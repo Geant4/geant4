@@ -1,0 +1,135 @@
+========================================================
+======              FTF Test Start              ========
+========================================================
+Generator <ftfp> is not included in the  list SetModels.csh, so is ignored!
+Use #run command to overcome this limitation 
+###### Start new run # 0   for 100000 events  #####
+Material is selected: G4_C
+Test30Physics entry
+Process is created gen= ftfp
+New generator for material G4_C Nelm= 1 Nmat= 1 Target element: C
+Secondary generator <ftfp> is initialized
+targetA 12
+Nucleus with A= 12  Z= 6  A(amu)= 1.201070e+01Mass from G4NucleiProperties(GeV)= 1.117486e+01
+
+The particle:  proton
+
+energy = 1.570645e+05 MeV    RMS(MeV)= 0.000000e+00 Plab 1.580000e+02 GeV/c
+Try 1 cross_secel 0.000000e+00
+cross(mb)in= 2.492227e+02
+cross(mb)el= 0.000000e+00
+
+Element A Z N: 12 6 6
+Proposed Xs (mb): Tot El In: 2.492227e+02 0.000000e+00 2.492227e+02
+CHIPS cross sections are used:----------------------
+Plab          Total        Elastic      Inelastic
+ 1.580000e+02 3.330770e+02 8.141228e+01 2.516647e+02
+
+Events start 100000
+### 0-th event start 1.580000e+02
+### 1000-th event start 1.580000e+02
+### 2000-th event start 1.580000e+02
+### 3000-th event start 1.580000e+02
+### 4000-th event start 1.580000e+02
+### 5000-th event start 1.580000e+02
+### 6000-th event start 1.580000e+02
+### 7000-th event start 1.580000e+02
+### 8000-th event start 1.580000e+02
+### 9000-th event start 1.580000e+02
+### 10000-th event start 1.580000e+02
+### 11000-th event start 1.580000e+02
+### 12000-th event start 1.580000e+02
+### 13000-th event start 1.580000e+02
+### 14000-th event start 1.580000e+02
+### 15000-th event start 1.580000e+02
+### 16000-th event start 1.580000e+02
+### 17000-th event start 1.580000e+02
+### 18000-th event start 1.580000e+02
+### 19000-th event start 1.580000e+02
+### 20000-th event start 1.580000e+02
+### 21000-th event start 1.580000e+02
+### 22000-th event start 1.580000e+02
+### 23000-th event start 1.580000e+02
+### 24000-th event start 1.580000e+02
+### 25000-th event start 1.580000e+02
+### 26000-th event start 1.580000e+02
+### 27000-th event start 1.580000e+02
+### 28000-th event start 1.580000e+02
+### 29000-th event start 1.580000e+02
+### 30000-th event start 1.580000e+02
+### 31000-th event start 1.580000e+02
+### 32000-th event start 1.580000e+02
+### 33000-th event start 1.580000e+02
+### 34000-th event start 1.580000e+02
+### 35000-th event start 1.580000e+02
+### 36000-th event start 1.580000e+02
+### 37000-th event start 1.580000e+02
+### 38000-th event start 1.580000e+02
+### 39000-th event start 1.580000e+02
+### 40000-th event start 1.580000e+02
+### 41000-th event start 1.580000e+02
+### 42000-th event start 1.580000e+02
+### 43000-th event start 1.580000e+02
+### 44000-th event start 1.580000e+02
+### 45000-th event start 1.580000e+02
+### 46000-th event start 1.580000e+02
+### 47000-th event start 1.580000e+02
+### 48000-th event start 1.580000e+02
+### 49000-th event start 1.580000e+02
+### 50000-th event start 1.580000e+02
+### 51000-th event start 1.580000e+02
+### 52000-th event start 1.580000e+02
+### 53000-th event start 1.580000e+02
+### 54000-th event start 1.580000e+02
+### 55000-th event start 1.580000e+02
+### 56000-th event start 1.580000e+02
+### 57000-th event start 1.580000e+02
+### 58000-th event start 1.580000e+02
+### 59000-th event start 1.580000e+02
+### 60000-th event start 1.580000e+02
+### 61000-th event start 1.580000e+02
+### 62000-th event start 1.580000e+02
+### 63000-th event start 1.580000e+02
+### 64000-th event start 1.580000e+02
+### 65000-th event start 1.580000e+02
+### 66000-th event start 1.580000e+02
+### 67000-th event start 1.580000e+02
+### 68000-th event start 1.580000e+02
+### 69000-th event start 1.580000e+02
+### 70000-th event start 1.580000e+02
+### 71000-th event start 1.580000e+02
+### 72000-th event start 1.580000e+02
+### 73000-th event start 1.580000e+02
+### 74000-th event start 1.580000e+02
+### 75000-th event start 1.580000e+02
+### 76000-th event start 1.580000e+02
+### 77000-th event start 1.580000e+02
+### 78000-th event start 1.580000e+02
+### 79000-th event start 1.580000e+02
+### 80000-th event start 1.580000e+02
+### 81000-th event start 1.580000e+02
+### 82000-th event start 1.580000e+02
+### 83000-th event start 1.580000e+02
+### 84000-th event start 1.580000e+02
+### 85000-th event start 1.580000e+02
+### 86000-th event start 1.580000e+02
+### 87000-th event start 1.580000e+02
+### 88000-th event start 1.580000e+02
+### 89000-th event start 1.580000e+02
+### 90000-th event start 1.580000e+02
+### 91000-th event start 1.580000e+02
+### 92000-th event start 1.580000e+02
+### 93000-th event start 1.580000e+02
+### 94000-th event start 1.580000e+02
+### 95000-th event start 1.580000e+02
+### 96000-th event start 1.580000e+02
+### 97000-th event start 1.580000e+02
+### 98000-th event start 1.580000e+02
+### 99000-th event start 1.580000e+02
+  User=6.463000e+01s Real=6.534000e+01s Sys=0.000000e+00s
+***********************************************************
+nevt Ninel 100000 100000
+Plab 1.580000e+02 SigIn 2.516647e+02
+******** xF distr ******* at Plab 1.580000e+05 Xin 2.516647e+02
+******** Rapidity ******* at Plab 1.580000e+05 Xin 2.516647e+02
+###### End of test #####

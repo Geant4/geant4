@@ -1,0 +1,90 @@
+========================================================
+======      Stopping Particles Test Start       ========
+========================================================
+Available commands are: 
+#events
+#particle
+#energy(MeV)
+#momentum(MeV/c)
+#step(mm)
+#material
+#generator
+#verbose
+#position(mm)
+#direction
+#time(ns)
+#randomSeed
+#jobID
+#run
+#exit
+Next line //parsing
+Next line of
+Next line this
+Next line file
+Next line is
+Next line very
+Next line fragile
+Next line //make
+Next line sure
+Next line #line
+Next line is
+Next line immediately
+Next line followed
+Next line by
+Next line its
+Next line data
+Next line #verbose
+Next line #rad
+Next line #events
+nevt : 10000
+Next line //--------muon_processes
+Next line #particle
+Next line #position(mm)
+Next line #direction
+Next line //--------
+Next line #material
+Next line #momentum(MeV/c)
+Next line //
+Next line ---
+Next line #generator
+stopping
+Next line #run
+###### Start new run # 0     #####
+###### Material: G4_Si derived from Si
+mu-stopping initializing 0
+mu-stopping initializing 1
+ Model <stopping> is initialized
+ For materials G4_Si Number of NISTIsotopes = 21
+The particle:  mu-
+The material:  G4_Si  Z= 14  A of the first element= 28  A of the last  element= 28.1086
+Number of isotopes 3
+The step:      1e-05 mm
+The position:  (0,0,0) mm
+The direction: (0,0,1)
+The time:      0 ns
+energy = 0.105658 GeV
+Initializing histograms for: mu- on Si
+  User=2.51s Real=2.51s Sys=0s
+Writing histogram file: muminusSistopping.root
+Next line #generator
+captureUpdate
+Next line #run
+###### Start new run # 1     #####
+###### Material: G4_Si derived from Si
+mu-captureUpdate initializing 0
+mu-captureUpdate initializing 1
+ Model <captureUpdate> is initialized
+ For materials G4_Si Number of NISTIsotopes = 21
+The particle:  mu-
+The material:  G4_Si  Z= 14  A of the first element= 28  A of the last  element= 28.1086
+Number of isotopes 3
+The step:      1e-05 mm
+The position:  (0,0,0) mm
+The direction: (0,0,1)
+The time:      0 ns
+energy = 0.105658 GeV
+Initializing histograms for: mu- on Si
+  User=2.54s Real=2.57s Sys=0s
+Writing histogram file: muminusSicaptureUpdate.root
+Next line #exit
+###### End of test #####

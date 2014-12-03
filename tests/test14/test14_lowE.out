@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -240,7 +240,7 @@ eIoni:   for  e-    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
-        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -267,7 +267,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -297,8 +297,8 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  proton    SubType= 3
@@ -334,7 +334,7 @@ ionIoni:   for  GenericIon    SubType= 2
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -346,13 +346,13 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -364,8 +364,8 @@ hIoni:   for  anti_proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  anti_proton    SubType= 3
@@ -396,8 +396,8 @@ hIoni:   for  kaon+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon+    SubType= 3
@@ -424,8 +424,8 @@ hIoni:   for  kaon-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon-    SubType= 3
@@ -452,8 +452,8 @@ muIoni:   for  mu+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -487,8 +487,8 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -522,8 +522,8 @@ hIoni:   for  pi+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi+    SubType= 3
@@ -550,8 +550,8 @@ hIoni:   for  pi-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi-    SubType= 3
@@ -721,7 +721,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 4.04e-06 0.000168    -49.9  0.000211        0        0         0    Absorber initStep
     1 2.65e-06 0.000169    -49.9         0 0.000211  5.8e-06   5.8e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -760,10 +760,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.71s Real=5.72s Sys=0s
+  User=5.09s Real=5.11s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -826,10 +826,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 -1.78e-06 2.31e-06      -50  0.000131        0        0         0    Absorber initStep
     1 -2.35e-06 1.95e-06      -50         0 0.000131 4.21e-06  4.21e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 10000
 
@@ -865,10 +865,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 3 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.51s Real=0.51s Sys=0s
+  User=0.46s Real=0.47s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -922,7 +922,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000481        0        0         0    Absorber initStep
     1 1.38e-06 3.11e-06      -50         0 0.000481 1.33e-05  1.33e-05    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -961,10 +961,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 5 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.41s Real=0.42s Sys=0s
+  User=0.34s Real=0.34s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1018,7 +1018,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000181        0        0         0    Absorber initStep
     1 8.17e-07 -3.14e-07      -50         0 0.000181 5.18e-06  5.18e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -1057,10 +1057,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 7 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.3s Real=0.3s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1268,10 +1268,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 4.73e-05 2.16e-05      -50  0.000154        0        0         0    Absorber initStep
     1 4.71e-05 2.24e-05      -50         0 0.000154 4.66e-06  4.66e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 10000
 
@@ -1307,10 +1307,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 9 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.89s Real=7.91s Sys=0s
+  User=7s Real=7.02s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1385,7 +1385,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 8.09e-06 -5.93e-06      -50  0.000234        0        0         0    Absorber initStep
     1 8.97e-06 -7.08e-06      -50         0 0.000234  6.3e-06   6.3e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -1424,10 +1424,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 11 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.51s Real=1.52s Sys=0s
+  User=1.13s Real=1.13s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1474,7 +1474,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
     1 3.11e-06 -3.94e-06      -50  0.000262 0.000338 1.21e-05  1.21e-05    Absorber msc
     2 3.85e-06 -3.88e-06      -50         0 0.000262 6.93e-06  1.91e-05    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -1513,10 +1513,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 13 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.41s Real=0.42s Sys=0s
+  User=0.35s Real=0.35s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1562,7 +1562,7 @@ Index : 1     used in the geometry : Yes
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
     1        0        0      -50         0   0.0003 7.84e-06  7.84e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -1601,10 +1601,10 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 15 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.2s Real=0.2s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 #
 /calor/setAbsMat Lead
 #====================
@@ -1654,7 +1654,7 @@ eIoni:   for  e-    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
-        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1681,7 +1681,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -1711,8 +1711,8 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  proton    SubType= 3
@@ -1748,7 +1748,7 @@ ionIoni:   for  GenericIon    SubType= 2
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -1760,13 +1760,13 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -1778,8 +1778,8 @@ hIoni:   for  anti_proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  anti_proton    SubType= 3
@@ -1810,8 +1810,8 @@ hIoni:   for  kaon+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon+    SubType= 3
@@ -1838,8 +1838,8 @@ hIoni:   for  kaon-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon-    SubType= 3
@@ -1866,8 +1866,8 @@ muIoni:   for  mu+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -1901,8 +1901,8 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -1936,8 +1936,8 @@ hIoni:   for  pi+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi+    SubType= 3
@@ -1964,8 +1964,8 @@ hIoni:   for  pi-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi-    SubType= 3
@@ -2116,10 +2116,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 -6.73e-06 -5.69e-06      -50   0.00016        0        0         0    Absorber initStep
     1 -8.06e-06 -5.46e-06      -50         0  0.00016  4.5e-06   4.5e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 10000
 
@@ -2160,10 +2160,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 17 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.54s Real=5.55s Sys=0s
+  User=5.18s Real=5.19s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2249,7 +2249,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 3.67e-06 -6.14e-07      -50  0.000103        0        0         0    Absorber initStep
     1 4.45e-06 -1.65e-06      -50         0 0.000103 3.51e-06  3.51e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -2293,10 +2293,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 19 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.22s Real=1.22s Sys=0s
+  User=1.19s Real=1.19s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2355,7 +2355,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000452        0        0         0    Absorber initStep
     1 1.47e-06 2.12e-06      -50         0 0.000452 1.07e-05  1.07e-05    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -2399,10 +2399,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 21 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.33s Real=0.34s Sys=0s
+  User=0.42s Real=0.42s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2461,7 +2461,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000147        0        0         0    Absorber initStep
     1 -9.51e-07 1.05e-06      -50         0 0.000147 4.26e-06  4.26e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -2505,10 +2505,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 23 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.25s Real=0.25s Sys=0s
+  User=0.33s Real=0.33s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -2695,10 +2695,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 9.83e-06 7.48e-05      -50  0.000179        0        0         0    Absorber initStep
     1 9.21e-06 7.43e-05      -50         0 0.000179 4.83e-06  4.83e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 10000
 
@@ -2739,10 +2739,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 25 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.640000000000001s Real=9.67s Sys=0s
+  User=10.11s Real=10.13s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2819,7 +2819,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 5.11e-06 -5.41e-06      -50  0.000159        0        0         0    Absorber initStep
     1 3.49e-06 -4.89e-06      -50         0 0.000159 4.47e-06  4.47e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -2863,10 +2863,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 27 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.11s Real=2.12s Sys=0s
+  User=2.22s Real=2.22s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2918,7 +2918,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
     1 -8.36e-07 -2.58e-06      -50  6.95e-05  0.00053 6.11e-06  6.11e-06    Absorber msc
     2 -2.9e-07 -3.05e-06      -50         0 6.95e-05 2.88e-06  8.99e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -2962,10 +2962,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 29 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.45s Real=0.45s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -3016,7 +3016,7 @@ Index : 2     used in the geometry : Yes
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
     1        0        0      -50         0   0.0003 7.15e-06  7.15e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -3060,10 +3060,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 31 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.18s Real=0.19s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -3114,7 +3114,7 @@ eIoni:   for  e-    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
-        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -3141,7 +3141,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -3171,8 +3171,8 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  proton    SubType= 3
@@ -3208,7 +3208,7 @@ ionIoni:   for  GenericIon    SubType= 2
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -3220,13 +3220,13 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -3238,8 +3238,8 @@ hIoni:   for  anti_proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  anti_proton    SubType= 3
@@ -3270,8 +3270,8 @@ hIoni:   for  kaon+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon+    SubType= 3
@@ -3298,8 +3298,8 @@ hIoni:   for  kaon-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon-    SubType= 3
@@ -3326,8 +3326,8 @@ muIoni:   for  mu+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -3361,8 +3361,8 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -3396,8 +3396,8 @@ hIoni:   for  pi+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi+    SubType= 3
@@ -3424,8 +3424,8 @@ hIoni:   for  pi-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi-    SubType= 3
@@ -3620,10 +3620,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 9.82e-05 9.39e-05    -49.7  0.000218        0        0         0    Absorber initStep
     1 9.93e-05 9.16e-05    -49.7         0 0.000218 8.82e-06  8.82e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 10000
 
@@ -3669,10 +3669,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 33 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=5.13s Real=5.14s Sys=0s
+  User=5.84s Real=5.85s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -3745,7 +3745,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  2.9e-06 -1.59e-05      -50  0.000545        0        0         0    Absorber initStep
     1 1.12e-05 -2.22e-05      -50         0 0.000545 2.48e-05  2.48e-05    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -3794,10 +3794,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 35 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1s Real=1.01s Sys=0s
+  User=1.05s Real=1.05s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -3861,7 +3861,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
     1 4.55e-07 -2.03e-07      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -3910,10 +3910,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 37 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.23s Real=0.22s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -3977,7 +3977,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000271        0        0         0    Absorber initStep
     1 -1.37e-06 -3.77e-06      -50         0 0.000271 1.07e-05  1.07e-05    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -4026,10 +4026,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 39 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.23s Real=0.23s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 #
 /gun/particle e-
 #-----------------
@@ -4226,10 +4226,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000139        0        0         0    Absorber initStep
     1 1.68e-06 6.52e-07      -50         0 0.000139 6.45e-06  6.45e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 10000
 
@@ -4275,10 +4275,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 41 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.4s Real=6.42s Sys=0s
+  User=6.74s Real=6.75s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -4354,7 +4354,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 3.47e-05 -7.4e-05      -50  0.000105        0        0         0    Absorber initStep
     1 3.37e-05 -7.47e-05      -50         0 0.000105 5.53e-06  5.53e-06    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -4403,10 +4403,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 43 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.36s Real=1.37s Sys=0s
+  User=1.39s Real=1.4s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -4462,7 +4462,7 @@ Index : 3     used in the geometry : Yes
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
     1        0        0      -50         0   0.0006 2.85e-05  2.85e-05    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -4511,10 +4511,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 45 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.32s Real=0.32s Sys=0s
+  User=0.39s Real=0.39s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -4570,7 +4570,7 @@ Index : 3     used in the geometry : Yes
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
     1        0        0      -50         0   0.0003 1.18e-05  1.18e-05    Absorber eIoni
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -4619,10 +4619,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 47 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.16s Real=0.16s Sys=0s
+  User=0.2s Real=0.21s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -4682,7 +4682,7 @@ eIoni:   for  e-    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
-        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -4709,7 +4709,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -4739,8 +4739,8 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  proton    SubType= 3
@@ -4776,7 +4776,7 @@ ionIoni:   for  GenericIon    SubType= 2
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -4788,13 +4788,13 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -4806,8 +4806,8 @@ hIoni:   for  anti_proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  anti_proton    SubType= 3
@@ -4838,8 +4838,8 @@ hIoni:   for  kaon+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon+    SubType= 3
@@ -4866,8 +4866,8 @@ hIoni:   for  kaon-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon-    SubType= 3
@@ -4894,8 +4894,8 @@ muIoni:   for  mu+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -4929,8 +4929,8 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -4964,8 +4964,8 @@ hIoni:   for  pi+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi+    SubType= 3
@@ -4992,8 +4992,8 @@ hIoni:   for  pi-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi-    SubType= 3
@@ -5052,10 +5052,10 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 ### Run 48 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.12s Real=0.12s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 10000
 
@@ -5101,10 +5101,10 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 ### Run 49 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.19s Real=0.19s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
@@ -5149,7 +5149,7 @@ eIoni:   for  e-    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
-        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -5176,7 +5176,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -5206,8 +5206,8 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  proton    SubType= 3
@@ -5243,7 +5243,7 @@ ionIoni:   for  GenericIon    SubType= 2
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -5255,13 +5255,13 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -5273,8 +5273,8 @@ hIoni:   for  anti_proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  anti_proton    SubType= 3
@@ -5305,8 +5305,8 @@ hIoni:   for  kaon+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon+    SubType= 3
@@ -5333,8 +5333,8 @@ hIoni:   for  kaon-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon-    SubType= 3
@@ -5361,8 +5361,8 @@ muIoni:   for  mu+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -5396,8 +5396,8 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -5431,8 +5431,8 @@ hIoni:   for  pi+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi+    SubType= 3
@@ -5459,8 +5459,8 @@ hIoni:   for  pi-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi-    SubType= 3
@@ -5519,10 +5519,10 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 ### Run 50 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.27s Real=0.27s Sys=0s
+  User=0.3s Real=0.3s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 10000
 
@@ -5568,10 +5568,10 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 ### Run 51 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.5s Real=0.5s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
@@ -5616,7 +5616,7 @@ eIoni:   for  e-    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
-        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -5643,7 +5643,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -5673,8 +5673,8 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  proton    SubType= 3
@@ -5710,7 +5710,7 @@ ionIoni:   for  GenericIon    SubType= 2
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -5722,13 +5722,13 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV   deltaVI
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 eV    Emax=       10 TeV
+   ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -5740,8 +5740,8 @@ hIoni:   for  anti_proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  anti_proton    SubType= 3
@@ -5772,8 +5772,8 @@ hIoni:   for  kaon+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon+    SubType= 3
@@ -5800,8 +5800,8 @@ hIoni:   for  kaon-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  kaon-    SubType= 3
@@ -5828,8 +5828,8 @@ muIoni:   for  mu+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+               Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -5863,8 +5863,8 @@ muIoni:   for  mu-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== Limit on energy threshold has been applied 
 
@@ -5898,8 +5898,8 @@ hIoni:   for  pi+    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi+    SubType= 3
@@ -5926,8 +5926,8 @@ hIoni:   for  pi-    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
       ===== Limit on energy threshold has been applied 
 
 hBrems:   for  pi-    SubType= 3
@@ -5986,10 +5986,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 52 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.12s Real=0.13s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 10000
 
@@ -6035,10 +6035,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 53 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.14s Real=0.14s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

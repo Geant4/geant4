@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,7 +27,6 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT_EMV>  EMoption= 1
 /testhadr/PrintModulo 10
 /run/initialize
 ### New geometry is constructed HCAL width(cm)= 46
-### New Excitation handler
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /run/setCut 1 mm
 /run/setCutForRegion HcalRegion 1 mm
@@ -770,49 +769,49 @@ EventAction: Event # 60 started
 EventAction: Event # 70 started
 EventAction: Event # 80 started
 EventAction: Event # 90 started
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.77s Real=41.2s Sys=0.08s
+  User=43.83s Real=43.96s Sys=0.03s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                           pi-
 Beam Energy(MeV)                        15000
 Number of events                        100
-Average number of MIPS (Edep < 0.8 GeV) 0.41
-Average number of steps                 1.596e+04
-Average number of neutron steps         3549
-Average number of hadron steps          2553
-Average number of gamma steps           1.143e+04
-Average number of e+- steps             2811
+Average number of MIPS (Edep < 0.8 GeV) 0.36
+Average number of steps                 1.702e+04
+Average number of neutron steps         6934
+Average number of hadron steps          2512
+Average number of gamma steps           1.021e+04
+Average number of e+- steps             2538
 ==============  ECAL  ====================================
-  1x1 (GeV) =      1.727 +-     0.1908    RMS= 1.908
-  3x3 (GeV) =      2.865 +-     0.3005    RMS= 3.005
-  5x5 (GeV) =      3.212 +-      0.332    RMS= 3.32
-  E1/E9     =     0.7427 +-    0.02221    RMS= 0.2221
-  E1/E25    =     0.6951 +-    0.02405    RMS= 0.2405
-  E9/E25    =      0.921 +-    0.00602    RMS= 0.0602
+  1x1 (GeV) =      1.832 +-     0.1877    RMS= 1.877
+  3x3 (GeV) =       3.06 +-     0.2849    RMS= 2.849
+  5x5 (GeV) =      3.481 +-     0.3173    RMS= 3.173
+  E1/E9     =     0.7185 +-    0.02233    RMS= 0.2233
+  E1/E25    =     0.6672 +-     0.0248    RMS= 0.248
+  E9/E25    =     0.9088 +-   0.007672    RMS= 0.07672
 ==============  HCAL  ====================================
-Visible HCAL Edep(GeV)     =   0.0759
-Visible HCAL e-Edep(GeV)   =   0.03883
-Total HCAL Edep(GeV)       =   8.535 +- 0.1229
+Visible HCAL Edep(GeV)     =   0.07591
+Visible HCAL e-Edep(GeV)   =   0.03319
+Total HCAL Edep(GeV)       =   7.496 +- 0.1985
 ==========================================================
-Erec(GeV)   =       10.9 +-     0.3243    RMS= 3.243
-Etot(GeV)   =      11.78 +-     0.1229    RMS= 1.229
+Erec(GeV)   =      11.18 +-     0.4012    RMS= 4.012
+Etot(GeV)   =      11.02 +-     0.1985    RMS= 1.985
 ==========================================================
-Ecal/E0=   0.2121  RMS/E0(%)= 21.93
-Hcal/E0=       0.5638 +- 0.008117
-Erec/E0=       0.7199 +- 0.02142
-Etot/E0=       0.7784 +- 0.008117
+Ecal/E0=   0.2299  RMS/E0(%)= 20.96
+Hcal/E0=       0.4951 +- 0.01311
+Erec/E0=       0.7382 +- 0.0265
+Etot/E0=       0.7279 +- 0.01311
 ==========================================================
 
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 136
+Total navigation history collections cleaned: 170
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 11 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.64 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-User=42.38s Real=43.54s Sys=0.1s
+User=45.43s Real=47.15s Sys=0.05s

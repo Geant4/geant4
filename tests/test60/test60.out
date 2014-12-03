@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -143,10 +143,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 0 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.48s Real=0.48s Sys=0s
+  User=0.45s Real=0.46s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -170,10 +170,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.37s Real=0.38s Sys=0s
+  User=0.41s Real=0.41s Sys=0s
 
  The run consists of 1 proton of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -197,10 +197,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 2 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.38s Real=0.39s Sys=0s
+  User=0.42s Real=0.42s Sys=0s
 
  The run consists of 1 hydrogen of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -224,10 +224,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 3 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.91s Real=0.94s Sys=0s
+  User=0.95s Real=0.95s Sys=0s
 
  The run consists of 1 alpha of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -251,10 +251,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 4 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.9s Real=0.91s Sys=0s
+  User=0.95s Real=0.96s Sys=0s
 
  The run consists of 1 alpha+ of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -278,10 +278,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 5 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.64s Real=0.64s Sys=0s
+  User=0.94s Real=0.94s Sys=0s
 
  The run consists of 1 helium of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -292,7 +292,6 @@ Run Summary
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-G4DNAChemistryManager::Notify ---> received G4State_Quit
 Total navigation history collections cleaned: 4
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0

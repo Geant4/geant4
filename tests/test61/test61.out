@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -18,10 +18,6 @@ Tst61PhysicsList::SetCuts:CutLength : 1000 (mm)
 userDetector->Construct() start.
 SLog is registered to the default region.
 physicsList->Construct() start.
-### New Excitation handler
-### New Excitation handler
-### New Excitation handler
-### New Excitation handler
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 Tst61PhysicsList::SetCuts:CutLength : 1000 (mm)
@@ -458,10 +454,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 4
-  User=21.84s Real=21.97s Sys=0.02s
+  User=66.74s Real=66.97s Sys=0.02s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -721,7 +717,7 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 16
   User=0s Real=0s Sys=0s
@@ -989,10 +985,10 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 ### Run 2 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.56s Real=4.58s Sys=0.01s
+  User=5.98s Real=5.99s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1268,40 +1264,16 @@ Index : 3     used in the geometry : Yes
       issued by : G4HadronicProcess:CheckResult()
 Warning: Bad energy non-conservation detected, will re-sample the interaction
  Process / Model: inelastic / QMDModel
- Primary: deuteron (1000010020), E= 4173.67, target nucleus (1,1)
- E(initial - final) = -1148.94 MeV.
+ Primary: deuteron (1000010020),  E= 3851.45, target nucleus (1, 1)
+ E(initial - final) = -1059.39 MeV.
 
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: inelastic / QMDModel
- Primary: alpha (1000020040), E= 6337.33, target nucleus (1,1)
- E(initial - final) = -1116.67 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: inelastic / QMDModel
- Primary: alpha (1000020040), E= 6337.33, target nucleus (1,1)
- E(initial - final) = -1041.12 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.62s Real=2.63s Sys=0s
+  User=2.81s Real=2.82s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1353,7 +1325,7 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 ### Run 4 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 4
   User=0s Real=0s Sys=0s
@@ -1407,7 +1379,7 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 ### Run 5 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 16
   User=0s Real=0s Sys=0s
@@ -1461,10 +1433,10 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 ### Run 6 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.61s Real=0.62s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1742,14 +1714,14 @@ Index : 4     used in the geometry : Yes
 ====================================================================
 
 ### Run 7 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 4
-  User=22.7s Real=22.77s Sys=0.02s
+  User=79.95s Real=80.21s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1819116775, 1787643592
+ Current couple of seeds = 609899788, 564392624
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1763,7 +1735,7 @@ Units table cleared.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 1 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.088 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -17,109 +17,134 @@ Next line #angles
 Next line #dangle
 Next line //--------
 Next line #generator
-Next line #paw
+Generator <binary> is not included in the  list SetModels.csh, so is ignored!
+Use #run command to overcome this limitation 
 Next line #run
 ###### Start new run # 0   for 10 events  #####
 ### NIST DataBase for Materials is used
 Material is selected: G4_Zr
+<bina>
 Test30Physics entry
-Process is created; gen= binary
+Process is created gen= binary
 New generator for material G4_Zr Nelm= 1 Nmat= 1 Target element: Zr
 Secondary generator <binary> is initialized
-Nucleus with N= 94  Z= 40  A(amu)= 9.131840e+01
-Mass from targetNucleus(GeV)= 8.745283e+01
-Mass from IonTable(GeV)=      8.745283e+01
+Nucleus with A= 94  Z= 40  A(amu)= 9.131840e+01Mass from G4NucleiProperties(GeV)= 8.745283e+01
+
 The particle:  proton
 The material:  G4_Zr Z= 40 A= 94  Amax= 95
 The step:      1.000000e-05 mm
 The position:  (0.000000e+00,0.000000e+00,0.000000e+00) mm
 The direction: (0.000000e+00,0.000000e+00,1.000000e+00)
 The time:      0.000000e+00 ns
-energy = 2.220000e+01 MeV
+energy = 2.220000e+01 MeV    RMS(MeV)= 0.000000e+00
 emax   = 2.500000e+01 MeV
 pmax   = 2.053098e+02 MeV
 ### Log10 scale from -2.000000e+00 to 2.000000e+00 in 80 bins
-### Histo books 57 histograms in <bic.root>
-[Histo::book] File created: bic.root
-Histograms are booked output file <bic> 
-### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
+### Histo::Save: Opended file <binary.root>  for 57 histograms 
+Histograms are booked output file <binary.root> 
+### factor  = 1.598168e+02### factora = 4.517367e+02### factorb = 1.419173e+02    cross(mb)= 1.419173e+03
 Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
 ### 0-th event start 
-Energy/Momentum balance= (5.771597e-10,-2.360423e-10,-1.286992e-09;-4.269486e-03)
 ### 1-th event start 
-Energy/Momentum balance= (1.560970e-09,-2.265629e-09,-4.825623e-09;3.715379e-03)
 ### 2-th event start 
-Energy/Momentum balance= (1.245212e-09,5.351524e-10,2.059409e-09;5.539021e-03)
 ### 3-th event start 
-Energy/Momentum balance= (2.369823e-09,-8.189929e-10,-4.321350e-09;-7.840639e-03)
 ### 4-th event start 
-Energy/Momentum balance= (-4.882565e-10,-2.042384e-10,-1.695469e-09;3.007643e-03)
 ### 5-th event start 
-Energy/Momentum balance= (2.027439e-09,-1.086278e-09,-6.673740e-10;-1.180394e-02)
 ### 6-th event start 
-Energy/Momentum balance= (-2.228096e-10,-3.872375e-10,8.495024e-10;9.074092e-03)
 ### 7-th event start 
-Energy/Momentum balance= (-8.630430e-11,7.922694e-10,-1.695469e-09;4.824556e-03)
 ### 8-th event start 
-Energy/Momentum balance= (-3.986739e-10,-2.324175e-10,6.840687e-10;3.630758e-03)
 ### 9-th event start 
-Energy/Momentum balance= (1.693876e-10,-1.393515e-10,7.706558e-10;-8.780304e-04)
-  User=3.000000e-02s Real=2.000000e-02s Sys=0.000000e+00s
+  User=0.000000e+00s Real=0.000000e+00s Sys=0.000000e+00s
 ###### Save histograms
-[Histo::save] ROOT: file writing <bic.root>
-[Histo::save] ROOT: files closing...
 ###### End of run # 0     ######
 Next line #generator
-Next line #paw
+Generator <bertini> is not included in the  list SetModels.csh, so is ignored!
+Use #run command to overcome this limitation 
 Next line #run
 ###### Start new run # 1   for 10 events  #####
 Material is selected: G4_Zr
+<bert>
 Test30Physics entry
-Process is created; gen= bertini
+Process is created gen= bertini
 New generator for material G4_Zr Nelm= 1 Nmat= 1 Target element: Zr
 Secondary generator <bertini> is initialized
-Nucleus with N= 94  Z= 40  A(amu)= 9.131840e+01
-Mass from targetNucleus(GeV)= 8.745283e+01
-Mass from IonTable(GeV)=      8.745283e+01
+Nucleus with A= 94  Z= 40  A(amu)= 9.131840e+01Mass from G4NucleiProperties(GeV)= 8.745283e+01
+
 The particle:  proton
 The material:  G4_Zr Z= 40 A= 94  Amax= 95
 The step:      1.000000e-05 mm
 The position:  (0.000000e+00,0.000000e+00,0.000000e+00) mm
 The direction: (0.000000e+00,0.000000e+00,1.000000e+00)
 The time:      0.000000e+00 ns
-energy = 2.220000e+01 MeV
+energy = 2.220000e+01 MeV    RMS(MeV)= 0.000000e+00
 emax   = 2.500000e+01 MeV
 pmax   = 2.053098e+02 MeV
 ### Log10 scale from -2.000000e+00 to 2.000000e+00 in 80 bins
-### Histo books 57 histograms in <bert.root>
-[Histo::book] File created: bert.root
-Histograms are booked output file <bert> 
-### factor  = 1.599707e+02### factora = 4.521719e+02### factorb = 1.420540e+02    cross(mb)= 1.420540e+03
+### Histo::Save: Opended file <bertini.root>  for 57 histograms 
+Histograms are booked output file <bertini.root> 
+### factor  = 1.598168e+02### factora = 4.517367e+02### factorb = 1.419173e+02    cross(mb)= 1.419173e+03
 Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
 ### 0-th event start 
-Energy/Momentum balance= (4.155837e-05,4.227365e-05,-2.658862e-04;-2.267214e-01)
 ### 1-th event start 
-Energy/Momentum balance= (1.738655e-04,-9.145326e-05,-1.087722e-04;-1.594253e-01)
 ### 2-th event start 
-Energy/Momentum balance= (-2.766299e-04,1.586161e-04,5.579118e-05;-2.270459e-01)
 ### 3-th event start 
-Energy/Momentum balance= (1.227539e-04,-2.337010e-04,5.948458e-05;-7.651766e-02)
 ### 4-th event start 
-Energy/Momentum balance= (1.174171e-04,1.542718e-04,-8.923229e-05;-2.248126e-01)
 ### 5-th event start 
-Energy/Momentum balance= (-1.598432e-05,-4.209101e-04,1.465253e-05;5.025685e-02)
 ### 6-th event start 
-Energy/Momentum balance= (1.532690e-04,-6.130308e-04,-7.050834e-05;-5.040259e-01)
 ### 7-th event start 
-Energy/Momentum balance= (-2.444286e-05,-1.596243e-04,9.621564e-05;-2.457944e-01)
 ### 8-th event start 
-Energy/Momentum balance= (-4.297281e-05,1.014020e-04,-1.046672e-04;-2.852680e-01)
 ### 9-th event start 
-Energy/Momentum balance= (2.670919e-05,6.061970e-05,-1.870158e-05;-1.599362e-01)
-  User=0.000000e+00s Real=1.000000e-02s Sys=0.000000e+00s
+  User=1.000000e-02s Real=1.000000e-02s Sys=0.000000e+00s
 ###### Save histograms
-[Histo::save] ROOT: file writing <bert.root>
-[Histo::save] ROOT: files closing...
 ###### End of run # 1     ######
+Next line #generator
+Generator chips is not allowed
+Next line #run
+Next line #generator
+Generator <incl> is not included in the  list SetModels.csh, so is ignored!
+Use #run command to overcome this limitation 
+Next line #run
+###### Start new run # 2   for 10 events  #####
+Material is selected: G4_Zr
+<incl>
+Test30Physics entry
+Process is created gen= incl
+
+================================================================================
+                                 INCL++ WARNING                                 
+INCL++/G4ExcitationHandler uses its own level-density parameter for fission
+================================================================================
+
+New generator for material G4_Zr Nelm= 1 Nmat= 1 Target element: Zr
+Secondary generator <incl> is initialized
+Nucleus with A= 94  Z= 40  A(amu)= 9.131840e+01Mass from G4NucleiProperties(GeV)= 8.745283e+01
+
+The particle:  proton
+The material:  G4_Zr Z= 40 A= 94  Amax= 95
+The step:      1.000000e-05 mm
+The position:  (0.000000e+00,0.000000e+00,0.000000e+00) mm
+The direction: (0.000000e+00,0.000000e+00,1.000000e+00)
+The time:      0.000000e+00 ns
+energy = 2.220000e+01 MeV    RMS(MeV)= 0.000000e+00
+emax   = 2.500000e+01 MeV
+pmax   = 2.053098e+02 MeV
+### Log10 scale from -2.000000e+00 to 2.000000e+00 in 80 bins
+### Histo::Save: Opended file <incl.root>  for 57 histograms 
+Histograms are booked output file <incl.root> 
+### factor  = 1.598168e+02### factora = 4.517367e+02### factorb = 1.419173e+02    cross(mb)= 1.419173e+03
+Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
+### 0-th event start 
+### 1-th event start 
+### 2-th event start 
+### 3-th event start 
+### 4-th event start 
+### 5-th event start 
+### 6-th event start 
+### 7-th event start 
+### 8-th event start 
+### 9-th event start 
+  User=7.000000e-02s Real=8.000000e-02s Sys=0.000000e+00s
+###### Save histograms
+###### End of run # 2     ######
 Next line #exit
 ###### End of test #####

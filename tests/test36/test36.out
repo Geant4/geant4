@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -364,10 +364,10 @@ Index : 3     used in the geometry : Yes
 ### Run 0 start.
 
 ---> Begin of Event: 0
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.72s Real=2.77s Sys=0.02s
+  User=2.3s Real=2.31s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=44.5785 +- 0.550693  mm  

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -167,7 +167,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -230,7 +230,7 @@ msc:   for anti_proton    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -575,10 +575,10 @@ Index : 1     used in the geometry : Yes
 
 ### Run 0 starts.
 ### Run 0 start.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.1s Real=0.09s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -618,10 +618,10 @@ Index : 1     used in the geometry : Yes
 
 ### Run 1 starts.
 ### Run 1 start.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.26s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -733,7 +733,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -796,7 +796,7 @@ msc:   for anti_proton    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -1010,10 +1010,10 @@ Index : 1     used in the geometry : Yes
 ### Run 2 start.
 EvtNo= 415  length= 0.00881287  xend= 0.00233447
 EvtNo= 532  length= 0.00942194  xend= 0.00349898
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.12s Real=0.12s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 998 for C12 with Ekin = 6 MeV p= 366.244 MeV/c
@@ -1137,7 +1137,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -1200,7 +1200,7 @@ msc:   for anti_proton    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -1412,10 +1412,10 @@ Index : 1     used in the geometry : Yes
 
 ### Run 3 starts.
 ### Run 3 start.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.12s Real=0.13s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1533,7 +1533,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -1596,7 +1596,7 @@ msc:   for anti_proton    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -1808,10 +1808,10 @@ Index : 1     used in the geometry : Yes
 
 ### Run 4 starts.
 ### Run 4 start.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.09s Real=0.1s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c

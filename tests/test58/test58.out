@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -334,10 +334,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 
 ---> Begin of Event: 0
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.38s Real=1.39s Sys=0s
+  User=1.35s Real=1.35s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -435,10 +435,10 @@ Index : 1     used in the geometry : Yes
 ----------------------------------------
 
 ---> Begin of Event: 0
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.35s Real=3.37s Sys=0s
+  User=2.59s Real=2.8s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -537,10 +537,10 @@ Index : 1     used in the geometry : Yes
 ----------------------------------------
 
 ---> Begin of Event: 0
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.72s Real=3.08s Sys=0.01s
+  User=2.53s Real=2.53s Sys=0s
 
  ======================== run summary ======================
 
@@ -639,10 +639,10 @@ Index : 1     used in the geometry : Yes
 ----------------------------------------
 
 ---> Begin of Event: 0
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.34s Real=2.35s Sys=0s
+  User=2.25s Real=2.31s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -740,10 +740,10 @@ Index : 1     used in the geometry : Yes
 ----------------------------------------
 
 ---> Begin of Event: 0
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.69s Real=4.95s Sys=0.01s
+  User=4.67s Real=4.68s Sys=0s
 
  ======================== run summary ======================
 
