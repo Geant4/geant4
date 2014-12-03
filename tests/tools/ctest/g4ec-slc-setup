@@ -61,7 +61,7 @@ fi
 
 #---CLHEP----------------------------------------------------------
 if [ -z "${CLHEP_ROOT_DIR}" ] ; then
-  CLHEP_ROOT_DIR=${lcgext}/clhep/2.1.4.1/${lcgopt}
+  CLHEP_ROOT_DIR=${lcgext}/clhep/2.2.0.4/${lcgopt}
   if [ -d ${CLHEP_ROOT_DIR} ] ; then
     export CLHEP_ROOT_DIR
     export LD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${LD_LIBRARY_PATH}

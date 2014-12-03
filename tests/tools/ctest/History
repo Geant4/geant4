@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3-12-2014, Gunter Folger            testtools-ctest-V10-00-08
+- use CLHEP 2.2.0.4 in g4ec-slc-setup. 
+
 2-12-2014,  Gunter Folger           testtools-ctest-V10-00-07
 - revert back to internal CLHEP for release. 
 
