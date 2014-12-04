@@ -122,6 +122,8 @@ G4double G4CascadParticle::getPathToTheNextZone(G4double rz_in,
 
   if (std::abs(pp) < 1e-9) {	// Cut-off for "at rest" is 1 eV momentum
     if (verboseLevel > 3) G4cout << " at rest; path length is zero" << G4endl;
+
+    if (current_zone == 0) movingIn = false;	// Allow 'stuck' to escape
     return 0.;
   }
 

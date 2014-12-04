@@ -15,6 +15,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1 December 2014  M. Kelsey (hadr-casc-V10-00-20)
+------------------------------------------------
+- G4CascadParticle.cc:  For stopped particles (zero path length), if at core
+  of nucleus switch "movingIn" flag to false to particle will be forced to
+  escape.  Protects against very rare infinite loop in mu- capture (nu_mu
+  produced with tiny momentum, gets stuck in nucleus zone 0).
+
 1 December 2014  M. Kelsey (hadr-casc-V10-00-19)
 ------------------------------------------------
 - G4ElementaryParticleCollider.cc:  In muon absorption, check return from
