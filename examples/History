@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th December 2014  Gabriele Cosmo (examples-V10-01-00)
+- Updated reference outputs according to reference tag geant4-10-01-ref-00.
+- Includes tags: hadrontherapy-V10-00-09, exbasic-V10-00-01, AnaEx01-V10-00-05,
+                 AnaEx02-V10-00-04, AnaEx03-V10-00-04, exbiasing-V10-00-03,
+                 B03-V10-00-00, GB03-V10-00-05, excommon-V10-00-06,
+                 testem8-V10-00-07, testem17-V10-00-01, p6decayer-V10-00-03,
+                 exExoticphysics-V10-00-02, fieldex04-V10-00-11,
+                 g3tog4Tests-V10-00-05, exExtHadFissFrag-V10-00-13,
+                 exhadr03-V10-00-09, exhadr04-V10-00-06, exhadr06-V10-00-09,
+                 exMedical-V10-00-00, chem1-V10-00-06, chem2-V10-00-05,
+                 chem3-V10-00-06, dnaphysics-V10-00-04, pdb4dna-V10-00-06,
+                 microdosimetry-V10-00-08, wholeNuclearDNA-V10-00-07,
+                 LXe-V10-00-08, expol01-V10-00-02, exampleRE01-V10-00-00,
+                 exampleRE06-V10-00-04, exam-ext-vis-standalone-V10-00-01,
+                 exam-ext-vis-UVA-V10-00-02.
+
 5th November 2014  Gabriele Cosmo (examples-V10-00-09)
 - Updated reference outputs according to reference tag geant4-10-00-ref-09.
 - Includes tags: amsEcal-V10-00-07, brachy-V10-00-00, ccal-V10-00-02,
