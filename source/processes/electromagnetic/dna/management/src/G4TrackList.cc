@@ -65,7 +65,7 @@ G4FastListNode<G4Track>* G4FastList<G4Track>::__GetNode(G4Track* __track)
 template<>
 void G4FastList<G4Track>::DeleteObject(G4Track* __track)
 {
-  if (G4AllocatorList::GetAllocatorListIfExist() == false) return;
+  if (!G4AllocatorList::GetAllocatorListIfExist()) return;
 
   G4Step* __step = const_cast<G4Step*>(__track->GetStep());
   if (__step)
