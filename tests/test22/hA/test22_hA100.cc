@@ -1,5 +1,4 @@
-//               FTF test: h+A interactions; Inclusive 100, 320 GeV/c
-//                p, Pi+, Pi-, K+, Pbar + Mg, Ag, Au
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -24,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//               FTF test: h+A interactions; Inclusive 100, 320 GeV/c
+//                p, Pi+, Pi-, K+, Pbar + Mg, Ag, Au
 //
 //
 // -------------------------------------------------------------------

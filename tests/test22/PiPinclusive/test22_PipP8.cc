@@ -1,4 +1,3 @@
-//               FTF test: Pi+P interactions; Inclusive
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//               FTF test: Pi+P interactions; Inclusive
 //
 //
 // -------------------------------------------------------------------

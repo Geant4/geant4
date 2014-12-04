@@ -1,5 +1,4 @@
-//               FTF test: h+A interactions; HARP Collaboration
-//                p, Pi+, Pi- + A at 3, 5, 8 and 12 GeV/c
+//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -24,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//               FTF test: h+A interactions; HARP Collaboration
+//                p, Pi+, Pi- + A at 3, 5, 8 and 12 GeV/c
 //
 //
 // -------------------------------------------------------------------

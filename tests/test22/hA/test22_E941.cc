@@ -1,4 +1,3 @@
-//               FTF test: h+A interactions; Inclusive
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//               FTF test: h+A interactions; Inclusive
 //
 //
 // -------------------------------------------------------------------

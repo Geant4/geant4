@@ -21,7 +21,7 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-// *******************************************************************
+// ********************************************************************
 //
 // Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
 // the *COMPLETE* version of this program, together with its documentation;

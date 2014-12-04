@@ -1,4 +1,3 @@
-//               FTF test: p+C interactions; Inclusive NA61/SHINE
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -24,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//               FTF test: p+C interactions; Inclusive NA61/SHINE
 //
 //
 // -------------------------------------------------------------------
