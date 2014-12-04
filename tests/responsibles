@@ -122,8 +122,6 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   brachytherapy              susanna@uow.edu.au              Susanna Guatelli
   ChargeExchangeMC           cirrone@lns.infn.it             Pablo Cirrone
   composite_calorimeter      Andrea.Dotti@cern.ch            Andrea Dotti
-  dnageometry                incerti@cenbg.in2p3.fr          Sebastien Incerti
-  dnaphysics                 incerti@cenbg.in2p3.fr          Sebastien Incerti
   eRosita                    Maria.Grazia.Pia@ge.infn.it     Maria Grazia Pia
   gammaknife                 romanof@lns.infn.it             Francesco Romano
   gammaray_telescope         longof@ts.infn.it               Francesco Longo
@@ -133,7 +131,6 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   lAr_calorimeter            Andrea.Dotti@cern.ch            Andrea Dotti
   medical_linac              cirrone@lns.infn.it             Pablo Cirrone
   microbeam                  incerti@cenbg.in2p3.fr          Sebastien Incerti
-  microdosimetry             incerti@cenbg.in2p3.fr          Sebastien Incerti
   microelectronics           melanie.raine@cea.fr            Mélanie Raine
   nanobeam                   incerti@cenbg.in2p3.fr          Sebastien Incerti
   purging_magnet             John.Apostolakis@cern.ch        John Apostolakis
@@ -150,7 +147,7 @@ examples/extended
     B1Con                    tkoi@slac.stanford.edu          Tatsumi Koi
   biasing
     B01, B02, B03            Alexander.Howard@cern.ch        Alexander Howard
-    GB01, GB02               Marc.Verderi@in2p3.fr           Marc Verderi
+    GB01, GB02, GB03, GB04   Marc.Verderi@in2p3.fr           Marc Verderi
     ReverseMC01              desorgher@spaceit.ch            Laurent Desorgher
   common                     ivana@ipno.in2p3.fr             Ivana Hrivnacova
   electromagnetic:
@@ -190,6 +187,7 @@ examples/extended
     Hadr06                   Michel.Maire@lapp.in2p3.fr      Michel Maire
   medical:
     DICOM                    Pedro.Arce@ciemat.es            Pedro Arce
+    dna                      incerti@cenbg.in2p3.fr          Sebastien Incerti
     electronScattering       Michel.Maire@lapp.in2p3.fr      Michel Maire
     electronScattering2      perl@slac.stanford.edu          Joseph Perl
     fanoCavity               Michel.Maire@lapp.in2p3.fr      Michel Maire
