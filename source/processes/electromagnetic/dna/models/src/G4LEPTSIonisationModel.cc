@@ -91,8 +91,8 @@ void G4LEPTSIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   fParticleChangeForGamma->ProposeLocalEnergyDeposit(Edep);
 
   if( P2KinEn > theLowestEnergyLimit) {
-    G4double cp0 = sqrt(P0KinEn*(P0KinEn + 2.*CLHEP::electron_mass_c2));
-    G4double cp1 = sqrt(P1KinEn*(P1KinEn + 2.*CLHEP::electron_mass_c2));
+    G4double cp0 = std::sqrt(P0KinEn*(P0KinEn + 2.*CLHEP::electron_mass_c2));
+    G4double cp1 = std::sqrt(P1KinEn*(P1KinEn + 2.*CLHEP::electron_mass_c2));
     G4ThreeVector P2Momentum = cp0*P0Dir -cp1*P1Dir;
     G4ThreeVector P2Dir = P2Momentum / P2Momentum.mag();
     P2Dir.rotateUz(P0Dir);

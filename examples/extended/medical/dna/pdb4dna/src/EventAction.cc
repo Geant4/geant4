@@ -176,7 +176,7 @@ void EventAction::ComputeStrandBreaks(G4int* sb)
 
       // one dsb
       //
-      if ( abs(nucl2-nucl1) <= fThresDistForDSB )
+      if ( std::abs(nucl2-nucl1) <= fThresDistForDSB )
       {
         if ( ( edep2 >= fThresEdepForSSB/eV ) &&
             ( edep1 >= fThresEdepForSSB/eV ) )

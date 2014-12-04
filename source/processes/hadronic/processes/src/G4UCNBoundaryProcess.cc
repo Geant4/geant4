@@ -422,7 +422,7 @@ G4UCNBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
            // --- Change of the normal momentum component
            //     p = sqrt(2*m*Ekin)
 
-           G4double mass = -sqrt(theMomentumNormal*theMomentumNormal - 
+           G4double mass = -std::sqrt(theMomentumNormal*theMomentumNormal - 
                                  neutron_mass_c2*2.*FermiPotDiff);
 
            // --- Momentum direction in new media
@@ -471,10 +471,10 @@ G4bool G4UCNBoundaryProcess::Loss(G4double pUpScatter,
   // omega, which are related to the height and the distance of
   // "disturbances" on the surface
 
-  G4double vBound = sqrt(2.*FermiPot/neutron_mass_c2*c_squared);
+  G4double vBound = std::sqrt(2.*FermiPot/neutron_mass_c2*c_squared);
   G4double vRatio = theVelocityNormal/vBound;
 
-  G4double pLoss = (2*pUpScatter*vRatio)/(sqrt(1-(vRatio*vRatio)));
+  G4double pLoss = (2*pUpScatter*vRatio)/(std::sqrt(1-(vRatio*vRatio)));
 
   // Check, if enhancement for surface roughness should be done
 
@@ -491,7 +491,7 @@ G4bool G4UCNBoundaryProcess::Loss(G4double pUpScatter,
      }
   }
 
-  return (G4UniformRand() <= fabs(pLoss));
+  return (G4UniformRand() <= std::fabs(pLoss));
 }
 
 G4bool G4UCNBoundaryProcess::SpinFlip(G4double pSpinFlip)
@@ -501,8 +501,8 @@ G4bool G4UCNBoundaryProcess::SpinFlip(G4double pSpinFlip)
 
 G4double G4UCNBoundaryProcess::Reflectivity(G4double FermiPot, G4double Enormal)
 {
-  G4double r = (sqrt(Enormal) - sqrt(Enormal - FermiPot)) /
-               (sqrt(Enormal) + sqrt(Enormal - FermiPot));
+  G4double r = (std::sqrt(Enormal) - std::sqrt(Enormal - FermiPot)) /
+               (std::sqrt(Enormal) + std::sqrt(Enormal - FermiPot));
 
   return r*r;
 } 
@@ -677,11 +677,11 @@ G4ThreeVector G4UCNBoundaryProcess::MRreflectHigh(G4double pDiffuse,
 
   Enew = Energy - FermiPot;
 
-  G4double palt = sqrt(2*neutron_mass_c2/c_squared*Energy);
+  G4double palt = std::sqrt(2*neutron_mass_c2/c_squared*Energy);
   G4double produ = OldMomentum * Normal;
 
   NewMomentum = palt*OldMomentum-
-                (palt*produ+sqrt(palt*palt*produ*produ-2*neutron_mass_c2/
+                (palt*produ+std::sqrt(palt*palt*produ*produ-2*neutron_mass_c2/
                       c_squared*FermiPot))*Normal;
 
   mSnellTransmit++;
@@ -856,7 +856,7 @@ G4ThreeVector G4UCNBoundaryProcess::LDiffRefl(G4ThreeVector Normal)
 
   // cosine distribution - Lambert's law
 
-  momentum.setRThetaPhi(1., acos(sqrt(G4UniformRand())), 2.*pi*G4UniformRand());
+  momentum.setRThetaPhi(1., std::acos(std::sqrt(G4UniformRand())), 2.*pi*G4UniformRand());
   momentum.rotateUz(Normal);
 
   if (momentum*Normal < 0) {

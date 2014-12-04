@@ -932,7 +932,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
         if (theSurfaceRoughness != 0. && Rindex1 > Rindex2) {
            G4double wavelength = h_Planck*c_light/thePhotonMomentum;
            G4double SurfaceRoughnessCriterion =
-             exp(-pow((4*pi*theSurfaceRoughness*Rindex1*cost1/wavelength),2));
+             std::exp(-std::pow((4*pi*theSurfaceRoughness*Rindex1*cost1/wavelength),2));
            SurfaceRoughnessCriterionPass = 
                                      G4BooleanRand(SurfaceRoughnessCriterion);
         }

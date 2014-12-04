@@ -147,7 +147,7 @@ template<typename Position>
 
     ret = __NearestInRange(dx <= 0.0 ? node->GetLeft() : node->GetRight(), pos,
                            range_sq, range, list, ordered, source_node);
-    if (ret >= 0 && fabs(dx) <= range)
+    if (ret >= 0 && std::fabs(dx) <= range)
     {
       added_res += ret;
       ret = __NearestInRange(dx <= 0.0 ? node->GetRight() : node->GetLeft(),

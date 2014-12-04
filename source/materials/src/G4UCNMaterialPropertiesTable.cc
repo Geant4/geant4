@@ -414,8 +414,8 @@ G4bool G4UCNMaterialPropertiesTable::ConditionsValid(G4double E,
                                                      G4double VFermi,
                                                      G4double theta_i)
 {
-  G4double k =   sqrt(2*neutron_mass_c2*E      / hbarc_squared);
-  G4double k_l = sqrt(2*neutron_mass_c2*VFermi / hbarc_squared);
+  G4double k =   std::sqrt(2*neutron_mass_c2*E      / hbarc_squared);
+  G4double k_l = std::sqrt(2*neutron_mass_c2*VFermi / hbarc_squared);
 
   //G4cout << " Energy: " << E/(1.e-9*eV) << "neV"
   //       << " VFermi: " << VFermi/(1.e-9*eV) << "neV"
@@ -426,7 +426,7 @@ G4bool G4UCNMaterialPropertiesTable::ConditionsValid(G4double E,
 
   // see eq. 17 of the Steyerl paper
 
-  if (2*b*k*cos(theta_i) < 1 && 2*b*k_l < 1) return true;
+  if (2*b*k*std::cos(theta_i) < 1 && 2*b*k_l < 1) return true;
   else return false;
 }
 
@@ -437,7 +437,7 @@ G4bool G4UCNMaterialPropertiesTable::TransConditionsValid(G4double E,
   G4double k2   = 2*neutron_mass_c2*E      / hbarc_squared;
   G4double k_l2 = 2*neutron_mass_c2*VFermi / hbarc_squared;
 
-  if (E*(cos(theta_i)*cos(theta_i)) < VFermi) return false;
+  if (E*(std::cos(theta_i)*std::cos(theta_i)) < VFermi) return false;
 
   G4double kS2 = k_l2 - k2;
 
@@ -446,7 +446,7 @@ G4bool G4UCNMaterialPropertiesTable::TransConditionsValid(G4double E,
 
   // see eq. 18 of the Steyerl paper
 
-  if (2*b*sqrt(kS2)*cos(theta_i) < 1 && 2*b*sqrt(k_l2) < 1) return true;
+  if (2*b*std::sqrt(kS2)*std::cos(theta_i) < 1 && 2*b*std::sqrt(k_l2) < 1) return true;
   else return false;
 }
 

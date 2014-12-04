@@ -113,11 +113,11 @@ void G4LEPTSElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4double G4LEPTSElasticModel::EnergyTransfer(G4double E, G4double ang, G4double MT, G4double MP) 
 {
-  G4double co = cos(ang);
-  G4double si = sin(ang);
+  G4double co = std::cos(ang);
+  G4double si = std::sin(ang);
 
-  G4double W = ( (E+MP)*si*si + MT - co*sqrt(MT*MT-MP*MP*si*si) ) * E*(E+2*MP)
-    / ( pow((E+MP+MT),2) - E*co*co*(E+2*MP) );
+  G4double W = ( (E+MP)*si*si + MT - co*std::sqrt(MT*MT-MP*MP*si*si) ) * E*(E+2*MP)
+    / ( std::pow((E+MP+MT),2) - E*co*co*(E+2*MP) );
 
   //G4double W2 = 2*MP/MT*(1-co)*E;
   //G4cout << "WWWWWWWWW: " << W/E << " " << E/W << " " << W2/W << G4endl;

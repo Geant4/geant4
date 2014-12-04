@@ -128,7 +128,7 @@ G4double G4VAdjointReverseReaction::GetMeanFreePath(const G4Track& track,
   G4double fwd_TotCS;
   G4double corr =  theAdjointCSManager->GetCrossSectionCorrection(track.GetDefinition(),preStepKinEnergy,track.GetMaterialCutsCouple(),IsFwdCSUsed, fwd_TotCS);
 
-  if(fabs(corr) > 100.) { Sigma = 0.0; }
+  if(std::fabs(corr) > 100.) { Sigma = 0.0; }
   else { Sigma *= corr; }
 
   //G4cout<<fwd_TotCS<<G4endl;

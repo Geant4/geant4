@@ -55,7 +55,7 @@ ComputeECForSinglePlane(G4double vXposition,
     G4double vValueForSinglePlane = 0.;
     for(unsigned int i=0;i<3;i++){
         vValueForSinglePlane += ( fAlfa[i] *
-                                 exp( - fabs(vXposition) * fBeta[i] / aTF ) );
+                                 std::exp( - std::fabs(vXposition) * fBeta[i] / aTF ) );
     }
 
     vValueForSinglePlane *= 2. * CLHEP::pi;

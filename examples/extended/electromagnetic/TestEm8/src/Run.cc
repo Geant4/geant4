@@ -95,7 +95,7 @@ void Run::EndOfRun()
   fOverflow    *= norm;
 
   G4double y1 = fEdep.mean();
-  G4double y2 = sqrt(fEdep.rms());
+  G4double y2 = std::sqrt(fEdep.rms());
 
   G4double de = fMaxEnergy/G4double(fNbins);  
   G4double x1 = -de*0.5; 

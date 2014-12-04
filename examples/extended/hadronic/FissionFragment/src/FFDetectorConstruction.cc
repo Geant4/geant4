@@ -243,11 +243,11 @@ Construct()
             placeMe = false;
             
             // Fuel plate must be completely within the radius to be placed
-            if(sqrt(x * x + y * y) < plateRadius)
+            if(std::sqrt(x * x + y * y) < plateRadius)
             {
                 // Leave a 1 inch radius opening in the middle for the neutron
                 // source
-                if(sqrt(x * x + y * y) > 1.0 * inch)
+                if(std::sqrt(x * x + y * y) > 1.0 * inch)
                 {
                     placeMe = true;
                 }
@@ -325,7 +325,7 @@ Construct()
                               fPolyethylene,            // the material
                               solidPoly->GetName());    // the name
     // The polyethylene detector tower goes just outside the tank at 45 deg
-    G4double radiusToPolyCenter = (tankOR / sqrt(2.0)) + sqrt(2.0) * polyS;
+    G4double radiusToPolyCenter = (tankOR / std::sqrt(2.0)) + std::sqrt(2.0) * polyS;
     position.set(-radiusToPolyCenter, radiusToPolyCenter, polyH);
     new G4PVPlacement(NULL,                             // no rotation
                       position,                         // position

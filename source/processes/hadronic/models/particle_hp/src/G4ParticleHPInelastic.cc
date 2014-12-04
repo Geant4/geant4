@@ -299,7 +299,7 @@ throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do w
       G4HadSecondary* seco = result->GetSecondary(0);
       if(seco) {
 	G4ThreeVector secoMom =  seco->GetParticle()->GetMomentum();
-	G4cout << " G4ParticleHPinelastic COS THETA " << cos(secoMom.theta()) <<" " << secoMom << G4endl;
+	G4cout << " G4ParticleHPinelastic COS THETA " << std::cos(secoMom.theta()) <<" " << secoMom << G4endl;
       }
     }
 

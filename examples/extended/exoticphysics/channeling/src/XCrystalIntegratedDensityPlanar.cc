@@ -82,7 +82,7 @@ G4double XCrystalIntegratedDensityPlanar::ComputeIntegratedDensity(
     
     
     vDensity *= vInterplanarPeriod;
-    vDensity *= vInterplanarPeriod/fabs(xMax - xMin);
+    vDensity *= vInterplanarPeriod/std::fabs(xMax - xMin);
 
     vDensity /= GetIntegrationPoints(0);
     

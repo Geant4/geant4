@@ -232,7 +232,7 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
 				 (currentKinEnergy*(currentKinEnergy+2.*mass)*
 				  KineticEnergy*(KineticEnergy+2.*mass)));
   y = trueStepLength/currentRadLength;
-  G4double theta0 = c_highland*std::abs(charge)*sqrt(y)*invbetacp;
+  G4double theta0 = c_highland*std::abs(charge)*std::sqrt(y)*invbetacp;
   y = G4Log(y);
   // correction factor from e- scattering data
   theta0 *= (coeffth1+coeffth2*y);

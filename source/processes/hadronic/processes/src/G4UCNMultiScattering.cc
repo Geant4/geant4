@@ -156,7 +156,7 @@ G4ThreeVector G4UCNMultiScattering::Scatter()
   // Make a simple uniform distribution in 4 pi
   // apply scattering, calculate angle phi, theta
 
-  G4double theta = acos(2*G4UniformRand()-1);
+  G4double theta = std::acos(2*G4UniformRand()-1);
   G4double phi = G4UniformRand() * 2 * pi;
 
   final.rotateY(theta);

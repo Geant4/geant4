@@ -373,7 +373,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	if(etot <= ionmass) {
 	  etot = ionmass;
 	} else {
-	  G4double ptot = sqrt((etot - ionmass)*(etot + ionmass));
+	  G4double ptot = std::sqrt((etot - ionmass)*(etot + ionmass));
 	  mom = ((*iList)->GetMomentum().vect().unit())*ptot;
 	}
 	G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);

@@ -139,7 +139,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
       //Assign this thread to cpus in a round robin way
 	  G4int offset = masterRM->GetPinAffinity();
 	  G4int cpuindex = 0;
-	  if ( abs(offset)>G4Threading::G4GetNumberOfCores() ) {
+	  if ( std::abs(offset)>G4Threading::G4GetNumberOfCores() ) {
 		  G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity, affinity parameter larger than number of cores");
 	  }
 	  if ( offset == 0 ) {

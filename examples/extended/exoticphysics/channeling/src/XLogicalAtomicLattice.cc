@@ -104,8 +104,8 @@ ComputeGeometricalStructureFactorSingleKind(G4int h,
         vTempDouble += h * fLatticeAtomPosition[i].x();
         vTempDouble += k * fLatticeAtomPosition[i].y();
         vTempDouble += l * fLatticeAtomPosition[i].z();
-        vResult += G4complex(cos(2 * CLHEP::pi * vTempDouble),
-                             sin(2 * CLHEP::pi * vTempDouble));
+        vResult += G4complex(std::cos(2 * CLHEP::pi * vTempDouble),
+                             std::sin(2 * CLHEP::pi * vTempDouble));
     }
 
     return vResult;

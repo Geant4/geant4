@@ -165,7 +165,7 @@ void XVCrystalIntegratedDensity::ComputePotentialParameters(){
         fPotentialMaximum = - fPotential->GetMinimum(fLattice);
     }
     
-    fPotentialRange = fabs(fPotentialMaximum - fPotentialMinimum);
+    fPotentialRange = std::fabs(fPotentialMaximum - fPotentialMinimum);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -183,7 +183,7 @@ void XVCrystalIntegratedDensity::InitializeTable(){
     
     fTableVector =
     new G4PhysicsLinearVector(0.,
-                               fabs(fPotentialMaximum - fPotentialMinimum),
+                               std::fabs(fPotentialMaximum - fPotentialMinimum),
                                GetNumberOfPoints());
     
     G4double vValue = 0;
@@ -204,14 +204,14 @@ GetIntegratedDensity(G4double vPotential,
                      G4int vParticleCharge){
         
     G4double vPotentialModified = vPotential /
-        fabs(G4double(vParticleCharge)) - fPotentialMinimum;
+        std::fabs(G4double(vParticleCharge)) - fPotentialMinimum;
     
     // if the crystal has not been initialized return -1 -> Error!
     if(!HasBeenInitialized(vLattice,vParticleCharge))
         return -1.;
     // if the potential is higher than the maximum the average density
     // is equal to the one of the amorphous material
-    else if(vPotentialModified >= fabs(fPotentialMaximum - fPotentialMinimum))
+    else if(vPotentialModified >= std::fabs(fPotentialMaximum - fPotentialMinimum))
         return 1.;
     // if the value is less than zero (because of possible variation
     // due to centrifugal force) take the zero value
@@ -334,14 +334,14 @@ void XVCrystalIntegratedDensity::ReadFromFile(const G4String& filename){
     
     fTableVector =
         new G4PhysicsLinearVector(0.,
-                                  fabs(fPotentialMaximum - fPotentialMinimum),
+                                  std::fabs(fPotentialMaximum - fPotentialMinimum),
                                   fNumberOfPoints);
     
     for(unsigned int i=0;i<fTable.size();i++){
         fTableVector->PutValue(i,fTable.at(i));
     }
     
-    fPotentialRange = fabs(fPotentialMaximum - fPotentialMinimum);
+    fPotentialRange = std::fabs(fPotentialMaximum - fPotentialMinimum);
     
     G4cout << "XVCrystalIntegratedDensity::InitializeTable()::";
     G4cout << "Potential Range =  " << fPotentialRange/CLHEP::eV;

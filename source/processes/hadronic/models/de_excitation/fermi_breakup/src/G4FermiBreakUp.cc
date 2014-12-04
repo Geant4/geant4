@@ -240,7 +240,7 @@ G4double G4FermiBreakUp::DecayProbability(G4int A, G4double TotalE,
     G4int n1 = n2/2;
     Gamma = sqrtpi*g4pow->factorial(n2)/
       (g4pow->powN(4.0,n1)*g4pow->factorial(n1));
-    Energ = g4pow->powN(Energ, n1)*sqrt(Energ);
+    Energ = g4pow->powN(Energ, n1)*std::sqrt(Energ);
   }
   
   // Permutation Factor G_n

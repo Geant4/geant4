@@ -212,7 +212,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   G4double sigmaAbs = numerator/denominator; 
 
   if(verbose > 2) {
-    G4cout << "E_GDR(MeV)= " << sqrt(energyGDR2) << " W_GDR(MeV)= " << widthGDR 
+    G4cout << "E_GDR(MeV)= " << std::sqrt(energyGDR2) << " W_GDR(MeV)= " << widthGDR 
 	   << " sigAbs= " << sigmaAbs  
 	   << " E(MeV)= " << e << " coeff= " << coeff
 	   << G4endl;

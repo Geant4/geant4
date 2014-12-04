@@ -41,11 +41,11 @@ G4double XCrystalPlanarNucleiDensity::
 ComputeECForSinglePlane(G4double vXposition,
                         XPhysicalLattice* vLattice){
     
-    G4double vValueForSinglePlane = exp( - 0.5 *
-            pow(vXposition/vLattice->GetThermalVibrationAmplitude(),2.0 ) );
+    G4double vValueForSinglePlane = std::exp( - 0.5 *
+            std::pow(vXposition/vLattice->GetThermalVibrationAmplitude(),2.0 ) );
 
     vValueForSinglePlane /= (vLattice->GetThermalVibrationAmplitude());
-    vValueForSinglePlane /= ( sqrt( 2 * CLHEP::pi) );
+    vValueForSinglePlane /= ( std::sqrt( 2 * CLHEP::pi) );
     
     return vValueForSinglePlane;
 }

@@ -107,7 +107,7 @@ G4double XUnitCell::ComputeVolume(){
         return ( fSize.x()*fSize.y()*fSize.z() );
     }
     else{
-        return (fSize.x()*fSize.y()*fSize.z()*cos(fAngle.x())*sin(fAngle.z()));
+        return (fSize.x()*fSize.y()*fSize.z()*std::cos(fAngle.x())*std::sin(fAngle.z()));
     }
 }
 
@@ -126,13 +126,13 @@ G4double XUnitCell::ComputeAtomVolumeDensity(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double XUnitCell::ComputeMillerOverSizeSquared(G4int h, G4int k, G4int l){
-    return pow(h/fSize.x(),2.) + pow(k/fSize.y(),2.) + pow(l/fSize.z(),2.);
+    return std::pow(h/fSize.x(),2.) + std::pow(k/fSize.y(),2.) + std::pow(l/fSize.z(),2.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double XUnitCell::ComputeMillerPerSizeSquared(G4int h, G4int k, G4int l){
-    return pow(h*fSize.x(),2.) + pow(k*fSize.y(),2.) + pow(l*fSize.z(),2.);
+    return std::pow(h*fSize.x(),2.) + std::pow(k*fSize.y(),2.) + std::pow(l*fSize.z(),2.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,25 +147,25 @@ G4double XUnitCell::ComputeReciprocalVectorSquared(G4int h, G4int k, G4int l){
         G4double vTemp[6];
         G4double vVolume = ComputeVolume();
         
-        vTemp[0] = fSize.y() * fSize.z() * sin(fAngle.y());
-        vTemp[0] = pow(vTemp[0] * h,2.) / vVolume;
+        vTemp[0] = fSize.y() * fSize.z() * std::sin(fAngle.y());
+        vTemp[0] = std::pow(vTemp[0] * h,2.) / vVolume;
         
-        vTemp[1] = fSize.x() * fSize.z() * sin(fAngle.x());
-        vTemp[1] = pow(vTemp[1] * k,2.) / vVolume;
+        vTemp[1] = fSize.x() * fSize.z() * std::sin(fAngle.x());
+        vTemp[1] = std::pow(vTemp[1] * k,2.) / vVolume;
         
-        vTemp[2] = fSize.x() * fSize.y() * sin(fAngle.z());
-        vTemp[2] = pow(vTemp[2] * l,2.) / vVolume;
+        vTemp[2] = fSize.x() * fSize.y() * std::sin(fAngle.z());
+        vTemp[2] = std::pow(vTemp[2] * l,2.) / vVolume;
         
-        vTemp[3] = fSize.x() * fSize.y() * pow(fSize.z(),2.) *
-            (cos(fAngle.x()) * cos(fAngle.y()) - cos(fAngle.z()));
+        vTemp[3] = fSize.x() * fSize.y() * std::pow(fSize.z(),2.) *
+            (std::cos(fAngle.x()) * std::cos(fAngle.y()) - std::cos(fAngle.z()));
         vTemp[3] *= (2. * h * k);
         
-        vTemp[4] = fSize.x() * pow(fSize.y(),2.) * fSize.z() *
-            (cos(fAngle.z()) * cos(fAngle.x()) - cos(fAngle.y()));
+        vTemp[4] = fSize.x() * std::pow(fSize.y(),2.) * fSize.z() *
+            (std::cos(fAngle.z()) * std::cos(fAngle.x()) - std::cos(fAngle.y()));
         vTemp[4] *= (2. * l * h);
         
-        vTemp[5] = pow(fSize.x(),2.) * fSize.y() * fSize.z() *
-            (cos(fAngle.y()) * cos(fAngle.z()) - cos(fAngle.x()));
+        vTemp[5] = std::pow(fSize.x(),2.) * fSize.y() * fSize.z() *
+            (std::cos(fAngle.y()) * std::cos(fAngle.z()) - std::cos(fAngle.x()));
         vTemp[5] *= (2. * k * l);
 
         vReciprocalVectorSquared = (vTemp[0]+vTemp[1]+vTemp[2]) / vVolume;
@@ -180,7 +180,7 @@ G4double XUnitCell::ComputeReciprocalVectorSquared(G4int h, G4int k, G4int l){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double XUnitCell::ComputeReciprocalVector(G4int h, G4int k, G4int l){
-    return sqrt(ComputeReciprocalVectorSquared(h,k,l));
+    return std::sqrt(ComputeReciprocalVectorSquared(h,k,l));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -193,11 +193,11 @@ G4double XUnitCell::ComputeDirectVectorSquared(G4int h, G4int k, G4int l){
         double vDirectVectorSquared = 0.0;
         vDirectVectorSquared = ComputeMillerPerSizeSquared(h,k,l);
         vDirectVectorSquared += 2. * h * k * fSize.y() *
-            fSize.z() * cos(fAngle.y()) ;
+            fSize.z() * std::cos(fAngle.y()) ;
         vDirectVectorSquared += 2. * l * h * fSize.x() *
-            fSize.z() * cos(fAngle.x()) ;
+            fSize.z() * std::cos(fAngle.x()) ;
         vDirectVectorSquared += 2. * l * l * fSize.x() *
-            fSize.y() * cos(fAngle.z()) ;
+            fSize.y() * std::cos(fAngle.z()) ;
         return vDirectVectorSquared;
     }
 }
@@ -205,7 +205,7 @@ G4double XUnitCell::ComputeDirectVectorSquared(G4int h, G4int k, G4int l){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double XUnitCell::ComputeDirectVector(G4int h, G4int k, G4int l){
-    return sqrt(ComputeDirectVectorSquared(h,k,l));
+    return std::sqrt(ComputeDirectVectorSquared(h,k,l));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,7 +217,7 @@ G4double XUnitCell::ComputeDirectPeriodSquared(G4int h, G4int k, G4int l){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double XUnitCell::ComputeDirectPeriod(G4int h, G4int k, G4int l){
-    return sqrt(ComputeDirectPeriodSquared(h,k,l));
+    return std::sqrt(ComputeDirectPeriodSquared(h,k,l));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

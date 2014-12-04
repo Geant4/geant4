@@ -774,7 +774,7 @@ void G4IonParametrisedLossModel::SampleSecondaries(
 
   // Change kinematics of primary particle
   G4ThreeVector direction = particle ->GetMomentumDirection();
-  G4double totalMomentum = sqrt(kineticEnergy*(energy + cacheMass));
+  G4double totalMomentum = std::sqrt(kineticEnergy*(energy + cacheMass));
 
   G4ThreeVector finalP = totalMomentum*direction - delta->GetMomentum();
   finalP               = finalP.unit();

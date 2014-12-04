@@ -895,5 +895,5 @@ unsigned short int PDBlib::ComputeMatchEdepDNA(Barycenter *BarycenterList,
 double PDBlib::DistanceTwo3Dpoints(double xA,double xB,double yA,double yB,
     double zA,double zB)
 {
-  return sqrt ( (xA-xB)*(xA-xB) + (yA-yB)*(yA-yB) + (zA-zB)*(zA-zB) );
+  return std::sqrt ( (xA-xB)*(xA-xB) + (yA-yB)*(yA-yB) + (zA-zB)*(zA-zB) );
 }

@@ -76,7 +76,7 @@ G4double G4UCNMicroRoughnessHelper::S2(G4double costheta2, G4double klk2)
   // case 2: radicand is negative, cf. p. 174 of the Steyerl paper
 
   if (costheta2>=klk2)
-     return 4*costheta2/(2*costheta2-klk2+2*sqrt(costheta2*(costheta2-klk2)));
+     return 4*costheta2/(2*costheta2-klk2+2*std::sqrt(costheta2*(costheta2-klk2)));
   else
      return 4*costheta2/klk2;
 }
@@ -88,7 +88,7 @@ G4double G4UCNMicroRoughnessHelper::SS2(G4double costhetas2, G4double klks2)
   // cf. p. 175 of the Steyerl paper
 
   return 4*costhetas2/
-                   (2*costhetas2+klks2+2*sqrt(costhetas2*(costhetas2+klks2)));
+                   (2*costhetas2+klks2+2*std::sqrt(costhetas2*(costhetas2+klks2)));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,22 +102,22 @@ G4double G4UCNMicroRoughnessHelper::Fmu(G4double k2, G4double thetai,
 
   // Checks if the distribution is peaked around the specular direction
 
-  if ((fabs(thetai-thetao)<AngCut) && (fabs(phio)<AngCut))
+  if ((std::fabs(thetai-thetao)<AngCut) && (std::fabs(phio)<AngCut))
     mu_squared=0.;
   else
     {
       // cf. p. 177 of the Steyerl paper
 
-      G4double sinthetai=sin(thetai);
-      G4double sinthetao=sin(thetao);
+      G4double sinthetai=std::sin(thetai);
+      G4double sinthetao=std::sin(thetao);
       mu_squared=k2*
           (sinthetai*sinthetai+sinthetao*sinthetao-
-                   2.*sinthetai*sinthetao*cos(phio));
+                   2.*sinthetai*sinthetao*std::cos(phio));
     }
 
   // cf. p. 177 of the Steyerl paper
 
-  return b2*w2/twopi*exp(-mu_squared*w2/2);
+  return b2*w2/twopi*std::exp(-mu_squared*w2/2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -133,21 +133,21 @@ G4double G4UCNMicroRoughnessHelper::FmuS(G4double k, G4double kS,
   // Checks if the distribution is peaked around the direction of
   // unperturbed refraction
 
-  if ((fabs(thetarefract-thetaSo)<AngCut) && (fabs(phiSo)<AngCut))
+  if ((std::fabs(thetarefract-thetaSo)<AngCut) && (std::fabs(phiSo)<AngCut))
     mu_squared=0.;
   else
     {
-      G4double sinthetai=sin(thetai);
-      G4double sinthetaSo=sin(thetaSo);
+      G4double sinthetai=std::sin(thetai);
+      G4double sinthetaSo=std::sin(thetaSo);
 
       // cf. p. 177 of the Steyerl paper
       mu_squared=k*k*sinthetai*sinthetai+kS*kS*sinthetaSo*sinthetaSo-
-                 2.*k*kS*sinthetai*sinthetaSo*cos(phiSo);
+                 2.*k*kS*sinthetai*sinthetaSo*std::cos(phiSo);
     }
 
   // cf. p. 177 of the Steyerl paper
 
-  return b2*w2/twopi*exp(-mu_squared*w2/2);
+  return b2*w2/twopi*std::exp(-mu_squared*w2/2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,7 +175,7 @@ G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
   G4double Intens;
   G4double ang_steptheta=90.*degree/(AngNoTheta-1);
   G4double ang_stepphi=360.*degree/(AngNoPhi-1);
-  G4double costheta_i=cos(theta_i);
+  G4double costheta_i=std::cos(theta_i);
   G4double costheta_i_squared=costheta_i*costheta_i;
 
   // (k_l/k)^2
@@ -196,7 +196,7 @@ G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
  
   for (theta_o=0.*degree; theta_o<=90.*degree+1e-6; theta_o+=ang_steptheta)
     {
-      costheta_o_squared=cos(theta_o)*cos(theta_o);
+      costheta_o_squared=std::cos(theta_o)*std::cos(theta_o);
 
       // Loop through phi_o
 
@@ -206,7 +206,7 @@ G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
 
 	  Intens=kl4d4/costheta_i*S2(costheta_i_squared,klk2)*
                  S2(costheta_o_squared,klk2)*
-                 Fmu(k2,theta_i,theta_o,phi_o,b2,w2,AngCut)*sin(theta_o);
+                 Fmu(k2,theta_i,theta_o,phi_o,b2,w2,AngCut)*std::sin(theta_o);
 
           //G4cout << "S2:  " << S2(costheta_i_squared,klk2) << G4endl;
           //G4cout << "S2:  " << S2(costheta_o_squared,klk2) << G4endl;
@@ -251,7 +251,7 @@ G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
            theta_o+=ang_steptheta)
 	{
 	  //G4cout << "theta_o: " << theta_o/degree << G4endl;
-	  costheta_o_squared=cos(theta_o)*cos(theta_o);
+	  costheta_o_squared=std::cos(theta_o)*std::cos(theta_o);
 	  for (phi_o=a_max_phi_o-ang_stepphi;
                phi_o<=a_max_phi_o+ang_stepphi+1e-6;
                phi_o+=ang_stepphi)
@@ -259,7 +259,7 @@ G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
 	      //G4cout << "phi_o: " << phi_o/degree << G4endl;
 	      Intens=kl4d4/costheta_i*S2(costheta_i_squared, klk2)*
                      S2(costheta_o_squared,klk2)*
-                     Fmu(k2,theta_i,theta_o,phi_o,b2,w2,AngCut)*sin(theta_o);
+                     Fmu(k2,theta_i,theta_o,phi_o,b2,w2,AngCut)*std::sin(theta_o);
 	      if (Intens>*max)
 		{
 		  *max=Intens;
@@ -289,7 +289,7 @@ G4double G4UCNMicroRoughnessHelper::IntIminus(G4double E, G4double fermipot,
   G4double IntensS;
   G4double ang_steptheta=180.*degree/(AngNoTheta-1);
   G4double ang_stepphi=180.*degree/(AngNoPhi-1);
-  G4double costheta_i=cos(theta_i);
+  G4double costheta_i=std::cos(theta_i);
   G4double costheta_i_squared=costheta_i*costheta_i;
 
   *max = 0.;
@@ -307,19 +307,19 @@ G4double G4UCNMicroRoughnessHelper::IntIminus(G4double E, G4double fermipot,
   G4double klks2=fermipot/(E-fermipot);
 
   // k'/k
-  G4double ksdk=sqrt((E-fermipot)/E);
+  G4double ksdk=std::sqrt((E-fermipot)/E);
 
   G4double costhetas_o_squared;
 
   // k
-  G4double k=sqrt(2*neutron_mass_c2*E/hbarc_squared);
+  G4double k=std::sqrt(2*neutron_mass_c2*E/hbarc_squared);
 
   // k'
   G4double kS=ksdk*k;
 
   for (thetas_o=0.*degree; thetas_o<=90.*degree+1e-6; thetas_o+=ang_steptheta)
     {
-      costhetas_o_squared=cos(thetas_o)*cos(thetas_o);
+      costhetas_o_squared=std::cos(thetas_o)*std::cos(thetas_o);
 
       for (phis_o=-180.*degree; phis_o<=180.*degree+1e-6; phis_o+=ang_stepphi)
 	{
@@ -329,13 +329,13 @@ G4double G4UCNMicroRoughnessHelper::IntIminus(G4double E, G4double fermipot,
             //calculates probability for a certain theta'_o, phi'_o pair
 
             G4double thetarefract = thetas_o;
-            if (std::fabs(sin(theta_i)/ksdk) <= 1.)
-                                        thetarefract = asin(sin(theta_i)/ksdk);
+            if (std::fabs(std::sin(theta_i)/ksdk) <= 1.)
+                                        thetarefract = std::asin(std::sin(theta_i)/ksdk);
 
 	    IntensS = kl4d4/costheta_i*ksdk*S2(costheta_i_squared, klk2)*
                       SS2(costhetas_o_squared,klks2)*
                       FmuS(k,kS,theta_i,thetas_o,phis_o,b2,w2,AngCut,thetarefract)*
-                      sin(thetas_o);
+                      std::sin(thetas_o);
 	  } else {
 	    IntensS=0.;
           }
@@ -368,19 +368,19 @@ G4double G4UCNMicroRoughnessHelper::IntIminus(G4double E, G4double fermipot,
            thetas_o<=a_max_thetas_o-ang_steptheta+1e-6;
            thetas_o+=ang_steptheta)
 	{
-	  costhetas_o_squared=cos(thetas_o)*cos(thetas_o);
+	  costhetas_o_squared=std::cos(thetas_o)*std::cos(thetas_o);
 	  for (phis_o=a_max_phis_o-ang_stepphi;
                phis_o<=a_max_phis_o+ang_stepphi+1e-6;
                phis_o+=ang_stepphi)
 	    {
               G4double thetarefract = thetas_o;
-              if (std::fabs(sin(theta_i)/ksdk) <= 1.)
-                                       thetarefract = asin(sin(theta_i)/ksdk);
+              if (std::fabs(std::sin(theta_i)/ksdk) <= 1.)
+                                       thetarefract = std::asin(std::sin(theta_i)/ksdk);
 
 	      IntensS=kl4d4/costheta_i*ksdk*S2(costheta_i_squared, klk2)*
                       SS2(costhetas_o_squared,klks2)*
                       FmuS(k,kS,theta_i,thetas_o,phis_o,b2,w2,AngCut,thetarefract)*
-                      sin(thetas_o);
+                      std::sin(thetas_o);
 	      if (IntensS>*max)
 		{
 		  *max=IntensS;
@@ -410,15 +410,15 @@ G4double G4UCNMicroRoughnessHelper::ProbIplus(G4double E, G4double fermipot,
   // (k_l/k)^2
   G4double klk2=fermipot/E;
 
-  G4double costheta_i=cos(theta_i); 
-  G4double costheta_o=cos(theta_o);
+  G4double costheta_i=std::cos(theta_i); 
+  G4double costheta_o=std::cos(theta_o);
 
   // eq. 20 on page 176 in the steyerl paper
 
   return kl4d4/costheta_i*S2(costheta_i*costheta_i, klk2)*
          S2(costheta_o*costheta_o,klk2)*
    Fmu(2*neutron_mass_c2*E/hbarc_squared,theta_i,theta_o,phi_o,b*b,w*w,AngCut)*
-   sin(theta_o);
+   std::sin(theta_o);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -444,26 +444,26 @@ G4double G4UCNMicroRoughnessHelper::ProbIminus(G4double E, G4double fermipot,
   }
 
   // k'/k
-  G4double ksdk=sqrt((E-fermipot)/E);
+  G4double ksdk=std::sqrt((E-fermipot)/E);
 
   // k
-  G4double k=sqrt(2*neutron_mass_c2*E/hbarc_squared);
+  G4double k=std::sqrt(2*neutron_mass_c2*E/hbarc_squared);
 
   // k'/k
   G4double kS=ksdk*k;
 
-  G4double costheta_i=cos(theta_i);
-  G4double costhetas_o=cos(thetas_o);
+  G4double costheta_i=std::cos(theta_i);
+  G4double costhetas_o=std::cos(thetas_o);
 
   // eq. 20 on page 176 in the steyerl paper
 
   G4double thetarefract = thetas_o;
-  if(std::fabs(sin(theta_i)/ksdk) <= 1.)thetarefract = asin(sin(theta_i)/ksdk);
+  if(std::fabs(std::sin(theta_i)/ksdk) <= 1.)thetarefract = std::asin(std::sin(theta_i)/ksdk);
 
   return kl4d4/costheta_i*ksdk*S2(costheta_i*costheta_i, klk2)*
          SS2(costhetas_o*costhetas_o,klks2)*
          FmuS(k,kS,theta_i,thetas_o,phis_o,b*b,w*w,AngCut,thetarefract)*
-         sin(thetas_o);
+         std::sin(thetas_o);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

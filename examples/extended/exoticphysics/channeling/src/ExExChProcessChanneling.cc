@@ -314,8 +314,8 @@ ComputeChannelingOutgoingMomentum(const G4Track& aTrack){
     
     G4double vTotalEnergy = vStepPre->GetTotalEnergy();
     
-    G4double vTransverseEnergyX = fabs(ComputeTransverseEnergy(aTrack).x());
-    G4double vTransverseEnergyY = fabs(ComputeTransverseEnergy(aTrack).y());
+    G4double vTransverseEnergyX = std::fabs(ComputeTransverseEnergy(aTrack).x());
+    G4double vTransverseEnergyY = std::fabs(ComputeTransverseEnergy(aTrack).y());
     double vPotentialEnergyX = 0.;
     double vPotentialEnergyY = 0.;
     
@@ -339,9 +339,9 @@ ComputeChannelingOutgoingMomentum(const G4Track& aTrack){
     vTransverseEnergyX-=vPotentialEnergyX;
     vTransverseEnergyY-=vPotentialEnergyY;
 
-    G4double vChAngleX = pow(+ 2. * fabs(vTransverseEnergyX)
+    G4double vChAngleX = std::pow(+ 2. * std::fabs(vTransverseEnergyX)
                              / vTotalEnergy , 0.5);
-    G4double vChAngleY = pow(+ 2. * fabs(vTransverseEnergyY)
+    G4double vChAngleY = std::pow(+ 2. * std::fabs(vTransverseEnergyY)
                              / vTotalEnergy , 0.5);
     
     G4double vPhi = 2. * ( G4UniformRand() - 0.5) * vChAngleX;
@@ -372,17 +372,17 @@ ComputeVolumeReflectionOutgoingMomentum(const G4Track& aTrack){
         G4double vTotalEnergy = vStep->GetTotalEnergy();
         
         G4double vEnergyMax =
-            fabs(ComputeCriticalEnergyMaximum(aTrack)
+            std::fabs(ComputeCriticalEnergyMaximum(aTrack)
                 - ComputeCriticalEnergyMinimum(aTrack));
         
         G4double vEnergyRMS =
-            fabs(ComputeCentrifugalEnergyMaximumVariation(aTrack).x());
+            std::fabs(ComputeCentrifugalEnergyMaximumVariation(aTrack).x());
         
         G4double vTransverseEnergy =
-            vEnergyMax + (G4UniformRand() * fabs(vEnergyRMS) );
+            vEnergyMax + (G4UniformRand() * std::fabs(vEnergyRMS) );
         
-        vVrAngle = - fabs(vRadiusX)/vRadiusX *
-            pow(+ 2. * fabs(vTransverseEnergy) / vTotalEnergy , 0.5);
+        vVrAngle = - std::fabs(vRadiusX)/vRadiusX *
+            std::pow(+ 2. * std::fabs(vTransverseEnergy) / vTotalEnergy , 0.5);
         
         if(ParticleIsNegative(aTrack)){
             vVrAngle *= 0.8; // = see PLB 681 (2009) 233
@@ -396,14 +396,14 @@ ComputeVolumeReflectionOutgoingMomentum(const G4Track& aTrack){
         G4double vAngleRatio =
             (vMomentumChanneled.x()/vTotalEnergy)/ComputeCriticalAngle(aTrack);
         
-        if(fabs(vAngleRatio)<1.5){
-            vVrAngle *= (-(fabs(vAngleRatio) - 1.5)/3.);
+        if(std::fabs(vAngleRatio)<1.5){
+            vVrAngle *= (-(std::fabs(vAngleRatio) - 1.5)/3.);
         }
     }
     
     G4double vOmega = GetXPhysicalLattice(aTrack)->GetLatticeAngles().y();
-    G4double vPhi = vVrAngle * cos(vOmega);
-    G4double vTheta = vVrAngle * sin(vOmega);
+    G4double vPhi = vVrAngle * std::cos(vOmega);
+    G4double vTheta = vVrAngle * std::sin(vOmega);
     
     G4ThreeVector vNewMomentum =
         aTrack.GetMomentum().unit()
@@ -463,12 +463,12 @@ ComputeDistanceWhereParticleTangentToBentPlane(const G4Track& aTrack){
     G4double vDeltaProportion = 1.;
     
     if((vMomentumPre.x())!=0.){
-        vDeltaProportion = fabs(vMomentumPre.unit().x());
+        vDeltaProportion = std::fabs(vMomentumPre.unit().x());
     }
     G4double vDeltaPosition = vDeltaProportion*
         GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x();
     
-    return abs(vDeltaPosition);
+    return std::abs(vDeltaPosition);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -564,7 +564,7 @@ IsUnderCoherentEffect(const G4Track& aTrack){
         G4ThreeVector vPositionInTheCrystal =
         GetInfo(aTrack)->GetPositionChanneled()
             + GetInfo(aTrack)->GetPositionChanneledInitial();
-        vTransverseEnergy += fabs(ComputeCentrifugalEnergy(aTrack,
+        vTransverseEnergy += std::fabs(ComputeCentrifugalEnergy(aTrack,
                                                 vPositionInTheCrystal).x());
         if(vTransverseEnergy <= vEnergyMax){
             // the particle is in channeling
@@ -609,7 +609,7 @@ GetChannelingMeanFreePath(const G4Track& aTrack){
         G4double vMFPVR =
             ComputeDistanceWhereParticleTangentToBentPlane(aTrack);
         
-        if((fabs(vMFPVR) < vMFP) && (fabs(vMFPVR) > (0.5 * vMFPosc))){
+        if((std::fabs(vMFPVR) < vMFP) && (std::fabs(vMFPVR) > (0.5 * vMFPosc))){
             vMFP = vMFPVR;
         }
     }
@@ -853,7 +853,7 @@ ComputeCriticalEnergyMaximum(const G4Track& aTrack){
             + fPotentialEnergy->GetMaximum(GetXPhysicalLattice(aTrack));
     }
     
-    vCriticalEnergy *= fabs(GetParticleDefinition(aTrack)->GetPDGCharge());
+    vCriticalEnergy *= std::fabs(GetParticleDefinition(aTrack)->GetPDGCharge());
     
     return vCriticalEnergy;
 }
@@ -878,7 +878,7 @@ ComputeCriticalEnergyMinimum(const G4Track& aTrack){
             + fPotentialEnergy->GetMinimum(GetXPhysicalLattice(aTrack));
     }
     
-    vCriticalEnergy *= fabs(GetParticleDefinition(aTrack)->GetPDGCharge());
+    vCriticalEnergy *= std::fabs(GetParticleDefinition(aTrack)->GetPDGCharge());
     
     return vCriticalEnergy;
 }
@@ -894,8 +894,8 @@ ComputeCriticalAngle(const G4Track& aTrack){
     
     G4double vTotalEnergy =
         aTrack.GetStep()->GetPostStepPoint()->GetTotalEnergy();
-    G4double vCriticalAngle = pow( 2.0 *
-                    fabs( ( ComputeCriticalEnergyMaximum(aTrack)
+    G4double vCriticalAngle = std::pow( 2.0 *
+                    std::fabs( ( ComputeCriticalEnergyMaximum(aTrack)
                            - ComputeCriticalEnergyMinimum(aTrack) )
                            / vTotalEnergy ) , 0.5);
     return vCriticalAngle;

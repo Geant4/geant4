@@ -544,7 +544,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 #ifdef G4PHPDEBUG
       if( getenv("G4ParticleHPDebug"))  G4cout << this << " G4ParticleHPInelasticBaseFS::BaseApply add secondary2 " << theSec->GetParticleDefinition()->GetParticleName() << " E= " << theSec->GetKineticEnergy() << " NSECO " << theResult.GetNumberOfSecondaries() << G4endl;
 #endif
-     if( getenv("G4PHPTEST") ) G4cout << " InelasticBaseFS COS THETA " << cos(theSec->GetMomentum().theta()) << " " << (theSec->GetMomentum().theta()) << " " << theSec->GetMomentum() << " E "<< theSec->GetKineticEnergy() << " " << theSec->GetDefinition()->GetParticleName() << G4endl; //GDEB
+     if( getenv("G4PHPTEST") ) G4cout << " InelasticBaseFS COS THETA " << std::cos(theSec->GetMomentum().theta()) << " " << (theSec->GetMomentum().theta()) << " " << theSec->GetMomentum() << " E "<< theSec->GetKineticEnergy() << " " << theSec->GetDefinition()->GetParticleName() << G4endl; //GDEB
       delete tmpHadrons->operator[](i);
     }
 #ifdef G4PHPDEBUG

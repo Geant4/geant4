@@ -82,7 +82,7 @@ ComputeECFromVector(G4ThreeVector vPosition){
     }
     else{
         G4double vPositionX = vPosition.x() -
-            fmod(vPosition.x(),vInterplanarPeriod) * vInterplanarPeriod;
+            std::fmod(vPosition.x(),vInterplanarPeriod) * vInterplanarPeriod;
         return G4ThreeVector(fVectorEC->Value(vPositionX),0.,0.);
     }
 }
@@ -107,7 +107,7 @@ ComputePositionInUnitCell(G4ThreeVector vPosition,
         return G4ThreeVector(0.,0.,0.);
     }
     else{
-        vPositionX -= fmod(vPosition.x(),vInterplanarPeriod)
+        vPositionX -= std::fmod(vPosition.x(),vInterplanarPeriod)
             * vInterplanarPeriod;
         return G4ThreeVector(vPositionX/vInterplanarPeriod,0.,0.);
     }

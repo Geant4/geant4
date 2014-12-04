@@ -1746,7 +1746,7 @@ G4ITNavigator2::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     //
     globalNormal = fExitNormalGlobalFrame; 
     G4double  normMag2 = globalNormal.mag2(); 
-    if( fabs ( normMag2 - 1.0 ) < perMillion )  // Value is good 
+    if( std::fabs ( normMag2 - 1.0 ) < perMillion )  // Value is good 
     {
        *pNormalCalculated = true; // ComputeStep always computes it if Exiting
                                   // (fExiting==true)

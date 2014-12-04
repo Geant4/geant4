@@ -99,7 +99,7 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double cost = 1.0 - 2*t/(P*P);
     if(cost > 1.0) { cost = 1.0; }
     if(cost <-1.0) { cost =-1.0; }
-    G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+    G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
     G4double phi = twopi*G4UniformRand();
     // Get the target particle
     G4DynamicParticle* targetParticle = targetNucleus.ReturnTargetParticle();

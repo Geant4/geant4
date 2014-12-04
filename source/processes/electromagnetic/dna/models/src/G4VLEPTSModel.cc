@@ -226,8 +226,8 @@ G4double G4VLEPTSModel::SampleAngle(const G4Material* aMaterial, G4double e, G4d
     G4double Ei = e;                                       //incidente
     G4double Ed = e -el;                                   //dispersado
       
-    G4double Pi = sqrt( pow( (Ei/27.2/137),2) +2*Ei/27.2); //incidente
-    G4double Pd = sqrt( pow( (Ed/27.2/137),2) +2*Ed/27.2); //dispersado
+    G4double Pi = std::sqrt( std::pow( (Ei/27.2/137),2) +2*Ei/27.2); //incidente
+    G4double Pd = std::sqrt( std::pow( (Ed/27.2/137),2) +2*Ed/27.2); //dispersado
 
     G4double Kmin = Pi - Pd;
     G4double Kmax = Pi + Pd;
@@ -236,7 +236,7 @@ G4double G4VLEPTSModel::SampleAngle(const G4Material* aMaterial, G4double e, G4d
       
     G4double co = (Pi*Pi + Pd*Pd - KR*KR) / (2*Pi*Pd);    //cos ang. disp.
     if( co > 1. ) co = 1.;
-    x = acos(co); //*360/twopi;                         //ang. dispers.
+    x = std::acos(co); //*360/twopi;                         //ang. dispers.
   }
   return(x);
 }
@@ -246,10 +246,10 @@ G4ThreeVector G4VLEPTSModel::SampleNewDirection(const G4Material* aMaterial, G4T
   
   G4double x = SampleAngle(aMaterial, e, el);
 
-  G4double cosTeta = cos(x); //*twopi/360.0);
-  G4double sinTeta = sqrt(1.0-cosTeta*cosTeta);
+  G4double cosTeta = std::cos(x); //*twopi/360.0);
+  G4double sinTeta = std::sqrt(1.0-cosTeta*cosTeta);
   G4double Phi     = CLHEP::twopi * G4UniformRand() ;
-  G4double dirx    = sinTeta*cos(Phi) , diry = sinTeta*sin(Phi) , dirz = cosTeta ;
+  G4double dirx    = sinTeta*std::cos(Phi) , diry = sinTeta*std::sin(Phi) , dirz = cosTeta ;
 
   G4ThreeVector P1Dir(dirx, diry, dirz);
 #ifdef DEBUG_LEPTS
@@ -267,10 +267,10 @@ G4ThreeVector G4VLEPTSModel::SampleNewDirection(const G4Material* aMaterial, G4T
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4ThreeVector G4VLEPTSModel::SampleNewDirection(G4ThreeVector P0Dir, G4double x) 
 {
-  G4double cosTeta = cos(x); //*twopi/360.0);
-  G4double sinTeta = sqrt(1.0-cosTeta*cosTeta);
+  G4double cosTeta = std::cos(x); //*twopi/360.0);
+  G4double sinTeta = std::sqrt(1.0-cosTeta*cosTeta);
   G4double Phi     = CLHEP::twopi * G4UniformRand() ;
-  G4double dirx    = sinTeta*cos(Phi) , diry = sinTeta*sin(Phi) , dirz = cosTeta ;
+  G4double dirx    = sinTeta*std::cos(Phi) , diry = sinTeta*std::sin(Phi) , dirz = cosTeta ;
 
   G4ThreeVector P1Dir( dirx,diry,dirz );
   P1Dir.rotateUz(P0Dir);

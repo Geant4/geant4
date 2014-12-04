@@ -294,7 +294,7 @@ void G4LivermoreIonisationModel::SampleSecondaries(
 
   // Change kinematics of primary particle
   G4ThreeVector direction = aDynamicParticle->GetMomentumDirection();
-  G4double totalMomentum = sqrt(kineticEnergy*(kineticEnergy + 2*electron_mass_c2));
+  G4double totalMomentum = std::sqrt(kineticEnergy*(kineticEnergy + 2*electron_mass_c2));
 
   G4ThreeVector finalP = totalMomentum*direction - delta->GetMomentum();
   finalP               = finalP.unit();

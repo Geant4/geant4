@@ -67,7 +67,7 @@ GeneratePrimaries(G4Event* event)
     const G4double radius = fNeutronSolid->GetOuterRadius();
     const G4double z = fNeutronSolid->GetZHalfLength() * 2;
     G4ThreeVector randomLocation;
-    randomLocation.setRThetaPhi(radius * sqrt(G4UniformRand()),
+    randomLocation.setRThetaPhi(radius * std::sqrt(G4UniformRand()),
                                 G4UniformRand() * 180 * deg,
                                 0);
     randomLocation.setZ(z * (G4UniformRand() - 0.5));

@@ -54,7 +54,7 @@ struct compDoubleWithPrecision
 {
   bool operator()(const double& a, const double& b) const
   {
-    if (fabs(a - b) < fPrecision)
+    if (std::fabs(a - b) < fPrecision)
     {
       return false;
     }
