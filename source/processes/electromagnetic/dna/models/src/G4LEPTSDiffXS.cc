@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string>
 
-#include <math.h>
+#include <cmath>
 #include "globals.hh"
 #include <iostream> 
 using namespace std;
