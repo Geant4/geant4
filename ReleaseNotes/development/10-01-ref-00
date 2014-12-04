@@ -263,7 +263,7 @@ processes/hadronic
   o BinaryLightReaction: momentum correction wrong in case of no Fragment,
     but primary projectile nucleon(s) in final state (ex. d + Pb -> X, where
     neutron or proton of deuteron did not interact).
-- models/cascade (hadr-casc-V10-00-19)
+- models/cascade (hadr-casc-V10-00-20)
   o G4CascadeParameters: turn off phase-space, trailing-effect and PreCompound.
   o G4CascadeInterface: fixed possible infinite-loop condition where
     (nTries >= maxTries) and momentum balance fails.
@@ -273,6 +273,9 @@ processes/hadronic
     leaks (G4CascadeChannelTables, G4CascadeParameters, G4MultiBodyMomentumDist
     and G4TwoBodyAngularDist).
   o G4InuclCollider: replaced G4Fragment::GetA() with GetA_asInt().
+  o G4CascadParticle: for stopped particles (zero path length), if at core
+    of nucleus make such that particle is forced to escape; protects against
+    very rare infinite loop in mu- capture.
   o G4ElementaryParticleCollider: improved optional pion-nucleon absorption
     (disabled by default; used for studies of pion stopping).
     In muon absorption, check return from G4GDecay3 for null vector; report
