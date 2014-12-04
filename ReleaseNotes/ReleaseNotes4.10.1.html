@@ -118,19 +118,20 @@ re-compilation) and a re-compilation of user applications is required.
     <LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
     </UL>
 </LI>
-<LI>The new version of CLHEP can now perform C++11 Standard builds,
-    on compilers supporting C++11. This can be used in conjuction with
-    a multi-threaded build of Geant4 and C++11 enabled, allowing for
-    use of the Standard <TT>thread_local</TT> and <TT>atomic</TT>
-    keywords.</LI>
+<LI>The new version of CLHEP can be built supporting the C++11 Standard,
+    on compilers that support C++11.
+    When C++11 option is chosen in a multi-threaded build of Geant4,
+    this trigers the use of the Standard <TT>thread_local</TT>
+    and <TT>atomic</TT> keywords.</LI>
 </UL>
 
 <P> </P>
 <B>Geometry</B>
 <P> </P>
 <UL>
-<LI>A new minor release of the GDML schema, GDML-3.1.1, is now in use,
-    supporting MultiUnion structures defined with the
+<LI>A new minor release of the GDML schema, GDML-3.1.1, is used,
+    supporting the new MultiUnion structure. This new feature
+    is available only in installations which use the 
     <A HREF="https://cern.ch/aidasoft/USolids">Unified Solids Library</A>.
     The new schema is fully compatible with old schema versions
     and schema validation thorugh network is already activated against it.</LI>
@@ -147,7 +148,10 @@ re-compilation) and a re-compilation of user applications is required.
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+  <LI>
+
+    ADD -TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!
+  </LI>
 </UL>
 
 <P> </P>
@@ -183,11 +187,11 @@ Please see the corresponding details in
 
 <B>Geometry</B>
 <UL>
-<LI>In this release, it is possible to specify usage of the
+<LI>In this release, an option allows an installation to use the
     <A HREF="https://cern.ch/aidasoft/USolids">Unified Solids Library</A>
     primitives, to replace the original Geant4 solids, as in the
-    previous release, but with the additional (optional) possibility
-    to build against an external installation of the library.</LI>
+    previous release.  An additional configuration option enables
+    a build against an external installation of the USolids library.</LI>
 </UL>
 
 <B>Materials</B>
@@ -200,7 +204,7 @@ Please see the corresponding details in
 <LI>G4EmParameters class and updated set of UI commands allowing 
     easy definition of EM parameters both in sequential and 
     multi-threaded modes.</LI>
-<LI>A new option "DisplacementBeyongBoundary" for simulation of 
+<LI>A new option "DisplacementBeyondBoundary" for simulation of 
     multiple scattering diplacement at geometry boundary is available.</LI>
 <LI>G4SynchrotronRadiation process is now applicable for all
     charged particles.</LI>
@@ -230,7 +234,15 @@ Please see the corresponding details in
 <LI>In this release, mass width is taken into account in decays of short-lived
     hadrons. Daughter hadrons have dynamical mass according to Breit-Wigner
     distribution.</LI>
+<LI>Revisions in string fragmentation affect the meson production, and in
+    particular the pi-zero fraction of showers. This is largely counteracted
+    by an imposed reduction of omega production.  The overall effects on
+    hadronic observables is found to large cancel in our benchmark hadronic
+    calorimeter setups - but the effect should be monitored on experiment
+    setups for key  observables including visible energy, resolution, and
+    longitudinal and lateral size </LI>
 <LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+
 </UL>
 
 <B>Generic Biasing</b>
@@ -336,15 +348,15 @@ please refer to the corresponding History files provided in most packages):
           co-processors).</LI>
       <LI>Removing any self-links from internal library link list when building
           global libraries.</LI>
-      <LI>Added support for builtin/system USolids library (builtin is the
-          default).</LI>
+      <LI>Enabled choice between builtin or system USolids library (builtin is
+          the default).</LI>
       <LI>Added Modules/Geant4ConfigureModulefile.cmake new file to configure
-          and install a basic Environment Modules modulefile for Geant4.</LI>
+          and install a basic Environment Modules module file for Geant4.</LI>
       <LI>Added ROOT_BIN_DIR variable in FindROOT.cmake to point to the path
           of root executables. Needed for merging of output files for MT in
           physics testings.</LI>
       <LI>Include Geant4 headers as SYSTEM and after other headers.</LI>
-      <LI>Removed not used settings for tpmalloc module.</LI>
+      <LI>Removed unused settings for tpmalloc module.</LI>
       <LI>Updated references to data libraries version for 10.1.</LI>
       </UL></LI> 
   <LI>GNUMake:
@@ -463,9 +475,6 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4GammaConversionToMuons: added protection against infinite loop at the
         reaction threshold; removed G4ThreadLocal variables; introduced G4Exp,
         G4Log and NIST functions; added counters limiting do/while loops.</LI>
-    <LI>G4GammaConversionToMuons: added protection against infinite loop at the
-        reaction threshold; removed G4ThreadLocal variables; introduced G4Exp,
-        G4Log and NIST functions; added counters limiting do/while loops.</LI>
     <LI>G4eeToHadrons, G4eeToHadronsModel,G4eeToHadronsMultiModel: revision
         and cleanup of code.</LI>
     </UL></LI>
@@ -524,8 +533,6 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Standard</B>
     <UL>
-    <LI>Removed method SampleDisplacement() in G4UrbanMscModel; code moved
-        inside SampleScattering().</LI>
     <LI>G4WentzelOKandVIxSection, G4WentzelVIRelXSection, G4WentzelVIModel,
         G4WentzelVIRelModel, G4eCoulombScatteringModel,
         G4hCoulombScatteringModel: added Boolean flag to identify in
@@ -559,7 +566,6 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4eCoulombScatteringModel, G4hCoulombScatteringModel,
         G4IonCoulombScatteringModel: updated initialisation of vector of cuts;
         cut for recoil can be changed via '/run/setCut' command.</LI>
-    <LI>G4PAIModel, G4PAIModelData: improved cout.</LI>
     <LI>G4ComptonScattering: set 'startFromNull' flag to true for all models forced
         to zero cross-section for the low energy in the cross-section table.</LI>
     <LI>G4KleinNishinaModel, G4KleinNishinaCompton, G4HeatedKleinNishinaCompton:
@@ -573,14 +579,14 @@ please refer to the corresponding History files provided in most packages):
         only by material name.</LI>
     <LI>G4ASTARStopping, G4ESTARStopping, G4PSTARStopping, G4WaterStopping:
         reduced memory churn by using static data; delete physics vectors at
-        destruction; changed interface to be always const
-        at run time (shared among threads).</LI>
+        destruction; changed interface to be const
+        (allowing it to be shared among threads).</LI>
     <LI>G4BraggModel, G4BraggIonModel: use static pointer to G4*STARStopping
         classes, which are initialized once.</LI>
-    <LI>G4PAIxSection, G4PAIPhotData, G4PAIPhotModel, G4PAIModelData: proper 
-        deletion at destruction; use
-        spline interpolation; fixed sampling of delta-electrons.</LI>
-    <LI>Fixed memory leak in G4PAIxSection.</LI>
+    <LI>G4PAIxSection, G4PAIPhotData, G4PAIPhotModel, G4PAIModelData: 
+        corrected deletion at destruction; use
+        spline interpolation; fixed sampling of delta-electrons.
+        Fixed memory leak in G4PAIxSection.</LI>
     <LI>G4PairProductionRelModel, G4eBremsstrahlungRelModel: added protection
         at initialisation for the case when user artificially reduces high
         energy limit of the model. Addressing problem report
@@ -595,7 +601,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4GoudsmitSaundersonMscModel: fixed displacement computation.</LI>
     <LI>G4PEEffectFluoModel: make internal array per material and not per
         materialCutsCouple, allowing model to be used in unit tests.</LI>
-    <LI>Fixes for Coverity defects.</LI>
+    <LI>Additional fixes for Coverity defects.</LI>
     </UL></LI>
 <LI><B>Utils</B>
     <UL>
@@ -604,13 +610,12 @@ please refer to the corresponding History files provided in most packages):
         Introduced optional mechanism of displacement at geometry boundary.</LI>
     <LI>G4VEmModel, G4VEmFluctuationModel: defined different pattern to access
         to random generator for sequential and MT modes to avoid compillation
-        problems; random generator pointer become available to derive
+        problems; random generator pointer becomes available to derived
         model classes in order to save CPU.</LI>
     <LI>G4EmCorrections, G4EmElementSelector, G4VEmModel, G4VEmProcess,
         G4VEnergyLossProcess, G4VMultipleScattering, G4ionEffectiveCharge:
-        general cleanup including: removed old commented code; use std::min
-        and std::max instead of "if" where possible; use G4Log; reduced number
-        of divisions.</LI>
+        general cleanup including: use G4Log; reduced number of divisions;
+         use std::min and std::max instead of "if" where possible.</LI>
     <LI>Fix in G4VMscModel::ComputeSafety() pass 2nd parameter to
         G4SafetyHelper for optimisation. Added default for 2nd parameter,
         compatible with G4SafetyHelper.</LI>
@@ -976,7 +981,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Added missing factories to G4NeutronCaptureXS, G4NeutronElasticXS, 
         G4NeutronInelasticXS, G4PiNuclearCrossSection.</LI>
     <LI>Added new interface class G4VCrossSectionRatio.</LI>
-    <LI>Fixing data-races in G4Chips{Neutron,Proton}ElasticXS as retported by
+    <LI>Fixing data-races in G4Chips{Neutron,Proton}ElasticXS as reported by
         DRD.</LI>
     <LI>Added G4DiffElasticRatio class managing single diffraction to elastic
         cross-section ratio.</LI>
@@ -987,9 +992,10 @@ please refer to the corresponding History files provided in most packages):
         access to the list of registered models, removed obsolete access methods
         to G4EnergyRangeManager.</LI>
     <LI>G4HadronicProcessStore: changed to become G4ThreadLocalSingleton,
-        allowing for automatic destruction of hadronic models cross-sections.
+        allowing for automatic destruction of hadronic processes, models, and
+        cross-sections.
         Correction in Clear() for stopping processes being deleted twice (once
-        because are registered as normal processes and once are registered as
+        because registered as normal processes and once because registered as
         extra processes).
         Added printout information for deuteron, triton, He3 and alpha.</LI>
     <LI>G4EnergyRangeManager: some cleaned up; instead of c-array, models
@@ -1027,7 +1033,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4HadronElasticProcess: replaced old method of G4EnergyRangeManager
         (still there but deprecated) with the new one (which uses IsApplicable()
         from G4HadronicInteraction).</LI>
-    <LI>G4HadronElasticProcess: added low-mass diffraction option.</LI>
+    <LI>G4HadronElasticProcess: added low-mass diffraction option 
+        (still in development and switched off by default).</LI>
     <LI>Added G4He3InelasticProcess class.</LI>
     </UL></LI>
 <LI><B>Stopping</B>
@@ -1117,7 +1124,7 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>De-excitation</B>
     <UL>
     <LI>G4NuclearLevelStore: use G4ThreadLocalSingleton pattern providing proper
-        deletion of photon evaporation classes at the end of run.</LI>
+        deletion of photon evaporation instances at the end of run.</LI>
     <LI>Improved design of FermiBreakUp and fixed decays of "unstable" Fermi
         fragments;
         reduced memory churn in several classes; optimized code reducing number
@@ -1135,12 +1142,12 @@ please refer to the corresponding History files provided in most packages):
         or several excited levels to be the same in the gamma level database;
         added DumpFragment() and Dump() methods.</LI>
     <LI>Removed obsolete class G4FermiConfigurationList.</LI>
-    <LI>G4ExcitationHandler: fixed problem in isomere production providing
-        energy non-conservation on level of 1 MeV;
+    <LI>G4ExcitationHandler: fixed a problem in isomer production that caused
+        energy non-conservation at the level of 1 MeV;
         added protection against abnormal fragments; 
         added ModelDescription() for automatic documentation.</LI>
-    <LI>Introduced an INCL++-specific fission level-density parameter class; set
-        af/an parameter for INCL++ to 1.02 for all nuclei.
+    <LI>Introduced an INCL++-specific fission level-density parameter class; 
+        set af/an parameter for INCL++ to 1.02 for all nuclei.
         Moved theChannels and theChannelFactory to the base class, since they
         seem to be common to all classes derived from G4VEvaporation.
         Some code refactoring.</LI>
@@ -1148,7 +1155,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4NuclearLevelStore fixed wrong deletion of user data at exit.
         Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1684">#1684</A>.
-        Ensure that the same level is not uploaded twice running in MT mode.</LI>
+        Ensure that the same level is not uploaded twice when
+        running in MT mode.</LI>
     <LI>G4NuclearLevelManager: removed unnecessary data members to reduce
         memory consumption.</LI>
     <LI>G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation,
@@ -1158,11 +1166,12 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition: fixed internal
         conversion for the case when transition energy is nearly electron bound
         energy.</LI>
-    <LI>G4VGammaDeexcitation: removed not needed extra call to CanDoTransition()
+    <LI>G4VGammaDeexcitation: removed unneeded extra call to CanDoTransition()
         inside DoChain() method.</LI>
     <LI>G4ContinuumGammaTransition, G4VGammaDeexcitation: coherently use same
         energy tolerance of 2 keV.</LI>
-    <LI>GEN probabilities: verified and level energies using gamma level data.</LI>
+    <LI>GEN probabilities: verified nuclear level energies using 
+        gamma level data.</LI>
     <LI>G4B10GEMProbability, G4B11GEMProbability: changed nuclear level energies
         to be the same as in the gamma level database.</LI>
     <LI>G4VEvaporationChannel, G4GEMChannel, G4GEMProbability: added Dump()
@@ -1178,11 +1187,12 @@ please refer to the corresponding History files provided in most packages):
         from G4HadronElastic; implemented SampleT() method in G4LEnp.
         Fix in G4LEpp for incorrect use data array, used GetInvariantT()
         inside ApplyYourself().</LI>
-    <LI>G4NuclNuclDiffuseElastic: fix to nuclear radius (which was zero),
-        Fixed deletion in destructor.</LI>
+    <LI>G4NuclNuclDiffuseElastic: fix to nuclear radius (which was zero);
+        fixed deletion in destructor.</LI>
     <LI>Fix in G4DiffuseElastic.</LI>
-    <LI>G4LEppData, G4LEpp: removed data with Coulomb correction and corresponding
-        code as not work properly and providing double counting with EM.</LI>
+    <LI>G4LEppData, G4LEpp: removed data with Coulomb correction and
+        corresponding code because they do not work properly and
+        provide double counting with EM.</LI>
     <LI>G4DiffuseElastic and G4NuclNuclDiffuseElastic: use the average nuclear
         weight for each element to compute the table of angles, in order to
         improve the reproducibility.</LI>
@@ -1250,14 +1260,14 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Lepto-nuclear</B>
     <UL>
-    <LI>Reuse G4PreCompoundModel and G4ExcitationHandler and not instantiate
-        locally as new; do not delete objects which following
-        G4HadronicInteraction interface to avoid double deletion.</LI>
+    <LI>Reuse G4PreCompoundModel and G4ExcitationHandler objects instead
+        of instantiating new local ones; do not delete objects which follow
+        the G4HadronicInteraction interface to avoid double deletion.</LI>
     </UL></LI>
 <LI><B>Neutron High Precision</B>
     <UL>
-    <LI>Fix rare core dump caused by angular parameter being all zero;
-        the angular parameters of the first and last seoncondary energy 
+    <LI>Fixed rare core dump caused by angular parameters being all zero;
+        the angular parameters of the first and last secondary energy 
         in ThermalScattering/Inelastic/FS have all zero elements.</LI>
     <LI>Uncomment out para and ortho hydrogen and liquid and solid methane
         in G4NeutronHPThermalScatteringNames.</LI>
@@ -1290,79 +1300,77 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>Particle High Precision</B>
     <UL>
     <LI>New module for treatment of low energy charged particles,
-        based on neutron_hp. Aimed to replace neutron_hp.</LI>
+        based on neutron_hp. This is still under testing, but it is aimed
+        to replace neutron_hp in the future.</LI>
     </UL></LI>
 <LI><B>Parton-String</B>
     <UL>
     <LI>Fix in G4VPartonStringModel, occuring when debugging with residual
         nucleus mass number equal to zero.
-        Improved code to treat an ExcitedString when it is a hadron stored as
-        a track of the ExcitedString; needed for a correct processing of
-        quark-exchange processes in FTF model.</LI>
+        Improved code to treat an ExcitedString object when it is a hadron
+        stored as a track, needed for a correct processing of quark-exchange
+        processes in FTF model.</LI>
     <LI>Fix on the positions of the increment of the variables "StateQ++" and
         "StateAQ" in G4LundStringFragmentation. This fix increases the
         production of neutral pions, while decreasing the production of
-        charged pions. Therefore it affects the simulation of hadronic
-        showers by increasing the electromagnetic component, which makes 
-        the showers more compact and with higher energy response.</LI>
-    <LI>G4FTFModel: factorized longest method PutOnMassShell(); no changes in
-        results for hadron-nucleus, nucleus-nucleus, anti_baryon-nucleus and
-        light anti_ion-nucleus interactions.</LI>
+        charged pions.</LI>
+    <LI>G4FTFModel: factorized the longest method PutOnMassShell(); 
+        no changes in results for hadron-nucleus, nucleus-nucleus,
+        anti_baryon-nucleus and light anti_ion-nucleus interactions.</LI>
     <LI>Re-tuned parameters of G4LundStringFragmentation; fragmentation function
         F(qq-&gt;B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.</LI>
-    <LI>G4DiffractiveSplitableHadron: setting to zero the probability of
-        (uu)-diquark, based on Instantons theory.</LI>
     <LI>Code cleanup in G4InteractionContent, G4VParticipants, G4VSplitableHadron.
         Added debugging option in G4VPartonStringModel.</LI>
-    <LI>Re-tuned parameters of G4LundStringFragmentation; fragmentation function
-        F(qq-&gt;B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.</LI>
     <LI>Fixed bug in G4DiffractiveSplitableHadron where baryons are subdivided
-        into quark and diquark. Introduced supression of uu-diquark in proton;
-        di-quarks with identical quarks are now suppressed on 50 % (probability
-        1/6) except baryon like Delta++ (uuu), Delta- (ddd) and so on.</LI>
-    <LI>Re-tuned parameters of FTF model in accordance with the hypothesis.</LI>
-    <LI>Fixed bug in G4DiffractiveExcitation responsible for leading to asymmetric
+        into quark and diquark. Introduced suppression of uu-diquark in proton,
+        based on the theory of QCD instantons: di-quarks with identical quarks
+        are suppressed by 50% (corresponding to a probability of 1/6), except
+        for baryons like Delta++ (uuu), Delta- (ddd) and so on.
+        Re-tuned parameters of FTF model (in the class G4FTFParameters) in
+        accordance with this assumption.</LI>
+    <LI>Fixed bug in G4DiffractiveExcitation responsible for asymmetric
         rapidity distributions in pp-interactions.</LI>
     <LI>G4VLongitudinalStringDecay: mixing between the vector mesons rho0 and
         omega have been changed from 50% (rho0) - 50% (omega) to 100% (rho0) - 0%
-        (omega), in order to reduce the pi0 production. 
-        Expected little effects in thin-target, and significant effects in
-        hadronic showers in calorimeters.</LI>
-    <LI>Essential improvement of QGS hadronization. Fragmentation functions of
-        quarks and di-quarks are close to Kaidalov's and Shabelskii's ones.
-        Ionk algorithm is inserted for sampling light-cone momentum fraction, z.
-        Tuned parameters of the fragmentation; will be improved after revision
-        of the QGSM string creation algorithm.</LI>
+        (omega), in order to reduce the pi0 production (which was increased
+        by the bug-fix on G4LundStringFragmentation). 
+        Little effects are seen in thin-target, while there are significant
+        effects in hadronic showers in calorimeters.</LI>
     <LI>Tuned parameters and string fragmentation functions of
         G4LundStringFragmentation, assuming that the weight of uu-diquarks in
         protons is 1/6. Improved treatment of string decay direction in
         G4FragmentingString and G4LundStringFragmentation.</LI>
     <LI>Improved EnergyAndMomentumCorrector in G4ExcitedStringDecay.</LI>
-    <LI>Improved algorithm of G4QGSMFragmentation::SplitEandP; now faster.</LI>
-    <LI>Corrected bug connected with annihilations of anti-delta isobars;
-        G4FTFAnnihilation can now treat the processes. Applied fine tuning
-        of parameters for Pi+P interactions.</LI>
-    <LI>Fixed problem of missing treatment of involved nucleons of a projectile
-        nucleus in FTFmodel. Fixed memory leaks.</LI>
-    <LI>Fixed problem connected with multiple quark exchanges in hA interactions
-        with by string excitations. Status of such hadrons was not set in a right
-        way. Also fixed determination of anti-alpha particle 4-momentum at
-        stopping at low energy.</LI>
-    <LI>Fixed bug connected to abnormal stable meson masses. Change of masses of
-        particles in quark-exchange processes is now improved.</LI>
-    <LI>Fixed problem of energy/momentum non-conservation in Xi-nucleus
+    <LI>Fixed bug connected with annihilations of anti-delta isobars:
+        G4FTFAnnihilation can now treat correctly these processes. 
+        Applied fine tuning of parameters for Pi+P interactions.</LI>
+    <LI>Fixed problem of missing treatment of involved nucleons in the case
+        of nuclear projectile in FTFmodel. Fixed memory leaks.</LI>
+    <LI>Fixed problem connected with multiple quark exchanges and
+        string excitations in hadron-nucleus interactions: the status of
+        such hadrons was set incorrectly. Also fixed the determination of
+        of the 4-momentum of anti-alpha at low energies.</LI>
+    <LI>Fixed bug connected to abnormal stable meson masses: change of masses
+        of particles in quark-exchange processes is now improved.</LI>
+    <LI>Fixed problem of energy-momentum non-conservation in Xi-nucleus
         interaction; energy/momentum is now conserved, but an accurate
-        treatment of minimal diffractive masses of strange particles is needed.</LI>
+        treatment of minimal diffractive masses for strange particles is
+        still needed.</LI>
     <LI>Fixed charge non-conservation for meson-nucleus interactions in
         G4DiffractiveExcitation, caused by quark exchange.</LI>
     <LI>G4DiffractiveExcitation: use pole mass + 5*width as maximum mass for
-        resonances, to avoid cases of energy/momentum non-conservation.</LI>
-    <LI>G4ExcitedStringDecay: restored initial string system for correct
-        calculations in the case when hadronization is fault.</LI>
+        resonances, to avoid cases of energy-momentum non-conservation.</LI>
+    <LI>G4ExcitedStringDecay: restored initial string system in the case
+        that the hadronization fails.</LI>
     <LI>G4LundStringFragmentation: set fragmentation functions for qq -&gt; B
         as f(z)~ Const for all baryons and fixed charged baryon number
         conservation for K-nucleus interactions.</LI>
-    <LI>Some code cleanup.</LI>
+    <LI>Essential improvement of QGS hadronization. Fragmentation functions of
+        quarks and di-quarks are close to Kaidalov's and Shabelskii's ones.
+        Ionk's algorithm is inserted for sampling light-cone momentum fraction, z.
+        First tuning of fragmentation parameters (further improvements are
+        expected after the revision of the QGSM string creation algorithm).</LI>
+    <LI>Improved algorithm of G4QGSMFragmentation::SplitEandP, now faster.</LI>
     </UL></LI>
 <LI><B>Pre-equilibrium</B>
     <UL>
@@ -1579,17 +1587,19 @@ please refer to the corresponding History files provided in most packages):
 <LI>Removed inclusions of obsolete cross-section headers.</LI>
 <LI>Builders:
     <UL>
-    <LI>In all builders do not create a new instance of G4PreCompoundModel
-        and G4ExcitationHandler to reduce number of its instances.</LI>
-    <LI>Avoid deleting models cross-sections in destructors of builders.</LI>
+    <LI>In all builders, new instances of G4PreCompoundModel
+        and G4ExcitationHandler are no longer created in order
+        to reduce the memory footprint.</LI>
+    <LI>Avoid deleting of processes, models and cross-sections in
+        destructors of builders.</LI>
     <LI>Convert G4INCLXXPiKBuilder to G4INCLXXPionBuilder.
         Set the maximum energy for G4INCLXXPionBuilder to 20 GeV.
         Added G4QGSPKaonBuilder.</LI>
     <LI>Added G4QGSPLundStrFragmProtonBuilder outfitting QGSP model with
         G4LundStringFragmentation (instead of the G4QGSMFfragmentation);
         this appears to give better agreement with data at the energies above
-        100GeV (tested for proton+C).
-        Set minimum energy for G4QGSPLundStrFragmProtonBuilder at 100GeV.
+        100 GeV (tested for proton+C).
+        Set minimum energy for G4QGSPLundStrFragmProtonBuilder at 100 GeV.
     <LI>Added dependency to 'de_excitation/fission' module in build scripts,
         now required by INCLXX.</LI>
     <LI>Added builders for particle_hp physics list.</LI>
@@ -1636,10 +1646,9 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>hadron_elastic
         <UL>
-        <LI>G4HadronHElasticPhysics: use G4NuclNuclDiffuseElastic model
-            instead of the Gheisha-based G4HadronElastic for all ions.
-            Improved version of elastic, used temporarily only in FTFP_BERT_TRV
-            as playground before becoming the default in all physics lists.</LI>
+        <LI>G4HadronHElasticPhysics: improved version of elastic, used
+            temporarily only in FTFP_BERT_TRV for testing; it may become
+            in the future the default in all physics lists.</LI>
         <LI>Fixed cases of inline static methods in G4HadronElasticPhysics.</LI>
         <LI>G4HadronHElasticPhysics: for proton, neutron, pion+ and pion-
             elastic scattering introduced the Chips model on Hydrogen, while
@@ -1648,7 +1657,8 @@ please refer to the corresponding History files provided in most packages):
             for each particle type (p, n, pi+, pi-); disable G4NuclNuclDiffuseElastic,
             using Gheisha elastic model for light ions (nothing else is available
             for heavy ions).</LI>
-        <LI>G4HadronHElasticPhysics: activating diffraction dissociation process.</LI>
+        <LI>G4HadronHElasticPhysics: included diffraction dissociation process.
+            This is under development and switched off by default.</LI>
         <LI>Added G4HadronElasticPhysicsPHP for particle_hp physics list.</LI>
         </UL></LI>
     <LI>hadron_inelastic:
@@ -1669,8 +1679,9 @@ please refer to the corresponding History files provided in most packages):
     <LI>ions:
         <UL>
         <LI></LI>
-        <LI>Reuse G4PreCompoundModel and not create a new local in ion physics
-            classes, should reduce memory churn.
+        <LI>Reuse the G4PreCompoundModel instance, instead of creating new
+            local instances in the ion physics classes, in order to reduce
+            the memory footprint.
         <LI>Added dependency to 'de_excitation/fission' module in build scripts,
             now required by INCLXX.
         </UL></LI>
@@ -1695,7 +1706,10 @@ please refer to the corresponding History files provided in most packages):
     <LI>Removed Bertini Cascade from alphas, deuterons and tritons and replaced
         with BinaryLightIonReaction.</LI>
     <LI>Replaced G4MuonMinusCaptureAtRest with G4MuonMinusCapture.</LI>
-    <LI>Added QGSP_BIC_AllHP particle_hp physics list.</LI>
+    <LI>Added QGSP_BIC_AllHP particle_hp physics list. 
+        Please note that particle_hp is still under development, and this
+        new physics list is meant only for testing purposes.
+        </LI>
     <LI>Added g4alt::G4PhysListFactory as user extensible list factory; work done
         via G4PhysListRegistry and G4PhysListStamper classes (not yet activated).</LI>
     <LI>Modify LBE physics-list constructor to accept verbosity as optional
