@@ -73,9 +73,10 @@ Platforms:
 More verified and tested configurations (64 bits):
 <UL>
 <LI>Linux, gcc-4.7.2, gcc-4.8.2, gcc-4.9.2</LI>
-<LI>Linux, Intel-icc 14.0</LI>
+<LI>Linux, Intel-icc 14.0, 15.0</LI>
 <LI>MacOSX 10.10 with gcc-4.2.1/clang-3.5</LI>
 <LI>Windows7 with Visual C++ 9.0, 10.0, 11.0</LI>
+<LI>Many Integrated Core architecture (aka Intel Xeon Phi) with Intel-icc 15.0</LI>
 </UL>
 Note: Windows platforms are supported/verified only for the sequential mode.
 Multi-threading capability of this release does not support Windows.
@@ -108,21 +109,22 @@ release.
 Note that for all users a full re-installation of libraries (or a full
 re-compilation) and a re-compilation of user applications is required.
 
-
 <P> </P>
 <B>General</B>
 <P> </P>
 <UL>
-<LI>Multi-threading:
-    <UL>
-    <LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
-    </UL>
-</LI>
 <LI>The new version of CLHEP can be built supporting the C++11 Standard,
     on compilers that support C++11.
     When C++11 option is chosen in a multi-threaded build of Geant4,
     this trigers the use of the Standard <TT>thread_local</TT>
     and <TT>atomic</TT> keywords.</LI>
+<LI>The procedure of deleting the full geometry for rebuilding a new one from
+    scratch has been reviewed. It is suggested to use
+    <TT>G4RunManager::ReinitializeGeometry(<I>true</I>)</TT>
+    or the equivalent UI command <TT>/run/reinitializeGeometry</TT> rather than
+    directly invoke deletion from G4SolidStore, G4LogicalVolumeStore and
+    G4PhysicalVolumeStore, to safely delete all previously-defined solids,
+    logical and physical volumes.</LI>
 </UL>
 
 <P> </P>
@@ -141,24 +143,25 @@ re-compilation) and a re-compilation of user applications is required.
 <B>Electromagnetic and optical physics</B>
 <P> </P>
 <UL>
-<LI>The data file G4EMLOW6.41 should be used.</LI>
+  <LI>The data file G4EMLOW6.41 should be used.</LI>
+  <LI>A new structure of UI commands for optical-physics is implemented.</LI>
 </UL>
 
 <P> </P>
 <B>Hadronic physics</B>
 <P> </P>
 <UL>
-  <LI>
-
-    ADD -TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!
-  </LI>
+  <LI>The new data sets G4PhotonEvaporation-3.1, G4RadioactiveDecay-4.2
+      and G4NDL-4.5 should be used.</LI>
 </UL>
 
 <P> </P>
-<B>Physics Lists</B>
+<B>Generic biasing</B>
 <P> </P>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+  <LI>The G4VBiasingOperation interface class had been modified to simplify
+      the interface. These are described in the Biasing section of detailed
+      changes chapter below.</LI>
 </UL>
 
 <P> </P>
@@ -180,30 +183,30 @@ Please see the corresponding details in
 
 <H2>4. New Developments and Capabilities </H2>
 
-<B>General</B>
-<UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
-</UL>
-
 <B>Geometry</B>
 <UL>
 <LI>In this release, an option allows an installation to use the
     <A HREF="https://cern.ch/aidasoft/USolids">Unified Solids Library</A>
     primitives, to replace the original Geant4 solids, as in the
-    previous release.  An additional configuration option enables
+    previous release. An additional configuration option enables
     a build against an external installation of the USolids library.</LI>
 </UL>
 
 <B>Materials</B>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+<LI>Preliminary support for phonon propagation
+    (see <A HREF="#phonon"><b>Phonon Physics</b></A> below) is provided
+    by G4LatticeLogical (which defines parameters for materials) and
+    G4LatticePhysical (which associates G4LatticeLogical with a particular
+    G4VPhysicalVolume, including lattice orientation). These objects should
+    be instantiated in the user's G4VUserDetectorConstruction class.</LI>
 </UL>
 
 <B>Electromagnetic physics</B>
 <UL>
-<LI>G4EmParameters class and updated set of UI commands allowing 
-    easy definition of EM parameters both in sequential and 
-    multi-threaded modes.</LI>
+<LI>A new class G4EmParameters and updated set of UI commands have been
+    introduced, allowing easy definition of the EM parameters both in
+    sequential and multi-threaded modes.</LI>
 <LI>A new option "DisplacementBeyondBoundary" for simulation of 
     multiple scattering diplacement at geometry boundary is available.</LI>
 <LI>G4SynchrotronRadiation process is now applicable for all
@@ -211,9 +214,8 @@ Please see the corresponding details in
 <LI>High energy processes G4GammaConversionToMuons and G4eeToHadrons
     are ready for production.</LI>
 <LI>A new model class G4LowEWentzelVIModel is introduced for low-energy
-    electron elastic scattering.</LI>
-<LI>Low-energy cross-section for water has been added for the low-energy
-    Livermore photoelectric model.</LI>
+    electron elastic scattering. Low-energy cross-section for water has
+    been added for the low-energy Livermore photoelectric model.</LI>
 <LI>A new User Interface command to disable production
     thresholds in atomic deexcitation has been introduced:
     <TT>/process/em/deexcitationIgnoreCut true/false</TT>.</LI>
@@ -234,30 +236,140 @@ Please see the corresponding details in
 <LI>In this release, mass width is taken into account in decays of short-lived
     hadrons. Daughter hadrons have dynamical mass according to Breit-Wigner
     distribution.</LI>
-<LI>Revisions in string fragmentation affect the meson production, and in
+<LI>The Fritiof (FTF) model has been significantly improved, resulting in
+    closer agreement with thin-target data. 
+    Revisions in string fragmentation affect the meson production, and in
     particular the pi-zero fraction of showers. This is largely counteracted
-    by an imposed reduction of omega production.  The overall effects on
-    hadronic observables is found to large cancel in our benchmark hadronic
-    calorimeter setups - but the effect should be monitored on experiment
-    setups for key  observables including visible energy, resolution, and
-    longitudinal and lateral size </LI>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+    by other improvements of FTF and an imposed reduction of omega production.
+    The overall effects on hadronic observables is found to large cancel 
+    in our benchmark hadronic calorimeter setups, but the effect should be
+    monitored on experiment setups for key observables including visible
+    energy, resolution, longitudinal and lateral size.</LI>
+<LI>The fragmentation part of the Quark-Gluon-String (QGS) model has been
+    improved significantly.
+    This implies that the hadronic showers produced with QGS-based physics
+    lists (e.g. QGSP_FTFP_BERT) become wider and longer, and with a lower
+    energy response, in closer agreement with the ones produced by FTF. </LI>
+<LI>The INCLXX model has been extended up to 15-20 GeV incident energy.</LI>
+<LI>Labeling of tracks resulting from muon stopping are added.</LI> 
+</UL>
 
+<A NAME="phonon"><B>Phonon Physics</b></A>
+<P>The contents of this new physics category were moved into the toolkit
+   from the <Code>phonon</Code> extended example.</P>
+<UL>
+<LI>A new set of processes and utility classes are provided as a framework
+    to support propagation of phonons through materials.</LI>
+<LI>G4LatticeManager and G4LatticeReader provide access to the solid
+    crystal structure parameters (G4LatticeLogical and G4LatticePhysical in
+    Materials) read from data files and used by the physics processes.</LI>
+<LI>G4PhononPolarization defines an enum to identify the three acoustic
+    phonon polarization states supported in this framework.  See
+    also <A HREF="#particles"><b>Particles</b></A> below.</LI>
+<LI>G4PhononTrackMap is an internal singleton class used by the processes
+    to associate additional phonon-specific information (wave number,
+    etc.) with each propagating G4Track object in the event.</LI>
+<LI>G4VPhononProcess is the abstract base class for the phonon processes,
+    and provide some common utility functions.</LI>
+<LI>G4PhononDownconversion implements the conversion of high energy
+    phonons to pairs of lower energy phonons.</LI>
+<LI>G4PhononReflection is a "template" process which will, in the future,
+    implement reflection or transmission of phonons at the boundaries of
+    crystals.  Currently, phonons at a boundary are absorbed, and an
+    associated G4VUserSteppingAction (in the <Code>phonon</Code> example)
+    records hits.</LI>
+<LI>G4PhononScattering implements the scatting of phonons from one
+    polarization state to another due to impurities or defects in the
+    crystal lattice.</LI>
 </UL>
 
 <B>Generic Biasing</b>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+<LI>A new class G4BiasingProcessSharedData is introduced, allowing to gather
+    information shared by the G4BiasingProcessInterface instances attached
+    to the same G4ParticleDefinition (hold by a same G4ProcessManager).</LI>
+<LI>Now providing easier access to cross-sections/mean-free-paths of wrapped
+    physics processes, making all them up to date at the first call to the
+    biasing operator.</LI>
+<LI>New examples have been added: <TT>GB03</TT> showing a technique inspired
+    by geometry importance biasing, but with some more flexibility;
+    <TT>GB04</TT>, an implementation of Bremsstrahlung splitting, using the
+    generic biasing classes.</LI>
+</UL>
+
+<A NAME="particles"><B>Particles</B></A>
+<UL>
+<LI>Ions and isomers are instantiated during the event loop as they become
+    necessary. In the previous release 10.0, all ions and isomers were
+    instantiated before the event loop.</LI>
+<LI>Pre-instantiation of all ions and isomers is still optional via a UI
+    command at <TT>PreInit</TT> or <TT>Idle</TT> states.</LI>
+<LI>Three new particles corresponding to the polarization states of acoustic
+    phonons are provided to support the <A HREF="#phonon">phonon physics</A>
+    processes.  These were moved into the toolkit from the <Code>phonon</Code>
+    extended example.
+    <UL>
+    <LI>G4PhononLong: longitudinal (along crystal valley axis) polarization;</LI>
+    <LI>G4PhononTransFast: higher-speed transverse polarization;</LI>
+    <LI>G4PhononTransSlow: lower-speed transverse polarization.</LI>
+    </UL>
 </UL>
 
 <B>Physics Lists</B>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+  <LI>Switched on muon-nuclear by default in all physics lists.</LI>
+  <LI>Cut on proton is set to zero, to simulate all recoils from elastic
+      scattering, in physics lists using neutron-HP.</LI>
+  <LI>The physics lists based on INCLXX use this model for pions, protons and
+      neutrons up to 20 GeV, and the string model (FTF or QGS) starting 
+      from 15 GeV.</LI>
+  <LI>Trying out a new hadron elastic scattering, still in development, in
+      the experimental physics-list FTFP_BERT_TRV.</LI>
+  <LI>The G4OpticalPhysics constructor has been restructured and UI
+      commands have changed. This allows for different particles to have
+      specific settings of optical parameters.</LI>
+  <LI>New experimental physics lists ShieldingM and NuBeam are introduced.</LI>
 </UL>
 
 <B>Visualization</B> and <B>Interfaces</B>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+<LI><U>Evolution of Qt User Interface</U>
+    <UL>
+    <LI>The "Scene tree" opens up as soon as the detector is drawn.</LI>
+    <LI>An editable "Viewer properties" panel allows one to adjust view
+        parameters interactively.</LI>
+    <LI>"Picking information" also has its own panel that may be opened
+        by the user. Picking has been improved.</LI>
+    <LI>The "Scene tree, Help and History" panel may be detached, leaving
+        more screen space for the viewers.</LI>
+    <LI>The "Output" panel may also be detached.</LI>
+    <LI>One may select output by a string match or, in the case of
+        multi-threaded mode, by thread.</LI>
+    <LI>A "Useful tips" window is available in the viewer panel and comes up
+       automatically if no other view has been created.</LI>
+    </UL></LI>
+<LI>In representing curved surfaces by planar polygons the number of
+    "lines per circle" may optionally be reduced to as little as 3 (the
+    default is 24) if speed of rendering is the priority.</LI>
+<LI><U>New commands</U>
+    <UL>
+    <LI><TT>/vis/touchable/dump</TT>: dumps attributes of a specific
+        touchable (as set by the <TT>/vis/set/touchable</TT> command).</LI>
+    <LI><TT>/vis/scene/add/extent</TT>: allows one to add an extent (i.e.,
+        coordinate system and range) to a scene. Normally this is done
+        automatically by a survey of the geometry, but if you wish to draw
+        trajectories without geometry, for example, you may use this command.</LI>
+    <LI><TT>/vis/set/textSize</TT>: controls text size on subsequent
+        <TT>/vis/scene/add/axes</TT> and <TT>/vis/scene/add/scale</TT> commands.</LI>
+    </UL></LI>
+<LI><U>Improved commands</U>
+    <UL>
+    <LI><TT>/vis/scene/add/scale</TT>: one may now add more than one scale
+        to a scene.</LI>
+    <LI><TT>/vis/scene/add/axes</TT>: one may suppress annotations.</LI>
+    <LI><TT>/vis/scene/add/logicalVolume</TT>: now draws axes of the local
+        coordinate system.</LI>
+    </UL></LI>
 </UL>
 
 <A NAME="5."></A>
@@ -266,6 +378,13 @@ Please see the corresponding details in
 <!-- ============================================== -->
 
 <H2>5. Expected effects on physics and computing performance</H2>
+
+<B>General</B>
+<UL>
+<LI>Memory space required per thread is reduced to less than half.
+    This reduction does not include the space defined in the users code.</LI>
+<LI>We observe up to 10% speedup in several use-cases.</LI>
+</UL>
 
 <B>Electromagnetic physics</B>
 <UL>
@@ -278,7 +397,14 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+<LI>Extensive development in the FTF model has improved significantly
+    the agreement between simulation and thin-target data on
+    hadron-hadron and hadron-nucleus interactions.
+    Small changes are expected in hadronic shower observables
+    in the physics lists based on the FTF model (e.g. FTFP_BERT).</LI>
+<LI>Improvements in the fragmentation part of the QGS model produce
+    now hadronic showers which are more similar to those produced by the
+    FTF model.</LI>
 </UL>
 
 <P> </P>
@@ -639,10 +765,9 @@ please refer to the corresponding History files provided in most packages):
         and G4Proton by default in InitialiseBirksCoefficient();
         moved check on existence of e- and proton from run time to
         initialisation (i.e. it is now done only once).</LI>
+        Changed initialisation of G4EmSaturation to work in MT mode.
     <LI>G4LossTableManager: helper classes are instantiated only if user
-        requests via access method;
-        changed initialisation of G4EmSaturation
-        class to work in MT mode.</LI>
+        requests via access method.</LI>
     <LI>G4LossTableManager, G4VEnergyLossProcess, G4VEmProcess: improved
         initialisation; moved modifiers for parameters from inline to source
         and added extra check on parameter value; throw warnings if parameters
@@ -713,9 +838,9 @@ please refer to the corresponding History files provided in most packages):
 <H3><I>Externals</I></H3></A>
 <UL>
 <LI>Moved USolids module from source/geometry.
-    Adapted scripts for optional external
+    Adapted scripts for optional builds against an installation of the
     <A HREF="https://cern.ch/aidasoft/USolids">Unified Solids Library</A>
-    build.</LI>
+    in a different, outside location.</LI>
 <LI>Removed unused 'tpmalloc' and 'memoryprotection' modules.</LI>
 <LI>Updated CLHEP module to version 2.2.0.4:
     <UL>
@@ -729,12 +854,13 @@ please refer to the corresponding History files provided in most packages):
         reported as compilation warning on Windows/VC9.</LI>
     <LI>Updated Hep3Vector to move operators 'operator()(int)' to be inline
         and removed printout to improve CPU performance.</LI>
-    <LI>Moved definition of pi into SystemOfUnits.h so that its hard-coded
-        value is not defined twice.</LI>
+    <LI>Moved definition of <TT>pi</TT> into SystemOfUnits.h so that its
+        hard-coded value is not defined twice.</LI>
     </UL></LI>
 <LI>USolids:
     <UL>
-    <LI>Added UMultiUnion construct.</LI>
+    <LI>Added UMultiUnion construct, which enables the simultaneous union
+	 of multiple solids.  Uses voxel technique to improve performance.</LI>
     <LI>Added shapes from the USolids library: UExtrudedSolid, UGenericTrap,
         UTessellatedSolid (together with UQuadrangularFacet, UTriangularFacet
         and UTessellatedGeometryAlgorithms utility classes) and UTrap.</LI>
@@ -758,20 +884,47 @@ please refer to the corresponding History files provided in most packages):
 <UL>
 <LI><B>Biasing</B>
     <UL>
-    <LI>generic:
+    <LI><U>management</U>:
         <UL>
-        <LI>Introduced anticipated call to PostStepGPIL of wrapped processes
-            by G4BiasingProcessInterface. This allows to collect all physics
-            cross-sections at the first call of biasing operator.</LI>
-        <LI>Bug fix to G4InteractionLawPhysical::UpdateInteractionLengthForStep().</LI>
+        <LI>Simplified the G4VBiasingOperation interface class:
+            <UL>
+            <LI>Suppressed DenyProcessPostStepDoIt() method, functionality
+                merged (and generalized) in ApplyFinalStateBiasing().</LI>
+            <LI>Extra argument added as last argument of
+                ApplyFinalStateBiasing(..., G4bool&amp; forceBiasedFinalState),
+                allowing to force to return as is the generated final state;
+                covers the case of the deprecated DenyProcessPostStepDoIt() by
+                not changing the primary state, changing its weight, and
+                setting this argument "true".</LI>
+            <LI>Merged ProposeGPILSelection() into
+                ProvideOccurenceBiasingInteractionLaw(), which has now
+                the signature ProvideOccurenceBiasingInteractionLaw(const G4BiasingProcessInterface*, G4ForceCondition&amp;).</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>management:
+    <LI><U>generic</U>:
         <UL>
-        <LI>Updated G4VBiasingOperation to suppress obsolete method
-            DenyProcessPostStepDoIt().</LI>
-        <LI>Fix in G4BiasingOperatorStateNotifier::Notify() to detect start
-            of run.</LI>
+        <LI>Introduced G4BiasingProcessSharedData: a class that gathers
+            information shared by G4BiasingProcessInterface instances attached
+            to the same G4ParticleDefinition (hold by same G4ProcessManager).
+            Access to the object is provided by the G4BiasingProcessInterface
+            methods GetSharedData().
+            Provides in particular lists of G4BiasingProcessInterface instances
+            for physics/non-physics biasing.</LI>
         </UL></LI>
+    <LI>Easier access to cross-sections/mean-free-pathes of wrapped
+        physics processes: this is done by a call to the
+        PostStepGetPhysicalInteractionLength() of the wrapped physics
+        processes that anticipates the call by the stepping manager:
+        the first G4BiasingProcessInterface in the
+        PostStepGetPhysicalInteractionLength() loop triggers these
+        calls, and results are cached in each G4BiasingProcessInterface
+        instance. This makes cross-sections of physics wrapped processes
+        up to date at the first call to the biasing operator, simplifying
+        biasing implementations dealing with several cross-section or the
+        total cross-section.</LI>
+    <LI>Related rewritting of biasing operator G4BOptrForceCollision,
+        biasing operation G4BOptnForceCommonTruncatedExp and simplified
+        implementation of interaction law G4ILawCommonTruncatedExp.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
@@ -1424,7 +1577,6 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="interc-notes">
 <H3><I>Intercoms</I></H3></A>
 <UL>
-  <LI></LI>
 <LI>G4UIparameter: improved dignostic message of CandidateCheck().</LI>
 <LI>Introducing "/control/cout/ignoreInitializationCout" UI command to
     omit G4cout from threads during initialization, as they should
@@ -1447,7 +1599,7 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="interf-notes">
 <H3><I>Interfaces</I></H3></A>
 <UL>
-<LI>G4UIQt:
+<LI><U>G4UIQt</U>:
     <UL>
     <LI>Changed help tree splitter from vertical to horizontal.
         Added method to display text in HTML.</LI>
@@ -1496,7 +1648,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Attempted fix for the cout widget not updating in real time when run
         progresses; update is more frequent now.</LI>
     </UL></LI>
-<LI>G4UIWt:
+<LI><U>G4UIWt</U>:
     <UL>
     <LI>Minor update.</LI>
     </UL></LI>
@@ -1678,7 +1830,6 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI>ions:
         <UL>
-        <LI></LI>
         <LI>Reuse the G4PreCompoundModel instance, instead of creating new
             local instances in the ion physics classes, in order to reduce
             the memory footprint.
@@ -1688,13 +1839,19 @@ please refer to the corresponding History files provided in most packages):
     <LI>limiters:
         <UL>
         <LI>G4GenericBiasingPhysics: fixed bug of PhysicsBias() which was not
-            taking into account the selected vector of processes, but biasing
-            all physics processes.</LI>
+            taking into account the vector of selected processes (but biasing
+            all physics processes).</LI>
         </UL></LI>
     </UL></LI>
 <LI>Lists:
     <UL>
-    <LI>Added experimental physics lists ShieldingM and NuBeam.</LI>
+      <LI>Added experimental physics lists ShieldingM and NuBeam.
+      ShieldingM is based on Shielding with the Bertini to FTFP model
+      transition region at 9.5-9.9GeV. NuBeam is based mainly on
+      FTFP_BERT with the Bertini to FTFP model
+      transition region at 3.0-3.5GeV for protons, pions and kaons
+      and uses QGSP+G4LundStringFragmentation
+      above 100GeV (with FTFP used up to 101GeV) for protons</LI>
     <LI>FTFP_BERT_TRV: use (temporary) G4HadronHElasticPhysics in order
         to allow testing of improvements in elastic.</LI>
     <LI>FTFP_BERT_HP, QGSP_BIC_HP, QGSP_BERT_HP: set cut on proton to 
@@ -1731,8 +1888,6 @@ please refer to the corresponding History files provided in most packages):
   <LI>Introducing mechanism to not delete G4Event until visualized by another
       thread; fixed cleaning up of kept events when visualization thread keeps
       events.</LI>
-  <LI>Use G4Threading::SetMultithreadedApplication(true) if a
-      G4MTRunManagerKernel is instantiated.</LI>
   <LI>Increase verbosity in case of NULL process-manager pointer in
       multi-threaded mode.</LI>
   <LI>Worker threads return G4RunManagerKernel::SetPhysics() method
@@ -2086,7 +2241,7 @@ please refer to the corresponding History files provided in most packages):
         <UL>
         <LI>Fixed warnings on Windows and MT-max runs.</LI>
         </UL></LI>
-    <LI><B>microdoelectronics</B>
+    <LI><B>microelectronics</B>
         <UL>
         <LI>Replaced use of G4UITerminal by G4UIExecutive; removed usage of
             flags G4UI_USE and G4VIS_USE in main().</LI>
@@ -2129,16 +2284,10 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>basic</B>
     <UL>
-    <LI></LI>
     <LI>Removed G4UI_USE/G4VIS_USE conditionals from B1-B4 examples and
         init.mac macro, no longer needed.</LI>
     <LI>Moved G4UIExecutive at the beginning of main() in all examples.</LI>
     <LI>Perform run initialization in macros instead of main().</LI>
-    <LI><B>basic/B5</B>
-        <UL>
-        <LI>Switch off primary randomization in gui.mac (needed for
-            the /gun/ UI commands to work).</LI>
-        </UL></LI>
     </UL></LI>
 <LI><B>extended</B>
     <UL>
@@ -2155,6 +2304,8 @@ please refer to the corresponding History files provided in most packages):
                 extended/common/analysis in 'hbook' sub-directory.</LI>
             </UL></LI>
         </UL></LI>
+    <LI><B>biasing</B>
+        <UL>
         <LI><B>biasing/B03</B>
             <UL>
             <LI>B03PhysicsList: replaced obsolete G4ParallelWorldScoringProcess
@@ -2165,10 +2316,16 @@ please refer to the corresponding History files provided in most packages):
             <LI>Fix in GB01BOptrChangeCrossSection, which was not properly
                 using the new cross-section value in case of an UpdateForStep().</LI>
             </UL></LI>
+    <LI><B>biasing/GB02</B>
+            <UL>
+            <LI>Update of the example to take into account changes made in the base
+                classes, and related changes in G4BOptrForceCollision.</LI>
+            </UL></LI>
         <LI><B>biasing/GB03</B>
             <UL>
             <LI>New example illustrating the use of generic biasing classes to
-                implement a technique near to "geometry importance biasing".</LI>
+                implement a technique close to the "geometry importance biasing" one.</LI>
+	    <LI>An extra mechanism to alleviate over-splitting is illustrated.</LI>
             </UL></LI>
         <LI><B>biasing/GB04</B>
             <UL>
@@ -2368,6 +2525,8 @@ please refer to the corresponding History files provided in most packages):
         </UL></LI>
     <LI><B>exoticphysics/phonon</B>
         <UL>
+        <LI>Moved lattice classes, particle definitions, and physics
+            processes into toolkit.</LI>
         <LI>Migrated code to support multi-threading.</LI>
         <LI>Fix in CMake script to copy data in build directory.</LI>
         </UL></LI>
