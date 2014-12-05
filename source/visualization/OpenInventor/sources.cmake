@@ -96,6 +96,7 @@ if(UNIX)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_HEADERS
     G4OpenInventorX.hh
     G4OpenInventorXt.hh
+    G4OpenInventorXtExaminerViewerMessenger.hh
     G4OpenInventorXtExaminerViewer.hh
     G4OpenInventorXtExtended.hh
     G4OpenInventorXtExtendedViewer.hh
@@ -110,6 +111,7 @@ if(UNIX)
   list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES
     G4OpenInventorXt.cc
     G4OpenInventorXtExaminerViewer.cc
+    G4OpenInventorXtExaminerViewerMessenger.cc
     G4OpenInventorXtExtended.cc
     G4OpenInventorXtExtendedViewer.cc
     G4OpenInventorXtViewer.cc

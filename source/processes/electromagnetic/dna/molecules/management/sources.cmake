@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-molman
         G4MolecularDissociationTable.hh
         G4MoleculeCounter.hh
         G4MoleculeDefinition.hh
+        G4MoleculeFinder.hh
         G4MoleculeHandleManager.hh
         G4Molecule.hh
         G4MoleculeIterator.hh

@@ -80,6 +80,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hIonEffChargeSquare.hh
         G4hNuclearStoppingModel.hh
         G4hParametrisedLossModel.hh
+        G4hSRIM2000p.hh
         G4hZiegler1985Nuclear.hh
         G4hZiegler1985p.hh
         G4IonChuFluctuationModel.hh
@@ -196,6 +197,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4hIonEffChargeSquare.cc
         G4hNuclearStoppingModel.cc
         G4hParametrisedLossModel.cc
+        G4hSRIM2000p.cc
         G4hZiegler1985Nuclear.cc
         G4hZiegler1985p.cc
         G4IonChuFluctuationModel.cc

@@ -70,10 +70,13 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.hh
         G4ITTransportation.icc
         G4ITTransportationManager.hh
+        G4ITTransportationManager.icc
         G4ITType.hh
         G4KDMap.hh
         G4KDNode.hh
+        G4KDNode.icc
         G4KDTree.hh
+        G4KDTree.icc
         G4KDTreeResult.hh
         G4ManyFastLists.hh
         G4ManyFastLists.icc

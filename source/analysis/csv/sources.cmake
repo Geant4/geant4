@@ -34,6 +34,7 @@ GEANT4_DEFINE_MODULE(NAME G4csv
         G4CsvAnalysisManager.hh
         G4CsvAnalysisManager.icc
         G4CsvAnalysisReader.hh
+        G4CsvAnalysisReader.icc
         G4CsvFileManager.hh
         G4CsvNtupleDescription.hh
         G4CsvNtupleManager.hh
