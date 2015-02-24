@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-Jan-2015, Makoto Asai  (phys-ctor-limiters-V09-06-17)
+- Fix G4ParallelWorldProcess.cc to correctly use the new method
+  SetProcessOrderingToSecond().
+
 05-Aug-2014, Vladimir Ivanchenko        (phys-ctor-limiters-V09-06-16)
 - G4NeutronTrackingCut - register G4NeutronKiller in 
     G4HadronicProcessStore - improved log and process deleted at exit
