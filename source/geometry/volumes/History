@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 11th, 2014 G.Cosmo               - geomvol-V09-06-23
+- Avoid post-increment in G4NavigationLevelRep::AddAReference().
+
 October 18th, 2014 A.Dotti                - geomvol-V09-06-22
 - Corrected possible data race (reported by DRD) in 
   G4PVReplica::InitialiseWorker().
