@@ -17,10 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Jan. 22nd, 2015    M.Asai (procman-V09-06-10)
-- G4ProcessManager::SetProcessOrderingToSecond() :
-  Change logic to make sure the process is always set before
-  the process that has the ordering index 1.
+- Jan. 20, 2015  H.Kurashige (procman-V09-06-10)
+- Modify SetProcessOrderingToSecond() in G4ProcessManager
 
 - May 12th, 2014    A.Dotti     (procman-V09-06-09)
 - Fixing bug #1625: G4WrapperProcess not correctly 
