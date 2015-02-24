@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-Feb-2015, Davide Mancusi             (phys-lists-V09-06-23)
+- INCLXXPhysicsListHelper: do not use G4NeutronTrackingCut for *_HP physics
+  lists
+
 10-Jun-2014, V.Ivanchenko               (phys-lists-V09-06-22)
 - INCLXXPhysicsListHelper - for the case of HP set cut on proton to 
   zero to simulate all recoils from elastic scattering
