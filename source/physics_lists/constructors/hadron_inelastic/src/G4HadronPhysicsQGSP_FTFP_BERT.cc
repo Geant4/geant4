@@ -171,29 +171,31 @@ void G4HadronPhysicsQGSP_FTFP_BERT::CreateModels()
 
 G4HadronPhysicsQGSP_FTFP_BERT::~G4HadronPhysicsQGSP_FTFP_BERT()
 {
-   delete tpdata->theQGSPNeutron;
-   delete tpdata->theFTFPNeutron;
-   delete tpdata->theBertiniNeutron;
-   delete tpdata->theNeutrons;
-
-   delete tpdata->theQGSPPro;
-   delete tpdata->theFTFPPro;
-   delete tpdata->thePro;
-   delete tpdata->theBertiniPro;
-
-   delete tpdata->theQGSPPiK;
-   delete tpdata->theFTFPPiK;
-   delete tpdata->theBertiniPiK;
-   delete tpdata->thePiK;
-
-   delete tpdata->theHyperon;
-   delete tpdata->theAntiBaryon;
-   delete tpdata->theFTFPAntiBaryon;
-
-   delete tpdata->xsNeutronInelasticXS;
-   delete tpdata->xsNeutronCaptureXS; 
-   
-   delete tpdata; tpdata = 0;
+  if (tpdata) {
+    delete tpdata->theQGSPNeutron;
+    delete tpdata->theFTFPNeutron;
+    delete tpdata->theBertiniNeutron;
+    delete tpdata->theNeutrons;
+    
+    delete tpdata->theQGSPPro;
+    delete tpdata->theFTFPPro;
+    delete tpdata->thePro;
+    delete tpdata->theBertiniPro;
+    
+    delete tpdata->theQGSPPiK;
+    delete tpdata->theFTFPPiK;
+    delete tpdata->theBertiniPiK;
+    delete tpdata->thePiK;
+    
+    delete tpdata->theHyperon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theFTFPAntiBaryon;
+    
+    delete tpdata->xsNeutronInelasticXS;
+    delete tpdata->xsNeutronCaptureXS; 
+    
+    delete tpdata; tpdata = 0;
+  }
 }
 
 void G4HadronPhysicsQGSP_FTFP_BERT::ConstructParticle()

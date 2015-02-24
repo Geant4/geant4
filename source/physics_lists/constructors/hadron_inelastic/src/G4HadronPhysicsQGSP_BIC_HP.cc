@@ -159,24 +159,26 @@ void G4HadronPhysicsQGSP_BIC_HP::CreateModels()
 
 G4HadronPhysicsQGSP_BIC_HP::~G4HadronPhysicsQGSP_BIC_HP() 
 {
-   delete tpdata->theHPNeutron;
-   delete tpdata->theBinaryNeutron;
-   delete tpdata->theQGSPNeutron;
-   delete tpdata->theFTFPNeutron;
-   delete tpdata->theBertiniPiK;
-   delete tpdata->theQGSPPiK;
-   delete tpdata->theFTFPPiK;
-   delete tpdata->thePiK;
-   delete tpdata->theBinaryPro;
-   delete tpdata->theQGSPPro;
-   delete tpdata->theFTFPPro;
-   delete tpdata->thePro;
-   delete tpdata->theFTFPAntiBaryon;
-   delete tpdata->theAntiBaryon;
-   delete tpdata->theHyperon;
-   delete tpdata->xsNeutronCaptureXS;
-
-   delete tpdata; tpdata = 0;
+  if (tpdata) {
+    delete tpdata->theHPNeutron;
+    delete tpdata->theBinaryNeutron;
+    delete tpdata->theQGSPNeutron;
+    delete tpdata->theFTFPNeutron;
+    delete tpdata->theBertiniPiK;
+    delete tpdata->theQGSPPiK;
+    delete tpdata->theFTFPPiK;
+    delete tpdata->thePiK;
+    delete tpdata->theBinaryPro;
+    delete tpdata->theQGSPPro;
+    delete tpdata->theFTFPPro;
+    delete tpdata->thePro;
+    delete tpdata->theFTFPAntiBaryon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theHyperon;
+    delete tpdata->xsNeutronCaptureXS;
+    
+    delete tpdata; tpdata = 0;
+  }
 }
 
 void G4HadronPhysicsQGSP_BIC_HP::ConstructParticle()

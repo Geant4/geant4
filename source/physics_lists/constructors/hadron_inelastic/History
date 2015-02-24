@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Jun-2014, Michael Kelsey             (phys-ctor-hinelastic-V09-06-22)
+- Add "if (!tpdata) return;" to all dtors, to avoid segfaults.
+
 29-Jan-2014, Gunter Folger              (phys-ctor-hinelastic-V09-06-21)
 - Removed from photolepton_hadron/muon_nuclear from sources.cmake
 

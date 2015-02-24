@@ -143,29 +143,31 @@ void G4HadronPhysicsFTFP_BERT::CreateModels()
 
 G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
 {
-  delete tpdata->theNeutrons;
-  delete tpdata->theBertiniNeutron;
-  delete tpdata->theFTFPNeutron;
+  if (tpdata) {
+    delete tpdata->theNeutrons;
+    delete tpdata->theBertiniNeutron;
+    delete tpdata->theFTFPNeutron;
+    
+    delete tpdata->thePiK;
+    delete tpdata->theBertiniPiK;
+    delete tpdata->theFTFPPiK;
+    
+    delete tpdata->thePro;
+    delete tpdata->theBertiniPro;
+    delete tpdata->theFTFPPro;    
+    
+    delete tpdata->theHyperon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theFTFPAntiBaryon;
+    
+    delete tpdata->xsNeutronInelasticXS;
+    delete tpdata->xsNeutronCaptureXS; 
 
-  delete tpdata->thePiK;
-  delete tpdata->theBertiniPiK;
-  delete tpdata->theFTFPPiK;
-    
-  delete tpdata->thePro;
-  delete tpdata->theBertiniPro;
-  delete tpdata->theFTFPPro;    
-    
-  delete tpdata->theHyperon;
-  delete tpdata->theAntiBaryon;
-  delete tpdata->theFTFPAntiBaryon;
- 
-  delete tpdata->xsNeutronInelasticXS;
-  delete tpdata->xsNeutronCaptureXS; 
- 
-  //Note that here we need to set to 0 the pointer
-  //since tpdata is static and if thread are "reused"
-  //it can be problematic
-  delete tpdata; tpdata = 0;
+    //Note that here we need to set to 0 the pointer
+    //since tpdata is static and if thread are "reused"
+    //it can be problematic
+    delete tpdata; tpdata = 0;
+  }
 }
 
 void G4HadronPhysicsFTFP_BERT::ConstructParticle()

@@ -170,31 +170,33 @@ void G4HadronPhysicsShielding::CreateModels()
 
 G4HadronPhysicsShielding::~G4HadronPhysicsShielding()
 {
-  delete tpdata->theNeutrons;
-  delete tpdata->theBertiniNeutron;
-  delete tpdata->theFTFPNeutron;
-  //delete tpdata->theHPNeutron;
-  delete tpdata->theLENeutron;
+  if (tpdata) {
+    delete tpdata->theNeutrons;
+    delete tpdata->theBertiniNeutron;
+    delete tpdata->theFTFPNeutron;
+    //delete tpdata->theHPNeutron;
+    delete tpdata->theLENeutron;
     
-  delete tpdata->thePiK;
-  delete tpdata->theBertiniPiK;
-  delete tpdata->theFTFPPiK;
+    delete tpdata->thePiK;
+    delete tpdata->theBertiniPiK;
+    delete tpdata->theFTFPPiK;
     
-  delete tpdata->thePro;
-  delete tpdata->theBertiniPro;
-  delete tpdata->theFTFPPro;    
+    delete tpdata->thePro;
+    delete tpdata->theBertiniPro;
+    delete tpdata->theFTFPPro;    
     
-  delete tpdata->theHyperon;
-  delete tpdata->theAntiBaryon;
-  delete tpdata->theFTFPAntiBaryon;
+    delete tpdata->theHyperon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theFTFPAntiBaryon;
+    
+    delete tpdata->theBGGxsNeutron;
+    delete tpdata->theNeutronHPJENDLHEInelastic;
+    delete tpdata->theBGGxsProton;
+    
+    delete tpdata->xsNeutronCaptureXS;
 
-  delete tpdata->theBGGxsNeutron;
-  delete tpdata->theNeutronHPJENDLHEInelastic;
-  delete tpdata->theBGGxsProton;
-
-  delete tpdata->xsNeutronCaptureXS;
-
-  delete tpdata; tpdata=0;
+    delete tpdata; tpdata=0;
+  }
 }
 
 void G4HadronPhysicsShielding::ConstructParticle()
