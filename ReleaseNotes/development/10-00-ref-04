@@ -15,6 +15,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(x)  Fixes included in release 9.6.p04
 (o)  Fixes included in release 10.0.p02
 
 Summarised, the list of changes is the following:
@@ -85,7 +86,7 @@ geometry/solids/specific                         geom-specific-V10-00-08     (o)
 ------------------------
 - Fixed signature of assignment operator to G4Polycone, G4Polyhedra,
   G4GenericPolycone and G4VCSGfaceted.
-- Get rid of deprecated 'register' storage class specifier in source files.
+- Get rid of deprecated 'register' storage class specifier in source files.  (x)
 
 geometry/volumes                                 geomvol-V10-00-02           (o)
 ----------------
@@ -110,7 +111,7 @@ intercoms                                        intercoms-V10-00-04
 - Extended use of "/control/macroPath" UI command to now also apply to
   macros called inside a loop.
 - Removed unnecessary source file G4AnyType.cc, as all symbols are inlined.
-- Corrected inclusion protection flag in G4GenericMessenger.hh.              (o)
+- Corrected inclusion protection flag in G4GenericMessenger.hh.             (xo)
   Addressing old problem report #1527.
 
 materials                                        materials-V10-00-05
@@ -128,16 +129,16 @@ particles                                        particles-V10-00-06
 ---------
 - Fixed Coverity defects in G4NuclideTable and G4IonTable.
 
-persistency/ascii                                ascii-V10-00-01             (o)
+persistency/ascii                                ascii-V10-00-01            (xo)
 -----------------
 - G4tgbGeometryDumper: directly use G4ThreeVector methods for SymAxis
   for dumping G4Para parameters.
 
 persistency/gdml                                 gdml-V10-00-02              (o)
 ----------------
-- Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.
+- Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.       (x)
   Addressing problem report #1602.
-- Get rid of deprecated 'register' storage class specifier in source files.
+- Get rid of deprecated 'register' storage class specifier in source files.  (x)
 
 physics_lists
 -------------

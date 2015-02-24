@@ -1,0 +1,175 @@
+
+                 Geant4 9.6 - patch-03 Release Notes
+                 -----------------------------------
+
+                                                              14 March 2014
+
+List of fixes included in this public patch since the public release 9.6.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Fixed bug in checking of status of Xmu include path and library
+        variables that resulted in no error being emitted if these were not
+        found.
+      o Ported scripts to MacOSX 10.9 and use of Qt5.
+    + GNUMake:
+      o Updated settings for Darwin targets.
+
+  o Analysis:
+    --------
+    + Updated to g4tools 1.4.4, to fix incorrect setting of the list
+      of free blocks in a Root file; addressing problem report #1523.
+      Fixed failure in writing empty ntuples (in tools/wroot/basket).
+    + Fix in G4RootAnalysisManager::WriteOnAscii().
+      Addressing problem report report #1473.
+
+  o Digits_Hits:
+    -----------
+    + Fixed angle factor in G4PSSphereSurfaceFlux to keep it always
+      positive. Addressing problem report #1479.
+
+  o Geometry:
+    --------
+    + management:
+      o Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
+        accuracy. Addressing problem report #1493.
+    + navigation:
+      o G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().
+    + solids/CSG:
+      o Corrected sanity check for wrong/small dimensions in G4Box constructor.
+      o Correctly initialise fSPhi to zero in G4Sphere constructor.
+    + solids/specific:
+      o Fix in G4SurfaceVoxelizer affecting tessellated-solid (and
+        extruded-solid) for wrong computation of DistanceToIn(p,v) for
+        points outside, when optimisation is active.
+      o Fix in G4TessellatedSolid::DistanceToIn(p,v) for specific cases
+        where points are located near surface.
+      o Fix in G4GenericTrap::InsidePolygone() to check if p lies between
+        the two extremes of the segment. Addressing problem report #1541.
+
+  o Global:
+    ------
+    + Updated date and version for 9.6.p03.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + Low Energy:
+      o Fixed case of exception from G4PenelopeOscillatorManager for
+        specific materials.
+    + Muons:
+      o G4MuPairProductionModel, G4MuBremsstrahlungModel: complete fix for
+        cross-section computation. Addresses problem report #1471.
+    + Standard:
+      o G4UrbanMscModel95, G4UrbanMscModel96: fixed bug in randomisation
+        of 1st step in a volume (useDistanceToBoundary option).
+      o G4NuclearStopping: do not reset dynamic charge of an ion, because
+        G4ionIonisation process is responsible for that (fix for partially
+        charged ion beam)
+    + Utils:
+      o G4VMultipleScattering: increased lowest limit from 1 eV to 10 eV to
+        avoid semi-infinite loop for low-energy particle tracking;
+        fixed re-computation of post-step safety in AlongStepDoIt method.
+      o G4VEnergyLossProcess, G4VEmProcess: set interaction length to 
+        DBL_MAX if process is de-activated (fixed problem of DNA simulation); 
+        fixed CrossSectionPerVolume access method.
+      o Fixed typo in G4EmBiasingManager.
+
+  o Generic Processes:
+    -----------------
+    + Decay:
+      o Fixed problem of wrong global time for secondaries in case that the
+        primary track stops during along step. Addressing problem report #1555.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o Code optimization for G4ElectroNuclearCrossSection and
+        G4PhotoNuclearCrossSection.
+    + models/cascade:
+      o G4NucleiModel: fixed rare cases of non-reproducibility in
+        method generateParticleFate(). Some data was not properly
+        initialized in the case that the interaction-partners list has
+        one single element.
+      o Fixed implementation of G4CascadeParameters singleton to follow
+        canonical format. Addressing problem report #1557.
+      o G4ParticleLargerEkin, G4ParticleLargerBeta: correct ">=" to ">"
+        conditions to avoid error in case that both inputs are identical.
+    + models/de_excitation:
+      o G4NeutronRadCapture: fixed run time memory leak, fixed time of 
+        reaction products.
+      o G4ExcitationHandler: if FermiBreakUp returns unchanged fragment
+        delete it to avoid minor memory leak; addressing HyperNews post
+        #1371. Fixed typo in GetPhotoEvaporation() method name.
+        Fixed typo in the SetMaxAForFermiBreakUp() method.
+      o G4FermiFragmentsPool: fixed typo for use of G4endl for end line.
+      o G4LevelReader, G4NuclearLevelManager: fixed trivial compilation issues
+        detected on Visual C++ 18.
+    + models/em_dissociation:
+      o Fixed memory leak of products from G4ExcitationHandler.
+    + models/parton_string/hadronization:
+      o Fixed two mistakes in the index manipulation of the BaryonWeight
+        4-dimensional vector in G4LundStringFragmentation.
+    + models/parton_string/management:
+      o Fix to remove 'inline' qualifier from methods in G4VParticipants.cc
+        and G4PomeronCrossSection.cc, responsible for cases of run-time
+        errors for undefined symbols in library...
+    + stopping:
+      o G4MuMinusCapturePrecompound: fixed case of infinite loop by
+        reimplementing old algorithm of mu- capture which does not include
+        direct muon reaction but only considering de-excitation of residual
+        fragment. Addressing problem report #1536.
+
+  o Materials:
+    ---------
+    + G4IonisParamMat: fixed density effect parameterisation.
+
+  o Particles:
+    ---------
+    + Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero
+      and G4AntiLambdacPlus. Addressing problem report #1571.
+
+  o Persistency:
+    -----------
+    + ascii:
+      o Corrected typo in G4tgrPlaceParameterisation::operator<<().
+        Addressing problem report #1504.
+      o Corrected typo in G4tgrUtils::WordIsUnit().
+      o Replaced deprecated calls to solids accessor methods.
+    + gdml:
+      o Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised
+        Sphere, Orb, Torus and Para.
+      o Replaced deprecated calls to G4Sphere accessor methods.
+
+  o Physics Lists:
+    -------------
+    + G4EmStandardPhysics_option3, G4EmStandardPhysics_option4,
+      G4EmLivermorePhysics, G4EmPenelopePhysics: use RangeFactor=0.01
+      for increased simulation accuracy; use G4UrbanMscModel96.
+
+  o Visualization:
+    -------------
+    + OpenGL:
+      o Fixed bug in the G4OpenGLQtViewer for viewer iterator increment
+        checking. Corrected use of 'true' in G4OpenGLQtExportDialog.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.6.
+  o  Technical notes distributed for release 9.6 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.6.p03 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

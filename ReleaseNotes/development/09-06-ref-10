@@ -22,6 +22,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 
 Summarised, the list of changes is the following:
 
@@ -70,7 +71,7 @@ geometry/management                              geommng-V09-06-13
 
 geometry/solids/CSG                              geom-csg-V09-06-04
 -------------------
-- Correctly initialise fSPhi to zero in G4Sphere constructor.
+- Correctly initialise fSPhi to zero in G4Sphere constructor.                (+)
 
 geometry/solids/specific                         geom-specific-V09-06-21
 ------------------------
@@ -196,7 +197,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-06-31
 - Improved CPU performances of G4PenelopePhotoElectricModel.
 - G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
   G4RayleighAngularGenerator: use G4Log, G4Exp.
-- Fixed Exception on G4PenelopeOscillatorManager for specific materials.
+- Fixed Exception on G4PenelopeOscillatorManager for specific materials.     (+)
 
 processes/electromagnetic/muons                  emmuons-V09-06-23
 -------------------------------
@@ -224,7 +225,7 @@ processes/electromagnetic/standard               emstand-V09-06-71
 
 processes/electromagnetic/utils                  emutils-V09-06-60
 -------------------------------
-- G4VMultipleScattering: increased lowestLimit from 1 eV to 10 eV.
+- G4VMultipleScattering: increased lowestLimit from 1 eV to 10 eV.           (+)
   Added Get/Set methods for this parameter. Urban multiple-scattering model
   cannot handle low-energy e- below 10 eV;   
 - G4EmModelManager: fixed control on cut value per G4Region, the problem was
@@ -260,7 +261,7 @@ processes/hadronic
   o G4NeutronRadCapture: added isomer production according to the updated 
     MT interface; added time propagation (correct time for delaied capture)
   o Use G4Log and G4Exp instead of standard math functions.
-  o Fixes for trivial compilation issues detected on Windows/VC18 
+  o Fixes for trivial compilation issues detected on Windows/VC18            (+)
     from Visual-Studio 12.
 - models/inclxx (hadr-inclxx-V09-06-30)
   o Updated to INCL++ v5.1.14_rc11: largely reduced memory churn.

@@ -16,6 +16,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(x)  Fixes included in release 9.6.p04
 (o)  Fixes included in release 10.0.p02
 (+)  Fixes included in release 10.0.p03
 
@@ -47,7 +48,7 @@ geometry/solids/Boolean                          geom-bool-V10-00-01
 
 geometry/navigation                              geomnav-V10-00-07
 -------------------
-- Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to          (+)
+- Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to         (x+)
   navigator limiting the step, if only one navigator limits the step.
 
 geometry/volumes                                 geomvol-V10-00-05

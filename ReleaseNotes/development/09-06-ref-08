@@ -22,6 +22,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 
 Summarised, the list of changes is the following:
 
@@ -58,7 +59,7 @@ geometry/divisions                               geomdiv-V09-06-03
 
 geometry/management                              geommng-V09-06-11
 -------------------
-- Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
+- Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified     (+)
   accuracy. Addressing problem report #1493.
 - Added parameter to specify maximum number of overlap errors to report
   in G4VPhysicalVolume::CheckOverlaps().
@@ -81,15 +82,15 @@ geometry/navigation                              geomnav-V09-06-15
 
 geometry/solids/CSG                              geom-csg-V09-06-03
 -------------------
-- Corrected sanity check for wrong/small dimensions in G4Box constructor.
+- Corrected sanity check for wrong/small dimensions in G4Box constructor.    (+)
 - Moved function-scoped 'static const' values for half-tolerances to private
   data members of classes, to overcome false-positive race-conditions defects
   reported by Valgrind in MT mode.
 
 geometry/solids/specific                         geom-specific-V09-06-17
 ------------------------
-- Fix in G4TessellatedSolid::DistanceToIn(p,v) for specific cases where points
-  are located near surface
+- Fix in G4TessellatedSolid::DistanceToIn(p,v) for specific cases where      (+)
+  points are located near surface
 - Move function-scoped 'static const' values for half-tolerances to private
   data members of classes, to overcome false-positive race-conditions defects
   reported by Valgrind in MT mode.
@@ -156,6 +157,16 @@ particles                                        particles-V09-06-40
   in the master thread and particle table and ion table of worker threads
   inherit those of master thread.
 
+persistency/ascii                                ascii-V09-06-04
+-----------------
+- Corrected typo in G4tgrPlaceParameterisation::operator<<().                (+)
+  Addressing problem report #1504.
+
+persistency/gdml                                 gdml-V09-06-05
+----------------
+- Added G4Ellipsoid among solids enabled for parameterisation in
+  G4GDMLParameterisation.
+
 physics_lists
 -------------
 - builders (phys-builders-V09-06-08)
@@ -177,16 +188,6 @@ physics_lists
     For the HP-based physics lists, used LEP fission only above 19.9 MeV.
 - lists (phys-lists-V09-06-13)
   o LBE: use G4UrbanMscModel instead on Urban93.
-
-persistency/ascii                                ascii-V09-06-04
------------------
-- Corrected typo in G4tgrPlaceParameterisation::operator<<().
-  Addressing problem report #1504.
-
-persistency/gdml                                 gdml-V09-06-05
-----------------
-- Added G4Ellipsoid among solids enabled for parameterisation in
-  G4GDMLParameterisation.
 
 processes/cuts                                   procuts-V09-06-07
 --------------
@@ -255,7 +256,7 @@ processes/electromagnetic/utils                  emutils-V09-06-53
 processes/hadronic
 ------------------
 - cross_sections (hadr-cross-V09-06-29)
-  o Improvements and cleanup in G4ElectroNuclearCrossSection.
+  o Improvements and cleanup in G4ElectroNuclearCrossSection.                (+)
 - models/cascade (hadr-casc-V09-06-47)
   o Added use of "Id" and "Name" keywords where missing.
   o Moved local statics to file scope to avoid thread collisions.
