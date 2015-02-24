@@ -97,6 +97,9 @@
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
 // 20130508  D. Wright -- Add support for muon capture
 // 20130804  M. Kelsey -- Fix bug #1513 -- "(Z=1)" in boolean expression
+// 20140116  M. Kelsey -- Move statics to const data members to avoid weird
+//		interactions with MT.
+// 20140929  M. Kelsey -- Explicitly call useCascadeDeexcitation() in ctor
 
 #include <cmath>
 #include <iostream>
@@ -135,27 +138,22 @@ typedef std::vector<G4InuclElementaryParticle>::const_iterator particleIterator;
 typedef std::vector<G4InuclNuclei>::const_iterator nucleiIterator;
 
 
-// Filename to capture random seed, if specified by user at runtime
-
-const G4String G4CascadeInterface::randomFile = G4CascadeParameters::randomFile();
-
-// Maximum number of iterations allowed for inelastic collision attempts
-
-const G4int G4CascadeInterface::maximumTries = 20;
-
-
 // Constructor and destrutor
 
 G4CascadeInterface::G4CascadeInterface(const G4String& name)
-  : G4VIntraNuclearTransportModel(name), numberOfTries(0),
+  : G4VIntraNuclearTransportModel(name), 
+    randomFile(G4CascadeParameters::randomFile()),
+    maximumTries(20), numberOfTries(0),
     collider(new G4InuclCollider), balance(new G4CascadeCheckBalance(name)),
     bullet(0), target(0), output(new G4CollisionOutput) {
   SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
-  // Description();                                // Model description
-
   this->SetVerboseLevel(G4CascadeParameters::verbose());
-  if (G4CascadeParameters::usePreCompound()) usePreCompoundDeexcitation();
+
+  if (G4CascadeParameters::usePreCompound())
+    usePreCompoundDeexcitation();
+  else
+    useCascadeDeexcitation();
 }
 
 G4CascadeInterface::~G4CascadeInterface() {
@@ -735,18 +733,19 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 	 << G4endl;
 #endif
 
-  return ( ((numberOfTries < maximumTries) &&
-	    (npart != 0) &&
+  return ( (numberOfTries < maximumTries) &&
+	   ( ((npart != 0) &&
 #ifdef G4CASCADE_COULOMB_DEV
-	    (coulombBarrierViolation() && npart+nfrag > 2)
+	      (coulombBarrierViolation() && npart+nfrag > 2)
 #else
-	    (npart+nfrag < 3 && firstOut == bullet->getDefinition())
+	      (npart+nfrag < 3 && firstOut == bullet->getDefinition())
 #endif
-	    )
+             )
 #ifndef G4CASCADE_SKIP_ECONS
-	   || (!balance->okay())
+	     || (!balance->okay())
 #endif
-	   );
+           )
+	 );
 }
 
 

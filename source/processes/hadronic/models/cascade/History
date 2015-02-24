@@ -15,6 +15,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2014  M. Kelsey (hadr-casc-V09-06-57)
+-------------------------------------------------
+- G4CascadeInterface.cc:  Fix parentheses in retryInelasticNucleus()
+  expression for conditional-compilation flag (does not affect defaults).
+
+18 November 2014  M. Kelsey (hadr-casc-V09-06-56)
+-------------------------------------------------
+- G4CascadeInterface.cc,.hh: Fix possible infinite-loop condition where
+  (nTries >= maxTries) and momentum balance fails, by regrouping conditions
+  in retryInelasticNucleus().
+
 23 May 2014  M. Kelsey (hadr-casc-V09-06-55)
 --------------------------------------------
 - G4InuclNuclei.cc:  Avoid FPE in setExcitationEnergy() for zero Ekin.
