@@ -30,6 +30,7 @@
 //  GEANT 4 class implementation
 // =======================================================================
 // Modified:
+//   12 Jan  2015, M.Kelsey: Use G4DynamicParticle mass, NOT PDGMass
 //            13 May  2006, J. Apostolakis: Revised for parallel navigation (PathFinder)
 //            19 Jan  2006, P.MoraDeFreitas: Fix for suspended tracks (StartTracking)
 //            11 Aug  2004, M.Asai: Add G4VSensitiveDetector* for updating stepPoint.
@@ -208,7 +209,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   G4double particleCharge = pParticle->GetCharge() ;
   G4double magneticMoment = pParticle->GetMagneticMoment() ;
-  G4double       restMass = pParticleDef->GetPDGMass() ; 
+  G4double       restMass = pParticle->GetMass() ; 
 
   fMassGeometryLimitedStep = false ; //  Set default - alex
   fAnyGeometryLimitedStep = false; 

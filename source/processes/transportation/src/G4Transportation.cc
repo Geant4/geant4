@@ -40,6 +40,7 @@
 //
 // =======================================================================
 // Modified:   
+//   12 Jan  2015, M.Kelsey: Use G4DynamicParticle mass, NOT PDGMass
 //   28 Oct  2011, P.Gumpl./J.Ap: Detect gravity field, use magnetic moment 
 //   20 Nov  2008, J.Apostolakis: Push safety to helper - after ComputeSafety
 //    9 Nov  2007, J.Apostolakis: Flag for short steps, push safety to helper
@@ -201,7 +202,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   G4double particleCharge = pParticle->GetCharge() ; 
   G4double magneticMoment = pParticle->GetMagneticMoment() ;
-  G4double       restMass = pParticleDef->GetPDGMass() ;
+  G4double       restMass = pParticle->GetMass() ;
 
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
