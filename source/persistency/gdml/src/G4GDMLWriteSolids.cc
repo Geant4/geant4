@@ -115,7 +115,7 @@ BooleanWrite(xercesc::DOMElement* solElement,
       if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(firstPtr))
       {
          firstpos += disp->GetObjectTranslation();
-         firstrot += firstrot + GetAngles(disp->GetObjectRotation());
+         firstrot += GetAngles(disp->GetObjectRotation());
          firstPtr = disp->GetConstituentMovedSolid();
          displaced++;
          continue;

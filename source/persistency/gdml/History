@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 November 2014 Gabriele Cosmo (gdml-V09-06-11)
+- Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of repeated
+  displacements of the reference solid in the same Boolean operation (issue
+  reported by ATLAS).
+
+10 November 2014 Witold Pokorski
+- Correction to G4GDMLReadMaterials::MixtureRead() to revert order of
+  reading (first elements then materials) for mixtures by fraction;
+  corrects referencing for cases when elements and materials may carry
+  the same name (case reported by ATLAS).
+
 21 May 2014 Gabriele Cosmo (gdml-V09-06-10)
 - Added better description to fatal exception in case document content
   imported happens to be empty in G4GDMLRead::Read().
