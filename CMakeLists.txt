@@ -76,10 +76,10 @@ set(CMAKE_MODULE_PATH
 # See the documentation in each of these modules for further details.
 #
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "10.0.3")
+set(${PROJECT_NAME}_VERSION "10.0.4")
 set(${PROJECT_NAME}_VERSION_MAJOR "10")
 set(${PROJECT_NAME}_VERSION_MINOR "0")
-set(${PROJECT_NAME}_VERSION_PATCH "3")
+set(${PROJECT_NAME}_VERSION_PATCH "4")
 
 # - Provide dependent options as these are needed for some Geant4 features
 include(CMakeDependentOption)
