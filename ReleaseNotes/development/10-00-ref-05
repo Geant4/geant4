@@ -299,7 +299,7 @@ processes/hadronic
   o G4BinaryCascade: improved calculation of mass, and of correction for    (xo)
     outgoing particles by always using GetIon() method; addresses potential
     crash for p+d seen in d+H in BIC.
-  o G4NeutronField, G4ProtonField: removed superfluous const_casts and use   (x)
+  o G4NeutronField, G4ProtonField: removed superfluous const_casts and use  (xo)
     unsigned int for index. Protect against negative index into buffer.
 - models/cascade (hadr-casc-V10-00-10)
   o G4PreCompoundDeexcitation: attempt to use shared instance of PreCompound

@@ -24,6 +24,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (+)  Fixes included in release 10.0.p03
+(o)  Fixes included in release 10.0.p04
 
 Summarised, the list of changes is the following:
 
@@ -155,7 +156,7 @@ physics_lists
 - constructors/hadron_inelastic (phys-ctor-hinelastic-V10-00-04)
   o Including constructors for NuBeam and Shielding.
     Extended Shielding code to also include ShieldingM variant.
-  o Added protection in all destructors to avoid double deletes. 
+  o Added protection in all destructors to avoid double deletes.             (o)
 - constructors/limiters (phys-ctor-limiters-V10-00-03)                       (+)
   o G4NeutronTrackingCut: register G4NeutronKiller in
     G4HadronicProcessStore; improved log and process deleted at exit.
@@ -531,7 +532,7 @@ examples                                         examples-V10-00-07
 tests                                            tests-V10-00-07
 -----
 - Updated reference outputs and tools.
-- tests/test23 (test23-V10-00-06)
+- tests/test23 (test23-V10-00-08)
   o ProcessWrapper: updated the call to ChooseHadronicInteraction
     according to its new signature.
   o Using new implementation of ShieldingM.

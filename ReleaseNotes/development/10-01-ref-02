@@ -1,0 +1,242 @@
+
+                       geant4-10-01-ref-02
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Introduced NTP_Temperature=20C; set as default for all materials
+   instead of STP_Temperature.
+ o Added missing gamma-gamma, omega-gamma modes to EtaPrime and updated
+   braching ratio.
+ o Fixes in de_excitation hadronic model to provide correct sampling
+   of the decay time for all type of levels, correct energy balance, and
+   better event reproducibility of hadronic transport.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(+)  Fixes included in release 10.0.p04
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-04
+-----
+- Added support for compiling against c++1y standard for GNU and Clang
+  compilers. Added support for compiling against c++11 standard for Intel 15
+  compiler. 'c++0x' is used for compilers with partial support (even if
+  'c++11' is allowed), reserving 'c++11' for fully supported cases.
+
+analysis                                         analysis-V10-01-03
+--------
+- Updated to g4tools 1.18.2: added code to send/recv histos through MPI;
+  fixed resetting histograms. See History_tools for the complete list of
+  modifications.
+
+digits_hits/scorer                               detscorer-V10-01-00
+------------------
+- Fix in CMake script for missing dependency on external library.
+
+event                                            event-V10-01-03
+-----
+- Fix to reduce performance penalty in MT mode when using GPS with low
+  energy primaries. Addressing problem report #1706.
+
+externals/usolids                                geom-usolids-V10-01-08
+-----------------
+- Fix in SetOriginalParameters() for UPolycone, in case of presence of       (+)
+  'rings' structures constructed by (r,z) corners.
+- Fixed typo in copy-ctor and assignment operator for UTubs.                 (+)
+
+g3tog4                                           g3tog4-V10-01-00
+------
+- Fix in CMake script for missing dependency on external library.
+
+geometry
+--------
+- solids/CSG (geom-csg-V10-01-01):
+  o Fixed typo in copy-ctor and assignment operator for G4Tubs and G4OTubs.  (+)
+- solids/specific (geom-specific-V10-01-05):
+  o Fix in SetOriginalParameters() for G4Polycone and G4Polyhedra, in case   (+)
+    of presence of 'rings' structures. Addressing problem report #1705.
+
+global                                           global-V10-01-02
+------
+- Added type-info information to G4Allocator to aid debugging.
+
+materials                                        materials-V10-01-01
+---------
+- G4Material, G4NistManager, G4NistMaterialBuilder, G4IonisParamMat:
+  introduced NTP_Temperature=20C; set this temperature as default for 
+  all materials instead of STP_Temperature. No effects in results expected.
+  Addressing problem report #1704.
+
+particles                                        particles-V10-01-00
+---------
+- Added missing gamma-gamma, omega-gamma modes to EtaPrime and updated
+  braching ratio. Addressing problem report #1713.
+
+persistency/gdml                                 gdml-V10-01-00
+----------------
+- Allow for return of NULL pointer in call to GetWorldVolume() in case
+  read command for importing a GDML file has not been yet issued.
+  Addressing enhancement request #1412.
+
+physics_lists
+-------------
+- constructors/electromagnetic (phys-ctor-em-V10-01-04):
+  o G4EmStandardPhysics_option4, G4EmStandardPhysicsWVI: disable
+    'DisplacementBeyondSafety' option; result of electron scattering
+    benchmark demonstrate some degradation of accuracy with this option
+    enabled.
+- constructors/hadron_elastic (phys-ctor-helastic-V10-01-00)
+  o Replaced CHIPS neutron elastic cross-section with NeutronElasticXS
+    cross-section.
+- lists (phys-lists-V10-01-01):
+  o INCLXXPhysicsListHelper: avoid use of G4NeutronTrackingCut               (+)
+    for *_HP physics-lists.
+
+processes/electromagnetic/dna                    emdna-V10-01-06
+-----------------------------
+- Fix for event reproducibility in the chemistry module
+- Fixed problem of "no reaction table found"; created G4ITReaction class.
+- G4shared_ptr refers to std::shared_ptr when C++11 is activated.
+- G4ITModelProcessor: removed assert() calls introduced for testing.
+- G4ITTransportation: removed extra parenthesis in the undef of PrepareState.
+
+processes/electromagnetic/highenergy             emhighenergy-V10-01-01
+------------------------------------
+- G4eeToHadronsModel: fixed kinematics in ISR gamma emission; added
+  check on energy balance. Addressing problem report #1716.
+- G4eeTo3PiModel: increased majoranta for sampling of 3-body final state;
+  fixed bug in sampling.
+
+processes/electromagnetic/utils                  emutils-V10-01-07
+-------------------------------
+- G4VEmProcess: fixed crash in printout for verbose level > 2.
+- G4EmCalculator: fixed minor defect reported by Coverity.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-01-03)
+  o Fix in G4ComponentGGHadronNucleusXsc to work for H target.
+- models/cascade (hadr-casc-V10-01-02)
+  o G4InuclCollider: added special end-of-cascade test to require low-energy
+    photo-nuclear and lepto-nuclear events to produce at least one non-gamma
+    secondary. Currently hidden behind G4CASCADE_CHECK_PHOTONUCLEAR flag.
+    Will address problem report #1680 to increase neutron yield around the
+    giant dipole resonance, without model changes.
+- models/coherent_elastic (hadr-cohe-V10-01-03)
+  o G4DiffuseElastic: fix for rare numerical error (sqrt of negative argument).
+- models/de_excitation (hadr-deex-V10-01-09)
+  o G4VGammaDeexcitation::GenerateGamma(): take into account atomic bond
+    energy for computation of transition energy and kinematics in the case
+    of internal conversion. 
+  o G4VGammaDeexcitation, G4DiscreteGammaDeexcitation, G4PhotonEvaporation:
+    changed default set of parameters: ICM disabled; time limit for isomere
+    production is set to DBL_MAX; sampling of gamma decay of long-lived
+    isomere levels is performed as it was in Geant4 9.6 assuming decay at
+    rest and making correction for energy balance (in that case momentum
+    balance is not guaranteed); binding energy is taken into account in the
+    case of ICM enabled. These modifications should provide correct sampling
+    of the decay time for all type of levels, energy balance in hadronic
+    interactions, and event reproducibility of hadronic transport.
+  o Enabled ICM by default in G4NeutronRadCapture.
+  o G4GEMProbability: added protection to avoid numerical problem seen
+    in FTF_BIC physics-list where a nucleus get excited to 8 GeV.
+  o G4NuclearLevelStore: take out access to G4LevelManager.
+  o G4NuclearLevelData: new data class for nuclear levels and gamma transitions;
+    pure singleton with data shared among threads.
+    Adapted classes G4LevelReader, G4LevelManager and G4NucLevel accordingly.
+  o G4LevelReader: added factor to transform half life time into life time.
+  o Cleanup of GNUmake and CMake scripts.
+    Removed dependency on hadronic/processes sub-module.
+- models/neutron_hp (hadr-hpn-V10-01-04)
+  o Removed unnecessary code in G4NeutronHPInelasticCompFS.
+    Addressing problem report #1710.
+- models/radioactive_decay (radioactive_decay-V10-01-08)
+  o Temporary removal of decay table map sharing for threads, to resolve
+    observed failures in MT mode.
+
+processes/scoring                                procsccore-V10-01-00
+-----------------
+- G4ParallelWorldProcess: added verbosity to check update of field-track.
+
+run                                              run-V10-01-02
+---
+- Added new method G4WorkerRunManager::DoWork(), called by
+  G4MTRunManagerKernel::StartThread() to process requests of new runs
+  from kernel.
+- Moved setting of pin affinity from G4MTRunManagerKernel::StartThread()
+  to G4WorkerThread.
+
+visualization                                    vis-V10-01-05
+-------------
+- Fix in CMake scripts for missing dependency on external library.
+- OpenInventor:
+  o G4OpenInventorViewer, G4OpenInventorXtExtendedViewer:
+    added viewer menu button and methods for PDF output.
+- externals (visexternal-V10-01-02):
+  o G4OpenGL2PSAction: added method setBufferSize().
+- Tree (vistree-V10-01-01)
+  o G4ASCIITreeSceneHandler: added physical volume dump for verbosity >=6.
+
+examples                                         examples-V10-01-02
+--------
+- Updated reference outputs.
+- advanced/air_shower (air_shower-V10-01-01)
+  o Set defaults for GPS in master thread.
+- advanced/hadrontherapy (hadrontherapy-V10-01-02)
+  o Corrected definition of Steppers in LaserDrivenBeamLine
+    (nvar=8 only for Electric field).
+  o Removed old files and updated README.
+- basic/B4 (exampleB4-V10-01-01)
+  o Fixed accessing 'gapHit'.
+    Addressing problem report #1714.
+  o Fixed documentation.
+- extended/electromagnetic/TestEm8 (testem8-V10-01-00)
+  o DetectorConstruction: removed local pointer to sensitive detector
+    in order to avoid race condition.
+- extended/eventgenerator/exgps (exgps-V10-01-01)
+  o Added in ctest with distribution from histogram for PhysicsChecks.
+  o Fixed documentation.
+- extended/hadronic/Hadr02 (exhadr02-V10-01-00)
+  o Removed obsolete interface to DPMJET.
+- extended/parallel/MPI (MPI-V10-01-05)
+  o Fixed bug in exMPI02 using wrong calls to random generator for
+    generation of primaries.
+  o Introduced new functionality in G4mpi library to merge G4Run, scorers
+    and g4tools histograms/profiles across MPI ranks.
+  o Introduced new example exMPI03, based on same geometry and physics
+    of exMPI02 to demonstrate merging capabilities.
+  o Adding MPI examples for ctest/cdash testing.
+- extended/runAndEvent/RE06 (exampleRE06-V10-01-00)
+  o Adding new macro file for testing on Xeon Phi with limited statistics.
+
+tests                                            tests-V10-01-02
+-----
+- Updated reference outputs and tools.
+- tests/test18 (test18-V10-01-00)
+  o Correction to CMake build script.
+- tests/test19 (test19-V10-01-00)
+  o Slightly reshuffle G4MODELS includes.
+  o Added executable gen_upload* scripts to replace generate_upload.
+  o Restructured analysis scripts. Added various scripts for automation.
+  o Updated CMake acripts.
+- tests/test22 (test22-V10-01-02)
+  o Correction to CMake build scripts to avoid configuration warnings.
+- tests/test23 (test23-V10-01-04)
+  o Several cleanups and updates (included rndm handling).
+  o Reshuffle G4PHYSICS_* includes
+  o Added gen_upload* executable scripts to replace generate_upload* ones.
+  o Refine pre-processor conditions for backward compatibility.
+  o Restructured and refined analysis scripts.
+    Added various scripts for automation.
+- tests/test47 (test47-V10-01-02)
+  o Restructured for use of common code.
+  o Various updates for p+N->pbar study (initial version).
+  o Refined analysis scripts for p+N->pbar (added mc2data, regression, etc...).
+  o EPTest temporarily disabled.
+- tests/test75 (test75-V10-01-00)
+  o Introduced post-MC-gen regression test script (optional).
+  o Restructured and refined analysis scripts.
+    Added various scripts for automation.
+  o Minor cleanups.
