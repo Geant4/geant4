@@ -111,11 +111,11 @@ geometry
 global                                           global-V10-00-44
 ------
 - G4StatDouble: corrected use 'const' interface for Add() method.
-- Added missing G4GLOB_DLL specification for DLL import/export to
+- Added missing G4GLOB_DLL specification for DLL import/export to            (o)
   G4CacheDetails specialization of cache reference for double.
 - Coherent use of 'thread_local' keyword for c++11, when supported and
   updated logic in tls.hh header.
-- G4FPEDetection.hh: restrict FPE trapping to GCC only, excluding CLang.
+- G4FPEDetection.hh: restrict FPE trapping to GCC only, excluding CLang.     (o)
   Addresses problem with Qt generating an apparent FPE deep inside its
   code with MacOSX CLang builds.
   Added call to 'sigfillset' to clear any signals before any use of sigset_t
