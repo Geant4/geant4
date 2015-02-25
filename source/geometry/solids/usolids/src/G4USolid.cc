@@ -360,13 +360,7 @@ G4GeometryType G4USolid::GetEntityType() const
 
 std::ostream& G4USolid::StreamInfo(std::ostream& os) const
 {
-  os << "-----------------------------------------------------------\n"
-     << "    *** Dump for solid - " << fShape->GetName() << " ***\n";
-  //   << "    ===================================================\n"
-  //   << " Solid type: " << fShape->GetEntityType() << "\n"
-  //   << "-----------------------------------------------------------\n";
-
-  return os;//fShape->StreamInfo(os);
+  return fShape->StreamInfo(os);
 }
 
 G4USolid::G4USolid(const G4USolid& rhs)

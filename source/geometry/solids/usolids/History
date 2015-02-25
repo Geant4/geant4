@@ -17,6 +17,54 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 23,  2015  T.Nikitina            geom-usolids-V09-06-17
+- Fix in SetOriginalParameters() for UPolycone, in case of presence of
+  'rings' structures constructed by (r,z) corners.
+
+February 16,  2015  G.Cosmo
+- Fixed typo in copy-ctor and assignment operator for UTubs.
+
+January 26,  2015  G.Cosmo
+- Renamed DistanceAwayForInside() to DistanceAway() and use polymorphism
+  in UPolyconeSide.
+
+January 26,  2015  T.Nikitina
+- Added special method for Inside 'DistanceAwayForInside()' in order to fix 
+  precision problem of calculation of DistanceToSide() in UPolyconeSide.
+
+December 17, 2014 G.Cosmo
+- Renamed ExceptionSeverity struct to UExceptionSeverity in UUtils.
+
+December 12, 2014 G.Cosmo
+- Use canonical form for operator=() in UPolycone.
+
+December 10, 2014 T.Nikitina
+- Fix in UPolycone::InsideSection() for points(0,0,z).
+  Code cleanup and formatting
+
+December 02, 2014 T.Nikitina
+- Fixes in UPolycone: 
+  InsideSection() for openPhi when StartPhi is negative,
+  Init() for Polycone defined from ZPlane[0]>ZPlane[N],
+  DistanceToOut() for points starting on internal surface.
+
+November 27, 2014 G.Cosmo
+- Removed 'inline' specification for pure virtual function StreamInfo()
+  in VUSolid base class.
+
+November 27, 2014 G.Cosmo
+- Fixed implementation of StreamInfo() for G4USolid.
+
+November 10, 2014 T.Nikitina
+- UPolyhedra: moved Extent() from protected to public.
+- UPolycone: correction in Capacity() for iteration over the number of
+  sections and in SurfaceArea() for the case opening-angle is less than 2*pi.
+- UTet: fixed approximation in Extent().
+
+November 6, 2014  T.Nikitina
+- Minor fixes of errors reported by Coverity and unit tests in 
+  UTubs, UCons, UTet.
+
 September 18, 2014  T.Nikitina            geom-usolids-V09-06-16
 - Fixed typo error in USphere::SafetyFromInside().
 
