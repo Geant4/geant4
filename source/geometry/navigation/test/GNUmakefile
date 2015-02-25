@@ -29,11 +29,11 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/intercoms/include
 
-LDLIBS   := -lG4geometry -lG4graphics_reps -lG4materials \
-            -lG4intercoms -lG4global
+# LDLIBS   := -lG4geometry -lG4graphics_reps -lG4materials \
+#             -lG4intercoms -lG4global
 #  For external CLHEP must not include G4clhep
 #ifndef CLHEP_BASE_DIR
-LDLIBS   += -lG4clhep
+# LDLIBS   += -lG4clhep
 # endif            
 
 include $(G4INSTALL)/config/binmake.gmk

@@ -80,7 +80,9 @@ G4Navigator::G4Navigator()
 // ********************************************************************
 //
 G4Navigator::~G4Navigator()
-{ delete fpVoxelSafety; }
+{
+  delete fpVoxelSafety;
+}
 
 // ********************************************************************
 // ResetHierarchyAndLocate
@@ -112,6 +114,8 @@ G4Navigator::ResetHierarchyAndLocate(const G4ThreeVector &p,
 // fEntering         - True if entering `daughter' volume (or replica)
 //                     whether daughter of last mother directly 
 //                     or daughter of that volume's ancestor.
+// fExiting          - True if exited 'mother' volume
+//                     (always ? - how about if going back down ? - tbc)
 // ********************************************************************
 //
 G4VPhysicalVolume* 
@@ -137,16 +141,15 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     globalDirection=*pGlobalDirection;
   }
 
-
 #ifdef G4VERBOSE
   if( fVerbose > 2 )
   {
     G4int oldcoutPrec = G4cout.precision(8);
     G4cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << G4endl; 
     G4cout << "    Called with arguments: " << G4endl
-           << "    Globalpoint = " << globalPoint << G4endl
-           << "    RelativeSearch = " << relativeSearch  << G4endl;
-    if( fVerbose == 4 )
+           << "        Globalpoint = " << globalPoint << G4endl
+           << "        RelativeSearch = " << relativeSearch  << G4endl;
+    if( fVerbose >= 4 )
     {
       G4cout << "    ----- Upon entering:" << G4endl;
       PrintState();
@@ -154,6 +157,9 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     G4cout.precision(oldcoutPrec);
   }
 #endif
+
+  G4int noLevelsExited=0 ;
+  G4int noLevelsEntered= 0;
 
   if ( !relativeSearch )
   {
@@ -168,6 +174,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       fExitedMother = fExiting;       // Remember
       if ( fExiting )
       {
+        noLevelsExited++;  // count this first level entered too
+
         if ( fHistory.GetDepth() )
         {
           fBlockedPhysicalVolume = fHistory.GetTopVolume();
@@ -178,6 +186,12 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         {
           fLastLocatedPointLocal = localPoint;
           fLocatedOutsideWorld = true;
+          fBlockedPhysicalVolume = 0;   // to be sure
+          fBlockedReplicaNo = -1;
+          fEntering = false;            // No longer 
+          fEnteredDaughter = false; 
+          fExitedMother = true;      // ??
+          
           return 0;           // Have exited world volume
         }
         // A fix for the case where a volume is "entered" at an edge
@@ -185,14 +199,23 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         //  - This stops it from exiting further volumes and cycling
         //  - However ReplicaNavigator treats this case itself
         //
+        // assert( fBlockedPhysicalVolume!=0 );
+
+        // Expect to be on edge => on surface
+        //
         if ( fLocatedOnEdge && (VolumeType(fBlockedPhysicalVolume)!=kReplica ))
         { 
           fExiting= false;
+          // Consider effect on Exit Normal !?
         }
       }
       else
         if ( fEntering )
         {
+          // assert( fBlockedPhysicalVolume!=0 );
+
+          noLevelsEntered++;   // count the first level entered too
+
           switch (VolumeType(fBlockedPhysicalVolume))
           {
             case kNormal:
@@ -259,7 +282,6 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   // else
   // o containing volume found
   //
-  G4int noLevelsExited=0 ;
 
   while (notKnownContained)
   {
@@ -365,7 +387,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
             {
               // The first transformation was done by the sub-navigator
               //
-              const G4RotationMatrix* mRot=fBlockedPhysicalVolume->GetRotation();
+              const G4RotationMatrix* mRot =
+                    fBlockedPhysicalVolume->GetRotation();
               if( mRot )
               { 
                 fGrandMotherExitNormal *= (*mRot).inverse();
@@ -402,7 +425,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   // o Positioned daughters & voxels
   // o Positioned daughters & no voxels
 
-  noResult = true;  // noResult should be renamed to 
+  noResult = true;  // noResult should be renamed to
                     // something like enteredLevel, as that is its meaning.
   do
   {
@@ -473,6 +496,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 
     if ( noResult )
     {
+      noLevelsEntered++;
+      
       // Entering a daughter after ascending
       //
       // The blocked volume is no longer valid - it was for another level
@@ -492,7 +517,11 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         const G4RotationMatrix* mRot = enteredPhysical->GetRotation();
         if( mRot )
         { 
-          fGrandMotherExitNormal *= (*mRot).inverse();
+          // Go deeper, i.e. move 'down' in the hierarchy
+          // Apply direct rotation, not inverse
+          //
+          fGrandMotherExitNormal *= (*mRot);
+          fChangedGrandMotherRefFrame= true;
         }
       }
 
@@ -519,7 +548,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     G4cout << "    Return value = new volume = " << curPhysVol_Name << G4endl;
     G4cout << "    ----- Upon exiting:" << G4endl;
     PrintState();
-    if( fVerbose == 5 )
+    if( fVerbose >= 5 )
     {
       G4cout << "Upon exiting LocateGlobalPointAndSetup():" << G4endl;
       G4cout << "    History = " << G4endl << fHistory << G4endl << G4endl;
@@ -548,7 +577,13 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 //
 void
 G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
-{  
+{
+#ifdef G4DEBUG_NAVIGATION
+   // Check: Either step was not limited by a boundary
+   //         or else the full step is no longer being taken
+   assert( !fWasLimitedByGeometry );
+#endif
+  
    fLastLocatedPointLocal = ComputeLocalPoint(pGlobalpoint);
    fLastTriedStepComputation= false;
    fChangedGrandMotherRefFrame= false;  //  Frame for Exit Normal
@@ -616,13 +651,14 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 // Save the state, in case this is a parasitic call
 // Save fValidExitNormal, fExitNormal, fExiting, fEntering, 
 //      fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero; 
-// Note: the state of dependent objects is not currently saved.
-//      This means that the full state is changed by calls between
-//      SetSavedState() and RestoreSavedState(); 
 // ********************************************************************
 //
 void G4Navigator::SetSavedState()
 {
+  // Note: the state of dependent objects is not currently saved.
+  //   ( This means that the full state is changed by calls between
+  //     SetSavedState() and RestoreSavedState(); 
+  
   fSaveState.sExitNormal = fExitNormal;
   fSaveState.sValidExitNormal = fValidExitNormal;
   fSaveState.sExiting = fExiting;
@@ -668,7 +704,8 @@ void G4Navigator::RestoreSavedState()
   fEnteredDaughter= fSaveState.sEnteredDaughter;
   fExitedMother= fSaveState.sExitedMother;
   fWasLimitedByGeometry= fSaveState.sWasLimitedByGeometry;
-
+  
+  // The 'expected' behaviour is to restore these too (fix 2014.05.26)
   fPreviousSftOrigin=   fSaveState.sPreviousSftOrigin;
   fPreviousSafety= fSaveState.sPreviousSafety;
 }
@@ -1002,7 +1039,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
 
-  fStepEndPoint = pGlobalpoint + Step * pDirection; 
+  fStepEndPoint = pGlobalpoint
+                + std::min(Step,pCurrentProposedStepLength) * pDirection;
   fLastStepEndPointLocal = fLastLocatedPointLocal + Step * localDirection; 
 
   if( fExiting )
@@ -1168,7 +1206,7 @@ G4double G4Navigator::CheckNextStep( const G4ThreeVector& pGlobalpoint,
   // ***> TODO: restore subnavigator state
   //            if( last_located)       Need Position of last location
   //            if( last_computed step) Need Endposition of last step
-
+  
   return step; 
 }
 
@@ -1247,12 +1285,16 @@ void G4Navigator::SetupHierarchy()
         pParam->ComputeTransformation(replicaNo, current);
 
         G4TouchableHistory *pTouchable= 0;
-        if( pParam->IsNested() ) {
+        if( pParam->IsNested() )
+        {
            pTouchable= new G4TouchableHistory( fHistory );
-           pTouchable->MoveUpHistory();           // move up to the parent level 
-                                                  // Adequate only if Nested at the Branch level (last)
+           pTouchable->MoveUpHistory(); // Move up to the parent level 
+             // Adequate only if Nested at the Branch level (last)
            // To extend to other cases:  
-           // pTouchable->MoveUpHistory(cdepth-i-1); // move to the parent level of *Current* level                       // Could replace this line and constructor with a revised c-tor for History( levels to drop)
+           // pTouchable->MoveUpHistory(cdepth-i-1);
+             // Move to the parent level of *Current* level
+             // Could replace this line and constructor with a revised
+             // c-tor for History(levels to drop)
         }
         // Set up the correct solid and material in Logical Volume
         //
@@ -1361,7 +1403,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
               else // if( inSideIt == kInside ) 
               {
                 message << "Point is Inside. " << G4endl
-                        << "  Safety (from inside) = " << safety << G4endl;              
+                        << "  Safety (from inside) = " << safety << G4endl;
               }
               G4Exception("G4Navigator::GetLocalExitNormal()", "GeomNav1001",
                           JustWarning, message);
@@ -1419,6 +1461,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
         fCalculatedExitNormal= false; 
         G4ExceptionDescription message; 
         message << "Function called when *NOT* at a Boundary." << G4endl;
+        message << "Exit Normal not calculated." << G4endl;
         G4Exception("G4Navigator::GetLocalExitNormal()",
                     "GeomNav0003", JustWarning, message); 
       }
@@ -1471,6 +1514,7 @@ G4Navigator::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol,
                            pEnteringPhysVol->GetTranslation()).Invert(); 
 }
 
+
 // ********************************************************************
 // GetLocalExitNormalAndCheck
 //
@@ -1479,8 +1523,8 @@ G4Navigator::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol,
 // checks the current point against expected 'local' value.
 // ********************************************************************
 //
-G4ThreeVector G4Navigator::
-GetLocalExitNormalAndCheck( 
+G4ThreeVector
+G4Navigator::GetLocalExitNormalAndCheck( 
 #ifdef G4DEBUG_NAVIGATION
                            const G4ThreeVector& ExpectedBoundaryPointGlobal,
 #else
@@ -1507,6 +1551,7 @@ GetLocalExitNormalAndCheck(
   return GetLocalExitNormal( pValid); 
 }
 
+
 // ********************************************************************
 // GetGlobalExitNormal
 //
@@ -1520,14 +1565,64 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 {
   G4bool         validNormal;
   G4ThreeVector  localNormal, globalNormal;
-
-  if( fLastTriedStepComputation && fExiting )  
+  G4bool         usingStored;
+ 
+  usingStored=
+   fCalculatedExitNormal &&
+     (  ( fLastTriedStepComputation && fExiting) // Just calculated it
+        ||                                       // No locate in between
+         (!fLastTriedStepComputation
+          && (IntersectPointGlobal-fStepEndPoint).mag2()
+             < (10.0*kCarTolerance*kCarTolerance)
+        )  // Calculated it 'just' before & then called locate
+           // but it did not move position
+      );
+  
+  if( usingStored )
   {
-    // This was computed in ComputeStep -- and only on arrival at boundary
+    // This was computed in last call to ComputeStep
+    // and only if it arrived at boundary
     //
     globalNormal = fExitNormalGlobalFrame; 
-    *pNormalCalculated = true; // ComputeStep always computes it if Exiting
-                               // (fExiting==true)
+    G4double  normMag2 = globalNormal.mag2(); 
+    if( std::fabs ( normMag2 - 1.0 ) < perMillion )  // Value is good 
+    {
+       *pNormalCalculated = true; // ComputeStep always computes it if Exiting
+                                  // (fExiting==true)
+    }
+    else
+    {
+       G4ExceptionDescription message;
+       message.precision(10); 
+       message << " WARNING> Expected normal-global-frame to be valid, "
+               << " i.e. a unit vector!" << G4endl
+               << "  - but |normal|   = "  << std::sqrt(normMag2)
+               << "  - and |normal|^2 = "  << normMag2 << G4endl
+               << " which differs from 1.0 by " << normMag2 - 1.0 << G4endl
+               << "   n = " << fExitNormalGlobalFrame << G4endl;
+       message << "============================================================"
+               << G4endl;
+       G4int oldVerbose = fVerbose; 
+       fVerbose=4; 
+       message << "   State of Navigator: " << G4endl;
+       message << *this << G4endl;
+       fVerbose = oldVerbose; 
+       message << "============================================================"
+               << G4endl;
+
+       G4Exception("G4Navigator::GetGlobalExitNormal()",
+                   "GeomNav0003",JustWarning, message,
+              "Value obtained from stored global-normal is not a unit vector.");
+
+       // (Re)Compute it now -- as either it was not computed, or it is wrong.
+       //
+       localNormal = GetLocalExitNormalAndCheck(IntersectPointGlobal,
+                                                &validNormal);
+       *pNormalCalculated = fCalculatedExitNormal;
+
+       G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
+       globalNormal = localToGlobal.TransformAxis( localNormal );
+    }
   }
   else
   {
@@ -1535,6 +1630,8 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     *pNormalCalculated = fCalculatedExitNormal;
 
 #ifdef G4DEBUG_NAVIGATION
+    usingStored= false;
+
     if( (!validNormal) && !fCalculatedExitNormal)
     {
       G4ExceptionDescription edN;
@@ -1560,10 +1657,10 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
        edN << "G4Navigator::GetGlobalExitNormal: "
            << "  Using Local Normal - from call to GetLocalExitNormalAndCheck. "
            << G4endl
-           << "  Local  Exit Normal = " << localNormal  << " || = "
-           << std::sqrt(localMag2) << G4endl
-           << "  Global Exit Normal = " << globalNormal << " || = "
-           << globalNormal.mag() << G4endl;
+           << "  Local  Exit Normal : " << " || = " << std::sqrt(localMag2) 
+           << " vec = " << localNormal << G4endl
+           << "  Global Exit Normal : " << " || = " << globalNormal.mag() 
+           << " vec = " << globalNormal << G4endl;
        edN << "  Calculated It      = " << fCalculatedExitNormal << G4endl;
 
        G4Exception("G4Navigator::GetGlobalExitNormal()",
@@ -1576,17 +1673,17 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
   }
 
 #ifdef G4DEBUG_NAVIGATION
-  // Temporary extra checks
-  if( fLastTriedStepComputation && fExiting)
+  if( usingStored )
   {
-    localNormal = GetLocalExitNormalAndCheck( IntersectPointGlobal, &validNormal);
-    *pNormalCalculated = fCalculatedExitNormal;
+    G4ThreeVector globalNormAgn; 
 
+    localNormal= GetLocalExitNormalAndCheck(IntersectPointGlobal, &validNormal);
+    
     G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
-    globalNormal = localToGlobal.TransformAxis( localNormal );
+    globalNormAgn = localToGlobal.TransformAxis( localNormal );
     
     // Check the value computed against fExitNormalGlobalFrame
-    G4ThreeVector diffNorm = globalNormal - fExitNormalGlobalFrame;
+    G4ThreeVector diffNorm = globalNormAgn - fExitNormalGlobalFrame;
     if( diffNorm.mag2() > perMillion*CLHEP::perMillion)
     {
       G4ExceptionDescription edDfn;
@@ -1595,7 +1692,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
       edDfn << "  Magnitude of diff =      " << diffNorm.mag() << G4endl;
       edDfn << "  Normal stored (Global)     = " << fExitNormalGlobalFrame
             << G4endl;
-      edDfn << "  Global Computed from Local = " << globalNormal << G4endl;
+      edDfn << "  Global Computed from Local = " << globalNormAgn << G4endl;
       G4Exception("G4Navigator::GetGlobalExitNormal()", "GeomNav0003",
                   JustWarning, edDfn);
     }
@@ -1641,14 +1738,30 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   }
 #endif
 
-  if (keepState)  { SetSavedState(); }
-
   G4double distEndpointSq = (pGlobalpoint-fStepEndPoint).mag2(); 
   G4bool   stayedOnEndpoint  = distEndpointSq < kCarTolerance*kCarTolerance; 
   G4bool   endpointOnSurface = fEnteredDaughter || fExitedMother;
 
-  if( !(endpointOnSurface && stayedOnEndpoint) )
+  if( endpointOnSurface && stayedOnEndpoint )
+    {
+#ifdef G4DEBUG_NAVIGATION
+      if( fVerbose >= 2 )
+      {
+        G4cout << "    G4Navigator::ComputeSafety() finds that point - "
+        << pGlobalpoint << " - is on surface " << G4endl;
+        if( fEnteredDaughter ) { G4cout << "   entered new daughter volume"; }
+        if( fExitedMother )    { G4cout << "   and exited previous volume."; }
+        G4cout << G4endl;
+        G4cout << " EndPoint was = " << fStepEndPoint << G4endl;
+      }
+#endif
+      newSafety = 0.0;
+      // return newSafety;
+    }
+  else // if( !(endpointOnSurface && stayedOnEndpoint) )
   {
+    if (keepState)  { SetSavedState(); }
+    
     // Pseudo-relocate to this point (updates voxel information only)
     //
     LocateGlobalPointWithinVolume( pGlobalpoint ); 
@@ -1716,35 +1829,20 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
       newSafety = freplicaNav.ComputeSafety(pGlobalpoint, localPoint,
                                             fHistory, pMaxLength);
     }
-  }
-  else // if( endpointOnSurface && stayedOnEndpoint )
-  {
-#ifdef G4DEBUG_NAVIGATION
-    if( fVerbose >= 2 )
+    
+    if (keepState)
     {
-      G4cout << "    G4Navigator::ComputeSafety() finds that point - " 
-             << pGlobalpoint << " - is on surface " << G4endl; 
-      if( fEnteredDaughter ) { G4cout << "   entered new daughter volume"; }
-      if( fExitedMother )    { G4cout << "   and exited previous volume."; }
-      G4cout << G4endl;
-      G4cout << " EndPoint was = " << fStepEndPoint << G4endl;
-    } 
-#endif
-    newSafety = 0.0; 
+      RestoreSavedState();
+      // This now overwrites the values of the Safety 'sphere' (correction)
+    }
+    
+    // Remember last safety origin & value
+    //
+    // We overwrite the Safety 'sphere' - keeping old behaviour
+    fPreviousSftOrigin = pGlobalpoint;
+    fPreviousSafety = newSafety;
   }
-
-  if (keepState)
-  {
-     RestoreSavedState();
-     // This now overwrites the values of the Safety 'sphere' (correction)
-  }
-
-  // Remember last safety origin & value
-  //
-  // We overwrite the Safety 'sphere' - keeping old behaviour
-  fPreviousSftOrigin = pGlobalpoint;
-  fPreviousSafety = newSafety; 
-
+  
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 1 )
   {
@@ -1774,21 +1872,21 @@ G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
 void  G4Navigator::PrintState() const
 {
   G4int oldcoutPrec = G4cout.precision(4);
-  if( fVerbose == 4 )
+  if( fVerbose >= 4 )
   {
     G4cout << "The current state of G4Navigator is: " << G4endl;
-    G4cout << "  ValidExitNormal= " << fValidExitNormal << G4endl
-           << "  ExitNormal     = " << fExitNormal      << G4endl
-           << "  Exiting        = " << fExiting         << G4endl
-           << "  Entering       = " << fEntering        << G4endl
+    G4cout << "  ValidExitNormal= " << fValidExitNormal // << G4endl
+           << "  ExitNormal     = " << fExitNormal      // << G4endl
+           << "  Exiting        = " << fExiting         // << G4endl
+           << "  Entering       = " << fEntering        // << G4endl
            << "  BlockedPhysicalVolume= " ;
     if (fBlockedPhysicalVolume==0)
       G4cout << "None";
     else
       G4cout << fBlockedPhysicalVolume->GetName();
     G4cout << G4endl
-           << "  BlockedReplicaNo     = " <<  fBlockedReplicaNo       << G4endl
-           << "  LastStepWasZero      = " <<   fLastStepWasZero       << G4endl
+           << "  BlockedReplicaNo     = " <<  fBlockedReplicaNo   //  << G4endl
+           << "  LastStepWasZero      = " <<   fLastStepWasZero   //  << G4endl
            << G4endl;   
   }
   if( ( 1 < fVerbose) && (fVerbose < 4) )
