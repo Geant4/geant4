@@ -156,6 +156,9 @@ class G4PolyconeSide : public G4VCSGface
     G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
                                  G4double &distOutside2, G4double *rzNorm=0 );
       
+    G4double DistanceAway( const G4ThreeVector &p,
+                                 G4double &distOutside2, G4double *edgeRZnorm );
+
     G4bool PointOnCone( const G4ThreeVector &hit, G4double normSign,
                         const G4ThreeVector &p,
                         const G4ThreeVector &v, G4ThreeVector &normal );
