@@ -87,8 +87,8 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
 
   // ===  sample capture  time and change time of projectile
 
-  G4double time = -std::log(G4UniformRand()) / lambda;
   G4HadProjectile* p = const_cast<G4HadProjectile*>(&projectile);
+  G4double time = p->GetGlobalTime() - std::log(G4UniformRand())/lambda;
   p->SetGlobalTime(time);
     
   //G4cout << "lambda= " << lambda << " lambdac= " << lambdac 
