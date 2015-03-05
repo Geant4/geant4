@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
+ Geant4 version Name: geant4-10-00-patch-04    (6-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -331,7 +331,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.24s Real=1.26s Sys=0.01s
+  User=1.47s Real=1.47s Sys=0s
 
  ======================== run summary ======================
 
@@ -432,7 +432,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.59s Real=2.74s Sys=0.02s
+  User=2.96s Real=2.97s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -534,7 +534,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.63s Real=2.65s Sys=0.01s
+  User=2.91s Real=2.93s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -636,7 +636,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.67s Real=1.69s Sys=0.01s
+  User=2.53s Real=2.55s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -737,7 +737,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.99s Real=5.01s Sys=0s
+  User=4.94s Real=5.13s Sys=0s
 
  ======================== run summary ======================
 

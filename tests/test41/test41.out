@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
+ Geant4 version Name: geant4-10-00-patch-04    (6-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10154,7 +10154,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.13s Real=0.25s Sys=0.03s
+  User=0.12s Real=0.23s Sys=0.04s
 ###  1000  events of mu+  with p(MeV/c)= 172 scattered off 116.24 mm of G4_lH2
 ###    Beam momentum spread 1 MeV/c
 /testem/setFileName test41_al.log

@@ -16,7 +16,7 @@ The particle:  proton
 Ekin = 2.205031e+00 GeV
 ### factor  = 9.403219e-02    cross(b)= 2.591799e-01
 ### 0-th event start 
-  User=0.03s Real=0.03s Sys=0s
+  User=0.04s Real=0.03s Sys=0s
 #################################################################
 ###### Cross section per bin for pi+
 
@@ -113,7 +113,7 @@ The particle:  proton
 Ekin = 2.20503 GeV
 ### factor  = 0.0940322    cross(b)= 0.25918
 ### 0-th event start 
-  User=0.05s Real=0.05s Sys=0s
+  User=0.05s Real=0.05s Sys=0.01s
 #################################################################
 ###### Cross section per bin for pi+
 

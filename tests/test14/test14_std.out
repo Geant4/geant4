@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
+ Geant4 version Name: geant4-10-00-patch-04    (6-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -480,7 +480,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.31s Real=0.31s Sys=0s
+  User=0.32s Real=0.5s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -577,7 +577,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.04s Sys=0s
+  User=0.04s Real=0.03s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -643,7 +643,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -682,7 +682,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -778,7 +778,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -991,7 +991,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1030,7 +1030,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.43s Real=0.43s Sys=0s
+  User=0.46s Real=0.68s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1149,7 +1149,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.12s Real=0.12s Sys=0s
+  User=0.12s Real=0.23s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1208,7 +1208,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1247,7 +1247,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.05s Sys=0s
+  User=0.05s Real=0.1s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1336,7 +1336,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.06s Sys=0s
 #
 /calor/setAbsMat Lead
 
@@ -1790,7 +1790,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.64s Real=0.64s Sys=0s
+  User=0.65s Real=1.2s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1960,7 +1960,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.16s Real=0.15s Sys=0s
+  User=0.16s Real=0.32s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2069,7 +2069,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.08s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2177,7 +2177,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.04s Sys=0s
+  User=0.04s Real=0.08s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -2620,7 +2620,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2664,7 +2664,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.13s Real=1.13s Sys=0s
+  User=1.21s Real=1.4s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2867,7 +2867,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2911,7 +2911,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.46s Real=0.46s Sys=0s
+  User=0.51s Real=0.52s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2997,7 +2997,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -3041,7 +3041,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.19s Real=0.19s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -3149,7 +3149,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.1s Real=0.15s Sys=0s
+  User=0.1s Real=0.11s Sys=0s
 #
 #
 /calor/setAbsMat Water
@@ -3390,7 +3390,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -3439,7 +3439,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.27s Sys=0s
+  User=0.29s Real=0.29s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -3564,7 +3564,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.07000000000000001s Real=0.06s Sys=0s
+  User=0.07000000000000001s Real=0.07000000000000001s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -3680,7 +3680,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.03s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -4016,7 +4016,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.28s Real=0.28s Sys=0s
+  User=0.35s Real=0.36s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -4112,7 +4112,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -4161,7 +4161,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.07000000000000001s Real=0.07000000000000001s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -4278,7 +4278,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -4386,7 +4386,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -4525,7 +4525,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -4574,7 +4574,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.02s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -4631,7 +4631,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.03s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -4680,7 +4680,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.07s Real=0.06s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -4786,7 +4786,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

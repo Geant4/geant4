@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
+ Geant4 version Name: geant4-10-00-patch-04    (6-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -102,7 +102,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.26s Real=0.31s Sys=0s
+  User=0.23s Real=0.22s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -129,7 +129,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.74s Real=0.75s Sys=0s
+  User=0.66s Real=0.67s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -157,7 +157,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=34.57s Real=34.89s Sys=0.06s
+  User=35.21s Real=35.4s Sys=0.06s
 
  The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
