@@ -1,3 +1,12 @@
+ 1.17.1 : revisit the usage of std::vector::resize(), have assign() if needed (for exa in histo::reset()) :
+  - tools/array, tools/histo/[base_histo,histo_data,p1,p2,profile_data], tools/rroot/streamers : revisit reset(). 
+
+ 1.17.0 :
+ - tools/wroot/infos : fixes in the streamer infos in order to read .root files with CERN-ROOT/6.02.03 :
+   In TTree fScaleFactor -> fScalefactor.
+   Replace the streamer_basic_type(OBJECT_ANY) to streamer_object_any(...).
+ - rm CVS directories (no more needed since g4tools handled in git).
+
  1.16.3 :
  - tools/rroot/ntuple : add also "id casting" in tools::rroot::ntuple::column<T> and column_element<T>.
  - tools/rcsv_ntuple : Windows : rcsv.cpp crashed. It came from a lack of "id casting" in the

@@ -934,7 +934,9 @@ G4bool G4VAnalysisManager::IsActive() const
 // an activated object.
 
   return fState.GetIsActivation() && 
-         ( fH1HnManager->IsActive() || fH2HnManager->IsActive() );
+         ( fH1HnManager->IsActive() || fH2HnManager->IsActive() ||
+           fH3HnManager->IsActive() || fP1HnManager->IsActive() ||
+           fP2HnManager->IsActive() );
 }  
 
 

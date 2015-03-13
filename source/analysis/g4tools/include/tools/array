@@ -122,12 +122,14 @@ public:
       //}
       _size *= m_orders[index];
     }
-    m_vector.resize(_size,zero());
+    m_vector.resize(_size);
+    m_vector.assign(_size,zero());
     m_offsets.resize(dim,0);
     m_offsets[0] = 1;
     for(unsigned int iaxis=1;iaxis<dim;iaxis++) 
       m_offsets[iaxis] = m_offsets[iaxis-1] * m_orders[iaxis-1];
-    m_is.resize(dim,0);
+    m_is.resize(dim);
+    m_is.assign(dim,0);
     return true;
   }
   unsigned int dimension() const { return m_orders.size();}

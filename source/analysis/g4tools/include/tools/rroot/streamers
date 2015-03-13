@@ -312,11 +312,13 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     }
 
     unsigned int binn = a_data.m_bin_number;
-    a_data.m_bin_Sw2.resize(binn,0);
+    a_data.m_bin_Sw2.resize(binn);
     if(binn==sumw2.size()) {
       for(unsigned int index=0;index<binn;index++){
         a_data.m_bin_Sw2[index] = sumw2[index];
       }
+    } else {
+      a_data.m_bin_Sw2.assign(binn,0);
     }
 
     if(!a_buffer.check_byte_count(s,c,"TH")) return false;

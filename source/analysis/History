@@ -17,12 +17,30 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 13, 2015 I. Hrivnacova (analysis-V10-00-42)
+- Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn
+  managers
+
+February 04, 2015 I. Hrivnacova
+- Updated to g4tools 1.17.1 (Guy Barrand):
+  Fixed resetting histograms;
+  see History_tools for the complete list of modifications.
+
+January 21, 2015 I. Hrivnacova
+- Updated to g4tools 1.17.0 (Guy Barrand):
+  Fixes in the Root files output to be compatible with ROOT 6.02/x;
+  see History_tools for the complete list of modifications.
+
+December 5, 2014 G. Cosmo
+- Corrected csv/sources.cmake to include missing file:
+    G4CsvAnalysisReader.icc
+
 November 24, 2014 I. Hrivnacova (analysis-V10-00-41)
 - Fixed update to g4tools 1.16.3:
   the update of g4tools/src/csz_inflate.cc with Coverity fix 
   was missing
 
-November 07, 2014 I. Hrivnacova (analysis-V09-06-33)
+November 07, 2014 I. Hrivnacova
 - Fixed createH2/setH2 commands implementation
   (was missing in the previous tag V09-06-32)
 

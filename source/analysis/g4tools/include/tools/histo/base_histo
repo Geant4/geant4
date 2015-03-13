@@ -163,6 +163,7 @@ public:
     }
     return value;
   }
+
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
 
@@ -176,10 +177,13 @@ protected:
     parent::m_bin_Sw2.clear();
     parent::m_bin_Sxw.clear();
     parent::m_bin_Sx2w.clear();
+    parent::m_in_range_Sxw.clear();
+    parent::m_in_range_Sx2w.clear();
     parent::m_axes.clear();
+    parent::m_annotations.clear();
+
     parent::m_bin_number = 0;
     parent::m_dimension = 0;
-    parent::m_annotations.clear();
     parent::m_all_entries = 0;
     parent::m_in_range_entries = 0;
     parent::m_in_range_Sw = 0;
@@ -217,10 +221,13 @@ protected:
     parent::m_bin_Sw2.clear();
     parent::m_bin_Sxw.clear();
     parent::m_bin_Sx2w.clear();
+    parent::m_in_range_Sxw.clear();
+    parent::m_in_range_Sx2w.clear();
     parent::m_axes.clear();
+    parent::m_annotations.clear();
+
     parent::m_bin_number = 0;
     parent::m_dimension = 0;
-    parent::m_annotations.clear();
     parent::m_all_entries = 0;
     parent::m_in_range_entries = 0;
     parent::m_in_range_Sw = 0;
