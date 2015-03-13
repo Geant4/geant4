@@ -47,7 +47,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4EmParameters.hh"
 #include "G4LossTableManager.hh"
-//#include "G4EmProcessOptions.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -57,7 +56,6 @@
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
-//#include "G4eCoulombScatteringModel.hh"
 #include "G4WentzelVIModel.hh"
 //#include "G4UrbanMscModel.hh"
 
@@ -113,9 +111,10 @@ G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetVerbose(verbose);
-  param->SetLatDisplacementBeyondSafety(true);
+  //param->SetLatDisplacementBeyondSafety(true);
   param->SetMuHadLateralDisplacement(false);
   param->ActivateAngularGeneratorForIonisation(true);
+  param->SetMscThetaLimit(0.2);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -319,6 +318,7 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
+  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

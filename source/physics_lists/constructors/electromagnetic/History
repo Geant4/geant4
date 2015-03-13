@@ -14,6 +14,15 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-Jan-2015, V.Ivanchenko (phys-ctor-em-V10-00-28)
+- G4EmStandardPhysics_option4 - disable DisplacementBeyondSafety
+    option (result of electron scattering benchmark demonstrate
+    some degradation of accuracy with this option enabled)
+
+17-Dec-2014, V.Ivanchenko
+- G4EmStandardPhysicsWVI - added angular limit to WentzelVI model
+    in order to provide correct backscattering (fixing problem #1702)
+
 28-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-27)
 - G4EmDNAChemistry: remove useless activation line
 
