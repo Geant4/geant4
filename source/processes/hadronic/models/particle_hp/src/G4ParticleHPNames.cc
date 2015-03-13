@@ -134,7 +134,7 @@ if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
 
        //check = new std::ifstream(*theName);
        check = new std::istringstream(std::ios::in);
-       G4ParticleHPManager::GetInstance()->GetDataStream(*theName,*check);
+       G4ParticleHPManager::GetInstance()->GetDataStream2(*theName,*check);
        if ( !(*check) ) 
        {
 	  //check->close();
@@ -157,7 +157,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              result.SetM(M);
              //check = new std::ifstream(*theName);
              check = new std::istringstream(std::ios::in);
-             G4ParticleHPManager::GetInstance()->GetDataStream(*theName,*check);
+             G4ParticleHPManager::GetInstance()->GetDataStream2(*theName,*check);
              if ( !(*check) ) 
              {
                 //check->close();
@@ -216,7 +216,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4a "<<*theName<<G4endl;
              fileName = base+"/"+rest+"/"+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
              //file = new std::ifstream(fileName);
              file = new std::istringstream(std::ios::in);
-             G4ParticleHPManager::GetInstance()->GetDataStream(fileName,*file);
+             G4ParticleHPManager::GetInstance()->GetDataStream2(fileName,*file);
 
              if ( *file )
              {
@@ -233,7 +233,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b1 "<<*theName<<G4endl;
                 delete file;
                 //file = new std::ifstream(fileName);
                 file = new std::istringstream(std::ios::in);
-                G4ParticleHPManager::GetInstance()->GetDataStream(fileName,*file);
+                G4ParticleHPManager::GetInstance()->GetDataStream2(fileName,*file);
                 if ( *file )
                 {
 

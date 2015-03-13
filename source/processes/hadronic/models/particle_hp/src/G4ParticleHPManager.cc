@@ -92,8 +92,7 @@ void G4ParticleHPManager::GetDataStream( G4String filename , std::istringstream&
       //                                 Now "complen" has uncomplessed size
       data = new G4String ( (char*)uncompdata , (G4long)complen );
       delete [] uncompdata;
-   }
-   else {
+   } else {
 // Use regular text file 
       std::ifstream thefData( filename , std::ios::in | std::ios::ate );
       if ( thefData.good() ) {
@@ -112,10 +111,45 @@ void G4ParticleHPManager::GetDataStream( G4String filename , std::istringstream&
          iss.setstate( std::ios::badbit ); 
       }
    }
-   if (data != NULL) iss.str(*data);
+   if ( data != NULL ) {
+      iss.str(*data);
+      G4String id;
+      iss >> id;
+      if ( id == "G4NDL" ) {
+         //Register information of file
+         G4String source;
+         iss >> source;
+         register_data_file(filename,source);
+      } else {
+         iss.seekg( 0 , std::ios::beg );
+      }
+   }
    //G4cout << iss.rdbuf()->in_avail() << G4endl;
    in->close(); delete in;
    delete data;
+}
+// Checking existance of data file 
+void G4ParticleHPManager::GetDataStream2( G4String filename , std::istringstream& iss ) 
+{
+   G4String compfilename(filename);
+   compfilename += ".z";
+   std::ifstream* in = new std::ifstream ( compfilename , std::ios::binary | std::ios::ate );
+   if ( in->good() )
+   {
+// Compressed file is exist 
+      in->close(); 
+   } else {
+      std::ifstream thefData( filename , std::ios::in | std::ios::ate );
+      if ( thefData.good() ) {
+// Regular text file is exist
+         thefData.close();
+      } else {
+// found no data file
+//                 set error bit to the stream   
+         iss.setstate( std::ios::badbit ); 
+      }
+   }
+   delete in;
 }
 
 void G4ParticleHPManager::SetVerboseLevel( G4int newValue )
@@ -124,3 +158,19 @@ void G4ParticleHPManager::SetVerboseLevel( G4int newValue )
    G4cout << "the new value will be used in whole of the neutron HP package, i.e., models and cross sections for Capture, Elastic, Fission and Inelastic interaction." << G4endl;
    verboseLevel = newValue;
 }
+
+void G4ParticleHPManager::register_data_file(G4String filename, G4String source)
+{
+   mDataEvaluation.insert( std::pair < G4String , G4String > ( filename , source ) );
+}
+void G4ParticleHPManager::DumpDataSource()
+{
+
+   G4cout << "Data source of this NeutronHP calculation are " << G4endl;
+   for (  std::map< G4String , G4String >::iterator 
+          it = mDataEvaluation.begin() ; it != mDataEvaluation.end() ; it++ ) {
+      G4cout << it->first << " " << it->second << G4endl;
+   }
+   G4cout << G4endl;
+}
+

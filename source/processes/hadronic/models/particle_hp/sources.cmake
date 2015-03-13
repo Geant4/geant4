@@ -52,11 +52,8 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4had_par_hp
   HEADERS
     G4ParticleHPList.hh
-    #G4InterpolationIterator.hh
     G4ParticleHPIsoData.hh
-    #G4InterpolationManager.hh
     G4ParticleHPLevel.hh
-    #G4InterpolationScheme.hh
     G4ParticleHP2AInelasticFS.hh
     G4ParticleHPNames.hh
     G4ParticleHP2N2AInelasticFS.hh
@@ -151,7 +148,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
     G4ParticleHPPInelasticFS.hh
     G4ParticleHPPTInelasticFS.hh
     G4ParticleHPPhotonDist.hh
-    #G4ParticleHPPhotonXSection.hh
     G4ParticleHPPolynomExpansion.hh
     G4ParticleHPSCFissionFS.hh
     G4ParticleHPSimpleEvapSpectrum.hh
@@ -171,7 +167,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
 ### FissionFragment Generator - end
   SOURCES
     G4ParticleHPIsoData.cc
-    #G4InterpolationManager.cc
     G4ParticleHPLevel.cc
     G4ParticleHP2AInelasticFS.cc
     G4ParticleHPList.cc
