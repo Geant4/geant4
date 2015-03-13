@@ -30,6 +30,31 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+29th January 2015 - Ben Morgan (cmake-V10-00-38)
+- Modules/Geant4MakeRules_cxx.cmake: Minor update to only use c++11
+  on Intel 15 compiler and better. Though this standard can be used
+  on slightly earlier versions, only 15 has full features (for Geant4's
+  needs). We would like to be consistent in standard use so that 'c++0x'
+  is always used for compilers with partial support (even if 'c++11' is
+  allowed), reserving 'c++11' for fully supported cases. This still
+  needs review for GNU and Clang.
+
+29th January 2015 - Ben Morgan
+- Modules/Geant4MakeRules_cxx.cmake: Add support for compiling against
+  c++1y standard for GNU and Clang compilers. Add support for compiling
+  against c++11 standard for Intel compiler.
+  
+17th December - Ben Morgan
+- Modules/Geant4InterfaceOptions.cmake: BUGFIX #1683. Correct search
+  path for X11 libraries to ensure location of Xquartz libs on OS X.
+
+05th December 2014 - Ben Morgan 
+- Modules/Geant4LibraryBuildOptions.cmake: When on OS X, check
+  whether compiler IDed as Clang is actually g++ via command
+  path. Ensures that "GEANT4_COMPILER" is correctly set for
+  GNUmake compatibility.
+
 01st December 2014 - Ben Morgan (cmake-V10-00-37)
 - Modules/Geant4BuildProjectConfig.cmake: Correct export of USolids
   system headers so that these are exported whether or not USolids
