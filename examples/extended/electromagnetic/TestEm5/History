@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-03-15 V.Ivant (testem5-V10-00-13)
+- Run - added forgotten fill of projectile scattering angle
+    for printed output (printed value was zero)
 	 
 23-10-14 mma (testem5-V10-00-12)
 - PhysListEmStandard : msc algorithm fUseSafetyPlus

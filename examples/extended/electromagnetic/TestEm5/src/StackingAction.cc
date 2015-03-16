@@ -126,8 +126,11 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   if (fKillSecondary) {
     if (fKillSecondary == 1) {
      fEventAction->AddEnergy(energy);
-    }  
      status = fKill;
+    }  
+    if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
+      status = fKill;
+    }
   }
     
   return status;
