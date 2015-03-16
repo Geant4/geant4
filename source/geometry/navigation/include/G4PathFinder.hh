@@ -216,7 +216,7 @@ class G4PathFinder
    G4int   fNoActiveNavigators; 
    G4bool  fNewTrack;               // Flag a new track (ensure first step)
 
-   static const G4int fMaxNav = 8;  // rename to kMaxNoNav ??
+   static const G4int fMaxNav = 16;  // rename to kMaxNoNav ??
 
    // Global state (retained during stepping for one track)
 

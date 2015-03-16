@@ -72,7 +72,10 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
                         G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fParticleIsLooping(false),
     fNoZeroStep(0), 
-    fVerboseLevel(0)
+    fVerboseLevel(0),
+    fFirstStepInVolume(true),
+    fLastStepInVolume(true),
+    fNewTrack(true)
 {
   if(fDetectorFieldMgr) { fEpsilonStep = fDetectorFieldMgr->GetMaximumEpsilonStep();}
   else                  { fEpsilonStep= 1.0e-5; } 
@@ -108,11 +111,15 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   RefreshIntersectionLocator();  //  Copy all relevant parameters 
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 G4PropagatorInField::~G4PropagatorInField()
 {
   if(fAllocatedLocator)delete  fIntersectionLocator; 
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 // Update the IntersectionLocator with current parameters
 void
 G4PropagatorInField::RefreshIntersectionLocator()
@@ -122,6 +129,7 @@ G4PropagatorInField::RefreshIntersectionLocator()
   fIntersectionLocator->SetChordFinderFor(GetChordFinder());
   fIntersectionLocator->SetSafetyParametersFor( fUseSafetyForOptimisation);
 }
+
 ///////////////////////////////////////////////////////////////////////////
 //
 // Compute the next geometric Step
@@ -148,6 +156,14 @@ G4PropagatorInField::ComputeStep(
     fpTrajectoryFilter->CreateNewTrajectorySegment();
   }
 
+  if( fNewTrack ) {
+     fFirstStepInVolume= true;
+  }else{
+     fFirstStepInVolume= fLastStepInVolume;
+  }
+  fLastStepInVolume= false;
+  fNewTrack= false; 
+  
   // Parameters for adaptive Runge-Kutta integration
   
   G4double      h_TrialStepSize;        // 1st Step Size 
@@ -237,11 +253,11 @@ G4PropagatorInField::ComputeStep(
      stepTrial *= decreaseFactor;
 
 #ifdef G4DEBUG_FIELD
-     G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
-	    << "  Decreasing step -  " 
-	    << " decreaseFactor= " << std::setw(8) << decreaseFactor 
-	    << " stepTrial = "     << std::setw(18) << stepTrial << " "
-	    << " fZeroStepThreshold = " << fZeroStepThreshold << G4endl;
+     G4cerr << " G4PropagatorInField::ComputeStep(): " << G4endl
+	    << "  Decreasing step -  in volume " << pPhysVol;
+     if( pPhysVol )
+        G4cerr << "    with name " << pPhysVol->GetName(); 
+     G4cerr << G4endl;
      PrintStepLengthDiagnostic(CurrentProposedStepLength, decreaseFactor,
                                stepTrial, pFieldTrack);
 #endif
@@ -367,18 +383,7 @@ G4PropagatorInField::ComputeStep(
     fParticleIsLooping = true;
 
     if ( fVerboseLevel > 0 )
-    {
-       G4cout << " G4PropagateInField::ComputeStep(): " << G4endl
-              << "  Killing looping particle " 
-              // << " of " << energy  << " energy "
-              << " after " << do_loop_count << " field substeps "
-              << " totaling " << StepTaken / mm << " mm " ;
-       if( pPhysVol )
-          G4cout << " in volume " << pPhysVol->GetName() ; 
-       else
-         G4cout << " in unknown or null volume. " ; 
-       G4cout << G4endl;
-    }
+       ReportLoopingParticle( do_loop_count, StepTaken, pPhysVol );
   }
 
   if( !intersects )
@@ -389,6 +394,7 @@ G4PropagatorInField::ComputeStep(
     End_PointAndTangent = CurrentState; 
     TruePathLength = StepTaken;
   }
+  fLastStepInVolume = intersects;
   
   // Set pFieldTrack to the return value
   //
@@ -417,37 +423,28 @@ G4PropagatorInField::ComputeStep(
   }
 #endif
 
-  // In particular anomalous cases, we can get repeated zero steps
-  // In order to correct this efficiently, we identify these cases
-  // and only take corrective action when they occur.
-  // 
-  if( ( (TruePathLength < fZeroStepThreshold) 
-	&& ( TruePathLength+kCarTolerance < CurrentProposedStepLength  ) 
-	) 
-      || ( TruePathLength < 0.5*kCarTolerance )
-    )
+  if( TruePathLength+kCarTolerance >= CurrentProposedStepLength )
   {
-    fNoZeroStep++;
+     fNoZeroStep = 0;     
   }
-  else{
-    fNoZeroStep = 0;
+  else
+  {     
+     // In particular anomalous cases, we can get repeated zero steps
+     // We identify these cases and take corrective action when they occur.
+     // 
+     if( TruePathLength < std::max( fZeroStepThreshold, 0.5*kCarTolerance ) )
+     {
+        fNoZeroStep++;
+     }
+     else{
+        fNoZeroStep = 0;
+     }
   }
-
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps )
   { 
      fParticleIsLooping = true;
-     std::ostringstream message;
-     message << "Particle is stuck; it will be killed." << G4endl
-             << "  Zero progress for "  << fNoZeroStep << " attempted steps." 
-             << G4endl
-             << "  Proposed Step is " << CurrentProposedStepLength
-             << " but Step Taken is "<< fFull_CurveLen_of_LastAttempt << G4endl;
-     if( pPhysVol )
-       message << " in volume " << pPhysVol->GetName() ; 
-     else
-       message << " in unknown or null volume. " ; 
-     G4Exception("G4PropagatorInField::ComputeStep()",
-                 "GeomNav1002", JustWarning, message);
+     ReportStuckParticle( fNoZeroStep, CurrentProposedStepLength, fFull_CurveLen_of_LastAttempt,
+                               pPhysVol );
      fNoZeroStep = 0; 
   }
  
@@ -604,6 +601,8 @@ G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const
   }
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 void 
 G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter)
 {
@@ -674,4 +673,41 @@ G4int G4PropagatorInField::SetVerboseLevel( G4int level )
   G4cout << "Set Driver verbosity to " << fVerboseLevel - 2 << G4endl;
 
   return oldval;
+}
+
+void G4PropagatorInField::ReportLoopingParticle( G4int              count,
+                                                 G4double           StepTaken,
+                                                 G4VPhysicalVolume* pPhysVol)
+{
+   std::ostringstream message;
+   message << "  Killing looping particle " 
+      // << " of " << energy  << " energy "
+          << " after " << count << " field substeps "
+          << " totaling " << StepTaken / mm << " mm " ;
+   if( pPhysVol )
+      G4cout << " in volume " << pPhysVol->GetName() ; 
+   else
+      G4cout << " in unknown or null volume. " ; 
+   // G4cout << G4endl;
+   G4Exception("G4PropagatorInField::ComputeStep()", "GeomNav1002",
+               JustWarning, message);   
+}
+
+void G4PropagatorInField::ReportStuckParticle( G4int      noZeroSteps,
+                                               G4double   proposedStep,
+                                               G4double   lastTriedStep,
+                                               G4VPhysicalVolume* physVol )
+{
+   std::ostringstream message;
+   message << "Particle is stuck; it will be killed." << G4endl
+           << "  Zero progress for "  << noZeroSteps << " attempted steps." 
+           << G4endl
+           << "  Proposed Step is " << proposedStep
+           << " but Step Taken is "<< lastTriedStep << G4endl;
+   if( physVol )
+      message << " in volume " << physVol->GetName() ; 
+   else
+      message << " in unknown or null volume. " ; 
+   G4Exception("G4PropagatorInField::ComputeStep()",
+               "GeomNav1002", JustWarning, message);
 }

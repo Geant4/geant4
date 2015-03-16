@@ -17,6 +17,46 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January  28, 2015 - J.Apostolakis (geomnav-V10-00-20)
+---------------------------------
+- G4PropagatorInField: Added new methods to report looping and stuck tracks. Cleanup.
+- G4PathFinder: Fix to two calls to ComputeSafety - second argument is length, not bool.
+    
+January  27, 2015 - J.Apostolakis
+---------------------------------
+- G4PropagatorInField: Fix for issue found in microbeam. Reinstate old code that worked.
+   G4PropagatorInField ComputeStep: Widthraw adjustment of 'step taken' 
+     in case it was just less than requested step (within tolerance.)
+   This change caused a step to appear to be fully taken, rather than 
+     stopping at the boundary just smaller the proposed step (from the physics).
+   As a consequence the trasnportation was not the chosen process, and 
+     other processes (multiple scattering) did not update parameters correctly.
+
+January  15, 2015 - J.Apostolakis
+---------------------------------
+- G4PathFinder: Pass to equation of motion relevant properties of current
+    particle: latest charge state (electric, magnetic dipole moment),
+    PDG spin value, momentum and rest mass of current particle
+    Part of corrections needed for Bugzilla issue 1696.
+	
+- Increased maximum number of Navigators from 8 to 16.
+    
+December 15, 2014 - J.Apostolakis
+---------------------------------
+- Improvements to enable identification of first and last step in a volume, when
+    tracking in a field. (Bugzilla issue 1032).
+  Revised G4PropagatorInField, adding new method PrepareNewTrack() and data members.
+  G4PropagatorInField ComputeStep: Adjust 'step taken' in case it was just less 
+     than requested/proposed (within tolerance) - in case accumulated numerical 
+     error might cause problem. [ Experimental - withdrawn in geomnav-V10-01-04.]
+  Note: Co-works with and is required tags in processes/transportation and track.  
+    
+December 15, 2014 - J.Apostolakis
+---------------------------------
+- G4ErrorPropagationNavigator: revise implementation of ComputeStep, to
+  avoid calling G4Navigator::ComputeSafety (which has side effects.)
+  Addresses problem report #1679.
+
 November 27, 2014 - G.Cosmo (geomnav-V10-00-19)
 ---------------------------
 - Added protection in G4ReplicaNavigation::DistanceToOutRad() for potential

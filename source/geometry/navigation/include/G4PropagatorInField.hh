@@ -155,6 +155,10 @@ class G4PropagatorInField
      // and return whether an intersection occurred
      // NOTE : SAFETY IS CHANGED
 
+   G4bool IsFirstStepInVolume()  { return fFirstStepInVolume; }
+   G4bool IsLastStepInVolume()   { return fLastStepInVolume;  }
+   void   PrepareNewTrack() { fNewTrack = true; fFirstStepInVolume=false; fLastStepInVolume=false; } 
+      
    inline G4VIntersectionLocator* GetIntersectionLocator();
    inline void SetIntersectionLocator(G4VIntersectionLocator *pLocator );
      // Change or get the object which calculates the exact 
@@ -184,12 +188,16 @@ class G4PropagatorInField
      // Update the Locator with parameters from this class
      //    and from current field manager
 
- protected:  // with description
+ protected:  // without description
 
    void PrintStepLengthDiagnostic( G4double      currentProposedStepLength,
                                    G4double      decreaseFactor,
                                    G4double      stepTrial,
                              const G4FieldTrack& aFieldTrack);
+
+   void ReportLoopingParticle( G4int count, double StepTaken, G4VPhysicalVolume* pPhysVol);
+   void ReportStuckParticle( G4int noZeroSteps, G4double proposedStep, G4double lastTriedStep,
+                             G4VPhysicalVolume* physVol );   
  private:
    // ----------------------------------------------------------------------
    //  DATA Members
@@ -266,6 +274,10 @@ class G4PropagatorInField
    G4int          fVerboseLevel;
        // For debuging purposes
 
+   G4bool         fFirstStepInVolume; 
+   G4bool         fLastStepInVolume; 
+   G4bool         fNewTrack;
+   
  private:
 };
 
