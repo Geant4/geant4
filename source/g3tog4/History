@@ -3,6 +3,9 @@ $Id$
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V10-00-02 2-Feb-2015 G.Cosmo
+- Fix to sources.cmake script to include missing dependency on external library.
+
 g3tog4-V10-00-01 29-Jan-2014 G.Cosmo
 - Remove inline specification for G3VolTableEntry::operator==()
   in sorce file.
