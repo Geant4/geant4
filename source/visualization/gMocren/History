@@ -20,10 +20,16 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
-29th Nobember 2014  Akinori Kimura (gMocren-V10-00-03)
+7th February 2015  Akinori Kimura (gMocren-V10-00-04)
+- G4GMocrenFileSceneHandler.cc: fixed bugs of checking string lengths.
+
+2nd February 2015  Gabriele Cosmo
+- Fix to sources.cmake script to include missing dependency on external library.
+
+29th November 2014  Akinori Kimura (gMocren-V10-00-03)
 - G4GMocrenFileSceneHandler.cc, G4GMocrenFileViewer.cc: fixed warnings according to COVERITY
 
-25th Nobember 2014  Akinori Kimura (gMocren-V10-00-02)
+25th November 2014  Akinori Kimura (gMocren-V10-00-02)
 - G4GMocrenFileSceneHandler.cc, G4GMocrenFileViewer.cc, G4GMocrenMessenger.cc:
   fixed STRING_OVERFLOW checks according to COVERITY
 
