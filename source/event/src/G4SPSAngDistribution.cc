@@ -53,7 +53,7 @@
 
 
 G4SPSAngDistribution::G4SPSAngDistribution()
-  : Theta(0.), Phi(0.)
+  : Theta(0.), Phi(0.), posDist(0),angRndm(0)
 {
   // Angular distribution Variables
   G4ThreeVector zero;

@@ -161,6 +161,16 @@
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
+/** Andrea Dotti Feb 2015
+ * Important: This is a shared class between threads.
+ * Only one thread should use the set-methods here.
+ * Note that this is exactly what is achieved using UI commands.
+ * If you use the set methods to set defaults in your
+ * application take care that only one thread is executing them.
+ * In addition take care of calling these methods before the run is started
+ * Do not use these setters during the event loop
+ */
+
 class G4SPSAngDistribution 
 {
 public:

@@ -65,8 +65,8 @@ ExamplePrimaryGeneratorAction::~ExamplePrimaryGeneratorAction()
   for(i=0; i<100; i++)
     {
       scalep = -1 + (i+1)*0.02;
-      scalet = (i+1) * (pi/100.);
-      scalephi = (i+1) * (twopi/100.);
+      scalet = (i+1) * (CLHEP::pi/100.);
+      scalephi = (i+1) * (CLHEP::twopi/100.);
       G4cout << scalep << "   " << debugpx[i] << "   " << debugpy[i] << "   " << debugpz[i] << "     " << scalet << "   " << debugtheta[i] << "     " << scalephi << "   " << debugphi[i] << G4endl;
     }
   
@@ -103,43 +103,43 @@ void ExamplePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->GeneratePrimaryVertex(anEvent);
   //G4cout << "Back " << DebugXmin << G4endl;
 
-  if(DebugXmin == -999999.)
-    {
-    SourceType = particleGun->GetPosDisType();
-    //G4cout << "SourceType " << SourceType << G4endl;
-    SourceShape = particleGun->GetPosDisShape();
-    //G4cout << "SourceShape " << SourceShape << G4endl;
-    radius = particleGun->GetRadius();
-    //G4cout << "radius " << radius << G4endl;
-    halfx = particleGun->GetHalfX();
-    //G4cout << "halfx " << halfx << G4endl;
-    halfy = particleGun->GetHalfY();
-    //G4cout << "halfy " << halfy << G4endl;
-    halfz = particleGun->GetHalfZ();
-    //G4cout << "halfz " << halfz << G4endl;
-    centre = particleGun->GetCentreCoords();
-    //G4cout << "centre " << centre << G4endl;
-
-    // for use with energy
-    EneDisType = particleGun->GetEnergyDisType();
-    //G4cout << "EneDisType " << EneDisType << G4endl;
-    InterpolationType = particleGun->GetIntType();
-    //G4cout << "InterpolationType " << InterpolationType << G4endl;
-    if(EneDisType == "Arb")
-      {
-	emin = particleGun->GetArbEmin();
-	//G4cout << "emin " << emin << G4endl;
-	emax = particleGun->GetArbEmax();
-	//G4cout << "emax " << emax << G4endl;
-      }
-    else
-      {
-	emin = particleGun->GetEmin();
-	//G4cout << "emin " << emin << G4endl;
-	emax = particleGun->GetEmax();
-	//G4cout << "emax " << emax << G4endl;
-      }
-    }
+//  if(DebugXmin == -999999.)
+//    {
+//    SourceType = particleGun->GetPosDisType();
+//    //G4cout << "SourceType " << SourceType << G4endl;
+//    SourceShape = particleGun->GetPosDisShape();
+//    //G4cout << "SourceShape " << SourceShape << G4endl;
+//    radius = particleGun->GetRadius();
+//    //G4cout << "radius " << radius << G4endl;
+//    halfx = particleGun->GetHalfX();
+//    //G4cout << "halfx " << halfx << G4endl;
+//    halfy = particleGun->GetHalfY();
+//    //G4cout << "halfy " << halfy << G4endl;
+//    halfz = particleGun->GetHalfZ();
+//    //G4cout << "halfz " << halfz << G4endl;
+//    centre = particleGun->GetCentreCoords();
+//    //G4cout << "centre " << centre << G4endl;
+//
+//    // for use with energy
+//    EneDisType = particleGun->GetEnergyDisType();
+//    //G4cout << "EneDisType " << EneDisType << G4endl;
+//    InterpolationType = particleGun->GetIntType();
+//    //G4cout << "InterpolationType " << InterpolationType << G4endl;
+//    if(EneDisType == "Arb")
+//      {
+//	emin = particleGun->GetArbEmin();
+//	//G4cout << "emin " << emin << G4endl;
+//	emax = particleGun->GetArbEmax();
+//	//G4cout << "emax " << emax << G4endl;
+//      }
+//    else
+//      {
+//	emin = particleGun->GetEmin();
+//	//G4cout << "emin " << emin << G4endl;
+//	emax = particleGun->GetEmax();
+//	//G4cout << "emax " << emax << G4endl;
+//      }
+//    }
   
   G4ThreeVector ParticlePos = particleGun->GetParticlePosition();
   //G4cout << "ParticlePos " << ParticlePos << G4endl;
@@ -305,8 +305,8 @@ void ExamplePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     }
   debugpz[idebug-1] = debugpz[idebug-1] + 1;
 
-  G4double theta = particleGun->GetTheta();
-  G4double phi = particleGun->GetPhi();
+  G4double theta = particleGun->GetParticleMomentumDirection().getTheta();
+  G4double phi = particleGun->GetParticleMomentumDirection().getPhi();
   
   //G4cout << "Here 13" << G4endl;
   // Theta ranges 0-Pi, and Phi goes 0-two pi.
@@ -314,7 +314,7 @@ void ExamplePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double Theta_edge = 0;
   while (theta > Theta_edge)
     {
-      Theta_edge =  (idebug+1) * (pi/100.);
+      Theta_edge =  (idebug+1) * (CLHEP::pi/100.);
       idebug++;
     }
   debugtheta[idebug-1] = debugtheta[idebug-1] + 1;
@@ -322,7 +322,7 @@ void ExamplePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double Phi_edge = 0.;
   while (phi > Phi_edge)
     {
-      Phi_edge = (idebug+1) * (twopi/100.);
+      Phi_edge = (idebug+1) * (CLHEP::twopi/100.);
       idebug++;
     }
   debugphi[idebug-1] = debugphi[idebug-1] + 1;

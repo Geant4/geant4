@@ -156,6 +156,26 @@
 
 class G4SingleParticleSource;
 
+/** Andrea Dotti Feb 2015
+ * GPS messenger design requires some explanation for what distributions
+ * parameters are concerned : Each thread has its own GPS
+ * since primary generation is a user action.
+ * However to save memory the underlying structures that provide the
+ * GPS functionalities ( the G4SPS*Distribution classes and the
+ * G4SPSRandomGenerator class)
+ * are shared among threads. This implies that modifying parameters of sources
+ * requires some attention:
+ * 1- Only one thread should change source parameters.
+ * 2- Changing of parameters can happen only between runs, when is guaranteed
+ *    that no thread is accessing them
+ * 2- UI commands require that even if messenger is instantiated in a thread
+ *    the commands are executed in the master (this is possible since V10.1)
+ * The simplest solution is to use UI commands to change GPS parameters and
+ * avoid C++ APIs. If this is inevitable a simple solution is to instantiate
+ * an instance of G4GeneralParticleSource explicitly in the master thread
+ * (for example in G4VUserActionInitialization::BuildForMaster() and set the
+ * defaults parameter there).
+ */
 class G4GeneralParticleSource : public G4VPrimaryGenerator
 {
     //
