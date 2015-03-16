@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 2 2015  Gabriele Cosmo  (detscorer-V10-00-00)
+- Fix to sources.cmake script to include missing dependency on external library.
+
 November 7 2013  Gabriele Cosmo  (detscorer-V09-06-00)
 - Replaced deprecated calls to G4Sphere accessor methods.
 
