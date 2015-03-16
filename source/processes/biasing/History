@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Mar 10th, 2015 Gabriele Cosmo (procbiasing-V09-06-19)
+Mar 10th, 2015 Gabriele Cosmo (procbiasing-V10-00-00)
 - G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess: made
   static thread-local variables into class data members.
   Renamed them accordingly: fEndTrack, feLimited, fParaflag.
