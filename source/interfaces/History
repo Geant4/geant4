@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15th December 2014  Laurent Garnier (interfaces-V10-00-24)
+- G4UIQt.cc
+  o Fix a problem when displaying the first time the help tree. The guidance label
+    was not show
+
 20th November 2014  Laurent Garnier (interfaces-V10-00-23)
 - G4UIQt.cc
   o Fix recursive calls caused by qApp->processEvent() in some cases (cms.gdml) 

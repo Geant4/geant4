@@ -2808,7 +2808,7 @@ void G4UIQt::updateHelpArea (
         fParameterHelpTable->resizeColumnToContents(c);
       }
     }
-
+    fParameterHelpLabel->setVisible(true);
     fParameterHelpTable->setVisible(true);
     
   }
