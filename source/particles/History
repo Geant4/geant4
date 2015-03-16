@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 16 Feb. 2015 Hisaya Kurashige (particles-V10-00-28)
+- Add gamma-gamma, omega-gamma modes to EtaPrime 
+  and update braching ratio
+
 - 18 Nov. 2014 Makoto Asai (particles-V10-00-27)
 - Fix G4IonTable to delete thread-local string objects.
 
