@@ -32,6 +32,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4NucleiProperties.hh"
+#include "G4HadronicException.hh"
 
 G4QMDNucleus::G4QMDNucleus()
 {
@@ -73,6 +74,10 @@ G4int G4QMDNucleus::GetMassNumber()
       if ( (*it)->GetDefinition() == G4Proton::Proton() 
         || (*it)->GetDefinition() == G4Neutron::Neutron() ) 
          A++; 
+   }
+
+   if ( A == 0 ) {
+      throw G4HadronicException(__FILE__, __LINE__, "G4QMDNucleus has the mass number of 0!");
    }
 
    return A;
