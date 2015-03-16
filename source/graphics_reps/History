@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
+14th August 2014  John Allison  (greps-V10-01-01)
+- G4VisAttributes.cc: Eliminated a nonsensical “if(&a)” in operator<<.
+
 24th August 2014  Laurent Garnier (greps-V10-00-10)
 - G4VisAttributes: Fix the fMinLineSegmentsPerCircle for SetForceLineSegmentsPerCircle
 
