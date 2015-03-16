@@ -71,7 +71,8 @@ G4FieldTrack::SetCurvePnt(const G4ThreeVector& pPosition,
   SixVector[4] = pMomentum.y(); 
   SixVector[5] = pMomentum.z(); 
 
-  fMomentumDir = pMomentum.unit();
+  fMomentumDir = (pMomentum.mag2() > 0.0)  ?
+     pMomentum.unit() : G4ThreeVector( 0.0, 0.0, 0.0 ); 
 
   fDistanceAlongCurve= s_curve;
 

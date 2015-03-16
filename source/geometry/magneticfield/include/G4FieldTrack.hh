@@ -123,6 +123,7 @@ class  G4FieldTrack
      inline G4double       GetProperTimeOfFlight() const;
      inline G4double       GetKineticEnergy() const;
      inline G4double       GetCharge() const;
+     inline G4double       GetRestMass() const { return fRestMass_c2; }
        // Accessors.
 
      inline void SetPosition(G4ThreeVector nPos); 
