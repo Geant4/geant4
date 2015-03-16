@@ -88,7 +88,7 @@ public:
 				    G4double  dens, 
 				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
-				    G4double  temp     = CLHEP::STP_Temperature,  
+				    G4double  temp     = NTP_Temperature,  
 				    G4double  pressure = CLHEP::STP_Pressure);
 
   // construct a G4Material from scratch by fraction mass
@@ -99,7 +99,7 @@ public:
 				    G4double  dens, 
 				    G4bool    isotopes = true,
 				    G4State   state    = kStateSolid,     
-				    G4double  temp     = CLHEP::STP_Temperature,  
+				    G4double  temp     = NTP_Temperature,  
 				    G4double  pressure = CLHEP::STP_Pressure); 
 
 
@@ -116,7 +116,7 @@ public:
                                            const std::vector<G4String>& elm,
                                            const std::vector<G4int>& nbAtoms,
                                            G4bool    isotopes = true,
-                                           G4double  temp     = CLHEP::STP_Temperature,
+                                           G4double  temp     = NTP_Temperature,
                                            G4double  pressure = CLHEP::STP_Pressure); 
 				      
   // verbosity level defined by G4NistManager
@@ -164,7 +164,7 @@ private:
 		   G4double pot=0.0, G4int ncomp=1,
 		   G4State=kStateSolid, G4bool stp = true);
 
-  void AddGas(const G4String& nameMat, G4double t=CLHEP::STP_Temperature,
+  void AddGas(const G4String& nameMat, G4double t=NTP_Temperature,
                                        G4double p=CLHEP::STP_Pressure);
 
   void AddElementByWeightFraction(G4int Z, G4double);

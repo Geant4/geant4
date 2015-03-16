@@ -298,7 +298,7 @@ void G4IonisParamMat::ComputeDensityEffect()
     G4double Pressure = fMaterial->GetPressure();
     G4double Temp     = fMaterial->GetTemperature();
       
-    G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
+    G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*NTP_Temperature);
 
     G4double ParCorr = G4Log(Density/DensitySTP);
   

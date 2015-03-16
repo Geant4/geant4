@@ -199,8 +199,8 @@ public:  // with description
     
   // printing methods
   //    
-  friend std::ostream& operator<<(std::ostream&, G4Element*);    
-  friend std::ostream& operator<<(std::ostream&, G4Element&);    
+  friend std::ostream& operator<<(std::ostream&, const G4Element*);
+  friend std::ostream& operator<<(std::ostream&, const G4Element&);
   friend std::ostream& operator<<(std::ostream&, G4ElementTable);
 
 public:  // without description

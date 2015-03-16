@@ -113,10 +113,10 @@ class G4Isotope
     size_t GetIndex() const {return fIndexInTable;}
     
     friend
-    std::ostream& operator<<(std::ostream&, G4Isotope*);
+    std::ostream& operator<<(std::ostream&, const G4Isotope*);
     
     friend
-    std::ostream& operator<<(std::ostream&, G4Isotope&);
+    std::ostream& operator<<(std::ostream&, const G4Isotope&);
     
     friend
     std::ostream& operator<<(std::ostream&, G4IsotopeTable);
