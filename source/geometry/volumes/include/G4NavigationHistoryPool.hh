@@ -64,6 +64,9 @@ class G4NavigationHistoryPool
     void Clean();
       // Delete all levels stored in the pool.
 
+    void Print() const;
+      // Print number of entries.
+
    ~G4NavigationHistoryPool();
       // Destructor: takes care to delete allocated levels.
 

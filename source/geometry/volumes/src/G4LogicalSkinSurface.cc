@@ -87,14 +87,13 @@ G4LogicalSkinSurface&
 G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
 {
   if (&right == this) return *this;
-  if (&right)
-  {
-    SetSurfaceProperty(right.GetSurfaceProperty());
-    SetName(right.GetName());
-    SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
-    LogVolume = right.LogVolume;
-    (*theSkinSurfaceTable) = (*right.theSkinSurfaceTable);
-  }
+
+  SetSurfaceProperty(right.GetSurfaceProperty());
+  SetName(right.GetName());
+  SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
+  LogVolume = right.LogVolume;
+  (*theSkinSurfaceTable) = (*right.theSkinSurfaceTable);
+
   return *this;
 }
 

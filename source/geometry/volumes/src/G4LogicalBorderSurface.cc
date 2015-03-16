@@ -92,15 +92,14 @@ G4LogicalBorderSurface&
 G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
 {
   if (&right == this) return *this;
-  if (&right)
-  {
-    SetSurfaceProperty(right.GetSurfaceProperty());
-    SetName(right.GetName());
-    SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
-    Volume1 = right.Volume1;
-    Volume2 = right.Volume2;
-    (*theBorderSurfaceTable) = (*right.theBorderSurfaceTable);
-  }
+
+  SetSurfaceProperty(right.GetSurfaceProperty());
+  SetName(right.GetName());
+  SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
+  Volume1 = right.Volume1;
+  Volume2 = right.Volume2;
+  (*theBorderSurfaceTable) = (*right.theBorderSurfaceTable);
+
   return *this;
 }
 

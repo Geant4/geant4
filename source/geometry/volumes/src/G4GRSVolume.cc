@@ -43,33 +43,29 @@ G4GRSVolume::G4GRSVolume(const G4GRSVolume& right)
 {
   if (frot) { delete frot; }
   frot = 0;
-  if ((&right) && (&right != this))
+  fvol = right.fvol;
+  ftlate = right.ftlate;
+  if (right.frot)
   {
-    fvol = right.fvol;
-    ftlate = right.ftlate;
-    if (right.frot)
-    {
-      frot = new G4RotationMatrix(*(right.frot));
-    }
+    frot = new G4RotationMatrix(*(right.frot));
   }
 }
 
 G4GRSVolume& G4GRSVolume::operator=(const G4GRSVolume& right)
 {
   if (&right == this)  { return *this; }
-  if (&right)
+
+  fvol = right.fvol;
+  ftlate = right.ftlate;
+  if (frot)
   {
-    fvol = right.fvol;
-    ftlate = right.ftlate;
-    if (frot)
-    {
-      delete frot;
-      frot = 0;
-    }
-    if (right.frot)
-    {
-      frot = new G4RotationMatrix(*(right.frot));
-    }
+    delete frot;
+    frot = 0;
   }
+  if (right.frot)
+  {
+    frot = new G4RotationMatrix(*(right.frot));
+  }
+
   return *this;
 }

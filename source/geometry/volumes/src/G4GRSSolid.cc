@@ -43,33 +43,29 @@ G4GRSSolid::G4GRSSolid(const G4GRSSolid& right)
 {
   if (frot) { delete frot; }
   frot = 0;
-  if ((&right) && (&right != this))
+  fsolid = right.fsolid;
+  ftlate = right.ftlate;
+  if (right.frot)
   {
-    fsolid = right.fsolid;
-    ftlate = right.ftlate;
-    if (right.frot)
-    {
-      frot = new G4RotationMatrix(*(right.frot));
-    }
+    frot = new G4RotationMatrix(*(right.frot));
   }
 }
 
 G4GRSSolid& G4GRSSolid::operator=(const G4GRSSolid& right)
 {
   if (&right == this)  { return *this; }
-  if (&right)
+
+  fsolid = right.fsolid;
+  ftlate = right.ftlate;
+  if (frot)
   {
-    fsolid = right.fsolid;
-    ftlate = right.ftlate;
-    if (frot)
-    {
-      delete frot;
-      frot = 0;
-    }
-    if (right.frot)
-    {
-      frot = new G4RotationMatrix(*(right.frot));
-    }
+    delete frot;
+    frot = 0;
   }
+  if (right.frot)
+  {
+    frot = new G4RotationMatrix(*(right.frot));
+  }
+
   return *this;
 }

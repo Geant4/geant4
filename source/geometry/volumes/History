@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 12th, 2014 G.Cosmo               - geomvol-V10-00-09
+- Use canonical form for copy-ctor and operator=() in G4GRSSolid, G4GRSVolume,
+  G4LogicalBorderSurface and G4LogicalSkinSurface.
+
+December 11th, 2014 G.Cosmo
+- Avoid post-increment in G4NavigationLevelRep::AddAReference().
+
+December 5th, 2014 M.Asai
+- G4NavigationHistoryPool - Move printout from the destructor to the
+  dedicated Print() method.
+
 November 13th, 2014 G.Cosmo               - geomvol-V10-00-08
 - Restored constructors/destructor for G4TouchableHistory - derived class
   to be not inline.
