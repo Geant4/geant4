@@ -567,7 +567,7 @@ bool UExtrudedSolid::AddGeneralPolygonFacets()
     double angle = GetAngle(c2->first, c3->first, c1->first);
 
     int counter = 0;
-    while (angle > UUtils::kPi)
+    while (angle >= UUtils::kPi)
     {
       // try next three consecutive vertices
       //

@@ -91,8 +91,26 @@ UTriangularFacet::UTriangularFacet(const UVector3& vt0, const UVector3& vt1, con
     //    UVector3 vtmp = 0.25 * (fE1 + fE2);
 
     fArea = 0.5 * (fE1.Cross(fE2)).Mag();
-    double lambda0 = (fA - fB) * fC / (8.0 * fArea * fArea);
-    double lambda1 = (fC - fB) * fA / (8.0 * fArea * fArea);
+    double lambda0 , lambda1 ;
+    if(std::fabs(fArea) < kCarTolerance*kCarTolerance)
+    {
+      ostringstream message;
+      message << "Area of Facet is too small, possible flat triangle!" << endl
+              << "  fVertices[0] = " << GetVertex(0) << endl
+              << "  fVertices[1] = " << GetVertex(1) << endl
+              << "  fVertices[2] = " << GetVertex(2) << endl
+              << "Area = " << fArea;
+      UUtils::Exception("UTriangularFacet::UTriangularFacet()",
+                        "GeomSolids1001", Warning, 1, message.str().c_str());
+      lambda0 = 0.5;
+      lambda1 = 0.5;  
+    }
+    else
+    {
+      lambda0 = (fA-fB) * fC / (8.0*fArea*fArea);
+      lambda1 = (fC-fB) * fA / (8.0*fArea*fArea);
+    }
+   
     UVector3 p0 = GetVertex(0);
     fCircumcentre = p0 + lambda0 * fE1 + lambda1 * fE2;
     double radiusSqr = (fCircumcentre - p0).Mag2();

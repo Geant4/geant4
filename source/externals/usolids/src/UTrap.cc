@@ -1061,7 +1061,7 @@ double UTrap::DistanceToIn(const UVector3& p,
 // This is the best fast estimation of the shortest distance to trap
 // - Returns 0 is ThreeVector inside
 
-double UTrap::SafetyFromInside(const UVector3& p, bool) const
+double UTrap::SafetyFromOutside(const UVector3& p, bool) const
 {
   double safe = 0.0, Dist;
   int i;
@@ -1340,7 +1340,7 @@ double UTrap::DistanceToOut(const UVector3& p, const UVector3&  v, UVector3&    
 // Calculate exact shortest distance to any boundary from inside
 // - Returns 0 is ThreeVector outside
 
-double UTrap::SafetyFromOutside(const UVector3& p, bool /*precise*/) const
+double UTrap::SafetyFromInside(const UVector3& p, bool /*precise*/) const
 {
   double safe = 0.0, Dist;
   int i;

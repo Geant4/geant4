@@ -121,7 +121,7 @@ int UUtils::StrPos(const string& haystack, const string& needle)
 }
 void UUtils:: Exception(const char* originOfException,
                         const char* exceptionCode,
-                        ExceptionSeverity severity,
+                        UExceptionSeverity severity,
                         int level,
                         const char* description)
 
