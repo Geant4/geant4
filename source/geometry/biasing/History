@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 10th, 2015 G.Cosmo (geombias-V09-06-11)
+- Made G4IStore and G4WeightWindowStore singletons thread-local to avoid
+  data races when accessing iterators.
+  Use const references for string in argument for constructor and accessor.
+
 November 27th, 2013 A.Howard (geombias-V09-06-10)
 - Added Clear() method to G4IStore and G4WeightWindowStore to allow changes to
   the store within a run, if required.
