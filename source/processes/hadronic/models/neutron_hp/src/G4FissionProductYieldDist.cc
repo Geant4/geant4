@@ -145,7 +145,7 @@ G4FFG_FUNCTIONENTER__
     // Set miscellaneous variables
     AlphaDefinition_ = reinterpret_cast<G4Ions*>(G4Alpha::Definition());
     NeutronDefinition_ = reinterpret_cast<G4Ions*>(G4Neutron::Definition());
-    GammaDefinition_ = reinterpret_cast<G4Ions*>(G4Gamma::Definition());
+    GammaDefinition_ = G4Gamma::Definition();
     SmallestZ_ = SmallestA_ = LargestZ_ = LargestA_ = NULL;
 
     // Construct G4NeutronHPNames: provides access to the element names

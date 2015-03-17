@@ -150,7 +150,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
     G4NeutronHPPInelasticFS.hh
     G4NeutronHPPTInelasticFS.hh
     G4NeutronHPPhotonDist.hh
-    #G4NeutronHPPhotonXSection.hh
     G4NeutronHPPolynomExpansion.hh
     G4NeutronHPSCFissionFS.hh
     G4NeutronHPSimpleEvapSpectrum.hh

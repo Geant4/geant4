@@ -34,6 +34,7 @@
 #define	G4FISSIONPRODUCTYIELDDIST_HH
 
 #include "G4Ions.hh"
+#include "G4Gamma.hh"
 #include "G4IonTable.hh"
 #include "G4NeutronHPNames.hh"
 #include "globals.hh"
@@ -189,7 +190,7 @@ protected:
         /** Sets the ternary fission probability. Valid ranges are [0, 1] */
         G4double TernaryProbability_;
         /** Contains the \p g4ParticleDefinition pointer to a gamma particle */
-        G4Ions* GammaDefinition_;
+        G4Gamma* GammaDefinition_;
         /** Kinetic energy, if any, of the incident particle in GeV. */
         G4double IncidentEnergy_;
         /** Sets the mean gamma energy, in MeV, produced by the fission of the
