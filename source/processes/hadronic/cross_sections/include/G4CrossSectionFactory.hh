@@ -105,7 +105,8 @@ template <typename T> class G4CrossSectionFactory<T,2> : public G4VBaseXSFactory
     
     virtual G4VCrossSectionDataSet* Instantiate()
     {
-        static G4ThreadLocal T* shared = new T();
+        static G4ThreadLocal T* shared = 0;
+        if (!shared) { shared = new T(); }
         return shared;
     }
 };

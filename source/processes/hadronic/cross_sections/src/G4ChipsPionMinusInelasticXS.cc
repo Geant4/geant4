@@ -75,13 +75,11 @@ G4ChipsPionMinusInelasticXS::~G4ChipsPionMinusInelasticXS()
 }
 
 
-G4bool G4ChipsPionMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+G4bool G4ChipsPionMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4PionMinus::PionMinus()      ) return true;
-  return false;
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)

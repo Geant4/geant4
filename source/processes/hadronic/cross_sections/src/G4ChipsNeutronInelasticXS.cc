@@ -75,13 +75,11 @@ G4ChipsNeutronInelasticXS::~G4ChipsNeutronInelasticXS()
   delete HEN;
 }
 
-G4bool G4ChipsNeutronInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+G4bool G4ChipsNeutronInelasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 				 const G4Element*,
 				 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4Neutron::Neutron()      ) return true;
-  return false;
+  return true;
 }
 
 

@@ -157,13 +157,11 @@ G4ChipsKaonPlusElasticXS::~G4ChipsKaonPlusElasticXS()
   B4T.clear();
 }
 
-G4bool G4ChipsKaonPlusElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4int, G4int,    
+G4bool G4ChipsKaonPlusElasticXS::IsIsoApplicable(const G4DynamicParticle*, G4int, G4int,    
 						 const G4Element*,
 						 const G4Material*)
 {
-  const G4ParticleDefinition* particle = Pt->GetDefinition();
-  if (particle == G4KaonPlus::KaonPlus()      ) return true;
-  return false;
+  return true;
 }
 
 // The main member function giving the collision cross section (P is in IU, CS is in mb)
