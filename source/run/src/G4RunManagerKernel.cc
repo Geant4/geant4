@@ -287,6 +287,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
 
   // deletion of navigation levels
+  if(verboseLevel>1) G4NavigationHistoryPool::GetInstance()->Print();
   delete G4NavigationHistoryPool::GetInstance();
 
   // deletion of allocators

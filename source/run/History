@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 5th, 2014 M.Asai (run-V10-00-44)
+- Print deleting message of G4NavigationHistoryPool only if the
+  verbose level is set to 2.
+
 November 24th, 2014 M.Asai (run-V10-00-43)
 - Fix G4VUserPhysicsList.cc to alternate the cut value for the
   region that shared the default cut value.
