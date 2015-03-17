@@ -82,7 +82,9 @@ void G4FieldTrackUpdator::Update(G4FieldTrack* ftrk,const G4Track* trk)
 
   ftrk->SetProperTimeOfFlight(trk->GetProperTime());
 
-  ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge() );
+  ftrk->SetChargeAndMoments( ptDynamicParticle->GetCharge(),
+                             ptDynamicParticle->GetMagneticMoment()); 
+  ftrk->SetPDGSpin(          ptDynamicParticle->GetParticleDefinition()->GetPDGSpin() ); 
    // The charge can change during tracking
   ftrk->SetSpin( ptDynamicParticle->GetPolarization() );
 }
