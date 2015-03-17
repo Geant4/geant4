@@ -37,7 +37,7 @@
 // -------------------------------------------------------------------
 
 TEMPLATE
-G4ThreadLocal G4ITMANAGER * G4ITMANAGER::fInstance(0);
+G4ThreadLocal G4ITMANAGER * G4ITMANAGER::fInstance = 0;
 
 TEMPLATE
 G4ITMANAGER * G4ITMANAGER::Instance()

@@ -171,7 +171,7 @@ private :
 };
 
 template <typename PointT>
-G4ThreadLocal G4Allocator<G4KDNode<PointT> >* G4KDNode<PointT>::fgAllocator(0);
+G4ThreadLocal G4Allocator<G4KDNode<PointT> >* G4KDNode<PointT>::fgAllocator = 0;
 
 template<typename PointT>
 void* G4KDNode<PointT>::operator new(size_t)
