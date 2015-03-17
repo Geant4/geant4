@@ -89,8 +89,8 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
   // ===  this is needed for the case when bound decay is not happen
   // ===  but muon is capruted by the nucleus with some delay
 
-  G4double time = -std::log(G4UniformRand()) / lambda;
   G4HadProjectile* p = const_cast<G4HadProjectile*>(&projectile);
+  G4double time = p->GetGlobalTime() - std::log(G4UniformRand())/lambda;
   p->SetGlobalTime(time);
     
   //G4cout << "lambda= " << lambda << " lambdac= " << lambdac 
@@ -121,6 +121,7 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
     G4double Eelect, Pelect, x, ecm;
     G4LorentzVector EL, NN;
     // Calculate electron energy
+    // these do/while loops are safe
     do {
       do {
         x = xmin + (xmax-xmin)*G4UniformRand();

@@ -65,10 +65,10 @@ G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name)
     : G4HadronicProcess(name, fHadronAtRest),
       fElementSelector(new G4ElementSelector()),
       fEmCascade(new G4EmCaptureCascade()),  // Owned by InteractionRegistry
-      fBoundDecay(0x0),
-      emcID(G4PhysicsModelCatalog::Register(G4String((name + "_EMCascade")))),
-      ncID(G4PhysicsModelCatalog::Register(G4String((name + "_NuclearCapture")))),
-      dioID(G4PhysicsModelCatalog::Register(G4String((name + "_DIO"))))
+      fBoundDecay(0),
+      emcID(-1),
+      ncID(-1),
+      dioID(-1)
 {
   // Modify G4VProcess flags to emulate G4VRest instead of G4VDiscrete
   enableAtRestDoIt = true;
@@ -99,6 +99,9 @@ void
 G4HadronStoppingProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
 {
   G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this,&p);
+  emcID = G4PhysicsModelCatalog::Register(G4String((GetProcessName() + "_EMCascade")));
+  ncID  = G4PhysicsModelCatalog::Register(G4String((GetProcessName() + "_NuclearCapture")));
+  dioID = G4PhysicsModelCatalog::Register(G4String((GetProcessName() + "_DIO")));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -139,7 +142,11 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
 
   G4HadFinalState* result = 0;
   thePro.Initialise(track);
+
+  // save track time an dstart capture from zero time
+  thePro.SetGlobalTime(0.0);
   G4double time0 = track.GetGlobalTime();
+
   G4bool nuclearCapture = true;
 
   // Do the electromagnetic cascade in the nuclear field.
@@ -150,12 +157,12 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
   G4double ebound = result->GetLocalEnergyDeposit(); 
   G4double edep = 0.0; 
   G4int nSecondaries = result->GetNumberOfSecondaries();
-  G4int nEmCascaceSec = nSecondaries;
+  G4int nEmCascadeSec = nSecondaries;
 
   // Try decay from bound level 
   // For mu- the time of projectile should be changed.
   // Decay should keep G4HadFinalState object,
-  // because it will not be deleted at the end of this method
+  // because it will not be deleted at the end of this method.
   //
   thePro.SetBoundEnergy(ebound);
   if(fBoundDecay) {
@@ -173,11 +180,16 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
   }
 
   if(nuclearCapture) {
+ 
+    // delay of capture
+    G4double capTime = thePro.GetGlobalTime();
+    thePro.SetGlobalTime(0.0);
 
     // select model
     G4HadronicInteraction* model = 0;
     try {
-      model = ChooseHadronicInteraction(thePro, *nucleus, track.GetMaterial(), elm);
+      model = ChooseHadronicInteraction(thePro, *nucleus, 
+					track.GetMaterial(), elm);
     }
     catch(G4HadronicException & aE) {
       G4ExceptionDescription ed;
@@ -230,7 +242,15 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
     while(!resultNuc);
 
     edep = resultNuc->GetLocalEnergyDeposit();
-    nSecondaries += resultNuc->GetNumberOfSecondaries();
+    size_t nnuc = resultNuc->GetNumberOfSecondaries();
+
+    // add delay time of capture
+    for(size_t i=0; i<nnuc; ++i) { 
+      G4HadSecondary* sec = resultNuc->GetSecondary(i);
+      sec->SetTime(capTime + sec->GetTime());
+    }
+
+    nSecondaries += nnuc;
     result->AddSecondaries(resultNuc); 
     resultNuc->Clear();
   }
@@ -257,7 +277,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
     t->SetWeight(w*sec->GetWeight());
 
     // use SetCreatorModelIndex to "label" the track
-    if (i<nEmCascaceSec) {
+    if (i<nEmCascadeSec) {
       t->SetCreatorModelIndex(emcID);
     } else if (nuclearCapture) {
       t->SetCreatorModelIndex(ncID);
