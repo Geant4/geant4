@@ -15,7 +15,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 March 2015 Tatsumi Koi (hadr-lend-V10-00-07)
+-----------------------------------------------
+-Fix for Coverity #56243 and 56237
+	include/G4GIDI_map.hh
+
+
 19 August 2014 Tatsumi Koi (hadr-lend-V10-00-06)
+-----------------------------------------------
 -Turn off license banner
 	src/G4LENDManager.cc
 -Fix bug FindIon -> GetIon
@@ -24,8 +31,8 @@ code and to keep track of all tags.
 	src/G4LENDInelastic.cc
 	src/G4LENDElastic.cc
 
-
 2 June 2014 Tatsumi Koi (hadr-lend-V10-00-05)
+-----------------------------------------------
 -Protect divide overflow 
        src/tpia_misc.cc
        src/tpia_kinetics.cc

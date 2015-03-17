@@ -67,6 +67,10 @@
 
 class G4GIDI_map {
 
+    private:
+        G4GIDI_map(){;};       
+        G4GIDI_map( const G4GIDI_map& ){;};       
+
     public:
         GIDI::statusMessageReporting smr;
         GIDI::tpia_map *map;
@@ -76,6 +80,7 @@ class G4GIDI_map {
 
         std::string path( void );
         std::string fileName( void );
+
 };
 
 #endif      // End of G4GIDI_map_h_included
