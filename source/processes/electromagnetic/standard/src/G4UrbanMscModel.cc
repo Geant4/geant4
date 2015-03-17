@@ -428,6 +428,7 @@ void G4UrbanMscModel::StartTracking(G4Track* track)
   tlimit = geombig;
   stepmin = tlimitminfix ;
   tlimitmin = 10.*stepmin ;
+  G4VEmModel::StartTracking(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

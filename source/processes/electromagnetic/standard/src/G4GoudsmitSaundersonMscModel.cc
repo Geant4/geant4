@@ -116,7 +116,7 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   firstStep = true; 
 
   currentCouple = 0;
-  fParticleChange = 0;  
+  fParticleChange = 0;
 
   GSTable = new G4GoudsmitSaundersonTable();
 
@@ -157,14 +157,11 @@ G4GoudsmitSaundersonMscModel::ComputeCrossSectionPerAtom(const G4ParticleDefinit
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreeVector& 
-G4GoudsmitSaundersonMscModel::SampleScattering(const G4ThreeVector& oldDirection, G4double)
+G4GoudsmitSaundersonMscModel::SampleScattering(const G4ThreeVector& oldDirection, 
+					       G4double)
 {
   fDisplacement.set(0.0,0.0,0.0);
   G4double kineticEnergy = currentKinEnergy;
-
-  //G4cout << "G4GoudsmitSaundersonMscModel::SampleScattering E= " 
-  //<< kineticEnergy<<G4endl;
-
   //dynParticle->GetKineticEnergy();
   if((kineticEnergy <= 0.0) || (tPathLength <= tlimitminfix)||
      (tPathLength/tausmall < lambda1)) { return fDisplacement; }
@@ -230,33 +227,32 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4ThreeVector& oldDirection
   if(lambda0>0.0) { lambdan=tPathLength/lambda0; }
   if(lambdan<=1.0e-12) { return fDisplacement; }
  
-  // G4cout << "E(eV)= " << kineticEnergy/eV << " L0= " << lambda0
+  //G4cout << "E(eV)= " << kineticEnergy/eV << " L0= " << lambda0
   //	<< " L1= " << lambda1 << G4endl;
 
+  G4double Qn1 = lambdan *g1;//2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);
+  G4double Qn12 = 0.5*Qn1;
+  
   G4double cosTheta1,sinTheta1,cosTheta2,sinTheta2;
+  G4double cosPhi1=1.0,sinPhi1=0.0,cosPhi2=1.0,sinPhi2=0.0;
+  G4double us=0.0,vs=0.0,ws=1.0,wss=0.,x_coord=0.0,y_coord=0.0,z_coord=1.0;
 
   G4double epsilon1=G4UniformRand();
   G4double expn = G4Exp(-lambdan);
 
-  //G4cout << "expn= " << expn << " epsilon1= " << epsilon1 << " lambdan= " << lambdan 
-  //	 << " scrA= " << scrA << G4endl;
-
-  G4ThreeVector newDirection(0.0,0.0,1.0);
-
   if(epsilon1<expn)// no scattering 
     { return fDisplacement; }
-
-  //single or plural scattering (Rutherford DCS's)
-  else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))
+  else if((epsilon1<((1.+lambdan)*expn))||(lambdan<1.))//single or plural scattering (Rutherford DCS's)
     {
       G4double xi=G4UniformRand();
       xi= 2.*scrA*xi/(1.-xi + scrA);
       if(xi<0.)xi=0.;
       else if(xi>2.)xi=2.;      
-      G4double ws=(1. - xi);
-      G4double wss=std::sqrt(xi*(2.-xi));      
-      G4double phi0=CLHEP::twopi*G4UniformRand();
-      newDirection.set(wss*cos(phi0),wss*sin(phi0),ws); 
+      ws=(1. - xi);
+      wss=std::sqrt(xi*(2.-xi));      
+      G4double phi0=CLHEP::twopi*G4UniformRand(); 
+      us=wss*cos(phi0);
+      vs=wss*sin(phi0);
     }
   else // multiple scattering
     {
@@ -264,24 +260,64 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4ThreeVector& oldDirection
       // Sample first substep scattering angle
       SampleCosineTheta(0.5*lambdan,scrA,cosTheta1,sinTheta1);
       G4double phi1  = CLHEP::twopi*G4UniformRand();
-      G4ThreeVector newDirection1(sinTheta1*cos(phi1),sinTheta1*sin(phi1),cosTheta1);
-
-      fDisplacement.set(0.0, 0.0, -0.5*zPathLength);
-      fDisplacement += 0.5*zPathLength*newDirection1;     
+      cosPhi1 = cos(phi1);
+      sinPhi1 = sin(phi1);
 
       // Sample second substep scattering angle
       SampleCosineTheta(0.5*lambdan,scrA,cosTheta2,sinTheta2);
       G4double phi2  = CLHEP::twopi*G4UniformRand();
-      newDirection.set(sinTheta2*cos(phi2),sinTheta2*sin(phi2),cosTheta2); 
-      newDirection.rotateUz(newDirection1);
+      cosPhi2 = cos(phi2);
+      sinPhi2 = sin(phi2);
+
+      // Overall scattering direction
+      us = sinTheta2*(cosTheta1*cosPhi1*cosPhi2 - sinPhi1*sinPhi2) 
+	+ cosTheta2*sinTheta1*cosPhi1;
+      vs = sinTheta2*(cosTheta1*sinPhi1*cosPhi2 + cosPhi1*sinPhi2) 
+	+ cosTheta2*sinTheta1*sinPhi1;
+      ws = cosTheta1*cosTheta2 - sinTheta1*sinTheta2*cosPhi2; 
+
+      //small angle approximation for theta less than screening angle
+      if(1. - ws < 0.5*scrA) 
+      {
+	G4int i=0;
+	do{i++;
+	  ws=1.+Qn12*G4Log(G4UniformRand());
+	}while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
+	if(i>=19)ws=cos(sqrt(scrA));
+	wss=std::sqrt((1. - ws)*(1. + ws));      
+	us=wss*std::cos(phi1);
+	vs=wss*std::sin(phi1);
+      }
     }
     
+  //G4ThreeVector oldDirection = dynParticle->GetMomentumDirection();
+  G4ThreeVector newDirection(us,vs,ws);
   newDirection.rotateUz(oldDirection);
   fParticleChange->ProposeMomentumDirection(newDirection);
+ 
+  // corresponding to error less than 1% in the exact formula of <z>
+  if(Qn1<0.02) { z_coord = 1.0 - Qn1*(0.5 - Qn1/6.); }
+  else         { z_coord = (1.-G4Exp(-Qn1))/Qn1; }
+  G4double rr = zPathLength*std::sqrt((1.- z_coord*z_coord)/(1.-ws*ws));
+  x_coord  = rr*us;
+  y_coord  = rr*vs;
+
+  // displacement is computed relatively to the end point
+  z_coord -= 1.0;
+  z_coord *= zPathLength;
+  /*
+    G4cout << "G4GS::SampleSecondaries: e(MeV)= " << kineticEnergy
+    << " sinTheta= " << sqrt(1.0 - ws*ws) 
+    << " trueStep(mm)= " << tPathLength
+    << " geomStep(mm)= " << zPathLength
+    << G4endl;
+  */
+
+  fDisplacement.set(x_coord,y_coord,z_coord);
   fDisplacement.rotateUz(oldDirection);
 
   return fDisplacement;
-}     
+    }    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -419,6 +455,7 @@ void G4GoudsmitSaundersonMscModel::StartTracking(G4Track* track)
   inside = false;
   insideskin = false;
   tlimit = geombig;
+  G4VEmModel::StartTracking(track);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
