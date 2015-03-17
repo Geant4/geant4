@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jan. 20, 2015  H.Kurashige (procman-V10-00-03)
+- Modify SetProcessOrderingToSecond() in G4ProcessManager
+
 - June 6th, 2014    P.Gumplinger (procman-V10-00-02)
 - Add new process type fUCN in G4ProcessType.hh
 

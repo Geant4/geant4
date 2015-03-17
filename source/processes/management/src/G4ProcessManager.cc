@@ -799,8 +799,8 @@ void G4ProcessManager::SetProcessOrderingToSecond(
   }
 
   // set ordering parameter to 1
-  pAttr->ordProcVector[ivec-1] = 1;
-  pAttr->ordProcVector[ivec]   = 1;
+  pAttr->ordProcVector[ivec-1] = 0;
+  pAttr->ordProcVector[ivec]   = 0;
 
   // find insert position
   G4ProcessVector* pVector = theProcVector[ivec];
