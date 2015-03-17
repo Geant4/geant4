@@ -48,18 +48,10 @@
 
 #include "G4VEmFluctuationModel.hh"
 #include "G4LossTableManager.hh"
-//#include "G4MTHepRandom.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#if __clang__
-  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
-      !__has_feature(cxx_thread_local))
-    #define CLANG_NOSTDTLS
-  #endif
-#endif
 
 G4VEmFluctuationModel::G4VEmFluctuationModel(const G4String& nam)
   : name(nam) 
@@ -67,12 +59,7 @@ G4VEmFluctuationModel::G4VEmFluctuationModel(const G4String& nam)
   fManager = G4LossTableManager::Instance();
   fManager->Register(this);
 
-#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-    (defined(CLANG_NOSTDTLS))
-  rndmEngineF = G4MTHepRandom::getTheEngine(); 
-#else // Sequential mode or supporting C++11 standard
-  rndmEngineF = CLHEP::HepRandom::getTheEngine();
-#endif
+  rndmEngineF = G4Random::getTheEngine();
 }
 
 G4VEmFluctuationModel::~G4VEmFluctuationModel() 

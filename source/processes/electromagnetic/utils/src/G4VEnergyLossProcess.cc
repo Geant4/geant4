@@ -683,7 +683,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  G4bool verb =  false;
+  G4bool verb = false;
   if(1 < verboseLevel || verb) {
   
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
@@ -1672,7 +1672,8 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   // sample secondaries
   secParticles.clear();
-  //G4cout<< "Eprimary: "<<dynParticle->GetKineticEnergy()/MeV<<G4endl;
+  //G4cout<< "@@@ Eprimary= "<<dynParticle->GetKineticEnergy()/MeV
+  //	<< " cut= " << tcut/MeV << G4endl;
   currentModel->SampleSecondaries(&secParticles, currentCouple, 
 				  dynParticle, tcut);
 
@@ -1747,7 +1748,9 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
        G4bool ascii)
 {
   G4bool res = true;
-  if ( baseParticle || part != particle ) return res;
+  //G4cout << "G4VEnergyLossProcess::StorePhysicsTable: " << part->GetParticleName()
+  //	 << "  " << directory << "  " << ascii << G4endl;
+  if (!isMaster || baseParticle || part != particle ) return res;
 
   if(!StoreTable(part,theDEDXTable,ascii,directory,"DEDX")) 
     {res = false;}
@@ -1782,8 +1785,8 @@ G4bool G4VEnergyLossProcess::StorePhysicsTable(
   if(!StoreTable(part,theSubLambdaTable,ascii,directory,"SubLambda")) 
     {res = false;}
 
-  if ( res ) {
-    if(0 < verboseLevel) {
+  if ( !res ) {
+    if(1 < verboseLevel) {
       G4cout << "Physics tables are stored for " 
 	     << particle->GetParticleName()
              << " and process " << GetProcessName()
@@ -1808,6 +1811,7 @@ G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 					   G4bool ascii)
 {
   G4bool res = true;
+  if (!isMaster) return res;
   const G4String particleName = part->GetParticleName();
 
   if(1 < verboseLevel) {
@@ -1873,9 +1877,13 @@ G4bool G4VEnergyLossProcess::StoreTable(const G4ParticleDefinition* part,
 					const G4String& directory,
 					const G4String& tname)
 {
+  //G4cout << "G4VEnergyLossProcess::StoreTable: " << aTable
+  //	 << "  " << directory << "  " << tname << G4endl;
   G4bool res = true;
   if ( aTable ) {
     const G4String name = GetPhysicsTableFileName(part,directory,tname,ascii);
+    G4cout << name << G4endl;
+    //G4cout << *aTable << G4endl;
     if( !aTable->StorePhysicsTable(name,ascii)) res = false;
   }
   return res;
