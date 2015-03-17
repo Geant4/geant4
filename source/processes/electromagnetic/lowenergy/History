@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.12.2014 G. Cosmo, tag emlowen-V10-00-23
+           - Corrected sources.cmake to include missing files:
+             G4hSRIM2000p.hh
+             G4hSRIM2000p.cc
+
 14.11.2014 G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-22
            - fix of loop
 
