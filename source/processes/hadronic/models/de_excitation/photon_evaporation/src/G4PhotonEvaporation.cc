@@ -93,8 +93,9 @@ G4PhotonEvaporation::G4PhotonEvaporation(const G4String & aName,
   // Time for short-cut simulation of photon evaporation
   p->SetTimeLimit(timeLimit);
 
-  // Time limit for isomere production 
-  SetMaxHalfLife(1.e-6*second);
+  // Default time limit for isomere production 
+  SetMaxHalfLife(DBL_MAX);
+  //  SetMaxHalfLife(1.e-6*second);
 
   nucleus = 0;
 }
@@ -109,18 +110,21 @@ G4PhotonEvaporation::~G4PhotonEvaporation()
 G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* aNucleus)
 {
   //G4cout << "G4PhotonEvaporation::EmittedFragment" << G4endl;
-  G4Fragment* gamma = contDeexcitation->GenerateGamma(aNucleus);
-  if(gamma) { 
-    if (verbose > 1) {
+  vShellNumber = -1;
+  G4Fragment* gamma = 0;
+  if(contDeexcitation->CanDoTransition(aNucleus)) { 
+    gamma = contDeexcitation->GenerateGamma(aNucleus);
+    if(gamma && verbose > 1) {
       G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
 	     << gamma << G4endl;
       G4cout << "   Residual: " << aNucleus << G4endl;
     }
-  } else {
+  } else if(discrDeexcitation->CanDoTransition(aNucleus)) {
 
     // Do one photon emission by the discrete deexcitation 
     gamma = discrDeexcitation->GenerateGamma(aNucleus);
     if(gamma) { 
+      vShellNumber = discrDeexcitation->GetVacantSN();
       if (verbose > 1) {
 	G4cout << "G4PhotonEvaporation::EmittedFragment discrete deex: "   
 	       << gamma << G4endl;
@@ -135,16 +139,18 @@ G4bool G4PhotonEvaporation::BreakUpChain(G4FragmentVector* products,
 					 G4Fragment* aNucleus)
 {
   //G4cout << "G4PhotonEvaporation::BreakUpChain" << G4endl;
-
+  G4Fragment* gamma = 0;
   // one continues emission is not excluded
-  G4Fragment* gamma = contDeexcitation->GenerateGamma(aNucleus);
-  if(gamma) { 
-    if (verbose > 1) {
-      G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
-	     << gamma << G4endl;
-      G4cout << "   Residual: " << aNucleus << G4endl;
+  if(contDeexcitation->CanDoTransition(aNucleus)) { 
+    gamma = contDeexcitation->GenerateGamma(aNucleus);
+    if(gamma) { 
+      if (verbose > 1) {
+	G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
+	       << gamma << G4endl;
+	G4cout << "   Residual: " << aNucleus << G4endl;
+      }
+      products->push_back(gamma);
     }
-    products->push_back(gamma);
   }
   // main emissions are discrete
   discrDeexcitation->DoChain(products, aNucleus);
@@ -164,6 +170,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& theNucleus)
   //G4cout << "G4PhotonEvaporation::BreakUp" << G4endl;
   G4Fragment* aNucleus = new G4Fragment(theNucleus);
   G4FragmentVector* products = new G4FragmentVector();
+  //discrDeexcitation->DoChain(products, aNucleus);
   BreakUpChain(products, aNucleus);
   products->push_back(aNucleus);
   return products;

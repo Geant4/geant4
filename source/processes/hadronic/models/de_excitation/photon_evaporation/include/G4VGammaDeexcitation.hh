@@ -101,6 +101,7 @@ protected:
   G4VGammaTransition* _transition; 
   G4int _verbose;
   G4double _tolerance;  
+  G4double _timeLimit;
 
 private:
 
@@ -111,7 +112,6 @@ private:
 
   G4ElectronOccupancy _electronO;
   G4int _vSN;
-  G4double _timeLimit;
 
 };
 

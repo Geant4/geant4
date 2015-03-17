@@ -109,13 +109,12 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   } else {
     ctransition->Update(levelManager,Z,A,excitation);
   }
-
-  if (_verbose > 1) {
+  /*
     G4cout <<"G4ContinuumGammaDeexcitation::CanDoTransition: " 
 	   << " Eex(MeV)= " << excitation 
 	   << " Emax(MeV)= " << levelManager->MaxLevelEnergy()
 	   << " Z= " << Z << " A= " << A << G4endl;
-  }
+  */
   return true;
 }
 

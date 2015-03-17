@@ -190,7 +190,6 @@ void G4DiscreteGammaTransition::SelectGamma()
 	    { iShell = 8;}
 	  // the following is needed to match the ishell to that used in  
 	  // G4AtomicShells
-	  /*
 	  if ( iShell == 9) {
 	    if ( (nucleusZ < 28) && (nucleusZ > 20)) {
 	      iShell--;
@@ -198,7 +197,6 @@ void G4DiscreteGammaTransition::SelectGamma()
 	      iShell = iShell -2;
 	    }
 	  }
-	  */
 	  //L.Desorgher 02/11/2011
 	  //Atomic shell information is available in Geant4 only up top Z=100
 	  //To extend the photo evaporation code to Z>100  the call 

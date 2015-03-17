@@ -57,6 +57,7 @@ G4NeutronRadCapture::G4NeutronRadCapture()
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
   photonEvaporation = new G4PhotonEvaporation();
+  photonEvaporation->SetICM(true);
   //photonEvaporation = 0;
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }

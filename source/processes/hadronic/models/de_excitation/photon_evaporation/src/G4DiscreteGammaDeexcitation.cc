@@ -101,7 +101,8 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   const G4NuclearLevel* level = levelManager->NearestLevel(excitation);
 
   // long lived level	
-  if (!level || (level->HalfLife() > maxhl && !rdm) ) { return false; }
+  if (!level || level->HalfLife() > maxhl) { return false; }
+  //  if (!level || (level->HalfLife() > maxhl && !rdm) ) { return false; }
 
   if (_verbose > 1) {
     G4cout << "G4DiscreteGammaDeexcitation: Elevel(MeV)= " 
@@ -114,6 +115,13 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   } else {
     dtransition->Update(level,Z);
   }
+  // control on ICM
+  if(level->HalfLife() > _timeLimit) {
+    dtransition->SetICM(true);
+  } else {
+    dtransition->SetICM(icm);  
+  }  
+
   dtransition->SetEnergyFrom(excitation);
   
   if (_verbose > 1) {

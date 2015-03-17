@@ -109,7 +109,6 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
   return probability;
 }
 
-
 G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment, 
                                            G4double MaximalKineticEnergy,
                                            G4double V)
@@ -142,7 +141,6 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
   G4double E0 = Ex - T*(G4Log(T/MeV) - G4Log(a*MeV)/4.0 
 	- 1.25*G4Log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
   //                      ***end RESIDUAL ***
-  
   //                       ***PARENT***
   //JMQ (September 2009) the following quantities refer to the PARENT:
      
@@ -170,11 +168,15 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     G4double tx = Ex/T;
     G4double s0 = 2.0*std::sqrt(a*(MaximalKineticEnergy-delta0));
     G4double sx = 2.0*std::sqrt(a*(Ex-delta0));
+    // VI: protection against FPE exception
+    if(s0 > 350.) { s0 = 350.; }
     Width = I1(t,tx)*T/expE0T + I3(s0,sx)*G4Exp(s0)/(sqrt2*a);
+
+    // VI this cannot happen!
     // For charged particles (Beta+V) = 0 beacuse Beta = -V
-    if (theZ == 0) {
-      Width += (Beta+V)*(I0(tx)/expE0T + 2.0*sqrt2*I2(s0,sx)*G4Exp(s0));
-    }
+    //if (theZ == 0) {
+    //  Width += (Beta+V)*(I0(tx)/expE0T + 2.0*sqrt2*I2(s0,sx)*G4Exp(s0));
+    //}
   }
   
   //JMQ 14/07/2009 BIG BUG : NuclearMass is in MeV => hbarc instead of hbar_planck must be used
@@ -215,9 +217,10 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     {
       //JMQ fixed bug in units
       //VI moved the computation here
-      G4double E0CN = ExCN - TCN*(G4Log(TCN/MeV) - G4Log(aCN*MeV)/4.0 
+      G4double E0CN = ExCN - TCN*(G4Log(TCN/MeV) - 0.25*G4Log(aCN*MeV) 
 				  - 1.25*G4Log(UxCN/MeV) 
 				  + 2.0*std::sqrt(aCN*UxCN));
+
       InitialLevelDensity = (pi/12.0)*G4Exp((U-E0CN)/TCN)/TCN;
     } 
   else 
@@ -225,6 +228,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
       //VI speedup
       G4double x  = U-deltaCN;
       G4double x1 = std::sqrt(aCN*x);
+
       InitialLevelDensity = (pi/12.0)*G4Exp(2*x1)/(x*std::sqrt(x1));
     }
 
