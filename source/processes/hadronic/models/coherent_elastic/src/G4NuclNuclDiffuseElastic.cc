@@ -989,6 +989,7 @@ void G4NuclNuclDiffuseElastic::BuildAngleTable()
 
     if(alphaMax > pi) alphaMax = pi;
 
+    alphaMax = pi2;
 
     alphaCoulomb = fRutherfordTheta*fCofAlphaCoulomb;
 
