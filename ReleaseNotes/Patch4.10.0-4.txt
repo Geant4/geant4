@@ -1,0 +1,140 @@
+
+                 Geant4 10.0 - patch-04 Release Notes
+                 ------------------------------------
+
+                                                            6 March 2015
+
+List of fixes included in this public patch since the public release 10.0.p03:
+
+  o Geometry:
+    --------
+    + navigation:
+      o G4Navigator: corrections in the computation of exit normal and small
+        fix to calculation of stored step endpoint, for steps that do not hit
+        a boundary. Some code cleanup.
+      o Added protection in G4ReplicaNavigation::DistanceToOutRad() for
+        potential rare cases of negative value to sqrt() in equation
+        calculation for rmin/rmax intersection.
+      o G4ErrorPropagationNavigator: added GetGlobalExitNormal() method to
+        match the update of G4Navigator interface made back in release 9.5.
+        Fix to make normal a unit vector, and fixed Coverity defect to protect
+        against null 'target'. Revised implementation of ComputeStep(),
+        to avoid calling G4Navigator::ComputeSafety().
+        Addresses problem report #1679.
+    + solids/CSG:
+      o Fixed typo in copy-ctor and assignment operator for G4Tubs and G4OTubs.
+      o Fix in temporary class G4OTubs to include symbol in library in any case.
+    + solids/specific:
+      o Fixed triangularisation method AddGeneralPOlygoneFacets() in
+        G4ExtrudedSolid by avoiding flat triangles. Added warning message to
+        G4TriangularFacet constructor if Area is 0; i.e., case of flat triangle.
+        Addressing problem report #1703.
+      o Added special DistanceAway() method for Inside() in order to fix
+        precision problem in calculation of DistanceToSide() in G4PolyconeSide.
+      o Fix in SetOriginalParameters() for G4Polycone and G4Polyhedra, in case
+        of presence of 'rings' structures. Addressing problem report #1705.
+      o Use canonical form for operator=() in G4PolyconeHistorical and
+        G4PolyhedraHistorical.
+    + solids/usolids:
+      o UPolycone: correction in Capacity() for iteration over the number of
+        sections and in SurfaceArea() in case opening-angle is less than 2*pi.
+        Fixes in InsideSection() for openPhi when StartPhi is negative,
+        in Init() for Polycone defined from ZPlane[0]>ZPlane[N],
+        and in DistanceToOut() for points starting on internal surface.
+        Fix in InsideSection() for points(0,0,z).
+        Fix in SetOriginalParameters(), in case of presence of 'rings'
+        structures constructed by (r,z) corners.
+        Use canonical form for operator=(). Code cleanup and formatting.
+      o Added special DistanceAway() method for Inside() in order to fix
+        precision problem in calculation of DistanceToSide() in UPolyconeSide.
+      o Fixed typo in copy-ctor and assignment operator for UTubs.
+      o UPolyhedra: moved Extent() from protected to public.
+      o UTet: fixed approximation in Extent().
+      o Minor fixes of errors reported by Coverity and unit tests in
+        UTubs,UCons, UTet.
+      o Removed useless 'inline' specification for pure virtual function
+        StreamInfo() in VUSolid base class.
+      o Renamed ExceptionSeverity struct to UExceptionSeverity in UUtils to
+        avoid possible clashes with external libraries.
+    + volumes:
+      o Avoid post-increment in G4NavigationLevelRep::AddAReference().
+
+  o Generic Processes:
+    -----------------
+    + Management:
+      o Fixed logic in G4ProcessManager::SetProcessOrderingToSecond() to make
+        sure the process is always set before the process that has ordering
+        index 1.
+    + Transportation:
+      o G4Transportation, G4CoupledTransportation: in AlongStepGetPIL(),
+        initialize restMass with G4DynamicParticle (as is used in DoIt()),
+        not with G4ParticleDefinition. Resolves inconsistent kinematics
+        when dynamic mass is measurably different from "PDG" mass.
+
+  o Global:
+    ------
+    + G4FPEDetection.hh: restrict FPE trapping to GCC only, excluding CLang.
+      Addresses problem with Qt generating an apparent FPE deep inside its
+      code with MacOSX CLang builds.
+      Added call to 'sigfillset' to clear any signals before any use of
+      sigset_t in InvalidOperationDetection() for both MacOS and Linux, as
+      suggested in specifications.
+    + Added missing G4GLOB_DLL specification for DLL import/export to
+      G4CacheDetails specialization of cache reference for double.
+    + Updated date and version for 10.0.p04.
+
+  o Persistency:
+    -----------
+    + gdml:
+      o Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of
+        repeated displacements of the reference solid in the same Boolean
+        operation (issue reported by ATLAS).
+      o Correction to G4GDMLReadMaterials::MixtureRead() to revert order of
+        reading (first elements then materials) for mixtures by fraction;
+        corrects referencing for cases when elements and materials may carry
+        the same name (case reported by ATLAS).
+
+  o Physics Lists:
+    -------------
+    + constructors/hadron_inelastic:
+      o Added protection in destructors to avoid double deletes. 
+    + constructors/limiters:
+      o Fix in G4ParallelWorldProcess to correctly use method
+        SetProcessOrderingToSecond().
+    + lists:
+      o INCLXXPhysicsListHelper: avoid use of G4NeutronTrackingCut
+        for *_HP physics-lists.
+
+  o Processes - Hadronic:
+    --------------------
+    + management:
+      o G4HadronicProcess::CheckResult(): added check for dynamic mass 
+        to correspond to PDG mass within ~10%.
+    + models/cascade:
+      o G4CascadeInterface: fixed possible infinite-loop condition where
+        (nTries >= maxTries) and momentum balance fails.
+    + stopping:
+      o G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon 
+        nuclear capture secondaries. Addressing problem report #1695.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.0 or 10.0.p01/2/3.
+  o  Technical notes distributed for release 10.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.0.p04 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

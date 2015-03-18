@@ -1,0 +1,223 @@
+
+                       geant4-10-01-ref-03
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o 
+
+---------- Reference-tag 'Release Notes' -----------
+
+(#)  Fixes included in release 10.1.p01
+
+Summarised, the list of changes is the following:
+
+analysis                                         analysis-V10-01-06
+--------
+- Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn managers. (#)
+- Fixed false warnings about unknown column type when an ntuple contains 
+  a column of a vector type and is created via ntuple booking.
+- Fixed reading XML ntuples with a column of a vector type; tools do not
+  support direct use of ntuple_bindings with a vector, use of a temporary
+  sub-ntuple is needed.
+
+digits_hits/utils                                detutils-V10-01-01          (#)
+-----------------
+- Added calls to G4VisManager::BeginDraw2D() and  G4VisManager::EndDraw()
+  in G4VScoreColorMap to speedup drawing of texts and color chart.
+  Revised Draw() DrawColumn() methods in G4ScoringBox and G4ScoringCylinder
+  to speed up drawing primitive scorers attached to the scoring meshes.
+
+externals/usolids                                geom-usolids-V10-01-09
+-----------------
+- UVector3: made data private and defined accessors x(), y() and z().
+- Made implementations operators +(), -(), *(), and /() inline.
+- Adapted all classes to the change.
+- Added method GetPointOnEdge() to UBox.
+
+geometry
+--------
+- biasing (geombias-V10-01-00)                                               (#)
+  o Made G4IStore and G4WeightWindowStore singletons thread-local to avoid
+    data races when accessing iterators.
+    Use const references for string in argument for constructor and accessor.
+- management (geommng-V10-01-00)
+  o G4USolid: use accessors x(), y() and z() from UVector3, instead of
+    directly accessing its data-members.
+- solids/Boolean (geom-bool-V10-01-00)
+  o G4UMultiUnion: use accessors x(), y() and z() from UVector3, instead
+    of directly accessing its data-members.
+- solids/CSG (geom-csg-V10-01-02):
+- solids/specific (geom-specific-V10-01-06):
+  o Use accessors x(), y() and z() from UVector3 in USolids wrappers, instead
+    of directly accessing its data-members.
+
+graphics_reps                                    greps-V10-01-02
+-------------
+- HepPolyhedron: corrected a long-standing spelling mistakes.
+  This is reflected in the method names, but the old names have been
+  kept for backwards compatibility.
+
+materials                                        materials-V10-01-02
+---------
+- G4NistManager: added method FindOrBuildSimpleMaterial(Z); 
+  removed GetLOGA(), duplicated method with G4Pow.
+- G4NistMaterialBuilder: added FindOrBuildSimpleMaterial(Z);
+  splitted implementation in longest private method.
+
+physics_lists
+-------------
+- builders (phys-builders-V10-01-01):
+  o G4INCLXXPionBuilder: fixed pion cross-section for pi-.
+  o Do not delete model and x-section at exit to avoid double deletion.
+- constructors/electromagnetic (phys-ctor-em-V10-01-05):
+  o G4EmLivermorePhysics, G4EmLowEPPhysics, G4EmPenelopePhysics,
+    G4EmStandardPhysics_option1, G4EmStandardPhysics_option2,
+    G4EmStandardPhysics_option3, G4EmStandardPhysics_option4: parameters
+    for multiple scattering are defined via G4EmParameters class.
+
+processes/biasing                                procbiasing-V10-01-00       (#)
+-----------------
+- G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess:
+  made static thread-local variables into simple class data members.
+  Renamed them accordingly: fEndTrack, feLimited, fParaflag.
+  Use const reference for string in argument in SetParallelWorld().
+
+processes/electromagnetic/muons                  emmuons-V10-01-00
+-------------------------------
+- G4MuMultipleScattering: do not redefine step limit type.
+
+processes/electromagnetic/standard               emstand-V10-01-05
+----------------------------------
+- G4hMultipleScattering: do not redefine step limit type.
+
+processes/electromagnetic/utils                  emutils-V10-01-10
+-------------------------------
+- G4EmCalculator: moved simple methods to inline; added public method
+  SetupMaterial() for computation of cross-section per atom, to add
+  initialisation of material (problem observed in Bremsstrahlung
+  cross-section). Minor fix of printout.
+- G4LossTableManager: moved run time methods to be inlined.
+- G4EmParameters, G4EmParametersMessenger: added new methods and respecitve
+  UI commands for muon/hadron/ion multiple scattering: 
+  SetMscMuHadRangeFactor(), SetMscMuHadStepLimitType();
+  /process/msc/RangeFactorMuHad, /process/msc/StepLimitMuHad.
+  Use new methods in G4VMultipleScattering.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-01-05)
+  o G4CrossSectionDataSetRegistry, G4VCrossSectionDataSet: defined as 
+    G4ThreadLocalSingleton; delete all x-sections at exit except HP.
+  o G4KokoulinMuonNuclearXS: fixed initialisation for the case of multiple runs.
+  o G4DiffElasticRatio: added protection for hydrogen.
+- management (hadr-man-V10-01-00)
+  o G4HadronicProcessStore, G4HadronicProcess: fixed procedure of
+    deletion at exit.
+- models/de_excitation (hadr-deex-V10-01-20)
+  o Moved G4NeutronRadCapture to handler sub-directory; use G4ExcitationHandler
+    instead of G4PhotonEvaporation allowing to have not only gamma de-excitation
+    but also fission or FermiBreakUp.
+  o G4VEvaporationChannel, G4VEvaporation, G4VEvaporationChannel: moved 
+    setters from G4PhotonEvaporation to reduce number of new/delete at
+    initialisation.
+  o Moved new nuclear data structure classes to 'management' module
+    Removed obsolete G4E1SingleProbability1, G4VPhotonEvaporation classes.
+  o G4WilsonAblationModel, G4EvaporationFactory, G4EvaporationFactory,
+    G4ExcitationHandler: use default constructor of G4Evaporation and access
+    photon evaporation class from G4Evaporation.
+  o G4Evaporation: use environment variable "G4UsePromptPhotonEvaporation"
+    to select gamma de-excitation model; if the variable is defined
+    the new G4PromptPhotonEvaporation class is used.
+  o G4PromptPhotonEvaporation, G4LevelReader, G4NucLevel: code cleanup.
+  o Fixed Coverity defects.
+  o Removed unused dependences from CMake script.
+- models/lend (hadr-lend-V10-01-00)                                          (#)
+  o Fixed Coverity defect in G4GIDI_map.
+- models/lepto_nuclear (hadr-lepnuc-V10-01-00)
+  o G4MuonVDNuclearModel: defined G4KokoulinMuonNuclearXS via factory interface
+    allowing reuse of already instantiated class; keep pointer of
+    G4KokoulinMuonNuclearXS instead of object in order to avoid double deletion
+    at exit
+- models/management (hadr-modman-V10-01-03)
+  o G4HadronicInteractionRegistry, G4HadronicInteraction: fixed deletion of 
+    models at exit. Made G4HadronicInteractionRegistry thread-local singleton.
+  o G4HadronicInteractionRegistry: more accurate check on HP models.
+- models/qmd (hadr-qmd-V10-01-01)                                            (#)
+  o Fixed Coverity defects in G4QMDGroundStateNucleus and G4QMDNucleus.
+- models/radioactive_decay (radioactive_decay-V10-01-10)
+  o Activated Auger in G4RadioactiveDecay::BuildPhysicsTable().
+  o Re-enable setting of ARM on/off (default is on) in G4ITDecay and G4ECDecay.
+- stopping (hadr-stopping-V10-01-02)
+  o G4MuonMinusBoundDecay: use G4Log() instead of std::log().
+
+processes/optical                                op-V10-01-00
+-----------------
+- Added call to ProposeLocalEnergyDeposit() for particle-change in
+  G4OpAbsorption.
+
+run                                              run-V10-01-04
+---
+- Corrected handling of deletion of worker run-managers.
+
+visualization                                    vis-V10-01-06
+-------------
+- management:
+  o Introduced G4USE_STD11 (limited to clang) and tidied.
+- modeling:
+  o Augmented G4PhysicalVolumeModel interface.
+    Added local transformation attribute.
+  o G4TouchableDumpScene: added polyhedron dump for use with /vis/touchable/dump.
+- gMocren:
+  o Fixed bugs in checking of string lengths.                                (#)
+- Tree:
+  o Tidied and cleaned up att values after use.
+  o G4ASCIITreeSceneHandler: Added polyhedron dump for verbosity >=7.
+
+examples                                         examples-V10-01-03
+--------
+- Updated reference outputs.
+- advanced/brachytherapy (brachy-V10-01-00)
+  o Removed unnecessary instantiation of GPS in master thread.
+- advanced/gammaknife (gammaknife-V10-01-00)
+  o Moved GPS defaults to master thread.
+- advanced/human_phantom (human_phantom-V10-01-01)
+- advanced/radioprotection (radioprotection-V10-01-00)
+- advanced/xray_telescope (xraytel-V10-01-00)
+  o Removed unnecessary instantiation of GPS in master thread.
+- extended/electromagnetic/TestEm5 (testem5-V10-01-00)                       (#)
+  o Run: added forgotten fill of projectile scattering angle
+    for printed output (printed value was zero).
+- extended/exoticphysics/channeling (channelingExample-V10-01-00)
+  o Moved GPS defaults to master thread.
+- extended/medical/dna (exdna-V10-01-00)
+  o New example "microyz" showing how to compute microdosimetry 
+    distributions in liquid water using Geant4-DNA.
+- extended/optical/wls (WLS-V10-01-02)
+  o Added global mutex for primary generation as application modifies
+    GPS polarization/time.
+- extended/parameterisations/gflash (exgflash-V10-01-00)
+  o Removed unnecessary instantiation of GPS in master thread.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-01-02)
+  o PhysicsList: removed initialization of UAtomicDeexcitation.
+- extended/radioactivedecay/rdecay02 (rdecay02-V10-01-01)
+  o Migrated to support multi-threading.
+  o Migrated to use g4tools for analysis.
+
+tests                                            tests-V10-01-03
+-----
+- Updated reference outputs and tools.
+- tests/test04 (test04-V10-01-01)
+  o Test for merging NeutronHP and ParticleHP; based on test11.
+- tests/test19 (test19-V10-01-01)
+  o Updated CMake scripts.
+- tests/test23 (test23-V10-01-05)
+  o Added p+H data (integrated spectra).
+  o Updated analysis and CMake scripts.
+- tests/test47 (test47-V10-01-03)
+  o Refined ITEP app, after restructuring.
+  o Added batch scripts for p+B-->pbar.
+  o Updated CMake scripts.
+- tests/test48 (test48-V10-01-00)
+- tests/test75 (test75-V10-01-01)
+  o Updated CMake scripts.

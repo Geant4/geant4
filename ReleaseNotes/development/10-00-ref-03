@@ -18,6 +18,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (+)  Fixes included in release 9.6.p03
+(#)  Fixes included in release 9.6.p04
 (*)  Fixes included in release 10.0.p01
 (o)  Fixes included in release 10.0.p02
 (x)  Fixes included in release 10.0.p03
@@ -78,7 +79,7 @@ geometry/magneticfield                           field-V10-00-01             (o)
 
 geometry/navigation                              geomnav-V10-00-01           (o)
 -------------------
-- Added method in G4PathFinder for end of track, needed to signal
+- Added method in G4PathFinder for end of track, needed to signal            (#)
   G4TransportationManager to use 'ordinary' Navigator.
 - Revised G4Navigator::SetupHierarchy() to reduce extra cost due to
   handling the case of nested parameterisations.
@@ -121,7 +122,7 @@ global                                           global-V10-00-12
   "locks" a pthread to the given CPU index. This will be used by run
   category as an option to improve performance on high-core counts CPUs.
 - Minor refinements to G4Poisson.                                            (o)
-- Fix in G4SimplexDownhill header to proper define header guard.             (o)
+- Fix in G4SimplexDownhill header to proper define header guard.            (#o)
 
 intercoms                                        intercoms-V10-00-02
 ---------
@@ -139,7 +140,7 @@ particles                                        particles-V10-00-05
 
 persistency/gdml                                 gdml-V10-00-00              (o)
 ----------------
-- Added comparison operator for 3-vector key in 'vertexMap' in
+- Added comparison operator for 3-vector key in 'vertexMap' in               (#)
   G4GDMLWriteSolids for export of tessellated solid.
   Addressing problem report #1573.
 
@@ -200,7 +201,7 @@ processes/hadronic
     members which use envvars into const data, and initialize them in ctors.
   o Fixed implementation of G4CascadeParameters singleton to follow         (+o)
     canonical format. Addressing problem report #1557.
-  o Fix for memory leak in secondaries in G4IntraNucleiCascader.             (o)
+  o Fix for memory leak in secondaries in G4IntraNucleiCascader.            (#o)
     Addressing problem report #1584.
   o Use const pointer to G4ParticleDefinition in G4CollisionOutput,
     G4InuclParticle and G4InuclElementaryParticle.

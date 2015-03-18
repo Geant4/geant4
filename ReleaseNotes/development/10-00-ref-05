@@ -20,6 +20,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(x)  Fixes included in release 9.6.p04
 (o)  Fixes included in release 10.0.p02
 (+)  Fixes included in release 10.0.p03
 
@@ -73,8 +74,8 @@ geometry/magneticfield                           field-V10-00-03             (o)
 
 geometry/navigation                              geomnav-V10-00-06
 -------------------
-- G4Navigator: corrected saving/restoring of 'navigator state'.              (o)
-  Revised SetupHierarchy() to reduce extra cost due to handling the
+- G4Navigator: corrected saving/restoring of 'navigator state'.             (xo)
+- Revised SetupHierarchy() to reduce extra cost due to handling the          (o)
   case of nested parameterisations.
 - G4PropagatorInField: added new method GetCurrentEquationOfMotion().
 - Added internal method RecheckDistanceToCurrentBoundary() for G4SafetyHelper,
@@ -121,9 +122,9 @@ global                                           global-V10-00-22
 
 intercoms                                        intercoms-V10-00-07
 ---------
-- Fixed treatment of double-quotes in G4UImanager::ForeachS().               (o)
+- Fixed treatment of double-quotes in G4UImanager::ForeachS().              (xo)
   Addressing problem report #1614.
-- G4GenericMessenger: fixed case of core dump when GetCurrentValue()         (o)
+- G4GenericMessenger: fixed case of core dump when GetCurrentValue()        (xo)
   method is invoked for a command defined by DeclareMethod().
 - Introducing new UI commands /control/doif and /control/getVal.
 
@@ -160,12 +161,12 @@ particles                                        particles-V10-00-11
 
 persistency/gdml                                 gdml-V10-00-05              (o)
 ----------------
-- Correction to G4GDMLRead::Read() for the case when schema validation
+- Correction to G4GDMLRead::Read() for the case when schema validation       (x)
   is turned off, to disable initialisation of validation machinery in the
   parser and allow for standalone parsing off-network.
-- Corrected minor Coverity defect in G4GDMLParser for uninitialised
+- Corrected minor Coverity defect in G4GDMLParser for uninitialised          (x)
   'strip' flag in constructors.
-- Corrected potential memory leak in G4GDMLReadSolids.
+- Corrected potential memory leak in G4GDMLReadSolids.                       (x)
 
 physics_lists
 -------------
@@ -295,15 +296,15 @@ processes/hadronic
 - models/abla (hadr-abla-V10-00-01)
   o Fixes for Coverity defects.
 - models/binary_cascade (had-binary-V10-00-09)
-  o G4BinaryCasacde: improved calculation of mass, and of correction for     (o)
+  o G4BinaryCascade: improved calculation of mass, and of correction for    (xo)
     outgoing particles by always using GetIon() method; addresses potential
     crash for p+d seen in d+H in BIC.
-  o G4NeutronField, G4ProtonField: removed superfluous const_casts and use 
-    unsigned int for index.
+  o G4NeutronField, G4ProtonField: removed superfluous const_casts and use  (xo)
+    unsigned int for index. Protect against negative index into buffer.
 - models/cascade (hadr-casc-V10-00-10)
   o G4PreCompoundDeexcitation: attempt to use shared instance of PreCompound
     by fetching from hadronic registry.
-  o G4InuclNuclei:fix case of floating-point exception in                    (o)
+  o G4InuclNuclei:fix case of floating-point exception in                   (xo)
     setExcitationEnergy() for zero Ekin.
 - models/coherent_elastic (hadr-cohe-V10-00-08)
   o New class G4hhElastic, implementation of the qQ-model with springy
@@ -357,14 +358,14 @@ processes/hadronic
   o Changed constructors to take const reference for position and 4-momentum.
   o Removed temporary method GetDefintion_asConst() from G4Nucleon.
 - stopping (hadr-stopping-V10-00-04)
-  o G4MuMinusCapturePrecompound: added simplified model for capture in       (o)
+  o G4MuMinusCapturePrecompound: added simplified model for capture in      (xo)
     deuterium and in He4; reduced number of trials to find neutrino 4-momentum
     from 1000 to 100; added protection 1 keV for negative excitation energy,
     and substituted FatalException by JustWarning.
   o G4HadronStoppingProcess: in destructor do not de-register if Boolean flag
     G4HadronicProcess::deRegister is true, this is needed to cope with the
     modified thread-local-singleton G4HadronicProcessStore.
-  o Fixes for Coverity defects in G4MuonMinusCaptureAtRest and               (o)
+  o Fixes for Coverity defects in G4MuonMinusCaptureAtRest and              (xo)
     G4AntiNeutronAnnihilationAtRest.
 - util (hadr-util-V10-00-05)
   o Removed temporary method GetDefintion_asConst().

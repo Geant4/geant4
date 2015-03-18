@@ -23,6 +23,8 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(x)  Fixes included in release 9.6.p04
+(o)  Fixes included in release 10.0.p04
 
 Summarised, the list of changes is the following:
 
@@ -64,18 +66,21 @@ externals                                        externals-V10-00-08
   o Moved definition of pi into SystemOfUnits.h so that its hard-coded
     value is not defined twice.
 - USolids (geom-usolids-V10-00-26):
-  o UPolyhedra: moved Extent() from protected to public.
-  o UPolycone: correction in Capacity() for iteration over the number of
+  o UPolyhedra: moved Extent() from protected to public.                     (o)
+  o UPolycone: correction in Capacity() for iteration over the number of     (o)
     sections and in SurfaceArea() for the case opening-angle is less than 2*pi.
     Fixes in InsideSection() for openPhi when StartPhi is negative,
     in Init() for Polycone defined from ZPlane[0]>ZPlane[N],
     and in DistanceToOut() for points starting on internal surface.
-  o UTet: fixed approximation in Extent().
-  o Minor fixes of errors reported by Coverity and unit tests in 
-    UTubs,UCons, UTrap, UTet, UTriangular/QuadrangularFacet.
+  o UTet: fixed approximation in Extent().                                   (o)
+  o Minor fixes of errors reported by Coverity and unit tests in             (o)
+    UTubs,UCons, UTet.
+  o Minor fixes of errors reported by Coverity and unit tests in
+    UTrap, UTriangular/QuadrangularFacet.
   o Fixed algorithm for Extent() in UTrap.
-  o Removed useless 'inline' specification for pure virtual function
-    StreamInfo() in VUSolid base class. Improved dump in UMultiUnion.
+  o Removed useless 'inline' specification for pure virtual function         (o)
+    StreamInfo() in VUSolid base class.
+  o Improved dump in UMultiUnion.
 - Removed unused 'tpmalloc' and 'memoryprotection' modules.
 
 geometry
@@ -84,15 +89,15 @@ geometry
   o Moved constructors and simple methods to inline in G4ChargeState and
     G4LineSection for CPU speedup.
 - management (geommng-V10-00-06):
-  o Enabled implementation of StreamInfo() for G4USolid.
+  o Enabled implementation of StreamInfo() for G4USolid.                     (o)
 - navigation (geomnav-V10-00-19):
-  o G4Navigator: corrections in the computation of exit normal and small
+  o G4Navigator: corrections in the computation of exit normal and small     (o)
     fix to calculation of stored step endpoint, for steps that do not hit
     a boundary. Some code cleanup.
-  o Added protection in G4ReplicaNavigation::DistanceToOutRad() for potential
-    rare cases of negative value to sqrt() in equation calculation for
-    rmin/rmax intersection.
-  o G4ErrorPropagationNavigator: added GetGlobalExitNormal() method to
+  o Added protection in G4ReplicaNavigation::DistanceToOutRad() for          (o)
+    potential rare cases of negative value to sqrt() in equation calculation
+    for rmin/rmax intersection.
+  o G4ErrorPropagationNavigator: added GetGlobalExitNormal() method to       (o)
     match the update of G4Navigator interface made back in release 9.5.
     Fix to make normal a unit vector, and fixed Coverity defect to protect
     against null 'target'. Addressing problem report #1679.
@@ -106,11 +111,11 @@ geometry
 global                                           global-V10-00-44
 ------
 - G4StatDouble: corrected use 'const' interface for Add() method.
-- Added missing G4GLOB_DLL specification for DLL import/export to
+- Added missing G4GLOB_DLL specification for DLL import/export to            (o)
   G4CacheDetails specialization of cache reference for double.
 - Coherent use of 'thread_local' keyword for c++11, when supported and
   updated logic in tls.hh header.
-- G4FPEDetection.hh: restrict FPE trapping to GCC only, excluding CLang.
+- G4FPEDetection.hh: restrict FPE trapping to GCC only, excluding CLang.     (o)
   Addresses problem with Qt generating an apparent FPE deep inside its
   code with MacOSX CLang builds.
   Added call to 'sigfillset' to clear any signals before any use of sigset_t
@@ -144,13 +149,13 @@ particles                                        particles-V10-00-27
 
 persistency/gdml                                 gdml-V10-00-11
 ----------------
-- Correction to G4GDMLReadMaterials::MixtureRead() to revert order of
+- Correction to G4GDMLReadMaterials::MixtureRead() to revert order of       (xo)
   reading (first elements then materials) for mixtures by fraction;
   corrects referencing for cases when elements and materials may carry
   the same name (case reported by ATLAS).
 - Fix in G4GDMLMessenger for UI command "/persistency/gdml/clear", to
   invoke G4RunManager for cleanly delete entire geometry.
-- Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of repeated
+- Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of repeated  (xo)
   displacements of the reference solid in the same Boolean operation (issue
   reported by ATLAS).
 - Issue exception when attempting to load multi-union structures in a build
@@ -247,8 +252,8 @@ processes/hadronic
   o G4HadronicProcess: added creator model type to secondary. Clearing final
     state before resample interaction due to energy balance violation.
     Fixed final track status for some models like G4WilsonAbrasionModel.
-    Add check for dynamic mass in CheckResult(), to correspond to PDG mass
-    within ~10%.
+  o Add check for dynamic mass in G4HadronicProcess::CheckResult(), to      (xo)
+    correspond to PDG mass within ~10%.
   o G4HadronicProcessStore: fixed computation of cross-sections for ions.
 - models/abla (hadr-abla-V10-00-02)
   o Fixed Coverity defects.
@@ -265,7 +270,7 @@ processes/hadronic
     neutron or proton of deuteron did not interact).
 - models/cascade (hadr-casc-V10-00-20)
   o G4CascadeParameters: turn off phase-space, trailing-effect and PreCompound.
-  o G4CascadeInterface: fixed possible infinite-loop condition where
+  o G4CascadeInterface: fixed possible infinite-loop condition where        (xo)
     (nTries >= maxTries) and momentum balance fails.
   o G4PreCompoundDeexcitation: fixed memory leak on exit by passing
     excitation handler through to PreCompound.

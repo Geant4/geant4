@@ -1,0 +1,298 @@
+
+                       geant4-10-01-ref-01
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Improved propagation in field to enable identification of first
+   and last step in a volume, when tracking in a field.
+ o Switch on low-mass diffraction dissociation in G4HadronHElasticPhysics
+   for FTFP_BERT_TRV list.
+ o Added elastic model by H.Tran in Geant4-DNA.
+ o Adopting dedicated thread for visualization in MT mode.
+ o New data set G4EMLOW-6.42.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(x)  Fixes included in release 9.6.p04
+(+)  Fixes included in release 10.0.p02
+(o)  Fixes included in release 10.0.p04
+(#)  Fixes included in release 10.1.p01
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-02
+-----
+- Corrected search path for X11 libraries to ensure location of Xquartz      (#)
+  libs on MacOSX. Addressing problem report #1683.
+- Ensure that system/compiler is correctly set for GNUMake compatibility     (#)
+  on MacOSX..
+- Updated data sets to G4EMLOW-6.42.
+
+analysis                                         analysis-V10-01-01          (#)
+--------
+- Updated to g4tools 1.17.0: fixes in the Root files output to be compatible
+  with ROOT 6.02/x; see History_tools for the complete list of modifications.
+- Corrected CMake script.
+
+externals                                        externals-V10-01-00
+---------
+- CLHEP:
+  o Fixed usage of std::abs() in RandGaussZiggurat header.
+- USolids (geom-usolids-V10-01-06):                                          (#)
+  o UPolycone: fix in InsideSection() for points(0,0,z).                     (o)
+    Use canonical form for operator=(). Code cleanup and formatting.
+  o Added special DistanceAway() method for Inside() in order to fix         (o)
+    precision problem in calculation of DistanceToSide() in UPolyconeSide.
+  o UTrap: fix in SafetyToIn/SafetyToOut() for implementations which were
+    reverted.
+  o Renamed ExceptionSeverity struct to UExceptionSeverity in UUtils to      (o)
+    avoid possible clashes with external libraries.
+  o Fixed triangularisation method AddGeneralPOlygoneFacets() in
+    UExtrudedSolid by avoiding flat triangles.
+  o Added warning message to UTriangularFacet constructor if Area is 0;
+    i.e. case of flat triangle.
+
+geometry
+--------
+- magneticfield (field-V10-01-03):                                           (#)
+  o Small refinements in G4FieldTrack: added method to access rest mass
+    and avoid division by zero for unit direction.
+- navigation (geomnav-V10-01-05):
+  o Improvements in G4PropagatorInField to enable identification of first    (#)
+    and last step in a volume, when tracking in a field.
+    Addressing old problem report #1032.
+    Added new methods to report looping and stuck tracks.
+  o G4ErrorPropagationNavigator: revised implementation of ComputeStep(),   (o#)
+    to avoid calling G4Navigator::ComputeSafety().
+    Addresses problem report #1679.
+  o G4PathFinder: pass to equation of motion relevant properties of current  (#)
+    particle: latest charge state, PDG spin value, momentum and rest mass
+    of current particle. Fix in calls to ComputeSafety() to correctly
+    use length as argument.
+    Increased maximum number of navigators from 8 to 16.
+    Addressing problem report #1696.
+  o Removed unused leftover header file G4GeomTestVolPoint.hh.
+- solids/CSG (geom-csg-V10-01-00):                                           (#)
+  o Fix in temporary class G4OTubs to include symbol in library in any case. (o)
+- solids/specific (geom-specific-V10-01-04):                                 (#)
+  o Fixed triangularisation method AddGeneralPOlygoneFacets() in            (xo)
+    G4ExtrudedSolid by avoiding flat triangles.
+    Added warning message to G4TriangularFacet constructor if Area is 0;
+    i.e., case of flat triangle.
+    Addressing problem report #1703.
+  o Added special DistanceAway() method for Inside() in order to fix         (o)
+    precision problem in calculation of DistanceToSide() in G4PolyconeSide.
+  o Use canonical form for operator=() in G4PolyconeHistorical and           (o)
+    G4PolyhedraHistorical.
+- volumes (geomvol-V10-01-02):                                               (#)
+  o G4NavigationHistoryPool: moved printout from the destructor to
+    dedicated Print() method.
+  o Avoid post-increment in G4NavigationLevelRep::AddAReference().          (xo)
+  o Use canonical form for copy-ctor and operator=() in G4GRSSolid,
+    G4GRSVolume, G4LogicalBorderSurface and G4LogicalSkinSurface.
+
+global                                           global-V10-01-01            (#)
+------
+- Define support for c++11 thread_local keyword on Intel-icc compiler
+  version 15.
+- Define G4THREADSLEEP(tick) macro in G4Threading header.
+
+graphics_reps                                    greps-V10-01-01             (#)
+-------------
+- G4VisAttributes: removed unnecessary check in operator<<().
+  Fixing compilation warning on clang.
+
+interfaces                                       interfaces-V10-01-00        (#)
+----------
+- G4UIQt: fixed problem when displaying the first time the help tree.
+  The guidance label was not shown.
+
+materials                                        materials-V10-01-00         (#)
+---------
+- G4Material, G4Element, G4Isotope: make arguments of stream operators const.
+
+physics_lists
+-------------
+- constructors/electromagnetic (phys-ctor-em-V10-01-02):
+  o G4EmStandardPhysicsWVI: added angular limit to WentzelVI model           (#)
+    in order to provide correct backscattering.
+    Addressing problem report #1702.
+  o Added G4EmDNAPhysics_option2 and G4EmDNAPhysics_option3 constructors.
+- constructors/limiters (phys-ctor-limiters-V10-01-00)                       (#)
+  o Fix in G4ParallelWorldProcess to correctly use the new method            (o)
+    SetProcessOrderingToSecond().
+- lists (phys-lists-V10-01-00):
+  o FTFP_BERT_TRV: switch on low-mass diffraction dissociation in
+    G4HadronHElasticPhysics.
+
+processes/electromagnetic/dna                    emdna-V10-01-04
+-----------------------------
+- BornIonisation: corrected array cleaning.
+- ScreenRutherfordElastic: corrected retrieval of water density.
+- Added elastic model by H.Tran.
+- Added Fe56 into G4DNARuddIonisationExtendedModel.
+- Explicitly initialise to zero TLS pointers in G4KDNode and G4ITFinder      (#)
+  to allow for compilation on Linux/clang-3.5.
+- Corrected CMake scripts.                                                   (#)
+
+processes/electromagnetic/lowenergy              emlowen-V10-01-00           (#)
+-----------------------------------
+- Corrected CMake script.
+
+processes/electromagnetic/standard               emstand-V10-01-03           (#)
+----------------------------------
+- G4GoudsmitSaundersonMscModel, G4UrbanMscModel,G4WentzelVIModel,
+  G4WentzelVIRelModel, G4UniversalFluctuation: redefine random engine pointer
+  in StartTracking() method to address problem reported by CMS.
+  G4UniversalFluctuation: switch to use G4Random::GetTheEngine() to simplify
+  code.
+- G4GoudsmitSaundersonMscModel: return back to version of 10.0 with two fixes;
+  trivial Coverity report, added protection against precision loss for small
+  angle calculation, to ensure same backscattering results.
+- G4KleinNishinaModel: fixed very rare crash happening when de-excitation
+  module is active and de-excitation energy is slightly larger than available
+  energy; now secondary energy is slightly modified to keep energy balance
+  instead of deleting secondary particle.
+  G4PEEffFluoModel: use the same pattern as G4KleinNishinaModel for
+  de-excitation products.
+
+processes/electromagnetic/utils                  emutils-V10-01-05           (#)
+-------------------------------
+- G4EmParametersMessenger: allow to set CSDA range flag only in the
+  PreInit state to avoid crash in store/retrieve tables.
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: allow for
+  storing of physics table only from master thread.
+- G4VEmProcess: fixed printout at initialisation for the case when a
+  process is shared between different particles.
+- G4VEmModel, G4VEmFluctuationModel: switch to use G4Random::GetTheEngine()
+  to simplify code.
+  Redefine random engine pointer in G4VEmModel::StartTracking() method
+  to address problem reported by CMS.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-01-01)                                      (#)
+  o Removed obsolete (wrong) checks for particle types in IsIsoApplicable()
+    in Chips cross sections.
+  o Workaround in G4CrossSectionFactory<T,2>::Instantiate() to allow for
+    compilation on clang-3.5 on Linux, for initialisation of TLS pointer.
+- models/coherent_elastic (hadr-cohe-V10-01-02)                              (#)
+  o G4DiffuseElastic: fix for low-energy neutrons.
+    Fix in theta_cms momentum transfer transformation.
+  o G4NuclNuclDiffuseElastic: fix for 700 MeV Be-ions scattering in Be.
+    Addressing problem report #1691.
+  o Corrected CMake script.
+- models/de_excitation (hadr-deex-V10-01-00)                                 (#)
+  o G4VGammaDeexcitation, G4PhotonEvaporation: propagate vacant shell number
+    after internal convertion allowing to enable  atomic de-excitation in
+    radioactive decay.
+  o G4DiscreteGammaTransition return back correction on shell number
+     to avoid assert failure in simplified calorimeter.
+  o G4ContinuumGammaDeexcitation: fixed Coverity report.
+- models/neutron_hp (hadr-hpn-V10-01-03)                                     (#)
+  o Fixed Coverity defects in G4NeutronHPElasticFS, G4NeutronHPChannelList
+    and G4FissionProductYieldDist.
+  o Corrected CMake script.
+- models/particle_hp (hadr-hpp-V10-01-01)                                    (#)
+  o Enabled reading of data file that has a signature of evaluation name.
+  o Corrected CMake script.
+- models/parton_string/hadronization (had-hadronization-V10-01-00)           (#)
+  o Fix for rare crash in G4LundStringFragmentation in the case of          (+x)
+    anti-sigma+ capture at rest on hydrogen.
+- models/radioactive_decay (radioactive_decay-V10-01-06)
+  o Added new classes G4BetaMinusDecay, G4BetaPlusDecay, G4ECDecay and
+    G4ITDecay to streamline inheritance chain and reduce non-reproducibility.
+  o Use G4NuclearDecay as the new base class for all decay channels.
+    This replaces G4NuclearDecayChannel.
+  o Removed G4NuclearDecayChannel from G4RadioactiveDecay.
+  o G4RadioactiveDecay: register G4UAtomicDeexcitation to G4LossTableManager
+    in BuildPhysicsTable() so that electron shells can be found.
+    Set Fluo and Auger flags to true, PIXE to false.
+    Change code to create new atomic deexcitation only if one doesn't
+    already exist.
+- stopping (hadr-stopping-V10-01-01)                                         (#)
+  o G4HadronStoppingProcess, G4MuonMinusBoundDecay: fixed time of muon      (ox)
+    nuclear capture secondaries. Addressing problem report #1695.
+  o Define index in the model cathalog inside PreparePhysicsTable() to
+    avoid bad interference with EM physics.
+
+processes/management                             procman-V10-01-00           (#)
+--------------------
+- Fixed logic in G4ProcessManager::SetProcessOrderingToSecond() to make     (ox)
+  sure the process is always set before the process that has ordering index 1.
+
+processes/transportation                         transport-V10-01-01         (#)
+------------------------
+- G4Transportation: added ability to identify last step in volume for
+  the case of propagation in field. Addresses old problem report #1032.
+- G4Transportation, G4CoupledTransportation: in AlongStepGetPIL(),           (o)
+  initialize restMass data member using G4DynamicParticle (as is used in
+  DoIt()), not G4ParticleDefinition. Resolves inconsistent kinematics when
+  dynamic mass is measurably different from "PDG" mass.
+
+run                                              run-V10-01-00               (#)
+---
+- Print message for deletion of G4NavigationHistoryPool only if the
+  verbose level is set to 2.
+
+track                                            track-V10-01-01             (#)
+-----
+- Fixed FieldTrackUpdator to pass magnetic moment and PDG spin.
+  Addressing problem report #1696.
+- Improved G4ParticleChangeForTransport by adding update for FirstStep
+  in volume.
+
+visualization                                    vis-V10-01-04
+-------------
+- management (visman-V10-01-03):
+  o Now adopting dedicated thread for visualization in MT mode.
+  o Improved guidance for /vis/scene/add/extent.
+  o Fixed /vis/scene/add/eventID command for MT mode.
+- OpenGL:
+  o Fixed problem when zooming on small volumes.
+- OpenInventor:
+  o Corrected CMake script.                                                  (#)
+
+data sets
+---------
+- G4EMLOW-6.42:
+  o Added elastic files by H.Tran for Geant4-DNA.
+
+examples                                         examples-V10-01-01
+--------
+- Updated reference outputs.
+- advanced/ChargeExchangeMC (ChargeExchangeMC-V10-01-00)                     (#)
+  o Bug fix for online histogram redrawing and easy online histogram
+    showing from a dedicated menu bar (in graphical mode).
+- advanced/microbeam (microbeam-V10-01-00)                                   (#)
+  o Added protection against loops on very low-energy particles.
+- extended/biasing/B03 (B03-V10-01-00)                                       (#)
+  o B03PhysicsList: properly use SetProcessOrderingToSecond() method
+    for G4ParallelWorldProcess.
+- extended/electromagnetic/TestEm1 (testem1-V10-01-00)
+  o PhysicsList: removed SetICM() method.
+- extended/electromagnetic/TestEm3 (testem3-V10-01-00)                       (#)
+  o Fixed formatting in .README.
+- extended/electromagnetic/TestEm16 (testem16-V10-01-00)                     (#)
+  o Run: fixed computation of max gamma energy for MT mode.
+- extended/eventgenerator/particleGun (particleGunExample-V10-01-00)         (#)
+  o Fixed formatting in .README.
+- extended/exoticphysics/ucn (ExUCN-V10-01-00)                               (#)
+  o Fixed files description for Doxygen.
+- extended/medical/electronScattering (electronScattering-V10-01-00)         (#)
+  o Corrected plot 6 filling, the distance from scattering foil to detector
+    was wrong.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-01-01)
+  o PhysicsList: removed call to SetICM().
+  o Compute total visible energy in TrackingAction, EventAction, Run
+    and HistoManager.
+  o Added reference files.
+
+tests                                            tests-V10-01-01
+-----
+- Updated reference outputs and tools.
+- tests/test56 (test56-V10-01-00)
+  o Set CSDA range flag at PreInit state.
+- tests/test202 (test202-V10-01-00)
+  o Updated references files according to use of vis thread.

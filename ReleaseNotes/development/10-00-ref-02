@@ -12,6 +12,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (+)  Fixes included in release 9.6.p03
+(#)  Fixes included in release 9.6.p04
 (*)  Fixes included in release 10.0.p01
 (o)  Fixes included in release 10.0.p02
 (x)  Fixes included in release 10.0.p03
@@ -89,7 +90,7 @@ global                                           global-V10-00-05            (*)
 
 interfaces                                       interfaces-V10-00-01        (*)
 ----------
-- Explicitly set the LC_NUMBERIC locale to "C" in G4UIQt.
+- Explicitly set the LC_NUMERIC locale to "C" in G4Qt.                       (#)
   Addressing problem report #1487.
   Fixed problem with resizing the QGLwidget when scene is opened from UI.
 
