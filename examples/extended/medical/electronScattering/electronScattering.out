@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,9 +13,7 @@
 
 ***** Table : Nb of materials = 11 *****
 
- Material:      Air    density:  1.205 mg/cm3  RadL: 303.867 m    Nucl.Int.Length: 709.970 m  
-                       Imean:  85.669 eV   temperature: 293.00 K  pressure:   1.00 atm
-
+ Material:      Air    density:  1.205 mg/cm3  RadL: 303.867 m    Nucl.Int.Length: 710.134 m    Imean:  85.669 eV   temperature: 293.00 K  pressure:   1.00 atm
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -39,9 +37,7 @@
           ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
 
 
- Material: Titanium    density:  4.420 g/cm3   RadL:   3.727 cm   Nucl.Int.Length:  28.416 cm 
-                       Imean: 228.544 eV 
-
+ Material: Titanium    density:  4.420 g/cm3   RadL:   3.727 cm   Nucl.Int.Length:  28.367 cm   Imean: 228.544 eV 
    --->  Element: Titanium (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
          --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
          --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
@@ -60,9 +56,7 @@
           ElmMassFraction:   4.00 %  ElmAbundance   3.60 % 
 
 
- Material:    Mylar    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.923 cm 
-                       Imean:  75.967 eV 
-
+ Material:    Mylar    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.984 cm   Imean:  75.967 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -80,72 +74,56 @@
           ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
 
 
- Material:   Helium    density:  0.166 kg/m3   RadL:   5.682 km   Nucl.Int.Length:   3.348 km 
-                       Imean:  41.800 eV   temperature: 293.00 K  pressure:   1.00 atm
-
+ Material:   Helium    density:  0.166 kg/m3   RadL:   5.682 km   Nucl.Int.Length:   3.349 km   Imean:  41.800 eV   temperature: 293.00 K  pressure:   1.00 atm
    --->  Element: Helium (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
          --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
          --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.880 cm 
-                       Imean: 166.000 eV 
-
+ Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.862 cm   Imean: 166.000 eV 
    --->  Element: Aluminium (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Beryllium    density:  1.850 g/cm3   RadL:  35.666 cm   Nucl.Int.Length:  39.530 cm 
-                       Imean:  63.700 eV 
-
+ Material: Beryllium    density:  1.850 g/cm3   RadL:  35.666 cm   Nucl.Int.Length:  39.886 cm   Imean:  63.700 eV 
    --->  Element: Beryllium (Be)   Z =  4.0   N =   9.1   A =   9.12 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Graphite    density:  2.180 g/cm3   RadL:  19.586 cm   Nucl.Int.Length:  36.768 cm 
-                       Imean:  81.000 eV 
-
+ Material: Graphite    density:  2.180 g/cm3   RadL:  19.586 cm   Nucl.Int.Length:  36.790 cm   Imean:  81.000 eV 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:   Copper    density:  8.920 g/cm3   RadL:   1.442 cm   Nucl.Int.Length:  15.658 cm 
-                       Imean: 322.000 eV 
-
+ Material:   Copper    density:  8.920 g/cm3   RadL:   1.442 cm   Nucl.Int.Length:  15.584 cm   Imean: 322.000 eV 
    --->  Element: Copper (Cu)   Z = 29.0   N =  63.5   A =  63.55 g/mole
          --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
          --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Tantalum    density: 16.650 g/cm3   RadL:   4.095 mm   Nucl.Int.Length:  11.890 cm 
-                       Imean: 718.000 eV 
-
+ Material: Tantalum    density: 16.650 g/cm3   RadL:   4.095 mm   Nucl.Int.Length:  11.887 cm   Imean: 718.000 eV 
    --->  Element: Tantalum (Ta)   Z = 73.0   N = 180.9   A = 180.95 g/mole
          --->  Isotope: Ta180   Z = 73   N = 180   A = 179.95 g/mole   abundance:   0.01 %
          --->  Isotope: Ta181   Z = 73   N = 181   A = 180.95 g/mole   abundance:  99.99 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     Gold    density: 19.300 g/cm3   RadL:   3.348 mm   Nucl.Int.Length:  10.551 cm 
-                       Imean: 790.000 eV 
-
+ Material:     Gold    density: 19.300 g/cm3   RadL:   3.348 mm   Nucl.Int.Length:  10.550 cm   Imean: 790.000 eV 
    --->  Element: Gold (Au)   Z = 79.0   N = 197.0   A = 196.97 g/mole
          --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
-                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -157,7 +135,7 @@
 #
 /testem/phys/addPhysics emstandard_opt0
 PhysicsList::AddPhysicsList: <emstandard_opt0>
-/run/setCut 1 mm
+/testem/phys/setCut 1 mm
 #
 /run/initialize
 userDetector->Construct() start.
@@ -173,22 +151,27 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
+physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /gun/particle e-
 /gun/energy 13 MeV
 #
 /testem/gun/rndm 420. um
 #
-/analysis/setFileName eScattering
-Set file name: eScattering
-/analysis/h1/set 1 180 -90. 90. deg
-/analysis/h1/set 2 120 0. 24. cm
-/analysis/h1/set 3 120 0. 24. cm
-/analysis/h1/set 4 120 0. 24. cm
+/testem/histo/setFileName eScattering
+/testem/histo/setHisto 1 180 -90. 90. deg
+----> SetHisto 1: projected angle at exit (deg)  180 bins from -90 deg to 90 deg
+/testem/histo/setHisto 2 120 0. 24. cm
+----> SetHisto 2: dN/dS = f(r) at exit (cm)  120 bins from 0 cm to 24 cm
+/testem/histo/setHisto 3 120 0. 24. cm
+----> SetHisto 3: d(N/cost)/dS = f(r) at exit (cm)  120 bins from 0 cm to 24 cm
+/testem/histo/setHisto 4 120 0. 24. cm
+----> SetHisto 4: normalized d(N/cost)/dS = f(r) at exit (cm)  120 bins from 0 cm to 24 cm
 #
-/run/printProgress 10000
+/testem/event/printModulo 10000
 #
 /run/beamOn 100000
 
@@ -207,42 +190,42 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : Yes
+Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Titanium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  12.8972 keV    e-  809.624 keV    e+  767.248 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : Yes
+Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : Mylar
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  3.02067 keV    e-  419.056 keV    e+  405.209 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 4     used in the geometry : Yes
+Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : Helium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 5     used in the geometry : Yes
+Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
@@ -268,52 +251,61 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       55.71          0k         2        2          9         0.00    Frame
       44.29          0k         1        3          4         0.00    Gas
-### Run 0 starts.
+### Run 0 start.
+... open Root analysis file : eScattering.root - done
+
+----> Histogram file is opened in eScattering.root
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-... open Root analysis file : eScattering.root - done
---> Event 0 starts.
---> Event 10000 starts.
---> Event 20000 starts.
---> Event 30000 starts.
---> Event 40000 starts.
---> Event 50000 starts.
---> Event 60000 starts.
---> Event 70000 starts.
---> Event 80000 starts.
---> Event 90000 starts.
- Run terminated.
+Start Run processing.
+
+---> Begin of Event: 0
+
+---> Begin of Event: 10000
+
+---> Begin of Event: 20000
+
+---> Begin of Event: 30000
+
+---> Begin of Event: 40000
+
+---> Begin of Event: 50000
+
+---> Begin of Event: 60000
+
+---> Begin of Event: 70000
+
+---> Begin of Event: 80000
+
+---> Begin of Event: 90000
+Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=16.26s Real=16.32s Sys=0.01s
+  User=13.82s Real=13.91s Sys=0s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 13 MeV through 0 fm  of Air (density: 1.21 mg/cm3)
 ... write Root file : eScattering.root - done
+... close Root file : eScattering.root - done
+
+----> Histograms are saved in eScattering.root
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 511619302, 535044548
+ Current couple of seeds = 976754867, 1797253004
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
-UserActionInitialization deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
 EventManager deleted.
-Units table cleared.
-Total navigation history collections cleaned: 10
-================== Deleting memory pools ===================
-Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.022 Mb
-============================================================
-G4Allocator objects are deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
-RunManagerKernel is deleted. Good bye :)
+RunManagerKernel is deleted.
+RunManager is deleted.

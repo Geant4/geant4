@@ -70,6 +70,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   
      G4Material* GetMaterialScatter()        {return fMaterial_ScatterFoil;};
      G4double    GetThicknessScatter()       {return fThickness_ScatterFoil;};
+
+     G4double    GetZdist_foil_detector() 
+                                   {return fThickness_Frame-fZfront_ScatterFoil
+                                         -0.5*fThickness_ScatterFoil;};
           
      const G4VPhysicalVolume* GetpvolWorld() {return fPvol_World;};
      const G4VPhysicalVolume* GetpvolFrame() {return fPvol_Frame;};

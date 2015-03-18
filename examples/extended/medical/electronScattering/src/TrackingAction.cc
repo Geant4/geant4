@@ -122,7 +122,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //measured space angle at exit : dN/dOmega_meas
   //
   ih = 6;  
-  const G4double dist = fDetector->GetThicknessFrame();
+  const G4double dist = fDetector->GetZdist_foil_detector();
   G4double thetam = std::atan(r/dist);
   if (thetam > 0.) {
      G4double dtheta = analysisManager->GetH1Width(ih);

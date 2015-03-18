@@ -15,7 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13-09-14 mma (electonScattering-V10-00-02)
+23-01-15 Laszlo Urban (electronScattering-V10-00-03)
+- plot 6 filling is corrected, the distance from scattering foil to detector
+  was wrong, it is corrected now
+
+13-09-14 mma (electronScattering-V10-00-02)
 - electronScttering.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
 
 24-06-14 mma (electronScattering-V10-00-01)
