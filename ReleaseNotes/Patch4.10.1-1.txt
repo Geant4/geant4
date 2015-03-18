@@ -23,6 +23,9 @@ List of fixes included in this public patch since the public release 10.1:
     --------
     + Fixed G4AnalysisManager::IsActive(), now taken into all Hn & Pn managers.
     + Fixes in the Root files output to be compatible with ROOT 6.02/x.
+    + Fixed reading XML ntuples with a column of a vector type; tools do not
+      support direct use of ntuple_bindings with a vector, use of a temporary
+      sub-ntuple is needed.
     + Fixed resetting histograms.
 
   o Digits & hits:
