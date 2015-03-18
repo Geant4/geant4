@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-12-14 V.Ivant (testem16-V10-00-05)
+- Run - fixed computation of max gamma energy for MT mode
+
 24-10-14 mma (testem16-V10-00-04)
 - in TestEm16.in : /run/numberOfThreads 2
 
