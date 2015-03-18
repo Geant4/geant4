@@ -17,7 +17,7 @@ analysis                                         analysis-V10-01-06
 - Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn managers. (#)
 - Fixed false warnings about unknown column type when an ntuple contains 
   a column of a vector type and is created via ntuple booking.
-- Fixed reading XML ntuples with a column of a vector type; tools do not
+- Fixed reading XML ntuples with a column of a vector type; tools do not     (#)
   support direct use of ntuple_bindings with a vector, use of a temporary
   sub-ntuple is needed.
 
