@@ -118,7 +118,7 @@ void B4cEventAction::EndOfEventAction(const G4Event* event)
 
   // Get hit with total values
   B4cCalorHit* absoHit = (*absoHC)[absoHC->entries()-1];
-  B4cCalorHit* gapHit = (*gapHC)[absoHC->entries()-1];
+  B4cCalorHit* gapHit = (*gapHC)[gapHC->entries()-1];
  
   // Print per event (modulo n)
   //

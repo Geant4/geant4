@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18/02/15 I. Hrivnacova (exampleB4-V10-00-04)
+- Fixed accessing gapHit (problem report #1714)
 	 
+02/02/15 I. Hrivnacova
+- Fixed documentation
+
 29/11/14 I. Hrivnacova
 - Use G4endl instead of \n in G4cout;
   this makes each new line in the output on threads preceded with
