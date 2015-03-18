@@ -54,7 +54,12 @@ G4NeutronLENDBuilder( G4String eva )
 
 G4NeutronLENDBuilder::
 ~G4NeutronLENDBuilder() 
-{}
+{
+  delete theLENDElasticCrossSection;
+  delete theLENDFissionCrossSection;
+  delete theLENDCaptureCrossSection;
+  delete theLENDInelasticCrossSection;
+}
 
 void G4NeutronLENDBuilder::
 Build(G4HadronElasticProcess * aP)

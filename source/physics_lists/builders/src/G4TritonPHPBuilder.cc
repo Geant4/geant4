@@ -38,7 +38,9 @@ G4TritonPHPBuilder()
 
 G4TritonPHPBuilder::
 ~G4TritonPHPBuilder() 
-{}
+{
+  delete theParticlePHPModel;
+}
 
 void G4TritonPHPBuilder::
 Build(G4HadronElasticProcess *)

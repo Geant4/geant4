@@ -28,7 +28,6 @@
  #include "G4ParticleDefinition.hh"
  #include "G4ParticleTable.hh"
  #include "G4ProcessManager.hh"
- #include "G4PiNuclearCrossSection.hh"
 
  G4INCLXXPionBuilder::
  G4INCLXXPionBuilder() 
@@ -38,20 +37,18 @@
    theModel = new G4INCLXXInterface();
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax); 
-   thePiData = new G4PiNuclearCrossSection();
  }
 
  G4INCLXXPionBuilder::
  ~G4INCLXXPionBuilder() 
 {
-  //delete theModel;
+  delete theModel;
 }
 
  void G4INCLXXPionBuilder::
  Build(G4PionPlusInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
-   aP->AddDataSet(thePiData);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }
@@ -60,7 +57,7 @@
  Build(G4PionMinusInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
-   aP->AddDataSet(thePiData);
+   aP->AddDataSet(&thePiData);
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax);
  }

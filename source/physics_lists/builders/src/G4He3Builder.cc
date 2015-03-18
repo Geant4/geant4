@@ -60,5 +60,7 @@
 
  G4He3Builder::
  ~G4He3Builder() 
- {}
+ {
+   delete theHe3Inelastic;
+ }
 

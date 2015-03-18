@@ -38,7 +38,9 @@ G4AlphaPHPBuilder()
 
 G4AlphaPHPBuilder::
 ~G4AlphaPHPBuilder() 
-{}
+{
+  delete theParticlePHPModel;
+}
 
 void G4AlphaPHPBuilder::
 Build(G4HadronElasticProcess *)
