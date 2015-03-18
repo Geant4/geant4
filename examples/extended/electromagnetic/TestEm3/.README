@@ -47,7 +47,7 @@
         ==========================================================================
         ^           ^           ^           ^           ^           ^           ^
         pln1        pln2        pln3       pln4        pln5        pln6       pln7
- <pre>
+ </pre>
  
   NB. The number of absorbers and the number of layers can be set to 1.
   In this case we have a unique homogeneous block of matter, which looks like 

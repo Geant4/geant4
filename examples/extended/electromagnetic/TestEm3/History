@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23-01-15 I. Hrivnacova (testem3-V10-00-17)
+- fixed formatting in .README
 	 
 28-10-14 mma (testem3-V10-00-16)
 - in macros : /run/numberOfThreads 2
