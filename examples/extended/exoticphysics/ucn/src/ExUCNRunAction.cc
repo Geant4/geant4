@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field01/src/ExUCNRunAction.cc
+/// \file exoticphysics/ucn/src/ExUCNRunAction.cc
 /// \brief Implementation of the ExUCNRunAction class
 //
 //
