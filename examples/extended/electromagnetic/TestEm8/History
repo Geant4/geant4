@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-02-15 V.Ivant (testem8-V10-00-08)
+- DetectorConstruction - removed local pointer to sensitive detector
+    in order to avoid race condition 
+
 20-11-14 V.Ivant (testem8-V10-00-07)
 - DetectorConstruction, TargetSD - attempt to fix crash at 
     destruction in MT mode

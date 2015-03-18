@@ -92,7 +92,6 @@ private:
   G4LogicalVolume*   fLogicDet;
 
   DetectorMessenger* fDetectorMessenger;  
-  TargetSD*          fTargetSD;
   G4ProductionCuts*  fGasDetectorCuts;
   G4Region*          fRegGasDet;
 
