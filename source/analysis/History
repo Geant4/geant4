@@ -17,6 +17,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 17, 2015 I. Hrivnacova (analysis-V10-00-43)
+- Fixed reading XML ntuples with a column of a vector type:
+  tools do not support direct use of ntuple_bindings with a vector,
+  use of a temorary sub-ntuple is needed
+
 March 13, 2015 I. Hrivnacova (analysis-V10-00-42)
 - Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn
   managers
