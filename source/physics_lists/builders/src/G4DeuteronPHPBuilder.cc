@@ -38,9 +38,7 @@ G4DeuteronPHPBuilder()
 
 G4DeuteronPHPBuilder::
 ~G4DeuteronPHPBuilder() 
-{
-  delete theParticlePHPModel;
-}
+{}
 
 void G4DeuteronPHPBuilder::
 Build(G4HadronElasticProcess *)

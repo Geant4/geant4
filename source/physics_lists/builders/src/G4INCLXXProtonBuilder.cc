@@ -50,7 +50,7 @@ G4INCLXXProtonBuilder()
 G4INCLXXProtonBuilder::
 ~G4INCLXXProtonBuilder() 
 {
-  delete theModel;
+  //delete theModel;
 }
 
 void G4INCLXXProtonBuilder::

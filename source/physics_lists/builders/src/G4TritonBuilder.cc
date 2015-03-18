@@ -60,7 +60,5 @@
 
  G4TritonBuilder::
  ~G4TritonBuilder() 
- {
-   delete theTritonInelastic;
- }
+ {}
 
