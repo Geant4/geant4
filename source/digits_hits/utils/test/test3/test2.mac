@@ -18,9 +18,11 @@
 #
 /score/list
 #
-/run/beamOn 10000
+#/run/beamOn 10000
+/run/beamOn 100
 #
 ########################################
 #
+/vis/drawVolume
 /score/drawProjection cylinderMesh_1 eDepPS
 #

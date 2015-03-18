@@ -18,9 +18,12 @@
 #
 /score/list
 #
+/vis/disable
 /run/beamOn 10000
+/vis/enable
 #
 ########################################
 #
+/vis/drawVolume
 /score/drawProjection cylinderMesh_1 dDepPS
 #

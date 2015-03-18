@@ -34,7 +34,8 @@
 #include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
-#include "G4ios.hh"              
+#include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
 
 Test2PhysicsList::Test2PhysicsList():  G4VUserPhysicsList()
 {

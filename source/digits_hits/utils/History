@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 11, 2015  A.Kimura (detutils-V10-00-01)
+- fine adjustment of the position drawing surfaces in G4ScoringBox::Draw(...)
+
+March 11, 2015  A.Kimura
+- Revised G4ScoringBox::Draw(...), ::DrawColumn(...), 
+  G4ScoringCylinder::Draw(...) and ::DrawColumn(...) to spped up 
+  drawing primitive scorers attached to the scoring meshes.
+
+October 03, 2014  A.Kimura (detutils-V10-00-00)
+- Added several sets of G4VisManager::BeginDraw2D() call and 
+  G4VisManager::EndDraw() call in G4VScoreColorMap.cc for the speedup 
+  of drawing the texts and the color chart.
+
 October 05, 2013  A.Kimura (detutils-V09-06-00)
 - Fixed a bug in G4ScoringBox::DrawColumn(...), which was a wrong size check of the column.
 

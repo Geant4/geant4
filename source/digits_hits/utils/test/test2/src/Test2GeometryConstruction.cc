@@ -38,6 +38,7 @@
 #include "G4PVDivision.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
 Test2GeometryConstruction::Test2GeometryConstruction(G4double boxsize[3],

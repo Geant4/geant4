@@ -39,10 +39,16 @@
 #
 /score/list
 #
+/vis/disable
 /run/beamOn 100
+/vis/enable
 #
 ########################################
 #
+#/vis/scene/create
+#/vis/sceneHandler/attach scene-2
+#/vis/viewer/flush
+#
 /score/drawProjection boxMesh_1 nOfStepPSgamma
-/score/drawProjection boxMesh_2 nOfStepPSgamma ! 11
+#/score/drawProjection boxMesh_2 nOfStepPSgamma ! 11
 #

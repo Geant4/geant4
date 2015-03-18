@@ -27,8 +27,9 @@
 #
 /score/list
 #
-#/run/beamOn 200
-/run/beamOn 10
+/vis/disable
+/run/beamOn 200
+/vis/enable
 #
 ########################################
 #

@@ -75,6 +75,7 @@ void G4DefaultLinearColorMap::GetMapColor(G4double val, G4double color[4])
   for(int i = 0; i < 4; i++) {
     color[i] = (b*colormap[during[0]].rgb[i] + a*colormap[during[1]].rgb[i])
       /(colormap[during[1]].val - colormap[during[0]].val);
+    if(color[i] > 1.) color[i] = 1.;
   } 
 
 }

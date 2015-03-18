@@ -40,6 +40,9 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4ios.hh"
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+
 
 Test2DetectorConstruction::Test2DetectorConstruction()
   :G4VUserDetectorConstruction(),fbConstructed(false),

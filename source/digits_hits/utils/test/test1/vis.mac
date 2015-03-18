@@ -10,7 +10,7 @@
 #
 # draw scene
 #
-/vis/drawVolume worlds
+/vis/drawVolume
 /vis/viewer/set/lightsThetaPhi 120 135                  
 /vis/viewer/set/viewpointThetaPhi 105 165 deg
 # Set specific colur for identification

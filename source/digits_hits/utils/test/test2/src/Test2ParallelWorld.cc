@@ -40,6 +40,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 
 
 Test2ParallelWorld::Test2ParallelWorld(G4String worldName)

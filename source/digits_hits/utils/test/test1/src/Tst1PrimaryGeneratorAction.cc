@@ -29,6 +29,7 @@
 
 #include "Tst1PrimaryGeneratorAction.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"

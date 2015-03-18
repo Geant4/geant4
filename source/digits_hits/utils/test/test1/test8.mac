@@ -24,10 +24,13 @@
 #
 /score/list
 #
+/vis/disable
 /run/beamOn 100
+/vis/enable
 #
 ########################################
 #
+/vis/scene/notifyHandlers
 /score/drawProjection cylinderMesh_1 nOfStepPSgamma ! 10
 /score/drawProjection cylinderMesh_1 nOfStepPSgamma logColorMap 101
 /score/drawProjection cylinderMesh_1 eDepPS logColorMap 101
