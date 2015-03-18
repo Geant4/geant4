@@ -41,6 +41,7 @@
 #include "Analysis.hh"
 
 #include "G4Alpha.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -210,4 +211,19 @@ if (matVoxelPRE  == 1)
     	 fRun->AddDoseBox(aStep->GetPreStepPoint()->GetTouchableHandle()->GetReplicaNumber(),
 	  aStep->GetTotalEnergyDeposit()/eV);
  	}
+
+// PROTECTION AGAINST MSC LOOPS FOR e-
+
+if ( aStep->GetTotalEnergyDeposit()/MeV<1e-25
+     && aStep->GetTrack()->GetDefinition()==G4Electron::ElectronDefinition()) 
+{
+  aStep->GetTrack()->SetTrackStatus(fStopAndKill);
+  /*
+  G4cout << "*** Warning *** : msc loop for " 
+    << aStep->GetTrack()->GetDefinition()->GetParticleName() 
+    << " in " << 
+    aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetName() << G4endl;
+  */
+}
+
 }
