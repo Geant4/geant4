@@ -7,6 +7,13 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================	    
+
+21.01.2015 J. Apostolakis  Tag: hadrontherapy-V10-00-10
+           - Corrected definition of Steppers in LaserDrivenBeamLine (nvar=8 only for Electric field)
+21.01.2015 F. Romano
+           - Old files removed and README updated
+15.12.2014 A. Tramontana, G. Milluzzo
+           - Magnetic and electric grid files have been updated and size reduced.
 27.10.2014 A. Tramontana Tag: hadrontherapy-V10-00-09
            - README update.
 27.10.2014 L. Pandola, A. Tramontana Tag: hadrontherapy-V10-00-08
