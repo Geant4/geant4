@@ -54,11 +54,14 @@
 #include <TCollection.h>
 #include <TDirectory.h>
 #include <TString.h>
-#include <TRegexp.h>
 #ifdef CEXMC_USE_ROOTQT
 #include <TCanvas.h>
+#include <TList.h>
 #include <QApplication>
 #include <QFont>
+#include <QMenu>
+#include <G4UIQt.hh>
+#include "CexmcMessenger.hh"
 #endif
 #include <G4LogicalVolume.hh>
 #include <G4Box.hh>
@@ -91,6 +94,8 @@ namespace
     const G4double  CexmcHistoAngularCResolution( 0.001 );
     const G4int     CexmcHistoCanvasWidth( 800 );
     const G4int     CexmcHistoCanvasHeight( 600 );
+    const G4String  CexmcHistoDirectoryHandle( "histograms" );
+    const G4String  CexmcHistoDirectoryTitle( "Histograms" );
 }
 
 
@@ -117,7 +122,9 @@ CexmcHistoManager::CexmcHistoManager() : outFile( NULL ),
     isInitialized( false ), opName( "" ), nopName( "" ), opMass( 0. ),
     nopMass( 0. ), verboseLevel( 0 ),
 #ifdef CEXMC_USE_ROOTQT
-    rootCanvas( NULL ),
+    rootCanvas( NULL ), areLiveHistogramsEnabled( false ),
+    isHistoMenuInitialized( false ), drawOptions1D( "" ), drawOptions2D( "" ),
+    drawOptions3D( "" ), histoMenuHandle( "" ), histoMenuLabel( "" ),
 #endif
     messenger( NULL )
 {
@@ -196,7 +203,7 @@ void  CexmcHistoManager::AddHisto( const CexmcHistoData &  data,
     }
 
     CexmcHistosMap::iterator  found( histos.find( data.type ) );
-    
+
     if ( found == histos.end() )
         throw CexmcException( CexmcWeirdException );
 
@@ -206,16 +213,13 @@ void  CexmcHistoManager::AddHisto( const CexmcHistoData &  data,
     {
         G4bool  dirOk( false );
 
-        if ( outFile )
-        {
-            dirOk = gDirectory->Get( fullName ) != NULL;
+        dirOk = gDirectory->Get( fullName ) != NULL;
 
-            if ( ! dirOk )
-                dirOk = ( gDirectory->mkdir( fullName, fullTitle ) != NULL );
+        if ( ! dirOk )
+            dirOk = ( gDirectory->mkdir( fullName, fullTitle ) != NULL );
 
-            if ( dirOk )
-                gDirectory->cd( fullName );
-        }
+        if ( dirOk )
+            gDirectory->cd( fullName );
 
         std::ostringstream  histoName;
         std::ostringstream  histoTitle;
@@ -228,11 +232,8 @@ void  CexmcHistoManager::AddHisto( const CexmcHistoData &  data,
         CreateHisto( histoVector, data.impl, histoName.str(), histoTitle.str(),
                      data.axes );
 
-        if ( outFile )
-        {
-            if ( dirOk )
-                gDirectory->cd( ".." );
-        }
+        if ( dirOk )
+            gDirectory->cd( ".." );
     }
     else
     {
@@ -322,6 +323,15 @@ void  CexmcHistoManager::Initialize( void )
                                ".root" );
         outFile = new TFile( resultsFile, "recreate" );
     }
+    else
+    {
+        outFile = new TDirectoryFile( CexmcHistoDirectoryHandle,
+                                      CexmcHistoDirectoryTitle );
+        gDirectory->cd( CexmcHistoDirectoryHandle );
+    }
+
+    if ( ! outFile )
+        throw CexmcException( CexmcWeirdException );
 
     const CexmcSetup *  setup( static_cast< const CexmcSetup * >(
                                 runManager->GetUserDetectorConstruction() ) );
@@ -435,22 +445,12 @@ void  CexmcHistoManager::SetupARHistos( const CexmcAngularRangeList &  aRanges )
     {
         TString   name( obj->GetName() );
 
-        if ( outFile )
+        if ( obj->IsFolder() && ( name.Contains( TString( "_arreal_" ) ) ||
+                                  name.Contains( TString( "_arrec_" ) ) ) )
         {
-            if ( obj->IsFolder() && ( name.Contains( TString( "_arreal_" ) ) ||
-                                      name.Contains( TString( "_arrec_" ) ) ) )
-            {
-                gDirectory->cd( name );
-                gDirectory->DeleteAll();
-                gDirectory->cd( ".." );
-            }
-        }
-        else
-        {
-            if ( name.Contains( TRegexp( "_r[0-9]+" ) ) )
-            {
-                gDirectory->Remove( obj );
-            }
+            gDirectory->cd( name );
+            gDirectory->DeleteAll();
+            gDirectory->cd( ".." );
         }
     }
 
@@ -733,6 +733,7 @@ void  CexmcHistoManager::Add( CexmcHistoType  histoType, unsigned int  index,
 
 void  CexmcHistoManager::List( void ) const
 {
+    /* BEWARE: list will be printed on stdout */
     gDirectory->ls();
 }
 
@@ -747,6 +748,7 @@ void  CexmcHistoManager::Print( const G4String &  value )
         return;
     }
 
+    /* BEWARE: histo will be printed on stdout */
     histo->Print( "range" );
 }
 
@@ -756,9 +758,7 @@ void  CexmcHistoManager::Print( const G4String &  value )
 void  CexmcHistoManager::Draw( const G4String &  histoName,
                                const G4String &  histoDrawOptions )
 {
-    CexmcRunManager *  runManager( static_cast< CexmcRunManager * >(
-                                            G4RunManager::GetRunManager() ) );
-    if ( ! runManager->AreLiveHistogramsEnabled() )
+    if ( ! areLiveHistogramsEnabled )
     {
         G4cout << "Live histograms option is disabled" << G4endl;
         return;
@@ -785,6 +785,92 @@ void  CexmcHistoManager::Draw( const G4String &  histoName,
     histo->Draw( histoDrawOptions );
     rootCanvas->show();
     rootCanvas->GetCanvas()->Update();
+}
+
+
+void  CexmcHistoManager::EnableLiveHistograms( G4UIsession *  session,
+                                               G4bool  on )
+{
+    areLiveHistogramsEnabled = on;
+
+    if ( ! on || ! isInitialized )
+        return;
+
+    G4UIQt *  qtSession( dynamic_cast< G4UIQt * >( session ) );
+
+    if ( ! qtSession )
+        return;
+
+    if ( ! histoMenuHandle.empty() && ! isHistoMenuInitialized )
+    {
+        qtSession->AddMenu( histoMenuHandle, histoMenuLabel );
+        BuildMenuTree( qtSession, histoMenuHandle, gDirectory->GetList() );
+        isHistoMenuInitialized = true;
+    }
+}
+
+
+void  CexmcHistoManager::BuildMenuTree( G4UIQt *  session,
+                                        const G4String &  menu, TList *  ls )
+{
+    TIter      objs( ls );
+    TObject *  obj( NULL );
+
+    while ( ( obj = ( TObject * )objs() ) )
+    {
+        G4String  name( obj->GetName() );
+        G4String  title( obj->GetTitle() );
+
+        if ( obj->IsFolder() )
+        {
+            AddSubmenu( session, menu, name, title );
+            BuildMenuTree( session, name, ( ( TDirectory * )obj )->GetList() );
+        }
+        else
+        {
+            G4String  options( name );
+
+            do
+            {
+                if ( obj->InheritsFrom( TH3::Class() ) &&
+                     ! drawOptions3D.empty() )
+                {
+                    title = G4String( "3: " ) + title;
+                    options += G4String( " " ) + drawOptions3D;
+                    break;
+                }
+                if ( obj->InheritsFrom( TH2::Class() ) &&
+                     ! drawOptions2D.empty() )
+                {
+                    title = G4String( "2: " ) + title;
+                    options += G4String( " " ) + drawOptions2D;
+                    break;
+                }
+                if ( obj->InheritsFrom( TH1::Class() ) &&
+                     ! drawOptions1D.empty() )
+                {
+                    options += G4String( " " ) + drawOptions1D;
+                    break;
+                }
+            } while ( false );
+
+            G4String  cmd( CexmcMessenger::histoDirName + "draw " + options );
+            session->AddButton( menu, title.c_str(), cmd );
+        }
+    }
+}
+
+
+void  CexmcHistoManager::AddSubmenu( G4UIQt *  session,
+                                     const G4String &  parent,
+                                     const G4String &  name,
+                                     const G4String &  label )
+{
+  QMenu *  menu( new QMenu( label.c_str() ) );
+  QMenu *  parentMenu( ( QMenu * )session->GetInteractor( parent ) );
+
+  parentMenu->addMenu( menu );
+  session->AddInteractor( name, ( G4Interactor )menu );
 }
 
 #endif
