@@ -208,7 +208,7 @@ examples                                         examples-V10-01-03
     GPS polarization/time.
 - extended/parameterisations/gflash (exgflash-V10-01-00)                     (#)
   o Removed unnecessary instantiation of GPS in master thread.
-- extended/persistency/gdml/G03 (G03-V10-01-00)
+- extended/persistency/gdml/G03 (G03-V10-01-00)                              (#)
   o Corrected visualization commands in read/write input macros.
   o Updated README.
 - extended/radioactivedecay/rdecay01 (rdecay01-V10-01-02)

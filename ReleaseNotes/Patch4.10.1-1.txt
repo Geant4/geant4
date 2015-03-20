@@ -344,6 +344,9 @@ List of fixes included in this public patch since the public release 10.1:
         GPS polarization/time
     + extended/parameterisations/gflash:
       o Removed unnecessary instantiation of GPS in master thread.
+    + extended/persistency/gdml/G03:
+      o Corrected visualization commands in read/write input macros.
+      o Updated README.
 
  ----------------------------------------------------------------------------
 
