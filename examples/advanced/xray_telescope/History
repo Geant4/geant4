@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06.03.2015   Andrea Dotti, tag xraytel-V10-00-04
+             Removing unnecessary GPS in master
+
 04.06.2014   Andrea Dotti, tag xraytel-V10-00-03
 	     Migration to new MT compliant GPS
 

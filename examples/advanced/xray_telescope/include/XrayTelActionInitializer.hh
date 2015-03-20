@@ -49,8 +49,6 @@ public:
   
   void Build() const;
   void BuildForMaster() const;
-private:
-  G4GeneralParticleSource* masterGPS;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
