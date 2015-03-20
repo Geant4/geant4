@@ -37,25 +37,13 @@
 GammaKnifePrimaryGeneratorAction::GammaKnifePrimaryGeneratorAction()
 {
   particleSource = new G4GeneralParticleSource();
-  SetDefaultPrimaryParticle();  
 }  
 
 GammaKnifePrimaryGeneratorAction::~GammaKnifePrimaryGeneratorAction()
 {
   delete particleSource;
 }
-  
-void GammaKnifePrimaryGeneratorAction::SetDefaultPrimaryParticle()
-{    
-  // ****************************
-  // Default primary particle
-  // ****************************
-  
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
-  particleSource->SetParticleDefinition(particle);
-    
-}
+
 
 void GammaKnifePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
