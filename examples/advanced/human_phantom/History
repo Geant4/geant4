@@ -18,6 +18,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 7, 2015, A. Dotti tag human_phantom-V10-00-02
+- Fixing compilaiton warning from previous tag on clang35 
+
+Mar 6, 2015, A. Dotti
+- removing unnecessary GPS in master
+
 Oct 9, 2014, S. Guatelli tag human_phantom-V10-00-01
 - warning in running time deleted
 
