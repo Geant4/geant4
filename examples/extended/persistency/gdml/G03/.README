@@ -32,7 +32,7 @@
    as well as the -DXERCESC_ROOT_DIR=<path_to_xercesc> flag pointing to 
    the path where the XercesC XML parser package is installed in your system.
  
- - Compile and link to generate the executable  (in your CMAKE build directory)::
+ - Compile and link to generate the executable (in your CMAKE build directory):
 \verbatim
 % make
 \endverbatim
