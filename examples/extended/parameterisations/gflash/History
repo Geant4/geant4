@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-Mar-2015, Andrea Dotti (exgflash-V10-00-01)
+- Remove unnecessary GPS in master
+
 04-Jun-2014, Andrea Dotti (exgflash-V10-00-00)
 - New GPS MT compliant system
 
