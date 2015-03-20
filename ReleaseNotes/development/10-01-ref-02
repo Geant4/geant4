@@ -185,7 +185,7 @@ visualization                                    vis-V10-01-05
 examples                                         examples-V10-01-02
 --------
 - Updated reference outputs.
-- advanced/air_shower (air_shower-V10-01-01)
+- advanced/air_shower (air_shower-V10-01-01)                                 (#)
   o Set defaults for GPS in master thread.
 - advanced/hadrontherapy (hadrontherapy-V10-01-02)                           (#)
   o Corrected definition of Steppers in LaserDrivenBeamLine

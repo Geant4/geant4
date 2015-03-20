@@ -16,6 +16,8 @@ List of fixes included in this public patch since the public release 10.1:
         cases.
       o Corrected search path for X11 libraries to ensure location of Xquartz
         libs on MacOSX. Addressing problem report #1683.
+      o Added external USolids library to static linkage list.
+        Addressing problem report #1725.
       o Ensure that system/compiler is correctly set for GNUMake compatibility
         on MacOSX.
 
@@ -292,15 +294,26 @@ List of fixes included in this public patch since the public release 10.1:
   o Examples:
     --------
     + Updated reference outputs.
+    + advanced/air_shower:
+      o Set defaults for GPS in master thread.
+    + advanced/brachytherapy:
+      o Removed unnecessary instantiation of GPS in master thread.
     + advanced/ChargeExchangeMC:
       o Bug fix for online histogram redrawing and easy online histogram
         showing from a dedicated menu bar (in graphical mode).
+    + advanced/gammaknife:
+      o Moved GPS defaults to master thread.
     + advanced/hadrontherapy:
       o Corrected definition of steppers in LaserDrivenBeamLine
         (nvar=8 only for Electric field).
       o Removed/reduced size of maps files and updated README.
+    + advanced/human_phantom:
+      o Removed unnecessary instantiation of GPS in master thread.
     + advanced/microbeam:
       o Added protection against loops on very low-energy particles.
+    + advanced/radioprotection:
+    + advanced/xray_telescope:
+      o Removed unnecessary instantiation of GPS in master thread.
     + basic/B4:
       o Fixed accessing 'gapHit'. Addressing problem report #1714.
       o Fixed documentation.
@@ -319,11 +332,18 @@ List of fixes included in this public patch since the public release 10.1:
       o Run: fixed computation of max gamma energy for MT mode.
     + extended/eventgenerator/particleGun:
       o Fixed formatting in .README.
+    + extended/exoticphysics/channeling:
+      o Moved GPS defaults to master thread.
     + extended/exoticphysics/ucn:
       o Fixed files description for Doxygen.
     + extended/medical/electronScattering:
       o Corrected plot 6 filling, the distance from scattering foil to
         detector was wrong.
+    + extended/optical/wls:
+      o Added global mutex for primary generation as application modifies
+        GPS polarization/time
+    + extended/parameterisations/gflash:
+      o Removed unnecessary instantiation of GPS in master thread.
 
  ----------------------------------------------------------------------------
 

@@ -12,6 +12,14 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
+cmake                                            cmake-V10-01-05
+-----
+- Added missing external G4geomUSolids library to static linkage list.       (#)
+  Addressing problem report #1725.
+- Exclude directories named "test" and "tests" from source packaging with
+  CPack. Provide name source packaging following convention of standatd release
+  proceedure.
+
 analysis                                         analysis-V10-01-06
 --------
 - Fixed G4AnalysisManager::IsActive() - now taken into all Hn & Pn managers. (#)
@@ -106,7 +114,7 @@ processes/electromagnetic/utils                  emutils-V10-01-10
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V10-01-05)
+- cross_sections (hadr-cross-V10-01-06)
   o G4CrossSectionDataSetRegistry, G4VCrossSectionDataSet: defined as 
     G4ThreadLocalSingleton; delete all x-sections at exit except HP.
   o G4KokoulinMuonNuclearXS: fixed initialisation for the case of multiple runs.
@@ -143,6 +151,8 @@ processes/hadronic
   o G4HadronicInteractionRegistry, G4HadronicInteraction: fixed deletion of 
     models at exit. Made G4HadronicInteractionRegistry thread-local singleton.
   o G4HadronicInteractionRegistry: more accurate check on HP models.
+- models/pre_equilibrium (hadr-pre-V10-01-00)
+  o Fixed Coverity defects and some code cleanup.
 - models/qmd (hadr-qmd-V10-01-01)                                            (#)
   o Fixed Coverity defects in G4QMDGroundStateNucleus and G4QMDNucleus.
 - models/radioactive_decay (radioactive_decay-V10-01-10)
@@ -177,27 +187,30 @@ visualization                                    vis-V10-01-06
 examples                                         examples-V10-01-03
 --------
 - Updated reference outputs.
-- advanced/brachytherapy (brachy-V10-01-00)
+- advanced/brachytherapy (brachy-V10-01-00)                                  (#)
   o Removed unnecessary instantiation of GPS in master thread.
-- advanced/gammaknife (gammaknife-V10-01-00)
+- advanced/gammaknife (gammaknife-V10-01-00)                                 (#)
   o Moved GPS defaults to master thread.
-- advanced/human_phantom (human_phantom-V10-01-01)
-- advanced/radioprotection (radioprotection-V10-01-00)
-- advanced/xray_telescope (xraytel-V10-01-00)
+- advanced/human_phantom (human_phantom-V10-01-01)                           (#)
+- advanced/radioprotection (radioprotection-V10-01-00)                       (#)
+- advanced/xray_telescope (xraytel-V10-01-00)                                (#)
   o Removed unnecessary instantiation of GPS in master thread.
 - extended/electromagnetic/TestEm5 (testem5-V10-01-00)                       (#)
   o Run: added forgotten fill of projectile scattering angle
     for printed output (printed value was zero).
-- extended/exoticphysics/channeling (channelingExample-V10-01-00)
+- extended/exoticphysics/channeling (channelingExample-V10-01-00)            (#)
   o Moved GPS defaults to master thread.
 - extended/medical/dna (exdna-V10-01-00)
   o New example "microyz" showing how to compute microdosimetry 
     distributions in liquid water using Geant4-DNA.
-- extended/optical/wls (WLS-V10-01-02)
+- extended/optical/wls (WLS-V10-01-02)                                       (#)
   o Added global mutex for primary generation as application modifies
     GPS polarization/time.
-- extended/parameterisations/gflash (exgflash-V10-01-00)
+- extended/parameterisations/gflash (exgflash-V10-01-00)                     (#)
   o Removed unnecessary instantiation of GPS in master thread.
+- extended/persistency/gdml/G03 (G03-V10-01-00)
+  o Corrected visualization commands in read/write input macros.
+  o Updated README.
 - extended/radioactivedecay/rdecay01 (rdecay01-V10-01-02)
   o PhysicsList: removed initialization of UAtomicDeexcitation.
 - extended/radioactivedecay/rdecay02 (rdecay02-V10-01-01)
