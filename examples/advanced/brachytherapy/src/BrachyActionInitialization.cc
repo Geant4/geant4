@@ -29,18 +29,15 @@
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "BrachySteppingAction.hh"
 #include "G4RunManager.hh"
-#include "G4GeneralParticleSource.hh"
 
 BrachyActionInitialization::BrachyActionInitialization():
 G4VUserActionInitialization()
 {
- masterGPS = new G4GeneralParticleSource();
 }
 
 
 BrachyActionInitialization::~BrachyActionInitialization()
 {
- delete masterGPS;
 }
 
 void BrachyActionInitialization::BuildForMaster() const

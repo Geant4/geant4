@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+06.03.2015 -  A. Dotti; brachy-V10-00-01
+              Removing unnecessary instantiation of GPS in master
+
 09.10.2014 -  S. Guatelli; brachy-V10-00-00
 	      Compilation errors and warnings with cdash deleted
               Analysis with ROOT introduced
