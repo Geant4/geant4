@@ -16,6 +16,13 @@ track of all tags.
  
      ----------------------------------------------------------
 
+March 8, 2015 A. Dotti (WLS-V10-00-05)
+- introducing global mutex for primary generation
+  because examples modifies GPS polarization/time
+
+March 6, 2015 A. Dotti
+- removing unnecessary GPS from master
+
 October 17, 2014 P. Gumplinger (WLS-V10-00-04)
 - remove double blank lines in WLSDetectorConstruction.cc and
   WLSPrimaryGeneratorAction.cc

@@ -51,6 +51,12 @@
 
 #include "G4SystemOfUnits.hh"
 
+#include "G4AutoLock.hh"
+
+namespace {
+  G4Mutex gen_mutex = G4MUTEX_INITIALIZER;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool WLSPrimaryGeneratorAction::fFirst = false;
@@ -189,6 +195,9 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //fParticleGun->SetParticleEnergy(sampledEnergy);
 #endif
 
+  //The code behing this line is not thread safe because polarization
+  //and time are randomly selected and GPS properties are global
+  G4AutoLock l(&gen_mutex);
   if(fParticleGun->GetParticleDefinition()->GetParticleName()=="opticalphoton"){
     SetOptPhotonPolar();
     SetOptPhotonTime();
