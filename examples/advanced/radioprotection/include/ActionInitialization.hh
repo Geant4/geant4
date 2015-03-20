@@ -46,7 +46,6 @@ class ActionInitialization: public G4VUserActionInitialization
     virtual void Build() const;
 
 private:
-    G4GeneralParticleSource* masterGPS;
     AnalysisManager* analysis;
 };
 

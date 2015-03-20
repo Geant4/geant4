@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+06.03.2015 - A. Dotti. tag radioprotection-V10-00-02
+             removing unnecessary GPS in master
+
 13.10.2014 - S. Guatelli. tag radioprotection-V10-00-01
              compilation warning with CLANG deleted (Run Action)
 
