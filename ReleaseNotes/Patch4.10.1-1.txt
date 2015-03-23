@@ -170,6 +170,10 @@ List of fixes included in this public patch since the public release 10.1:
       o G4EmStandardPhysicsWVI: added angular limit to WentzelVI model
         in order to provide correct backscattering.
         Addressing problem report #1702.
+    + constructors/hadron_elastic:
+      o G4HadronElasticPhysics: replaced Chips neutron elastic cross-section
+        with default, according to fix in cross_sections module for Chips
+        neutron elastic cross-section.
     + constructors/limiters:
       o Fix in G4ParallelWorldProcess to correctly use method
         SetProcessOrderingToSecond().
