@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 20, 2015  A.Kimura (detutils-V10-00-02)
+- fixed type convertion warnigs at l.132 and l.157 of G4VScoreColorMap.cc
+
 March 11, 2015  A.Kimura (detutils-V10-00-01)
 - fine adjustment of the position drawing surfaces in G4ScoringBox::Draw(...)
 

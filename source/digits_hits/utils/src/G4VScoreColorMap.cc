@@ -129,7 +129,7 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
 
   // draw ps name
   // background
-  G4int lpsname = 2.+fPSName.size()*0.95;
+  G4double lpsname = 2.+fPSName.size()*0.95;
   if(lpsname > 0) {
     for(int l = 0; l < 22; l++) {
       G4Polyline line;
@@ -154,7 +154,7 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
 
   // draw unit
   // background
-  G4int len = 2.+fPSUnit.size();
+  G4double len = 2.+fPSUnit.size();
   if(len > 0) {
     for(int l = 0; l < 21; l++) {
       G4Polyline line;
