@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-Feb-2015, A. Ribon         (phys-ctor-helastic-V10-00-10)
+- G4HadronElasticPhysics: replaced Chips neutron elastic cross section
+  with default (Gheisha) cross section.
+
 24-Nov-2014, V. Ivanchenko    (phys-ctor-helastic-V10-00-09)
 - G4HadronHElasticPhysics - corrected addition of low-mass
     diffraction
