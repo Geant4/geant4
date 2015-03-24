@@ -18,8 +18,8 @@
 /testem/phys/setCuts 0.0003 mm
 /testem/stack/killSecondaries false
 #
-/run/initialize
 /process/eLoss/CSDARange true
+/run/initialize
 #/testem/phys/fluo true
 /process/em/deexcitation World true true true
 /process/em/fluo true

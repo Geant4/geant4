@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-12-14  V.Ivanchenko (test56-V10-00-01)
+- Set CSDA range flag at PreInit state
+
 11-08-14  V.Ivanchenko (test56-V10-00-00)
 - Removed warning on CSDA range
 
