@@ -29,7 +29,7 @@ analysis                                         analysis-V10-01-06
   support direct use of ntuple_bindings with a vector, use of a temporary
   sub-ntuple is needed.
 
-digits_hits/utils                                detutils-V10-01-01          (#)
+digits_hits/utils                                detutils-V10-01-02          (#)
 -----------------
 - Added calls to G4VisManager::BeginDraw2D() and  G4VisManager::EndDraw()
   in G4VScoreColorMap to speedup drawing of texts and color chart.
@@ -91,6 +91,11 @@ processes/biasing                                procbiasing-V10-01-00       (#)
   Renamed them accordingly: fEndTrack, feLimited, fParaflag.
   Use const reference for string in argument in SetParallelWorld().
 
+processes/electromagnetic/dna                    emdna-V10-01-08
+-----------------------------
+- Vector of products becomes a pointer instead of a reference in
+  G4UserTimeStepAction::UserReactionAction().
+
 processes/electromagnetic/muons                  emmuons-V10-01-00
 -------------------------------
 - G4MuMultipleScattering: do not redefine step limit type.
@@ -122,7 +127,7 @@ processes/hadronic
 - management (hadr-man-V10-01-00)
   o G4HadronicProcessStore, G4HadronicProcess: fixed procedure of
     deletion at exit.
-- models/de_excitation (hadr-deex-V10-01-20)
+- models/de_excitation (hadr-deex-V10-01-21)
   o Moved G4NeutronRadCapture to handler sub-directory; use G4ExcitationHandler
     instead of G4PhotonEvaporation allowing to have not only gamma de-excitation
     but also fission or FermiBreakUp.
@@ -137,6 +142,9 @@ processes/hadronic
   o G4Evaporation: use environment variable "G4UsePromptPhotonEvaporation"
     to select gamma de-excitation model; if the variable is defined
     the new G4PromptPhotonEvaporation class is used.
+  o G4VEvaporationChannel, G4PhotonEvaporation: removed "timeType" 
+    which is no longer used; removed name of channel.
+  o G4PromptPhotonEvaporation: moved virtual methods to source.
   o G4PromptPhotonEvaporation, G4LevelReader, G4NucLevel: code cleanup.
   o Fixed Coverity defects.
   o Removed unused dependences from CMake script.
@@ -161,10 +169,13 @@ processes/hadronic
 - stopping (hadr-stopping-V10-01-02)
   o G4MuonMinusBoundDecay: use G4Log() instead of std::log().
 
-processes/optical                                op-V10-01-00
+processes/optical                                op-V10-01-01
 -----------------
-- Added call to ProposeLocalEnergyDeposit() for particle-change in
-  G4OpAbsorption.
+- Change calculation of NewPolarization in G4OpRayleigh to avoid potential
+  division by zero when the NewMomentumDirection is perpendicular to the
+  OldPolarization. If the polarization is perpendicular to the scattering
+  plane, it will not change after the scattering.
+- Added call to ProposeLocalEnergyDeposit() for particle-change in G4OpAbsorption.
 
 run                                              run-V10-01-04
 ---
@@ -203,6 +214,12 @@ examples                                         examples-V10-01-03
 - extended/medical/dna (exdna-V10-01-00)
   o New example "microyz" showing how to compute microdosimetry 
     distributions in liquid water using Geant4-DNA.
+- extended/medical/dna/chem2 (chem2-V10-01-01)
+- extended/medical/dna/chem3 (chem3-V10-01-01)
+  o In G4UserTimeStepAction::UserReactionAction(), vector of reaction
+    products becomes a pointer instead of a reference.
+  o CommandLine option: -mt option restaured with 2 as default number of threads
+  o Updated viauslization macros.
 - extended/optical/wls (WLS-V10-01-02)                                       (#)
   o Added global mutex for primary generation as application modifies
     GPS polarization/time.
@@ -220,7 +237,7 @@ examples                                         examples-V10-01-03
 tests                                            tests-V10-01-03
 -----
 - Updated reference outputs and tools.
-- tests/test04 (test04-V10-01-01)
+- tests/test04 (test04-V10-01-02)
   o Test for merging NeutronHP and ParticleHP; based on test11.
 - tests/test19 (test19-V10-01-01)
   o Updated CMake scripts.
@@ -232,5 +249,10 @@ tests                                            tests-V10-01-03
   o Added batch scripts for p+B-->pbar.
   o Updated CMake scripts.
 - tests/test48 (test48-V10-01-00)
+  o Updated CMake scripts.
+- tests/test70 (test70-V10-01-01)
+  o In G4UserTimeStepAction::UserReactionAction(), vector of products becomes
+    a pointer instead of a reference.
+  o Updated CommandLineParser.
 - tests/test75 (test75-V10-01-01)
   o Updated CMake scripts.

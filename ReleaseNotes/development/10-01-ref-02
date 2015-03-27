@@ -224,7 +224,7 @@ tests                                            tests-V10-01-02
   o Added executable gen_upload* scripts to replace generate_upload.
   o Restructured analysis scripts. Added various scripts for automation.
   o Updated CMake acripts.
-- tests/test22 (test22-V10-01-02)
+- tests/test22 (test22-V10-01-02)                                            (#)
   o Correction to CMake build scripts to avoid configuration warnings.
 - tests/test23 (test23-V10-01-04)
   o Several cleanups and updates (included rndm handling).
