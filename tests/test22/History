@@ -15,6 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
 -------------------------------------------------------------------------
 
+20 February 2015 Gunter Folger                    (test22-V10-00-02)
+- CMakeLists.txt: add missing DEPEND on build step 
+
+19  February 2015 Gunter Folger
+---------------------------------------------------------------------
+- Revising CMakeLists.txt to eliminate configure warnings: only 
+     test22_NA49 is used for testing, others may be build like examples.
+
+11 February 2015 Andrea Dotti
+---------------------------------------------------------------------
+- Adding OPTIONAL to the install cmake command to avoid problems
+  when issuing make install and testing is enabled
+
 25 November 2014 Gunter Folger                     (test22-V10-00-01)
 ---------------------------------------------------------------------
 CMakeLists.txt: set policy CMP0042 to OLD, avoid warning on Mac with recent
