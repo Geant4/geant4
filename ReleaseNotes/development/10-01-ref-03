@@ -108,6 +108,9 @@ physics_lists
     G4EmStandardPhysics_option1, G4EmStandardPhysics_option2,
     G4EmStandardPhysics_option3, G4EmStandardPhysics_option4: parameters
     for multiple scattering are defined via G4EmParameters class.
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V10-01-00)
+  o G4HadronPhysicsFTFP_BERT_TRV: changed the transition region between
+    BERT and FTF from [3, 12] GeV to [2, 4] GeV.
 
 processes/biasing                                procbiasing-V10-01-00       (#)
 -----------------
@@ -184,6 +187,8 @@ processes/hadronic
   o G4HadronicInteractionRegistry: more accurate check on HP models.
 - models/neutron_hp (hadr-hpn-V10-01-06)
   o Fixed issue in MT-mode in Wendt-Fission-Fragment model.
+- models/parton_string/diffraction (hadr-string-diff-V10-01-00)
+  o G4FTFParameters: tuning to improve the description of evaporated neutrons.
 - models/parton_string/hadronization (had-hadronization-V10-01-01)
   o G4LundStringFragmentation: improved reaction cross-sections of:
     Pbar + P -> Pi+Pi-, K+K-.
