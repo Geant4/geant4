@@ -4,7 +4,12 @@
 
 Major development/fixes included since the last development tag are:
 
- o 
+ o Defined accessors for UVector3 in USolids and adapted interfaces.
+ o New GDML schema version 3.1.2 with added 'userinfo' field to allow
+   'global' auxiliary fields. Defined ability in the GDML parser to
+   optionally export and import geometrical regions for production cuts.
+ o Implemented alternative model for photon-evaporation, which can be
+   optionally enabled; default is off.
 
 ---------- Reference-tag 'Release Notes' -----------
 
@@ -60,6 +65,10 @@ geometry
   o Use accessors x(), y() and z() from UVector3 in USolids wrappers, instead
     of directly accessing its data-members.
 
+global                                           global-V10-01-03
+------
+- Added "g/mole" Molar mass definition to G4UnitsTable.
+
 graphics_reps                                    greps-V10-01-02
 -------------
 - HepPolyhedron: corrected a long-standing spelling mistakes.
@@ -72,6 +81,22 @@ materials                                        materials-V10-01-02
   removed GetLOGA(), duplicated method with G4Pow.
 - G4NistMaterialBuilder: added FindOrBuildSimpleMaterial(Z);
   splitted implementation in longest private method.
+
+persistency/gdml                                 gdml-V10-01-03
+----------------
+- New GDML schema version 3.1.2 (files: gdml.xsd, gdml_core.xsd):
+  Added 'userinfo' to GDML schema to allow 'global' auxiliary fields.
+  Extended auxiliary field in the schema by 'auxunit' and pointer to
+  sub-auxiliary fields (no limit on the number of levels).
+- Added writer support for auxiliary info (global and volume-specific).
+- Implemented import/export of geometrical regions associated to volumes
+  for importing and storing production cuts and user-limits, as global
+  auxiliary_info entity.
+  Updated G4GDMLParser to optionally activate export of regions (default
+  is OFF). Export of regions can be activated/de-activated by means of
+  the new UI command "/persistency/gdml/export_regions [true/false]".
+- Avoid use of standard evaluator for import of units; adopt G4UnitsTable
+  instead, in order to avoid loss of precision due to unit's conversion.
 
 physics_lists
 -------------
@@ -127,10 +152,7 @@ processes/hadronic
 - management (hadr-man-V10-01-00)
   o G4HadronicProcessStore, G4HadronicProcess: fixed procedure of
     deletion at exit.
-- models/de_excitation (hadr-deex-V10-01-21)
-  o Moved G4NeutronRadCapture to handler sub-directory; use G4ExcitationHandler
-    instead of G4PhotonEvaporation allowing to have not only gamma de-excitation
-    but also fission or FermiBreakUp.
+- models/de_excitation (hadr-deex-V10-01-24)
   o G4VEvaporationChannel, G4VEvaporation, G4VEvaporationChannel: moved 
     setters from G4PhotonEvaporation to reduce number of new/delete at
     initialisation.
@@ -141,7 +163,8 @@ processes/hadronic
     photon evaporation class from G4Evaporation.
   o G4Evaporation: use environment variable "G4UsePromptPhotonEvaporation"
     to select gamma de-excitation model; if the variable is defined
-    the new G4PromptPhotonEvaporation class is used.
+    the new G4PromptPhotonEvaporation class is used. Implemented choice
+    between G4PhotonEvaporation and G4PromptPhotonEvaporation.
   o G4VEvaporationChannel, G4PhotonEvaporation: removed "timeType" 
     which is no longer used; removed name of channel.
   o G4PromptPhotonEvaporation: moved virtual methods to source.
@@ -159,6 +182,11 @@ processes/hadronic
   o G4HadronicInteractionRegistry, G4HadronicInteraction: fixed deletion of 
     models at exit. Made G4HadronicInteractionRegistry thread-local singleton.
   o G4HadronicInteractionRegistry: more accurate check on HP models.
+- models/neutron_hp (hadr-hpn-V10-01-06)
+  o Fixed issue in MT-mode in Wendt-Fission-Fragment model.
+- models/parton_string/hadronization (had-hadronization-V10-01-01)
+  o G4LundStringFragmentation: improved reaction cross-sections of:
+    Pbar + P -> Pi+Pi-, K+K-.
 - models/pre_equilibrium (hadr-pre-V10-01-00)
   o Fixed Coverity defects and some code cleanup.
 - models/qmd (hadr-qmd-V10-01-01)                                            (#)
@@ -177,9 +205,12 @@ processes/optical                                op-V10-01-01
   plane, it will not change after the scattering.
 - Added call to ProposeLocalEnergyDeposit() for particle-change in G4OpAbsorption.
 
-run                                              run-V10-01-04
+run                                              run-V10-01-05
 ---
 - Corrected handling of deletion of worker run-managers.
+- G4VUserPhysicsList: lookup for default-world-region in G4RegionStore
+  instead of accessing the store at index 0. It's not always guaranteed the
+  default world region is the first element in the store!
 
 visualization                                    vis-V10-01-06
 -------------
@@ -225,6 +256,8 @@ examples                                         examples-V10-01-03
     GPS polarization/time.
 - extended/parameterisations/gflash (exgflash-V10-01-00)                     (#)
   o Removed unnecessary instantiation of GPS in master thread.
+- extended/persistency/gdml/G01 (G01-V10-01-00)
+  o Added example code showing how to import and export auxiliary information.
 - extended/persistency/gdml/G03 (G03-V10-01-00)                              (#)
   o Corrected visualization commands in read/write input macros.
   o Updated README.
