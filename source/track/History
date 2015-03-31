@@ -18,12 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- January 15, 2015 J.Apostolakis (track-V10-00-05)
+- January 15, 2015 J.Apostolakis (track-V10-00-06)
 - Fixed FieldTrackUpdator to pass magnetic moment and PDG spin
   Is part of corrections needed for Bugzilla issue 1696.
-     
-- December 16, 2014 J.Apostolakis
-- Improve G4ParticleChangeForTransport, by adding update for FirstStep in volume.
      
 - August 19, 2014 K. Genser (track-V10-00-04)
 - Removed non cost requirement when using G4PhysicsModelCatalog getters and moved 
