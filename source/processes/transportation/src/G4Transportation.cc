@@ -39,7 +39,7 @@
 //   which will be used to update the post-step point's safety.
 //
 // =======================================================================
-// Modified:
+// Modified:   
 //   10 Jan  2015, M.Kelsey: Use G4DynamicParticle mass, NOT PDGMass
 //   28 Oct  2011, P.Gumpl./J.Ap: Detect gravity field, use magnetic moment 
 //   20 Nov  2008, J.Apostolakis: Push safety to helper - after ComputeSafety
@@ -73,9 +73,6 @@
 class G4VSensitiveDetector;
 
 G4bool G4Transportation::fUseMagneticMoment=false;
-
-// #define  G4DEBUG_TRANSPORT 1
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
@@ -90,11 +87,7 @@ G4Transportation::G4Transportation( G4int verbosity )
     fEndGlobalTimeComputed(false), 
     fCandidateEndGlobalTime(0.0),
     fParticleIsLooping( false ),
-    fNewTrack( true ),
-    fFirstStepInVolume( true ),
-    fLastStepInVolume( false ), 
     fGeometryLimitedStep(true),
-    fFieldExertedForce( false ),
     fPreviousSftOrigin( 0.,0.,0. ),
     fPreviousSafety( 0.0 ),
     // fParticleChange(),
@@ -181,13 +174,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   //
   *selection = CandidateForSelection ;
 
-  fFirstStepInVolume= fNewTrack || fLastStepInVolume;
-  // G4cout << "  Transport::AlongStep GPIL:  1st-step= "  << fFirstStepInVolume << "  newTrack= " << fNewTrack << " fLastStep-in-Vol= "  << fLastStepInVolume << G4endl;
-  fLastStepInVolume= false;
-  fNewTrack = false;
-
-  fParticleChange.ProposeFirstStepInVolume(fFirstStepInVolume);
-  
   // Get initial Energy/Momentum of the track
   //
   const G4DynamicParticle*    pParticle  = track.GetDynamicParticle() ;
@@ -260,7 +246,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
   // G4cout << " G4Transport:  field exerts force= " << fieldExertsForce
   //        << "  fieldMgr= " << fieldMgr << G4endl;
-  fFieldExertedForce = fieldExertsForce; 
   
   if( !fieldExertsForce ) 
   {
@@ -357,14 +342,16 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                                           currentMinimumStep, 
                                                           currentSafety,
                                                           track.GetVolume() ) ;
+        fGeometryLimitedStep= lengthAlongCurve < currentMinimumStep; 
+        if( fGeometryLimitedStep )
+        {
+           geometryStepLength   = lengthAlongCurve ;
+        }
+        else
+        {
+           geometryStepLength   = currentMinimumStep ;
+        }
 
-        fGeometryLimitedStep= fFieldPropagator->IsLastStepInVolume();
-        // It is possible that step was reduced in PropagatorInField due to previous zero steps
-        // To cope with case that reduced step is taken in full, we must rely on PiF to obtain this
-        // value.
-
-        geometryStepLength = std::min( lengthAlongCurve, currentMinimumStep );
-        
         // Remember last safety origin & value.
         //
         fPreviousSftOrigin = startPosition ;
@@ -649,8 +636,7 @@ G4double G4Transportation::
 PostStepGetPhysicalInteractionLength( const G4Track&,
                                             G4double, // previousStepSize
                                             G4ForceCondition* pForceCond )
-{
-  fFieldExertedForce = false; // Not known
+{ 
   *pForceCond = Forced ; 
   return DBL_MAX ;  // was kInfinity ; but convention now is DBL_MAX
 }
@@ -696,11 +682,22 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     fParticleChange.SetTouchableHandle( fCurrentTouchableHandle ) ;
 
     // Update the Step flag which identifies the Last Step in a volume
-    if( !fFieldExertedForce )
-       isLastStep =  fLinearNavigator->ExitedMotherVolume() 
-                   | fLinearNavigator->EnteredDaughterVolume() ;
-    else
-       isLastStep = fFieldPropagator->IsLastStepInVolume(); 
+    isLastStep =  fLinearNavigator->ExitedMotherVolume() 
+                       | fLinearNavigator->EnteredDaughterVolume() ;
+
+#ifdef G4DEBUG_TRANSPORT
+    //  Checking first implementation of flagging Last Step in Volume
+    //
+    G4bool exiting =  fLinearNavigator->ExitedMotherVolume();
+    G4bool entering = fLinearNavigator->EnteredDaughterVolume();
+    if( ! (exiting || entering) )
+    { 
+      G4cout << " Transport> :  Proposed isLastStep= " << isLastStep 
+             << " Exiting "  << fLinearNavigator->ExitedMotherVolume()          
+             << " Entering " << fLinearNavigator->EnteredDaughterVolume() 
+             << G4endl;
+    } 
+#endif
   }
   else                 // fGeometryLimitedStep  is false
   {                    
@@ -717,10 +714,15 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
     retCurrentTouchable = track.GetTouchableHandle() ;
 
     isLastStep= false;
+
+#ifdef G4DEBUG_TRANSPORT
+    //  Checking first implementation of flagging Last Step in Volume
+    //
+    G4cout << " Transport> Proposed isLastStep= " << isLastStep
+           << " Geometry did not limit step. " << G4endl;
+#endif
   }         // endif ( fGeometryLimitedStep ) 
-  fLastStepInVolume= isLastStep; 
-  
-  fParticleChange.ProposeFirstStepInVolume(fFirstStepInVolume);
+
   fParticleChange.ProposeLastStepInVolume(isLastStep);    
 
   const G4VPhysicalVolume* pNewVol = retCurrentTouchable->GetVolume() ;
@@ -774,10 +776,7 @@ void
 G4Transportation::StartTracking(G4Track* aTrack)
 {
   G4VProcess::StartTracking(aTrack);
-  fNewTrack= true;
-  fFirstStepInVolume= true;
-  fLastStepInVolume= false;
-  
+
   // The actions here are those that were taken in AlongStepGPIL
   //   when track.GetCurrentStepNumber()==1
 
@@ -812,9 +811,6 @@ G4Transportation::StartTracking(G4Track* aTrack)
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();
-
-  // Inform field propagator of new track
-  fFieldPropagator->PrepareNewTrack();
 }
 
 #include "G4CoupledTransportation.hh"

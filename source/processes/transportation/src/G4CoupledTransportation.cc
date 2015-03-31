@@ -295,8 +295,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         equationOfMotion->SetChargeMomentumMass( chargeState,
                                                  momentumMagnitude,
                                                  restMass );
-     }else{
-        G4cerr << " ERROR > Cannot find valid Equation of motion - Unable to pass Charge, Momentum and Mass "  << G4endl;
      }
   }
 
