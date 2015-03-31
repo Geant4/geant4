@@ -17,15 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 15, 2014 - J.Apostolakis (geomnav-V10-01-01)
+January  15, 2015 - J.Apostolakis  (geomnav-V10-00-21)
+---------------------------------
+- G4PathFinder: Pass to equation of motion relevant properties of current
+    particle: latest charge state (electric, magnetic dipole moment),
+    PDG spin value, momentum and rest mass of current particle
+    Part of corrections needed for Bugzilla issue 1696.
+	
+- Increased maximum number of Navigators from 8 to 16.
+    
+December 15, 2014 - J.Apostolakis
 ---------------------------------
 - G4ErrorPropagationNavigator: revise implementation of ComputeStep, to
   avoid calling G4Navigator::ComputeSafety (which has side effects.)
   Addresses problem report #1679.
-
-December 8, 2014 - G.Cosmo (geomnav-V10-01-00)
---------------------------
-- Removed unused leftover header file G4GeomTestVolPoint.hh.
 
 November 27, 2014 - G.Cosmo (geomnav-V10-00-19)
 ---------------------------
