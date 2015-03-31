@@ -59,7 +59,7 @@ geometry
   o Small refinements in G4FieldTrack: added method to access rest mass
     and avoid division by zero for unit direction.
 - navigation (geomnav-V10-01-05):
-  o Improvements in G4PropagatorInField to enable identification of first    (#)
+  o Improvements in G4PropagatorInField to enable identification of first
     and last step in a volume, when tracking in a field.
     Addressing old problem report #1032.
     Added new methods to report looping and stuck tracks.
@@ -222,11 +222,11 @@ processes/management                             procman-V10-01-00           (#)
 - Fixed logic in G4ProcessManager::SetProcessOrderingToSecond() to make     (ox)
   sure the process is always set before the process that has ordering index 1.
 
-processes/transportation                         transport-V10-01-01         (#)
+processes/transportation                         transport-V10-01-01
 ------------------------
 - G4Transportation: added ability to identify last step in volume for
   the case of propagation in field. Addresses old problem report #1032.
-- G4Transportation, G4CoupledTransportation: in AlongStepGetPIL(),           (o)
+- G4Transportation, G4CoupledTransportation: in AlongStepGetPIL(),          (o#)
   initialize restMass data member using G4DynamicParticle (as is used in
   DoIt()), not G4ParticleDefinition. Resolves inconsistent kinematics when
   dynamic mass is measurably different from "PDG" mass.
@@ -236,9 +236,9 @@ run                                              run-V10-01-00               (#)
 - Print message for deletion of G4NavigationHistoryPool only if the
   verbose level is set to 2.
 
-track                                            track-V10-01-01             (#)
+track                                            track-V10-01-01
 -----
-- Fixed FieldTrackUpdator to pass magnetic moment and PDG spin.
+- Fixed FieldTrackUpdator to pass magnetic moment and PDG spin.              (#)
   Addressing problem report #1696.
 - Improved G4ParticleChangeForTransport by adding update for FirstStep
   in volume.

@@ -81,10 +81,6 @@ List of fixes included in this public patch since the public release 10.1:
       o G4ErrorPropagationNavigator: revised implementation of ComputeStep(),
         to avoid calling G4Navigator::ComputeSafety().
         Addresses problem report #1679.
-      o Improvements in G4PropagatorInField to enable identification of first
-        and last step in a volume, when tracking in a field.
-        Addressing old problem report #1032.
-        Added new methods to report looping and stuck tracks.
       o G4PathFinder: pass to equation of motion relevant properties of current
         particle: latest charge state, PDG spin value, momentum and rest mass
         of current particle. Fix in calls to ComputeSafety() to correctly
@@ -123,8 +119,6 @@ List of fixes included in this public patch since the public release 10.1:
         sure the process is always set before the process that has ordering
         index 1.
     + Transportation:
-      o G4Transportation: fixed ability to identify last step in volume for
-        the case of propagation in field. Addresses old problem report #1032.
       o G4Transportation, G4CoupledTransportation: in AlongStepGetPIL(),
         initialize restMass with G4DynamicParticle (as is used in DoIt()),
         not with G4ParticleDefinition. Resolves inconsistent kinematics
@@ -286,8 +280,6 @@ List of fixes included in this public patch since the public release 10.1:
     -----
     + Fixed FieldTrackUpdator to pass magnetic moment and PDG spin.
       Addressing problem report #1696.
-    + Improved G4ParticleChangeForTransport by adding update for FirstStep
-      in volume.
 
   o Visualization:
     -------------
