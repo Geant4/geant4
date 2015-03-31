@@ -164,7 +164,7 @@ class G4MultiNavigator : public G4Navigator
    // STATE Information 
 
    G4int   fNoActiveNavigators; 
-   static const G4int fMaxNav = 16;   // rename to kMaxNoNav ??
+   static const G4int fMaxNav = 8;   // rename to kMaxNoNav ??
    G4VPhysicalVolume* fLastMassWorld; 
 
    // Global state (retained during stepping for one track

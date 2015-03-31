@@ -365,8 +365,6 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   fNewTrack= true; 
   this->MovePoint();   // Signal further that the last status is wiped
 
-  fpFieldPropagator->PrepareNewTrack();   // Inform field propagator of new track
-  
   // Message the G4NavigatorPanel / Dispatcher to find active navigators
   //
   std::vector<G4Navigator*>::iterator pNavigatorIter; 
@@ -751,7 +749,7 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
 
    for( G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
    {
-      G4double safety = (*pNavigatorIter)->ComputeSafety( position, DBL_MAX, true );
+      G4double safety = (*pNavigatorIter)->ComputeSafety( position,true );
       if( safety < minSafety ) { minSafety = safety; } 
       fNewSafetyComputed[num]= safety;
    } 
@@ -1155,15 +1153,6 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   G4FieldTrack  fieldTrack= initialState;
   G4ThreeVector startPoint= initialState.GetPosition(); 
 
-
-  G4EquationOfMotion* equationOfMotion = 
-     (fpFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
-     ->GetEquationOfMotion();
-
-  equationOfMotion->SetChargeMomentumMass( *(initialState.GetChargeState()), 
-                                           initialState.GetMomentum().mag2(),
-                                           initialState.GetRestMass() );
-  
 #ifdef G4DEBUG_PATHFINDER
   G4int prc= G4cout.precision(9);
   if( fVerboseLevel > 2 )
@@ -1183,7 +1172,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      G4double minSafety= kInfinity, safety; 
      for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
      {
-        safety= fpNavigator[numNav]->ComputeSafety( startPoint, DBL_MAX, false );
+        safety= fpNavigator[numNav]->ComputeSafety( startPoint, false );
         fPreSafetyValues[numNav]= safety; 
         fCurrentPreStepSafety[numNav]= safety; 
         minSafety = std::min( safety, minSafety ); 
