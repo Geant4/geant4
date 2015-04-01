@@ -1,319 +1,581 @@
-**********************************************
- Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
-             Copyright : Geant4 Collaboration
-**********************************************
 
-phot:  Total cross sections from Sandia parametrisation. 
-B02PhysicsList::SetCuts:CutLength : 1 (mm)
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+*************************************************************
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+ constructing parallel world 
+ B03ImportanceDetectorConstruction:: ghostWorldName = ParallelBiasingWorld
+ G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
+ Preparing Importance Sampling with GhostWorld ParallelBiasingWorld
+G4IStore:: Creating new Parallel IStore ParallelBiasingWorld
+ G4IStore:: ParallelWorldName = ParallelBiasingWorld
+ G4IStore:: fParallelWorldVolume = ParallelBiasingWorld
+G4GeometrySampler:: preparing importance sampling WorldName is 
+G4ImportanceConfigurator:: entering importance configure, paraflag 1
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+G4ImportanceProcess:: Creating 
+G4ImportanceProcess:: importance process paraflag is: 1
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-+++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
-=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
-  ProcessName: PScoreProcess
-The initial Vectors: 
+G4ImportanceProcess:: SetParallelWorld name = ParallelBiasingWorld
+=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
+  Modifying Process Order for ProcessName: ImportanceProcess
+  The initial AlongStep Vectors: 
 GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   Transportation
+   ParaWorldProc_ParallelBiasingWorld
+   CoupledTransportation
 DoIt Vector: 
-   Transportation
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-The final Vectors: 
+   CoupledTransportation
+   ParaWorldProc_ParallelBiasingWorld
+The initial PostStep Vectors: 
 GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   PScoreProcess
-   Transportation
+   ParaWorldProc_ParallelBiasingWorld
+   CoupledTransportation
 DoIt Vector: 
-   Transportation
-   PScoreProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
+   CoupledTransportation
+   ParaWorldProc_ParallelBiasingWorld
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ImportanceProcess
+   ParaWorldProc_ParallelBiasingWorld
+   CoupledTransportation
+DoIt Vector: 
+   CoupledTransportation
+   ParaWorldProc_ParallelBiasingWorld
+   ImportanceProcess
+The final PostStep Vectors: 
+GPIL Vector: 
+   ParaWorldProc_ParallelBiasingWorld
+   ImportanceProcess
+   CoupledTransportation
+DoIt Vector: 
+   CoupledTransportation
+   ImportanceProcess
+   ParaWorldProc_ParallelBiasingWorld
 ================================================
-=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
-  ProcessName: ParallelTransport
-The initial Vectors: 
-GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   PScoreProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   PScoreProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-The final Vectors: 
-GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   PScoreProcess
-   ParallelTransport
-   Transportation
-DoIt Vector: 
-   Transportation
-   ParallelTransport
-   PScoreProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-================================================
-output pScorer, scoring detector, neutron
-Volume name = score_worldCylinder_phys, Replica number = -1
-HistorysEntering
-entries                             : 331
-Sum(w)                              : 331
-Sum(w*x)                            : 331
-Sum(w*x*x)                          : 331
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 331
-Sum(x^2)                            : 331
-EnergyEnteringHistory
-entries                             : 331
-Sum(w)                              : 331
-Sum(w*x)                            : 2868.82
-Sum(w*x*x)                          : 26144.9
-mean=Sum(w*x) / Sum(w)              : 8.66714
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.96678
-Sum(x)                              : 2868.82
-Sum(x^2)                            : 26144.9
-Volume name = scorecell: M1, Replica number = 0
-HistorysEntering
-entries                             : 1794
-Sum(w)                              : 1794
-Sum(w*x)                            : 1794
-Sum(w*x*x)                          : 1794
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1794
-Sum(x^2)                            : 1794
-EnergyEnteringHistory
-entries                             : 1794
-Sum(w)                              : 1794
-Sum(w*x)                            : 17426.6
-Sum(w*x*x)                          : 171284
-mean=Sum(w*x) / Sum(w)              : 9.71383
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.05729
-Sum(x)                              : 17426.6
-Sum(x^2)                            : 171284
-Collisions
-entries                             : 1263
-Sum(w)                              : 1263
-Sum(w*x)                            : 1263
-Sum(w*x*x)                          : 1263
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 1263
-Sum(x^2)                            : 1263
-Volume name = scorecell: D1, Replica number = 0
-HistorysEntering
-entries                             : 858
-Sum(w)                              : 858
-Sum(w*x)                            : 858
-Sum(w*x*x)                          : 858
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 858
-Sum(x^2)                            : 858
-EnergyEnteringHistory
-entries                             : 858
-Sum(w)                              : 858
-Sum(w*x)                            : 8292.88
-Sum(w*x*x)                          : 81250.1
-mean=Sum(w*x) / Sum(w)              : 9.66536
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.13047
-Sum(x)                              : 8292.88
-Sum(x^2)                            : 81250.1
-Collisions
-entries                             : 512
-Sum(w)                              : 512
-Sum(w*x)                            : 512
-Sum(w*x*x)                          : 512
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 512
-Sum(x^2)                            : 512
-Volume name = scorecell: M2, Replica number = 0
-HistorysEntering
-entries                             : 845
-Sum(w)                              : 845
-Sum(w*x)                            : 845
-Sum(w*x*x)                          : 845
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 845
-Sum(x^2)                            : 845
-EnergyEnteringHistory
-entries                             : 845
-Sum(w)                              : 845
-Sum(w*x)                            : 7918.1
-Sum(w*x*x)                          : 76692.5
-mean=Sum(w*x) / Sum(w)              : 9.37053
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.71858
-Sum(x)                              : 7918.1
-Sum(x^2)                            : 76692.5
-Collisions
-entries                             : 696
-Sum(w)                              : 696
-Sum(w*x)                            : 696
-Sum(w*x*x)                          : 696
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 696
-Sum(x^2)                            : 696
-Volume name = scorecell: D2, Replica number = 0
-HistorysEntering
-entries                             : 392
-Sum(w)                              : 392
-Sum(w*x)                            : 392
-Sum(w*x*x)                          : 392
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 392
-Sum(x^2)                            : 392
-EnergyEnteringHistory
-entries                             : 392
-Sum(w)                              : 392
-Sum(w*x)                            : 3630.15
-Sum(w*x*x)                          : 34992.4
-mean=Sum(w*x) / Sum(w)              : 9.26058
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.87297
-Sum(x)                              : 3630.15
-Sum(x^2)                            : 34992.4
-Collisions
-entries                             : 233
-Sum(w)                              : 233
-Sum(w*x)                            : 233
-Sum(w*x*x)                          : 233
-mean=Sum(w*x) / Sum(w)              : 1
-sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
-Sum(x)                              : 233
-Sum(x^2)                            : 233
+ GeomSampler Configured!!! 
+ Running in singlethreaded mode!!! 
+B03PhysicsList::SetCuts:CutLength : 1 (mm)
+ ghost world: ParallelBiasingWorld
+ adding cell: 1 replica: 0 name: cell_01
+ adding cell: 2 replica: 0 name: cell_02
+ adding cell: 3 replica: 0 name: cell_03
+ adding cell: 4 replica: 0 name: cell_04
+ adding cell: 5 replica: 0 name: cell_05
+ adding cell: 6 replica: 0 name: cell_06
+ adding cell: 7 replica: 0 name: cell_07
+ adding cell: 8 replica: 0 name: cell_08
+ adding cell: 9 replica: 0 name: cell_09
+ adding cell: 10 replica: 0 name: cell_10
+ adding cell: 11 replica: 0 name: cell_11
+ adding cell: 12 replica: 0 name: cell_12
+ adding cell: 13 replica: 0 name: cell_13
+ adding cell: 14 replica: 0 name: cell_14
+ adding cell: 15 replica: 0 name: cell_15
+ adding cell: 16 replica: 0 name: cell_16
+ adding cell: 17 replica: 0 name: cell_17
+ adding cell: 18 replica: 0 name: cell_18
 
-----------------------------------------------
-Volume name               |  AV E/Track | sigma       |  Coll_Ent.Tr|
-score_worldCylinder_phys. |     8.66714 |     1.96678 |           0 |
-scorecell: M1............ |     9.71383 |     1.05729 |    0.704013 |
-scorecell: D1............ |     9.66536 |     1.13047 |    0.596737 |
-scorecell: M2............ |     9.37053 |     1.71858 |    0.823669 |
-scorecell: D2............ |     9.26058 |     1.87297 |    0.594388 |
-+++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
-  ProcessName: PScoreProcess, will be removed!
-The initial Vectors: 
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+        Model:                  QMDModel: 100 MeV ---> 10 GeV
+     Cr_sctns:         TripathiLightIons: 0 eV  ---> 100 TeV
+     Cr_sctns:                  Tripathi: 0 eV  ---> 100 TeV
+     Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:                 ANTI-FTFP: 0 eV  ---> 20 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:                 ANTI-FTFP: 0 eV  ---> 20 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+        Model:                  QMDModel: 100 MeV ---> 10 GeV
+     Cr_sctns:         TripathiLightIons: 0 eV  ---> 100 TeV
+     Cr_sctns:                  Tripathi: 0 eV  ---> 100 TeV
+     Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:            BertiniCascade: 0 eV  ---> 22 MeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:            BertiniCascade: 0 eV  ---> 22 MeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:            BertiniCascade: 0 eV  ---> 22 MeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:            BertiniCascade: 0 eV  ---> 22 MeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nFission
+        Model:                G4LFission: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaFissionXS: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:            BertiniCascade: 0 eV  ---> 22 MeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:            BertiniCascade: 0 eV  ---> 22 MeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:            BertiniCascade: 0 eV  ---> 22 MeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+        Model:                  QMDModel: 100 MeV ---> 10 GeV
+     Cr_sctns:         TripathiLightIons: 0 eV  ---> 100 TeV
+     Cr_sctns:                  Tripathi: 0 eV  ---> 100 TeV
+     Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+================================================================
+++ ConcreteSD/Collisions id 0
+++ ConcreteSD/CollWeight id 1
+++ ConcreteSD/Population id 2
+++ ConcreteSD/TrackEnter id 3
+++ ConcreteSD/SL id 4
+++ ConcreteSD/SLW id 5
+++ ConcreteSD/SLWE id 6
+++ ConcreteSD/SLW_V id 7
+++ ConcreteSD/SLWE_V id 8
+### Run 0 start.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : GeomBias1001
+      issued by : G4ImportanceAlgorithm::Warning()
+Calculate() - ipre_over_ipost ! in [0.25, 4].
+ipre_over_ipost = 131072.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+ ###### EndOfRunAction  
+ getting hits map ConcreteSD/Collisions
+ getting hits map ConcreteSD/CollWeight
+ getting hits map ConcreteSD/Population
+ getting hits map ConcreteSD/TrackEnter
+ getting hits map ConcreteSD/SL
+ getting hits map ConcreteSD/SLW
+ getting hits map ConcreteSD/SLWE
+ getting hits map ConcreteSD/SLW_V
+ getting hits map ConcreteSD/SLWE_V
+
+--------------------End of Global Run-----------------------
+ Number of event processed : 100
+=============================================================
+=============================================================
+        Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
+       cell_00 |            33 |           128 |             0 |             0 |      0.544806 |       2.93307 |             1 |       6702.15 |       6702.15 |        1231.4 |       19657.9 |       670.875 |
+       cell_01 |           140 |           194 |           634 |           634 |       0.48232 |       3.95611 |             1 |       25383.1 |       25383.1 |       5974.17 |        100418 |       2881.46 |
+       cell_02 |           138 |           251 |          1089 |         544.5 |      0.271119 |       2.85234 |           0.5 |       39197.4 |       19598.7 |       6486.35 |       55902.3 |       1758.57 |
+       cell_03 |           185 |           302 |          1511 |        377.75 |      0.174901 |       1.93308 |          0.25 |       51959.7 |       12989.9 |       5111.01 |       25110.6 |        893.92 |
+       cell_04 |           224 |           343 |          1614 |        201.75 |      0.146075 |       1.74485 |         0.125 |       54278.4 |        6784.8 |       3004.35 |       11838.5 |       438.862 |
+       cell_05 |           236 |           367 |          2171 |       135.688 |      0.149307 |       1.59616 |        0.0625 |       69388.5 |       4336.78 |       1800.26 |        6922.2 |       268.792 |
+       cell_06 |           261 |           420 |          2237 |       69.9062 |      0.119296 |       1.55743 |       0.03125 |       70186.1 |       2193.32 |       1069.83 |       3415.94 |       127.626 |
+       cell_07 |           251 |           386 |          2179 |       34.0469 |       0.12704 |       1.63164 |      0.015625 |       66776.7 |       1043.39 |       493.604 |       1702.43 |       62.7075 |
+       cell_08 |           231 |           361 |          2049 |       16.0078 |      0.121532 |        1.3898 |     0.0078125 |       61414.2 |       479.798 |       217.408 |       666.823 |       26.4221 |
+       cell_09 |           198 |           311 |          1757 |       6.86328 |      0.137392 |       1.48318 |    0.00390625 |       55218.4 |       215.697 |       93.4597 |       319.917 |       12.8406 |
+       cell_10 |           156 |           252 |          1472 |         2.875 |      0.133653 |       1.38763 |    0.00195312 |       44995.1 |       87.8811 |       38.1492 |       121.947 |       5.09875 |
+       cell_11 |           158 |           242 |          1503 |       1.46777 |      0.110388 |       1.17517 |   0.000976562 |       44738.6 |       43.6901 |       20.2416 |       51.3434 |       2.23442 |
+       cell_12 |           133 |           191 |          1217 |      0.594238 |     0.0691676 |      0.798124 |   0.000488281 |       35331.5 |       17.2517 |       9.65689 |        13.769 |      0.667944 |
+       cell_13 |           106 |           180 |           998 |      0.243652 |     0.0732816 |       1.07384 |   0.000244141 |       28584.6 |       6.97866 |       4.25868 |       7.49399 |      0.312083 |
+       cell_14 |            70 |           115 |           612 |      0.074707 |     0.0866863 |       1.46029 |    0.00012207 |       18245.9 |       2.22728 |       1.38232 |       3.25248 |      0.119828 |
+       cell_15 |            52 |            87 |           460 |     0.0280762 |      0.114094 |       1.77684 |   6.10352e-05 |       13891.3 |      0.847856 |      0.475141 |        1.5065 |     0.0542105 |
+       cell_16 |            41 |            68 |           365 |     0.0111389 |      0.185954 |       1.92053 |   3.05176e-05 |       13292.6 |      0.405657 |      0.155054 |      0.779075 |     0.0288329 |
+       cell_17 |            49 |            79 |           434 |    0.00662231 |      0.195263 |       1.78346 |   1.52588e-05 |       13145.3 |      0.200582 |     0.0699803 |      0.357728 |     0.0136646 |
+       cell_18 |            32 |            60 |           398 |     0.0030365 |      0.116211 |       1.15304 |   7.62939e-06 |       10912.1 |     0.0832527 |     0.0359684 |     0.0959934 |    0.00417993 |
+       cell_19 |            18 |            18 |             0 |             0 |      0.115406 |       1.96884 |   7.62939e-06 |       2590.11 |     0.0197609 |      0.010877 |     0.0389061 |    0.00125528 |
+=============================================
+=== G4ProcessPlacer::RemoveProcess: for: neutron
+  ProcessName: ImportanceProcess, will be removed!
+  The initial AlongStep Vectors: 
 GPIL Vector: 
-   Decay
-   LCapture
-   LFission
-   inelastic
-   LElastic
-   PScoreProcess
-   ParallelTransport
-   Transportation
+   ImportanceProcess
+   ParaWorldProc_ParallelBiasingWorld
+   CoupledTransportation
 DoIt Vector: 
-   Transportation
-   ParallelTransport
-   PScoreProcess
-   LElastic
-   inelastic
-   LFission
-   LCapture
-   Decay
-The final Vectors: 
+   CoupledTransportation
+   ParaWorldProc_ParallelBiasingWorld
+   ImportanceProcess
+  The initial PostStep Vectors: 
 GPIL Vector: 
+   ParaWorldProc_ParallelBiasingWorld
    Decay
-   LCapture
-   LFission
+   nCapture
+   nFission
    inelastic
-   LElastic
-   ParallelTransport
-   Transportation
+   hadElastic
+   ImportanceProcess
+   CoupledTransportation
 DoIt Vector: 
-   Transportation
-   ParallelTransport
-   LElastic
+   CoupledTransportation
+   ImportanceProcess
+   hadElastic
    inelastic
-   LFission
-   LCapture
+   nFission
+   nCapture
    Decay
-WARNING - Attempt to delete the physical volume store while geometry closed !
-WARNING - Attempt to delete the logical volume store while geometry closed !
-WARNING - Attempt to delete the solid store while geometry closed !
+   ParaWorldProc_ParallelBiasingWorld
+  The final AlongStep Vectors: 
+GPIL Vector: 
+   ParaWorldProc_ParallelBiasingWorld
+   CoupledTransportation
+DoIt Vector: 
+   CoupledTransportation
+   ParaWorldProc_ParallelBiasingWorld
+  The final PostStep Vectors: 
+GPIL Vector: 
+   ParaWorldProc_ParallelBiasingWorld
+   Decay
+   nCapture
+   nFission
+   inelastic
+   hadElastic
+   CoupledTransportation
+DoIt Vector: 
+   CoupledTransportation
+   hadElastic
+   inelastic
+   nFission
+   nCapture
+   Decay
+   ParaWorldProc_ParallelBiasingWorld
+================================================

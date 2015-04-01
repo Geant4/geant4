@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,7 +29,7 @@
 
 
  Material: Water_gas    density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 753.560 m  
-                       Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
@@ -53,7 +53,7 @@
 
 
  Material: Graphite_gas    density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 353.873 m  
-                       Imean:  81.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -70,7 +70,7 @@
 
 
  Material: Aluminium_gas    density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.793 m  
-                       Imean: 166.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
@@ -88,10 +88,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -273,7 +275,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=9.73s Real=9.75s Sys=0s
+  User=11.06s Real=11.12s Sys=0s
 
  Process calls frequency --->  msc= 571115  eIoni= 608991  Transportation= 23083
 

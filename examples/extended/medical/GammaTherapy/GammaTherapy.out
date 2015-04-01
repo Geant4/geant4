@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -34,7 +34,7 @@
 
 
  Material:    G4_He    density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km 
-                       Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  41.800 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
          --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
@@ -58,7 +58,7 @@
 
 
  Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m  
-                       Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  85.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
@@ -215,7 +215,7 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=9.89s Real=9.92s Sys=0s
+  User=10.39s Real=10.39s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
@@ -235,7 +235,6 @@ Total fGamma fluence in front of the phantom 7.931 MeV
 
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 26
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.057 Mb

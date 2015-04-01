@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -158,6 +158,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of anti_proton
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -280,7 +281,7 @@ hPairProd:   for  kaon-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of kaon+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -346,7 +347,7 @@ muPairProd:   for  mu-    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of mu+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -410,7 +411,7 @@ hPairProd:   for  pi-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of pi+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -424,7 +425,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
      Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
@@ -760,34 +760,33 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.33s Real=0.33s Sys=0.01s
+  User=0.29s Real=0.3s Sys=0s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.326   RMS(GeV) 4.143
-Average number of steps              53.8
-Average number of gamma              0.69
+Average energy deposit (GeV)         6.503   RMS(GeV) 4.16
+Average number of steps              55.14
+Average number of gamma              0.53
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           13.81
-Average number of protons            13.6
+Average number of neutrons           13.7
+Average number of protons            14.29
 Average number of antiprotons        0
-Average number of pi+ & pi-          6.33
-Average number of pi0                3.42
-Average number of kaons              0.29
+Average number of pi+ & pi-          7.06
+Average number of pi0                3.71
+Average number of kaons              0.42
 Average number of muons              0
-Average number of deuterons+tritons  1.76
-Average number of He3+alpha          1.32
-Average number of ions               0.84
+Average number of deuterons+tritons  1.71
+Average number of He3+alpha          1.3
+Average number of ions               0.73
 ========================================================
 
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.077 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.083 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

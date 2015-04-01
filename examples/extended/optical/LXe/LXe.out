@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,10 +20,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -236,7 +238,7 @@ Unacounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.36s Real=0.36s Sys=0.01s
+  User=0.32s Real=0.32s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -284,11 +286,10 @@ Unacounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.23s Real=0.24s Sys=0s
+  User=0.22s Real=0.22s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
 Dynamic pools deleted: 15 / Total memory freed: 2.6 Mb

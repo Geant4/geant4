@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,7 @@
 ***** Table : Nb of materials = 19 *****
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
-                       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
+                       Imean:  85.703 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -465,7 +465,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=15.35s Real=15.39s Sys=0s
+  User=16.25s Real=16.28s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -534,7 +534,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=12.65s Real=12.69s Sys=0.01s
+  User=14.94s Real=14.97s Sys=0s
 
  ======================== run summary ======================
 
