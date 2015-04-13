@@ -163,7 +163,8 @@ List of fixes included in this public patch since the public release 10.1:
         enabled. Use step limitation option 'fUseDistanceToBoundary' instead.
       o G4EmStandardPhysicsWVI: added angular limit to WentzelVI model
         in order to provide correct backscattering.
-        Addressing problem report #1702.
+        Addressing problem report #1702. For more information see:
+        S. H. Kim et al., IEEE Trans. Nucl. Sci., vol. 62, no. 2, 2015.
     + constructors/hadron_elastic:
       o G4HadronElasticPhysics: replaced Chips neutron elastic cross-section
         with default, according to fix in cross_sections module for Chips
