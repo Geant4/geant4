@@ -51,14 +51,59 @@
 #include "G4ThreeVector.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
+namespace  {
+    const G4int    nps=150;        // Number of steps in the R(s) LinTable
+    const G4int    mps=nps+1;      // Number of elements in the R(s) LinTable
+    const G4double sma=150.;       // The first LinTabEl(s=0)=1., s>sma -> logTab
+    const G4double ds=sma/nps;     // Step of the linear Table
+    const G4int    nls=100;        // Number of steps in the R(lns) logTable
+    const G4int    mls=nls+1;      // Number of elements in the R(lns) logTable
+    const G4double lsi=5.;         // The min ln(s) logTabEl(s=148.4 < sma=150.)
+    const G4double lsa=9.;         // The max ln(s) logTabEl(s=148.4 - 8103. mb)
+    const G4double mi=std::exp(lsi);// The min s of logTabEl(~ 148.4 mb)
+    const G4double min_s=std::exp(lsa);// The max s of logTabEl(~ 8103. mb)
+    const G4double dls=(lsa-lsi)/nls;// Step of the logarithmic Table
+    const G4double edls=std::exp(dls);// Multiplication step of the logarithmic Table
+    const G4double toler=.01;      // The tolarence mb defining the same cross-section
+    const G4double C=1.246;
+    const G4double lmi=3.5;       // min of (lnP-lmi)^2 parabola
+    const G4double pbe=.0557;     // elastic (lnP-lmi)^2 parabola coefficient
+    const G4double pbt=.3;        // total (lnP-lmi)^2 parabola coefficient
+    const G4double pmi=.1;        // Below that fast LE calculation is made
+    const G4double pma=1000.;     // Above that fast HE calculation is made
+    const G4int    nlp=300;         // Number of steps in the S(lnp) logTable(5% step)
+    const G4int    mlp=nlp+1;       // Number of elements in the S(lnp) logTable
+    const G4double lpi=-5.;         // The min ln(p) logTabEl(p=6.7 MeV/c - 22. TeV/c)
+    const G4double lpa=10.;         // The max ln(p) logTabEl(p=6.7 MeV/c - 22. TeV/c)
+    const G4double mip=std::exp(lpi);// The min p of logTabEl(~ 6.7 MeV/c)
+    const G4double map=std::exp(lpa);// The max p of logTabEl(~ 22. TeV)
+    const G4double dlp=(lpa-lpi)/nlp;// Step of the logarithmic Table
+    const G4double edlp=std::exp(dlp);// Multiplication step of the logarithmic Table
+}
 
-// initialisation of statics
-G4ThreadLocal std::vector<G4double*> *G4QuasiElRatios::vT_G4MT_TLS_ = 0; // Vector of pointers to LinTable in C++ heap
-G4ThreadLocal std::vector<G4double*> *G4QuasiElRatios::vL_G4MT_TLS_ = 0; // Vector of pointers to LogTable in C++ heap
-G4ThreadLocal std::vector<std::pair<G4double,G4double>*> *G4QuasiElRatios::vX_G4MT_TLS_ = 0; // ETPointers to LogTable
 
 G4QuasiElRatios::G4QuasiElRatios()
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
+    vT = new std::vector<G4double*>;
+    vL = new std::vector<G4double*>;
+    vX = new std::vector<std::pair<G4double,G4double>*>;
+    
+    lastSRatio=0.;             // The last sigma value for which R was calculated
+    lastRRatio=0.;             // The last ratio R which was calculated
+    lastARatio=0;             // theLast of calculated A
+    lastHRatio=0.;            // theLast of max s initialized in the LinTable
+    lastNRatio=0;             // theLast of topBin number initialized in LinTable
+    lastMRatio=0.;            // theLast of rel max ln(s) initialized in LogTable
+    lastKRatio=0;             // theLast of topBin number initialized in LogTable
+    lastTRatio=0;             // theLast of pointer to LinTable in the C++ heap
+    lastLRatio=0;             // theLast of pointer to LogTable in the C++ heap
+    lastPtot=0.;              // The last momentum for which XS was calculated
+    lastHtot=0;               // The last projPDG for which XS was calculated
+    lastFtot=true;            // The last nucleon for which XS was calculated
+    lastItot=0;              // The Last index for which XS was calculated
+    lastMtot=0.;             // The Last rel max ln(p) initialized in LogTable
+    lastKtot=0;             // The Last topBin number initialized in LogTable
+    lastXtot = new std::pair<G4double,G4double>; // The Last ETPointers to LogTable in heap
     
     PCSmanager=(G4ChipsProtonElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsProtonElasticXS::Default_Name());
     
@@ -66,32 +111,25 @@ G4QuasiElRatios::G4QuasiElRatios()
 }
 
 G4QuasiElRatios::~G4QuasiElRatios()
-{  ;;;   if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; std::vector<std::pair<G4double,G4double>*> &vX = *vX_G4MT_TLS_;  ;;;    ;;;   if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &vL = *vL_G4MT_TLS_;  ;;;    ;;;   if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &vT = *vT_G4MT_TLS_;  ;;;  
+{
     std::vector<G4double*>::iterator pos;
-    for(pos=vT.begin(); pos<vT.end(); pos++)
+    for(pos=vT->begin(); pos<vT->end(); pos++)
     { delete [] *pos; }
-    vT.clear();
-    for(pos=vL.begin(); pos<vL.end(); pos++)
+    vT->clear();
+    for(pos=vL->begin(); pos<vL->end(); pos++)
     { delete [] *pos; }
-    vL.clear();
+    vL->clear();
     
     std::vector<std::pair<G4double,G4double>*>::iterator pos2;
-    for(pos2=vX.begin(); pos2<vX.end(); pos2++)
+    for(pos2=vX->begin(); pos2<vX->end(); pos2++)
     { delete [] *pos2; }
-    vX.clear();
-}
-
-// Returns Pointer to the G4VQCrossSection class
-G4QuasiElRatios* G4QuasiElRatios::GetPointer()
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
-    static G4ThreadLocal G4QuasiElRatios *theRatios_G4MT_TLS_ = 0 ; if (!theRatios_G4MT_TLS_) theRatios_G4MT_TLS_ = new  G4QuasiElRatios  ;  G4QuasiElRatios &theRatios = *theRatios_G4MT_TLS_;   // *** Static body of the QEl Cross Section ***
-    return &theRatios;
+    vX->clear();
 }
 
 // Calculation of pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)
 std::pair<G4double,G4double> G4QuasiElRatios::GetRatios(G4double pIU, G4int pPDG,
                                                          G4int tgZ,    G4int tgN)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
     G4double R=0.;
     G4double QF2In=1.;                        // Prototype of QuasiFree/Inel ratio for hN_tot
     G4int tgA=tgZ+tgN;
@@ -109,161 +147,133 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetRatios(G4double pIU, G4int pPDG
 
 // Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section (mb) and A
 G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double m_s, G4int A)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ;  ;;;   if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &vL = *vL_G4MT_TLS_;  ;;;    ;;;   if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &vT = *vT_G4MT_TLS_;  ;;;  
-    static const G4int    nps=150;        // Number of steps in the R(s) LinTable
-    static const G4int    mps=nps+1;      // Number of elements in the R(s) LinTable
-    static const G4double sma=150.;       // The first LinTabEl(s=0)=1., s>sma -> logTab
-    static const G4double ds=sma/nps;     // Step of the linear Table
-    static const G4int    nls=100;        // Number of steps in the R(lns) logTable
-    static const G4int    mls=nls+1;      // Number of elements in the R(lns) logTable
-    static const G4double lsi=5.;         // The min ln(s) logTabEl(s=148.4 < sma=150.)
-    static const G4double lsa=9.;         // The max ln(s) logTabEl(s=148.4 - 8103. mb)
-    static const G4double mi=std::exp(lsi);// The min s of logTabEl(~ 148.4 mb)
-    static const G4double min_s=std::exp(lsa);// The max s of logTabEl(~ 8103. mb)
-    static const G4double dl=(lsa-lsi)/nls;// Step of the logarithmic Table
-    static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
-    static const G4double toler=.01;      // The tolarence mb defining the same cross-section
-    static G4ThreadLocal G4double lastS=0.;             // The last sigma value for which R was calculated
-    static G4ThreadLocal G4double lastR=0.;             // The last ratio R which was calculated
-    // Local Associative Data Base:
-    static G4ThreadLocal std::vector<G4int>     *vA_G4MT_TLS_ = 0 ; if (!vA_G4MT_TLS_) vA_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vA = *vA_G4MT_TLS_;     // Vector of calculated A
-    static G4ThreadLocal std::vector<G4double>  *vH_G4MT_TLS_ = 0 ; if (!vH_G4MT_TLS_) vH_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vH = *vH_G4MT_TLS_;     // Vector of max s initialized in the LinTable
-    static G4ThreadLocal std::vector<G4int>     *vN_G4MT_TLS_ = 0 ; if (!vN_G4MT_TLS_) vN_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vN = *vN_G4MT_TLS_;     // Vector of topBin number initialized in LinTable
-    static G4ThreadLocal std::vector<G4double>  *vM_G4MT_TLS_ = 0 ; if (!vM_G4MT_TLS_) vM_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vM = *vM_G4MT_TLS_;     // Vector of rel max ln(s) initialized in LogTable
-    static G4ThreadLocal std::vector<G4int>     *vK_G4MT_TLS_ = 0 ; if (!vK_G4MT_TLS_) vK_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vK = *vK_G4MT_TLS_;     // Vector of topBin number initialized in LogTable
-    // Last values of the Associative Data Base:
-    static G4ThreadLocal G4int     lastA=0;             // theLast of calculated A
-    static G4ThreadLocal G4double  lastH=0.;            // theLast of max s initialized in the LinTable
-    static G4ThreadLocal G4int     lastN=0;             // theLast of topBin number initialized in LinTable
-    static G4ThreadLocal G4double  lastM=0.;            // theLast of rel max ln(s) initialized in LogTable
-    static G4ThreadLocal G4int     lastK=0;             // theLast of topBin number initialized in LogTable
-    static G4ThreadLocal G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
-    static G4ThreadLocal G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
+{
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
     if(m_s<toler || A<2) return 1.;
     if(m_s>min_s) return 0.;
+    
     if(A>238)
     {
         G4cout<<"-Warning-G4QuasiElRatio::GetQF2IN_Ratio:A="<<A<<">238, return zero"<<G4endl;
         return 0.;
     }
-    G4int nDB=vA.size();                  // A number of nuclei already initialized in AMDB
-    if(nDB && lastA==A && m_s==lastS) return lastR;  // VI do not use tolerance
+    G4int nDB=vARatio.size();                  // A number of nuclei already initialized in AMDB
+    if(nDB && lastARatio==A && m_s==lastSRatio) return lastRRatio;  // VI do not use tolerance
     G4bool found=false;
     G4int i=-1;
-    if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Search for this A in AMDB
+    if(nDB) for (i=0; i<nDB; i++) if(A==vARatio[i]) // Search for this A in AMDB
     {
         found=true;                         // The A value is found
         break;
     }
     if(!nDB || !found)                    // Create new line in the AMDB
     {
-        lastA = A;
-        lastT = new G4double[mps];          // Create the linear Table
-        lastN = static_cast<int>(m_s/ds)+1;   // MaxBin to be initialized
-        if(lastN>nps)
+        lastARatio = A;
+        lastTRatio = new G4double[mps];          // Create the linear Table
+        lastNRatio = static_cast<int>(m_s/ds)+1;   // MaxBin to be initialized
+        if(lastNRatio>nps)
         {
-            lastN=nps;
-            lastH=sma;
+            lastNRatio=nps;
+            lastHRatio=sma;
         }
-        else lastH = lastN*ds;              // Calculate max initialized s for LinTab
+        else lastHRatio = lastNRatio*ds;              // Calculate max initialized s for LinTab
         G4double sv=0;
-        lastT[0]=1.;
-        for(G4int j=1; j<=lastN; j++)       // Calculate LogTab values
+        lastTRatio[0]=1.;
+        for(G4int j=1; j<=lastNRatio; j++)       // Calculate LogTab values
         {
             sv+=ds;
-            lastT[j]=CalcQF2IN_Ratio(sv,A);
+            lastTRatio[j]=CalcQF2IN_Ratio(sv,A);
         }
-        lastL=new G4double[mls];            // Create the logarithmic Table
+        lastLRatio=new G4double[mls];            // Create the logarithmic Table
         if(m_s>sma)                           // Initialize the logarithmic Table
         {
 	  G4double ls=std::log(m_s);
-            lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
-            if(lastK>nls)
+            lastKRatio = static_cast<int>((ls-lsi)/dls)+1; // MaxBin to be initialized in LogTaB
+            if(lastKRatio>nls)
             {
-                lastK=nls;
-                lastM=lsa-lsi;
+                lastKRatio=nls;
+                lastMRatio=lsa-lsi;
             }
-            else lastM = lastK*dl;            // Calculate max initialized ln(s)-lsi for LogTab
+            else lastMRatio = lastKRatio*dls;            // Calculate max initialized ln(s)-lsi for LogTab
             sv=mi;
-            for(G4int j=0; j<=lastK; j++)     // Calculate LogTab values
+            for(G4int j=0; j<=lastKRatio; j++)     // Calculate LogTab values
             {
-                lastL[j]=CalcQF2IN_Ratio(sv,A);
-                if(j!=lastK) sv*=edl;
+                lastLRatio[j]=CalcQF2IN_Ratio(sv,A);
+                if(j!=lastKRatio) sv*=edls;
             }
         }
         else                                // LogTab is not initialized
         {
-            lastK = 0;
-            lastM = 0.;
+            lastKRatio = 0;
+            lastMRatio = 0.;
         }
         i++;                                // Make a new record to AMDB and position on it
-        vA.push_back(lastA);
-        vH.push_back(lastH);
-        vN.push_back(lastN);
-        vM.push_back(lastM);
-        vK.push_back(lastK);
-        vT.push_back(lastT);
-        vL.push_back(lastL);
+        vARatio.push_back(lastARatio);
+        vHRatio.push_back(lastHRatio);
+        vNRatio.push_back(lastNRatio);
+        vMRatio.push_back(lastMRatio);
+        vKRatio.push_back(lastKRatio);
+        vT->push_back(lastTRatio);
+        vL->push_back(lastLRatio);
     }
     else                                  // The A value was found in AMDB
     {
-        lastA=vA[i];
-        lastH=vH[i];
-        lastN=vN[i];
-        lastM=vM[i];
-        lastK=vK[i];
-        lastT=vT[i];
-        lastL=vL[i];
-        if(m_s>lastH)                          // At least LinTab must be updated
+        lastARatio=vARatio[i];
+        lastHRatio=vHRatio[i];
+        lastNRatio=vNRatio[i];
+        lastMRatio=vMRatio[i];
+        lastKRatio=vKRatio[i];
+        lastTRatio=(*vT)[i];
+        lastLRatio=(*vL)[i];
+        if(m_s>lastHRatio)                          // At least LinTab must be updated
         {
-            G4int nextN=lastN+1;               // The next bin to be initialized
-            if(lastN<nps)
+            G4int nextN=lastNRatio+1;               // The next bin to be initialized
+            if(lastNRatio<nps)
             {
-	      G4double sv=lastH; // bug fix by WP
+	      G4double sv=lastHRatio; // bug fix by WP
 
-                lastN = static_cast<int>(m_s/ds)+1;// MaxBin to be initialized
-                if(lastN>nps)
+                lastNRatio = static_cast<int>(m_s/ds)+1;// MaxBin to be initialized
+                if(lastNRatio>nps)
                 {
-                    lastN=nps;
-                    lastH=sma;
+                    lastNRatio=nps;
+                    lastHRatio=sma;
                 }
-                else lastH = lastN*ds;           // Calculate max initialized s for LinTab
+                else lastHRatio = lastNRatio*ds;           // Calculate max initialized s for LinTab
 
-                for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
+                for(G4int j=nextN; j<=lastNRatio; j++)// Calculate LogTab values
                 {
                     sv+=ds;
-                    lastT[j]=CalcQF2IN_Ratio(sv,A);
+                    lastTRatio[j]=CalcQF2IN_Ratio(sv,A);
                 }
             } // End of LinTab update
-            if(lastN>=nextN)
+            if(lastNRatio>=nextN)
             {
-                vH[i]=lastH;
-                vN[i]=lastN;
+                vHRatio[i]=lastHRatio;
+                vNRatio[i]=lastNRatio;
             }
-            G4int nextK=lastK+1;
-            if(!lastK) nextK=0;
-            if(m_s>sma && lastK<nls)             // LogTab must be updated
+            G4int nextK=lastKRatio+1;
+            if(!lastKRatio) nextK=0;
+            if(m_s>sma && lastKRatio<nls)             // LogTab must be updated
             {
-                G4double sv=std::exp(lastM+lsi); // Define starting poit (lastM will be changed)
+                G4double sv=std::exp(lastMRatio+lsi); // Define starting poit (lastM will be changed)
                 G4double ls=std::log(m_s);
-                lastK = static_cast<int>((ls-lsi)/dl)+1; // MaxBin to be initialized in LogTaB
-                if(lastK>nls)
+                lastKRatio = static_cast<int>((ls-lsi)/dls)+1; // MaxBin to be initialized in LogTaB
+                if(lastKRatio>nls)
                 {
-                    lastK=nls;
-                    lastM=lsa-lsi;
+                    lastKRatio=nls;
+                    lastMRatio=lsa-lsi;
                 }
-                else lastM = lastK*dl;           // Calculate max initialized ln(s)-lsi for LogTab
-                for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
+                else lastMRatio = lastKRatio*dls;           // Calculate max initialized ln(s)-lsi for LogTab
+                for(G4int j=nextK; j<=lastKRatio; j++)// Calculate LogTab values
                 {
-                    sv*=edl;
-                    lastL[j]=CalcQF2IN_Ratio(sv,A);
+                    sv*=edls;
+                    lastLRatio[j]=CalcQF2IN_Ratio(sv,A);
                 }
             } // End of LogTab update
-            if(lastK>=nextK)
+            if(lastKRatio>=nextK)
             {
-                vM[i]=lastM;
-                vK[i]=lastK;
+                vMRatio[i]=lastMRatio;
+                vKRatio[i]=lastKRatio;
             }
         }
     }
@@ -272,26 +282,25 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double m_s, G4int A)
     {
         G4int n=static_cast<int>(m_s/ds);     // Low edge number of the bin
         G4double d=m_s-n*ds;                  // Linear shift
-        G4double v=lastT[n];                // Base
-        lastR=v+d*(lastT[n+1]-v)/ds;        // Result
+        G4double v=lastTRatio[n];                // Base
+        lastRRatio=v+d*(lastTRatio[n+1]-v)/ds;        // Result
     }
     else                                  // Use log table
     {
         G4double ls=std::log(m_s)-lsi;        // ln(s)-l_min
-        G4int n=static_cast<int>(ls/dl);    // Low edge number of the bin
-        G4double d=ls-n*dl;                 // Log shift
-        G4double v=lastL[n];                // Base
-        lastR=v+d*(lastL[n+1]-v)/dl;        // Result
+        G4int n=static_cast<int>(ls/dls);    // Low edge number of the bin
+        G4double d=ls-n*dls;                 // Log shift
+        G4double v=lastLRatio[n];                // Base
+        lastRRatio=v+d*(lastLRatio[n+1]-v)/dls;        // Result
     }
-    if(lastR<0.) lastR=0.;
-    if(lastR>1.) lastR=1.;
-    return lastR;
+    if(lastRRatio<0.) lastRRatio=0.;
+    if(lastRRatio>1.) lastRRatio=1.;
+    return lastRRatio;
 } // End of CalcQF2IN_Ratio
 
 // Calculatio QasiFree/Inelastic Ratio as a function of total hN cross-section and A
 G4double G4QuasiElRatios::CalcQF2IN_Ratio(G4double m_s, G4int A)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
-    static const G4double C=1.246;
+{
     G4double s2=m_s*m_s;
     G4double s4=s2*s2;
     G4double ss=std::sqrt(std::sqrt(m_s));
@@ -303,13 +312,9 @@ G4double G4QuasiElRatios::CalcQF2IN_Ratio(G4double m_s, G4int A)
 
 // Calculatio pair(hN_el,hN_tot) (mb): p in GeV/c, index(PDG,F) (see FetchElTot)
 std::pair<G4double,G4double> G4QuasiElRatios::CalcElTot(G4double p, G4int I)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
     // ---------> Each parameter set can have not more than nPoints=128 parameters
-    static const G4double lmi=3.5;       // min of (lnP-lmi)^2 parabola
-    static const G4double pbe=.0557;     // elastic (lnP-lmi)^2 parabola coefficient
-    static const G4double pbt=.3;        // total (lnP-lmi)^2 parabola coefficient
-    static const G4double pmi=.1;        // Below that fast LE calculation is made
-    static const G4double pma=1000.;     // Above that fast HE calculation is made
+
     G4double El=0.;                      // prototype of the elastic hN cross-section
     G4double To=0.;                      // prototype of the total hN cross-section
     if(p<=0.)
@@ -559,7 +564,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::CalcElTot(G4double p, G4int I)
 
 // For hadron PDG with momentum Mom (GeV/c) on N (p/n) calculate <sig_el,sig_tot> pair (mb)
 std::pair<G4double,G4double> G4QuasiElRatios::GetElTotXS(G4double p, G4int PDG, G4bool F)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
     G4int ind=0;                                 // Prototype of the reaction index
     G4bool kfl=true;                             // Flag of K0/aK0 oscillation
     G4bool kf=false;
@@ -586,35 +591,13 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetElTotXS(G4double p, G4int PDG, 
 
 // Calculatio pair(hN_el,hN_tot)(mb): p in GeV/c, F=true -> N=proton, F=false -> N=neutron
 std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, G4bool F)
-{  ;;;   if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; std::vector<std::pair<G4double,G4double>*> &vX = *vX_G4MT_TLS_;  ;;;   if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
-    static const G4int    nlp=300;         // Number of steps in the S(lnp) logTable(5% step)
-    static const G4int    mlp=nlp+1;       // Number of elements in the S(lnp) logTable
-    static const G4double lpi=-5.;         // The min ln(p) logTabEl(p=6.7 MeV/c - 22. TeV/c)
-    static const G4double lpa=10.;         // The max ln(p) logTabEl(p=6.7 MeV/c - 22. TeV/c)
-    static const G4double mi=std::exp(lpi);// The min p of logTabEl(~ 6.7 MeV/c)
-    static const G4double ma=std::exp(lpa);// The max p of logTabEl(~ 22. TeV)
-    static const G4double dl=(lpa-lpi)/nlp;// Step of the logarithmic Table
-    static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
-    //static const G4double toler=.001;      // Relative Tolarence defining "theSameMomentum"
-    static G4ThreadLocal G4double lastP=0.;              // The last momentum for which XS was calculated
-    static G4ThreadLocal G4int    lastH=0;               // The last projPDG for which XS was calculated
-    static G4ThreadLocal G4bool   lastF=true;            // The last nucleon for which XS was calculated
-    static G4ThreadLocal std::pair<G4double,G4double>* G4MT_lastR=0; if (!G4MT_lastR) G4MT_lastR = new std::pair<G4double,G4double>(0.,0.); std::pair<G4double,G4double> &lastR=*G4MT_lastR; // The last result
-    // Local Associative Data Base:
-    static G4ThreadLocal std::vector<G4int>     *vI_G4MT_TLS_ = 0 ; if (!vI_G4MT_TLS_) vI_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vI = *vI_G4MT_TLS_;      // Vector of index for which XS was calculated
-    static G4ThreadLocal std::vector<G4double>  *vM_G4MT_TLS_ = 0 ; if (!vM_G4MT_TLS_) vM_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vM = *vM_G4MT_TLS_;      // Vector of rel max ln(p) initialized in LogTable
-    static G4ThreadLocal std::vector<G4int>     *vK_G4MT_TLS_ = 0 ; if (!vK_G4MT_TLS_) vK_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vK = *vK_G4MT_TLS_;      // Vector of topBin number initialized in LogTable
-    // Last values of the Associative Data Base:
-    static G4ThreadLocal G4int     lastI=0;              // The Last index for which XS was calculated
-    static G4ThreadLocal G4double  lastM=0.;             // The Last rel max ln(p) initialized in LogTable
-    static G4ThreadLocal G4int     lastK=0;             // The Last topBin number initialized in LogTable
-    static G4ThreadLocal std::pair<G4double,G4double>* *lastX_G4MT_TLS_ = 0 ; if (!lastX_G4MT_TLS_) {lastX_G4MT_TLS_ = new  std::pair<G4double,G4double>*  ; *lastX_G4MT_TLS_=0 ; }  std::pair<G4double,G4double>* &lastX = *lastX_G4MT_TLS_; // The Last ETPointers to LogTable in heap
+{
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
-    G4int nDB=vI.size();                   // A number of hadrons already initialized in AMDB
-    if(nDB && lastH==PDG && lastF==F && p>0. && p==lastP) return lastR;// VI don't use toler.
+    G4int nDB=vItot.size();                   // A number of hadrons already initialized in AMDB
+    if(nDB && lastHtot==PDG && lastFtot==F && p>0. && p==lastPtot) return lastRtot;// VI don't use toler.
     //  if(nDB && lastH==PDG && lastF==F && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
-    lastH=PDG;
-    lastF=F;
+    lastHtot=PDG;
+    lastFtot=F;
     G4int ind=-1;                          // Prototipe of the index of the PDG/F combination
     // i=0: pp(nn), i=1: np(pn), i=2: pimp(pipn), i=3: pipp(pimn), i=4: Kmp(Kmn,K0n,K0p),
     // i=5: Kpp(Kpn,aK0n,aK0p), i=6: Hp(Hn), i=7: app(apn,ann,anp) 
@@ -638,12 +621,12 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
         <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
         G4Exception("G4QuasiELRatio::FetchElTot:","22",FatalException,"QECrash");
     }
-    if(nDB && lastI==ind && p>0. && p==lastP) return lastR;  // VI do not use toler
+    if(nDB && lastItot==ind && p>0. && p==lastPtot) return lastRtot;  // VI do not use toler
     //  if(nDB && lastI==ind && p>0. && std::fabs(p-lastP)/p<toler) return lastR;
-    if(p<=mi || p>=ma) return CalcElTot(p,ind);   // @@ Slow calculation ! (Warning?)
+    if(p<=mip || p>=map) return CalcElTot(p,ind);   // @@ Slow calculation ! (Warning?)
     G4bool found=false;
     G4int i=-1;
-    if(nDB) for (i=0; i<nDB; i++) if(ind==vI[i])  // Sirch for this index in AMDB
+    if(nDB) for (i=0; i<nDB; i++) if(ind==vItot[i])  // Sirch for this index in AMDB
     {
         found=true;                                 // The index is found
         break;
@@ -651,75 +634,75 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
     G4double lp=std::log(p);
     if(!nDB || !found)                            // Create new line in the AMDB
     {
-        lastX = new std::pair<G4double,G4double>[mlp]; // Create logarithmic Table for ElTot
-        lastI = ind;                                // Remember the initialized inex
-        lastK = static_cast<int>((lp-lpi)/dl)+1;    // MaxBin to be initialized in LogTaB
-        if(lastK>nlp)
+        lastXtot = new std::pair<G4double,G4double>[mlp]; // Create logarithmic Table for ElTot
+        lastItot = ind;                                // Remember the initialized inex
+        lastKtot = static_cast<int>((lp-lpi)/dlp)+1;    // MaxBin to be initialized in LogTaB
+        if(lastKtot>nlp)
         {
-            lastK=nlp;
-            lastM=lpa-lpi;
+            lastKtot=nlp;
+            lastMtot=lpa-lpi;
         }
-        else lastM = lastK*dl;               // Calculate max initialized ln(p)-lpi for LogTab
-        G4double pv=mi;
-        for(G4int j=0; j<=lastK; j++)        // Calculate LogTab values
+        else lastMtot = lastKtot*dlp;               // Calculate max initialized ln(p)-lpi for LogTab
+        G4double pv=mip;
+        for(G4int j=0; j<=lastKtot; j++)        // Calculate LogTab values
         {
-            lastX[j]=CalcElTot(pv,ind);
-            if(j!=lastK) pv*=edl;
+            lastXtot[j]=CalcElTot(pv,ind);
+            if(j!=lastKtot) pv*=edlp;
         }
         i++;                                 // Make a new record to AMDB and position on it
-        vI.push_back(lastI);
-        vM.push_back(lastM);
-        vK.push_back(lastK);
-        vX.push_back(lastX);
+        vItot.push_back(lastItot);
+        vMtot.push_back(lastMtot);
+        vKtot.push_back(lastKtot);
+        vX->push_back(lastXtot);
     }
     else                                   // The A value was found in AMDB
     {
-        lastI=vI[i];
-        lastM=vM[i];
-        lastK=vK[i];
-        lastX=vX[i];
-        G4int nextK=lastK+1;
-        G4double lpM=lastM+lpi;
-        if(lp>lpM && lastK<nlp)              // LogTab must be updated
+        lastItot=vItot[i];
+        lastMtot=vMtot[i];
+        lastKtot=vKtot[i];
+        lastXtot=(*vX)[i];
+        G4int nextK=lastKtot+1;
+        G4double lpM=lastMtot+lpi;
+        if(lp>lpM && lastKtot<nlp)              // LogTab must be updated
         {
-            lastK = static_cast<int>((lp-lpi)/dl)+1; // MaxBin to be initialized in LogTab
-            if(lastK>nlp)
+            lastKtot = static_cast<int>((lp-lpi)/dlp)+1; // MaxBin to be initialized in LogTab
+            if(lastKtot>nlp)
             {
-                lastK=nlp;
-                lastM=lpa-lpi;
+                lastKtot=nlp;
+                lastMtot=lpa-lpi;
             }
-            else lastM = lastK*dl;           // Calculate max initialized ln(p)-lpi for LogTab
+            else lastMtot = lastKtot*dlp;           // Calculate max initialized ln(p)-lpi for LogTab
             G4double pv=std::exp(lpM);       // momentum of the last calculated beam
-            for(G4int j=nextK; j<=lastK; j++)// Calculate LogTab values
+            for(G4int j=nextK; j<=lastKtot; j++)// Calculate LogTab values
             {
-                pv*=edl;
-                lastX[j]=CalcElTot(pv,ind);
+                pv*=edlp;
+                lastXtot[j]=CalcElTot(pv,ind);
             }
         } // End of LogTab update
-        if(lastK>=nextK)                   // The AMDB was apdated
+        if(lastKtot>=nextK)                   // The AMDB was apdated
         {
-            vM[i]=lastM;
-            vK[i]=lastK;
+            vMtot[i]=lastMtot;
+            vKtot[i]=lastKtot;
         }
     }
     // Now one can use tabeles to calculate the value
-    G4double dlp=lp-lpi;                       // Shifted log(p) value
-    G4int n=static_cast<int>(dlp/dl);          // Low edge number of the bin
-    G4double d=dlp-n*dl;                       // Log shift
-    G4double e=lastX[n].first;                 // E-Base
-    lastR.first=e+d*(lastX[n+1].first-e)/dl;   // E-Result
-    if(lastR.first<0.)  lastR.first = 0.;
-    G4double t=lastX[n].second;                // T-Base
-    lastR.second=t+d*(lastX[n+1].second-t)/dl; // T-Result
-    if(lastR.second<0.) lastR.second= 0.;
-    if(lastR.first>lastR.second) lastR.first = lastR.second;
-    return lastR;
+    G4double dlpp=lp-lpi;                       // Shifted log(p) value
+    G4int n=static_cast<int>(dlpp/dlp);          // Low edge number of the bin
+    G4double d=dlpp-n*dlp;                       // Log shift
+    G4double e=lastXtot[n].first;                 // E-Base
+    lastRtot.first=e+d*(lastXtot[n+1].first-e)/dlp;   // E-Result
+    if(lastRtot.first<0.)  lastRtot.first = 0.;
+    G4double t=lastXtot[n].second;                // T-Base
+    lastRtot.second=t+d*(lastXtot[n+1].second-t)/dlp; // T-Result
+    if(lastRtot.second<0.) lastRtot.second= 0.;
+    if(lastRtot.first>lastRtot.second) lastRtot.first = lastRtot.second;
+    return lastRtot;
 } // End of FetchElTot
 
 // (Mean Elastic and Mean Total) Cross-Sections (mb) for PDG+(Z,N) at P=p[GeV/c]
 std::pair<G4double,G4double> G4QuasiElRatios::GetElTot(G4double pIU, G4int hPDG,
                                                         G4int Z,       G4int N)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
     G4double pGeV=pIU/gigaelectronvolt;
     if(Z<1 && N<1)
     {
@@ -735,7 +718,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetElTot(G4double pIU, G4int hPDG,
 // (Mean Elastic and Mean Total) Cross-Sections (mb) for PDG+(Z,N) at P=p[GeV/c]
 std::pair<G4double,G4double> G4QuasiElRatios::GetChExFactor(G4double pIU, G4int hPDG,
                                                              G4int Z, G4int N)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
     G4double pGeV=pIU/gigaelectronvolt;
     G4double resP=0.;
     G4double resN=0.;
@@ -778,7 +761,7 @@ std::pair<G4double,G4double> G4QuasiElRatios::GetChExFactor(G4double pIU, G4int 
 // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
 std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
                                                                      G4LorentzVector N4M, G4int pPDG, G4LorentzVector p4M)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;    
+{
     static const G4double mNeut= G4Neutron::Neutron()->GetPDGMass();
     static const G4double mProt= G4Proton::Proton()->GetPDGMass();
     static const G4double mDeut= G4Deuteron::Deuteron()->GetPDGMass();
@@ -892,7 +875,7 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::Scatter(G4int NPDG,
 // User should himself change the charge (PDG) (e.g. pn->np, pi+n->pi0p, pi-p->pi0n etc.)
 std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
                                                                     G4LorentzVector N4M, G4int pPDG, G4LorentzVector p4M)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
     static const G4double mNeut= G4Neutron::Neutron()->GetPDGMass();
     static const G4double mProt= G4Proton::Proton()->GetPDGMass();
     G4LorentzVector pr4M=p4M/megaelectronvolt;          // Convert 4-momenta in MeV(keep p4M)
@@ -1003,15 +986,16 @@ std::pair<G4LorentzVector,G4LorentzVector> G4QuasiElRatios::ChExer(G4int NPDG,
 
 // Calculate ChEx/El ratio (p is in independent units, (Z,N) is target, pPDG is projectile)
 G4double G4QuasiElRatios::ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG) 
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
+    
     p/=MeV;                                // Converted from independent units
     G4double A=Z+N;
     if(A<1.5) return 0.;
-    G4double C=0.;
-    if     (pPDG==2212) C=N/(A+Z);
-    else if(pPDG==2112) C=Z/(A+N);
+    G4double Cex=0.;
+    if     (pPDG==2212) Cex=N/(A+Z);
+    else if(pPDG==2112) Cex=Z/(A+N);
     else G4cout<<"*Warning*G4CohChrgExchange::ChExElCoef: wrong PDG="<<pPDG<<G4endl;
-    C*=C;                         // Coherent processes squares the amplitude
+    Cex*=Cex;                         // Coherent processes squares the amplitude
     // @@ This is true only for nucleons: other projectiles must be treated differently
     G4double sp=std::sqrt(p);
     G4double p2=p*p;            
@@ -1020,13 +1004,13 @@ G4double G4QuasiElRatios::ChExElCoef(G4double p, G4int Z, G4int N, G4int pPDG)
     G4double T=(6.75+.14*dl1*dl1+13./p)/(1.+.14/p4)+.6/(p4+.00013);
     G4double U=(6.25+8.33e-5/p4/p)*(p*sp+.34)/p2/p; 
     G4double R=U/T;
-    return C*R*R;
+    return Cex*R*R;
 }
 
 // Decay of Hadron In2Particles f&s, f is in respect to the direction of HadronMomentumDir
 G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVector& f4Mom, G4LorentzVector& s4Mom,
                                      G4LorentzVector& dir, G4double maxCost, G4double minCost)
-{ if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
     G4double fM2 = f4Mom.m2();
     G4double fM  = std::sqrt(fM2);              // Mass of the 1st Hadron
     G4double sM2 = s4Mom.m2();

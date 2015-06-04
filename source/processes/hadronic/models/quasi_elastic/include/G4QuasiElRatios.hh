@@ -51,15 +51,11 @@
 
 class G4QuasiElRatios
 {
-protected:
-    
-    G4QuasiElRatios();                 // Constructor
     
 public:
+    G4QuasiElRatios();                 // Constructor
     
     ~G4QuasiElRatios();                 // Destructor
-    
-    static G4QuasiElRatios* GetPointer(); // Gives a pointer to this singletone
     
     // Pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)
     std::pair<G4double,G4double> GetRatios(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
@@ -102,8 +98,40 @@ private:
     
     // Body
 private:
-    static G4ThreadLocal std::vector<G4double*> *vT_G4MT_TLS_;     // Vector of pointers to LinTable
-    static G4ThreadLocal std::vector<G4double*> *vL_G4MT_TLS_;     // Vector of pointers to LogTable
-    static G4ThreadLocal std::vector<std::pair<G4double,G4double>*> *vX_G4MT_TLS_; // Vector of ETPointers to LogTable
+    std::vector<G4double*> *vT;     // Vector of pointers to LinTable
+    std::vector<G4double*> *vL;     // Vector of pointers to LogTable
+    std::vector<std::pair<G4double,G4double>*> *vX; // Vector of ETPointers to LogTable
+    
+    G4double lastSRatio;             // The last sigma value for which R was calculated
+    G4double lastRRatio;             // The last ratio R which was calculated
+    std::vector<G4int> vARatio;
+    std::vector<G4double> vHRatio;     // Vector of max s initialized in the LinTable
+    std::vector<G4int> vNRatio;    // Vector of topBin number initialized in LinTable
+    std::vector<G4double> vMRatio;     // Vector of rel max ln(s) initialized in LogTable
+    std::vector<G4int> vKRatio;     // Vector of topBin number initialized in LogTable
+ 
+    G4int     lastARatio;             // theLast of calculated A
+    G4double  lastHRatio;            // theLast of max s initialized in the LinTable
+    G4int     lastNRatio;             // theLast of topBin number initialized in LinTable
+    G4double  lastMRatio;            // theLast of rel max ln(s) initialized in LogTable
+    G4int     lastKRatio;             // theLast of topBin number initialized in LogTable
+    G4double* lastTRatio;             // theLast of pointer to LinTable in the C++ heap
+    G4double* lastLRatio;             // theLast of pointer to LogTable in the C++ heap
+    
+    G4double lastPtot;              // The last momentum for which XS was calculated
+    G4int    lastHtot;               // The last projPDG for which XS was calculated
+    G4bool   lastFtot;            // The last nucleon for which XS was calculated
+    std::pair<G4double,G4double> lastRtot; // The last result
+    std::vector<G4int>  vItot;      // Vector of index for which XS was calculated
+    std::vector<G4double> vMtot;      // Vector of rel max ln(p) initialized in LogTable
+    std::vector<G4int> vKtot;      // Vector of topBin number initialized in LogTable
+    G4int     lastItot;              // The Last index for which XS was calculated
+    G4double  lastMtot;             // The Last rel max ln(p) initialized in LogTable
+    G4int     lastKtot;             // The Last topBin number initialized in LogTable
+    std::pair<G4double,G4double>* lastXtot; // The Last ETPointers to LogTable in heap
+
+
+    
+    
 };
 #endif
