@@ -14,6 +14,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15-April-2015 V.Ivanchenko   hadr-pre-V10-00-03
+-------------------------------------------------
+- G4PreCompoundTransition - extended protection against numerical 
+    problem; use G4Log and G4Exp instead of G4Pow; cleanup sampling of
+    number of charged excitons
+- G4PreCompoundModel - cleanup
+
+15-April-2015 V.Ivanchenko
+-------------------------------------------------
+- G4PreCompoundTransition - added protection against numerical problem
+    due too high excitation energy; code cleanup
+
+18-March-2015 V.Ivanchenko
+-------------------------------------------------
+- G4PreCompoundAlpha, G4PreCompoundDeuteron, G4PreCompoundHe3,
+  G4PreCompoundModel, G4PreCompoundNeutron, G4PreCompoundProton,
+  G4PreCompoundTransitions, G4PreCompoundTriton - fixed minor
+    Coverity report, cleanup local constants, minor cleanup of the
+    code, should not affect any result
+
 07-July-2014 V.Ivanchenko+J.M.Juesada  hadr-pre-V10-00-02
 ---------------------------------------------------------
 - G4PreCompoundIon - cleanup transition probability computation

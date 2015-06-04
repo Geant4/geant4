@@ -42,12 +42,10 @@
 //                    number of excitons will be the same
 
 #include "G4VPreCompoundTransitions.hh"
-
 #include "globals.hh"
-#include "G4Fragment.hh"
 
 class G4ParticleDefinition;
-class G4Pow;
+class G4Fragment;
 
 class G4PreCompoundTransitions : public G4VPreCompoundTransitions
 {
@@ -68,7 +66,6 @@ private:
   G4bool operator==(const G4PreCompoundTransitions &right) const;
   G4bool operator!=(const G4PreCompoundTransitions &right) const;
 
-  G4Pow* g4pow;
   const G4ParticleDefinition* proton;
 
   G4double FermiEnergy;
