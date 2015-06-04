@@ -14,6 +14,25 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+28-May-2015 A. Ribon       (hadr-string-diff-V10-00-17)
+- G4FTFModel : fixed energy non-conservation in nucleus-nucleus interactions
+  in the method SamplingNucleonKinematics.
+
+24-May-2015 V. Uzhinsky    (hadr-string-diff-V10-00-16)
+  Bug is fixed in G4FTFModel::SamplingNucleonKinematics for
+  hadron-nucleon interactions. fixed bug #1741
+
+18-May-2015 V. Uzhinsky
+- G4FTFParameters.cc 
+    A bug at Xnn calculations found by Alberto is fixed. The bug gives Xin=0 for projectile
+    nucleons in Nucl-Nucl interactions.
+
+22-Apr-2015 A. Ribon
+- G4FTFParticipants : added a new method to clean up the member vector.
+- G4FTFModel : using the above new method to release the memory allocated
+               in GetStrings().
+
 27-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-15)
 - Charge non-conservation is erased for meson-nucleus interactions
   in G4Diffractive Excitation. It was caused by quark exchange.

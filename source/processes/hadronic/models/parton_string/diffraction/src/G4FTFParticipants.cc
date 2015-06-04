@@ -347,3 +347,18 @@ void G4FTFParticipants::ShiftInteractionTime() {
   }
   return;
 }
+
+
+//============================================================================
+
+void G4FTFParticipants::Clean() {
+  for ( size_t i = 0; i < theInteractions.size(); i++ ) {
+    if ( theInteractions[ i ] ) {
+      delete theInteractions[ i ];
+      theInteractions[ i ] = 0;
+    }
+  }
+  theInteractions.clear();
+  currentInteraction = -1;
+}
+

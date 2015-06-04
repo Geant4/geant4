@@ -63,6 +63,7 @@ class G4FTFParticipants : public G4VParticipants {
     void SortInteractionsIncT();
     void ShiftInteractionTime();
     G4InteractionContent& GetInteraction();  
+    void Clean();
     std::vector< G4InteractionContent* > theInteractions;
 
   private:

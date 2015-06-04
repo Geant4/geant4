@@ -171,11 +171,11 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
   NumberOfTargetNucleons = NumberOfTargetProtons + NumberOfTargetNeutrons;
 
   if ( ProjectilePDGcode == 2212  ||  ProjectilePDGcode == 2112 ) {  // Projectile is nucleon        
- 
-    G4double XtotPP = FTFxsManager->GetTotalElementCrossSection( particle, KineticEnergy, 1, 0 );
+    G4ParticleDefinition* Proton = G4Proton::Proton();                                          //ALB 
+    G4double XtotPP = FTFxsManager->GetTotalElementCrossSection( Proton, KineticEnergy, 1, 0 );
     G4ParticleDefinition* Neutron = G4Neutron::Neutron();
     G4double XtotPN = FTFxsManager->GetTotalElementCrossSection( Neutron, KineticEnergy, 1, 0 );
-    G4double XelPP  = FTFxsManager->GetElasticElementCrossSection( particle, KineticEnergy, 1, 0 );
+    G4double XelPP  = FTFxsManager->GetElasticElementCrossSection( Proton, KineticEnergy, 1, 0 );
     G4double XelPN  = FTFxsManager->GetElasticElementCrossSection( Neutron, KineticEnergy, 1, 0 );
 
     #ifdef debugFTFparams
@@ -503,18 +503,24 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
   //G4cout << "Param ProjectilePDGcode " << ProjectilePDGcode << G4endl;
 
   if ( ProjectilePDGcode > 1000 ) {  // Projectile is baryon
-    //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
-    SetParams( 1,      25.0, 1.0,          -50.34, 1.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc.
-    SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Projectile diffraction
-    SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Target diffraction
-    SetParams( 4,       1.0, 0.0 ,          -2.01 , 0.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc. Additional multiply
-//
-    if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
-      SetParams( 2,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Projectile diffraction
-//      SetParams( 3,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Target diffraction
+    //        Proc#     A1      B1            A2       B2   A3   Atop       Ymin
+    SetParams(   0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
+    SetParams(   1,      25.0, 1.0 ,          -50.34, 1.5 , 0.0, 0.0  ,     1.4 );   // Qexchange with    Exc.
+    if ( Xinel > 0.0 ) {
+      SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Projectile diffraction
+      SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Target diffraction
+      SetParams( 4,       1.0, 0.0 ,           -2.01, 0.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc. Additional multiply
+    } else {
+      SetParams( 2,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,     0.0 );
+      SetParams( 3,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,     0.0 );
+      SetParams( 4,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,     0.0 );
     }
-//
+
+    if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
+      SetParams( 2,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0 );  // Projectile diffraction
+      //SetParams( 3,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0 );  // Target diffraction
+    }
+
     SetDeltaProbAtQuarkExchange( 0.0 );
     if ( NumberOfTargetNucleons > 26 ) {
       SetProbOfSameQuarkExchange( 1.0);
@@ -531,16 +537,22 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
 
   } else if( ProjectilePDGcode < -1000 ) {  // Projectile is anti_baryon
 
-    //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-    SetParams( 0,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  1000.0  );  // Qexchange without Exc. 
-    SetParams( 1,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  1000.0  );  // Qexchange with    Exc.
-    SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Projectile diffraction
-    SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Target diffraction
-    SetParams( 4,       1.0, 0.0 ,             0.0  , 0.0 , 0.0, 0.0  ,     0.93 );  // Qexchange with    Exc. Additional multiply
+    //        Proc#     A1      B1            A2       B2   A3   Atop       Ymin
+    SetParams(   0,       0.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,  1000.0  );  // Qexchange without Exc. 
+    SetParams(   1,       0.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,  1000.0  );  // Qexchange with    Exc.
+    if ( Xinel > 0.0 ) {
+      SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93 );  // Projectile diffraction
+      SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93 );  // Target diffraction
+      SetParams( 4,       1.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,     0.93 );  // Qexchange with    Exc. Additional multiply
+    } else {
+      SetParams( 2,       0.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,     0.0  );
+      SetParams( 3,       0.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,     0.0  );
+      SetParams( 4,       0.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,     0.0  );
+    }
 
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
-      SetParams( 2,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Projectile diffraction
-//      SetParams( 3,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
+      SetParams( 2,       0.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,  -100.0  );  // Projectile diffraction
+      //SetParams( 3,       0.0, 0.0 ,             0.0, 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
     }
     SetDeltaProbAtQuarkExchange( 0.0 );
     SetProbOfSameQuarkExchange( 0.0 );
@@ -600,16 +612,22 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
 
    } else {  // Projectile is undefined, Nucleon assumed
 
-    //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
-    SetParams( 1,      25.0, 1.0,          -50.34, 1.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc.
-    SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Projectile diffraction
-    SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Target diffraction
-    SetParams( 4,       1.0, 0.0 ,          -2.01 , 0.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc. Additional multiply
+    //        Proc#     A1      B1            A2       B2   A3   Atop       Ymin
+    SetParams(   0,     13.71, 1.75,         -214.5 , 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
+    SetParams(   1,      25.0, 1.0 ,          -50.34, 1.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc.
+    if ( Xinel > 0.0 ) {
+      SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Projectile diffraction
+      SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);  // Target diffraction
+      SetParams( 4,       1.0, 0.0 ,           -2.01, 0.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc. Additional multiply
+    } else {
+      SetParams( 2,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,     0.0 );
+      SetParams( 3,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,     0.0 );
+      SetParams( 4,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,     0.0 );
+    }
 
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
-      SetParams( 2,      0.0 , 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0  );  // Projectile diffraction
-//      SetParams( 3,      0.0 , 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
+      SetParams( 2,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0 );  // Projectile diffraction
+      //SetParams( 3,       0.0, 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0 );  // Target diffraction
     }
     SetDeltaProbAtQuarkExchange( 0.0 );              // 7 June 2011
     SetProbOfSameQuarkExchange( 0.0 );
