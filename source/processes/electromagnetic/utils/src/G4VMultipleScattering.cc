@@ -101,6 +101,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   facrange(0.04),
   latDisplacement(true),
   isIon(false),
+  fNewPosition(0.,0.,0.),
+  fNewDirection(0.,0.,1.),
   fDispBeyondSafety(false)
 {
   theParameters = G4EmParameters::Instance();

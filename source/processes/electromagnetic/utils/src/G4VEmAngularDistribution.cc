@@ -51,10 +51,8 @@
 #include "G4VEmAngularDistribution.hh"
 
 G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name) 
-  : fName(name)
-{
-  fLocalDirection.set(0.0,0.0,1.0);
-}
+  : fLocalDirection(0.0,0.0,1.0),fName(name)
+{}
 
 G4VEmAngularDistribution::~G4VEmAngularDistribution() 
 {}

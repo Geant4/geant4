@@ -67,6 +67,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   lambdalimit(mm),
   geomMin(1.e-6*CLHEP::mm),
   geomMax(1.e50*CLHEP::mm),
+  fDisplacement(0.,0.,0.),
   steppingAlgorithm(fUseSafety),
   samplez(false),
   latDisplasment(true)
