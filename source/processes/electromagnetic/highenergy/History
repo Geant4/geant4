@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 April 2015: V.Ivant (emhighenergy-V10-00-07)
+- G4eeTo3PiModel - do not use default constructor of G4LorentzVector
+
 20 Feb 2015: V.Ivant (emhighenergy-V10-00-06)
 - G4eeTo3PiModel - increased majoranta for sampling of 3-body final
     state; fixed bug in sampling

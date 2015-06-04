@@ -110,7 +110,7 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
   G4double x0 = massPi0/e;
   G4double x1 = massPi/e;
 
-  G4LorentzVector w0, w1, w2;
+  G4LorentzVector w0(0.,0.,0.,0.), w1(0.,0.,0.,0.), w2(0.,0.,0.,0.);
   G4ThreeVector dir0, dir1;
   G4double e0, p0, e2, p, gg, m01, m02, m12;
 
