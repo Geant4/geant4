@@ -51,6 +51,7 @@
 #include "G4MaterialTable.hh"
 #include "G4SandiaTable.hh"
 #include "G4OrderedTable.hh"
+#include "G4RegionStore.hh"
 
 #include "Randomize.hh"
 #include "G4Electron.hh"
@@ -85,8 +86,6 @@ G4PAIPhotModel::G4PAIPhotModel(const G4ParticleDefinition* p, const G4String& na
 
   // default generator
   SetAngularDistribution(new G4DeltaAngle());
-
-  isInitialised = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -102,61 +101,80 @@ G4PAIPhotModel::~G4PAIPhotModel()
 void G4PAIPhotModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector& cuts)
 {
-  // if(fVerbose > 0) 
+  if(fVerbose > 0) 
   {
     G4cout<<"G4PAIPhotModel::Initialise for "<<p->GetParticleName()<<G4endl;
   }
-
-  if(isInitialised) { return; }
-  isInitialised = true;
-
   SetParticle(p);
   fParticleChange = GetParticleChangeForLoss();
 
-  if(IsMaster()) { 
+  if( IsMaster() ) 
+  { 
 
     InitialiseElementSelectors(p, cuts);
 
-    if(!fModelData) {
+    delete fModelData;
+    fMaterialCutsCoupleVector.clear(); 
 
-      G4double tmin = LowEnergyLimit()*fRatio;
-      G4double tmax = HighEnergyLimit()*fRatio;
-      fModelData = new G4PAIPhotData(tmin, tmax, fVerbose);
-    }
+    G4double tmin = LowEnergyLimit()*fRatio;
+    G4double tmax = HighEnergyLimit()*fRatio;
+    fModelData = new G4PAIPhotData(tmin, tmax, fVerbose);
+    
     // Prepare initialization
     const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
     size_t numOfMat   = G4Material::GetNumberOfMaterials();
     size_t numRegions = fPAIRegionVector.size();
 
-    for(size_t iReg = 0; iReg < numRegions; ++iReg) {
+    // protect for unit tests
+    if(0 == numRegions) {
+      G4Exception("G4PAIModel::Initialise()","em0106",JustWarning,
+                  "no G4Regions are registered for the PAI model - World is used");
+      fPAIRegionVector.push_back(G4RegionStore::GetInstance()
+				 ->GetRegion("DefaultRegionForTheWorld", false));
+      numRegions = 1;
+    }
+
+    for( size_t iReg = 0; iReg < numRegions; ++iReg ) 
+    {
       const G4Region* curReg = fPAIRegionVector[iReg];
       G4Region* reg = const_cast<G4Region*>(curReg);
 
-      for(size_t jMat = 0; jMat < numOfMat; ++jMat) {
+      for(size_t jMat = 0; jMat < numOfMat; ++jMat) 
+      {
 	G4Material* mat = (*theMaterialTable)[jMat];
 	const G4MaterialCutsCouple* cutCouple = reg->FindCouple(mat);
 	//G4cout << "Couple <" << fCutCouple << G4endl;
-	if(cutCouple) {
-	  /*
+	if(cutCouple) 
+        {
+	  if(fVerbose>0)
+	  {
 	    G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
-	    << fMaterial->GetName() << ">  fCouple= " 
-	    << fCutCouple << " idx= " << fCutCouple->GetIndex()
-	    <<"  " << p->GetParticleName() <<G4endl;
-	    // G4cout << cuts.size() << G4endl;
-	    */
+	    << mat->GetName() << ">  fCouple= " 
+	    << cutCouple << ", idx= " << cutCouple->GetIndex()
+	    <<"  " << p->GetParticleName() 
+	    <<", cuts.size() = " << cuts.size() << G4endl;
+	  }
 	  // check if this couple is not already initialized
+
 	  size_t n = fMaterialCutsCoupleVector.size();
-	  if(0 < n) {
-	    for(size_t i=0; i<fMaterialCutsCoupleVector.size(); ++i) {
+
+	  G4bool isnew = true;
+	  if( 0 < n ) 
+          {
+	    for(size_t i=0; i<fMaterialCutsCoupleVector.size(); ++i) 
+            {
 	      if(cutCouple == fMaterialCutsCoupleVector[i]) {
+		isnew = false;
 		break;
 	      }
 	    }
 	  }
 	  // initialise data banks
-	  fMaterialCutsCoupleVector.push_back(cutCouple);
-	  G4double deltaCutInKinEnergy = cuts[cutCouple->GetIndex()];
-	  fModelData->Initialise(cutCouple, deltaCutInKinEnergy, this);
+	  if(isnew) {
+	    fMaterialCutsCoupleVector.push_back(cutCouple);
+	    G4double deltaCutInKinEnergy = cuts[cutCouple->GetIndex()];
+	    fModelData->Initialise(cutCouple, deltaCutInKinEnergy, this);
+	  }
 	}
       }
     }
@@ -169,7 +187,8 @@ void G4PAIPhotModel::InitialiseLocal(const G4ParticleDefinition*,
 				 G4VEmModel* masterModel)
 {
   fModelData = static_cast<G4PAIPhotModel*>(masterModel)->GetPAIPhotData();
-  SetElementSelectors(masterModel->GetElementSelectors());
+  fMaterialCutsCoupleVector = static_cast<G4PAIPhotModel*>(masterModel)->GetVectorOfCouples();
+  SetElementSelectors( masterModel->GetElementSelectors() );
 }
 
 //////////////////////////////////////////////////////////////////////////////

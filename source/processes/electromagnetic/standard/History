@@ -18,6 +18,31 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+30 April 15:  V.Ivanchenko (emstand-V10-00-54)
+- G4WentzelVIModel - repeat check on safety for each new step,
+    in SampleScattering optimized use of random engine
+- G4UrbanMscModel - repeat check on safety for each new step,
+    add extra limit for very small step regime
+- G4PAIModel, G4PAIModelData, G4PAIPhotModel, G4PAIPhotModelData - 
+    (V.Grichine) last part of fixes for the problem report #1731:
+    when next run is initialized old data class is deleted and
+    a new one is created
+
+28 April 15: V.Ivanchenko
+- G4WentzelOKandVIxSection - improved angular sampling
+
+27 April 15: V.Ivanchenko
+- G4UrbanMscModel, G4UniversalFluctuation, G4KleinNishinaCompton,
+  G4KleinNishinaModel - defined pointer to random engine locally
+
+24 April 15: V.Ivanchenko
+- G4PAIModel, G4PAIModelData - fixes of problem report #1731:
+    cuts are not used in Initialise method but only in run time methods;
+    added copy of vector of G4MaterialCutsCouple from master to worker
+    threads 
+- G4KleinNishinaModel, G4WentzelOKandVIxSection - accurate 
+    initialisation of G4ThreeVectors and G4LorentzVector in constructors
+
 16 January 15: V.Ivanchenko (emstand-V10-00-53)
 - G4UniversalFluctuation - switch to use 
   G4Random::getTheEngine() to have more clean code 

@@ -148,7 +148,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 
   if(dp->GetDefinition() != particle) { InitialiseMe(dp->GetDefinition()); }
 
-  rndmEngineF = G4Random::getTheEngine();
+  CLHEP::HepRandomEngine* rndmEngineF = G4Random::getTheEngine();
   
   G4double tau   = tkin * m_Inv_particleMass;            
   G4double gam   = tau + 1.0;

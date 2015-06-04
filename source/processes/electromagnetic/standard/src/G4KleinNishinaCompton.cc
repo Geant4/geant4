@@ -176,6 +176,8 @@ void G4KleinNishinaCompton::SampleSecondaries(
   G4double alpha1     = - G4Log(eps0);
   G4double alpha2     = 0.5*(1.- epsilon0sq);
 
+  rndmEngineMod = G4Random::getTheEngine();
+
   G4int nloop = 0;
   do {
     ++nloop;

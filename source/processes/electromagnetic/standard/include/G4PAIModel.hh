@@ -112,6 +112,8 @@ public:
 
   inline G4PAIModelData* GetPAIModelData();
 
+  inline const std::vector<const G4MaterialCutsCouple*>& GetVectorOfCouples();
+
   inline G4double ComputeMaxEnergy(G4double scaledEnergy);
 
   inline void SetVerboseLevel(G4int verbose);
@@ -146,13 +148,17 @@ private:
   G4double fMass;
   G4double fRatio;
   G4double fChargeSquare;
-
-  G4bool   isInitialised;
 };
 
 inline G4PAIModelData* G4PAIModel::GetPAIModelData()
 {
   return fModelData;
+}
+
+inline const std::vector<const G4MaterialCutsCouple*>& 
+G4PAIModel::GetVectorOfCouples()
+{
+  return fMaterialCutsCoupleVector;
 }
 
 inline G4double G4PAIModel::ComputeMaxEnergy(G4double scaledEnergy)

@@ -74,7 +74,7 @@ public:
 
   ~G4PAIModelData();
 
-  void Initialise(const G4MaterialCutsCouple*, G4double cut, G4PAIModel*);
+  void Initialise(const G4MaterialCutsCouple*, G4PAIModel*);
 
   G4double DEDXPerVolume(G4int coupleIndex, G4double scaledTkin,
 			 G4double cut) const;
@@ -84,11 +84,12 @@ public:
 
   G4double SampleAlongStepTransfer(G4int coupleIndex, G4double kinEnergy,
 				   G4double scaledTkin,
+				   G4double tmax,
 				   G4double stepFactor) const;
 
   G4double SamplePostStepTransfer(G4int coupleIndex, 
 				  G4double scaledTkin, 
-				  G4double scaledTmax) const;
+				  G4double tmin, G4double tmax) const;
 
 private:
 
@@ -111,8 +112,8 @@ private:
   std::vector<G4PhysicsTable*>      fPAIxscBank;
   std::vector<G4PhysicsTable*>      fPAIdEdxBank;
   std::vector<G4PhysicsLogVector*>  fdEdxTable;
-  std::vector<G4PhysicsLogVector*>  fdNdxCutTable;
-  std::vector<G4PhysicsLogVector*>  fdEdxCutTable;
+  //  std::vector<G4PhysicsLogVector*>  fdNdxCutTable;
+  //std::vector<G4PhysicsLogVector*>  fdEdxCutTable;
 
 };
 
