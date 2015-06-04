@@ -1,3 +1,6 @@
+ 1.17.2 :
+ - tools/wroot/file : #ifdef WIN32 -> #ifdef _MSC_VER and handle MinGW in synchronize().
+
  1.17.1 : revisit the usage of std::vector::resize(), have assign() if needed (for exa in histo::reset()) :
   - tools/array, tools/histo/[base_histo,histo_data,p1,p2,profile_data], tools/rroot/streamers : revisit reset(). 
 

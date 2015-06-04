@@ -21,13 +21,11 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#ifdef WIN32
-#ifndef __GNUC__
+#ifdef _MSC_VER
 #include <direct.h>
 #include <io.h>
 // disable the warning about the usage of "this" in the constructor.
 #pragma warning(disable:4355)
-#endif
 #else
 #include <unistd.h>
 #endif
@@ -64,7 +62,7 @@ public: //ifile
 
 #if defined(__linux__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ >= 2)
     if (::lseek64(m_file, a_offset, whence) < 0) {
-#elif defined(WIN32)
+#elif defined(_MSC_VER)
     if (::_lseeki64(m_file, a_offset, whence) < 0) {
 #else
     if (::lseek(m_file, a_offset, whence) < 0) {
@@ -101,7 +99,7 @@ public: //ifile
 
   virtual bool write_buffer(const char* a_buffer,uint32 a_length) {
     // Write a buffer to the file. This is the basic low level write operation.
-#ifdef WIN32
+#ifdef _MSC_VER
     typedef int ssize_t;
 #endif
     ssize_t siz;
@@ -138,17 +136,24 @@ public: //ifile
 
   virtual bool synchronize(){
     // Synchornize a file's in-core and on-disk states.
-#ifdef WIN32
+#ifdef _MSC_VER
+    if(::_commit(m_file)) {
+      m_out << "inlib::wroot::file::synchronize :"
+            << " in _commit() for file " << sout(m_path) << "."
+            << std::endl;
+      return false;
+    }
+#elif defined(__MINGW32__) || defined(__MINGW64__)
     return true;
 #else
     if (::fsync(m_file) < 0) {
-      m_out << "tools::wroot::file::synchronize :"
-            << " error flushing file " << sout(m_path) << "."
+      m_out << "inlib::wroot::file::synchronize :"
+            << " error in fsync() for file " << sout(m_path) << "."
             << std::endl;
       return false;
     } 
-    return true;
 #endif
+    return true;
   }
 
   virtual bool ziper(char a_key,zip_func& a_func) const {
@@ -249,7 +254,7 @@ public:
     }
 
     m_file = _open(a_path.c_str(),
-#ifdef WIN32
+#ifdef _MSC_VER
                                O_RDWR | O_CREAT | O_BINARY,S_IREAD | S_IWRITE
 #else
                                O_RDWR | O_CREAT,0644
@@ -460,7 +465,7 @@ protected:
   static bool access_path(const std::string& a_path,EAccessMode a_mode){
     // Returns true if one can access a file using the specified access mode.
     // Mode is the same as for the WinNT access(2) function.
-#ifdef WIN32
+#ifdef _MSC_VER
     return (::_access(a_path.c_str(),a_mode) == 0) ? true : false;
 #else
     return (::access(a_path.c_str(),a_mode) == 0) ? true : false;
@@ -471,7 +476,7 @@ protected:
     // false in case of failure.
     struct stat finfo;
     if (::stat(a_path.c_str(),&finfo) < 0) return false;
-#ifdef WIN32 
+#ifdef _MSC_VER
     if (finfo.st_mode & S_IFDIR)
       return (::_rmdir(a_path.c_str())==-1 ? false : true);
     else
