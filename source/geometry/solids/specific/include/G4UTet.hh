@@ -95,7 +95,7 @@ inline std::vector<G4ThreeVector> G4UTet::GetVertices() const
   std::vector<G4ThreeVector> vertices;
   for (unsigned int i=0; i<vec.size(); ++i)
   {
-    G4ThreeVector v(vec[i].x, vec[i].y, vec[i].z);
+    G4ThreeVector v(vec[i].x(), vec[i].y(), vec[i].z());
     vertices.push_back(v);
   }
   return vertices;
