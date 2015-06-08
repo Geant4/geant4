@@ -162,7 +162,7 @@ int main()
 {
 
 #ifdef NDEBUG
-	G4Exception("FAIL: *** Assertions must be compiled in! ***");
+  G4Exception("main","000",FatalException,"FAIL: *** Assertions must be compiled in! ***");
 #endif
 	assert(testG4AffineTransform());
 	return 0;

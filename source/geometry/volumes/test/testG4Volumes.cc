@@ -221,7 +221,7 @@ G4bool testG4Volumes()
 int main()
 {
 #ifdef NDEBUG
-    G4Exception("FAIL: *** Assertions must be compiled in! ***");
+    G4Exception("main","000",FatalException,"FAIL: *** Assertions must be compiled in! ***");
 #endif
     assert(testG4LogicalVolume());
     assert(testG4PVPlacement());
