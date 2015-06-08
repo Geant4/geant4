@@ -176,7 +176,7 @@ void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnTheExtSurfaceOfTheSolid(
 //
 G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurfaceStartingFromBox(G4VSolid* aSolid,G4int Nstat)
 {
-  if ( Nstat == 0 ) return 0.;
+  if ( Nstat <= 0 ) return 0.;
   G4double area=1.;
   G4int i=0;
   G4int j=0;
@@ -194,7 +194,7 @@ G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurfaceStartingFromBox(
 //
 G4double G4AdjointPosOnPhysVolGenerator::ComputeAreaOfExtSurfaceStartingFromSphere(G4VSolid* aSolid,G4int Nstat)
 {
-  if ( Nstat == 0 ) return 0.;
+  if ( Nstat <= 0 ) return 0.;
   G4double area=1.;
   G4int i=0;
   G4int j=0;
