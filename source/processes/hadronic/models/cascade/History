@@ -15,6 +15,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 April 2015  A. Ribon (hadr-casc-V10-00-21)     
+---------------------------------------------
+- G4PreCompoundDeexcitation: delete precompound products (i.e. 
+  G4ReactionProduct objects) before cleaning and deleting their
+  vector container.
+
 1 December 2014  M. Kelsey (hadr-casc-V10-00-20)
 ------------------------------------------------
 - G4CascadParticle.cc:  For stopped particles (zero path length), if at core
