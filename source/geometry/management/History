@@ -28,7 +28,7 @@ April 29, 2015 J.Apostolakis
 
 March 3, 2015 G.Cosmo
 - Use accessors x(), y() and z() from UVector3, instead of directly accessing
-  its data-members. Co-work with tag "geom-usolids-V10-01-09".
+  its data-members.
 
 November 27, 2014 G.Cosmo                  geommng-V10-00-06
 - Fixed implementation of StreamInfo() for G4USolid.
