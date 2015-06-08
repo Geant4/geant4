@@ -31,6 +31,58 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+5th May 2015 - Ben Morgan (cmake-V10-00-40)
+- Modules/Geant4ConfigureModulefile.cmake : Genarate a modulefile
+  for the build tree. Requested by developers, but otherwise unsupported.
+- Templates/geant4-modulefile.in : Update export variables to allow
+  transparent configuration of build/install tree versions.
+
+29th April 2015 - Ben Morgan
+- Modules/Geant4MakeRules_cxx.cmake: Add `-no-gcc` to CMAKE_CXX_FLAGS
+  when using Intel compiler. This is temporary fix to give
+  matching flags against old GNUmake build. It requires further checks
+  to understand full behaviour of this flag to tune code versus
+  Intel's `-gcc-sys` flag and `__INTEL_COMPILER` macro.
+
+22nd April 2015 - Ben Morgan
+- Modules/FindCLHEP.cmake: Add CLHEP_ROOT_DIR to CMake cache, allowing
+  it to be editted in the CMake curses/GUI. Use unset command to remove
+  LIBRARY and INCLUDE_DIR variables for CLHEP from the cache when
+  CLHEP_ROOT_DIR is changed.
+- Templates/geant4-env-skeleton.in: Add expansion entry for CLHEP library
+  path
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Export setting
+  of dynamic library path to prepend system CLHEP's library path in
+  geant4.(c)sh
+
+17th April 2015 - Ben Morgan
+- Fixes for JIRA DEV-185 (Allow use of system CLHEP granular libraries)
+- Modules/FindCLHEP.cmake: Allow component arguments to be supplied to
+  find_package, each component being a CLHEP granular library. Support
+  dependencies between components, and fail on REQUIRED if any requested
+  component or dependency is not found. Set cache variables for each requested
+  component library, and fill CLHEP_LIBRARIES with the requested libraries
+- Modules/Geant4OptionalComponents.cmake: Provide new advanced option 
+  GEANT4_USE_SYSTEM_CLHEP_GRANULAR, which can be set to enable use of CLHEP
+  granular libraries from the system. When activated, use new FindCLHEP 
+  interface to search for Geant4's required components. 
+- Templates/Geant4Config.cmake.in: Export and document a new variable, 
+  Geant4_system_clhep_ISGRANULAR that clients can query to check whether
+  the system CLHEP was linked in granular mode.
+- Modules/Geant4ConfigureConfigScript.cmake: Process and export system CLHEP
+  library list to support either singular or granular CLHEP libraries.
+- Templates/geant4-config.in: Support CLHEP granular library listing in
+  '--libs' argument.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake: Export CLHEP_LIB env var
+  to support use of system CLHEP libraries in granular mode.
+- Templates/geant4make-skeleton.in: Export CLHEP_LIB env var to support
+  system CLHEP libs in granular mode.
+
+15th April 2015 - Ben Morgan
+- Modules/Geant4MakeRules_cxx.cmake: Update AppleClang version regex for
+  Xcode 6.1. This version adds the patch number to the "based on LLVM"
+  id. The full version number is now derived.
+
 20th March 2015 - Gabriele Cosmo (cmake-V10-00-39)
 - Modules/Geant4MacroLibraryTargets.cmake: Added external G4geomUSolids
   library to static linkage list. Addressing problem report #1725.

@@ -84,7 +84,7 @@ function(__configure_cxxstd_clang)
   # version of LLVM X.Y, not a release, so it may not provide all features
   # present in the X.Y release.
   if(APPLE AND "${_clangcxx_version}" MATCHES ".*Apple LLVM version.*")
-    string(REGEX REPLACE ".*based on LLVM ([0-9]\\.[0-9]+)svn.*" "\\1" _clangcxx_version ${_clangcxx_version})
+    string(REGEX REPLACE ".*based on LLVM ([0-9](\\.[0-9])+)svn.*" "\\1" _clangcxx_version ${_clangcxx_version})
   endif()
   message(STATUS "Clang version : ${_clangcxx_version}")
 
@@ -214,7 +214,7 @@ endif()
 #
 # Sufficient id on all platforms?
 if(CMAKE_CXX_COMPILER MATCHES "icpc.*|icc.*")
-  set(CMAKE_CXX_FLAGS_INIT "-w1 -Wno-non-virtual-dtor -Wpointer-arith -Wwrite-strings -fp-model precise")
+  set(CMAKE_CXX_FLAGS_INIT "-w1 -Wno-non-virtual-dtor -Wpointer-arith -Wwrite-strings -no-gcc -fp-model precise")
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g")
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")

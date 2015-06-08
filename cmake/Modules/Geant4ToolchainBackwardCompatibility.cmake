@@ -319,14 +319,36 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
   if(GEANT4_USE_SYSTEM_CLHEP)
     # Have to use detected CLHEP paths to set base dir and others
     get_filename_component(_CLHEP_BASE_DIR ${CLHEP_INCLUDE_DIR} PATH)
-    get_filename_component(_CLHEP_LIB_DIR ${CLHEP_LIBRARY} PATH)
+
+    # Handle granular vs singular cases
+    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_Vector_LIBRARY} PATH)
+    else()
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_LIBRARY} PATH)
+    endif()
 
     set(GEANT4_TC_G4LIB_USE_CLHEP "# USING SYSTEM CLHEP")
     _g4tc_setenv_command(GEANT4_TC_CLHEP_BASE_DIR ${SHELL_FAMILY} CLHEP_BASE_DIR ${_CLHEP_BASE_DIR})
 
     _g4tc_setenv_command(GEANT4_TC_CLHEP_INCLUDE_DIR ${SHELL_FAMILY} CLHEP_INCLUDE_DIR ${CLHEP_INCLUDE_DIR})
 
+    # Only need to handle CLHEP_LIB for granular case
+    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+      set(G4_SYSTEM_CLHEP_LIBRARIES )
+      foreach(_clhep_lib ${CLHEP_LIBRARIES})
+        get_filename_component(_curlib "${_clhep_lib}" NAME)
+        string(REGEX REPLACE "^lib(.*)\\.(so|a|dylib|lib|dll)$" "\\1" _curlib "${_curlib}")
+        set(G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES} -l${_curlib}")
+      endforeach()
+
+      # Strip first "-l" as that's prepended by Geant4Make
+      string(REGEX REPLACE "^ *\\-l" "" G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES}")
+
+      _g4tc_setenv_command(GEANT4_TC_CLHEP_LIB ${SHELL_FAMILY} CLHEP_LIB "\"${G4_SYSTEM_CLHEP_LIBRARIES}\"")
+    endif()
+
     _g4tc_setenv_command(GEANT4_TC_CLHEP_LIB_DIR ${SHELL_FAMILY} CLHEP_LIB_DIR ${_CLHEP_LIB_DIR})
+
 
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
       _g4tc_prepend_path(GEANT4_TC_CLHEP_LIB_PATH_SETUP ${SHELL_FAMILY} DYLD_LIBRARY_PATH \${CLHEP_LIB_DIR})
@@ -706,6 +728,24 @@ foreach(_shell bourne;cshell)
     ${_libpathname}
     "\"`cd $geant4_envbindir/${G4ENV_BINDIR_TO_LIBDIR} > /dev/null ; pwd`\""
     )
+
+  # Third party lib paths
+  # - CLHEP, if system
+  set(GEANT4_TC_CLHEP_LIB_PATH_SETUP "# - Builtin CLHEP used")
+  if(GEANT4_USE_SYSTEM_CLHEP)
+    # Handle granular vs singular cases
+    if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_Vector_LIBRARY} PATH)
+    else()
+      get_filename_component(_CLHEP_LIB_DIR ${CLHEP_LIBRARY} PATH)
+    endif()
+
+    _g4tc_prepend_path(GEANT4_TC_CLHEP_LIB_PATH_SETUP
+      ${_shell}
+      ${_libpathname}
+      "${_CLHEP_LIB_DIR}"
+      )
+  endif()
 
   # - Set data paths
   set(GEANT4_ENV_DATASETS )
