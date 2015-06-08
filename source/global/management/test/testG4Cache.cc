@@ -29,15 +29,25 @@
 // Unit test for G4Cache
 #include <iostream>
 #include <cstdlib>
+#include <vector>
+using std::vector;
 using std::cout;
 using std::cerr;
 using std::endl;
 
+//Debug G4Cache
+//#define g4cdebug 1
 #include "G4Cache.hh"
 
 struct A {
+  A() : a(0) {}
   A(int _a) : a(_a) {}
   int a;
+};
+
+struct B {
+  int b;
+  B() { b=1; }
 };
 
 #define CHECKVAL( cond , errmsg ) { \
@@ -66,13 +76,18 @@ G4ThreadFunReturnType myfunc( G4ThreadFunArgType val) {
   MSG("Shared Cache object content from thread:");
   for ( G4MapCache<int,double>::const_iterator it = asc.Begin() ; it!=asc.End() ; ++it ) 
     MSG(it->first<<":"<<it->second);
+  cout<<"Test simple cache with struct and provided constructor"<<endl;
+    G4Cache<B> bb;
+    CHECKVAL( bb.Get().b == 1 , "Wrong Cache content for default initialization");
+    cout<<"SUCCESS"<<endl;
+
   MSG("Thread is over");
   return NULL;
 }
 
 int main(int,char**) {
   MSG("Testing G4caches");
-  int nthreads = 0; //num threads
+  int nthreads = 2; //num threads
   G4Thread* tid = new G4Thread[nthreads];
 
   G4MapCache<int,double> aSharedCache;
@@ -164,6 +179,49 @@ int main(int,char**) {
   mya->a = 1;
   CHECKVAL( ac.Get()->a == 1 , "Wrong Cache content");
   
+  cout<<"Test simple cache with struct and provided constructor"<<endl;
+  G4Cache<B> bb;
+  CHECKVAL( bb.Get().b == 1 , "Wrong Cache content for default initialization");
+
+  cout<<"Test copying of cache data"<<endl;
+  B ab;
+  ab.b = 1234;
+  G4Cache<B> abCache;
+  abCache.Put(ab);
+  G4Cache<B> aCopy(abCache);
+  CHECKVAL(abCache.Get().b==aCopy.Get().b,"Copied cache has different value");
+  CHECKVAL(&(abCache.Get())!=&(aCopy.Get()),"Copied object has same address as original");
+  B anewb;
+  anewb.b=4321;
+  aCopy.Put(anewb);
+  CHECKVAL( aCopy.Get().b==4321,"Copy does not have new value");
+  CHECKVAL( abCache.Get().b==1234,"After copy Original does not have anymore correct value");
+
+  cout<<"Test assignment of cache data"<<endl;
+  G4Cache<B> assB = abCache;
+  CHECKVAL(assB.Get().b==abCache.Get().b,"Assigned cache has different value");
+  CHECKVAL(&(assB.Get())!=&(abCache.Get()),"Copied object has same address as original");
+  assB.Put(anewb);
+  CHECKVAL( assB.Get().b==4321,"Assigned cache does not have new value");
+  CHECKVAL( abCache.Get().b==1234,"After assignement Original does not have anymore correct value");
+
+  cout<<"Test of G4Cache in vector"<<endl;
+  G4Cache<A> anE;
+  anE.Put(A(1234));
+#ifdef g4cdebug
+  cout<<"Create a 10 elements vector with default element"<<endl;
+#endif
+  vector<G4Cache<A> > aVec(10,anE);
+#ifdef g4cdebug
+  cout<<"Now trigger resize 20"<<endl;
+#endif
+  aVec.resize(20);
+  G4Cache<A> anE2(5678);
+  for ( int i = 10; i<20 ; ++i ) aVec[i]=anE2;
+  for ( int i = 0 ; i < 20 ; ++i ) {
+	  const int val = i>9 ? 5678 : 1234;
+	  CHECKVAL( aVec[i].Get().a ==val , "Value in vector<G4Cache> wrong for"<<i);
+  }
   cout<<"SUCCESS"<<endl;
   return 0;
 }

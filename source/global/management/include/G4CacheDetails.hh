@@ -235,7 +235,11 @@ void G4CacheReference<G4double>::Initialize( unsigned int id )
         cache->resize(id+1,static_cast<G4double>(0));
 }
 
+#ifdef g4cdebug
+void G4CacheReference<G4double>::Destroy( unsigned int id , G4bool last) {
+#else
 void G4CacheReference<G4double>::Destroy( unsigned int /*id*/ , G4bool last) {
+#endif
     if ( cache && last ) {
 #ifdef g4cdebug
         cout<<"Destroying element"<<id<<" is last?"<<last<<"-Pointer template specialization-"<<endl;

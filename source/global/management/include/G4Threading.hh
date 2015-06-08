@@ -40,6 +40,15 @@
 
 #include "G4Types.hh"
 
+// Macro to put current thread to sleep
+//
+#if defined(WIN32)
+#define G4THREADSLEEP( tick ) { Sleep(tick); }
+#else
+#include <unistd.h>    // needed for sleep()
+#define G4THREADSLEEP( tick ) { sleep(tick); }
+#endif
+
 #if defined(G4MULTITHREADED)
   //===============================
   // Multi-threaded build
@@ -72,10 +81,6 @@
     #define G4MUTEXINIT(mutex) pthread_mutex_init( &mutex , NULL);
     #define G4MUTEXDESTROY(mutex) pthread_mutex_destroy( &mutex );
 
-    // Macro to put current thread to sleep
-    //
-    #define G4THREADSLEEP( tick ) { sleep(tick); }
-	
     // Macro to create a G4Thread object
     //
     #define G4THREADCREATE( worker , func , arg )  { \
@@ -138,7 +143,6 @@
     BOOL G4ReleaseMutex( __in G4Mutex m);
     #define G4MUTEXUNLOCK G4ReleaseMutex
 
-    #define G4THREADSLEEP( tick ) { Sleep(tick); }
     #define G4THREADCREATE( worker, func, arg ) { *worker = CreateThread( NULL, 16*1024*1024 , func , arg , 0 , NULL ); }
     #define G4THREADJOIN( worker ) WaitForSingleObject( worker , INFINITE);
     #define G4THREADSELF GetCurrentThreadId
@@ -174,7 +178,6 @@
   #define G4MUTEXDESTROY(mutex) ;;
   #define G4MUTEXLOCK fake_mutex_lock_unlock
   #define G4MUTEXUNLOCK fake_mutex_lock_unlock
-  #define G4THREADSLEEP ( tick ) ;;
   #define G4THREADCREATE( worker , func , arg ) ;;
   #define G4THREADJOIN( worker ) ;;
   #define G4THREADSELF( nothing ) G4Thread(nothing); 

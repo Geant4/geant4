@@ -39,6 +39,8 @@
 #include <map>
 #include <vector>
 
+///#include "G4MKL_engine.hh"
+
 #define SUCCESS 1
 #define FAIL 0
 //Just to give some time, on my MacBook Pro Intel i7 2.6GHz: 2 min for 3M TRIALS, set a reasonable number.
@@ -70,6 +72,9 @@ void InitMe( int engineSwitch = 0 )
           case 4:
               pdefaultEngine = new CLHEP::RanshiEngine();
               break;
+          //case 5:
+	  //    pdefaultEngine = new G4MKL_engine();
+ 	  //    break;
           default:
               std::cerr<<"Non valid selection for RandomEngine, valid values from 0 (default) to 4"<<std::endl;
               abort();
@@ -223,7 +228,8 @@ int main(int,char**)
         ++i;
     }
     //0-5
-    for ( int t = 0 ; t < 5 ; ++t ) //Loop on engine types
+    const int max = 5;//6
+    for ( int t = 0 ; t < max ; ++t ) //Loop on engine types
     {
         if ( pdefaultEngine )
         {

@@ -19,6 +19,9 @@ include $(G4INSTALL)/config/architecture.gmk
 #
 INCFLAGS := -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include
-LDLIBS   := -lG4globman
+LDLIBS   := -lG4heprandom -lG4globman
+ifdef G4LIB_USE_CLHEP
+  LDLIBS += -lG4clhep
+endif
 
 include $(G4INSTALL)/config/binmake.gmk

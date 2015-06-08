@@ -32,14 +32,14 @@
 #include <CLHEP/Random/Randomize.h>
 
 #if __clang__
-  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
+  #if ((defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
       !__has_feature(cxx_thread_local))
     #define CLANG_NOSTDTLS
   #endif
 #endif
 
-#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-    (defined(CLANG_NOSTDTLS))
+#if (defined(G4MULTITHREADED) && \
+    (!defined(G4USE_STD11) || (defined(CLANG_NOSTDTLS))))
 
 // MT needs special Random Number distribution classes
 //
@@ -65,8 +65,6 @@
 
 #define G4UniformRand() G4MTHepRandom::getTheEngine()->flat()
 
-// Currently not be used in G4 source
-//
 #define G4RandFlatArray G4MTRandFlat::shootArray
 #define G4RandFlatInt G4MTRandFlat::shootInt
 #define G4RandGeneralTmp G4MTRandGeneral

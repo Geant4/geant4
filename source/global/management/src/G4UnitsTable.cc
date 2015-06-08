@@ -322,6 +322,7 @@ void G4UnitDefinition::BuildUnitsTable()
  
  //Amount of substance
  new G4UnitDefinition("mole","mol","Amount of substance",mole);
+ new G4UnitDefinition("g/mole","g/mol","Molar mass",g/mole);
  
  //Activity
  new G4UnitDefinition("becquerel","Bq","Activity",becquerel);

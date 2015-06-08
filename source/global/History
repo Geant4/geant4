@@ -17,6 +17,35 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 27, 2015 J.Allison (global-V10-00-46)
+- Define G4THREADSLEEP(tick) macro in G4Threading.hh also for sequential
+  builds.
+
+May 26, 2015 G.Cosmo
+- Corrected logic for use of TLS on clang compiler for the Random module.
+
+May 22, 2015 G.Cosmo
+- Added inclusion of <unistd.h> in G4Threading.hh for self-consistency
+  with the call to sleep().
+
+May 18, 2015 A.Dotti
+- Adding copy constructor and assignement operator for G4Cache
+  Addressing issue #1739
+
+May 13, 2015 G.Cosmo
+- Added guard against potential loop in G4RandomTools::G4LambertianRand().
+
+April 26, 2015 V.Ivantchenko
+- G4StatDouble: return RMS 0 instead of -1 in the case the number
+  of entries is below 2 (fixes arithmetic exceptions in examples for 
+  run with 1 event only).
+
+April 8, 2015 G.Cosmo
+- Corrected GNUmakefile in HepRandom unit tests.
+
+March 27, 2015 G.Cosmo
+- Added "g/mole" Molar mass definition to G4UnitsTable.
+
 January 12, 2015 G.Cosmo (global-V10-00-45)
 - Define G4THREADSLEEP(tick) macro in G4Threading.hh.
 

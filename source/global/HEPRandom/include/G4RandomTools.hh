@@ -56,9 +56,12 @@ inline G4ThreeVector G4LambertianRand(const G4ThreeVector& normal)
 {
   G4ThreeVector vect;
   G4double ndotv;
+  G4int count=0;
+  const G4int max_trials = 1024;
 
   do
   {
+    ++count;
     vect = G4RandomDirection();
     ndotv = normal * vect;
 
@@ -68,7 +71,7 @@ inline G4ThreeVector G4LambertianRand(const G4ThreeVector& normal)
       ndotv = -ndotv;
     }
 
-  } while (!(G4UniformRand() < ndotv));
+  } while (!(G4UniformRand() < ndotv) && (count < max_trials));
 
   return vect;
 }

@@ -30,11 +30,13 @@
 // ----------------------------------------------------------------------
 #include "Randomize.hh"
 #include "G4ios.hh"
-
-RandEngine theRandEngine;
-DRand48Engine theDRand48Engine;
+using namespace CLHEP;
+//RandEngine theRandEngine;
+//DRand48Engine theDRand48Engine;
 RanluxEngine theRanluxEngine(19780503,4);
 RanecuEngine theRanecuEngine;
+#include "G4MKL_engine.hh"
+G4MKL_engine theMKLengine;
 
 //========================  CHI-SQUARED TEST  ============================
 
@@ -90,7 +92,7 @@ void even_test(int seq)
           << "\t" << prob[j] << G4endl;
    G4cout << G4endl;
    G4cout << G4endl;
-   G4cout << "                   -----  Press <ENTER> to continue  -----";
+   G4cout << "                   -----  Press <ENTER> to continue  -----"<<G4endl;
    if ( (Pause = G4cin.get()) != '\n') exit(0);
    if (more == 1)
      if ( (Pause = G4cin.get()) != '\n') exit(0);
@@ -143,7 +145,7 @@ void corr_test(int seq)
         << "Standard deviation predicted: " << std << G4endl
         << "Mean value effective : " << mve << "\t"
         << "Standard deviation effective: " << stde << G4endl << G4endl;
-   G4cout << "                   -----  Press <ENTER> to continue  -----";
+   G4cout << "                   -----  Press <ENTER> to continue  -----"<<G4endl;
    if ( (Pause = G4cin.get()) != '\n') exit(0);
    G4cout << G4endl;
 
@@ -197,7 +199,7 @@ void spat_test ()
         << 4.*PI/3. << "\t" << .5*PI*PI << G4endl << G4endl;
 
    if (more != 99) {
-     G4cout << "                   -----  Press <ENTER> to continue  -----";
+     G4cout << "                   -----  Press <ENTER> to continue  -----"<<G4endl;
      if ( (Pause = G4cin.get()) != '\n') exit(0);
      G4cout << G4endl;
    }
@@ -267,6 +269,8 @@ void start_test()
    layout(seq);
    G4cout << G4endl << G4endl;
    more = 0;
+
+   /*
    G4cout << "---------------------------  Test on RandEngine  ------------------------------" << G4endl;
    G4cout << G4endl;
    HepRandom::setTheEngine(&theRandEngine);
@@ -277,6 +281,7 @@ void start_test()
    HepRandom::setTheEngine(&theDRand48Engine);
    layout(seq);
    G4cout << G4endl << G4endl;
+   */
    G4cout << "---------------------  Test on RanluxEngine (luxury 4) ------------------------" << G4endl;
    G4cout << G4endl;
    HepRandom::setTheEngine(&theRanluxEngine);
@@ -287,7 +292,15 @@ void start_test()
    G4cout << G4endl;
    HepRandom::setTheEngine(&theRanecuEngine);
    layout(seq);
+
+   G4cout << "--------------------------  Test on MKL G4 wrapper ------------------------------" << G4endl;
+   G4cout << G4endl;
+   HepRandom::setTheEngine(&theMKLengine);
+   layout(seq);
+
+
 }  // end start_test()
+
 
 
 int main() {
