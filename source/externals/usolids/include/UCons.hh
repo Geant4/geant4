@@ -162,7 +162,7 @@ class UCons : public VUSolid
     // Reset relevant values to zero
 
     inline void CheckSPhiAngle(double sPhi);
-    inline void CheckDPhiAngle(double dPhi);
+           void CheckDPhiAngle(double dPhi);
     inline void CheckPhiAngles(double sPhi, double dPhi);
     //
     // Reset relevant flags and angle values

@@ -43,10 +43,11 @@
 #define UTUBS_HH
 
 #include "VUSolid.hh"
+#include <sstream>
 
 class UTubs : public VUSolid
 {
-  public: // with description
+  public:
 
     UTubs(const std::string& pName,
           double pRMin,
@@ -110,7 +111,7 @@ class UTubs : public VUSolid
     virtual void GetParametersList(int /*aNumber*/, double* /*aArray*/) const;
     virtual void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
-  public: // without description
+  public:
 
     UTubs();
     //
@@ -121,8 +122,6 @@ class UTubs : public VUSolid
     UTubs(const UTubs& rhs);
     UTubs& operator=(const UTubs& rhs);
     // Copy constructor and assignment operator.
-
-    //  Older names for access functions
 
     inline double GetRMin() const;
     inline double GetRMax() const;
@@ -158,6 +157,7 @@ class UTubs : public VUSolid
     // specification for points not on the surface
 
      inline double SafetyToPhi(const UVector3& p, const double rho, bool& outside) const;
+
   protected:
 
     double fCubicVolume, fSurfaceArea;

@@ -84,7 +84,7 @@ void UReduciblePolygon::Create(const double a[],
 {
   if (n < 3)
     UUtils::Exception("UReduciblePolygon::Create()", "GeomSolids0002",
-                      FatalErrorInArguments, 1, "Less than 3 vertices specified.");
+                      UFatalErrorInArguments, 1, "Less than 3 vertices specified.");
 
   const double* anext = a, *bnext = b;
 

@@ -437,7 +437,7 @@ void UVoxelizer::BuildBoundingBox(UVector3& amin, UVector3& amax, double toleran
     fBoundingBoxSize[i] = (max - min) / 2 + tolerance * 0.5;
     fBoundingBoxCenter[i] = min + fBoundingBoxSize[i];
   }
-  fBoundingBox = UBox("", fBoundingBoxSize.x, fBoundingBoxSize.y, fBoundingBoxSize.z);
+  fBoundingBox = UBox("", fBoundingBoxSize.x(), fBoundingBoxSize.y(), fBoundingBoxSize.z());
 }
 
 
@@ -886,18 +886,18 @@ int UVoxelizer::GetCandidatesVoxelArray(const UVector3& point, vector<int>& list
       int slice;
       if (fBoundaries[0].size() > 2)
       {
-        slice = BinarySearch(fBoundaries[0], point.x);
+        slice = BinarySearch(fBoundaries[0], point.x());
         if (!(mask = ((unsigned int*) fBitmasks[0].fAllBits)[slice])) return 0;
       }
       if (fBoundaries[1].size() > 2)
       {
-        slice = BinarySearch(fBoundaries[1], point.y);
+        slice = BinarySearch(fBoundaries[1], point.y());
         if (!(mask &= ((unsigned int*) fBitmasks[1].fAllBits)[slice]
              )) return 0;
       }
       if (fBoundaries[2].size() > 2)
       {
-        slice = BinarySearch(fBoundaries[2], point.z);
+        slice = BinarySearch(fBoundaries[2], point.z());
         if (!(mask &= ((unsigned int*) fBitmasks[2].fAllBits)[slice]
              )) return 0;
       }
@@ -1025,10 +1025,10 @@ double UVoxelizer::MinDistanceToBox(const UVector3& aPoint, const UVector3& f)
   // of its surfaces. The algorithm may be accurate or should provide a fast
   // underestimate.
   double safe, safx, safy, safz;
-  safe = safx = -f.x + std::abs(aPoint.x);
-  safy = -f.y + std::abs(aPoint.y);
+  safe = safx = -f.x() + std::abs(aPoint.x());
+  safy = -f.y() + std::abs(aPoint.y());
   if (safy > safe) safe = safy;
-  safz = -f.z + std::abs(aPoint.z);
+  safz = -f.z() + std::abs(aPoint.z());
   if (safz > safe) safe = safz;
   if (safe < 0.0) return 0.0; // point is inside
 //  if (!aAccurate) return safe;
@@ -1187,17 +1187,17 @@ UVoxelCandidatesIterator::UVoxelCandidatesIterator(const UVoxelizer &f, const UV
   if (carNodes > 1)
   {
     n = 1+(carNodes-1)/(8*sizeof(unsigned int));
-    int sliceX = UVoxelizer::BinarySearch(f.fBoundaries[0], point.x);
-    int sliceY = UVoxelizer::BinarySearch(f.fBoundaries[1], point.y);
-    int sliceZ = UVoxelizer::BinarySearch(f.fBoundaries[2], point.z);
+    int sliceX = UVoxelizer::BinarySearch(f.fBoundaries[0], point.x());
+    int sliceY = UVoxelizer::BinarySearch(f.fBoundaries[1], point.y());
+    int sliceZ = UVoxelizer::BinarySearch(f.fBoundaries[2], point.z());
 
     unsigned int *maskX = ((unsigned int *) f.fBitmasks[0].fAllBits) + sliceX*n;
-    maskXLeft = (sliceX && point.x == f.fBoundaries[0][sliceX]) ? maskX - n : NULL;
+    maskXLeft = (sliceX && point.x() == f.fBoundaries[0][sliceX]) ? maskX - n : NULL;
 
     unsigned int *maskY = ((unsigned int *) f.fBitmasks[1].fAllBits) + sliceY*n;
-    maskYLeft = (sliceY && point.y == f.fBoundaries[1][sliceY]) ? maskY - n : NULL;
+    maskYLeft = (sliceY && point.y() == f.fBoundaries[1][sliceY]) ? maskY - n : NULL;
     unsigned int *maskZ = ((unsigned int *) f.fBitmasks[2].fAllBits) + sliceZ*n;
-    maskZLeft = (sliceZ && point.z == f.fBoundaries[2][sliceZ]) ? maskZ - n  : NULL;
+    maskZLeft = (sliceZ && point.z() == f.fBoundaries[2][sliceZ]) ? maskZ - n  : NULL;
 
     if (sliceX == -1 || sliceX == f.fBoundaries[0].back()) nextAvailable = false;
     if (sliceY == -1 || sliceY == f.fBoundaries[1].back()) nextAvailable = false;
@@ -1205,9 +1205,9 @@ UVoxelCandidatesIterator::UVoxelCandidatesIterator(const UVoxelizer &f, const UV
   }
   else
   {
-    if (point.x < f.fBoundaries[0].front() || point.x > f.fBoundaries[0].back()) nextAvailable = false;
-    if (point.y < f.fBoundaries[1].front() || point.y > f.fBoundaries[1].back()) nextAvailable = false;
-    if (point.z < f.fBoundaries[2].front() || point.z > f.fBoundaries[2].back()) nextAvailable = false;
+    if (point.x() < f.fBoundaries[0].front() || point.x() > f.fBoundaries[0].back()) nextAvailable = false;
+    if (point.y() < f.fBoundaries[1].front() || point.y() > f.fBoundaries[1].back()) nextAvailable = false;
+    if (point.z() < f.fBoundaries[2].front() || point.z() > f.fBoundaries[2].back()) nextAvailable = false;
   }
 }
 

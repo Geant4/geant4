@@ -82,7 +82,7 @@ void UPolycone::SetOriginalParameters()
 
   for (int j = 0; j < numPlanes; j++)
   {
-    fOriginalParameters->fZValues[j] = corners[numPlanes + j].z;
+    fOriginalParameters->fZValues[j] = corners[numPlanes + j].z();
     fOriginalParameters->Rmax[j] = corners[numPlanes + j].r;
     fOriginalParameters->Rmin[j] = corners[numPlanes - 1 - j].r;
   }

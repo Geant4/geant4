@@ -69,7 +69,8 @@ void UTrd::CheckAndSetAllParameters ( double pdx1,  double pdx2,
                 << "          X - " << pdx1 << ", " << pdx2 << std::endl
                 << "          Y - " << pdy1 << ", " << pdy2 << std::endl
                 << "          Z - " << pdz << std::endl;
-      UUtils::Exception("UTrd::CheckAndSetAllParameters()", "InvalidSetup", FatalErrorInArguments, 1, "Invalid parameters.");
+      UUtils::Exception("UTrd::CheckAndSetAllParameters()", "GeomSolids0002",
+                        UFatalErrorInArguments, 1, "Invalid parameters.");
     }
   }
 }
@@ -97,25 +98,25 @@ double UTrd::SafetyFromInside(const UVector3& p, bool aAccurate) const
     std::cout << "p.y() = "   << p.y() / mm << " mm" << std::endl ;
     std::cout << "p.z() = "   << p.z() / mm << " mm" << std::endl << std::endl ;
     std::cout.precision(oldprc) ;
-    UUtils::Exception("UTrd::DistanceToOut(p)", "Notification", Warning, 1,
+    UUtils::Exception("UTrd::DistanceToOut(p)", "GeomSolids1002", UWarning, 1,
                       "Point p is outside !?");
   }
 #endif
 
-  safe = fDz - std::fabs(p.z); // z perpendicular Dist
+  safe = fDz - std::fabs(p.z()); // z perpendicular Dist
 
-  zbase = fDz + p.z;
+  zbase = fDz + p.z();
 
   // xdist = distance perpendicular to z axis to closest x plane from p
-  //       = (x half width of shape at p.z) - std::abs(p.x)
+  //       = (x half width of shape at p.z()) - std::abs(p.x())
   //
   tanxz = (fDx2 - fDx1) * 0.5 / fDz; // angle between two parts on trinngle, which reflects proportional part on triangle related to position of point, see it on picture
-  xdist = fDx1 + tanxz * zbase - std::fabs(p.x); // distance to closest point on x border on x-axis on which point is located to
+  xdist = fDx1 + tanxz * zbase - std::fabs(p.x()); // distance to closest point on x border on x-axis on which point is located to
   saf1 = xdist / std::sqrt(1.0 + tanxz * tanxz); // x*std::cos(ang_xz) =
   // shortest (perpendicular)
   // distance to plane, see picture
   tanyz = (fDy2 - fDy1) * 0.5 / fDz;
-  ydist = fDy1 + tanyz * zbase - std::fabs(p.y);
+  ydist = fDy1 + tanyz * zbase - std::fabs(p.y());
   saf2 = ydist / std::sqrt(1.0 + tanyz * tanyz);
 
   // Return minimum x/y/z distance
@@ -137,20 +138,20 @@ double UTrd::SafetyFromInsideAccurate(const UVector3& p) const
   double saf[3];
   //--- Compute safety first
   // check Z facettes
-  saf[0] = fDz - std::abs(p.z);
+  saf[0] = fDz - std::abs(p.z());
   double fx = 0.5 * (fDx1 - fDx2) / fDz;
   double calf = 1. / std::sqrt(1.0 + fx * fx);
   // check X facettes
-  double distx = 0.5 * (fDx1 + fDx2) - fx * p.z;
+  double distx = 0.5 * (fDx1 + fDx2) - fx * p.z();
   if (distx < 0) saf[1] = UUtils::kInfinity;
-  else         saf[1] = (distx - std::abs(p.x)) * calf;
+  else         saf[1] = (distx - std::abs(p.x())) * calf;
 
   double fy = 0.5 * (fDy1 - fDy2) / fDz;
   calf = 1. / std::sqrt(1.0 + fy * fy);
   // check Y facettes
-  distx = 0.5 * (fDy1 + fDy2) - fy * p.z;
+  distx = 0.5 * (fDy1 + fDy2) - fy * p.z();
   if (distx < 0) saf[2] = UUtils::kInfinity;
-  else         saf[2] = (distx - std::abs(p.y)) * calf;
+  else         saf[2] = (distx - std::abs(p.y())) * calf;
 
   return amin(3, saf);
 }
@@ -176,17 +177,17 @@ double UTrd::SafetyFromOutside(const UVector3& p, bool aAccurate) const
   double tanyz, disty, safy;
   double zbase;
 
-  safe = std::abs(p.z) - fDz;
+  safe = std::abs(p.z()) - fDz;
   if (safe < 0) safe = 0;  // Also used to ensure x/y distances
   // POSITIVE
-  zbase = fDz + p.z;
+  zbase = fDz + p.z();
 
   // Find distance along x direction to closest x plane
   //
   tanxz = (fDx2 - fDx1) * 0.5 / fDz;
-  //    widx=fDx1+tanxz*(fDz+p.z()); // x width at p.z
+  //    widx=fDx1+tanxz*(fDz+p.z()); // x width at p.z()
   //    distx=std::abs(p.x())-widx;      // distance to plane
-  distx = std::abs(p.x) - (fDx1 + tanxz * zbase); // distance to point on border of trd, related to axis on which point p lies
+  distx = std::abs(p.x()) - (fDx1 + tanxz * zbase); // distance to point on border of trd, related to axis on which point p lies
   if (distx > safe)
   {
     safx = distx / std::sqrt(1.0 + tanxz * tanxz); // perpendicular distance calculation; vector Dist=Dist*std::cos(ang), it can be probably negative, then comparing in next statement, we will get rid of such distance, because it directs away from the solid
@@ -195,9 +196,9 @@ double UTrd::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 
   // Find distance along y direction to slanted wall
   tanyz = (fDy2 - fDy1) * 0.5 / fDz;
-  //    widy=fDy1+tanyz*(fDz+p.z()); // y width at p.z
+  //    widy=fDy1+tanyz*(fDz+p.z()); // y width at p.z()
   //    disty=std::abs(p.y())-widy;      // distance to plane
-  disty = std::abs(p.y) - (fDy1 + tanyz * zbase);
+  disty = std::abs(p.y()) - (fDy1 + tanyz * zbase);
   if (disty > safe)
   {
     safy = disty / std::sqrt(1.0 + tanyz * tanyz); // distance along vector
@@ -214,20 +215,20 @@ double UTrd::SafetyFromOutsideAccurate(const UVector3& p) const
   double saf[3];
   //--- Compute safety first
   // check Z facettes
-  saf[0] = fDz - std::abs(p.z);
+  saf[0] = fDz - std::abs(p.z());
   double fx = 0.5 * (fDx1 - fDx2) / fDz;
   double calf = 1. / std::sqrt(1.0 + fx * fx);
   // check X facettes
-  double distx = 0.5 * (fDx1 + fDx2) - fx * p.z;
+  double distx = 0.5 * (fDx1 + fDx2) - fx * p.z();
   if (distx < 0) saf[1] = UUtils::kInfinity;
-  else         saf[1] = (distx - std::abs(p.x)) * calf;
+  else         saf[1] = (distx - std::abs(p.x())) * calf;
 
   double fy = 0.5 * (fDy1 - fDy2) / fDz;
   calf = 1. / std::sqrt(1.0 + fy * fy);
   // check Y facettes
-  distx = 0.5 * (fDy1 + fDy2) - fy * p.z;
+  distx = 0.5 * (fDy1 + fDy2) - fy * p.z();
   if (distx < 0) saf[2] = UUtils::kInfinity;
-  else         saf[2] = (distx - std::abs(p.y)) * calf;
+  else         saf[2] = (distx - std::abs(p.y())) * calf;
 
   for (int i = 0; i < 3; i++) saf[i] = -saf[i];
   return amax(3, saf);
@@ -250,60 +251,60 @@ double UTrd::SafetyFromOutsideAccurate(const UVector3& p) const
 // 2. it counts with tolerance
 // 3. algorithm checks are similar:
 // Geant4: x=0.5*(fDx2*zbase1+fDx1*zbase2)/fDz - fgTolerance/2;
-// Root: double dx = 0.5*(fDx2*(point.z+fDz)+fDx1*(fDz-point.z))/fDz;
+// Root: double dx = 0.5*(fDx2*(point.z()+fDz)+fDx1*(fDz-point.z()))/fDz;
 //
 VUSolid::EnumInside UTrd::Inside(const UVector3& p) const
 {
   VUSolid::EnumInside in = eOutside;
   double x, y, zbase1, zbase2;
 
-  if (std::abs(p.z) <= fDz - fgTolerance / 2)
+  if (std::abs(p.z()) <= fDz - fgTolerance / 2)
   {
-    zbase1 = p.z + fDz; // Dist from -ve z plane
-    zbase2 = fDz - p.z; // Dist from +ve z plane
+    zbase1 = p.z() + fDz; // Dist from -ve z plane
+    zbase2 = fDz - p.z(); // Dist from +ve z plane
 
     // Check whether inside x tolerance
     //
-    x = 0.5 * (fDx2 * zbase1 + fDx1 * zbase2) / fDz - fgTolerance / 2; // calculate x coordinate of one corner point corresponding to p.z inside trd (on x axis), ... by using proportional calculation related to triangle
-    if (std::abs(p.x) <= x)
+    x = 0.5 * (fDx2 * zbase1 + fDx1 * zbase2) / fDz - fgTolerance / 2; // calculate x coordinate of one corner point corresponding to p.z() inside trd (on x axis), ... by using proportional calculation related to triangle
+    if (std::abs(p.x()) <= x)
     {
       y = 0.5 * ((fDy2 * zbase1 + fDy1 * zbase2)) / fDz - fgTolerance / 2;
-      if (std::abs(p.y) <= y)
+      if (std::abs(p.y()) <= y)
       {
         in = eInside;
       }
-      else if (std::abs(p.y) <= y + fgTolerance)
+      else if (std::abs(p.y()) <= y + fgTolerance)
       {
         in = eSurface;
       }
     }
-    else if (std::abs(p.x) <= x + fgTolerance)
+    else if (std::abs(p.x()) <= x + fgTolerance)
     {
       // y = y half width of shape at z of point + tolerant boundary
       //
       y = 0.5 * ((fDy2 * zbase1 + fDy1 * zbase2)) / fDz + fgTolerance / 2;
-      if (std::abs(p.y) <= y)
+      if (std::abs(p.y()) <= y)
       {
         in = eSurface;
       }
     }
   }
-  else if (std::abs(p.z) <= fDz + fgTolerance / 2)
+  else if (std::abs(p.z()) <= fDz + fgTolerance / 2)
   {
     // Only need to check outer tolerant boundaries
     //
-    zbase1 = p.z + fDz; // Dist from -ve z plane
-    zbase2 = fDz - p.z; // Dist from +ve z plane
+    zbase1 = p.z() + fDz; // Dist from -ve z plane
+    zbase2 = fDz - p.z(); // Dist from +ve z plane
 
     // x = x half width of shape at z of point plus tolerance
     //
     x = 0.5 * (fDx2 * zbase1 + fDx1 * zbase2) / fDz + fgTolerance / 2;
-    if (std::abs(p.x) <= x)
+    if (std::abs(p.x()) <= x)
     {
       // y = y half width of shape at z of point
       //
       y = 0.5 * ((fDy2 * zbase1 + fDy1 * zbase2)) / fDz + fgTolerance / 2;
-      if (std::abs(p.y) <= y) in = eSurface;
+      if (std::abs(p.y()) <= y) in = eSurface;
     }
   }
   return in;
@@ -328,35 +329,35 @@ double UTrd::DistanceToIn(const UVector3& p,
   double s1, s2, tanxz, tanyz, ds1, ds2;
   double ss1, ss2, sn1 = 0., sn2 = 0., dist;
 
-  if (v.z)    // Calculate valid z intersect range
+  if (v.z())    // Calculate valid z intersect range
   {
-    if (v.z > 0)     // Calculate smax: must be +ve or no intersection.
+    if (v.z() > 0)     // Calculate smax: must be +ve or no intersection.
     {
-      dist = fDz - p.z ;  // to plane at +dz
+      dist = fDz - p.z() ;  // to plane at +dz
 
       if (dist >= 0.5 * VUSolid::fgTolerance)
       {
-        smax = dist / v.z; // distance to intersection with +dz, maximum
-        smin = -(fDz + p.z) / v.z; // distance to intersection with +dz, minimum
+        smax = dist / v.z(); // distance to intersection with +dz, maximum
+        smin = -(fDz + p.z()) / v.z(); // distance to intersection with +dz, minimum
       }
       else  return snxt ;
     }
-    else // v.z <0
+    else // v.z() <0
     {
-      dist = fDz + p.z; // plane at -dz
+      dist = fDz + p.z(); // plane at -dz
 
       if (dist >= 0.5 * VUSolid::fgTolerance)
       {
-        smax = -dist / v.z;
-        smin = (fDz - p.z) / v.z;
+        smax = -dist / v.z();
+        smin = (fDz - p.z()) / v.z();
       }
       else return snxt ;
     }
     if (smin < 0) smin = 0 ;
   }
-  else // v.z=0
+  else // v.z()=0
   {
-    if (std::abs(p.z) >= fDz) return snxt ;      // Outside & no intersect
+    if (std::abs(p.z()) >= fDz) return snxt ;      // Outside & no intersect
     else
     {
       smin = 0 ;    // Always inside z range
@@ -366,15 +367,15 @@ double UTrd::DistanceToIn(const UVector3& p,
 
   // Calculate x intersection range
   //
-  // Calc half width at p.z, and components towards planes
+  // Calc half width at p.z(), and components towards planes
 
   tanxz = (fDx2 - fDx1) * 0.5 / fDz ;
-  s1    = 0.5 * (fDx1 + fDx2) + tanxz * p.z ; // x half width at p.z
-  ds1   = v.x - tanxz * v.z ;     // Components of v towards faces at +-x
-  ds2   = v.x + tanxz * v.z ;
-  ss1   = s1 - p.x;         // -delta x to +ve plane
+  s1    = 0.5 * (fDx1 + fDx2) + tanxz * p.z() ; // x half width at p.z()
+  ds1   = v.x() - tanxz * v.z() ;     // Components of v towards faces at +-x
+  ds2   = v.x() + tanxz * v.z() ;
+  ss1   = s1 - p.x();         // -delta x to +ve plane
   // -ve when outside
-  ss2   = -s1 - p.x;        // -delta x to -ve plane
+  ss2   = -s1 - p.x();        // -delta x to -ve plane
   // +ve when outside
   if (ss1 < 0 && ss2 <= 0)
   {
@@ -455,11 +456,11 @@ double UTrd::DistanceToIn(const UVector3& p,
   // (repeat of x intersection code)
 
   tanyz = (fDy2 - fDy1) * 0.5 / fDz ;
-  s2    = 0.5 * (fDy1 + fDy2) + tanyz * p.z; // y half width at p.z
-  ds1   = v.y - tanyz * v.z;     // Components of v towards faces at +-y
-  ds2   = v.y + tanyz * v.z;
-  ss1   = s2 - p.y;         // -delta y to +ve plane
-  ss2   = -s2 - p.y;        // -delta y to -ve plane
+  s2    = 0.5 * (fDy1 + fDy2) + tanyz * p.z(); // y half width at p.z()
+  ds1   = v.y() - tanyz * v.z();     // Components of v towards faces at +-y
+  ds2   = v.y() + tanyz * v.z();
+  ss1   = s2 - p.y();         // -delta y to +ve plane
+  ss2   = -s2 - p.y();        // -delta y to -ve plane
 
   if (ss1 < 0 && ss2 <= 0)
   {
@@ -562,12 +563,12 @@ double UTrd::DistanceToOut(const UVector3&  p, const UVector3& v,
   double tanxz = 0., cosxz = 0., tanyz = 0., cosyz = 0.;
 
   // Calculate z plane intersection
-  if (v.z > 0)
+  if (v.z() > 0)
   {
-    pdist = fDz - p.z;
+    pdist = fDz - p.z();
     if (pdist > VUSolid::fgTolerance / 2)
     {
-      snxt = pdist / v.z;
+      snxt = pdist / v.z();
       side = kPZ;
     }
     else
@@ -576,12 +577,12 @@ double UTrd::DistanceToOut(const UVector3&  p, const UVector3& v,
       return snxt = 0;
     }
   }
-  else if (v.z < 0)
+  else if (v.z() < 0)
   {
-    pdist = fDz + p.z;
+    pdist = fDz + p.z();
     if (pdist > VUSolid::fgTolerance / 2)
     {
-      snxt = -pdist / v.z;
+      snxt = -pdist / v.z();
       side = kMZ;
     }
     else
@@ -606,15 +607,15 @@ double UTrd::DistanceToOut(const UVector3&  p, const UVector3& v,
 
   // +ve plane (1)
   //
-  ss1 = central + tanxz * p.z - p.x; // distance || x axis to plane
+  ss1 = central + tanxz * p.z() - p.x(); // distance || x axis to plane
   // (+ve if point inside)
-  ds1 = v.x - tanxz * v.z; // component towards plane at +x
+  ds1 = v.x() - tanxz * v.z(); // component towards plane at +x
   // (-ve if +ve -> -ve direction)
   // -ve plane (2)
   //
-  ss2 = -tanxz * p.z - p.x - central; //distance || x axis to plane
+  ss2 = -tanxz * p.z() - p.x() - central; //distance || x axis to plane
   // (-ve if point inside)
-  ds2 = tanxz * v.z + v.x; // component towards plane at -x
+  ds2 = tanxz * v.z() + v.x(); // component towards plane at -x
 
   if (ss1 > 0 && ss2 < 0)
   {
@@ -753,15 +754,15 @@ double UTrd::DistanceToOut(const UVector3&  p, const UVector3& v,
 
     // +ve plane (1)
     //
-    ss1 = central + tanyz * p.z - p.y; // distance || y axis to plane
+    ss1 = central + tanyz * p.z() - p.y(); // distance || y axis to plane
     // (+ve if point inside)
-    ds1 = v.y - tanyz * v.z; // component towards +ve plane
+    ds1 = v.y() - tanyz * v.z(); // component towards +ve plane
     // (-ve if +ve -> -ve direction)
     // -ve plane (2)
     //
-    ss2 = -tanyz * p.z - p.y - central; // distance || y axis to plane
+    ss2 = -tanyz * p.z() - p.y() - central; // distance || y axis to plane
     // (-ve if point inside)
-    ds2 = tanyz * v.z + v.y; // component towards -ve plane
+    ds2 = tanyz * v.z() + v.y(); // component towards -ve plane
 
     if (ss1 > 0 && ss2 < 0)
     {
@@ -920,7 +921,8 @@ double UTrd::DistanceToOut(const UVector3&  p, const UVector3& v,
         n.Set(0, 0, -1);
         break;
       default:
-        UUtils::Exception("UTrd::DistanceToOut(p,v,..)", "Notification", Warning, 1, "Undefined side for valid surface normal to solid.");
+        UUtils::Exception("UTrd::DistanceToOut(p,v,..)", "GeomSolids1002",
+                UWarning, 1, "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -938,43 +940,44 @@ bool UTrd::Normal(const UVector3& p, UVector3& norm) const
 
   double tanx  = (fDx2 - fDx1) / z;
   double secx  = std::sqrt(1.0 + tanx * tanx);
-  double newpx = std::abs(p.x) - p.z * tanx;
+  double newpx = std::abs(p.x()) - p.z() * tanx;
   double widx  = fDx2 - fDz * tanx;
 
   double tany  = (fDy2 - fDy1) / z;
   double secy  = std::sqrt(1.0 + tany * tany);
-  double newpy = std::abs(p.y) - p.z * tany;
+  double newpy = std::abs(p.y()) - p.z() * tany;
   double widy  = fDy2 - fDz * tany;
 
   double distx = std::abs(newpx - widx) / secx;   // perp. distance to x side
   double disty = std::abs(newpy - widy) / secy;   //                to y side
-  double distz = std::abs(std::abs(p.z) - fDz); //                to z side
+  double distz = std::abs(std::abs(p.z()) - fDz); //                to z side
 
   if (distx <= delta) // we are near the x corner?
   {
     double fcos = 1.0 / secx;
     noSurfaces ++;
-    if (p.x >= 0.) sumnorm.x += fcos;
-    else sumnorm.x -= fcos;
-    sumnorm.z -= tanx * fcos;
+    if (p.x() >= 0.) sumnorm.x() += fcos;
+    else sumnorm.x() -= fcos;
+    sumnorm.z() -= tanx * fcos;
   }
   if (disty <= delta) // y corner ...
   {
     double fcos = 1.0 / secy;
     noSurfaces++;
-    if (p.y >= 0.) sumnorm.y += fcos;
-    else sumnorm.y -= fcos;
-    sumnorm.z -= tany * fcos;
+    if (p.y() >= 0.) sumnorm.y() += fcos;
+    else sumnorm.y() -= fcos;
+    sumnorm.z() -= tany * fcos;
   }
   if (distz <= delta)
   {
     noSurfaces++;
-    sumnorm.z += (p.z >= 0.) ? 1.0 : -1.0;
+    sumnorm.z() += (p.z() >= 0.) ? 1.0 : -1.0;
   }
   if (noSurfaces == 0)
   {
 #ifdef UDEBUG
-    UUtils::Exception("UTrd::SurfaceNormal(p)", "Notification", Warning, 1, "Point p is not on surface !?");
+    UUtils::Exception("UTrd::SurfaceNormal(p)", "GeomSolids1002",
+                      UWarning, 1, "Point p is not on surface !?");
 #endif
     // point is not on surface, calculate normal closest to surface. this is not likely to be used too often..., normally the user gives point on surface...
     //     norm = ApproxSurfaceNormal(p);
@@ -991,7 +994,7 @@ bool UTrd::Normal(const UVector3& p, UVector3& norm) const
         //
         fcos = 1.0 / secx;
         // normal=(+/-std::cos(ang),0,-std::sin(ang))
-        if (p.x >= 0)
+        if (p.x() >= 0)
           norm = UVector3(fcos, 0, -tanx * fcos);
         else
           norm = UVector3(-fcos, 0, -tanx * fcos);
@@ -1000,7 +1003,7 @@ bool UTrd::Normal(const UVector3& p, UVector3& norm) const
       {
         // Closest to Z
         //
-        if (p.z >= 0)
+        if (p.z() >= 0)
           norm = UVector3(0, 0, 1);
         else
           norm = UVector3(0, 0, -1);
@@ -1013,7 +1016,7 @@ bool UTrd::Normal(const UVector3& p, UVector3& norm) const
         // Closest to Y
         //
         fcos = 1.0 / secy;
-        if (p.y >= 0)
+        if (p.y() >= 0)
           norm = UVector3(0, fcos, -tany * fcos);
         else
           norm = UVector3(0, -fcos, -tany * fcos);
@@ -1022,7 +1025,7 @@ bool UTrd::Normal(const UVector3& p, UVector3& norm) const
       {
         // Closest to Z
         //
-        if (p.z >= 0)
+        if (p.z() >= 0)
           norm = UVector3(0, 0, 1);
         else
           norm = UVector3(0, 0, -1);
@@ -1055,17 +1058,17 @@ UVector3 UTrd::ApproxSurfaceNormal(const UVector3& p) const
 
   tanx = (fDx2 - fDx1) / z;
   secx = std::sqrt(1.0 + tanx * tanx);
-  newpx = std::abs(p.x) - p.z * tanx;
+  newpx = std::abs(p.x()) - p.z() * tanx;
   widx = fDx2 - fDz * tanx;
 
   tany = (fDy2 - fDy1) / z;
   secy = std::sqrt(1.0 + tany * tany);
-  newpy = std::abs(p.y) - p.z * tany;
+  newpy = std::abs(p.y()) - p.z() * tany;
   widy = fDy2 - fDz * tany;
 
   distx = std::abs(newpx - widx) / secx; // perpendicular distance to x side
   disty = std::abs(newpy - widy) / secy; //                        to y side
-  distz = std::abs(std::abs(p.z) - fDz); //                        to z side
+  distz = std::abs(std::abs(p.z()) - fDz); //                        to z side
 
   // find closest side
   //
@@ -1077,7 +1080,7 @@ UVector3 UTrd::ApproxSurfaceNormal(const UVector3& p) const
       //
       fcos = 1.0 / secx;
       // normal=(+/-std::cos(ang),0,-std::sin(ang))
-      if (p.x >= 0)
+      if (p.x() >= 0)
         norm = UVector3(fcos, 0, -tanx * fcos);
       else
         norm = UVector3(-fcos, 0, -tanx * fcos);
@@ -1086,7 +1089,7 @@ UVector3 UTrd::ApproxSurfaceNormal(const UVector3& p) const
     {
       // Closest to Z
       //
-      if (p.z >= 0)
+      if (p.z() >= 0)
         norm = UVector3(0, 0, 1);
       else
         norm = UVector3(0, 0, -1);
@@ -1099,7 +1102,7 @@ UVector3 UTrd::ApproxSurfaceNormal(const UVector3& p) const
       // Closest to Y
       //
       fcos = 1.0 / secy;
-      if (p.y >= 0)
+      if (p.y() >= 0)
         norm = UVector3(0, fcos, -tany * fcos);
       else
         norm = UVector3(0, -fcos, -tany * fcos);
@@ -1108,7 +1111,7 @@ UVector3 UTrd::ApproxSurfaceNormal(const UVector3& p) const
     {
       // Closest to Z
       //
-      if (p.z >= 0)
+      if (p.z() >= 0)
         norm = UVector3(0, 0, 1);
       else
         norm = UVector3(0, 0, -1);

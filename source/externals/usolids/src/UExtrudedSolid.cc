@@ -33,7 +33,7 @@ UExtrudedSolid::UExtrudedSolid(const std::string& pName,
     fZSections(),
     fTriangles(),
     fIsConvex(false),
-    fGeometryType("UExtrudedSolid")
+    fGeometryType("ExtrudedSolid")
 
 {
   // General constructor
@@ -53,7 +53,7 @@ UExtrudedSolid::UExtrudedSolid(const std::string& pName,
     fZSections(),
     fTriangles(),
     fIsConvex(false),
-    fGeometryType("UExtrudedSolid")
+    fGeometryType("ExtrudedSolid")
 
 {
   // Special constructor for solid with 2 z-sections
@@ -136,7 +136,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon,
     std::ostringstream message;
     message << "Number of polygon vertices < 3 - " << GetName().c_str();
     UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids0002",
-                      FatalErrorInArguments, 2, message.str().c_str());
+                      UFatalErrorInArguments, 2, message.str().c_str());
   }
 
   if (fNz < 2)
@@ -144,7 +144,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon,
     std::ostringstream message;
     message << "Number of z-sides < 2 - " << GetName().c_str();
     UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids0002",
-                      FatalErrorInArguments, 2, message.str().c_str());
+                      UFatalErrorInArguments, 2, message.str().c_str());
   }
 
   for (int i = 0; i < fNz - 1; ++i)
@@ -155,7 +155,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon,
       message << "Z-sections have to be ordered by z value (z0 < z1 < z2...) - "
               << GetName().c_str();
       UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids0002",
-                        FatalErrorInArguments, 2, message.str().c_str());
+                        UFatalErrorInArguments, 2, message.str().c_str());
     }
     if (std::fabs(zsections[i + 1].fZ - zsections[i].fZ) < VUSolid::fgTolerance * 0.5)
     {
@@ -163,7 +163,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon,
       message << "Z-sections with the same z position are not supported - "
               << GetName().c_str();
       UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids0001",
-                        FatalError, 1, message.str().c_str());
+                        UFatalError, 1, message.str().c_str());
     }
   }
 
@@ -192,7 +192,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon,
   {
     // Polygon vertices are defined anti-clockwise, we revert them
     UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids1001",
-                      Warning, 4,
+                      UWarning, 4,
                 "Polygon vertices defined anti-clockwise, reverting polygon");
     for (int i = 0; i < fNv; ++i)
     {
@@ -215,7 +215,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon,
     std::ostringstream message;
     message << "Making facets failed - " << GetName().c_str();
     UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids0003",
-                     FatalError, 1, message.str().c_str());
+                     UFatalError, 1, message.str().c_str());
   }
   fIsConvex = IsConvex();
 
@@ -238,7 +238,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon, double dz,
     std::ostringstream message;
     message << "Number of polygon vertices < 3 - " << GetName().c_str();
     UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids0002",
-                      FatalErrorInArguments, 2, message.str().c_str());
+                      UFatalErrorInArguments, 2, message.str().c_str());
   }
 
   // Check if polygon vertices are defined clockwise
@@ -270,7 +270,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon, double dz,
   {
     // Polygon vertices are defined anti-clockwise, we revert them
     UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids1001",
-                      Warning, 4,
+                      UWarning, 4,
                  "Polygon vertices defined anti-clockwise, reverting polygon");
     for (int i = 0; i < fNv; ++i)
     {
@@ -289,7 +289,7 @@ void UExtrudedSolid::Initialise(std::vector<UVector2>& polygon, double dz,
     std::ostringstream message;
     message << "Making facets failed - " << GetName().c_str();
     UUtils::Exception("UExtrudedSolid::UExtrudedSolid()", "GeomSolids0003",
-                      FatalError, 1, message.str().c_str());
+                      UFatalError, 1, message.str().c_str());
   }
   fIsConvex = IsConvex();
 
@@ -353,18 +353,18 @@ UVector2 UExtrudedSolid::ProjectPoint(const UVector3& point) const
   // p(z) = scale(z)*p0 + offset(z)
   // p0 = (p(z) - offset(z))/scale(z);
 
-  // Select projection (z-segment of the solid) according to p.z
+  // Select projection (z-segment of the solid) according to p.z()
   //
   int iz = 0;
-  while (point.z > fZSections[iz + 1].fZ && iz < fNz - 2)
+  while (point.z() > fZSections[iz + 1].fZ && iz < fNz - 2)
   {
     ++iz;
   }
 
   double z0 = (fZSections[iz + 1].fZ + fZSections[iz].fZ) / 2.0;
-  UVector2 p2(point.x, point.y);
-  double pscale  = fKScales[iz] * (point.z - z0) + fScale0s[iz];
-  UVector2 poffset = fKOffsets[iz] * (point.z - z0) + fOffset0s[iz];
+  UVector2 p2(point.x(), point.y());
+  double pscale  = fKScales[iz] * (point.z() - z0) + fScale0s[iz];
+  UVector2 poffset = fKOffsets[iz] * (point.z() - z0) + fOffset0s[iz];
 
   // pscale is always >0 as it is an interpolation between two
   // positive scale values
@@ -496,7 +496,7 @@ UExtrudedSolid::MakeDownFacet(int ind1, int ind2, int ind3) const
   UVector3 cross
     = (vertices[1] - vertices[0]).Cross(vertices[2] - vertices[1]);
 
-  if (cross.z > 0.0)
+  if (cross.z() > 0.0)
   {
     // vertices ardered clock wise has to be reordered
 
@@ -527,7 +527,7 @@ UExtrudedSolid::MakeUpFacet(int ind1, int ind2, int ind3) const
   UVector3 cross
     = (vertices[1] - vertices[0]).Cross(vertices[2] - vertices[1]);
 
-  if (cross.z < 0.0)
+  if (cross.z() < 0.0)
   {
     // vertices ordered clock wise has to be reordered
 
@@ -586,7 +586,7 @@ bool UExtrudedSolid::AddGeneralPolygonFacets()
       if (counter > fNv)
       {
         UUtils::Exception("UExtrudedSolid::AddGeneralPolygonFacets",
-                          "GeomSolids0003", FatalError, 1,
+                          "GeomSolids0003", UFatalError, 1,
                           "Triangularisation has failed.");
         break;
       }
@@ -776,13 +776,13 @@ bool UExtrudedSolid::IsConvex() const
 
 //_____________________________________________________________________________
 
-/*UGeometryType UExtrudedSolid::GetEntityType () const
+UGeometryType UExtrudedSolid::GetEntityType () const
 {
   // Return entity type
 
   return fGeometryType;
 }
-*/
+
 //_____________________________________________________________________________
 
 VUSolid* UExtrudedSolid::Clone() const
@@ -800,12 +800,12 @@ VUSolid::EnumInside UExtrudedSolid::Inside(const UVector3& p) const
 
   // Check first if outside extent
   //
-  if (p.x < GetMinXExtent() - VUSolid::fgTolerance * 0.5 ||
-      p.x > GetMaxXExtent() + VUSolid::fgTolerance * 0.5 ||
-      p.y < GetMinYExtent() - VUSolid::fgTolerance * 0.5 ||
-      p.y > GetMaxYExtent() + VUSolid::fgTolerance * 0.5 ||
-      p.z < GetMinZExtent() - VUSolid::fgTolerance * 0.5 ||
-      p.z > GetMaxZExtent() + VUSolid::fgTolerance * 0.5)
+  if (p.x() < GetMinXExtent() - VUSolid::fgTolerance * 0.5 ||
+      p.x() > GetMaxXExtent() + VUSolid::fgTolerance * 0.5 ||
+      p.y() < GetMinYExtent() - VUSolid::fgTolerance * 0.5 ||
+      p.y() > GetMaxYExtent() + VUSolid::fgTolerance * 0.5 ||
+      p.z() < GetMinZExtent() - VUSolid::fgTolerance * 0.5 ||
+      p.z() > GetMaxZExtent() + VUSolid::fgTolerance * 0.5)
   {
     return eOutside;
   }
@@ -844,8 +844,8 @@ VUSolid::EnumInside UExtrudedSolid::Inside(const UVector3& p) const
   {
     // Check if on surface of z sides
     //
-    if (std::fabs(p.z - fZSections[0].fZ) < VUSolid::fgTolerance * 0.5 ||
-        std::fabs(p.z - fZSections[fNz - 1].fZ) < VUSolid::fgTolerance * 0.5)
+    if (std::fabs(p.z() - fZSections[0].fZ) < VUSolid::fgTolerance * 0.5 ||
+        std::fabs(p.z() - fZSections[fNz - 1].fZ) < VUSolid::fgTolerance * 0.5)
     {
       return eSurface;
     }

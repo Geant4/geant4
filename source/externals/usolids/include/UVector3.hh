@@ -30,20 +30,20 @@ struct UVector3
   public:
     UVector3()
     {
-      x = y = z = 0.0;
+      x_ = y_ = z_ = 0.0;
     }
     UVector3(double xval, double yval, double zval)
     {
-      x = xval;
-      y = yval;
-      z = zval;
+      x_ = xval;
+      y_ = yval;
+      z_ = zval;
     }
     UVector3(double theta, double phi);
     UVector3(const double coord[3])
     {
-      x = coord[0];
-      y = coord[1];
-      z = coord[2];
+      x_ = coord[0];
+      y_ = coord[1];
+      z_ = coord[2];
     }
 
     inline UVector3& operator = (const UVector3& v);
@@ -66,6 +66,18 @@ struct UVector3
     inline double& operator[](int index);
 
     inline double operator[](int index) const;
+
+    inline double& x();
+
+    inline double x() const;
+
+    inline double& y();
+
+    inline double y() const;
+
+    inline double& z();
+
+    inline double z() const;
 
     inline UVector3& operator *= (double);
     // Scaling with real numbers.
@@ -132,34 +144,47 @@ struct UVector3
 
     inline UVector3& MultiplyByComponents(const UVector3& p);
 
-  public:
-    double x;
-    double y;
-    double z;
+  private:
+    double x_;
+    double y_;
+    double z_;
 };
 
-UVector3 operator + (const UVector3&, const UVector3&);
-// Addition of 3-vectors.
 
-UVector3 operator - (const UVector3&, const UVector3&);
-// Subtraction of 3-vectors.
+inline UVector3 operator + (const UVector3& a, const UVector3& b)
+{
+  return UVector3(a.x() + b.x(), a.y() + b.y(), a.z() + b.z());
+}
 
-double operator * (const UVector3&, const UVector3&);
-// Scalar product of 3-vectors.
+inline UVector3 operator - (const UVector3& a, const UVector3& b)
+{
+  return UVector3(a.x() - b.x(), a.y() - b.y(), a.z() - b.z());
+}
 
-UVector3 operator * (const UVector3&, double a);
-UVector3 operator / (const UVector3&, double a);
-UVector3 operator * (double a, const UVector3&);
+inline UVector3 operator * (const UVector3& p, double a)
+{
+  return UVector3(a * p.x(), a * p.y(), a * p.z());
+}
 
-// Scaling of 3-vectors with a real number
+inline UVector3 operator / (const UVector3& p, double a)
+{
+  a = 1. / a;
+  return UVector3(a * p.x(), a * p.y(), a * p.z());
+}
+
+inline UVector3 operator * (double a, const UVector3& p)
+{
+  return UVector3(a * p.x(), a * p.y(), a * p.z());
+}
+
 
 //______________________________________________________________________________
 inline UVector3& UVector3::MultiplyByComponents(const UVector3& p)
 {
   // Assignment of a UVector3
-  x *= p.x;
-  y *= p.y;
-  z *= p.z;
+  x_ *= p.x_;
+  y_ *= p.y_;
+  z_ *= p.z_;
   return *this;
 }
 
@@ -168,116 +193,111 @@ inline UVector3& UVector3::operator = (const UVector3& p)
 {
   // Assignment of a UVector3
   if (this == &p)  { return *this; }
-  x = p.x;
-  y = p.y;
-  z = p.z;
+  x_ = p.x_;
+  y_ = p.y_;
+  z_ = p.z_;
   return *this;
 }
 
 inline UVector3& UVector3::operator = (const double vect[3])
 {
   // Assignment of a C array
-  x = vect[0];
-  y = vect[1];
-  z = vect[2];
+  x_ = vect[0];
+  y_ = vect[1];
+  z_ = vect[2];
   return *this;
 }
 
 inline bool UVector3::operator == (const UVector3& v) const
 {
-  return (v.x == x && v.y == y && v.z == z) ? true : false;
+  return (v.x_ == x_ && v.y_ == y_ && v.z_ == z_) ? true : false;
 }
 
 inline bool UVector3::operator != (const UVector3& v) const
 {
-  return (v.x != x || v.y != y || v.z != z) ? true : false;
+  return (v.x_ != x_ || v.y_ != y_ || v.z_ != z_) ? true : false;
 }
 
 inline UVector3& UVector3::operator += (const UVector3& p)
 {
-  x += p.x;
-  y += p.y;
-  z += p.z;
+  x_ += p.x_;
+  y_ += p.y_;
+  z_ += p.z_;
   return *this;
 }
 
 inline UVector3& UVector3::operator -= (const UVector3& p)
 {
-  x -= p.x;
-  y -= p.y;
-  z -= p.z;
+  x_ -= p.x_;
+  y_ -= p.y_;
+  z_ -= p.z_;
   return *this;
 }
 
 inline UVector3 UVector3::operator - () const
 {
-  return UVector3(-x, -y, -z);
+  return UVector3(-x_, -y_, -z_);
 }
 
 inline UVector3& UVector3::operator *= (double a)
 {
-  x *= a;
-  y *= a;
-  z *= a;
+  x_ *= a;
+  y_ *= a;
+  z_ *= a;
   return *this;
 }
 
 inline UVector3& UVector3::operator /= (double a)
 {
   a = 1. / a;
-  x *= a;
-  y *= a;
-  z *= a;
+  x_ *= a;
+  y_ *= a;
+  z_ *= a;
   return *this;
 }
 
 inline bool UVector3::IsNull() const
 {
-  return ((std::abs(x) + std::abs(y) + std::abs(z)) == 0.0) ? true : false;
+  return ((std::abs(x_) + std::abs(y_) + std::abs(z_)) == 0.0) ? true : false;
 }
-
-/*
-inline void UVector3::SetNull() {
-x = y = z = 0.0;
-}
-*/
 
 inline void UVector3::Set(double xx, double yy, double zz)
 {
-  x = xx;
-  y = yy;
-  z = zz;
+  x_ = xx;
+  y_ = yy;
+  z_ = zz;
 }
 
 inline void UVector3::Set(double xx)
 {
-  x = y = z = xx;
+  x_ = y_ = z_ = xx;
 }
 
 inline double UVector3::Dot(const UVector3& p) const
 {
-  return x * p.x + y * p.y + z * p.z;
+  return x_ * p.x_ + y_ * p.y_ + z_ * p.z_;
 }
 
 inline UVector3 UVector3::Cross(const UVector3& p) const
 {
-  return UVector3(y * p.z - p.y * z, z * p.x - p.z * x, x * p.y - p.x * y);
+  return UVector3(y_ * p.z_ - p.y_ * z_, z_ * p.x_ - p.z_ * x_,
+                  x_ * p.y_ - p.x_ * y_);
 }
 
 inline double UVector3::Mag2() const
 {
-  return x * x + y * y + z * z;
+  return x_ * x_ + y_ * y_ + z_ * z_;
 }
 
 inline double UVector3::Perp2() const
 {
-  return x * x + y * y;
+  return x_ * x_ + y_ * y_;
 }
 
 inline double UVector3::CosTheta() const
 {
   double ptot = Mag();
-  return ptot == 0.0 ? 1.0 : z / ptot;
+  return ptot == 0.0 ? 1.0 : z_ / ptot;
 }
 
 
@@ -286,13 +306,13 @@ inline double& UVector3::operator[](int index)
   switch (index)
   {
     case 0:
-      return x;
+      return x_;
     case 1:
-      return y;
+      return y_;
     case 2:
-      return z;
+      return z_;
     default:
-      return x;
+      return x_;
   }
 }
 
@@ -304,26 +324,38 @@ inline double UVector3::operator[](int index) const
   // => first version is slightly faster
   if (true)
   {
-    double vec[3] = {x, y, z};
+    double vec[3] = {x_, y_, z_};
     return vec[index];
   }
 
   switch (index)
   {
     case 0:
-      return x;
+      return x_;
     case 1:
-      return y;
+      return y_;
     case 2:
-      return z;
+      return z_;
     default:
       return 0;
   }
 }
 
+inline double& UVector3::x() { return x_; }
+
+inline double UVector3::x() const { return x_; }
+
+inline double& UVector3::y() { return y_; }
+
+inline double UVector3::y() const { return y_; }
+
+inline double& UVector3::z() { return z_; }
+
+inline double UVector3::z() const { return z_; }
+
 inline std::ostream& operator<< (std::ostream& os, const UVector3& v)
 {
-  return os << "(" << v.x << "," << v.y << "," << v.z << ")";
+  return os << "(" << v.x() << "," << v.y() << "," << v.z() << ")";
 }
 
 #endif

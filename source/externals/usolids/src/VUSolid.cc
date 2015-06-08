@@ -39,8 +39,8 @@ int UIntersectingCone::LineHitsCone2( const UVector3 &p,
 	const UVector3 &v,
 	double &s1, double &s2 )
 {
-	double x0 = p.x, y0 = p.y, z0 = p.z;
-	double tx = v.x, ty = v.y, tz = v.z;
+	double x0 = p.x(), y0 = p.y(), z0 = p.z();
+	double tx = v.x(), ty = v.y(), tz = v.z();
 
 	// Special case which might not be so rare: B = 0 (precisely)
 	//
@@ -114,8 +114,8 @@ int UIntersectingCone::LineHitsCone2( const UVector3 &p,
 	const UVector3 &v,
 	double &s1, double &s2 )
 {
-	double x0 = p.x, y0 = p.y, z0 = p.z;
-	double tx = v.x, ty = v.y, tz = v.z;
+	double x0 = p.x(), y0 = p.y(), z0 = p.z();
+	double tx = v.x(), ty = v.y(), tz = v.z();
 
 	// Special case which might not be so rare: B = 0 (precisely)
 	//
@@ -232,14 +232,14 @@ double VUSolid::EstimateCubicVolume(int nStat, double epsilon) const
 
   for(int i = 0; i < nStat; i++ )
   {
-    px = min.x+(max.x-min.x)*UUtils::Random();
-    py = min.y+(max.y-min.y)*UUtils::Random();
-    pz = min.z+(max.z-min.z)*UUtils::Random();
+    px = min.x()+(max.x()-min.x())*UUtils::Random();
+    py = min.y()+(max.y()-min.y())*UUtils::Random();
+    pz = min.z()+(max.z()-min.z())*UUtils::Random();
     p	= UVector3(px,py,pz);
     in = this->Inside(p);
     if(in != eOutside) iInside++;		
   }
-  volume = (max.x-min.x)*(max.y-min.y)*(max.z-min.z)*iInside/nStat;
+  volume = (max.x()-min.x())*(max.y()-min.y())*(max.z()-min.z())*iInside/nStat;
   return volume;
 }
 
@@ -283,9 +283,9 @@ double VUSolid::EstimateSurfaceArea(int nStat, double ell) const
 
   if(nStat < 100) { nStat = 100; }
 
-  double dX=max.x-min.x;
-  double dY=max.y-min.y;
-  double dZ=max.z-min.z;
+  double dX=max.x()-min.x();
+  double dY=max.y()-min.y();
+  double dZ=max.z()-min.z();
   if(ell<=0.)					// Automatic definition of skin thickness
   {
     double minval=dX;
@@ -295,13 +295,13 @@ double VUSolid::EstimateSurfaceArea(int nStat, double ell) const
   }
 
   double dd=2*ell;
-  min.x-=ell; min.y-=ell; min.z-=ell; dX+=dd; dY+=dd; dZ+=dd;
+  min.x()-=ell; min.y()-=ell; min.z()-=ell; dX+=dd; dY+=dd; dZ+=dd;
 
   for(int i = 0; i < nStat; i++ )
   {
-    px = min.x+dX*UUtils::Random();
-    py = min.y+dY*UUtils::Random();
-    pz = min.z+dZ*UUtils::Random();
+    px = min.x()+dX*UUtils::Random();
+    py = min.y()+dY*UUtils::Random();
+    pz = min.z()+dZ*UUtils::Random();
     p	= UVector3(px,py,pz);
     in = this->Inside(p);
     if(in != eOutside)

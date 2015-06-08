@@ -40,10 +40,8 @@
 #ifndef USOLIDS_UExtrudedSolid_HH
 #define USOLIDS_UExtrudedSolid_HH
 
-//#include <vector>
+#include <vector>
 
-//#include "VUSolid.hh"
-//#include "UUtils.hh"
 #include "UTessellatedSolid.hh"
 #include "UVector2.hh"
 
@@ -101,10 +99,8 @@ class UExtrudedSolid : public UTessellatedSolid
                          double aPstep = UUtils::kInfinity) const;
     double  SafetyFromInside(const UVector3& aPoint,
                              bool aAccurate = false) const;
-    UGeometryType GetEntityType() const
-    {
-      return "ExtrudedSolid";
-    }
+
+    UGeometryType GetEntityType() const;
     VUSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;

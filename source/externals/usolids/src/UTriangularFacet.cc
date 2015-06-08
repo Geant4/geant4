@@ -69,7 +69,8 @@ UTriangularFacet::UTriangularFacet(const UVector3& vt0, const UVector3& vt1, con
             << "Side lengths = P[0]->P[1]" << eMag1 << endl
             << "Side lengths = P[0]->P[2]" << eMag2 << endl
             << "Side lengths = P[1]->P[2]" << eMag3;
-    UUtils::Exception("UTriangularFacet::UTriangularFacet()", "GeomSolids1001", Warning, 1, message.str().c_str());
+    UUtils::Exception("UTriangularFacet::UTriangularFacet()", "GeomSolids1001",
+                      UWarning, 1, message.str().c_str());
     fIsDefined     = false;
     fSurfaceNormal.Set(0);
     fA = fB = fC = 0.0;
@@ -101,7 +102,7 @@ UTriangularFacet::UTriangularFacet(const UVector3& vt0, const UVector3& vt1, con
               << "  fVertices[2] = " << GetVertex(2) << endl
               << "Area = " << fArea;
       UUtils::Exception("UTriangularFacet::UTriangularFacet()",
-                        "GeomSolids1001", Warning, 1, message.str().c_str());
+                        "GeomSolids1001", UWarning, 1, message.str().c_str());
       lambda0 = 0.5;
       lambda1 = 0.5;  
     }
@@ -830,7 +831,7 @@ double UTriangularFacet::GetArea()
 
 UGeometryType UTriangularFacet::GetEntityType() const
 {
-  return "UTriangularFacet";
+  return "TriangularFacet";
 }
 
 UVector3 UTriangularFacet::GetSurfaceNormal() const

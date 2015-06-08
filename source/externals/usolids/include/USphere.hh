@@ -292,7 +292,7 @@ void USphere::CheckThetaAngles(double sTheta, double dTheta)
     message << "sTheta outside 0-PI range." << std::endl
             << "Invalid starting Theta angle for solid: " << GetName();
     UUtils::Exception("USphere::CheckThetaAngles()", "GeomSolids0002",
-                      FatalError, 1, message.str().c_str());
+                      UFatalError, 1, message.str().c_str());
   }
   else
   {
@@ -313,7 +313,7 @@ void USphere::CheckThetaAngles(double sTheta, double dTheta)
             << "Negative delta-Theta (" << dTheta << "), for solid: "
             << GetName();
     UUtils::Exception("USphere::CheckThetaAngles()", "GeomSolids0002",
-                      FatalError, 1, message.str().c_str());
+                      UFatalError, 1, message.str().c_str());
   }
   if (fDTheta - fSTheta < UUtils::kPi)
   {
@@ -370,7 +370,7 @@ void USphere::CheckDPhiAngle(double dPhi)
               << "Negative delta-Phi (" << dPhi << "), for solid: "
               << GetName();
       UUtils::Exception("USphere::CheckDPhiAngle()", "GeomSolids0002",
-                        FatalError, 1, message.str().c_str());
+                        UFatalError, 1, message.str().c_str());
     }
   }
 }

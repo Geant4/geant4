@@ -54,7 +54,7 @@ UCons::UCons(const std::string& pName,
     std::ostringstream message;
     message << "Invalid Z half-length for Solid: " << GetName() << std::endl
             << "  hZ = " << pDz;
-    UUtils::Exception("UCons::UCons()", "UGeomSolids", FatalErrorInArguments, 1, message.str().c_str());
+    UUtils::Exception("UCons::UCons()", "GeomSolids0002", UFatalErrorInArguments, 1, message.str().c_str());
   }
 
   // Check radii
@@ -65,7 +65,7 @@ UCons::UCons(const std::string& pName,
     message << "Invalid values of radii for Solid: " << GetName() << std::endl
             << "  pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
             << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2;
-    UUtils::Exception("UCons::UCons()", "UGeomSolids", FatalErrorInArguments, 1, message.str().c_str());
+    UUtils::Exception("UCons::UCons()", "GeomSolids0002", UFatalErrorInArguments, 1, message.str().c_str());
 
   }
   if ((pRmin1 == 0.0) && (pRmin2 > 0.0))
@@ -186,14 +186,14 @@ bool UCons::Normal(const UVector3& p, UVector3& n) const
   UVector3 norm, sumnorm(0., 0., 0.), nZ = UVector3(0., 0., 1.);
   UVector3 nR, nr(0., 0., 0.), nPs, nPe;
 
-  distZ = std::fabs(std::fabs(p.z) - fDz);
-  rho  = std::sqrt(p.x * p.x + p.y * p.y);
+  distZ = std::fabs(std::fabs(p.z()) - fDz);
+  rho  = std::sqrt(p.x() * p.x() + p.y() * p.y());
 
-  pRMin   = rho - p.z * tanRMin;
+  pRMin   = rho - p.z() * tanRMin;
   widRMin = fRmin2 - fDz * tanRMin;
   distRMin = std::fabs(pRMin - widRMin) / secRMin;
 
-  pRMax   = rho - p.z * tanRMax;
+  pRMax   = rho - p.z() * tanRMax;
   widRMax = fRmax2 - fDz * tanRMax;
   distRMax = std::fabs(pRMax - widRMax) / secRMax;
 
@@ -201,7 +201,7 @@ bool UCons::Normal(const UVector3& p, UVector3& n) const
   {
     if (rho)
     {
-      pPhi = std::atan2(p.y, p.x);
+      pPhi = std::atan2(p.y(), p.x());
 
       if (pPhi  < fSPhi - delta)
       {
@@ -225,10 +225,10 @@ bool UCons::Normal(const UVector3& p, UVector3& n) const
   }
   if (rho > delta)
   {
-    nR = UVector3(p.x / rho / secRMax, p.y / rho / secRMax, -tanRMax / secRMax);
+    nR = UVector3(p.x() / rho / secRMax, p.y() / rho / secRMax, -tanRMax / secRMax);
     if (fRmin1 || fRmin2)
     {
-      nr = UVector3(-p.x / rho / secRMin, -p.y / rho / secRMin, tanRMin / secRMin);
+      nr = UVector3(-p.x() / rho / secRMin, -p.y() / rho / secRMin, tanRMin / secRMin);
     }
   }
 
@@ -258,7 +258,7 @@ bool UCons::Normal(const UVector3& p, UVector3& n) const
   if (distZ <= delta)
   {
     noSurfaces ++;
-    if (p.z >= 0.)
+    if (p.z() >= 0.)
     {
       sumnorm += nZ;
     }
@@ -272,7 +272,7 @@ bool UCons::Normal(const UVector3& p, UVector3& n) const
 #ifdef UDEBUG
 
     UUtils::Exception("UCons::SurfaceNormal(p)", "GeomSolids1002",
-                      Warning, 1, "Point p is not on surface !?");
+                      UWarning, 1, "Point p is not on surface !?");
 #endif
     norm = ApproxSurfaceNormal(p);
   }
@@ -304,14 +304,14 @@ UVector3 UCons::ApproxSurfaceNormal(const UVector3& p) const
   double pRMin, widRMin;
   double pRMax, widRMax;
 
-  distZ = std::fabs(std::fabs(p.z) - fDz);
-  rho  = std::sqrt(p.x * p.x + p.y * p.y);
+  distZ = std::fabs(std::fabs(p.z()) - fDz);
+  rho  = std::sqrt(p.x() * p.x() + p.y() * p.y());
 
-  pRMin   = rho - p.z * tanRMin;
+  pRMin   = rho - p.z() * tanRMin;
   widRMin = fRmin2 - fDz * tanRMin;
   distRMin = std::fabs(pRMin - widRMin) / secRMin;
 
-  pRMax   = rho - p.z * tanRMax;
+  pRMax   = rho - p.z() * tanRMax;
   widRMax = fRmax2 - fDz * tanRMax;
   distRMax = std::fabs(pRMax - widRMax) / secRMax;
 
@@ -343,7 +343,7 @@ UVector3 UCons::ApproxSurfaceNormal(const UVector3& p) const
   }
   if (!fPhiFullCone && rho)    // Protected against (0,0,z)
   {
-    phi = std::atan2(p.y, p.x);
+    phi = std::atan2(p.y(), p.x());
 
     if (phi < 0)
     {
@@ -382,14 +382,14 @@ UVector3 UCons::ApproxSurfaceNormal(const UVector3& p) const
   {
     case kNRMin:      // Inner radius
       rho *= secRMin;
-      norm = UVector3(-p.x / rho, -p.y / rho, tanRMin / secRMin);
+      norm = UVector3(-p.x() / rho, -p.y() / rho, tanRMin / secRMin);
       break;
     case kNRMax:      // Outer radius
       rho *= secRMax;
-      norm = UVector3(p.x / rho, p.y / rho, -tanRMax / secRMax);
+      norm = UVector3(p.x() / rho, p.y() / rho, -tanRMax / secRMax);
       break;
     case kNZ:        // +/- dz
-      if (p.z > 0)
+      if (p.z() > 0)
       {
         norm = UVector3(0, 0, 1);
       }
@@ -406,7 +406,7 @@ UVector3 UCons::ApproxSurfaceNormal(const UVector3& p) const
       break;
     default:          // Should never reach this case...
       UUtils::Exception("UCons::ApproxSurfaceNormal()",
-                        "GeomSolids1002", Warning, 1,
+                        "GeomSolids1002", UWarning, 1,
                         "Undefined side for valid surface normal to solid.");
       break;
   }
@@ -480,48 +480,48 @@ double UCons::DistanceToIn(const UVector3& p,
   tolIDz = fDz - halfCarTolerance;
   tolODz = fDz + halfCarTolerance;
 
-  if (std::fabs(p.z) >= tolIDz)
+  if (std::fabs(p.z()) >= tolIDz)
   {
-    if (p.z * v.z < 0)   // at +Z going in -Z or visa versa
+    if (p.z() * v.z() < 0)   // at +Z going in -Z or visa versa
     {
-      sd = (std::fabs(p.z) - fDz) / std::fabs(v.z); // Z intersect distance
+      sd = (std::fabs(p.z()) - fDz) / std::fabs(v.z()); // Z intersect distance
 
       if (sd < 0.0)
       {
         sd = 0.0;  // negative dist -> zero
       }
 
-      xi   = p.x + sd * v.x; // Intersection coords
-      yi   = p.y + sd * v.y;
+      xi   = p.x() + sd * v.x(); // Intersection coords
+      yi   = p.y() + sd * v.y();
       rhoi2 = xi * xi + yi * yi ;
 
       // Check validity of intersection
       // Calculate (outer) tolerant radi^2 at intersecion
 
-      if (v.z > 0)
+      if (v.z() > 0)
       {
         tolORMin  = fRmin1 - halfRadTolerance * secRMin;
         tolIRMin  = fRmin1 + halfRadTolerance * secRMin;
         tolIRMax  = fRmax1 - halfRadTolerance * secRMin;
-        tolORMax2 = (fRmax1 + halfRadTolerance * secRMax) *
-                    (fRmax1 + halfRadTolerance * secRMax);
+        // tolORMax2 = (fRmax1 + halfRadTolerance * secRMax) *
+        //             (fRmax1 + halfRadTolerance * secRMax);
       }
       else
       {
         tolORMin  = fRmin2 - halfRadTolerance * secRMin;
         tolIRMin  = fRmin2 + halfRadTolerance * secRMin;
         tolIRMax  = fRmax2 - halfRadTolerance * secRMin;
-        tolORMax2 = (fRmax2 + halfRadTolerance * secRMax) *
-                    (fRmax2 + halfRadTolerance * secRMax);
+        // tolORMax2 = (fRmax2 + halfRadTolerance * secRMax) *
+        //             (fRmax2 + halfRadTolerance * secRMax);
       }
       if (tolORMin > 0)
       {
-        tolORMin2 = tolORMin * tolORMin;
+        // tolORMin2 = tolORMin * tolORMin;
         tolIRMin2 = tolIRMin * tolIRMin;
       }
       else
       {
-        tolORMin2 = 0.0;
+        // tolORMin2 = 0.0;
         tolIRMin2 = 0.0;
       }
       if (tolIRMax > 0)
@@ -564,7 +564,7 @@ double UCons::DistanceToIn(const UVector3& p,
 // Intersection with outer cone (possible return) and
 //                   inner cone (must also check phi)
 //
-// Intersection point (xi,yi,zi) on line x=p.x+t*v.x etc.
+// Intersection point (xi,yi,zi) on line x=p.x()+t*v.x() etc.
 //
 // Intersects with x^2+y^2=(a*z+b)^2
 //
@@ -577,17 +577,17 @@ double UCons::DistanceToIn(const UVector3& p,
 //  \--------u-------/       \-----------v----------/ \---------w--------/
 //
 
-  t1   = 1.0 - v.z * v.z;
-  t2   = p.x * v.x + p.y * v.y;
-  t3   = p.x * p.x + p.y * p.y;
-  rin = tanRMin * p.z + rMinAv;
-  rout = tanRMax * p.z + rMaxAv;
+  t1   = 1.0 - v.z() * v.z();
+  t2   = p.x() * v.x() + p.y() * v.y();
+  t3   = p.x() * p.x() + p.y() * p.y();
+  rin = tanRMin * p.z() + rMinAv;
+  rout = tanRMax * p.z() + rMaxAv;
 
   // Outer Cone Intersection
   // Must be outside/on outer cone for valid intersection
 
-  nt1 = t1 - (tanRMax * v.z) * (tanRMax * v.z);
-  nt2 = t2 - tanRMax * v.z * rout;
+  nt1 = t1 - (tanRMax * v.z()) * (tanRMax * v.z());
+  nt2 = t2 - tanRMax * v.z() * rout;
   nt3 = t3 - rout * rout;
 
   if (std::fabs(nt1) > kRadTolerance) // Equation quadratic => 2 roots
@@ -644,7 +644,7 @@ double UCons::DistanceToIn(const UVector3& p,
             double fTerm = sd - std::fmod(sd, dRmax);
             sd = fTerm + DistanceToIn(p + fTerm * v, v);
           }
-          zi = p.z + sd * v.z;
+          zi = p.z() + sd * v.z();
 
           if (std::fabs(zi) <= tolODz)
           {
@@ -656,8 +656,8 @@ double UCons::DistanceToIn(const UVector3& p,
             }
             else
             {
-              xi     = p.x + sd * v.x;
-              yi     = p.y + sd * v.y;
+              xi     = p.x() + sd * v.x();
+              yi     = p.y() + sd * v.y();
               ri     = rMaxAv + zi * tanRMax;
               cosPsi = (xi * cosCPhi + yi * sinCPhi) / ri;
 
@@ -677,18 +677,18 @@ double UCons::DistanceToIn(const UVector3& p,
 
       if ((t3 > (rin + halfRadTolerance * secRMin)*
            (rin + halfRadTolerance * secRMin))
-          && (nt2 < 0) && (d >= 0) && (std::fabs(p.z) <= tolIDz))
+          && (nt2 < 0) && (d >= 0) && (std::fabs(p.z()) <= tolIDz))
       {
         // Inside cones, delta r -ve, inside z extent
         // Point is on the Surface => check Direction using Normal.Dot(v)
 
-        xi     = p.x;
-        yi     = p.y  ;
+        xi     = p.x();
+        yi     = p.y()  ;
         risec = std::sqrt(xi * xi + yi * yi) * secRMax;
         norm = UVector3(xi / risec, yi / risec, -tanRMax / secRMax);
         if (!fPhiFullCone)
         {
-          cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / std::sqrt(t3);
+          cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / std::sqrt(t3);
           if (cosPsi >= cosHDPhiIT)
           {
             if (norm.Dot(v) <= 0)
@@ -719,7 +719,7 @@ double UCons::DistanceToIn(const UVector3& p,
       }
       else  // sd >= 0, If 'forwards'. Check z intersection
       {
-        zi = p.z + sd * v.z;
+        zi = p.z() + sd * v.z();
 
         if ((std::fabs(zi) <= tolODz) && (nt2 < 0))
         {
@@ -731,8 +731,8 @@ double UCons::DistanceToIn(const UVector3& p,
           }
           else
           {
-            xi     = p.x + sd * v.x;
-            yi     = p.y + sd * v.y;
+            xi     = p.x() + sd * v.x();
+            yi     = p.y() + sd * v.y();
             ri     = rMaxAv + zi * tanRMax;
             cosPsi = (xi * cosCPhi + yi * sinCPhi) / ri;
 
@@ -761,8 +761,8 @@ double UCons::DistanceToIn(const UVector3& p,
 
   if (rMinAv)
   {
-    nt1 = t1 - (tanRMin * v.z) * (tanRMin * v.z);
-    nt2 = t2 - tanRMin * v.z * rin;
+    nt1 = t1 - (tanRMin * v.z()) * (tanRMin * v.z());
+    nt2 = t2 - tanRMin * v.z() * rin;
     nt3 = t3 - rin * rin;
 
     if (nt1)
@@ -794,14 +794,14 @@ double UCons::DistanceToIn(const UVector3& p,
               double fTerm = sd - std::fmod(sd, dRmax);
               sd = fTerm + DistanceToIn(p + fTerm * v, v);
             }
-            zi = p.z + sd * v.z;
+            zi = p.z() + sd * v.z();
 
             if (std::fabs(zi) <= tolODz)
             {
               if (!fPhiFullCone)
               {
-                xi     = p.x + sd * v.x;
-                yi     = p.y + sd * v.y;
+                xi     = p.x() + sd * v.x();
+                yi     = p.y() + sd * v.y();
                 ri     = rMinAv + zi * tanRMin;
                 cosPsi = (xi * cosCPhi + yi * sinCPhi) / ri;
 
@@ -834,8 +834,8 @@ double UCons::DistanceToIn(const UVector3& p,
                 {
                   // Calculate a normal vector in order to check Direction
 
-                  xi     = p.x + sd * v.x;
-                  yi     = p.y + sd * v.y;
+                  xi     = p.x() + sd * v.x();
+                  yi     = p.y() + sd * v.y();
                   risec = std::sqrt(xi * xi + yi * yi) * secRMin;
                   norm = UVector3(-xi / risec, -yi / risec, tanRMin / secRMin);
                   if (norm.Dot(v) <= 0)
@@ -869,7 +869,7 @@ double UCons::DistanceToIn(const UVector3& p,
           {
             sd = -b + std::sqrt(d);
           }
-          zi = p.z + sd * v.z;
+          zi = p.z() + sd * v.z();
           ri = rMinAv + zi * tanRMin;
 
           if (ri > 0)
@@ -884,8 +884,8 @@ double UCons::DistanceToIn(const UVector3& p,
               }
               if (!fPhiFullCone)
               {
-                xi     = p.x + sd * v.x;
-                yi     = p.y + sd * v.y;
+                xi     = p.x() + sd * v.x();
+                yi     = p.y() + sd * v.y();
                 cosPsi = (xi * cosCPhi + yi * sinCPhi) / ri;
 
                 if (cosPsi >= cosHDPhiOT)
@@ -917,8 +917,8 @@ double UCons::DistanceToIn(const UVector3& p,
                 {
                   // Calculate a normal vector in order to check Direction
 
-                  xi     = p.x + sd * v.x;
-                  yi     = p.y + sd * v.y;
+                  xi     = p.x() + sd * v.x();
+                  yi     = p.y() + sd * v.y();
                   risec = std::sqrt(xi * xi + yi * yi) * secRMin;
                   norm = UVector3(-xi / risec, -yi / risec, tanRMin / secRMin);
                   if (norm.Dot(v) <= 0)
@@ -939,7 +939,7 @@ double UCons::DistanceToIn(const UVector3& p,
             {
               sd = c / (-b + std::sqrt(d));
             }
-            zi = p.z + sd * v.z;
+            zi = p.z() + sd * v.z();
             ri = rMinAv + zi * tanRMin;
 
             if ((sd >= 0) && (ri > 0) && (std::fabs(zi) <= tolODz))   // sd>0
@@ -952,8 +952,8 @@ double UCons::DistanceToIn(const UVector3& p,
               }
               if (!fPhiFullCone)
               {
-                xi     = p.x + sd * v.x;
-                yi     = p.y + sd * v.y;
+                xi     = p.x() + sd * v.x();
+                yi     = p.y() + sd * v.y();
                 cosPsi = (xi * cosCPhi + yi * sinCPhi) / ri;
 
                 if (cosPsi >= cosHDPhiIT)
@@ -985,8 +985,8 @@ double UCons::DistanceToIn(const UVector3& p,
                 {
                   // Calculate a normal vector in order to check Direction
 
-                  xi     = p.x + sd * v.x;
-                  yi     = p.y + sd * v.y;
+                  xi     = p.x() + sd * v.x();
+                  yi     = p.y() + sd * v.y();
                   risec = std::sqrt(xi * xi + yi * yi) * secRMin;
                   norm = UVector3(-xi / risec, -yi / risec, tanRMin / secRMin);
                   if (norm.Dot(v) <= 0)
@@ -1006,7 +1006,7 @@ double UCons::DistanceToIn(const UVector3& p,
         // ----> if not:
         //    -2nd root with validity check
 
-        if (std::fabs(p.z) <= tolODz)
+        if (std::fabs(p.z()) <= tolODz)
         {
           if (nt2 > 0)
           {
@@ -1014,7 +1014,7 @@ double UCons::DistanceToIn(const UVector3& p,
 
             if (!fPhiFullCone)
             {
-              cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / std::sqrt(t3);
+              cosPsi = (p.x() * cosCPhi + p.y() * sinCPhi) / std::sqrt(t3);
 
               if (cosPsi >= cosHDPhiIT)
               {
@@ -1045,7 +1045,7 @@ double UCons::DistanceToIn(const UVector3& p,
               {
                 sd = c / (-b + std::sqrt(d));
               }
-              zi = p.z + sd * v.z;
+              zi = p.z() + sd * v.z();
               ri = rMinAv + zi * tanRMin;
 
               if (ri > 0)     // 2nd root
@@ -1059,7 +1059,7 @@ double UCons::DistanceToIn(const UVector3& p,
                   sd = -b + std::sqrt(d);
                 }
 
-                zi = p.z + sd * v.z;
+                zi = p.z() + sd * v.z();
 
                 if ((sd >= 0) && (std::fabs(zi) <= tolODz))    // sd>0
                 {
@@ -1071,8 +1071,8 @@ double UCons::DistanceToIn(const UVector3& p,
                   }
                   if (!fPhiFullCone)
                   {
-                    xi     = p.x + sd * v.x;
-                    yi     = p.y + sd * v.y;
+                    xi     = p.x() + sd * v.x();
+                    yi     = p.y() + sd * v.y();
                     ri     = rMinAv + zi * tanRMin;
                     cosPsi = (xi * cosCPhi + yi * sinCPhi) / ri;
 
@@ -1110,7 +1110,7 @@ double UCons::DistanceToIn(const UVector3& p,
             {
               sd = -b + std::sqrt(d);
             }
-            zi = p.z + sd * v.z;
+            zi = p.z() + sd * v.z();
 
             if ((sd >= 0) && (std::fabs(zi) <= tolODz))    // sd>0
             {
@@ -1122,8 +1122,8 @@ double UCons::DistanceToIn(const UVector3& p,
               }
               if (!fPhiFullCone)
               {
-                xi     = p.x + sd * v.x;
-                yi     = p.y + sd * v.y;
+                xi     = p.x() + sd * v.x();
+                yi     = p.y() + sd * v.y();
                 ri     = rMinAv + zi * tanRMin;
                 cosPsi = (xi * cosCPhi + yi * sinCPhi) / ri;
 
@@ -1156,11 +1156,11 @@ double UCons::DistanceToIn(const UVector3& p,
   {
     // First phi surface (starting phi)
 
-    Comp    = v.x * sinSPhi - v.y * cosSPhi;
+    Comp    = v.x() * sinSPhi - v.y() * cosSPhi;
 
     if (Comp < 0)      // Component in outwards normal dirn
     {
-      Dist = (p.y * cosSPhi - p.x * sinSPhi);
+      Dist = (p.y() * cosSPhi - p.x() * sinSPhi);
 
       if (Dist < halfCarTolerance)
       {
@@ -1173,12 +1173,12 @@ double UCons::DistanceToIn(const UVector3& p,
             sd = 0.0;
           }
 
-          zi = p.z + sd * v.z;
+          zi = p.z() + sd * v.z();
 
           if (std::fabs(zi) <= tolODz)
           {
-            xi        = p.x + sd * v.x;
-            yi        = p.y + sd * v.y;
+            xi        = p.x() + sd * v.x();
+            yi        = p.y() + sd * v.y();
             rhoi2    = xi * xi + yi * yi;
             tolORMin2 = (rMinOAv + zi * tanRMin) * (rMinOAv + zi * tanRMin);
             tolORMax2 = (rMaxOAv + zi * tanRMax) * (rMaxOAv + zi * tanRMax);
@@ -1200,11 +1200,11 @@ double UCons::DistanceToIn(const UVector3& p,
 
     // Second phi surface (Ending phi)
 
-    Comp    = -(v.x * sinEPhi - v.y * cosEPhi);
+    Comp    = -(v.x() * sinEPhi - v.y() * cosEPhi);
 
     if (Comp < 0)     // Component in outwards normal dirn
     {
-      Dist = -(p.y * cosEPhi - p.x * sinEPhi);
+      Dist = -(p.y() * cosEPhi - p.x() * sinEPhi);
       if (Dist < halfCarTolerance)
       {
         sd = Dist / Comp;
@@ -1216,12 +1216,12 @@ double UCons::DistanceToIn(const UVector3& p,
             sd = 0.0;
           }
 
-          zi = p.z + sd * v.z;
+          zi = p.z() + sd * v.z();
 
           if (std::fabs(zi) <= tolODz)
           {
-            xi        = p.x + sd * v.x;
-            yi        = p.y + sd * v.y;
+            xi        = p.x() + sd * v.x();
+            yi        = p.y() + sd * v.y();
             rhoi2    = xi * xi + yi * yi;
             tolORMin2 = (rMinOAv + zi * tanRMin) * (rMinOAv + zi * tanRMin);
             tolORMax2 = (rMaxOAv + zi * tanRMax) * (rMaxOAv + zi * tanRMax);
@@ -1262,16 +1262,16 @@ double UCons::SafetyFromOutside(const UVector3& p, bool aAccurate) const
   double pRMin, pRMax;
   bool outside;
 
-  rho  = std::sqrt(p.x * p.x + p.y * p.y);
-  safeZ = std::fabs(p.z) - fDz;
+  rho  = std::sqrt(p.x() * p.x() + p.y() * p.y());
+  safeZ = std::fabs(p.z()) - fDz;
   safeR1 = 0; safeR2 = 0;
 
   if (fRmin1 || fRmin2)
   {
-    pRMin  = tanRMin * p.z + (fRmin1 + fRmin2) * 0.5;
+    pRMin  = tanRMin * p.z() + (fRmin1 + fRmin2) * 0.5;
     safeR1  = (pRMin - rho) / secRMin;
 
-    pRMax  = tanRMax * p.z + (fRmax1 + fRmax2) * 0.5;
+    pRMax  = tanRMax * p.z() + (fRmax1 + fRmax2) * 0.5;
     safeR2  = (rho - pRMax) / secRMax;
 
     if (safeR1 > safeR2)
@@ -1285,7 +1285,7 @@ double UCons::SafetyFromOutside(const UVector3& p, bool aAccurate) const
   }
   else
   {
-    pRMax  = tanRMax * p.z + (fRmax1 + fRmax2) * 0.5;
+    pRMax  = tanRMax * p.z() + (fRmax1 + fRmax2) * 0.5;
     safe    = (rho - pRMax) / secRMax;
   }
   if (safeZ > safe)
@@ -1372,13 +1372,13 @@ double UCons::DistanceToOut(const UVector3& p,
 
   // Z plane intersection
 
-  if (v.z > 0.0)
+  if (v.z() > 0.0)
   {
-    pdist = fDz - p.z;
+    pdist = fDz - p.z();
 
     if (pdist > halfCarTolerance)
     {
-      snxt = pdist / v.z;
+      snxt = pdist / v.z();
       side = kPZ;
     }
     else
@@ -1388,13 +1388,13 @@ double UCons::DistanceToOut(const UVector3& p,
       return  snxt = 0.0;
     }
   }
-  else if (v.z < 0.0)
+  else if (v.z() < 0.0)
   {
-    pdist = fDz + p.z;
+    pdist = fDz + p.z();
 
     if (pdist > halfCarTolerance)
     {
-      snxt = -pdist / v.z;
+      snxt = -pdist / v.z();
       side = kMZ;
     }
     else
@@ -1415,7 +1415,7 @@ double UCons::DistanceToOut(const UVector3& p,
   // Intersection with outer cone (possible return) and
   //                   inner cone (must also check phi)
   //
-  // Intersection point (xi,yi,zi) on line x=p.x+t*v.x etc.
+  // Intersection point (xi,yi,zi) on line x=p.x()+t*v.x() etc.
   //
   // Intersects with x^2+y^2=(a*z+b)^2
   //
@@ -1429,21 +1429,21 @@ double UCons::DistanceToOut(const UVector3& p,
 
   rMaxAv  = (fRmax1 + fRmax2) * 0.5;
 
-  t1   = 1.0 - v.z * v.z;   // since v normalised
-  t2   = p.x * v.x + p.y * v.y;
-  t3   = p.x * p.x + p.y * p.y;
-  rout = tanRMax * p.z + rMaxAv;
+  t1   = 1.0 - v.z() * v.z();   // since v normalised
+  t2   = p.x() * v.x() + p.y() * v.y();
+  t3   = p.x() * p.x() + p.y() * p.y();
+  rout = tanRMax * p.z() + rMaxAv;
 
-  nt1 = t1 - (tanRMax * v.z) * (tanRMax * v.z);
-  nt2 = t2 - tanRMax * v.z * rout;
+  nt1 = t1 - (tanRMax * v.z()) * (tanRMax * v.z());
+  nt2 = t2 - tanRMax * v.z() * rout;
   nt3 = t3 - rout * rout;
 
-  if (v.z > 0.0)
+  if (v.z() > 0.0)
   {
     deltaRoi2 = snxt * snxt * t1 + 2 * snxt * t2 + t3
                 - fRmax2 * (fRmax2 + kRadTolerance * secRMax);
   }
-  else if (v.z < 0.0)
+  else if (v.z() < 0.0)
   {
     deltaRoi2 = snxt * snxt * t1 + 2 * snxt * t2 + t3
                 - fRmax1 * (fRmax1 + kRadTolerance * secRMax);
@@ -1470,7 +1470,7 @@ double UCons::DistanceToOut(const UVector3& p,
       {
         risec     = std::sqrt(t3) * secRMax;
         aConvex = true;
-        aNormalVector        = UVector3(p.x / risec, p.y / risec, -tanRMax / secRMax);
+        aNormalVector        = UVector3(p.x() / risec, p.y() / risec, -tanRMax / secRMax);
         return snxt = 0;
       }
       else
@@ -1485,7 +1485,7 @@ double UCons::DistanceToOut(const UVector3& p,
           srd = c / (-b + std::sqrt(d));
         }
 
-        zi    = p.z + srd * v.z;
+        zi    = p.z() + srd * v.z();
         ri    = tanRMax * zi + rMaxAv;
 
         if ((ri >= 0) && (-halfRadTolerance <= srd) && (srd <= halfRadTolerance))
@@ -1509,7 +1509,7 @@ double UCons::DistanceToOut(const UVector3& p,
           {
             sr2 = -b + std::sqrt(d);
           }
-          zi  = p.z + sr2 * v.z;
+          zi  = p.z() + sr2 * v.z();
           ri  = tanRMax * zi + rMaxAv;
 
           if ((ri >= 0) && (sr2 > halfRadTolerance))
@@ -1539,7 +1539,7 @@ double UCons::DistanceToOut(const UVector3& p,
 
       risec     = std::sqrt(t3) * secRMax;
       aConvex = true;
-      aNormalVector        = UVector3(p.x / risec, p.y / risec, -tanRMax / secRMax);
+      aNormalVector        = UVector3(p.x() / risec, p.y() / risec, -tanRMax / secRMax);
       return snxt = 0.0;
     }
   }
@@ -1549,7 +1549,7 @@ double UCons::DistanceToOut(const UVector3& p,
 
     risec     = std::sqrt(t3) * secRMax;
     aConvex = true;
-    aNormalVector        = UVector3(p.x / risec, p.y / risec, -tanRMax / secRMax);
+    aNormalVector        = UVector3(p.x() / risec, p.y() / risec, -tanRMax / secRMax);
     return snxt = 0.0;
   }
   else
@@ -1573,8 +1573,8 @@ double UCons::DistanceToOut(const UVector3& p,
     //
     // Calculate a normal vector, as below
 
-    xi    = p.x + slentol * v.x;
-    yi    = p.y + slentol * v.y;
+    xi    = p.x() + slentol * v.x();
+    yi    = p.y() + slentol * v.y();
     risec = std::sqrt(xi * xi + yi * yi) * secRMax;
     UVector3 norm = UVector3(xi / risec, yi / risec, -tanRMax / secRMax);
 
@@ -1595,13 +1595,13 @@ double UCons::DistanceToOut(const UVector3& p,
 
   if (fRmin1 || fRmin2)
   {
-    nt1    = t1 - (tanRMin * v.z) * (tanRMin * v.z);
+    nt1    = t1 - (tanRMin * v.z()) * (tanRMin * v.z());
 
     if (nt1)
     {
       rMinAv  = (fRmin1 + fRmin2) * 0.5;
-      rin    = tanRMin * p.z + rMinAv;
-      nt2    = t2 - tanRMin * v.z * rin;
+      rin    = tanRMin * p.z() + rMinAv;
+      nt2    = t2 - tanRMin * v.z() * rin;
       nt3    = t3 - rin * rin;
 
       // Equation quadratic => 2 roots : first root must be leaving
@@ -1620,8 +1620,8 @@ double UCons::DistanceToOut(const UVector3& p,
           if (nt2 < 0.0)
           {
             aConvex = false;
-            risec = std::sqrt(p.x * p.x + p.y * p.y) * secRMin;
-            aNormalVector = UVector3(-p.x / risec, -p.y / risec, tanRMin / secRMin);
+            risec = std::sqrt(p.x() * p.x() + p.y() * p.y()) * secRMin;
+            aNormalVector = UVector3(-p.x() / risec, -p.y() / risec, tanRMin / secRMin);
             return          snxt      = 0.0;
           }
         }
@@ -1635,7 +1635,7 @@ double UCons::DistanceToOut(const UVector3& p,
           {
             sr2 = c / (-b + std::sqrt(d));
           }
-          zi  = p.z + sr2 * v.z;
+          zi  = p.z() + sr2 * v.z();
           ri  = tanRMin * zi + rMinAv;
 
           if ((ri >= 0.0) && (-halfRadTolerance <= sr2) && (sr2 <= halfRadTolerance))
@@ -1664,7 +1664,7 @@ double UCons::DistanceToOut(const UVector3& p,
             {
               if (sr3 < srd)
               {
-                zi = p.z + sr3 * v.z;
+                zi = p.z() + sr3 * v.z();
                 ri = tanRMin * zi + rMinAv;
 
                 if (ri >= 0.0)
@@ -1703,8 +1703,8 @@ double UCons::DistanceToOut(const UVector3& p,
 
             // Calculate a normal vector, as below
 
-            xi     = p.x + slentol * v.x;
-            yi     = p.y + slentol * v.y;
+            xi     = p.x() + slentol * v.x();
+            yi     = p.y() + slentol * v.y();
             if (sidetol == kRMax)
             {
               risec = std::sqrt(xi * xi + yi * yi) * secRMax;
@@ -1745,7 +1745,7 @@ double UCons::DistanceToOut(const UVector3& p,
     // add angle calculation with correction
     // of the difference in domain of atan2 and Sphi
 
-    vphi = std::atan2(v.y, v.x);
+    vphi = std::atan2(v.y(), v.x());
 
     if (vphi < fSPhi - halfAngTolerance)
     {
@@ -1756,17 +1756,17 @@ double UCons::DistanceToOut(const UVector3& p,
       vphi -= 2 * UUtils::kPi;
     }
 
-    if (p.x || p.y)     // Check if on z axis (rho not needed later)
+    if (p.x() || p.y())     // Check if on z axis (rho not needed later)
     {
       // pDist -ve when inside
 
-      pDistS = p.x * sinSPhi - p.y * cosSPhi;
-      pDistE = -p.x * sinEPhi + p.y * cosEPhi;
+      pDistS = p.x() * sinSPhi - p.y() * cosSPhi;
+      pDistE = -p.x() * sinEPhi + p.y() * cosEPhi;
 
       // Comp -ve when in direction of outwards normal
 
-      compS = -sinSPhi * v.x + cosSPhi * v.y;
-      compE = sinEPhi * v.x - cosEPhi * v.y;
+      compS = -sinSPhi * v.x() + cosSPhi * v.y();
+      compE = sinEPhi * v.x() - cosEPhi * v.y();
 
       sidephi = kNull;
 
@@ -1781,8 +1781,8 @@ double UCons::DistanceToOut(const UVector3& p,
           sphi = pDistS / compS;
           if (sphi >= -halfCarTolerance)
           {
-            xi = p.x + sphi * v.x;
-            yi = p.y + sphi * v.y;
+            xi = p.x() + sphi * v.x();
+            yi = p.y() + sphi * v.y();
 
             // Check intersecting with correct half-plane
             // (if not -> no intersect)
@@ -1828,8 +1828,8 @@ double UCons::DistanceToOut(const UVector3& p,
           //
           if ((sphi2 > -halfCarTolerance) && (sphi2 < sphi))
           {
-            xi = p.x + sphi2 * v.x;
-            yi = p.y + sphi2 * v.y;
+            xi = p.x() + sphi2 * v.x();
+            yi = p.y() + sphi2 * v.y();
 
             // Check intersecting with correct half-plane
 
@@ -1907,15 +1907,15 @@ double UCons::DistanceToOut(const UVector3& p,
   {
       // Note: returned vector not normalised
     case kRMax:        // (divide by frmax for Unit vector)
-      xi         = p.x + snxt * v.x;
-      yi         = p.y + snxt * v.y;
+      xi         = p.x() + snxt * v.x();
+      yi         = p.y() + snxt * v.y();
       risec     = std::sqrt(xi * xi + yi * yi) * secRMax;
       aNormalVector        = UVector3(xi / risec, yi / risec, -tanRMax / secRMax);
       aConvex = true;
       break;
     case kRMin:
-      xi         = p.x + snxt * v.x;
-      yi         = p.y + snxt * v.y;
+      xi         = p.x() + snxt * v.x();
+      yi         = p.y() + snxt * v.y();
       risec = std::sqrt(xi * xi + yi * yi) * secRMin;
       aNormalVector = UVector3(-xi / risec, -yi / risec, tanRMin / secRMin);
       aConvex = false;  // Rmin is inconvex
@@ -1960,24 +1960,24 @@ double UCons::DistanceToOut(const UVector3& p,
       message << "Undefined side for valid surface normal to solid."
               << std::endl
               << "Position:"  << std::endl << std::endl
-              << "p.x = "  << p.x << " mm" << std::endl
-              << "p.y = "  << p.y << " mm" << std::endl
-              << "p.z = "  << p.z << " mm" << std::endl << std::endl
-              << "pho at z = "   << std::sqrt(p.x * p.x + p.y * p.y)
+              << "p.x = "  << p.x() << " mm" << std::endl
+              << "p.y = "  << p.y() << " mm" << std::endl
+              << "p.z = "  << p.z() << " mm" << std::endl << std::endl
+              << "pho at z = "   << std::sqrt(p.x() * p.x() + p.y() * p.y())
               << " mm" << std::endl << std::endl;
-      if (p.x != 0. || p.y != 0.)
+      if (p.x() != 0. || p.y() != 0.)
       {
-        message << "point phi = "   << std::atan2(p.y, p.x) / (UUtils::kPi / 180.0)
+        message << "point phi = "   << std::atan2(p.y(), p.x()) / (UUtils::kPi / 180.0)
                 << " degree" << std::endl << std::endl;
       }
       message << "Direction:" << std::endl << std::endl
-              << "v.x = "  << v.x << std::endl
-              << "v.y = "  << v.y << std::endl
-              << "v.z = "  << v.z << std::endl << std::endl
+              << "v.x = "  << v.x() << std::endl
+              << "v.y = "  << v.y() << std::endl
+              << "v.z = "  << v.z() << std::endl << std::endl
               << "Proposed distance :" << std::endl << std::endl
               << "snxt = "    << snxt << " mm" << std::endl;
       message.precision(oldprc);
-      UUtils::Exception("UCons::DistanceToOut()", "UGeomSolids", Warning, 1, message.str().c_str());
+      UUtils::Exception("UCons::DistanceToOut()", "GeomSolids0002", UWarning, 1, message.str().c_str());
       break;
   }
   if (snxt < halfCarTolerance)
@@ -2003,26 +2003,26 @@ double UCons::SafetyFromInside(const UVector3& p, bool) const
     cout << std::endl;
     DumpInfo();
     cout << "Position:" << std::endl << std::endl;
-    cout << "p.x = "   << p.x << " mm" << std::endl;
-    cout << "p.y = "   << p.y << " mm" << std::endl;
-    cout << "p.z = "   << p.z << " mm" << std::endl << std::endl;
-    cout << "pho at z = "  << std::sqrt(p.x * p.x + p.y * p.y)
+    cout << "p.x = "   << p.x() << " mm" << std::endl;
+    cout << "p.y = "   << p.y() << " mm" << std::endl;
+    cout << "p.z = "   << p.z() << " mm" << std::endl << std::endl;
+    cout << "pho at z = "  << std::sqrt(p.x() * p.x() + p.y() * p.y())
          << " mm" << std::endl << std::endl;
-    if ((p.x != 0.) || (p.x != 0.))
+    if ((p.x() != 0.) || (p.x() != 0.))
     {
-      cout << "point phi = "   << std::atan2(p.y, p.x) / degree
+      cout << "point phi = "   << std::atan2(p.y(), p.x()) / degree
            << " degree" << std::endl << std::endl;
     }
     cout.precision(oldprc);
-    UUtils::Exception("UCons::UCons()", "UGeomSolids", Warning, 1, message.str().c_str());
+    UUtils::Exception("UCons::UCons()", "GeomSolids0002", UWarning, 1, message.str().c_str());
 
   }
 #endif
   
-  rho = std::sqrt(p.x * p.x + p.y * p.y);
+  rho = std::sqrt(p.x() * p.x() + p.y() * p.y());
 
   safe = SafetyFromInsideR(p, rho, false);
-  safeZ = fDz - std::fabs(p.z);
+  safeZ = fDz - std::fabs(p.z());
 
   if (safeZ < safe)
   {
@@ -2189,6 +2189,33 @@ void UCons::Extent(UVector3& aMin, UVector3& aMax) const
   aMax = UVector3(max, max, fDz);
 }
 
+void UCons::CheckDPhiAngle(double dPhi)
+{
+  fPhiFullCone = true;
+  if (dPhi >= 2 * UUtils::kPi - kAngTolerance * 0.5)
+  {
+    fDPhi = 2 * UUtils::kPi;
+    fSPhi = 0;
+  }
+  else
+  {
+    fPhiFullCone = false;
+    if (dPhi > 0)
+    {
+      fDPhi = dPhi;
+    }
+    else
+    {
+      std::ostringstream message;
+      message << "Invalid dphi." << std::endl
+              << "Negative or zero delta-Phi (" << dPhi << ") in solid: "
+              << GetName();
+      UUtils::Exception("UCons::CheckDPhiAngle()", "GeomSolids0002",
+                        UFatalErrorInArguments, 1, message.str().c_str());
+    }
+  }
+}
+
 void UCons::GetParametersList(int, double* aArray) const
 {
   aArray[0] = GetInnerRadiusMinusZ();
@@ -2198,5 +2225,4 @@ void UCons::GetParametersList(int, double* aArray) const
   aArray[4] = GetZHalfLength();
   aArray[5] = GetStartPhiAngle();
   aArray[6] = GetDeltaPhiAngle();
- 
 }

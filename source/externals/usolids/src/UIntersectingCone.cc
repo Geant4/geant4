@@ -208,8 +208,8 @@ int UIntersectingCone::Solution (const UVector3 &p, const UVector3 &v, double a,
 
 int UIntersectingCone::LineHitsCone1(const UVector3& p, const UVector3& v, double& s1, double& s2)
 {
-  double x0 = p.x, y0 = p.y, z0 = p.z;
-  double tx = v.x, ty = v.y, tz = v.z;
+  double x0 = p.x(), y0 = p.y(), z0 = p.z();
+  double tx = v.x(), ty = v.y(), tz = v.z();
 
   double a = tx * tx + ty * ty - UUtils::sqr(B * tz);
   double b = 2 * (x0 * tx + y0 * ty - (A * B + B * B * z0) * tz);
@@ -300,8 +300,8 @@ int UIntersectingCone::LineHitsCone1(const UVector3& p, const UVector3& v, doubl
 
 int UIntersectingCone::LineHitsCone1Optimized(const UVector3& p, const UVector3& v, double& s1, double& s2)
 {
-  double x0 = p.x, y0 = p.y, z0 = p.z;
-  double tx = v.x, ty = v.y, tz = v.z;
+  double x0 = p.x(), y0 = p.y(), z0 = p.z();
+  double tx = v.x(), ty = v.y(), tz = v.z();
 
   double a = tx * tx + ty * ty - UUtils::sqr(B * tz);
   double b = 2 * (x0 * tx + y0 * ty - (A * B + B * B * z0) * tz);
@@ -417,8 +417,8 @@ int UIntersectingCone::LineHitsCone2(const UVector3& p,
                                      const UVector3& v,
                                      double& s1, double& s2)
 {
-  double x0 = p.x, y0 = p.y, z0 = p.z;
-  double tx = v.x, ty = v.y, tz = v.z;
+  double x0 = p.x(), y0 = p.y(), z0 = p.z();
+  double tx = v.x(), ty = v.y(), tz = v.z();
 
   // Special case which might not be so rare: B = 0 (precisely)
   //

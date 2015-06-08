@@ -106,7 +106,7 @@ double UMultiUnion::Capacity()
       point = left + length.MultiplyByComponents(random / RAND_MAX);
       if (Inside(point) != eOutside) inside++;
     }
-    double vbox = (2 * d.x) * (2 * d.y) * (2 * d.z);
+    double vbox = (2 * d.x()) * (2 * d.y()) * (2 * d.z());
     fCubicVolume = inside * vbox / generated;
   }
   return fCubicVolume;
@@ -643,16 +643,16 @@ void UMultiUnion::Extent(EAxisType aAxis, double& aMin, double& aMax) const
       switch (aAxis)
       {
         case eXaxis:
-          aMin = min.x;
-          aMax = max.x;
+          aMin = min.x();
+          aMax = max.x();
           break;
         case eYaxis:
-          aMin = min.y;
-          aMax = max.y;
+          aMin = min.y();
+          aMax = max.y();
           break;
         case eZaxis:
-          aMin = min.z;
-          aMax = max.z;
+          aMin = min.z();
+          aMax = max.z();
           break;
       }
     }
@@ -662,22 +662,22 @@ void UMultiUnion::Extent(EAxisType aAxis, double& aMin, double& aMax) const
       switch (aAxis)
       {
         case eXaxis:
-          if (min.x < aMin)
-            aMin = min.x;
-          if (max.x > aMax)
-            aMax = max.x;
+          if (min.x() < aMin)
+            aMin = min.x();
+          if (max.x() > aMax)
+            aMax = max.x();
           break;
         case eYaxis:
-          if (min.y < aMin)
-            aMin = min.y;
-          if (max.y > aMax)
-            aMax = max.y;
+          if (min.y() < aMin)
+            aMin = min.y();
+          if (max.y() > aMax)
+            aMax = max.y();
           break;
         case eZaxis:
-          if (min.z < aMin)
-            aMin = min.z;
-          if (max.z > aMax)
-            aMax = max.z;
+          if (min.z() < aMin)
+            aMin = min.z();
+          if (max.z() > aMax)
+            aMax = max.z();
           break;
       }
     }
@@ -904,11 +904,11 @@ int UMultiUnion::SafetyFromOutsideNumberNode(const UVector3& aPoint, bool /*aAcc
   for (int i = 0; i < numNodes; ++i)
   {
     double d2xyz = 0.;
-    double dxyz0 = std::abs(aPoint.x - boxes[i].pos.x) - boxes[i].hlen.x;
+    double dxyz0 = std::abs(aPoint.x() - boxes[i].pos.x()) - boxes[i].hlen.x();
     if (dxyz0 > safetyMin) continue;
-    double dxyz1 = std::abs(aPoint.y - boxes[i].pos.y) - boxes[i].hlen.y;
+    double dxyz1 = std::abs(aPoint.y() - boxes[i].pos.y()) - boxes[i].hlen.y();
     if (dxyz1 > safetyMin) continue;
-    double dxyz2 = std::abs(aPoint.z - boxes[i].pos.z) - boxes[i].hlen.z;
+    double dxyz2 = std::abs(aPoint.z() - boxes[i].pos.z()) - boxes[i].hlen.z();
     if (dxyz2 > safetyMin) continue;
 
     if (dxyz0 > 0) d2xyz += dxyz0 * dxyz0;

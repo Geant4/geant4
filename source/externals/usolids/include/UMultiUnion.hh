@@ -104,7 +104,7 @@ class UMultiUnion : public VUSolid
 
     VUSolid* Clone() const ;
 
-    UGeometryType GetEntityType() const { return "MultipleUnion"; }
+    UGeometryType GetEntityType() const { return "MultiUnion"; }
     void ComputeBBox(UBBox* aBox, bool aStore = false);
 
     virtual void GetParametersList(int /*aNumber*/, double* /*aArray*/) const {}

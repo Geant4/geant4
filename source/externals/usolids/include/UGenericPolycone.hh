@@ -77,8 +77,6 @@ class UGenericPolycone: public UVCSGfaceted
     VUSolid* Clone() const;
 
     std::ostream& StreamInfo(std::ostream& os) const;
-
-
     bool Reset();
 
     // Accessors

@@ -42,7 +42,7 @@ UVector2 UGenericTrap::GetVertex(int index) const
   if (index < 0 || index >= int(fVertices.size()))
   {
     UUtils::Exception("UGenericTrap::GetVertex()", "GeomSolids0003",
-                      FatalError, 1, "Index outside range.");
+                      UFatalError, 1, "Index outside range.");
   }
   return fVertices[index];
 }
@@ -64,7 +64,7 @@ double UGenericTrap::GetTwistAngle(int index) const
   if ((index < 0) || (index >= int(fVertices.size())))
   {
     UUtils::Exception ("UGenericTrap::GetTwistAngle()", "GeomSolids0003",
-                       FatalError, 1, "Index outside range.");
+                       UFatalError, 1, "Index outside range.");
   }
   return fTwist[index];
 }
@@ -85,7 +85,7 @@ void UGenericTrap::SetTwistAngle(int index, double twist)
   if ((index < 0) || (index >= int(fVertices.size())))
   {
     UUtils::Exception ("UGenericTrap::SetTwistAngle()", "GeomSolids0003",
-                       FatalError, 1, "Index outside range.");
+                       UFatalError, 1, "Index outside range.");
   }
   fTwist[index] = twist;
 }

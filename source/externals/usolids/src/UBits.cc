@@ -17,24 +17,25 @@
 #include "UBits.hh"
 #include <stdio.h>
 //______________________________________________________________________________
-UBits::UBits(unsigned int nBits) : fNBits(nBits)
+UBits::UBits(unsigned int nBits) : 
+   fNBits(nBits>0 ? nBits : 0),
+   fNBytes(fNBits ? ((fNBits - 1) / 8) + 1 : 1),
+   fAllBits(new unsigned char[fNBytes])
 {
   // UBits constructor.  All bits set to 0
 
-  if (fNBits <= 0) fNBits = 0;
-  fNBytes  = fNBits ? ((fNBits - 1) / 8) + 1 : 1;
-  fAllBits = new unsigned char[fNBytes];
   // this is redundant only with libNew
   std::memset(fAllBits, 0, fNBytes);
 }
 
 //______________________________________________________________________________
-UBits::UBits(const UBits& original) : fNBits(original.fNBits),
-  fNBytes(original.fNBytes)
+UBits::UBits(const UBits& original) : 
+   fNBits(original.fNBits),
+   fNBytes(original.fNBytes),
+   fAllBits(new unsigned char[fNBytes])
 {
   // UBits copy constructor
 
-  fAllBits = new unsigned char[fNBytes];
   std::memcpy(fAllBits, original.fAllBits, fNBytes);
 
 }

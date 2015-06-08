@@ -42,12 +42,12 @@ double UPolyPhiFace::ExactZOrder(double z,
   double answer = vert->z - z;
   if (std::fabs(answer) < VUSolid::Tolerance())
   {
-    UVector3 qa(qx - vert->x + radial.x,
-                qy - vert->y + radial.y, qz - vert->z),
+    UVector3 qa(qx - vert->x + radial.x(),
+                qy - vert->y + radial.y(), qz - vert->z),
                    qb(qx - vert->x, qy - vert->y, qz - vert->z);
     UVector3 qacb = qa.Cross(qb);
 
-    answer = normSign * qacb.Dot(v) * (normal.y * radial.x - normal.x * radial.y);
+    answer = normSign * qacb.Dot(v) * (normal.y() * radial.x() - normal.x() * radial.y());
   }
 
   return answer;
