@@ -116,7 +116,7 @@ inline G4Transform3D* G4UMultiUnion::GetTransformation(G4int index) const
     rot(CLHEP::HepRep3x3(tr.fRot[0], tr.fRot[1], tr.fRot[2],
                          tr.fRot[3], tr.fRot[4], tr.fRot[5],
                          tr.fRot[6], tr.fRot[7], tr.fRot[8]));
-  G4ThreeVector transl(tr.fTr.x, tr.fTr.y, tr.fTr.z);
+  G4ThreeVector transl(tr.fTr.x(), tr.fTr.y(), tr.fTr.z());
 
   return new G4Transform3D(rot, transl);
 }
