@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th May 2015   Gabriele Cosmo  (config-V10-00-12)
+- Updated CPPFLAGS for Linux-icc and WIN32-g++ configurations.
+
 29th October 2014   Gabriele Cosmo  (config-V10-00-11/10)
 - Moved geometry/solids/usolids module to externals.
   Adapted scripts for optional external USolids library build.
