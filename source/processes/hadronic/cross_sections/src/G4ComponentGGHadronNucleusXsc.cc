@@ -242,22 +242,41 @@ G4ComponentGGHadronNucleusXsc::IsIsoApplicable(const G4DynamicParticle* aDP,
 
   const G4ParticleDefinition* theParticle = aDP->GetDefinition();
  
-  if ( ( kineticEnergy  >= fLowerLimit &&
-	 //         Z > 1 &&      // >=  He
-       ( theParticle == theAProton   ||
-         theParticle == theGamma     ||
-        theParticle == theSMinus    ||  
-         theParticle == theProton    ||
-         theParticle == theNeutron   ||   
-         theParticle == thePiPlus    ||
-         theParticle == thePiMinus       )  &&
-         Z >= 1 &&      // >=  H for kaons
+  if ( 
+       Z >= 1  // >=  H for kaons
+       &&     
        ( 
-         theParticle == theKPlus     ||
-         theParticle == theKMinus    || 
-         theParticle == theK0L       ||
-         theParticle == theK0S       
-                                     )    )    ) applicable = true;
+         kineticEnergy  >= fLowerLimit 
+         &&
+	 //         Z > 1 &&      // >=  He
+         ( 
+           theParticle == theAProton   ||
+           theParticle == theGamma     ||
+           theParticle == theSMinus    ||  
+           theParticle == theProton    ||
+           theParticle == theNeutron   ||   
+           theParticle == thePiPlus    ||
+           theParticle == thePiMinus       
+         )
+       )  
+     ) 
+     applicable = true;
+
+  if ( 
+       Z >= 1  // >=  H for kaons
+       &&
+       ( 
+         kineticEnergy  >= 0.01*fLowerLimit 
+         &&
+         ( 
+           theParticle == theKPlus     ||
+           theParticle == theKMinus    || 
+           theParticle == theK0L       ||
+           theParticle == theK0S       
+         )    
+       )    
+     ) 
+     applicable = true;
 
   return applicable;
 }
@@ -385,16 +404,16 @@ G4ComponentGGHadronNucleusXsc::GetIsoCrossSection(const G4DynamicParticle* aPart
      // fElasticXsc   = fTotalXsc - fInelasticXsc;      
     }
     else if( theParticle == theKPlus || 
-           theParticle == theKMinus  || 
-           theParticle == theK0S     || 
-           theParticle == theK0L        ) 
+             theParticle == theKMinus  || 
+             theParticle == theK0S     || 
+             theParticle == theK0L        ) 
     { 
       fInelasticXsc = hpInXsc;
       fElasticXsc   = fTotalXsc - fInelasticXsc;
     }   
     else
     {
-    fInelasticXsc = hpInXsc;
+      fInelasticXsc = hpInXsc;
       fElasticXsc   = fTotalXsc - fInelasticXsc;
     }
     if (fElasticXsc < 0.) fElasticXsc = 0.;
