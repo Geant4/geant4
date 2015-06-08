@@ -319,6 +319,7 @@ void G4ReplicatedSlice::SetParameterisation( G4LogicalVolume* motherLogical,
 {
   G4VSolid* mSolid = motherLogical->GetSolid();
   G4String mSolidType = mSolid->GetEntityType();
+  fparam = 0;
 
   // If the solid is a reflected one, update type to its
   // real constituent solid.

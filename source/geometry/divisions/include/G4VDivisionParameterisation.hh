@@ -45,6 +45,7 @@
 #include "G4Types.hh"
 #include "geomdefs.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4RotationMatrix.hh"
 
 enum DivisionType { DivNDIVandWIDTH, DivNDIV, DivWIDTH };
 
@@ -110,6 +111,8 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4double kCarTolerance;
 
     G4double fhgap;
+
+    G4RotationMatrix* fRotMatrix;
 };
 
 #include "G4VDivisionParameterisation.icc"
