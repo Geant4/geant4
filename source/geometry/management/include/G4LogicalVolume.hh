@@ -417,9 +417,6 @@ class G4LogicalVolume
     G4double fBiasWeight;
       // Weight used in the event biasing technique.
   
-    G4bool fChangedState;
-      // Invalidates any estimations from previous state
-  
     G4int instanceID;
       // This new field is used as instance ID.
     G4GEOM_DLL static G4LVManager subInstanceManager;

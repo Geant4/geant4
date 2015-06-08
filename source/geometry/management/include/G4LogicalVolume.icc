@@ -266,7 +266,6 @@ inline
 void G4LogicalVolume::ResetMass()
 {
   G4MT_mass= 0.0;
-  // Do not fChangedState= 1; 
 }
 
 // ********************************************************************

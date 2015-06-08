@@ -165,6 +165,9 @@ private:
   G4double tx,ty,tz;
 };
 
+std::ostream&
+  operator << (std::ostream &os, const G4AffineTransform &transf);
+
 #include "G4AffineTransform.icc"
 
 #endif
