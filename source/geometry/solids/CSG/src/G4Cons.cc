@@ -783,25 +783,25 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         tolORMin  = fRmin1 - halfRadTolerance*secRMin ;
         tolIRMin  = fRmin1 + halfRadTolerance*secRMin ;
         tolIRMax  = fRmax1 - halfRadTolerance*secRMin ;
-        tolORMax2 = (fRmax1 + halfRadTolerance*secRMax)*
-                    (fRmax1 + halfRadTolerance*secRMax) ;
+        // tolORMax2 = (fRmax1 + halfRadTolerance*secRMax)*
+        //             (fRmax1 + halfRadTolerance*secRMax) ;
       }
       else
       {
         tolORMin  = fRmin2 - halfRadTolerance*secRMin ;
         tolIRMin  = fRmin2 + halfRadTolerance*secRMin ;
         tolIRMax  = fRmax2 - halfRadTolerance*secRMin ;
-        tolORMax2 = (fRmax2 + halfRadTolerance*secRMax)*
-                    (fRmax2 + halfRadTolerance*secRMax) ;
+        // tolORMax2 = (fRmax2 + halfRadTolerance*secRMax)*
+        //             (fRmax2 + halfRadTolerance*secRMax) ;
       }
       if ( tolORMin > 0 ) 
       {
-        tolORMin2 = tolORMin*tolORMin ;
+        // tolORMin2 = tolORMin*tolORMin ;
         tolIRMin2 = tolIRMin*tolIRMin ;
       }
       else                
       {
-        tolORMin2 = 0.0 ;
+        // tolORMin2 = 0.0 ;
         tolIRMin2 = 0.0 ;
       }
       if ( tolIRMax > 0 )  { tolIRMax2 = tolIRMax*tolIRMax; }     

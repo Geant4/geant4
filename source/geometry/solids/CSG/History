@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 20, 2015  T.Nikitina                 geom-csg-V10-00-08
+- Fixed DistanceToOut(p) and Inside(p) in G4Sphere for sphere cut in theta
+  for point (0,0,0) and for cases when Start/End angle have not to be taken
+  in account (STheta==0 || eTheta==pi).
+  Added corresponding test cases to unit test for testG4Sphere.
+  Fix triggered by analysing setup provided in problem report #1702.
+
+May 5, 2015  G.Cosmo
+- Fixed Coverity defect for unused variable quantity in G4Cons.
+
+April 28, 2015  T.Nikitina
+- Fixed calculation of Normal in G4Para for kPX and kMX sides in
+  DistanceToOut(p,v) and ApproxSurfaceNormal(p).
+  Addressing problem report #1736. 
+
+March 3, 2015  G.Cosmo
+- Use accessors x(), y() and z() from UVector3, instead of directly accessing
+  its data-members.
+
 February 16, 2015  G.Cosmo               geom-csg-V10-00-07
 - Fixed typo in copy-ctor and assignment operator for G4Tubs and G4OTubs.
 
