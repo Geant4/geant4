@@ -162,7 +162,6 @@ void G4NistManager::PrintG4Element(const G4String& name)
     G4Element* elm = (*theElementTable)[i];
     if ( name == elm->GetName() || "all" == name) {
       G4cout << *elm << G4endl;
-      return;
     }
   }
 }
@@ -177,7 +176,6 @@ void G4NistManager::PrintG4Material(const G4String& name)
     G4Material* mat = (*theMaterialTable)[i];
     if ( name == mat->GetName() || "all" == name) {
       G4cout << *mat << G4endl;
-      return;
     }
   }
 }

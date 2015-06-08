@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-05-15 V.Ivanchenko (materials-V10-00-28)
+- G4NistManager - fixed problem #1747 - correct printout of elements
+    and materials
+
 06-02-15 V.Ivanchenko (materials-V10-00-27)
 - G4Material, G4NistManager, G4NistMaterialBuilder, G4IonisParamMat 
     introduced NTP_Temperature=20C; set this tempature default for 
