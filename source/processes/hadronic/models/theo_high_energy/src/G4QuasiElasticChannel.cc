@@ -60,12 +60,14 @@
 
 
 G4QuasiElasticChannel::G4QuasiElasticChannel()
-  : theQuasiElastic(G4QuasiElRatios::GetPointer()),
-    the3DNucleus(new G4Fancy3DNucleus) {}
+  : theQuasiElastic(new G4QuasiElRatios),
+    the3DNucleus(new G4Fancy3DNucleus) {
+}
 
 G4QuasiElasticChannel::~G4QuasiElasticChannel()
 {
   delete the3DNucleus;
+  delete theQuasiElastic;
 }
 
 G4double G4QuasiElasticChannel::GetFraction(G4Nucleus &theNucleus,
