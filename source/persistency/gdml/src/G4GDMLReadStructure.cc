@@ -903,7 +903,8 @@ GetAuxMap() const
 G4VPhysicalVolume* G4GDMLReadStructure::
 GetWorldVolume(const G4String& setupName)
 {
-   G4LogicalVolume* volume = GetVolume(GenerateName(sname, dostrip));
+   G4LogicalVolume* volume =
+     GetVolume(GenerateName(GetSetup(setupName), dostrip));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
 
    G4VPhysicalVolume* pvWorld = 0;
