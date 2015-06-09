@@ -31,6 +31,14 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+8th June 2015 - Ben Morgan (cmake-V10-00-41)
+- Templates/Geant4Config.cmake.in : Always re-find Qt5 via find_package
+  if Geant4 was configured with Qt5 support. Qt5 libraries are in
+  public link interface of G4interfaces and G4OpenGL whether or not it
+  is activated for an application, so must always be linked. Without
+  refinding, dangling imported targets are left in the link interfaces 
+  of G4interfaces and G4OpenGL.
+
 5th May 2015 - Ben Morgan (cmake-V10-00-40)
 - Modules/Geant4ConfigureModulefile.cmake : Genarate a modulefile
   for the build tree. Requested by developers, but otherwise unsupported.
