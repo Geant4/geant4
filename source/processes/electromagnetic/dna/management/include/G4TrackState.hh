@@ -287,7 +287,7 @@ template<class OriginalType>
   G4shared_ptr<G4VTrackState> ConvertToAbstractTrackState(G4shared_ptr<G4TrackState<OriginalType> > state)
   {
 
-    G4shared_ptr<G4VTrackState> output = CLHEP::dynamic_pointer_cast<G4VTrackState>(state);
+    G4shared_ptr<G4VTrackState> output = G4dynamic_pointer_cast<G4VTrackState>(state);
     return output;
   }
 
@@ -295,7 +295,7 @@ template<class FinalType>
   G4shared_ptr<G4TrackState<FinalType> > ConvertToConcreteTrackState(G4VTrackStateHandle state)
   {
 
-    G4shared_ptr<G4TrackState<FinalType> > output = CLHEP::dynamic_pointer_cast<G4TrackState<FinalType> >(state);
+    G4shared_ptr<G4TrackState<FinalType> > output = G4dynamic_pointer_cast<G4TrackState<FinalType> >(state);
     return output;
   }
 
@@ -310,21 +310,21 @@ template<class T>
 
     virtual ~G4TrackStateDependent()
     { ;}
-    virtual void SetTrackState(CLHEP::shared_ptr<StateType> state)
+    virtual void SetTrackState(G4shared_ptr<StateType> state)
     {
       fpTrackState = state;
     }
 
     virtual G4VTrackStateHandle PopTrackState()
     {
-      G4VTrackStateHandle output = CLHEP::dynamic_pointer_cast<G4VTrackState>(fpTrackState);
+      G4VTrackStateHandle output = G4dynamic_pointer_cast<G4VTrackState>(fpTrackState);
       fpTrackState.reset();
       return output;
     }
 
     virtual G4VTrackStateHandle GetTrackState() const
     {
-      G4VTrackStateHandle output = CLHEP::dynamic_pointer_cast<G4VTrackState>(fpTrackState);
+      G4VTrackStateHandle output = G4dynamic_pointer_cast<G4VTrackState>(fpTrackState);
       return output;
     }
 

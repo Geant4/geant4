@@ -73,8 +73,12 @@
 
 class G4VSensitiveDetector;
 
+#ifndef PrepareState
+#define PrepareState() G4ITTransportationState* __state = this->GetState<G4ITTransportationState>();
+#endif
+
 #ifndef State
-#define State(theXInfo) (GetState<G4ITTransportationState>()->theXInfo)
+#define State(theXInfo) (__state->theXInfo)
 #endif
 
 //#define DEBUG_MEM
@@ -250,6 +254,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
                                       G4double& currentSafety,
                                       G4GPILSelection* selection)
 {
+  PrepareState()
   G4double geometryStepLength(-1.0), newSafety(-1.0);
 
   State(fParticleIsLooping) = false;
@@ -643,6 +648,7 @@ void G4ITTransportation::ComputeStep(const G4Track& track,
                                      const double timeStep,
                                      double& oPhysicalStep)
 {
+  PrepareState()
   const G4DynamicParticle* pParticle = track.GetDynamicParticle();
   G4ThreeVector startMomentumDir = pParticle->GetMomentumDirection();
   G4ThreeVector startPosition = track.GetPosition();
@@ -690,6 +696,8 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt(const G4Track& track,
   mem_first = MemoryUsage();
 #endif
 
+  PrepareState()
+  
   // G4cout << "G4ITTransportation::AlongStepDoIt" << G4endl;
   // set  pdefOpticalPhoton
   // Andrea Dotti: the following statement should be in a single line:
@@ -862,6 +870,8 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
                                                     const G4Step&)
 {
   //    G4cout << "G4ITTransportation::PostStepDoIt" << G4endl;
+ 
+  PrepareState()
   G4TouchableHandle retCurrentTouchable; // The one to return
   G4bool isLastStep = false;
 
@@ -1073,9 +1083,11 @@ void G4ITTransportation::StartTracking(G4Track* track)
 
   // Update the current touchable handle  (from the track's)
   //
+  PrepareState()
   State(fCurrentTouchableHandle) = track->GetTouchableHandle();
 
   G4VITProcess::StartTracking(track);
 }
 
 #undef State
+#undef PrepareState

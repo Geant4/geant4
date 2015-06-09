@@ -37,6 +37,7 @@
 #include "G4VITTimeStepComputer.hh"
 #include "G4VITReactionProcess.hh"
 //#include "G4ITTimeStepper.hh"
+#include "G4ITReaction.hh"
 
 //#define DEBUG_MEM
 
@@ -69,7 +70,7 @@ G4ITModelProcessor::G4ITModelProcessor()
 G4ITModelProcessor::~G4ITModelProcessor()
 {
   //dtor
-//    if(fpModelHandler) delete fpModelHandler; deleted by G4Scheduler
+  //    if(fpModelHandler) delete fpModelHandler; deleted by G4Scheduler
   fCurrentModel.clear();
   fReactionInfo.clear();
 }
@@ -109,7 +110,7 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription
-        << "No G4ITModelHandler was passed to the modelProcessor.";
+    << "No G4ITModelHandler was passed to the modelProcessor.";
     G4Exception("G4ITModelProcessor::InitializeStepper", "ITModelProcessor002",
                 FatalErrorInArgument, exceptionDescription);
   }
@@ -120,7 +121,7 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription
-        << "No G4ITModelManager was register to G4ITModelHandler.";
+    << "No G4ITModelManager was register to G4ITModelHandler.";
     G4Exception("G4ITModelProcessor::InitializeStepper", "ITModelProcessor003",
                 FatalErrorInArgument, exceptionDescription);
   }
@@ -157,7 +158,7 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
         mem_first = MemoryUsage();
 #endif
 
-//      stepper->PrepareForAllProcessors() ;
+        //      stepper->PrepareForAllProcessors() ;
         stepper->Prepare();
 
 #if defined (DEBUG_MEM)
@@ -207,7 +208,7 @@ void G4ITModelProcessor::DoCalculateStep()
   else // ie many models have been declared and will be used
   {
     std::vector<G4VITStepModel*>& model = fCurrentModel[GetIT(fpTrack)
-        ->GetITType()];
+                                                        ->GetITType()];
 
     for (int i = 0; i < (int) model.size(); i++)
     {
@@ -218,69 +219,70 @@ void G4ITModelProcessor::DoCalculateStep()
 }
 
 //______________________________________________________________________________
-void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* tracks,
-                                      const double currentStepTime,
-                                      const double previousStepTime,
-                                      const bool reachedUserStepTimeLimit)
+void G4ITModelProcessor::FindReaction(
+    G4ITReactionSet* reactionSet,
+    const double currentStepTime,
+    const double previousStepTime,
+    const bool reachedUserStepTimeLimit)
 {
   // DEBUG
   //    G4cout << "G4ITReactionManager::FindReaction" << G4endl;
-  if (tracks == 0) return;
-
+  //if (tracks == 0) return;
+  if(reactionSet == 0) return;
   if (fpModelHandler->GetAllModelManager()->empty()) return;
 
-  std::map<G4Track*, G4TrackVectorHandle>::iterator tracks_i = tracks->begin();
+  G4ITReactionPerTrackMap& reactionPerTrackMap = reactionSet->GetReactionMap();
 
-//    G4cout << "G4ITModelProcessor::FindReaction at step :" << G4ITTimeStepper::Instance()->GetNbSteps() << G4endl;
+  std::map<G4Track*, G4ITReactionPerTrackPtr, compTrackPerID>::iterator tracks_i = reactionPerTrackMap.begin();
 
-  for (tracks_i = tracks->begin(); tracks_i != tracks->end(); tracks_i++)
+  //std::map<G4Track*, G4TrackVectorHandle, compTrackPerID>::iterator tracks_i = tracks->begin();
+
+  //    G4cout << "G4ITModelProcessor::FindReaction at step :" << G4ITTimeStepper::Instance()->GetNbSteps() << G4endl;
+
+  //  for (tracks_i = tracks->begin(); tracks_i != tracks->end(); tracks_i++)
+  for (tracks_i = reactionPerTrackMap.begin();
+       tracks_i != reactionPerTrackMap.end() ;
+       tracks_i = reactionPerTrackMap.begin())
   {
-    /// Get track A
+    //G4cout << "here" << G4endl;
     G4Track* trackA = tracks_i->first;
-
-    if (trackA == 0) continue;
-
-    // G4cout << "trackA is " << GetIT(trackA)->GetName() << G4endl;
-
-    std::map<const G4Track*, G4bool>::iterator it_hasReacted =
-        fHasReacted->find(trackA);
-    if (it_hasReacted != fHasReacted->end()) continue;
-    if (trackA->GetTrackStatus() == fStopAndKill) continue;
+    if (trackA->GetTrackStatus() == fStopAndKill)
+    {
+      //G4cout << "continue 1" << G4endl;
+      continue;
+    }
+    
+    G4ITReactionPerTrackPtr reactionPerTrack = tracks_i->second;
+    G4ITReactionList& reactionList = reactionPerTrack->GetReactionList();
 
     G4IT* ITA = GetIT(trackA);
     G4ITType ITypeA = ITA->GetITType();
 
     const std::vector<G4VITStepModel*> model = fCurrentModel[ITypeA];
 
-    G4TrackVectorHandle& trackB_vector = tracks_i->second;
-    std::vector<G4Track*>::iterator trackB_i = trackB_vector->begin();
-
     G4Track* trackB = 0;
     G4ITType ITypeB(-1);
     G4VITReactionProcess* process = 0;
     G4ITReactionChange* changes = 0;
+    
+    assert(reactionList.begin() != reactionList.end());
 
-    for (; trackB_i != trackB_vector->end(); trackB_i++)
+    for(G4ITReactionList::iterator it = reactionList.begin() ;
+        it != reactionList.end() ; it = reactionList.begin() )
     {
-      trackB = *trackB_i;
-
-      if (trackB == 0) continue;
-      it_hasReacted = fHasReacted->find(trackB);
-      if (it_hasReacted != fHasReacted->end()) continue;
-      if (trackB->GetTrackStatus() == fStopAndKill) continue;
-
-      // DEBUG
-      //             G4cout << "Couple : " << trackA->GetParticleDefinition->GetParticleName() << " ("
-      //                        << trackA->GetTrackID() << ")   "
-      //                        << trackB->GetParticleDefinition->GetParticleName() << " ("
-      //                        << trackB->GetTrackID() << ")"
-      //                        << G4endl;
+      G4ITReactionPtr reaction(*it);
+      trackB = reaction->GetReactant(trackA);
+      if(trackB->GetTrackStatus() == fStopAndKill)
+      {
+        //G4cout << "continue 2" << G4endl;
+        continue;
+      }
 
       if (trackB == trackA)
       {
         G4ExceptionDescription exceptionDescription;
         exceptionDescription
-            << "The IT reaction process sent back a reaction between trackA and trackB. ";
+        << "The IT reaction process sent back a reaction between trackA and trackB. ";
         exceptionDescription << "The problem is trackA == trackB";
         G4Exception("G4ITModelProcessor::FindReaction", "ITModelProcessor005",
                     FatalErrorInArgument, exceptionDescription);
@@ -295,6 +297,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
         if (model[ITypeB]) process = model[ITypeB]->GetReactionProcess();
       }
+      
+      reactionSet->SelectThisReaction(reaction);
 
       if (process && process->TestReactibility(*trackA, *trackB,
                                                currentStepTime,
@@ -306,18 +310,13 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
       if (changes)
       {
-        (*fHasReacted)[trackA] = true;
-        (*fHasReacted)[trackB] = true;
-        changes->GetTrackA();
-        changes->GetTrackB();
-
         fReactionInfo.push_back(changes);
 
-//				G4cout << "pushing reaction for trackA (" << trackA->GetTrackID() << ") and trackB ("
-//					   << trackB->GetTrackID() << ")" << G4endl;
-//
-//				G4cout << "nb of secondaries : " << changes->GetNumberOfSecondaries() << G4endl;
-//				G4cout << "with track 0 = " << changes->GetSecondary(0) << G4endl;
+        //        G4cout << "pushing reaction for trackA (" << trackA->GetTrackID() << ") and trackB ("
+        //             << trackB->GetTrackID() << ")" << G4endl;
+        //
+        //        G4cout << "nb of secondaries : " << changes->GetNumberOfSecondaries() << G4endl;
+        //        G4cout << "with track 0 = " << changes->GetSecondary(0) << G4endl;
 
         process->ResetChanges();
         changes = 0;
@@ -326,6 +325,6 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
       }
     }
   }
-
-  fHasReacted->clear();
+  
+  //assert(G4ITReaction::gAll->empty() == true);
 }

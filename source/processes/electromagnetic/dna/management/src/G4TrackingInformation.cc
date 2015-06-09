@@ -104,7 +104,7 @@ G4TrackingInformation& G4TrackingInformation::operator=(const G4TrackingInformat
 //    return fProcessState[index];
 //}
 
-G4::shared_ptr<G4ProcessState_Lock> G4TrackingInformation::GetProcessState(size_t index)
+G4shared_ptr<G4ProcessState_Lock> G4TrackingInformation::GetProcessState(size_t index)
 {
     if(index> G4VITProcess::GetMaxProcessIndex())
     {

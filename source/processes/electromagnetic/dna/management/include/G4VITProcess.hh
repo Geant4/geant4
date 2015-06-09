@@ -65,10 +65,10 @@ struct G4ProcessState_Lock
 };
 
 /*
- class G4ProcessStateHandle_Lock : public G4::shared_ptr<G4ProcessState_Lock>
+ class G4ProcessStateHandle_Lock : public G4shared_ptr<G4ProcessState_Lock>
  {
  public:
- G4ProcessStateHandle_Lock(G4ProcessState_Lock* plock) : G4::shared_ptr<G4ProcessState_Lock>(plock)
+ G4ProcessStateHandle_Lock(G4ProcessState_Lock* plock) : G4shared_ptr<G4ProcessState_Lock>(plock)
  {}
  virtual ~G4ProcessStateHandle_Lock(){}
  };
@@ -78,16 +78,16 @@ struct G4ProcessState_Lock
     reference_cast<destinationType>(source)
 
 #define DowncastProcessState(destinationType) \
-	G4::dynamic_pointer_cast<destinationType>(G4VITProcess::fpState)
+	G4dynamic_pointer_cast<destinationType>(G4VITProcess::fpState)
 
 #define UpcastProcessState(destinationType) \
-	G4::dynamic_pointer_cast<destinationType>(G4VITProcess::fpState)
+	G4dynamic_pointer_cast<destinationType>(G4VITProcess::fpState)
 
 #define DowncastState(destinationType,source) \
-	G4::dynamic_pointer_cast<destinationType>(source)
+	G4dynamic_pointer_cast<destinationType>(source)
 
 #define UpcastState(destinationType,source) \
-	G4::dynamic_pointer_cast<destinationType>(source)
+	G4dynamic_pointer_cast<destinationType>(source)
 
 /**
  * G4VITProcess inherits from G4VProcess.
@@ -128,12 +128,12 @@ public:
 //        fpState = (G4ProcessState*) aProcInfo;
 //    }
 
-  G4::shared_ptr<G4ProcessState_Lock> GetProcessState()
+  G4shared_ptr<G4ProcessState_Lock> GetProcessState()
   {
     return UpcastProcessState(G4ProcessState_Lock);
   }
 
-  void SetProcessState(G4::shared_ptr<G4ProcessState_Lock> aProcInfo)
+  void SetProcessState(G4shared_ptr<G4ProcessState_Lock> aProcInfo)
   {
     fpState = DowncastState(G4ProcessState, aProcInfo);
   }
@@ -225,7 +225,7 @@ protected:
       return fpState->GetState<T>();
     }
 
-  G4::shared_ptr<G4ProcessState> fpState;
+  G4shared_ptr<G4ProcessState> fpState;
 
   void virtual SubtractNumberOfInteractionLengthLeft(G4double previousStepSize);
 

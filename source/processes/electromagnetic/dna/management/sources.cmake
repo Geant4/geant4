@@ -59,6 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITNavigator2.hh
         G4ITNavigator2.icc
         G4ITPathFinder.hh
+        G4ITReaction.hh
         G4ITReactionChange.hh
         G4ITReactionTable.hh
         G4ITSafetyHelper.hh
@@ -111,6 +112,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITNavigator2.cc
         G4ITNavigatorState2.cc
         G4ITPathFinder.cc
+        G4ITReaction.cc
         G4ITReactionChange.cc
         G4ITReactionTable.cc
         G4ITSafetyHelper.cc

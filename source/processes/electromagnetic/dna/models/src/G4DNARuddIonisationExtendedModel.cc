@@ -159,7 +159,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     G4ParticleDefinition* nitrogenDef =  G4IonTable::GetIonTable()->GetIon(7,14);
     G4ParticleDefinition* oxygenDef =  G4IonTable::GetIonTable()->GetIon(8,16);
     G4ParticleDefinition* siliconDef = G4IonTable::GetIonTable()->GetIon(14,28);
-    G4ParticleDefinition* ironDef =  G4IonTable::GetIonTable()->GetIon(26,52);
+    G4ParticleDefinition* ironDef =  G4IonTable::GetIonTable()->GetIon(26,56);
     //
 
     G4String proton;
@@ -408,8 +408,8 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     //SEB
     //lowEnergyLimit[iron] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
     //highEnergyLimit[iron] = 1e6* particle->GetAtomicMass()* MeV;
-    lowEnergyLimit[iron] = 0.5*52*MeV;
-    highEnergyLimit[iron] = 1e6*52*MeV;
+    lowEnergyLimit[iron] = 0.5*56*MeV;
+    highEnergyLimit[iron] = 1e6*56*MeV;
     //
 
     // Cross section
@@ -538,7 +538,7 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
                                                                  G4double,
                                                                  G4double)
 {
-    //SEB: particleDefinition->GetParticleName() is for eg. Fe52
+    //SEB: particleDefinition->GetParticleName() is for eg. Fe56
     //     particleDefinition->GetPDGMass() is correct
     //     particleDefinition->GetAtomicNumber() is correct
 
@@ -583,7 +583,7 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
             &&
             particleDefinition != G4IonTable::GetIonTable()->GetIon(14,28)
             &&
-            particleDefinition != G4IonTable::GetIonTable()->GetIon(26,52)
+            particleDefinition != G4IonTable::GetIonTable()->GetIon(26,56)
             //
             )
 
@@ -680,7 +680,7 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
                                                          G4double,
                                                          G4double)
 {
-    //SEB: particle->GetDefinition()->GetParticleName() is for eg. Fe52
+    //SEB: particle->GetDefinition()->GetParticleName() is for eg. Fe56
     //     particle->GetDefinition()->GetPDGMass() is correct
     //     particle->GetDefinition()->GetAtomicNumber() is correct
     //     particle->GetDefinition()->GetAtomicMass() is correct

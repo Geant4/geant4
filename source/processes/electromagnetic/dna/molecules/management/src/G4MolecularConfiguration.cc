@@ -214,8 +214,8 @@ G4MolecularConfiguration*
 G4MolecularConfiguration::GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
                                                     int charge)
 {
-  G4MolecularConfiguration* molConf = GetManager()->GetMolecularConfiguration(
-      molDef, charge);
+  G4MolecularConfiguration* molConf =
+      GetManager()->GetMolecularConfiguration(molDef, charge);
 
   if (molConf)
   {

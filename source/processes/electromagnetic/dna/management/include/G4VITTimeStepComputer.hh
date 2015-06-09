@@ -55,10 +55,10 @@
 #include "G4ITReactionTable.hh"
 #include "G4ReferenceCountedHandle.hh"
 #include "AddClone_def.hh"
-#include "CLHEP/Utility/memory.h"
+#include "G4memory.hh"
 
 //typedef G4ReferenceCountedHandle< std::vector<G4Track*> > G4TrackVectorHandle;
-typedef CLHEP::shared_ptr< std::vector<G4Track*> > G4TrackVectorHandle;
+typedef G4shared_ptr< std::vector<G4Track*> > G4TrackVectorHandle;
 
 /**
   * Before stepping all tracks G4Scheduler calls all the G4VITModel

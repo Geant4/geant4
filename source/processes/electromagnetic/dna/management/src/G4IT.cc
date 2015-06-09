@@ -214,5 +214,5 @@ const G4ThreeVector& G4IT::GetPosition() const
 
 const double& G4IT::operator[](int i) const
 {
-  return const_cast<G4ThreeVector&>(GetTrack()->GetPosition())[i];
+  return const_cast<G4ThreeVector&>(GetTrack()->GetPosition())(i);
 }

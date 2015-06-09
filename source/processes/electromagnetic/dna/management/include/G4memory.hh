@@ -26,6 +26,18 @@
 #ifndef G4SHARED_PTR_HH_
 #define G4SHARED_PTR_HH_
 
+#if __cplusplus >= 201103L
+#include <memory>
+
+#define G4shared_ptr std::shared_ptr
+#define G4weak_ptr std::weak_ptr
+#define G4static_pointer_cast std::static_pointer_cast
+#define G4const_pointer_cast std::const_pointer_cast
+#define G4dynamic_pointer_cast std::dynamic_pointer_cast
+#define G4enable_shared_from_this std::enable_shared_from_this
+#define G4enable_shared_from_this2 std::enable_shared_from_this
+
+#else
 #include "CLHEP/Utility/memory.h"
 
 #define G4shared_ptr G4::shared_ptr
@@ -72,7 +84,7 @@ public:
 	shared_from_this()
 	{
 		shared_ptr<T>  p( weak_this_ );
-		assert( p.get() == this );
+		// assert( p.get() == this );
 		return p;
 	}
 
@@ -80,7 +92,7 @@ public:
 	shared_from_this() const
 	{
 		shared_ptr<T const>  p( weak_this_ );
-		assert( p.get() == this );
+		// assert( p.get() == this );
 		return p;
 	}
 
@@ -218,5 +230,6 @@ namespace G4
 	using CLHEP::enable_shared_from_this;
 	using CLHEP::enable_shared_from_this2;
 }
+#endif
 
 #endif /* G4SHARED_PTR_HH_ */

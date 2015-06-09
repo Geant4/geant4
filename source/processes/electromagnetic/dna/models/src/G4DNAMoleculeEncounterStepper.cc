@@ -328,15 +328,16 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA,
 //     G4cout << "Potential reactions :" << G4endl;
 //        G4cout << GetMolecule(trackA)->GetName()
 //    << " ("<< trackA.GetTrackID()<< ") " << " + ..." << G4endl;
-//    << " | " << trackB->GetTrackID() << G4endl;
+//    //<< " | " << trackB->GetTrackID() << G4endl;
 //
-//        for(int j = 0 ; j < fReactants->size() ; j++)
+//        for(int j = 0 ; j < (int) fReactants->size() ; j++)
 //        {
 //         G4cout << GetMolecule(fReactants->at(j) )->GetName()
 //    <<" ("<< fReactants->at(j)->GetTrackID() << ")" << G4endl;
 //        }
 //  }
-  }
+
+ }
 
 #ifdef G4VERBOSE
   //    DEBUG

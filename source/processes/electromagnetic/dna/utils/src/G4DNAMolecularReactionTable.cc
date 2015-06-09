@@ -96,7 +96,7 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
   {
     sumDiffCoeff = reactive1->GetDiffusionCoefficient();
     fReducedReactionRadius = fReactionRate
-        / (4 * pi * reactive1->GetDiffusionCoefficient() * Avogadro);
+        / (4 * pi * sumDiffCoeff * Avogadro);
   }
   else
   {
@@ -121,7 +121,7 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
   {
     sumDiffCoeff = fReactive1->GetDiffusionCoefficient();
     fReducedReactionRadius = fReactionRate
-        / (4 * pi * fReactive1->GetDiffusionCoefficient() * Avogadro);
+        / (4 * pi * sumDiffCoeff * Avogadro);
   }
   else
   {

@@ -206,7 +206,7 @@ G4double G4DNAScreenedRutherfordElasticModel::CrossSectionPerVolume(const G4Mate
 
   }
 
-  return sigma*material->GetAtomicNumDensityVector()[1];
+  return sigma*waterDensity;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
