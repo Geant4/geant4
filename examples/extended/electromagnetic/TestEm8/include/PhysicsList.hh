@@ -44,7 +44,6 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "G4EmConfigurator.hh"
 
 class G4VPhysicsConstructor;
 class StepMax;
@@ -74,8 +73,6 @@ private:
   void  NewPAIModel(const G4ParticleDefinition*, const G4String& modname, 
                     const G4String& procname);
 
-  G4EmConfigurator* fConfig;
-
   G4VPhysicsConstructor*  fEmPhysicsList;
   G4VPhysicsConstructor*  fDecayPhysicsList;
   std::vector<G4VPhysicsConstructor*> fHadronPhys;
@@ -84,6 +81,7 @@ private:
   StepMax* fStepMaxProcess;
     
   PhysicsListMessenger* fMessenger;
+  G4bool fPAI;
 
 };
 

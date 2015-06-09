@@ -95,13 +95,14 @@ void Run::EndOfRun()
   fOverflow    *= norm;
 
   G4double y1 = fEdep.mean();
-  G4double y2 = std::sqrt(fEdep.rms());
+  G4double y2 = fEdep.rms();
+  if(y2 > 0.0) { y2 = std::sqrt(y2); }
 
   G4double de = fMaxEnergy/G4double(fNbins);  
   G4double x1 = -de*0.5; 
 
   fFactorALICE = fParam->GetFactorALICE();
-  
+
   G4cout << " ================== run summary =====================" << G4endl;
   G4int prec = G4cout.precision(5);
   G4cout << "   End of Run TotNbofEvents    = " 
