@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 April 2015 Gabriele Cosmo (gdml-V10-00-12)
+- Fixed non-initialised boolean flag in G4GDMLRead, reported by Coverity.
+
+20 April 2015 Gabriele Cosmo
+- Corrected parsing of shape type-ID for MultiUnion in G4GDMLWriteSolids.
+
+16 April 2015 Gabriele Cosmo
+- Improved text in G4Exception for failed import of file in G4GDMLRead.
+
+13 April 2015 Witek Pokorski
+- Correction for optional stripping of world-volume.
+
+9 April 2015 Gabriele Cosmo
+- Added "dichroic" surface model for optical property, consistent with
+  addition done in release 10.0.
+
+27 March 2015 Gabriele Cosmo
+- Avoid use of standard evaluator for import of units; adopt G4UnitsTable
+  instead, in order to avoid loss of precision due to unit's conversion.
+
 24 November 2014 Gabriele Cosmo (gdml-V10-00-11)
 - Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of repeated
   displacements of the reference solid in the same Boolean operation (issue

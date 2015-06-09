@@ -33,6 +33,7 @@
 
 #include "G4GDMLReadStructure.hh"
 
+#include "G4UnitsTable.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -46,7 +47,7 @@
 #include "G4VisAttributes.hh"
 
 G4GDMLReadStructure::G4GDMLReadStructure()
-  : G4GDMLReadParamvol(), pMotherLogical(0)
+  : G4GDMLReadParamvol(), pMotherLogical(0), strip(false)
 {
 }
 
@@ -190,7 +191,7 @@ DivisionvolRead(const xercesc::DOMElement* const divisionvolElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = attValue; } else
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="width") { width = eval.Evaluate(attValue); } else
       if (attName=="offset") { offset = eval.Evaluate(attValue); } else
       if (attName=="number") { number = eval.EvaluateInteger(attValue); } else
@@ -582,7 +583,7 @@ QuantityRead(const xercesc::DOMElement* const readElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="unit") { unit = eval.Evaluate(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
       if (attName=="value"){ value= eval.Evaluate(attValue); } 
    }
 
@@ -901,8 +902,8 @@ GetAuxMap() const
 
 G4VPhysicalVolume* G4GDMLReadStructure::
 GetWorldVolume(const G4String& setupName)
-{    
-   G4LogicalVolume* volume = GetVolume(Strip(GetSetup(setupName)));
+{
+   G4LogicalVolume* volume = GetVolume(GenerateName(sname, dostrip));
    volume->SetVisAttributes(G4VisAttributes::Invisible);
 
    G4VPhysicalVolume* pvWorld = 0;

@@ -101,6 +101,7 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
    G4GDMLAssemblyMapType assemblyMap;
    G4LogicalVolume *pMotherLogical;
    std::map<std::string, G4VPhysicalVolume*> setuptoPV;
+   G4bool strip;
 };
 
 #endif

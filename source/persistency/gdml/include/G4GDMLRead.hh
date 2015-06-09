@@ -119,13 +119,14 @@ class G4GDMLRead
      // Main method for reading GDML files.
 
    void StripNames() const;
+   void StripName(G4String&) const;
      //
      // Strip off pointers from entity IDs.
 
    void OverlapCheck(G4bool);
      //
      // Activate/de-activate surface check for overlaps (default is off)
-
+  
  protected:
 
    G4GDMLRead();
@@ -134,7 +135,6 @@ class G4GDMLRead
    G4String Transcode(const XMLCh* const);
    G4String GenerateName(const G4String& name, G4bool strip=false);
    G4String Strip(const G4String&) const;
-   void StripName(G4String&) const;
    void GeneratePhysvolName(const G4String&,G4VPhysicalVolume*);
    void LoopRead(const xercesc::DOMElement* const,
                  void(G4GDMLRead::*)(const xercesc::DOMElement* const));
@@ -144,6 +144,7 @@ class G4GDMLRead
    G4GDMLEvaluator eval;
    G4bool validate;
    G4bool check;
+   G4bool dostrip;
 
  private:
 
