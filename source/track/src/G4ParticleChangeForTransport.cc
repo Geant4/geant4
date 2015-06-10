@@ -226,6 +226,11 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
     pPostStepPoint->SetMaterialCutsCouple( theMaterialCutsCoupleChange );
     pPostStepPoint->SetSensitiveDetector( theSensitiveDetectorChange );
   }
+  if( this->GetFirstStepInVolume() ){
+    pStep->SetFirstStepFlag();
+  }else{
+    pStep->ClearFirstStepFlag(); 
+  }  
   if( this->GetLastStepInVolume() ){
     pStep->SetLastStepFlag();
   }else{
