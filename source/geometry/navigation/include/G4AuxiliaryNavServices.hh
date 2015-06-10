@@ -71,10 +71,8 @@ class G4AuxiliaryNavServices
      // Is the track (point, direction) exiting the solid 'sampleSolid' ? 
      // Returns true if we are going to exit the volume.
 
- private:
- 
-   G4bool testOne();
-
+   static void ReportTolerances();
+     // Print global values of Cartesian, Radial and Angle Tolerances
 };
 
 #include "G4AuxiliaryNavServices.icc"

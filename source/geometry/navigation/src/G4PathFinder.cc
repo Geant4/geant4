@@ -263,23 +263,22 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 #ifdef G4DEBUG_PATHFINDER      
   else
   {
-     if( proposedStepLength < fTrueMinStep )  // For 2nd+ geometry 
+     const G4double checkTolerance = 1.0e-9; 
+     if( proposedStepLength < fTrueMinStep * ( 1.0 + checkTolerance) )  // For 2nd+ geometry 
      { 
        std::ostringstream message;
+       message.precision( 12 ); 
        message << "Problem in step size request." << G4endl
-               << "        Error can be caused by incorrect process ordering."
                << "        Being requested to make a step which is shorter"
                << " than the minimum Step " << G4endl
                << "        already computed for any Navigator/geometry during"
                << " this tracking-step: " << G4endl
-               << "        This can happen due to an error in process ordering."
+               << "        This could happen due to an error in process ordering."
                << G4endl
                << "        Check that all physics processes are registered"
-               << G4endl
                << "        before all processes with a navigator/geometry."
                << G4endl
                << "        If using pre-packaged physics list and/or"
-               << G4endl
                << "        functionality, please report this error."
                << G4endl << G4endl
                << "        Additional information for problem: "  << G4endl
@@ -292,8 +291,11 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                << "        Navigator raw return value" << G4endl
                << "        Requested step now = " << proposedStepLength
                << G4endl
-               << "        Difference min-req = "
+               << "        Difference min-req (absolute) = "
                << fTrueMinStep-proposedStepLength << G4endl
+               << "        Relative (to max of two) = " 
+               << (fTrueMinStep-proposedStepLength)
+                  / std::max(proposedStepLength, fTrueMinStep) << G4endl
                << "     -- Step info> stepNo= " << stepNo
                << " last= " << fLastStepNo 
                << " newTr= " << fNewTrack << G4endl;
@@ -365,6 +367,8 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   fNewTrack= true; 
   this->MovePoint();   // Signal further that the last status is wiped
 
+  fpFieldPropagator->PrepareNewTrack();   // Inform field propagator of new track
+  
   // Message the G4NavigatorPanel / Dispatcher to find active navigators
   //
   std::vector<G4Navigator*>::iterator pNavigatorIter; 
@@ -749,7 +753,7 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
 
    for( G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
    {
-      G4double safety = (*pNavigatorIter)->ComputeSafety( position,true );
+      G4double safety = (*pNavigatorIter)->ComputeSafety( position, DBL_MAX, true );
       if( safety < minSafety ) { minSafety = safety; } 
       fNewSafetyComputed[num]= safety;
    } 
@@ -1181,7 +1185,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      G4double minSafety= kInfinity, safety; 
      for( numNav=0; numNav < fNoActiveNavigators; ++numNav )
      {
-        safety= fpNavigator[numNav]->ComputeSafety( startPoint, false );
+        safety= fpNavigator[numNav]->ComputeSafety( startPoint, DBL_MAX, false );
         fPreSafetyValues[numNav]= safety; 
         fCurrentPreStepSafety[numNav]= safety; 
         minSafety = std::min( safety, minSafety ); 

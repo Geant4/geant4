@@ -122,7 +122,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 #ifdef G4DEBUG_FIELD
   static G4double tolerance = 1.0e-8; 
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
-  if( (TrialPoint - StartPosition).mag() < tolerance * mm ) 
+  if( (TrialPoint - StartPosition).mag() < tolerance * CLHEP::mm ) 
   {
      G4Exception("G4SimpleLocator::EstimateIntersectionPoint()", 
                  "GeomNav1002", JustWarning,

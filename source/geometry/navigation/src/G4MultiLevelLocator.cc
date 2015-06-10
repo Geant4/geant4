@@ -159,7 +159,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   G4int depth=0; // Depth counts how many subdivisions of initial step made
 
 #ifdef G4DEBUG_FIELD
-  static const G4double tolerance = 1.0e-8 * mm; 
+  static const G4double tolerance = 1.0e-8 * CLHEP::mm; 
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
   if( (TrialPoint - StartPosition).mag() < tolerance) 
   {
@@ -234,7 +234,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
       G4double       MomDir_dot_Norm= NewMomentumDir.dot( NormalAtEntry ) ;
       
 #ifdef G4DEBUG_FIELD
-      if( VerboseLevel > 3 )
+      if( fVerboseLevel > 3 )
       { 
          G4ThreeVector  ChordAB           = Point_B - Point_A;
          G4double       ABchord_length    = ChordAB.mag(); 

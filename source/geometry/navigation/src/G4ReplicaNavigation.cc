@@ -801,10 +801,8 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   G4ExitNormal normalOutStc;
   const G4int topDepth= history.GetDepth();
 
-  if ( sampleSafety<ourSafety )
-  {
-    ourSafety = sampleSafety;
-  }
+  ourSafety = std::min( ourSafety, sampleSafety);
+
   if ( sampleSafety<ourStep )
   {
 
