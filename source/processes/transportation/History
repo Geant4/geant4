@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 10th 2015, M.Kelsey transport-V10-00-09
+January 10th 2015, M.Kelsey transport-V10-00-10
 ---------------------------
 - G4Transportation.cc, G4CoupledTransportation: In
   AlongStepGetPhysicalInteractionLength(), initialize restMass data member
@@ -25,6 +25,13 @@ January 10th 2015, M.Kelsey transport-V10-00-09
   Resolves inconsistent kinematics when dynamic mass is measurably different
   from "PDG" mass.
 
+December 17th 2014, J.Apostolakis
+--------------------------------- 
+- G4Transportation: Added ability to identify last step in volume for the case of
+   propagation in field.       
+   Requires use of tags in navigation (geomnav-V10-01-02) and track (track-V10-01-00) .
+   Addresses Bugzilla issue #1032.
+    
 November 21st 2014, J.Apostolakis transport-V10-00-06
 --------------------------------- (corrected version of transport-V10-00-04)
 - Added initialization of G4CoupledTransportation data members (fixes Coverity issue 15280)
