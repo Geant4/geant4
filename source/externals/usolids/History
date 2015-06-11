@@ -17,66 +17,66 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 27, 2015  T.Nikitina                  geom-usolids-V10-01-16
+May 27, 2015  T.Nikitina                  geom-usolids-V10-00-28
 - Fixed DistanceToOut(p) and Inside(p) in USphere for sphere cut in theta
   for point (0,0,0) and for cases when Start/End angle have not to be taken
   in account (STheta==0 || eTheta==pi).
   Fix triggered by analysing setup provided in Geant4 problem report #1702.
 
-May 4,  2015  G.Cosmo                     geom-usolids-V10-01-15
+May 4,  2015  G.Cosmo
 - Fixed Coverity defect for unused variable quantity in UCons.
 
-April 24,  2015  G.Cosmo                  geom-usolids-V10-01-14, 13
+April 24,  2015  G.Cosmo
 - Commented out use of shrink_to_fit() in UTessellatedSolid as not yet
   part of the C++ Standard on Linux...
 
-April 24,  2015  G.Cosmo                  geom-usolids-V10-01-12
+April 24,  2015  G.Cosmo
 - Some code cleanup and minor fixes...
   Syncronised implementation with USolids module in VecGeom.
 
-April 23,  2015  G.Cosmo                  geom-usolids-V10-01-11
+April 23,  2015  G.Cosmo
 - Replaced Exception IDs in UUtils to avoid clashes with wild global
   extern functions in Root.
 
-April 20,  2015  G.Cosmo                  geom-usolids-V10-01-10
+April 20,  2015  G.Cosmo
 - Corrected string returned as type-ID by GetEntityType() to conform
   to shape kind in: UExtrudedSolid, UMultiUnion, UQuadrangularFacet,
   UTessellatedSolid, UTrap, UTriangularFacet and UVCSGfaceted.
 
-March 3,  2015  G.Cosmo                   geom-usolids-V10-01-09
+March 3,  2015  G.Cosmo
 - UVector3: made data private and defined accessors x(), y() and z().
 - Made implementations operators +(), -(), *(), and /() inline.
 - Adapted all classes to the change.
 - Added method GetPointOnEdge() to UBox.
 
-February 23,  2015  T.Nikitina            geom-usolids-V10-01-08
+February 23,  2015  T.Nikitina            geom-usolids-V10-00-27
 - Fix in SetOriginalParameters() for UPolycone, in case of presence of
   'rings' structures constructed by (r,z) corners.
 
-February 16,  2015  G.Cosmo               geom-usolids-V10-01-07
+February 16,  2015  G.Cosmo
 - Fixed typo in copy-ctor and assignment operator for UTubs.
 
-January 26,  2015  G.Cosmo                geom-usolids-V10-01-06
+January 26,  2015  G.Cosmo
 - Renamed DistanceAwayForInside() to DistanceAway() and use polymorphism
   in UPolyconeSide.
 
-January 26,  2015  T.Nikitina             geom-usolids-V10-01-05, 04
+January 26,  2015  T.Nikitina
 - Added special method for Inside 'DistanceAwayForInside()' in order to fix 
   precision problem of calculation of DistanceToSide() in UPolyconeSide.
 
-January 21,  2015  T.Nikitina             geom-usolids-V10-01-03
+January 21,  2015  T.Nikitina
 - Fixed triangularisation method AddGeneralPOlygoneFacets() in
   UExtrudedSolid by avoiding flat triangles.
 - Added warning message to UTriangularFacet constructor if Area is 0;
   i.e. case of flat triangle.
 
-December 17, 2014 G.Cosmo                 geom-usolids-V10-01-02
+December 17, 2014 G.Cosmo
 - Renamed ExceptionSeverity struct to UExceptionSeverity in UUtils.
 
-December 12, 2014 G.Cosmo                 geom-usolids-V10-01-01
+December 12, 2014 G.Cosmo
 - Use canonical form for operator=() in UPolycone.
 
-December 10, 2014 T.Nikitina              geom-usolids-V10-01-00
+December 10, 2014 T.Nikitina
 - Fix in UPolycone::InsideSection() for points(0,0,z).
   Code cleanup and formatting
 - Fix in UTrap::SafetyToIn/SafetyToOut() for implementations which were
