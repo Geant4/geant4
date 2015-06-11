@@ -238,6 +238,16 @@ void G4DNAChemistryManager::SetNewValue(G4UIcommand* command, G4String value)
   }
 }
 
+G4String G4DNAChemistryManager::GetCurrentValue(G4UIcommand* command)
+{
+  if (command == fpActivateChem)
+  {
+    return G4UIcmdWithABool::ConvertToString(fActiveChemistry);
+  }
+
+  return "";
+}
+
 void G4DNAChemistryManager::Run()
 {
   if (fActiveChemistry)

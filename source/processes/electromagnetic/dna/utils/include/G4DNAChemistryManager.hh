@@ -110,6 +110,7 @@ public:
   //============================================================================
   virtual G4bool Notify(G4ApplicationState requestedState);
   virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual G4String GetCurrentValue(G4UIcommand * command);
 
   //============================================================================
   // INITIALIZATION AND FINALIZATION METHODS

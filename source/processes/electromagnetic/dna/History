@@ -14,6 +14,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+05-06-2015, MK,  tag emdna-V10-00-66
+- G4IT: remove a "virtual" keyword when accessing position
+
 12-02-2015, MK,  tag emdna-V10-00-65
 - G4ITReaction: Remove "gAll" introduced for testing
 - G4ITModelProcessor: Remove "assert" introduced for testing

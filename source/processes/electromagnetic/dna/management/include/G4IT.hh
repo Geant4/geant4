@@ -126,7 +126,7 @@ public:
   inline const G4Track* GetTrack() const;
 
   virtual const G4ThreeVector& GetPosition() const;
-  virtual const double& operator[](int i) const;
+  double operator[](int i) const;
 
   void RecordCurrentPositionNTime();
 
