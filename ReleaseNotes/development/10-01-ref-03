@@ -14,6 +14,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (#)  Fixes included in release 10.1.p01
+(=)  Fixes included in release 10.1.p02
 
 Summarised, the list of changes is the following:
 
@@ -41,7 +42,7 @@ digits_hits/utils                                detutils-V10-01-02          (#)
   Revised Draw() DrawColumn() methods in G4ScoringBox and G4ScoringCylinder
   to speed up drawing primitive scorers attached to the scoring meshes.
 
-externals/usolids                                geom-usolids-V10-01-09
+externals/usolids                                geom-usolids-V10-01-09      (=)
 -----------------
 - UVector3: made data private and defined accessors x(), y() and z().
 - Made implementations operators +(), -(), *(), and /() inline.
@@ -54,20 +55,20 @@ geometry
   o Made G4IStore and G4WeightWindowStore singletons thread-local to avoid
     data races when accessing iterators.
     Use const references for string in argument for constructor and accessor.
-- management (geommng-V10-01-00)
+- management (geommng-V10-01-00)                                             (=)
   o G4USolid: use accessors x(), y() and z() from UVector3, instead of
     directly accessing its data-members.
-- solids/Boolean (geom-bool-V10-01-00)
+- solids/Boolean (geom-bool-V10-01-00)                                       (=)
   o G4UMultiUnion: use accessors x(), y() and z() from UVector3, instead
     of directly accessing its data-members.
-- solids/CSG (geom-csg-V10-01-02):
-- solids/specific (geom-specific-V10-01-06):
+- solids/CSG (geom-csg-V10-01-02):                                           (=)
+- solids/specific (geom-specific-V10-01-06):                                 (=)
   o Use accessors x(), y() and z() from UVector3 in USolids wrappers, instead
     of directly accessing its data-members.
 
 global                                           global-V10-01-03
 ------
-- Added "g/mole" Molar mass definition to G4UnitsTable.
+- Added "g/mole" Molar mass definition to G4UnitsTable.                      (=)
 
 graphics_reps                                    greps-V10-01-02
 -------------
@@ -95,7 +96,7 @@ persistency/gdml                                 gdml-V10-01-04
   Updated G4GDMLParser to optionally activate export of regions (default
   is OFF). Export of regions can be activated/de-activated by means of
   the new UI command "/persistency/gdml/export_regions [true/false]".
-- Avoid use of standard evaluator for import of units; adopt G4UnitsTable
+- Avoid use of standard evaluator for import of units; adopt G4UnitsTable    (=)
   instead, in order to avoid loss of precision due to unit's conversion.
 
 physics_lists
@@ -192,7 +193,7 @@ processes/hadronic
 - models/parton_string/hadronization (had-hadronization-V10-01-01)
   o G4LundStringFragmentation: improved reaction cross-sections of:
     Pbar + P -> Pi+Pi-, K+K-.
-- models/pre_equilibrium (hadr-pre-V10-01-00)
+- models/pre_equilibrium (hadr-pre-V10-01-00)                                (=)
   o Fixed Coverity defects and some code cleanup.
 - models/qmd (hadr-qmd-V10-01-01)                                            (#)
   o Fixed Coverity defects in G4QMDGroundStateNucleus and G4QMDNucleus.

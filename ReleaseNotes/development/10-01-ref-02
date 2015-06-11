@@ -16,6 +16,7 @@ Major development/fixes included since the last development tag are:
 
 (+)  Fixes included in release 10.0.p04
 (#)  Fixes included in release 10.1.p01
+(=)  Fixes included in release 10.1.p02
 
 Summarised, the list of changes is the following:
 
@@ -97,11 +98,11 @@ physics_lists
 
 processes/electromagnetic/dna                    emdna-V10-01-06
 -----------------------------
-- Fix for event reproducibility in the chemistry module
-- Fixed problem of "no reaction table found"; created G4ITReaction class.
-- G4shared_ptr refers to std::shared_ptr when C++11 is activated.
-- G4ITModelProcessor: removed assert() calls introduced for testing.
-- G4ITTransportation: removed extra parenthesis in the undef of PrepareState.
+- Fix for event reproducibility in the chemistry module.                     (=)
+- Fixed problem of "no reaction table found"; created G4ITReaction class.    (=)
+- G4shared_ptr refers to std::shared_ptr when C++11 is activated.            (=)
+- G4ITModelProcessor: removed assert() calls introduced for testing.         (=)
+- G4ITTransportation: removed extra parenthesis in the undef of PrepareState.(=)
 
 processes/electromagnetic/highenergy             emhighenergy-V10-01-01      (#)
 ------------------------------------

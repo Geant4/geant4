@@ -18,6 +18,7 @@ Major development/fixes included since the last development tag are:
 (+)  Fixes included in release 10.0.p02
 (o)  Fixes included in release 10.0.p04
 (#)  Fixes included in release 10.1.p01
+(=)  Fixes included in release 10.1.p02
 
 Summarised, the list of changes is the following:
 
@@ -38,7 +39,7 @@ analysis                                         analysis-V10-01-01          (#)
 externals                                        externals-V10-01-00
 ---------
 - CLHEP:
-  o Fixed usage of std::abs() in RandGaussZiggurat header.
+  o Fixed usage of std::abs() in RandGaussZiggurat header.                   (=)
 - USolids (geom-usolids-V10-01-06):                                          (#)
   o UPolycone: fix in InsideSection() for points(0,0,z).                     (o)
     Use canonical form for operator=(). Code cleanup and formatting.
@@ -59,7 +60,7 @@ geometry
   o Small refinements in G4FieldTrack: added method to access rest mass
     and avoid division by zero for unit direction.
 - navigation (geomnav-V10-01-05):
-  o Improvements in G4PropagatorInField to enable identification of first
+  o Improvements in G4PropagatorInField to enable identification of first    (=)
     and last step in a volume, when tracking in a field.
     Addressing old problem report #1032.
     Added new methods to report looping and stuck tracks.
@@ -128,10 +129,10 @@ physics_lists
 
 processes/electromagnetic/dna                    emdna-V10-01-04
 -----------------------------
-- BornIonisation: corrected array cleaning.
-- ScreenRutherfordElastic: corrected retrieval of water density.
+- BornIonisation: corrected array cleaning.                                  (=)
+- ScreenRutherfordElastic: corrected retrieval of water density.             (=)
 - Added elastic model by H.Tran.
-- Added Fe56 into G4DNARuddIonisationExtendedModel.
+- Added Fe56 into G4DNARuddIonisationExtendedModel.                          (=)
 - Explicitly initialise to zero TLS pointers in G4KDNode and G4ITFinder      (#)
   to allow for compilation on Linux/clang-3.5.
 - Corrected CMake scripts.                                                   (#)
@@ -224,7 +225,7 @@ processes/management                             procman-V10-01-00           (#)
 
 processes/transportation                         transport-V10-01-01
 ------------------------
-- G4Transportation: added ability to identify last step in volume for
+- G4Transportation: added ability to identify last step in volume for       (=)
   the case of propagation in field. Addresses old problem report #1032.
 - G4Transportation, G4CoupledTransportation: in AlongStepGetPIL(),          (o#)
   initialize restMass data member using G4DynamicParticle (as is used in
@@ -240,7 +241,7 @@ track                                            track-V10-01-01
 -----
 - Fixed FieldTrackUpdator to pass magnetic moment and PDG spin.              (#)
   Addressing problem report #1696.
-- Improved G4ParticleChangeForTransport by adding update for FirstStep
+- Improved G4ParticleChangeForTransport by adding update for FirstStep       (=)
   in volume.
 
 visualization                                    vis-V10-01-04

@@ -1,0 +1,263 @@
+
+                       geant4-10-01-ref-04
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Added extensions to CMake to allow use of system CLHEP granular libraries.
+ o Added handling of vector column in cvs analysis.
+ o First implementation of G4UniformRandPool for serial generation of
+   uniform random numbers. Feature not actived yet.
+ o Simplified implementation in G4NavigationHistoryPool to make use of
+   simple stack of free entries.
+ o Implemented ability in GDML writer to optionally export energy cuts
+   associated to logical volumes (default is OFF).
+ o G4UrbanMscModel: new lateral displacement correlation and positron
+   correction.
+ o Properly delete precompound products in Bertini Cascade, responsible
+   for observed constant memory growth in the use of G4Allocator.
+ o Improved fragmentation of fast residual nuclei in Binary Cascade.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(=)  Fixes included in release 10.1.p02
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-08
+-----
+- Added extensions to allow use of system CLHEP granular libraries.          (=)
+  Provide new advanced option GEANT4_USE_SYSTEM_CLHEP_GRANULAR, which can
+  be set to enable use of CLHEP granular libraries from the system; when
+  activated, use new FindCLHEP interface to search for Geant4's required
+  Export and document a new variable "Geant4_system_clhep_ISGRANULAR" that
+  clients can query to check whether the system CLHEP was linked in granular
+  mode. Support CLHEP granular library listing in '--libs' argument.
+  Added CLHEP_ROOT_DIR to CMake cache, allowing it to be edited in the
+  CMake curses/GUI.
+- Updated AppleClang version regex to properly parse LLVM version            (=)
+  number in Xcode 6.3.
+
+analysis                                         analysis-V10-01-09
+--------
+- Updated to g4tools 1.19.2:
+  o csv: now handling vector column if using the ntuple_booking way.
+  o Changes for Windows (MinGW) to use '_MSC_VER' in place of 'WIN32' flag.  (=)
+    Addressing problem report #1721.
+  o See History_tools for the complete list of modifications.
+
+event                                            event-V10-01-04             (=)
+-----
+- Clean up code and removed not needed thread-local data that 
+  need to be shared for UI commands to work properly.
+- Fixes for Coverity defects.
+
+externals                                        externals-V10-01-01
+---------
+- CLHEP:
+  o Fixed usage of std::abs() in RandGaussZiggurat source.                   (=)
+- usolids (geom-usolids-V10-01-14):                                          (=)
+  o Corrected string returned as type-ID by GetEntityType() to conform
+    to shape kind in: UExtrudedSolid, UMultiUnion, UQuadrangularFacet,
+    UTessellatedSolid, UTrap, UTriangularFacet and UVCSGfaceted.
+  o Replaced Exception IDs in UUtils to avoid clashes with wild global
+    extern functions in Root.
+  o Some code cleanup and minor fixes...
+    Syncronised implementation with USolids module in VecGeom.
+
+geometry
+--------
+- solids/CSG (geom-csg-V10-01-03):                                           (=)
+  o Fixed calculation of Normal in G4Para for kPX and kMX sides in
+    DistanceToOut(p,v) and ApproxSurfaceNormal(p).
+    Addressing problem report #1736.
+- solids/volumes (geomvol-V10-01-04):                                        (=)
+  o Simplified implementation in G4NavigationHistoryPool to make use of simple
+    stack of free entries. Pre-allocate size of vectors and inlined GetLevels().
+    Also addressing problem report #1730.
+  o Updated unit-tests to new G4Exception signature.
+
+global                                           global-V10-01-07
+------
+- First implementation of G4UniformRandPool for serial generation of
+  uniform random numbers. Feature not actived yet.
+
+graphics_reps                                    greps-V10-01-03
+-------------
+- Fixed Coverity defect in HepPolyhedron.
+
+persistency/gdml                                 gdml-V10-01-13
+----------------
+- Implemented ability to optionally export (export only!) energy cuts
+  associated to logical volumes (default is OFF). Export of energy cuts for
+  volumes can be activated/de-activated by means of a new UI command
+  "/persistency/gdml/export_Ecuts [true/false]".
+- Corrected signature for import/export of auxiliary information and
+  execute dump of the auxiliary information after all volume's content,
+  included daughters tree, to be consistent with schema definition.
+- Added "dichroic" surface model for optical property, consistent with       (=)
+  addition done in release 10.0.
+- Fixed writing out of reflected volumes. No more redundant duplicated
+  logical volumes in the store after import of geometry.
+- Correction for optional stripping of world-volume.                         (=)
+- Corrected parsing of shape type-ID for MultiUnion in G4GDMLWriteSolids.    (=)
+- Improved text in G4Exception for failed import of file in G4GDMLRead.      (=)
+- Code cleanup and formatting.
+
+physics_lists
+-------------
+- builders (phys-builders-V10-01-02):
+  o Fixes for Coverity defects.
+- constructors/decay (phys-ctor-decay-V10-01-00):
+  o Added constructor for Spin decay, G4SpinDecayPhysics.
+- constructors/gamma_lepto_nuclear (phys-ctro-glnuclear-V10-01-00):
+- constructors/hadron_elastic (phys-ctor-helastic-V10-01-01)
+- constructors/limiters (phys-ctor-limiters-V10-01-01):
+  o Fixes for Coverity defects.
+- lists (phys-lists-V10-01-03):
+  o Cleanup in FTFP_BERT_TRV.
+
+processes/electromagnetic/highenergy        emhighenergy-V10-01-02           (=)
+------------------------------------
+- G4eeTo3PiModel: do not use default constructor for G4LorentzVector.
+
+processes/electromagnetic/standard               emstand-V10-01-10
+----------------------------------
+- G4UrbanMscModel: new lateral displacement correlation and positron
+  correction. Code cleanup: define some const data members and const
+  static values.
+- G4UrbanMscModel, G4UniversalFluctuation, G4KleinNishinaCompton,            (=)
+  G4KleinNishinaModel: define local pointer to random engine.
+- G4WentzelOKandVIxSection: improved angular sampling.                       (=)
+- G4KleinNishinaModel, G4WentzelOKandVIxSection: accurate initialisation     (=)
+  of G4ThreeVectors and G4LorentzVector in constructors.
+- G4PAIModel, G4PAIModelData: cuts are not used in Initialise() method       (=)
+  but only at run time; added copy of vector of G4MaterialCutsCouple from
+  master to worker threads. Addresses problem report #1731.
+
+processes/electromagnetic/utils                  emutils-V10-01-11
+-------------------------------
+- G4VEmModel, G4VEmFluctuationModel: removed pointers to random engine,
+  now handled by individual models.
+- G4VMultipleScattering, G4VMscModel, G4VEmAngularDistribution: accurate     (=)
+  initialisation of G4ThreeVectors and G4LorentzVector in constructors.
+
+processes/hadronic
+------------------
+- models/abla (hadr-abla-V10-01-00)
+  o Fixes for Coverity defects.
+- models/binary_cascade (had-binary-V10-01-01)
+  o Improved fragmentation of fast residual nuclei in
+    G4GeneratorPrecompoundInterface, with energies of the order of some
+    TeV/nucleon. A residual is transformed in its rest frame. After
+    fragmentation, all produced fragments are transformed to Lab. system.
+  o Use const address as argument to typeid() in method
+    G4BinaryCascade::DebugApplyCollisionFail(), fixing compilation
+    warning on clang-3.6.
+- models/cascade (hadr-casc-V10-01-03)
+  o G4PreCompoundDeexcitation: properly delete precompound products (i.e.    (=)
+    G4ReactionProduct objects). Fixes issue of constant memory growth in
+    the use of G4Allocator.
+  o G4KaonSampler, G4HyperonSampler: new copies of G4KaonHypSampler, which
+    will eventually diverge with different energy binning, in order to extend
+    kaon and hyperon final state tables to ~30 GeV.
+- models/coherent_elastic (hadr-cohe-V10-01-05)
+  o G4LMsdGenerator: modification in angle distribution to reduce angles
+    at high energies.
+- models/de_excitation (hadr-deex-V10-01-29)
+  o G4ChatterjeeCrossSection, G4KalbachCrossSection: new cross-section 
+    classes to be used for all evaporation fragments.
+  o G4AlphaEvaporationProbability, G4DeuteronEvaporationProbability,
+    G4EvaporationProbability, G4He3EvaporationProbability,
+    G4NeutronEvaporationProbability, G4ProtonEvaporationProbability,
+    G4TritonEvaporationProbability: use new classes above; reduced
+    number of virtual calls and number of computations in the loop 
+    of integration.
+  o G4NeutronRadCapture: added check on initial kinematics for all isotopes; (=)
+    proper initialisation of G4LorentzVector in class constructor, fixed
+    Coverity reports.
+  o G4FissionParameters, G4CompetitiveFission: fixed kinematics; code cleanup.
+  o G4WilsonAblationModel: fixed Coverity defects.
+- models/im_r_matrix (had-im_r-V10-01-00)                                    (=)
+  o Fixed compiler warnings in clang-3.6.
+- models/lend (hadr-lend-V10-01-01)                                          (=)
+  o Fixed Coverity defect in G4GIDI_map.
+- models/neutron_hp (hadr-hpn-V10-01-08)
+  o Fixed Coverity defects in G4NeutronHPEnAngCorrelation and
+    G4NeutronHPInterpolator.
+- models/parton_string/diffraction (hadr-string-diff-V10-01-02)
+  o G4FTFParticipants : added new method to clean up the member vector.      (=)
+    Use above new method to release the memory allocated in G4FTFModel
+    GetStrings(); reduces observed memory growth in use of G4Allocator.
+  o G4FTFModel: define lower energy limit from 2 to 1 GeV.
+  o Introduced smearing of the excitation energy associated with an
+    involved nucleon.
+  o G4FTFParameters: Average e* per wounded nucleon set to 40 MeV for all
+    interactions after analysis of ITEP and Leray exp. data.
+- models/parton_string/management (hadr-partonstring-mgt-V10-01-00)
+  o Improved debug diagnostics.
+- models/pre_equilibrium (hadr-pre-V10-01-02)                                (=)
+  o G4PreCompoundTransition: added protection against numerical problem
+    due too high excitation energy; use G4Log and G4Exp instead of G4Pow;
+    cleanup sampling of number of charged excitons.
+  o G4PreCompoundModel: some code cleanup.
+- models/qmd (hadr-qmd-V10-01-04)
+  o Added new method GetExcitationHandler() in G4QMDReaction and deleted
+    obsolete code.
+  - Fixed Coverity defects.
+- models/quasi_elastic (hadr-qelastic-V10-01-00)                             (=)
+  o Code cleanup: removed all unneeded statics and thread-local variables.
+- models/theo_high_energy (had-theo-HE-V10-01-02)                            (=)`
+  o Updated according to new quasi-elastic class structure.
+
+examples                                         examples-V10-01-04
+--------
+- Updated reference outputs.
+- advanced/air_shower (air_shower-V10-01-02)
+  o Replaced call to obsolete GetDz() for G4Tubs to GetZHalfLength()
+    in UltraDetectorConstruction.
+- advanced/lAr_calorimeter (lAr_calorimeter-V10-01-00)
+  o Fixed internal array overflow in FCALTestSetupSD, causing crashes in MT.
+- basic/B1 (exampleB1-V10-01-01)
+  o Modified RunAction; no functional changes.
+- extended/electromagnetic/TestEm8 (testem8-V10-01-01)                       (=)
+  o PhysicsList: fix in configuration of models per G4Region in MT mode.
+    Addressing problem report #1731.
+  o Run: added protection against numerical exception for run
+    with 0 or 1 events
+- extended/eventgenerator/particleGun (particleGunExample-V10-01-01)
+  o PrimaryGeneratorAction1: added randomization of time zero of each event.
+- extended/field/field05 (fieldex05-V10-01-00)
+  o Use new G4SpinDecayPhysics constructor in PhysicsList.
+- extended/medical/dna (exdna-V10-01-01)
+  o Corrected main CMakeLists.txt for name of microyz example.
+- extended/medical/dna/microyz (microyz-V10-01-03)
+  o Adapted example to use-case.
+- extended/medical/electronScattering2 (exampleES2-V10-01-02)
+  o Removing from master unnecessary instance of GPS.
+- extended/parameterisations/Par02 (expar02-V10-01-04)
+  o New example implementing a simplified version of a Geant4-based fast
+    simulation program for Future Circular Collider (FCC), showing how to
+    do "track and energy smearing" .
+
+tests                                            tests-V10-01-04
+-----
+- Updated reference outputs and tools.
+- tests/test03 (test03-V10-01-00)
+  o Added test for ntuple columns of a vector type.
+- tests/test19 (test19-V10-01-03)
+  o Updates to gen_upload scripts (better handling of regression/versions).
+  o Start introducing tests of INCL++ for p,pion+N-->pion production.
+- tests/test23 (test23-V10-01-08)
+  o Minor updates to scripts and code cleanup.
+- tests/test47 (test47-V10-01-05)
+  o Cleanup p+N-->pbar analysis scripts
+  o Added script to generate XML upload spec for p+N-->pbar.
+  o Updates to gen_upload scripts (regression/versions; pbar-prod inclusion).
+- tests/test48 (test48-V10-01-03)
+  o Reinstated mu- capture jobs.
+  o Refined mu- capture analysis scripts.
+  o Some updates to pi- (upload/gen) scripts.
+- tests/test75 (test75-V10-01-03)
+  o Updates to gen_upload scripts (better handling of versions 
+    in regression testing).
