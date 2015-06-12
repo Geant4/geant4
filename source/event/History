@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 11th, 2015 A.Dotti (event-V10-00-23)
+- Re-enabling legacy UI commands as in G4 Ver 10.1.p01
+
+June 8th, 2015 A.Dotti
+- Fixing valgring report
+
 June 6th, 2015 A.Dotti (event-V10-00-22)
 - Protecting the command /gps/source/set in case
   of out-of-bound index.
