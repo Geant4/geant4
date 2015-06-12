@@ -9,10 +9,21 @@
 //
 // ======================================================================
 
+// don't generate unnecessary warnings
+#if defined __GNUC__ 
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif 
+#ifdef __clang__
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wdelete-non-virtual-dtor"
+  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif
 
 #include "CLHEP/Utility/defs.h"
 
-#include <memory>  // for unique_ptr
+#include <memory>  // for auto_ptr
 
 #if defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define CLHEP_HAS_RVALUE_REFERENCE
@@ -154,7 +165,7 @@ template< typename F, typename... ArgTypes > typename result_of<F(ArgTypes...)>;
 template< typename From, typename To > struct is_ptr_convertible;
 template< typename From, typename To, typename R=void > struct enable_if_convertible;
 template< typename From, typename To, typename R=void > struct enable_if_ptr_convertible;
-template< typename P, typename R=void > struct enable_if_unique_ptr;
+template< typename P, typename R=void > struct enable_if_auto_ptr;
 
 
 // ----------------------------------------------------------------------
@@ -1336,16 +1347,16 @@ template< typename From  // type of conversion's source
 
 
 // ----------------------------------------------------------------------
-// enable_if_unique_ptr - convenience metaprogramming type trait
+// enable_if_auto_ptr - convenience metaprogramming type trait
 // ----------------------------------------------------------------------
 
 template< typename P  // pointee type
         , typename R  // result type
         >
-  struct enable_if_unique_ptr  { };
+  struct enable_if_auto_ptr  { };
 
 template< typename P, typename R >
-  struct enable_if_unique_ptr< std::unique_ptr<P>, R >
+  struct enable_if_auto_ptr< std::auto_ptr<P>, R >
 {
   typedef  R  type;
 };
@@ -1355,7 +1366,13 @@ template< typename P, typename R >
 
 }  // namespace CLHEP
 
+#if defined __GNUC__ 
+  #pragma GCC diagnostic pop
+#endif 
+#ifdef __clang__
+  #pragma clang diagnostic pop
+#endif
 
-#endif  // HEP_TYPE_TRAITS_H
+#endif  // CLHEP_TYPE_TRAITS_H
 
 // ======================================================================

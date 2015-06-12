@@ -20,7 +20,7 @@ committal in the CVS repository !
 11 June 2015 - G.Cosmo
 - Moved static methods handling static data in G4RandGauss from inline
   to source. Addressing problem report #1754.
-- Replaced deprecated calls to auto_ptr with unique_ptr in Utility headers.
+- Switch off warnings for deprecated calls to auto_ptr in Utility headers.
 
 9 April 2015 - G.Cosmo
 - Fixed usage of std::abs() in RandGaussZiggurat source...

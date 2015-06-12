@@ -32,14 +32,14 @@
 
 // don't generate unnecessary warnings
 #if defined __GNUC__ 
-  #if __GNUC__ > 3 && __GNUC_MINOR__ > 6
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-  #endif
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #endif 
 #ifdef __clang__
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wdelete-non-virtual-dtor"
+  #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif
 
 #include "CLHEP/Utility/defs.h"
@@ -52,7 +52,7 @@
 #include <exception>  // for exception
 #include <functional> // for less
 #include <iosfwd>     // for basic_ostream
-#include <memory>     // for allocator, unique_ptr
+#include <memory>     // for allocator, auto_ptr
 #include <typeinfo>   // for bad_cast, type_info
 
 
@@ -419,7 +419,7 @@ public:
     inline  shared_ctrl_handle( P *, D, A );
   template< typename P >
     inline  explicit
-    shared_ctrl_handle( std::unique_ptr<P> & );
+    shared_ctrl_handle( std::auto_ptr<P> & );
   inline  ~shared_ctrl_handle() throw();
   // constructors and destructor
 
@@ -512,7 +512,7 @@ template< typename P, typename D, typename A >
 }
 
 template< typename P >
-  shared_ctrl_handle::shared_ctrl_handle( std::unique_ptr<P> & p )
+  shared_ctrl_handle::shared_ctrl_handle( std::auto_ptr<P> & p )
     : acb_ptr( new ctrl_block_p<P>( p.get() ) )
 {
   p.release();
@@ -854,11 +854,11 @@ public:
     inline  shared_ptr( shared_ptr<P2> const &, sp::polymorphic_cast_tag );
   template< typename P2 >
     inline  explicit
-    shared_ptr( std::unique_ptr<P2> & );
+    shared_ptr( std::auto_ptr<P2> & );
   template< typename AP >
     inline  explicit
     shared_ptr( AP
-              , typename enable_if_unique_ptr<AP,void*>::type = 0
+              , typename enable_if_auto_ptr<AP,void*>::type = 0
               );
   template< typename P2 >
     inline
@@ -868,9 +868,9 @@ public:
   template< typename P2 >
     inline  shared_ptr &  operator = ( shared_ptr<P2> const & ) throw();
   template< typename P2 >
-    inline  shared_ptr &  operator = ( std::unique_ptr<P2> & );
+    inline  shared_ptr &  operator = ( std::auto_ptr<P2> & );
   template< typename AP >
-    inline  typename enable_if_unique_ptr< AP, shared_ptr & >::type
+    inline  typename enable_if_auto_ptr< AP, shared_ptr & >::type
     operator = ( AP );
   // copy-like functions
 
@@ -1057,7 +1057,7 @@ template< typename P2 >
 
 template< typename P >
 template< typename P2 >
-  shared_ptr<P>::shared_ptr( std::unique_ptr<P2> & other )
+  shared_ptr<P>::shared_ptr( std::auto_ptr<P2> & other )
   : px( other.get() )
   , pn(             )  // temporarily
 {
@@ -1069,7 +1069,7 @@ template< typename P2 >
 template< typename P >
 template< typename AP >
   shared_ptr<P>::shared_ptr( AP other
-                           , typename enable_if_unique_ptr<AP,void*>::type
+                           , typename enable_if_auto_ptr<AP,void*>::type
                            )
   : px( other.get() )
   , pn(             )  // temporarily
@@ -1100,7 +1100,7 @@ template< typename P2 >
 template< typename P >
 template< typename P2 >
   shared_ptr<P> &
-  shared_ptr<P>::operator = ( std::unique_ptr<P2> & other )
+  shared_ptr<P>::operator = ( std::auto_ptr<P2> & other )
 {
   this_type( other ).swap( *this );
   return *this;
@@ -1108,7 +1108,7 @@ template< typename P2 >
 
 template< typename P >
 template< typename AP >
-  typename enable_if_unique_ptr< AP, shared_ptr<P> & >::type
+  typename enable_if_auto_ptr< AP, shared_ptr<P> & >::type
   shared_ptr<P>::operator = ( AP other )
 {
   this_type( other ).swap( *this );
@@ -1487,9 +1487,7 @@ do_nothing_deleter::operator () ( void const * ) const
 
 
 #if defined __GNUC__ 
-  #if __GNUC__ > 3 && __GNUC_MINOR__ > 6
-    #pragma GCC diagnostic pop
-  #endif
+  #pragma GCC diagnostic pop
 #endif 
 #ifdef __clang__
   #pragma clang diagnostic pop
