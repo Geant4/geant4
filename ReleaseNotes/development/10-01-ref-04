@@ -110,7 +110,8 @@ physics_lists
   o Fixes for Coverity defects.
 - constructors/decay (phys-ctor-decay-V10-01-00):
   o Added constructor for Spin decay, G4SpinDecayPhysics.
-- constructors/gamma_lepto_nuclear (phys-ctro-glnuclear-V10-01-00):
+- constructors/gamma_lepto_nuclear (phys-ctro-glnuclear-V10-01-00):          (=)
+  o Fixes for Coverity defects.
 - constructors/hadron_elastic (phys-ctor-helastic-V10-01-01)
 - constructors/limiters (phys-ctor-limiters-V10-01-01):
   o Fixes for Coverity defects.

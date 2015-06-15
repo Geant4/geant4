@@ -135,7 +135,9 @@ List of fixes included in this public patch since the public release 10.1.p01:
     + Fix in G4StatDouble to return RMS 0 instead of -1 in the case the number
       of entries is below 2 (fixes arithmetic exceptions in examples for run
       with 1 event only).
-    + Adding copy constructor and assignment operator for G4Cache.
+    + Fixed bug in G4CacheReference::Destroy(); modified behavior to identify
+      internal inconsistencies and throw exception.
+    + Added copy constructor and assignment operator to G4Cache.
       Addressing problem report #1739.
     + Corrected logic for use of TLS on clang compiler for the Random module.
     + Added guard against potential loop in G4RandomTools::G4LambertianRand().
@@ -161,6 +163,13 @@ List of fixes included in this public patch since the public release 10.1.p01:
       o Improved text in G4Exception for failed import of file in G4GDMLRead.
       o Fixed non-initialised boolean flag in G4GDMLRead, reported by Coverity.
 
+  o Physics Lists:
+    -------------
+    + constructors/gamma_lepto_nuclear:
+      o G4EmExtraPhysics, G4EmMessenger: clean up messenger and added new
+        UI commands. Addresses problem report #1752.
+      o Fixed Coverity defects.
+
   o Processes - Electromagnetic:
     ---------------------------
     + dna:
@@ -182,8 +191,7 @@ List of fixes included in this public patch since the public release 10.1.p01:
     + standard:
       o G4WentzelVIModel: repeat check on safety for new steps.
         In SampleScattering optimized use of random engine.
-      o G4UrbanMscModel: repeat check on safety for new steps,
-        added extra limit for very small step regime.
+      o G4UrbanMscModel: repeat check on safety for new steps.
       o G4UrbanMscModel, G4UniversalFluctuation, G4KleinNishinaCompton,
         G4KleinNishinaModel: define local pointer to random engine.
       o G4WentzelOKandVIxSection: improved angular sampling.
