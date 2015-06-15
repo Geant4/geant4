@@ -11,10 +11,12 @@
 
 // don't generate unnecessary warnings
 #if defined __GNUC__ 
-  #pragma GCC diagnostic push
-  #pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
-  #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif 
+  #if __GNUC__ > 3 && __GNUC_MINOR__ > 6
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wdelete-non-virtual-dtor"
+    #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+  #endif
+#endif
 #ifdef __clang__
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wdelete-non-virtual-dtor"
@@ -1367,7 +1369,9 @@ template< typename P, typename R >
 }  // namespace CLHEP
 
 #if defined __GNUC__ 
-  #pragma GCC diagnostic pop
+  #if __GNUC__ > 3 && __GNUC_MINOR__ > 6
+    #pragma GCC diagnostic pop
+  #endif
 #endif 
 #ifdef __clang__
   #pragma clang diagnostic pop

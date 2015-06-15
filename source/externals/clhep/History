@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 June 2015 - G.Cosmo
+- Updated to CLHEP-2.2.0.8. 
+
 11 June 2015 - G.Cosmo
 - Moved static methods handling static data in G4RandGauss from inline
   to source. Addressing problem report #1754.
