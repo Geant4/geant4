@@ -14,6 +14,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-June-2015, V.Ivanchenko              (phys-ctor-glnuclear-V10-00-06)
+- G4EmExtraPhysics, G4EmMessenger - fixed problem #1752; clean up
+    messenger and add new UI commands
+
+06-April-2015, A. Dotti
+- Coverity fixes
+
 27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-05)
 - G4BertiniElectroNuclearBuilder - removed double deletion
 
