@@ -17,18 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15-June-2015: G.Cosmo (externals-V10-00-11)
-- CLHEP: avoid warnings on legacy gcc compilers.
+15-June-2015: G.Cosmo (externals-V10-01-05, 04)
+- Updated to CLHEP-2.2.0.4:
+  o Avoid warnings on deprecated calls to auto_ptr in Utility headers.
 
-11-June-2015: G.Cosmo (externals-V10-00-10)
+11-June-2015: G.Cosmo (externals-V10-01-03, 02)
 - CLHEP: Moved static methods handling static data in G4RandGauss from inline
   to source. Addressing problem report #1754.
   Switch off warnings for deprecated calls to auto_ptr in Utility headers.
 
-9-April-2015: G.Cosmo
+9-April-2015: G.Cosmo (externals-V10-01-01)
 - CLHEP: Fixed usage of std::abs() in RandGaussZiggurat source.
 
-12-December-2014: G.Cosmo
+12-December-2014: G.Cosmo (externals-V10-01-00)
 - CLHEP: Fixed usage of std::abs() in RandGaussZiggurat header.
 - USolids: Use canonical form for operator=() in UPolycone.
 
