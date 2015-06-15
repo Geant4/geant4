@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 12, 2015 A.Dotti (global-V10-00-47)
+- Fix bug in G4CacheReference::Destroy method
+- Modify behavior of G4Cache to identify internal
+  inconsistencies. An exception is thrown
+
 May 27, 2015 J.Allison (global-V10-00-46)
 - Define G4THREADSLEEP(tick) macro in G4Threading.hh also for sequential
   builds.
