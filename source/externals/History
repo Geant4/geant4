@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 15-June-2015: G.Cosmo (externals-V10-00-11)
-- CLHEP: void warnings on legacy gcc compilers.
+- CLHEP: avoid warnings on legacy gcc compilers.
 
 11-June-2015: G.Cosmo (externals-V10-00-10)
 - CLHEP: Moved static methods handling static data in G4RandGauss from inline
