@@ -51,6 +51,14 @@
 #include "CLHEP/Random/RandPoissonQ.h"
 #include "CLHEP/Random/RandStudentT.h"
 
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 6)
+  #pragma GCC diagnostic push
+  #pragma GCC diagnostic ignored "-Wunused-variable"
+#elif __clang__
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wunused-variable"
+#endif
+
 namespace CLHEP {
 
 #define HepUniformRand() HepRandom::getTheEngine()->flat()
@@ -61,5 +69,11 @@ namespace CLHEP {
 static const int HepRandomGenActive = HepRandom::createInstance();
 
 }  // namespace CLHEP
+
+#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 6)
+  #pragma GCC diagnostic pop
+#elif __clang__
+  #pragma clang diagnostic pop
+#endif
 
 #endif

@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15-June-2015: G.Cosmo (externals-V10-00-12, 11)
+16-June-2015: G.Cosmo (externals-V10-00-13, 12, 11)
 - Updated to CLHEP-2.2.0.8:
   o Avoid warnings on deprecated calls to auto_ptr in Utility headers.
 
