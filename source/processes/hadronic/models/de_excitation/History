@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-16 Apr 2015 Vladimir Ivanchenko (hadr-deex-V10-00-31)
+16 Apr 2015 Vladimir Ivanchenko (hadr-deex-V10-00-32)
 ----------------------------------------------------------
 - G4NeutronRadCapture - proper initialisation of G4LorentzVector
     in class constructor

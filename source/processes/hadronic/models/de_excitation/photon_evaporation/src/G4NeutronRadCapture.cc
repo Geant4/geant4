@@ -60,7 +60,6 @@ G4NeutronRadCapture::G4NeutronRadCapture()
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
 
-  char* env = getenv("G4UsePromptPhotonEvaporation"); 
   photonEvaporation = new G4PhotonEvaporation(); 
   photonEvaporation->SetICM(true);
  
