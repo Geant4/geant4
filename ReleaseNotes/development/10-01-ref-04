@@ -152,7 +152,7 @@ processes/hadronic
     G4GeneratorPrecompoundInterface, with energies of the order of some
     TeV/nucleon. A residual is transformed in its rest frame. After
     fragmentation, all produced fragments are transformed to Lab. system.
-  o Use const address as argument to typeid() in method
+  o Use const address as argument to typeid() in method                      (=)
     G4BinaryCascade::DebugApplyCollisionFail(), fixing compilation
     warning on clang-3.6.
 - models/cascade (hadr-casc-V10-01-03)

@@ -210,6 +210,10 @@ List of fixes included in this public patch since the public release 10.1.p01:
     + cross_sections:
       o G4ComponentGGHadronNucleusXsc: extended applicability for kaons down
         to 0.1*MeV.
+    + models/binary_cascade:
+      o Use const address as argument to typeid() in method
+        G4BinaryCascade::DebugApplyCollisionFail(), fixing compilation
+        warning on clang-3.6.
     + models/cascade:
       o G4PreCompoundDeexcitation: properly delete precompound products (i.e.
         G4ReactionProduct objects). Fixes issue of constant memory growth in
