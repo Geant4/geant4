@@ -426,6 +426,7 @@ private:
 inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
 {
   fCurrentCouple = p;
+  rndmEngineMod = G4Random::getTheEngine();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
