@@ -51,6 +51,13 @@
 #include "CLHEP/Random/RandPoissonQ.h"
 #include "CLHEP/Random/RandStudentT.h"
 
+namespace CLHEP {
+
+#define HepUniformRand() HepRandom::getTheEngine()->flat()
+
+// On some compilers the static instance of the HepRandom generator
+// needs to be created explicitly in the client code (i.e. here).
+
 #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 6)
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wunused-variable"
@@ -58,13 +65,6 @@
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Wunused-variable"
 #endif
-
-namespace CLHEP {
-
-#define HepUniformRand() HepRandom::getTheEngine()->flat()
-
-// On some compilers the static instance of the HepRandom generator
-// needs to be created explicitly in the client code (i.e. here).
 
 static const int HepRandomGenActive = HepRandom::createInstance();
 
