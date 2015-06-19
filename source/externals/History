@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-16-June-2015: G.Cosmo (externals-V10-00-14, 13, 12, 11)
+19-June-2015: G.Cosmo (externals-V10-00-15)
 - Updated to CLHEP-2.2.0.8:
-  o Avoid warnings on deprecated calls to auto_ptr in Utility headers.
+  o Avoid gcc-5 warnings on deprecated calls to auto_ptr in Utility headers.
+  o Switch off gcc-5 warning for unused variable in Randomize.h header.
 
 11-June-2015: G.Cosmo (externals-V10-00-10)
 - CLHEP: Moved static methods handling static data in G4RandGauss from inline
