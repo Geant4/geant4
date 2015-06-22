@@ -423,11 +423,11 @@ void G4UrbanMscModel::StartTracking(G4Track* track)
 {
   SetParticle(track->GetDynamicParticle()->GetDefinition());
   firstStep = true; 
+  inside = false;
   insideskin = false;
-  fr = facrange;
-  tlimit = tgeom = rangeinit = geombig;
-  stepmin   = tlimitminfix;
-  tlimitmin = 10.*stepmin;
+  tlimit = geombig;
+  stepmin = tlimitminfix ;
+  tlimitmin = 10.*stepmin ;
   G4VEmModel::StartTracking(track);
 }
 
@@ -450,12 +450,19 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
   tPathLength = min(tPathLength,currentRange);
 
+  // set flag to default values
+  latDisplasment = latDisplasmentbackup;
   /*
   G4cout << "G4Urban::StepLimit tPathLength= " 
    	 <<tPathLength<<" inside= " << inside
 	 << " range= " <<currentRange<< " lambda= "<<lambda0
    	 <<G4endl;
   */
+  // stop here if small range particle
+  if(inside) { 
+    latDisplasment = false;   
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
+  }
   // stop here if small step
   if(tPathLength < tlimitminfix) { 
     latDisplasment = false;   
@@ -472,11 +479,10 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // far from geometry boundary
   if(currentRange < presafety)
     {
+      inside = true;
       latDisplasment = false;   
       return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
     }
-  // set flag to default values
-  latDisplasment = latDisplasmentbackup;
 
   // standard  version
   //
@@ -488,6 +494,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       // is it far from boundary ?
       if(currentRange < presafety)
 	{
+	  inside = true;
           latDisplasment = false;   
 	  return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 	}
@@ -509,7 +516,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           stepmin = rat*lambda0;
           skindepth = skin*stepmin;
           //define tlimitmin
-          tlimitmin = max(10.*stepmin,tlimitminfix);
+          tlimitmin = 10.*stepmin;
+          tlimitmin = max(tlimitmin,tlimitminfix);
 	  //G4cout << "rangeinit= " << rangeinit << " stepmin= " << stepmin
 	  //       << " tlimitmin= " << tlimitmin << " geomlimit= " 
 	  //       << geomlimit <<G4endl;
@@ -594,7 +602,13 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     //  there no small step/single scattering at boundaries
   else if(steppingAlgorithm == fUseSafety)
     {
-      if(stepStatus != fGeomBoundary)  {
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }   
+      else if(stepStatus != fGeomBoundary)  {
 	presafety = ComputeSafety(sp->GetPosition(),tPathLength); 
       }
       /*
@@ -606,6 +620,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       // is far from boundary
       if(currentRange < presafety)
         {
+          inside = true;
           latDisplasment = false;
           return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
@@ -655,7 +670,13 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   // new stepping mode UseSafetyPlus
     else if(steppingAlgorithm == fUseSafetyPlus)
     {
-      if(stepStatus != fGeomBoundary)  {
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }
+      else if(stepStatus != fGeomBoundary)  {
         presafety = ComputeSafety(sp->GetPosition(),tPathLength);
       }
       /*
@@ -667,6 +688,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       // is far from boundary
       if(currentRange < presafety)
         {
+          inside = true;
           latDisplasment = false;
           return ConvertTrueToGeom(tPathLength, currentMinimalStep);
         }
@@ -709,8 +731,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(currentRange > rangecut) {
         if(firstStep) {
           tPathLength = min(tPathLength,facsafety*presafety);
-        } else if(stepStatus != fGeomBoundary && presafety > stepmin) {
+        }
+      else if(stepStatus != fGeomBoundary) {
+        if(presafety > stepmin) {
           tPathLength = min(tPathLength,presafety);
+          }
         }
       } 
 
@@ -1012,7 +1037,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     }
     // is step extreme small ?
     G4bool extremesmallstep = false ;
-    G4double tsmall = std::min(tlimitmin,lambdalimit);
+    G4double tsmall = tlimitmin;
     G4double theta0 = 0.;
     if(trueStepLength > tsmall) {
        theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
