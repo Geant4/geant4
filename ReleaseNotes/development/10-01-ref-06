@@ -1,0 +1,257 @@
+
+                       geant4-10-01-ref-06
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated to most recent version of CLHEP, CLHEP-2.2.0.8.
+ o Adopt new Goudsmit-Saunderson model for multiple-scattering for
+   e+e- below 100 MeV in G4EmStandardPhysicsGS constructor. Using as
+   default in experimental physics-list FTFP_BERT_TRV.
+ o New Monash Compton model G4LowEPPolarizedComptonModel including polarization.
+ o New G4VAuxiliaryTrackInformation class to be associated to G4Track.
+ o Major tuning of QGSM model; implented Reggeon cascading and associated
+   "Fermi motion". Implemented new algorithm of parton kinematical properties
+   determination and calculation of residual nucleus properties.
+ o New version of channeling example with full integration of particle
+   trajectory into the channeling process.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(=)  Fixes included in release 10.1.p02
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-13
+-----
+- Corrected Qt5 settings for test applications.                              (=)
+
+analysis                                         analysis-V10-01-18
+--------
+- Updated to g4tools 1.20.1:
+  o Revisited structure for plotting related code. 
+    Added methods for writing multiple pages in a file.
+- Integrated changes in g4tools: generating a single plot file with
+  multiple pages.
+- Make new functions SetNtupleSColumn() in G4VRNtupleManager pure virtual.
+
+event                                            event-V10-01-08             (=)
+-----
+- Fixed issue in case "/gps/source/clear" is used.
+  further addressing problem report #1744.
+- Increased verbosity of error messages for GPS in case no sources are defined.
+- Protecting command "/gps/source/set" in case of out-of-bound index.
+  Fixing Valgrind report.
+
+externals                                        externals-V10-01-08
+---------
+- CLHEP:
+  o Updated to CLHEP-2.2.0.8:
+    + Moved static methods handling static data in G4RandGauss from inline   (=)
+      to source. Addressing problem report #1754.
+    + Switch off gcc-5 warnings for deprecated calls to auto_ptr in Utility  (=)
+      headers. Switch off gcc-5 warning for unused variable in Randomize.h
+      header.
+
+geometry
+--------
+- magnetifield (field-V10-01-10):
+  o Change assignment to field instead of field array in G4RepleteEofM.
+- management (geommng-V10-01-02):
+  o Return const reference in G4LogicalVolume::GetName().
+    Addressing report #1757.
+- navigation (geomnav-V10-01-23):
+  o G4NavigationLogger: refinements for ReportOutsideMotherVolume() to       (=)
+    delegate printing details to new method ReportVolumeAndIntersection()
+    and print additional diagnostic information.
+    Added new properties, 'fMinTriggerDistance' (larger error is fatal,
+    def. DBL_MAX), and 'fReportSoftWarnings' (to report if small safety,
+    less than tolerance is not rounded to zero).
+  o Minor printout fix in G4NavigationLogger::ReportOutsideMother().         (=)
+
+global                                           global-V10-01-14
+------
+- Fixed bug in G4CacheReference::Destroy(); modified behavior to identify    (=)
+  internal inconsistencies and throw exception.
+
+interfaces                                       interfaces-V10-01-01
+----------
+- G4UIQt: added method GetCoutDockWidget() returning the dock widget as
+  a QDockWidget.
+
+physics_lists
+-------------
+- constructors/decay (phys-ctor-decay-V10-01-02):
+  o Fixed Coverity errors in G4SpinDecayPhysics.
+- constructors/electromagnetic (phys-ctor-em-V10-01-11):
+  o Added G4EmStandardPhysicsGS constructor to use the Goudsmit-Saunderson
+    multiple-scattering model for e+e- below 100 MeV.
+    Enable Rayleigh scattering and fluorescence.
+  o Added G4EmDNAPhysics_option5 constructor.
+  o G4EmStandardPhysics_option4: configure Penelope ionisation for e+-
+    below 1 MeV.
+  o G4EmStandardPhysicsSS, G4EmStandardPhysicsWVI: enable Rayleigh scattering
+    and fluorescence.
+  o G4EmModelActivator: fixed Coverity report.
+- constructors/gamma_lepto_nuclear (phys-ctor-glnuclear-V10-01-01):          (=)
+  o G4EmExtraPhysics, G4EmMessenger: clean up messenger and added new
+    UI commands. Addresses problem report #1752.
+- constructors/hadron_elastic (phys-ctor-helastic-V10-01-02):
+  o G4HadronHElasticPhysics: fixed Coverity report for memory leak at exit.
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V10-01-01):
+  o G4HadronInelasticQBBC: reduced upper limit of Bertini from 12 to 4 GeV;
+    use BGG inelastic cross-sections for pions.
+- lists (phys-lists-V10-01-06):
+  o FTFP_BERT_TRV: now using G4EmStandardPhysicsGS.
+  o G4PhysListFactory: added QGSP_BIC_AllHP.
+    Addresses problem report #1732.
+
+processes/decay                                  decay-V10-01-00
+---------------
+- Fixed issue in G4Decay::DecayIt() to check that the parent mass is
+  enough for decay products.
+
+processes/electromagnetic/adjoint                emadjoint-V10-01-00
+---------------------------------
+- G4AdjointhMultipleScattering: make it coherent with the forward 
+  multiple-scattering processes.
+
+processes/electromagnetic/dna                    emdna-V10-01-21
+-----------------------------
+- Removed "virtual" keyword when accessing position in G4IT.                 (=)
+- G4DNAElastic: added check on name.
+- G4DNAIonElasticModel: cleanup and fixed potential double free.
+
+processes/electromagnetic/lowenergy              emlowen-V10-01-03
+-----------------------------------
+- Migrated G4LowEPComptonModel to multi-threading.
+- New Monash Compton model G4LowEPPolarizedComptonModel including polarization.
+
+processes/electromagnetic/standard               emstand-V10-01-22
+----------------------------------
+- G4UrbanMscModel: revert back step limit algorithm, two methods are added
+  for sampling of lateral displacement (one old from 10.1 and one new disabled
+  by default), flags are added to switch between lateral displacement methods
+  and to enable/disable special treatment of positrons below 1 MeV.
+- G4PWATotalXsecTable: fixed Coverity report and compilation warnings on
+  Windows.
+
+processes/hadronic
+------------------
+- models/cascade (hadr-casc-V10-01-05)
+  o Verified while-do loops conditions for potential non-termination.
+- models/coherent_elastic (hadr-cohe-V10-01-09)
+  o G4ElasticHadrNucleusHE: replaced use of std::log/exp/pow with G4Exp,
+    G4Log and G4Pow. Added check on max Z. Fixed Coverity defect.
+  o G4LMsdGenerator: disactivated internal elastic scattering of dissociated
+    hadron.
+  o G4NuclNuclDiffuseElastic: fixed trivial Coverity reports.
+- models/fission (hadr-fission-V10-01-03)
+  o Adapted interface in G4FissionLibrary with particle-hp module.
+  o Set A and Z of actual target of reaction to "targetNucleus" from
+    HadronicProcess. Reset isotope pointer to the target G4Nucleus object
+    of reaction; fixing warning message about 'ReactionWhiteBoard disappeared'.
+- models/management (hadr-modman-V10-01-04)
+  o G4HadronicInteractionRegistry: added trick for ParticleHP model settings
+    as for NeutronHP, to prevent problem at termination.
+- models/neutron_hp (hadr-hpn-V10-01-13)
+  o Fixed problem on photon distribution.
+    Addressing problem report #1745.
+  o Added model and cross-section descriptions.
+- models/particle_hp (hadr-hpp-V10-01-15)
+  o Improved sharing of static data among threads.
+  o Added model and cross-section descriptions.
+  o Fixed problem on photon distribution.
+    Addressing problem report #1745.
+  o Fixed Coverity defects and problem of array out-of-bound errors.
+- models/parton_string/hadronization (had-hadronization-V10-01-06)
+  o Fixed bug in G4QGSMFragmentation::SplitEandP() for rare energy-momentum
+    non-conservation.
+- processes/hadronic/models/parton_string/qgsm (hadr-qgsm-V10-01-11)
+  o Major tuning of QGSM model; implented Reggeon cascading and associated
+    "Fermi motion". Implemented new algorithm of parton kinematical properties
+    determination and calculation of residual nucleus properties.
+    Adjusted G4GammaParticipants to the new tuning.
+  o Improved energy-momentum conservation, especially in the case when
+    diffraction interactions happen.
+- models/qmd (hadr-qmd-V10-01-05)
+  o Added model and cross-section descriptions.
+- models/util (hadr-mod-util-V10-01-02)
+  o New implementations of G4Clebsch, G4LegendrePolynomial and
+    G4PolynomialPDF for correlated gamma nuclear de-excitation. 
+  o Use G4Exp, G4Log and G4Pow in place of std functions.
+- processes (hadr-proc-V10-01-01)
+  o Inline some methods in G4UCNBoundaryProcess.
+
+track                                            track-V10-01-04
+-----
+- New G4VAuxiliaryTrackInformation class to be associated to G4Track.
+
+visualization                                    vis-V10-01-07
+-------------
+- management:
+  o New interface in G4VViewer for multi-threading.
+- OpenGL:
+  o Introduced sleep while waiting for pick action
+  o Migrated to new G4VViewer interface.
+  o A bit of cleaning in managing OpenGL context for Qt.
+
+examples                                         examples-V10-01-06
+--------
+- Updated reference outputs.
+- extended/analysis/AnaEx01 (AnaEx01-V10-01-00)
+  o Updated hbook for developments in analysis category:
+    implemented interfaces for activations of ntuples.
+- extended/biasing/GB04 (GB04-V10-01-00)
+  o Bug fix in GB04BOptnBremSplitting for missing call to
+    SetSecondaryWeightByProcess(true).
+- extended/common (excommon-V10-01-00)
+  o Added a client-specific prefix to common library and test 
+    to avoid name clashes when building all extended examples at once.
+- extended/electromagnetic/TestEm2 (testem2-V10-01-00)
+  o PhysicsList: use GS, WVI, SS EM physics from main library.
+- extended/electromagnetic/TestEm3 (testem3-V10-01-01)
+- extended/electromagnetic/TestEm5 (testem5-V10-01-01)
+- extended/electromagnetic/TestEm12 (testem12-V10-01-00)
+  o PhysicsList: use GS physics from main library.
+- extended/eventgenerator/pythia/decayer6 (p6decayer-V10-01-00)
+  o Set a specific prefix to common library and test 
+    to avoid name clashes when building all extended examples at once.
+- extended/exoticphysics/channeling (channelingExample-V10-01-05)
+  o Added full integration of particle trajectory into the channeling process.
+  o Added beampipe and detector box to the detector construction.
+  o Modified wrapper classes to correct bugs in energy loss calculation
+    under channeling.
+  o Added to the wrapper class the InCrystal parameter in order to be
+    completely transparent if the particle is outside a volume with a lattice.
+    Added InCrystal parameter to the user info to switch between single and
+    multiple scattering.
+  o Single and multiple scattering are enabled/disabled if the volume has or
+    not a lattice.
+  o Added data files for Si110 and Si111 planar nuclei density, planar
+    electron density and planar electric field.
+  o Minor modification to XPhysicalLattice.
+  o Minor modification to the macro to analyze the output data.
+- extended/g3tog4 (g3tog4Tests-V10-01-00)
+  o Set a specific prefix to common library and test 
+    to avoid name clashes when building all extended examples at once.
+- extended/medical/fanoCavity (fano-V10-01-01)
+- extended/medical/fanoCavity2 (fano2-V10-01-01)
+  o Migrated code to support multi-threading.
+- extended/optical/OpNovice (OpNovice-V10-01-04)
+  o Introduced G4ThreadLocal in OpNovicePhysicsList.
+  o Reduced output size.
+- extended/parameterisations (exParameterisations-V10-01-01)
+  o Fixed handling required gdml package in CMake files.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-01-03)
+  o Updated it1.mac and it2.mac macros.
+- extended/runAndEvent/RE01 (exampleRE01-V10-01-00)
+  o Reduced output size.
+
+tests                                            tests-V10-01-06
+-----
+- Updated reference outputs and tools.
+- tests/test03 (test03-V10-01-02)
+  o Added plotting P1
+- tests/test54 (test54-V10-01-01)
+  o Added GS, SS, WVI, Opt4 physics; in the default macro use GS.
