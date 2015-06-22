@@ -191,9 +191,8 @@ List of fixes included in this public patch since the public release 10.1.p01:
     + standard:
       o G4WentzelVIModel: repeat check on safety for new steps.
         In SampleScattering optimized use of random engine.
-      o G4UrbanMscModel: repeat check on safety for new steps.
-      o G4UrbanMscModel, G4UniversalFluctuation, G4KleinNishinaCompton,
-        G4KleinNishinaModel: define local pointer to random engine.
+      o G4UniversalFluctuation, G4KleinNishinaCompton, G4KleinNishinaModel:
+        define local pointer to random engine.
       o G4WentzelOKandVIxSection: improved angular sampling.
       o G4KleinNishinaModel, G4WentzelOKandVIxSection: accurate initialisation
         of G4ThreeVectors and G4LorentzVector in constructors.

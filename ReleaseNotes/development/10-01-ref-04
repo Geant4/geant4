@@ -127,8 +127,8 @@ processes/electromagnetic/standard               emstand-V10-01-10
 - G4UrbanMscModel: new lateral displacement correlation and positron
   correction. Code cleanup: define some const data members and const
   static values.
-- G4UrbanMscModel, G4UniversalFluctuation, G4KleinNishinaCompton,            (=)
-  G4KleinNishinaModel: define local pointer to random engine.
+- G4UniversalFluctuation, G4KleinNishinaCompton, G4KleinNishinaModel:        (=)
+  define local pointer to random engine.
 - G4WentzelOKandVIxSection: improved angular sampling.                       (=)
 - G4KleinNishinaModel, G4WentzelOKandVIxSection: accurate initialisation     (=)
   of G4ThreeVectors and G4LorentzVector in constructors.

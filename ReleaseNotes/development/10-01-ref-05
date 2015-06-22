@@ -203,7 +203,7 @@ processes/electromagnetic/standard               emstand-V10-01-20
 ----------------------------------
 - G4WentzelVIModel: repeat check on safety for each new step.                (=)
   In SampleScattering optimized use of random engine.
-- G4UrbanMscModel: repeat check on safety for each new step, added extra     (=)
+- G4UrbanMscModel: repeat check on safety for each new step, added extra
   limit for very small step regime.
 - G4UrbanMscModel: better optimization in ComputeTruePathLengthLimit().
   Bugfix in ComputeTruePathLengthLimit() in order not to get many extreme
