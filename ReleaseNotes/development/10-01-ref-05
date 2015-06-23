@@ -352,6 +352,14 @@ visualization
     Fixing Qt visualization in MT mode on clang.
   o G4OpenGLXViewer: added sleep while waiting for pick action.
 
+data sets
+---------
+- G4EMLOW-6.44:
+  o Added files by D. Emfietzoglou for Geant4-DNA
+  o Added files by M.Novak for upgraded version of the Goudthmit-Sounderson
+    multiple-scattering model.
+  o Substituted 2016 files in ion_stopping_data by new PASS computations.
+
 examples                                         examples-V10-01-05
 --------
 - Updated reference outputs.
