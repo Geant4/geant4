@@ -10,7 +10,7 @@ Major development/fixes included since the last development tag are:
    default in experimental physics-list FTFP_BERT_TRV.
  o New Monash Compton model G4LowEPPolarizedComptonModel including polarization.
  o New G4VAuxiliaryTrackInformation class to be associated to G4Track.
- o Major tuning of QGSM model; implented Reggeon cascading and associated
+ o Major tuning of QGSM model; implemented Reggeon cascading and associated
    "Fermi motion". Implemented new algorithm of parton kinematical properties
    determination and calculation of residual nucleus properties.
  o New version of channeling example with full integration of particle
@@ -111,11 +111,6 @@ processes/decay                                  decay-V10-01-01
 - Fixed issue in G4Decay::DecayIt() to check that the parent mass is
   enough for decay products.
 
-processes/electromagnetic/adjoint                emadjoint-V10-01-00
----------------------------------
-- G4AdjointhMultipleScattering: make it coherent with the forward 
-  multiple-scattering processes.
-
 processes/electromagnetic/dna                    emdna-V10-01-21
 -----------------------------
 - Removed "virtual" keyword when accessing position in G4IT.                 (=)
@@ -168,7 +163,7 @@ processes/hadronic
   o Fixed bug in G4QGSMFragmentation::SplitEandP() for rare energy-momentum
     non-conservation.
 - processes/hadronic/models/parton_string/qgsm (hadr-qgsm-V10-01-11)
-  o Major tuning of QGSM model; implented Reggeon cascading and associated
+  o Major tuning of QGSM model; implemented Reggeon cascading and associated
     "Fermi motion". Implemented new algorithm of parton kinematical properties
     determination and calculation of residual nucleus properties.
     Adjusted G4GammaParticipants to the new tuning.

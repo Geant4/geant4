@@ -88,7 +88,7 @@ geometry
     + If it is  negative,  reset value to zero!
     Do not return motherExitNormal (valid=false) if outside mother.
   o Correction for roundoff issue in G4PropagatorInField.                    (=)
-  o NavigationLogger: added method for Reporting a point is outside the
+  o NavigationLogger: added method for Reporting a point is outside the      (=)
     mother volume: CheckAndReportBadNormal(), CheckDaughterEntryPoint().
   o G4AuxiliaryNavigationServices: optimisation to reuse dot product, rather (=)
     than recomputing; added optional printout (protected by debug flag);
