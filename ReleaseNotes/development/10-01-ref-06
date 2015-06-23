@@ -106,7 +106,7 @@ physics_lists
   o G4PhysListFactory: added QGSP_BIC_AllHP.
     Addresses problem report #1732.
 
-processes/decay                                  decay-V10-01-00
+processes/decay                                  decay-V10-01-01
 ---------------
 - Fixed issue in G4Decay::DecayIt() to check that the parent mass is
   enough for decay products.
