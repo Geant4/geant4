@@ -1,5 +1,5 @@
 Starting run with
-Macro File    : /ec/G4-builds/release/slc6-gcc49-RelWithDebInfo/geant4-10-01-patch-01_cand-02/examples/extended/medical/electronScattering2/electronScattering2.in
+Macro File    : /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/geant4-10-01-patches_branch/examples/extended/medical/electronScattering2/electronScattering2.in
 Starting Seed : 1
 Output File   : output.csv
 
@@ -8,7 +8,7 @@ Output File   : output.csv
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4

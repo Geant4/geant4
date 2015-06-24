@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2861,7 +2861,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.63s Real=1.64s Sys=0s
+  User=1.02s Real=1.02s Sys=0s
 Going to save histograms
 ... write Root file : xrayfluo.root - done
 /vis/viewer/update

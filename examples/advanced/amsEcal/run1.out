@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -177,7 +177,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=23.29s Real=23.34s Sys=0s
+  User=18.05s Real=18.33s Sys=0s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -313,7 +313,7 @@ Units table cleared.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.012 Mb
+Dynamic pools deleted: 9 / Total memory freed: 0.011 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

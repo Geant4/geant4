@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-01    (27-March-2015)
+ Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -507,35 +507,35 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.14s Real=6.14s Sys=0s
+  User=5.17s Real=5.45s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 775.61 MeV :  16.66 MeV     2.148 +- 0.2148 %      54.3 cm  +- 1.21 cm 
-   liquidArgon: 214.92 MeV :  16.86 MeV     7.843 +- 0.7843 %      1.06 m   +- 8.53 cm 
+          Lead: 778.24 MeV :  19.29 MeV     2.479 +- 0.2479 %      54.5 cm  +- 1.43 cm 
+   liquidArgon: 211.26 MeV :   17.4 MeV     8.235 +- 0.8235 %      1.05 m   +- 9.01 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       508
- Mean number of e-          868
- Mean number of e+          53.5
- Mean number of charged steps  4618.66
- Mean number of neutral steps  3647.09
+ Mean number of gamma       510
+ Mean number of e-          875
+ Mean number of e+          53.2
+ Mean number of charged steps  4605.49
+ Mean number of neutral steps  3680.4
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 775.608 MeV
-liquidArgon:	 214.819 MeV
+      Lead:	 778.234 MeV
+liquidArgon:	 211.249 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 667551838, 1565497027
+ Current couple of seeds = 2118776774, 2079416596
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -955,42 +955,42 @@ Index : 2     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 667551838, 1565497027
+ Current couple of seeds = 2118776774, 2079416596
 ----------------------------------------
 --> Event 0 starts.
 --> Event 50 starts.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.21s Real=5.21s Sys=0s
+  User=3.62s Real=3.86s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 778.12 MeV :  18.97 MeV     2.438 +- 0.2438 %      52.1 cm  +-  1.2 cm 
-   liquidArgon: 210.53 MeV :  16.68 MeV     7.922 +- 0.7922 %       100 cm  +- 7.73 cm 
+          Lead: 778.91 MeV :  21.98 MeV     2.822 +- 0.2822 %      51.9 cm  +- 1.18 cm 
+   liquidArgon: 210.62 MeV :  15.18 MeV      7.21 +- 0.721 %      99.9 cm  +- 7.11 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       294
+ Mean number of gamma       292
  Mean number of e-          560
- Mean number of e+          54.3
- Mean number of charged steps  3926.05
- Mean number of neutral steps  2928.94
+ Mean number of e+          53.6
+ Mean number of charged steps  3952.86
+ Mean number of neutral steps  2899.33
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 778.099 MeV
-liquidArgon:	 212.636 MeV
+      Lead:	 777.358 MeV
+liquidArgon:	 212.191 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1395465908, 2090053554
+ Current couple of seeds = 321872100, 1755928378
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -1002,7 +1002,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 142
+Total navigation history collections cleaned: 145
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
 Dynamic pools deleted: 9 / Total memory freed: 0.19 Mb
