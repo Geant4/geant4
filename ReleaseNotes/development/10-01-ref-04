@@ -179,7 +179,7 @@ processes/hadronic
     Coverity reports.
   o G4FissionParameters, G4CompetitiveFission: fixed kinematics; code cleanup.
   o G4WilsonAblationModel: fixed Coverity defects.
-- models/im_r_matrix (had-im_r-V10-01-00)                                    (=)
+- models/im_r_matrix (had-im_r-V10-01-00)
   o Fixed compiler warnings in clang-3.6.
 - models/lend (hadr-lend-V10-01-01)                                          (=)
   o Fixed Coverity defect in G4GIDI_map.
