@@ -33,6 +33,10 @@
 //                         
 // 24-May-07 V. Grichine
 //
+// 21.10.15 V. Grichine 
+//             Bug fixed in BuildAngleTable, improving accuracy for 
+//             angle bins at high energies > 50 GeV for pions.
+//
 
 #include "G4DiffuseElastic.hh"
 #include "G4ParticleTable.hh"
@@ -1016,10 +1020,13 @@ void G4DiffuseElastic::BuildAngleTable()
 
 
     // if (alphaMax > 4.) alphaMax = 4.;  // vmg05-02-09: was pi2 
-    // if ( alphaMax > 4. || alphaMax < 1. ) alphaMax = 15.;  // vmg27.11.14  
-    if ( alphaMax > 4. || alphaMax < 1. ) alphaMax = CLHEP::pi*CLHEP::pi;  // vmg06.01.15  
-    // if (alphaMax > 4. || alphaMax < 1. ) alphaMax = 4.;  // vmg07.01.15: was pi2 
+    // if ( alphaMax > 4. || alphaMax < 1. ) alphaMax = 15.;  // vmg27.11.14 
+ 
+    // if ( alphaMax > 4. || alphaMax < 1. ) alphaMax = CLHEP::pi*CLHEP::pi;  // vmg06.01.15 
+ 
     // G4cout<<"alphaMax = "<<alphaMax<<", ";
+
+    if ( alphaMax >= CLHEP::pi*CLHEP::pi ) alphaMax = CLHEP::pi*CLHEP::pi;   // vmg21.10.15 
 
     alphaCoulomb = kRcoul*kRcoul/kR2;
 
