@@ -17,6 +17,15 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 30, 2015 I. Hrivnacova (analysis-V10-00-46)
+- Fixed handling ntuples created in MT mode on master thread
+  This fixes the problem reported in hypernews (#459) and the problem
+  of deleting non-empty Root file containing only ntuples.
+
+June 23, 2015 I. Hrivnacova (analysis-V10-00-45)
+- Fixed G4Analysis::Tokenize() which was failing when processsing a string
+  containing opening double quota without a closing one.
+
 April 9, 2015 I. Hrivnacova (analysis-V10-00-44)
 - Updated to g4tools 1.17.2 (Guy Barrand):
   Changes for Windows (MinGW) - fixing problem #1721 (mainly to change 

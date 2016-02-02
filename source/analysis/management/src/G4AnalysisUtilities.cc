@@ -185,7 +185,7 @@ void  Tokenize(const G4String& line, std::vector<G4String>& tokens)
     }  
     begIdx = endIdx + 1;
   }
-  while ( endIdx != line.length() );
+  while ( endIdx < line.length() );
 }
 
 }

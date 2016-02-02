@@ -189,13 +189,6 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
 {
 // Create ntuple from ntuple_booking.
 
-  // Do not create ntuples on master thread 
-  if ( G4Threading::IsMultithreadedApplication() && 
-       fState.GetIsMaster() ) {
-       G4cout << "Do not create ntuples on master thread"  << G4endl; 
-       return;
-  }          
-  
   G4int ntupleId = fFirstId;
   std::vector<G4XmlNtupleDescription*>::iterator itn;  
   for (itn = fNtupleDescriptionVector.begin(); itn != fNtupleDescriptionVector.end(); itn++ ) {

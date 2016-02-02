@@ -505,7 +505,7 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 
          fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
-         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() ) || 
+         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() && fNtupleManager->IsEmpty()) || 
        ( ( ! fState.GetIsMaster() ) && fNtupleManager->IsEmpty() ) ) {
     result = ! std::remove(fFileManager->GetFullFileName());
     //  std::remove returns 0 when success

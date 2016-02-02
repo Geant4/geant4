@@ -527,12 +527,8 @@ G4bool G4CsvAnalysisManager::CloseFileImpl()
   // object in WriteHn{Pn] function
  
   // Close ntuple files
-  if ( ( ! G4Threading::IsMultithreadedApplication() ) || 
-       ( ! fState.GetIsMaster() ) ) {
-    // In sequential mode or in MT mode only on workers
-    result = CloseNtupleFiles();
-    finalResult = finalResult && result;
-  }  
+  result = CloseNtupleFiles();
+  finalResult = finalResult && result;
 
   // reset data
   result = Reset();

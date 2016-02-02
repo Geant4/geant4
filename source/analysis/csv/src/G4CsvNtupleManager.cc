@@ -210,10 +210,6 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
 {
 // Create ntuple from ntuple_booking.
 
-  // Do not create ntuples on master thread 
-  if ( G4Threading::IsMultithreadedApplication() && 
-       fState.GetIsMaster() ) return;     
-  
   std::vector<G4CsvNtupleDescription*>::iterator itn;  
   for (itn = fNtupleDescriptionVector.begin(); itn != fNtupleDescriptionVector.end(); itn++ ) {
 
