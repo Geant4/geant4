@@ -91,7 +91,7 @@ int main(int argc,char** argv)
   //
   G4UIExecutive* ui = 0;
   if ( ! macro.size() ) {
-    ui = new G4UIExecutive(argc, argv);
+    ui = new G4UIExecutive(argc, argv, session);
   }
 
   // Choose the Random engine
