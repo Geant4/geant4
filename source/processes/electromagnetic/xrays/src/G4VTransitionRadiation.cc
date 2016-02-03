@@ -41,6 +41,7 @@
 #include "G4Material.hh"
 #include "G4Region.hh"
 #include "G4TransportationManager.hh"
+#include "G4EmProcessSubType.hh"
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -53,6 +54,7 @@ G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
   gammaMin(100),
   cosDThetaMax(std::cos(0.1))
 {
+  SetProcessSubType(fTransitionRadiation);
   Clear();
 }
 

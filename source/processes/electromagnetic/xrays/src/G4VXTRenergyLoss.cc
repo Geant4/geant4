@@ -55,6 +55,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4EmProcessSubType.hh"
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -75,6 +76,7 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fAngleForEnergyTable(0)
 {
   verboseLevel = 1;
+  SetProcessSubType(fTransitionRadiation);
 
   fPtrGamma = 0;
   fMinEnergyTR = fMaxEnergyTR = fMaxThetaTR = fGamma = fEnergy = fVarAngle 
