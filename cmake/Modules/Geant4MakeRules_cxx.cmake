@@ -46,14 +46,17 @@ function(__configure_cxxstd_gnu)
     OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
-  if(_gnucxx_version VERSION_LESS 4.3)
+  # Set allowed flags based, temporarily, on KNOWN abilities of compiler
+  # rather than what flags it supports (e.g. GCC 4.7 claims -std=c++11
+  # works, but it does not support inheriting constructors...)
+  if(_gnucxx_version VERSION_LESS 4.8)
     set(_CXXSTDS "c++98")
-  elseif(_gnucxx_version VERSION_LESS 4.7)
-    set(_CXXSTDS "c++98" "c++0x")
   elseif(_gnucxx_version VERSION_LESS 4.9)
-    set(_CXXSTDS "c++98" "c++0x" "c++11")
+    set(_CXXSTDS "c++11" "c++98")
+  elseif(_gnucxx_version VERSION_LESS 5.3)
+    set(_CXXSTDS "c++11" "c++98" "c++1y")
   else()
-    set(_CXXSTDS "c++98" "c++0x" "c++11" "c++1y")
+    set(_CXXSTDS "c++14" "c++11" "c++98" "c++1z")
   endif()
 
   set(CXXSTD_IS_AVAILABLE ${_CXXSTDS} PARENT_SCOPE)
@@ -75,33 +78,71 @@ function(__configure_cxxstd_clang)
     ERROR_STRIP_TRAILING_WHITESPACE
     )
   string(REGEX REPLACE ".*clang version ([0-9]\\.[0-9]+).*" "\\1" _clangcxx_version ${_clangcxx_dumpedversion})
-  # Apple Clang 4.2 no longer reports clang version but LLVM version
-  # Moreover, this is Apple versioning, not LLVM upstream
-  # If this is the case, the previous regex will not do anything.
-  # Check to see if we have "Apple LLVM version" in the output,
-  # and if so extract the original LLVM version which should appear as
-  # "based on LLVM X.Ysvn". The "svn" extension means the development
-  # version of LLVM X.Y, not a release, so it may not provide all features
-  # present in the X.Y release.
-  if(APPLE AND "${_clangcxx_version}" MATCHES ".*Apple LLVM version.*")
-    string(REGEX REPLACE ".*based on LLVM ([0-9](\\.[0-9])+)svn.*" "\\1" _clangcxx_version ${_clangcxx_version})
-  endif()
-  message(STATUS "Clang version : ${_clangcxx_version}")
 
-  if(_clangcxx_version VERSION_LESS 2.9)
-    set(_CXXSTDS "c++98")
-  elseif(_clangcxx_version VERSION_LESS 3.3)
-    set(_CXXSTDS "c++98" "c++0x" "c++11")
-  elseif(_clangcxx_version VERSION_LESS 3.5)
-    set(_CXXSTDS "c++98" "c++0x" "c++11" "c++1y")
+  # Set allowed flags based, temporarily, on KNOWN abilities of compiler
+  # rather than what flags it supports (e.g. Clang 3.4 claims -std=c++11
+  # works, but it does not support <type_traits>...)
+
+  # Apple Clang Versioning works slightly differently...
+  # We follow CMake conventions, allowing minimal changes for
+  # CMake 3's 'AppleClang' convention
+  if(APPLE AND "${_clangcxx_version}" MATCHES ".*Apple (LLVM|clang) version.*")
+    # Apple LLVM version
+    string(REGEX
+      REPLACE ".*Apple (LLVM|clang) version ([0-9](\\.[0-9])+) .*" "\\2"
+      APPLE_LLVM_VERSION_STR
+      "${_clangcxx_version}"
+      )
+    # Apple build version
+    string(REGEX REPLACE ".*[\\(/]clang\\-([0-9\\.]+)\\).*" "\\1"
+      APPLE_BUILD_VERSION_STR
+      "${_clangcxx_version}"
+      )
+    string(REPLACE "." ""
+      APPLE_BUILD_VERSION_STR
+      "${APPLE_BUILD_VERSION_STR}"
+      )
+
+    # Format should be XXX.YY.ZZ, but 'YY' often appears as single digit,
+    # so pad if length < 7 chars
+    string(LENGTH ${APPLE_BUILD_VERSION_STR} ABVS_LENGTH)
+    if(ABVS_LENGTH LESS 7)
+      string(SUBSTRING "${APPLE_BUILD_VERSION_STR}" 0 3 APPLE_BUILD_VERSION_MAJOR)
+      string(SUBSTRING "${APPLE_BUILD_VERSION_STR}" 3 -1 APPLE_BUILD_VERSION_REMAINDER)
+      set(APPLE_BUILD_VERSION_STR "${APPLE_BUILD_VERSION_MAJOR}0${APPLE_BUILD_VERSION_REMAINDER}")
+    endif()
+
+    set(__appleclang_version "${APPLE_LLVM_VERSION_STR}.${APPLE_BUILD_VERSION_STR}")
+
+    # Handle AppleClang versions
+    if(__appleclang_version VERSION_LESS 5.1)
+      set(_CXXSTDS "c++98")
+    elseif(__appleclang_version VERSION_LESS 6.1)
+      set(_CXXSTDS "c++11" "c++98" "c++1y")
+    else()
+      # As Apple's exact clang version is unclear, only use c++14 when
+      # the 3.6svn version started to be used.
+      set(_CXXSTDS "c++11" "c++98" "c++14")
+    endif()
+
+    # Apple Clang requires use of libc++ for full C++11 support.
+    # From OS X 10.9, libc++ is the default, but set it explicitly so
+    # that 10.8 can be supported.
+    set(_CXXSTDLIBFLAGS "-stdlib=libc++")
   else()
-    # Be cautious for now and only use c++1y rather than c++14
-    set(_CXXSTDS "c++98" "c++0x" "c++11" "c++1y")
+    # Otherwise, have out-the-box clang
+    if(_clangcxx_version VERSION_LESS 3.4)
+      set(_CXXSTDS "c++98")
+    elseif(_clangcxx_version VERSION_LESS 3.5)
+      set(_CXXSTDS "c++11" "c++98" "c++1y")
+    else()
+      set(_CXXSTDS "c++11" "c++98" "c++14")
+    endif()
   endif()
 
   set(CXXSTD_IS_AVAILABLE ${_CXXSTDS} PARENT_SCOPE)
   foreach(_s ${_CXXSTDS})
-    set(${_s}_FLAGS "-std=${_s}" PARENT_SCOPE)
+    set(${_s}_FLAGS "-std=${_s} ${_CXXSTDLIBFLAGS}" PARENT_SCOPE)
   endforeach()
 endfunction()
 
@@ -120,9 +161,9 @@ function(__configure_cxxstd_intel)
   if(_icpc_dumpedversion VERSION_LESS 11.0)
     set(_CXXSTDS "c++98")
   elseif(_icpc_dumpedversion VERSION_LESS 15.0)
-    set(_CXXSTDS "c++98" "c++0x")
+    set(_CXXSTDS "c++0x" "c++98")
   else()
-    set(_CXXSTDS "c++98" "c++11")
+    set(_CXXSTDS "c++11" "c++98")
   endif()
 
   set(CXXSTD_IS_AVAILABLE ${_CXXSTDS} PARENT_SCOPE)
@@ -205,6 +246,15 @@ if(MSVC)
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-MDd -Zi -G4DEBUG_VERBOSE")
   set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-MDd -Zi")
 
+  # C++ Standard modes - don't have flags, but is needed to set compile
+  # defs
+  # NB: Visual Studio 14 2015 => MSVC 19.X, and this is CMake's compiler
+  # version
+  if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 19.0)
+    set(CXXSTD_IS_AVAILABLE "c++98")
+  else()
+    set(CXXSTD_IS_AVAILABLE "c++11" "c++98")
+  endif()
   # We may also have to set linker flags....
 endif()
 
