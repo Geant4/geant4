@@ -113,8 +113,7 @@ private:
   G4bool  isMaster;
 
   static G4ElementData* data;
-  std::vector<G4PhysicsVector*> work;
-  std::vector<G4double>         temp;
+  std::vector<G4double> temp;
 
   static G4double  coeff[MAXZINEL];
 

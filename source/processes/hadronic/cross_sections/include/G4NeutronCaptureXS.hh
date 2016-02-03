@@ -110,9 +110,7 @@ private:
   G4bool   isMaster;
 
   static G4ElementData* data;
-
-  std::vector<G4PhysicsVector*> work;
-  std::vector<G4double>         temp;
+  std::vector<G4double> temp;
 
   static const G4int amin[MAXZCAPTURE];
   static const G4int amax[MAXZCAPTURE];
