@@ -57,6 +57,7 @@ class ExDivDetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      G4VPhysicalVolume* Construct();
+     void ConstructSDandField();
      ExVDivTester* CreateSolidTester( const G4String& stype,
                                       const G4String& thePVTypeStr,
                                       const G4String& thePosTypeStr,

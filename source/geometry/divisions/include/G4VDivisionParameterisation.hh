@@ -104,15 +104,15 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4VSolid* fmotherSolid;
     G4bool fReflectedSolid;
     G4bool fDeleteSolid;
-  
-    static G4ThreadLocal G4int verbose;
+
+    static G4ThreadLocal G4RotationMatrix* fRot;
+
+    static const G4int verbose;
     G4int theVoluFirstCopyNo;
 
     G4double kCarTolerance;
 
     G4double fhgap;
-
-    G4RotationMatrix* fRotMatrix;
 };
 
 #include "G4VDivisionParameterisation.icc"

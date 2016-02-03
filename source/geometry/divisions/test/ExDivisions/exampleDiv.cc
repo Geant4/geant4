@@ -28,14 +28,16 @@
 //
 
 #include "ExDivDetectorConstruction.hh"
+#include "ExDivActionInitialization.hh"
+
 #include "ExDivPhysicsList.hh"
-#include "ExDivPrimaryGeneratorAction.hh"
-#include "ExDivRunAction.hh"
-#include "ExDivEventAction.hh"
-#include "ExDivSteppingAction.hh"
 #include "ExDivSteppingVerbose.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
@@ -115,7 +117,11 @@ int main(int argc,char** argv)
   G4VSteppingVerbose::SetInstance(new ExDivSteppingVerbose);
   
   // Run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // UserInitialization classes (mandatory)
   ExDivDetectorConstruction* ExDivdetector =
@@ -124,19 +130,16 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(ExDivdetector);
   runManager->SetUserInitialization(new ExDivPhysicsList);
   
+  // Set user action classes
+  runManager->SetUserInitialization(new ExDivActionInitialization());
+
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-   
-  // UserAction classes
-  runManager->SetUserAction(new ExDivPrimaryGeneratorAction(ExDivdetector));
-  runManager->SetUserAction(new ExDivRunAction);
-  runManager->SetUserAction(new ExDivEventAction);
-  runManager->SetUserAction(new ExDivSteppingAction);
 
-  // Initialize G4 kernel
+  // Initialise G4 kernel
   runManager->Initialize();
 
   // Get the pointer to the User Interface manager 

@@ -34,7 +34,6 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-class ExDivDetectorConstruction;
 class G4ParticleGun;
 class G4Event;
 
@@ -43,7 +42,7 @@ class G4Event;
 class ExDivPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    ExDivPrimaryGeneratorAction(ExDivDetectorConstruction*);    
+    ExDivPrimaryGeneratorAction();    
    ~ExDivPrimaryGeneratorAction();
 
   public:
@@ -51,7 +50,6 @@ class ExDivPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     G4ParticleGun* particleGun;
-    ExDivDetectorConstruction* myDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

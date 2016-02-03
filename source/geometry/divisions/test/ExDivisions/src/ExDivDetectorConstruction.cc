@@ -97,6 +97,12 @@ G4VPhysicalVolume* ExDivDetectorConstruction::Construct()
 }
 
 //--------------------------------------------------------------------------
+void ExDivDetectorConstruction::ConstructSDandField()
+{
+  // Sensitive detectors
+}
+
+//--------------------------------------------------------------------------
 ExVDivTester*
 ExDivDetectorConstruction::CreateSolidTester( const G4String& stype,
                                               const G4String& PVTypeStr,

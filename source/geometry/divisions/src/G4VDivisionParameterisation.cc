@@ -39,8 +39,10 @@
 #include "G4RotationMatrix.hh"
 #include "G4ReflectedSolid.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4AutoDelete.hh"
 
-G4ThreadLocal G4int G4VDivisionParameterisation::verbose = 5;
+const G4int G4VDivisionParameterisation::verbose = 5;
+G4ThreadLocal G4RotationMatrix* G4VDivisionParameterisation::fRot = 0;
 
 //--------------------------------------------------------------------------
 G4VDivisionParameterisation::
@@ -51,7 +53,6 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
     fDivisionType(divType), fmotherSolid( motherSolid ), fReflectedSolid(false),
     fDeleteSolid(false), theVoluFirstCopyNo(1), fhgap(0.)
 {
-  fRotMatrix = new G4RotationMatrix();
 #ifdef G4DIVDEBUG
   if (verbose >= 1)
   {
@@ -68,7 +69,6 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
 G4VDivisionParameterisation::~G4VDivisionParameterisation()
 {
   if (fDeleteSolid) delete fmotherSolid;
-  if (fRotMatrix) { delete fRotMatrix; fRotMatrix=0; }
 }
 
 //--------------------------------------------------------------------------
@@ -89,9 +89,13 @@ void
 G4VDivisionParameterisation::
 ChangeRotMatrix( G4VPhysicalVolume *physVol, G4double rotZ ) const
 {
-  *fRotMatrix = G4RotationMatrix();
-  fRotMatrix->rotateZ( rotZ );
-  physVol->SetRotation(fRotMatrix);
+  if (!fRot)
+  {
+    fRot = new G4RotationMatrix();
+    G4AutoDelete::Register(fRot);
+  }
+  fRot->rotateZ( rotZ );
+  physVol->SetRotation(fRot);
 }
 
 //--------------------------------------------------------------------------

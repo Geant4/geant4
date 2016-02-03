@@ -23,56 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id:$
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
+#include "ExDivActionInitialization.hh"
 #include "ExDivPrimaryGeneratorAction.hh"
-
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "globals.hh"
+#include "ExDivRunAction.hh"
+#include "ExDivEventAction.hh"
+#include "ExDivSteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExDivPrimaryGeneratorAction::
-ExDivPrimaryGeneratorAction()
+ExDivActionInitialization::ExDivActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExDivActionInitialization::~ExDivActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExDivActionInitialization::BuildForMaster() const
 {
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
-
-// default particle
-
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("geantino");
-  
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(3.0*GeV);
+  SetUserAction(new ExDivRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExDivPrimaryGeneratorAction::~ExDivPrimaryGeneratorAction()
+void ExDivActionInitialization::Build() const
 {
-  delete particleGun;
-}
+  SetUserAction(new ExDivPrimaryGeneratorAction);
+  SetUserAction(new ExDivRunAction);
+  SetUserAction(new ExDivEventAction);
+  SetUserAction(new ExDivSteppingAction);
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExDivPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{ 
-  G4double position = -8*m - 5*cm;  // -theWorldLengthZ - theWorldGap/2
-  particleGun->SetParticlePosition(G4ThreeVector(5.*cm,0.,position));
-  
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

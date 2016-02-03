@@ -23,56 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id:$
 //
-// $Id$
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-#include "ExDivPrimaryGeneratorAction.hh"
+#ifndef ExDivActionInitialization_h
+#define ExDivActionInitialization_h 1
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class ExDivDetectorConstruction;
 
-ExDivPrimaryGeneratorAction::
-ExDivPrimaryGeneratorAction()
+/// Action initialization class.
+///
+
+class ExDivActionInitialization : public G4VUserActionInitialization
 {
-  G4int n_particle = 1;
-  particleGun = new G4ParticleGun(n_particle);
+  public:
+    ExDivActionInitialization();
+    virtual ~ExDivActionInitialization();
 
-// default particle
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+};
 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("geantino");
-  
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(3.0*GeV);
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExDivPrimaryGeneratorAction::~ExDivPrimaryGeneratorAction()
-{
-  delete particleGun;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ExDivPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{ 
-  G4double position = -8*m - 5*cm;  // -theWorldLengthZ - theWorldGap/2
-  particleGun->SetParticlePosition(G4ThreeVector(5.*cm,0.,position));
-  
-  particleGun->GeneratePrimaryVertex(anEvent);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+    

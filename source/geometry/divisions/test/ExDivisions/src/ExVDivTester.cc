@@ -52,7 +52,7 @@
 #include <sstream>
 #include <fstream>
 
-G4bool ExVDivTester::bDivCylindrical = 0;
+G4ThreadLocal G4bool ExVDivTester::bDivCylindrical = 0;
 
 //--------------------------------------------------------------------------
 ExVDivTester::
@@ -102,7 +102,7 @@ void ExVDivTester::readExtraPars()
       theWidthFactor = getValueFromExtraPar( theExtraPars[ii] );
       ifound = 1;
     } else if( theExtraPars[ii].substr(0,7) == "divtype" ) {
-      G4int ival = int(getValueFromExtraPar( theExtraPars[ii] ));
+      G4int ival = G4int(getValueFromExtraPar( theExtraPars[ii] ));
       if( ival == 0 ){
         theDivType = DivNDIVandWIDTH;
         ifound = 1;
@@ -164,9 +164,9 @@ void ExVDivTester::GenerateRandomPoints()
 
   numberOfPoints = 1000;
   for( G4int ii = 0; ii < numberOfPoints; ii++ ) {
-    posX = CLHEP::RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
-    posY = CLHEP::RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
-    posZ = CLHEP::RandFlat::shoot(-theWorldLengthZ, theWorldLengthZ);
+    posX = G4RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
+    posY = G4RandFlat::shoot(-theWorldLengthXY, theWorldLengthXY);
+    posZ = G4RandFlat::shoot(-theWorldLengthZ, theWorldLengthZ);
     fout << posX << " " << posY << " " << posZ << G4endl;
   }
 }

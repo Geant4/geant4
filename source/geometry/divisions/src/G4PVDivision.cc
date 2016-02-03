@@ -240,7 +240,6 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
 //--------------------------------------------------------------------------
 G4PVDivision::~G4PVDivision()
 {
-  delete GetRotation();
 }
 
 //--------------------------------------------------------------------------

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-09-15 G.Cosmo
+----------------
+- Migrated to multi-threading.
+
 22-03-13 G.Cosmo
 ----------------
 - Fixed compilation warnings for variable shadowing...

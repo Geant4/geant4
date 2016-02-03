@@ -85,7 +85,7 @@ class ExVDivTester
     void SetOffsets();
 
   public:
-    static G4bool bDivCylindrical;
+    static G4ThreadLocal G4bool bDivCylindrical;
 
   protected:
 
