@@ -340,7 +340,8 @@ G4PropagatorInField::ComputeStep(
     // E <- Intersection Point of chord AB and either volume A's surface 
     //                                  or a daughter volume's surface ..
 
-    if( first_substep ) { 
+    if( first_substep )
+    { 
        currentSafety = NewSafety;
     } // Updating safety in other steps is potential future extention
 
@@ -352,19 +353,44 @@ G4PropagatorInField::ComputeStep(
        //   of vol(A), if it exists. Start with point E as first "estimate".
        G4bool recalculatedEndPt= false;
        
-         G4bool found_intersection = fIntersectionLocator->
+       G4bool found_intersection = fIntersectionLocator->
          EstimateIntersectionPoint( SubStepStartState, CurrentState, 
-                                  InterSectionPointE, IntersectPointVelct_G,
-                                  recalculatedEndPt,fPreviousSafety,fPreviousSftOrigin);
-       intersects = intersects && found_intersection;
-       if( found_intersection ) {        
+                                    InterSectionPointE, IntersectPointVelct_G,
+                                    recalculatedEndPt, fPreviousSafety,
+                                    fPreviousSftOrigin);
+       intersects = found_intersection;
+       if( found_intersection )
+       {        
           End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
           StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
                                       - OriginalState.GetCurveLength();
-       } else {
-          // intersects= false;          // "Minor" chords do not intersect
-          if( recalculatedEndPt ){
-             CurrentState= IntersectPointVelct_G; 
+       }
+       else
+       {
+          // Either "minor" chords do not intersect
+          // or else stopped (due to too many steps)
+          //
+          if( recalculatedEndPt )
+          {
+             G4double endAchieved = IntersectPointVelct_G.GetCurveLength();
+             G4double endExpected = CurrentState.GetCurveLength(); 
+
+             // Detect failure - due to too many steps
+             G4bool shortEnd = endAchieved
+                             < (endExpected*(1.0-CLHEP::perMillion));
+
+             G4double stepAchieved = endAchieved
+                                   - SubStepStartState.GetCurveLength();
+
+             // Update remaining state - must work for 'full' step or
+             // abandonned intersection
+             //
+             CurrentState= IntersectPointVelct_G;
+             s_length_taken = stepAchieved;
+             if( shortEnd )
+             {
+                fParticleIsLooping = true;
+             } 
           }
        }
     }
@@ -379,13 +405,16 @@ G4PropagatorInField::ComputeStep(
     first_substep = false;
 
 #ifdef G4DEBUG_FIELD
-    if( fNoZeroStep > fActionThreshold_NoZeroSteps ) {
+    if( fNoZeroStep > fActionThreshold_NoZeroSteps )
+    {
       printStatus( SubStepStartState,  // or OriginalState,
                    CurrentState,  CurrentProposedStepLength, 
                    NewSafety,     do_loop_count,  pPhysVol );
     }
-    if( (fVerboseLevel > 1) && (do_loop_count > fMax_loop_count-10 )) {
-      if( do_loop_count == fMax_loop_count-9 ){
+    if( (fVerboseLevel > 1) && (do_loop_count > fMax_loop_count-10 ))
+    {
+      if( do_loop_count == fMax_loop_count-9 )
+      {
         G4cout << " G4PropagatorInField::ComputeStep(): " << G4endl
                << "  Difficult track - taking many sub steps." << G4endl;
       }
@@ -397,17 +426,19 @@ G4PropagatorInField::ComputeStep(
     do_loop_count++;
 
   } while( (!intersects )
+        && (!fParticleIsLooping)
         && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
         && ( do_loop_count < fMax_loop_count ) );
 
   if( do_loop_count >= fMax_loop_count  )
   {
     fParticleIsLooping = true;
-
-    if ( fVerboseLevel > 0 )
-       ReportLoopingParticle( do_loop_count, StepTaken, pPhysVol );
   }
-
+  if ( fParticleIsLooping && (fVerboseLevel > 0) )
+  {
+    ReportLoopingParticle( do_loop_count, StepTaken, pPhysVol );
+  }
+    
   if( !intersects )
   {
     // Chord AB or "minor chords" do not intersect
@@ -679,7 +710,8 @@ FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
   }
   fCurrentFieldMgr= currentFieldMgr;
 
-  // Flag that field manager has been set.
+  // Flag that field manager has been set
+  //
   fSetFieldMgr= true;
 
   return currentFieldMgr;
@@ -706,14 +738,16 @@ void G4PropagatorInField::ReportLoopingParticle( G4int              count,
 {
    std::ostringstream message;
    message << "  Killing looping particle " 
-      // << " of " << energy  << " energy "
-          << " after " << count << " field substeps "
-          << " totaling " << StepTaken / mm << " mm " ;
+           << " after " << count << " field substeps "
+           << " totaling " << StepTaken / mm << " mm " ;
    if( pPhysVol )
-      G4cout << " in volume " << pPhysVol->GetName() ; 
+   {
+      message << " in *volume* " << pPhysVol->GetName() ;
+   }
    else
-      G4cout << " in unknown or null volume. " ; 
-   // G4cout << G4endl;
+   {
+      message << " in unknown or null volume. " ;
+   }
    G4Exception("G4PropagatorInField::ComputeStep()", "GeomNav1002",
                JustWarning, message);   
 }

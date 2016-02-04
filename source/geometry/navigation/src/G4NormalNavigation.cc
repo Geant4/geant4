@@ -305,6 +305,13 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
           if (rot)
           {
             exitNormal *= rot->inverse();
+#ifdef G4VERBOSE
+            if( fCheck )
+               fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
+                                                motherExitNormal,  // original 
+                                                *rot,
+                                                "From RotationMatrix" );
+#endif            
           }
         }
       }

@@ -64,8 +64,8 @@ class G4VoxelSafety
                              const G4ThreeVector& localPoint );
 
     G4double ComputeSafety( const G4ThreeVector&     localPoint,
-			    const G4VPhysicalVolume& currentPhysical, 
-			          G4double           maxLength=DBL_MAX );
+                            const G4VPhysicalVolume& currentPhysical, 
+                                  G4double           maxLength=DBL_MAX );
 
     inline G4int GetVerboseLevel() const { return fVerbose; } 
     inline void  SetVerboseLevel(G4int level) { fVerbose= level; } 
@@ -86,7 +86,7 @@ class G4VoxelSafety
                               const G4ThreeVector& localPoint ); 
 
     G4SmartVoxelNode* VoxelLocateLight( G4SmartVoxelHeader* pHead,
-					const G4ThreeVector& localPoint ) const;
+                                        const G4ThreeVector& localPoint ) const;
   private:
 
     // BEGIN State - values used during computation of Safety 

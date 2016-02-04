@@ -194,8 +194,10 @@ G4NavigationLogger::AlongComputeStepLog(const G4VSolid* sampleSolid,
               << "          Solid gave DistanceToIn = "
               << sampleStep << " yet returns " << solidResponse
               << " for this point !" << G4endl
-              << "          Point = " << intersectionPoint << G4endl
-              << "          Safety values: " << G4endl;
+              << "          Original Point     = " << samplePoint << G4endl
+              << "          Original Direction = " << sampleDirection << G4endl              
+              << "          Intersection Point = " << intersectionPoint << G4endl
+              << "            Safety values: " << G4endl;
       if ( insideIntPt != kInside )
       {
         message << "          DistanceToIn(p)  = " << safetyIn;
@@ -576,15 +578,13 @@ CheckAndReportBadNormal(const G4ThreeVector& unitNormal,
     message << "============================================================"
             << G4endl;
     message << " WARNING>  Normal is not a unit vector. "
-            << "           Expected normal-global-frame to be valid "
-            << " i.e. a unit vector!" << G4endl
             << "  - but |normal|   = "  << normMag
             << "  - and |normal|^2     = "  << normMag2 << G4endl
             << "    which differ from 1.0 by: " <<  G4endl 
             << "        |normal|-1 = " << normMag - 1.0
             << "    and |normal|^2 - 1 = " << normMag2 - 1.0 << G4endl
             << "   n = " << unitNormal << G4endl;
-    message << " Info string: " << * msg << G4endl;
+    message << " Info string: " << msg << G4endl;
     message << "============================================================"
             << G4endl;
 
@@ -598,6 +598,56 @@ CheckAndReportBadNormal(const G4ThreeVector& unitNormal,
             << G4endl;
     message << " Parameters of solid:     " << G4endl;
     message << *solid; 
+    message << "============================================================";
+      
+    G4String fMethod = fId + "::ComputeStep()";
+    G4Exception( fMethod, "GeomNav0003", JustWarning, message); 
+  }
+  return badLength;
+}
+
+// ********************************************************************
+// CheckAndReportBadNormal - due to Rotation Matrix
+// ********************************************************************
+//
+G4bool
+G4NavigationLogger::
+CheckAndReportBadNormal(const G4ThreeVector& rotatedNormal,
+                        const G4ThreeVector& originalNormal,
+                        const G4RotationMatrix& rotationM,
+                        const char*          msg ) const
+{
+  G4double  normMag2 = rotatedNormal.mag2();
+  G4bool badLength = ( std::fabs ( normMag2 - 1.0 ) > CLHEP::perMillion );
+
+  if( badLength )
+  {
+    G4double  normMag= std::sqrt(normMag2); 
+    G4ExceptionDescription message;
+    message.precision(10);
+    message << "============================================================"
+            << G4endl;
+    message << " WARNING>  Rotated n(ormal) is not a unit vector. " << G4endl
+            << "     |normal|   = "  << normMag
+            << "   and |normal|^2     = "  << normMag2 << G4endl
+            << "   Diff from 1.0: " <<  G4endl 
+            << "     |normal|-1 = " << normMag - 1.0
+            << "   and |normal|^2 - 1 = " << normMag2 - 1.0 << G4endl;
+    message << "   Rotated  n = (" << rotatedNormal.x() << "," << rotatedNormal.y() << "," 
+            << rotatedNormal.z() << ")" << G4endl;
+    message << "   Original n = (" << originalNormal.x() << "," << originalNormal.y() << "," 
+            << originalNormal.z() << ")" << G4endl;
+    message << " Info string: " << msg << G4endl;
+    message << "============================================================"
+            << G4endl;
+
+    message.precision(16);
+
+    message << " Information on RotationMatrix : " << G4endl;
+    message << " Original: " << G4endl;
+    message << rotationM << G4endl;
+    message << " Inverse (used in transformation): " << G4endl;
+    message << rotationM.inverse() << G4endl;    
     message << "============================================================";
       
     G4String fMethod = fId + "::ComputeStep()";
