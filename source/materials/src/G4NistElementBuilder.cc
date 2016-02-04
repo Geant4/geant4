@@ -211,7 +211,7 @@ void G4NistElementBuilder::PrintElement(G4int Z) const
     G4cout << "          mass(amu): ";
     for(j=0; j<nc; ++j) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
     G4cout << G4endl;
-    G4cout << "     abanbance: ";
+    G4cout << "     abundance: ";
     for(j=0; j<nc; ++j) {G4cout << relAbundance[idx + j] << " ";}
     G4cout << G4endl;
   }
