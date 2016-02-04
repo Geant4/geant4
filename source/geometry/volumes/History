@@ -17,9 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 15th, 2015 G.Cosmo                - geomvol-V10-00-11
+- Enable paramerisation by solid type in G4GeometryWorkspace.
+  Assumes solids being parameterised are declared thread-local in the
+  user's parameterisation class and allocated just once.
+
 April 15th, 2015 G.Cosmo                  - geomvol-V10-00-10
 - Simplified implementation in G4NavigationHistoryPool to make use of simple
   stack of free entries. Pre-allocate size of vectors and inlined GetLevels().
+  Also addressing problem report #1730.
 
 April 8th, 2015 A.Dotti
 - Updated unit-tests to new G4Exception signature.
