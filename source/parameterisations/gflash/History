@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 2nd, 2015, M. Verderi (gflash-V10-00-00)
+-------------------------
+- Fix bug 1719: Zeff wrongly computed as ( W1*Z2 ) + ( W2*Z1 ), with Z1 and Z2 swapped.
+
 Apr 30th, 2013, M. Verderi (gflash-V09-06-02)
 --------------------------
 - Replace CLHEP::RandXXX by G4RandXXX for thread safety in

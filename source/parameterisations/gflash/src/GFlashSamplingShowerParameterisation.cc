@@ -180,11 +180,11 @@ void GFlashSamplingShowerParameterisation::ComputeZAX0EFFetc()
 
   // material and geometry parameters for a sampling calorimeter
   G4double denominator = (d1*density1 + d2*density2);
-  G4double W1 = (d1*density1) / denominator;
-  G4double W2  = (d2*density2)/denominator;
-  Zeff   = ( W1*Z2 ) + (W2*Z1);    //X0*Es/Ec;
-  Aeff   = ( W1*A1 ) + (W2*A2);
-  X0eff  =(1/ (( W1 / X01) +( W2 / X02))); 
+  G4double W1  = (d1*density1) / denominator;
+  G4double W2  = (d2*density2) / denominator;
+  Zeff   = ( W1*Z1 ) + ( W2*Z2 );    //X0*Es/Ec;
+  Aeff   = ( W1*A1 ) + ( W2*A2 );
+  X0eff  = ( 1./ ( ( W1 / X01) +( W2 / X02) ) ); 
   Rhoeff = ( (d1 *density1 ) + (d2 * density2 ))/G4double (d2  + d1  );
   Rmeff =  1/  ((((W1*Ec1)/ X01)   +   ((W2* Ec2)/  X02) ) / Es ) ;
   Eceff =  X0eff *((W1*Ec1)/ X01 + (W2* Ec2)/  X02 );      
