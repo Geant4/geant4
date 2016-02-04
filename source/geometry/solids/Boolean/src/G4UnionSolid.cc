@@ -345,41 +345,39 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 
     if( positionA != kOutside )
     { 
-      do
+      do  // Loop checking, 13.08.2015, G.Cosmo
       {
         disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v,calcNorm,
-                                           validNorm,nTmp)        ;
+                                           validNorm,nTmp);
         dist += disTmp ;
 
         if(fPtrSolidB->Inside(p+dist*v) != kOutside)
         { 
           disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v,calcNorm,
-                                            validNorm,nTmp)         ;
+                                             validNorm,nTmp);
           dist += disTmp ;
         }
       }
-      //     while( Inside(p+dist*v) == kInside ) ;
-           while( fPtrSolidA->Inside(p+dist*v) != kOutside && 
-                  disTmp > 0.5*kCarTolerance ) ;
+      while( (fPtrSolidA->Inside(p+dist*v) != kOutside)
+          && (disTmp > 0.5*kCarTolerance) );
     }
     else // if( positionB != kOutside )
     {
-      do
+      do  // Loop checking, 13.08.2015, G.Cosmo
       {
         disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v,calcNorm,
-                                           validNorm,nTmp)        ; 
+                                           validNorm,nTmp); 
         dist += disTmp ;
 
         if(fPtrSolidA->Inside(p+dist*v) != kOutside)
         { 
           disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v,calcNorm,
-                                            validNorm,nTmp)         ;
+                                             validNorm,nTmp);
           dist += disTmp ;
         }
       }
-      //  while( Inside(p+dist*v) == kInside ) ;
-        while( (fPtrSolidB->Inside(p+dist*v) != kOutside)
-            && (disTmp > 0.5*kCarTolerance) ) ;
+      while( (fPtrSolidB->Inside(p+dist*v) != kOutside)
+          && (disTmp > 0.5*kCarTolerance) );
     }
   }
   if( calcNorm )

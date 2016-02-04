@@ -249,7 +249,7 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
   G4double rand;
   G4ThreeVector p;
 
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     rand = G4UniformRand();
 

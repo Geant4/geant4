@@ -296,7 +296,8 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
     G4double      dB = 0., dB1=0., dB2=0.;
     G4bool        doA = true, doB = true;
 
-    while(true) 
+    static const size_t max_trials=10000;
+    for (size_t trial=0; trial<max_trials; ++trial) 
     {
       if(doA) 
       {
@@ -359,6 +360,11 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
       }
     }
   }
+#ifdef G4BOOLDEBUG
+  G4Exception("G4IntersectionSolid::DistanceToIn(p,v)",
+              "GeomSolids0001", JustWarning,
+              "Reached maximum number of iterations! Returning zero.");
+#endif
   return dist ;  
 }
 
