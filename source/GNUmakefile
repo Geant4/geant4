@@ -168,8 +168,8 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version geant4-10-01-patch-02           "
-	@$(ECHO) " Copyright (C) 1994-2015 Geant4 Collaboration                "
+	@$(ECHO) " Installation Geant4 version geant4-10-01-patch-03           "
+	@$(ECHO) " Copyright (C) 1994-2016 Geant4 Collaboration                "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::
