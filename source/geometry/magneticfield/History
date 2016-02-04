@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov  2, 2015 J.Apostolakis             - field-V10-00-06
+--------------------------
+- Added explanation comment in G4MagHelicalSteper.
+
+Oct 13, 2015 J.Apostolakis
+--------------------------
+- G4ChordFinder::FindNextChord: Added check against number of iterations, 
+  to identify potential issue of lack of convergence.
+- test: fixed testProElectricMagField.cc
+
 Jan 28, 2015 J.Apostolakis             - field-V10-00-05
 --------------------------
 - Revert unintended inclusion of changes in G4MagIntegratorDriver

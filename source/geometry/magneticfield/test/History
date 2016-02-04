@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sept  21st,  2015 J.Apostolakis
+----------------------------------
+-Fixed compilation issues in testProElectricMagField.cc
+Configuration
+-Revised CMakeLists.txt file in this directory (added field07 as subdirectory)
+-Created draft CMakeLists.txt file in field07
+Cleanup
+-Removed additional files  and all subdirectories in field03
+
 March 14th,  2014 J.Apostolakis
 ----------------------------------
 Updated interface to use field manager to set charge momentum, mass' testProElectroMagField.cc

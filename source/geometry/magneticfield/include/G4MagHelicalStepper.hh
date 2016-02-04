@@ -36,6 +36,11 @@
 // Abstract base class for integrator of particle's equation of motion,
 // used in tracking in space dependent magnetic field
 
+// It is used for a set of steppers which use the helix as a sort of
+// 'first order' solution.
+//   - Most obtain an error by breaking up the step in two
+//   - G4ExactHelicalStepper does not provide an error estimate
+
 // History:
 // - 05.11.98  J.Apostolakis   Creation of new ABC 
 // --------------------------------------------------------------------

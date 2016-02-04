@@ -187,7 +187,10 @@ void G4FieldTrack::SetMomentum(G4ThreeVector pMomentum)
   SixVector[4] = pMomentum.y(); 
   SixVector[5] = pMomentum.z(); 
 
-  fMomentumDir = pMomentum.unit(); 
+  if( pMomentum.mag2() > 0.0 ) 
+     fMomentumDir = pMomentum.unit();
+  else
+     fMomentumDir = G4ThreeVector( 0.0, 0.0, 0.0 ); 
 }
 
 inline

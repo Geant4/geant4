@@ -13,11 +13,16 @@ host=`hostname`
 #
 MAKE=make
 BINDIR=$G4BIN/$G4SYSTEM/
+#xport BINDIR=$G4BIN_GMAKE/$G4SYSTEM/
 #INDIR=$G4WORKDIR/bin/$G4SYSTEM/
 
 target=testPropagateMagField
 echo  "Compiling $target ... "
 $MAKE G4TARGET=$target   || exit
+if [[ ! -x $BINDIR/$target ]] ; then
+  echo "Could not find executable $target in directory $BINDIR" 
+  exit 1
+fi
 echo  "Executing $target ..."
 for n in 1 2 3 4 5 6 7 8 9 10 11 12 13
 do

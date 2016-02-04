@@ -12,7 +12,7 @@ $Id$
     and field dependent electromagnetic processes.
 
 	
-    This test has moved to extended/field/field01, and is being refined 
+    This test has moved to examples/extended/field/field01, and is being refined 
     into an example.
 
     Only run script are now in this directory.

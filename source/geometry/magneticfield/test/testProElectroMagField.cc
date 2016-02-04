@@ -235,7 +235,6 @@ G4UniformElectricField myElectricField(10.*kilovolt/cm, 0., 0.);
 
 G4EqMagElectricField *fEquation = 0;
 
-
 G4FieldManager* SetupField(G4int type)
 {
     G4FieldManager   *pFieldMgr;
@@ -305,11 +304,14 @@ void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
    // fieldMgr= G4TransportationManager::GetTransportationManager()->
    //          GetFieldManager(); 
 
-   static G4ChargeState* chargeState= new G4ChargeState ( charge, 0, 0 );  // no Mag Dip Moment
+   static G4ChargeState* pChargeState= new G4ChargeState ( -100, 0, 0 );  ;
+   // delete pChargeState;
+   // pChargeState= new G4ChargeState ( charge, 0, 0 );  // no Mag Dip Moment
+   pChargeState->SetCharge(charge);
 
     // pMagFieldPropagator->set_magnetic_field();
    fEquation->SetChargeMomentumMass(
-		      chargeState,  // charge in e+ units
+		      *pChargeState,  // charge in e+ units
 		      MomentumXc,   // Momentum in Mev/c ?
                       Mass );
 }
@@ -334,8 +336,9 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
                     GetTransportationManager()-> GetNavigatorForTracking();
     G4PropagatorInField *pMagFieldPropagator= SetupPropagator(type);
 
-    pMagFieldPropagator->SetChargeMomentumMass(  
-			    +1.,                    // charge in e+ units
+    // pMagFieldPropagator->
+    SetChargeMomentumMass(  
+			   +1.,                    // charge in e+ units
 			   0.5 * proton_mass_c2,    // Momentum in Mev/c ?
 			    proton_mass_c2 );
     pNavig->SetWorldVolume(pTopNode);
@@ -380,7 +383,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
        G4ThreeVector Spin(1.0, 0.0, 0.0);
                                                    // Momentum in Mev/c ?
-       pMagFieldPropagator->SetChargeMomentumMass(
+       SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
 		      momentum, 
 		      proton_mass_c2); 

@@ -1,4 +1,6 @@
-GEANT4_ADD_UNIT_TESTS(test*.cc field07 
+cmake_minimum_required(VERSION 3.1)
+
+GEANT4_ADD_UNIT_TESTS(test*.cc
                       INCLUDE_DIRS geometry/management/include
                                    geometry/volumes/include
                                    geometry/navigation/include
@@ -19,23 +21,12 @@ GEANT4_ADD_UNIT_TESTS(test*.cc field07
                                    particles/hadrons/barions/include
                                    particles/hadrons/ions/include
                                    materials/include
-                                   event/include
-                                   digits_hits/hits/include
-                                   digits_hits/digits/include
-                                   digits_hits/detector/include
                                    tracking/include
                                    track/include
-                                   processes/management/include
-                                   processes/cuts/include
-                                   processes/electromagnetic/standard/include
-                                   processes/electromagnetic/utils/include
-                                   processes/electromagnetic/muons/include
-                                   processes/electromagnetic/highenergy/include
-                                   processes/decay/include
-                                   processes/transportation/include
                                    intercoms/include
                                    interfaces/basic/include
                                    interfaces/common/include
                                    ${CLHEP_INCLUDE_DIRS}
                       LIBRARIES G4geometry G4particles G4interfaces G4run)
 
+subdirectory(field07)

@@ -64,8 +64,27 @@ G4UniformMagField::G4UniformMagField(G4double vField,
 {
    if ( (vField<0) || (vTheta<0) || (vTheta>pi) || (vPhi<0) || (vPhi>twopi) )
    {
+      std::ostringstream msg;
+      msg << "ERROR in G4UniformMagField::G4UniformMagField(double, double, double) : "
+          << "Invalid parameter(s). " << std::endl;
+      msg << " Expected " << std::endl;
+      
+      msg << " - Magnitude vField: Value = " << vField
+          << "  Expected vField > 0 " ;
+      if ( vField<0) {  msg << " <------ Erroneous "; }
+      msg << std::endl;      
+
+      msg << " - Theta angle: Value = " << vTheta
+          << "  Expected between 0 <= theta <= pi = " << pi << " ";
+      if ( (vTheta<0) || (vTheta>pi) ) { msg << " <------ Erroneous "; }
+
+      msg << std::endl;
+      msg << " - Phi   angle: Value = " << vPhi
+          << "  Expected between 0 <=  phi  <= 2*pi = " << twopi << std::endl;
+      if ( (vPhi<0) || (vPhi>twopi) ) { msg << " <------ Erroneous "; }
+      
       G4Exception("G4UniformMagField::G4UniformMagField()",
-                  "GeomField0002", FatalException, "Invalid parameters.") ;
+                  "GeomField0002", FatalException, msg ); // "Invalid parameters.") ;
    }
    fFieldComponents[0] = vField*std::sin(vTheta)*std::cos(vPhi) ;
    fFieldComponents[1] = vField*std::sin(vTheta)*std::sin(vPhi) ;

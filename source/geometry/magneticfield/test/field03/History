@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11 March 2014 John Apostolakis  -  tst-field03-01
+- This example is no longer maintained.  It has been migrated to extended/field/field03
+- Removing all source code.
 
 5th December 2012  John Allison
 - Migrated to DrawTrajectory (i_mode argument no longer available).
