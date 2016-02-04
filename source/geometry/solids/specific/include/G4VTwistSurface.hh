@@ -378,7 +378,7 @@ G4bool DistanceSort( const Intersection &a, const Intersection &b)
 inline
 G4bool EqualIntersection( const Intersection &a, const Intersection &b)
 {
-  return ( ( a.xx - b.xx ).mag() < 1E-9*CLHEP::mm ) ;
+  return ( ( a.xx - b.xx ).mag() < 1E-9*CLHEP::mm ) ;  
 }
 
 #include "G4VTwistSurface.icc"

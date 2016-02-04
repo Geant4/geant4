@@ -69,11 +69,11 @@ G4bool G4VFacet::operator== (const G4VFacet &right) const
 
   G4bool coincident  = true;
   G4int i = 0;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     coincident = false;
     G4int j   = 0; 
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       coincident = (GetVertex(i)-right.GetVertex(j)).mag2() < tolerance;
     } while (!coincident && ++j < GetNumberOfVertices());

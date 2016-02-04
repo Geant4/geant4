@@ -252,7 +252,7 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
       pos = fFacetList.lower_bound(value);
 
       it = pos;
-      while (!found && it != end)
+      while (!found && it != end)    // Loop checking, 13.08.2015, G.Cosmo
       {
         G4int id = (*it).id;
         G4VFacet *facet = fFacets[id];
@@ -266,7 +266,7 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
       if (fFacets.size() > 1)
       {
         it = pos;
-        while (!found && it != begin)
+        while (!found && it != begin)    // Loop checking, 13.08.2015, G.Cosmo
         {
           --it;
           G4int id = (*it).id;
@@ -311,7 +311,7 @@ G4int G4TessellatedSolid::SetAllUsingStack(const std::vector<G4int> &voxel,
 
   vector<G4int> candidates;
 
-  while (!pos.empty())
+  while (!pos.empty())    // Loop checking, 13.08.2015, G.Cosmo
   {
     xyz = pos.top();
     pos.pop();
@@ -480,7 +480,7 @@ void G4TessellatedSolid::CreateVertexList()
       {
         pos = vertexListSorted.lower_bound(value);
         it = pos;
-        while (it != end)
+        while (it != end)    // Loop checking, 13.08.2015, G.Cosmo
         {
           id = (*it).id;
           G4ThreeVector q = fVertexList[id];
@@ -495,7 +495,7 @@ void G4TessellatedSolid::CreateVertexList()
         if (!found && (fVertexList.size() > 1))
         {
           it = pos;
-          while (it != begin)
+          while (it != begin)    // Loop checking, 13.08.2015, G.Cosmo
           {
             --it;
             id = (*it).id;
@@ -711,7 +711,7 @@ EInside G4TessellatedSolid::InsideVoxels(const G4ThreeVector &p) const
   G4int sm                  = 0;
 
   G4bool nearParallel = false;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     // We loop until we find direction where the vector is not nearly parallel
     // to the surface of any facet since this causes ambiguities.  The usual
@@ -737,7 +737,7 @@ EInside G4TessellatedSolid::InsideVoxels(const G4ThreeVector &p) const
     G4bool crossed = false;
     G4bool started = true;
 
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       const vector<G4int> &candidates =
         started ? startingCandidates : fVoxels.GetCandidates(curVoxel);
@@ -902,7 +902,7 @@ EInside G4TessellatedSolid::InsideNoVoxels (const G4ThreeVector &p) const
   for (G4int i=0; i<nTry; ++i)
   {
     G4bool nearParallel = false;
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       //
       // We loop until we find direction where the vector is not nearly parallel
@@ -915,7 +915,7 @@ EInside G4TessellatedSolid::InsideNoVoxels (const G4ThreeVector &p) const
       sm++;
       vector<G4VFacet*>::const_iterator f = fFacets.begin();
 
-      do
+      do    // Loop checking, 13.08.2015, G.Cosmo
       {
         //
         // Here we loop through the facets to find out if there is an
@@ -1270,7 +1270,7 @@ G4TessellatedSolid::DistanceToOutCore(const G4ThreeVector &aPoint,
     const vector<G4int> *old = 0;
 
     G4int minCandidate = -1;
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       const vector<G4int> &candidates = fVoxels.GetCandidates(curVoxel);
       if (old == &candidates)
@@ -1389,7 +1389,7 @@ G4TessellatedSolid::DistanceToInCore(const G4ThreeVector &aPoint,
     vector<G4int> curVoxel(3);
 
     fVoxels.GetVoxel(curVoxel, currentPoint);
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       const vector<G4int> &candidates = fVoxels.GetCandidates(curVoxel);
       if (candidates.size())
@@ -1673,7 +1673,22 @@ G4double G4TessellatedSolid::DistanceToIn(const G4ThreeVector& p) const
 G4double G4TessellatedSolid::DistanceToIn(const G4ThreeVector& p,
                                           const G4ThreeVector& v)const
 {
-  return DistanceToInCore(p,v,kInfinity);
+  G4double dist = DistanceToInCore(p,v,kInfinity);
+#ifdef G4SPECSDEBUG
+  if (dist < kInfinity)
+  {
+    if (Inside(p + dist*v) != kSurface)
+    {
+      std::ostringstream message;
+      message << "Invalid response from facet in solid '" << GetName() << "',"
+              << G4endl
+              << "at point: " << p <<  "and direction: " << v;
+      G4Exception("G4TessellatedSolid::DistanceToIn(p,v)",
+                  "GeomSolids1002", JustWarning, message);
+    }
+  }
+#endif
+  return dist;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1721,6 +1736,20 @@ G4double G4TessellatedSolid::DistanceToOut(const G4ThreeVector& p,
     *norm = n;
     *validNorm = valid;
   }
+#ifdef G4SPECSDEBUG
+  if (dist < kInfinity)
+  {
+    if (Inside(p + dist*v) != kSurface)
+    {
+      std::ostringstream message;
+      message << "Invalid response from facet in solid '" << GetName() << "',"
+              << G4endl
+              << "at point: " << p <<  "and direction: " << v;
+      G4Exception("G4TessellatedSolid::DistanceToOut(p,v,..)",
+                  "GeomSolids1002", JustWarning, message);
+    }
+  }
+#endif
   return dist;
 }
 
@@ -1927,8 +1956,21 @@ G4VisExtent G4TessellatedSolid::GetExtent () const
 //
 G4double G4TessellatedSolid::GetCubicVolume ()
 {
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = G4VSolid::GetCubicVolume(); }
+  if (fCubicVolume != 0.) return fCubicVolume;
+
+  // For explanation of the following algorithm see:
+  // https://en.wikipedia.org/wiki/Polyhedron#Volume
+  // http://wwwf.imperial.ac.uk/~rn/centroid.pdf
+
+  G4int size = fFacets.size();
+  for (G4int i = 0; i < size; ++i)
+  {
+    G4VFacet &facet = *fFacets[i];
+    G4double area = facet.GetArea();
+    G4ThreeVector unit_normal = facet.GetSurfaceNormal();
+    fCubicVolume += area * (facet.GetVertex(0).dot(unit_normal));
+  }
+  fCubicVolume /= 3.;
   return fCubicVolume;
 }
 

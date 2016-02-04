@@ -149,7 +149,7 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
   
   G4VCSGface **face = faces,
        **sourceFace = source.faces;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *face = (*sourceFace)->Clone();
   } while( ++sourceFace, ++face < faces+numFace );
@@ -170,7 +170,7 @@ void G4VCSGfaceted::DeleteStuff()
   if (numFace)
   {
     G4VCSGface **face = faces;
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       delete *face;
     } while( ++face < faces + numFace );
@@ -196,7 +196,7 @@ G4bool G4VCSGfaceted::CalculateExtent( const EAxis axis,
   // Loop over all faces, checking min/max extent as we go.
   //
   G4VCSGface **face = faces;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     (*face)->CalculateExtent( axis, voxelLimit, transform, extentList );
   } while( ++face < faces + numFace );
@@ -221,7 +221,7 @@ EInside G4VCSGfaceted::Inside( const G4ThreeVector &p ) const
   EInside answer=kOutside;
   G4VCSGface **face = faces;
   G4double best = kInfinity;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double distance;
     EInside result = (*face)->Inside( p, kCarTolerance/2, &distance );
@@ -245,7 +245,7 @@ G4ThreeVector G4VCSGfaceted::SurfaceNormal( const G4ThreeVector& p ) const
   G4ThreeVector answer;
   G4VCSGface **face = faces;
   G4double best = kInfinity;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double distance;
     G4ThreeVector normal = (*face)->Normal( p, &distance );
@@ -270,7 +270,7 @@ G4double G4VCSGfaceted::DistanceToIn( const G4ThreeVector &p,
   G4double distFromSurface = kInfinity;
   G4VCSGface **face = faces;
   G4VCSGface *bestFace = *face;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double   faceDistance,
                faceDistFromSurface;
@@ -327,7 +327,7 @@ G4double G4VCSGfaceted::DistanceToOut( const G4ThreeVector &p,
   
   G4VCSGface **face = faces;
   G4VCSGface *bestFace = *face;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double  faceDistance,
               faceDistFromSurface;
@@ -398,7 +398,7 @@ G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p,
 {
   G4VCSGface **face = faces;
   G4double best = kInfinity;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double distance = (*face)->Distance( p, outgoing );
     if (distance < best)  { best = distance; }
@@ -434,11 +434,11 @@ G4VisExtent G4VCSGfaceted::GetExtent() const
      {-kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity, -kInfinity};
 
   G4VCSGface **face = faces;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {    
     const G4ThreeVector **axis = axes+5 ;
     G4double *answer = answers+5;
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       G4double testFace = (*face)->Extent( **axis );
       if (testFace > *answer)  { *answer = testFace; }
@@ -613,7 +613,7 @@ G4ThreeVector G4VCSGfaceted::GetPointOnSurfaceGeneric( ) const
 
   // First step: calculate surface areas
   //
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double result = (*face)->SurfaceArea( );
     areas.push_back(result);

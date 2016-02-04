@@ -157,6 +157,12 @@ G4SurfaceVoxelizer::GetCandidates(std::vector<G4int> &curVoxel) const
 }
 
 inline
+G4int G4SurfaceVoxelizer::GetTotalCandidates() const
+{
+  return fTotalCandidates;
+}
+
+inline
 G4int G4SurfaceVoxelizer::GetVoxelBoxesSize() const
 {
   return fVoxelBoxes.size();

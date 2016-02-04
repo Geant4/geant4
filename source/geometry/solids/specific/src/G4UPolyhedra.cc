@@ -31,6 +31,7 @@
 
 #include "G4Polyhedra.hh"
 #include "G4UPolyhedra.hh"
+
 #include "G4VPVParameterisation.hh"
 
 using CLHEP::twopi;
@@ -198,18 +199,18 @@ G4Polyhedron* G4UPolyhedra::CreatePolyhedron() const
       std::vector<G4int*> triQuads;
       G4int remaining = GetNumRZCorner();
       G4int iStarter = 0;
-      while (remaining >= 3)
+      while (remaining >= 3)    // Loop checking, 13.08.2015, G.Cosmo
       {
         // Find unchopped corners...
         //
         G4int A = -1, B = -1, C = -1;
         G4int iStepper = iStarter;
-        do
+        do    // Loop checking, 13.08.2015, G.Cosmo
         {
           if (A < 0)      { A = iStepper; }
           else if (B < 0) { B = iStepper; }
           else if (C < 0) { C = iStepper; }
-          do
+          do    // Loop checking, 13.08.2015, G.Cosmo
           {
             if (++iStepper >= GetNumRZCorner()) iStepper = 0;
           }
@@ -236,7 +237,7 @@ G4Polyhedron* G4UPolyhedra::CreatePolyhedron() const
         }
         else
         {
-          do
+          do    // Loop checking, 13.08.2015, G.Cosmo
           {
             if (++iStarter >= GetNumRZCorner()) { iStarter = 0; }
           }

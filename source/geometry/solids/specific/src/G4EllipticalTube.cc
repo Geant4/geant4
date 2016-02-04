@@ -183,7 +183,7 @@ G4EllipticalTube::CalculateExtent( const EAxis axis,
                 w0, w1;
   transform.ApplyPointTransform( v0 );
   transform.ApplyPointTransform( v1 );
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     phi += sigPhi;
     if (numPhi == 1) phi = 0;  // Try to avoid roundoff

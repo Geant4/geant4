@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-Nov-2015  G.Cosmo               (geom-specific-V10-00-14)
+- Added specialised implementation for GetCubicVolume() in
+  G4TessellatedSolid (J.Allison).
+
+29-Oct-2015  G.Cosmo
+- Added debug printouts withing G4SPECSDEBUG in G4TessellatedSolid for
+  DistanceToIn/Out(p,v) to identify potential wrong responses.
+
+26-Oct-2015  G.Cosmo
+- Removed redundant condition in G4Polyhedra and G4polycone
+  SetOriginalParameters() method.
+
+13-Aug-2015  G.Cosmo
+- Checked for potential never-ending loops.
+  No issues found, only added annotations.
+
+05-Aug-2015  G.Cosmo
+- Minor code cleanup in G4SurfaceVoxelizer.
+
 03-Mar-2015  G.Cosmo               (geom-specific-V10-00-13)
 - Use accessors x(), y() and z() from UVector3, instead of directly accessing
   its data-members.

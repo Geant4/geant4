@@ -241,10 +241,12 @@ void G4Polycone::Create( G4double phiStart,
     // Convert phi into our convention
     //
     startPhi = phiStart;
-    while( startPhi < 0 ) startPhi += twopi;
+    while( startPhi < 0 )    // Loop checking, 13.08.2015, G.Cosmo
+     startPhi += twopi;
     
     endPhi = phiStart+phiTotal;
-    while( endPhi < startPhi ) endPhi += twopi;
+    while( endPhi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+     endPhi += twopi;
   }
   
   //
@@ -259,7 +261,7 @@ void G4Polycone::Create( G4double phiStart,
   
   G4PolyconeSideRZ *next = corners;
   iterRZ.Begin();
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next->r = iterRZ.GetA();
     next->z = iterRZ.GetB();
@@ -280,7 +282,7 @@ void G4Polycone::Create( G4double phiStart,
                    *prev = corners + numCorner-1,
                    *nextNext;
   G4VCSGface  **face = faces;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = corner+1;
     if (next >= corners+numCorner) next = corners;
@@ -409,7 +411,7 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
   
   G4PolyconeSideRZ  *corn = corners,
         *sourceCorn = source.corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *corn = *sourceCorn;
   } while( ++sourceCorn, ++corn < corners+numCorner );
@@ -1062,16 +1064,8 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
   inextr=1+icurr;
   inextl=(icurl <= 0)? numPlanes-1 : icurl-1;
  
-  if(corners[inextr].z==corners[inextl].z)
-  {
-    Rmax.push_back(corners[inextr].r);
-    Rmin.push_back(corners[inextl].r);
-  }
-  else
-  {
-    Rmax.push_back(corners[inextr].r);
-    Rmin.push_back(corners[inextl].r);
-  }
+  Rmax.push_back(corners[inextr].r);
+  Rmin.push_back(corners[inextl].r);
 
   // Set original parameters Rmin,Rmax,Z
   //

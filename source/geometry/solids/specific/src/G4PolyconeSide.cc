@@ -106,8 +106,10 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
     //
     // Set phi values to our conventions
     //
-    while (deltaPhi < 0.0) deltaPhi += twopi;
-    while (startPhi < 0.0) startPhi += twopi;
+    while (deltaPhi < 0.0)    // Loop checking, 13.08.2015, G.Cosmo
+     deltaPhi += twopi;
+    while (startPhi < 0.0)    // Loop checking, 13.08.2015, G.Cosmo
+     startPhi += twopi;
     
     //
     // Calculate corner coordinates
@@ -516,7 +518,8 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
   if (phiIsOpen)
   {
     G4double phi = GetPhi(axis);
-    while( phi < startPhi ) phi += twopi;
+    while( phi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+      phi += twopi;
     
     if (phi > deltaPhi+startPhi)
     {
@@ -738,7 +741,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
     transform.ApplyPointTransform( v2 );
   }
 
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     phi += sigPhi;
     if (numPhi == 1) phi = startPhi+deltaPhi;  // Try to avoid roundoff
@@ -971,7 +974,8 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
     // Finally, check phi
     //
     G4double phi = GetPhi(p);
-    while( phi < startPhi ) phi += twopi;
+    while( phi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+      phi += twopi;
     
     if (phi > startPhi+deltaPhi)
     {
@@ -979,7 +983,8 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       // Oops. Are we closer to the start phi or end phi?
       //
       G4double d1 = phi-startPhi-deltaPhi;
-      while( phi > startPhi ) phi -= twopi;
+      while( phi > startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+        phi -= twopi;
       G4double d2 = startPhi-phi;
       
       if (d2 < d1) d1 = d2;
@@ -1062,7 +1067,8 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
     // Finally, check phi
     //
     G4double phi = GetPhi(p);
-    while( phi < startPhi ) phi += twopi;
+    while( phi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+      phi += twopi;
     
     if (phi > startPhi+deltaPhi)
     {
@@ -1070,7 +1076,8 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p,
       // Oops. Are we closer to the start phi or end phi?
       //
       G4double d1 = phi-startPhi-deltaPhi;
-      while( phi > startPhi ) phi -= twopi;
+      while( phi > startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+        phi -= twopi;
       G4double d2 = startPhi-phi;
       
       if (d2 < d1) d1 = d2;
@@ -1118,7 +1125,8 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit,
     // PolyPhiFace. See PolyPhiFace::InsideEdgesExact
     //
     G4double phi = GetPhi(hit);
-    while( phi < startPhi-phiTolerant ) phi += twopi;
+    while( phi < startPhi-phiTolerant )   // Loop checking, 13.08.2015, G.Cosmo
+      phi += twopi;
     
     if (phi > startPhi+deltaPhi+phiTolerant) return false;
     
