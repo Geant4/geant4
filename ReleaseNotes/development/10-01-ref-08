@@ -1,0 +1,452 @@
+
+                       geant4-10-01-ref-08
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Added new G4MultiSensitiveDetector functionality, allowing to assign
+   multiple sensitive-detectors to a single logical-volume.
+ o Added USolids/VecGeom wrapper for G4Paraboloid.
+   Activated only for external USolids/VecGeom installation.
+ o Corrected density effect parameterisation when density of a simple
+   (one component) material differs from the nominal value.
+ o Added easier handling of cumulative probabilities in DNA SR elastic models.
+ o Updated Goudsmit-Saunderson multiple-scattering model.
+ o Extension to G4GeneralPhaseSpaceDecay and G4KineticTrack to deal with
+   decays with maximum 4 daughters (instead of 3).
+ o Re-implemented graphics system fallback strategy. A graphics system may
+   have more than one nickname.
+ o New data set G4EMLOW-6.45.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 10.1.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-22
+-----
+- Updates for migration to CMake >= 2.8.12. Use generator expressions in
+  setting of per-mode compile definitions for Geant4 libs.
+- Removed -no-gcc in CMAKE_CXX_FLAGS when using Intel compiler, as gcc
+  interoperability is required for use of C++11 features in cxxlib.
+  Removed -i-dynamic from LDFLAGS, no longer supported.
+- Added specific compilation flag "-DG4GEOM_USE_SYS_USOLIDS" to distinguish
+  build with sys-installed USolids/VecGeom module (temporary, until internal
+  USolids module will be removed).
+- Updated data-sets to use G4EMLOW-6.45.
+
+config                                           config-V10-01-04
+------
+- Set C++11 as default build option for gcc, icc and clang.
+- Linux-icc.gmk: removed -no-gcc option, as gcc interoperability is required
+  for use of C++11 features in cxxlib.
+  Removed -i-dynamic from LDFLAGS, no longer supported.
+  Removed -lstdc++ from LOADLIBS, no longer necessary.
+- geomconf.gmk: added UTorus and UParaboloid for USolids/VecGeom use as
+  external library.
+
+analysis                                         analysis-V10-01-23
+--------
+- Fixed parameter range in 'setAscii' command.
+- Removed profile directory; the profiles are put in the histograms directory,
+  if its name is set by the user.
+- Updated exception_classification.
+
+digits_hits                                      digits_hits-V10-01-00
+-----------
+- Added new G4MultiSensitiveDetector functionality, allowing to assign
+  multiple sensitive-detectors to a single logical-volume.
+  Sensitive-detectors are added to this proxy class and an instance of the
+  proxy is assigned to the logical volume. Calls to the sensitive-detectors
+  methods are forwarded to all user-defined sensitive-detectors that are added.
+
+error_propagation                                error-propagation-V10-01-00
+-----------------
+- Checked for potential never-ending loops.
+
+externals                                        externals-V10-01-12
+---------
+- CLHEP:
+  o Use std::shared_ptr in random classes instead of internal Boost-derived
+    implementation. In the Utility module, removed Boost derived implementation
+    of shared_ptr and weak_ptr; removed no longer used type_traits.h header.
+  o Enabled thread_local and atomic c++11 features for Intel-icc compiler
+    in Utility module: thread_local.h, atomic_int.h.
+  o Corrected RandExpZiggurat to use shared_ptr as for all other distributions.
+  o Added liter and its sub units to SystemOfUnits.h: liter, L, dL, cL, mL.
+- usolids (geom-usolids-V10-01-18):
+  o Fixed compilation warnings on Windows Visual-Studio 2015 in UVoxelizer.
+  o Some code cleanup to UMultiUnion; moved struct defined at global scope
+    in source code to private section of the class.
+
+geometry
+--------
+- divisions (geomdiv-V10-01-03),
+  o Checked for potential never-ending loops.                                (*)
+- management (geommng-V10-01-04):
+  o Checked for potential never-ending loops.
+- navigation (geomnav-V10-01-25):
+  o G4VIntersectionLocator: properly initialise 'fCheckMode'; fixing         (*)
+    reported Coverity defect.
+- solids/Boolean (geom-bool-V10-01-01)
+  o Checked for potential never-ending loops.                                (*)
+  o Replaced while-do loop with bounded for-loop in                          (*)
+    G4IntersectionSolid::DistanceToIn(p,v).
+- solids/CSG (geom-csg-V10-01-06)
+  o Added USolids/VecGeom wrapper for G4Torus.
+    Activated only for external USolids/VecGeom installation.
+- solids/specific (geom-specific-V10-01-10)
+  o Added USolids/VecGeom wrapper for G4Paraboloid.
+    Activated only for external USolids/VecGeom installation.
+  o Minor code cleanup in G4SurfaceVoxelizer.                                (*)
+  o Checked for potential never-ending loops.                                (*)
+
+global                                           global-V10-01-20
+------
+- Force use of G4MT wrappers for Intel-icc compiler for random numbers.      (*)
+- Explicit settings for Intel-icc compiler in tls.hh.
+- Added missing inclusion of <assert.h> in G4UniformRandPool header.
+- Added missing 'inline' specification to functions in G4String.icc.         (*)
+- Tune radial tolerance to same value as for Cartesian tolerance in          (*)
+  G4GeometryTolerance.
+- Added units in G4SystemOfUnits.hh (temporarily commented out pending
+  inclusion to new CLHEP version): liter, L, dL, cL, mL.
+  Updated G4SIunits.hh and G4UnitsTable accordingly.
+
+materials                                        materials-V10-01-08
+---------
+- G4NistManager, G4NistMaterialBuilder: added method GetNominalDensity()
+- G4IonisParamMat: corrected density effect parameterisation when density
+  of a simple (one component) material differs from the nominal value.
+  Added protection for the case of large difference between nominal density
+  and defined density of the material; for big difference Sternheimer-1971
+  parameterisation is used, while Sternheimer-1984 is normally applied;
+  important for vacuum and low-density gas. Addressing problem report #1765.
+- Checked for potential never-ending loops.
+
+particles                                        particles-V10-01-05
+---------
+- Added new method G4VDecayChannel::IsOKWithParentMass() to check that parent
+  mass (dynamical mass) is enough for decay products.
+  Added 'parentMass' as argument of G4DecayTable::SelectADecayChannel().
+  Channels which give false with IsOKWithParentMass() are ignored.
+- Added new method G4PhaseSpaceDecayChannel::SetDaughterMasses() to give
+  daughter masses instead of sampling masses according to PDG mass and width.
+  A new method of SampleDaughterMasses() switches back to sampling masses.
+- Fixed bug in K-K* decay modes in G4ExitedMesonConstructor; K-K* modes in
+  pi2(1670) decay were missing.
+- Fixed Coverity defects in G4IonTable.
+- Checked for potential never-ending loops.
+
+persistency/gdml                                 gdml-V10-01-19
+----------------
+- Added support for writing and reading copy-numbers associated to placements.
+  Updated GDML schema (GDML version 3.1.3).
+- Fixed typo in exported name for electron cuts in G4GDMLWriteStructure.
+
+physics_lists
+-------------
+- constructors/decay (phys-ctor-decay-V10-01-03):
+  o Fixed Coverity defects in G4SpinDecayPhysics.
+- constructors/electromagnetic (phys-ctor-em-V10-01-19):
+  o G4EmStandardPhysics_option4: use WVI+SS for pions, kaons, p, pbar
+  o G4EmStandardPhysicsGS: use PWA screening option for e+; set RangeFactor
+    to 0.15; use 'SafetyPlus' step limit.
+  o G4EmStandardPhysicsWVI: set RangeFactor to 0.15.
+  o Corrected proton energy limits in G4EmDNAPhysics_option2.
+  o Added G4DNARuddIonisationExtendedModel to G4EmDNAPhysics_option5.
+
+processes/cuts                                   procuts-V10-01-04
+--------------
+- Checked for potential never-ending loops.
+
+processes/decay                                  decay-V10-01-03
+---------------
+- Check on parent mass for decay products moved to method
+  G4VDecayChannel::IsOKWithParentMass().
+
+processes/electromagnetic/adjoint                emadjoint-V10-01-01
+---------------------------------
+- Checked for potential never-ending loops.
+
+processes/electromagnetic/dna                    emdna-V10-01-33
+-----------------------------
+- Added easier handling of cumulative probabilities in SR elastic models.
+- Added new class G4Serialize.
+- Added accessors in G4MolecularReactionTable.
+- G4MoleculeGun, G4MoleculeGunMessenger: place gun randomly in a box.
+- G4DNAAttachment, G4DNAChargeDecrease, G4DNADissociation, G4DNAExcitation,
+  G4DNAIonisation: updated processes & models initialisation.
+- G4memory: removed use of CLHEP::shared_ptr, replaced by std calls.
+
+processes/electromagnetic/highenergy             emhighenergy-V10-01-03
+------------------------------------
+- Checked for potential never-ending loops.
+
+processes/electromagnetic/muons                  emmuons-V10-01-01
+-------------------------------
+- Checked for potential never-ending loops.
+- Code cleanup.
+
+processes/electromagnetic/polarisation           empolar-V10-01-00
+--------------------------------------
+- Checked for potential never-ending loops.
+
+processes/electromagnetic/standard               emstand-V10-01-31
+----------------------------------
+- Updated GS models: G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable,
+  G4PWATotalXsecTable.
+- Checked for potential never-ending loops.
+- Code cleanup.
+
+processes/electromagnetic/utils                  emutils-V10-01-22
+-------------------------------
+- G4VMscModel: compute distance to boundary even if a particle is inside
+  world volume.
+- Checked for potential never-ending loops.
+
+processes/electromagnetic/xrays                  xrays-V10-01-02
+-------------------------------
+- Checked for potential never-ending loops.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-01-18)
+  o Fixed Coverity defect in G4NeutronCaptureXS.                             (*)
+- management (hadr-man-V10-01-03)
+  o Fixed Coverity defects in G4HadronicProcess.
+- models/abrasion (had-abrasion-V10-01-01)
+  o Use G4Exp and G4Pow in G4NuclearAbrasionGeometry and G4WilsonAbrasionModel.
+  o Checked for potential never-ending loops.
+- models/binary_cascade (had-binary-V10-01-07)
+  o Checked for potential never-ending loops.
+- models/cascade (hadr-casc-V10-01-11)
+  o Included missing header in G4NucleiModel.cc.
+- models/coherent_elastic (hadr-cohe-V10-01-13)
+  o G4LMsdGenerator: included resonances recommended by the COMPASS experiment
+    in diffraction dissociation.
+  o Use G4Exp, G4Log and G4Pow in several classes.
+  o Checked for potential never-ending loops.
+- processes/hadronic/models/de_excitation (hadr-deex-V10-01-42)
+  o G4NuclearLevelData: fixed lazy initialisation in MT mode.
+  o G4VEvaporationChannel, G4LevelManager, G4EvaporationFactory,
+    G4EvaporationDefaultGEMFactory, G4EvaporationGEMFactory: added new method
+    GetNearestLevel() providing access to the nuclear level data from any
+    nuclear decay channel. Providing implementation of GetNearestLevel()
+    in G4PromptPhotonEvaporation. 
+  o G4WilsonAblationModel: complete migration to G4PromptPhotonEvaporation.
+    Use G4Exp and G4Pow.
+  o G4PromptPhotonEvaporation: added extra methods to compute probability
+    and to sample final states for continuous gamma emission.
+  o G4Evaporation: access random engine before the loop.
+  o G4VGammaDeexcitation, G4PhotonEvaporation, G4E1Probability,
+    G4DiscreteGammaTransition, G4DiscreteGammaDeexcitation,
+    G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation: reduced
+    tolerance is reduced from 1/10 keV to 0.1 keV. Required in order to
+    address problem report #1760.
+  o G4FermiPhaseSpaceDecay: removed obsolete method to sample N-body 
+    decay and left only Kopylov one. Fixed compilation on Windows.
+  o Checked for potential never-ending loops.
+  o Code cleanup and fixed Coverity defects.
+- processes/hadronic/models/em_dissociation (hadr-emd-V10-01-01)
+  o G4EMDissociation: fixed Coverity defects related to memory leaks.
+    Removed useless header file dependency on G4GeneralPhaseSpaceDecay.
+- processes/hadronic/models/lend (hadr-lend-V10-01-02)
+  o Fixed compilation problem on Intel-icc with c++11 enabled.
+- processes/hadronic/models/lepto_nuclear (hadr-lepnuc-V10-01-01)
+  o Checked for potential never-ending loops.
+- models/particle_hp (hadr-hpp-V10-01-21)
+  o Use G4Threading::IsMasterThread() instead of !G4Threading::IsWorkerThread().
+- models/parton_string/diffraction (hadr-string-diff-V10-01-11)
+  o G4FTFParameters, G4FTFModel, G4FTFAnnihilation, G4DiffractiveExcitation
+    and G4ElasticHNScattering: use G4Exp, G4Log and G4Pow.
+  o Checked for potential never-ending loops.
+  o Fixed Coverity defects in G4FTFModel and G4DiffractiveExcitation.
+- models/parton_string/hadronization (had-hadronization-V10-01-09)
+  o G4VLongitudinalStringDecay, G4LundStringFragmentation, G4QGSMFragmentation:
+    use G4Exp, G4Log and G4Pow.
+  o Checked for potential never-ending loops.
+  o Fixed Coverity defects in G4QGSMFragmentation and G4FragmentingString.
+- models/parton_string/management (hadr-partonstring-mgt-V10-01-02)
+  o G4PomeronCrossSection: use G4Exp, G4Log and G4Pow.
+  o Checked for potential never-ending loops.
+- models/parton_string/qgsm (hadr-qgsm-V10-01-14)
+  o G4ASCCrossSection, G4QGSMSplitableHadron, G4QGSParticipants, 
+    G4SingleDiffractiveExcitation and G4QGSDiffractiveExcitation:
+    use G4Exp, G4Log and G4Pow.
+  o Checked for potential never-ending loops.
+  o Fixed Coverity defects in G4GammaParticipants and G4QGSParticipants.
+- models/pre_equilibrium (hadr-pre-V10-01-05)
+  o Checked for potential never-ending loops.
+  o Added inclusion of missing header in G4PreCompoundFragment and
+    G4GNASHTransitions.
+- models/radioactive_decay (radioactive_decay-V10-01-15)
+  o Addressing problem report #1727 for Auger electron cascade missing
+    vacancies
+  o Fixed Coverity defects.
+  o Checked for potential never-ending loops.
+- models/rpg (hadr-rpg-V10-01-00)
+- models/theo_high_energy (had-theo-HE-V10-01-03)
+  o Checked for potential never-ending loops.
+- models/util (hadr-mod-util-V10-01-07)
+  o G4Fragment: fixed copy constructor; fixed leak in operator=().
+    Use initialisers in constructors.
+    Add usage of G4NuclearParameterization.
+  o G4GeneralPhaseSpaceDecay, G4KineticTrack : extension to deal with
+    decays with maximum 4 daughters (instead of 3). 
+  o G4KineticTrack: fixed final products list.
+- processes (hadr-proc-V10-01-02)
+- stopping (hadr-stopping-V10-01-03)
+  o Checked for potential never-ending loops.
+- util (hadr-util-V10-01-01)
+  o G4NuclearPolarization: new container class keeping nuclear polarisation
+    tensor.
+  o G4Nucleus, G4Bessel and G4LightMedia: use G4Exp, G4Log and G4Pow.
+
+processes/management                             procman-V10-01-03
+--------------------
+- Cleanup source code of messengers.
+- Fixed Coverity defects in G4ProcessTable.
+- Checked for potential never-ending loops.
+
+processes/optical                                op-V10-01-03
+-----------------
+- Checked for potential never-ending loops.
+
+run                                              run-V10-01-10
+---
+- Added new G4MultiSensitiveDetector functionality.
+
+track                                            track-V10-01-07
+-----
+- Added verbosity to G4VParticleChange and G4ParticleChange for the case
+  of event abortion.
+
+visualization                                    vis-V10-01-13
+-------------
+- management:
+  o Re-implemented graphics system fallback strategy. A graphics system may
+    have more than one nickname. This is used for finding a fallback graphics
+    systems when, for example, a Qt session is requested but the user has not
+    instantiated a Qt session, or when interactive graphics systems are
+    prohibited, as in batch mode. This allows the user to run an application
+    that is fully configured with all available graphics systems, even under
+    circumstances for which the primary graphics system is inappropriate. For
+    example, it allows one to make a image with these commands in a batch
+    macro:
+      /vis/open OGL
+      /vis/drawVolume
+      /vis/ogl/export
+- modeling:
+  o G4PhysicalVolumeSearchScene.cc: minor improvement; replaced an assignment
+    by a reference.
+- OpenGL:
+  o Improved graphics system fallback strategy: implemented
+    IsUISessionCompatible() in G4OpenGLQt and G4OpenGLXm; Qt not allowed
+    unless a Qt session has been instantiated; interactive graphics systems
+    (Qt, Xm) are not allowed in batch.
+  o Fixed minor problem for Qt driver: open/close icons on scene tree/viewer
+    properties and pick were not good at start
+  o Minor improvements to the interface on scene tree/viewer properties and
+    pick item menu.
+  o Fixed bug when launching OGL driver from a macro file (in batch mode).
+- OpenInventor:
+  o G4OpenInventor: added IsUISessionCompatible(); set OI graphics system
+    not compatible with a batch job.
+
+data sets
+---------
+- G4EMLOW-6.45:
+  o Upgraded files for Goudthmit-Sounderson multiple-scattering model in
+    the module 'msc_GS_2015'.
+
+examples                                         examples-V10-01-08
+--------
+- Updated reference outputs.
+- advanced/microbeam (microbeam-V10-01-03)
+  o Added stronger constraints on SetMinimumEpsilonStep() and
+    SetMaximumEpsilonStep().
+  o Switched to use G4UIExecutive.
+- extended/analysis/AnaEx01 (AnaEx01-V10-01-08)
+- extended/analysis/AnaEx02 (AnaEx02-V10-01-02)
+- extended/analysis/AnaEx03 (AnaEx03-V10-01-02)
+  o Introduced meaningful histograms and ntuple names instead of numbers
+    in all AnaEx0N examples and use histogram ids starting from 0.
+  o Simplified HistoManager class and fixed function names to follow 
+    coding guidelines
+  o Updated hbook for developments in analysis category.
+- extended/electromagnetic/TestEm5 (testem5-V10-01-02)
+  o DetectorConstruction: do not remove volumes when sizes are changed.
+  o SteppingVerbose: restored usage of this class.
+  o TrackingAction: cleanup logic of transmitted/reflected particles.
+- extended/electromagnetic/TestEm8 (testem8-V10-01-04)
+  o PhysicsList: removed configuration of PAI models via G4EmConfigurator
+    and left only method via UI command; set default verbosity to zero to
+    reduce length of reference output; fixed initialisation of StepMax in
+    MT mode.
+  o DetectorConstruction: allowed to change geometry sizes between runs.
+  o TestParameters: added parameters needed for ALICE TRD simulation.
+  o Updated macro files.
+- extended/exoticphysics/monopole (monopole-V10-01-00)
+  o Removed EventAction and EventActionMessenger classes, now obsolete, and 
+    replaced "/testex/event/printModulo" UI commands in macros with 
+    "/run/printProgress".
+- extended/exoticphysics/phonon (phononExample-V10-01-01)
+  o XAluminumElectrodeHit: make simple container with public data members.
+  o XAluminumElectrodeSensitivity: improved MT robustness, make HC local,
+    make file streams shared-static, with protective mutexes.
+  o Updated output reference logs.
+- extended/field/field01 (fieldex01-V10-01-02)
+- extended/field/field02 (fieldex02-V10-01-02)
+- extended/field/field03 (fieldex03-V10-01-00)
+  o Removed EventActionMessenger classes, now obsolete, and replaced
+    "/event/printModulo" UI commands in macros with "/run/printProgress".
+  o Code cleanup.
+- extended/hadronic/Hadr01 (exhadr01-V10-01-00)
+  o PhysicsList: updated according to developments in reference physics-lists.
+- extended/medical/dna (exdna-V10-01-03)
+- extended/medical/dna/dnaphysics (dnaphysics-V10-01-01)
+  o Switched to use G4UIExecutive.
+- extended/medical/dna/range (range-V10-01-00)
+  o New example showing how to calculate range of electrons in liquid water
+    using the Geant4-DNA physics processes and models.
+- extended/medical/dna/svalue (svalue-V10-01-07)
+  o Updated README.
+- extended/medical/dna/wvalue (wvalue-V10-01-01)
+  o New example showing how to calculate w in liquid water for e- using
+    the Geant4-DNA physics processes and models. 
+- extended/parallel/MPI (MPI-V10-01-20)
+  o New functionalities shown in exMPI03: merging of command line scorers
+    via MPI::Pack; merging of user data associated to Run.
+  o Optimized merging for G4Run and scorer.
+  o Improved CMake scripts for standalone use: allow for library
+    and examples to be built together.
+- extended/persistency/gdml/G02 (G02-V10-01-00)
+  o Added mbb.geom mbb.tree to G02_SCRIPTS.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-01-04)
+  o Removed EventMessenger classe, now obsolete, and replaced
+    "/event/printModulo" UI commands in macros with "/run/printProgress".
+- extended/radioactivedecay/rdecay02 (rdecay02-V10-01-03)
+  o Updated README.
+
+tests                                            tests-V10-01-08
+-----
+- Updated reference outputs and tools.
+- tests/test03 (test03-V10-01-04)
+  o Updated hbook test/scripts.
+- tests/test04 (test04-V10-01-05)
+- tests/test11 (test11-V10-01-01)
+  o Use parameterised volume for changing material of target box.
+- tests/test17 (test17-V10-01-00)
+  o Use Opt3 physics-list in the default macro.
+- tests/test31 (test31-V10-01-00)
+  o PhysicsList: added GS, SS, WVI options.
+- tests/test46 (test46-V10-01-00)
+  o Added TrackingAction and added ntuples with transfer energy depositions
+    in ECAL and HCAL.
+- tests/test54 (test54-V10-01-03)
+  o TrackingAction: added protection against zero scattering angle.
+- tests/test61 (test61-V10-01-00)
+- tests/test65 (test65-V10-01-00)
+  o Use parameterised volume for changing material of target box.

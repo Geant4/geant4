@@ -1,0 +1,339 @@
+
+                       geant4-10-01-ref-09
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated configuration setups for MacOSX 10.11 El Capitan.
+ o Introduced C++11 features in analysis module. Added classes for common
+   handling of tools objects to avoid code duplication.
+ o Added MixMax random engine classes implementing the "Matrix Generator
+   of Pseudorandom Numbers", as described in J. Compt. Phy. 97, 573 (1991)
+   in internal CLHEP module.
+ o Removed internal USolids module; now requiring external installation
+   of the USolids/VecGeom package.
+ o Enabled use of divisions in MT mode.
+ o Fixed logic error in G4MultiLevelLocator for keeping consistent candidate
+   intersection.
+ o Added stationary regime to all inelastic models of DNA processes.
+ o Fix to increase number of scattering for thin layers in
+   G4GoudsmitSaundersonMscModel.
+ o First merging of classes between neutron_hp and particle_hp modules.
+ o New data sets G4EMLOW-6.47 and G4ENSDFSTATE-1.1.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 10.1.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-29
+-----
+- Only allow use of system USolids, i.e. external installation of the package.
+- Updated Apple Clang detection to work on Xcode-7.                          (*)
+- Correction to allow for both static and shared libs to be built on Windows.
+- Updated data-sets to use G4EMLOW-6.47 and G4ENSDFSTATE-1.1.
+  Export and use G4ENSDFDATA dataset and environment variable. It will become
+  the default to use this dataset so requires export.
+
+config                                           config-V10-01-06
+------
+- Updated X11 settings in Darwin-clang.gmk and Darwin-g++.gmk for MacOSX 10.11
+  El Capitan; replaced X11R6 with X11.
+- Use USolids/VecGeom as external package installation only.
+  If $G4GEOM_USE_USOLIDS is set, it is mandatory setting the path to
+  the external USolids/VecGeom installation with $USOLIDS_BASE_DIR.
+
+analysis                                         analysis-V10-01-40
+--------
+- Updated to g4tools 1.24.2: added ability to handle old MPI_[Pack,UnPack]
+  signature; Coverity fixes. Use tools ntuple column base type (icol, iobj).
+  Simplified definitions of G4TNtupleManager pure virtual functions
+  See History_tools for the complete list of modifications.
+- Added  G4AnalysisOutput type (as class enum) and G4AnalysisManager functions
+  needed to connect analysis to Geant4 scorers.
+- Implemented 'setPlotting' commands and added G4HnManager::SetPlotting()
+  function to set plotting to all objects.
+- Introduced C++11 features. Added classes for common handling of tools
+  objects to avoid code duplication. Improved G4XNtupleManager classes;
+  introduced template functions to avoid code duplication and added
+  G4TNtupleManager class template with a common implementation for all
+  output types.
+- G4BaseToolsManager class replaced with G4Analysis namespace utility
+  functions, defined in G4BaseHistoUtilies.
+- Added new sub-category parameters with first implementation of
+  G4ParameterManager (still to be finalized).
+- Fixed plotting in more pages.
+- Removed G4CsvNtupleManager.icc file, not used.
+
+digits_hits                                      digits_hits-V10-01-01
+-----------
+- Removed spurious printout.
+
+externals                                        externals-V10-01-17
+---------
+- CLHEP:
+  o Added MixMax random engine classes implementing the "Matrix Generator
+    of Pseudorandom Numbers", as described in J. Compt. Phy. 97, 573 (1991).
+- expat:
+  o Upgraded source code to expat 2.1.0.
+- usolids:
+  o Removed internal USolids module. Now USolids/VecGeom can be used only as
+    external installation.
+
+geometry
+--------
+- divisions (geomdiv-V10-01-07):
+  o Fix for use of rotation matrix in G4VDivisionParameterisation in         (*)
+    MT-mode; use thread-local pointer for rotation matrix as member of the
+    class G4VDivisionParameterisation and set it to suto-delete.
+    Removed unnecessary thread-local verbose flag.
+    Addressing problem reports #1743 and #1758.
+  o Set as unsupported divisions of polycone and polyhedra in MT-mode.       (*)
+- management (geommng-V10-01-06):
+  o In G4VSolid, moved EstimateCubiVolume() and EstimateSurfaceArea() to
+    public section for specific use-cases and customisation of precision.
+  o Protected compilation of G4USolid class with G4GEOM_USE_USOLIDS flag.
+  o Replaced use of sprintf with C++ streams in G4AffineTransform.
+- navigation (geomnav-V10-01-31):
+  o G4MultiLevelLocator::EstimateIntersectionPoint():                        (*)
+    * Fix for logic error in keeping consistent candidate intersection.
+      Copes with case that a candidate intersection is not found in the next
+      segment (typically in the 'second half' part).
+    * Revised condition of 'while' loop which ensures that a new candidate
+      intersection exists. Corrected the resetting of 'first_section' flag.
+  o G4VIntersectionLocator: added new logging methods & revised interfaces.  (*)
+  o Removed debug printouts and code cleanup.                                (*)
+- solids (geomsolids-V10-01-00)
+  o Protected compilation of USolid wrappers with G4GEOM_USE_USOLIDS flag.
+
+global                                           global-V10-01-21
+------
+- Added string length check in G4String::operator==().                       (*)
+
+parameterisations/gflash                         gflash-V10-01-00
+------------------------
+- Fix for Zeff wrongly computed as ( W1*Z2 ) + ( W2*Z1 ), with Z1 and Z2     (*)
+  swapped. Addressing problem report #1719.
+
+particles                                        particles-V10-01-12
+---------
+- Clean up of G4IonTable class; simplified GetLifeTime() and make sure
+  worker threads know G4NuclideTable.
+- Introducing a utility method G4IonTable::GetLifeTime(A,Z,E), returning
+  the lifetime of a nuclide without instantiating a G4Ion object.
+- Added parent_polarization to G4VDecayChannel
+- Fixed Coverity defects.
+
+persistency/gdml                                 gdml-V10-01-24
+----------------
+- Use relaxed precision constant for matrix to angle formula evaluation      (*)
+  in G4GDMLWriteDefine, to allow for proper treatment of singularities.
+  Fixes issues of misplaced volumes in exported geometries of complex
+  detectors.
+- Rectify rotation matrices in reading and writing GDML files to reduce      (*)
+  spurious roundoff errors in stored values.
+- Protected compilation of G4MultiUnion wrapper with G4GEOM_USE_USOLIDS flag.
+
+physics_lists
+-------------
+- constructors/decay (phys-ctor-decay-V10-01-04):
+  o Added G4Gamma::GammaDefinition() to G4SpinDecayPhysics::ConstructParticle().
+- constructors/electromagnetic (phys-ctor-em-V10-01-20):
+  o Define 'fluo' flag in constructors of all EM constructors.
+  o G4EmStandardPhysics_option3, G4EmStandardPhysicsWVI,  
+    G4EmStandardPhysicsSS, G4EmStandardPhysicsGS: use
+    G4LivermorePhotoElectricModel and G4KleinNishinaModel.
+  o G4EmStandardPhysics, G4EmStandardPhysics_option1,2: set new Urban
+    multiple-scattering lateral displacement off.
+- constructors/gamma_lepto_nuclear (phys-ctor-glnuclear-V10-01-02):
+  o Fixed text in History (problem report #1788).
+- lists (phys-lists-V10-01-09)
+  o G4PhysListFactory: added extra EM option "_GS" where 
+    G4GoudsmithSoundersonMscModel is used for e+-; registered
+    new QGSP_BIC_AllHP physics list to mirror original factory.
+  o FTFP_BERT_TRV: switch off (temporarily, for the release 10.2) low-mass
+    diffraction dissociation used in G4HadronHElasticPhysics.
+
+processes/cuts                                   procuts-V10-01-05
+--------------
+- G4VRangeToEnergyConverter: added back call to Reset() in destructor.
+
+processes/decay                                  decay-V10-01-04
+---------------
+- Fix for spin treatment in decay in-flight. Addressing problem report #1783.
+
+processes/electromagnetic/dna                    emdna-V10-01-38
+-----------------------------
+- Added stationary regime to all inelastic models.
+- Updated ion selection in G4DNARuddIonisationExtendedModel for Z>2.
+- Added proton ionisation scaling in G4DNABornIonisationModel1* classes.
+
+processes/electromagnetic/lowenergy              emlowen-V10-01-11
+-----------------------------------
+- Updated G4UAtomicDeexcitation for Bearden UI command.
+  Cleanup initialisation, use only G4EmParameters.
+- Fixed cross-section names in G4UAtomicDeexcitation, G4empCrossSection
+  and G4teoCrossSection.
+- G4PenelopeIonisationModel: use G4EmParameters.
+- Checked code for potential never-ending loops.
+
+processes/electromagnetic/polarisation           empolar-V10-01-01
+--------------------------------------
+- G4PolarizedCompton, G4ePolarizedIonisation, G4eplusPolarizedAnnihilation:
+  changed initialisation taking into account MT mode; added method
+  ComputeSaturationFactor() used in mean-free-path and step-limit corrections;
+  removed PreparePhysicsTable() method (use one from the base class); fixed
+  computation of the value of number of interaction lengths left which is
+  responsible for the problem report #1698.
+- G4PolarizedComptonModel: revised do/while loop in sampling of gamma
+  scattering angle.
+
+processes/electromagnetic/standard               emstand-V10-01-34
+----------------------------------
+- G4UrbanMscModel: modification in new lateral algorithm; bug fix for cases
+  of extreme small steps.
+- G4GoudsmitSaundersonMscModel: fix to increase number of scattering for
+  thin layers.
+
+processes/electromagnetic/utils                  emutils-V10-01-31
+-------------------------------
+- G4EmParameters, G4EmParametersMessenger: define allowed names for PIXE
+  cross-sections and to multiple-scattering step limits; set by default usage
+  of Bearden files for level energies. Fixed cross-sections names.
+- G4VAtomDeexcitation, G4EmProcessOptions: use only G4EmParameters for
+  de-ecitation module parameters.
+- added UI command for Bearden files in G4VAtomicDeexcitation, G4EmParameters
+  and G4EmParametersMessenger.
+- G4VMscModel: compute distance to boundary even if a particle is inside the
+  world volume (identified use-case when the world volume is filled not by
+  vacuum but some material).
+- G4VEmProcess, G4VEnegryLossProcess: avoid destruction of 
+  G4PhysicsModelCatalog at end of run.
+- Fixed Coverty defects; code cleanup.
+  In all files use 'nullptr' to initialise pointers.
+- Checked code for potential never-ending loops.
+
+processes/hadronic
+------------------
+- management (hadr-man-V10-01-05)
+  o G4HadronicProcessStore: print "/n", i.e. "per nucleon", in the kinetic
+    energy limits of hadronic models in the case of ions.
+    Addressing problem report #1775.
+  o Replace condition in G4HadronicProcess::BiasCrossSectionByFactor()
+    with initial capital letter for strings being compared. 
+    Addressing problem report #1740.
+- models/binary_cascade (had-binary-V10-01-08)
+  o Migrated code to use G4Exp, G4Log, and G4Pow.
+- models/coherent_elastic (hadr-cohe-V10-01-14)
+  o G4LMsdGenerator: fixed uninitialized variable responsible for event
+    non-reproducibility.
+- models/neutron_hp (hadr-hpn-V10-01-20)
+  o First merging of classes with particle_hp module.
+- models/particle_hp (hadr-hpp-V10-01-22)
+  o First merging of classes with neutron_hp module.
+- models/radioactive_decay (radioactive_decay-V10-01-19)
+  o G4ITDecay: fix memory leak of G4Fragment objects.
+    Addressing problem report #1787.
+  o G4RIsotopeTable: added object name in constructor; removed G4RIsotopeTable
+    (now redundant) and all associated pointers from G4RadioactiveDecay.
+  o Changed G4ProtonDecayChannel by G4ProtonDecay.
+- processes (hadr-proc-V10-01-03)
+  o Changed default argument of G4He3InelasticProcess constructor to avoid
+    confusion with triton. Addressing problem report #1782.
+- stopping (hadr-stopping-V10-01-04)
+  o G4AntiNeutronAnnihilationAtRest: migration to G4Exp, G4Log and G4Pow.
+
+processes/optical                                op-V10-01-05
+-----------------
+- Checked code for potential never-ending loops.
+  Fixed Coverity defect in G4OpBoundaryProcess.
+
+run                                              run-V10-01-11
+---
+- Fixed bug for G4MultiSensitiveDetector functionality.
+
+track                                            track-V10-01-10
+-----
+- Fix in G4ParticleChange::UpdateStepForPostStep().
+- Added GetNumberOfSecondariesInCurrentStep() method to G4Step.
+- Removed verbosity in G4VParticleChange and G4ParticleChange.
+
+visualization                                    vis-V10-01-16
+-------------
+- management:
+  o Improvements to help and verbosity printing.
+  o New commands for multi-threading:
+    /vis/multithreading/actionOnEventQueueFull
+    /vis/multithreading/maxEventQueueSize.
+  o Added "light" representation to /vis/scene/add/magneticField.
+- modeling:
+  o Added "light" representation to /vis/scene/add/magneticField.
+
+data sets
+---------
+- G4EMLOW-6.47:
+  o Added directories livermore/tripdata and livermore/pairdata used by
+    the new Livermore polarized gamma models.
+- G4ENSDFSTATE-1.1:
+  o Fixed missing ground state of Cl35.
+  o Fixed duplicated entry for ground state of 21N.
+  o Fixed formatting in ground state of 223Rn.
+
+examples                                         examples-V10-01-09
+--------
+- Updated reference outputs.
+- advanced/iort_therapy (iort_therapy-V10-01-00)
+  o Migrated to use g4tools.
+- advanced/xray_fluorescence (XrayFluo-V10-01-00)
+  o Updated livermore.mac macro.
+- extended/electromagnetic/TestEm3 (testem3-V10-01-02)
+  o TestEm3: use default 4 threads, improved vis.mac macro.
+  o PhysListEmStandard: use G4EmParameters.
+- extended/electromagnetic/TestEm8 (testem8-V10-01-05)
+  o Use one thread for interactive mode; improved vis.mac macro.
+- extended/electromagnetic/TestEm9 (testem9-V10-01-00)
+  o Applied code guidelines, removed tabulation.
+- extended/electromagnetic/TestEm13 (testem13-V10-01-00)
+- extended/electromagnetic/TestEm14 (testem14-V10-01-00)
+  o DetectorConstruction::SetMatetial(): allow NIST materials.
+- extended/medical/DICOM (DICOM-V10-01-01)
+  o Fixed coding guidelines (long lines).
+- extended/medical/dna (exdna-V10-01-04)
+  o Fixes in Doxygen documentation.
+- extended/medical/dna/dnaphysics (dnaphysics-V10-01-02)
+  o Added 'ignoreCut' UI command in dnaphysics.in macro.
+- extended/medical/dna/microdosimetry (microdosimetry-V10-01-00)
+- extended/medical/dna/pdb4dna (pdb4dna-V10-01-02)
+- extended/medical/dna/range (range-V10-01-01)
+- extended/medical/dna/svalue (svalue-V10-01-08)
+- extended/medical/dna/wvalue (wvalue-V10-01-02)
+  o Applied code guidelines.
+- extended/parameterisations/Par02 (expar02-V10-01-06)
+  o Migrated to MT-mode.
+- extended/persistency/P03 (exampleP03-V10-01-01)
+  o Removed ExTGPhysicsList class.
+
+tests                                            tests-V10-01-09
+-----
+- Updated reference outputs and tools.
+- tests/test03 (test03-V10-01-10)
+  o Temporarly disabled filling of ntuple string columns.
+- tests/test18 (test18-V10-01-01)
+  o Tst18RunAction: fixed output formatting.
+- tests/test19 (test19-V10-01-07)
+  o Added histograms for testing model in the "Mu2e way", theta spectra
+    in specific momentum bins.
+  o Minor cleanups and updated scripts.
+- tests/test23 (test23-V10-01-12)
+  o Export more HARP data (from test35): C, Cu, Al, Pb.
+  o Added testing of Shielding&ShieldingM, and corresponding Mu2e-like 
+    comparison vs. HARP data (theta-spectra in specific momentum bins).
+  o Updated scripts.
+- tests/test47 (test47-V10-01-09)
+- tests/test48 (test48-V10-01-06)
+  o Updated scripts.
+- tests/test67 (test67-V10-01-01)
+  o PhysListEmPenelope: use G4EmParameters instead of G4EmProcessOptions.
+- tests/test75 (test75-V10-01-07)
+  o Updated scripts.

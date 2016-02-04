@@ -10,7 +10,6 @@ Major development/fixes included since the last development tag are:
    volume.
  o New helper class G4EmModelActivator to activate PAI, MicroElec
    and DNA models per G4Region.
- o Setting 'particle_hp' as default model in place of neutron_hp.
  o Implemented correct coupling of FTF with BIC.
  o Updated data sets to G4EMLOW-6.44.
 
@@ -279,7 +278,6 @@ processes/hadronic
   o Use G4Threading::IsMasterThread() instead of !G4Threading::IsWorkerThread().
   o Corrected GNUmakefile for inclusion of internal zlib.
 - models/particle_hp (hadr-hpp-V10-01-09)
-  o Setting 'particle_hp' as default for a while.
   o Fixing problem of possible infinite loop in G4ParticleHPEnAngCorrelation.
   o Fixed rare core dump in thermal scattering.
   o Uncomment out para/ortho hydrogen and liquid/solid methane.

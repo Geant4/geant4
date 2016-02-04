@@ -1,0 +1,474 @@
+
+                       geant4-10-02-ref-00
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Use CMake Compile Features to setup C++ Standard in CMake configuration.
+ o Fix in G4MultiLevelLocator for avoiding fatal expection for exceeding max
+   steps in intersection point estimation.
+ o Added specialised implementation for GetCubicVolume() in G4TessellatedSolid.
+ o Migrated generic biasing to use G4VAuxiliaryTrackInformation.
+ o G4LivermoreIonisationModel: increased intrinsic low limit from 10 to 12 eV.
+ o Removed 'neutron_hp' hadronic model and completed migration to 'particle_hp'.
+ o Updated LEND code to LEND v1.3.
+ o Increased limit for multi-fragmentation model from 4 to 400 GeV.
+   Added prototype of gamma transition in G4PhotonEvaporation with correlated
+   gamma emission.
+ o New version of CLHEP required, CLHEP-2.3.1.1.
+ o New data sets G4PhotonEvaporation-3.2 and G4RadioactiveDecay-4.3.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 10.1.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-41
+-----
+- Use CMake Compile Features to setup C++ Standard.
+  Removed setup of standard selection via compiler version checking.
+  Created list of compile features required by Geant4; For release 10.2,
+  do not include
+  - cxx_deleted_functions
+  - cxx_generalized_initializers
+  - cxx_constexpr
+  - cxx_inheriting_constructors
+  to provide backward compatibility with Visual Studio 2013 (MSVC 18).
+  Maintain GEANT4_BUILD_CXXSTD option to allow user to choose between
+  C++11 and C++14 standards. When newer standard is chosen, require that
+  compiler supports at least one feature from that standard, and add all
+  supported features of that standard to the required list.
+- Updated setting of flags and standard used to obtain information from
+  compile features.
+- Added TOOLS_FONT_PATH to test environment when Freetype support enabled.
+- Updated FindROOT.cmake script to provide compatibility with Root-6 and
+  allow usage of ROOTConfig.cmake, if available.
+- Corrected checking of Intel compiler to use better CMAKE_CXX_COMPILER_ID
+  variable.
+- Changed default build mode for single config generators to RelWithDebInfo
+  to match testing system and UNIX conventions.
+- Added new MSVC only option GEANT4_BUILD_MSVC_MP, defaulting to OFF.
+  When ON, it prepends /MP to CMAKE_CXX_FLAGS to enable file level parallel
+  compilation on Windows.
+- Allow user to force search for Qt4 only when GEANT4_USE_QT is selected.
+  Requested on HN User Forum #1766.
+- Put CLHEP version 2.3.1.x as the minimum required.
+- Updated data-sets to use G4PhotonEvaporation-3.2 and G4RadioactiveDecay-4.3.
+
+config                                           config-V10-01-08
+------
+- binmake.gmk: added "analysis/parameters/include" to INCFLAGS.
+
+environments                                     envs-V10-01-01
+------------
+- Updates in G4Py for 10.2 release, according to changes of class interfaces.
+- Added exported methods as suggested in enhancement request #1613.
+- Updated CMakeLists.txt for C++11 migration and minimum required version for
+  CMake to 3.3.
+
+analysis                                         analysis-V10-01-47
+--------
+- Updated to g4tools 1.26.2: see History_tools for the complete list of
+  modifications.
+- Fixed default viewer settings and finalized supported plotting
+  configurations; extended viewplot and set limits for layout parameters
+  which can be changed via UI commands.
+- Fixed handling of n-tuples created in MT mode on master thread; this fixes (*)
+  the problem reported in Hypernews Analysis Forum (#495) and the problem
+  of deleting non-empty Root file containing only n-tuples.
+- Fixed G4Parameter constructor.
+
+externals                                        externals-V10-01-19
+---------
+- CLHEP: synchronised with release 2.3.1.1.
+  Added MixMaxRng to Randomize.h.
+
+geometry
+--------
+- magneticfield (field-V10-01-15):
+  o Added check against number of iterations in                              (*)
+    G4ChordFinder::FindNextChord(), to identify potential cases of lack
+    of convergence.
+  o Added explanation comment in G4MagHelicalSteper.                         (*)
+- navigation (geomnav-V10-01-35):
+  o G4MultiLevelLocator::EstimateIntersectionPoint(): replaced fatal error   (*)
+    for exceeding max steps with warning. In addition it returns immediately,
+    giving the current progress as the 'Recalculated End Point'. This signals
+    'looping' for too many steps.
+    G4PropagatorInField detects this condition, and identifies it as a
+    'Looping Particle' which is then flagged.
+    The calling class (Transportation, PathFinder) is expected to stop the
+    tracking of this particle after a few of these steps.
+    Addresses issues seen by ALICE.
+- solids/specific (geom-specific-V10-01-15):
+  o Added specialised implementation for GetCubicVolume() in                 (*)
+    G4TessellatedSolid.
+    Added debug printouts withing G4SPECSDEBUG for DistanceToIn/Out(p,v) to
+    identify potential wrong responses.
+
+global                                           global-V10-01-25
+------
+- Enabled units liter, L, dL, cL, mL in G4SystemOfUnits.hh and G4UnitsTable.
+  Requires new CLHEP version 2.3.1.1.
+- Coverity fix in G4UniformRandPool.
+- Updated dates and tag-ID for release 10.2.
+
+intercoms                                        intercoms-V10-01-03
+---------
+- Fixed Coverity defects in G4UImanager.
+
+materials                                        materials-V10-01-14
+---------
+- G4Material: rolled back equal operators from private to public in order
+  not to break public API.
+
+particles                                        particles-V10-01-18
+---------
+- Added methods to cleanly delete particle dictionaries when worker
+  threads are deleted.
+- Fix for Windows in G4NuclideTable, removed static data member.
+- Added messenger for G4NuclideTable.
+
+physics_lists
+-------------
+- builders (phys-builders-V10-01-04):
+  o G4NeutronHPBuilder: migrated to 'particle_hp' module and renamed
+    G4NeutronPHPBuilder.
+- constructors/decay (phys-ctor-decay-V10-01-05):
+  o Migrated to 'particle_hp' module.
+- constructors/electromagnetic (phys-ctor-em-V10-01-22):
+  o G4EmStandardPhysicsSS: allowing Mott correction for e-.
+- constructors/factory (phys-ctor-fact-V10-01-00):
+  o Migrated to 'particle_hp' module.
+- constructors/gamma_lepto_nuclear (phys-ctor-glnuclear-V10-01-03):
+  o G4EmExtraPhysics: removed use of G4AutoDelete.
+- constructors/hadron_elastic (phys-ctor-helastic-V10-01-05):
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V10-01-05):
+- constructors/ions (phys-ctor-ions-V10-01-00):
+  o Migrated to 'particle_hp' module.
+- constructors/limiters (phys-ctor-limiters-V10-01-04):
+  o Add utility methods to G4GenericBiasingPhysics for selection of
+    particles to bias.
+  o Migrated to 'particle_hp' module.
+- constructors/stopping (phys-ctor-stopping-V10-01-00):
+  o Migrated to 'particle_hp' module.
+- lists (phys-lists-V10-01-10)
+  o Migrate responsibility for pulling the $PHYSLIST down to G4PhysListRegistry.
+  o Allow user to set a preferred default in case $PHYSLIST is not set;
+    initial value (and value when set to "") is system default "FTFP_BERT".
+  o Migrated to 'particle_hp' module.
+- util (phys-util-V10-01-00):
+  o Migrated to 'particle_hp' module.
+
+processes/biasing
+-----------------
+- generic (proc-biasgen-V10-01-01):
+  o Migrated to use G4VAuxiliaryTrackInformation: creation of
+    G4BOptrForceCollisionTrackData and rewrite of G4BOptrForceCollision biasing
+    operator, removing many state variables used for bookeeping of tracks
+    which is now achieved in much simpler way via G4VAuxiliaryTrackInformation.
+    Comes together with related logic re-writing.
+  o Fixed initialization of model IDs in MT mode.
+    Prevent "over initialization" of operators.
+  o Removed dependency on 'management' module.
+- management (proc-biasmng-V10-01-00):
+  o Migrated to use G4VAuxiliaryTrackInformation: removed classes
+    G4BiasingTrackData and G4BiasingTrackDataStore.
+    Removed no longer applicable methods in G4VBiasingOperator.
+
+processes/electromagnetic/dna                    emdna-V10-01-55
+-----------------------------
+- Renamed G4DNAOneStepSolvatationModel to G4DNAOneStepThermalizationModel.
+  Avoid placing products outside volume of the mother track and delete
+  navigator state when model is deleted.
+- G4MoleculeCounter: fixed bug and made class compatible with
+  G4DNAElectronHoleRecombination.
+  Added a flag to check or not against scheduler time.
+- G4MoleculeTable: no longer store G4MolecularConf as G4MolecularConfMan is
+  taking care of this.
+- Added classes G4VITDiscreteProcess and G4ReactionTableMessenger.
+- Added class G4DNARevertProbability, now used by
+  G4DNAWaterDissociationDisplacer.
+- G4Scheduler: Update time before G4ITStepProcessor::DoIt().
+- Reset leading tracks at the end of the call in G4ITStepProcessor::DoIt().
+- G4ITModelProcessor: added RegisterModel() and GetComputeTimeStep() methods.
+- G4DNAMolecularReactionTable: delete reaction data when table is deleted.
+- G4DNAElectronHoleRecombination: enable using this model even when not 
+  all dissociation products have been defined (they will just not be taken
+  into account).
+- G4DNAWaterDissociationDisplacer: fix and speed up distributions.
+- G4Serialize, G4FastList: code cleanup.
+- Fixed Coverity defects.
+
+processes/electromagnetic/highenergy             emhighenergy-V10-01-04
+------------------------------------
+- Replaced use of variable 'L' in G4eeToHadronsModel.cc to avoid
+  shadowing of new volumetric units.
+
+processes/electromagnetic/lowenergy              emlowen-V10-01-17
+-----------------------------------
+- G4LivermoreIonisationModel: increased intrinsic low limit from 10 eV to 12 eV.
+- G4UAtomDeexcitation: comment out unnecessary G4Exceptions
+- Replaced use of variable 'L' in G4Generator2BN.cc to avoid
+  shadowing of new volumetric units.
+- Fixed Coverity defects.
+
+processes/electromagnetic/standard               emstand-V10-01-41
+----------------------------------
+- Fixed Coverity defect in G4ScreeningMottCrossSection.
+
+processes/electromagnetic/utils                  emutils-V10-01-40
+-------------------------------
+- G4VMultipleScattering: added protection in the algorithm for displacement
+  beyond boundary to avoid crashes in geometry.
+- G4EmParametersMessenger: fixed typos in few UI commands.
+  Added command "/process/msc/UseMottCorrection".
+- G4EmParameters: added 'useMottCorrection' parameter and Get/Set methods.
+
+processes/hadronic                               hadr-V10-01-01
+------------------
+- Removed 'neutron_hp' module and completed migration to 'particle_hp'.
+- cross_sections (hadr-cross-V10-01-37)
+  o G4HadronNucleonXsc, G4ComponentGGHadronNucleusXsc: clean up of kaon-nucleon
+    cross-section vector-arrays, no longer used.
+  o G4CrossSectionDataSetRegistry: added same ad-hoc trick of NeutronHP to
+    ParticleHP models to prevent problem at termination.
+  o First implementation of fast-path (ASCR style) cross-section feature 
+    (currently OFF by default).
+  o Properly treat initialisation of float quantities in G4HadronCrossSections.
+  o Replaced use of variable 'L' in G4ElectroNuclearCrossSection.cc to avoid
+    shadowing of new volumetric units.
+- management (hadr-man-V10-01-06)
+  o Checked for potential never-ending do-while loops in G4HadronicProcess.
+- models/abla (hadr-abla-V10-01-01)
+  o Checked for potential never-ending do-while loops.
+- models/cascade (hadr-casc-V10-01-13)
+  o G4CascadeKplusNChannel: extended to 9-body final states and 32 GeV using
+    same energy bins as G4CascadeKplusPChannel.
+- models/coherent_elastic (hadr-cohe-V10-01-19)
+  o Properly treat initialisation of float quantities.
+  o Fixed Coverity defect in G4ElasticHadrNucleusHE.
+  o Removed unnecessary dependency on neutron_hp.
+- models/de_excitation (hadr-deex-V10-01-63)
+  o G4ExcitationHandler: increased limit for multi-fragmentation model from
+    4 to 400 GeV, so rare cases when a fragment with very high excitation is
+    sent to the de-excitation module are not treated with this model.
+  o G4PhotonEvaporation: added prototype of gamma transition class with
+    correlated gamma emission. Computation of probability of gamma emission
+    does not use level data information (and does not require uploading files);
+    this reduces CPU used by de-excitation module.
+  o G4PhotonEvaporation, G4GammaTransition, G4PolarizedGammaTransition: 
+    added protection against fragments with Z > 100. Added protection
+    against wrong shell index.
+  o G4NuclearLevelData, G4LevelReader: cleanup of reading of the data.
+    Implemented lazy initialisation per isotope (before data for all isotopes
+    for a given Z were uploaded); reduces initial memory footprint.
+  o Fixed level probabilities in G4LevelReader, G4PhotonEvaporation and
+    G4GammaTransition.
+  o Replaced use of variable 'L' in G4LevelReader.cc and
+    G4PolarizationTransition to avoid shadowing of new volumetric units.
+  o More accurate use of G4float, make explicit conversion to G4double
+    when needed, use float const for initialisation of float.
+  o Fixed cases of event non-reproducibility.
+- models/fission (hadr-fission-V10-01-07)
+  o Removed dependency on neutron_hp.
+  o Checked for potential never-ending do-while loops.
+- models/im_r_matrix (had-im_r-V10-01-05)
+  o Migrated code to use fast math functions.
+  o Properly treat initialisation of float quantities.
+  o Checked for potential never-ending do-while loops.
+- models/inclxx (hadr-inclxx-V10-01-06)
+  o Updated to INCL++ v5.2.9.5: added some setters for configuration; added
+    UI commands to control the INCL physics and the coupled de-excitation model;
+    removed INCL_INVERSE_KINEMATICS compile-time symbol.
+  o Omit use of real masses from incl42 physics option.
+  o Fix nuclide name parsing.
+- models/lend (hadr-lend-V10-01-14)
+  o Updated LEND code to LEND v1.3.
+  o fixed case of energy non-conservation in Capture and Inelastic.
+  o Migrated code to use fast math functions.
+  o Checked for potential never-ending do-while loops.
+- models/lepto_nuclear (hadr-lepnuc-V10-01-02)
+  o Migrated code to use fast math functions.
+- models/management (hadr-modman-V10-01-07)
+  o G4HadronicInteractionRegistry: fixed problem at termination for the
+    'particle_hp' model.
+  o Checked for potential never-ending do-while loops.
+- models/particle_hp (hadr-hpp-V10-01-31)
+  o Fixed bug introduced in previous tag -23.
+  o Fix problem in G4InterpolationIterator.
+  o Fixes in G4ParticleHPProduct and G4ParticleHPEnAngCorrelation for solving
+    event reproducibility issues.
+  o Moved header files from old 'neutron_hp' module as typedefs to new
+    types for backward compatibility. Added NeutronHP.History and
+    FissFragGen.History, copies of the History files in the old neutron_hp
+    module.
+  o Migrated code to use fast math functions.
+  o Checked for potential never-ending do-while loops.
+  o Replaced use of variable 'L' in G4ParticleHPThermalScattering.cc and
+    G4PolarizationTransition to avoid shadowing of new volumetric units.
+- models/pre_equilibrium (hadr-pre-V10-01-06)
+  o Fixed compilation problem on icc-16 in G4PreCompoundFragment.
+- models/qmd (hadr-qmd-V10-01-09)
+  o Checked for potential never-ending do-while loops.
+- models/quasi_elastic (hadr-qelastic-V10-01-03)
+  o Migrated code to use fast math functions.
+- models/radioactive_decay (radioactive_decay-V10-01-23)
+  o Fixed cases of energy non-conservation in IT and EC modes due to
+    incomplete atomic relaxation model. Addresses problem report #1756.
+  o G4RadioactiveDecay::DoDecay(): pass parent mass + 30 MeV to
+    G4DecayTable::SelectADecayChannel() in order to account for difference
+    in mass defects between parent and daughter.
+    Addresses problem report #1793.
+  o Removed obsolete class G4BetaFermiFunction and references to it in 
+    G4NuclearDecayChannel.  Addresses problem report #1785.
+- models/rpg (hadr-rpg-V10-01-04)
+  o Migrated code to use fast math functions.
+  o Properly treat initialisation of float quantities.
+- models/util (hadr-mod-util-V10-01-11)
+  o Fixed Coverity defect in G4PolynomialPDF.
+  o Checked for potential never-ending do-while loops.
+- stopping (hadr-stopping-V10-01-05)
+  o G4HadronStoppingProcess: removed call to DeRegistration() to fix
+    memory corruption reported by Valgrind.
+- util (hadr-util-V10-01-02)
+  o Checked for potential never-ending do-while loops.
+
+run                                              run-V10-01-16
+---
+- Added MixMaxRng to the list of possible engines to use in
+  G4UserWorkerThreadInitialization::SetupRNGEngine().
+  Requires installation of CLHEP version 2.3.1.0.
+- Fixed issue for random-number strong-reproducibility in MT mode.
+  Implemented suggestions on improving documentation for new UI command
+  for strong reproducibility.
+- Invoking G4ParticleTable::DestroyWorkerG4ParticleTable() in
+  G4WorkerRunManagerKernel destructor to cleanly delete thread-local
+  particle dictionaries.
+
+visualization                                    vis-V10-01-19
+-------------
+- management:
+  o Introduced use of <chrono> for queue handling in MT mode.
+- OpenGL:
+  o Fixed "SetVisible" problem on various platforms.
+  o G4OpenGLViewer: fixed small problem in picking list.
+- HepRep:
+  o Fixed compilation warnings on Windows/VC-14.
+
+data sets
+---------
+- G4PhotonEvaporation-3.2:
+  o New photon evaporation database meant to be consistent with version
+    4.3 of the radioactive-decay database. Also formatted to remove scientific
+    notation where possible and to remove trailing zeros.
+- G4RadioactiveDecay-4.3:
+  o New files with February 2015 input data from ENSDF and nuclear wallet cards.
+    Q values are computed with QCalc. Data overlapping with those in
+    G4PhotonEvaporation-3.2 and G4ENDSFSTATE are intended to be consistent.
+  o Added proton, neutron emission and spontaneuos fission lines.
+
+examples                                         examples-V10-02-00
+--------
+- Updated reference outputs.
+- advanced/composite_calorimeter (ccal-V10-01-00)
+  o Migrated to use 'particle_hp' module.
+- advanced/hadrontherapy (hadrontherapy-V10-01-03)
+  o General revision and fixed comments.
+- advanced/underground_physics (DMX-V10-01-01)
+  o Migrated to use 'particle_hp' module.
+- basic/B1 (exampleB1-V10-01-03)
+  o B1Run class replaced with a code based on G4Parameter.
+- basic/B3 (exampleB3-V10-01-01)
+  o Split example in two variants of merging data:
+    B3a (new) with the code based on G4Parameter;
+    B3b (as previous B3) with the code based on G4Run.
+- basic/B5 (exampleB5-V10-01-00
+  o Extended n-tuple with two columns of a vector type in order to provide
+    an example of this analysis use case.
+- extended/biasing/GB02 (GB02-V10-01-01)
+  o Biasing scheme evolved to use G4VAuxiliaryTrackInformation.
+    Adapted example to these changes: second OperationApplied() method
+    implemented in GB02BOptrMultiParticleForceCollision.
+  o Code cleanup.
+- extended/electromagnetic/TestEm0 (testem0-V10-01-01)
+  o Fix in DirectAccess.cc.
+- extended/electromagnetic/TestEm1 (testem1-V10-01-03)
+  o Added EM standards physics builders GS, WVI.
+  o Updated physics list description in READMEs.
+- extended/electromagnetic/TestEm2 (testem2-V10-01-03)
+- extended/electromagnetic/TestEm3 (testem3-V10-01-04)
+  o Updated physics list description in READMEs.
+- extended/electromagnetic/TestEm5 (testem5-V10-01-06)
+  o Fix in TrackingAction: transmitted/reflected charged particles should have
+    energy above zero to be included into histograms for transmitted/reflected
+    particles energy and angles at exit.
+  o Updated physics list description in READMEs.
+- extended/electromagnetic/TestEm6 (testem6-V10-01-00)
+  o Added more standard EM physics builders.
+  o Updated physics list description in READMEs.
+- extended/electromagnetic/TestEm11 (testem11-V10-01-03)
+  o Added EM physics builders G4EmStandardPhysicsMP which uses
+    G4DiscreteScatteringModel for e-.
+  o Use G4EmParameters in local Physics List classes.
+  o Improved log output of the test.
+- extended/electromagnetic/TestEm17 (testem17-V10-01-01)
+  o PhysicsList, PhysListEmStandard: fixed upper energy for physics tables.
+- extended/eventgenerator (exEventgenerator-V10-01-00)
+  o Renamed basicPrimary example to userPrimaryGenerator.
+    Added class PrimaryGenerator to it.
+- extended/hadronic/Hadr03 (exhadr03-V10-01-00)
+  o Fix in SteppingAction for setting pointer to hadronic process.
+- extended/hadronic/Hadr04 (exhadr04-V10-01-00)
+- extended/hadronic/Hadr06 (exhadr06-V10-01-00)
+  o Migrated to use 'particle_hp' module.
+- extended/medical/electronScattering2 (exampleES2-V10-01-05)
+  o Removed local physics lists.
+  o Correction to only instantiate VisManager if no macro file is specified
+    on command line.
+- extended/medical/dna/dnaphysics (dnaphysics-V10-01-04)
+  o Use G4EmModelActivator to define DNA physics.
+- extended/medical/dna/microyz (microyz-V10-01-05)
+  o Updated plot.C and microyz.in macro.
+- extended/parallel/MPI (MPI-V10-01-23)
+  o Fixed file descriptions for Doxygen.
+- extended/parallel/ThreadsafeScorers (ThreadsafeScorers-V10-01-02)
+  o New example demonstrating a very simple application where an energy
+    deposit and # of steps is accounted in thread-local (i.e. one instance
+    per thread) hits maps with underlying types of plain-old data (POD) and
+    global (i.e. one instance) hits maps with underlying types of atomics.
+- extended/parameterisations/gflash (exgflash-V10-01-01)
+  o ExGflashPhysicsList replaced with ExGflashPhysics builder
+  o Code clean-up, coding guidelines.
+- extended/persistency (exPersistency-V10-01-01)
+  o Removed obsolete check for GCCXML in CMake configuration and defined
+    Root-6 as minimal version.
+- extended/persistency/P01 (exampleP01-V10-01-02)
+- extended/persistency/P02 (exampleP02-V10-01-02)
+  o Updated documentation and CMake script.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-01-06)
+  o PhysicsList: added LevelTolerance (100*eV) and HalfLife(0.1*ps).
+
+tests                                            tests-V10-02-00
+-----
+- Updated reference outputs and tools.
+- tests/test04 (test04-V10-01-06)
+- tests/test11 (test11-V10-01-02)
+  o Migrated to use 'particle_hp' module.
+- tests/test30 (test30-V10-01-02)
+  o Fixed histograms for elastic scattering.
+  o Migrated to use 'particle_hp' module.
+- tests/test31 (test31-V10-01-01)
+  o Replaced use of variable 'L' to avoid shadowing of new volumetric units.
+- tests/test40 (test40-V10-01-00)
+  o Replaced use of variable 'dL' to avoid shadowing of new volumetric units.
+- tests/test47 (test47-V10-01-10)
+- tests/test48 (test48-V10-01-07)
+  o Migrated to use 'particle_hp' module.
+- tests/test65 (test65-V10-01-03)
+  o Updated for using new LEND v1.3.
+  o Added process, model and cross-sections for gamma incidence.
+  o Migrated to use 'particle_hp' module.
+- tests/test70 (test70-V10-01-06)
+  o Testing G4MoleculeCounter step by step.

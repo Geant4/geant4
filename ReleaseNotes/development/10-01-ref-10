@@ -1,0 +1,336 @@
+
+                       geant4-10-01-ref-10
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Added new GEANT4_USE_FREETYPE option (OFF by default), to allow user to
+   enable Freetype support in analysis library.
+ o Enabled geometry paramerisation by solid type in MT-mode.
+ o Enabled use of object persistency for detector description to wprk with
+   Root-6.
+ o Updated G4NuclideTable, by deleting hard-coded state data, now retrieved
+   from the G4ENSDFSTATE data set.
+ o Use G4ComponentGGHadronNucleusXsc for kaon inelastic cross-sections and
+   ion elastic physics.
+ o Enable G4PromptPhotonEvaporation (now renamed to G4PhotonEvaporation) as
+   the default in hadronic de_excitation.
+ o Temporarily restored QGS string formation as it was in release 10.1.
+ o New data sets G4EMLOW-6.48 and G4ENSDFSTATE-1.2.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 10.1.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-33
+-----
+- Added new GEANT4_USE_FREETYPE option (OFF by default), to allow user to
+  enable Freetype support in analysis library.
+  Added export of TOOLS_FONT_PATH to environment when Freetype support is
+  enabled, pointing to the fonts/ subdirectory of Geant4's share directory.
+- Updated data-sets to use G4EMLOW-6.48 and G4ENSDFSTATE-1.2.
+
+analysis                                         analysis-V10-01-41
+--------
+- Updated to g4tools 1.26.0: added support for using Freetype rendering in
+  plotting. See History_tools for the complete list of modifications.
+- Implemented support for Freetype in G4PlotManager.
+- Added G4PlotParameters and G4PlotMessenger classes which define the plot
+  configuration parameters that can be set via UI commands.
+
+geometry
+--------
+- management (geommng-V10-01-07):
+  o Added shadow pointers to shared data structures in G4LogicalVolume
+    and G4VPhysicalVolume for exclusive use by object persistency.
+- navigation (geomnav-V10-01-33):
+  o G4MultiLevelLocator::EstimateIntersectionPoint(): ensure that splitting  (*)
+    of step (new level / depth) advances the required length by calling
+    G4ChordFinder's AdvanceChordLimited() method instead of AccurateAdvance()
+    of driver, used when adding a new level/depth.
+    Try addressing issue seen by ALICE (non-finishing of step due to poor
+    advances).
+  o Added method in G4VIntersectionLocator to report Immediate Hit           (*)
+    i.e. if the intersection point is within tolerance of the start point.
+    Fixed Coverity defect for non initialised data.
+  o G4NavigationLogger: added method to report issue with normal that        (*)
+    is the result of applying a rotation.
+  o G4NormalNavigation, G4VoxelNavigation: added check of rotated exit       (*)
+    normal.
+- solids/CSG (geom-csg-V10-01-10):
+  o Introduced check in G4Sphere::DistanceToIn(p,v) for concave Theta and    (*)
+    point located on the origin. Also make proper use of radial tolerance in
+    DistanceToOut(p,v).
+  o Fixed Coverity defect in G4CutTubs::GetMaxMinZ().                        (*)
+- solids/specific (geom-specific-V10-01-13):
+  o G4PolyhedraSide: moved internal struct definitions to public section
+    to overcome deficiencies in object-persistency class parsing.
+  o Removed redundant condition in G4Polyhedra and G4polycone                (*)
+    SetOriginalParameters() method.
+- volumes (geomvol-V10-01-05):
+  o Enabled paramerisation by solid type in G4GeometryWorkspace in MT-mode.  (*)
+    Assumes solids being parameterised are declared thread-local in the
+    user's parameterisation class and allocated just once.
+
+global                                           global-V10-01-23
+------
+- G4PhysicsVector, G4Physics2DVector, G4PhysicsOrderedFreeVector:
+  use std::lower_bound() instead of do/while loops.
+  Minor cleanup of the code.
+- G4Pow: added protections against zero value of argument of methods powN(),
+  powA() and A13(). Minor cleanup.
+
+materials                                        materials-V10-01-11
+---------
+- G4Element: always define effective number of nucleons 'fNeff' as
+  fAeff/(g/mole); addressing post on Hadronic Processes Forum on Hypernews
+  #1495; it is recommended to use element->GetN() for average atomic mass,
+  for number of nucleons to use G4lrint(element->GetN()).
+- G4IonisParamMat: use G4Exp, G4Log, all operators moved to private;
+  use double argument to compute A^2/3.
+- G4NistMaterialBuilder: fixed computation of gas density in method
+  ConstructNewGasMaterial().
+- G4Material: some code cleanup.
+
+particles                                        particles-V10-01-15
+---------
+- Updated G4NuclideTable: deleted hard-coded state data, now retrieved from
+  the G4ENSDFSTATE data set. Enabled to change tolerance value for finding
+  state.
+
+physics_lists
+-------------
+- constructors/electromagnetic (phys-ctor-em-V10-01-21):
+  o G4EmStandardPhysicsGS: tuned parameters; now compatible with standard Opt0.
+- constructors/hadron_elastic (phys-ctor-helastic-V10-01-03):
+  o G4IonElasticPhysics: replaced old class G4GlauberGribovCrossSection
+    with new recommended one G4ComponentGGHadronNucleusXsc.
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V10-01-03):
+  o Use G4ComponentGGHadronNucleusXsc for the kaon inelastic cross-sections
+    consistently everywhere (instead of G4GlauberGribovCrossSection).
+    According to LHCb, this class describes well the charged kaon cross
+    section asymmetry.
+- lists (phys-lists-V10-01-10)
+  o LBE: replaced old G4GGNuclNuclCrossSection class with the new recommended
+    one, G4ComponentGGNuclNuclXsc.
+
+processes/electromagnetic/adjoint                emadjoint-V10-01-03
+---------------------------------
+- G4AdjointCSManager: use G4ThreadLocalSingleton pattern, fixed computation
+  of A of an element, added initialisation of all class members in the
+  constructor.
+- Fixed coverity defect in G4VEmAdjointModel.
+
+processes/electromagnetic/dna                    emdna-V10-01-42
+-----------------------------
+- Use standard shared_ptr types instead of old CLHEP wrappers.
+- Fixed issue of vector out-of-bounds in Sanche model.
+- Added base class G4VDNAPTBModel.
+- Removed dynamic_cast to G4VITProcess in G4ITStepProcessor.
+
+processes/electromagnetic/lowenergy              emlowen-V10-01-14
+-----------------------------------
+- Migrated MT-compliant Livermore polarized models for gammas.
+- Upgraded models for pair and triplet production.
+- Replaced G4Exception in G4PenelopeIonisationModel with printout.
+- Checked while/do loop in G4PenelopeBremsstrahlungFS.
+- Requiring G4EMLOW-6.47 or higher.
+
+processes/electromagnetic/polarisation           empolar-V10-01-02
+--------------------------------------
+- G4PolarizedComptonModel: fixed Coverity defect for use of vector of random
+  numbers in sampling of final state.
+
+processes/electromagnetic/standard               emstand-V10-01-40
+----------------------------------
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable: revised model.
+  Requires updated data set G4EMLOW-6.48.
+- G4UrbanMscModel: setting 'facsafety' parameter to 0.6 (was 0.3) to provide
+  some CPU speedup for calorimeter simulation and not affecting calorimeter
+  response.
+- G4UrbanMscModel, G4IonFluctuations, G4MollerBhabhaModel: take from material
+  class the value of effective Z instead of computing it; fixing potantial
+  source of event non-reproducibility.
+- G4hCoulombScatteringModel, G4eCoulombScatteringModel, G4SeltzerBergerModel,
+  G4ICRU73QOModel, G4ICRU49NuclearStoppingModel, G4BraggModel, G4BraggIonModel
+  and G4eBremsstrahlungRelModel: use G4lrint to convert double Z into integer.
+- Use nullptr in models implementation.
+  Use rndmEngine->flatArray(n, rndm) in sampling algorithms.
+- G4IonCoulombScatteringModel, G4hCoulombScatteringModel: fixed recoil
+  kinematics. Addressing problem report #1778.
+- Updated G4ScreeningMottCrossSection and G4eSingleCoulombScatteringModel;
+  make optimal usage of vectors.
+- G4IonCoulombScatteringModel: minor cleanup.
+
+processes/electromagnetic/utils                  emutils-V10-01-35
+-------------------------------
+- G4VMultipleScattering: fixed algorithm of displacement beyond the boundary.
+- G4VEmModel: added new feature, a flag allowing a user to "lock" model
+  parameters protecting from overwrite by default values. Currently needed
+  for the new Goudsmit-Saunderson multiple-scattering model.
+- G4EmCalculator: added special computation of dEdx for ICRU'73 based ion
+  ionisation model. Addressing problem report #1792.
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering, G4VEmModel: added
+  new interfaces for automatic description of processes/models to generate
+  HTML pages.
+- G4EmCorrections: use G4Exp, G4Log, G4pow, G4lrint.
+- G4EmParametersMessenger: made command "/process/em/fluoBearden" active
+  only PreInit state.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-01-28)
+  o Deleted old classes G4GlauberGribovCrossSection, G4GGNuclNuclCrossSection,
+    and replaced them with new, recommended ones G4ComponentGGHadronNucleusXsc
+    and G4ComponentGGNuclNuclXsc, respectively.
+  o Added artificial cross-section data set G4ZeroXS which always replies zero.
+  o G4HadronNucleonXsc: fixed energies for K-p data in order to avoid crash
+     when bounds check is applied.
+  o G4ComponentGGHadronNucleusXsc: added Default_Name() method.
+  o Migrated code to use faster G4Exp, G4Log and G4Pow where possible.
+- models/cascade (hadr-casc-V10-01-12)
+  o G4CascadeCoalescence: added explicit inclusion of                        (*)
+    G4InuclElementaryParticle header to address compiler error from Cray
+    (as reported in Configuration Hypernews Forum #1764).
+- models/coherent_elastic (hadr-cohe-V10-01-15)
+  o G4DiffuseElastic: bug-fix in BuildAngleTable() to improve the angle bin  (*)
+    accuracy at high energies.
+- models/de_excitation (hadr-deex-V10-01-50)
+  o G4Evaporation: enable G4PromptPhotonEvaporation as the default and
+    renamed it G4PhotonEvaporation (old G4PhotonEvaporation class temporarly
+    renamed to G4PhotonEvaporationOLD. Also fixed gamma emission probability.
+  o G4PolarizationTransition: new class for correlated gamma emission.
+  o G4VEvaporationChannel, G4VEvaporationChannel, G4LevelManager: provide
+    extra method GetMaxLevelEnergy() needed for decay channels to distinguish
+    continue and discrete excitation states
+  o G4WilsonAblationModel: fixed Coverity defect.
+  o G4PromptPhotonEvaporation: code cleanup.
+- models/fission (hadr-fission-V10-01-05)
+  o Migration to fast-math functions.
+- models/particle_hp (hadr-hpp-V10-01-23)
+  o Make particle_hp behave the same as neutron_hp when PHP_AS_HP and
+    DO_NOT_ADJUST_FINAL_STATE flags are selected (neutron_hp keeps on
+    applying the adjusting in some places).
+- models/parton_string/qgsm (hadr-qgsm-V10-01-16)
+  o Reversed (temporarily, just for the coming release G4 10.2) the
+    improvements made after 10.1.ref05, in such a way to leave the QGS
+    string formation as it was in G4 10.1 (and before).
+    After release 10.2, previous developments will be resumed.
+    Include check on do-while loops and migration to fast-math function.
+- models/qmd (hadr-qmd-V10-01-08)
+  o Fixed bug in handling forgiven decay in G4QMDCollision.
+  o Migrated to use fast-math functions.
+- models/radioactive_decay (radioactive_decay-V10-01-20)
+  o G4NeutronDecay added to work with the "Neutron" key in the radfiles.
+- models/util (hadr-mod-util-V10-01-09)
+  o G4PolynomialPDF: modifications for correlated gamma emission.
+  o Fixed Coverity defects.
+- processes (hadr-proc-V10-01-03)
+  o Added G4PhotoCaptureProcess and G4PhotoFissionProcess classes.
+
+run                                              run-V10-01-12
+---
+- Fixed typo in exception warning output.
+
+visualization
+-------------
+- management (visman-V10-01-19)
+  o G4VisManager: corrected end-of-run printing for the case of 
+    "/vis/multithreading/actionOnEventQueueFull discard".
+  o G4VisCommandsViewer: improved guidance and confirmation printing for
+    /vis/viewer/save.
+
+data sets
+---------
+- G4EMLOW-6.48:
+  o New files for upgraded version of the Goudthmit-Sounderson multiple
+    scattering model in the sub-directory 'msc_GS'. Removed temporary
+    directory 'msc_GS_2015'.
+- G4ENSDFSTATE-1.2:
+  o Update state data based on ENSDF 09/2015.
+
+examples                                         examples-V10-01-10
+--------
+- Updated reference outputs.
+- advanced/air_shower (air_shower-V10-01-03)
+  o Correction to README.
+- advanced/gammaray_telescope (gammaraytel-V10-01-00)
+  o GammaRayTelIonPhysics: replaced use of G4GGNuclNuclCrossSection
+    with recommended one, G4ComponentGGNuclNuclXsc.
+- advanced/nanobeam (nanobeam-V10-01-00)
+  o Updated analysis script.
+- advanced/underground_physics (DMX-V10-01-00)
+  o DMXPhysicsList: replaced use of G4GGNuclNuclCrossSection
+    with recommended one, G4ComponentGGNuclNuclXsc.
+- extended/analysis/AnaEx01 (AnaEx01-V10-01-09)
+  o Updated hbook for developments in analysis category.
+- extended/electromagnetic/TestEm0 (testem0-V10-01-00)
+  o Removed local SetCutFor*() methods from PhysicsList and 'setCut'
+    command from PhysicsListMessenger, to use '/run/setCut' UI command.
+- extended/electromagnetic/TestEm1 (testem1-V10-01-02)
+- extended/electromagnetic/TestEm2 (testem2-V10-01-02)
+- extended/electromagnetic/TestEm3 (testem3-V10-01-03)
+- extended/electromagnetic/TestEm5 (testem5-V10-01-03)
+- extended/electromagnetic/TestEm7 (testem7-V10-01-01)
+- extended/electromagnetic/TestEm8 (testem8-V10-01-06)
+  o Updated README files.
+- extended/electromagnetic/TestEm9 (testem9-V10-01-01)
+  o Added physics lists G4EmStandardPhysicsGS, SS, WVI.
+- extended/electromagnetic/TestEm11 (testem11-V10-01-01)
+  o RunAction: corrected bin width of histogram #1.
+  o Added EM physics builders G4EmStandardGS, WVI.
+- extended/electromagnetic/TestEm12 (testem12-V10-01-02)
+  o RunAction: corrected bin width of histogram #1.
+  o Updated README files.
+- extended/electromagnetic/TestEm17 (testem17-V10-01-00)
+  o Set default EmParameters in PhysListEmStandard.
+- extended/hadronic/FissionFragment (exExtHadFissFrag-V10-01-01)
+  o Limit number of worker threads of one.
+- extended/medical/electronScattering2 (exampleES2-V10-01-04)
+  o Modifid primary foil parameters by setting class variables and calling
+    G4RunManager [Physics/Geometry]HasBeenModified.
+- extended/medical/dna/clustering (clustering-V10-01-00)
+  o New example simulating protons tracks in liquid water using Geant4-DNA
+    processes and models. Energy deposit are clustered with a dedicated
+    clustering algorithm to assess strand breaks.
+    The default parameters of the clustering algorithm have been tuned to
+    reproduce data published by Francis et al. 2011 Comput. Meth. Programs.
+    Biomed. 2011 101(3).
+- extended/medical/dna/dnaphysics (dnaphysics-V10-01-03)
+- extended/medical/dna/range (range-V10-01-02)
+- extended/medical/dna/wvalue (wvalue-V10-01-03)
+  o Updated analysis script.
+- extended/medical/fanoCavity (fano-V10-01-03)
+- extended/medical/fanoCavity2 (fano2-V10-01-03)
+  o Removed EventActionMessenger class.
+    Replaced printModulo by '/run/printProgress' UI command.
+- extended/parameterisations/Par02 (expar02-V10-01-07)
+  o Fixed deleting of fast simulation models in multi-threaded mode.
+  o Simplified code to set Primary Particle Information.
+- extended/persistency/gdml/G04 (G04-V10-01-01)
+  o Migrated code to support multi-threading.
+- extended/persistency/P01 (exampleP01-V10-01-00)
+- extended/persistency/P02 (exampleP02-V10-01-00)
+  o Upgraded to work with Root-6.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-01-05)
+  o Minor cosmetic in EventAction::EndOfEventAction().
+
+tests                                            tests-V10-01-10
+-----
+- Updated reference outputs and tools.
+- tests/test01 (test01-V10-01-00)
+  o Updated CMake scripts.
+- tests/test03 (test03-V10-01-11)
+  o Updated hbook for developments in analysis category.
+- tests/test14 (test14-V10-01-00)
+  o Tst14DetectorConstruction: update geometry between runs without deletion
+    but only by setting parameters.
+  o PhysicsList: GS, WVI, SS lists use from EM constructors.
+  o PhysListEmStandard: use EM parameters.
+- tests/test33 (test33-V10-01-00)
+  o Tst33PhysicsList: replaced use of G4GGNuclNuclCrossSection
+    with recommended one, G4ComponentGGNuclNuclXsc.
+- tests/test58 (test58-V10-01-01)
+  o PhysicsList: improved definition of ISS physics.

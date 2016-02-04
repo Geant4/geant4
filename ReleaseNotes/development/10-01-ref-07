@@ -1,0 +1,272 @@
+
+                       geant4-10-01-ref-07
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Default to use C++11 builds on compilers supporting it.
+ o Updated g4analysis and g4tools to support MPI.
+ o Upgraded expat and zlib to new versions 2.1.0 and 1.2.8 respectively.
+ o Corrected setup of energy boundaries to G4DNA processes and new
+   development for molecules.
+ o Introduced possibility in INCLXX hadronic model to perform calculations
+   with a limited number of outgoing pions in multi-pion collisions.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 10.1.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-01-17
+-----
+- Always use libc++ with Apple Clang so that std-supporting library is       (*)
+  used for C++11 mode on older Mac systems where libstdc++ is the default.
+- When compiler allows selection of C++ standard and allows C++0x/11,        (*)
+  default to using this standard.
+  To permit transition to C++11, updated std-flag setting rules to only
+  allow C++11 builds with compiler versions that are known to support the
+  features in current use.
+- Migrate output directories for build products to use same layout as
+  install tree. For single mode generators (Makefiles/Ninja), products
+  are output to a 'BuildProducts' subdir of the main binary dir which
+  holds bin/lib directories as derived from requested install dirs.
+  With multimode generators (Xcode/VS), 'BuildProducts' holds an extra
+  directory layer, one per build mode, under which the same bin/lib
+  structure is used.
+
+analysis                                         analysis-V10-01-20
+--------
+- Updated to g4tools 1.23.1:
+  o Finalized interfaces to MPI.
+  o Prepare the ground for plot style files.
+  o See History_tools for the complete list of modifications.
+- Added G4VAnalysisManager::Merge(tools::histo::hmpi*) and G4MMPIToolsManager
+  class which implements histogram & profiles MPI merging using
+  tools/histo/hmpi interface.
+- Fixed G4Analysis::Tokenize() which was failing when processing a string    (*)
+  containing opening double quota without a closing one.
+- Revised while loops.
+
+externals
+---------
+- expat (expat-V10-01-00):
+  o Upgraded to version 2.1.0.
+  o Use pragmas to suppress trivial warnings for GNU and Clang compilers.
+- zlib (zlib-V10-01-01):
+  o Upgraded to version 1.2.8.
+  o Keeping local modifications, like function declarationss, and removed
+    obsolete register keyword; added type casts to fix compilation errors
+    on Windows.
+
+geometry
+--------
+- magnetifield (field-V10-01-12):
+  o Include 'NumberOfVariables' in G4RepleteEofM constructor argument list.
+
+global                                           global-V10-01-15
+------
+- Coverity fix in G4UniformRandPool and bug fixing.
+
+physics_lists
+-------------
+- constructors/electromagnetic (phys-ctor-em-V10-01-16):
+  o G4EmLivermorePhysics, G4EmLowEPPhysics, G4EmPenelopePhysics,
+    G4EmStandardPhysics_option3,4: set lowest e+- energy to 100 eV.
+  o G4EmStandardPhysicsWVI,  G4EmStandardPhysicsSS, G4EmStandardPhysicsGS:
+    set lowest e+- energy to 10 eV
+  o G4EmLivermorePhysics, G4EmLowEPPhysics, G4EmPenelopePhysics,
+    G4EmStandardPhysics_option[1,2,3,4], G4EmStandardPhysicsWVI, 
+    G4EmStandardPhysicsSS, G4EmStandardPhysics, G4EmLivermorePolarizedPhysics,
+    G4EmDNAPhysics_option[1,2,3,4,5]: call G4EmParameters::SetDefaults() in
+    constructor for each electromagnetic physics-list.
+  o Updated G4EmDNAPhysics_option1 for GenericIon usage.
+  o G4DNAPhysics_option5: added Born models for energy regions where
+    Emfietzoglou models do not apply.
+  o G4EmDNAChemistry: adapted for new elastic model.
+    Use G4MolecularConfiguration instead of G4Molecule.
+  o G4EmModelActivator: added Ion elastic model + cosmetics.
+
+processes/electromagnetic/dna                    emdna-V10-01-26
+-----------------------------
+- G4DNA processes: corrected setup of energy boundaries.
+- Added new classes G4ITLeadingTracks, G4ITSteppingVerbose, G4IosFlagsSaver,
+  G4DNAElectronHoleRecombination.
+- Added new UI command '/chem/tracking/verbose 1,2,3...' in 
+  G4VITSteppingVerbose and G4ITSteppingVerbose. 
+- Added methods SetFormatedName(), NewConfiguration(), NewConfiguration(),
+  AddDecayChannel() per G4MolecularConfiguration, Finalize() to
+  G4MoleculeDefinition; replaced AddDecayChannel() for a molecule model. 
+- G4MolecularConfiguration: new configuration can be defined by labels;
+  added Finalize() method and added exception if attempt to modified
+  the G4MolecularConfiguration is done after finalization.
+- G4MolecularDissociationChannel, G4DNAMolecularReactionTable and
+  G4DNAMolecularEncounterStepper: use G4MolecularConfiguration rather 
+  than molecule models.
+- G4Molecule: added constructor where only G4MolecularConfiguration is
+  specified.
+- G4Scheduler: removed entirely track specification from this class.
+  Added GetGun() method.
+- G4ITXProcess: deal with tracks.
+- G4ITTrackingManager is a "service" to start and finish tracking.
+- G4ITModelProcessor, G4ITStepProcessor: added macro to prevent warnings
+  in verbose mode.
+- G4DNADingfelderChargeDecreaseModel: added hole creation.
+- G4DNAEmfietzoglouXModel: specify energy boundaries in constructor.
+- G4DNAEmfietzoglouIonisationModel: removed condition for faster code usage
+  on shell selection.
+
+processes/electromagnetic/lowenergy              emlowen-V10-01-05
+-----------------------------------
+- Fixed issue of over-generation of atomi deexcitation in PenelopeIonisation
+  model when PIXE activated. Addressing problem report #1761.
+- Fixed Coverity defects.
+
+processes/electromagnetic/standard               emstand-V10-01-29
+----------------------------------
+- G4hCoulombScatteringModel, G4WentzelVIRelXSection: fully implemented
+  scattering in CM rest frame of projectile/target
+- G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
+  G4hCoulombScatteringModel: removed low-energy limits from scattering models,
+  because it is now implemented inside ionisation.
+- G4IonCoulombScatteringModel, G4IonCoulombCrossSection: fixed wrong
+  kinematics for the recoil. Addressing problem report #1763.
+  Removed unused class members
+- G4BraggIonModel: fixed non reproducibility problem.
+  Addressing problem report #1771.
+- G4GoudsmitSaundersonTable: fix for problem report #1767.
+- G4ASTARStopping, G4ESTARStopping, G4PSTARStopping: build Spline at
+  initialisation of a vector.
+- G4UrbanMscModel: fix for rare long running event.
+  Updated new lateral correlation algorithm; removed upper limit for
+  computation of e+ correction.
+
+processes/electromagnetic/utils                  emutils-V10-01-22
+-------------------------------
+- G4EmParameters, G4EmParametersMessenger: added extra parameters, accessors
+  and UI commands: dump parameters, lowest energy for e+- and muons/hadrons.
+  Added SetDefaults() method call in constructor.
+- G4VEnergyLossProcess: use lowest energy from G4EmParameters.
+  Minor optimisation at the last step.
+- G4VEmProcess, G4VEnergyLossProcess, G4LossTableManager, G4EmConfigurator:
+  removed tabs and improve code formatting.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-01-17)
+  o G4NeutronInelasticXS, G4NeutronCaptureXS: fixed isotope cross-sections   (*)
+    including retrieve, data management, isotope x-section and isotope
+    selection.
+  o Fixed Coverity defects.
+- models/cascade (hadr-casc-V10-01-10)
+  o G4KaonSampler: modified to 30 bins, finely divided up to 1.5 GeV, very
+    coarsely grained above 10 GeV. Binning optimized to isolate various
+    resonances in Kp and Kn spectra.
+  o G4CascadeKplusPChannel: use new G4KaonSampler binning, with final states
+    tabulated up to 9-body. Should dramatically improve match to data.
+  o Follow new G4cbrt() by moving powers of Z and A out of argument.
+    Lookup table only covers real nuclei (up to about 300 or so).
+  o Migrated "TLS" local buffers in G4InuclSpecialFunctions and G4NucleiModel
+    to use G4AutoDelete mechanism. This removes them as spurious memory leaks
+    at end of job.
+  o Migrated few remaining instances of std::pow, std::log, and std::exp to
+    G4Pow, G4Log, G4Exp)..
+  o Fixed Coverity defects.
+- models/coherent_elastic (hadr-cohe-V10-01-10)
+  o G4LMsdGenerator: improved resonance masses, taking them from
+    G4ParticleTable.
+- models/inclxx (hadr-inclxx-V10-01-02)
+  o Updated to INCL++ v5.2.9.1: introducing possibility to perform calculations
+    with a limited number of outgoing pions in multi-pion collisions.
+    Checked all the while loops in the code and added guards and comments.
+- models/neutron_hp (hadr-hpn-V10-01-17)
+  o Fixed problems at deletion and reproducibility in multi-threading mode.
+  o Adding UI command for changing verbose level.
+  o Code cleanup.
+- models/particle_hp (hadr-hpp-V10-01-20)
+  o Fixed problems at deletion and reproducibility in multi-threading mode.
+  o Adding UI command for changing verbose level.
+  o Fixed problem on UI commands defined in ParticleHPMessenger.
+  o Enable to use dynamically generated materials.
+  o Improved memory consumption.
+  o Code cleanup.
+- models/parton_string/diffraction (hadr-string-diff-V10-01-11)
+  o G4FTFParameters: fixed Valgrind error for uninitialized variables.
+  o Fixed Coverity defects.
+- models/quasi_elastic (hadr-qelastic-V10-01-02)
+  o Fixed problem of double deletion.
+  o Fixed Coverity defects.
+
+processes/optical                                op-V10-01-03
+-----------------
+- Corrected reflectivity calculation with complex refractive index;
+  include the index of refraction of the PreStepPoint medium; allow
+  for a real and imaginary part of the index of refraction.
+  Addressing problem report #1762,
+
+processes/scoring                                procscore-V10-01-01
+-----------------
+- Fixed Coverity defects.
+
+track                                            track-V10-01-06
+-----
+- Removed data members of G4VAuxiliaryTrackInformation abstract base class
+  for memory reduction.
+
+tracking                                         tracking-V10-01-01
+--------
+- Fixed Coverity defect in G4RichTrajectory.
+
+visualization
+-------------
+- OpenGL (opengl-V10-01-07):
+  o Fixed Coverity defects in G4OpenGLViewer and G4OpenGLStoredViewer.
+
+examples                                         examples-V10-01-07
+--------
+- Updated reference outputs.
+- extended/electromagnetic/TestEm7 (testem7-V10-01-00)
+  o Replaced CLHEP header inclusion for units in G4ScreenedNuclearRecoil.
+- extended/electromagnetic/TestEm8 (testem8-V10-01-03)
+  o RunAction, Run, StackingAction: improved histogram handling.
+  o PhysicsList: added SS, GS, WVI physics-lists.
+  o Macro files: added alternative configuration of PAI models via UI command.
+- extended/exoticphysics/ucn (ExUCN-V10-01-03)
+  o Removed AddBetaDecay() method. Added 'NumberOfVariables' in
+    G4RepleteEofM constructor.
+- extended/field/field06 (fieldex06-V10-01-03)
+  o Removed AddBetaDecay() method.
+- extended/geometry/transforms (exTransforms-V10-01-00)
+  o Updated vis.mac macro to draw axes.
+- extended/medical/electronScattering2 exampleES2-V10-01-03
+  o Added physics-list G4EmStandardGS to PhysicsList.
+  o Set verbosity of physics-lists to.
+- extended/medical/fanoCavity (fano-V10-01-02)
+- extended/medical/fanoCavity2 (fano2-V10-01-02)
+  o Use G4EmParameters instead of G4EmProcessOptions.
+- extended/parallel/MPI (MPI-V10-01-13)
+  o Added implementation of histo merger with use of g4analysis and g4tools;
+    kept temporarily old merger class.
+  o Fixed exMPI03 Analysis class: separated Close() from Save() to avoid
+    resetting histogram before performing Merge.  
+  o Increased verbosity during build phase to print out location of MPI
+    library and headers. Updated CMake scripts.
+
+tests                                            tests-V10-01-07
+-----
+- Updated reference outputs and tools.
+- tests/test06 (test06-V10-01-01)
+  o New test specific for zlib.
+- tests/test19 (test19-V10-01-05)
+- tests/test23 (test23-V10-01-10)
+- tests/test47 (test47-V10-01-07)
+  o Using macro ROOT_INCLUDE_DIR to identify root/include path.
+- tests/test58 (test58-V10-01-00)
+  o StackingAction: fix in recol mass.
+    Addressing problem report #1763.
+  o PhysicsList: use SS physics list from reference physics-lists.
+- tests/test67 (test67-V10-01-00)
+- tests/test73 (test73-V10-01-00)
+  o Fixed use of TString for C++11 on gcc-5.2.
+- tests/test75 (test75-V10-01-05)
+  o Using macro ROOT_INCLUDE_DIR to identify root/include path.

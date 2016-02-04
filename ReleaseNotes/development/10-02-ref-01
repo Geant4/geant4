@@ -1,0 +1,267 @@
+
+                       geant4-10-02-ref-01
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Fixed configuration error occurring when using CLHEP-2.3.1.1 external
+   installation.
+ o FTFP_BERT_TRV: Switch on the low-mass diffraction dissociation
+   used in G4HadronHElasticPhysics.
+ o Major revision of the QGS final-state model (note: this was already
+   included in 10.2.beta, but did not enter in 10.2 due to the missing
+   re-tuning of parameters): implemented Reggeon cascading and "Fermi motion";
+   new algorithm for the determination of the kinematical properties of
+   partons; improved formation of the residual nucleus.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 10.1.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-02-02
+-----
+- Fixed configuration error occurring when using CLHEP-2.3.1.1 external
+  installation. Addressing problem report #1805.
+
+analysis                                         analysis-V10-02-00
+--------
+- Fixed definition of /analysis/ntuple command directory which was created
+  implicitly with the commands and so defined without a guideline and not
+  deleted.
+
+digits_hits                                      digits_hits-V10-02-02
+-----------
+- Code cleanup and introduced first C++11 features.
+- Checked do-while loops for potential infinite loops.
+
+event                                            event-V10-02-00
+-----
+- Code cleanup and introduced first C++11 features.
+
+externals/zlib                                   zlib-V10-02-00
+--------------
+- Fixed compilation warnings on clang-3.7 compiler.
+
+geometry
+--------
+- magneticfield (field-V10-02-00):
+  o Fix to CMake scripts in unit tests.
+- navigation (geomnav-V10-02-00):
+  o Moved check for overlaps in G4Navigator::ComputeStep() within G4VERBOSE. (*)
+    Addressing problem report #1811.
+
+global                                           global-V10-02-01
+------
+- Corrected conditions for proper treatment of gcc-5 in tls.hh and           (*)
+  G4Threading.hh.
+- Removed unused and buggy operator=(const G4String&) in G4SubString.        (*)
+
+materials                                        materials-V10-02-00
+---------
+- G4NistMaterialBuilder: added lock to build of new NIST material; needed,
+  as some physics processes may create a new NIST material from worker thread.
+
+particles                                        particles-V10-02-05
+---------
+- Revert default value of level tolerance in G4NuclideTable to 1 eV; turn out
+  rounding of excitation energy to avoid potential conservation problems.
+- Fixed wrong argument order CreateIon(A,Z,LL,0.0) in G4IonTable to
+  CreateIon(Z,A,LL,0.0).
+- Fixed setting of mass in decay parent particle.
+  Addressing problem report #1820.
+- Fixed G4DecayTable::SelectADecayChannel() for decay channels all
+  kinematically forbidden.
+
+persistency/gdml                                 gdml-V10-02-00
+----------------
+- Corrected broken URLs and version number to schema.
+
+physics_lists
+-------------
+- builders (phys-builders-V10-02-00):
+  o G4NeutronHPBuilder: corrected name from "NeutronHPInelastic" to
+    "ParticleHPInelastic".
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V10-02-00):
+  o G4HadronPhysicsQGSP_BIC_AllHP: activate ParticleHP for deuteron,
+    triton, He3 and alpha.
+- lists (phys-lists-V10-02-00)
+  o FTFP_BERT_TRV: Switch on the low-mass diffraction dissociation
+    used in G4HadronHElasticPhysics.
+
+processes/biasing
+-----------------
+- generic (proc-biasgen-V10-02-01):
+  o Code cleanup and Coverity fixes.
+- management (proc-biasmng-V10-02-00):
+  o Fixed Coverity defects.
+
+processes/electromagnetic/dna                    emdna-V10-02-01
+-----------------------------
+- G4DNAIonElasticModel::SampleSecondaries(): added protection on energy.
+  In ionisation models SampleSecondaries(), added protection on energy
+  for interpolation method change.
+
+processes/electromagnetic/lowenergy              emlowen-V10-02-01
+-----------------------------------
+- Fixed inclusion guard in G4LivermorePolarizedPhotoElecticModel.hh.
+  Addressing problem report #1816.
+- Code cleanup and fixed Coverity defects.
+
+processes/electromagnetic/standard               emstand-V10-02-02
+----------------------------------
+- Fixed cases of floating-point exception in G4ScreeningMottCrossSection.
+  Some code cleanup and performance improvements.
+- G4GoudsmitSaundersonMscModel G4GoudsmitSaundersonTable: updated step 
+  limitations. Fixed Coverity defects and improved comments.
+
+processes/electromagnetic/utils                  emutils-V10-02-01
+-------------------------------
+- G4EmSaturation: changed method name from VisibleEnergyDeposition() to
+  VisibleEnergyDepositionAtAStep(), in order to allow overloading of virtual
+  method. Addressing problem report #1807.
+- G4LossTableManager: avoid double addition of He3 and alpha to the loss table
+  map (should not have any effect on results).
+- G4EmCalculator: fixed computation of dEdx and range for He3 and alpha.
+  Addresing problem report #1808.
+
+processes/electromagnetic/xrays                  xrays-V10-02-02
+-------------------------------
+- G4VTransitionRadiation, G4VXTRenergyLoss: fixed process sub-type.          (*)
+- G4Scintillation: use new method introduced in G4EmSaturation
+  VisibleEnergyDepositionAtAStep() in order to fix overloading problem.
+- Added new class G4ScintillationTrackInformation and use it in
+  G4Scintillation.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-02-00)
+  o Checked do-while loops for potential infinite loops.
+- models/abla (hadr-abla-V10-02-00)
+  o Fixed bug in de-excitation of boosted nucleon remnants.
+- models/coherent_elastic (hadr-cohe-V10-02-00)
+  o G4LMsdGenerator: restored hadronic internal decay scheme allowing for
+    stable decay of the Roper resonances.
+- models/de_excitation (hadr-deex-V10-02-03)
+  o G4PhotonEvaporation: set limit on emitted gamma energy 0.1 keV (was 10 keV).
+  o G4GammaTransition: added protection against rare problem in sampling 
+    of internal conversion when transition energy is lower than atomic 
+    level energy: instead of stopping the cascade, set bound level energy to
+    zero and produce final e-; this allows to complete radioactive-decay
+    cascade. Addressing problem report #1806.
+  o G4PhotonEvaporation, G4LevelManager, G4LevelReader, G4NuclearLevelData:
+    fixed remaining cases of production of excited stated.
+    Addressing problem report #1806.
+  o G4PhotonEvaporation, G4LevelManager: fixed potential rare case of event
+    non-reproducibilty.
+- models/lend (hadr-lend-V10-02-02)
+  o Fixed problem in prodcution of residual neutrons.
+  o Fixed Coverity defects.
+  o Corrected use of isnan() to std::isnan() for compilers different than
+    Windows/VC++.
+- models/particle_hp (hadr-hpp-V10-02-02)
+  o Fixed Coverity defects.
+- models/parton_string/qgsm (hadr-qgsm-V10-02-00)
+  o Major revision of the QGS final-state model (note: this was already
+    included in 10.2.beta, but did not enter in 10.2 due to the missing
+    re-tuning of parameters): implemented Reggeon cascading and "Fermi motion";
+    new algorithm for the determination of the kinematical properties of
+    partons; improved formation of the residual nucleus.
+  o Model parameters are still unchanged: a new re-tuning on thin-target data
+    is planned for this year.
+- models/radioactive_decay (radioactive_decay-V10-02-01)
+  o G4BetaMinusDecay, G4RadioactiveDecay: added protection for case
+    when end point energy is 0 in beta- decay.
+    Addressing problem report #1766.
+  o G4RadioactiveDecay: renamed several methods and variables to more closely
+    represent their meaning.
+- models/util (hadr-mod-util-V10-02-00)
+  o G4KineticTrack: replaced G4cerr with a 'JustWarning' G4Exception.
+
+track                                            track-V10-02-00
+-----
+- Change G4VUserTrackInformation pointer in G4Track to mutable and setters
+  to be const-methods. This allows the user to set his/her
+  G4VUserTrackInformation pointer without casting G4Track const pointer.
+
+visualization
+-------------
+- management (visman-V10-02-03):
+  o Improved error tracking: introduced error code to track error conditions
+    in G4VVisCommand; tracked error conditions for '/vis/open' and
+    '/vis/drawTree' in G4VisCommandsCompound.
+  o Improved '/vis/viewer/save'.
+  o Use SetWorldVolume() for OriginVolume drawing and filtering. 
+  o Code cleanup in G4VisCommandsSceneHandler.
+- modeling (modeling-V10-02-00):
+  o Added specific arguments to LocateGlobalPointAndSetup() to handle
+    multi-threading mode in G4TrajectoryDrawByOriginVolume::Draw() and
+    G4TrajectoryOriginVolumeFilter::Evaluate().
+
+examples                                         examples-V10-02-01
+--------
+- Updated reference outputs.
+- basic (exbasic-V10-02-00)
+  o Updated README files, and added G4ENSDFSTATEDATA in the lists of
+    mandatory data sets.
+  o B4 (exampleB4-V10-02-00)
+    + Restored the third parameter in G4UIsession construction, which was    (*)
+      lost when moving G4UIExecutive at the beginning of main().
+      Addressing problem report #1802.
+- extended/electromagnetic/TestEm1 (testem1-V10-02-00)
+- extended/electromagnetic/TestEm2 (testem2-V10-02-00)
+- extended/electromagnetic/TestEm3 (testem3-V10-02-00)
+- extended/electromagnetic/TestEm4 (testem4-V10-02-00)
+  o Fixed macros to allow to work both  with Root-5 and 6.
+- extended/electromagnetic/TestEm5 (testem5-V10-02-01)
+  o PhysicsList: added hadron elastic physics.
+  o Fixed macros to allow to work both  with Root-5 and 6.
+- extended/electromagnetic/TestEm6 (testem6-V10-02-00)
+- extended/electromagnetic/TestEm7 (testem7-V10-02-00)
+  o Fixed macros to allow to work both  with Root-5 and 6.
+- extended/electromagnetic/TestEm10 (testem10-V10-02-00)
+  o Major example revision & clean-up: simplified class names; refactored
+    detector construction & its messenger classes; revised scoring, removed
+    unused code and replaced histograms with standard calls to g4tools;
+    added StackingAction which accounts XTR gamma, all gamma and all e-
+    spectra; changed to a modular physics list and introduced 
+    TransitionRadiationPhysics builder; clean-up of the primary generator
+    action; added test_suite.sh script.
+- extended/electromagnetic/TestEm11 (testem11-V10-02-00)
+  o Fixed macros to allow to work both  with Root-5 and 6.
+- extended/electromagnetic/TestEm12 (testem12-V10-02-01)
+  o Updated dna.mac macro.
+  o Fixed macros to allow to work both  with Root-5 and 6.
+- extended/electromagnetic/TestEm14 (testem14-V10-02-00)
+  o Fixed macros to allow to work both  with Root-5 and 6.
+- extended/electromagnetic/TestEm16 (testem16-V10-02-00)
+- extended/electromagnetic/TestEm17 (testem17-V10-02-00)
+- extended/electromagnetic/TestEm18 (testem18-V10-02-00)
+  o Demonstrating synkrotron radiation for FCC.
+  o Fixed macros to allow to work both  with Root-5 and 6.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-02-01)
+  o PhysicsList: SetLevelTolerance to 1*eV, there appears to already be a
+    level Ni60[1332.510] stored somewhere instead of Ni60[1332.514].
+    Setting the tolerance to 1 eV gets the right level.
+  o Updated references in it1.mac and it2.mac.
+
+tests                                            tests-V10-02-01
+-----
+- Updated reference outputs and tools.
+- tests/test04 (test04-V10-02-02)
+  o Updated cross-section and model for ions
+  o Deleted environmental variable TEST04_USE_PARTICLE_HP and related codes.
+  o Fixed CMake scripts.
+- tests/test11 (test11-V10-02-00)
+  o Fixed CMake scripts.
+- tests/test46 (test46-V10-02-00)
+  o EcalSD, HcalSD: use new method of G4EmSaturation class
+    VisibleEnergyDepositionAtAStep() to fix overloading problem.
+- tests/test65 (test65-V10-02-00)
+  o Fixed CMake scripts.
+- tests/test68 (test68-V10-02-00)
+  o Fixed reference outputs.
+- tests/test69 (test69-V10-02-00)
+  o Kill neutrons below 1 MeV and neglect Doppler broadening in tests with
+    NeutronHP. This should speed up the tests.
