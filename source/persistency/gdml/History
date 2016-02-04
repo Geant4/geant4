@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02 October 2015 Gabriele Cosmo (gdml-V10-00-13)
+- G4GDMLWriteDefine: se more relaxed precision
+  constant for formula evaluation, to allow for proper treatment of
+  singularities.
+
+24 September 2015 Gabriele Cosmo
+- Rectify rotation matrices in reading and writing GDML files to get rid of
+  spurious roundoff errors in stored values. 
+
 30 April 2015 Gabriele Cosmo (gdml-V10-00-12)
 - Fixed non-initialised boolean flag in G4GDMLRead, reported by Coverity.
 

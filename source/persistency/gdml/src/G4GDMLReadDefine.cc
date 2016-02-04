@@ -137,6 +137,7 @@ G4GDMLReadDefine::GetRotationMatrix(const G4ThreeVector& angles)
    rot.rotateX(angles.x());
    rot.rotateY(angles.y());
    rot.rotateZ(angles.z());
+   rot.rectify();  // Rectify matrix from possible roundoff errors
 
    return rot;
 }
