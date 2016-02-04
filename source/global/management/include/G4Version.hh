@@ -46,11 +46,11 @@
 //     |--> patch number
 
 #ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  1012
+#define G4VERSION_NUMBER  1013
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-01-patch-02 $"
+#define G4VERSION_TAG "$Name: geant4-10-01-patch-03 $"
 #endif
 
 // as variables
@@ -58,10 +58,10 @@
 #include "G4String.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-01-patch-02 [MT]$";
+static const G4String G4Version = "$Name: geant4-10-01-patch-03 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-10-01-patch-02 $";
+static const G4String G4Version = "$Name: geant4-10-01-patch-03 $";
 #endif
-static const G4String G4Date    = "(19-June-2015)";
+static const G4String G4Date    = "(5-February-2016)";
 
 #endif

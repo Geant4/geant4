@@ -108,7 +108,7 @@ void G4GeometryTolerance::SetSurfaceTolerance(G4double worldExtent)
 {
   if (!fInitialised)
   {
-    fCarTolerance = worldExtent*1E-11;
+    fCarTolerance = fRadTolerance = worldExtent*1E-11;
     fInitialised = true;
   }
   else

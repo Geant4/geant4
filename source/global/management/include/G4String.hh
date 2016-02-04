@@ -66,7 +66,6 @@ public:
 
   inline G4SubString& operator=(const char*);         
 
-  inline G4SubString& operator=(const G4String&);
   inline G4SubString& operator=(const G4SubString&);
  
   inline char& operator()(str_size);

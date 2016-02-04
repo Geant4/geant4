@@ -17,7 +17,7 @@ include $(G4INSTALL)/config/architecture.gmk
 
 # Override some variables for binmake.gmk.
 #
-INCFLAGS := -I$(G4BASE)/global/management/include
-LDLIBS   := -lG4globman
+#INCFLAGS := -I$(G4BASE)/global/management/include
+#LDLIBS   := -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk

@@ -72,7 +72,7 @@ class G4GeometryTolerance
   protected:
 
     static void SetSurfaceTolerance(G4double worldExtent);
-      // Sets the Cartesian surface tolerance to a value computed
+      // Sets the Cartesian and Radial surface tolerance to a value computed
       // from the maximum extent of the world volume. This method
       // can be called only once, and is done only through the
       // G4GeometryManager class.

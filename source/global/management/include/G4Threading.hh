@@ -54,7 +54,7 @@
   // Multi-threaded build
   //===============================
 #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
-    ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 ) || \
+    ( defined(__MACH__) && defined(__GNUC__) && (__GNUC__>=4 && __GNUC_MINOR__>=7 || __GNUC__>=5) ) || \
     defined(__linux__) || defined(_AIX)
     //
     // Multi-threaded build: for POSIX systems

@@ -34,7 +34,7 @@
 #endif
 
 #if (defined(G4MULTITHREADED) && \
-    (!defined(G4USE_STD11) || (defined(CLANG_NOSTDTLS))))
+    (!defined(G4USE_STD11) || (defined(CLANG_NOSTDTLS) || defined(__INTEL_COMPILER))))
 
 #include <CLHEP/Random/StaticRandomStates.h>
 #include <CLHEP/Random/JamesRandom.h>
