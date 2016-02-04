@@ -937,10 +937,58 @@ G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(-45.,0.,0),G4Thre
     Dist=b1046.DistanceToIn(G4ThreeVector(0.,0.,4800*km),vmz);
     G4cout<<"b1046.DistanceToIn(G4ThreeVector(0.,0.,4800*km),vmz... = "<<Dist<<G4endl;
     // assert(ApproxEqual(Dist,0.));
+//Test for Sphere with Theta section(sn11) for point(0,0,0)
+    Dist=sn11.DistanceToIn(G4ThreeVector(0.,0.,0.),vmz);
+    //G4cout<<"sn11.DistanceToIn(G4ThreeVector(0.,0.,0),vmz... = "<<Dist<<G4endl; 
+    assert(ApproxEqual(Dist,kInfinity));
+    Dist=sn11.DistanceToIn(G4ThreeVector(0.,0.,0.),vz);
+    // G4cout<<"sn11.DistanceToIn(G4ThreeVector(0.,0.,0),vz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,0.));
+
+    Dist=sn11.DistanceToOut(G4ThreeVector(0.,0.,0.),vmz);
+    //G4cout<<"sn11.DistanceToOut(G4ThreeVector(0.,0.,0),vmz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,0.));
+    Dist=sn11.DistanceToOut(G4ThreeVector(0.,0.,0.),vz);
+    //G4cout<<"sn11.DistanceToIn(G4ThreeVector(0.,0.,0),vz... = "<<Dist<<G4endl;
+    assert(ApproxEqual(Dist,50.));
+    
+    Dist=sn11.DistanceToIn(G4ThreeVector(0.0,0.,0.),vmxy);
+    G4cout<<"sn11.DistanceToIn(G4ThreeVector(0.,0.,0),vmz... = "<<Dist<<G4endl; 
+    //assert(ApproxEqual(Dist,kInfinity));
+    Dist=sn11.DistanceToIn(G4ThreeVector(0.0,0.,0.),vxy);
+    G4cout<<"sn11.DistanceToIn(G4ThreeVector(0.,0.,0),vz... = "<<Dist<<G4endl;
+    //assert(ApproxEqual(Dist,0.));
+
+     Dist=sn11.DistanceToOut(G4ThreeVector(0.0,0.,0.),vmxy);
+     G4cout<<"sn11.DistanceToOut(G4ThreeVector(0.,0.,0),vmz... = "<<Dist<<G4endl;
+     //assert(ApproxEqual(Dist,0.));
+    Dist=sn11.DistanceToOut(G4ThreeVector(0.0,0.,0.),vxy);
+    G4cout<<"sn11.DistanceToOut(G4ThreeVector(0.,0.,0),vz... = "<<Dist<<G4endl;
+    //assert(ApproxEqual(Dist,50.));
 
 
+    Dist=sn12.DistanceToIn(G4ThreeVector(0.0,0.,0.),vx);
+    G4cout<<"sn12.DistanceToIn(G4ThreeVector(0.,0.,0),vx... = "<<Dist<<G4endl; 
+    //assert(ApproxEqual(Dist,kInfinity));
+    Dist=sn12.DistanceToIn(G4ThreeVector(0.0,0.,0.),vy);
+    G4cout<<"sn12.DistanceToIn(G4ThreeVector(0.,0.,0),vy... = "<<Dist<<G4endl;
+    //assert(ApproxEqual(Dist,0.));
 
+     Dist=sn12.DistanceToOut(G4ThreeVector(0.0,0.,0.),vx);
+     G4cout<<"sn12.DistanceToOut(G4ThreeVector(0.,0.,0),vx... = "<<Dist<<G4endl;
+     //assert(ApproxEqual(Dist,0.));
+    Dist=sn12.DistanceToOut(G4ThreeVector(0.0,0.,0.),vy);
+    G4cout<<"sn12.DistanceToOut(G4ThreeVector(0.,0.,0),vy... = "<<Dist<<G4endl;
+    //assert(ApproxEqual(Dist,50.));
 
+    Dist=sn12.DistanceToIn(G4ThreeVector(0.0,0.,0.),vmz);
+    G4cout<<"sn12.DistanceToIn(G4ThreeVector(0.,0.,0),vmz... = "<<Dist<<G4endl; 
+    //assert(ApproxEqual(Dist,kInfinity));
+    Dist=sn12.DistanceToIn(G4ThreeVector(0.0,0.,0.),vz);
+    G4cout<<"sn12.DistanceToIn(G4ThreeVector(0.,0.,0),vz... = "<<Dist<<G4endl;
+    //assert(ApproxEqual(Dist,0.));
+
+  
 
      ///////////////////////////////////////////////////////////////////////////
 
@@ -1204,7 +1252,7 @@ G4cout<<"Dist from Center ="<<sn22.DistanceToOut(G4ThreeVector(-45.,0.,0),G4Thre
 	   {
              if(sntest.Inside(in1) != kOutside)
 	       {Dist=sntest.DistanceToOut(in1,dir12);
-		 G4cout<<" i="<<i<<" Dout="<<Dist<<" dif="<< Dist-length<<G4endl;
+		 if(std::fabs(Dist-length)>0.00001) G4cout<<"Potential ERROR i="<<i<<" Dout="<<Dist<<" dif="<< Dist-length<<G4endl;
                 in1=in1+G4ThreeVector(0.00001,0.00001,0);
                 //in2=in2+G4ThreeVector(-0.00001,-0.00001,0);
                 length = (in1-in2).mag();

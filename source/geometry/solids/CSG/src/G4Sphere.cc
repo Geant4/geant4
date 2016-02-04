@@ -936,6 +936,22 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
   {
     tolSTheta = fSTheta - halfAngTolerance ;
     tolETheta = eTheta + halfAngTolerance ;
+
+    // Special case rad2 = 0 comparing with direction
+    //
+    if ((rad2!=0.0) || (fRmin!=0.0))
+    {
+      // Keep going for computation of distance...
+    }
+    else  // Positioned on the sphere's origin
+    {
+      G4double vTheta = std::atan2(std::sqrt(v.x()*v.x()+v.y()*v.y()),v.z()) ;
+      if ( (vTheta < tolSTheta) || (vTheta > tolETheta) )
+      {
+        return snxt ; // kInfinity
+      }
+      return snxt = 0.0 ;
+    }
   }
 
   // Outer spherical shell intersection
@@ -2291,7 +2307,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
           b  = t2/t1;
           c  = dist2ETheta/t1;
           d2 = b*b - c ;
-
+          if ( (d2 <halfRmaxTolerance) && (d2 > -halfRmaxTolerance) )
+          {
+            d2 = 0.;
+          }
           if ( d2 >= 0. )
           {
             d = std::sqrt(d2);
@@ -2319,11 +2338,11 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
               sd = -b - d;         // First root
 
               if ( ((std::fabs(sd) < halfRmaxTolerance) && (t2 >= 0.))
-                || (sd < 0.) || ( (sd > 0.) && (p.z() + sd*v.z() > 0.) ) )
+                || (sd < 0.) || ( (sd > 0.) && (p.z() + sd*v.z() > halfRmaxTolerance) ) )
               {
                 sd = -b + d ; // 2nd root
               }
-              if( (sd > halfRmaxTolerance) && (p.z() + sd*v.z() <= 0.) )  
+              if( (sd > halfRmaxTolerance) && (p.z() + sd*v.z() <= halfRmaxTolerance) )  
               {
                 if( sd < stheta )
                 {

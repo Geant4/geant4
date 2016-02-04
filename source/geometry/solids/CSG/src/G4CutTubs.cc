@@ -2122,7 +2122,7 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
       in_range_hi = true;
     }
     phiHigh += pi;
-    if (phiLow>twopi)  { phiHigh-=twopi; }
+    if (phiHigh>twopi)  { phiHigh-=twopi; }
   }
 
   xc = fRMin*std::cos(fSPhi);
