@@ -207,7 +207,7 @@ G4NeutronInelasticXS::IsoCrossSection(G4double ekin, G4int Z, G4int A)
   }
 
   // isotope cross section exist
-  if(pv && amin[Z] > 0) {
+  if(pv && amin[Z] > 0 && A >= amin[Z] && A <= amax[Z]) {
     pv = data->GetComponentDataByIndex(Z, A - amin[Z]);
     if(pv && ekin > pv->Energy(0)) { xs = pv->Value(ekin); }
   }
@@ -246,6 +246,8 @@ G4Isotope* G4NeutronInelasticXS::SelectIsotope(
 
       // element may be not initialised in unit test
       if(!data->GetElementData(Z)) { Initialise(Z); }
+      size_t nn = temp.size();
+      if(nn < nIso) { temp.resize(nIso, 0.); }
 
       for (j=0; j<nIso; ++j) {
         sum += abundVector[j]*IsoCrossSection(kinEnergy, Z, 

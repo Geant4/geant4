@@ -178,7 +178,7 @@ G4double G4NeutronCaptureXS::IsoCrossSection(G4double ekin, G4int Z, G4int A)
   }
 
   // isotope cross section exist
-  if(pv && amin[Z] > 0) {
+  if(pv && amin[Z] > 0 && A >= amin[Z] && A <= amax[Z]) {
     pv  = data->GetComponentDataByID(Z, A - amin[Z]);
     if(pv) { 
 
@@ -187,11 +187,10 @@ G4double G4NeutronCaptureXS::IsoCrossSection(G4double ekin, G4int Z, G4int A)
       else if(ekin <= pv->GetMaxEnergy()) { xs = pv->Value(ekin); }
     }
   }
-  if(verboseLevel > 0){
+  if(verboseLevel > 0) {
     G4cout  << "G4NeutronCaptureXS::IsoCrossSection: Ekin(MeV)= " << ekin/MeV 
 	    << "  xs(b)= " << xs/barn 
-	    << "  Z= " << Z << "  A= " << A << "  " << pv->GetVectorLength() 
-	    << G4endl;
+	    << "  Z= " << Z << "  A= " << A << G4endl;
   }
   return xs;
 }
@@ -225,7 +224,8 @@ G4Isotope* G4NeutronCaptureXS::SelectIsotope(const G4Element* anElement,
 
       // element may be not initialised in unit test
       if(!data->GetElementData(Z)) { Initialise(Z); }
-
+      size_t nn = temp.size();
+      if(nn < nIso) { temp.resize(nIso, 0.); }
 
       for (j=0; j<nIso; ++j) {
         sum += abundVector[j]*IsoCrossSection(kinEnergy, Z, 
