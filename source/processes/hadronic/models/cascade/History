@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 October 2015  V.Ivanchenko (hadr-casc-V10-00-22)
+---------------------------------------------------
+- G4CascadeCoalescence.hh:  Add #include "G4InuclElementaryParticle.hh", to
+  address compiler error from Cray (see Config HN 1764).
+
 23 April 2015  A. Ribon (hadr-casc-V10-00-21)     
 ---------------------------------------------
 - G4PreCompoundDeexcitation: delete precompound products (i.e. 
