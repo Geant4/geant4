@@ -163,6 +163,8 @@ List of fixes included in this public patch since the public release 10.1.p02:
     + models/coherent_elastic:
       o G4DiffuseElastic: bug-fix in BuildAngleTable() to improve the angle
         bin accuracy at high energies.
+    + models/im_r_matrix:
+      o Fixed compiler warning in clang-3.6.
 
   o Run:
     ---
