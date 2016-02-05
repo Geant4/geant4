@@ -60,9 +60,11 @@ G4int G4ParallelWorldProcess::GetHypNavigatorID()
 
 G4ParallelWorldProcess::
 G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
-:G4VProcess(processName,theType), fGhostNavigator(0), fNavigatorID(-1),
- fFieldTrack('0'),layeredMaterialFlag(false)
+:G4VProcess(processName,theType),fGhostWorld(nullptr),fGhostNavigator(nullptr),
+ fNavigatorID(-1),fFieldTrack('0'),fGhostSafety(0.),fOnBoundary(false),
+ layeredMaterialFlag(false)
 {
+  SetProcessSubType(491);
   if(!fpHyperStep) fpHyperStep = new G4Step();
   iParallelWorld = ++nParallelWorlds;
 
@@ -77,10 +79,6 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
   fPathFinder = G4PathFinder::GetInstance();
 
   fGhostWorldName = "** NotDefined **";
-  fGhostWorld = 0;
-  fGhostSafety = 0.;
-  fOnBoundary = false;
-
   G4ParallelWorldProcessStore::GetInstance()->SetParallelWorld(this,processName);
 
   if (verboseLevel>0)
@@ -291,6 +289,23 @@ G4double G4ParallelWorldProcess::AlongStepGetPhysicalInteractionLength(
   else 
   {
     G4FieldTrackUpdator::Update(&fFieldTrack,&track);
+
+#ifdef G4DEBUG_PARALLEL_WORLD_PROCESS    
+    if( verboseLevel > 0 ){
+       int localVerb = verboseLevel-1; 
+
+       if( localVerb == 1 ) { 
+          G4cout << " Pll Wrl  proc::AlongStepGPIL " << this->GetProcessName() << G4endl;
+       }else if( localVerb > 1 ) { 
+          G4cout << "----------------------------------------------" << G4endl;
+          G4cout << " ParallelWorldProcess: field Track set to : " << G4endl;
+          G4cout << "----------------------------------------------" << G4endl;
+          G4cout << fFieldTrack << G4endl;
+          G4cout << "----------------------------------------------" << G4endl;
+       }
+    }
+#endif
+    
     returnedStep
       = fPathFinder->ComputeStep(fFieldTrack,currentMinimumStep,fNavigatorID,
                      track.GetCurrentStepNumber(),fGhostSafety,eLimited,
@@ -298,11 +313,12 @@ G4double G4ParallelWorldProcess::AlongStepGetPhysicalInteractionLength(
     if(eLimited == kDoNot)
     {
       fOnBoundary = false;
-      fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition());
+      fGhostSafety = fGhostNavigator->ComputeSafety(endTrack.GetPosition());      
     }
     else
     {
       fOnBoundary = true;
+      // fGhostSafetyEnd = 0.0;    // At end-point of expected step only
     }
     proposedSafety = fGhostSafety;
     if(eLimited == kUnique || eLimited == kSharedOther) {

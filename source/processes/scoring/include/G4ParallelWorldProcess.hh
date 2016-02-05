@@ -79,7 +79,7 @@ public: // with description
   //------------------------
   
   G4ParallelWorldProcess(const G4String& processName = "ParaWorld",
-				 G4ProcessType theType = fParameterisation);
+				 G4ProcessType theType = fParallel);
   virtual ~G4ParallelWorldProcess();
   
   //--------------------------------------------------------------
