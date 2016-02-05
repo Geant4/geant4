@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th January 2016 M. Asai (tracking-V10-00-01)
+- G4SteppingManager.cc: Set OriginTouchableHandle for primary track.
+  Addressing to Bug report #1773.
+
 4th June 2014 L. Desorgher (tracking-V10-00-00)
 -Corrections in G4AdjointSteppingAction and G4AdjointTrackingAction  to have
  the treatment of adj and forward tracks in the same event
