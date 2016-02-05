@@ -1110,6 +1110,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.isDuplicable =  false;
   theTable->push_back(tmp);
   sizeOfTable +=1;  
+
+  tmp.processTypeName =  "ParallelWorld";
+  tmp.processType     = 10;
+  tmp.processSubType  = 491;
+  tmp.ordering[0]     = 9900;
+  tmp.ordering[1]     = 1;
+  tmp.ordering[2]     =  9900;
+  tmp.isDuplicable =  true;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
 }
 
 
