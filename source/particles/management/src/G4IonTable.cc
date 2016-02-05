@@ -348,7 +348,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 ////////////////////
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double E)
 {
-  if (L==0) return CreateIon(A,Z,E);
+  if (L==0) return CreateIon(Z,A,E);
   
   // create hyper nucleus
   G4ParticleDefinition* ion=0;
@@ -444,7 +444,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
 ////////////////////
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4int lvl)
 {
-  if (L==0) return CreateIon(A,Z,lvl);
+  if (L==0) return CreateIon(Z,A,lvl);
   
   if (lvl>0) {
     G4ExceptionDescription ed;
@@ -454,7 +454,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4int lvl
     return 0;
   }
   
-  return CreateIon(A,Z,L,0.0);
+  return CreateIon(Z,A,L,0.0);
 }
 
 ////////////////////
