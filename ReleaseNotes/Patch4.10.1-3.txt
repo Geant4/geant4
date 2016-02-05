@@ -14,6 +14,9 @@ List of fixes included in this public patch since the public release 10.1.p02:
         used for C++11 mode on older Mac systems where libstdc++ is the default.
       o When compiler allows selection of C++ standard and allows C++0x/11,
         default to using this standard. Updated std-flag setting rules.
+    + GNUMake:
+      o Updated X11 settings in MacOS platform.
+      o Added settings for C++ standards in platform specific scripts.
 
   o Analysis:
     --------
@@ -111,6 +114,13 @@ List of fixes included in this public patch since the public release 10.1.p02:
     + gflash: fix for Zeff wrongly computed as ( W1*Z2 ) + ( W2*Z1 ), with Z1
       and Z2 swapped. Addressing problem report #1719.
 
+  o Particles:
+    ---------
+    + Fixed wrong argument order CreateIon(A,Z,LL,0.0) in G4IonTable to
+      CreateIon(Z,A,LL,0.0).
+    + Fixed setting of mass in decay parent particle.
+      Addressing problem report #1820.
+
   o Persistency:
     -----------
     + GDML:
@@ -121,10 +131,24 @@ List of fixes included in this public patch since the public release 10.1.p02:
       o Rectify rotation matrices in reading and writing GDML files to reduce
         spurious roundoff errors in stored values.
 
+  o Physics Lists
+    -------------
+    + constructors/limiters:
+      o G4ParallelWorldPhysics: fixed process order index for
+        G4ParallelWorldProcess to 9900 to make sure it is registered
+        prior to G4OpBoundaryProcess.
+
   o Processes - Electromagnetic:
     ---------------------------
     + xrays:
       o G4VTransitionRadiation, G4VXTRenergyLoss: fixed process sub-type.
+
+  o Processes - Generic:
+    -------------------
+    + scoring:
+      o G4ParallelWorldProcess: fixed processType from 'fParameterized'
+        to 'fParallel' and set processSubType to 491.
+      o Fixed Coverity defects.
 
   o Processes - Hadronic:
     --------------------
@@ -139,6 +163,18 @@ List of fixes included in this public patch since the public release 10.1.p02:
     + models/coherent_elastic:
       o G4DiffuseElastic: bug-fix in BuildAngleTable() to improve the angle
         bin accuracy at high energies.
+
+  o Run:
+    ---
+    + G4PhysicsListHelper: add entry for G4ParallelWorldProcess.
+    + G4RunManager, G4WorkerRunManager: fixed process order index of
+      G4ParallelWorldProcess to 9900 to make sure it is registered
+      prior to G4OpBoundaryProcess.
+
+  o Tracking:
+    --------
+    + G4SteppingManager: fix to properly set 'OriginTouchableHandle' for the
+      primary track. Addressing problem report #1773.
 
   o Examples:
     --------
