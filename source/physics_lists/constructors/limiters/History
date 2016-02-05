@@ -14,6 +14,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-Jan-2016, M. Asai (phys-ctor-limiters-V10-00-06)
+- G4ParallelWorldPhysics: change process order index of
+  G4ParallelWorldProcess to 9900 to make sure it is registered
+  prior to G4OpBoundaryProcess.
+
 20-Jan-2015, Makoto Asai  (phys-ctor-limiters-V10-00-05)
 - Fix G4ParallelWorldProcess.cc to correctly use the new method
   SetProcessOrderingToSecond().
