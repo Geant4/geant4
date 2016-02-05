@@ -108,7 +108,7 @@ public:
     {theCollisionTime = value;}
 
 // for debugging only
-  G4BCAction * GetGenerator()
+const G4BCAction * GetGenerator()
   {
     return theFSGenerator;
   }
