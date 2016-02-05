@@ -206,7 +206,7 @@ processes/optical                                op-V10-01-03
 
 processes/scoring                                procscore-V10-01-01
 -----------------
-- Fixed Coverity defects.
+- Fixed Coverity defects.                                                    (*)
 
 track                                            track-V10-01-06
 -----

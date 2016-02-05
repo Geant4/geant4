@@ -67,9 +67,9 @@ particles                                        particles-V10-02-05
 ---------
 - Revert default value of level tolerance in G4NuclideTable to 1 eV; turn out
   rounding of excitation energy to avoid potential conservation problems.
-- Fixed wrong argument order CreateIon(A,Z,LL,0.0) in G4IonTable to
+- Fixed wrong argument order CreateIon(A,Z,LL,0.0) in G4IonTable to          (*)
   CreateIon(Z,A,LL,0.0).
-- Fixed setting of mass in decay parent particle.
+- Fixed setting of mass in decay parent particle.                            (*)
   Addressing problem report #1820.
 - Fixed G4DecayTable::SelectADecayChannel() for decay channels all
   kinematically forbidden.
