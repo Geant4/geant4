@@ -60,7 +60,7 @@ G4int G4ParallelWorldProcess::GetHypNavigatorID()
 
 G4ParallelWorldProcess::
 G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
-:G4VProcess(processName,theType),fGhostWorld(nullptr),fGhostNavigator(nullptr),
+:G4VProcess(processName,theType),fGhostWorld(NULL),fGhostNavigator(NULL),
  fNavigatorID(-1),fFieldTrack('0'),fGhostSafety(0.),fOnBoundary(false),
  layeredMaterialFlag(false)
 {

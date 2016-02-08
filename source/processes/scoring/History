@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 27, 2016, M. Asai (procscore-V10-00-02)
+January 27, 2016, M. Asai (procscore-V10-00-03, 02)
 - G4ParallelWorldProcess: change processType from fParameterized
   to fParallel and set the processSubType to 491.
 
