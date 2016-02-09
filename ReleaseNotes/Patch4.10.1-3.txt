@@ -196,9 +196,7 @@ List of fixes included in this public patch since the public release 10.1.p02:
      valid for this patch.
 
 The code and rebuilt binary libraries for release 10.1.p03 are available
-through our "Download" Web page:
-   http://cern.ch/geant4/support/download.shtml
+through our "Download" Web page.
 
-Please refer to the Geant4 User Documentation:
-   http://cern.ch/geant4/support/userdocuments.shtml
-for further information about using Geant4.
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.
