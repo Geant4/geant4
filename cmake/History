@@ -31,7 +31,7 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
-6th October 2015 - Ben Morgan (cmake-V10-00-42)
+6th October 2015 - Ben Morgan (cmake-V10-00-43, 42)
 - Modules/Geant4MakeRules_cxx.cmake: Update AppleClang detection to
   for Xcode 7 and match to CMake 3's AppleClang rules. Provide
   CXXSTD_IS_AVAILABLE for MSVC 19 so that appropriate standard selection
@@ -46,10 +46,6 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 - Modules/Geant4MakeRules_cxx.cmake : To permit transition to C++11
   update std-flag setting rules to only allow C++11 builds with compiler
   versions that are know to support the features in current use.
-
-22nd July 2015 - Ben Morgan
-- Modules/Geant4MakeRules_cxx.cmake : When compiler allows selection
-  of C++ standard and allows C++0x/11, default to using this standard.
 
 8th June 2015 - Ben Morgan (cmake-V10-00-41)
 - Templates/Geant4Config.cmake.in : Always re-find Qt5 via find_package
