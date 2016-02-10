@@ -22,9 +22,9 @@ cmake                                            cmake-V10-01-17
 -----
 - Always use libc++ with Apple Clang so that std-supporting library is       (*)
   used for C++11 mode on older Mac systems where libstdc++ is the default.
-- When compiler allows selection of C++ standard and allows C++0x/11,        (*)
+- When compiler allows selection of C++ standard and allows C++0x/11,
   default to using this standard.
-  To permit transition to C++11, updated std-flag setting rules to only
+- To permit transition to C++11, updated std-flag setting rules to only      (*)
   allow C++11 builds with compiler versions that are known to support the
   features in current use.
 - Migrate output directories for build products to use same layout as

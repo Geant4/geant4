@@ -12,8 +12,7 @@ List of fixes included in this public patch since the public release 10.1.p02:
       o Updated Apple Clang detection to work on Xcode-7.
       o Always use libc++ with Apple Clang so that std-supporting library is
         used for C++11 mode on older Mac systems where libstdc++ is the default.
-      o When compiler allows selection of C++ standard and allows C++0x/11,
-        default to using this standard. Updated std-flag setting rules.
+      o Updated std-flag setting rules.
     + GNUMake:
       o Updated X11 settings in MacOS platform.
       o Added settings for C++ standards in platform specific scripts.
