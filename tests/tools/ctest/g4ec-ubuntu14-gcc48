@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+CONFIG=ubuntu14-gcc48
+
+#---Enable FPE -----------------------------------------------------
+export CXXFLAGS=-DG4FPE_DEBUG
+
+#------------------------------------------------------------------
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+#---Xerces-C-------------------------------------------------------
+export XERCESC_ROOT_DIR=/home/sftnight/xerces-c-3.1.1-x86_64-linux-gcc-3.4
+export LD_LIBRARY_PATH=${XERCESC_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
+
+#---CMake---------------------------------------------------------
+export PATH=/home/sftnight/cmake-2.8.10-Linux-i386/bin:${PATH}
+
+#-----------------------------------------------------------------
+CtestDir=$(dirname $0)
+
+
+#---CLHEP----------------------------------------------------------
+  Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=OFF"
+  Use_QT=ON
+  
+  
+# Common environment settings, options,...
+. ${CtestDir}/g4-unix-common
+
+
+if [ "${RESET_SOURCE}" = "yes" ]; then
+  rm -rf ${SOURCE}
+fi
+
+if [ ! -d "${SOURCE}" ]; then
+  ${CtestDir}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q
+fi
+
+#---Run the CTest script-------------------------------------------
+echo "Starting CTest script for configuration ${CONFIG} at `date`" 
+ctest -V -S ${CtestDir}/g4${MODE}.cmake 
+

@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+# set variables needed in gnumake build
+
+#---Environment from http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch06.html
+export G4SYSTEM=Linux-g++
+export G4INSTALL=${SOURCE}
+export G4WORKDIR=${BINARY}
+export G4LIB=${G4WORKDIR}/lib
+export G4INCLUDE=${G4WORKDIR}/include
+#export CLHEP_BASE_DIR=${CLHEP_ROOT_DIR}
+export G4LIB_BUILD_SHARED=1
+export G4_NO_VERBOSE=1
+export G4LIB_USE_GRANULAR=1
+export G4LIB_USE_CLHEP=1
+
+
+
+#---Data libraries environment variables--------------------------
+#export G4_DATA_DIR=/cvmfs/geant4.cern.ch/share/data
+
+G4_DATA_DIR=/afs/cern.ch/sw/geant4/releases/share/data/
+
+
+export G4LEVELGAMMADATA=${G4_DATA_DIR}/PhotonEvaporation3.2
+export G4LEDATA=${G4_DATA_DIR}/G4EMLOW6.48
+export G4RADIOACTIVEDATA=${G4_DATA_DIR}/RadioactiveDecay4.3
+export G4NEUTRONHPDATA=${G4_DATA_DIR}/G4NDL4.5
+export G4PIIDATA=${G4_DATA_DIR}/G4PII1.3
+export G4NEUTRONXSDATA=${G4_DATA_DIR}/G4NEUTRONXS1.4
+export G4SAIDXSDATA=${G4_DATA_DIR}/G4SAIDDATA1.1
+export G4REALSURFACEDATA=${G4_DATA_DIR}/RealSurface1.0
+export G4ENSDFSTATEDATA=${G4_DATA_DIR}/G4ENSDFSTATE1.2
+
+export LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}:${LD_LIBRARY_PATH}
+
+#test -d "${BINARY}"  && rm -r ${BINARY}

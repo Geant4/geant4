@@ -1,9 +1,10 @@
 @echo off  
 rem ---Compiler------------------------------------------------------
-call "%VS120COMNTOOLS%\..\..\vc\vcvarsall"
+call "%VS140COMNTOOLS%\..\..\vc\vcvarsall"
 rem ---Xerces-C------------------------------------------------------
 
-set xerc_dirs=D:\sw\lcg\external\XercesC\3.1.1\x86-windows-vc10
+set xerc_dirs=D:\sw\lcg\external\XercesC\3.1.2\x86-windows-vc14
+set xerc_dirs=D:\sw\lcg\external\XercesC\3.1.1\x86-windows-vc10,%xerc_dirs%
 set xerc_dirs=C:\build\sw\lcg\external\XercesC\3.1.1\x86-windows-vc10,%xerc_dirs%
 
 for %%a IN (%xerc_dirs%) DO (
@@ -15,13 +16,15 @@ set PATH=%XERCESC_ROOT_DIR%\bin;%PATH%
 
 rem ---------------------------------------
 
-set CONFIG=x86-win7-vc12
+set CONFIG=x86-win7-vc14
 
 rem - location of this .bat file
 set THIS=%~d0%~p0
 
 rem ---Define basic config parameters--------------------------------
 call %THIS%g4-win-common.bat
+
+echo Geant4 CMake options - 2 : %G4_XOPTS%
 
 rem ---Optionally remove source code tree
 if "%RESET_SOURCE%"=="yes" (

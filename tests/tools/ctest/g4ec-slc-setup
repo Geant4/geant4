@@ -1,4 +1,4 @@
-#!/usr/bin/env bash 
+#!/usr/bin/env bash
 
 # common setup of environment.
 
@@ -24,26 +24,41 @@ lcg="${lcgbase}-gcc`echo ${gccver} | awk -F. '{ printf"%d%d",$1,$2 }'`"
 lcgopt="${lcg}-opt" 
 
 lcgext="/afs/cern.ch/sw/lcg/external"
+lcgrel="/afs/cern.ch/sw/lcg/releases"
 lcgapp="/afs/cern.ch/sw/lcg/app/releases"
 lcgcontrib="/afs/cern.ch/sw/lcg/contrib"
 lcgexperim="/afs/cern.ch/sw/lcg/experimental"
+g4lcgapp="/afs/cern.ch/sw/lcg/app/releases/GEANT4"
 
 [ -z ${rootlcg} ] && rootlcg=${lcgopt}
+whichXercesC()
+{
+   version=$1;
+	shift;
+	for place in "$@"; do 
+	   if [ -d ${place}/XercesC/${version}/${lcgopt} ] ; then
+		   XercesC_dir=${place}/XercesC/${version}/${lcgopt}
+			break
+		fi
+	done		
+}
 
 #---Xerces-C-------------------------------------------------------
 if [ -z "${XERCESC_ROOT_DIR}" ] ; then
   [ -z "${XERCESC_VERSION}" ] && XERCESC_VERSION=3.1.1p2 || true
-  [ -z "${XercesC_dir}" ] && XercesC_dir=${lcgext}/XercesC/${XERCESC_VERSION}/${lcgopt}
-  if [ ! -d $XercesC_dir -a \
-       -d ${lcgexperim}/XercesC/${XERCESC_VERSION}/${lcgopt} ] ; then
-	 XercesC_dir=${lcgexperim}/XercesC/${XERCESC_VERSION}/${lcgopt} 
+  if [ -z "${XercesC_dir}" -o ! -d "$XercesC_dir" ] ; then
+     whichXercesC ${XERCESC_VERSION} ${g4lcgapp} ${lcgext} ${lcgexperim}
   fi
-  if [ -d $XercesC_dir ] ; then
+  if [ -z "${XercesC_dir}" -o ! -d "$XercesC_dir" ] ; then
+     XERCESC_VERSION=3.1.1p2
+     whichXercesC ${XERCESC_VERSION} ${lcgext} ${lcgexperim} ${g4lcgapp}
+  fi
+  if [ -n "$XercesC_dir" -a -d "$XercesC_dir" ] ; then
     export XERCESC_ROOT_DIR=${XercesC_dir}
     export LD_LIBRARY_PATH=${XercesC_dir}/lib:${LD_LIBRARY_PATH}
     echo "Using XercesC from $XercesC_dir"
   else
-    echo "XercesC not found in $XercesC_dir"
+    echo "XercesC not found, XercesC_dir=${XercesC_dir:-Null}"
   fi
   unset XercesC_dir
 fi
@@ -62,51 +77,68 @@ fi
 #---CLHEP----------------------------------------------------------
 if [ -z "${CLHEP_ROOT_DIR}" ] ; then
   CLHEP_ROOT_DIR=${lcgext}/clhep/2.2.0.4/${lcgopt}
-  if [ -d ${CLHEP_ROOT_DIR} ] ; then
-    export CLHEP_ROOT_DIR
-    export LD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
-    Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=ON\;-DCLHEP_ROOT_DIR=${CLHEP_ROOT_DIR}"
-    echo "Using system CLHEP from ${CLHEP_ROOT_DIR}"
-  else
-    unset CLHEP_ROOT_DIR
-    Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=OFF"
-    echo "Using internal CLHEP"
-  fi
+fi  
+if [ ${CLHEP_ROOT_DIR} != "-" -a -d ${CLHEP_ROOT_DIR} ] ; then
+  export CLHEP_ROOT_DIR
+  export LD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
+  Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=ON\;-DCLHEP_ROOT_DIR=${CLHEP_ROOT_DIR}"
+  echo "Using system CLHEP from ${CLHEP_ROOT_DIR}"
+else
+  unset CLHEP_ROOT_DIR
+  Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=OFF"
+  echo "Using internal CLHEP"
 fi
+
 whichQT()
 {
-	QTDIR=`ls -td ${lcgext}/qt/${1}*/${lcgopt} | head -1`
+	QTDIR=`ls -td ${lcgext}/qt/${1}*/${lcgopt} 2>/dev/null | head -1 `
+	[ -z "${QTDIR}" ] && QTDIR=`ls -td ${lcgrel}/qt/${1}*/${lcgopt} 2>/dev/null | head -1` \
+	                  || true
 }
+
 #---Qt-------------------------------------------------------------
+# check for version of qt, skip system provided qt3, 
+if [ -n "${QTDIR}" -a "${QTDIR}" != "-" ] ; then
+   qtversion=0
+	[ -x ${QTDIR}/bin/qmake ] && qtversion=`${QTDIR}/bin/qmake  -query QT_VERSION | awk -F\. '{ print $1 }'`
+	#echo "qt is ${qtversion}"
+	case ${qtversion} in
+	  4) true
+	     ;;
+	  *) QTDIR=''
+		  ;;
+	esac								  
+fi 
 if [ -z "${QTDIR}" ] ; then
    whichQT 4
-   if [ -n "${QTDIR}" -a -d ${QTDIR} ] ; then
-     Use_QT="ON" 
-     export QTDIR
-     echo "Using QT from ${QTDIR}"
-   else
-     Use_QT="OFF"
-     unset QTDIR
-     echo "Not using QT"
-   fi
+fi	
+if [ -n "${QTDIR}" -a "${QTDIR}" != "-" -a -d "${QTDIR}" ] ; then
+  Use_QT="ON" 
+  export QTDIR
+  echo "Using QT from ${QTDIR}"
 else
-   echo "Using QT from ${QTDIR}"
+  Use_QT="OFF"
+  unset QTDIR
+  echo "Not using QT"
 fi
 
 #---CMake----------------------------------------------------------
-#if  IsNotInPath CMake ; then
+#---if  IsNotInPath CMake ; then
+#   export PATH=${lcgcontrib}/CMake/3.3.2/Linux-x86_64/bin:${PATH}
    export PATH=${lcgcontrib}/CMake/2.8.9/Linux-i386/bin:${PATH}
-#fi
+#---fi
 
-#---GCCXML--------------------------------------------------------
-if  IsNotInPath  gccxml ; then
-   gccxmlDir=${lcgext}/gccxml/0.9.0_20110825/${lcgopt}/bin
-   if [ -d ${gccxmlDir} ] ; then 
-     export PATH=${gccxmlDir}:${PATH}
-   fi
-   unset gccxmlDir 
-fi
+#---Valgrind----------------------------------------------------------
+valgrind=`ls -1t ${lcgrel}/valgrind/*/${lcgopt}/bin/valgrind 2>/dev/null | head -1`
 
+if [ -n "$valgrind" ] ; then
+   vg_dir=`dirname $valgrind`
+	echo "Using valgrind from $vg_dir"
+   export PATH=${PATH}:${vg_dir}
+	export VALGRIND_LIB=`echo ${valgrind} | sed -e 's=/bin/valgrind=/lib/valgrind='`
+	echo "  and VALGRIND_LIB = $VALGRIND_LIB"
+fi 
+#----------------------------------------------------------------------
 
 whichroot()
 {
@@ -157,61 +189,16 @@ if [ -z "${CXX}" ] ; then
       . $gcc_dir/setup.sh
       echo "Using g++ from $gcc_dir"
     fi 
-    echo "Using g++:"
-    g++ --version | head -1
     unset gcc_dir    
   fi
+  export CXX=`which g++`
+  export CC=`which gcc`
 fi
-
-#echo $PATH | wc -c
-
-test -n "$VERSION_BENCHMARKS" && echo "Using benchmarks tag: $VERSION_BENCHMARKS"
- 
-
-if [ x$MODE = x ]; then
-  export MODE=nightly
-fi
-if [ x$WORKDIR = x ]; then 
-  WORKDIR=/ec/G4-builds
-fi
-if [ x$VERSION = x ]; then 
-  export VERSION=g4tags-dev
-fi
-
-if [ x$BUILDTYPE = x ]; then
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}
-else
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
-fi
-
-export SOURCE=${PLATFORM}/${VERSION}
-export BINARY=${PLATFORM}/build
+echo "Using g++:  $CXX"
+$CXX --version | head -1
 
 
-#
-#default, to be modified for non default buildtypes
-#
-  export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
--DGEANT4_USE_OPENGL_X11=ON;\
--DGEANT4_USE_QT=${Use_QT};\
--DGEANT4_USE_RAYTRACER_X11=ON;\
-${Use_CLHEP};\
--DGEANT4_USE_XM=ON"
+# Common environment settings, options,...
+CtestDir=$(dirname $0)
 
-
-case "${BUILDTYPE}" in 
-
-   staticlibs)
-	   export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
-	   ;;
-   MT)
-	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
-	   ;;
-   MTmax)
-	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
-	   export G4FORCENUMBEROFTHREADS="max"
-	   ;;
-esac
-
-echo $G4_XOPTS
-
+. ${CtestDir}/g4-unix-common

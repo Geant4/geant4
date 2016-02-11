@@ -25,6 +25,7 @@ endif()
 if(DEFINED ENV{WITH_MEMCHECK})
   set(WITH_MEMCHECK TRUE)
   find_program(CTEST_MEMORYCHECK_COMMAND NAMES valgrind)
+  message( " running with memcheck command ${CTEST_MEMORYCHECK_COMMAND}" )
   set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "--track-origins=yes")
 endif()
 
@@ -72,6 +73,7 @@ ctest_build(BUILD ${CTEST_SOURCE_DIRECTORY}/source)
 ctest_test(PARALLEL_LEVEL ${ncpu})
 
 if (WITH_MEMCHECK AND CTEST_MEMORYCHECK_COMMAND)
+   message( " memory checking using ${CTEST_MEMORYCHECK_COMMAND}" )
    set(CTEST_TEST_TIMEOUT 3500)
    ctest_memcheck(PARALLEL_LEVEL ${ncpu} 
 			  INCLUDE "example-(bas|ext)"

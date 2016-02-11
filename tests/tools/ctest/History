@@ -17,6 +17,166 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th February 2016, Gunter Folger           testtools-ctest-V10-00-09
+- create setup for 10-01-patches testing in jenkins:
+    based on up-to-date scripts, and reverted version numbers for XercesC,
+	  clhep and cmake (on linux) back to those used with 10.1.
+
+2nd february 2016 - Gunter Folger
+-  g4ec-slc-setup: in extending to gcc52:
+    change default for XercesC to 3.1.2 looked for in g4lcgapp first, 
+	 and only if not found look for 3.1.1.p2 as previous - to be deleted when 
+	    3.1.2 available everywhere
+		 
+19th January 2016 - Gunter Folger
+-  g4ec-mac-setup:  look for clhep also on local node /{ec,build}/externals
+
+23rd November 2015- Gunter Folger           testtools-ctest-V10-01-16
+-  mark continuous and experimental in CDash build name starting with c_/e_
+
+11th November 2015- Gunter Folger           testtools-ctest-V10-01-15
+-  g4ec-slc-setup: use CMake 3.3.2
+
+     invalid tag testtools-ctest-V10-01-14
+
+9th November 2015- Gunter Folger            testtools-ctest-V10-01-13
+-  Use new datasets PhotonEvaporation3.2 and  RadioactiveDecay4.3
+-  Use CLHEP 2.3.1
+
+28th October 2015 - Gunter Folger            testtools-ctest-V10-01-12
+-  Use new data set G4EMLOW6.48
+
+23 October 2015 Gunter Folger                testtools-ctest-V10-01-11
+-  Use new data set G4ENSDFSTATE1.2
+
+20-23 October 2015 Gunter Folger
+-  Correctly identify CentOS in CMake
+
+12 October 2015 Gunter Folger           testtools-ctest-V10-01-10
+-  Use EMLOW6.47 for gmake
+
+2 October 2015 Gunter Folger
+- g4{common,macros}.cmake: add/correct setting sfor VC14
+
+1 October 2015 Gunter Folger           testtools-ctest-V10-01-09
+-  Use EMLOW6.46 for gmake
+-  remove all slc5: g4ec-slc5-gcc41 g4ec-slc5-gcc43 g4ec-slc5-gcc43-gmake
+                    g4ec-slc5-gcc46 g4ec-slc5-gcc47 g4ec-slc5-icc12
+-  remove old mac: g4ec-mac107-gcc42  g4ec-mac107-gcc42-gmake
+-  remove old Win: g4ec-win7-vc10.bat  g4ec-winxp-vc10.bat g4ec-winxp-vc9.bat
+                   g4ec-x64-win7-vc10.bat  g4ec-x64-win7-vc9.bat  
+						 g4ec-x86-win7-vc10.bat  g4ec-x86-win7-vc11.bat
+						  
+29 September 2015 Gunter Folger
+-  fix g4-win-common.bat: add MT and MTmax option
+
+16 September 2015, Gunter Folger
+-  fix g4ec-cc7; it only get one argument, ie. compiler like gcc48
+-  enable gnumake build for jenkins, including the memcheck option.
+ 
+1 September 2015, Gunter Folger 
+- switch *gmake* to EMLOW 6.45
+- extend g4-unix-common for Vecgeom
+
+12 August 2015, Gunter Folger
+- g4ec-{slc6,cc7}-gcc51: remove setting of CXX11 option
+- g4ec-unix-common: ignore CXX11 option
+
+11 August 2015, Gunter Folger           testtools-ctest-V10-01-08
+- g4ec-slc-setup: switch to use root 6.0.4
+
+6 August 2015, Gunter Folger
+-  g4ec-slc-icc: for icc with std11 we first must set up gcc4{8,9..}, then icc.
+    somewhat similar to clang.
+	 
+22 July 2015, Gunter Folger
+-  after turning on c++11 for capable compilers, clang35/36 on slc6 show
+   problems. clang uses includes files from gcc44, but should use gcc49.
+	Attempt to fix this using the option 
+	--gcc-toolchain=path-to-gcc49-installdir in CXXFLAGS
+
+21 July 2015, Gunter Folger
+- g4common.cmake, g4Proposed.cmake: adapt Windows PATH to use BuildProducts instead of
+   outputs
+	
+20 July 2015, Gunter Folger
+- in g4ec-slc6-gcc44 and g4ec-slc6-gcc48-gmake-vg use cmake 3.1.0
+
+
+13 July 2015, Gunter Folger
+- switch to root6, AND revert back 
+
+10 July 2015, Gunter Folger 
+- remove setup of gccxml
+
+8 June 2015, Gunter Folger        testtools-ctest-V10-01-07
+- g4-unix-common:
+  -  Add option to build using C++11.
+  -  fix bug in setting number of threads for MAC for MTmax.
+  -  export CXX and CC from g4-slc-setup also when correct compiler is already
+     in PATH, improve info on g++ used using $CXX, as cmake does.
+
+26 May 2015, Gunter Folger        testtools-ctest-V10-01-06
+- Switch gmake build to  G4EMLOW6.44
+
+19 May 2015, Gunter Folger        testtools-ctest-V10-01-05
+- Switch gmake build to  G4EMLOW6.43
+
+24 Apr 2015, Gunter Folger 
+- add g4-win-common setting build env. similar to g4-unix-common,
+    including buildoptions from jenkins
+- rename PLATFORM to BUILDDIR in g4-{unix,win}-common*, 
+      Platform is used in g4common.cmake to signal x64 compiler on Windows.
+
+22 Apr 2015, Gunter Folger 
+- g4ec-mac-setup: adapt to new convention for clang version number
+- add g4ec-slc6-clang36
+
+20/21 Apr 2015, Gunter Folger
+- add jenkins log files to notes
+
+25 Mar 2015, Gunter Folger
+- correct CTEST_BUILD_NAME for new THREAD variable
+- new g4-unix-common, for common setup of environment for G4 build
+
+25 Feb 2015, Gunter Folger       testtools-ctest-V10-01-05
+- g4tagsvn.ps: Give Success a default value.
+- g4ec-slc-common: enable saving core dump files via ulimit.
+ 
+11 Feb 2015, Gunter Folger       testtools-ctest-V10-01-04
+-  g4ec-slc-setup:  switch to use CMake 3.1.0 and set CC/CXX env. variable for
+    CMmake.
+	
+27 Jan 2015, Gunter Folger       testtools-ctest-V10-01-03
+-  g4tagsdev.py: fix return code. One problem was hiding another problem.
+26 Jan 2015, Gunter Folger       -no tag-
+-  add g4ec-slc6-clang35 for use bu jenkins
+23 Jan 2015, Gunter Folger       -no tag-
+-  g4ec-slc-setup: for jenkins set WORKDIR to $WORKSPACE
+
+22 Jan 2015, Gunter Folger       -no tag-
+-  g4ec-slc-setup: fix typo on use of new BUILDOPTIONS 
+-  g4common.cmake: add BUILDOPTIONS to (CTEST-)BUILD-NAME
+-  g4ec-slc-setup: look for qt also in .../lcg/releases/qt/...
+  
+21 Jan 2015, Gunter Folger       -no tag- 
+-  g4tagsvn.py: protect against random svn failures, i.e. retry command 
+     up to five times after increasing waiting period
+-  g4ec-slc-setup: with jenkins, use BUILDOPTIONS to pass options
+      like MT, static, etc. instead of using BUILDTYPE.
+-  g4ec-slc-icc: variable THIS is overwritten by root, use variable CtestDir 		 	  
+
+16-12-2014, Gunter Folger           testtools-ctest-V10-01-02
+-  G4ec-slc-setup: protect setting qt from system scripts setting
+    QTDIR to /usr/lib64/qt-3.3 on slc3. 
+ 
+15-12-2014, Gunter Folger           testtools-ctest-V10-01-01
+-  update *-gmake* to use new datafile G4EMLOW6.42
+ 
+15-12-2014, Gunter Folger           testtools-ctest-V10-01-00
+- g4ec-slc-setup: allow to disable external CLHEP and use of QT 
+- g4ec-slc6-clang34: disable external CLHEP
+
 3-12-2014, Gunter Folger            testtools-ctest-V10-00-08
 - use CLHEP 2.2.0.4 in g4ec-slc-setup. 
 

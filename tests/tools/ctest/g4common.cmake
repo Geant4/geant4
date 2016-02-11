@@ -37,7 +37,9 @@ if(WIN32)
     set(win64 " Win64")
   endif()
   # be4 adding a new generator, make sure that cmake knows about this....
-  if(tag MATCHES vc12)
+  if(tag MATCHES vc14)
+    set(CTEST_CMAKE_GENERATOR "Visual Studio 14 2015${win64}")
+  elseif(tag MATCHES vc12)
     set(CTEST_CMAKE_GENERATOR "Visual Studio 12${win64}")
   elseif(tag MATCHES vc11)
     set(CTEST_CMAKE_GENERATOR "Visual Studio 11${win64}")
@@ -67,6 +69,14 @@ else()
 endif()
 if(NOT $ENV{VERSION} STREQUAL "g4tags-dev")
   set(CTEST_BUILD_NAME $ENV{VERSION}-${CTEST_BUILD_NAME})
+endif()
+
+if (NOT "$ENV{THREAD}" STREQUAL "")
+  set (CTEST_BUILD_NAME ${CTEST_BUILD_NAME}-$ENV{THREAD})
+endif()
+
+if (NOT "$ENV{BUILDOPTIONS}" STREQUAL "")
+  set (CTEST_BUILD_NAME ${CTEST_BUILD_NAME}-$ENV{BUILDOPTIONS})
 endif()
 
 set(CTEST_CONFIGURATION_TYPE "${CTEST_BUILD_CONFIGURATION}")
@@ -99,7 +109,7 @@ else()
 endif()
 #	     "warning: declaration of 'tokType' shadows a member of"
 
-message( "CTEST_TIMEOUT =x$ENV{CTEST_TIMEOUT}x")
+#message( "CTEST_TIMEOUT =x$ENV{CTEST_TIMEOUT}x")
 if("$ENV{CTEST_TIMEOUT}" STREQUAL "")
   # use default value
    set(CTEST_TEST_TIMEOUT 1500)
@@ -107,12 +117,19 @@ else()
    message( "Setting timelimit from environment to $ENV{CTEST_TIMEOUT}" )
    set(CTEST_TEST_TIMEOUT $ENV{CTEST_TIMEOUT})
 endif()
-#set(CTEST_TEST_TIMEOUT 1500)
 
 if("$ENV{VERSION}" STREQUAL "g4tags-dev")
   set(CTEST_NOTES_FILES ${CTEST_SOURCE_DIRECTORY}/gettags.txt)
 endif()
 set(CTEST_NOTES_FILES ${CTEST_NOTES_FILES} ${CTEST_SCRIPT_DIRECTORY}/${CTEST_SCRIPT_NAME})
+
+if(EXISTS ${pwd}/jenkins.err)
+  set(CTEST_NOTES_FILES ${CTEST_NOTES_FILES} ${pwd}/jenkins.err)
+endif()
+if(EXISTS ${pwd}/jenkins.log)
+  set(CTEST_NOTES_FILES ${CTEST_NOTES_FILES} ${pwd}/jenkins.log)
+endif()
+  
 
 set(CTEST_START_WITH_EMPTY_BINARY_DIRECTORY_ONCE 1)
 set(CTEST_CONFIG_OPTIONS -DGEANT4_ENABLE_TESTING=ON
@@ -134,5 +151,6 @@ if(WIN32)
   if(NOT CTEST_CMAKE_GENERATOR MATCHES Makefiles)
     set(_cfg /${CTEST_BUILD_CONFIGURATION})
   endif()
-  set(ENV{PATH} "${CTEST_BINARY_DIRECTORY}/outputs/runtime${_cfg};$ENV{PATH}")
+#  set(ENV{PATH} "${CTEST_BINARY_DIRECTORY}/outputs/runtime${_cfg};$ENV{PATH}")
+  set(ENV{PATH} "${CTEST_BINARY_DIRECTORY}/BuildProducts/${_cfg}/bin;$ENV{PATH}")
 endif()

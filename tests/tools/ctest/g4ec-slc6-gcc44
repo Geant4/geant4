@@ -15,7 +15,8 @@ externals=/afs/cern.ch/sw/lcg/experimental
 platform=x86_64-${CONFIG}-opt
 
 #---CMake----------------------------------------------------------
-export PATH=/afs/cern.ch/sw/lcg/external/CMake/2.8.9/Linux-i386/bin:${PATH}
+#export PATH=/afs/cern.ch/sw/lcg/external/CMake/2.8.9/Linux-i386/bin:${PATH}
+export PATH=${lcgcontrib}/CMake/3.1.0/Linux-x86_64/bin:${PATH}
 
 #---Xerces-C-------------------------------------------------------
 version=3.1.1p1
@@ -54,60 +55,24 @@ export PATH=${externals}/gccxml/${version}/${platform}/bin:${PATH}
 # Default compiler
 #-----------------------------------------------------------------
 
-THIS=$(dirname $0)
+CtestDir=$(dirname $0)
 
-if [ x$MODE = x ]; then
-  export MODE=nightly
-fi
-if [ x$WORKDIR = x ]; then 
-  WORKDIR=/ec/G4-builds
-fi
-if [ x$VERSION = x ]; then 
-  export VERSION=g4tags-dev
-fi
+# use common setup for environment
 
-if [ x$BUILDTYPE = x ]; then
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}
-else
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
-fi
+. ${CtestDir}/g4-unix-common
 
-export SOURCE=${PLATFORM}/${VERSION}
-export BINARY=${PLATFORM}/build
-
-
-#
-#default, to be modified for non default buildtypes
-#
-  export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
--DGEANT4_USE_OPENGL_X11=ON;\
--DGEANT4_USE_QT=${Use_QT};\
--DGEANT4_USE_RAYTRACER_X11=ON;\
-${Use_CLHEP};\
--DGEANT4_USE_XM=ON"
-
-
-case "${BUILDTYPE}" in 
-
-   staticlibs)
-	   export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
-	   ;;
-   MT)
-	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
-	   ;;
-esac
 
 if [ "${RESET_SOURCE}" = "yes" ]; then
   rm -rf ${SOURCE}
 fi
 
 if [ ! -d "${SOURCE}" ]; then
-  ${THIS}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q
+  ${CtestDir}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q
 fi
 
 #---Run the CTest script-------------------------------------------
 echo "Starting CTest script for configutation ${CONFIG} at `date`" 
-ctest -V -S ${THIS}/g4${MODE}.cmake 
+ctest -V -S ${CtestDir}/g4${MODE}.cmake 
 
 
 

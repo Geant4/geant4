@@ -24,15 +24,21 @@ Identify_Compiler() {
      # using gcc/g++
 	  cc_version=`echo $cid | awk '{ print $1 }' | awk -F\- '{ print $NF }'`
 	  export CC=gcc
-          export CXX=g++
+     export CXX=g++
 
   elif echo $cid | grep clang > /dev/null ; then
      # using clang/clang++
-	  cc_version=`echo $cid | awk '{ print $NF }' | sed -e"s/svn)//"`
+	  if echo $cid | grep sed > /dev/null; then
+	      #MAC clang prior to 70
+	      cc_version=`echo $cid | awk '{ print $NF }' | sed -e"s/svn)//"`
+	  else
+	      cc_version=`echo $cid | awk '{ print $(NF-1) }' | tr -d '.' \
+			                     | awk '{ print	substr($1,1,2) }'`
+	  fi	
 	  export CC=clang
-          export CXX=clang++
+     export CXX=clang++
   fi
-  cc_version=`echo ${cc_version} | tr -d '.'`
+  cc_version=`echo ${cc_version} | awk -F\. '{print $1$2}'`
 }
 
 Identify_OS() {
@@ -52,20 +58,23 @@ export CONFIG=mac${macvers}-${CC}${cc_version}
 lcg="${lcgbase}-${CC}${cc_version}"
 lcgopt="${lcg}-opt" 
 
-lcgext="/ec/externals"
+[ -d /ec/externals ] && lcgext="/ec/externals"  || true
+[ -d /build/externals ] && lcgext="/build/externals"  || true
+
 lcgapp="/afs/cern.ch/sw/lcg/app/releases"
-lcgcontrib="/afs/cern.ch/sw/lcg/contrib"
+
 lcgexperim="/afs/cern.ch/sw/lcg/experimental"
+g4lcgapp="/afs/cern.ch/sw/lcg/app/releases/GEANT4"
+[ -r $g4lcgapp ] && true || g4lcgapp=$lcgext
 
 [ -z ${rootlcg} ] && rootlcg=${lcgopt}
 
 #---Xerces-C-------------------------------------------------------
 if [ -z "${XERCESC_ROOT_DIR}" ] ; then
-  [ -z "${XERCESC_VERSION}" ] && XERCESC_VERSION=3.1.1 || true     
-  XercesC_dir=${lcgext}/xerces-c-${XERCESC_VERSION}/${lcgopt}
-
+        [ -z "${XERCESC_VERSION}" ] && XERCESC_VERSION=3.1.1 || true     
+        XercesC_dir=${lcgext}/xerces-c-${XERCESC_VERSION}/${lcgopt}
    # if no XercesC, look in experimental
-  if [ ! -d $XercesC_dir -a \
+  if [ ! -d "${XercesC_dir}" -a \
        -d ${lcgexperim}/XercesC/${XERCESC_VERSION}/${lcgopt} ] ; then
 	 XercesC_dir=${lcgexperim}/XercesC/${XERCESC_VERSION}/${lcgopt} 
   fi
@@ -75,7 +84,7 @@ if [ -z "${XERCESC_ROOT_DIR}" ] ; then
     dir=`ls -t ${lcgext}/xerces-c-${XERCESC_VERSION}/x86_64-mac*-${CC}*-opt | head -1`
     if [ -n "$dir" -a -d $dir ] ; then
 	    XercesC_dir=$dir
-	 fi 
+    fi 
   fi
 
   if [ -d $XercesC_dir ] ; then
@@ -167,31 +176,6 @@ if  IsNotInPath Python ; then
 fi
 #-----------------------------------------------------------------
 
-#echo $PATH | wc -c
-
-test -n "$VERSION_BENCHMARKS" && echo "Using benchmarks tag: $VERSION_BENCHMARKS"
- 
-
-if [ -z "$MODE" ]; then
-  export MODE=nightly
-fi
-if [ -z "$WORKDIR" ]; then 
-  WORKDIR=/ec/G4-builds
-fi
-if [ -z "$VERSION" ]; then 
-  export VERSION=g4tags-dev
-fi
-
-if [ -z "$BUILDTYPE" ]; then
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}
-else
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
-fi
-
-export SOURCE=${PLATFORM}/${VERSION}
-export BINARY=${PLATFORM}/build
-
-
 #
 #default, to be modified for non default buildtypes
 #
@@ -200,20 +184,8 @@ export BINARY=${PLATFORM}/build
 -DGEANT4_USE_RAYTRACER_X11=ON;\
 ${Use_CLHEP}"
 
+# Common environment settings, options,...
+CtestDir=$(dirname $0)
 
-case "${BUILDTYPE}" in 
-
-   staticlibs)
-	   export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
-	   ;;
-   MT)
-	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
-	   ;;
-   MTmax)
-	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
-	   export G4FORCENUMBEROFTHREADS="max"
-	   ;;
-esac
-
-echo $G4_XOPTS
+. ${CtestDir}/g4-unix-common
 

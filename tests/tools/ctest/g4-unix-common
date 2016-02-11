@@ -1,0 +1,170 @@
+test -n "$VERSION_BENCHMARKS" && echo "Using benchmarks tag: $VERSION_BENCHMARKS"
+ 
+
+if [ x$MODE = x ]; then
+  export MODE=nightly
+fi
+if [ x$WORKDIR = x ]; then 
+  WORKDIR=/ec/G4-builds
+fi
+
+if [ x$VERSION = x ]; then 
+  export VERSION=g4tags-dev
+fi
+
+if [ x$BUILDTYPE = x ]; then
+   BUILDDIR=${WORKDIR}/${MODE}/${CONFIG}
+else
+   BUILDDIR=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
+fi
+
+# jk uses workspace, and use/adapt BUILDDIR
+if [ -n "${WORKSPACE}" -a -d "${WORKSPACE}" ]; then
+  WORKDIR=`/bin/pwd` 
+  BUILDDIR=${WORKDIR}
+  echo "Using jenkings workspace .${WORKSPACE}. and workdir: .${WORKDIR}."
+  #cleanup
+  #MODE=`echo $MODE | tr -d " "`
+  #BUILDTYPE=`echo $BUILDTYPE| tr -d " "`
+  #VERSION=`echo $VERSION | tr -d " "`
+  #BUILDDIR=${WORKDIR}/${MODE}/${BUILDTYPE}/${VERSION}
+fi
+
+if [ ! -d ${BUILDDIR} ] ; then
+   echo "Error: No Directory to build in, using BUILDDIR=${BUILDDIR}"
+fi
+
+export SOURCE=${BUILDDIR}/${VERSION}
+export BINARY=${BUILDDIR}/build
+
+if [ "$MODE" = "gnumake" ] ; then
+   source $(dirname $0)/g4-setup-gnumake
+fi
+
+#
+#default, to be modified for non default buildtypes
+#
+ if [ x$G4_XOPTS = x ]; then
+   export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
+-DGEANT4_USE_OPENGL_X11=ON;\
+-DGEANT4_USE_QT=${Use_QT};\
+-DGEANT4_USE_RAYTRACER_X11=ON;\
+${Use_CLHEP};\
+-DGEANT4_USE_XM=ON"
+fi
+
+if [ x$WORKSPACE = x ]; then
+   # EC: get options from BUILDTYPE
+	case "${BUILDTYPE}" in 
+
+   	staticlibs)
+	   	export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
+	   	;;
+   	MT)
+	   	export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+	   	;;
+   	MTmax)
+	   	export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+	   	export G4FORCENUMBEROFTHREADS="max"
+	   	;;
+	esac
+else
+	# JK: now options and BUILDTYPE are separate
+	for option in ${BUILDOPTIONS//,/ } ; do
+		case "${option}" in 
+
+   		staticlibs)
+	   		export G4_XOPTS="${G4_XOPTS};-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
+	   		;;
+   		EpCheck)
+                export G4Hadronic_epReportLevel=-3
+	   		;;
+			BoundsCheck)	
+				    export CXXFLAGS="-DG4FPE_DEBUG -D_GLIBCXX_DEBUG"
+                export CTEST_TIMEOUT=5000
+				  ;;
+			MemCheck)
+			       echo "Using Memory checking"
+			       export WITH_MEMCHECK=1		 
+             ;;
+		   UseUsolids)
+			       export G4_XOPTS="${G4_XOPTS};-DGEANT4_USE_USOLIDS=ON"
+				 ;;
+		   UseSystemUsolids)
+			       export G4_XOPTS="${G4_XOPTS};-DGEANT4_USE_SYSTEM_USOLIDS=ON"
+			    ;;
+			USolids_DIR*)
+			       echo "usolids dir = ${option}"
+			       export G4_XOPTS="${G4_XOPTS};-D${option}"
+			    ;;	 
+			UseInternalCLHEP) 
+			      echo $G4_XOPTS | grep -q GEANT4_USE_SYSTEM_CLHEP \
+					   && G4_XOPTS=`echo G4_XOPTS | sed -e 's/GEANT4_USE_SYSTEM_CLHEP=ON/GEANT4_USE_SYSTEM_CLHEP=OFF/'` \
+						|| G4_XOPTS="${G4_XOPTS};-DGEANT4_USE_SYSTEM_CLHEP=OFF"
+			    ;;
+		   UseGranularCLHEP)
+			 	 	if ( echo $G4_XOPTS | grep -q GEANT4_USE_SYSTEM_CLHEP ) ; then
+					   G4_XOPTS="${G4_XOPTS};-DGEANT4_USE_SYSTEM_CLHEP_GRANULAR=ON"
+					else
+					   echo "Not using system CLHEP, therefore ignoring option to use granular CLHEP"
+					fi
+					;;		
+		   CXX11)
+					echo " Ignoring superfluous option CXX11" 
+					;;	
+		    *) echo "Error: unknown option passed in BUILDOPTIONS: ${option}"
+		       exit 1;
+			    ;;
+		esac
+	done
+	
+	# Mark if we implictely use CLHEP, when not found in lcg...
+	if echo ${BUILDOPTIONS} | grep -e 'UseInternalCLHEP' > /dev/null ; then
+	   echo "use internal CLHEP"
+	else
+	   if echo ${G4_XOPTS} | grep -e  USE_SYSTEM_CLHEP=OFF > /dev/null ; then
+		   BUILDOPTIONS="${BUILDOPTIONS},UseInternalCLHEP"
+			echo "marking build as using internal CLHEP"
+		fi	
+	fi	 
+	#reformat for CMake for use in build name 
+	for option in ${BUILDOPTIONS//,/ } ; do
+		case "${option}" in
+		UseSystemUsolids)
+		    BuildName="${BuildName}${BuildName+-}VecGeom"
+		  ;;
+		USolids_DIR*)
+		  ;;
+		*)  BuildName="${BuildName}${BuildName+-}${option}"
+		  ;;
+		esac
+	done	
+   export BUILDOPTIONS=${BuildName}
+
+
+   echo " THREAD=${THREAD}."
+	
+	case "${THREAD}" in 
+
+		Seq) # no extra setting needed
+			;;
+   	MT)
+	   	export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+	   	;;
+   	MTmax)
+	   	export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+			if [ -r /proc/cpuinfo ] ; then 
+			   cpus=`grep processor  /proc/cpuinfo  | wc -l`
+	   	   threads=$((15 * $cpus / 10))
+			else 
+			   threads="max"
+			fi	
+			export G4FORCENUMBEROFTHREADS="$threads"
+	   	;;
+		*) echo "Error: unknown option passed in THREAD: ${THREAD}"
+		   exit 1;
+			;;
+	esac
+fi	 
+
+echo "Geant4 CMake options: $G4_XOPTS"

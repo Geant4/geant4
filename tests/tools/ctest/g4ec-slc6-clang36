@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+THIS=$(dirname $0)
+
+#---Enable FPE ---------------------------------------------------
+#export CXXFLAGS=-DG4FPE_DEBUG
+
+CONFIG=slc6-clang36
+
+#use Xercesc 3.1.1p1 from ...experimental....
+XERCESC_VERSION=3.1.1p1
+#use Xercesc 3.1.1p1 from explicit place 
+XercesC_dir=/afs/cern.ch/sw/lcg/external/XercesC/3.1.1p1/x86_64-slc6-gcc48-opt
+
+#run without root
+export ROOTSYS="-"
+#export CLHEP_ROOT_DIR="-"
+[ -z "${BUILDOPTIONS}" ] && BUILDOPTIONS="UseInternalCLHEP" \
+                         || BUILDOPTIONS="${BUILDOPTIONS},UseInternalCLHEP"
+
+Clang_dir=/afs/cern.ch/sw/lcg/external/llvm/3.6/x86_64-slc6-gcc49-opt
+
+# as clang was built with 4.9, we need the libs for this
+. /afs/cern.ch/sw/lcg/external/gcc/4.9/x86_64-slc6-gcc49-opt/setup.sh
+
+gccbase=`which g++ | sed -e "s=/bin/g++=="`
+export CXXFLAGS="${CXXFLAGS:- } --gcc-toolchain=$gccbase"
+export  CCFLAGS="${CCFLAGS:- } --gcc-toolchain=$gccbase"
+
+# now set up clang
+.  ${Clang_dir}/setup.sh
+
+ # and make sure to use the correct libs and includes....
+export CXX=${Clang_dir}/bin/clang++
+export  CC=${Clang_dir}/bin/clang
+
+. ${THIS}/g4ec-slc-common x86_64-slc6 4.9

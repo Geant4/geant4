@@ -7,7 +7,7 @@ import MySQLdb
 import time, sys, re, os
 
 host     = 'dbod-g4-tags.cern.ch'
-port     = 5500
+port     = 5503
 user     = 'g4tagsro'
 passwd   = 'read'
 dbname   = 'geant4tags'

@@ -6,6 +6,9 @@ include(${CTEST_SCRIPT_DIRECTORY}/g4common.cmake)
 #---Addional CTest settings-------------------------------------------------
 #set(CTEST_UPDATE_OPTIONS "${CTEST_UPDATE_OPTIONS} -p")  # Add proposed tags
 
+#---mark experimental in build name-----------------------------------------
+set(CTEST_BUILD_NAME e_${CTEST_BUILD_NAME})
+
 #---CTest commands----------------------------------------------------------
 ctest_empty_binary_directory(${CTEST_BINARY_DIRECTORY})
 ctest_start("Experimental")

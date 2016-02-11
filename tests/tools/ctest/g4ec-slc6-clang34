@@ -11,7 +11,8 @@ CONFIG=slc6-clang34
 XERCESC_VERSION=3.1.1p1
 
 #run without root
-export ROOTSYS="/"
+export ROOTSYS="-"
+export CLHEP_ROOT_DIR="-"
 
 Clang_dir=/afs/cern.ch/sw/lcg/external/llvm/3.4/x86_64-slc6-gcc48-opt
 

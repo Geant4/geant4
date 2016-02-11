@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+THIS=$(dirname $0)
+
+#---Enable FPE ---------------------------------------------------
+export CXXFLAGS=-DG4FPE_DEBUG
+
+
+#use Xercesc 3.1.2
+XERCESC_VERSION=3.1.2
+
+CONFIG=cc7-gcc51
+
+. ${THIS}/g4ec-slc-common x86_64-cc7 5.1

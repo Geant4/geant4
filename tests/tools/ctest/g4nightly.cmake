@@ -13,7 +13,3 @@ ctest_configure(BUILD   ${CTEST_BINARY_DIRECTORY}
 ctest_build(BUILD ${CTEST_BINARY_DIRECTORY})
 ctest_test(PARALLEL_LEVEL ${ncpu} INCLUDE_LABEL "Nightly")
 ctest_submit()
-
-
-
-

@@ -78,7 +78,8 @@ if(WIN32)
   if(NOT CTEST_CMAKE_GENERATOR MATCHES Makefiles)
     set(_cfg /${CTEST_BUILD_CONFIGURATION})
   endif()
-  set(ENV{PATH} "${CTEST_BINARY_DIRECTORY}/outputs/runtime${_cfg};$ENV{PATH}")
+  #set(ENV{PATH} "${CTEST_BINARY_DIRECTORY}/outputs/runtime${_cfg};$ENV{PATH}")
+  set(ENV{PATH} "${CTEST_BINARY_DIRECTORY}/BuildProducts/${_cfg}/bin;$ENV{PATH}")
 endif()
 
 #---CTest commands----------------------------------------------------------

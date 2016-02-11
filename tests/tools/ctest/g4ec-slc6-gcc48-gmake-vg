@@ -28,6 +28,9 @@ if [ x$MODE = x ]; then
   export MODE=nightly
 fi
 
+#---CTest----------------------------------------------------------
+export PATH=${lcgcontrib}/CMake/3.1.0/Linux-x86_64/bin:${PATH}
+
 if [ x$BUILDTYPE = xRelWithDebInfo ]; then
    export G4OPTDEBUG=1
 elif [ x$BUILDTYPE = xDebug ]; then
@@ -63,7 +66,7 @@ export G4LIB_USE_CLHEP=1
 #export G4_DATA_DIR=/cvmfs/geant4.cern.ch/share/data
 export G4_DATA_DIR=/afs/cern.ch/sw/geant4/releases/share/data/
 export G4LEVELGAMMADATA=${G4_DATA_DIR}/PhotonEvaporation3.1
-export G4LEDATA=${G4_DATA_DIR}/G4EMLOW6.41
+export G4LEDATA=${G4_DATA_DIR}/G4EMLOW6.47
 export G4RADIOACTIVEDATA=${G4_DATA_DIR}/RadioactiveDecay4.2
 export G4NEUTRONHPDATA=${G4_DATA_DIR}/G4NDL4.5
 export G4PIIDATA=${G4_DATA_DIR}/G4PII1.3
