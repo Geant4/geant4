@@ -1,11 +1,12 @@
-####   Starting: /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/examples/extended/hadronic/FissionFragment/FissionFragment    ####
+####   Starting: /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/examples/extended/hadronic/FissionFragment/FissionFragment    ####
+MT RNG Seed: 62737819
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,6 +14,11 @@
 
 <<< Geant4 Physics List simulation engine: QGSP_BIC_HP 2.0
 
+Checking overlaps for volume Floor ... OK! 
+Checking overlaps for volume Tank_Wall ... OK! 
+Checking overlaps for volume Tank_Air ... OK! 
+Checking overlaps for volume Tank_H2O ... OK! 
+Checking overlaps for volume Plate_Meat ... OK! 
 Checking overlaps for volume Plate@Location    X:0.00    Y:1.20 ... OK! 
 Checking overlaps for volume Plate@Location    X:0.00    Y:-1.20 ... OK! 
 Checking overlaps for volume Plate@Location    X:0.00    Y:1.50 ... OK! 
@@ -326,6 +332,10 @@ Checking overlaps for volume Plate@Location    X:10.00    Y:-6.60 ... OK!
 Checking overlaps for volume Plate@Location    X:-10.00    Y:6.60 ... OK! 
 Checking overlaps for volume Plate@Location    X:-10.00    Y:-6.60 ... OK! 
 312 plates were added to the subcritical assembly
+Checking overlaps for volume NeutronSource ... OK! 
+Checking overlaps for volume Poly ... OK! 
+Checking overlaps for volume Detector_Shell ... OK! 
+Checking overlaps for volume Detector_BF3_Core ... OK! 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -336,12 +346,10 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLImmediateXm (OGLI, OGLIXm)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -669,21 +677,21 @@ CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
 Activate Fission Fragments Production for the target isotope of Z = 92, A = 235
 As the result, delayed neutrons are omitted and they should be taken care by RadioaActiveDecay.
 Activate Fission Fragments Production for the target isotope of Z = 92, A = 238
@@ -1083,5 +1091,155 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
+Shooting event 1
+Emission Location: r: (3.9412,0,444.628)
+Emission Direction: r: (-0.720729,0.12139,-0.682506)
+Shooting event 2
+Emission Location: r: (4.17763,0,479.475)
+Emission Direction: r: (-0.719373,-0.671396,-0.178132)
+Shooting event 3
+Emission Location: r: (0.66197,0,483.282)
+Emission Direction: r: (-0.165139,-0.932667,-0.320721)
+Shooting event 4
+Emission Location: r: (3.80136,0,478.324)
+Emission Direction: r: (-0.210341,-0.629553,-0.747943)
+Shooting event 5
+Emission Location: r: (4.62315,0,456.405)
+Emission Direction: r: (0.612194,0.0273638,-0.790234)
+Shooting event 6
+Emission Location: r: (2.92356,0,438.936)
+Emission Direction: r: (0.432806,0.0703172,0.898741)
+Shooting event 7
+Emission Location: r: (1.88724,0,450.282)
+Emission Direction: r: (0.359342,0.840666,-0.405159)
+Shooting event 8
+Emission Location: r: (0.56947,0,485.093)
+Emission Direction: r: (-0.234791,0.220263,-0.946762)
+Shooting event 9
+Emission Location: r: (1.9735,0,444.272)
+Emission Direction: r: (0.59254,-0.699268,-0.3999)
+Shooting event 10
+Emission Location: r: (4.72547,0,451.921)
+Emission Direction: r: (0.571126,-0.684701,0.452768)
+Shooting event 11
+Emission Location: r: (1.10603,0,474.152)
+Emission Direction: r: (-0.980294,0.0473819,-0.191777)
+Shooting event 12
+Emission Location: r: (2.69868,0,464.157)
+Emission Direction: r: (-0.777808,-0.404649,-0.48091)
+Shooting event 13
+Emission Location: r: (0.63229,0,464.317)
+Emission Direction: r: (-0.936435,-0.0577947,0.346049)
+Shooting event 14
+Emission Location: r: (3.85457,0,434.984)
+Emission Direction: r: (0.829784,0.335646,0.445869)
+Shooting event 15
+Emission Location: r: (3.15939,0,442.907)
+Emission Direction: r: (0.483114,-0.385893,-0.785931)
+Shooting event 16
+Emission Location: r: (1.14932,0,470.671)
+Emission Direction: r: (-0.975011,0.0946814,0.200968)
+Shooting event 17
+Emission Location: r: (0.343654,0,460.981)
+Emission Direction: r: (0.702644,-0.55183,0.449194)
+Shooting event 18
+Emission Location: r: (1.86792,0,471.388)
+Emission Direction: r: (0.507207,0.316761,-0.801501)
+Shooting event 19
+Emission Location: r: (1.6248,0,455.664)
+Emission Direction: r: (0.678986,0.386143,-0.624397)
+Shooting event 20
+Emission Location: r: (1.11745,0,473.966)
+Emission Direction: r: (0.953708,0.252765,0.162943)
+Shooting event 21
+Emission Location: r: (2.73163,0,474.237)
+Emission Direction: r: (-0.731992,-0.644051,0.222231)
+Shooting event 22
+Emission Location: r: (1.95852,0,438.186)
+Emission Direction: r: (0.600361,-0.792332,-0.108522)
+Shooting event 23
+Emission Location: r: (4.1222,0,473.383)
+Emission Direction: r: (0.704229,0.481411,-0.521828)
+Shooting event 24
+Emission Location: r: (4.5796,0,479.218)
+Emission Direction: r: (-0.845298,-0.187687,-0.500246)
+Shooting event 25
+Emission Location: r: (3.31434,0,471.137)
+Emission Direction: r: (0.368345,0.656469,0.658309)
+Shooting event 26
+Emission Location: r: (0.670582,0,437.07)
+Emission Direction: r: (-0.430525,0.795425,-0.426554)
+Shooting event 27
+Emission Location: r: (2.76725,0,485.566)
+Emission Direction: r: (-0.552958,-0.450511,-0.700911)
+Shooting event 28
+Emission Location: r: (1.91494,0,468.728)
+Emission Direction: r: (-0.224456,0.182467,0.957249)
+Shooting event 29
+Emission Location: r: (2.37722,0,466.554)
+Emission Direction: r: (-0.799924,0.532997,0.275745)
+Shooting event 30
+Emission Location: r: (4.18608,0,474.043)
+Emission Direction: r: (-0.700589,0.531064,-0.476598)
+Shooting event 31
+Emission Location: r: (0.96991,0,485.217)
+Emission Direction: r: (0.176126,0.842533,0.509036)
+Shooting event 32
+Emission Location: r: (3.42098,0,468.877)
+Emission Direction: r: (0.479802,-0.778697,-0.404253)
+Shooting event 33
+Emission Location: r: (2.89872,0,460.566)
+Emission Direction: r: (-0.474195,0.0395863,0.879529)
+Shooting event 34
+Emission Location: r: (0.432493,0,454.248)
+Emission Direction: r: (0.327245,0.666184,0.670156)
+Shooting event 35
+Emission Location: r: (3.8503,0,462.961)
+Emission Direction: r: (-0.0622017,-0.65657,-0.751696)
+Shooting event 36
+Emission Location: r: (3.35607,0,480.698)
+Emission Direction: r: (0.588781,0.707858,-0.390223)
+Shooting event 37
+Emission Location: r: (0.107528,0,438.087)
+Emission Direction: r: (0.0555912,0.998421,0.00812142)
+Shooting event 38
+Emission Location: r: (2.74674,0,459.686)
+Emission Direction: r: (-0.166963,-0.238647,0.956646)
+Shooting event 39
+Emission Location: r: (2.9176,0,450.165)
+Emission Direction: r: (0.665455,0.639135,-0.385585)
+Shooting event 40
+Emission Location: r: (2.56137,0,472.688)
+Emission Direction: r: (0.492421,0.275884,0.825475)
+Shooting event 41
+Emission Location: r: (4.21483,0,435.475)
+Emission Direction: r: (-0.53897,0.535323,0.650339)
+Shooting event 42
+Emission Location: r: (3.30303,0,484.64)
+Emission Direction: r: (-0.199465,-0.342111,-0.918245)
+Shooting event 43
+Emission Location: r: (1.6946,0,448.405)
+Emission Direction: r: (0.83254,-0.525217,0.176136)
+Shooting event 44
+Emission Location: r: (0.388986,0,460.677)
+Emission Direction: r: (-0.504571,0.618546,0.602336)
+Shooting event 45
+Emission Location: r: (1.72434,0,460.707)
+Emission Direction: r: (0.516745,0.0200477,-0.855904)
+Shooting event 46
+Emission Location: r: (1.62667,0,483.43)
+Emission Direction: r: (-0.206373,-0.529746,-0.822666)
+Shooting event 47
+Emission Location: r: (0.091839,0,471.393)
+Emission Direction: r: (-0.653205,0.717048,0.24324)
+Shooting event 48
+Emission Location: r: (1.73383,0,483.312)
+Emission Direction: r: (0.446252,0.365307,-0.816952)
+Shooting event 49
+Emission Location: r: (4.8606,0,473.322)
+Emission Direction: r: (0.616822,0.75785,0.212587)
+Shooting event 50
+Emission Location: r: (4.29702,0,475.553)
+Emission Direction: r: (-0.359677,0.0237744,-0.932774)
 Graphics systems deleted.
 Visualization Manager deleting...

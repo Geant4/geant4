@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,12 +20,10 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLImmediateXm (OGLI, OGLIXm)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -949,7 +947,7 @@ Tracks in tracking region have been processed. -- Stage 0 over.
 >>> Summary of Event 0
 
 Tracker hits --------------------------------------------------------------
-1806 hits are stored in RE01TrackerHitsCollection.
+2024 hits are stored in RE01TrackerHitsCollection.
 List of hits in tracker
 TrackID 358   Position (232.46,-91.9901,249.104)       : 372.236 [keV]
 TrackID 358   Position (278.926,-110.455,298.797)       : 680.682 [keV]
@@ -1877,886 +1875,1104 @@ TrackID -1   Position (-370.007,-155.792,180.401)       : 48.6374 [keV]
 TrackID -1   Position (-276.913,-288.651,8.271)       : 5.57189 [keV]
 TrackID -1   Position (-278.106,-290.294,8.9113)       : 2.25297 [keV]
 TrackID -1   Position (-448.406,77.1825,223.911)       : 1.39693 [keV]
-TrackID -1   Position (236.143,185.578,-101.92)       : 19.2085 [keV]
-TrackID -1   Position (278.95,-110.442,-149.052)       : 1.9038 [keV]
-TrackID -1   Position (278.951,-110.449,-149.051)       : 3.91849 [keV]
-TrackID -1   Position (278.948,-110.456,-149.048)       : 3.70646 [keV]
-TrackID -1   Position (278.948,-110.464,-149.046)       : 6.61637 [keV]
-TrackID -1   Position (278.947,-110.471,-149.041)       : 4.78008 [keV]
-TrackID -1   Position (278.944,-110.479,-149.038)       : 38.8262 [keV]
-TrackID -1   Position (278.938,-110.484,-149.037)       : 2.51966 [keV]
-TrackID -1   Position (278.937,-110.491,-149.04)       : 65.4152 [keV]
-TrackID -1   Position (278.94,-110.499,-149.042)       : 55.1076 [keV]
-TrackID -1   Position (-147.869,203.373,147.959)       : 115.631 [keV]
-TrackID -1   Position (9.68523,352.49,21.736)       : 49.2433 [keV]
-TrackID -1   Position (-21.5347,299.962,80.2033)       : 233.451 [keV]
-TrackID -1   Position (-47.8087,297.806,76.6955)       : 91.854 [keV]
-TrackID -1   Position (-47.7719,297.848,76.408)       : 138.892 [keV]
-TrackID -1   Position (-47.5739,298.266,76.2897)       : 665.641 [keV]
-TrackID -1   Position (-47.1326,298.476,76.1311)       : 2.72805 [keV]
-TrackID -1   Position (-362.791,-270.813,417.448)       : 252.9 [keV]
-TrackID -1   Position (349.903,-194.859,-5.0309)       : 169.294 [keV]
-TrackID -1   Position (286.973,-206.464,124.94)       : 66.9008 [keV]
-TrackID -1   Position (-45.6768,-301.398,97.5149)       : 46.8802 [keV]
-TrackID -1   Position (-56.6174,-296.418,101.385)       : 422.942 [keV]
-TrackID -1   Position (-171.597,-366.484,268.269)       : 52.0293 [keV]
-TrackID -1   Position (158.307,371.604,69.944)       : 125.762 [keV]
-TrackID -1   Position (401.305,1.83536,328.22)       : 2.46613 [keV]
-TrackID -1   Position (324.506,-142.828,-4.77597)       : 36.2841 [keV]
-TrackID -1   Position (324.57,-142.931,-4.7354)       : 67.905 [keV]
-TrackID -1   Position (324.633,-142.971,-4.66246)       : 21.0591 [keV]
-TrackID -1   Position (324.623,-143.008,-4.58892)       : 25.8358 [keV]
-TrackID -1   Position (324.636,-143.041,-4.51613)       : 24.1049 [keV]
-TrackID -1   Position (324.638,-143.081,-4.44685)       : 17.4695 [keV]
-TrackID -1   Position (324.643,-143.104,-4.37068)       : 32.5604 [keV]
-TrackID -1   Position (324.625,-143.121,-4.29618)       : 21.5635 [keV]
-TrackID -1   Position (324.599,-143.167,-4.23891)       : 21.9871 [keV]
-TrackID -1   Position (324.6,-143.164,-4.15975)       : 22.1032 [keV]
-TrackID -1   Position (324.581,-143.131,-4.08968)       : 25.4118 [keV]
-TrackID -1   Position (324.562,-143.123,-4.0193)       : 34.9903 [keV]
-TrackID -1   Position (324.519,-143.172,-3.97248)       : 34.3875 [keV]
-TrackID -1   Position (324.459,-143.207,-3.92148)       : 25.7512 [keV]
-TrackID -1   Position (324.439,-143.302,-3.90842)       : 38.1161 [keV]
-TrackID -1   Position (324.484,-143.357,-3.97165)       : 32.5302 [keV]
-TrackID -1   Position (324.556,-143.388,-3.98814)       : 27.6138 [keV]
-TrackID -1   Position (324.616,-143.42,-4.02734)       : 95.2558 [keV]
-TrackID -1   Position (324.67,-143.418,-4.07674)       : 28.226 [keV]
-TrackID -1   Position (324.719,-143.455,-4.07229)       : 2.11504 [keV]
-TrackID -1   Position (397.036,-48.6008,52.0965)       : 7.71203 [keV]
-TrackID -1   Position (397.043,-48.602,52.0943)       : 3.36144 [keV]
-TrackID -1   Position (397.049,-48.6005,52.09)       : 21.2273 [keV]
-TrackID -1   Position (397.054,-48.6,52.085)       : 3.52468 [keV]
-TrackID -1   Position (397.057,-48.5971,52.0801)       : 2.96824 [keV]
-TrackID -1   Position (397.062,-48.5981,52.0753)       : 2.07044 [keV]
-TrackID -1   Position (397.064,-48.5987,52.0683)       : 8.79679 [keV]
-TrackID -1   Position (397.068,-48.6011,52.0621)       : 5.04984 [keV]
-TrackID -1   Position (397.068,-48.6007,52.0531)       : 8.62377 [keV]
-TrackID -1   Position (397.067,-48.5992,52.044)       : 4.97232 [keV]
-TrackID -1   Position (397.063,-48.5963,52.0367)       : 34.7014 [keV]
-TrackID -1   Position (397.066,-48.5973,52.0301)       : 7.18236 [keV]
-TrackID -1   Position (397.073,-48.5961,52.0267)       : 54.9087 [keV]
-TrackID -1   Position (324.562,-143.123,-4.0193)       : 1.844 [keV]
-TrackID -1   Position (324.429,-143.149,-3.93572)       : 13.7351 [keV]
-TrackID -1   Position (60.097,242.669,-98.4703)       : 141.213 [keV]
-TrackID -1   Position (60.0266,242.936,-98.1739)       : 147.9 [keV]
-TrackID -1   Position (60.0386,243.054,-97.8667)       : 97.6976 [keV]
-TrackID -1   Position (60.2276,243.158,-97.6305)       : 89.8523 [keV]
-TrackID -1   Position (60.357,243.192,-97.342)       : 77.5941 [keV]
-TrackID -1   Position (60.4326,243.279,-97.04)       : 173.868 [keV]
-TrackID -1   Position (60.7008,243.281,-96.8522)       : 71.4364 [keV]
-TrackID -1   Position (60.9122,243.161,-96.6411)       : 125.056 [keV]
-TrackID -1   Position (61.14,243.014,-96.4883)       : 89.5444 [keV]
-TrackID -1   Position (61.3037,243.049,-96.2176)       : 99.2689 [keV]
-TrackID -1   Position (61.4458,242.881,-95.9805)       : 108.889 [keV]
-TrackID -1   Position (61.709,242.765,-95.8634)       : 506.674 [keV]
-TrackID -1   Position (61.999,242.902,-95.8835)       : 66.3604 [keV]
-TrackID -1   Position (454.905,-9.28125,-306.244)       : 0.0695921 [keV]
-TrackID -1   Position (60.3544,242.605,-99.226)       : 0.116806 [keV]
-TrackID -1   Position (60.3545,242.605,-99.226)       : 0.187838 [keV]
-TrackID -1   Position (60.3545,242.605,-99.226)       : 0.24614 [keV]
-TrackID -1   Position (60.3545,242.605,-99.226)       : 0.171795 [keV]
-TrackID -1   Position (60.3545,242.605,-99.2261)       : 0.186386 [keV]
-TrackID -1   Position (60.3546,242.605,-99.2261)       : 0.540832 [keV]
-TrackID -1   Position (60.3546,242.605,-99.2261)       : 0.324037 [keV]
-TrackID -1   Position (60.3546,242.605,-99.2261)       : 2.04771 [keV]
-TrackID -1   Position (-135.939,-211.698,157.642)       : 74.0813 [keV]
-TrackID -1   Position (-138.171,-211.642,154.626)       : 83.4366 [keV]
-TrackID -1   Position (395.876,-213.968,118.367)       : 81.1846 [keV]
-TrackID -1   Position (395.885,-214.151,118.137)       : 138.152 [keV]
-TrackID -1   Position (395.864,-214.285,117.768)       : 128.729 [keV]
-TrackID -1   Position (395.883,-214.303,117.369)       : 118.79 [keV]
-TrackID -1   Position (395.824,-214.098,117.046)       : 9.46505 [keV]
-TrackID -1   Position (369.931,-164.851,37.1174)       : 109.245 [keV]
-TrackID -1   Position (369.836,-164.731,36.8469)       : 43.0077 [keV]
-TrackID -1   Position (413.934,-176.518,-33.5073)       : 47.0901 [keV]
-TrackID -1   Position (414.021,-176.511,-33.6781)       : 188.032 [keV]
-TrackID -1   Position (414.132,-176.522,-33.8302)       : 68.5089 [keV]
-TrackID -1   Position (414.15,-176.448,-33.9992)       : 71.3851 [keV]
-TrackID -1   Position (414.139,-176.552,-34.1559)       : 52.6935 [keV]
-TrackID -1   Position (414.118,-176.67,-34.2967)       : 52.2337 [keV]
-TrackID -1   Position (414.194,-176.686,-34.4647)       : 54.4075 [keV]
-TrackID -1   Position (414.339,-176.682,-34.5845)       : 57.2505 [keV]
-TrackID -1   Position (414.439,-176.76,-34.7137)       : 49.7006 [keV]
-TrackID -1   Position (414.437,-176.72,-34.8936)       : 52.5139 [keV]
-TrackID -1   Position (414.384,-176.75,-35.063)       : 60.0468 [keV]
-TrackID -1   Position (414.215,-176.806,-35.1193)       : 83.247 [keV]
-TrackID -1   Position (414.074,-176.898,-35.1741)       : 65.9935 [keV]
-TrackID -1   Position (414.042,-177.064,-35.216)       : 211.529 [keV]
-TrackID -1   Position (413.906,-176.993,-35.2603)       : 129.451 [keV]
-TrackID -1   Position (413.79,-177.008,-35.271)       : 138.217 [keV]
-TrackID -1   Position (416.107,-184.066,377.991)       : 0.44738 [keV]
-TrackID -1   Position (231.586,-391.654,358.001)       : 49.3668 [keV]
-TrackID -1   Position (182.352,-241.478,279.302)       : 88.9493 [keV]
-TrackID -1   Position (182.204,-241.625,280.003)       : 247.425 [keV]
-TrackID -1   Position (-258.193,310.311,155.668)       : 444.994 [keV]
-TrackID -1   Position (-258.354,310.337,155.331)       : 90.0894 [keV]
-TrackID -1   Position (-399.893,44.8819,63.3918)       : 14.8906 [keV]
-TrackID -1   Position (336.652,222.081,350.333)       : 143.128 [keV]
-TrackID -1   Position (336.266,222.082,350.588)       : 742.77 [keV]
-TrackID -1   Position (-24.7573,-350.253,-94.4052)       : 4.66103 [keV]
-TrackID -1   Position (21.3979,-404.258,-131.525)       : 10.8315 [keV]
-TrackID -1   Position (21.3852,-404.294,-131.53)       : 23.0136 [keV]
-TrackID -1   Position (21.3634,-404.319,-131.554)       : 21.9656 [keV]
-TrackID -1   Position (21.3542,-404.349,-131.566)       : 9.23096 [keV]
-TrackID -1   Position (21.3479,-404.371,-131.554)       : 10.2709 [keV]
-TrackID -1   Position (21.3408,-404.391,-131.539)       : 5.24461 [keV]
-TrackID -1   Position (21.3237,-404.407,-131.53)       : 8.62578 [keV]
-TrackID -1   Position (21.3132,-404.425,-131.516)       : 8.28762 [keV]
-TrackID -1   Position (21.3011,-404.439,-131.498)       : 0.168695 [keV]
-TrackID -1   Position (-42.8051,-447.96,-109.388)       : 10.1364 [keV]
-TrackID -1   Position (-42.808,-447.975,-109.379)       : 4.54173 [keV]
-TrackID -1   Position (-42.8137,-447.984,-109.368)       : 5.04862 [keV]
-TrackID -1   Position (-42.8191,-447.993,-109.358)       : 7.04197 [keV]
-TrackID -1   Position (-42.8288,-447.998,-109.347)       : 13.2234 [keV]
-TrackID -1   Position (-42.8353,-448.004,-109.335)       : 6.57533 [keV]
-TrackID -1   Position (-42.8377,-448.007,-109.32)       : 4.90347 [keV]
-TrackID -1   Position (-42.8361,-448.01,-109.306)       : 47.4577 [keV]
-TrackID -1   Position (-42.8279,-448.011,-109.293)       : 9.51984 [keV]
-TrackID -1   Position (-42.8236,-448.013,-109.279)       : 9.35839 [keV]
-TrackID -1   Position (-42.8096,-448.016,-109.273)       : 19.5988 [keV]
-TrackID -1   Position (-42.8093,-448.004,-109.284)       : 6.8354 [keV]
-TrackID -1   Position (-42.8174,-447.993,-109.289)       : 14.9433 [keV]
-TrackID -1   Position (-42.8253,-447.981,-109.288)       : 20.7703 [keV]
-TrackID -1   Position (-42.8371,-447.973,-109.283)       : 6.29408 [keV]
-TrackID -1   Position (-42.8508,-447.973,-109.286)       : 21.7541 [keV]
-TrackID -1   Position (-42.8557,-447.983,-109.278)       : 11.799 [keV]
-TrackID -1   Position (-42.8662,-447.985,-109.282)       : 48.7636 [keV]
-TrackID -1   Position (84.8709,-344.121,-129.14)       : 230.2 [keV]
-TrackID -1   Position (-267.685,300.051,298.733)       : 56.5712 [keV]
-TrackID -1   Position (-438.199,-106.048,-308.061)       : 30.3054 [keV]
-TrackID -1   Position (-438.298,-106.087,-308.005)       : 86.3986 [keV]
-TrackID -1   Position (-438.554,-106.228,-307.924)       : 88.4596 [keV]
-TrackID -1   Position (-438.827,-106.353,-307.712)       : 136.135 [keV]
-TrackID -1   Position (-439.105,-106.606,-307.448)       : 151.851 [keV]
-TrackID -1   Position (-439.361,-107.1,-307.407)       : 208.394 [keV]
-TrackID -1   Position (-439.507,-107.65,-307.12)       : 246.5 [keV]
-TrackID -1   Position (-439.135,-107.702,-306.504)       : 620.062 [keV]
-TrackID -1   Position (-438.699,-108.218,-306.592)       : 201.978 [keV]
-TrackID -1   Position (-436.401,124.2,-358.967)       : 147.77 [keV]
-TrackID -1   Position (89.1435,-390.378,-381.385)       : 24.4789 [keV]
-TrackID -1   Position (89.2098,-390.414,-381.451)       : 22.0124 [keV]
-TrackID -1   Position (89.2986,-390.49,-381.553)       : 59.5952 [keV]
-TrackID -1   Position (89.4226,-390.603,-381.586)       : 211.671 [keV]
-TrackID -1   Position (89.5491,-390.715,-381.707)       : 69.9368 [keV]
-TrackID -1   Position (89.5249,-390.937,-381.826)       : 233.54 [keV]
-TrackID -1   Position (89.6124,-391.137,-381.999)       : 107.048 [keV]
-TrackID -1   Position (89.8618,-391.174,-382.265)       : 450.485 [keV]
-TrackID -1   Position (89.6556,-391.491,-382.281)       : 87.9336 [keV]
-TrackID -1   Position (-336.751,-298.805,55.9628)       : 89.6047 [keV]
-TrackID -1   Position (-380.257,-132.713,77.6252)       : 280.289 [keV]
-TrackID -1   Position (224.377,-113.488,45.8331)       : 292.981 [keV]
-TrackID -1   Position (-161.67,-254.377,270.947)       : 101.547 [keV]
-TrackID -1   Position (209.811,-139.134,99.1939)       : 613.369 [keV]
-TrackID -1   Position (209.259,-138.875,99.0965)       : 149.789 [keV]
-TrackID -1   Position (211.737,-140.168,99.8216)       : 149.216 [keV]
-TrackID -1   Position (212.092,-139.869,100.01)       : 488.604 [keV]
-TrackID -1   Position (345.939,-290.064,145.814)       : 92.2627 [keV]
-TrackID -1   Position (202.582,225.552,214.605)       : 4.39931 [keV]
-TrackID -1   Position (238.942,259.665,110.602)       : 35.9239 [keV]
-TrackID -1   Position (192.675,232.326,55.4881)       : 433.743 [keV]
-TrackID -1   Position (454.597,7.88873,433.963)       : 39.7005 [keV]
-TrackID -1   Position (454.553,7.76067,434.021)       : 26.9681 [keV]
-TrackID -1   Position (454.479,7.66945,434.029)       : 50.8458 [keV]
-TrackID -1   Position (454.355,7.68048,433.982)       : 57.0495 [keV]
-TrackID -1   Position (454.245,7.62515,433.867)       : 47.3663 [keV]
-TrackID -1   Position (454.071,7.53935,433.835)       : 80.9014 [keV]
-TrackID -1   Position (453.93,7.35824,433.914)       : 87.9897 [keV]
-TrackID -1   Position (454.024,7.13272,434.081)       : 83.6267 [keV]
-TrackID -1   Position (454.105,6.8855,434.139)       : 90.7462 [keV]
-TrackID -1   Position (454.068,6.64302,434.196)       : 86.7103 [keV]
-TrackID -1   Position (453.964,6.48904,434.381)       : 418.268 [keV]
-TrackID -1   Position (-382.275,-237.415,-411.22)       : 0.0605134 [keV]
-TrackID -1   Position (379.318,-126.955,-335.419)       : 276.642 [keV]
-TrackID -1   Position (379.643,-127.005,-335.186)       : 124.482 [keV]
-TrackID -1   Position (379.957,-127.025,-334.937)       : 107.498 [keV]
-TrackID -1   Position (380.277,-126.847,-334.795)       : 112.899 [keV]
-TrackID -1   Position (380.526,-126.695,-334.548)       : 105.791 [keV]
-TrackID -1   Position (380.826,-126.505,-334.424)       : 302.92 [keV]
-TrackID -1   Position (380.974,-126.292,-334.147)       : 116.318 [keV]
-TrackID -1   Position (381.107,-126.273,-333.783)       : 114.725 [keV]
-TrackID -1   Position (381.221,-126.499,-333.455)       : 447.568 [keV]
-TrackID -1   Position (381.043,-126.838,-333)       : 272.126 [keV]
-TrackID -1   Position (314.409,328.885,-276.929)       : 10.4582 [keV]
-TrackID -1   Position (314.395,328.907,-276.938)       : 1.00527 [keV]
-TrackID -1   Position (304.097,338.452,-287.765)       : 6.2152 [keV]
-TrackID -1   Position (304.084,338.458,-287.783)       : 3.76883 [keV]
-TrackID -1   Position (295.119,346.309,-403.303)       : 3.57963 [keV]
-TrackID -1   Position (295.116,346.304,-403.307)       : 5.56894 [keV]
-TrackID -1   Position (295.108,346.297,-403.315)       : 5.92445 [keV]
-TrackID -1   Position (295.103,346.293,-403.327)       : 3.3818 [keV]
-TrackID -1   Position (295.096,346.29,-403.339)       : 2.61211 [keV]
-TrackID -1   Position (295.099,346.284,-403.351)       : 4.2889 [keV]
-TrackID -1   Position (295.101,346.28,-403.364)       : 4.04738 [keV]
-TrackID -1   Position (295.106,346.273,-403.376)       : 5.89781 [keV]
-TrackID -1   Position (295.109,346.269,-403.388)       : 5.57793 [keV]
-TrackID -1   Position (295.115,346.269,-403.401)       : 6.77432 [keV]
-TrackID -1   Position (295.115,346.272,-403.414)       : 5.53609 [keV]
-TrackID -1   Position (295.121,346.26,-403.419)       : 8.05117 [keV]
-TrackID -1   Position (295.126,346.247,-403.424)       : 9.32695 [keV]
-TrackID -1   Position (295.125,346.233,-403.424)       : 4.83232 [keV]
-TrackID -1   Position (295.123,346.218,-403.429)       : 11.51 [keV]
-TrackID -1   Position (295.121,346.202,-403.438)       : 15.1401 [keV]
-TrackID -1   Position (295.129,346.183,-403.45)       : 14.9981 [keV]
-TrackID -1   Position (295.131,346.164,-403.463)       : 12.0987 [keV]
-TrackID -1   Position (295.101,346.16,-403.462)       : 127.843 [keV]
-TrackID -1   Position (357.488,179.85,-256.001)       : 14.8574 [keV]
-TrackID -1   Position (357.531,179.89,-256.014)       : 16.5539 [keV]
-TrackID -1   Position (357.57,179.942,-256.032)       : 26.0511 [keV]
-TrackID -1   Position (357.634,179.991,-256.065)       : 48.7373 [keV]
-TrackID -1   Position (357.685,180.009,-256.148)       : 109.705 [keV]
-TrackID -1   Position (357.643,179.901,-256.2)       : 42.105 [keV]
-TrackID -1   Position (357.687,179.845,-256.257)       : 214.763 [keV]
-TrackID -1   Position (-330.837,116.732,318.527)       : 61.3378 [keV]
-TrackID -1   Position (-411.801,193.507,-125.332)       : 77.7735 [keV]
-TrackID -1   Position (-411.611,193.332,-125.267)       : 146.877 [keV]
-TrackID -1   Position (-411.448,193.095,-125.25)       : 73.2013 [keV]
-TrackID -1   Position (-411.345,192.827,-125.206)       : 66.6484 [keV]
-TrackID -1   Position (-411.368,192.574,-125.083)       : 102.639 [keV]
-TrackID -1   Position (-411.424,192.295,-125.045)       : 103.496 [keV]
-TrackID -1   Position (-411.258,192.053,-125.029)       : 97.1119 [keV]
-TrackID -1   Position (-411.201,191.749,-124.936)       : 94.6446 [keV]
-TrackID -1   Position (-411.141,191.388,-124.925)       : 124.404 [keV]
-TrackID -1   Position (-410.899,191.049,-125.042)       : 149.184 [keV]
-TrackID -1   Position (-410.683,190.636,-124.776)       : 664.636 [keV]
-TrackID -1   Position (-410.436,190.142,-124.823)       : 41.4665 [keV]
-TrackID -1   Position (-131.189,434.102,-305.808)       : 162.999 [keV]
-TrackID -1   Position (-130.826,434.001,-306.059)       : 292.008 [keV]
-TrackID -1   Position (-130.473,433.715,-306.265)       : 558.403 [keV]
-TrackID -1   Position (-112.128,-389.169,108.324)       : 31.5826 [keV]
-TrackID -1   Position (363.939,264.666,318.436)       : 0.0316915 [keV]
-TrackID -1   Position (88.3979,-446.33,292.434)       : 0.015748 [keV]
-TrackID -1   Position (-290.165,-343.954,-346.658)       : 2.19523 [keV]
-TrackID -1   Position (-286.006,-353.872,-337.745)       : 0.0315499 [keV]
-TrackID -1   Position (-395.113,225.634,-387.58)       : 2.69064 [keV]
-TrackID -1   Position (-420.539,173.701,-405.027)       : 1.23326 [keV]
-TrackID -1   Position (-182.579,-304.45,234.19)       : 13.5318 [keV]
-TrackID -1   Position (234.288,390.044,358.505)       : 0.0154489 [keV]
-TrackID -1   Position (233.136,387.906,359.518)       : 0.0112025 [keV]
-TrackID -1   Position (-226.41,-333.123,-196.773)       : 28.6771 [keV]
-TrackID -1   Position (-296.175,276.234,-218.129)       : 0.00524391 [keV]
-TrackID -1   Position (-295.015,275.456,-219.757)       : 0.0042768 [keV]
-TrackID -1   Position (-395.964,85.0738,-135.864)       : 0.741179 [keV]
-TrackID -1   Position (198.038,-225.346,11.2752)       : 6.03977 [keV]
-TrackID -1   Position (-164.974,-308.68,178.659)       : 1.34855 [keV]
-TrackID -1   Position (-234.417,-389.966,386.793)       : 0.000938402 [keV]
-TrackID -1   Position (-121.343,332.638,-233.936)       : 83.1329 [keV]
-TrackID -1   Position (-346.387,71.3065,-225.034)       : 110.089 [keV]
-TrackID -1   Position (-444.649,82.0665,-179.241)       : 106.943 [keV]
-TrackID -1   Position (-408.64,-200.095,-224.906)       : 3836.83 [keV]
-TrackID -1   Position (-359.642,-186.233,-123.195)       : 4356.58 [keV]
-TrackID -1   Position (-310.07,-172.862,-21.432)       : 4232.65 [keV]
-TrackID -1   Position (-260.986,-157.834,77.5789)       : 842.497 [keV]
-TrackID -1   Position (-260.007,-157.518,79.5954)       : 896.6 [keV]
-TrackID -1   Position (-258.738,-159.085,81.4965)       : 17041.8 [keV]
-TrackID -1   Position (-239.78,-182.332,111.191)       : 9883.98 [keV]
-TrackID -1   Position (-229.405,-196.399,128.25)       : 18378.5 [keV]
-TrackID -1   Position (-211.792,-219.472,155.341)       : 6.02479 [keV]
-TrackID -1   Position (-148.878,-316.758,272.126)       : 5732.05 [keV]
-TrackID -1   Position (-101.942,-386.792,362.17)       : 1392.17 [keV]
-TrackID -1   Position (-100.664,-388.631,364.555)       : 2024.72 [keV]
-TrackID -1   Position (-70.1349,-444.501,368.559)       : 2773.5 [keV]
-TrackID -1   Position (-229.405,-196.399,128.25)       : 486.036 [keV]
-TrackID -1   Position (-229.064,-196.358,128.766)       : 279.702 [keV]
-TrackID -1   Position (-239.78,-182.332,111.191)       : 149.037 [keV]
-TrackID -1   Position (-239.893,-182.361,111.42)       : 468.589 [keV]
-TrackID -1   Position (-258.738,-159.085,81.4965)       : 493.115 [keV]
-TrackID -1   Position (-258.467,-159.347,81.473)       : 44.6852 [keV]
-TrackID -1   Position (-100.664,-388.631,364.555)       : 347.205 [keV]
-TrackID -1   Position (-260.007,-157.518,79.5954)       : 686.048 [keV]
-TrackID -1   Position (-416.374,-183.46,-332.058)       : 543.574 [keV]
-TrackID -1   Position (-414.61,-182.77,-332.105)       : 799.577 [keV]
-TrackID -1   Position (-412.57,-182.445,-331.148)       : 652.281 [keV]
-TrackID -1   Position (-411.927,-182.485,-329.236)       : 857.913 [keV]
-TrackID -1   Position (-413.049,-183.93,-328.095)       : 587.841 [keV]
-TrackID -1   Position (-412.909,-183.421,-326.42)       : 293.191 [keV]
-TrackID -1   Position (-412.607,-183.478,-326.108)       : 314.852 [keV]
-TrackID -1   Position (-412.607,-183.478,-326.108)       : 1.844 [keV]
-TrackID -1   Position (-412.608,-183.535,-326.059)       : 12.8652 [keV]
-TrackID -1   Position (-204.896,144.8,175.959)       : 17.2793 [keV]
-TrackID -1   Position (-10.9933,253.846,190.039)       : 277.356 [keV]
-TrackID -1   Position (135.45,-429.546,-163.621)       : 1.97808 [keV]
-TrackID -1   Position (397.746,-55.499,-291.961)       : 164.95 [keV]
-TrackID -1   Position (398.144,-55.1997,-291.856)       : 172.707 [keV]
-TrackID -1   Position (398.322,-54.6942,-291.731)       : 354.898 [keV]
-TrackID -1   Position (398.876,-54.4373,-291.753)       : 537.245 [keV]
-TrackID -1   Position (399.141,-54.1735,-291.621)       : 20.075 [keV]
-TrackID -1   Position (-386.485,-116.567,-313.111)       : 432.25 [keV]
-TrackID -1   Position (-399.858,-217.114,-361.15)       : 1939.43 [keV]
-TrackID -1   Position (-395.883,-217.786,-364.349)       : 1193.66 [keV]
-TrackID -1   Position (-438.564,-121.189,-365.257)       : 4276.78 [keV]
-TrackID -1   Position (-398.486,-219.622,-323.186)       : 1593.09 [keV]
-TrackID -1   Position (-394.148,-220.146,-321.789)       : 295.399 [keV]
-TrackID -1   Position (-393.514,-220.416,-321.198)       : 1400.22 [keV]
-TrackID -1   Position (-391.331,-222.812,-319.463)       : 940.328 [keV]
-TrackID -1   Position (-391.613,-225.232,-318.971)       : 802.843 [keV]
-TrackID -1   Position (-392.342,-226.621,-319.844)       : 544.888 [keV]
-TrackID -1   Position (-391.699,-227.521,-319.432)       : 357.719 [keV]
-TrackID -1   Position (-393.514,-220.416,-321.198)       : 1.844 [keV]
-TrackID -1   Position (-393.492,-220.508,-321.16)       : 12.6869 [keV]
-TrackID -1   Position (-407.458,-200.401,-448.272)       : 39.9416 [keV]
-TrackID -1   Position (-376.433,-139.013,-351.253)       : 35.0185 [keV]
-TrackID -1   Position (-443.708,-96.5913,-290.094)       : 59.5683 [keV]
-TrackID -1   Position (-443.667,-96.4737,-289.972)       : 202.801 [keV]
-TrackID -1   Position (-443.542,-96.2785,-289.831)       : 97.3871 [keV]
-TrackID -1   Position (-443.343,-96.0549,-289.698)       : 191.065 [keV]
-TrackID -1   Position (-443.457,-95.8832,-289.401)       : 456.919 [keV]
-TrackID -1   Position (-443.56,-95.7102,-289.013)       : 139.244 [keV]
-TrackID -1   Position (-409.777,190.386,-352.374)       : 121.664 [keV]
-TrackID -1   Position (222.482,392.137,5.59579)       : 204.682 [keV]
-TrackID -1   Position (-242.748,67.9079,-248.971)       : 2313.59 [keV]
-TrackID -1   Position (-239.619,73.9328,-248.615)       : 1043.14 [keV]
-TrackID -1   Position (-29.8643,248.21,-123.917)       : 2026.11 [keV]
-TrackID -1   Position (-25.0991,250.043,-122.915)       : 1362.46 [keV]
-TrackID -1   Position (-23.4513,253.418,-123.115)       : 207.366 [keV]
-TrackID -1   Position (-26.1865,298.855,-86.9249)       : 260.599 [keV]
-TrackID -1   Position (-26.2334,299.754,-86.6094)       : 302.859 [keV]
-TrackID -1   Position (-26.2291,300.371,-86.1048)       : 250.624 [keV]
-TrackID -1   Position (-25.8148,300.857,-85.6234)       : 318.467 [keV]
-TrackID -1   Position (-25.8813,301.245,-84.9434)       : 672.642 [keV]
-TrackID -1   Position (-26.3336,301.389,-84.3086)       : 542.093 [keV]
-TrackID -1   Position (-26.8672,302.019,-84.0284)       : 456.447 [keV]
-TrackID -1   Position (-146.713,426.341,54.894)       : 161.516 [keV]
-TrackID -1   Position (-299.259,-23.8037,-266.077)       : 39.9282 [keV]
-TrackID -1   Position (-299.197,-23.7995,-266.122)       : 22.7703 [keV]
-TrackID -1   Position (-299.186,-23.7668,-266.138)       : 22.3872 [keV]
-TrackID -1   Position (-299.154,-23.7592,-266.157)       : 14.1125 [keV]
-TrackID -1   Position (-299.142,-23.7333,-266.156)       : 14.9642 [keV]
-TrackID -1   Position (-299.15,-23.7134,-266.153)       : 16.4682 [keV]
-TrackID -1   Position (-299.163,-23.6949,-266.145)       : 114.428 [keV]
-TrackID -1   Position (-76.398,290.109,-184.794)       : 37.1775 [keV]
-TrackID -1   Position (-367.912,156.974,-303.604)       : 11.3972 [keV]
-TrackID -1   Position (-353.132,-286.92,-441.593)       : 19.5078 [keV]
-TrackID -1   Position (270.834,359.373,-305.414)       : 28.4057 [keV]
-TrackID -1   Position (-241.863,80.792,-182.882)       : 37.1073 [keV]
-TrackID -1   Position (-282.173,101.874,-175.196)       : 48.3138 [keV]
-TrackID -1   Position (-251.607,41.4617,-194.466)       : 10.7634 [keV]
-TrackID -1   Position (304.753,-172.121,-266.79)       : 0.000320539 [keV]
-TrackID -1   Position (358.304,-177.816,-276.522)       : 0.00259175 [keV]
-TrackID -1   Position (-322.766,-147.808,-301.239)       : 0.0546405 [keV]
-TrackID -1   Position (-453.844,32.4167,-382.061)       : 11.8036 [keV]
-TrackID -1   Position (-179.049,-363.272,72.015)       : 26.4287 [keV]
-TrackID -1   Position (383.172,114.801,365.453)       : 5.20514 [keV]
-TrackID -1   Position (438.931,99.1943,297.905)       : 1.05176 [keV]
-TrackID -1   Position (-380.442,-138.885,-187.395)       : 9.97837 [keV]
-TrackID -1   Position (-169.833,-311.74,-312.331)       : 5.94029 [keV]
-TrackID -1   Position (-74.8142,-392.941,-366.051)       : 54.4703 [keV]
-TrackID -1   Position (-71.7324,-395.655,-367.896)       : 68.8745 [keV]
-TrackID -1   Position (-350.647,-289.952,-368.771)       : 4.36269 [keV]
-TrackID -1   Position (-378.72,-252.183,-443.582)       : 11.5784 [keV]
-TrackID -1   Position (352.123,280.195,-389.683)       : 9.31865 [keV]
-TrackID -1   Position (357.106,277.712,-387.641)       : 7.19086 [keV]
-TrackID -1   Position (-57.3995,395.86,-185.085)       : 27.3857 [keV]
-TrackID -1   Position (-374.432,-154.356,-334.152)       : 0.132891 [keV]
-TrackID -1   Position (-382.738,-132.425,-195.724)       : 29.3051 [keV]
-TrackID -1   Position (-120.478,280.197,-212.917)       : 0.0132842 [keV]
-TrackID -1   Position (30.1658,-453.999,266.621)       : 26.3369 [keV]
-TrackID -1   Position (143.521,263.442,297.234)       : 0.336356 [keV]
-TrackID -1   Position (217.291,394.061,-186.378)       : 0.45159 [keV]
-TrackID -1   Position (218.821,396.948,-197.023)       : 0.174629 [keV]
-TrackID -1   Position (12.0216,349.871,-61.9974)       : 74.2998 [keV]
-TrackID -1   Position (-135.913,-267.446,-103.541)       : 34.7575 [keV]
-TrackID -1   Position (-136.687,-271.602,-106.749)       : 0.81328 [keV]
-TrackID -1   Position (-373.97,-250.292,-219.342)       : 43.0946 [keV]
-TrackID -1   Position (-374.569,-154.022,-176.355)       : 48.659 [keV]
-TrackID -1   Position (184.79,-415.785,42.3646)       : 2.98719 [keV]
-TrackID -1   Position (140.29,-379.926,35.8953)       : 6.72998 [keV]
-TrackID -1   Position (-263.398,-238.005,-230.707)       : 13.9084 [keV]
-TrackID -1   Position (-255.921,-240.105,-224.902)       : 17.4943 [keV]
-TrackID -1   Position (-426.913,142.286,-238.475)       : 6.28395 [keV]
-TrackID -1   Position (-357.758,189.828,-365.367)       : 51.9768 [keV]
-TrackID -1   Position (-381.136,239.239,-364.095)       : 15.6305 [keV]
-TrackID -1   Position (-299.995,1.66002,-166.867)       : 54.6783 [keV]
-TrackID -1   Position (14.0818,-399.752,-369.891)       : 37.9078 [keV]
-TrackID -1   Position (-372.892,-158.039,-242.846)       : 48.9996 [keV]
-TrackID -1   Position (-420.883,161.986,-228.881)       : 70.0692 [keV]
-TrackID -1   Position (-236.541,-388.682,213.911)       : 2707.13 [keV]
-TrackID -1   Position (-205.221,-349.155,200.176)       : 2957.17 [keV]
-TrackID -1   Position (-174.708,-309.034,188.678)       : 3033.71 [keV]
-TrackID -1   Position (-144.81,-268.431,176.455)       : 3393.47 [keV]
-TrackID -1   Position (-114.633,-227.781,160.749)       : 3146.69 [keV]
-TrackID -1   Position (183.866,169.39,-25.7029)       : 3622.32 [keV]
-TrackID -1   Position (213.585,210.669,-45.2479)       : 3904.14 [keV]
-TrackID -1   Position (243.009,251.886,-64.3792)       : 4394.21 [keV]
-TrackID -1   Position (273.636,291.759,-82.771)       : 4137.17 [keV]
-TrackID -1   Position (276.35,295.21,-84.3668)       : 553.176 [keV]
-TrackID -1   Position (304.382,331.438,-98.8075)       : 3263.27 [keV]
-TrackID -1   Position (306.421,334.157,-99.9052)       : 1788.88 [keV]
-TrackID -1   Position (346.656,67.44,56.4974)       : 240.703 [keV]
-TrackID -1   Position (-230.313,-109.457,35.1854)       : 43.5335 [keV]
-TrackID -1   Position (-427.693,155.252,-133.383)       : 0.00157117 [keV]
-TrackID -1   Position (1.70229,349.996,175.229)       : 0.00534198 [keV]
-TrackID -1   Position (10.6036,354.035,181.648)       : 0.00118122 [keV]
-TrackID -1   Position (258.354,374.537,-111.26)       : 651.785 [keV]
-TrackID -1   Position (256.263,374.814,-111.085)       : 3580.86 [keV]
-TrackID -1   Position (246.856,376.536,-111.103)       : 93.1661 [keV]
-TrackID -1   Position (177.989,363.792,-112.075)       : 2302.95 [keV]
-TrackID -1   Position (170.688,362.427,-111.852)       : 221.427 [keV]
-TrackID -1   Position (170.287,362.254,-111.857)       : 123.713 [keV]
-TrackID -1   Position (111.936,336.891,-116.457)       : 906.666 [keV]
-TrackID -1   Position (109.482,335.116,-116.952)       : 1635.03 [keV]
-TrackID -1   Position (114.27,282.785,-208.003)       : 548.715 [keV]
-TrackID -1   Position (114.148,282.115,-209.927)       : 440.068 [keV]
-TrackID -1   Position (114.095,281.7,-210.551)       : 231.199 [keV]
-TrackID -1   Position (114.046,281.287,-211.206)       : 1076.88 [keV]
-TrackID -1   Position (111.962,281.097,-212.975)       : 1008.26 [keV]
-TrackID -1   Position (110.195,282.268,-212.47)       : 450.525 [keV]
-TrackID -1   Position (110.096,282.65,-212.416)       : 93.1256 [keV]
-TrackID -1   Position (141.278,378.285,106.268)       : 37.2487 [keV]
-TrackID -1   Position (100.174,286.673,-217.959)       : 302.317 [keV]
-TrackID -1   Position (111.894,280.174,-214.986)       : 489.456 [keV]
-TrackID -1   Position (125.767,382.718,35.6336)       : 6.00854 [keV]
-TrackID -1   Position (91.9214,235.487,-208.412)       : 32.2454 [keV]
-TrackID -1   Position (114.095,281.691,-210.564)       : 16.954 [keV]
-TrackID -1   Position (170.287,362.254,-111.857)       : 1.844 [keV]
-TrackID -1   Position (170.272,362.248,-111.859)       : 11.0475 [keV]
-TrackID -1   Position (279.652,355.687,-111.572)       : 43.6433 [keV]
-TrackID -1   Position (298.7,191.842,333.677)       : 11.0354 [keV]
-TrackID -1   Position (-232.556,-268.221,225.596)       : 0.0176754 [keV]
-TrackID -1   Position (-228.364,-267.952,224.881)       : 0.00115552 [keV]
-TrackID -1   Position (-450.936,-60.6752,98.2375)       : 0.0122077 [keV]
-TrackID -1   Position (-150.753,-370.505,342.787)       : 24.172 [keV]
-TrackID -1   Position (-154.895,-373.381,336.602)       : 2.42144 [keV]
-TrackID -1   Position (-155.36,-372.481,336.227)       : 13.8892 [keV]
-TrackID -1   Position (49.3404,298.071,295.552)       : 311.325 [keV]
-TrackID -1   Position (-343.671,-290.5,-227.407)       : 0.0611227 [keV]
-TrackID -1   Position (-338.24,-299.933,-230.875)       : 0.910973 [keV]
-TrackID -1   Position (-171.101,-189.075,-88.0167)       : 0.973549 [keV]
-TrackID -1   Position (-131.493,-435.585,26.9438)       : 39.9283 [keV]
-TrackID -1   Position (-155.087,-319.332,7.41642)       : 57.8872 [keV]
-TrackID -1   Position (-156.009,-314.841,6.65404)       : 63.7301 [keV]
-TrackID -1   Position (-86.6969,-342.084,4.29649)       : 6.39604 [keV]
-TrackID -1   Position (-115.213,-332.978,-8.03025)       : 53.8044 [keV]
-TrackID -1   Position (-26.4596,-303.85,82.4151)       : 22.2033 [keV]
-TrackID -1   Position (69.3947,-343.052,20.5008)       : 12.8105 [keV]
-TrackID -1   Position (-78.3839,237.394,138.123)       : 29.0444 [keV]
-TrackID -1   Position (-161.167,314.699,5.10073)       : 74.7337 [keV]
-TrackID -1   Position (362.437,-275.071,83.529)       : 1.26216 [keV]
-TrackID -1   Position (352.773,-39.7001,-40.0337)       : 0.448888 [keV]
-TrackID -1   Position (304.808,-10.8186,-127.016)       : 0.401562 [keV]
-TrackID -1   Position (434.692,-116.375,-290.376)       : 0.686662 [keV]
-TrackID -1   Position (449.901,9.4303,-302.748)       : 0.120393 [keV]
-TrackID -1   Position (340.477,100.501,-64.5651)       : 0.746977 [keV]
-TrackID -1   Position (373.392,143.453,-106.898)       : 0.575979 [keV]
-TrackID -1   Position (454.993,2.58574,360.149)       : 0.190703 [keV]
-TrackID -1   Position (-368.276,-168.517,190.105)       : 0.537558 [keV]
-TrackID -1   Position (-311.117,-170.972,217.014)       : 0.189052 [keV]
-TrackID -1   Position (-328.638,120.403,291.548)       : 7.35566 [keV]
-TrackID -1   Position (288.16,-207.337,292.86)       : 16.0825 [keV]
-TrackID -1   Position (200.826,-157.144,-130.761)       : 9.54547 [keV]
-TrackID -1   Position (282.051,-207.238,-155.368)       : 1.34628 [keV]
-TrackID -1   Position (-242.983,175.953,28.5935)       : 13.1641 [keV]
-TrackID -1   Position (222.61,-208.494,-51.3959)       : 1.32026 [keV]
-TrackID -1   Position (245.517,172.398,295.758)       : 54.7208 [keV]
-TrackID -1   Position (247.575,176.207,290.836)       : 36.2562 [keV]
-TrackID -1   Position (247.605,175.621,291.338)       : 17.7335 [keV]
-TrackID -1   Position (366.382,-269.794,-320.396)       : 13.8685 [keV]
-TrackID -1   Position (453.142,41.0778,-115.299)       : 0.0700847 [keV]
-TrackID -1   Position (284.751,-211.996,-239.423)       : 2.32953 [keV]
-TrackID -1   Position (-259.967,-149.723,64.2675)       : 34.8588 [keV]
-TrackID -1   Position (-311.265,251.226,-209.859)       : 8.88441 [keV]
-TrackID -1   Position (399.675,-217.451,-349.101)       : 0.137409 [keV]
-TrackID -1   Position (-311.982,250.334,-337.519)       : 0.034146 [keV]
-TrackID -1   Position (-324.802,241.927,-200.453)       : 0.0435423 [keV]
-TrackID -1   Position (218.662,-278.863,-139.812)       : 131.278 [keV]
-TrackID -1   Position (216.864,-336.224,-93.7406)       : 134.345 [keV]
-TrackID -1   Position (-135.268,-376.434,-137.787)       : 56.7513 [keV]
-TrackID -1   Position (-135.459,-376.498,-137.831)       : 123.835 [keV]
-TrackID -1   Position (-135.863,-376.659,-137.892)       : 141.415 [keV]
-TrackID -1   Position (-136.208,-376.904,-137.979)       : 321.453 [keV]
-TrackID -1   Position (-136.477,-377.165,-137.779)       : 184.799 [keV]
-TrackID -1   Position (-136.611,-377.564,-137.828)       : 110.17 [keV]
-TrackID -1   Position (-136.755,-377.676,-138.224)       : 196.359 [keV]
-TrackID -1   Position (-137.144,-377.943,-138.379)       : 175.602 [keV]
-TrackID -1   Position (-137.624,-378.147,-138.497)       : 612.22 [keV]
-TrackID -1   Position (-137.845,-378.414,-137.924)       : 198.158 [keV]
-TrackID -1   Position (332.394,-307.34,-47.3897)       : 358.01 [keV]
-TrackID -1   Position (-384.039,127.927,-306.699)       : 42.2273 [keV]
-TrackID -1   Position (278.35,-293.454,-232.324)       : 131.607 [keV]
-TrackID -1   Position (90.2831,391.23,323.487)       : 87.2016 [keV]
-TrackID -1   Position (354.344,-285.422,-265.752)       : 0.128319 [keV]
-TrackID -1   Position (211.672,-345.282,-247.128)       : 0.132468 [keV]
-TrackID -1   Position (131.658,-329.684,-200.552)       : 0.102574 [keV]
-TrackID -1   Position (56.8495,-395.94,-75.8701)       : 0.0465037 [keV]
-TrackID -1   Position (329.95,-313.302,223.55)       : 0.00645746 [keV]
-TrackID -1   Position (-126.183,437.153,41.6076)       : 6.55994 [keV]
-TrackID -1   Position (-171.029,311.085,-108.135)       : 2.63504 [keV]
-TrackID -1   Position (216.376,-207.801,251.535)       : 11.3632 [keV]
-TrackID -1   Position (8.92646,-254.844,144.113)       : 0.00534444 [keV]
-TrackID -1   Position (-32.1671,-448.849,138.542)       : 0.00616311 [keV]
-TrackID -1   Position (35.9003,-353.18,154.569)       : 0.00505407 [keV]
-TrackID -1   Position (37.7132,-350.56,154.994)       : 0.00208909 [keV]
-TrackID -1   Position (59.8402,-446.004,80.2876)       : 0.00339168 [keV]
-TrackID -1   Position (31.9057,403.741,171.497)       : 7.22743 [keV]
-TrackID -1   Position (-23,304.132,267.682)       : 3.263 [keV]
-TrackID -1   Position (17.4882,349.563,-122.113)       : 0.0637943 [keV]
-TrackID -1   Position (-157.697,426.798,-96.1013)       : 0.00774783 [keV]
-TrackID -1   Position (-200.633,408.377,-309.754)       : 0.159301 [keV]
-TrackID -1   Position (26.6591,402.902,-148.682)       : 113.074 [keV]
-TrackID -1   Position (8.42034,403.864,-96.1621)       : 386.232 [keV]
-TrackID -1   Position (46.3851,300.35,-26.6893)       : 144.99 [keV]
-TrackID -1   Position (46.6443,300.553,-26.7229)       : 426.566 [keV]
-TrackID -1   Position (52.5212,-448.802,-266.171)       : 105.441 [keV]
-TrackID -1   Position (448.082,-41.5015,-235.171)       : 49.8222 [keV]
-TrackID -1   Position (-340.856,-79.4803,53.0573)       : 59.3328 [keV]
-TrackID -1   Position (-42.8494,246.3,154.311)       : 20.3813 [keV]
-TrackID -1   Position (-38.1055,251.414,155.874)       : 39.4805 [keV]
-TrackID -1   Position (170.243,-189.848,-142.428)       : 3.85866 [keV]
-TrackID -1   Position (-148.197,371.534,36.5047)       : 9.63033 [keV]
-TrackID -1   Position (-33.9319,353.375,35.9577)       : 0.84753 [keV]
-TrackID -1   Position (58.3281,299.371,-0.121615)       : 6.70724 [keV]
-TrackID -1   Position (37.9089,297.595,-42.194)       : 2.61609 [keV]
-TrackID -1   Position (-326.796,-230.66,-239.821)       : 2.29992 [keV]
-TrackID -1   Position (-288.553,-345.307,-227.61)       : 0.839111 [keV]
-TrackID -1   Position (-301.749,44.4126,151.81)       : 1.78457 [keV]
-TrackID -1   Position (399.369,-207.376,-55.0496)       : 0.0264684 [keV]
-TrackID -1   Position (360.163,-185.222,-218.762)       : 0.0252419 [keV]
-TrackID -1   Position (248.621,56.6816,-172.324)       : 0.0174718 [keV]
-TrackID -1   Position (-391.099,-84.927,-144.486)       : 17.2882 [keV]
-TrackID -1   Position (-352.586,-189.054,-107.47)       : 58.0565 [keV]
-TrackID -1   Position (-317.131,-158.762,-126.509)       : 17.9065 [keV]
-TrackID -1   Position (-317.063,-158.792,-126.481)       : 59.6093 [keV]
-TrackID -1   Position (-316.997,-158.855,-126.407)       : 47.218 [keV]
-TrackID -1   Position (-316.88,-158.82,-126.445)       : 51.1055 [keV]
-TrackID -1   Position (-316.738,-158.864,-126.411)       : 303.354 [keV]
-TrackID -1   Position (-380.7,-134.751,-87.227)       : 222.133 [keV]
-TrackID -1   Position (-377.046,-136.726,-89.1693)       : 94.3007 [keV]
-TrackID -1   Position (-377.059,-136.767,-88.909)       : 102.52 [keV]
-TrackID -1   Position (-376.873,-136.865,-88.7102)       : 89.7068 [keV]
-TrackID -1   Position (-377.073,-136.9,-88.523)       : 428.728 [keV]
-TrackID -1   Position (-375.673,-138.664,-115.432)       : 260.517 [keV]
-TrackID -1   Position (-451.754,54.2565,-56.9151)       : 19.2263 [keV]
-TrackID -1   Position (-405.31,195.509,-293.126)       : 14.8625 [keV]
-TrackID -1   Position (-453.014,42.467,-366.819)       : 0.000249674 [keV]
-TrackID -1   Position (-404.602,-17.9504,-265.266)       : 0.000743123 [keV]
-TrackID -1   Position (402.887,41.318,-305.638)       : 0.711865 [keV]
-TrackID -1   Position (275.451,-215.933,-245.602)       : 11.0887 [keV]
-TrackID -1   Position (266.515,-234.165,-241.274)       : 6.92054 [keV]
-TrackID -1   Position (266.675,-233.889,-241.275)       : 7.81741 [keV]
-TrackID -1   Position (447.9,-43.4196,-353.835)       : 6.4013 [keV]
-TrackID -1   Position (432.755,-140.527,-370.969)       : 5.16043 [keV]
-TrackID -1   Position (441.992,-108.019,-387.324)       : 0.144288 [keV]
-TrackID -1   Position (402.9,-41.185,-387.37)       : 2.88997 [keV]
-TrackID -1   Position (292.901,-85.0543,-236.225)       : 0.409661 [keV]
-TrackID -1   Position (261.914,-232.166,227.887)       : 1.56783 [keV]
-TrackID -1   Position (14.1245,-350.099,-212.011)       : 101.248 [keV]
-TrackID -1   Position (291.231,-281.442,141.328)       : 37.1758 [keV]
-TrackID -1   Position (410.787,195.65,333.118)       : 1.41025 [keV]
-TrackID -1   Position (117.948,-334.833,-209.205)       : 31.7059 [keV]
-TrackID -1   Position (287.863,84.4696,-40.7285)       : 2.51152 [keV]
-TrackID -1   Position (392.794,-75.5813,103.255)       : 12.8763 [keV]
-TrackID -1   Position (449.546,20.2015,388.213)       : 17.7492 [keV]
-TrackID -1   Position (240.996,-178.665,-272.969)       : 2305.32 [keV]
-TrackID -1   Position (282.223,-207.003,-213.679)       : 2417.15 [keV]
-TrackID -1   Position (323.526,-235.225,-153.736)       : 1243.08 [keV]
-TrackID -1   Position (325.568,-236.641,-150.773)       : 1327.33 [keV]
-TrackID -1   Position (364.123,-264.414,-95.0841)       : 2957.01 [keV]
-TrackID -1   Position (325.568,-236.641,-150.773)       : 873.59 [keV]
-TrackID -1   Position (326.403,-236.776,-150.587)       : 119.306 [keV]
-TrackID -1   Position (167.807,-312.835,-149.306)       : 11.1756 [keV]
-TrackID -1   Position (43.2056,-352.361,-90.6963)       : 47.5499 [keV]
-TrackID -1   Position (-22.2851,402.602,400)       : 48.7395 [keV]
-TrackID -1   Position (-393.254,-73.1533,-395.537)       : 0.149455 [keV]
-TrackID -1   Position (-158.638,426.449,182.471)       : 7.51287 [keV]
-TrackID -1   Position (-112.417,389.085,132.443)       : 0.0738236 [keV]
-TrackID -1   Position (-290.376,-275.103,-396.832)       : 24.7673 [keV]
-TrackID -1   Position (64.4207,241.557,3.35734)       : 21.8108 [keV]
-TrackID -1   Position (276.311,214.831,85.4117)       : 4.07337 [keV]
-TrackID -1   Position (302.84,36.2356,-36.0513)       : 50.2983 [keV]
-TrackID -1   Position (242.325,79.3948,-132.604)       : 41.8177 [keV]
-TrackID -1   Position (286.904,278.722,-40.2064)       : 34.0131 [keV]
-TrackID -1   Position (-199.487,230.716,-9.8408)       : 12.8619 [keV]
-TrackID -1   Position (376.836,-148.391,156.014)       : 0.00627143 [keV]
-TrackID -1   Position (255.852,-246.099,203.399)       : 19.6053 [keV]
-TrackID -1   Position (16.2635,-354.627,292.257)       : 0.0334056 [keV]
-TrackID -1   Position (-297.05,-275.293,49.5182)       : 29.2065 [keV]
-TrackID -1   Position (-185.865,237.471,4.61967)       : 1768.15 [keV]
-TrackID -1   Position (-196.084,163.022,-82.6375)       : 1330.13 [keV]
-TrackID -1   Position (-196.666,160.559,-85.7359)       : 904.696 [keV]
-TrackID -1   Position (-196.802,159.87,-86.7837)       : 1234.56 [keV]
-TrackID -1   Position (-196.786,157.566,-89.4346)       : 88.9194 [keV]
-TrackID -1   Position (-196.78,157.366,-89.6715)       : 1241.08 [keV]
-TrackID -1   Position (-196.507,155.366,-92.1994)       : 478.342 [keV]
-TrackID -1   Position (-196.78,157.366,-89.6715)       : 521.478 [keV]
-TrackID -1   Position (-197.009,157.354,-89.9862)       : 28.4447 [keV]
-TrackID -1   Position (-196.786,157.566,-89.4346)       : 188.216 [keV]
-TrackID -1   Position (-197.134,157.66,-89.9329)       : 220.224 [keV]
-TrackID -1   Position (-197.165,158.173,-90.2439)       : 602.517 [keV]
-TrackID -1   Position (-197.514,158.681,-90.7835)       : 346.225 [keV]
-TrackID -1   Position (-196.802,159.87,-86.7837)       : 427.202 [keV]
-TrackID -1   Position (-196.507,155.366,-92.1994)       : 1.844 [keV]
-TrackID -1   Position (-196.508,155.332,-92.2278)       : 5.7612 [keV]
-TrackID -1   Position (-196.666,160.559,-85.7359)       : 1.844 [keV]
-TrackID -1   Position (-196.736,160.341,-86.0463)       : 13.4224 [keV]
-TrackID -1   Position (-185.865,237.471,4.61967)       : 1151.25 [keV]
-TrackID -1   Position (-206.539,149.554,-46.2974)       : 2424.07 [keV]
-TrackID -1   Position (-208.553,143.696,-47.8555)       : 167.528 [keV]
-TrackID -1   Position (-208.143,143.709,-47.4479)       : 1616.78 [keV]
-TrackID -1   Position (-205.396,144.962,-44.4183)       : 1083.22 [keV]
-TrackID -1   Position (-203.133,146.997,-43.2751)       : 1199.15 [keV]
-TrackID -1   Position (-205.409,148.767,-44.0458)       : 690.383 [keV]
-TrackID -1   Position (-206.873,148.738,-44.4145)       : 107.641 [keV]
-TrackID -1   Position (-262.145,145.876,-76.3434)       : 21.4538 [keV]
-TrackID -1   Position (-262.225,145.875,-76.3753)       : 18.1793 [keV]
-TrackID -1   Position (-262.292,145.898,-76.3891)       : 20.9996 [keV]
-TrackID -1   Position (-262.333,145.956,-76.3901)       : 18.5273 [keV]
-TrackID -1   Position (-262.334,146.027,-76.4045)       : 30.5413 [keV]
-TrackID -1   Position (-262.349,146.093,-76.4278)       : 27.3462 [keV]
-TrackID -1   Position (-262.353,146.167,-76.4659)       : 33.7773 [keV]
-TrackID -1   Position (-262.357,146.256,-76.5036)       : 30.8153 [keV]
-TrackID -1   Position (-262.392,146.343,-76.553)       : 41.9035 [keV]
-TrackID -1   Position (-262.461,146.409,-76.637)       : 47.2067 [keV]
-TrackID -1   Position (-262.472,146.439,-76.7893)       : 66.6735 [keV]
-TrackID -1   Position (-262.471,146.539,-76.9226)       : 61.4799 [keV]
-TrackID -1   Position (-262.407,146.583,-77.0695)       : 54.1402 [keV]
-TrackID -1   Position (-262.4,146.731,-77.1404)       : 317.902 [keV]
-TrackID -1   Position (-127.14,436.876,305.117)       : 2212.21 [keV]
-TrackID -1   Position (-184.313,360.63,390.495)       : 80.3594 [keV]
-TrackID -1   Position (-184.529,360.44,390.7)       : 165.006 [keV]
-TrackID -1   Position (-184.955,360.215,391.023)       : 1971.1 [keV]
-TrackID -1   Position (-188.03,358.689,393.835)       : 361.686 [keV]
-TrackID -1   Position (-189.142,358.12,393.854)       : 444.255 [keV]
-TrackID -1   Position (-189.764,356.859,393.799)       : 468.306 [keV]
-TrackID -1   Position (-190.756,355.536,393.798)       : 483.509 [keV]
-TrackID -1   Position (-191.741,354.239,393.624)       : 564.132 [keV]
-TrackID -1   Position (-192.27,352.852,394.233)       : 813.985 [keV]
-TrackID -1   Position (-193.026,351.707,395.049)       : 498.758 [keV]
-TrackID -1   Position (-193.936,350.913,395.786)       : 237.384 [keV]
-TrackID -1   Position (-21.2305,304.044,200.406)       : 103.291 [keV]
-TrackID -1   Position (217.545,395.618,-82.5874)       : 99.422 [keV]
-TrackID -1   Position (-205.396,144.962,-44.4183)       : 442.538 [keV]
-TrackID -1   Position (-204.094,285.5,288.695)       : 272.938 [keV]
-TrackID -1   Position (-184.955,360.215,391.023)       : 1.844 [keV]
-TrackID -1   Position (-185.915,359.563,391.873)       : 18.1702 [keV]
-TrackID -1   Position (-272.044,361.782,181.449)       : 47.9941 [keV]
-TrackID -1   Position (-169.47,363.344,396.138)       : 86.794 [keV]
-TrackID -1   Position (-183.722,359.906,395.831)       : 2.94465 [keV]
-TrackID -1   Position (-189.835,356.842,395.082)       : 107.109 [keV]
-TrackID -1   Position (-189.977,356.692,395.198)       : 89.2841 [keV]
-TrackID -1   Position (-190.154,356.607,395.368)       : 131.494 [keV]
-TrackID -1   Position (-190.233,356.557,395.609)       : 102.694 [keV]
-TrackID -1   Position (-190.237,356.302,395.57)       : 369.716 [keV]
-TrackID -1   Position (45.5668,349.281,76.2612)       : 408.746 [keV]
-TrackID -1   Position (124.886,-380.967,-240.105)       : 366.37 [keV]
-TrackID -1   Position (115.903,-334.068,-233.143)       : 151.245 [keV]
-TrackID -1   Position (-145.351,429.631,207.612)       : 302.543 [keV]
-TrackID -1   Position (-244.529,71.9113,29.8467)       : 26.635 [keV]
-TrackID -1   Position (-244.5,71.8052,29.8254)       : 31.7753 [keV]
-TrackID -1   Position (-244.461,71.7235,29.7986)       : 29.8134 [keV]
-TrackID -1   Position (-244.434,71.6438,29.7527)       : 28.2296 [keV]
-TrackID -1   Position (-244.389,71.5678,29.7136)       : 33.1464 [keV]
-TrackID -1   Position (-244.36,71.4733,29.6992)       : 37.2848 [keV]
-TrackID -1   Position (-244.289,71.3806,29.6922)       : 41.3646 [keV]
-TrackID -1   Position (-244.247,71.2593,29.618)       : 44.9819 [keV]
-TrackID -1   Position (-244.192,71.1107,29.6285)       : 50.1896 [keV]
-TrackID -1   Position (-244.121,70.9379,29.6399)       : 69.9327 [keV]
-TrackID -1   Position (-244.168,70.7896,29.7917)       : 101.648 [keV]
-TrackID -1   Position (-244.138,70.7263,29.99)       : 123.902 [keV]
-TrackID -1   Position (-244.174,70.8182,30.2123)       : 333.268 [keV]
-TrackID -1   Position (330.285,-121.773,-110.542)       : 51.184 [keV]
-TrackID -1   Position (323.569,-140.009,-94.6884)       : 263.196 [keV]
-TrackID -1   Position (-146.432,-202.627,115.064)       : 32.4997 [keV]
-TrackID -1   Position (-316.105,150.259,-287.179)       : 23.7596 [keV]
-TrackID -1   Position (-297.002,-338.068,-278.615)       : 14.4023 [keV]
-TrackID -1   Position (346.163,-51.684,-231.799)       : 3.20832 [keV]
-TrackID -1   Position (-56.0206,-446.499,-277.167)       : 0.902929 [keV]
-TrackID -1   Position (195.702,-410.762,-291.261)       : 1.67027 [keV]
-TrackID -1   Position (407.085,-191.785,-172.764)       : 0.709016 [keV]
-TrackID -1   Position (426.288,-159.071,-174.316)       : 2.64439 [keV]
-TrackID -1   Position (346.643,-76.5765,-235.402)       : 2.67885 [keV]
-TrackID -1   Position (446.451,-56.407,-288.234)       : 2.34713 [keV]
-TrackID -1   Position (275.208,-297.129,-183.08)       : 0.591125 [keV]
-TrackID -1   Position (125.452,216.245,-226.988)       : 0.3551 [keV]
-TrackID -1   Position (258.516,368.333,-274.007)       : 0.578599 [keV]
-TrackID -1   Position (434.759,116.125,-359.567)       : 8.60504 [keV]
-TrackID -1   Position (330.527,-312.693,149.977)       : 32.9437 [keV]
-TrackID -1   Position (446.645,-54.8482,-88.8417)       : 6.33813 [keV]
-TrackID -1   Position (176.026,419.571,-151.195)       : 0.281227 [keV]
-TrackID -1   Position (245.68,46.2761,152.589)       : 0.581432 [keV]
-TrackID -1   Position (151.38,375.645,-300.878)       : 0.0012692 [keV]
-TrackID -1   Position (-152.737,264.001,-172.057)       : 0.0107393 [keV]
-TrackID -1   Position (-123.288,223.215,-215.162)       : 0.00358843 [keV]
-TrackID -1   Position (243.027,-323.979,-77.7234)       : 57.9805 [keV]
-TrackID -1   Position (-167.275,363.344,174.597)       : 18.3703 [keV]
-TrackID -1   Position (-235.177,383.656,179.853)       : 50.8653 [keV]
-TrackID -1   Position (-174.511,-365.473,251.844)       : 36.1085 [keV]
-TrackID -1   Position (249.697,-12.306,-187.233)       : 2.14471 [keV]
-TrackID -1   Position (254.138,-15.8412,-197.374)       : 2.28145 [keV]
-TrackID -1   Position (-146.589,261.747,192.199)       : 1.65365 [keV]
-TrackID -1   Position (-150.514,264.321,196.086)       : 0.15701 [keV]
-TrackID -1   Position (-164.765,-193.366,250)       : 0.263234 [keV]
-TrackID -1   Position (-57.0817,-345.314,144.605)       : 1.98823 [keV]
-TrackID -1   Position (243.596,-75.4055,4.82551)       : 0.281084 [keV]
-TrackID -1   Position (242.486,-70.7435,0.450593)       : 0.289434 [keV]
-TrackID -1   Position (242.733,-70.79,0.511452)       : 0.271675 [keV]
-TrackID -1   Position (84.0707,-442.077,-374.954)       : 0.203115 [keV]
-TrackID -1   Position (75.1211,-448.475,-375.689)       : 0.0725122 [keV]
-TrackID -1   Position (299.551,-271.853,149.373)       : 78.3481 [keV]
-TrackID -1   Position (59.2975,446.076,-343.48)       : 0.018716 [keV]
-TrackID -1   Position (-171.797,-366.757,184.066)       : 0.364935 [keV]
-TrackID -1   Position (-90.8855,389.538,-10.8218)       : 0.00909282 [keV]
-TrackID -1   Position (-90.214,392.055,-11.0034)       : 0.114988 [keV]
-TrackID -1   Position (72.3526,393.402,-3.16484)       : 0.0052727 [keV]
-TrackID -1   Position (88.4705,393.46,-2.35284)       : 0.223923 [keV]
-TrackID -1   Position (-89.8502,389.778,37.6306)       : 0.0833854 [keV]
-TrackID -1   Position (-42.9675,450.614,41.6494)       : 264.54 [keV]
-TrackID -1   Position (-29.0548,298.59,10.9053)       : 0.506589 [keV]
-TrackID -1   Position (-338.647,106.505,-85.6717)       : 0.000608805 [keV]
-TrackID -1   Position (-301.82,43.9254,-65.2168)       : 0.00319015 [keV]
-TrackID -1   Position (-338.871,87.5574,-112.53)       : 0.00220576 [keV]
-TrackID -1   Position (-339.394,88.1808,-113.19)       : 0.000596017 [keV]
-TrackID -1   Position (342.08,74.0333,104.441)       : 0.0307583 [keV]
-TrackID -1   Position (444.935,67.3237,277.323)       : 0.00634642 [keV]
-TrackID -1   Position (154.684,196.399,-62.0366)       : 38.6825 [keV]
-TrackID -1   Position (-22.6583,454.435,200.421)       : 54.455 [keV]
-TrackID -1   Position (358.066,-280.738,434.785)       : 1.00454 [keV]
-TrackID -1   Position (294.641,-198.02,315.513)       : 10.1516 [keV]
-TrackID -1   Position (197.968,-353.318,364.146)       : 1.31325 [keV]
-TrackID -1   Position (324.749,-318.689,444.43)       : 31.679 [keV]
-TrackID -1   Position (-321.824,149.847,336.463)       : 0.405124 [keV]
-TrackID -1   Position (-401.174,55.5398,6.93845)       : 0.0172607 [keV]
-TrackID -1   Position (-133.827,376.949,249.418)       : 3.69939 [keV]
-TrackID -1   Position (-134.592,378.952,248.244)       : 1.15756 [keV]
-TrackID -1   Position (-386.572,102.77,-27.4677)       : 0.0289605 [keV]
-TrackID -1   Position (-429.655,133.779,-119.739)       : 0.256516 [keV]
-TrackID -1   Position (72.6795,-449.158,279.911)       : 30.6846 [keV]
-TrackID -1   Position (72.3696,-449.208,241.097)       : 0.586907 [keV]
-TrackID -1   Position (63.8645,-399.933,240.268)       : 5.76556 [keV]
-TrackID -1   Position (84.7113,-344.745,209.076)       : 20.779 [keV]
-TrackID -1   Position (18.1058,-399.59,61.0806)       : 25.3534 [keV]
-TrackID -1   Position (-208.259,-281.297,-188.687)       : 2.65391 [keV]
-TrackID -1   Position (-339.701,84.2824,-111.84)       : 0.00331275 [keV]
-TrackID -1   Position (-385.813,105.586,-183.631)       : 0.00196009 [keV]
-TrackID -1   Position (-387.274,106,-185.765)       : 0.00783056 [keV]
-TrackID -1   Position (245.581,-383.034,360.711)       : 0.18201 [keV]
-TrackID -1   Position (245.246,-381.665,361.449)       : 0.053697 [keV]
-TrackID -1   Position (-47.9472,-402.152,-27.439)       : 0.0918533 [keV]
-TrackID -1   Position (-333.527,-220.817,246.849)       : 0.119883 [keV]
-TrackID -1   Position (-305.265,-337.399,323.994)       : 0.0775528 [keV]
-TrackID -1   Position (193.8,157.929,-47.9877)       : 0.0979469 [keV]
-TrackID -1   Position (194.545,158.678,-48.5514)       : 0.042505 [keV]
-TrackID -1   Position (197.148,157.316,-48.7743)       : 0.0459136 [keV]
-TrackID -1   Position (198.897,157.278,-47.5236)       : 0.16057 [keV]
-TrackID -1   Position (-250.234,-49.0684,-122.57)       : 0.02788 [keV]
-TrackID -1   Position (-245.934,-48.8697,-127.269)       : 0.18136 [keV]
-TrackID -1   Position (-448.336,77.5875,28.8567)       : 0.0825569 [keV]
-TrackID -1   Position (-404.994,2.25847,-17.0856)       : 0.00386079 [keV]
-TrackID -1   Position (-295.588,-187.423,-51.0368)       : 0.1356 [keV]
-TrackID -1   Position (-281.961,-210.964,-54.9832)       : 0.0832852 [keV]
-TrackID -1   Position (-285.085,-209.502,-53.7403)       : 0.0611368 [keV]
-TrackID -1   Position (-152.136,198.38,205.663)       : 0.545699 [keV]
-TrackID -1   Position (-97.4101,283.745,286.687)       : 6.31815 [keV]
-TrackID -1   Position (-308.202,-254.974,169.598)       : 2.53638 [keV]
-TrackID -1   Position (-308.965,-256.912,169.163)       : 0.186912 [keV]
-TrackID -1   Position (-310.712,-259.064,175.738)       : 2.05458 [keV]
-TrackID -1   Position (-332.56,-124.212,207.466)       : 0.0843162 [keV]
-TrackID -1   Position (-390.336,-231.004,-90.6692)       : 9.39205 [keV]
-TrackID -1   Position (-371.307,-153.047,70.1272)       : 44.92 [keV]
-TrackID -1   Position (-190.407,-233.437,103.702)       : 23.1414 [keV]
-TrackID -1   Position (-127.198,-220.987,76.9598)       : 12.4845 [keV]
-TrackID -1   Position (-127.162,-220.992,76.9484)       : 25.5884 [keV]
-TrackID -1   Position (-127.115,-221.006,76.9276)       : 8.86356 [keV]
-TrackID -1   Position (-127.065,-221.003,76.9139)       : 18.6263 [keV]
-TrackID -1   Position (-127.014,-221.007,76.9223)       : 39.8984 [keV]
-TrackID -1   Position (-126.965,-220.997,76.9123)       : 22.993 [keV]
-TrackID -1   Position (-126.916,-220.982,76.9028)       : 14.7373 [keV]
-TrackID -1   Position (-126.875,-220.99,76.8729)       : 18.5268 [keV]
-TrackID -1   Position (-126.837,-220.995,76.8387)       : 17.7325 [keV]
-TrackID -1   Position (-126.826,-220.986,76.7841)       : 15.0083 [keV]
-TrackID -1   Position (-126.796,-220.976,76.7333)       : 19.7742 [keV]
-TrackID -1   Position (-126.763,-220.973,76.6744)       : 22.0279 [keV]
-TrackID -1   Position (-126.731,-220.923,76.6317)       : 45.5603 [keV]
-TrackID -1   Position (-126.694,-220.848,76.6163)       : 39.5374 [keV]
-TrackID -1   Position (-126.686,-220.751,76.5689)       : 48.5886 [keV]
-TrackID -1   Position (-126.597,-220.664,76.5006)       : 272.639 [keV]
-TrackID -1   Position (72.0305,-448.139,346.966)       : 140.909 [keV]
-TrackID -1   Position (-80.1032,-392.37,399.538)       : 192.04 [keV]
-TrackID -1   Position (-71.4329,-394.866,395.884)       : 88.6567 [keV]
-TrackID -1   Position (-129.859,382.931,10.0497)       : 155.629 [keV]
-TrackID -1   Position (132.331,-325.062,180.674)       : 91.4043 [keV]
-TrackID -1   Position (-216.648,-210.171,81.5324)       : 64.2276 [keV]
-TrackID -1   Position (209.446,-341.872,323.124)       : 96.8188 [keV]
-TrackID -1   Position (-158.925,-194.8,-190.517)       : 77.2911 [keV]
-TrackID -1   Position (-190.057,-237.674,-251.179)       : 95.0186 [keV]
-TrackID -1   Position (-18.4061,-354.523,302.212)       : 0.0154869 [keV]
-TrackID -1   Position (279.784,-210.288,292.695)       : 0.0444429 [keV]
-TrackID -1   Position (287.688,-206.556,292.548)       : 0.00136947 [keV]
-TrackID -1   Position (287.422,-206.462,292.307)       : 0.0481156 [keV]
-TrackID -1   Position (-273.488,-123.306,-67.8998)       : 12.9253 [keV]
-TrackID -1   Position (-122.996,-437.254,424.984)       : 66.6828 [keV]
-TrackID -1   Position (283.002,99.5492,-108.275)       : 48.1088 [keV]
-TrackID -1   Position (380.767,-249.082,-342.938)       : 0.0122813 [keV]
-TrackID -1   Position (-347.132,-208.625,188.646)       : 1.27921 [keV]
-TrackID -1   Position (-391.748,231.428,82.5758)       : 39.5794 [keV]
-TrackID -1   Position (-293.08,279.515,135.812)       : 26.0298 [keV]
-TrackID -1   Position (-300.9,188.373,159.396)       : 11.4453 [keV]
-TrackID -1   Position (-301.653,179.627,161.657)       : 32.8186 [keV]
-TrackID -1   Position (57.0755,350.382,-284.789)       : 0.404881 [keV]
-TrackID -1   Position (56.1569,348.938,-280.35)       : 16.8188 [keV]
-TrackID -1   Position (53.7899,347.562,-276.115)       : 5.13793 [keV]
-TrackID -1   Position (-347.885,-70.7174,-61.4162)       : 0.00244549 [keV]
-TrackID -1   Position (-253.655,-26.1584,-59.9849)       : 0.0150811 [keV]
-TrackID -1   Position (-299.981,-3.39814,-57.9015)       : 0.00448956 [keV]
-TrackID -1   Position (371.415,-262.823,310.53)       : 0.103607 [keV]
-TrackID -1   Position (-345.63,211.104,220.39)       : 0.0898576 [keV]
-TrackID -1   Position (-364.426,263.995,235.603)       : 0.0335161 [keV]
-TrackID -1   Position (190.123,357.601,366.313)       : 0.00639169 [keV]
-TrackID -1   Position (203.974,290.55,316.603)       : 0.00474188 [keV]
-TrackID -1   Position (204.345,288.948,315.365)       : 0.00745045 [keV]
-TrackID -1   Position (204.459,289.454,314.823)       : 0.00691289 [keV]
-TrackID -1   Position (211.764,284.858,326.493)       : 0.00442393 [keV]
-TrackID -1   Position (338.14,296.92,323.939)       : 0.00603723 [keV]
-TrackID -1   Position (287.291,285.463,324.302)       : 0.00513132 [keV]
-TrackID -1   Position (309.132,-165.588,193.478)       : 80.8741 [keV]
-TrackID -1   Position (345.548,-201.486,321.275)       : 0.116347 [keV]
-TrackID -1   Position (343.765,-211.022,311.889)       : 1.79982 [keV]
-TrackID -1   Position (440.239,-114.954,437.179)       : 0.214152 [keV]
-TrackID -1   Position (364.146,264.382,237.928)       : 1.4017 [keV]
-TrackID -1   Position (362.986,270.233,234.836)       : 1.36743 [keV]
-TrackID -1   Position (343.902,213.908,308.646)       : 1.21256 [keV]
-TrackID -1   Position (350.499,282.224,259.269)       : 0.394499 [keV]
-TrackID -1   Position (378.548,143.968,166.73)       : 0.302705 [keV]
-TrackID -1   Position (376.839,138.582,162.173)       : 0.450976 [keV]
-TrackID -1   Position (454.522,-20.8527,253.118)       : 0.00671059 [keV]
-TrackID -1   Position (-349.9,-8.36456,196.523)       : 0.0114467 [keV]
-TrackID -1   Position (449.724,-15.7497,366.692)       : 32.1865 [keV]
-TrackID -1   Position (92.0491,-445.592,14.2372)       : 0.0167188 [keV]
-TrackID -1   Position (440.805,-90.5063,-40.7833)       : 2.58013 [keV]
-TrackID -1   Position (376.402,-149.488,99.4201)       : 1.8591 [keV]
-TrackID -1   Position (415.096,186.334,307.593)       : 0.00242706 [keV]
-TrackID -1   Position (413.798,181.521,300.918)       : 0.0529993 [keV]
-TrackID -1   Position (413.782,181.321,300.787)       : 0.0442159 [keV]
-TrackID -1   Position (220.401,-203.527,-45.1745)       : 0.0186608 [keV]
-TrackID -1   Position (6.51119,-454.953,-441.683)       : 3045.39 [keV]
-TrackID -1   Position (275.029,290.446,-369.185)       : 2654.01 [keV]
-TrackID -1   Position (293.546,341.073,-364.191)       : 2737.85 [keV]
-TrackID -1   Position (157.768,-372.108,172.388)       : 433.062 [keV]
-TrackID -1   Position (140.589,-432.735,435.871)       : 1.16202 [keV]
-TrackID -1   Position (140.59,-432.733,435.871)       : 1.28711 [keV]
-TrackID -1   Position (140.589,-432.731,435.872)       : 1.45296 [keV]
-TrackID -1   Position (140.588,-432.729,435.872)       : 1.25609 [keV]
-TrackID -1   Position (140.587,-432.727,435.872)       : 1.05121 [keV]
-TrackID -1   Position (140.586,-432.725,435.873)       : 1.93618 [keV]
-TrackID -1   Position (140.586,-432.723,435.874)       : 2.30893 [keV]
-TrackID -1   Position (140.585,-432.72,435.876)       : 3.72562 [keV]
-TrackID -1   Position (140.586,-432.716,435.879)       : 3.98988 [keV]
-TrackID -1   Position (140.59,-432.714,435.88)       : 2.64121 [keV]
-TrackID -1   Position (140.591,-432.719,435.881)       : 3.05355 [keV]
-TrackID -1   Position (140.588,-432.721,435.883)       : 3.91189 [keV]
-TrackID -1   Position (140.588,-432.724,435.886)       : 4.36537 [keV]
-TrackID -1   Position (140.588,-432.725,435.889)       : 4.56401 [keV]
-TrackID -1   Position (140.588,-432.726,435.891)       : 4.77627 [keV]
-TrackID -1   Position (140.587,-432.726,435.894)       : 3.50055 [keV]
-TrackID -1   Position (140.586,-432.726,435.896)       : 4.83164 [keV]
-TrackID -1   Position (140.584,-432.726,435.897)       : 29.6264 [keV]
-TrackID -1   Position (211.097,-403.067,309.494)       : 0.652341 [keV]
-TrackID -1   Position (76.0829,-238.142,118.406)       : 19.766 [keV]
-TrackID -1   Position (73.1099,398.347,367.393)       : 5.68177 [keV]
-TrackID -1   Position (-325.287,-310.948,424.99)       : 0.771906 [keV]
-TrackID -1   Position (196.666,348.314,312.977)       : 0.015978 [keV]
-TrackID -1   Position (19.0346,454.602,293.179)       : 0.134404 [keV]
-TrackID -1   Position (50.1659,401.881,301.913)       : 0.0073767 [keV]
-TrackID -1   Position (88.2505,-446.36,308.378)       : 0.308898 [keV]
-TrackID -1   Position (-235.297,-186.119,63.2252)       : 71.1133 [keV]
+TrackID -1   Position (31.5646,299.192,-238.247)       : 38.214 [keV]
+TrackID -1   Position (-56.3822,345.593,-250.97)       : 13.5977 [keV]
+TrackID -1   Position (-56.416,345.573,-250.974)       : 13.6927 [keV]
+TrackID -1   Position (-56.4472,345.545,-250.981)       : 17.7856 [keV]
+TrackID -1   Position (-56.4625,345.511,-250.975)       : 9.58705 [keV]
+TrackID -1   Position (-56.4769,345.489,-250.967)       : 72.8976 [keV]
+TrackID -1   Position (-56.4916,345.471,-250.967)       : 6.29929 [keV]
+TrackID -1   Position (-56.492,345.447,-250.969)       : 18.6467 [keV]
+TrackID -1   Position (-56.498,345.426,-250.979)       : 9.62113 [keV]
+TrackID -1   Position (-56.5184,345.416,-250.986)       : 8.7467 [keV]
+TrackID -1   Position (-56.537,345.414,-250.999)       : 8.18306 [keV]
+TrackID -1   Position (-56.5521,345.425,-251.012)       : 13.8002 [keV]
+TrackID -1   Position (-56.5686,345.433,-251.024)       : 11.8457 [keV]
+TrackID -1   Position (-56.5792,345.412,-251.031)       : 11.869 [keV]
+TrackID -1   Position (-45.8209,301.538,-238.386)       : 3.10069 [keV]
+TrackID -1   Position (-45.818,301.535,-238.384)       : 1.65404 [keV]
+TrackID -1   Position (-45.8147,301.534,-238.381)       : 3.11183 [keV]
+TrackID -1   Position (-45.812,301.534,-238.378)       : 1.30282 [keV]
+TrackID -1   Position (-45.8089,301.533,-238.375)       : 3.24712 [keV]
+TrackID -1   Position (-45.8054,301.534,-238.372)       : 1.72654 [keV]
+TrackID -1   Position (-45.8026,301.533,-238.369)       : 3.146 [keV]
+TrackID -1   Position (-45.8051,301.534,-238.366)       : 1.20487 [keV]
+TrackID -1   Position (-45.8084,301.534,-238.363)       : 2.28439 [keV]
+TrackID -1   Position (-45.8124,301.534,-238.361)       : 3.17989 [keV]
+TrackID -1   Position (-45.8161,301.535,-238.359)       : 3.44403 [keV]
+TrackID -1   Position (-45.8201,301.536,-238.358)       : 1.3028 [keV]
+TrackID -1   Position (-89.6985,338.311,-239.986)       : 3.29706 [keV]
+TrackID -1   Position (-89.7001,338.311,-239.985)       : 1.60115 [keV]
+TrackID -1   Position (-89.7014,338.312,-239.985)       : 2.39255 [keV]
+TrackID -1   Position (-89.7028,338.312,-239.984)       : 1.0793 [keV]
+TrackID -1   Position (-89.7041,338.312,-239.984)       : 0.762301 [keV]
+TrackID -1   Position (-89.7047,338.312,-239.983)       : 6.82744 [keV]
+TrackID -1   Position (-89.7048,338.314,-239.982)       : 1.19198 [keV]
+TrackID -1   Position (-89.7047,338.315,-239.982)       : 2.58243 [keV]
+TrackID -1   Position (-89.7051,338.316,-239.981)       : 1.53854 [keV]
+TrackID -1   Position (-89.7048,338.318,-239.98)       : 3.4833 [keV]
+TrackID -1   Position (-89.7073,338.318,-239.979)       : 6.85161 [keV]
+TrackID -1   Position (-89.7089,338.318,-239.977)       : 4.8897 [keV]
+TrackID -1   Position (-89.7095,338.315,-239.977)       : 3.12066 [keV]
+TrackID -1   Position (-89.7107,338.314,-239.975)       : 2.71493 [keV]
+TrackID -1   Position (-89.7113,338.314,-239.976)       : 22.0486 [keV]
+TrackID -1   Position (454.076,5.48078,-322.77)       : 9.39152 [keV]
+TrackID -1   Position (454.108,5.46156,-322.796)       : 137.381 [keV]
+TrackID -1   Position (-3.20126,453.83,-262.991)       : 378.831 [keV]
+TrackID -1   Position (55.077,446.712,-316.684)       : 58.1942 [keV]
+TrackID -1   Position (2.47941,404.992,-350.506)       : 17.662 [keV]
+TrackID -1   Position (2.43835,404.962,-350.545)       : 70.5352 [keV]
+TrackID -1   Position (2.27473,404.841,-350.642)       : 61.6032 [keV]
+TrackID -1   Position (2.15312,404.712,-350.774)       : 184.627 [keV]
+TrackID -1   Position (1.98356,404.576,-350.835)       : 58.275 [keV]
+TrackID -1   Position (1.7917,404.468,-350.882)       : 66.0453 [keV]
+TrackID -1   Position (1.61169,404.533,-350.994)       : 151.698 [keV]
+TrackID -1   Position (1.39085,404.551,-351.02)       : 54.7914 [keV]
+TrackID -1   Position (1.26153,404.713,-351.096)       : 81.5163 [keV]
+TrackID -1   Position (1.18352,404.915,-351.162)       : 37.8127 [keV]
+TrackID -1   Position (1.56522,449.997,-399.666)       : 17.7037 [keV]
+TrackID -1   Position (1.59035,450.055,-399.687)       : 21.1271 [keV]
+TrackID -1   Position (1.61389,450.11,-399.7)       : 12.7011 [keV]
+TrackID -1   Position (1.63791,450.165,-399.697)       : 16.5582 [keV]
+TrackID -1   Position (1.63929,450.227,-399.695)       : 23.0576 [keV]
+TrackID -1   Position (1.64706,450.292,-399.704)       : 22.338 [keV]
+TrackID -1   Position (1.6019,450.364,-399.715)       : 37.7741 [keV]
+TrackID -1   Position (1.56384,450.455,-399.754)       : 55.4763 [keV]
+TrackID -1   Position (1.60495,450.581,-399.722)       : 52.3536 [keV]
+TrackID -1   Position (1.61341,450.546,-399.569)       : 52.1479 [keV]
+TrackID -1   Position (1.63767,450.533,-399.411)       : 49.7589 [keV]
+TrackID -1   Position (1.687,450.388,-399.433)       : 43.1573 [keV]
+TrackID -1   Position (1.64634,450.334,-399.353)       : 145.91 [keV]
+TrackID -1   Position (1.60922,450.242,-399.337)       : 173.568 [keV]
+TrackID -1   Position (47.4408,349.515,-312.19)       : 193.663 [keV]
+TrackID -1   Position (47.1031,348.915,-312.441)       : 225.462 [keV]
+TrackID -1   Position (46.7983,348.339,-312.475)       : 269.822 [keV]
+TrackID -1   Position (46.153,348.155,-312.448)       : 299.153 [keV]
+TrackID -1   Position (45.5419,348.219,-312.205)       : 338.349 [keV]
+TrackID -1   Position (44.9692,348.273,-311.942)       : 282.729 [keV]
+TrackID -1   Position (44.5063,348.621,-311.704)       : 200.691 [keV]
+TrackID -1   Position (44.1886,349.162,-311.672)       : 538.746 [keV]
+TrackID -1   Position (43.9765,349.745,-311.845)       : 248.425 [keV]
+TrackID -1   Position (65.4939,346.354,-137.086)       : 150.726 [keV]
+TrackID -1   Position (114.352,439.53,-396.784)       : 202.502 [keV]
+TrackID -1   Position (79.1724,446.377,-110.164)       : 1.3734 [keV]
+TrackID -1   Position (68.6581,446.333,-78.3087)       : 12.4272 [keV]
+TrackID -1   Position (49.2415,397.137,-110.086)       : 18.7125 [keV]
+TrackID -1   Position (49.2989,397.126,-110.053)       : 25.7314 [keV]
+TrackID -1   Position (46.1953,400.249,-105.999)       : 81.3953 [keV]
+TrackID -1   Position (139.114,430.086,-285.621)       : 126.423 [keV]
+TrackID -1   Position (-443.497,76.2233,-444.285)       : 1.844 [keV]
+TrackID -1   Position (-442.047,96.7784,-435.228)       : 509.155 [keV]
+TrackID -1   Position (-103.013,281.759,236.204)       : 1636.98 [keV]
+TrackID -1   Position (-99.8521,283.856,233.407)       : 1336.2 [keV]
+TrackID -1   Position (-97.5766,284.121,230.806)       : 1243.64 [keV]
+TrackID -1   Position (-98.9112,284.31,228.269)       : 134.39 [keV]
+TrackID -1   Position (-99.0951,284.395,228.286)       : 746.761 [keV]
+TrackID -1   Position (-100.617,283.503,228.807)       : 540.962 [keV]
+TrackID -1   Position (-100.788,282.715,228.3)       : 232.423 [keV]
+TrackID -1   Position (-257.667,305.954,235.707)       : 1.844 [keV]
+TrackID -1   Position (-263.116,306.695,235.962)       : 151.061 [keV]
+TrackID -1   Position (-76.5761,290.062,219.911)       : 1.844 [keV]
+TrackID -1   Position (-75.2878,291.489,218.506)       : 53.0926 [keV]
+TrackID -1   Position (88.5457,442.45,-37.0736)       : 78.6437 [keV]
+TrackID -1   Position (-348.526,62.9535,-111.276)       : 37.9277 [keV]
+TrackID -1   Position (-349.498,-30.1832,-2.59136)       : 3.51573 [keV]
+TrackID -1   Position (-294.208,-198.294,327.86)       : 91.524 [keV]
+TrackID -1   Position (186.373,-414.719,-92.179)       : 39.5162 [keV]
+TrackID -1   Position (186.434,-414.59,-92.1792)       : 38.7129 [keV]
+TrackID -1   Position (186.509,-414.529,-92.113)       : 61.3455 [keV]
+TrackID -1   Position (186.612,-414.458,-92.0855)       : 47.8127 [keV]
+TrackID -1   Position (186.653,-414.344,-92.0345)       : 48.5318 [keV]
+TrackID -1   Position (186.62,-414.341,-91.892)       : 338.391 [keV]
+TrackID -1   Position (-128.743,435.049,-32.3302)       : 34.6423 [keV]
+TrackID -1   Position (44.1365,402.063,-11.9309)       : 8.05927 [keV]
+TrackID -1   Position (47.3206,398.481,-10.5341)       : 10.8775 [keV]
+TrackID -1   Position (68.3602,394.692,8.59246)       : 45.2953 [keV]
+TrackID -1   Position (181.766,302.523,-72.0077)       : 11.4316 [keV]
+TrackID -1   Position (187.731,300.205,-72.4001)       : 11.6379 [keV]
+TrackID -1   Position (297.403,186.663,-38.6126)       : 227.835 [keV]
+TrackID -1   Position (292.603,192.077,-20.0538)       : 59.0419 [keV]
+TrackID -1   Position (292.646,192.236,-20.0778)       : 45.7623 [keV]
+TrackID -1   Position (292.614,192.437,-20.0729)       : 64.2164 [keV]
+TrackID -1   Position (292.641,192.606,-20.1725)       : 55.207 [keV]
+TrackID -1   Position (292.624,192.79,-20.2568)       : 262.728 [keV]
+TrackID -1   Position (292.648,192.913,-20.4109)       : 56.3013 [keV]
+TrackID -1   Position (292.727,193.02,-20.5658)       : 58.4217 [keV]
+TrackID -1   Position (292.866,193.025,-20.7109)       : 73.6836 [keV]
+TrackID -1   Position (292.932,192.965,-20.907)       : 65.7663 [keV]
+TrackID -1   Position (293.078,193.008,-21.0607)       : 84.5772 [keV]
+TrackID -1   Position (293.104,193.172,-21.2438)       : 73.3177 [keV]
+TrackID -1   Position (293.096,193.377,-21.4207)       : 529.077 [keV]
+TrackID -1   Position (293.191,193.71,-21.5915)       : 16.8764 [keV]
+TrackID -1   Position (47.6226,-246.265,-72.8977)       : 14.7855 [keV]
+TrackID -1   Position (397.224,-219.26,329.202)       : 485.938 [keV]
+TrackID -1   Position (-400.453,-7.49038,-395.785)       : 91.3355 [keV]
+TrackID -1   Position (-435.213,130.005,329.25)       : 4.34026 [keV]
+TrackID -1   Position (-364.068,175.808,372.332)       : 74.5244 [keV]
+TrackID -1   Position (-361.689,171.363,364.106)       : 40.6945 [keV]
+TrackID -1   Position (-361.6,171.364,364.074)       : 15.0582 [keV]
+TrackID -1   Position (-361.582,171.33,364.062)       : 11.5513 [keV]
+TrackID -1   Position (-361.579,171.3,364.048)       : 13.2387 [keV]
+TrackID -1   Position (-361.566,171.274,364.046)       : 7.4409 [keV]
+TrackID -1   Position (-361.552,171.257,364.037)       : 4.70792 [keV]
+TrackID -1   Position (-361.553,171.238,364.034)       : 8.73785 [keV]
+TrackID -1   Position (-361.547,171.222,364.028)       : 10.931 [keV]
+TrackID -1   Position (-361.543,171.213,364.013)       : 7.01003 [keV]
+TrackID -1   Position (-361.537,171.204,363.998)       : 7.84886 [keV]
+TrackID -1   Position (-361.538,171.193,363.984)       : 8.16017 [keV]
+TrackID -1   Position (-361.534,171.196,363.966)       : 7.88667 [keV]
+TrackID -1   Position (-361.526,171.201,363.95)       : 6.93485 [keV]
+TrackID -1   Position (-361.518,171.218,363.95)       : 9.24424 [keV]
+TrackID -1   Position (-361.509,171.229,363.941)       : 9.30296 [keV]
+TrackID -1   Position (-333.992,220.112,354.404)       : 1.14594 [keV]
+TrackID -1   Position (-333.991,220.114,354.401)       : 1.98423 [keV]
+TrackID -1   Position (-333.991,220.116,354.398)       : 2.35731 [keV]
+TrackID -1   Position (-333.989,220.117,354.395)       : 2.30071 [keV]
+TrackID -1   Position (-333.988,220.12,354.392)       : 3.02465 [keV]
+TrackID -1   Position (-333.989,220.122,354.389)       : 1.87187 [keV]
+TrackID -1   Position (-333.987,220.125,354.388)       : 1.65422 [keV]
+TrackID -1   Position (-333.985,220.129,354.388)       : 3.26235 [keV]
+TrackID -1   Position (-333.982,220.131,354.388)       : 2.40666 [keV]
+TrackID -1   Position (-333.98,220.134,354.387)       : 4.14126 [keV]
+TrackID -1   Position (-333.977,220.136,354.385)       : 0.912907 [keV]
+TrackID -1   Position (-327.584,229.54,350.587)       : 0.48332 [keV]
+TrackID -1   Position (-327.584,229.54,350.587)       : 0.744659 [keV]
+TrackID -1   Position (-327.584,229.542,350.588)       : 1.31797 [keV]
+TrackID -1   Position (-327.583,229.543,350.589)       : 5.4669 [keV]
+TrackID -1   Position (-327.582,229.545,350.59)       : 1.67647 [keV]
+TrackID -1   Position (-327.581,229.547,350.589)       : 2.22045 [keV]
+TrackID -1   Position (-327.58,229.548,350.589)       : 9.04355 [keV]
+TrackID -1   Position (-327.58,229.55,350.588)       : 1.7468 [keV]
+TrackID -1   Position (-327.582,229.551,350.587)       : 1.97245 [keV]
+TrackID -1   Position (-327.583,229.552,350.587)       : 1.34121 [keV]
+TrackID -1   Position (-327.584,229.553,350.586)       : 3.71452 [keV]
+TrackID -1   Position (-327.586,229.554,350.586)       : 2.42748 [keV]
+TrackID -1   Position (-327.588,229.554,350.587)       : 2.10262 [keV]
+TrackID -1   Position (-327.591,229.556,350.588)       : 6.19448 [keV]
+TrackID -1   Position (-327.591,229.56,350.587)       : 35.4935 [keV]
+TrackID -1   Position (358.818,-182.342,243.524)       : 8.58929 [keV]
+TrackID -1   Position (-149.438,318.059,-111.382)       : 127.415 [keV]
+TrackID -1   Position (148.057,-319.894,180.745)       : 351.15 [keV]
+TrackID -1   Position (148.331,-319.997,179.957)       : 367.206 [keV]
+TrackID -1   Position (148.558,-320.48,179.637)       : 531.865 [keV]
+TrackID -1   Position (148.288,-320.954,179.604)       : 166.454 [keV]
+TrackID -1   Position (-269.609,-301.154,-280.355)       : 76.7478 [keV]
+TrackID -1   Position (152.46,-369.946,249.828)       : 10.8023 [keV]
+TrackID -1   Position (152.427,-369.956,249.83)       : 12.3626 [keV]
+TrackID -1   Position (152.415,-369.979,249.854)       : 17.2244 [keV]
+TrackID -1   Position (152.403,-370.016,249.866)       : 24.9861 [keV]
+TrackID -1   Position (152.404,-370.058,249.87)       : 170.536 [keV]
+TrackID -1   Position (-395.785,-64.1059,311.305)       : 1.844 [keV]
+TrackID -1   Position (-394.401,-66.6943,312.59)       : 5.17057 [keV]
+TrackID -1   Position (-394.402,-66.7037,312.591)       : 5.29601 [keV]
+TrackID -1   Position (-394.404,-66.7108,312.593)       : 3.83423 [keV]
+TrackID -1   Position (-394.406,-66.7176,312.595)       : 6.02526 [keV]
+TrackID -1   Position (-394.408,-66.7244,312.598)       : 5.88657 [keV]
+TrackID -1   Position (-394.41,-66.7287,312.604)       : 2.47005 [keV]
+TrackID -1   Position (-394.412,-66.7347,312.608)       : 6.16753 [keV]
+TrackID -1   Position (-394.415,-66.7401,312.612)       : 6.04794 [keV]
+TrackID -1   Position (-394.417,-66.7442,312.618)       : 4.15257 [keV]
+TrackID -1   Position (-394.419,-66.7457,312.625)       : 4.01554 [keV]
+TrackID -1   Position (-394.422,-66.7471,312.632)       : 3.71107 [keV]
+TrackID -1   Position (-394.425,-66.749,312.64)       : 6.26545 [keV]
+TrackID -1   Position (-394.431,-66.7494,312.647)       : 8.60291 [keV]
+TrackID -1   Position (-394.435,-66.7531,312.656)       : 10.5017 [keV]
+TrackID -1   Position (-394.443,-66.7468,312.663)       : 15.5031 [keV]
+TrackID -1   Position (-394.454,-66.7384,312.668)       : 79.1277 [keV]
+TrackID -1   Position (-395.785,-64.1059,311.305)       : 240.385 [keV]
+TrackID -1   Position (-318.848,-151.35,267.894)       : 40.7668 [keV]
+TrackID -1   Position (-315.758,-152.759,267.5)       : 193.938 [keV]
+TrackID -1   Position (221.153,-272.75,-18.6453)       : 17.1725 [keV]
+TrackID -1   Position (-306.452,330.112,-272.294)       : 30.259 [keV]
+TrackID -1   Position (-306.491,330.065,-272.369)       : 45.792 [keV]
+TrackID -1   Position (-306.557,330.002,-272.453)       : 35.588 [keV]
+TrackID -1   Position (-306.589,329.915,-272.534)       : 50.4798 [keV]
+TrackID -1   Position (-306.649,329.852,-272.605)       : 47.046 [keV]
+TrackID -1   Position (-306.667,329.793,-272.694)       : 53.7923 [keV]
+TrackID -1   Position (-306.676,329.744,-272.778)       : 26.6899 [keV]
+TrackID -1   Position (-306.714,329.708,-272.852)       : 60.0535 [keV]
+TrackID -1   Position (-306.728,329.681,-272.936)       : 31.2789 [keV]
+TrackID -1   Position (-306.749,329.714,-273.018)       : 30.288 [keV]
+TrackID -1   Position (-306.79,329.725,-273.106)       : 32.952 [keV]
+TrackID -1   Position (-306.784,329.716,-273.213)       : 27.3425 [keV]
+TrackID -1   Position (-306.84,329.692,-273.301)       : 47.8888 [keV]
+TrackID -1   Position (-306.874,329.68,-273.408)       : 27.5246 [keV]
+TrackID -1   Position (-306.931,329.769,-273.415)       : 80.4235 [keV]
+TrackID -1   Position (-306.923,329.8,-273.278)       : 290.278 [keV]
+TrackID -1   Position (286.892,-351.056,233.42)       : 468.283 [keV]
+TrackID -1   Position (286.958,-351.626,233.542)       : 266.888 [keV]
+TrackID -1   Position (418.028,173.876,254.965)       : 87.332 [keV]
+TrackID -1   Position (417.921,173.695,255.011)       : 476.093 [keV]
+TrackID -1   Position (417.506,173.123,255.024)       : 368.29 [keV]
+TrackID -1   Position (124.1,434.499,53.7685)       : 4.46243 [keV]
+TrackID -1   Position (236.106,323.029,328.286)       : 87.4286 [keV]
+TrackID -1   Position (158.131,423.607,-329.529)       : 725.998 [keV]
+TrackID -1   Position (-190.111,-233.3,-260.554)       : 95.2224 [keV]
+TrackID -1   Position (-195.782,-231.97,-201.434)       : 518.425 [keV]
+TrackID -1   Position (-195.968,-231.498,-201.271)       : 167.715 [keV]
+TrackID -1   Position (299.965,269.422,-230.963)       : 23.3362 [keV]
+TrackID -1   Position (-209.972,-399.772,-448.041)       : 51.3987 [keV]
+TrackID -1   Position (-99.4945,-230.657,-127.421)       : 505.016 [keV]
+TrackID -1   Position (164.133,309.56,26.771)       : 136.373 [keV]
+TrackID -1   Position (174.246,-365.067,-355.838)       : 94.0892 [keV]
+TrackID -1   Position (176.337,-359.32,-358.003)       : 34.4914 [keV]
+TrackID -1   Position (176.332,-359.383,-358.062)       : 38.4185 [keV]
+TrackID -1   Position (176.279,-359.317,-358.063)       : 22.4716 [keV]
+TrackID -1   Position (176.33,-359.287,-358.06)       : 29.1937 [keV]
+TrackID -1   Position (176.38,-359.313,-358.031)       : 197.657 [keV]
+TrackID -1   Position (176.127,-307.436,-348.083)       : 174.053 [keV]
+TrackID -1   Position (283.59,205.504,16.7259)       : 22.8078 [keV]
+TrackID -1   Position (283.568,205.444,16.7085)       : 10.1248 [keV]
+TrackID -1   Position (283.535,205.409,16.7181)       : 12.628 [keV]
+TrackID -1   Position (283.511,205.385,16.7258)       : 10.7397 [keV]
+TrackID -1   Position (283.505,205.371,16.7479)       : 11.8495 [keV]
+TrackID -1   Position (283.494,205.35,16.759)       : 12.5972 [keV]
+TrackID -1   Position (283.488,205.325,16.7681)       : 9.63457 [keV]
+TrackID -1   Position (283.491,205.299,16.7713)       : 12.0569 [keV]
+TrackID -1   Position (283.495,205.282,16.7917)       : 8.16392 [keV]
+TrackID -1   Position (283.513,205.264,16.8005)       : 11.2444 [keV]
+TrackID -1   Position (283.537,205.252,16.8044)       : 13.0935 [keV]
+TrackID -1   Position (283.562,205.242,16.7996)       : 9.60132 [keV]
+TrackID -1   Position (283.581,205.224,16.8053)       : 11.035 [keV]
+TrackID -1   Position (283.597,205.203,16.8112)       : 20.0898 [keV]
+TrackID -1   Position (283.603,205.183,16.8266)       : 13.1394 [keV]
+TrackID -1   Position (283.621,205.162,16.8293)       : 10.5817 [keV]
+TrackID -1   Position (283.634,205.161,16.8068)       : 8.47837 [keV]
+TrackID -1   Position (283.633,205.171,16.7835)       : 13.9759 [keV]
+TrackID -1   Position (283.637,205.17,16.7578)       : 12.8121 [keV]
+TrackID -1   Position (283.629,205.18,16.7367)       : 18.0667 [keV]
+TrackID -1   Position (283.61,205.182,16.7548)       : 17.5198 [keV]
+TrackID -1   Position (283.59,205.167,16.7486)       : 11.6698 [keV]
+TrackID -1   Position (283.569,205.171,16.7417)       : 28.1367 [keV]
+TrackID -1   Position (283.558,205.183,16.7226)       : 27.0621 [keV]
+TrackID -1   Position (283.556,205.202,16.7238)       : 46.7438 [keV]
+TrackID -1   Position (283.559,205.214,16.739)       : 13.6246 [keV]
+TrackID -1   Position (-166.972,-418.613,444.884)       : 38.8993 [keV]
+TrackID -1   Position (-195.759,-410.59,336.763)       : 4.47852 [keV]
+TrackID -1   Position (-195.775,-410.575,336.759)       : 14.3365 [keV]
+TrackID -1   Position (-195.802,-410.546,336.771)       : 8.90949 [keV]
+TrackID -1   Position (-195.838,-410.521,336.773)       : 189.495 [keV]
+TrackID -1   Position (-195.875,-410.494,336.784)       : 38.6259 [keV]
+TrackID -1   Position (-195.901,-410.454,336.789)       : 29.6578 [keV]
+TrackID -1   Position (-195.941,-410.435,336.766)       : 34.3764 [keV]
+TrackID -1   Position (-195.984,-410.464,336.786)       : 53.404 [keV]
+TrackID -1   Position (-195.953,-410.482,336.788)       : 112.168 [keV]
+TrackID -1   Position (31.3338,-350.606,314.715)       : 81.3423 [keV]
+TrackID -1   Position (35.2331,-351.783,313.677)       : 9.71448 [keV]
+TrackID -1   Position (44.2589,-350.373,309.723)       : 120.628 [keV]
+TrackID -1   Position (44.4841,-350.253,309.648)       : 623.055 [keV]
+TrackID -1   Position (45.08,-350.271,309.576)       : 124.73 [keV]
+TrackID -1   Position (-63.7479,-448.404,431.977)       : 2.94427 [keV]
+TrackID -1   Position (-231.716,-267.981,261.707)       : 283.52 [keV]
+TrackID -1   Position (-427.101,156.874,-126.709)       : 60.5518 [keV]
+TrackID -1   Position (-427.072,156.719,-126.678)       : 45.7507 [keV]
+TrackID -1   Position (-427.016,156.585,-126.574)       : 49.6126 [keV]
+TrackID -1   Position (-426.991,156.42,-126.523)       : 94.1072 [keV]
+TrackID -1   Position (-426.986,156.291,-126.402)       : 45.9439 [keV]
+TrackID -1   Position (-426.986,156.222,-126.238)       : 67.3429 [keV]
+TrackID -1   Position (-426.97,156.104,-126.115)       : 52.3501 [keV]
+TrackID -1   Position (-427.012,155.938,-126.09)       : 47.1788 [keV]
+TrackID -1   Position (-427.023,155.769,-126.06)       : 61.4522 [keV]
+TrackID -1   Position (-427.067,155.611,-126.005)       : 48.0466 [keV]
+TrackID -1   Position (-427.084,155.482,-125.887)       : 53.7737 [keV]
+TrackID -1   Position (-427.106,155.323,-125.809)       : 44.3 [keV]
+TrackID -1   Position (-427.23,155.222,-125.889)       : 46.8758 [keV]
+TrackID -1   Position (-427.393,155.241,-125.929)       : 96.8343 [keV]
+TrackID -1   Position (-427.547,155.268,-126.007)       : 57.8002 [keV]
+TrackID -1   Position (-427.676,155.187,-126.039)       : 85.5533 [keV]
+TrackID -1   Position (-427.755,155.063,-126.057)       : 2.86932 [keV]
+TrackID -1   Position (203.457,290.54,-48.512)       : 159.009 [keV]
+TrackID -1   Position (-285.6,-202.318,-93.669)       : 0.580537 [keV]
+TrackID -1   Position (-288,-202.98,-93.0498)       : 0.955409 [keV]
+TrackID -1   Position (-295.57,-272.191,184.141)       : 319.501 [keV]
+TrackID -1   Position (-295.46,-272.036,184.763)       : 490.788 [keV]
+TrackID -1   Position (-295.147,-271.939,184.99)       : 68.376 [keV]
+TrackID -1   Position (-285.505,-287.058,176.397)       : 204.18 [keV]
+TrackID -1   Position (315.691,162.37,232.605)       : 0.124289 [keV]
+TrackID -1   Position (301.628,45.2294,72.2894)       : 0.109304 [keV]
+TrackID -1   Position (349.117,24.8475,43.8714)       : 0.216923 [keV]
+TrackID -1   Position (291.525,-89.6555,219.899)       : 0.144768 [keV]
+TrackID -1   Position (-352.182,-199.983,-354.883)       : 27.2273 [keV]
+TrackID -1   Position (-294.836,-197.729,93.8546)       : 0.868239 [keV]
+TrackID -1   Position (-104.696,-339.21,321.362)       : 56.2897 [keV]
+TrackID -1   Position (-454.998,1.23196,-149.657)       : 27.9872 [keV]
+TrackID -1   Position (-454.187,0.745604,-150.25)       : 0.483826 [keV]
+TrackID -1   Position (-389.538,-235.128,237.152)       : 0.0989385 [keV]
+TrackID -1   Position (-386.265,-232.431,236.268)       : 0.231112 [keV]
+TrackID -1   Position (-340.07,-219.949,374.347)       : 0.0772213 [keV]
+TrackID -1   Position (378.436,-144.262,-134.143)       : 53.6045 [keV]
+TrackID -1   Position (434.24,-118.05,-225.725)       : 60.1655 [keV]
+TrackID -1   Position (416.099,-184.082,392.401)       : 0.130998 [keV]
+TrackID -1   Position (-64.3999,-398.592,146.042)       : 309.086 [keV]
+TrackID -1   Position (-259.124,242.651,137.895)       : 0.00201199 [keV]
+TrackID -1   Position (383.205,-131.069,317.407)       : 16.4744 [keV]
+TrackID -1   Position (31.7184,247.98,-120.774)       : 30.5388 [keV]
+TrackID -1   Position (32.4082,252.494,-127.771)       : 1.04294 [keV]
+TrackID -1   Position (-92.3116,394.339,259.813)       : 1.33944 [keV]
+TrackID -1   Position (-63.0439,-395.838,137.021)       : 57.4479 [keV]
+TrackID -1   Position (-62.9782,-395.708,136.87)       : 87.9513 [keV]
+TrackID -1   Position (-62.9833,-395.618,136.696)       : 101.145 [keV]
+TrackID -1   Position (-63.0601,-395.464,136.706)       : 3.32718 [keV]
+TrackID -1   Position (-63.0664,-395.459,136.71)       : 72.61 [keV]
+TrackID -1   Position (-63.1268,-395.363,136.785)       : 25.5239 [keV]
+TrackID -1   Position (-63.1855,-395.291,136.836)       : 35.1724 [keV]
+TrackID -1   Position (-63.2219,-395.213,136.86)       : 25.8618 [keV]
+TrackID -1   Position (-63.2633,-395.151,136.827)       : 20.7879 [keV]
+TrackID -1   Position (-63.3011,-395.079,136.809)       : 23.7501 [keV]
+TrackID -1   Position (-63.3665,-395.03,136.798)       : 40.2834 [keV]
+TrackID -1   Position (-63.3946,-394.956,136.784)       : 7.81462 [keV]
+TrackID -1   Position (-63.3897,-349.295,96.6584)       : 5.27284 [keV]
+TrackID -1   Position (-63.39,-349.277,96.6447)       : 9.18 [keV]
+TrackID -1   Position (-63.3922,-349.259,96.6313)       : 5.83849 [keV]
+TrackID -1   Position (-63.4009,-349.244,96.616)       : 6.39091 [keV]
+TrackID -1   Position (-63.4088,-349.231,96.598)       : 4.39521 [keV]
+TrackID -1   Position (-63.4081,-349.218,96.5793)       : 7.13815 [keV]
+TrackID -1   Position (-63.397,-349.209,96.5615)       : 7.77056 [keV]
+TrackID -1   Position (-63.3907,-349.207,96.5382)       : 5.74377 [keV]
+TrackID -1   Position (-63.394,-349.213,96.5144)       : 6.13138 [keV]
+TrackID -1   Position (-63.4072,-349.213,96.4945)       : 5.22958 [keV]
+TrackID -1   Position (-63.4236,-349.206,96.4812)       : 4.64362 [keV]
+TrackID -1   Position (-63.4425,-349.192,96.4766)       : 23.12 [keV]
+TrackID -1   Position (-63.4673,-349.188,96.4877)       : 6.92652 [keV]
+TrackID -1   Position (-63.4917,-349.182,96.498)       : 8.70624 [keV]
+TrackID -1   Position (-63.5179,-349.175,96.4958)       : 9.52219 [keV]
+TrackID -1   Position (-63.538,-349.177,96.4771)       : 18.3984 [keV]
+TrackID -1   Position (-63.5492,-349.184,96.4551)       : 15.8925 [keV]
+TrackID -1   Position (-63.5565,-349.184,96.434)       : 15.6216 [keV]
+TrackID -1   Position (-63.5759,-349.188,96.4232)       : 11.8434 [keV]
+TrackID -1   Position (-63.5959,-349.184,96.4133)       : 8.65195 [keV]
+TrackID -1   Position (-63.6142,-349.197,96.4072)       : 9.75942 [keV]
+TrackID -1   Position (-63.6322,-349.204,96.3971)       : 12.9701 [keV]
+TrackID -1   Position (-63.6391,-349.226,96.3977)       : 13.5205 [keV]
+TrackID -1   Position (-63.6251,-349.236,96.4121)       : 12.7781 [keV]
+TrackID -1   Position (-63.6026,-349.232,96.4101)       : 19.05 [keV]
+TrackID -1   Position (-63.5837,-349.234,96.416)       : 34.8072 [keV]
+TrackID -1   Position (-63.5882,-349.245,96.4364)       : 25.9872 [keV]
+TrackID -1   Position (-63.5989,-349.23,96.4428)       : 39.5467 [keV]
+TrackID -1   Position (-63.0664,-395.459,136.71)       : 1.844 [keV]
+TrackID -1   Position (-63.2061,-395.448,136.771)       : 7.26076 [keV]
+TrackID -1   Position (-203.514,-350.153,-75.5272)       : 7.98716 [keV]
+TrackID -1   Position (62.5531,-349.445,-276.299)       : 10.2741 [keV]
+TrackID -1   Position (-110.747,-436.159,-438.607)       : 3.31134 [keV]
+TrackID -1   Position (-122.736,-279.215,-280.272)       : 3.61758 [keV]
+TrackID -1   Position (102.474,-443.31,-363.729)       : 41.9757 [keV]
+TrackID -1   Position (-159.157,-260.181,26.2779)       : 47.0944 [keV]
+TrackID -1   Position (105.682,-333.663,-229.834)       : 4.22276 [keV]
+TrackID -1   Position (108.44,-334.464,-232.495)       : 25.1093 [keV]
+TrackID -1   Position (238.209,-256.43,-323.736)       : 57.3102 [keV]
+TrackID -1   Position (-314.269,-329.029,67.0248)       : 0.724236 [keV]
+TrackID -1   Position (-157.613,-200.457,-23.4161)       : 1.11946 [keV]
+TrackID -1   Position (-202.546,-221.303,-148.582)       : 0.611071 [keV]
+TrackID -1   Position (-203.813,-221.897,-152.063)       : 1.76386 [keV]
+TrackID -1   Position (-213.187,-213.161,-156.838)       : 0.514549 [keV]
+TrackID -1   Position (-276.454,-361.383,-120.277)       : 1.64808 [keV]
+TrackID -1   Position (-454.654,17.7433,-234.647)       : 45.3532 [keV]
+TrackID -1   Position (-452.587,14.9898,-235.277)       : 45.7707 [keV]
+TrackID -1   Position (-378.945,-142.919,146.573)       : 0.0001878 [keV]
+TrackID -1   Position (-373.85,-149.12,152.766)       : 3.49901e-05 [keV]
+TrackID -1   Position (241.058,-320.295,-385.37)       : 80.1931 [keV]
+TrackID -1   Position (-172.939,-305.761,48.1404)       : 82.4637 [keV]
+TrackID -1   Position (-162.942,-313.07,31.1183)       : 114.472 [keV]
+TrackID -1   Position (118.771,-435.23,-293.258)       : 128.778 [keV]
+TrackID -1   Position (51.3648,-248.911,92.0969)       : 25.9173 [keV]
+TrackID -1   Position (-288.064,-345.989,133.978)       : 72.5265 [keV]
+TrackID -1   Position (-231.239,-263.236,223.393)       : 37.1197 [keV]
+TrackID -1   Position (-231.26,-263.152,223.393)       : 38.228 [keV]
+TrackID -1   Position (-231.314,-263.15,223.469)       : 204.846 [keV]
+TrackID -1   Position (134.356,328.593,-323.644)       : 2.03109 [keV]
+TrackID -1   Position (135.226,325.457,-318.925)       : 0.32752 [keV]
+TrackID -1   Position (135.801,323.296,-321.252)       : 2.47075 [keV]
+TrackID -1   Position (-341.559,76.4047,-189.982)       : 1.31911 [keV]
+TrackID -1   Position (-349.118,64.3579,-162.774)       : 46.3717 [keV]
+TrackID -1   Position (-211.743,141.342,-43.8385)       : 98.8838 [keV]
+TrackID -1   Position (-246.384,174.593,-96.6842)       : 96.2068 [keV]
+TrackID -1   Position (-377.071,245.596,-28.6411)       : 4.1201 [keV]
+TrackID -1   Position (-271.78,228.387,-270.818)       : 28.541 [keV]
+TrackID -1   Position (199.392,293.714,-244.527)       : 9.41392 [keV]
+TrackID -1   Position (-296.519,-45.5716,51.7587)       : 11.6141 [keV]
+TrackID -1   Position (-296.581,-45.616,51.7971)       : 24.6036 [keV]
+TrackID -1   Position (-133.11,-379.431,-342.12)       : 117.162 [keV]
+TrackID -1   Position (-445.636,64.3345,-155.936)       : 71.0487 [keV]
+TrackID -1   Position (-346.809,-206.419,-385.846)       : 147.383 [keV]
+TrackID -1   Position (-325.516,-312.57,-63.394)       : 200.526 [keV]
+TrackID -1   Position (-325.3,-312.854,-62.8643)       : 283.998 [keV]
+TrackID -1   Position (-325.712,-313.181,-62.2615)       : 202.465 [keV]
+TrackID -1   Position (-325.811,-313.913,-61.9723)       : 218.068 [keV]
+TrackID -1   Position (-326.214,-314.606,-62.1008)       : 203.579 [keV]
+TrackID -1   Position (-326.745,-314.947,-61.6069)       : 238.751 [keV]
+TrackID -1   Position (-327.327,-315.335,-61.2715)       : 267.523 [keV]
+TrackID -1   Position (-347.566,-293.637,-44.0447)       : 36.2034 [keV]
+TrackID -1   Position (-347.453,-293.605,-44.0779)       : 30.6266 [keV]
+TrackID -1   Position (-347.349,-293.564,-44.1038)       : 29.0551 [keV]
+TrackID -1   Position (-347.239,-293.562,-44.1307)       : 36.5615 [keV]
+TrackID -1   Position (-347.129,-293.549,-44.1531)       : 31.968 [keV]
+TrackID -1   Position (-347.029,-293.593,-44.186)       : 34.6885 [keV]
+TrackID -1   Position (-346.968,-293.654,-44.2845)       : 31.266 [keV]
+TrackID -1   Position (-346.943,-293.783,-44.2718)       : 50.8788 [keV]
+TrackID -1   Position (-346.888,-293.88,-44.2526)       : 35.1581 [keV]
+TrackID -1   Position (-346.824,-293.958,-44.2081)       : 29.1329 [keV]
+TrackID -1   Position (-346.749,-294.043,-44.2062)       : 30.6112 [keV]
+TrackID -1   Position (-346.661,-294.106,-44.1898)       : 48.9538 [keV]
+TrackID -1   Position (-346.571,-294.166,-44.2206)       : 40.9346 [keV]
+TrackID -1   Position (-346.467,-294.158,-44.2728)       : 49.8597 [keV]
+TrackID -1   Position (-346.396,-294.233,-44.3656)       : 225.786 [keV]
+TrackID -1   Position (-346.467,-294.312,-44.4729)       : 46.8631 [keV]
+TrackID -1   Position (-346.538,-294.387,-44.4991)       : 76.2847 [keV]
+TrackID -1   Position (-346.49,-294.483,-44.5113)       : 187.889 [keV]
+TrackID -1   Position (-376.659,-255.251,-370.037)       : 122.469 [keV]
+TrackID -1   Position (-376.596,-255.294,-370.06)       : 26.2842 [keV]
+TrackID -1   Position (-376.53,-255.33,-370.069)       : 36.6026 [keV]
+TrackID -1   Position (-376.473,-255.368,-370.098)       : 19.3459 [keV]
+TrackID -1   Position (-376.411,-255.394,-370.13)       : 30.8395 [keV]
+TrackID -1   Position (-376.345,-255.42,-370.151)       : 26.2805 [keV]
+TrackID -1   Position (-376.288,-255.446,-370.192)       : 24.2929 [keV]
+TrackID -1   Position (-376.242,-255.501,-370.197)       : 35.5314 [keV]
+TrackID -1   Position (-376.189,-255.552,-370.202)       : 27.8613 [keV]
+TrackID -1   Position (-376.126,-255.585,-370.21)       : 25.1951 [keV]
+TrackID -1   Position (-376.056,-255.577,-370.183)       : 32.373 [keV]
+TrackID -1   Position (-376.005,-255.509,-370.194)       : 31.1519 [keV]
+TrackID -1   Position (-375.968,-255.428,-370.143)       : 49.8483 [keV]
+TrackID -1   Position (-375.977,-255.296,-370.186)       : 332.724 [keV]
+TrackID -1   Position (-376.846,-254.975,-368.582)       : 0.0880419 [keV]
+TrackID -1   Position (-376.846,-254.975,-368.582)       : 0.591418 [keV]
+TrackID -1   Position (-376.846,-254.975,-368.582)       : 0.327808 [keV]
+TrackID -1   Position (-376.846,-254.975,-368.582)       : 0.857709 [keV]
+TrackID -1   Position (347.506,-49.4661,-189.642)       : 26.3344 [keV]
+TrackID -1   Position (392.631,83.0779,-156.135)       : 360.176 [keV]
+TrackID -1   Position (299.149,56.6927,-127.414)       : 120.816 [keV]
+TrackID -1   Position (-423.407,-157.959,-381.608)       : 295.909 [keV]
+TrackID -1   Position (-425.183,-160.416,-387.132)       : 59.4523 [keV]
+TrackID -1   Position (-425.984,-158.666,-442.601)       : 156.453 [keV]
+TrackID -1   Position (-344.569,-62.1119,-323.677)       : 22.7649 [keV]
+TrackID -1   Position (-344.535,-62.1211,-323.668)       : 18.627 [keV]
+TrackID -1   Position (-344.515,-62.129,-323.655)       : 13.52 [keV]
+TrackID -1   Position (-344.499,-62.1424,-323.659)       : 7.73425 [keV]
+TrackID -1   Position (-344.482,-62.1397,-323.661)       : 6.10289 [keV]
+TrackID -1   Position (-344.472,-62.1328,-323.66)       : 4.6797 [keV]
+TrackID -1   Position (-344.463,-62.132,-323.664)       : 4.05229 [keV]
+TrackID -1   Position (-344.454,-62.1285,-323.665)       : 7.5205 [keV]
+TrackID -1   Position (-344.444,-62.126,-323.667)       : 0.868695 [keV]
+TrackID -1   Position (-390.731,-88.1538,-353.08)       : 61.4531 [keV]
+TrackID -1   Position (-408.49,-191.197,-403.749)       : 40.6175 [keV]
+TrackID -1   Position (-131.416,-431.093,111.132)       : 1.96102 [keV]
+TrackID -1   Position (-416.014,-174.837,-415.257)       : 77.6306 [keV]
+TrackID -1   Position (-416.125,-172.226,-413.475)       : 42.9484 [keV]
+TrackID -1   Position (-416.109,-172.126,-413.435)       : 49.2609 [keV]
+TrackID -1   Position (-416.109,-172.04,-413.449)       : 187.423 [keV]
+TrackID -1   Position (-403.259,-210.73,-374.383)       : 2623.59 [keV]
+TrackID -1   Position (-227.716,-391.531,-194.003)       : 271.564 [keV]
+TrackID -1   Position (-227.098,-391.927,-193.669)       : 220.91 [keV]
+TrackID -1   Position (-226.862,-391.795,-193.129)       : 161.81 [keV]
+TrackID -1   Position (-226.408,-391.676,-192.72)       : 226.195 [keV]
+TrackID -1   Position (-225.993,-391.115,-192.546)       : 162.081 [keV]
+TrackID -1   Position (-225.739,-390.75,-192.29)       : 117.569 [keV]
+TrackID -1   Position (-225.618,-391.089,-192.358)       : 172.819 [keV]
+TrackID -1   Position (-225.672,-391.409,-192.652)       : 570.046 [keV]
+TrackID -1   Position (-384.424,-236.757,-280.226)       : 330.697 [keV]
+TrackID -1   Position (-383.714,-236.408,-279.279)       : 767.934 [keV]
+TrackID -1   Position (-333.538,-229.734,-307.622)       : 218.052 [keV]
+TrackID -1   Position (-332.749,-229.828,-307.881)       : 163.56 [keV]
+TrackID -1   Position (-332.244,-230.175,-307.826)       : 215.837 [keV]
+TrackID -1   Position (-331.989,-230.71,-307.659)       : 147.65 [keV]
+TrackID -1   Position (-331.879,-231.254,-307.865)       : 191.497 [keV]
+TrackID -1   Position (-331.447,-231.7,-307.867)       : 305.743 [keV]
+TrackID -1   Position (-331.323,-232.241,-307.654)       : 191.239 [keV]
+TrackID -1   Position (-330.88,-232.596,-307.603)       : 247.555 [keV]
+TrackID -1   Position (-330.434,-232.209,-307.431)       : 204.085 [keV]
+TrackID -1   Position (-330.696,-231.986,-307.017)       : 216.395 [keV]
+TrackID -1   Position (-331.24,-232.178,-306.775)       : 401.831 [keV]
+TrackID -1   Position (-331.528,-231.915,-306.805)       : 3.84694 [keV]
+TrackID -1   Position (-383.714,-236.408,-279.279)       : 1.844 [keV]
+TrackID -1   Position (-383.584,-236.429,-279.162)       : 8.42575 [keV]
+TrackID -1   Position (-384.004,-240.687,-292.145)       : 33.6775 [keV]
+TrackID -1   Position (-383.907,-240.716,-292.085)       : 2492.49 [keV]
+TrackID -1   Position (-379.022,-242.574,-288.834)       : 1827.9 [keV]
+TrackID -1   Position (-377.982,-246.626,-286.663)       : 676.337 [keV]
+TrackID -1   Position (-377.144,-248.138,-285.824)       : 443.268 [keV]
+TrackID -1   Position (-376.209,-249.266,-285.404)       : 801.807 [keV]
+TrackID -1   Position (-374.6,-249.54,-284.724)       : 579.289 [keV]
+TrackID -1   Position (-375.108,-249.723,-283.776)       : 580.595 [keV]
+TrackID -1   Position (-377.144,-248.138,-285.824)       : 240.546 [keV]
+TrackID -1   Position (-377.128,-248.21,-285.336)       : 494.22 [keV]
+TrackID -1   Position (-377.465,-248.156,-285.036)       : 118.059 [keV]
+TrackID -1   Position (-207.796,-141.323,-48.45)       : 2.20309 [keV]
+TrackID -1   Position (-208.891,-144.437,-32.2246)       : 60.6166 [keV]
+TrackID -1   Position (72.309,-342.803,-141.054)       : 45.2908 [keV]
+TrackID -1   Position (72.4278,-342.812,-141.052)       : 36.8219 [keV]
+TrackID -1   Position (72.5046,-342.868,-140.993)       : 102.521 [keV]
+TrackID -1   Position (72.5044,-342.993,-140.982)       : 44.35 [keV]
+TrackID -1   Position (1.32939,-449.998,-74.1036)       : 1.844 [keV]
+TrackID -1   Position (1.46914,-450.155,-73.8875)       : 89.1077 [keV]
+TrackID -1   Position (-42.9422,-400.427,-142.585)       : 12.68 [keV]
+TrackID -1   Position (-42.935,-400.236,-142.537)       : 1.45426 [keV]
+TrackID -1   Position (-43.1429,-399.657,-142.357)       : 23.5786 [keV]
+TrackID -1   Position (-27.0846,-351.557,-114.941)       : 249.251 [keV]
+TrackID -1   Position (-27.2833,-349.649,-112.895)       : 215.5 [keV]
+TrackID -1   Position (-26.8425,-349.869,-112.596)       : 338.809 [keV]
+TrackID -1   Position (-26.1156,-350.222,-112.721)       : 345.288 [keV]
+TrackID -1   Position (-25.6106,-350.877,-112.499)       : 285.385 [keV]
+TrackID -1   Position (-24.7802,-351.023,-112.308)       : 253.249 [keV]
+TrackID -1   Position (-24.0299,-350.841,-111.982)       : 289.23 [keV]
+TrackID -1   Position (-23.8103,-351.482,-112.508)       : 288.682 [keV]
+TrackID -1   Position (-23.407,-351.948,-112.082)       : 291.908 [keV]
+TrackID -1   Position (-23.2338,-351.965,-111.659)       : 576.421 [keV]
+TrackID -1   Position (-23.2338,-351.965,-111.659)       : 1.844 [keV]
+TrackID -1   Position (-22.9531,-351.914,-111.341)       : 10.2229 [keV]
+TrackID -1   Position (-384.513,-236.849,-287.042)       : 1024.58 [keV]
+TrackID -1   Position (-327.882,-237.735,-273.461)       : 497.289 [keV]
+TrackID -1   Position (-326.839,-237.547,-273.143)       : 1091.61 [keV]
+TrackID -1   Position (-323.584,-236.712,-273.361)       : 489.416 [keV]
+TrackID -1   Position (-275.83,-223.479,-275.698)       : 559.147 [keV]
+TrackID -1   Position (-273.896,-223.282,-275.855)       : 199.331 [keV]
+TrackID -1   Position (-273.328,-223.745,-275.775)       : 541.165 [keV]
+TrackID -1   Position (-272.108,-224.563,-274.953)       : 500.106 [keV]
+TrackID -1   Position (-271.109,-224.795,-274.083)       : 571.923 [keV]
+TrackID -1   Position (-270.678,-224.756,-272.475)       : 469.195 [keV]
+TrackID -1   Position (-269.965,-223.828,-273.107)       : 586.254 [keV]
+TrackID -1   Position (-270.045,-223.324,-273.361)       : 67.9806 [keV]
+TrackID -1   Position (-129.827,-327.437,-216.095)       : 7.26347 [keV]
+TrackID -1   Position (-273.328,-223.745,-275.775)       : 1.844 [keV]
+TrackID -1   Position (-273.323,-223.751,-275.774)       : 4.0428 [keV]
+TrackID -1   Position (-326.839,-237.547,-273.143)       : 1.844 [keV]
+TrackID -1   Position (-326.73,-237.535,-273.106)       : 17.389 [keV]
+TrackID -1   Position (-385.763,-237.65,-374.615)       : 640.322 [keV]
+TrackID -1   Position (-384.215,-238.386,-375.209)       : 357.167 [keV]
+TrackID -1   Position (-383.427,-238.617,-375.318)       : 1444.75 [keV]
+TrackID -1   Position (-330.753,-233.725,-380.934)       : 521.545 [keV]
+TrackID -1   Position (-329.713,-234.003,-381.003)       : 530.815 [keV]
+TrackID -1   Position (-329.316,-234.431,-381.591)       : 267.149 [keV]
+TrackID -1   Position (-329.379,-234.827,-382.31)       : 12.6442 [keV]
+TrackID -1   Position (-329.395,-234.846,-382.316)       : 158.282 [keV]
+TrackID -1   Position (-355.145,-276.355,-385.618)       : 40.3858 [keV]
+TrackID -1   Position (-355.208,-276.484,-385.652)       : 51.2468 [keV]
+TrackID -1   Position (-355.217,-276.625,-385.729)       : 42.5726 [keV]
+TrackID -1   Position (-355.25,-276.73,-385.848)       : 339.436 [keV]
+TrackID -1   Position (-355.281,-276.804,-385.985)       : 44.9488 [keV]
+TrackID -1   Position (-355.349,-276.893,-386.092)       : 51.6124 [keV]
+TrackID -1   Position (-355.449,-276.914,-386.204)       : 47.1128 [keV]
+TrackID -1   Position (-355.505,-276.769,-386.283)       : 83.8286 [keV]
+TrackID -1   Position (-355.434,-276.635,-386.27)       : 46.9715 [keV]
+TrackID -1   Position (-355.359,-276.541,-386.188)       : 45.212 [keV]
+TrackID -1   Position (-355.315,-276.405,-386.141)       : 40.2869 [keV]
+TrackID -1   Position (-355.342,-276.264,-386.133)       : 79.9449 [keV]
+TrackID -1   Position (-355.382,-276.205,-386.274)       : 79.912 [keV]
+TrackID -1   Position (-355.428,-276.08,-386.289)       : 150.612 [keV]
+TrackID -1   Position (-355.564,-276.079,-386.289)       : 133.106 [keV]
+TrackID -1   Position (-305.554,-265.823,-385.662)       : 1.844 [keV]
+TrackID -1   Position (-300.527,-267.576,-386.33)       : 47.081 [keV]
+TrackID -1   Position (451.222,-5.51702,-305.656)       : 247.24 [keV]
+TrackID -1   Position (-384.513,-236.849,-287.042)       : 180.871 [keV]
+TrackID -1   Position (-384.143,-237.069,-286.556)       : 1796.13 [keV]
+TrackID -1   Position (-382.098,-239.064,-284.278)       : 932.134 [keV]
+TrackID -1   Position (-381.666,-240.533,-281.921)       : 854.958 [keV]
+TrackID -1   Position (-382.877,-242.297,-280.937)       : 628.321 [keV]
+TrackID -1   Position (-383.92,-242.353,-281.108)       : 320.095 [keV]
+TrackID -1   Position (-384.004,-240.687,-292.145)       : 292.946 [keV]
+TrackID -1   Position (-383.419,-240.944,-291.397)       : 283.744 [keV]
+TrackID -1   Position (-383.117,-241.53,-290.746)       : 343.782 [keV]
+TrackID -1   Position (-382.622,-241.99,-290.065)       : 306.415 [keV]
+TrackID -1   Position (-382.525,-242.269,-289.157)       : 531.723 [keV]
+TrackID -1   Position (-382.369,-242.963,-288.613)       : 370.751 [keV]
+TrackID -1   Position (-382.104,-242.937,-287.724)       : 578.273 [keV]
+TrackID -1   Position (-381.727,-243.378,-287.395)       : 204.288 [keV]
+TrackID -1   Position (-379.51,-243,-270.828)       : 333.859 [keV]
+TrackID -1   Position (-434.649,116.534,-97.6031)       : 6.78273 [keV]
+TrackID -1   Position (-404.207,25.3293,192.637)       : 13.5446 [keV]
+TrackID -1   Position (-16.4981,454.701,-78.9569)       : 14.6311 [keV]
+TrackID -1   Position (-185.622,242.011,-182.372)       : 0.0174554 [keV]
+TrackID -1   Position (-43.7788,-347.251,62.3279)       : 0.0357898 [keV]
+TrackID -1   Position (-421.903,-170.361,-196.231)       : 11.8708 [keV]
+TrackID -1   Position (-423.542,152.028,319.554)       : 7.86207 [keV]
+TrackID -1   Position (-398.478,219.637,327.187)       : 14.3606 [keV]
+TrackID -1   Position (-253.249,-248.777,-231.854)       : 19.1853 [keV]
+TrackID -1   Position (-404.896,9.1646,209.767)       : 20.8279 [keV]
+TrackID -1   Position (-393.976,-227.613,-329.982)       : 0.466615 [keV]
+TrackID -1   Position (-391.043,-223.446,-333.07)       : 0.380146 [keV]
+TrackID -1   Position (-365.462,-174.535,-336.735)       : 0.00881495 [keV]
+TrackID -1   Position (-343.687,-88.9053,-335.561)       : 35.2266 [keV]
+TrackID -1   Position (-322.655,-236.418,-231.224)       : 60.2621 [keV]
+TrackID -1   Position (-321.674,-244.243,-225.769)       : 8.73796 [keV]
+TrackID -1   Position (-439.711,-116.957,-214.709)       : 0.00115681 [keV]
+TrackID -1   Position (-404.959,-5.78793,15.2765)       : 0.0156538 [keV]
+TrackID -1   Position (-446.549,55.6227,31.2999)       : 0.0114112 [keV]
+TrackID -1   Position (-238.776,320.914,63.8152)       : 0.0146204 [keV]
+TrackID -1   Position (-71.4119,244.797,193.128)       : 0.000326556 [keV]
+TrackID -1   Position (-444.521,-97.0889,-170.758)       : 0.189416 [keV]
+TrackID -1   Position (-443.039,-86.688,-163.76)       : 0.136851 [keV]
+TrackID -1   Position (-310.132,332.931,-290.841)       : 0.00143078 [keV]
+TrackID -1   Position (-308.565,333.575,-291.131)       : 0.102987 [keV]
+TrackID -1   Position (-391.987,-101.837,-111.26)       : 0.0941417 [keV]
+TrackID -1   Position (-353.804,-29.11,-75.3206)       : 1.07332 [keV]
+TrackID -1   Position (-351.203,-24.8164,-73.1843)       : 0.997436 [keV]
+TrackID -1   Position (-349.37,-28.714,-75.6075)       : 0.411008 [keV]
+TrackID -1   Position (-441.96,-108.148,-280.414)       : 51.2933 [keV]
+TrackID -1   Position (-194.389,-235.028,-266.317)       : 59.143 [keV]
+TrackID -1   Position (-245.192,48.7942,-127.934)       : 20.5172 [keV]
+TrackID -1   Position (-399.053,-218.59,-275.045)       : 50.6912 [keV]
+TrackID -1   Position (-318.325,-248.913,-112.999)       : 30.5334 [keV]
+TrackID -1   Position (-392.009,101.755,144.338)       : 1.60619 [keV]
+TrackID -1   Position (-215.716,-281.826,318.479)       : 17.994 [keV]
+TrackID -1   Position (-215.7,-281.826,318.507)       : 11.6692 [keV]
+TrackID -1   Position (-215.68,-281.824,318.529)       : 20.7195 [keV]
+TrackID -1   Position (-215.658,-281.844,318.545)       : 121.559 [keV]
+TrackID -1   Position (-31.8512,-449.647,-58.7881)       : 183.405 [keV]
+TrackID -1   Position (-31.8848,-449.799,-59.3152)       : 1316.06 [keV]
+TrackID -1   Position (-30.0706,-451.021,-62.344)       : 687.343 [keV]
+TrackID -1   Position (-30.5808,-452.762,-63.0369)       : 812.6 [keV]
+TrackID -1   Position (-30.5808,-452.762,-63.0369)       : 119.234 [keV]
+TrackID -1   Position (-30.7362,-452.888,-63.3111)       : 96.8428 [keV]
+TrackID -1   Position (-30.9603,-452.876,-63.469)       : 513.951 [keV]
+TrackID -1   Position (-31.8848,-449.799,-59.3152)       : 71.0841 [keV]
+TrackID -1   Position (-32.0096,-449.754,-59.4037)       : 77.4845 [keV]
+TrackID -1   Position (-32.2716,-449.717,-59.4093)       : 71.8758 [keV]
+TrackID -1   Position (-32.5256,-449.744,-59.4524)       : 484.408 [keV]
+TrackID -1   Position (-318.325,-248.913,-112.999)       : 131.78 [keV]
+TrackID -1   Position (24.9631,-299.053,291.524)       : 102.768 [keV]
+TrackID -1   Position (-38.663,-402.992,98.9957)       : 275.31 [keV]
+TrackID -1   Position (-408.491,-190.173,-246.228)       : 80.3809 [keV]
+TrackID -1   Position (369.622,165.544,-48.1909)       : 0.174304 [keV]
+TrackID -1   Position (173.376,186.992,35.5368)       : 0.0460994 [keV]
+TrackID -1   Position (-35.7564,453.593,141.713)       : 7.65736 [keV]
+TrackID -1   Position (110.621,284.232,-41.0879)       : 31.0168 [keV]
+TrackID -1   Position (-278.934,123.372,-163.642)       : 26.5388 [keV]
+TrackID -1   Position (189.455,413.681,37.7072)       : 20.5205 [keV]
+TrackID -1   Position (340.19,219.762,-272.349)       : 17.649 [keV]
+TrackID -1   Position (-207.926,347.551,-11.6205)       : 1.05268 [keV]
+TrackID -1   Position (-203.701,345.62,-43.4935)       : 13.5855 [keV]
+TrackID -1   Position (-42.3659,-296.993,-146.209)       : 0.854107 [keV]
+TrackID -1   Position (-41.8061,-299.248,-146.556)       : 18.2361 [keV]
+TrackID -1   Position (402.821,-200.588,-10.2114)       : 0.0872408 [keV]
+TrackID -1   Position (-234.785,-389.745,429.67)       : 47.1536 [keV]
+TrackID -1   Position (-234.703,-389.709,429.543)       : 37.8224 [keV]
+TrackID -1   Position (-234.587,-389.716,429.484)       : 41.3885 [keV]
+TrackID -1   Position (-234.483,-389.714,429.405)       : 30.4655 [keV]
+TrackID -1   Position (-234.38,-389.715,429.322)       : 26.7447 [keV]
+TrackID -1   Position (-234.275,-389.654,429.271)       : 35.0076 [keV]
+TrackID -1   Position (-234.205,-389.618,429.17)       : 36.3872 [keV]
+TrackID -1   Position (-234.122,-389.58,429.079)       : 54.2819 [keV]
+TrackID -1   Position (-234.082,-389.547,428.949)       : 51.9491 [keV]
+TrackID -1   Position (-234.108,-389.423,428.853)       : 73.3516 [keV]
+TrackID -1   Position (-234.137,-389.315,428.71)       : 62.0978 [keV]
+TrackID -1   Position (-234.19,-389.158,428.597)       : 171.25 [keV]
+TrackID -1   Position (-234.244,-389.036,428.413)       : 473.461 [keV]
+TrackID -1   Position (110.456,-224.275,96.3219)       : 9.17447 [keV]
+TrackID -1   Position (107.621,-436.941,5.65804)       : 40.3774 [keV]
+TrackID -1   Position (-10.1154,299.829,-28.271)       : 0.0978569 [keV]
+TrackID -1   Position (-9.21696,300.997,-27.06)       : 0.356766 [keV]
+TrackID -1   Position (62.6432,247.186,-120.969)       : 0.313021 [keV]
+TrackID -1   Position (85.4308,339.414,-190.393)       : 0.404824 [keV]
+TrackID -1   Position (-63.5649,298.303,-245.865)       : 0.508468 [keV]
+TrackID -1   Position (285.368,-354.387,-219.817)       : 0.108049 [keV]
+TrackID -1   Position (375.373,-257.139,-205.175)       : 0.0204395 [keV]
+TrackID -1   Position (-342.67,206.342,-103.174)       : 0.0245416 [keV]
+TrackID -1   Position (228.684,271.531,-218.94)       : 0.00204333 [keV]
+TrackID -1   Position (296.003,-73.5346,-204.073)       : 5.08503 [keV]
+TrackID -1   Position (397.837,-41.5456,-242.124)       : 1.47335 [keV]
+TrackID -1   Position (431.091,-139.696,-208.557)       : 265.579 [keV]
+TrackID -1   Position (61.1801,-349.688,-311.24)       : 0.145372 [keV]
+TrackID -1   Position (429.036,-151.504,-294.888)       : 2.10341 [keV]
+TrackID -1   Position (-266.669,304.816,135.849)       : 0.0117595 [keV]
+TrackID -1   Position (-267.825,367.825,-124.633)       : 0.0231287 [keV]
+TrackID -1   Position (-304.328,182.782,-253.693)       : 0.000891956 [keV]
+TrackID -1   Position (-346.817,47.0982,-332.807)       : 0.145749 [keV]
+TrackID -1   Position (-349.561,38.5882,-337.682)       : 0.128697 [keV]
+TrackID -1   Position (-246.787,321.125,104.11)       : 0.554959 [keV]
+TrackID -1   Position (81.7624,-288.643,126.861)       : 0.421174 [keV]
+TrackID -1   Position (82.7648,-289.93,127.088)       : 0.418152 [keV]
+TrackID -1   Position (-136.052,-267.376,38.8619)       : 0.215268 [keV]
+TrackID -1   Position (-233.663,102.111,-47.2924)       : 0.0142356 [keV]
+TrackID -1   Position (-232.051,99.0524,-50.9048)       : 0.0288969 [keV]
+TrackID -1   Position (-346.601,209.505,-84.6418)       : 0.00261791 [keV]
+TrackID -1   Position (346.897,-286.641,-440.463)       : 0.953482 [keV]
+TrackID -1   Position (-131.601,-324.316,-319.327)       : 0.507702 [keV]
+TrackID -1   Position (-145.752,267.92,-97.8829)       : 4.73799 [keV]
+TrackID -1   Position (-144.995,262.902,-98.3652)       : 122.705 [keV]
+TrackID -1   Position (-234.529,389.523,-30.8453)       : 165.412 [keV]
+TrackID -1   Position (-319.088,143.816,-145.451)       : 1.86016 [keV]
+TrackID -1   Position (453.934,31.1208,-374.774)       : 35.5248 [keV]
+TrackID -1   Position (404.64,-17.07,-372.008)       : 16.4111 [keV]
+TrackID -1   Position (-70.1992,-239.942,-17.527)       : 57.3457 [keV]
+TrackID -1   Position (-99.1616,438.938,-278.751)       : 2.62407 [keV]
+TrackID -1   Position (-68.0207,-446.048,7.02458)       : 79.0908 [keV]
+TrackID -1   Position (402.531,5.38792,-339.03)       : 320.153 [keV]
+TrackID -1   Position (123.979,327.721,-197.312)       : 92.4885 [keV]
+TrackID -1   Position (337.171,111.089,233.793)       : 20.1433 [keV]
+TrackID -1   Position (222.85,-269.885,179.107)       : 25.025 [keV]
+TrackID -1   Position (-182.511,-178.087,55.4672)       : 0.682889 [keV]
+TrackID -1   Position (251.376,42.8389,-74.879)       : 2.096 [keV]
+TrackID -1   Position (442.797,104.671,145.394)       : 0.996861 [keV]
+TrackID -1   Position (283.483,112.527,80.2465)       : 1.81696 [keV]
+TrackID -1   Position (145.014,209.752,138.974)       : 1.13585 [keV]
+TrackID -1   Position (134.261,382.098,148.693)       : 0.00191068 [keV]
+TrackID -1   Position (395.609,86.7108,64.4956)       : 18.7458 [keV]
+TrackID -1   Position (9.0238,300.572,242.065)       : 9.25209 [keV]
+TrackID -1   Position (384.706,113.507,308.403)       : 29.3105 [keV]
+TrackID -1   Position (127.417,-434.898,90.6796)       : 105.709 [keV]
+TrackID -1   Position (394.863,64.1864,294.447)       : 172.913 [keV]
+TrackID -1   Position (-90.7601,-338.028,87.6032)       : 0.013904 [keV]
+TrackID -1   Position (-353.645,-186.91,86.0814)       : 0.0098375 [keV]
+TrackID -1   Position (201.764,-147.619,231.867)       : 0.200784 [keV]
+TrackID -1   Position (-23.8789,-449.366,-298.682)       : 35.2243 [keV]
+TrackID -1   Position (297.289,40.2411,44.1961)       : 0.2342 [keV]
+TrackID -1   Position (399.387,22.1423,26.6204)       : 0.317061 [keV]
+TrackID -1   Position (402.849,21.466,26.1667)       : 0.468801 [keV]
+TrackID -1   Position (254.947,-5.21598,64.2346)       : 0.312897 [keV]
+TrackID -1   Position (228.283,101.917,34.7025)       : 0.465392 [keV]
+TrackID -1   Position (-162.055,195.099,-233.342)       : 10.3974 [keV]
+TrackID -1   Position (-225.772,202.548,-283.756)       : 1.84214 [keV]
+TrackID -1   Position (-327.584,136.799,-329.533)       : 39.4564 [keV]
+TrackID -1   Position (-336.638,-95.7851,256.984)       : 47.1215 [keV]
+TrackID -1   Position (-253.935,-23.2857,246.134)       : 1.19251 [keV]
+TrackID -1   Position (296.524,268.465,90.747)       : 61.5507 [keV]
+TrackID -1   Position (83.4901,-396.301,216.061)       : 23.2226 [keV]
+TrackID -1   Position (137.055,-428.621,177.864)       : 31.3376 [keV]
+TrackID -1   Position (313.422,-155.777,302.445)       : 0.339505 [keV]
+TrackID -1   Position (295.484,-269.609,328.585)       : 31.151 [keV]
+TrackID -1   Position (213.62,401.736,-221.906)       : 0.253664 [keV]
+TrackID -1   Position (115.209,-435.002,119.747)       : 0.0189337 [keV]
+TrackID -1   Position (255,0.422696,99.5014)       : 0.0466866 [keV]
+TrackID -1   Position (382.772,121.931,-350.008)       : 208.271 [keV]
+TrackID -1   Position (247.252,314.431,-311.003)       : 2.1299 [keV]
+TrackID -1   Position (321.495,314.867,-197.322)       : 1.07394 [keV]
+TrackID -1   Position (326.694,315.084,-190.946)       : 0.0656123 [keV]
+TrackID -1   Position (81.0588,-391.701,-306.295)       : 0.278374 [keV]
+TrackID -1   Position (-448.123,-78.8084,-366.141)       : 0.439511 [keV]
+TrackID -1   Position (-445.977,-79.2625,-365.813)       : 0.499478 [keV]
+TrackID -1   Position (-200.957,-351.627,-114.769)       : 0.416668 [keV]
+TrackID -1   Position (-199.573,-346.966,-115.669)       : 0.30248 [keV]
+TrackID -1   Position (272.219,-358.325,-437.132)       : 2.95543 [keV]
+TrackID -1   Position (-123.327,-278.954,-263.973)       : 5.53989 [keV]
+TrackID -1   Position (-126.379,-275.654,-264.199)       : 1.73427 [keV]
+TrackID -1   Position (-129.443,-274.565,-260.932)       : 1.56811 [keV]
+TrackID -1   Position (-62.2554,-349.499,115.727)       : 5.86273 [keV]
+TrackID -1   Position (440.032,110.499,-14.3222)       : 232.518 [keV]
+TrackID -1   Position (240.641,380.252,-364.354)       : 0.000236618 [keV]
+TrackID -1   Position (129.619,436.147,-306.11)       : 0.220272 [keV]
+TrackID -1   Position (364.881,-271.821,-58.3849)       : 0.00697256 [keV]
+TrackID -1   Position (-244.139,323.143,-10.1014)       : 0.643988 [keV]
+TrackID -1   Position (-162.769,-309.849,-78.394)       : 0.862347 [keV]
+TrackID -1   Position (-162.395,-312.759,-78.7154)       : 0.226421 [keV]
+TrackID -1   Position (-136.667,-375.928,-44.9456)       : 1.40793 [keV]
+TrackID -1   Position (-123.201,-432.807,-147.377)       : 1.11096 [keV]
+TrackID -1   Position (59.6507,-349.953,-220.292)       : 1.36816 [keV]
+TrackID -1   Position (-48.3289,-351.695,-340.634)       : 1.87986 [keV]
+TrackID -1   Position (454.605,18.9495,444.771)       : 302.623 [keV]
+TrackID -1   Position (453.574,18.8954,444.813)       : 723.819 [keV]
+TrackID -1   Position (452.112,18.5897,444.614)       : 468.598 [keV]
+TrackID -1   Position (450.966,19.5495,444.394)       : 456.823 [keV]
+TrackID -1   Position (451.233,20.7033,445.269)       : 486.31 [keV]
+TrackID -1   Position (450.754,21.6501,446.164)       : 705.915 [keV]
+TrackID -1   Position (449.805,21.7657,446.47)       : 380.222 [keV]
+TrackID -1   Position (454.998,1.2896,431.156)       : 65.4795 [keV]
+TrackID -1   Position (454.767,1.19629,431.113)       : 86.3064 [keV]
+TrackID -1   Position (454.612,1.14495,430.815)       : 110.263 [keV]
+TrackID -1   Position (454.45,1.04515,430.532)       : 81.8211 [keV]
+TrackID -1   Position (454.264,0.951797,430.281)       : 109.8 [keV]
+TrackID -1   Position (454.197,0.835176,429.981)       : 92.1319 [keV]
+TrackID -1   Position (454.057,0.750515,429.685)       : 91.8927 [keV]
+TrackID -1   Position (453.895,0.613611,429.429)       : 82.9889 [keV]
+TrackID -1   Position (453.781,0.508276,429.139)       : 94.5772 [keV]
+TrackID -1   Position (453.566,0.321461,428.911)       : 138.574 [keV]
+TrackID -1   Position (453.619,-0.059437,428.891)       : 150.843 [keV]
+TrackID -1   Position (453.654,-0.445647,428.805)       : 124.785 [keV]
+TrackID -1   Position (453.799,-0.586376,428.482)       : 538.569 [keV]
+TrackID -1   Position (453.928,-0.807998,428.109)       : 55.3097 [keV]
+TrackID -1   Position (90.4656,444.149,351.475)       : 11.4398 [keV]
+TrackID -1   Position (94.7231,441.412,352.555)       : 5.45899 [keV]
+TrackID -1   Position (95.3935,440.424,352.554)       : 165.128 [keV]
+TrackID -1   Position (92.928,443.483,345.585)       : 176.479 [keV]
+TrackID -1   Position (288.738,-348.814,435.063)       : 165.698 [keV]
+TrackID -1   Position (290.008,-348.288,434.682)       : 61.5571 [keV]
+TrackID -1   Position (-193.907,228.911,-109.679)       : 0.292679 [keV]
+TrackID -1   Position (-194.385,230.934,-110.576)       : 0.555239 [keV]
+TrackID -1   Position (-196.092,228.424,-116.191)       : 0.109444 [keV]
+TrackID -1   Position (77.9329,346.34,334.377)       : 10.0708 [keV]
+TrackID -1   Position (125.361,326.779,322.618)       : 64.7442 [keV]
+TrackID -1   Position (247.937,169.245,233.976)       : 193.035 [keV]
+TrackID -1   Position (-390.144,-88.2489,54.0245)       : 54.3527 [keV]
+TrackID -1   Position (-118.347,-387.323,-197.061)       : 0.0170735 [keV]
+TrackID -1   Position (-90.0243,-291.411,-221.052)       : 0.0496452 [keV]
+TrackID -1   Position (-89.3039,-289.087,-221.483)       : 0.00118589 [keV]
+TrackID -1   Position (-179.617,-240.287,-174.791)       : 0.0357275 [keV]
+TrackID -1   Position (-275.908,-215.348,-304.644)       : 0.0314592 [keV]
+TrackID -1   Position (134.38,-434.703,185.684)       : 6.20223 [keV]
+TrackID -1   Position (236.676,-382.733,143.719)       : 2.52004 [keV]
+TrackID -1   Position (345.75,288.023,401.06)       : 4.38998 [keV]
+TrackID -1   Position (196.748,233.056,292.106)       : 25.1405 [keV]
+TrackID -1   Position (-104.516,-339.266,-78.4933)       : 0.456931 [keV]
+TrackID -1   Position (-122.621,-380.742,-97.2847)       : 0.284493 [keV]
+TrackID -1   Position (15.5547,-454.734,-189.96)       : 6.77181 [keV]
+TrackID -1   Position (-5.3766,-454.968,-284.535)       : 49.9969 [keV]
+TrackID -1   Position (77.8208,-346.365,34.0379)       : 1.17776 [keV]
+TrackID -1   Position (138.021,-428.311,-150.366)       : 1.60784 [keV]
+TrackID -1   Position (93.5323,-342.457,-155.143)       : 0.0885595 [keV]
+TrackID -1   Position (-27.6661,248.464,53.0006)       : 0.952734 [keV]
+TrackID -1   Position (-247.541,-320.544,136.389)       : 0.000472319 [keV]
+TrackID -1   Position (-136.125,-327.864,309.443)       : 0.00326457 [keV]
+TrackID -1   Position (-219.762,-334.222,283.794)       : 0.0031996 [keV]
+TrackID -1   Position (-224.022,-334.826,282.302)       : 0.00088882 [keV]
+TrackID -1   Position (-267.606,-233.264,162.393)       : 0.00235401 [keV]
+TrackID -1   Position (-308.585,-254.509,139.667)       : 0.00274965 [keV]
+TrackID -1   Position (-81.746,-447.596,-59.8788)       : 54.0819 [keV]
+TrackID -1   Position (-154.441,-422.668,-284.43)       : 29.5664 [keV]
+TrackID -1   Position (205.391,-400.393,-127.301)       : 32.8235 [keV]
+TrackID -1   Position (-207.899,216.282,-244.384)       : 0.0566426 [keV]
+TrackID -1   Position (-333.221,221.278,-303.364)       : 33.69 [keV]
+TrackID -1   Position (-49.8796,447.227,348.884)       : 8.59221 [keV]
+TrackID -1   Position (225.87,204.958,288.065)       : 0.0863716 [keV]
+TrackID -1   Position (-294.514,278.005,60.6038)       : 0.000716675 [keV]
+TrackID -1   Position (381.518,135.901,-385.027)       : 10.2209 [keV]
+TrackID -1   Position (444.923,67.4057,-390.111)       : 11.0037 [keV]
+TrackID -1   Position (-228.472,-194.423,-282.588)       : 10.3756 [keV]
+TrackID -1   Position (-228.912,-196.018,-279.603)       : 8.40627 [keV]
+TrackID -1   Position (-354.146,-277.633,-100.079)       : 4.16366 [keV]
+TrackID -1   Position (-373.506,-259.843,-138.053)       : 5.72313 [keV]
+TrackID -1   Position (-200.509,-346.116,-305.831)       : 3.11218 [keV]
+TrackID -1   Position (-203.413,-349.265,-302.962)       : 2.67442 [keV]
+TrackID -1   Position (-228.103,-194.856,107.066)       : 3.28696 [keV]
+TrackID -1   Position (-219.673,-129.494,95.8803)       : 0.705002 [keV]
+TrackID -1   Position (-299.69,-13.6293,121.407)       : 1.52018 [keV]
+TrackID -1   Position (-334.717,-308.203,411.165)       : 6.67728 [keV]
+TrackID -1   Position (298.43,336.808,-443.427)       : 11.0881 [keV]
+TrackID -1   Position (353.514,280.926,87.1964)       : 30.6507 [keV]
+TrackID -1   Position (-281.223,-112.271,119.268)       : 20.1469 [keV]
+TrackID -1   Position (-349.797,-56.1505,103.325)       : 71.6228 [keV]
+TrackID -1   Position (-204.392,288.072,-192.405)       : 290.464 [keV]
+TrackID -1   Position (-302.201,-32.1926,275.705)       : 80.1788 [keV]
+TrackID -1   Position (103.265,336.267,-300.951)       : 315.327 [keV]
+TrackID -1   Position (103.69,337.185,-300.496)       : 349.968 [keV]
+TrackID -1   Position (103.82,337.799,-300.293)       : 226.519 [keV]
+TrackID -1   Position (103.9,338.469,-300.253)       : 213.953 [keV]
+TrackID -1   Position (104.225,338.872,-299.864)       : 207.981 [keV]
+TrackID -1   Position (104.35,339.306,-300.142)       : 5.44158 [keV]
+TrackID -1   Position (124.01,380.291,-300.754)       : 12.9914 [keV]
+TrackID -1   Position (124.026,380.334,-300.749)       : 14.7135 [keV]
+TrackID -1   Position (124.053,380.387,-300.754)       : 18.1406 [keV]
+TrackID -1   Position (124.076,380.442,-300.765)       : 17.7754 [keV]
+TrackID -1   Position (124.088,380.49,-300.799)       : 23.7277 [keV]
+TrackID -1   Position (124.096,380.548,-300.819)       : 27.5041 [keV]
+TrackID -1   Position (124.128,380.614,-300.853)       : 41.0814 [keV]
+TrackID -1   Position (124.19,380.689,-300.83)       : 40.3374 [keV]
+TrackID -1   Position (124.284,380.762,-300.79)       : 165.465 [keV]
+TrackID -1   Position (124.349,380.858,-300.703)       : 352.411 [keV]
+TrackID -1   Position (104.225,338.872,-299.864)       : 88.0435 [keV]
+TrackID -1   Position (104.399,338.874,-299.804)       : 35.2925 [keV]
+TrackID -1   Position (104.484,338.793,-299.821)       : 75.0561 [keV]
+TrackID -1   Position (104.583,338.7,-299.806)       : 85.2987 [keV]
+TrackID -1   Position (104.607,338.562,-299.823)       : 308.567 [keV]
+TrackID -1   Position (29.6883,-454.03,338.966)       : 5169.53 [keV]
+TrackID -1   Position (28.7794,-452.843,339.448)       : 4298.7 [keV]
+TrackID -1   Position (28.0967,-451.886,339.832)       : 3851.18 [keV]
+TrackID -1   Position (27.5268,-451.133,340.128)       : 3281.61 [keV]
+TrackID -1   Position (27.0638,-450.535,340.36)       : 3368.68 [keV]
+TrackID -1   Position (26.6823,-450.058,340.552)       : 2740.39 [keV]
+TrackID -1   Position (26.3727,-449.692,340.708)       : 2769.75 [keV]
+TrackID -1   Position (26.1108,-449.403,340.824)       : 1587.21 [keV]
+TrackID -1   Position (-18.4912,-404.578,361.056)       : 2678.2 [keV]
+TrackID -1   Position (-18.667,-404.393,361.142)       : 2747.27 [keV]
+TrackID -1   Position (-18.7795,-404.231,361.189)       : 3179.2 [keV]
+TrackID -1   Position (-18.8582,-404.133,361.187)       : 445.1 [keV]
+TrackID -1   Position (-18.863,-404.128,361.187)       : 61.4091 [keV]
+TrackID -1   Position (-18.8637,-404.127,361.187)       : 15.996 [keV]
+TrackID -1   Position (-18.8641,-404.127,361.187)       : 22.1476 [keV]
+TrackID -1   Position (129.61,-219.605,75.255)       : 2.51106 [keV]
+TrackID -1   Position (-147.21,-430.528,304.987)       : 0.00387886 [keV]
+TrackID -1   Position (-300.533,-341.621,158.27)       : 0.00737258 [keV]
+TrackID -1   Position (-210.68,-397.636,350.395)       : 0.00616103 [keV]
+TrackID -1   Position (-0.259131,-405,125.591)       : 25.5841 [keV]
+TrackID -1   Position (-73.1591,-347.38,164.971)       : 37.0306 [keV]
+TrackID -1   Position (-80.6969,-341.462,169.254)       : 41.1629 [keV]
+TrackID -1   Position (-229.275,-193.476,179.269)       : 22.1587 [keV]
+TrackID -1   Position (-231.297,-194.253,178.095)       : 6.18143 [keV]
+TrackID -1   Position (-299.779,11.5157,195.38)       : 33.6016 [keV]
+TrackID -1   Position (-28.7234,-348.819,105.635)       : 24.651 [keV]
+TrackID -1   Position (60.6843,-450.935,262.973)       : 11.0501 [keV]
+TrackID -1   Position (-11.9667,-354.798,-165.783)       : 57.7135 [keV]
+TrackID -1   Position (-91.0811,-394.625,136.765)       : 2.11748 [keV]
+TrackID -1   Position (-127.374,-277.13,246.755)       : 43.9507 [keV]
+TrackID -1   Position (247.7,247.274,89.0306)       : 35.9306 [keV]
+TrackID -1   Position (239.402,320.448,-27.4925)       : 11.5272 [keV]
+TrackID -1   Position (190.01,357.661,-283.69)       : 22.7729 [keV]
+TrackID -1   Position (-250.517,373.82,396.365)       : 12.4003 [keV]
+TrackID -1   Position (-380.037,124.789,300.282)       : 20.364 [keV]
+TrackID -1   Position (-385.824,113.509,295.811)       : 15.3218 [keV]
+TrackID -1   Position (-454.954,-6.44578,228.434)       : 7.78177 [keV]
+TrackID -1   Position (71.7386,-449.309,262.139)       : 10.0388 [keV]
+TrackID -1   Position (372.119,-253.036,193.856)       : 12.3771 [keV]
+TrackID -1   Position (388.144,237.422,251.41)       : 1.50872 [keV]
+TrackID -1   Position (-97.2919,-336.206,305.339)       : 1.5184 [keV]
+TrackID -1   Position (-71.0953,-393.631,328.29)       : 3.64225 [keV]
+TrackID -1   Position (8.46917,-404.911,250.402)       : 26.8222 [keV]
+TrackID -1   Position (-10.5842,-454.877,204.573)       : 8.82259 [keV]
+TrackID -1   Position (65.73,241.204,-110.835)       : 0.0150869 [keV]
+TrackID -1   Position (211.893,339.266,-132.841)       : 0.0202297 [keV]
+TrackID -1   Position (126.251,-437.133,351.329)       : 4.74436 [keV]
+TrackID -1   Position (131.032,-432.074,355.275)       : 20.2638 [keV]
+TrackID -1   Position (-125.351,-385.113,336.157)       : 0.452884 [keV]
+TrackID -1   Position (-139.567,-377.775,338.209)       : 1.88071 [keV]
+TrackID -1   Position (147.544,-322.124,102.776)       : 150.851 [keV]
+TrackID -1   Position (71.18,-292.406,191.752)       : 79.9174 [keV]
+TrackID -1   Position (-62.4241,-450.697,326.824)       : 0.79937 [keV]
+TrackID -1   Position (-62.1736,-449.674,318.749)       : 0.441415 [keV]
+TrackID -1   Position (446.806,-53.516,314.174)       : 51.292 [keV]
+TrackID -1   Position (333.571,105.974,302.739)       : 6.75246 [keV]
+TrackID -1   Position (171.962,361.15,196.46)       : 4.13652 [keV]
+TrackID -1   Position (205.393,225.474,286.593)       : 7.45394 [keV]
+TrackID -1   Position (289.695,275.82,352.091)       : 9.83711 [keV]
+TrackID -1   Position (-245.719,46.0683,41.2469)       : 5.14842 [keV]
+TrackID -1   Position (-272.194,126.136,69.3673)       : 5.22644 [keV]
+TrackID -1   Position (-90.9654,445.814,226.945)       : 0.0142599 [keV]
+TrackID -1   Position (-134.859,267.98,172.508)       : 3.1097 [keV]
+TrackID -1   Position (-178.961,300.787,184.667)       : 7.85499 [keV]
+TrackID -1   Position (-296.527,-268.461,334.807)       : 6.7228 [keV]
+TrackID -1   Position (-102.489,-287.265,151.176)       : 7.02515 [keV]
+TrackID -1   Position (-159.689,-420.713,-78.7761)       : 2.53764 [keV]
+TrackID -1   Position (-159.505,-423.143,-80.5016)       : 2.47546 [keV]
+TrackID -1   Position (0.746404,-404.999,-279.806)       : 1.55814 [keV]
+TrackID -1   Position (102.842,227.868,122.322)       : 0.00168229 [keV]
+TrackID -1   Position (-224.876,395.545,386.109)       : 0.0117242 [keV]
+TrackID -1   Position (-442.854,-104.429,-79.3749)       : 0.002063 [keV]
+TrackID -1   Position (180.079,239.94,7.71101)       : 0.863758 [keV]
+TrackID -1   Position (179.67,246.326,2.98102)       : 0.136659 [keV]
+TrackID -1   Position (-183.718,-297.906,312.67)       : 0.446631 [keV]
+TrackID -1   Position (349.574,-17.2546,232.385)       : 49.5335 [keV]
+TrackID -1   Position (-397.398,45.5464,67.3245)       : 0.554489 [keV]
+TrackID -1   Position (-329.357,131.539,-53.6565)       : 86.5335 [keV]
+TrackID -1   Position (-403.484,199.249,-143.285)       : 4.12427 [keV]
+TrackID -1   Position (-335.505,226.851,-196.426)       : 5.74795 [keV]
+TrackID -1   Position (-181.309,245.259,-132.191)       : 2.29823 [keV]
+TrackID -1   Position (-373.925,250.36,107.582)       : 2.30824 [keV]
+TrackID -1   Position (433.866,137.06,177.527)       : 1.44576 [keV]
+TrackID -1   Position (404.673,16.2711,-160.271)       : 0.593266 [keV]
+TrackID -1   Position (351.694,48.3351,-225.371)       : 0.464863 [keV]
+TrackID -1   Position (384.821,109.145,-230.433)       : 13.0899 [keV]
+TrackID -1   Position (221.702,-338.93,343.821)       : 0.000549298 [keV]
+TrackID -1   Position (209.349,-286.702,301.876)       : 0.00371462 [keV]
+TrackID -1   Position (-132.822,-213.347,145.24)       : 79.8685 [keV]
+TrackID -1   Position (346.4,-50.0709,330.497)       : 4.01933 [keV]
+TrackID -1   Position (-409.646,186.253,382.918)       : 1.21878 [keV]
+TrackID -1   Position (-408.691,197.982,383.459)       : 0.546562 [keV]
+TrackID -1   Position (-304.316,-20.4077,236.336)       : 1.04585 [keV]
+TrackID -1   Position (-359.042,176.32,330.493)       : 0.542022 [keV]
+TrackID -1   Position (172.706,415.539,420.437)       : 1.3963 [keV]
+TrackID -1   Position (-164.337,309.02,-168.546)       : 13.0687 [keV]
+TrackID -1   Position (-166.917,311.205,-172.965)       : 11.7736 [keV]
+TrackID -1   Position (-169.739,310.266,-169.572)       : 6.04017 [keV]
+TrackID -1   Position (99.3285,335.61,311.696)       : 1.46508 [keV]
+TrackID -1   Position (-137.389,-266.692,235.255)       : 0.0258518 [keV]
+TrackID -1   Position (-83.5673,240.626,-30.2152)       : 133.817 [keV]
+TrackID -1   Position (265.015,-144.919,180.122)       : 66.2828 [keV]
+TrackID -1   Position (187.79,-166.657,55.694)       : 140.204 [keV]
+TrackID -1   Position (335.147,-220.54,50.7117)       : 226.028 [keV]
+TrackID -1   Position (-267.994,-363.764,190.856)       : 203.87 [keV]
+TrackID -1   Position (195.734,-350.341,355.247)       : 489.543 [keV]
+TrackID -1   Position (196.002,-350.049,355.294)       : 70.341 [keV]
+TrackID -1   Position (280.146,-355.042,337.746)       : 43.6756 [keV]
+TrackID -1   Position (-196.309,-354.243,223.022)       : 16.1616 [keV]
+TrackID -1   Position (-365.627,-270.817,221.769)       : 0.0561525 [keV]
+TrackID -1   Position (-366.722,-266.953,218.614)       : 0.0334509 [keV]
+TrackID -1   Position (144.875,-324.093,232.794)       : 0.00269338 [keV]
+TrackID -1   Position (259.103,-304.739,251.354)       : 0.00284331 [keV]
+TrackID -1   Position (-112.823,-388.968,302.738)       : 29.8681 [keV]
+TrackID -1   Position (-103.36,-339.62,295.658)       : 0.00276949 [keV]
+TrackID -1   Position (-332.291,-231.533,-67.4363)       : 1.77175 [keV]
+TrackID -1   Position (355.801,-283.603,-385.052)       : 35.1824 [keV]
+TrackID -1   Position (355.987,-282.572,-384.411)       : 41.5111 [keV]
+TrackID -1   Position (134.414,-323.161,-95.2561)       : 0.0140393 [keV]
+TrackID -1   Position (295.172,-346.264,-376.655)       : 17.4725 [keV]
+TrackID -1   Position (294.585,-345.849,-375.702)       : 47.6887 [keV]
+TrackID -1   Position (-248.223,-29.7574,-61.2095)       : 15.6072 [keV]
+TrackID -1   Position (411.678,193.768,233.948)       : 28.4157 [keV]
+TrackID -1   Position (237.393,191.493,249.51)       : 4.555 [keV]
+TrackID -1   Position (39.6428,453.27,-198.124)       : 32.6944 [keV]
+TrackID -1   Position (38.0847,451.086,-198.768)       : 29.7286 [keV]
+TrackID -1   Position (-24.1406,404.28,-151.929)       : 5.93236 [keV]
+TrackID -1   Position (-331.518,223.82,-257.215)       : 32.5261 [keV]
+TrackID -1   Position (-184.97,354.663,-180.87)       : 21.9692 [keV]
+TrackID -1   Position (328.675,-134.155,-306.101)       : 20.9895 [keV]
+TrackID -1   Position (-192.196,-354.415,358.921)       : 86.9988 [keV]
+TrackID -1   Position (-316.574,-321.99,307.545)       : 112.536 [keV]
+TrackID -1   Position (-185.05,-412.696,288.176)       : 545.475 [keV]
+TrackID -1   Position (-185.711,-412.167,288.171)       : 429.099 [keV]
+TrackID -1   Position (239.898,-184.157,-68.2148)       : 230.091 [keV]
+TrackID -1   Position (253.906,-159.786,-204.377)       : 0.00275041 [keV]
+TrackID -1   Position (-307.225,-256.15,-150.956)       : 0.011483 [keV]
+TrackID -1   Position (-283.962,-213.051,-315.028)       : 0.00966882 [keV]
+TrackID -1   Position (-186.856,-409.371,-337.415)       : 0.00125089 [keV]
+TrackID -1   Position (-186.709,-409.674,-337.447)       : 0.00241593 [keV]
+TrackID -1   Position (118.856,-439.202,70.2817)       : 0.00551075 [keV]
+TrackID -1   Position (-33.5257,-453.763,74.8406)       : 0.00708505 [keV]
+TrackID -1   Position (178.545,-242.8,-117.422)       : 257.558 [keV]
+TrackID -1   Position (-17.8072,-452.358,18.0673)       : 233.507 [keV]
+TrackID -1   Position (-350.404,-199.812,234.286)       : 515.158 [keV]
+TrackID -1   Position (-301.254,-180.214,150.934)       : 160.903 [keV]
+TrackID -1   Position (-275.891,-290.914,171.182)       : 36.7962 [keV]
+TrackID -1   Position (-216.875,-396.51,123.092)       : 174.766 [keV]
+TrackID -1   Position (-96.7205,-388.13,-320.474)       : 0.312197 [keV]
+TrackID -1   Position (-96.124,-389.326,-319.622)       : 0.0809385 [keV]
+TrackID -1   Position (-74.8663,-394.177,-331.881)       : 0.501055 [keV]
+TrackID -1   Position (-41.1238,347.576,17.7589)       : 0.169 [keV]
+TrackID -1   Position (-40.5232,349.455,18.7409)       : 0.00387958 [keV]
+TrackID -1   Position (7.1041,351.904,23.3975)       : 0.0217992 [keV]
+TrackID -1   Position (74.161,393.065,47.7175)       : 0.322072 [keV]
+TrackID -1   Position (274.897,-216.637,-85.0925)       : 0.273107 [keV]
+TrackID -1   Position (123.985,277.171,175.374)       : 31.6471 [keV]
+TrackID -1   Position (123.808,277.055,177.31)       : 98.7007 [keV]
+TrackID -1   Position (121.076,276.379,169.687)       : 291.291 [keV]
+TrackID -1   Position (-187.81,-414.43,-390.449)       : 0.00303515 [keV]
+TrackID -1   Position (-147.527,-377.175,-285.759)       : 0.00150271 [keV]
+TrackID -1   Position (-224.181,-206.804,204.255)       : 3.94619 [keV]
+TrackID -1   Position (257.635,368.95,-372.792)       : 1.67332 [keV]
+TrackID -1   Position (258.004,369.9,-372.743)       : 2.12662 [keV]
+TrackID -1   Position (360.317,184.924,-318.059)       : 0.639991 [keV]
+TrackID -1   Position (88.4111,-233.845,160.975)       : 2.10064 [keV]
+TrackID -1   Position (197.425,-153.374,174.824)       : 1.65157 [keV]
+TrackID -1   Position (58.1734,-243.138,-218.97)       : 1.64582 [keV]
+TrackID -1   Position (48.959,-249.083,-244.89)       : 1.15131 [keV]
+TrackID -1   Position (302.797,-264.634,-309.511)       : 127.778 [keV]
+TrackID -1   Position (314.031,-329.256,288.305)       : 2.21749 [keV]
+TrackID -1   Position (183.211,-243.842,274.669)       : 0.72087 [keV]
+TrackID -1   Position (327.471,-308.646,230.696)       : 0.651656 [keV]
+TrackID -1   Position (-387.675,238.186,289.28)       : 0.242615 [keV]
+TrackID -1   Position (79.9353,442.843,-145.079)       : 0.246081 [keV]
+TrackID -1   Position (16.1435,454.714,-189.411)       : 0.0361593 [keV]
+TrackID -1   Position (15.6554,454.364,-189.761)       : 0.168965 [keV]
+TrackID -1   Position (129.034,-276.361,224.127)       : 17.9163 [keV]
+TrackID -1   Position (27.2393,-353.953,221.181)       : 19.355 [keV]
+TrackID -1   Position (38.907,-398.103,280.243)       : 16.8712 [keV]
+TrackID -1   Position (-39.9538,-352.745,230.75)       : 14.3866 [keV]
+TrackID -1   Position (252.965,-378.198,84.7333)       : 6.77974e-05 [keV]
+TrackID -1   Position (239.555,-386.831,88.6731)       : 0.0245277 [keV]
+TrackID -1   Position (372.828,-260.815,-238.889)       : 0.304129 [keV]
+TrackID -1   Position (353.733,29.9666,-339.887)       : 0.00184873 [keV]
+TrackID -1   Position (284.955,-354.719,431.3)       : 1.65072 [keV]
+TrackID -1   Position (212.647,-344.683,176.485)       : 0.817241 [keV]
+TrackID -1   Position (330.462,-225.377,385.746)       : 20.9945 [keV]
+TrackID -1   Position (237.321,-191.582,228.523)       : 17.7731 [keV]
+TrackID -1   Position (226.753,-329.52,227.908)       : 25.6341 [keV]
+TrackID -1   Position (278.814,-219.744,182.212)       : 1.41883 [keV]
+TrackID -1   Position (240.228,319.829,-35.8919)       : 13.4887 [keV]
+TrackID -1   Position (157.648,318.076,-3.37261)       : 19.9304 [keV]
+TrackID -1   Position (418.989,164.159,-61.6744)       : 10.6442 [keV]
+TrackID -1   Position (328.828,133.781,-293.766)       : 13.1293 [keV]
+TrackID -1   Position (325.909,132.877,-301.035)       : 10.1951 [keV]
+TrackID -1   Position (166.803,-369.055,116.811)       : 0.00380805 [keV]
+TrackID -1   Position (177.714,301.526,221.517)       : 0.0936911 [keV]
+TrackID -1   Position (176.26,248.912,249.081)       : 0.0224131 [keV]
+TrackID -1   Position (56.3387,-446.459,-208.81)       : 0.0231129 [keV]
+TrackID -1   Position (55.9787,-448.534,-210.194)       : 0.0480142 [keV]
+TrackID -1   Position (-398.43,72.656,167.794)       : 0.676351 [keV]
+TrackID -1   Position (-361.206,-171.844,181.019)       : 1.9847 [keV]
+TrackID -1   Position (-359.696,-181.936,181.634)       : 2.12297 [keV]
+TrackID -1   Position (-441.596,-109.625,215.666)       : 1.52468 [keV]
+TrackID -1   Position (248.918,249.512,205.84)       : 26.352 [keV]
+TrackID -1   Position (-444.381,97.7285,140.486)       : 11.5058 [keV]
+TrackID -1   Position (-354.775,-12.6292,181.52)       : 18.2792 [keV]
+TrackID -1   Position (86.7553,-344.236,-66.2383)       : 0.0341406 [keV]
+TrackID -1   Position (100.519,-287.96,28.8156)       : 0.00379915 [keV]
+TrackID -1   Position (-265.504,235.654,217.779)       : 27.7802 [keV]
+TrackID -1   Position (-137.846,267.417,238.043)       : 478.493 [keV]
+TrackID -1   Position (-392.946,219.444,160.053)       : 609.721 [keV]
 
 Calorimeter hits --------------------------------------------------------------
 0 hits are stored in RE01CalorimeterHitsCollection.
@@ -21883,330 +22099,330 @@ Point[1] Position= (-18.956,3.91184,84.6395)
 
 TrackID =2149 : ParentID=1828 : TrackStatus=1
 Particle name : mu-  PDG code : 13  Charge : -1
-Original momentum : -0.283337 0.260283 1.29913 GeV
+Original momentum : -0.283386 0.260292 1.29934 GeV
 Vertex : -0.467912 0.0901674 2.04924 m    Global time : 7.29745 ns 
   Current trajectory has 34 points.
 Point[0] Position= (-467.912,90.1674,2049.24)
-Point[1] Position= (-486.231,107.003,2133.21)
-Point[2] Position= (-567.752,181.96,2506.9)
-Point[3] Position= (-595.603,207.594,2634.6)
-Point[4] Position= (-632.392,241.476,2803.56)
-Point[5] Position= (-705.185,308.482,3138.62)
-Point[6] Position= (-739.502,340.088,3297)
-Point[7] Position= (-767.295,365.644,3425.14)
-Point[8] Position= (-797.603,393.497,3564.85)
-Point[9] Position= (-819.468,413.573,3665.56)
-Point[10] Position= (-846.821,438.696,3791.58)
-Point[11] Position= (-870.609,460.528,3901.13)
-Point[12] Position= (-943.881,527.756,4238.53)
-Point[13] Position= (-947.292,530.889,4254.24)
-Point[14] Position= (-959.933,542.5,4312.45)
-Point[15] Position= (-968.454,550.329,4351.7)
-Point[16] Position= (-1056.48,631.101,4756.78)
-Point[17] Position= (-1084.98,657.284,4888.04)
-Point[18] Position= (-1093.9,665.48,4929.11)
-Point[19] Position= (-1109.76,680.07,5002.21)
-Point[20] Position= (-1134.5,702.801,5116.23)
-Point[21] Position= (-1150.95,717.904,5191.97)
-Point[22] Position= (-1174.71,739.693,5301.33)
-Point[23] Position= (-1187.63,751.524,5360.72)
-Point[24] Position= (-1200.64,763.455,5420.6)
-Point[25] Position= (-1208.65,770.803,5457.48)
-Point[26] Position= (-1217.53,778.942,5498.32)
-Point[27] Position= (-1221.98,783.023,5518.78)
-Point[28] Position= (-1221.99,783.031,5518.82)
-Point[29] Position= (-1223.17,784.109,5524.22)
-Point[30] Position= (-1276.34,832.923,5768.86)
-Point[31] Position= (-1315.51,868.909,5949.27)
-Point[32] Position= (-1318.75,871.887,5964.21)
-Point[33] Position= (-1326.51,879.021,6000)
+Point[1] Position= (-486.231,107.001,2133.22)
+Point[2] Position= (-567.753,181.949,2506.91)
+Point[3] Position= (-595.605,207.58,2634.6)
+Point[4] Position= (-632.394,241.457,2803.57)
+Point[5] Position= (-705.188,308.455,3138.63)
+Point[6] Position= (-739.506,340.058,3297.01)
+Point[7] Position= (-767.3,365.611,3425.15)
+Point[8] Position= (-797.608,393.461,3564.86)
+Point[9] Position= (-819.473,413.533,3665.57)
+Point[10] Position= (-846.827,438.654,3791.59)
+Point[11] Position= (-870.615,460.483,3901.14)
+Point[12] Position= (-943.888,527.703,4238.54)
+Point[13] Position= (-947.299,530.835,4254.25)
+Point[14] Position= (-959.941,542.446,4312.47)
+Point[15] Position= (-968.462,550.273,4351.72)
+Point[16] Position= (-1056.49,631.035,4756.8)
+Point[17] Position= (-1084.99,657.216,4888.06)
+Point[18] Position= (-1093.9,665.41,4929.13)
+Point[19] Position= (-1109.77,679.998,5002.23)
+Point[20] Position= (-1134.51,702.727,5116.25)
+Point[21] Position= (-1150.96,717.828,5191.99)
+Point[22] Position= (-1174.73,739.615,5301.36)
+Point[23] Position= (-1187.64,751.444,5360.74)
+Point[24] Position= (-1200.65,763.374,5420.62)
+Point[25] Position= (-1208.67,770.72,5457.5)
+Point[26] Position= (-1217.55,778.858,5498.34)
+Point[27] Position= (-1221.99,782.939,5518.8)
+Point[28] Position= (-1222,782.947,5518.84)
+Point[29] Position= (-1223.18,784.025,5524.25)
+Point[30] Position= (-1276.35,832.833,5768.88)
+Point[31] Position= (-1315.52,868.815,5949.3)
+Point[32] Position= (-1318.76,871.792,5964.24)
+Point[33] Position= (-1326.52,878.92,6000)
 
 TrackID =2181 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 24.8846 32.1404 0.679694 keV
-Vertex : -1.31875 0.871887 5.96421 m    Global time : 20.9546 ns 
+Original momentum : 24.8824 32.1421 0.679743 keV
+Vertex : -1.31876 0.871792 5.96424 m    Global time : 20.9547 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1318.75,871.887,5964.21)
-Point[1] Position= (-1318.72,871.926,5964.21)
+Point[0] Position= (-1318.76,871.792,5964.24)
+Point[1] Position= (-1318.73,871.832,5964.24)
 
 TrackID =2180 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 3.33836 -39.6648 10.3602 keV
-Vertex : -1.31551 0.868909 5.94927 m    Global time : 20.9025 ns 
+Original momentum : 3.34117 -39.6646 10.3598 keV
+Vertex : -1.31552 0.868815 5.9493 m    Global time : 20.9026 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1315.51,868.909,5949.27)
-Point[1] Position= (-1315.5,868.859,5949.28)
+Point[0] Position= (-1315.52,868.815,5949.3)
+Point[1] Position= (-1315.52,868.765,5949.31)
 
 TrackID =2179 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 37.4862 -18.6955 13.8625 keV
-Vertex : -1.27634 0.832923 5.76886 m    Global time : 20.2732 ns 
+Original momentum : 37.4877 -18.6931 13.8619 keV
+Vertex : -1.27635 0.832833 5.76888 m    Global time : 20.2732 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1276.34,832.923,5768.86)
-Point[1] Position= (-1276.28,832.896,5768.88)
+Point[0] Position= (-1276.35,832.833,5768.88)
+Point[1] Position= (-1276.29,832.806,5768.9)
 
 TrackID =2178 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 37.5192 13.162 7.19987 keV
-Vertex : -1.22317 0.784109 5.52422 m    Global time : 19.4198 ns 
+Original momentum : 37.5184 13.1645 7.19959 keV
+Vertex : -1.22318 0.784025 5.52425 m    Global time : 19.4199 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1223.17,784.109,5524.22)
-Point[1] Position= (-1223.12,784.125,5524.23)
+Point[0] Position= (-1223.18,784.025,5524.25)
+Point[1] Position= (-1223.13,784.041,5524.26)
 
 TrackID =2177 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -11.5995 36.5987 -8.24748 keV
-Vertex : -1.22199 0.783031 5.51882 m    Global time : 19.401 ns 
+Original momentum : -11.6021 36.598 -8.24699 keV
+Vertex : -1.222 0.782947 5.51884 m    Global time : 19.401 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1221.99,783.031,5518.82)
-Point[1] Position= (-1222,783.072,5518.81)
+Point[0] Position= (-1222,782.947,5518.84)
+Point[1] Position= (-1222.02,782.988,5518.83)
 
 TrackID =2176 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -16.492 -27.6338 2.99548 keV
-Vertex : -1.22198 0.783023 5.51878 m    Global time : 19.4009 ns 
+Original momentum : -16.4901 -27.6349 2.99538 keV
+Vertex : -1.22199 0.782939 5.5188 m    Global time : 19.4009 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1221.98,783.023,5518.78)
-Point[1] Position= (-1221.99,783.003,5518.78)
+Point[0] Position= (-1221.99,782.939,5518.8)
+Point[1] Position= (-1222.01,782.919,5518.81)
 
 TrackID =2175 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -5.75648 -55.7165 13.2385 keV
-Vertex : -1.21753 0.778942 5.49832 m    Global time : 19.3295 ns 
+Original momentum : -5.75255 -55.717 13.238 keV
+Vertex : -1.21755 0.778858 5.49834 m    Global time : 19.3295 ns 
   Current trajectory has 3 points.
-Point[0] Position= (-1217.53,778.942,5498.32)
-Point[1] Position= (-1217.55,778.832,5498.34)
-Point[2] Position= (-1217.55,778.807,5498.33)
+Point[0] Position= (-1217.55,778.858,5498.34)
+Point[1] Position= (-1217.56,778.749,5498.37)
+Point[2] Position= (-1217.56,778.723,5498.35)
 
 TrackID =2182 : ParentID=2175 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 30.2696 -11.6011 10.1071 keV
-Vertex : -1.21755 0.778832 5.49834 m    Global time : 19.3328 ns 
+Original momentum : 30.2705 -11.599 10.1069 keV
+Vertex : -1.21756 0.778749 5.49837 m    Global time : 19.3329 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1217.55,778.832,5498.34)
-Point[1] Position= (-1217.52,778.823,5498.35)
+Point[0] Position= (-1217.56,778.749,5498.37)
+Point[1] Position= (-1217.53,778.739,5498.38)
 
 TrackID =2174 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 30.5761 25.9581 3.12748 keV
-Vertex : -1.20865 0.770803 5.45748 m    Global time : 19.187 ns 
+Original momentum : 30.5744 25.9602 3.1274 keV
+Vertex : -1.20867 0.77072 5.4575 m    Global time : 19.187 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1208.65,770.803,5457.48)
-Point[1] Position= (-1208.62,770.834,5457.48)
+Point[0] Position= (-1208.67,770.72,5457.5)
+Point[1] Position= (-1208.63,770.751,5457.51)
 
 TrackID =2173 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -14.315 -41.6827 7.23121 keV
-Vertex : -1.20064 0.763455 5.4206 m    Global time : 19.0584 ns 
+Original momentum : -14.3121 -41.6838 7.23095 keV
+Vertex : -1.20065 0.763374 5.42062 m    Global time : 19.0584 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1200.64,763.455,5420.6)
-Point[1] Position= (-1200.66,763.392,5420.61)
+Point[0] Position= (-1200.65,763.374,5420.62)
+Point[1] Position= (-1200.67,763.311,5420.63)
 
 TrackID =2172 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 3.22313 -34.7886 8.96236 keV
-Vertex : -1.18763 0.751524 5.36072 m    Global time : 18.8495 ns 
+Original momentum : 3.22559 -34.7885 8.96198 keV
+Vertex : -1.18764 0.751444 5.36074 m    Global time : 18.8495 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1187.63,751.524,5360.72)
-Point[1] Position= (-1187.62,751.492,5360.72)
+Point[0] Position= (-1187.64,751.444,5360.74)
+Point[1] Position= (-1187.63,751.412,5360.75)
 
 TrackID =2171 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -12.5286 31.1093 -7.71061 keV
-Vertex : -1.17471 0.739693 5.30133 m    Global time : 18.6424 ns 
+Original momentum : -12.5308 31.1085 -7.71016 keV
+Vertex : -1.17473 0.739615 5.30136 m    Global time : 18.6424 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1174.71,739.693,5301.33)
-Point[1] Position= (-1174.73,739.72,5301.33)
+Point[0] Position= (-1174.73,739.615,5301.36)
+Point[1] Position= (-1174.74,739.641,5301.35)
 
 TrackID =2170 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 27.8562 60.2565 -1.46658 keV
-Vertex : -1.15095 0.717904 5.19197 m    Global time : 18.2609 ns 
+Original momentum : 27.8521 60.2584 -1.46628 keV
+Vertex : -1.15096 0.717828 5.19199 m    Global time : 18.2609 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1150.95,717.904,5191.97)
-Point[1] Position= (-1150.84,718.141,5191.96)
+Point[0] Position= (-1150.96,717.828,5191.99)
+Point[1] Position= (-1150.85,718.065,5191.99)
 
 TrackID =2169 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 2.25689 -86.1702 25.8893 keV
-Vertex : -1.1345 0.702801 5.11623 m    Global time : 17.9967 ns 
+Original momentum : 2.26303 -86.1703 25.8885 keV
+Vertex : -1.13451 0.702727 5.11625 m    Global time : 17.9967 ns 
   Current trajectory has 3 points.
-Point[0] Position= (-1134.5,702.801,5116.23)
-Point[1] Position= (-1134.48,702.075,5116.44)
-Point[2] Position= (-1134.44,702.038,5116.4)
+Point[0] Position= (-1134.51,702.727,5116.25)
+Point[1] Position= (-1134.49,702.001,5116.47)
+Point[2] Position= (-1134.45,701.964,5116.43)
 
 TrackID =2168 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -0.238696 45.6704 -6.98477 keV
-Vertex : -1.10976 0.68007 5.00221 m    Global time : 17.599 ns 
+Original momentum : -0.24188 45.6705 -6.98432 keV
+Vertex : -1.10977 0.679998 5.00223 m    Global time : 17.599 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1109.76,680.07,5002.21)
-Point[1] Position= (-1109.76,680.144,5002.2)
+Point[0] Position= (-1109.77,679.998,5002.23)
+Point[1] Position= (-1109.77,680.073,5002.22)
 
 TrackID =2167 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -43.8247 42.4099 -13.9847 keV
-Vertex : -1.0939 0.66548 4.92911 m    Global time : 17.344 ns 
+Original momentum : -43.8277 42.407 -13.9838 keV
+Vertex : -1.0939 0.66541 4.92913 m    Global time : 17.344 ns 
   Current trajectory has 3 points.
-Point[0] Position= (-1093.9,665.48,4929.11)
-Point[1] Position= (-1094.02,665.597,4929.07)
-Point[2] Position= (-1094.07,665.595,4929)
+Point[0] Position= (-1093.9,665.41,4929.13)
+Point[1] Position= (-1094.03,665.527,4929.09)
+Point[2] Position= (-1094.08,665.525,4929.02)
 
 TrackID =2166 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -73.3065 -21.6861 -5.60371 keV
-Vertex : -1.08498 0.657284 4.88804 m    Global time : 17.2007 ns 
+Original momentum : -73.3051 -21.691 -5.60314 keV
+Vertex : -1.08499 0.657216 4.88806 m    Global time : 17.2008 ns 
   Current trajectory has 3 points.
-Point[0] Position= (-1084.98,657.284,4888.04)
-Point[1] Position= (-1085.38,657.167,4888.01)
-Point[2] Position= (-1085.39,657.194,4887.97)
+Point[0] Position= (-1084.99,657.216,4888.06)
+Point[1] Position= (-1085.39,657.098,4888.03)
+Point[2] Position= (-1085.4,657.126,4887.99)
 
 TrackID =2165 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -1.36862 -42.7579 10.1967 keV
-Vertex : -1.05648 0.631101 4.75678 m    Global time : 16.7429 ns 
+Original momentum : -1.36561 -42.7581 10.1963 keV
+Vertex : -1.05649 0.631035 4.7568 m    Global time : 16.7429 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-1056.48,631.101,4756.78)
-Point[1] Position= (-1056.48,631.038,4756.79)
+Point[0] Position= (-1056.49,631.035,4756.8)
+Point[1] Position= (-1056.49,630.973,4756.81)
 
 TrackID =2164 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -10.8844 -29.7565 4.62005 keV
-Vertex : -0.968454 0.550329 4.3517 m    Global time : 15.3299 ns 
+Original momentum : -10.8823 -29.7573 4.61988 keV
+Vertex : -0.968462 0.550273 4.35172 m    Global time : 15.3299 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-968.454,550.329,4351.7)
-Point[1] Position= (-968.462,550.307,4351.71)
+Point[0] Position= (-968.462,550.273,4351.72)
+Point[1] Position= (-968.469,550.251,4351.72)
 
 TrackID =2163 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -33.9657 -5.63641 -5.01244 keV
-Vertex : -0.959933 0.5425 4.31245 m    Global time : 15.193 ns 
+Original momentum : -33.9654 -5.63867 -5.01213 keV
+Vertex : -0.959941 0.542446 4.31247 m    Global time : 15.193 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-959.933,542.5,4312.45)
-Point[1] Position= (-959.963,542.496,4312.45)
+Point[0] Position= (-959.941,542.446,4312.47)
+Point[1] Position= (-959.97,542.441,4312.47)
 
 TrackID =2162 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 26.0029 26.7618 1.73646 keV
-Vertex : -0.947292 0.530889 4.25424 m    Global time : 14.9899 ns 
+Original momentum : 26.0011 26.7636 1.73644 keV
+Vertex : -0.947299 0.530835 4.25425 m    Global time : 14.9899 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-947.292,530.889,4254.24)
-Point[1] Position= (-947.265,530.916,4254.24)
+Point[0] Position= (-947.299,530.835,4254.25)
+Point[1] Position= (-947.273,530.862,4254.25)
 
 TrackID =2161 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 6.03924 -36.2788 10.028 keV
-Vertex : -0.943881 0.527756 4.23853 m    Global time : 14.9351 ns 
+Original momentum : 6.04181 -36.2785 10.0276 keV
+Vertex : -0.943888 0.527703 4.23854 m    Global time : 14.9351 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-943.881,527.756,4238.53)
-Point[1] Position= (-943.874,527.718,4238.54)
+Point[0] Position= (-943.888,527.703,4238.54)
+Point[1] Position= (-943.882,527.665,4238.55)
 
 TrackID =2160 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -45.8658 -3.3636 -7.07752 keV
-Vertex : -0.870609 0.460528 3.90113 m    Global time : 13.7582 ns 
+Original momentum : -45.8657 -3.36665 -7.07706 keV
+Vertex : -0.870615 0.460483 3.90114 m    Global time : 13.7582 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-870.609,460.528,3901.13)
-Point[1] Position= (-870.685,460.523,3901.12)
+Point[0] Position= (-870.615,460.483,3901.14)
+Point[1] Position= (-870.691,460.478,3901.13)
 
 TrackID =2159 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 32.7724 12.4005 5.93256 keV
-Vertex : -0.846821 0.438696 3.79158 m    Global time : 13.3761 ns 
+Original momentum : 32.7717 12.4027 5.93233 keV
+Vertex : -0.846827 0.438654 3.79159 m    Global time : 13.3761 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-846.821,438.696,3791.58)
-Point[1] Position= (-846.791,438.707,3791.58)
+Point[0] Position= (-846.827,438.654,3791.59)
+Point[1] Position= (-846.797,438.665,3791.6)
 
 TrackID =2158 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 35.6278 -11.4753 11.5937 keV
-Vertex : -0.819468 0.413573 3.66556 m    Global time : 12.9365 ns 
+Original momentum : 35.6287 -11.473 11.5932 keV
+Vertex : -0.819473 0.413533 3.66557 m    Global time : 12.9366 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-819.468,413.573,3665.56)
-Point[1] Position= (-819.428,413.56,3665.57)
+Point[0] Position= (-819.473,413.533,3665.57)
+Point[1] Position= (-819.433,413.52,3665.59)
 
 TrackID =2157 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -26.1113 18.8084 -8.28819 keV
-Vertex : -0.797603 0.393497 3.56485 m    Global time : 12.5853 ns 
+Original momentum : -26.1126 18.8067 -8.28772 keV
+Vertex : -0.797608 0.393461 3.56486 m    Global time : 12.5853 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-797.603,393.497,3564.85)
-Point[1] Position= (-797.624,393.512,3564.85)
+Point[0] Position= (-797.608,393.461,3564.86)
+Point[1] Position= (-797.629,393.475,3564.86)
 
 TrackID =2156 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -89.7701 11.5085 -13.2775 keV
-Vertex : -0.767295 0.365644 3.42514 m    Global time : 12.0979 ns 
+Original momentum : -89.771 11.5025 -13.2764 keV
+Vertex : -0.7673 0.365611 3.42515 m    Global time : 12.098 ns 
   Current trajectory has 3 points.
-Point[0] Position= (-767.295,365.644,3425.14)
-Point[1] Position= (-768.079,365.745,3425.02)
-Point[2] Position= (-768.279,365.647,3424.95)
+Point[0] Position= (-767.3,365.611,3425.15)
+Point[1] Position= (-768.084,365.711,3425.03)
+Point[2] Position= (-768.283,365.614,3424.96)
 
 TrackID =2155 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 10.4852 -60.8886 18.6611 keV
-Vertex : -0.739502 0.340088 3.297 m    Global time : 11.651 ns 
+Original momentum : 10.4895 -60.8881 18.6604 keV
+Vertex : -0.739506 0.340058 3.29701 m    Global time : 11.651 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-739.502,340.088,3297)
-Point[1] Position= (-739.463,339.865,3297.07)
+Point[0] Position= (-739.506,340.058,3297.01)
+Point[1] Position= (-739.467,339.835,3297.08)
 
 TrackID =2154 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -96.7413 32.4203 -16.617 keV
-Vertex : -0.705185 0.308482 3.13862 m    Global time : 11.0986 ns 
+Original momentum : -96.7437 32.4138 -16.6157 keV
+Vertex : -0.705188 0.308455 3.13863 m    Global time : 11.0986 ns 
   Current trajectory has 4 points.
-Point[0] Position= (-705.185,308.482,3138.62)
-Point[1] Position= (-705.852,308.705,3138.51)
-Point[2] Position= (-706.591,308.852,3138.16)
-Point[3] Position= (-706.632,308.866,3138.17)
+Point[0] Position= (-705.188,308.455,3138.63)
+Point[1] Position= (-705.855,308.679,3138.52)
+Point[2] Position= (-706.595,308.825,3138.17)
+Point[3] Position= (-706.636,308.839,3138.18)
 
 TrackID =2183 : ParentID=2154 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -8.77949 -34.1756 3.99218 keV
-Vertex : -0.705852 0.308705 3.13851 m    Global time : 11.1106 ns 
+Original momentum : -8.77723 -34.1761 3.99235 keV
+Vertex : -0.705855 0.308679 3.13852 m    Global time : 11.1106 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-705.852,308.705,3138.51)
-Point[1] Position= (-705.86,308.674,3138.51)
+Point[0] Position= (-705.855,308.679,3138.52)
+Point[1] Position= (-705.863,308.648,3138.52)
 
 TrackID =2153 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 30.2342 -24.6859 13.2689 keV
-Vertex : -0.632392 0.241476 2.80356 m    Global time : 9.9297 ns 
+Original momentum : 30.236 -24.684 13.2684 keV
+Vertex : -0.632394 0.241457 2.80357 m    Global time : 9.9297 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-632.392,241.476,2803.56)
-Point[1] Position= (-632.354,241.444,2803.58)
+Point[0] Position= (-632.394,241.457,2803.57)
+Point[1] Position= (-632.356,241.426,2803.58)
 
 TrackID =2152 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 29.8767 24.139 3.19053 keV
-Vertex : -0.595603 0.207594 2.6346 m    Global time : 9.34014 ns 
+Original momentum : 29.8751 24.141 3.19045 keV
+Vertex : -0.595605 0.20758 2.6346 m    Global time : 9.34015 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-595.603,207.594,2634.6)
-Point[1] Position= (-595.571,207.62,2634.6)
+Point[0] Position= (-595.605,207.58,2634.6)
+Point[1] Position= (-595.573,207.606,2634.61)
 
 TrackID =2151 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -16.3473 37.2217 -9.26114 keV
-Vertex : -0.567752 0.18196 2.5069 m    Global time : 8.89453 ns 
+Original momentum : -16.3499 37.2207 -9.26059 keV
+Vertex : -0.567753 0.181949 2.50691 m    Global time : 8.89453 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-567.752,181.96,2506.9)
-Point[1] Position= (-567.773,182.008,2506.89)
+Point[0] Position= (-567.753,181.949,2506.91)
+Point[1] Position= (-567.774,181.997,2506.89)
 
 TrackID =2150 : ParentID=2149 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 20.1236 26.0442 0.275745 keV
-Vertex : -0.486231 0.107003 2.13321 m    Global time : 7.5905 ns 
+Original momentum : 20.1218 26.0456 0.275786 keV
+Vertex : -0.486231 0.107001 2.13322 m    Global time : 7.5905 ns 
   Current trajectory has 2 points.
-Point[0] Position= (-486.231,107.003,2133.21)
-Point[1] Position= (-486.215,107.023,2133.22)
+Point[0] Position= (-486.231,107.001,2133.22)
+Point[1] Position= (-486.216,107.021,2133.22)
 
 TrackID =2148 : ParentID=1828 : TrackStatus=1
 Particle name : anti_nu_mu  PDG code : -14  Charge : 0
-Original momentum : -101.785 -185.675 387.03 MeV
+Original momentum : -101.801 -185.672 387.1 MeV
 Vertex : -0.467912 0.0901674 2.04924 m    Global time : 7.29745 ns 
   Current trajectory has 2 points.
 Point[0] Position= (-467.912,90.1674,2049.24)
-Point[1] Position= (-1506.93,-1805.18,6000)
+Point[1] Position= (-1506.9,-1804.81,6000)
 
 TrackID =1827 : ParentID=1823 : TrackStatus=1
 Particle name : unknown : k_star+  PDG code : 323  Charge : 1
@@ -22326,376 +22542,7 @@ Point[1] Position= (73.1792,266.422,816.647)
 
 TrackID =2215 : ParentID=2185 : TrackStatus=1
 Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -63.932 -2.79284 14.9615 keV
-Vertex : 7.26773 26.4576 81.0981 cm   Global time : 5.28731 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (72.6773,264.576,810.981)
-Point[1] Position= (72.5292,264.569,811.016)
-
-TrackID =2214 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 34.7501 78.2197 -14.2893 keV
-Vertex : 7.09968 25.8633 79.2647 cm   Global time : 5.16772 ns 
-  Current trajectory has 3 points.
-Point[0] Position= (70.9968,258.633,792.647)
-Point[1] Position= (71.086,258.834,792.61)
-Point[2] Position= (71.1462,258.892,792.678)
-
-TrackID =2229 : ParentID=2214 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -14.1445 44.5607 -24.6526 keV
-Vertex : 7.1086 25.8834 79.261 cm   Global time : 5.17216 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (71.086,258.834,792.61)
-Point[1] Position= (71.0655,258.899,792.574)
-
-TrackID =2213 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -37.6599 9.58271 3.28177 keV
-Vertex : 6.99598 25.4995 78.1433 cm   Global time : 5.09458 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (69.9598,254.995,781.433)
-Point[1] Position= (69.9301,255.003,781.436)
-
-TrackID =2212 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 19.6376 -31.7244 11.3788 keV
-Vertex : 6.96229 25.3811 77.7782 cm   Global time : 5.07076 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (69.6229,253.811,777.782)
-Point[1] Position= (69.6384,253.786,777.791)
-
-TrackID =2211 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -16.2996 -46.6025 22.1594 keV
-Vertex : 6.85529 25.0063 76.6195 cm   Global time : 4.9952 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (68.5529,250.063,766.195)
-Point[1] Position= (68.5281,249.992,766.229)
-
-TrackID =2210 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -99.0862 35.5719 19.2827 keV
-Vertex : 6.73607 24.5881 75.3235 cm   Global time : 4.91072 ns 
-  Current trajectory has 4 points.
-Point[0] Position= (67.3607,245.881,753.235)
-Point[1] Position= (66.7514,246.1,753.354)
-Point[2] Position= (66.8925,245.748,753.326)
-Point[3] Position= (66.8941,245.748,753.325)
-
-TrackID =2230 : ParentID=2210 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -4.18115 -4.60761 35.7985 keV
-Vertex : 6.67514 24.61 75.3354 cm   Global time : 4.92142 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (66.7514,246.1,753.354)
-Point[1] Position= (66.7485,246.097,753.378)
-
-TrackID =2209 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 31.8395 -26.9059 9.23454 keV
-Vertex : 6.56511 23.9845 73.4456 cm   Global time : 4.78836 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (65.6511,239.845,734.456)
-Point[1] Position= (65.6808,239.82,734.464)
-
-TrackID =2208 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -8.56989 35.009 -8.02829 keV
-Vertex : 5.42646 19.8897 60.7319 cm   Global time : 3.96005 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (54.2646,198.897,607.319)
-Point[1] Position= (54.2585,198.922,607.313)
-
-TrackID =2207 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 11.5267 -28.0162 10.0566 keV
-Vertex : 5.38936 19.7539 60.3151 cm   Global time : 3.93287 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (53.8936,197.539,603.151)
-Point[1] Position= (53.8998,197.523,603.157)
-
-TrackID =2206 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 32.6872 12.024 -4.47716 keV
-Vertex : 5.37911 19.7164 60.2001 cm   Global time : 3.92537 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (53.7911,197.164,602.001)
-Point[1] Position= (53.8123,197.171,601.998)
-
-TrackID =2205 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -7.86932 36.9688 -8.52066 keV
-Vertex : 4.8934 17.9375 54.7551 cm   Global time : 3.5702 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (48.934,179.375,547.551)
-Point[1] Position= (48.9254,179.416,547.541)
-
-TrackID =2204 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -36.9703 -10.1111 9.58381 keV
-Vertex : 4.87826 17.8819 54.5852 cm   Global time : 3.55912 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (48.7826,178.819,545.852)
-Point[1] Position= (48.7403,178.808,545.863)
-
-TrackID =2203 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 20.1141 -31.8655 11.5957 keV
-Vertex : 4.83368 17.718 54.084 cm   Global time : 3.52643 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (48.3368,177.18,540.84)
-Point[1] Position= (48.3598,177.144,540.853)
-
-TrackID =2202 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 25.0078 146.108 -8.7031 keV
-Vertex : 4.75786 17.4383 53.2285 cm   Global time : 3.47063 ns 
-  Current trajectory has 7 points.
-Point[0] Position= (47.5786,174.383,532.285)
-Point[1] Position= (48.0588,177.188,532.118)
-Point[2] Position= (47.7355,177.816,532.203)
-Point[3] Position= (47.0472,178.436,532.263)
-Point[4] Position= (46.2586,178.501,532.547)
-Point[5] Position= (46.4297,178.74,532.298)
-Point[6] Position= (46.5309,178.735,532.314)
-
-TrackID =2233 : ParentID=2202 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -1.94905 -36.7713 0.300716 keV
-Vertex : 4.64297 17.874 53.2298 cm   Global time : 3.55269 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (46.4297,178.74,532.298)
-Point[1] Position= (46.4278,178.704,532.298)
-
-TrackID =2232 : ParentID=2202 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -2.9315 30.646 -14.9164 keV
-Vertex : 4.70472 17.8436 53.2263 cm   Global time : 3.52845 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (47.0472,178.436,532.263)
-Point[1] Position= (47.0448,178.461,532.251)
-
-TrackID =2231 : ParentID=2202 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 25.0212 29.0577 -10.3354 keV
-Vertex : 4.77355 17.7816 53.2203 cm   Global time : 3.51455 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (47.7355,177.816,532.203)
-Point[1] Position= (47.7645,177.85,532.191)
-
-TrackID =2201 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 16.3478 -26.7146 9.34262 keV
-Vertex : 4.70673 17.2492 52.6515 cm   Global time : 3.43298 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (47.0673,172.492,526.515)
-Point[1] Position= (47.0797,172.472,526.522)
-
-TrackID =2200 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -5.68323 43.2015 -9.90398 keV
-Vertex : 4.163 15.2606 46.597 cm   Global time : 3.03794 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (41.63,152.606,465.97)
-Point[1] Position= (41.6214,152.671,465.955)
-
-TrackID =2199 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 19.2365 40.6631 -11.0068 keV
-Vertex : 4.02824 14.7695 45.1049 cm   Global time : 2.94057 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (40.2824,147.695,451.049)
-Point[1] Position= (40.3139,147.761,451.031)
-
-TrackID =2198 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -35.7501 -16.7778 12.0463 keV
-Vertex : 3.7173 13.6397 41.6751 cm   Global time : 2.71671 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (37.173,136.397,416.751)
-Point[1] Position= (37.1279,136.376,416.766)
-
-TrackID =2197 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -19.534 -63.9324 33.3596 keV
-Vertex : 2.72069 9.98587 30.5881 cm   Global time : 1.99325 ns 
-  Current trajectory has 3 points.
-Point[0] Position= (27.2069,99.8587,305.881)
-Point[1] Position= (27.1213,99.5787,306.027)
-Point[2] Position= (27.0534,99.5343,306.093)
-
-TrackID =2234 : ParentID=2197 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 21.6603 1.63591 23.4797 keV
-Vertex : 2.71213 9.95787 30.6027 cm   Global time : 2.0008 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (27.1213,99.5787,306.027)
-Point[1] Position= (27.137,99.5799,306.044)
-
-TrackID =2196 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -35.544 -5.98307 7.73065 keV
-Vertex : 2.66994 9.79895 30.0189 cm   Global time : 1.95613 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (26.6994,97.9895,300.189)
-Point[1] Position= (26.6645,97.9837,300.197)
-
-TrackID =2195 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -30.1164 26.3714 -2.89895 keV
-Vertex : 2.60957 9.57645 29.341 cm   Global time : 1.91192 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (26.0957,95.7645,293.41)
-Point[1] Position= (26.0599,95.7958,293.407)
-
-TrackID =2194 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 49.5507 -0.547972 0.469419 keV
-Vertex : 2.43012 8.91518 27.3252 cm   Global time : 1.78045 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (24.3012,89.1518,273.252)
-Point[1] Position= (24.3965,89.1508,273.253)
-
-TrackID =2193 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 86.706 -21.8221 15.0525 keV
-Vertex : 1.23746 4.53591 13.9354 cm   Global time : 907.691 ps 
-  Current trajectory has 3 points.
-Point[0] Position= (12.3746,45.3591,139.354)
-Point[1] Position= (13.117,45.1722,139.483)
-Point[2] Position= (13.1402,45.2226,139.346)
-
-TrackID =2192 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 41.234 -32.3329 12.4321 keV
-Vertex : 1.18863 4.35592 13.3839 cm   Global time : 871.752 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (11.8863,43.5592,133.839)
-Point[1] Position= (11.9831,43.4833,133.868)
-
-TrackID =2191 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -30.7869 -25.2144 14.3682 keV
-Vertex : 1.17255 4.29671 13.2024 cm   Global time : 859.928 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (11.7255,42.9671,132.024)
-Point[1] Position= (11.6845,42.9335,132.043)
-
-TrackID =2190 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -62.4389 -2.51578 14.1546 keV
-Vertex : 0.925687 3.38712 10.4101 cm   Global time : 678.023 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (9.25687,33.8712,104.101)
-Point[1] Position= (9.03216,33.8621,104.152)
-
-TrackID =2189 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 22.1941 -24.9204 8.39393 keV
-Vertex : 0.823224 3.0098 9.25007 cm   Global time : 602.464 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (8.23224,30.098,92.5007)
-Point[1] Position= (8.25098,30.077,92.5078)
-
-TrackID =2188 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -18.1922 -24.3233 11.5303 keV
-Vertex : 0.798413 2.91871 8.96979 cm   Global time : 584.209 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (7.98413,29.1871,89.6979)
-Point[1] Position= (7.97056,29.1689,89.7065)
-
-TrackID =2187 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 16.5301 116.956 -12.8764 keV
-Vertex : 0.564403 2.05992 6.32891 cm   Global time : 412.207 ps 
-  Current trajectory has 4 points.
-Point[0] Position= (5.64403,20.5992,63.2891)
-Point[1] Position= (5.87383,22.2251,63.1101)
-Point[2] Position= (5.51891,22.9767,63.4202)
-Point[3] Position= (5.60167,23.266,63.5612)
-
-TrackID =2186 : ParentID=2185 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -25.4928 -27.8069 14.4415 keV
-Vertex : 0.18174 0.663041 2.0381 cm   Global time : 132.733 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (1.8174,6.63041,20.381)
-Point[1] Position= (1.78674,6.59697,20.3984)
-
-TrackID =2184 : ParentID=1827 : TrackStatus=1
-Particle name : pi0  PDG code : 111  Charge : 0
-Original momentum : 643.152 -68.3803 404.551 MeV
-Vertex : 9.91059e-294 -2.20853e-294 8.27772e-294 fm   Global time : 7.2822e-305 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (9.91059e-306,-2.20853e-306,8.27772e-306)
-Point[1] Position= (2.00533e-05,-2.13208e-06,1.26138e-05)
-
-TrackID =1826 : ParentID=1823 : TrackStatus=1
-Particle name : unknown : k_star-  PDG code : -323  Charge : -1
-Original momentum : 2.0674 -1.18845 -0.820801 GeV
-Vertex : 5.31791e-294 -2.40968e-294 3.44411e-294 fm   Global time : 4.72199e-305 ps 
-  Current trajectory has 2 points.
-Point[0] Position= (5.31791e-306,-2.40968e-306,3.44411e-306)
-Point[1] Position= (1.07862e-305,-5.55315e-306,1.27308e-306)
-
-TrackID =2249 : ParentID=2238 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -13.6415 -20.9562 -20.3506 keV
-Vertex : 42.2717 -25.0447 -2.39976 cm   Global time : 1.80854 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (422.717,-250.447,-23.9976)
-Point[1] Position= (422.71,-250.459,-24.0087)
-
-TrackID =2248 : ParentID=2238 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 9.15645 18.7201 -31.53 keV
-Vertex : 41.2422 -24.4309 -2.27541 cm   Global time : 1.76419 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (412.422,-244.309,-22.7541)
-Point[1] Position= (412.429,-244.295,-22.7775)
-
-TrackID =2247 : ParentID=2238 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 1.61576 -6.20398 32.5251 keV
-Vertex : 41.1502 -24.3761 -2.2643 cm   Global time : 1.76023 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (411.502,-243.761,-22.643)
-Point[1] Position= (411.503,-243.764,-22.6242)
-
-TrackID =2246 : ParentID=2238 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 2.49976 8.77606 -32.5417 keV
-Vertex : 38.0417 -22.519 -1.87967 cm   Global time : 1.62624 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (380.417,-225.19,-18.7967)
-Point[1] Position= (380.419,-225.185,-18.8162)
-
-TrackID =2245 : ParentID=2238 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : 10.2018 -15.2142 81.4991 keV
-Vertex : 36.0443 -21.3213 -1.6211 cm   Global time : 1.54004 ns 
-  Current trajectory has 3 points.
-Point[0] Position= (360.443,-213.213,-16.211)
-Point[1] Position= (360.484,-213.273,-15.8857)
-Point[2] Position= (360.471,-213.288,-15.8529)
-
-TrackID =2250 : ParentID=2245 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -38.3863 11.4526 -10.2829 keV
-Vertex : 36.0484 -21.3273 -1.58857 cm   Global time : 1.54693 ns 
-  Current trajectory has 2 points.
-Point[0] Position= (360.484,-213.273,-15.8857)
-Point[1] Position= (360.45,-213.263,-15.8947)
-
-TrackID =2243 : ParentID=2238 : TrackStatus=1
-Particle name : e-  PDG code : 11  Charge : -1
-Original momentum : -13.9124 -32.8685 43.3346 keV
-Vertex : 30.9314 -18.2963 -1.30534 cm   Global time : 1.3211 ns 
-  Current trajectory has 3 points.
-Point[0] Position= (309.314,-182.963,-13.0534)
-Point[1] Position= (309.312
+Original momentum : -63.932 -2.79284 
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================

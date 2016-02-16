@@ -10,13 +10,11 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
-    Default Physics Lists FTFP_BERT is instantiated
-G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
-<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
-
-<<< Reference Physics List FTFP_BERT is built
-
+<<< Reference Physics List QBBC 
+Checking overlaps for volume Envelope ... OK! 
+Checking overlaps for volume Shape1 ... OK! 
+Checking overlaps for volume Shape2 ... OK! 
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -62,12 +60,6 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-Opening output file  ...  done
-Constructing materials...... done
-******** Number of Rods in FCAL1 : 2351
-********* Number of Rods in FCAL2 : 2546
-TBSetupSD is not found in /FCALTB/
-### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -437,13 +429,14 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 1 GeV ---> 12 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
@@ -622,8 +615,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -635,8 +628,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -650,8 +643,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: lambdaInelastic
-        Model:            BertiniCascade: 0 eV  ---> 6 GeV
-        Model:                      FTFP: 2 GeV ---> 100 TeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -681,8 +674,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -698,8 +691,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -712,12 +705,14 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: protonInelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 1 GeV ---> 12 GeV
+        Model:            Binary Cascade: 0 eV  ---> 1.5 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -735,555 +730,149 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
-
-Region <DefaultRegionForTheWorld> --  -- appears in <Mother> world volume
- This region is in the mass world.
- Root logical volume(s) : Mother 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Polystyrene MWPCArCO2 Lead Aluminium Iron ShieldingConcrete LiquidArgon Copper FCAL1CuArKap FCAL2WFeNi FCAL2CuArKap Tungsten 
- Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Polystyrene
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  2.10846 keV    e-  280.946 keV    e+  272.577 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes
- Material : MWPCArCO2
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : Yes
- Material : Lead
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  94.5861 keV    e-  1.00386 MeV    e+  951.321 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.87535 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 5     used in the geometry : Yes
- Material : Iron
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  17.2183 keV    e-  951.321 keV    e+  901.528 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 6     used in the geometry : Yes
- Material : ShieldingConcrete
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.31198 keV    e-  451.206 keV    e+  436.298 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 7     used in the geometry : Yes
- Material : LiquidArgon
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  5.20596 keV    e-  274.415 keV    e+  267.137 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : Yes
- Material : Copper
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  20.6438 keV    e-  1.03121 MeV    e+  977.24 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes
- Material : FCAL1CuArKap
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  14.4581 keV    e-  679.834 keV    e+  652.968 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 10     used in the geometry : Yes
- Material : FCAL2WFeNi
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  96.1886 keV    e-  1.60683 MeV    e+  1.5024 MeV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 11     used in the geometry : Yes
- Material : FCAL2CuArKap
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  14.4581 keV    e-  679.834 keV    e+  652.968 keV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 12     used in the geometry : Yes
- Material : Tungsten
- Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
- Energy thresholds :  gamma  97.4901 keV    e-  1.63955 MeV    e+  1.54333 MeV proton 70 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   389 kByte
-    Total CPU time elapsed for geometry optimisation: 0.38 seconds
-
-    Voxelisation: top CPU users:
-    Percent   Total CPU    System CPU       Memory  Volume
-    -------   ----------   ----------     --------  ----------
-      86.84         0.33         0.00          148k EmModuleLogical
-      13.16         0.05         0.00          236k HadModuleLogical
-       0.00         0.00         0.00            4k Mother
-       0.00         0.00         0.00            0k CryostatLogical
-       0.00         0.00         0.00            0k LArgLogical
-       0.00         0.00         0.00            0k FCALEnvelopeLogical
-       0.00         0.00         0.00            0k SolidWLogical
-       0.00         0.00         0.00            0k CuPlateLogical
-
-    Voxelisation: top memory users:
-    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
-    -------   --------     ------   ------   --------   ----------    ----------
-      60.56        235k      1361     2360       3772         0.05    HadModuleLogical
-      38.11        148k      1077     1143       2440         0.33    EmModuleLogical
-       0.94          3k         8       42        146         0.00    Mother
-       0.11          0k         1        6          8         0.00    SolidWLogical
-       0.11          0k         1        6          8         0.00    CuPlateLogical
-       0.08          0k         1        4          6         0.00    LArgLogical
-       0.05          0k         1        2          4         0.00    CryostatLogical
-       0.05          0k         1        2          4         0.00    FCALEnvelopeLogical
-### Run 0 starts.
 ### Run 0 start.
-Read 2001 events from file data-tracks/tracks-20GeV.dat
-******** Number of Rods in FCAL1 : 2351
-********* Number of Rods in FCAL2 : 2546
 
----> Begin of event: 1
- ****  Primary : 1
- Vertex : (5.55552,7.16569,32740)
-Number of F1 Tiles with Positive energy : 44
-Number of F2 tiles with Positive energy : 1
- Visisble Energy in S1 , S2 , S3 in (MeV)
-3.7309 1.62166 1.62899 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-3.93089
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 0
-N Scondaries 182
-EmEdep is=19863 MeV 
-HadEdep is=5.8588 MeV
-Edep in FCAL1 FCAl2 : 19863 5.8588
- ****  Primary : 2
- Vertex : (-3.76032,10.9751,32740)
-Number of F1 Tiles with Positive energy : 47
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.81871 1.6427 2.05847 
- Visible Energy in Hole Counter  (MeV) 
-0 87.7463
- Visible Energy in Upstream Dead Materials 
-1317.05
- Visible Energy in Tail Catcher Scintillator
-0.000529877 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0.00624725 0 0 0 0 0 
-N Tracks out of world 45
-N Scondaries 126
-EmEdep is=17549.2 MeV 
-HadEdep is=10.3741 MeV
-Edep in FCAL1 FCAl2 : 17549.2 10.3741
- ****  Primary : 3
- Vertex : (13.1951,2.677,32740)
-Number of F1 Tiles with Positive energy : 49
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.82622 2.54817 1.78306 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-2.59957
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 4
-N Scondaries 167
-EmEdep is=19670.9 MeV 
-HadEdep is=1.34452 MeV
-Edep in FCAL1 FCAl2 : 19670.9 1.34452
- ****  Primary : 4
- Vertex : (-8.66148,-8.80731,32740)
-Number of F1 Tiles with Positive energy : 42
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.91798 1.65813 1.48528 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-12.4007
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 1
-N Scondaries 241
-EmEdep is=19814.3 MeV 
-HadEdep is=1.62221 MeV
-Edep in FCAL1 FCAl2 : 19814.3 1.62221
- ****  Primary : 5
- Vertex : (4.75859,7.01622,32740)
-Number of F1 Tiles with Positive energy : 49
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.57899 3.64259 1.87869 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-107.791
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 13
-N Scondaries 149
-EmEdep is=19410.5 MeV 
-HadEdep is=7.21628 MeV
-Edep in FCAL1 FCAl2 : 19410.5 7.21628
- ****  Primary : 6
- Vertex : (1.94335,14.9228,32740)
-Number of F1 Tiles with Positive energy : 51
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.85687 1.57079 2.78874 
- Visible Energy in Hole Counter  (MeV) 
-0 28.0454
- Visible Energy in Upstream Dead Materials 
-498.024
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 25
-N Scondaries 188
-EmEdep is=18974.1 MeV 
-HadEdep is=0.54301 MeV
-Edep in FCAL1 FCAl2 : 18974.1 0.54301
- ****  Primary : 7
- Vertex : (-10.9878,-6.7949,32740)
-Number of F1 Tiles with Positive energy : 55
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.0956 1.5621 3.46043 
- Visible Energy in Hole Counter  (MeV) 
-0 8.57259
- Visible Energy in Upstream Dead Materials 
-127.424
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 15
-N Scondaries 198
-EmEdep is=19436.2 MeV 
-HadEdep is=12.2339 MeV
-Edep in FCAL1 FCAl2 : 19436.2 12.2339
- ****  Primary : 8
- Vertex : (10.9757,-1.49585,32740)
-Number of F1 Tiles with Positive energy : 39
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.49433 1.85293 1.84206 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-2.98341
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 1
-N Scondaries 203
-EmEdep is=19883.4 MeV 
-HadEdep is=12.7998 MeV
-Edep in FCAL1 FCAl2 : 19883.4 12.7998
- ****  Primary : 9
- Vertex : (-27.7734,3.36444,32740)
-Number of F1 Tiles with Positive energy : 59
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.6429 1.53446 1.69831 
- Visible Energy in Hole Counter  (MeV) 
-0 59.2426
- Visible Energy in Upstream Dead Materials 
-4316.37
- Visible Energy in Tail Catcher Scintillator
-0.12074 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 135
-N Scondaries 106
-EmEdep is=13444.3 MeV 
-HadEdep is=2.59681 MeV
-Edep in FCAL1 FCAl2 : 13444.3 2.59681
- ****  Primary : 10
- Vertex : (-22.5474,4.1006,32740)
-Number of F1 Tiles with Positive energy : 37
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.28012 1.64933 1.87032 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-10.4587
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 2
-N Scondaries 292
-EmEdep is=19851.7 MeV 
-HadEdep is=33.5907 MeV
-Edep in FCAL1 FCAl2 : 19851.7 33.5907
+---> Begin of event: 0
 
----> Begin of event: 11
- ****  Primary : 11
- Vertex : (-6.31939,21.5056,32740)
-Number of F1 Tiles with Positive energy : 49
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.72743 1.73578 1.50181 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-3.72147
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 1
-N Scondaries 118
-EmEdep is=19746.5 MeV 
-HadEdep is=0.995739 MeV
-Edep in FCAL1 FCAl2 : 19746.5 0.995739
- ****  Primary : 12
- Vertex : (17.1015,6.30557,32740)
-Number of F1 Tiles with Positive energy : 45
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-3.32474 1.69961 3.31935 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-23.8193
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 2
-N Scondaries 228
-EmEdep is=19770.8 MeV 
-HadEdep is=2.1345 MeV
-Edep in FCAL1 FCAl2 : 19770.8 2.1345
- ****  Primary : 13
- Vertex : (-24.9484,11.8659,32740)
-Number of F1 Tiles with Positive energy : 40
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.78835 1.63066 2.40571 
- Visible Energy in Hole Counter  (MeV) 
-0 34.9815
- Visible Energy in Upstream Dead Materials 
-17633.3
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 173
-N Scondaries 156
-EmEdep is=1009.25 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 1009.25 0
- ****  Primary : 14
- Vertex : (-0.133696,18.3151,32740)
-Number of F1 Tiles with Positive energy : 44
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.73528 2.09708 1.92 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-5.42808
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 4
-N Scondaries 181
-EmEdep is=19702.5 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19702.5 0
- ****  Primary : 15
- Vertex : (17.3196,17.6617,32740)
-Number of F1 Tiles with Positive energy : 44
-Number of F2 tiles with Positive energy : 1
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.5738 2.37553 1.6951 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-17.7602
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 4
-N Scondaries 147
-EmEdep is=19877.2 MeV 
-HadEdep is=12.228 MeV
-Edep in FCAL1 FCAl2 : 19877.2 12.228
- ****  Primary : 16
- Vertex : (-20.8489,10.8988,32740)
-Number of F1 Tiles with Positive energy : 60
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.7158 2.47271 5.05585 
- Visible Energy in Hole Counter  (MeV) 
-0 94.2455
- Visible Energy in Upstream Dead Materials 
-6558.23
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 171
-N Scondaries 148
-EmEdep is=11372.6 MeV 
-HadEdep is=0.921244 MeV
-Edep in FCAL1 FCAl2 : 11372.6 0.921244
- ****  Primary : 17
- Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 60
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.73339 1.98122 2.00488 
- Visible Energy in Hole Counter  (MeV) 
-0 125.39
- Visible Energy in Upstream Dead Materials 
-4933
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 145
-N Scondaries 111
-EmEdep is=13671.7 MeV 
-HadEdep is=2.27029 MeV
-Edep in FCAL1 FCAl2 : 13671.7 2.27029
- ****  Primary : 18
- Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 38
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-3.67023 2.09917 1.89684 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-15.1085
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 7
-N Scondaries 112
-EmEdep is=19699 MeV 
-HadEdep is=25.2083 MeV
-Edep in FCAL1 FCAl2 : 19699 25.2083
- ****  Primary : 19
- Vertex : (-3.64184,-3.4838,32740)
-Number of F1 Tiles with Positive energy : 64
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.23531 1.81096 1.71325 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-17.7935
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 10
-N Scondaries 131
-EmEdep is=19573.2 MeV 
-HadEdep is=2.80181 MeV
-Edep in FCAL1 FCAl2 : 19573.2 2.80181
- ****  Primary : 20
- Vertex : (-3.38741,1.01439,32740)
-Number of F1 Tiles with Positive energy : 50
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.66259 1.94858 2.28411 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-1.12515
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 0
-N Scondaries 146
-EmEdep is=19939.2 MeV 
-HadEdep is=1.6751 MeV
-Edep in FCAL1 FCAl2 : 19939.2 1.6751
- Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=19.7s Real=19.75s Sys=0.01s
+---> Begin of event: 100
+
+---> Begin of event: 200
+
+---> Begin of event: 300
+
+---> Begin of event: 400
+
+---> Begin of event: 500
+
+---> Begin of event: 600
+
+---> Begin of event: 700
+
+---> Begin of event: 800
+
+---> Begin of event: 900
+
+G4ConvergenceTester Output Result of DOSE_TALLY
+       EFFICIENCY =         0.168
+             MEAN =     3.757e-14
+              VAR =   1.30367e-26
+               SD =   1.14178e-13
+                R =     0.0961041
+            SHIFT =   1.84293e-13
+              VOV =     0.0114277
+              FOM =       721.813
+THE LARGEST SCORE =   5.52257e-13 and it happend at 844th event
+    Affected Mean =   3.80841e-14 and its ratio to orignal is 1.01369
+     Affected VAR =   1.32883e-26 and its ratio to orignal is 1.0193
+       Affected R =     0.0956693 and its ratio to orignal is 0.995475
+   Affected SHIFT =   1.84978e-13 and its ratio to orignal is 1.00371
+     Affected FOM =       721.813 and its ratio to orignal is 1
+MEAN distribution is not RANDOM
+r follows 1/std::sqrt(N)
+r is monotonically decrease 
+r is less than 0.1. r = 0.0961041
+VOV follows 1/std::sqrt(N)
+VOV is monotonically decrease 
+FOM distribution is not RANDOM
+Number of non zero history too small to calculate SLOPE
+This result passes 5 / 8 Convergence Test.
+
+
+G4ConvergenceTester Output History of DOSE_TALLY
+i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
+   1    62  2.54615e-14  8.11321e-27  9.00734e-14     0.445699      0.27373      33.5602  1.72206e-13     0.142857    0.0952381     0.100257
+   2   124  3.02403e-14  1.13136e-26  1.06365e-13     0.314601     0.126836      67.3579  2.01606e-13        0.152    0.0446316    0.0535504
+   3   187  2.63932e-14  1.00961e-26   1.0048e-13     0.277655    0.0986951      86.4762  2.08192e-13     0.143617    0.0317179    0.0449646
+   4   249   3.6293e-14  1.37533e-26  1.17274e-13     0.204367    0.0480669       159.62  1.95776e-13         0.16        0.021    0.0205988
+   5   312  3.53778e-14   1.3384e-26  1.15689e-13     0.184838    0.0387003      195.132  1.94435e-13      0.15016    0.0180817    0.0159741
+   6   374  4.05078e-14  1.50751e-26  1.22781e-13     0.156522     0.028002      272.117  1.91393e-13     0.165333    0.0134624    0.0109716
+   7   437  4.00262e-14  1.47401e-26  1.21409e-13     0.144933    0.0241225      317.374  1.89764e-13      0.16895    0.0112304   0.00972735
+   8   499  3.68725e-14  1.36525e-26  1.16844e-13     0.141716    0.0233878      331.949  1.92469e-13        0.158    0.0106582   0.00938503
+   9   562  3.74275e-14  1.35781e-26  1.16525e-13     0.131212    0.0204396      387.223  1.89775e-13      0.16341   0.00909337   0.00809268
+  10   624   3.6538e-14  1.31325e-26  1.14597e-13     0.125455    0.0189292      423.576  1.89062e-13       0.1616   0.00830099   0.00741283
+  11   687  3.68189e-14  1.28757e-26  1.13471e-13     0.117495    0.0169139      482.912  1.84965e-13     0.167151   0.00724216   0.00654291
+  12   749  3.69726e-14  1.30601e-26  1.14281e-13     0.112866    0.0154022      523.342  1.85989e-13     0.165333   0.00673118   0.00599048
+  13   812  3.83422e-14  1.34975e-26  1.16179e-13     0.106268    0.0136517      590.337  1.85224e-13     0.169742   0.00601636   0.00526274
+  14   874  3.81321e-14  1.33326e-26  1.15467e-13     0.102368    0.0128943      636.186  1.85401e-13     0.172571   0.00547966   0.00498748
+  15   937  3.78194e-14  1.31728e-26  1.14773e-13    0.0990882    0.0120889      678.992   1.8475e-13     0.170576    0.0051839    0.0046241
+  16   999    3.757e-14  1.30367e-26  1.14178e-13    0.0961041    0.0114277      721.813  1.84293e-13        0.168   0.00495238   0.00427439
+
+--------------------End of Global Run-----------------------
+ The run consists of 1000 gamma of 6 MeV
+ Dose in scoring volume : 37.57 picoGy  +- 3.60882 picoGy 
+------------------------------------------------------------
+
+### Run 1 start.
+
+---> Begin of event: 0
+
+---> Begin of event: 100
+
+---> Begin of event: 200
+
+---> Begin of event: 300
+
+---> Begin of event: 400
+
+---> Begin of event: 500
+
+---> Begin of event: 600
+
+---> Begin of event: 700
+
+---> Begin of event: 800
+
+---> Begin of event: 900
+
+G4ConvergenceTester Output Result of DOSE_TALLY
+       EFFICIENCY =         0.631
+             MEAN =   5.04395e-12
+              VAR =       2.1e-23
+               SD =   4.58257e-12
+                R =     0.0287302
+            SHIFT =  -7.84191e-15
+              VOV =   0.000183215
+              FOM =       1121.76
+THE LARGEST SCORE =   1.07285e-11 and it happend at 458th event
+    Affected Mean =   5.04963e-12 and its ratio to orignal is 1.00113
+     Affected VAR =   2.10113e-23 and its ratio to orignal is 1.00054
+       Affected R =     0.0286912 and its ratio to orignal is 0.998644
+   Affected SHIFT =  -1.19728e-14 and its ratio to orignal is 1.52677
+     Affected FOM =       1121.76 and its ratio to orignal is 1
+MEAN distribution is  RANDOM
+r follows 1/std::sqrt(N)
+r is monotonically decrease 
+r is less than 0.1. r = 0.0287302
+VOV follows 1/std::sqrt(N)
+VOV is monotonically decrease 
+FOM distribution is not RANDOM
+SLOPE is not large enough
+This result passes 6 / 8 Convergence Test.
+
+
+G4ConvergenceTester Output History of DOSE_TALLY
+i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
+   1    62  4.80464e-12  2.02855e-23  4.50395e-12     0.118103   0.00430815      66.3822  2.25972e-13     0.603175    0.0104428   0.00328424
+   2   124    4.873e-12   2.0289e-23  4.50433e-12    0.0826758    0.0018714      135.463  8.75388e-14          0.6   0.00533333   0.00144727
+   3   187  4.95263e-12  2.10147e-23  4.58418e-12    0.0675066   0.00102059      203.181  3.85345e-14     0.606383   0.00345278   0.00108012
+   4   249  4.94125e-12  2.09057e-23  4.57227e-12    0.0585229  0.000786121      270.349  5.12925e-14        0.608   0.00257895  0.000832278
+   5   312  5.02328e-12  2.08238e-23  4.56331e-12    0.0513477  0.000651095      351.184  3.49475e-15     0.623003   0.00193332  0.000694842
+   6   374  4.93481e-12  2.08201e-23  4.56291e-12    0.0477481  0.000532526      406.129  8.48821e-14     0.618667   0.00164368  0.000630122
+   7   437  4.97206e-12  2.09762e-23  4.57998e-12    0.0440139  0.000438653      477.966  5.38148e-14     0.621005   0.00139337  0.000539435
+   8   499  5.09727e-12  2.07542e-23  4.55568e-12    0.0399697  0.000404329      579.582 -5.78042e-14         0.64     0.001125  0.000469382
+   9   562  5.06875e-12   2.0751e-23  4.55533e-12    0.0378761  0.000354496      645.426 -2.70248e-14     0.639432   0.00100158  0.000430469
+  10   624  5.03117e-12  2.08942e-23  4.57102e-12    0.0363416  0.000305467      701.081   3.6821e-15       0.6304  0.000938071  0.000380527
+  11   687  5.06138e-12  2.08064e-23   4.5614e-12    0.0343586  0.000281769      784.343 -2.41671e-14     0.633721   0.00084009  0.000338707
+  12   749  5.07326e-12   2.1029e-23  4.58574e-12    0.0330059  0.000244257      849.947 -3.42078e-14        0.632  0.000776371  0.000311568
+  13   812  5.06184e-12  2.10128e-23  4.58397e-12    0.0317606  0.000226292      917.909 -2.21532e-14     0.633456  0.000711735  0.000295757
+  14   874  5.06524e-12  2.10667e-23  4.58984e-12    0.0306333  0.000206603      986.709 -2.38247e-14        0.632  0.000665461  0.000271864
+  15   937   5.0616e-12  2.09607e-23  4.57829e-12    0.0295334  0.000198982      1061.57 -1.74847e-14     0.633262  0.000617404  0.000253891
+  16   999  5.04395e-12      2.1e-23  4.58257e-12    0.0287302  0.000183215      1121.76 -7.84191e-15        0.631  0.000584786  0.000239812
+
+--------------------End of Global Run-----------------------
+ The run consists of 1000 proton of 210 MeV
+ Dose in scoring volume : 5.04395 nanoGy  +- 144.841 picoGy 
+------------------------------------------------------------
+
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
-G4SDManager deleted.
-EventManager deleted.
-Units table cleared.
-Total navigation history collections cleaned: 264
-================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.43 Mb
-============================================================
-G4Allocator objects are deleted.
-UImanager deleted.
-StateManager deleted.
-RunManagerKernel is deleted. Good bye :)
