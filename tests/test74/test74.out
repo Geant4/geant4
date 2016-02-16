@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -102,7 +102,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.29s Sys=0s
+  User=0.23s Real=0.22s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -129,7 +129,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.73s Real=0.74s Sys=0.01s
+  User=0.52s Real=0.53s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -157,7 +157,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=34.48s Real=34.71s Sys=0.04s
+  User=28.24s Real=28.31s Sys=0.04s
 
  The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -168,7 +168,6 @@ Run Summary
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 4
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 33 Mb

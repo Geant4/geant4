@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,7 +46,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.05s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 ###  1000  events of mu+  with p(MeV/c)= 172 scattered off 116.24 mm of G4_lH2
 ###    Beam momentum spread 1 MeV/c
 /testem/setFileName test41_al.log
@@ -55,9 +55,8 @@ Run Summary
 /testem/det/setWidth 1.5 mm
 /run/geometryModified
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.013 Mb
+Dynamic pools deleted: 9 / Total memory freed: 0.012 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

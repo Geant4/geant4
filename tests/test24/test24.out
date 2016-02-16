@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -441,7 +441,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.27s Real=2.32s Sys=0.01s
+  User=2s Real=2.03s Sys=0.01s
 #
 # neutron at 10 GeV in U
 #
@@ -479,7 +479,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.82s Real=2.86s Sys=0.02s
+  User=1.71s Real=1.71s Sys=0.01s
 #
 # pi+ at 10 GeV in U
 #
@@ -517,7 +517,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.37s Real=2.4s Sys=0.01s
+  User=1.74s Real=1.76s Sys=0s
 #
 # pi- at 10 GeV in U
 #
@@ -555,7 +555,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.57s Real=2.58s Sys=0.01s
+  User=1.76s Real=1.77s Sys=0.01s
 #
 # proton at 10 GeV in Cu
 #
@@ -817,7 +817,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.65s Real=0.66s Sys=0s
+  User=0.68s Real=0.67s Sys=0s
 #
 # neutron at 10 GeV in Cu
 #
@@ -860,7 +860,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.66s Real=0.66s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -903,7 +903,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.79s Real=0.79s Sys=0s
+  User=0.42s Real=0.43s Sys=0s
 #
 # pi- at 10 GeV in Cu
 #
@@ -946,7 +946,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.71s Real=0.72s Sys=0.01s
+  User=0.44s Real=0.45s Sys=0s
 #
 # proton at 10 GeV in Si
 #
@@ -1213,7 +1213,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.28s Sys=0s
+  User=0.21s Real=0.2s Sys=0.01s
 #
 # neutron at 10 GeV in Si
 #
@@ -1261,7 +1261,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.27s Sys=0s
+  User=0.15s Real=0.16s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -1309,7 +1309,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.27s Sys=0s
+  User=0.18s Real=0.17s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1357,7 +1357,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.27s Real=0.26s Sys=0s
+  User=0.2s Real=0.21s Sys=0s
 #
 # proton at 10 GeV in Carbon
 #
@@ -1684,7 +1684,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.16s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 #
 # pi+ at 10 GeV in Carbon
 #
@@ -1738,7 +1738,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.14s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 #
 # pi- at 10 GeV in Carbon
 #
@@ -1792,7 +1792,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.18s Real=0.19s Sys=0s
+  User=0.16s Real=0.16s Sys=0s
 #
 # proton at 10 GeV in Beryllium
 #
@@ -2070,7 +2070,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.16s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # neutron at 10 GeV in Beryllium
 #
@@ -2129,7 +2129,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.18s Real=0.17s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 #
 # pi+ at 10 GeV in Beryllium
 #
@@ -2188,7 +2188,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.19s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # pi- at 10 GeV in Beryllium
 #
@@ -2247,7 +2247,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.14s Sys=0s
+  User=0.13s Real=0.14s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -2731,7 +2731,7 @@ Units table cleared.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.082 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.085 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

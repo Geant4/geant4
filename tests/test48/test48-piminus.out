@@ -48,7 +48,7 @@ The direction: (0,0,1)
 The time:      0 ns
 energy = 0.13957 GeV
 Initializing histograms for: pi- on Pb
-  User=208.58s Real=209.5s Sys=0.19s
+  User=147.31s Real=147.53s Sys=0.03s
 Writing histogram file: piminusPbBertini.root
 Next line #exit
 ###### End of test #####

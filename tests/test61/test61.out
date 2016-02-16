@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -457,7 +457,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 4
-  User=66.74s Real=66.97s Sys=0.02s
+  User=27.67s Real=27.73s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -720,7 +720,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -988,7 +988,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 16
-  User=5.98s Real=5.99s Sys=0s
+  User=3.99s Real=4s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1258,22 +1258,10 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 3 starts.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: inelastic / QMDModel
- Primary: deuteron (1000010020),  E= 3851.45, target nucleus (1, 1)
- E(initial - final) = -1059.39 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
  Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.81s Real=2.82s Sys=0s
+  User=1.42s Real=1.42s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1328,7 +1316,7 @@ Index : 3     used in the geometry : No
  Run terminated.
 Run Summary
   Number of events processed : 4
-  User=0s Real=0s Sys=0s
+  User=5.46s Real=5.45s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1382,7 +1370,7 @@ Index : 3     used in the geometry : No
  Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1436,7 +1424,7 @@ Index : 3     used in the geometry : No
  Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.23s Real=0.23s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1717,11 +1705,11 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 4
-  User=79.95s Real=80.21s Sys=0s
+  User=45.72s Real=45.8s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 609899788, 564392624
+ Current couple of seeds = 293392394, 1399751049
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1735,7 +1723,7 @@ Units table cleared.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.088 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.072 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -54,7 +54,7 @@ Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
 ### 7-th event start 
 ### 8-th event start 
 ### 9-th event start 
-  User=0.000000e+00s Real=0.000000e+00s Sys=0.000000e+00s
+  User=0.000000e+00s Real=1.000000e-02s Sys=0.000000e+00s
 ###### Save histograms
 ###### End of run # 0     ######
 Next line #generator
@@ -94,7 +94,7 @@ Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
 ### 7-th event start 
 ### 8-th event start 
 ### 9-th event start 
-  User=1.000000e-02s Real=1.000000e-02s Sys=0.000000e+00s
+  User=1.000000e-02s Real=0.000000e+00s Sys=0.000000e+00s
 ###### Save histograms
 ###### End of run # 1     ######
 Next line #generator
@@ -143,7 +143,7 @@ Test rotation= (0.000000e+00,0.000000e+00,1.000000e+00)
 ### 7-th event start 
 ### 8-th event start 
 ### 9-th event start 
-  User=7.000000e-02s Real=8.000000e-02s Sys=0.000000e+00s
+  User=6.000000e-02s Real=6.000000e-02s Sys=0.000000e+00s
 ###### Save histograms
 ###### End of run # 2     ######
 Next line #exit

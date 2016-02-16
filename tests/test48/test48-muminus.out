@@ -64,7 +64,7 @@ The direction: (0,0,1)
 The time:      0 ns
 energy = 0.105658 GeV
 Initializing histograms for: mu- on Si
-  User=2.51s Real=2.51s Sys=0s
+  User=1.72s Real=1.72s Sys=0s
 Writing histogram file: muminusSistopping.root
 Next line #generator
 captureUpdate
@@ -84,7 +84,7 @@ The direction: (0,0,1)
 The time:      0 ns
 energy = 0.105658 GeV
 Initializing histograms for: mu- on Si
-  User=2.54s Real=2.57s Sys=0s
+  User=2.88s Real=2.87s Sys=0s
 Writing histogram file: muminusSicaptureUpdate.root
 Next line #exit
 ###### End of test #####

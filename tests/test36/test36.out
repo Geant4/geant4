@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,23 +47,14 @@ Detector gamma cut    = 0.01 mm
 Detector electron cut = 0.01 mm
 Detector positron cut = 0.01 mm
 Detector cuts are set
-G4PAIPhotModel::Initialise for e+
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for e-
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for kaon+
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for kaon-
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for mu+
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for mu-
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for pi+
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for pi-
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
-G4PAIPhotModel::Initialise for proton
 G4PAIPhotData::Initialise: cut = 0.99 keV cutEl = 0.99 keV cutPh = 0.99 keV
 
 phot:   for  gamma, applyCuts: 1     SubType= 12  BuildTable= 0
@@ -164,7 +155,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.09 s
+total time for build X-ray TR energy loss tables = 0.05 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -367,7 +358,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.3s Real=2.31s Sys=0s
+  User=1.76s Real=1.77s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=44.5785 +- 0.550693  mm  
@@ -490,7 +481,6 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 14
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 1
 Dynamic pools deleted: 11 / Total memory freed: 0.087 Mb

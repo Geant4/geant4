@@ -1,4 +1,4 @@
-Seed used : 1455639117
+Seed used : 1455639125
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -53,8 +53,8 @@ Available colours:
 
 *** WARNING : the G4DNAChampionElasticModel class is not activated below 7.4 eV !
 *** NOTE: if you are using G4EmDNAChemistry, do not worry, this is the expected behavior
-macFile = /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/geant4-10-01-patch-03_cand-02/tests/test70/short.mac
------- LaunchG4::RunSimu - Start script : /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/geant4-10-01-patch-03_cand-02/tests/test70/short.mac------ 
+macFile = /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/geant4-10-01-patch-03_cand-02/tests/test70/short-mt.mac
+------ LaunchG4::RunSimu - Start script : /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/geant4-10-01-patch-03_cand-02/tests/test70/short-mt.mac------ 
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -176,8 +176,8 @@ alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin= -------0 eV-   Emax= -----400 MeV
 !!!e- finished tracking track 1 
-!!! Penetration : 17.3013 um-
-End of tracking primary particle, its final energy is :747.989
+!!! Penetration : 13.8958 um-
+End of tracking primary particle, its final energy is :747.994
 Number of chemical species involved in reactions = 6
 Reaction                                  Reaction Rate [dm3/(mol*s)]   Interaction Range for chosen reaction model [nm]
 ----------------------------------------------------------------------------------------------------------------------------
@@ -200,98 +200,17 @@ e_aq^1 + H2O2^0 -> OH^-1 + OH^0           1.41e+10                      0.295745
 H^0 + H^0 -> H_2^0                        1.2e+10                       0.226528
 ----------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
-*** G4Scheduler starts processing 
-At time :     1.2 ps  Reaction : e_aq^1 (-193) + OH^0 (-321) -> OH^-1 (-440)
-At time :     1.2 ps  Reaction : OH^-1 (-440) + H3O^1 (-232) -> No product
-At time :     1.4 ps  Reaction : e_aq^1 (-121) + OH^0 (-343) -> OH^-1 (-441)
-At time :     1.4 ps  Reaction : OH^-1 (-441) + H3O^1 (-266) -> No product
-At time : 3.48877 ps  Reaction : e_aq^1 (-127) + OH^0 (-220) -> OH^-1 (-442)
-At time : 14.1814 ps  Reaction : e_aq^1 (-185) + OH^0 (-329) -> OH^-1 (-443)
-At time : 16.1814 ps  Reaction : OH^-1 (-443) + H3O^1 (-328) -> No product
-At time : 34.7224 ps  Reaction : e_aq^1 (-78) + H3O^1 (-354) -> H^0 (-444)
-At time : 45.5263 ps  Reaction : OH^-1 (-222) + H3O^1 (-284) -> No product
-At time : 49.5263 ps  Reaction : e_aq^1 (-182) + OH^0 (-233) -> OH^-1 (-445)
-At time : 73.5263 ps  Reaction : e_aq^1 (-201) + OH^0 (-231) -> OH^-1 (-446)
-At time :  91.216 ps  Reaction : OH^-1 (-219) + H3O^1 (-262) -> No product
-At time : 175.994 ps  Reaction : H3O^1 (-256) + OH^-1 (-442) -> No product
-At time : 227.017 ps  Reaction : e_aq^1 (-131) + H3O^1 (-260) -> H^0 (-447)
-At time : 263.017 ps  Reaction : e_aq^1 (-194) + H3O^1 (-326) -> H^0 (-448)
-At time : 311.513 ps  Reaction : e_aq^1 (-184) + H3O^1 (-238) -> H^0 (-449)
-At time : 329.513 ps  Reaction : e_aq^1 (-155) + OH^0 (-251) -> OH^-1 (-450)
-At time : 332.513 ps  Reaction : e_aq^1 (-58) + OH^0 (-281) -> OH^-1 (-451)
-At time : 332.513 ps  Reaction : e_aq^1 (-106) + OH^0 (-347) -> OH^-1 (-452)
-At time : 429.022 ps  Reaction : OH^0 (-325) + OH^0 (-411) -> H2O2^0 (-453)
-At time : 453.291 ps  Reaction : e_aq^1 (-154) + OH^0 (-249) -> OH^-1 (-454)
-At time :  498.56 ps  Reaction : e_aq^1 (-146) + H3O^1 (-248) -> H^0 (-455)
-At time :  526.15 ps  Reaction : e_aq^1 (-88) + H3O^1 (-372) -> H^0 (-456)
-At time : 552.732 ps  Reaction : H3O^1 (-244) + OH^-1 (-454) -> No product
-At time : 624.057 ps  Reaction : e_aq^1 (-162) + OH^0 (-407) -> OH^-1 (-457)
-At time : 643.518 ps  Reaction : OH^-1 (-450) + H3O^1 (-336) -> No product
-At time : 661.518 ps  Reaction : e_aq^1 (-62) + OH^0 (-361) -> OH^-1 (-458)
-At time : 1.17123 ns  Reaction : H3O^1 (-406) + OH^-1 (-457) -> No product
-At time : 1.23123 ns  Reaction : e_aq^1 (-118) + OH^0 (-267) -> OH^-1 (-459)
-At time : 1.27781 ns  Reaction : e_aq^1 (-137) + H3O^1 (-254) -> H^0 (-460)
-At time : 1.61371 ns  Reaction : e_aq^1 (-159) + H3O^1 (-308) -> H^0 (-461)
-At time : 1.65371 ns  Reaction : OH^0 (-275) + OH^0 (-401) -> H2O2^0 (-462)
-At time : 1.69371 ns  Reaction : H^0 (-455) + OH^0 (-337) -> No product
-At time : 2.27268 ns  Reaction : e_aq^1 (-217) + H3O^1 (-318) -> H^0 (-463)
-At time : 3.24783 ns  Reaction : OH^-1 (-452) + H3O^1 (-294) -> No product
-At time : 3.58921 ns  Reaction : e_aq^1 (-147) + OH^0 (-253) -> OH^-1 (-464)
-At time : 3.61921 ns  Reaction : OH^-1 (-464) + H3O^1 (-306) -> No product
-At time : 3.87543 ns  Reaction : e_aq^1 (-174) + H3O^1 (-330) -> H^0 (-465)
-At time : 4.02317 ns  Reaction : e_aq^1 (-192) + H3O^1 (-322) -> H^0 (-466)
-At time : 5.11198 ns  Reaction : e_aq^1 (-71) + OH^0 (-419) -> OH^-1 (-467)
-At time : 9.11997 ns  Reaction : e_aq^1 (-200) + OH^0 (-413) -> OH^-1 (-468)
-*** G4Scheduler ends at time : 10 ns 
-___________________________________
 !!!e- finished tracking track 1 
-!!! Penetration : 18.5327 um 
-End of tracking primary particle, its final energy is :747.985
-*** G4Scheduler starts processing 
-At time :     1.3 ps  Reaction : OH^0 (-246) + e_aq^1 (-143) -> OH^-1 (-435)
-At time :     1.3 ps  Reaction : H3O^1 (-245) + OH^-1 (-435) -> No product
-At time : 15.9167 ps  Reaction : OH^0 (-280) + e_aq^1 (-75) -> OH^-1 (-436)
-At time : 15.9167 ps  Reaction : H3O^1 (-271) + OH^-1 (-436) -> No product
-At time : 18.9167 ps  Reaction : H3O^1 (-327) + e_aq^1 (-165) -> H^0 (-437)
-At time : 36.0585 ps  Reaction : OH^0 (-330) + OH^0 (-328) -> H2O2^0 (-438)
-At time : 38.0585 ps  Reaction : OH^0 (-402) + OH^0 (-380) -> H2O2^0 (-439)
-At time : 53.2816 ps  Reaction : OH^0 (-338) + e_aq^1 (-134) -> OH^-1 (-440)
-At time : 53.2816 ps  Reaction : H3O^1 (-337) + OH^-1 (-440) -> No product
-At time : 86.8261 ps  Reaction : H3O^1 (-411) + e_aq^1 (-188) -> H^0 (-441)
-At time : 92.5745 ps  Reaction : OH^0 (-378) + OH^0 (-276) -> H2O2^0 (-442)
-At time : 142.254 ps  Reaction : OH^0 (-278) + e_aq^1 (-76) -> OH^-1 (-443)
-At time : 142.254 ps  Reaction : H3O^1 (-269) + OH^-1 (-443) -> No product
-At time : 196.254 ps  Reaction : OH^0 (-268) + e_aq^1 (-89) -> OH^-1 (-444)
-At time : 199.254 ps  Reaction : OH^0 (-216) + e_aq^1 (-211) -> OH^-1 (-445)
-At time :   258.5 ps  Reaction : OH^0 (-290) + e_aq^1 (-57) -> OH^-1 (-446)
-At time :   258.5 ps  Reaction : H3O^1 (-285) + OH^-1 (-446) -> No product
-At time : 304.978 ps  Reaction : H3O^1 (-353) + OH^-1 (-444) -> No product
-At time : 332.354 ps  Reaction : e_aq^1 (-175) + H^0 (-437) -> OH^-1 (-447) + H_2^0 (-448)
-At time : 344.354 ps  Reaction : H3O^1 (-233) + e_aq^1 (-176) -> H^0 (-449)
-At time : 505.216 ps  Reaction : OH^0 (-234) + H^0 (-449) -> No product
-At time : 517.216 ps  Reaction : H^0 (-441) + OH^0 (-426) -> No product
-At time : 541.216 ps  Reaction : OH^0 (-404) + e_aq^1 (-77) -> OH^-1 (-450)
-At time : 650.566 ps  Reaction : H2O2^0 (-439) + e_aq^1 (-74) -> OH^-1 (-451) + OH^0 (-452)
-At time : 662.566 ps  Reaction : OH^0 (-452) + e_aq^1 (-83) -> OH^-1 (-453)
-At time : 708.493 ps  Reaction : OH^0 (-244) + e_aq^1 (-147) -> OH^-1 (-454)
-At time : 874.933 ps  Reaction : H3O^1 (-333) + OH^-1 (-454) -> No product
-At time : 915.504 ps  Reaction : OH^0 (-362) + e_aq^1 (-120) -> OH^-1 (-455)
-At time : 1.16599 ns  Reaction : H3O^1 (-329) + OH^-1 (-447) -> No product
-At time : 1.20599 ns  Reaction : OH^0 (-218) + e_aq^1 (-207) -> OH^-1 (-456)
-At time : 2.35106 ns  Reaction : e_aq^1 (-51) + H3O^1 (-287) -> H^0 (-457)
-At time : 2.43106 ns  Reaction : H3O^1 (-295) + e_aq^1 (-86) -> H^0 (-458)
-At time :  2.5055 ns  Reaction : OH^0 (-254) + OH^0 (-406) -> H2O2^0 (-459)
-At time : 3.11041 ns  Reaction : OH^0 (-394) + OH^0 (-417) -> H2O2^0 (-460)
-At time : 3.34082 ns  Reaction : H3O^1 (-275) + OH^-1 (-451) -> No product
-At time : 3.84516 ns  Reaction : OH^0 (-392) + e_aq^1 (-149) -> OH^-1 (-461)
-At time : 3.94113 ns  Reaction : OH^0 (-272) + e_aq^1 (-72) -> OH^-1 (-462)
-At time : 4.34513 ns  Reaction : H3O^1 (-377) + OH^-1 (-462) -> No product
-At time : 5.54969 ns  Reaction : OH^0 (-324) + OH^0 (-238) -> H2O2^0 (-463)
-At time : 6.16985 ns  Reaction : e_aq^1 (-171) + e_aq^1 (-178) -> OH^-1 (-464) + OH^-1 (-465) + H_2^0 (-466)
-*** G4Scheduler ends at time : 10 ns 
-___________________________________
-Seed used :1455639117
------- LaunchG4::RunSimu - End script : /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/geant4-10-01-patch-03_cand-02/tests/test70/short.mac------ 
------- User Elapsed Time (s) =1.567e-08 ------ 
+!!! Penetration : 3.66477 um 
+End of tracking primary particle, its final energy is :741.939
+!!!e- finished tracking track 1 
+!!! Penetration : 21.3426 um 
+End of tracking primary particle, its final energy is :747.996
+!!!e- finished tracking track 1 
+!!! Penetration : 13.4024 um 
+End of tracking primary particle, its final energy is :747.538
+Seed used :1455639125
+------ LaunchG4::RunSimu - End script : /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/geant4-10-01-patch-03_cand-02/tests/test70/short-mt.mac------ 
+------ User Elapsed Time (s) =4.205e-08 ------ 
 Graphics systems deleted.
 Visualization Manager deleting...

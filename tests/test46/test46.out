@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -136,6 +136,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  proton, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of anti_proton
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -258,7 +259,7 @@ hPairProd:   for  kaon-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  kaon-, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of kaon+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -324,7 +325,7 @@ muPairProd:   for  mu-    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of mu+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -388,7 +389,7 @@ hPairProd:   for  pi-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  pi-, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of pi+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -401,7 +402,6 @@ CoulombScat:   for  pi-, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 
 
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
@@ -772,46 +772,45 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=43.83s Real=43.96s Sys=0.03s
+  User=33.58s Real=33.63s Sys=0.03s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                           pi-
 Beam Energy(MeV)                        15000
 Number of events                        100
-Average number of MIPS (Edep < 0.8 GeV) 0.36
-Average number of steps                 1.702e+04
-Average number of neutron steps         6934
-Average number of hadron steps          2512
-Average number of gamma steps           1.021e+04
-Average number of e+- steps             2538
+Average number of MIPS (Edep < 0.8 GeV) 0.44
+Average number of steps                 1.758e+04
+Average number of neutron steps         6892
+Average number of hadron steps          2598
+Average number of gamma steps           1.062e+04
+Average number of e+- steps             2728
 ==============  ECAL  ====================================
-  1x1 (GeV) =      1.832 +-     0.1877    RMS= 1.877
-  3x3 (GeV) =       3.06 +-     0.2849    RMS= 2.849
-  5x5 (GeV) =      3.481 +-     0.3173    RMS= 3.173
-  E1/E9     =     0.7185 +-    0.02233    RMS= 0.2233
-  E1/E25    =     0.6672 +-     0.0248    RMS= 0.248
-  E9/E25    =     0.9088 +-   0.007672    RMS= 0.07672
+  1x1 (GeV) =      1.932 +-     0.2085    RMS= 2.085
+  3x3 (GeV) =      3.041 +-     0.3226    RMS= 3.226
+  5x5 (GeV) =        3.4 +-     0.3587    RMS= 3.587
+  E1/E9     =     0.7775 +-    0.02012    RMS= 0.2012
+  E1/E25    =     0.7304 +-    0.02255    RMS= 0.2255
+  E9/E25    =     0.9261 +-   0.006507    RMS= 0.06507
 ==============  HCAL  ====================================
-Visible HCAL Edep(GeV)     =   0.07591
-Visible HCAL e-Edep(GeV)   =   0.03319
-Total HCAL Edep(GeV)       =   7.496 +- 0.1985
+Visible HCAL Edep(GeV)     =   0.08334
+Visible HCAL e-Edep(GeV)   =   0.03756
+Total HCAL Edep(GeV)       =   7.964 +- 0.1646
 ==========================================================
-Erec(GeV)   =      11.18 +-     0.4012    RMS= 4.012
-Etot(GeV)   =      11.02 +-     0.1985    RMS= 1.985
+Erec(GeV)   =      11.84 +-     0.3578    RMS= 3.578
+Etot(GeV)   =      11.41 +-     0.1646    RMS= 1.646
 ==========================================================
-Ecal/E0=   0.2299  RMS/E0(%)= 20.96
-Hcal/E0=       0.4951 +- 0.01311
-Erec/E0=       0.7382 +- 0.0265
-Etot/E0=       0.7279 +- 0.01311
+Ecal/E0=   0.2246  RMS/E0(%)= 23.69
+Hcal/E0=       0.5261 +- 0.01087
+Erec/E0=       0.7818 +- 0.02363
+Etot/E0=       0.7537 +- 0.01087
 ==========================================================
 
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 170
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.64 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.35 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-User=45.43s Real=47.15s Sys=0.05s
+User=35.03s Real=35.63s Sys=0.05s

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -164,124 +164,123 @@ Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
  You selected a Polyhedra detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (234.773,-884.017,828.61)
-  A 10000 optical photons vertex has been generated at (-957.53,-505.28,266.629)
-  A 10000 optical photons vertex has been generated at (266.471,-160.729,229.975)
-  A 10000 optical photons vertex has been generated at (-210.204,-106.833,-89.6711)
-  A 10000 optical photons vertex has been generated at (518.394,-435.333,482.096)
+  A 10000 optical photons vertex has been generated at (610.207,258.211,-752.108)
+  A 10000 optical photons vertex has been generated at (855.821,-4.49651,8.79496)
+  A 10000 optical photons vertex has been generated at (896.621,-799.899,-951.14)
+  A 10000 optical photons vertex has been generated at (592.513,-370.478,-700.382)
+  A 10000 optical photons vertex has been generated at (334.855,498.362,427.927)
 
  You selected a Polycone detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-462.353,762.172,844.019)
-  A 10000 optical photons vertex has been generated at (685.879,951.289,-865.333)
-  A 10000 optical photons vertex has been generated at (995.088,-249.838,-699.257)
-  A 10000 optical photons vertex has been generated at (779.555,618.107,135.062)
-  A 10000 optical photons vertex has been generated at (17.0566,46.3924,-78.7175)
+  A 10000 optical photons vertex has been generated at (785.763,-540.782,450.648)
+  A 10000 optical photons vertex has been generated at (-808.8,501.928,-409.114)
+  A 10000 optical photons vertex has been generated at (-539.908,871.583,357.295)
+  A 10000 optical photons vertex has been generated at (685.627,-570.748,-728.948)
+  A 10000 optical photons vertex has been generated at (-445.573,869.832,-912.895)
 
  You selected a Ellipsoid detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-397.217,554.375,3.52718)
-  A 10000 optical photons vertex has been generated at (-717.062,-384.047,626.676)
-  A 10000 optical photons vertex has been generated at (414.977,-670.246,-719.198)
-  A 10000 optical photons vertex has been generated at (-299.714,-35.0623,-881.007)
-  A 10000 optical photons vertex has been generated at (671.755,-294.119,845.882)
+  A 10000 optical photons vertex has been generated at (-684.42,492.739,-596.567)
+  A 10000 optical photons vertex has been generated at (-92.5375,348.401,-717.072)
+  A 10000 optical photons vertex has been generated at (-850.506,-335.635,-457.137)
+  A 10000 optical photons vertex has been generated at (251.714,338.372,-758.625)
+  A 10000 optical photons vertex has been generated at (702.674,509.522,70.2867)
 
  You selected a EllipticalTube detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-565.901,-785.591,791.775)
-  A 10000 optical photons vertex has been generated at (-564.539,813.546,-638.94)
-  A 10000 optical photons vertex has been generated at (-172.986,667.924,-606.017)
-  A 10000 optical photons vertex has been generated at (905.523,-966.409,159.087)
-  A 10000 optical photons vertex has been generated at (-373.693,-486.831,-979.698)
+  A 10000 optical photons vertex has been generated at (-389.527,608.168,482.667)
+  A 10000 optical photons vertex has been generated at (81.2034,-979.292,733.518)
+  A 10000 optical photons vertex has been generated at (-632.05,-886.931,-570.652)
+  A 10000 optical photons vertex has been generated at (374.084,132.832,617.786)
+  A 10000 optical photons vertex has been generated at (403.687,-304.887,-856.168)
 
  You selected a EllipticalCone detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-596.449,-443.477,410.302)
-  A 10000 optical photons vertex has been generated at (884.681,-843.204,817.836)
-  A 10000 optical photons vertex has been generated at (710.227,607.587,-629.407)
-  A 10000 optical photons vertex has been generated at (-272.633,-117.128,-711.041)
-  A 10000 optical photons vertex has been generated at (54.2767,-559.139,637.979)
+  A 10000 optical photons vertex has been generated at (-941.403,-320.818,640.832)
+  A 10000 optical photons vertex has been generated at (591.932,697.259,183.021)
+  A 10000 optical photons vertex has been generated at (716.419,486.512,690.299)
+  A 10000 optical photons vertex has been generated at (-812.41,-54.6838,295.51)
+  A 10000 optical photons vertex has been generated at (-2.56604,-329.828,-769.207)
 
  You selected a Tet detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-314.967,-591.281,453.977)
-  A 10000 optical photons vertex has been generated at (486.907,-844.214,530.651)
-  A 10000 optical photons vertex has been generated at (-53.6698,-653.361,455.842)
-  A 10000 optical photons vertex has been generated at (601.185,-805.342,640.575)
-  A 10000 optical photons vertex has been generated at (-903.302,-973.205,799.833)
+  A 10000 optical photons vertex has been generated at (548.031,-836.091,-9.29164)
+  A 10000 optical photons vertex has been generated at (-797.582,131.073,-255.084)
+  A 10000 optical photons vertex has been generated at (-224.812,301.325,-898.885)
+  A 10000 optical photons vertex has been generated at (422.201,-93.385,216.547)
+  A 10000 optical photons vertex has been generated at (645.682,-515.146,760.499)
 
  You selected a TessellatedSolid detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-718.415,-622.733,-838.454)
-  A 10000 optical photons vertex has been generated at (47.7786,-722.609,84.6776)
-  A 10000 optical photons vertex has been generated at (82.7951,928.105,931.317)
-  A 10000 optical photons vertex has been generated at (-700.15,-39.5412,-961.669)
-  A 10000 optical photons vertex has been generated at (918.637,728.972,802.466)
+  A 10000 optical photons vertex has been generated at (-226.275,0.716385,-180.079)
+  A 10000 optical photons vertex has been generated at (-796.536,409.643,-248.561)
+  A 10000 optical photons vertex has been generated at (272.77,-207.338,107.389)
+  A 10000 optical photons vertex has been generated at (78.3562,717.83,-630.674)
+  A 10000 optical photons vertex has been generated at (541.457,-8.67813,813.856)
 
  You selected a ExtrudedSolid detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (966.319,-856.566,461.461)
-  A 10000 optical photons vertex has been generated at (-924.505,-340.439,-292.155)
-  A 10000 optical photons vertex has been generated at (-121.198,-665.26,199.153)
-  A 10000 optical photons vertex has been generated at (665.002,-669.677,-403.138)
-  A 10000 optical photons vertex has been generated at (-938.786,727.239,672.014)
+  A 10000 optical photons vertex has been generated at (788.77,171.338,-439.119)
+  A 10000 optical photons vertex has been generated at (882.995,-869.095,732.385)
+  A 10000 optical photons vertex has been generated at (209.505,564.278,601.792)
+  A 10000 optical photons vertex has been generated at (400.967,349.802,688.118)
+  A 10000 optical photons vertex has been generated at (303.181,-509.955,661.239)
 
  You selected a UnionSolid detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-517.333,684.827,-259.861)
-  A 10000 optical photons vertex has been generated at (-78.701,-704.001,-340.264)
-  A 10000 optical photons vertex has been generated at (135.278,338.834,771.738)
-  A 10000 optical photons vertex has been generated at (911.427,-219.082,-203.142)
-  A 10000 optical photons vertex has been generated at (-431.408,327.358,271.902)
+  A 10000 optical photons vertex has been generated at (-545.372,559.261,-945.147)
+  A 10000 optical photons vertex has been generated at (378.339,676.28,801.705)
+  A 10000 optical photons vertex has been generated at (-412.21,338.693,-373.284)
+  A 10000 optical photons vertex has been generated at (133.304,467.883,-877.634)
+  A 10000 optical photons vertex has been generated at (-159.977,655.893,-513.775)
 
  You selected a IntersectionSolid detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-772.4,224.402,682.486)
-  A 10000 optical photons vertex has been generated at (-635.712,333.37,-982.858)
-  A 10000 optical photons vertex has been generated at (-415.698,-250.988,-661.061)
-  A 10000 optical photons vertex has been generated at (493.555,443.521,-426.704)
-  A 10000 optical photons vertex has been generated at (-758.927,-719.912,178.173)
+  A 10000 optical photons vertex has been generated at (708.354,949.698,-437.424)
+  A 10000 optical photons vertex has been generated at (729.668,502.207,591.903)
+  A 10000 optical photons vertex has been generated at (166.38,190.227,441.557)
+  A 10000 optical photons vertex has been generated at (-917.876,-716.941,417.694)
+  A 10000 optical photons vertex has been generated at (-359.515,-771.924,-509.497)
 
  You selected a SubtractionSolid detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-509.342,-255.71,513.614)
-  A 10000 optical photons vertex has been generated at (-967.692,539.089,199.278)
-  A 10000 optical photons vertex has been generated at (-508.102,214.737,-220.915)
-  A 10000 optical photons vertex has been generated at (686.04,-392.204,-308.097)
-  A 10000 optical photons vertex has been generated at (398.757,-54.3274,-648.034)
+  A 10000 optical photons vertex has been generated at (350.425,-112.257,116.804)
+  A 10000 optical photons vertex has been generated at (-865.975,12.8375,399.464)
+  A 10000 optical photons vertex has been generated at (-363.013,589.601,-466.706)
+  A 10000 optical photons vertex has been generated at (-321.803,306.255,-930.056)
+  A 10000 optical photons vertex has been generated at (-465.152,926.297,-18.3847)
 
  You selected a TwistedTrap detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (288.359,-776.652,392.188)
+  A 10000 optical photons vertex has been generated at (-646.265,-778.85,358.77)
 
  You selected a TwistedTrap2 detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (942.359,762.935,173.552)
+  A 10000 optical photons vertex has been generated at (963.371,-94.126,727.123)
 
  You selected a TwistedTrd detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-330.669,315.451,603.99)
+  A 10000 optical photons vertex has been generated at (81.0463,-297.1,236.446)
 
  You selected a TwistedBox detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (-976.158,-759.707,793.272)
+  A 10000 optical photons vertex has been generated at (360.872,-77.6823,813.059)
 
  You selected a TwistedTubs detector
 
 ---> Begin of Event: 0
-  A 10000 optical photons vertex has been generated at (425.997,986.539,203.459)
-Total navigation history collections cleaned: 6
+  A 10000 optical photons vertex has been generated at (-526.346,-397.218,826.624)

@@ -49,7 +49,7 @@ Available colours:
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -240,6 +240,7 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of anti_proton
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -362,7 +363,7 @@ hPairProd:   for  kaon-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of kaon+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -428,7 +429,7 @@ muPairProd:   for  mu-    SubType= 4
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of mu+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -492,7 +493,7 @@ hPairProd:   for  pi-    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Used Lambda table of pi+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
@@ -505,7 +506,6 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
@@ -840,84 +840,80 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
 Tst69EventAction: starting event 0, 1 s after action creation, 1 s after last printout. 
-[INCL++] Warning: energy conservation violated by 10.5246 MeV in 50.2047-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 18.6112 MeV in 50.2047-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 9.08313 MeV in 39.6664-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 1517.58 MeV in 9250.82-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 34.1006 MeV in 155.211-MeV triton + Si28 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 5.78614 MeV in 61.3833-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 50, 17 s after action creation, 16 s after last printout. 
-[INCL++] Warning: energy conservation violated by 5.95092 MeV in 33.9846-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 8.71339 MeV in 39.5088-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 36.3181 MeV in 81.2052-MeV He3 + C12 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 100, 25 s after action creation, 8 s after last printout. 
-[INCL++] Warning: energy conservation violated by 18.7494 MeV in 114.519-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 30.6512 MeV in 114.519-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 34.9592 MeV in 133.162-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 150, 36 s after action creation, 10 s after last printout. 
-[INCL++] Warning: energy conservation violated by 15.5849 MeV in 63.9231-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 34.658 MeV in 143.283-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 5.35123 MeV in 45.4089-MeV neutron + C12 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 200, 45 s after action creation, 9 s after last printout. 
-[INCL++] Warning: energy conservation violated by 6.19062 MeV in 82.3527-MeV neutron + C12 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 5.69373 MeV in 44.5838-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 250, 56 s after action creation, 10 s after last printout. 
-[INCL++] Warning: energy conservation violated by 2543.4 MeV in 12981.4-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 8.418 MeV in 74.6913-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 50.0411 MeV in 508.668-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 300, 67 s after action creation, 10 s after last printout. 
-[INCL++] Warning: energy conservation violated by 8.49213 MeV in 18.5647-MeV deuteron + H1 inelastic reaction, in inverse kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 11.1044 MeV in 58.053-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 34.1006 MeV in 876.215-MeV triton + Si28 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 6.22546 MeV in 43.5067-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 7.26921 MeV in 55.1521-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 23.2046 MeV in 166.425-MeV deuteron + H1 inelastic reaction, in inverse kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 21.796 MeV in 166.425-MeV deuteron + H1 inelastic reaction, in inverse kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 9.51051 MeV in 46.6344-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 350, 81 s after action creation, 14 s after last printout. 
-[INCL++] Warning: energy conservation violated by 7.66944 MeV in 57.5882-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 53.16 MeV in 146.049-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 48.0751 MeV in 222.971-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 400, 89 s after action creation, 7 s after last printout. 
-Tst69EventAction: starting event 450, 98 s after action creation, 8 s after last printout. 
-[INCL++] Warning: energy conservation violated by 13.6816 MeV in 126.695-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 7.75839 MeV in 63.0006-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 1094.05 MeV in 5397.29-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 500, 111 s after action creation, 13 s after last printout. 
-[INCL++] Warning: energy conservation violated by 13.248 MeV in 99.0117-MeV deuteron + H1 inelastic reaction, in inverse kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 21.4161 MeV in 122.087-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 550, 120 s after action creation, 8 s after last printout. 
-[INCL++] Warning: energy conservation violated by 12.5127 MeV in 69.2785-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 600, 131 s after action creation, 10 s after last printout. 
-[INCL++] Warning: energy conservation violated by 11.9318 MeV in 165.661-MeV neutron + C12 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 5.04779 MeV in 32.0218-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 18.0319 MeV in 98.6062-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 8.56725 MeV in 60.6176-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 650, 141 s after action creation, 10 s after last printout. 
-[INCL++] Warning: energy conservation violated by 9.14505 MeV in 41.1646-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 7.88193 MeV in 46.2169-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 700, 150 s after action creation, 8 s after last printout. 
-[INCL++] Warning: energy conservation violated by 8.46901 MeV in 66.7971-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: maximum number of tries exceeded for the proposed 21.7021-MeV pi- + He4 inelastic reaction, in direct kinematics.
-[INCL++] Warning: energy conservation violated by 10.4901 MeV in 85.8916-MeV neutron + C12 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 26.1237 MeV in 94.1734-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 750, 165 s after action creation, 14 s after last printout. 
-[INCL++] Warning: energy conservation violated by 14.0879 MeV in 76.6485-MeV triton + He4 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 8.38723 MeV in 62.4883-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
-Tst69EventAction: starting event 800, 171 s after action creation, 6 s after last printout. 
-[INCL++] Warning: energy conservation violated by 20.464 MeV in 71.7162-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: maximum number of tries exceeded for the proposed 6.77046-MeV proton + Pb207 inelastic reaction, in direct kinematics.
+[INCL++] Warning: energy conservation violated by 16.681 MeV in 70.2519-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 7.34547 MeV in 43.451-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 50, 11 s after action creation, 10 s after last printout. 
+[INCL++] Warning: energy conservation violated by 6.87706 MeV in 35.1373-MeV deuteron + H1 inelastic reaction, in inverse kinematics. Will resample.
+Tst69EventAction: starting event 100, 22 s after action creation, 10 s after last printout. 
+[INCL++] Warning: energy conservation violated by 7.19467 MeV in 38.6723-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 14.7633 MeV in 80.6349-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 150, 29 s after action creation, 6 s after last printout. 
+[INCL++] Warning: energy conservation violated by 5.86104 MeV in 38.0341-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 5.67507 MeV in 44.3893-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 200, 41 s after action creation, 12 s after last printout. 
+[INCL++] Warning: energy conservation violated by 17.3587 MeV in 86.5529-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 5.91984 MeV in 51.4446-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 250, 49 s after action creation, 8 s after last printout. 
+[INCL++] Warning: energy conservation violated by 76.102 MeV in 501.882-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 8.55775 MeV in 40.7518-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 6.69049 MeV in 60.0874-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 13.2081 MeV in 60.0874-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 11.2458 MeV in 60.0874-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 15.763 MeV in 60.0874-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 11.1826 MeV in 60.0874-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 10.372 MeV in 60.0874-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 8.00388 MeV in 59.0529-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: maximum number of tries exceeded for the proposed 5.94189-MeV alpha + H1 inelastic reaction, in inverse kinematics.
+Tst69EventAction: starting event 300, 57 s after action creation, 7 s after last printout. 
+[INCL++] Warning: energy conservation violated by 15.6524 MeV in 83.4435-MeV deuteron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 5.06353 MeV in 40.4433-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 34.6386 MeV in 182.123-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 17.2794 MeV in 58.2983-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 350, 64 s after action creation, 7 s after last printout. 
+[INCL++] Warning: energy conservation violated by 15.7667 MeV in 73.6777-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 10.2339 MeV in 83.2425-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 400, 71 s after action creation, 6 s after last printout. 
+[INCL++] Warning: energy conservation violated by 7.85346 MeV in 42.1545-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 10.1746 MeV in 61.7817-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 2827.51 MeV in 14299-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 450, 79 s after action creation, 8 s after last printout. 
+[INCL++] Warning: energy conservation violated by 3156.97 MeV in 13567.4-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 2373.69 MeV in 13567.4-MeV proton + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 22.4396 MeV in 57.8781-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: maximum number of tries exceeded for the proposed 6.27404-MeV proton + Pb208 inelastic reaction, in direct kinematics.
+[INCL++] Warning: energy conservation violated by 17.7247 MeV in 127.844-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 66.5884 MeV in 303.604-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 7.44729 MeV in 62.0591-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 10.8192 MeV in 46.9689-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 35.4173 MeV in 126.562-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 500, 89 s after action creation, 10 s after last printout. 
+[INCL++] Warning: energy conservation violated by 2268.66 MeV in 14002.9-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 34.1006 MeV in 245.927-MeV alpha + C12 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 6.1236 MeV in 48.8599-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 29.0132 MeV in 80.311-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 759.654 MeV in 4335.77-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 550, 96 s after action creation, 7 s after last printout. 
+[INCL++] Warning: energy conservation violated by 13.0502 MeV in 84.5781-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 11.0294 MeV in 79.2778-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 12.2436 MeV in 79.2778-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 14.7372 MeV in 79.2778-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 8.7548 MeV in 56.1278-MeV deuteron + He4 inelastic reaction, in direct kinematics. Will resample.
+Tst69EventAction: starting event 600, 103 s after action creation, 6 s after last printout. 
+[INCL++] Warning: maximum number of tries exceeded for the proposed 8.05759-MeV pi+ + He4 inelastic reaction, in direct kinematics.
+[INCL++] Warning: energy conservation violated by 13.5665 MeV in 57.4609-MeV neutron + He4 inelastic reaction, in direct kinematics. Will resample.
 [INCL++] INCL++ has already emitted 50 warnings and will emit no more.
-Tst69EventAction: starting event 850, 179 s after action creation, 7 s after last printout. 
-G4Fragment::CalculateExcitationEnergy(): WARNING 
-Fragment: A =   3, Z =   2, U = -1.396e+01 MeV  IsStable= 1
-          P = (2.093e+02,-3.398e+02,5.992e+01) MeV   E = 2.823e+03 MeV
-
-Tst69EventAction: starting event 900, 187 s after action creation, 7 s after last printout. 
-Tst69EventAction: starting event 950, 198 s after action creation, 11 s after last printout. 
+Tst69EventAction: starting event 650, 116 s after action creation, 13 s after last printout. 
+Tst69EventAction: starting event 700, 124 s after action creation, 7 s after last printout. 
+Tst69EventAction: starting event 750, 138 s after action creation, 14 s after last printout. 
+Tst69EventAction: starting event 800, 145 s after action creation, 7 s after last printout. 
+Tst69EventAction: starting event 850, 151 s after action creation, 6 s after last printout. 
+Tst69EventAction: starting event 900, 156 s after action creation, 5 s after last printout. 
+Tst69EventAction: starting event 950, 163 s after action creation, 7 s after last printout. 
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=209.58s Real=210.91s Sys=0.12s
+  User=170.47s Real=170.71s Sys=0.11s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -932,7 +928,7 @@ Units table cleared.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 1.3 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.29 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

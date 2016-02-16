@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,10 +27,10 @@ Shower parameterization
 /********************************************/ 
   - GVFlashShowerParameterisation::Material -  
         Material : PbWO4
-   Z = 68.3599
-   A = 170.87
+   Z  = 68.3599
+   A  = 170.87
    X0 = 0.892421 cm
-    Rm= 1.73752 cm
+   Rm = 1.73752 cm
    Ec = 10.786 MeV
 /********************************************/ 
 /********************************************/ 
@@ -286,9 +286,9 @@ Index : 1     used in the geometry : Yes
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
   5344 hits are stored in Tst34HitsCollection 
@@ -314,7 +314,7 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 2  -----
   5317 hits are stored in Tst34HitsCollection 
@@ -325,7 +325,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -338,9 +338,9 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 4  -----
   5316 hits are stored in Tst34HitsCollection 
@@ -351,7 +351,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -366,7 +366,7 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
   5335 hits are stored in Tst34HitsCollection 
@@ -377,9 +377,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
   5315 hits are stored in Tst34HitsCollection 
@@ -392,7 +392,7 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 8  -----
   5317 hits are stored in Tst34HitsCollection 
@@ -403,18 +403,17 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
-Internal System Elapsed Time: 0.01
+Internal Real Elapsed Time is: 0
+Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
   5329 hits are stored in Tst34HitsCollection 
  #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9585 (GeV)
 number of events = 10
-Total navigation history collections cleaned: 9
 
 ******************************************
-Total Real Elapsed Time is: 0.77
+Total Real Elapsed Time is: 0.63
 Total System Elapsed Time: 0.01
-Total GetUserElapsed Time: 0.75
+Total GetUserElapsed Time: 0.62
 ******************************************

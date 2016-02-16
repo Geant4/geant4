@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-macro --> /ec/G4-builds/release/slc6-gcc49-RelWithDebInfo/10-01-ref-00_branch/tests/test50/test50.in
+macro --> /mnt/build/jenkins/workspace/g4-slc6/COMPILER/native/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-01-patch-03_cand-02/geant4-10-01-patch-03_cand-02/tests/test50/test50.in
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
@@ -868,4 +868,3 @@ hPairProd:   for  pi-    SubType= 4
 /gun/energy 10. MeV
 /run/beamOn 1
 <Tst50Collection> is not found.
-Total navigation history collections cleaned: 5
