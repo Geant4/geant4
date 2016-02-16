@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -425,7 +425,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3  1.1e+03      500        0     1e+05        0  2.2e+03  1.11e+04 av_5_impr_1_CONS_pv_0 Transportation
     4  1.6e+03      500        0     1e+05        0      500  1.16e+04      world3 Transportation
     5    2e+04      500        0     1e+05        0 1.84e+04     3e+04  OutOfWorld Transportation
-Total navigation history collections cleaned: 7
 
 !!! Test completed !!!
 
