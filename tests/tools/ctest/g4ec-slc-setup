@@ -19,18 +19,56 @@ IsNotInPath() {
   return $rc
 }
 
+#---Compiler-native-----------------------------------------------------
 
+if [ "${gccver}" = "native" ] ; then
+   [ -z "${CXX}" ] && export CXX=`which g++`
+	[ -z "${CC}"  ] && export CC=`which gcc`
+	gccver=`g++ --version | head -1 | awk '{ print $3 }'`
+	echo "native compiler is version $gccver"
+fi
+
+#--- initial lcg setup, needed for compiler ---------------------
+
+lcgcontrib="/afs/cern.ch/sw/lcg/contrib"
 lcg="${lcgbase}-gcc`echo ${gccver} | awk -F. '{ printf"%d%d",$1,$2 }'`"
 lcgopt="${lcg}-opt" 
+
+#---Compiler-explicit-----------------------------------------------------
+ 	
+if [ -z "${CXX}"  ] ; then
+  if IsNotInPath "gcc/$gccver" ; then
+    gcc_dir=${lcgcontrib}/gcc/${gccver}/${lcgbase}
+	 [ -d $gcc_dir ] && true ||  gcc_dir=${lcgcontrib}/gcc/${gccver}/${lcgopt}  
+    echo Try gcc from $gcc_dir
+    if [ -d $gcc_dir ] ; then
+      #export PATH=${gcc_dir}/bin:${PATH}
+      #export LD_LIBRARY_PATH=${gcc_dir}/lib64:${LD_LIBRARY_PATH}
+      . $gcc_dir/setup.sh
+      echo "Using g++ from $gcc_dir"
+    fi 
+    unset gcc_dir    
+  fi
+  export CXX=`which g++`
+  export CC=`which gcc`
+fi
+
+
+echo "Using g++:  $CXX"
+$CXX --version | head -1
+
+#--- lcg ----------------------------------------------------------
 
 lcgext="/afs/cern.ch/sw/lcg/external"
 lcgrel="/afs/cern.ch/sw/lcg/releases"
 lcgapp="/afs/cern.ch/sw/lcg/app/releases"
-lcgcontrib="/afs/cern.ch/sw/lcg/contrib"
 lcgexperim="/afs/cern.ch/sw/lcg/experimental"
 g4lcgapp="/afs/cern.ch/sw/lcg/app/releases/GEANT4"
 
 [ -z ${rootlcg} ] && rootlcg=${lcgopt}
+
+#---XercesC----------------------------------------------------------
+
 whichXercesC()
 {
    version=$1;
@@ -176,26 +214,6 @@ if  IsNotInPath Python ; then
   unset pythonDir
 fi
 #-----------------------------------------------------------------
-
-#---Compiler------------------------------------------------------
-if [ -z "${CXX}" ] ; then
-  if IsNotInPath "gcc/$gccver" ; then
-    gcc_dir=${lcgcontrib}/gcc/${gccver}/${lcgbase}
-	 [ -d $gcc_dir ] && true ||  gcc_dir=${lcgcontrib}/gcc/${gccver}/${lcgopt}  
-    echo Try gcc from $gcc_dir
-    if [ -d $gcc_dir ] ; then
-      #export PATH=${gcc_dir}/bin:${PATH}
-      #export LD_LIBRARY_PATH=${gcc_dir}/lib64:${LD_LIBRARY_PATH}
-      . $gcc_dir/setup.sh
-      echo "Using g++ from $gcc_dir"
-    fi 
-    unset gcc_dir    
-  fi
-  export CXX=`which g++`
-  export CC=`which gcc`
-fi
-echo "Using g++:  $CXX"
-$CXX --version | head -1
 
 
 # Common environment settings, options,...

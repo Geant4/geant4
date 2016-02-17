@@ -9,9 +9,11 @@ case $1 in
   gcc*) compiler_version=`echo $1 | awk \
              '{ maj=substr($1,4,1);min=substr($1,5);printf"%d.%d",maj,min }'`
         ;;
-		*) echo "Error, not configured for compiler $1"
-		   exit 1
-			;;
+native) compiler_version=$1
+        ;;		  
+     *) echo "Error, not configured for compiler $1"
+        exit 1
+        ;;
 esac			 
 
 CONFIG=cc7-$1

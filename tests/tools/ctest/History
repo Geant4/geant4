@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th February 2016, Gunter Folger           testtools-ctest-V10-00-12
+-  correct setup of lcg compiler, this needs few lcg... variables
+
+15th February 2016, Gunter Folger           testtools-ctest-V10-00-11
+-  extend to compile using "native" compiler: provide generic g4ec-slc6
+ 
+15th February 2016, Gunter Folger           testtools-ctest-V10-00-10
+-  extend to compile using "native" compiler
+ 
 10th February 2016, Gunter Folger           testtools-ctest-V10-00-09
 - create setup for 10-01-patches testing in jenkins:
     based on up-to-date scripts, and reverted version numbers for XercesC,

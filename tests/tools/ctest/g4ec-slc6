@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+THIS=$(dirname $0)
+
+#---Enable FPE ---------------------------------------------------
+export CXXFLAGS=-DG4FPE_DEBUG
+
+case $1 in 
+  gcc*) compiler_version=`echo $1 | awk \
+             '{ maj=substr($1,4,1);min=substr($1,5);printf"%d.%d",maj,min }'`
+        ;;
+native) compiler_version=$1
+        ;;		  
+     *) echo "Error, not configured for compiler $1"
+        exit 1
+        ;;
+esac			 
+
+. ${THIS}/g4ec-slc-common x86_64-slc6 ${compiler_version} 
