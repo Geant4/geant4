@@ -1,1 +1,1 @@
-Geant4 Git Mirror
+Geant4 public releases Git mirror
