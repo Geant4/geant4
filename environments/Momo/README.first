@@ -1,0 +1,194 @@
+How to Install and Use GAG and Momo
+
+			1998 December 4 revised for release
+			1998 July 6 written for beta
+
+				Hajime YOSHIDA
+
+1) Necessary Toolkits for GAG, GGE and Momo
+
+1.1) Tcl/Tk and JAVA
+
+GAG, GGE and Momo are implemented, using the popular "Open Source
+Programs", or free software;  Tcl/tk 8.0a or later and
+JDK 1.1.3 or later  and JAVA  Foundation Class Swing-1.0.2.
+Both are supported and freely distributed by Sun Microsystems.
+
+As of July 6, JAVA GAG is tested on Linux with JDK-1.1.3 + Swing-1.0.2 and on
+Solaris with JDK-1.1.6 + Swing-1.0.2. Tcl/Tk GAG is tested on
+Linux and Solaris with Tcl8.0p2/Tk8.0p2.
+
+As of December 4, Java GAG is running on Linux (RedHat 5.2) with JDK-1.1.7 +
+Swing-1.0.2. So, replace JDK-1.1.3 below with the latest JDK-1.1.7.
+JDK1.2 version is not yet delivered.
+
+1.2) Installation
+If the required toolkits  as well as GAG, GGE and Momo have been installed
+in your computer system by your system administrator or by your collegues,
+you have only to set PATH and environment variables  which
+will be explained later. Such lucky few can skip the next section of
+installation.
+
+1.2.1) Installation of Tcl/tk
+
+If you are using free Unix like Linux, the latest version (8.0a or
+later) of Tcl/tk is already included. If it is installed by root to
+the default destination, /usr/local/bin and /uar/local/lib,
+and if you can locate wish (version 8.0) in your path, everuthing is
+good.
+
+To verify this, do as follows;
+
+	[yoshidah@ermac1 G++-Linux]$ wish
+	% info tclversion
+	8.0
+	% exit
+	[yoshidah@ermac1 G++-Linux]$ 
+
+
+Tk command "wish" pops up a small white window. You delete it with "exit".
+
+
+If not, you can install it under your home directory without root's permission. 
+You can get the latest version of Tcl/tk from many mirror sites world-wide.
+It is easy to compile and install them. 
+Be careful that tcl8.0.tar.gz and tk8.0.tar.gz files are placed in the same
+directory.
+
+First attack the Tcl package. You do " ./configure" then  "make"
+ and finally  "make install". 
+Then, you repeat the same procedure for Tk package.
+
+If Tcl/Tk is installed in an arbitrary destination,  you have to set
+path and environmental variables.
+
+  : Verify that {\tt wish} is in in your PATH and its version is correct.
+  : setenv TCL_LIBRARY to the directory where "libtcl.a" is placed
+  : setenv TK_LIBRARY to the directory where "libtk.a" is placed
+
+1.2.2 Installation of JAVA
+
+GAG, GGE and Momo use  JDK 1.1.3 or later and Java Foundation Class, 
+or Swing-1.0.2 (early access version).
+Note that older or newer versions of Swing are imcompatible with 
+the current Java GAG.
+
+GAG, GGE anf Momo is going to be updated to JDK1.2 which has not been 
+released yet. JAVA Foundation Class will follow important
+modifications in the JDK1.2. Thus present GUI may not work
+correctly with other than Swing-1.0.2 on which it is implemented.
+(Swing-1.0.2 still contains "preview" classes!! -July 1998-)
+
+Swing is available from JAVA Developer Connection. You are requested to
+register yourself as a JDC member. Please read carefully licence agreement
+to use it on your computer.
+For general information on JAVA, visit JavaSoft Home Page.
+
+You may put Swing package in any directory, but you have to make the
+environment variable CLASSPATH include "swingall.jar". 
+
+   %setenv CLASSPATH .:/home/foo/swing1.0.2/swingall.jar:
+
+You are recommended to check sample programs associated with it.
+
+	% cd ~foo/swing1.0.2/examples/SwingSet/classes
+	% java SwingSet
+
+Wait a moment while loading many classes. If it works well, though
+very slowly, you can use GAG of JAVA version.
+
+
+JAVA GAG uses TextWidget, a free software which is includes as is in the
+current GAG distribution. Please read and respect the copyleft written
+there.
+
+
+2) Install and Run  GAG, GGE and Momo
+
+After unpacking GEANT4 package you have the Momo files under the
+"geant4alpha/environments/Momo/" directory.
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                   !!!!! Important!!!!!
+   Keep the following directory hierarchy. Tcl/tk
+products assume that all relevant files are found under $MOMOPATH, while
+JAVA products assume that all relevant classes are found in $CLASSPATH.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2.1) JAVA GUIs
+2.1.1 Files
+
+    ../Momo/java/Momo/           necessary hierarchy for JAVA's name space.
+                /Momo/GAG/       Java source codes; *.java
+                /Momo/GGE/       Java source codes; *.java (to come)
+                /Momo/GAG/GAG.jar    JAVA binary archive
+
+2.1.2) CLASSPATH
+
+JAVA's CLASSPATH must contain the following;
+
+  JDK's class file :  The path to "classes.zip" is set by default. 
+	Otherwise let's assume  /home/foo/jdk1.1.6/lib/classes.zip.
+
+  Swing-1.0:  As was explained above, "swingall.jar" is the only file necessary
+         for Swing-1.0.2. Let us assume that you have Swing-1.0.2 in your 
+         $HOME/swing1.0.2/swingall.jar.
+
+  GAG.jar:  In the GEANT4 distribution, it is placed in 
+         geant4alpha/environments/Momo/java/Momo/GAG/GAG.jar. So, let's
+         assume that it is at 
+          $HOME/geant4alpha/environments/Momo/java/Momo/GAG/GAG.jar.
+
+Assuming you have everything in your $HOME, CLASSPATH example for Unix
+is like;
+
+  %setenv CLASSPATH .:$HOME/swing1.0.2/swingall.jar:\
+     $HOME/geant4alpha/environments/Momo/java/Momo/GAG/GAG.jar:
+	$HOME/jdk1.1.6/lib/classes.zip
+
+2.1.3) Run JAVA GAG
+
+To run JAVA GAG without Momo, type the following line at any directory.
+
+     % java gag
+
+Then, choose a GEANT4 executable file.
+
+2.2) Tcl/Tk GUIs
+
+2.2.1) Files
+
+    ../Momo/tcltk/                This is the MOMOPATH.
+           /tcltk/tMomo.tcl       Momo script file
+           /tcltk/tmomo*          Momo executable file
+           /tcltk/GAG/            GAG procedures script files
+           /tcltk/GAG/GAG.tcl     GAG script file
+	   /tcltk/XXXXX		  Other directories containing procedures used
+					in GAG.tcl
+
+2.2.2) MOMOPATH
+
+You have to setenv MOMOPATH which  specifies the position of Momo/tcltk/.
+For example, like;
+
+   %setenv MOMOPATH $HOME/geant4alpha/environments/Momo/tcltk
+
+2.2.3) Run Tcl/Tk Momo and GAG
+
+Then you can run Momo 
+
+   %$MOMOPATH/tmomo
+
+Or without using Momo, GAG can be directly invoked by
+
+  %wish $MOMOPATH/GAG/GAG.tcl
+
+Good luck!
+
+
+
+
+
+
+
+
+

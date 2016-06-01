@@ -1,0 +1,449 @@
+                  README of GGE; GEANT4 Geometry Editor
+
+					1998 Dec. 11
+					1998 Oct. 15
+					1998 Sep. 24
+					1998 Sep. 10
+                                        1998 Aug. 31
+                                        Hajime YOSHIDA
+                                        Naruto University of Education
+0) Reference
+  GGE is changing day-by-day. It will be adapted to the new Java2 (ex JDK1.2).
+So, after this release, we will keep the latest versions and related information in our URL;
+
+	http://erpc1.naruto-u.ac.jp/~geant4
+
+
+1) Introduction
+
+ GGE, GEANT4 Geometry  Editor,  is a visual tool to "create"  a C++ source code which
+implements a detector geometry after GEANT4's norm.  
+
+It provides users with tables which  users fill  with their detector parameters,
+such as its materials, solid shapes, visualisation attributes and placement.  After the
+data in the tables, GGE creates C++ source codes  for a detector. The C++ codes  is a complete
+description of a detector, including the definition of atoms, materials, solids, color attributes,
+logical volumes and physical volumes with rotations and translations.
+The C++ source code is saved into a file and can be compiled to make a GEANT4 executable.
+A minimum set of files for the GEANT4 managers to visualise the detector as well as
+a GNUMakefile are provided for that.
+
+GAG is helpful to have a visualization of the whole detector.
+Simple macro files are associated, too, for visualisation.
+
+ GGE   consists  of  two editors (material   and   volume)  which  are
+interrelated upon   users'  request.  Volume editor has two main functions;
+first is to define logical volumes, while the second is to position or relocate them.
+GGE provides users a variety of relocation;  Single Placement, Multiple Copies
+ with  incremental  copy numbers (translational arrangement or axially symmetric arrangement), 
+Replicas (in any axis or phi direction) and Parametrized volumes(not yet).
+
+GGE is based on Java's MVC model so that any change or input to the tables by a user
+are automatically reflected to the internal data structure of GGE and C++ codes.
+
+2) Functions of GGE
+
+ 2.1) Material Editor
+  a) implemented in this version
+
+	+ append, insert, edit and delete a material
+	     + material from scratch
+	     + material by combination (number or fractional ratios)
+	     + periodic table of atoms automatically popped up to create a material
+	     + default states are provided (material state, temperature, pressure)
+	     + canonical physical units  in GEANT4 selectable from a combobox
+
+	+ "in Use" mark for materials used in user's detector
+	     + materials used in the logical volumes are automatically made "in Use".
+	     + user can add any materials "in Use" to have C++ constructors
+
+	+ persistent material file 
+	     + load, append or save a material file
+	     + an exemplary persistent material database file  "MaterialDB.g4mt"  from the PDG
+
+  b)not yet implemented
+
+	 - material from materials (coming)
+	 - isotope (planned)
+	 - protection from duplicated "in Use" instances of the same materials.
+
+ 2.2) Volume Editor ; logical and physical volumes
+
+  a)implemented
+
+      + G4Solids
+	   + CSG solids
+		+ Box, Tube segment, Cone segment, Sphere segment, Torus segment, Parallelepiped,
+		       Symmetric Trapezoid, HYPE
+			+ parameters and canonical units
+			+ preview with DAWN (automatically chosen world size)
+	   + BREPs
+		+ Polycone segment, Polyhedra
+			+ any number of nodes and facets with parameters and canonical units 
+			+ preview with DAWN (automatically chosen world size)
+      + G4LogicalVolume
+	        + create, delete a logical volume
+		+ Its name, G4Solid,   material, visualization attributes
+		+ selectable G4Solid among the above candidates (CSGs, BREPs)
+		+ type-in materials name (drag and drop is planned)
+		+ Color Chooser to specify visualization attribute (color and its name)
+		+ Used materials link to material DB
+
+      + G4PVPlacement ; Placement of physical volumes
+		+ Type 1 constructor = rotation of the frame, physical mother volume
+		+ Type 2 constructor = rotation of a body, physical mother volume
+		+ Type 3 constructor = rotation of the frame, logical mother volume
+		+ Type 4 constructor = rotation of a body, logical mother volume
+
+	   + Single Placement of a Volume (SPV)
+		+ mother volume is either 
+			null(Master Reference System), logical or physical
+			      + MARS is constructed first in C++ code.
+			      + logical mother is for nested volumes
+		+ translation  in the X, Y or Z direction (default is no translation)
+		+ rotation around X, Y or Z axis with an angle (frame or body)
+
+	   + Repeated Placement of a Volume with incremental copy numbers (RPV)
+		+ translational arrangement of any number of copies of a logical volume 
+			+ placements in the X, Y or Z direction
+ 				+ the position of the first copy and incremental step size
+				+ with respect to a logical or physical mother volume
+	   	+ axially symmetric arrangement
+			+ rotational axis is parallel to X, Y or Z axis
+			+ rotation of the frames or a body
+			+ position of the center of axial symmetry can be set
+			+ radius of axially symmetric arrangement
+			+ starting angle and incremental step angle with number of copies
+			+ logical or physical mother volume
+
+      + Slicing or Replica
+		+ replication in the X, Y or Z direction (cartesian coordinates)
+		+ replication in rho or phi direction (cylindrical coordinates)
+		+ width (in length or angle) and number of replicas
+		+ offset (in length or angle)
+		+ logical or physical mother volume
+
+  b)to be implemented
+
+
+
+	- paremetrised volumes (coming soon)
+		- linear scaling
+		- linear rotation
+
+ 2.3) Generation of C++ code ; "MyDetectorConstruction.cc" (default naming)
+
+   a) implemented
+	+ C++ code is output to a editor widget
+	+ all necessary header files are automatically included
+	+ save the file with a file chooser; "GGEmake/MyDetectorConstruction.cc" (default naming)
+	+ order of creating instances; 
+		   G4Elements, G4Material, G4VisAttributes, G4Solids, G4LogicalVolume,
+		   Single Positioned Volumes, Repeated Volumes, Replicas
+	     x order of instantiation inside each section is decided by  GGE user, 
+			except MARS
+	+ return the instance name of the MARS
+
+   b)not implemented
+	- automatic correct ordering of constructors of volumes
+
+
+ 2.4) GGEmake; a directory containing the GEANT4 codes to compile and visualize the detector
+     a) implemented
+	+ GNUmakefile
+	+ myDetector.cc ; main()  with GAG session and visualization manager
+	+ src/ directory contains
+		+ MyDetectorConstruction.cc
+                + MyPhysicsList.cc
+		+ MyPrimaryGeneratorAction.cc
+		+ MyVisManager.cc
+	+ include/ directory
+
+ 2.5) compile and visualize with Momo and GAG
+
+    a) implemented
+
+	+ canonical scheme of GEANT4 to compile
+	   	+ make G4TARGET=myDetector
+		+ the binary is created as $G4INSTALL/bin/$G4SYSTEM/myDetector
+
+	+ Momo (GAG, Compile and GGE buttons)
+		+ rapid cycling of GGE and GAG to edit and view the geometry
+		+ a macro file for visualization (OGLIX default) "DrawDAWN.g4m", etc..
+
+     b) not implemented
+		- automatic "calibration" of the detector with geantino
+
+ 2.6) exemplary persistent detector files with *.g4dt suffix 
+	 + rotateallsolids.g4dt; all CSG except HYPE and two BREPs are placed in an axially symmetric manner
+	 + translateallsolids.g4dt
+
+
+-------------------------------------------------------------------------
+
+3) Installation
+
+The minimum set to run GGE and to create the C++ source code
+	1) GGE.jar file
+	2) Java interpreter ; java
+Additional set to compile and get the executable
+	3) GEANT4 toolkit with compiled libraries
+	4) GGEmake directory
+Additional set to visualise and use GUI
+	4) DAWN (plus Ghostview) or OGLIX or VRML
+	5) GAG (Java version) or GAG.jar file
+Additional too to make life easy
+	6) Momo to use all the above ingredients; Momo.jar file
+	 (without Momo, you have to invoke GGE, compile and GAG respectively in windows.)
+
+3.1) Java and Swing
+We have tested GGE on Unix-en (Linux and Solaris) and Windows (95/NT).
+
+ 3.1.1) Unix:
+
+  + Linux: jdk1.1.3 or later(i.,e., jdk-1.1.6 or jdk-1.1.7) + Swing-1.0.2
+
+	1) GGE co-works with Swing-1.0.2 and not with 1.0.1 (or maybe not
+		with 1.0.3).
+	2) we are testing the current GGE with JRE1.2-beta04. The present source can be
+		compiled but doesn't execute correctly. In any case
+		Sun has announced on 17 August that JDK1.2 will be delayed
+		till November!!
+  + Solaris: jdk1.1.6 + swing-1.0.2
+
+
+  We assume that you have 
+	1)$JAVAHOME/jdk1.1.6/bin/java (Java interpreter)  to which paths are set
+	2)Swing-1.0.2 which is defreezed and placed in $JAVAHOME/swing/swingall.jar
+
+ 3.1.2) Windows:
+
+	We use JBuilder2 with  Swing-1.0.2. Note that you have to 
+	eliminate all other libraries other than swing-1.0.2, after having
+	copied it into JBuilder2.
+
+	We are trying JDK1.2beta4 + JRE1.2 with JBuilder2.
+
+	NOTE! At present you can only create C++ code under the Windows.
+
+3.2) GGE and related files
+
+The latest product of GGE is that of 11th December 1998.
+All *.java, *.class and GGE.jar files are placed in 
+		$G4INSTALL/environments/Momo/java/Momo/GGE
+
+Only "GGE.jar" file is necessary to run GGE. The following files are included for
+completeness.
+
+	GGE/*.java	GGE source files
+	GGE/*.class	GGE byte code files
+	GGE/GGE.jar	jar archive file to which CLASSPATH must be set
+	GGE/*.g4mt	material database after PDG data
+	GGE/*.g4dt	exampleN0x detector file
+
+A set of C++ source codes and GNUmakefiles necessary to compile with GEANT4 are placed in
+       		$G4INSTALL/environments/Momo/GGEmake.
+
+Only geantino is instantiated in the initialization of GEANT4, so that it is quite
+rapid to have a visualization of the geometry. You can choose DAWN, OpenGL or VRML system.
+
+	 GGEmake/myDetector.cc			main() program
+		/GNUmakefile
+		/src
+		/src/MyDetectorConstruction.cc	C++ generated by GGE
+ 		/src/MyPrimaryGeneratorAction.cc	geantino gun
+		/src/MyVisManager.cc		DAWN, DAWNFILE, OGLIX, OGLSX, VRML1, VRML1FILE
+		/src/MyPhysicsList.cc		geantino definition
+		/include/*.hh
+		/DrawOGLIX.g4m			macro file to visualize with OGLIX
+		/DrawDAWN.g4m      		macro file for DAWN
+		/DrawDAWNFILE.g4m  		macro file for DAWN with Postscript file
+
+3.3) install, setenv and run
+
+	%set path=($path $JAVAHOME/jdk1.1.6/bin)  	<=== add the path to java and javac
+	%setenv CLASSPATH .:$JAVAHOME/swing/swingall.jar:$G4INSTALL/environments/Momo/java/Momo/GGE/GGE.jar
+
+
+ In any directory, you can invoke GGE.
+
+	%java gge
+Then, the material window appears, followed by the volume window.
+
+3.4) DAWN, Tcl/Tk and Postscript for the preview of CSG or BREP solids
+
+
+ If you want to  preview  G4Solids, you have to install
+DAWN, Fukui renderer as well as Tcl/Tk wish (Tcl/Tk 8.0) for its GUI. 
+DAWN uses also Postscript to draw *.prim files.  
+ If you don't use GGE's preview button, these are not necessary.
+
+For the visualization of the whole detector, DAWN or  Mesa (for OGLIX)
+are necessary.
+
+3.5) GEANT4 toolkit and its environments
+The visualization manager instantiates DAWN, DAWNFILE, OPENGLIX,
+OPENGLSX, VRML, VRMLFILE. So, you have to setenv accordingly.
+
+4) A First Lesson; how to use GGE.
+
+Here is a walk-through of how to use GGE.
+
+4.1) Visualize the prefabricated detector sample
+	1) In a xterm, type %java gge
+	2) In the "Volume window", select "Load a Volume file" menu
+		and double click on "rotateallsolids.g4dt"
+	3) Click "Makesource" and select "Make C++ code". Have a look of the generated C++ code.
+	4) Save the C++ code (overwrite the existing one)
+		in .../GGEmake/src/MyDetectorConstruction.cc" using the file chooser.
+	5) In another xterm, go to the directory GGEmake/ and type
+		%make G4TARGET=myDetector
+
+		Watch if there is any compilation error. At present,
+		GGE is made so that it generates correct C++ codes,
+		if a user uses GGE correctly.
+
+		
+	6) Check that you have "myDetector" executable, in $(G4INSTALL)/bin/$(G4SYSTEM)
+	7) In another xterm, type 
+		%java gag
+		
+		and with the "Run GEANT4" button, choose and run "myDetector".
+        8) Use /control/execute command and double click on "DrawOGLIX.g4m".
+		To have a better view, use vis commands (camera/viewpoint, zoom etc).
+		You can select DrawDAWNFILE to  draw and have a PS hardcopy.
+
+4.2) Modify the prefabricated detector
+ Now let's change the detector configuration. Go to the "Volume" window
+	and change any part of it, including material.
+
+4.2.1) Changing materials
+		
+	1) First, you have to  "Clear Material" in the Material editor. 
+	2) Then, select "Load material" and double click on "MaterialDB.g4mt". 
+		    Now you have a list of materials.
+	3) Then, in the "Logical Volume" panel, double click the box you want to change
+		    and type in the name of the material in the material editor.
+	4) Change as many materials as you like and push "Used Material" button.
+		    You see that materials you have typed in are marked "Used" in red.
+		    If not, you might have mistyped the name of a material.
+	5) If you want to use additional materials, select  "Use" in the material 
+		   editor (the leftmost column).
+	6) Push "Makesource" and see your change has been realized in the C++ code.
+
+	NOTE!! Be careful that there are no duplicated "Used" materials, when
+		you load the material DB without "Clear Material".
+
+4.2.2) Modifying the size parameters of solids
+
+	To change the sizes of G4 solids
+	1) click a "solid" box of the logical volume of your choice. 
+	2) You have a pop-up window to edit the parameters. Change a parameter 
+			or its unit, as you like.
+	3) Push "Makesource" and see if your changes have been correctly applied 
+			to C++ code.
+	4) In case of BREP solids, the pop-up window has variable number of columns
+			to accept any number of nodes.
+	5) For complicated solids like BREPs, preview may be useful. Click "View"
+			button and you have a view with the DAWN renderer. Its g4.prim file
+			is also shown in an edit-able widget.
+
+4.2.3) Changing the type of solid of an existing logical volume
+   You may want to replace the current G4Solid with another one. In the 
+    present GGE you can't do so directly. You have to "Create" a new logical
+    volume with the type of solid you want and then delete the unnecessary volume.
+
+	1) Choose your new solid with "Select Solid" combo-box.
+	2) Push "Create" button and you have a pop-up window to input parameters.
+	3) Type in numbers and select their units.  
+	4) Preview if you like and then push "OK".
+	5) Check the C++ code.
+
+4.2.4) Changing visualization attributes (Color).
+	1) You have to "Create" a new VisAttributes
+	2) Upon the "Create" button, you have a Color Chooser.
+	3) Select RGB (not HSV). Set your color with slide-bars.
+	4) Give it a name, and push "OK". Then you have a color circle and name in the
+		VisAttrib panel.
+	5) Edit the VisAtb box in the LogicalVolume panel.
+	6) See the C++ code.
+
+4.2.5) Changing Repeated Volumes
+
+
+	a) "edit" the physical volumes
+
+	"translateallsolids.g4dt" contains all except HYPE CSG and two BREP volumes which are
+	positioned in  "Pepeated Placement Volumes" in threee  directions.
+	Change the parameter of repetition such as the number or width, or you can 
+	add another "repeated volumes" 	in another direction.
+
+
+
+	b) making C++ code "MyDetectorConstruction.cc" and compile.
+
+	Finally, back to the step 3 and recompile.
+	If you have any compiler errors, in most cases, it is due to unfilled table, misspelled name
+	etc.. GGE is not yet wise enough to correct such simple mistakes.
+
+
+
+
+	Opening GGE, compile, GAG simultaneously, you can 
+	test and improve the geometry, just like creating
+	HTML or TeX documents.
+
+
+4) Naming conventions in GGE
+
+ Knowledge of GGE's naming convention is helpful to read the generated C++ code as 
+well as using GGE correctly.
+
+    4-1) Elements and materials
+
+	a) Elements are named "elementXXX", where XXX stands for the
+		element's symbol in the periodic table.
+	b) materials are named just as you have typed in the second column
+		of the material window.
+
+    4-2) solids and logical volumes
+	The "Name" typed in the first (leftmost) column of the "Logical Volume"
+	is used to name the corresponding solid. If, for example, the name "world" is given
+	to a logical volume of a Box, the G4Box has an instance "solidworld".
+    4-3) logical and physical volumes
+	The instance of a physical volume defined by "pName" has a name prefixed
+	with "physical", i.,e., instance's name is "physical" + pName ( the plus sign means
+	string concatenation). "logical" is added to the instance of a logical
+	volume.
+	In case of SPV (single placement of a volume), the columns "pName" (instance of 
+	physical volume) and "pLogical" may have the same strings.
+
+	In case of RPV (repeated placement of a volume ), "pName" must be different from 
+	"pLogical" whose copies are repeatedly placed.
+
+    4-4) All variables are named after their proper instances.
+	See for example, the control variable used in the for loop in the 
+	RPV. Another examples are seen in the arrays to define BREP geometry. 
+
+5) Default values and combo-boxes
+
+
+5.1) Default optional values of materials
+	GGE provides default values in a pre-filled columns or with the
+	combo-boxes. "Use", "State" and "Unit" columns are equipped with
+	combo-boxes. Temperature and pressure column are pre-filled with
+	273.15 * kelvin and 1 * atmosphere.
+5.2) Default values in volumes
+	"Mother Type" is either NULL (mother of all), logical (type 2, 4 constructors)
+	or physical (type 2 or 4 constructors) in G4PVPlacement.
+
+
+
+
+
+
+
+
+
+
+

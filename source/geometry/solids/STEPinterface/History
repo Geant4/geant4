@@ -1,0 +1,73 @@
+History file for geometry/solids/STEPinterface
+
+revision 1.9
+date: 1998/12/09 12:00:42;  author: broglia;  state: Exp;  lines: +22 -37
+December 9, 1998 : L. Broglia
+ - Make the possibility to read a STEP file containing
+   an assembly of assemblies.
+
+   G4AdvancedBrepShapeRepresentation can have 1 or more
+   Manifold solid, so the creator return an array of
+   G4BREPSolid (class G4BREPSolidVector)
+
+   G4ContextDependentShapeRepresentationCreator and
+   G4RepresentationRelationshipCreator create G4AdvancedBrepShapeRepresentation,
+   so I modified the 'return' type (now G4BREPSolidVector)
+
+   G4AssemblyCreator create an assembly of solids, so a STEP file containing
+   an assembly of assemblies is saved into an assembly of solids.
+
+----------------------------
+revision 1.6
+
+November 17, 1998 : L. Broglia
+  - Modify  G4AssemblyCreator, made of 0 or 1 Axis2Placement3D
+    and 1 or more ManifoldSolidBrep
+
+
+November 6, 1998  L. Broglia
+
+ - Implement CreateG4Geometry in G4CircleCreator, G4CylindricalSurfaceCreator,
+  G4CylindricalSurfaceCreator.cc, G4SphericalSurfaceCreator.cc
+
+----------------------------
+revision 1.4
+date: 1998/07/29 00:45:22;  author: gcosmo;  state: Exp;  lines: +2 -1
+Porting on DEC-cxx 6.0: for-loop usage fixed
+----------------------------
+revision 1.3
+date: 1998/07/12 02:58:03;  author: urbi;  state: Exp;  lines: +1 -1
+branches:  1.3.6;
+Renaming methods.
+----------------------------
+revision 1.2
+date: 1998/07/10 20:55:42;  author: japost;  state: Exp;  lines: +4 -4
+  Changed
+    ::G4GeometryTable::Register
+  to
+    G4GeometryTable::Register
+  in order to allow it to compile on DEC-AFS.
+
+  Also deleted unneeded ";" after {} of functions. (Warnings on DEC)
+
+----------------------------
+revision 1.1
+date: 1998/07/08 15:26:35;  author: jsulkimo;  state: Exp;
+First version of STEPinterface.
+  Compiled on AIX & Linux
+----------------------------
+revision 1.3.6.1
+date: 1998/08/21 14:37:27;  author: allison;  state: Exp;  lines: +2 -1
+HEAD version now temporarily in beta01-02-branch.
+=============================================================================
+
+
+
+
+
+
+
+
+
+
+

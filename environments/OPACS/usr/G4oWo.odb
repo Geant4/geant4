@@ -1,0 +1,223 @@
+!----------------------------
+begin OInterface
+ prefix = Wo_
+ packages = Xm 
+end
+!----------------------------
+begin OWidget
+ name = Wo_casc
+ type = XmCascadeButton
+ background = lightgrey
+ labelString = Wo
+ mnemonic = O
+ subMenuId = Wo_pull
+end
+!----------------------------
+begin OWidget
+ name = Wo_pull
+ type = XmPulldownMenu
+ children = Wo_490 Wo_otype Wo_osh Wo_431 Wo_461 Wo_462 Wo_491 Wo_467 Wo_fit 
+ background = lightgrey
+end
+!----------------------------
+begin OWidget
+ name = Wo_490
+ type = XmCascadeButton
+ background = lightgrey
+ labelString = Interface
+ mnemonic = I
+ subMenuId = Wo_491
+end
+!----------------------------
+begin OWidget
+ name = Wo_otype
+ type = XmPushButton
+ labelString = Instances
+ activateCallback = osh> load OType.odb | realize -;manageWidget OType_palette;raiseWidget OType_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_osh
+ type = XmPushButton
+ labelString = osh
+ activateCallback = osh> load osh.odb | realize -;manageWidget osh_palette;raiseWidget osh_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_431
+ type = XmPushButton
+ background = lightgrey
+! labelType = pixmap
+ labelPixmap = book.xpm
+ labelString = Help
+ mnemonic = H
+ accelerator = Ctrl<Key>h
+ acceleratorText = Ctrl/h
+ activateCallback = osh>\
+  load Help.odb | realize -\
+  manageWidget Help_palette;raiseWidget Help_palette_popup\
+  showTopic Help_help 'Wo.htm'
+end
+!----------------------------
+begin OWidget
+ name = Wo_461
+ type = XmPushButton
+ background = lightgrey
+! labelType = pixmap
+ labelPixmap = Print.xpm
+ labelString = Print
+ mnemonic = P
+ accelerator = Ctrl<Key>p
+ acceleratorText = Ctrl/p
+ activateCallback = osh> load CPS.odb | realize -; manageWidget CPS_palette;raiseWidget CPS_palette_popup
+! activateCallback = osh> load Visps.odb | realize -; manageWidget Visps_palette;raiseWidget Visps_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_462
+ type = XmPushButton
+ labelString = XoCamera
+ activateCallback = osh> load XoCamera.odb | realize -; manageWidget XoCamera_palette;;raiseWidget XoCamera_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_491
+ type = XmPulldownMenu
+ children = Wo_482 Wo_496 Wo_492 Wo_460 Wo_487 Wo_474 Wo_480 Wo_MenuBar Wo_481 Wo_494 Wo_493 Wo_463 Wo_483 Wo_471 
+ background = lightgrey
+end
+!----------------------------
+begin OWidget
+ name = Wo_482
+ type = XmPushButton
+ labelString = Save interface
+ mnemonic = S
+ accelerator = Ctrl<Key>s
+ acceleratorText = Ctrl/s
+ activateCallback = osh> do Wo saveInterface
+end
+!----------------------------
+begin OWidget
+ name = Wo_496
+ type = XmPushButton
+ labelString = Reload interface
+ accelerator = Ctrl<Key>l
+ acceleratorText = Ctrl/l
+ activateCallback = &osh> \
+  fname=`get Wo interfaceFile`\
+  collect OInterface where dataBaseName eq $fname | destroy -\
+  load $fname | realize -
+end
+!----------------------------
+begin OWidget
+ name = Wo_492
+ type = XmSeparator
+ background = lightgrey
+end
+!----------------------------
+begin OWidget
+ name = Wo_460
+ type = XmPushButton
+ labelString = Widget
+ mnemonic = W
+ accelerator = Ctrl<Key>w
+ acceleratorText = Ctrl/w
+ activateCallback = osh> load Widget.odb | realize -; manageWidget Widget_palette;raiseWidget Widget_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_487
+ type = XmPushButton
+ labelString = New widget
+ mnemonic = N
+ accelerator = Ctrl<Key>n
+ acceleratorText = Ctrl/n
+ activateCallback = osh> load Create.odb | realize -; manageWidget Create_palette;raiseWidget Create_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_MenuBar
+ type = XmPushButton
+ labelString = Edit menu bar
+ activateCallback = osh> load MenuBar.odb | realize -; manageWidget MenuBar_palette;raiseWidget MenuBar_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_474
+ type = XmPushButton
+ labelString = Resource
+ mnemonic = R
+ accelerator = Ctrl<Key>r
+ acceleratorText = Ctrl/r
+ activateCallback = osh> load ResEd.odb | realize -; manageWidget ResEd_palette;raiseWidget ResEd_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_480
+ type = XmPushButton
+ labelString = Attachment
+ mnemonic = A
+ accelerator = Ctrl<Key>a
+ acceleratorText = Ctrl/a
+ activateCallback = osh> load Attach.odb | realize -; manageWidget Attach_palette;raiseWidget Attach_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_481
+ type = XmPushButton
+ labelString = Compound
+ accelerator = Ctrl<Key>c
+ acceleratorText = Ctrl/c
+ activateCallback = osh> load Compound.odb | realize -; manageWidget Compound_palette;raiseWidget Compound_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_494
+ type = XmPushButton
+ labelString = odb files
+ accelerator = Ctrl<Key>o
+ acceleratorText = Ctrl/o
+ activateCallback = osh> load OInterf.odb | realize -; manageWidget OInterface_palette;raiseWidget OInterface_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_493
+ type = XmPushButton
+ labelString = Save pixmap
+ activateCallback = osh> load Pixmap.odb | realize -; manageWidget Pixmap_palette;raiseWidget Pixmap_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_463
+ type = XmPushButton
+ labelString = Mailbox
+ activateCallback = osh> load XMailbox.odb | realize -; manageWidget XMailbox_palette;raiseWidget XMailbox_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_483
+ type = XmPushButton
+ labelString = Ci
+ activateCallback = osh> load Ci.odb | realize -; manageWidget Ci_palette;raiseWidget Ci_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_471
+ type = XmPushButton
+ labelString = Wo toolkit
+ activateCallback = osh> load Sys.odb | realize -; manageWidget Sys_palette;raiseWidget Sys_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_467
+ type = XmPushButton
+ labelString = XoPlotter
+ activateCallback = osh> load Plotter.odb | realize -; manageWidget Plotter_palette;raiseWidget Plotter_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = Wo_fit
+ type = XmPushButton
+ labelString = Fit
+ activateCallback = osh> load Fit.odb | realize -; manageWidget Fit_palette;raiseWidget Fit_palette_popup
+end

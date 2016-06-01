@@ -1,0 +1,36 @@
+inline void G4CompositeCurve::Init(const G4CurveVector& segments0) 
+{
+  segments= segments0;
+  lastIntersection.Reset();
+  InitBounded();
+}
+
+inline const G4CurveVector& G4CompositeCurve::GetSegments() const 
+{
+  return segments;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+inline G4double G4CompositeCurve::GetPMax() 
+{
+  G4Exception("G4CompositeCurve::GetPMax");
+  return 0;
+}
+
+inline G4Point3D G4CompositeCurve::GetPoint(G4double param) 
+{
+  G4Exception("G4CompositeCurve::GetPoint");
+  // Fake return value
+  return G4Point3D();
+}
+
+inline G4double G4CompositeCurve::GetPPoint(const G4Point3D& pt) 
+{
+  G4Exception("G4CompositeCurve::GetPPoint");
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+

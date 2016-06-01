@@ -1,0 +1,48 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: EXPO_Primary.icc,v 2.1 1998/07/12 02:36:59 urbi Exp $
+// GEANT4 tag $Name: geant4-00 $
+//
+//  See also G4/run/example/EXPO_PrimaryGeneratorAction.cc.
+
+#include <G4VUserPrimaryGeneratorAction.hh>
+
+#include <globals.hh>
+#include <G4Event.hh>
+#include <G4ParticleGun.hh>
+#include <G4ParticleTable.hh>
+#include <G4ParticleDefinition.hh>
+
+class EXPO_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  private:
+    G4ParticleGun* particleGun;
+  public:
+    EXPO_PrimaryGeneratorAction()  
+      {
+	G4int                 n_particle = 1;
+	G4String              particleName;
+	particleGun           = new G4ParticleGun(n_particle);
+	G4ParticleTable*      particleTable = G4ParticleTable::GetParticleTable();
+	G4ParticleDefinition* particle      = particleTable->FindParticle(particleName="e-");
+	particleGun->SetParticleDefinition        (particle);
+	particleGun->SetParticleEnergy            (1.*GeV);
+	particleGun->SetParticleMomentumDirection (G4ThreeVector(1.,0.,0.));
+	particleGun->SetParticlePosition          (G4ThreeVector(0.*cm,0.*cm,0.*cm));
+      }
+    ~EXPO_PrimaryGeneratorAction()
+      {
+	delete particleGun;
+      }
+    void GeneratePrimaries(G4Event* anEvent)
+      {
+	particleGun->GeneratePrimaryVertex(anEvent);
+      }
+
+};
+

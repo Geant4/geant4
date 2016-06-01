@@ -1,0 +1,20 @@
+#
+/gun/particle e-
+/gun/energy 1 GeV
+/gun/position 0 0 0
+#
+/tracking/verbose 1
+#
+/gun/direction 0 .6 1.
+/run/beamOn 5
+#
+/gun/direction 0 .3 1.
+/run/beamOn 5
+#
+/gun/direction 0 -.3 1.
+/run/beamOn 5
+#
+/gun/direction 0 -.6 1.
+/run/beamOn 5
+#
+exit

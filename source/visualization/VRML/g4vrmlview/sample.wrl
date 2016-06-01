@@ -1,0 +1,700 @@
+#VRML V1.0 ascii
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1
+	}
+	DEF box_WBox_10 Separator {
+		Material {
+			diffuseColor 1 1 1
+		}
+		Cube {
+			width 12000
+			height 24000
+			depth 20000
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 0 1
+	}
+	DEF box_WSBox_11 Separator {
+		Material {
+			diffuseColor 1 0 0
+		}
+		Cube {
+			width 3200
+			height 1300
+			depth 3200
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 0 1
+	}
+	DEF box_WSWBox_12 Separator {
+		Material {
+			diffuseColor 0 1 0
+		}
+		Cube {
+			width 3180
+			height 1280
+			depth 3180
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 400 0 1
+	}
+	DEF box_WSSBox_13 Separator {
+		Material {
+			diffuseColor 0 0 1
+		}
+		Cube {
+			width 3180
+			height 2
+			depth 3180
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 460 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 520 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 580 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 640 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 700 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 760 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 820 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 880 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 940 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1060 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1120 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1180 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1240 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1300 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1360 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1420 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1480 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1540 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1600 0 1
+	}
+	USE box_WSSBox_13
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -1220 1
+	}
+	DEF tubs_CUTubsR_14 Separator {
+		ShapeHints {
+			vertexOrdering COUNTERCLOCKWISE
+			shapeType SOLID
+			faceType CONVEX
+		}
+		Material {
+			diffuseColor 1 1 1
+		}
+		Coordinate3 {
+			point [
+				1512.5 1512.5 305,
+				1069.5 1852.43 305,
+				553.614 2066.12 305,
+				1.30972e-13 2139 305,
+				1512.5 1512.5 -305,
+				1069.5 1852.43 -305,
+				553.614 2066.12 -305,
+				1.30972e-13 2139 -305,
+				1234.86 1234.86 305,
+				873.18 1512.39 305,
+				451.991 1686.85 305,
+				1.0693e-13 1746.36 305,
+				1234.86 1234.86 -305,
+				873.18 1512.39 -305,
+				451.991 1686.85 -305,
+				1.0693e-13 1746.36 -305,
+			]
+		}
+		IndexedFaceSet {
+			coordIndex [
+				0, 4, 5, 1, -1,
+				1, 5, 6, 2, -1,
+				2, 6, 7, 3, -1,
+				12, 8, 9, 13, -1,
+				13, 9, 10, 14, -1,
+				14, 10, 11, 15, -1,
+				8, 0, 1, 9, -1,
+				9, 1, 2, 10, -1,
+				10, 2, 3, 11, -1,
+				4, 12, 13, 5, -1,
+				5, 13, 14, 6, -1,
+				6, 14, 15, 7, -1,
+				0, 8, 12, 4, -1,
+				7, 15, 11, 3, -1,
+			]
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -1220 1
+	}
+	DEF tubs_CRTubsR_15 Separator {
+		ShapeHints {
+			vertexOrdering COUNTERCLOCKWISE
+			shapeType SOLID
+			faceType CONVEX
+		}
+		Material {
+			diffuseColor 1 1 1
+		}
+		Coordinate3 {
+			point [
+				1505.43 1505.43 305,
+				1064.5 1843.77 305,
+				551.026 2056.46 305,
+				1.30359e-13 2129 305,
+				1505.43 1505.43 -305,
+				1064.5 1843.77 -305,
+				551.026 2056.46 -305,
+				1.30359e-13 2129 -305,
+				1234.86 1234.86 305,
+				873.18 1512.39 305,
+				451.991 1686.85 305,
+				1.0693e-13 1746.36 305,
+				1234.86 1234.86 -305,
+				873.18 1512.39 -305,
+				451.991 1686.85 -305,
+				1.0693e-13 1746.36 -305,
+			]
+		}
+		IndexedFaceSet {
+			coordIndex [
+				0, 4, 5, 1, -1,
+				1, 5, 6, 2, -1,
+				2, 6, 7, 3, -1,
+				12, 8, 9, 13, -1,
+				13, 9, 10, 14, -1,
+				14, 10, 11, 15, -1,
+				8, 0, 1, 9, -1,
+				9, 1, 2, 10, -1,
+				10, 2, 3, 11, -1,
+				4, 12, 13, 5, -1,
+				5, 13, 14, 6, -1,
+				6, 14, 15, 7, -1,
+				0, 8, 12, 4, -1,
+				7, 15, 11, 3, -1,
+			]
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -1220 1
+	}
+	DEF tubs_CUTubsL_16 Separator {
+		ShapeHints {
+			vertexOrdering COUNTERCLOCKWISE
+			shapeType SOLID
+			faceType CONVEX
+		}
+		Material {
+			diffuseColor 1 1 1
+		}
+		Coordinate3 {
+			point [
+				1.30972e-13 2139 305,
+				-553.614 2066.12 305,
+				-1069.5 1852.43 305,
+				-1512.5 1512.5 305,
+				1.30972e-13 2139 -305,
+				-553.614 2066.12 -305,
+				-1069.5 1852.43 -305,
+				-1512.5 1512.5 -305,
+				1.0693e-13 1746.36 305,
+				-451.991 1686.85 305,
+				-873.18 1512.39 305,
+				-1234.86 1234.86 305,
+				1.0693e-13 1746.36 -305,
+				-451.991 1686.85 -305,
+				-873.18 1512.39 -305,
+				-1234.86 1234.86 -305,
+			]
+		}
+		IndexedFaceSet {
+			coordIndex [
+				0, 4, 5, 1, -1,
+				1, 5, 6, 2, -1,
+				2, 6, 7, 3, -1,
+				12, 8, 9, 13, -1,
+				13, 9, 10, 14, -1,
+				14, 10, 11, 15, -1,
+				8, 0, 1, 9, -1,
+				9, 1, 2, 10, -1,
+				10, 2, 3, 11, -1,
+				4, 12, 13, 5, -1,
+				5, 13, 14, 6, -1,
+				6, 14, 15, 7, -1,
+				0, 8, 12, 4, -1,
+				7, 15, 11, 3, -1,
+			]
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -1220 1
+	}
+	DEF tubs_CRTubsL_17 Separator {
+		ShapeHints {
+			vertexOrdering COUNTERCLOCKWISE
+			shapeType SOLID
+			faceType CONVEX
+		}
+		Material {
+			diffuseColor 1 1 1
+		}
+		Coordinate3 {
+			point [
+				1.30359e-13 2129 305,
+				-551.026 2056.46 305,
+				-1064.5 1843.77 305,
+				-1505.43 1505.43 305,
+				1.30359e-13 2129 -305,
+				-551.026 2056.46 -305,
+				-1064.5 1843.77 -305,
+				-1505.43 1505.43 -305,
+				1.0693e-13 1746.36 305,
+				-451.991 1686.85 305,
+				-873.18 1512.39 305,
+				-1234.86 1234.86 305,
+				1.0693e-13 1746.36 -305,
+				-451.991 1686.85 -305,
+				-873.18 1512.39 -305,
+				-1234.86 1234.86 -305,
+			]
+		}
+		IndexedFaceSet {
+			coordIndex [
+				0, 4, 5, 1, -1,
+				1, 5, 6, 2, -1,
+				2, 6, 7, 3, -1,
+				12, 8, 9, 13, -1,
+				13, 9, 10, 14, -1,
+				14, 10, 11, 15, -1,
+				8, 0, 1, 9, -1,
+				9, 1, 2, 10, -1,
+				10, 2, 3, 11, -1,
+				4, 12, 13, 5, -1,
+				5, 13, 14, 6, -1,
+				6, 14, 15, 7, -1,
+				0, 8, 12, 4, -1,
+				7, 15, 11, 3, -1,
+			]
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -610 1
+	}
+	USE tubs_CUTubsR_14
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -610 1
+	}
+	USE tubs_CRTubsR_15
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -610 1
+	}
+	USE tubs_CUTubsL_16
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 -610 1
+	}
+	USE tubs_CRTubsL_17
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 0 1
+	}
+	USE tubs_CUTubsR_14
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 0 1
+	}
+	USE tubs_CRTubsR_15
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 0 1
+	}
+	USE tubs_CUTubsL_16
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 0 1
+	}
+	USE tubs_CRTubsL_17
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 610 1
+	}
+	USE tubs_CUTubsR_14
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 610 1
+	}
+	USE tubs_CRTubsR_15
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 610 1
+	}
+	USE tubs_CUTubsL_16
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 610 1
+	}
+	USE tubs_CRTubsL_17
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 1220 1
+	}
+	USE tubs_CUTubsR_14
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 1220 1
+	}
+	USE tubs_CRTubsR_15
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 1220 1
+	}
+	USE tubs_CUTubsL_16
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 1000 1220 1
+	}
+	USE tubs_CRTubsL_17
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 4100 0 1
+	}
+	DEF box_muCh_18 Separator {
+		Material {
+			diffuseColor 1 1 1
+		}
+		Cube {
+			width 8000
+			height 200
+			depth 8000
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 4250 0 1
+	}
+	DEF box_muFe_19 Separator {
+		Material {
+			diffuseColor 1 1 1
+		}
+		Cube {
+			width 8000
+			height 100
+			depth 8000
+		}
+	}
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 4400 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 4550 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 4700 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 4850 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5000 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5150 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5300 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5450 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5550 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5700 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5850 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 5950 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 6100 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 6250 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 6350 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 6500 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 6650 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 6750 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 6900 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7050 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7150 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7300 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7450 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7550 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7700 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7850 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 7950 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 8100 0 1
+	}
+	USE box_muCh_18
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 8250 0 1
+	}
+	USE box_muFe_19
+}
+Separator {
+	MatrixTransform {
+		matrix 1 0 0 0 0 1 0 0 0 0 1 0 0 8350 0 1
+	}
+	USE box_muFe_19
+}
+#End of file.

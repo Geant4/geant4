@@ -1,0 +1,9 @@
+#echo 'notify : end of event.'
+collect ONode where name eq Trajectory* | delete  -
+#collect Trajectory | dump -
+# Color of a trajectory is decided, according to charge, in representation code.
+# red -; blue +; green neutral
+#set OContext markerStyle cross
+collect Trajectory | represent - | viewNode - TEST_camera
+# Enter in a secondary loop
+do Wo processEvents

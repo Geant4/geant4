@@ -1,0 +1,287 @@
+##	GAGsavelog
+##	(FBtext procedure)
+#	check Before Save
+
+##
+##	k.ohtubo(Tubocky)
+##
+##	1998.3.16
+##	Tcl/Tk version 8.0
+#	1998 July 5 GEANT4 Beta-01
+##	Procedures
+
+proc Before_Save {} {
+	global SAVE_RANGE FONT F_COLOR B_COLOR
+
+	if {![winfo exists .fbt.text]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return
+	}
+
+	if {[.fbt.text tag range SEARCH_ALL_TAG] != ""} {
+		Message_Skeleton -icon question -button {O.K. Cancel} \
+			-message "Save only searched strings."
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {
+			destroy .msgskeleton
+			set SAVE_RANGE [.fbt.text tag range SEARCH_ALL_TAG]
+			Save_Window
+		}
+		.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+	} elseif {[.fbt.text tag range sel] != ""} {
+		Message_Skeleton -icon question -button {O.K. Cancel} \
+			-message "Save only marked part."
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {
+			destroy .msgskeleton
+			set SAVE_RANGE [.fbt.text tag range sel]
+			Save_Window
+		}
+		.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+	} else {
+		set SAVE_RANGE [list 0.0 [.fbt.text index end]]
+		Save_Window
+	}
+}
+
+#	make Save window
+proc Save_Window {} {
+	if [winfo exists .sl] {
+		raise .sl
+		focus .sl.name.ent
+		return
+	}
+
+	global FONT F_COLOR B_COLOR errorCode errorInfo env
+
+	set DIR $env(G_PATH)
+	File_List_Skeleton .sl
+
+	.sl.butt.b0 configure -text "Save Text" -command {
+		set Name [.sl.name.ent get]
+		if {$Name != ""} {
+			if [file isdirectory $env(G_PATH)/$Name] {
+				cd $Name
+				set END [string length $env(HOME)]
+				set PATH ~[string range $env(G_PATH) $END end]
+				.sl.info.label1 configure -text $PATH
+				.sl.butt.b1 invoke
+				Put_File_List .sl
+			} elseif [file executable $env(G_PATH)/$Name] {
+				Message_Skeleton -icon warning -button O.K. \
+					-message "Warning!\n\"$Name\" is an executable file."
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			} elseif [file isfile $env(G_PATH)/$Name] {
+				Message_Skeleton -icon question -button {Yes No} \
+					-message "$Name: Overwrite?"
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {
+					destroy .msgskeleton
+					Save
+				}
+				.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+			} else {
+				Message_Skeleton -icon question -button {Yes No} \
+					-message "$Name: New file?"
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {
+					destroy .msgskeleton
+					Save
+				}
+				.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+			}
+		}
+	}
+
+	.sl.butt.b1 configure -text Clear -command {
+		.sl.select.list see 0
+		.sl.select.list selection clear 0 end
+		focus .sl.name.ent
+		.sl.name.ent delete 0 end
+		set END [string length $env[HOME)]
+		set PATH ~[string range [pwd] $END end]
+		.sl.info.label1 configure -text $PATH
+		Put_File_List .sl
+	}
+
+	.sl.butt.b2 configure -text Cancel -command {
+		destroy .sl
+	}
+
+
+#	Binding
+
+	bind .sl.select.list <ButtonRelease> {
+		if {![catch {selection get} GET]} {
+			if [file isdirectory $env(G_PATH)/$GET] {
+				Change_Path $GET
+				set END [string length $env(HOME)]
+				set PATH ~[string range $env(G_PATH) $END end]
+				.sl.info.label1 configure -text $PATH
+				.sl.butt.b1 invoke
+				Put_File_List .sl
+			} else {
+				.sl.name.ent delete 0 end
+				.sl.name.ent insert end $GET
+			}
+		}
+		if {$errorCode != "NONE"} {
+			set errorCode NONE
+		}
+		if {$errorInfo != ""} {
+			set errorInfo ""
+		}
+	}
+
+	bind .sl.select.list <Double-Button> {
+		set Name [.sl.name.ent get]
+		if {$Name != ""} {
+			if [file executable $env(G_PATH)/$Name] {
+				Message_Skeleton -icon warning -button O.K. \
+					-message "Warning!\n\"$Name\" is an executable file."
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			} elseif [file isfile $env(G_PATH)/$Name] {
+				Message_Skeleton -icon question -button {Yes No} \
+					-message "$Name: Overwrite?"
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {
+					destroy .msgskeleton
+					Save
+				}
+				.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+			} else {
+				Message_Skeleton -icon question -button {Yes No} \
+					-message "$Name: New file?"
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {
+					destroy .msgskeleton
+					Save
+				}
+				.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+			}
+		}
+	}
+
+	bind .sl.select.list <Double-ButtonRelease> {}
+
+	bind .sl.name.ent <Return> {.sl.butt.b0 invoke}
+
+	bind .sl <Enter> {
+		raise .sl
+		focus .sl.name.ent
+	}
+
+
+	wm title .sl "Save Log"
+	wm protocol .sl WM_DELETEWINDOW {
+		grab release .sl
+		Change_Path $DIR
+	}
+	Put_File_List .sl
+	if {$FONT != ""} {
+		Change_Font $FONT .sl
+	}
+	if {$F_COLOR != "" && $B_COLOR != ""} {
+		Change_Color $F_COLOR $B_COLOR .sl
+	}
+	Win_Size .sl
+	Tab_off
+	Control
+	grab set .sl
+}
+
+#	Save log
+proc Save {} {
+	global SAVE_RANGE FONT F_COLOR B_COLOR errorCode errorInfo env
+
+	if {![winfo exists .sl]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return
+	}
+
+	set Name [.sl.name.ent get]
+
+	if {![catch {open $env(G_PATH)/$Name w} file_ID]} {
+		set LENGTH [llength $SAVE_RANGE]
+		for {set i 0} {$i < $LENGTH} {incr i} {
+			puts $file_ID [.fbt.text get [lindex $SAVE_RANGE $i] [lindex $SAVE_RANGE [expr $i + 1]]]
+			incr i
+		}
+		close $file_ID
+	} else {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Cannot open."
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+	}
+
+	if {$errorCode != "NONE"} {
+		set errorCode NONE
+	}
+	if {$errorInfo != ""} {
+		set errorInfo ""
+	}
+}

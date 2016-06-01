@@ -1,0 +1,24 @@
+1998 June 25			Yoshida
+
+	Improve look-and-feel of GAG by KOdama (as of 31/March/1998).
+
+
+Swing-1.0.1 is used.
+Swing-1.0.2 is desirable, but wait a moment. Swing-1.0.2 has
+not yet frozen classes and interfaces, among them JColorChooser
+and JFileChooser.
+They are left as before in swing.preview package!!
+
+
+Swing-1.0.2 JFileChooser is good for us since it allows file filtering,
+ free label on buttons etc..
+
+But it is better to wait JDK1.2!!
+
+
+So there is only minor improvements.
+
+Font is one of the most iportant improvement.
+Current fonts are too small or not beautiful.
+
+

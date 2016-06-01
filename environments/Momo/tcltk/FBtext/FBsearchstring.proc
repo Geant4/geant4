@@ -1,0 +1,411 @@
+##	FBsearchstring
+##	(FBtext procedure)
+#	make Search String window
+
+##
+##	k.ohtubo(Tubocky)
+##
+##	1997.3.16
+##	Tcl/Tk version 8.0
+##	1998 July 5 GEANT4 Beta-01
+##	
+proc Search_String {} {
+	global FONT SEARCH REPLACE F_COLOR B_COLOR
+
+	if {![winfo exists .fbt.text]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return
+	}
+
+
+	if [winfo exists .ss] {
+		raise .ss
+		focus .ss.ent.search
+		return
+	}
+
+
+	toplevel .ss -highlightthickness 0
+	wm title .ss "Search String"
+	wm protocol .ss WM_DELETE_WINDOW {
+		.fbt.text tag remove SEARCH_TAG 1.0 end
+		.fbt.text tag remove SEARCH_ALL_TAG 1.0 end
+		destroy .ss
+	}
+
+	frame .ss.butt -highlightthickness 0
+	pack .ss.butt -side top -fill x
+
+	button .ss.butt.b0 -text Search -bd 3 -highlightthickness 0 \
+		-command {
+			if {[.ss.ent.search get] != ""} {
+				if {![Search]} {
+					set STRING [.ss.ent.search get]
+					Message_Skeleton -icon info -button O.K. \
+						-message "$STRING:No match."
+					if {$FONT != ""} {
+						Change_Font $FONT .msgskeleton
+					}
+					if {$F_COLOR != "" && $B_COLOR != ""} {
+						Change_Color $F_COLOR $B_COLOR .msgskeleton
+					}
+					.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+				}
+			} else {
+				Message_Skeleton -icon error -button O.K. \
+					-message "Input String."
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			}
+		}
+	button .ss.butt.b1 -text Replace -bd 3 -highlightthickness 0 \
+		-command {
+			if {[.ss.ent.search get] != ""} {
+				if {[.ss.ent.replace get] != ""} {
+					Message_Skeleton -icon question -button {Yes No} \
+						-message "Chack!\nDelete [.ss.ent.search get]?"
+					if {$FONT != ""} {
+						Change_Font $FONT .msgskeleton
+					}
+					if {$F_COLOR != "" && $B_COLOR != ""} {
+						Change_Color $F_COLOR $B_COLOR .msgskeleton
+					}
+					.msgskeleton.butt.0 configure -command {
+						destroy .msgskeleton
+						Replace
+					}
+					.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+				}
+			} else {
+				Message_Skeleton -icon error -button O.K. \
+					-message "Input String."
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			}
+		}
+
+	menubutton .ss.butt.b2 -text Option -menu .ss.butt.b2.set \
+		-relief raised -bd 3 -highlightthickness 0
+
+	menu .ss.butt.b2.set -tearoff 0
+	.ss.butt.b2.set add cascade -label Search -menu .ss.butt.b2.set.search
+	.ss.butt.b2.set add cascade -label Replace \
+		-menu .ss.butt.b2.set.replace
+
+	menu .ss.butt.b2.set.search -tearoff 0
+	.ss.butt.b2.set.search add radiobutton -label Up \
+		-variable SEARCH -value Up
+	.ss.butt.b2.set.search add radiobutton -label Down \
+		-variable SEARCH -value Down
+
+	menu .ss.butt.b2.set.replace -tearoff 0
+	.ss.butt.b2.set.replace add radiobutton -label "Only One" \
+		-variable REPLACE -value One
+	.ss.butt.b2.set.replace add radiobutton -label "About All" \
+		-variable REPLACE -value All
+
+	button .ss.butt.b3 -text Clear -bd 3 -highlightthickness 0 \
+		-command {
+			.ss.ent.search delete 0 end
+			.ss.ent.replace delete 0 end
+			.fbt.text tag remove SEARCH_TAG 1.0 end
+			.fbt.text tag remove SEARCH_ALL_TAG 1.0 end
+			focus .ss.ent.search
+			.fbt.text see end
+		}
+	button .ss.butt.b4 -text Cancel -bd 3 -highlightthickness 0 \
+		-command {
+			if [winfo exists .ss] {destroy .ss}
+			.fbt.text tag remove SEARCH_TAG 1.0 end
+			.fbt.text tag remove SEARCH_ALL_TAG 1.0 end
+		}
+
+	pack .ss.butt.b0 .ss.butt.b1 .ss.butt.b2 .ss.butt.b3 .ss.butt.b4 \
+		-side left -fill x
+
+
+	frame .ss.space -highlightthickness 0
+	pack .ss.space -side top -fill both -expand 1
+
+
+	frame .ss.label -highlightthickness 0
+	pack .ss.label -side left
+
+	label .ss.label.search -text Search -anchor w \
+		-highlightthickness 0
+	pack .ss.label.search -side top -fill x
+
+	label .ss.label.replace -text Replace -anchor w \
+		-highlightthickness 0
+	pack .ss.label.replace -side top -fill x
+
+
+	frame .ss.ent -highlightthickness 0
+	pack .ss.ent -side left -fill x -expand 1
+
+	entry .ss.ent.search -highlightthickness 0
+	pack .ss.ent.search -side top -fill x
+
+	entry .ss.ent.replace -highlightthickness 0
+	pack .ss.ent.replace -side top -fill x
+	
+
+	focus .ss.ent.search
+	Tab_off
+	Control
+
+	foreach BIND {Return Tab Shift-Tab Down Control-n} {
+		bind .ss.ent.search <$BIND> {focus .ss.ent.replace}
+	}
+	foreach BIND {Return Tab Shift-Tab Up Control-p} {
+		bind .ss.ent.replace <$BIND> {focus .ss.ent.search}
+	}
+
+	if {$FONT != ""} {
+		Change_Font $FONT .ss
+	}
+	if {$F_COLOR != "" && $B_COLOR != ""} {
+		Change_Color $F_COLOR $B_COLOR .ss
+	}
+	Win_Size .ss
+	wm resizable .ss 1 0
+}
+
+#	Search string on FBtext window
+proc Search {} {
+	global SEARCH FONT F_COLOR B_COLOR
+
+	if {![winfo exists .ss.ent.search]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return 1
+	}
+
+
+	.fbt.text tag remove SEARCH_ALL_TAG 1.0 end
+	.fbt.text tag configure SEARCH_ALL_TAG \
+		-foreground #fffffffff -background #000000000
+	set CURSOL [.fbt.text index insert]
+	set CUR 1.0
+	set STRING [.ss.ent.search get]
+	if {$STRING != ""} {
+		while {[set CUR [.fbt.text search -count LENGTH -regexp --\
+				$STRING $CUR end]] != ""} {
+			.fbt.text tag add SEARCH_ALL_TAG \
+				$CUR "$CUR + $LENGTH char"
+			set CUR [.fbt.text index "$CUR + $LENGTH char"]
+		}
+	}
+	.fbt.text index $CURSOL
+
+	switch $SEARCH {
+		Up {
+			if [Search_Up] {
+				return 1
+			} else {
+				return 0
+			}
+		}
+		Down {
+			if [Search_Down] {
+				return 1
+			} else {
+				return 0
+			}
+		}
+		default {
+			Message_Skeleton -icon error -button O.K. \
+				-message "Click \"Option\" button.\nAnd check search up or down."
+			if {$FONT != ""} {
+				Change_Font $FONT .msgskeleton
+			}
+			if {$F_COLOR != "" && $B_COLOR != ""} {
+				Change_Color $F_COLOR $B_COLOR .msgskeleton
+			}
+			.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			return 1
+		}
+	}
+}
+
+#	Search mode is "up"
+proc Search_Up {} {
+	.fbt.text tag remove SEARCH_TAG 1.0 end
+	.fbt.text tag configure SEARCH_TAG \
+		-foreground #fffffffff -background #ccc000000
+
+	set CURSOL [.fbt.text index insert]
+	set STRING [.ss.ent.search get]
+	set STOP 1.0
+
+	set INDEX [.fbt.text search -backwards \
+		-count LENGTH -regexp -- $STRING $CURSOL $STOP]
+
+	if {$INDEX != ""} {
+		scan $INDEX %d.%d LINE HEAD
+		set TAIL [expr $HEAD + $LENGTH]
+		.fbt.text tag add SEARCH_TAG $LINE.$HEAD $LINE.$TAIL
+		.fbt.text mark set insert $LINE.$HEAD
+		.fbt.text yview -pickplace insert
+	} else {
+		.fbt.text mark set insert 1.0
+		return 0
+	}
+	return 1
+}
+
+#	Search mode is "down"
+proc Search_Down {} {
+	.fbt.text tag remove SEARCH_TAG 1.0 end
+	.fbt.text tag configure SEARCH_TAG \
+		-foreground #fffffffff -background #ccc000000
+
+	set CURSOL [.fbt.text index insert]
+	set STRING [.ss.ent.search get]
+	set STOP [.fbt.text index end]
+
+	set INDEX [.fbt.text search -count LENGTH -regexp \
+		-- $STRING $CURSOL $STOP]
+
+	if {$INDEX != ""} {
+		scan $INDEX %d.%d LINE HEAD
+		set TAIL [expr $HEAD + $LENGTH]
+		.fbt.text tag add SEARCH_TAG $LINE.$HEAD $LINE.$TAIL
+		.fbt.text mark set insert $LINE.$TAIL
+		.fbt.text yview -pickplace insert
+	} else {
+		.fbt.text mark set insert end
+		return 0
+	}
+	return 1
+}
+
+#	Replace string on FBtext window
+proc Replace {} {
+	global REPLACE FONT F_COLOR B_COLOR errorCode errorInfo
+
+	if {![winfo exists .ss.ent.replace]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return
+	}
+
+	set STRING [.ss.ent.search get]
+
+	switch $REPLACE {
+		One {
+			if {![Replace_One]} {
+				Message_Skeleton -icon info -button O.K. \
+					-message "$STRING:No match."
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			}
+		}
+		All {
+			Message_Skeleton -icon question -button {Yes No} \
+				-message "Check!\nReplace all?"
+			if {$FONT != ""} {
+				Change_Font $FONT .msgskeleton
+			}
+			if {$F_COLOR != "" && $B_COLOR != ""} {
+				Change_Color $F_COLOR $B_COLOR .msgskeleton
+			}
+			.msgskeleton.butt.0 configure -command {
+				destroy .msgskeleton
+				Replace_All
+			}
+			.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+		}
+		default {
+			Message_Skeleton -icon warning -button O.K. \
+				-message "Click \"Option\" button.\nAnd check replace one or all."
+			if {$FONT != ""} {
+				Change_Font $FONT .msgskeleton
+			}
+			if {$F_COLOR != "" && $B_COLOR != ""} {
+				Change_Color $F_COLOR $B_COLOR .msgskeleton
+			}
+			.msgskeleton.butt.0 conigure -command {destroy .msgskeleton}
+		}
+	}
+}
+
+#	Replace mode is "one"
+proc Replace_One {} {
+	if {[set RANGE [.fbt.text tag range SEARCH_TAG]] == ""} {
+		if {![Search]} {
+			return 0
+		} else {
+			return 1
+		}
+	}
+
+	if {[.ss.ent.search get] != [eval ".fbt.text get $RANGE"]} {
+		if {![Search]} {
+			return 0
+		} else {
+			set RANGE [.fbt.text tag range SEARCH_TAG]
+		}
+	}
+
+	.fbt.text tag remove SEARCH_TAG 1.0 end
+	eval .fbt.text delete $RANGE
+	set INSERT [lindex [split $RANGE] 0]
+
+	if {![catch {.ss.ent.replace get} STRING]} {
+		.fbt.text insert $INSERT $STRING
+		scan $INSERT %d.%d LINE HEAD
+		set TAIL [expr [string length $STRING] + $HEAD]
+		.fbt.text tag add SEARCH_TAG $LINE.$HEAD $LINE.$TAIL
+		if {![Search]} {return 0}
+	}
+	if {$errorCode != "NONE"} {
+		set errorCode NONE
+	}
+	if {$errorInfo != ""} {
+		set errorInfo ""
+	}
+	return 1
+}
+
+#	Replace mode is "all"
+proc Replace_All {} {
+	while {[Replace_One] != 0} {}
+}

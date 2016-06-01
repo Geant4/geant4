@@ -1,0 +1,52 @@
+xvt.benchmark.readme
+=====================
+
+Written by: S.Prior
+      Date: 11/07/97
+  Platform: HP-UX (10.20)
+=============================================================================
+
+This GUI is specific to HP (HP-UX 10.20) - it is NOT compiled (yet) for any 
+other platform, this is because the version of XVT we have (4.5) is not able
+to run on the current AIX CERNSP operating system (it is too old a version).
+
+Please run the script (HP_setup) to set up some of the appropriate 
+environment variables.
+
+************************ IMPORTANT ******************************************
+***                                                                       ***
+*** Please compile this benchmark file using the following compilation    ***
+*** flags and environment variables on HP:                                ***
+***                                                                       ***
+*** CXXFLAGS=+O3 +a1 -DRW_NO_STL -ptS'.hh .c .C .cxx .CXX .cc .CC         *** 
+***          .cpp' -pts -ptr(path of your g4.ptrep)                       ***
+***                                                                       ***
+***                                                                       ***
+*** One Important thing: The flags used when compiling the benchmark must ***
+*** not contain the -z option as this causes some strange problems. -     ***
+*** This is one of the future development issues that needs sorting out.  ***
+***                                                                       ***
+***                                                                       ***
+*** setenv DAWN_INSTALLED 1                                               ***
+*** setenv DAWN_HOME (your DAWN path)                                     ***
+*** set path=( $path $DAWN_HOME )                                         ***
+*** setenv XKEYSYMDB (your path to: XKeysymDB)                            ***
+*** setenv TCL_LIBRARY (your path to the tcl library)                     ***
+*** setenv TK_LIBRARY (your path to the TK library)                       ***
+*** setenv DISPLAY (your display)                                         ***
+*** setenv TESTTARGET xvt.benchmark                                       ***
+***                                                                       ***
+*** Then 'gmake -e' to compile                                            ***
+***                                                                       ***
+*****************************************************************************
+
+=============================================================================
+
+This benchmark file is essentially 'example4' of Makoto's except that I have
+updated the relevant parts for XVT.
+
+You can enter all the commands available for Geant in an entirely graphical
+manner.
+
+To familiarise yourself with the XVT GUI please read the file 'XVT_G4_TUTORIAL'
+which goes through an example for you to follow and shows how to use the GUI.

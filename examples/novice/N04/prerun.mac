@@ -1,0 +1,8 @@
+#
+# default set for single particle test
+#
+/mydet/generator particleGun
+/mydet/reqmuon 1
+/mydet/isomuon 1
+#
+exit

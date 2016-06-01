@@ -1,0 +1,15 @@
+/control/verbose 0
+/tracking/verbose 0
+#
+# Initialize GEANT4
+#
+/run/initialize
+#
+# Run 100 events
+#
+/run/beamOn 1
+#
+# Termination
+#
+exit
+

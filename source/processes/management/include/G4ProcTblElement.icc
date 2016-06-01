@@ -1,0 +1,76 @@
+//////////////////////////
+inline 
+ G4ProcTblElement::G4ProcMgrVector*  G4ProcTblElement::GetProcMgrVector() const
+{
+  return pProcMgrVector;
+}
+
+
+//////////////////////////
+inline 
+ G4bool G4ProcTblElement::Contains(const G4ProcessManager* pManager) const
+{
+  return pProcMgrVector->contains(pManager);
+}
+
+//////////////////////////
+inline 
+ G4int  G4ProcTblElement::GetIndex(const G4ProcessManager* pManager) const
+{
+  if ( Contains(pManager) ) return pProcMgrVector->index(pManager);
+  else return -1;
+}
+
+
+//////////////////////////
+inline 
+ G4int  G4ProcTblElement::Length() const
+{
+  if (pProcMgrVector != NULL) return pProcMgrVector->length();
+  else return -1;
+} 
+
+//////////////////////////
+inline 
+ G4ProcessManager* G4ProcTblElement::GetProcessManager(G4int index) const
+{
+  if (pProcMgrVector != NULL) {
+    if ((index < pProcMgrVector->length()) && (index>=0)){
+      return (*pProcMgrVector)(index);
+    } else {
+      return NULL;
+    }
+  } else {
+    return NULL;
+  }
+}
+
+
+//////////////////////////
+inline 
+ G4VProcess* G4ProcTblElement::GetProcess() const
+{
+  return pProcess;
+}
+
+
+//////////////////////////
+inline 
+ void  G4ProcTblElement::Insert(G4ProcessManager* aProcMgr)
+{
+  if (pProcMgrVector != NULL) pProcMgrVector->insert(aProcMgr);
+} 
+
+//////////////////////////
+inline 
+ void  G4ProcTblElement::Remove(G4ProcessManager* aProcMgr)
+{
+  if (pProcMgrVector != NULL) pProcMgrVector->remove(aProcMgr);
+} 
+
+//////////////////////////
+inline 
+ G4String G4ProcTblElement::GetProcessName() const
+{
+  return  pProcess->GetProcessName();
+}

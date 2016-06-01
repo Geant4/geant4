@@ -1,0 +1,42 @@
+#! /bin/csh -f
+
+if ( ! $?G4EXAMPLE_FDID ) then
+  echo "G4EXAMPLE_FDID is not defined.  Stop."
+  exit 2
+endif
+
+# setup some variables
+
+set CWD          = `pwd`
+set G4SYSTEM     = AIX-AFS
+set G4BIN        = ${CWD}/../../../bin/${G4SYSTEM}
+set G4SCHEMA_DIR = ${CWD}/../../../schema
+
+#### remove used database files
+###
+###set file = ${G4EXAMPLE_BOOT}      ; if (-e $file) rm $file
+###set file = ${G4EXAMPLE_BOOT}.FDDB ; if (-e $file) rm $file
+###cd $G4EXAMPLE_BOOT_DIR
+###rm -f Events.*.DB Geometry.*.DB System.*.DB core
+###
+###echo "Creating a federated database  $G4EXAMPLE_BOOT"
+###${HEP_ODBMS_DIR}/etc/getdb \
+###${G4SCHEMA_DIR}/G4SCHEMA $G4EXAMPLE_BOOT $G4EXAMPLE_FDID
+
+# Since the name of the federated database file G4EXAMPLE is hard
+# coded into the executable for now, it is neccessary to run it in
+# the same directory as $G4EXAMPLE_BOOT.
+
+echo "cd $G4EXAMPLE_BOOT_DIR" ; cd $G4EXAMPLE_BOOT_DIR
+
+if ( $?BACKGROUND ) then
+  if ( -e exampleE02.log.old ) rm -f exampleE02.log.old
+  if ( -e exampleE02.log )     mv -f exampleE02.log exampleE02.log.old
+  ${G4BIN}/exampleE02 ${CWD}/exampleE02.in >& ${CWD}/exampleE02.log &
+  echo "Job exampleE02 submitted..."
+  sleep 2
+  echo "tail -f exampleE02.log"
+  tail -f ${CWD}/exampleE02.log
+else
+  ${G4BIN}/exampleE02 ${CWD}/exampleE02.in
+endif

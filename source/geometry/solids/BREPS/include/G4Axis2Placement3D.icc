@@ -1,0 +1,66 @@
+inline void G4Axis2Placement3D::Init( const G4Vector3D& refDirection0 ,
+				      const G4Vector3D& axis0         ,
+				      const G4Point3D& location0       ) 
+{
+  refDirection = refDirection0;
+  axis         = axis0;
+  location     = location0;
+  
+  // get the axes of the placement coordinate system
+  // (p[] of the STEP standard)
+  pZ = axis.unit();
+  pX = (refDirection-(refDirection*pZ)*pZ).unit();
+  pY = pZ.cross(pX); // normalized
+  
+  // basis transformation
+  fromPlacementCoordinates= HepTranslate3D(location)
+    * G4Transform3D(HepXHat, HepYHat, HepZHat,
+		     pX, pY, pZ);
+
+  toPlacementCoordinates= fromPlacementCoordinates.inverse();
+}
+
+
+inline G4Axis2Placement3D::G4Axis2Placement3D(const G4Vector3D& refDirection0,
+					      const G4Vector3D& axis0        ,
+					      const G4Point3D& location0      )
+{
+  Init( refDirection0, axis0, location0);
+}
+
+
+inline G4Point3D G4Axis2Placement3D::GetLocation() const { return location; }
+
+inline G4Vector3D G4Axis2Placement3D::GetAxis() const { return axis; }
+
+inline G4Vector3D G4Axis2Placement3D::GetRefDirection() const 
+{
+  return refDirection;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+inline const G4Transform3D&
+G4Axis2Placement3D::GetToPlacementCoordinates() const 
+{
+  return toPlacementCoordinates;
+}
+
+
+inline const G4Transform3D&
+G4Axis2Placement3D::GetFromPlacementCoordinates() const 
+{
+  return fromPlacementCoordinates;
+}
+
+
+inline G4Vector3D G4Axis2Placement3D::GetPX() const { return pX; }
+
+inline G4Vector3D G4Axis2Placement3D::GetPY() const { return pY; }
+
+inline G4Vector3D G4Axis2Placement3D::GetPZ() const { return pZ; }
+
+
+
+
+

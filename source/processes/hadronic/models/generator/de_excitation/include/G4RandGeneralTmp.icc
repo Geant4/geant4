@@ -1,0 +1,19 @@
+// -----------------------------------------------------------------------
+//                             HEP Random
+//                         --- RandGeneralTmp ---
+//                 inlined functions implementation file
+// -----------------------------------------------------------------------
+ 
+// =======================================================================
+// Gabriele Cosmo - Created: 20th August 1998
+// =======================================================================
+
+inline HepDouble G4RandGeneralTmp::shoot()
+{
+  return fire();
+}
+
+inline void G4RandGeneralTmp::shootArray( const HepInt size, HepDouble* vect )
+{
+  fireArray(size, vect);
+}

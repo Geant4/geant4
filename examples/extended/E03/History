@@ -1,0 +1,32 @@
+$Id: History,v 1.1 1998/10/14 15:54:47 allison Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Novice Example 09 History file
+                    ------------------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+14th October 1998  John Allison
+- Moved from N09.
+
+21st August 1998  John Allison
+- Renamed files N09* to ExN09*.
+
+9th August 1998  John Allison
+- Changed G4UIterminal to G4UIGAG.
+
+7th August 1998  John Allison
+- Moved from test05.
+
+June 27, 98 G. Cosmo
+- Created.
+

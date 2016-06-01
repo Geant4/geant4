@@ -1,0 +1,33 @@
+Dec    1st, 1998   J. Apostolakis          -  solids-00-04-02
+
+  Small additions to History
+  fix to GNUmakefiles
+   and All of solids-00-04-02plus
+
+Dec    1st, 1998   J. Apostolakis          -  solids-00-04-02plus
+
+  Includes David W's new CSG implementations.
+
+Dec    1st, 1998   J. Apostolakis          -  solids-00-04-02minus
+
+  Boolean fixes (see that History)
+  BREPS   fixes
+
+  Not David W's new CSG implementations (yet)
+
+
+Nov   20th, 1998   J. Apostolakis/L.Broglia  -  solids-00-03-04
+
+  Tag includes BREPS/STEP/STEPinterface fixes (see relevant history files)
+
+
+Nov   17th, 1998   J. Apostolakis            -  solids-00-03-03
+
+  Latest state (but excluding Boolean - and possibly G4Sphere state)
+
+  --> newest PCone at the time
+
+    given to CMS (Matthias) for preliminary testing. 
+    mentioned to Steffano Magni
+
+Nov   17th, 1998   J. Apostolakis            -  solids-00-03-02

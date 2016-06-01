@@ -1,0 +1,12 @@
+$Id: README,v 2.4 1998/10/09 14:27:35 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            ExampleN03
+                            ----------
+
+May 4, 1998     John Apostolakis.
+ Started from exampleEmPhys2.

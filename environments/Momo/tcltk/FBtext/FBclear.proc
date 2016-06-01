@@ -1,0 +1,61 @@
+##	FBclear
+##	(FBtext procedure)
+#	Clear Log
+
+##
+##	k.ohtubo(Tubocky)
+##
+##	1997.11.10
+##	Tcl/Tk version 8.0
+##	1998 July 5 GEANT4 Beta-01
+##	
+
+proc Clear_Log {} {
+	global FONT F_COLOR B_COLOR
+	if {![winfo exists .fbt.text]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return
+	}
+
+	set RANGE [.fbt.text tag range sel]
+	if {$RANGE == ""} {
+		Message_Skeleton -icon question -button {Yes No} \
+			-message "Check!\nClear all?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {
+			destroy .msgskeleton
+			.fbt.text delete 1.0 end
+		}
+		.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+		return
+	} else {
+		Message_Skeleton -icon question -button {Yes No} \
+			-message "Check!\nClear marked part?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {
+			destroy .msgskeleton
+			.fbt.text tag remove sel 1.0 end
+			eval .fbt.text delete $RANGE
+		}
+		.msgskeleton.butt.1 configure -command {destroy .msgskeleton}
+		return
+	}
+}

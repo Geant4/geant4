@@ -1,0 +1,19 @@
+1998 July 6	JAVA GAG for Beta-01 release
+
+		H. Yoshida; Naruto UE
+
+This directory and its subdirectories contain all necessary JAVA
+source codes as well as *.class files. All are archived into
+GAG.jar file.
+
+JAVA GAG uses Swing-1.0.2. Older versions based on Swing-1.0.1 can't
+be compiled, and pour out "deprecated" errors on javac. 
+
+But Swing-1.0.2 has yet unfrozen classes and interfaces, among them 
+are JColorChooser and JFileChooser which JAVA GAG uses.
+
+They are left as before in swing.preview package!!
+Swing-1.0.3 is announced, but we will wait JDK1.2 which
+is forseen in the next September (right?).
+
+

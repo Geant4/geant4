@@ -1,0 +1,3 @@
+#echo 'notify : end of run.'
+updatePlot TEST_plot1
+updatePlot TEST_plot2

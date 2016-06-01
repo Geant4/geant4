@@ -1,0 +1,91 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: EXPO_Detector.icc,v 2.1 1998/07/12 02:36:58 urbi Exp $
+// GEANT4 tag $Name: geant4-00 $
+//
+//  See also G4/run/example/MyDetectorConstruction.cc.
+
+#include <G4VUserDetectorConstruction.hh>
+
+#ifdef DEBUG
+#include <stdio.h>
+#endif
+
+#include <globals.hh>
+#include <G4Element.hh>
+#include <G4Material.hh>
+#include <G4Box.hh>
+#include <G4Tubs.hh>
+#include <G4LogicalVolume.hh>
+#include <G4PVPlacement.hh>
+#include <G4ThreeVector.hh>
+
+class EXPO_DetectorConstruction : public G4VUserDetectorConstruction
+{
+  public:
+    EXPO_DetectorConstruction()
+      {
+      }
+    ~EXPO_DetectorConstruction() 
+      {
+      }
+    G4VPhysicalVolume* Construct()
+      {	
+        G4String    name,symbol;
+	G4double    iz,a;
+        G4double    z,density;
+        G4int       nel;
+#ifdef DEBUG
+	printf ("debug : EXPO_DetectorConstruction.Construct : begin.\n");
+#endif
+	// Elements
+	G4Element*  elN = new G4Element (name="Nitrogen" , symbol="N", iz=7., a=14.01*g/mole);
+	G4Element*  elO = new G4Element (name="Oxygen"   , symbol="O", iz=8., a=16.00*g/mole);
+#ifdef DEBUG
+	printf ("debug : EXPO_DetectorConstruction.Construct : end Elements.\n");
+#endif
+        // Materials 
+        G4Material* Air = new G4Material("Air"      , density = 1.29e-03*g/cm3, nel=2);
+        Air->AddElement (elN, .7);
+        Air->AddElement (elO, .3);
+#ifdef DEBUG
+	printf ("debug : EXPO_DetectorConstruction.Construct : end Air.\n");
+#endif
+        G4Material* Al  = new G4Material("Aluminium", z=13., a = 26.98 *g/mole, density = 2.7  *g/cm3);
+        G4Material* Fe  = new G4Material("Iron"     , z=26., a = 55.85 *g/mole, density = 7.87 *g/cm3);
+        G4Material* Pb  = new G4Material("Lead"     , z=82., a = 207.19*g/mole, density = 11.35*g/cm3);
+#ifdef DEBUG
+	printf ("debug : EXPO_DetectorConstruction.Construct : end Materials.\n");
+#endif
+        // Geometry
+        G4Box*           myWorldBox  = new G4Box  ("WorldBox"  ,10000*cm,10000*cm,10000*cm);
+        G4Box*           myCalorBox  = new G4Box  ("CalorBox"  ,1500*cm ,1500*cm ,1000*cm);
+        G4Tubs*          myChambTube = new G4Tubs ("ChambTube" ,50*cm,150*cm,200*cm,0.*deg,360.*deg);
+#ifdef DEBUG
+	printf ("debug : EXPO_DetectorConstruction.Construct : end Geometry.\n");
+#endif
+        // Logical volumes
+        G4LogicalVolume* myWorldLog  = new G4LogicalVolume (myWorldBox  ,Air,"WorldLog" ,0,0,0);
+        G4LogicalVolume* myCalorLog  = new G4LogicalVolume (myCalorBox  ,Air,"CalorLog" ,0,0,0);
+        G4LogicalVolume* myChambLog  = new G4LogicalVolume (myChambTube ,Pb ,"ChambLog" ,0,0,0);
+#ifdef DEBUG
+	printf ("debug : EXPO_DetectorConstruction.Construct : end Logical volumes.\n");
+#endif
+        // Physical volumes
+        G4PVPlacement*   myWorldPhys = new G4PVPlacement (0,G4ThreeVector()              ,"WorldPhys",myWorldLog,0          ,false,0);
+        G4PVPlacement*   myCalorPhys = new G4PVPlacement (0,G4ThreeVector()              ,"CalorPhys",myCalorLog,myWorldPhys,false,0);
+        G4PVPlacement*   myChambPhys = new G4PVPlacement (0,G4ThreeVector(0*cm,0*cm,0*cm),"ChambPhys",myChambLog,myCalorPhys,false,1);
+#ifdef DEBUG
+	printf ("debug : EXPO_DetectorConstruction.Construct : end.\n");
+#endif
+        return           myWorldPhys;
+      }
+
+      
+
+};

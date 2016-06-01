@@ -1,0 +1,13 @@
+inline const G4Axis2Placement3D* G4Conic::GetPosition() const {
+  return &position;
+}
+
+inline G4double G4Conic::GetPShift() const {
+  return pShift;
+}
+
+inline void G4Conic::SetPShift(G4double pShift0) {
+  pShift= pShift0;
+}
+
+

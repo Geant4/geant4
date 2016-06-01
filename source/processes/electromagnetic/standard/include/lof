@@ -1,0 +1,10 @@
+G4IMultipleScattering.hh
+G4IMultipleScattering.icc
+G4IeBremsstrahlung.hh
+G4IeBremsstrahlung.icc
+G4IeEnergyLoss.hh
+G4IeEnergyLoss.icc
+G4IeIonisation.hh
+G4IeIonisation.icc
+G4IeplusAnnihilation.hh
+G4IeplusAnnihilation.icc

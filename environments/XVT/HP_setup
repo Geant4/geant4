@@ -1,0 +1,102 @@
+#!/bin/csh -f
+#
+# --[ XVT-DSC++ Installation ] -------------------------------------------
+#
+
+set ARCH "`uname`"
+
+switch ($ARCH)
+case IRIX:
+#--------------------- XVT 3.2 environment variables ---------------------
+  setenv XVT_DSP_DIR /afs/cern.ch/rd44/dev/XVT/xvtdsp32/xm12_sgi_irix
+  setenv XA_SHELL_PATH $XVT_DSP_DIR/pwr/shell
+  setenv PATH ${PATH}:$XVT_DSP_DIR/pwr/bin
+  setenv PATH ${PATH}:$XVT_DSP_DIR/ptk/bin
+  if ( "$?UIDPATH" == 0 ) then
+    setenv UIDPATH ./%U:$XVT_DSP_DIR/pwr/bin/%U
+  else
+    setenv UIDPATH ${UIDPATH}:./%U:$XVT_DSP_DIR/pwr/bin/%U
+  endif
+  setenv UIDPATH ${UIDPATH}:$XVT_DSP_DIR/ptk/bin/%U
+  setenv PWRDIR $XVT_DSP_DIR/pwr
+  setenv XVTPATH $XVT_DSP_DIR/ptk/print
+  alias xvth1   "$XVT_DSP_DIR/ptk/bin/helpview $XVT_DSP_DIR/pwr/doc/dscpp32.csc &
+  alias xvth2   "$XVT_DSP_DIR/ptk/bin/helpview $XVT_DSP_DIR/pwr/doc/migrate.csc &
+  alias xvt     "$XVT_DSP_DIR/pwr/bin/Architect &"
+  breaksw
+case HP-UX:
+#--------------------- XVT 4.5 environment variables ---------------------
+  setenv XVT_DSP_DIR /afs/cern.ch/rd44/dev/XVT/xvtdsp45/xm12_hp_hpux
+  setenv XVTPATH $XVT_DSP_DIR/print
+  setenv XA_SHELL_PATH $XVT_DSP_DIR/bin/shell
+  setenv PATH ${PATH}:$XVT_DSP_DIR/bin
+  if ( "$?UIDPATH" == 0 ) then
+    setenv UIDPATH ./%U:$XVT_DSP_DIR/bin/%U
+  else
+    setenv UIDPATH ${UIDPATH}:./%U:$XVT_DSP_DIR/bin/%U
+  endif
+  if ( "$?SHLIB_PATH" == 0 ) then
+    setenv SHLIB_PATH /usr/lib:$XVT_DSP_DIR/lib
+  else
+    setenv SHLIB_PATH ${SHLIB_PATH}:/usr/lib:$XVT_DSP_DIR/lib
+  endif
+  if ( "$?LIBPATH" == 0 ) then
+    setenv LIBPATH /usr/lib:$XVT_DSP_DIR/lib
+  else
+    setenv LIBPATH ${LIBPATH}:/usr/lib:$XVT_DSP_DIR/lib
+  endif
+  alias xvt       "$XVT_DSP_DIR/bin/Architect &"
+  alias xvth      "$XVT_DSP_DIR/bin/helpview $XVT_DSP_DIR/doc/refman.csc &"
+  breaksw
+case AIX:
+default:
+#--------------------- XVT 3.22 environment variables --------------------
+#  setenv XVT_DSP_DIR /afs/cern.ch/rd44/dev/XVT/xvtdsp322/xm12_rs6_aix
+#  setenv PWRDIR $XVT_DSP_DIR/pwr
+#  setenv PTKDIR $XVT_DSP_DIR/ptk
+#  setenv XA_SHELL_PATH $PWRDIR/shell
+#  setenv PATH ${PATH}:$PWRDIR/bin
+#  setenv PATH ${PATH}:$PTKDIR/bin
+#  setenv UIDPATH ./%U:$PWRDIR/bin/%U:$PTKDIR/bin/%U
+#  setenv XVTPATH $PTKDIR/print
+#  if ( "$?SHLIB_PATH" == 0 ) then
+#    setenv SHLIB_PATH $PTKDIR/lib:$PWRDIR/lib
+#  else
+#    setenv SHLIB_PATH ${SHLIB_PATH}:$PTKDIR/lib:$PWRDIR/lib
+#  endif
+#  if ( "$?LIBPATH" == 0 ) then
+#    setenv LIBPATH $PTKDIR/lib:$PWRDIR/lib
+#  else
+#    setenv LIBPATH ${LIBPATH}:$PTKDIR/lib:$PWRDIR/lib
+#  endif
+#  alias xvt       "$XVT_DSP_DIR/pwr/bin/Architect &"
+#  alias xvth1     "$XVT_DSP_DIR/pwr/bin/helpview $PWRDIR/doc/dscpp32.csc &"
+#  alias xvth2     "$XVT_DSP_DIR/pwr/bin/helpview $PWRDIR/doc/migrate.csc &"
+#--------------------- XVT 4.5 environment variables ---------------------
+  setenv XVT_DSP_DIR /afs/cern.ch/rd44/dev/XVT/xvtdsp45/xm12_rs6_aix
+  setenv XA_SHELL_PATH $XVT_DSP_DIR/bin/shell
+  setenv PATH ${PATH}:$XVT_DSP_DIR/bin
+  if ( "$?UIDPATH" == 0 ) then
+    setenv UIDPATH ./%U:$XVT_DSP_DIR/bin/%U
+  else
+    setenv UIDPATH ${UIDPATH}:./%U:$XVT_DSP_DIR/bin/%U
+  endif
+  if ( "$?SHLIB_PATH" == 0 ) then
+    setenv SHLIB_PATH $XVT_DSP_DIR/lib
+  else
+    setenv SHLIB_PATH ${SHLIB_PATH}:$XVT_DSP_DIR/lib
+  endif
+  if ( "$?LIBPATH" == 0 ) then
+    setenv LIBPATH $XVT_DSP_DIR/lib
+  else
+    setenv LIBPATH ${LIBPATH}:$XVT_DSP_DIR/lib
+  endif
+  alias xvt       "$XVT_DSP_DIR/bin/Architect &"
+  alias xvth      "$XVT_DSP_DIR/bin/helpview $XVT_DSP_DIR/refman.csc &"
+  breaksw
+endsw
+
+#
+# --[ End of XVT-DSC++ Installation ] ------------------------------------
+#
+exit

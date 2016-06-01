@@ -1,0 +1,5 @@
+For the moment a trivial (and hence approximative) interface to pre-equilibrium 
+is provided, along with the diffractive string approach in case you would like 
+to try the generator category in this first release.
+Note that these two are fairly fresh code, and testing and
+physics validation will continue.

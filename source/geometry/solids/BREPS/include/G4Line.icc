@@ -1,0 +1,75 @@
+
+inline G4double G4Line::GetPMax() { return -1; }
+
+inline G4Point3D G4Line::GetPoint(G4double param) { return pnt+param*dir; }
+
+inline G4double G4Line::GetPPoint(const G4Point3D& pt) 
+{ 
+  return (pt-pnt)*invDir; 
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+inline void G4Line::Init(const G4Point3D& pnt0, const G4Vector3D& dir0) {
+  pnt= pnt0;
+  dir= dir0;
+  invDir= dir*(1/dir.mag2());
+  v= dir.unit();
+}
+
+inline G4Point3D G4Line::GetPnt() const {
+  return pnt;
+}
+
+inline G4Vector3D G4Line::GetDir() const {
+  return dir;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+inline void G4Line::InitBounded() {
+  bBox.Init(GetStart(), GetEnd());
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+#include "G4CurveRayIntersection.hh"
+
+inline void G4Line::IntersectRay2D(const G4Ray& ray,
+				   G4CurveRayIntersection& is)
+{
+  is.Init(*this, ray);
+  G4CurveRayIntersection isTmp(*this, ray);
+
+  const G4Point3D& s= ray.GetStart();
+  const G4Vector3D& d= ray.GetDir();
+
+  G4double num= (s.x()-pnt.x())*v.y()-(s.y()-pnt.y())*v.x();
+  G4double denom= d.y()*v.x()-d.x()*v.y();
+  
+  if (denom < kAngTolerance) {
+    if (num < kCarTolerance) {
+
+      // identical lines
+      isTmp.ResetDistance(kCarTolerance);
+      is.Update(isTmp);
+      isTmp.Reset(GetPStart(), GetStart());
+      is.UpdateWithPointOnCurve(isTmp);
+      isTmp.Reset(GetPEnd(), GetEnd());
+      is.UpdateWithPointOnCurve(isTmp);
+
+    } else {
+
+      // parallel lines
+
+    }
+  } else {
+
+    // properly intersecting lines
+    isTmp.ResetDistance(num/denom);
+    is.Update(isTmp);
+
+  }
+}
+
+

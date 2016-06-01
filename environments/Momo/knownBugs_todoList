@@ -1,0 +1,33 @@
+                knownBugs and To do list
+
+				Hajime YOSHIDA
+----------------------------------------------------------------------
+
+
+December 4 1998
+- The problems below are solved.
+	- GAG (Java, Tcl/Tk) are protected against G4 binary with G4UIsession 
+	- GAG has a simple interface to cin (@@Ask protocol).
+		More sophisticated interactivity will be added, if required.
+July 22 1998
+- to accept GEANT4 executables which have been compiled with G4UIsession
+  session instance. (batch and G4UIGAG sessions are OK)
+- to handle GEANT4's "cin" during its execution in a "canonical" way.
+  Currently it is accepted bu @@Ask protocol, in exampleN02. 
+- better treatment of path of macro files, specially in case of 
+	nested macro files
+- slowness of JAVA GAG
+- adaptation to the coming JDK1.2
+
+Apr 15, 98
+-  With the current UI scheme, when two condition described below holds
+   for some parameter, then the current value is used instead of the
+   default value.
+     (i) the currentAsDefault flag is set for a parameter
+     (ii) a default value is not given for that parameter
+  On the other hand, GAG is designed to display the default value 
+  when the "parameter input window" is displayed for the first time.
+  The small bug described here is that GAG does not handle
+  the special case of CurrentAsDefault described above.
+  This bug will be fixed before the next tag.
+

@@ -1,0 +1,113 @@
+OPACS as a G4 driver
+--------------------
+ The OPACS html address is :
+
+   http://www.lal.in2p3.fr/OPACS
+
+ To have G4 running with OPACS :
+
+  - Install the OPACS v3 by following
+    the web installation page.
+     For G4 take the group :
+      WoXoXm  if you have MOTIF
+      WoXoXaw if you have Xaw
+     For example on a UNIX with MOTIF only :
+      UNIX> mkdir OPACS
+      UNIX> cd    OPACS
+      UNIX> ftp ftp.lal.in2p3.fr
+      anonymous
+      user name
+      ftp> cd pub/OPACS/v3
+      ftp> bin
+      ftp> get WoXoXm.tar.Z
+    ( ftp> get WoXoXaw.tar.Z )
+      ftp> quit
+      UNIX> uncompress WoXoXm.tar.Z
+    ( UNIX> uncompress WoXoXaw.tar.Z )
+      UNIX> tar xvf WoXoXm.tar
+    ( UNIX> tar xvf WoXoXaw.tar )
+      UNIX> rm WoXoXm.tar
+    ( UNIX> rm WoXoXaw.tar )
+      UNIX> cd OPACS/v3
+      UNIX> chmod u+x conf.sh    
+      UNIX> ./conf.sh
+       csh> source setup.csh
+       (sh> . ./setup.sh)
+      UNIX> make WoXo
+    ( UNIX> gmake WoXo )
+     At end of installation you should
+    be able to build a simple Wo application
+    (for exa named Xxx) by doing :
+       csh> mkdir tmp
+       csh> cd tmp
+    with MOTIF :
+       csh> onew Xxx
+    or with Xaw :
+       csh> onew Xxx $WOROOT/usr/template/Xaw/
+    then :
+       csh> gmake `uname`
+       csh> ./Xxx.exe
+     The interpreted interface is described 
+    in Xxx.odb.
+    See OPACS doc for more.
+
+  - Execute OPACS setup script :
+       csh> source <OPACS_HOME>/OPACS/v3/setup.csh
+
+  - Set environment variables :
+      G4UI_BUILD_WO_SESSION
+      G4UI_USE_WO
+      G4VIS_BUILD_OPACS_DRIVER
+      G4VIS_USE_OPACS
+     For example : 
+         csh> setenv G4UI_BUILD_WO_SESSION    1
+         csh> setenv G4UI_USE_WO              1
+         csh> setenv G4VIS_BUILD_OPACS_DRIVER 1
+         csh> setenv G4VIS_USE_OPACS          1
+     Set G4_OPACS_WIDGET_SET to Xaw if you want 
+    to use Athena widget set instead of Motif :
+         csh> setenv G4_OPACS_WIDGET_SET Xaw
+
+  - Compile G4 interfaces and visualization modules with
+    the upper variables setted.
+
+  - Build visualization/test/test19.
+
+  - example to run test 19 with Xaw G4UI and Xo vis driver :
+      csh> source <OPACS_HOME>/OPACS/v3/setup.csh
+   (or sh> . <OPACS_HOME>/v3/setup.sh)
+      csh> cd .../visualization/test
+      csh> G++-Linux/test19 Xaw
+    In the little window type :
+       continue (and click on ok)
+       continue
+       /vis~/create_view/new_graphics_system Xo
+       /run/beamOn 1 
+       continue
+    When you have something in the Xo window
+   you can manipulate it with :
+      Ctrl+button1+move pointer
+   on the window. On button3 you have a popup
+   menu to do things, like changing "Ctrl" action,
+   setting ZBuffer, etc...
+
+  - example to run test19 with Wo G4UI reconstructed 
+    with MOTIF :
+      csh> source <OPACS_HOME>/OPACS/v3/setup.csh
+   (or sh> . <OPACS_HOME>/v3/setup.sh)
+      csh> cd .../visualization/test
+      csh> HP-UX/test19 Wo
+   or with Xaw :
+      csh> source <OPACS_HOME>/OPACS/v3/setup.csh
+      csh> cd .../visualization/test
+      csh> setenv WOENVIRONMENT test19Xaw.odb
+      csh> G++-Linux/test19 Wo
+  The "Wo" interface to test19 is in test19.odb
+ (or test19Xaw.odb). In this file you can 
+ find examples of buttons that triggs G4 commands.    
+   
+
+
+
+
+

@@ -1,0 +1,196 @@
+// neutron_hp -- source file
+// J.P. Wellisch, Nov-1996
+// A prototype of the low energy neutron transport model.
+//
+#include "G4NeutronHPElementData.hh"
+
+  G4NeutronHPElementData::G4NeutronHPElementData()
+  {
+     theFissionData = new G4NeutronHPVector;
+     theCaptureData = new G4NeutronHPVector;
+     theElasticData = new G4NeutronHPVector;
+     theInelasticData = new G4NeutronHPVector;
+    theIsotopeWiseData = NULL;
+  }
+  
+  G4NeutronHPElementData::~G4NeutronHPElementData()
+  {
+    if(theFissionData!=NULL) delete theFissionData;
+    if(theCaptureData!=NULL) delete theCaptureData;
+    if(theElasticData!=NULL) delete theElasticData;
+    if(theInelasticData!=NULL) delete theInelasticData;
+    if(theIsotopeWiseData!=NULL) delete [] theIsotopeWiseData;
+  }
+  
+  void G4NeutronHPElementData::Init(G4Element * theElement)  
+  {
+    G4int count = theElement->GetNumberOfIsotopes();
+      if(count == 0) count +=
+         theStableOnes.GetNumberOfIsotopes(theElement->GetZ());
+    theIsotopeWiseData = new G4NeutronHPIsoData[count];
+    // filename = ein data-set je isotope.
+    count = 0;
+    G4int nIso = theElement->GetNumberOfIsotopes();
+    G4int Z = theElement->GetZ();
+    G4int i1;
+    if(nIso!=0)
+    {
+      for (i1=0; i1<nIso; i1++)
+      {
+//        G4cout <<" Init: normal case"<<endl;
+        G4int A = theElement->GetIsotope(i1)->GetN();
+        G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
+        UpdateData(A, Z, count++, frac);
+      }
+    }else{
+//      G4cout <<" Init: theStableOnes case: Z="<<Z<<endl;
+      G4int first = theStableOnes.GetFirstIsotope(Z);
+//      G4cout <<"first="<<first<<" "<<theStableOnes.GetNumberOfIsotopes(theElement->GetZ())<<endl;
+      for(G4int i1=0; 
+        i1<theStableOnes.GetNumberOfIsotopes(theElement->GetZ());
+        i1++)
+      {
+//        G4cout <<" Init: theStableOnes in the loop"<<endl;
+        G4int A = theStableOnes.GetIsotopeNucleonCount(first+i1);
+        G4double frac = theStableOnes.GetAbundance(first+i1);
+//        G4cout <<" Init: theStableOnes in the loop: "<<A<<endl;
+        UpdateData(A, Z, count++, frac);
+      }
+    }
+  }
+  
+  void G4NeutronHPElementData::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
+  {
+    //Reads in the Data, using G4NeutronHPIsoData[], and its Init
+//    G4cout << "entered: ElementWiseData::UpdateData"<<endl;
+    theIsotopeWiseData[index].Init(A, Z, abundance);
+//    G4cout << "ElementWiseData::UpdateData Init finished"<<endl;
+
+    theBuffer = theIsotopeWiseData[index].MakeElasticData();
+//    G4cout << "ElementWiseData::UpdateData MakeElasticData finished: "
+//         <<theBuffer->GetVectorLength()<<endl;
+    Harmonise(theElasticData, theBuffer);
+//    G4cout << "ElementWiseData::UpdateData Harmonise finished: "
+//         <<theElasticData->GetVectorLength()<<endl;
+    delete theBuffer;
+    
+    theBuffer = theIsotopeWiseData[index].MakeInelasticData();
+//    G4cout << "ElementWiseData::UpdateData MakeInelasticData finished: "
+//         <<theBuffer->GetVectorLength()<<endl;
+    Harmonise(theInelasticData, theBuffer);
+//    G4cout << "ElementWiseData::UpdateData Harmonise finished: "
+//         <<theInelasticData->GetVectorLength()<<endl;
+    delete theBuffer;
+    
+    theBuffer = theIsotopeWiseData[index].MakeCaptureData();
+//    G4cout << "ElementWiseData::UpdateData MakeCaptureData finished: "
+//         <<theBuffer->GetVectorLength()<<endl;
+    Harmonise(theCaptureData, theBuffer);
+//    G4cout << "ElementWiseData::UpdateData Harmonise finished: "
+//         <<theCaptureData->GetVectorLength()<<endl;
+    delete theBuffer;
+    
+    theBuffer = theIsotopeWiseData[index].MakeFissionData();
+//    G4cout << "ElementWiseData::UpdateData MakeFissionData finished: "
+//         <<theBuffer->GetVectorLength()<<endl;
+    Harmonise(theFissionData, theBuffer);
+//    G4cout << "ElementWiseData::UpdateData Harmonise finished: "
+//         <<theFissionData->GetVectorLength()<<endl;
+    delete theBuffer;
+    
+//    G4cout << "ElementWiseData::UpdateData finished"<endl;
+  }
+  
+  void G4NeutronHPElementData::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
+  {
+    if(theNew == NULL) return;
+    G4int s = 0, n=0, i=0, m=0;
+    G4NeutronHPVector * theMerge = new G4NeutronHPVector;
+    G4bool flag;
+//    G4cout << "Harmonise 1: "<<theStore->GetEnergy(s)<<" "<<theNew->GetEnergy(0)<<endl;
+    while ( theStore->GetEnergy(s)<theNew->GetEnergy(0)&&s<theStore->GetVectorLength() )
+    {
+      theMerge->SetData(m++, theStore->GetEnergy(s), theStore->GetXsec(s));
+      s++;
+    }
+    G4NeutronHPVector *active = theStore;
+    G4NeutronHPVector * passive = theNew;
+    G4NeutronHPVector * tmp;
+    G4int a = s, p = n, t;
+//    G4cout << "Harmonise 2: "<<active->GetVectorLength()<<" "<<passive->GetVectorLength()<<endl;
+    while (a<active->GetVectorLength()&&p<passive->GetVectorLength())
+    {
+      if(active->GetEnergy(a) <= passive->GetEnergy(p))
+      {
+//        G4cout << "Harmoniseing 1: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
+        theMerge->SetData(m, active->GetEnergy(a), active->GetXsec(a));
+        // addiere passiv. interpoliert auf demn punkt theMerge.GetLowEdgeEnergy(m)
+//        G4cout << "Harmoniseing 2: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
+        G4double x  = theMerge->GetEnergy(m);
+        G4double x1 = passive->GetEnergy(p);
+        G4double x2 = passive->GetEnergy(p+1);
+        G4double y1 = passive->GetXsec(x1);
+        G4double y2 = passive->GetXsec(x2);
+        G4double y = passive->GetXsec(x); 
+//        G4cout << "Harmoniseing 3: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
+        theMerge->SetData(m, x, theMerge->GetXsec(m)+y);
+//        G4cout << "Harmoniseing 4: "<<a<<" "<<p<<" "<<active->GetEnergy(a)<<" "<<passive->GetEnergy(p)<<endl;
+        m++;
+        a++;
+      } else {
+//        G4cout << "swapping in Harmonise"<<endl;
+        tmp = active; t=a;
+        active = passive; a=p;
+        passive = tmp; p=t;
+      }
+    }
+//    G4cout << "Harmonise 3: "<< a <<" "<<active->GetVectorLength()<<" "<<m<<endl;
+    while (a!=active->GetVectorLength())
+    {
+      theMerge->SetData(m++, active->GetEnergy(a), active->GetXsec(a));
+      a++;
+    }
+//    G4cout << "Harmonise 4: "<< p <<" "<<passive->GetVectorLength()<<" "<<m<<endl;
+    while (p!=passive->GetVectorLength())
+    {
+      theMerge->SetData(m++, passive->GetEnergy(p), passive->GetXsec(p));
+      p++;
+    }
+//    G4cout <<"Harmonise 5: "<< theMerge->GetVectorLength() << " " << m << endl;
+    delete theStore;
+    theStore = theMerge;
+//    G4cout <<"Harmonise 6: "<< theStore->GetVectorLength() << " " << m << endl;
+  }
+
+  G4NeutronHPVector * G4NeutronHPElementData::MakePhysicsVector(G4Element * theElement,
+                                      G4ParticleDefinition * theP,
+                                      G4NeutronHPFissionData* theSet)
+  {
+   if(theP != G4Neutron::Neutron()) G4Exception();
+   Init ( theElement );
+   return GetData(theSet);
+  }
+  G4NeutronHPVector * G4NeutronHPElementData::MakePhysicsVector(G4Element * theElement,
+                                      G4ParticleDefinition * theP,
+                                      G4NeutronHPCaptureData * theSet)
+  {
+   if(theP != G4Neutron::Neutron()) G4Exception();
+   Init ( theElement );
+   return GetData(theSet);
+  }
+  G4NeutronHPVector * G4NeutronHPElementData::MakePhysicsVector(G4Element * theElement,
+                                      G4ParticleDefinition * theP,
+                                      G4NeutronHPElasticData * theSet)
+  {
+   if(theP != G4Neutron::Neutron()) G4Exception();
+   Init ( theElement );
+   return GetData(theSet);
+  }
+    G4NeutronHPVector * G4NeutronHPElementData::MakePhysicsVector(G4Element * theElement,
+                                      G4ParticleDefinition * theP,
+                                      G4NeutronHPInelasticData * theSet)
+  {
+   if(theP != G4Neutron::Neutron()) G4Exception();
+   Init ( theElement );
+   return GetData(theSet);
+  }

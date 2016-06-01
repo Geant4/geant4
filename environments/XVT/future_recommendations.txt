@@ -1,0 +1,95 @@
+Future Recommendations for XVT GUI development.
+================================================
+
+By S. Prior - August '97.
+--------------------------
+
+1.. Code methods to allow user to completely close the command palette and
+    later on regenerate it (method exists but is not coded).
+
+2.. Sort out methods to update the command palette if new commands are added or
+    the commands change in some way during execution.
+    
+3.. The issue of parameter entry needs to be aired and heavily discussed. 
+    Currently it is accomplished by using a simple text entry dialog box which
+    is automatically displayed if the command needs a parameter - the user can
+    simply type this value or string in.  However, it would be better to have
+    some custom 'built' way of parameter entry that incorporates some nice,
+    easy to use, intuitive widgets that reduce the scope for errors in user
+    command entry.
+    
+    The difficulty at present is the fact that on startup we don't actually
+    know what commands are available from Geant - all this information has to
+    be read in dynamically - this is where the problem lies... If we don't know
+    what the parameter type, range, default value (etc) are, how can we
+    construct a suitable widget representation ??? - it is more suited to TCL
+    which is interpreted and can easily generate widgets 'on-the-fly' but XVT
+    works in a different manner - so this problem must be addressed
+    before any attempt at coding takes place.
+    
+4.. The help needs updating to be more informative to the user - i.e. along
+    with the description of the command if it has parameters the user should be
+    made aware of what type and ranges he/she can enter.
+
+5.. Also as XVT supports hypertext help systems it might be an idea creating a
+    help system for other areas which the user might need help on (i.e. NOT the
+    commands!).    
+    
+6.. Add a quitting safeguard so that if the user clicks 'quit' but hasn't
+    exitted from Geant they should be warned or not permitted to quit the XVT 
+    GUI until Geant has been exitted.    
+
+7.. Investigation needs to be done into why there are problems when compilation
+    takes place with the -z option in the CXXFLAGS line.
+        
+8.. There are a couple of debugging methods I wrote that can also be got
+    rid of when it is sure that the program works bug-free (I have them in
+    there for ease of use).  An example is the method I use to print out the
+    command arrays contents.
+    
+    There are also some COUTS in various methods which are also used for
+    debugging and these can be deleted when the time is right.
+    
+9.. The State change Geant4 needs investigating and properly specifying as to
+    'what should happen when the state changes to X ??' - then the GUI can
+    respond accordingly - things like blanking out commands/buttons so the user
+    cannot execute them at the wrong time etc.  What currently happens is that
+    even though Geant might be processing stuff, the XVT GUI is still 'live'
+    and can send commands - then when Geant has finished processing events etc
+    it plays catch-up to those commands - this is not too favourable, what
+    should happen is the disabling of the commands etc until Geants state is
+    able to receive the commands OK.
+    
+    As yet though the state change Geant4 is very new and not properly
+    specified.
+
+10. Portability issues should be addressed sometime.  The XVT GUI and the
+    benchmark file rely on named pipes for communication so for UNIX based
+    systems this is fine.  However - porting to NT and PC based operating
+    systems could cause problems in this area.  A suggestion might be to have a
+    sort of 'switch' in the code which detects which operating system you are
+    on and uses the relevant IPC mechanism available.  This should all be
+    transparent to the user.
+    
+11. Small things to enhance the interface could be done - like displaying the
+    mouse coordinates in the field already set up in the status bar - this is
+    trivial 'final touch' stuff though.
+
+12. A few more checks might be added to the code - for example when doing a
+    write to a named pipe - currently there is no action taken if the write was
+    unsucessful apart from printing out a message to the user. - Maybe this
+    could be extended so that it would be repeated until the write WAS
+    successful.
+    
+13. File I/O operations need adding (to save the log etc) - Please refer to the
+    Object Oriented persistent file I/O work I did early on.
+
+14. When the appropriate bitmaps have been drawn for the command palette (they
+    must be 16X16 pixels in size) the code needs changing to actually do the
+    attaching of the bitmaps to the buttons.  You will note that there is a
+    data member commented out of the type 'G4CommandData' which holds
+    information about the bitmap (its name).
+    
+    I propose that there is a directory created in the CVS repository where all
+    the command bitmaps are located and then the XVT GUI can go to this
+    directory at run time and find the appropriate bitmaps for the buttons.

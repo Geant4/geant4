@@ -1,0 +1,237 @@
+Written by: Simon Prior
+      Date: 10/07/97
+  Platform: HP-UX (10.20)
+
+G4UIxvt driver class
+---------------------
+
+This file will document all about the driver classes G4UIxvt.cc and .hh, what
+ideas I had and any discoveries made etc.  It will be informative for future
+developers of the XVT Geant GUI when looking at work I have done and for
+reference.
+
+I will look in detail at the code I wrote in these classes to explain what it
+does. 
+
+---------------------
+
+XVT driver class header
+~~~~~~~~~~~~~~~~~~~~~~~
+
+I basically took the TCL and Terminal implementations and extended/changed
+their behaviour to fit in with my requirements for XVT.
+
+First thing to note in this file is the #defines which define XvtToGeant and
+GeantToXvt.  These are names I will use in my code for the named pipes which I
+set up for communication between the XVT executable and the Geant4 executable.
+
+The next #define simply defines the file mode (i.e. appropriate UNIX 
+permissions) to open the named pipes with.
+
+After this come several #includes which include various functions I will use in
+the code.
+
+After this I define 2 new types called 'G4parameterData' and 'G4commandData'.  
+These are structures to hold information about commands.  
+
+The idea is that at the start of the program I will have an array of these
+structures, parse the command tree for command information and fill this array
+with the information obtained.  Later on this information can be sent to XVT
+when it is required.
+
+After this are the usual method declarations and data member definitions etc.
+- These are commented.
+
+******************************************************************************
+*************************** IMPORTANT  *************************************** 
+***                                                                        ***
+*** The declaration of 'G4commandData commandArray[200];' in the header    ***
+*** file basically declares how many commands can be stored in the array   ***
+*** and then used to create the command palette.                           ***
+*** IF during future use the program coredumps when obtaining the commands ***
+*** it is most likely that there are greater that 200 commands             ***
+*** - especially as commands are being added all the time.  All you need   ***
+*** to do is increase this value and everything will work fine again.      ***
+***                                                                        ***
+******************************************************************************
+
+---------------------
+
+XVT driver class implementation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+the constructor:
+----------------
+
+The usual class variable initialisation happens here.
+
+I set a variable called 'number' which is the number of bytes read in one go
+from the named pipe to a value of 100.
+
+I set the array indexing variables (currentPosition and lastPosition) to 0 and
+100 respectively.
+
+notify:
+-------
+
+This method simply notifies the user of Geant4 State changes (sends info to GUI
+which displays it).
+
+breakRequested:
+---------------
+
+This method handles notification the the user of break points and actually
+setting them up.
+
+set_verbose:
+------------
+
+This sets the verbose flag of the GUI's state handling.
+
+PLEASE NOTE: The above 3 methods were created by Makoto Asai and as I am not an
+             expert in them any questions should be directed towards him.
+
+
+sessionStart:
+-------------
+
+In this method I first call openConnections() which opens the named pipes from
+the Geant end with the appropriate permissions (see description below).
+
+I then call the 'fillArrayEntries' method with the command tree - this parses
+the command tree to get all the commands and put them in the commandArray
+(this is an array of G4commandData structures).
+
+After this the main program control is entered.  It waits for user commands and
+dispatches them to Geant.
+
+Note: The order of execution of these statements is very important as some of
+the methods require other things to already have been executed.  This is
+particularly important when Filling the commandArray.
+
+additionalSession:
+------------------
+
+This method basically handles the stage when the a breakpoint has been reached
+and the user must type 'continue' to continue from it.
+
+NOTE: This (additionalSession) is another one of Makoto's methods.
+
+
+sessionTerminate:
+-----------------
+
+Basically write the end of program text to the named pipe for XVT to display 
+to the user. >> After state machine update this method is no longer called.
+
+openConnections:
+----------------
+
+This method opens the named pipes from the Geant end.  It opens the GeantToXvt 
+pipe with write permission and opens the XvtToGeant with read permission.
+
+checkXvtToGeantPipe:
+--------------------
+
+This method uses an I/O control function (from ioctl.h) to test whether the
+named pipe can be read without blocking.
+
+readXvtToGeant:
+---------------
+
+When called this method reads the XvtToGeant pipe and returns the string to the
+caller.  It has no checks/safeguards so checkXvtToGeantPipe should be called
+first to make sure the operation won't block.
+
+writeGeantToXvt:
+----------------
+
+This write the string passed to the XVT via the named pipe.
+
+errorHandler:
+-------------
+
+This just write an error message to the user via cout.
+
+getCommand:
+-----------
+
+This is very similar to the TCL and terminal implementations - It waits for the
+user to enter a command (via the XVT GUI and by reading the pipe) then once it
+has obtained the string decides what to do with it.
+
+There are a few alterations in this method that I made for my XVT
+implementation.  Firstly the loop which obtains the command from the user is
+different.  Then there is a new command to branch to called 'getCommands'. -
+see code.
+
+I have also stripped out the directory navigation commands that are in the
+terminal implementation like 'ls', 'cd' etc as they are not needed for the 
+XVT implementation.
+
+codeGen:
+--------
+
+This is the same apart from where TCL and terminal did a cout - I do a
+writeGeantToXvt see code for more details.
+
+briefListCommands:
+------------------
+
+This calls codeGen to list the commands in the command tree.
+
+listCurrentDirectory:
+---------------------
+
+This does a complete listing of the current directory i.e. all the available
+commands, sub-commands and their parameters/guidance etc.  Please note that
+this is not needed or ever executed - It is there incase similar code is
+required in the future as this shows quite extensively how to access all parts
+of the commandTree via the UIManager pointer and public methods.
+
+sendArrayEntriesToXvt:
+----------------------
+
+When called, this method goes sequentially through the commandArray and sends
+each element down the GeantToXvt pipe to XVT to process.
+
+fillArrayEntries:
+-----------------
+
+This traverses the command tree in the same manner that codeGen does
+(recursively) and puts the commands in an array in the G4commandData structures
+defined in the header file.
+
+The idea is that later this information is sent to XVT via the pipe using 
+sendArrayEntriesToXvt().
+
+This method takes care of coding the command array entries with a particular
+'tag' - 0, 1 or 2 which indicates whether the command is a directory(0), a
+Geant4 executable command (1) or a subdirectory (2).
+
+This is extremely important when building the command palette at the XVT end of
+the pipe. - It is used to generate the heirarchy.
+
+listCommandArray:
+-----------------
+
+This is merely a debugging method that parses the command array printing out
+all the details.  It is foreseen that this will be deleted in the future when
+things have been proved bug free.
+
+==============================================================================
+FOOTNOTE:
+
+Basically this driver class handles everything between XVT and the core of
+Geant.
+
+The main idea is that when Geant is started by XVT the driver class does all
+the appropriate initialisation and command retrieval from Geant.  When ready it
+enters the main part of the code which basically receives commands from XVT and
+executes them.
+
+It is also responsible for sending the commands down the pipe to XVT when
+requested so that XVT can build the command palettes etc.
+
+==============================================================================
+S.Prior - August '97

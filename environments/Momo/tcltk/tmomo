@@ -1,0 +1,2 @@
+## invoke tMomo.tcl
+wish $MOMOPATH/tMomo.tcl

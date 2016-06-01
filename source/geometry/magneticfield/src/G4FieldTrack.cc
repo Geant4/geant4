@@ -1,0 +1,20 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4FieldTrack.cc,v 2.3 1998/11/11 10:46:50 japost Exp $
+// GEANT4 tag $Name: geant4-00 $
+//
+#include "G4FieldTrack.hh"
+
+ostream& operator<<( ostream& os, G4FieldTrack& SixVec)
+{
+     G4double *SixV = SixVec.SixVector;
+     os << " X= " << SixV[0] << " " << SixV[1] << " " << SixV[2] << " ";
+     os << " V= " << SixV[3] << " " << SixV[4] << " " << SixV[5] << " ";
+     os << " l= " << SixVec.CurveS();
+     return os;
+}

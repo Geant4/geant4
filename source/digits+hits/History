@@ -1,0 +1,57 @@
+$Id: History,v 2.3 1998/10/26 01:52:40 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Oct 26, 98 M.Asai (tag digits+hits-00-03-01)
+- Debugged in G4HCofThisEvent.hh and G4DCofThisEvent.hh
+
+July 15, 98 M.Asai (tag digits+hits-00-01-02)
+- Modify some UI command definitions.
+
+July 4, 98 M.Asai (tag digits+hits-00-01-01)
+- Ready for the beta release.
+
+July 1, 98 M.Asai (tag digits+hits-00-07-02)
+- G4TDigiCollection has been debugged.
+
+June 30, 98 M.Asai (tag digits+hits-00-07-01)
+- Introduce G4Allocator for G4HCofThisEvent, G4DCofThisEvent,
+  G4HitsCollection, G4DigiCollection.
+- New template classes G4THitsCollection and G4TDigiCollection
+- New base class protected method in G4VSensitiveDetector
+- Corrections in G4VReadoutGeometry
+
+June 11, 98 G.Cosmo (digits+hits-00-06-02)
+- Removed CR characters from G4HCtable.hh, .cc (P.Urban)
+
+June 8, 98 M.Asai
+- Tagged as digits+hits-00-06-01
+
+June 6, 98 M.Asai
+- New sub-directories (detector, hits, digits) are introduced.
+- All codes which used to be in include and src directories are
+ moved to the newly created sub-directories.
+- GNUmakefile is completely changed to catch up the new directory 
+ structure.
+
+April 21, 98 M.Asai
+- Tagged as hits-00-05-01.
+
+December 19, 97 G. Cosmo - (alpha03)
+
+- Created.

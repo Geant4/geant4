@@ -1,0 +1,73 @@
+##	global variable
+env
+TEXT_LOG
+FONT
+SEARCH
+REPLACE
+GEANT_ID
+F_COLOR
+B_COLOR
+PROMPT
+HOME
+HELP()
+FLAG_B
+FLAG_P
+PARAM()
+PRE()
+COMMAND_NAME()
+Win_Name
+HISTORY
+errorCode
+errorInfo
+
+##	procedures
+#GAGclearlog.proc
+Clear_Log
+
+#GAGconnect.proc
+GAG_Connect		COMMAND
+GAG_Command		COMMAND
+Parse_Line
+Make_Button		LINE
+Delete_Button
+Make_Param		LINE
+Command_Passive
+Command_Active		COMMAND
+
+#GAGdirectory
+Directory
+
+#GAGparam.proc
+Param			NAME
+Put_Param		NAME
+Make_Param		LINE
+Pick_Up_Param		LINE
+Candidate		PARA_NAME
+Delete_Candidate	W
+Command_Dir		W
+
+#GAGsavelog.proc
+Before_Save
+Save_Window
+Save
+
+#GAGsearchstring.proc
+Search_String
+Search
+Search_Up
+Search_Down
+Replace
+Replace_One
+Replace_All
+
+#GAGhistory.proc
+Command_History
+CH_Save_Window
+CH_Save
+Search_String_CH
+Search_CH
+Search_Up_CH
+Search_Down_CH
+Replace_CH
+Replace_One_CH
+Replace_All_CH

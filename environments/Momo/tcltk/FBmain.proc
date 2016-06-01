@@ -1,0 +1,149 @@
+##	FBmain.proc
+##	(Momo procedure)
+#	File Browser main
+##	assumes MOMOPATH/tcltk/Momo/FBtext directories
+#		uses FBtext procs for file browser
+
+##
+##	k.ohtubo(Tubocky)
+##
+##	1998.3.16
+##	Tcl/Tk version 8.0
+##	1998 July 5 GEANT4 Beta-01
+
+proc FBmain {} {
+	global env FONT F_COLOR B_COLOR WISH HOME
+
+	if [winfo exists .fbm] {
+		raise .fbm
+		focus .fbm.name.ent
+		return
+	}
+
+	if {[lsearch [array name env] FONT] >= 0} {
+		set FONT $env(FONT)
+	} else {
+		set FONT ""
+	}
+	if {[lsearch [array name env] FORE_GROUND_COLOR] >= 0} {
+		set F_COLOR $env(FORE_GROUND_COLOR)
+	} else {
+		set F_COLOR #000000000
+	}
+	if {[lsearch [array names env] BACK_GROUND_COLOR] >= 0} {
+		set B_COLOR $env(BACK_GROUND_COLOR)
+	} else {
+		set B_COLOR #d90d90d90
+	}
+
+	toplevel .fbm -highlightthickness 0
+
+	frame .fbm.butt -highlightthickness 0
+	pack .fbm.butt -side top -fill x
+
+	menubutton .fbm.butt.b0 -text Function -bd 3 -menu .fbm.butt.b0.func \
+		-relief raised -highlightthickness 0
+	pack .fbm.butt.b0 -side left -fill y
+
+	menu .fbm.butt.b0.func -tearoff 0
+	.fbm.butt.b0.func add command -label Clear -command {
+		.fbm.select.list see 0
+		.fbm.select.list selection clear 0 end
+		focus .fbm.name.ent
+		.fbm.name.ent delete 0 end
+		set END [string length $env(HOME)]
+		set Path ~[string range $env(G_PATH) $END end]
+		.fbm.info.label1 configure -text $Path
+		Put_File_List .fbm
+	}
+	.fbm.butt.b0.func add separator
+	.fbm.butt.b0.func add command -label "Close File Browser" -command {destroy .fbm}
+
+
+	frame .fbm.info -highlightthickness 0
+	pack .fbm.info -side top -fill x
+
+	label .fbm.info.label0 -text Directory: -anchor w -highlightthickness 0
+	pack .fbm.info.label0 -side left
+
+	set END [string length $env(HOME)]
+	set Path ~[string range $env(G_PATH) $END end]
+	label .fbm.info.label1 -text $Path -anchor w -highlightthickness 0
+	pack .fbm.info.label1 -side left -fill x -expand 1
+
+
+	frame .fbm.name -highlightthickness 0
+	pack .fbm.name -side top -fill x
+
+	label .fbm.name.label -text "File Name" -anchor w -highlightthickness 0
+	pack .fbm.name.label -side left
+
+	entry .fbm.name.ent -highlightthickness 0
+	pack .fbm.name.ent -side left -fill x -expand 1
+
+
+	frame .fbm.select -highlightthickness 0
+	pack .fbm.select -side top -fill both
+
+	listbox .fbm.select.list -width 20 -height 20 \
+		-yscrollcommand ".fbm.select.scroll set" -highlightthickness 0
+	pack .fbm.select.list -side left -fill both -expand 1
+
+	scrollbar .fbm.select.scroll -command ".fbm.select.list yview" \
+		-highlightthickness 0
+	pack .fbm.select.scroll -side left -fill y
+
+
+##	Binding
+
+	bind .fbm.select.list <ButtonRelease> {
+		.fbm.name.ent delete 0 end
+		.fbm.name.ent insert end [selection get]
+
+		set NAME [.fbm.name.ent get]
+		if [file isdirectory $env(G_PATH)/$NAME] {
+			Change_Path $NAME
+			set END [string length $env(HOME)]
+			set Path ~[string range $env(G_PATH) $END end]
+			.fbm.info.label1 configure -text $Path
+			.fbm.butt.b0.func invoke 1
+			Put_File_List .fbm
+		}
+	}
+	bind .fbm.select.list <Double-Button> {
+		set NAME [.fbm.name.ent get]
+		if {$NAME != ""} {
+			if [file executable $env(G_PATH)/$NAME] {
+				Message_Skeleton -icon warning -button O.K. \
+					-message "Warning!\nCannot open."
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			} elseif [file isfile $env(G_PATH)/$NAME] {
+				set env(FB_Open_File_Name) $env(G_PATH)/$NAME
+				exec $WISH $HOME/FBtext/FBtext.tcl &
+			}
+		}
+	}
+
+	focus .fbm.name.ent
+
+	Put_File_List .fbm
+
+
+	wm title .fbm "File Browser"
+	if {$FONT != ""} {
+		Change_Font $FONT .fbm
+	}
+	if {$F_COLOR != "" && $B_COLOR != ""} {
+		Change_Color $F_COLOR $B_COLOR .fbm
+	}
+	Win_Size .fbm
+	Tab_off
+	Del_Bind
+	Control
+}

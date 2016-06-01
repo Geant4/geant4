@@ -1,0 +1,120 @@
+!/* +---------------------- Copyright notice -------------------------------+ */
+!/* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
+!/* |   Permission to use, copy, modify, and distribute this software       | */
+!/* |   and its documentation for any purpose and without fee is hereby     | */
+!/* |   granted, provided that the above copyright notice appear in all     | */
+!/* |   copies and that both that copyright notice and this permission      | */
+!/* |   notice appear in supporting documentation.  This software is        | */
+!/* |   provided "as is" without express or implied warranty.               | */
+!/* +---------------------- Copyright notice -------------------------------+ */
+!----------------------------
+begin OInterface
+ prefix = G4PV_
+ packages = Xm
+end
+!----------------------------
+begin OWidget
+ name = G4PV_palette
+ type = XmFormDialog
+ children = G4PV_7 G4PV_11 G4PV_erase G4PV_atbs G4PV_14 G4PV_draw G4PV_draw_all 
+ autoUnmanage = False
+ dialogTitle = GEANT
+end
+!----------------------------
+begin OWidget
+ name = G4PV_7
+ type = XmPushButton
+ labelString = Update list
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+ topAttachment = attach_form
+ activateCallback = osh> collect PhysicalVolume | get - name | removeDuplicates - | setWidgetResource G4PV_list items -
+end
+!----------------------------
+begin OWidget
+ name = G4PV_11
+ type = XmFrame
+ children = G4PV_list 
+ topAttachment = attach_form
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+ bottomAttachment = attach_widget
+ bottomWidget = G4PV_erase
+ topAttachment = attach_widget
+ topWidget = G4PV_7
+end
+!----------------------------
+begin OWidget
+ name = G4PV_list
+ type = XmScrolledList
+ background = lightgrey
+ visibleItemCount = 5
+ selectionPolicy = single_select
+ scrollBarDisplayPolicy = static
+end
+!----------------------------
+begin OWidget
+ name = G4PV_erase
+ type = XmPushButton
+ labelString = Erase (in target)
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+ bottomAttachment = attach_widget
+ bottomWidget = G4PV_draw
+ activateCallback = osh>\
+  widget=`get Widget target`\
+  camera=`get $widget name`\
+  name=`getWidgetResource G4PV_list selectedItems`\
+  string=`collect PhysicalVolume where name eq $name`\
+  getCameraNodes $camera | collect ONode where name in $string | delete - 
+end
+!----------------------------
+begin OWidget
+ name = G4PV_draw
+ type = XmPushButton
+ labelString = Draw (in target)
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+ bottomAttachment = attach_widget
+ bottomWidget = G4PV_draw_all
+ activateCallback = osh>\
+  widget=`get Widget target`\
+  camera=`get $widget name`\
+  collect PhysicalVolume where name eq `getWidgetResource G4PV_list selectedItems` | represent -  | viewNode - $camera
+end
+!----------------------------
+begin OWidget
+ name = G4PV_draw_all
+ type = XmPushButton
+ labelString = Draw all (in target)
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+ bottomAttachment = attach_widget
+ bottomWidget = G4PV_atbs
+ activateCallback = osh>\
+  widget=`get Widget target`\
+  camera=`get $widget name`\
+  collect PhysicalVolume | represent -  | viewNode - $camera
+end
+!----------------------------
+begin OWidget
+ name = G4PV_atbs
+ type = XmPushButton
+ labelString = Atbs
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+ bottomAttachment = attach_widget
+ bottomWidget = G4PV_14
+ labelString = Attributs
+ activateCallback = osh> load OContext.odb| realize -;do Widget/OContext_palette manage;do Widget/OContext_palette_popup raise
+end
+!----------------------------
+begin OWidget
+ name = G4PV_14
+ type = XmPushButton
+ labelString = Cancel
+ activateCallback = osh> do `get Widget thisParent` unmanage
+ bottomAttachment = attach_form
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+end

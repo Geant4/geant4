@@ -1,0 +1,87 @@
+inline void G4Ellipse::Init(const G4Axis2Placement3D& position0,
+			    G4double semiAxis10, G4double semiAxis20) {
+  position= position0;
+  semiAxis1= semiAxis10;
+  semiAxis2= semiAxis20;
+
+  ratioAxis2Axis1= semiAxis2/semiAxis1;
+
+  SetBounds(0, 0);
+
+  // needed only for 2D ellipses
+  toUnitCircle = G4Scale3D(1/semiAxis1, 1/semiAxis2, 0)
+                 * position.GetToPlacementCoordinates();
+
+  forTangent= -semiAxis1*semiAxis1/(semiAxis2*semiAxis2);
+}
+
+inline G4double G4Ellipse::GetSemiAxis1() const {
+  return semiAxis1;
+}
+
+inline G4double G4Ellipse::GetSemiAxis2() const {
+  return semiAxis2;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+inline G4double G4Ellipse::GetPMax() {
+  return twopi;
+}
+
+inline G4Point3D G4Ellipse::GetPoint(G4double param) {
+  param-= GetPShift();
+  return position.GetLocation()
+    + semiAxis1*cos(param)*position.GetPX()
+    + semiAxis2*sin(param)*position.GetPY();
+}
+
+inline G4double G4Ellipse::GetPPoint(const G4Point3D& pt) {
+  G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
+  G4double angle= atan2(ptLocal.y(), ptLocal.x()*ratioAxis2Axis1);
+  G4double r= (angle<0)? angle+twopi: angle;
+  return r+GetPShift();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+#include "G4CurveRayIntersection.hh"
+
+inline void G4Ellipse::IntersectRay2D(const G4Ray& ray,
+				      G4CurveRayIntersection& is)
+{
+  is.Init(*this, ray);
+
+  // transform s.t. the ellipse becomes the unit circle
+  // with the center at the origin
+
+  // 2D operations would be faster
+  G4Point3D s= toUnitCircle*ray.GetStart();
+  G4Vector3D d= toUnitCircle*ray.GetDir();
+  
+  // solve (s+i*t)^2 = 1 for i (the distance)
+
+  G4double sd= s*d;
+  G4double dd= d.mag2(); // never 0
+  G4double ss= s.mag2();
+
+  G4double discr= sd*sd-dd*(ss-1);
+  if (discr >= 0) {
+
+    // 2 intersections (maybe 1, but this case is rare)
+    G4double sqrtdiscr= sqrt(discr);
+    // find the smallest positive i
+    G4double i= -sd-sqrtdiscr;
+    if (i<kCarTolerance) {
+      i= -sd+sqrtdiscr;
+      if (i<kCarTolerance) {
+	return;
+      }
+    }
+    i/= dd;
+    G4CurveRayIntersection isTmp(*this, ray);
+    isTmp.ResetDistance(i);
+    is.Update(isTmp);
+
+  }
+}

@@ -1,0 +1,120 @@
+/* 
+    GUI.url: Example Universal Resource Language File for XVT-Power++
+               applications.  You may add any application specific resources.
+*/
+
+#ifndef PAFACTORY_QBASE_NAME
+#define PAFACTORY_QBASE_NAME "GUI"
+#define PAFACTORY_BASE_NAME GUI
+#endif
+
+#define APPNAME PAFACTORY_BASE_NAME
+#define QAPPNAME PAFACTORY_QBASE_NAME
+
+#define XVT_PREFERRED_MEM_SIZE 4 * 1024 * 1024
+#define XVT_MINIMUM_MEM_SIZE   1 * 1024 * 1024
+
+#include "url.h"
+#include "PwrURL.h"
+
+#if XVTWS == MACWS
+#include "faccmd.h"
+#include "factory.url"
+#else
+#include "factory/faccmd.h"
+#include "factory/factory.url"
+#endif
+
+/*
+	Definition of NULLicon
+*/
+
+#if XVTWS == WINWS || XVTWS == NTWS       
+
+#transparent $$$         
+20001 ICON DISCARDABLE null.ico
+$$$
+                                                         
+#endif /* WINWS & NTWS */
+
+#if XVTWS == PMWS
+
+#transparent $$$
+BITMAP 20001 null.bmp
+ICON 20001 null.ico
+$$$
+
+#endif /* PMWS */
+
+#if XVTWS == MACWS
+
+#transparent $$$         
+resource 'ICON' (20001) {
+        $"0000 0000 001E 0000 001E 0000 001E 0000"            /* ................ */
+        $"001E 0000 001E 0000 001E 0000 0008 0000"            /* ................ */
+        $"003F 0000 003F 0000 003F 0000 003F 0000"            /* .?...?...?...?.. */
+        $"007F 8000 0069 8000 00E1 C000 00C8 C000"            /* ....i..áÀ..ÈÀ. */
+        $"01C8 E000 0FFF FC00 0FFF FC00 0308 3000"            /* .Èà..ÿü..ÿü...0. */
+        $"0708 3800 0600 1800 0E00 1C00 0C00 0C00"            /* ..8............. */
+        $"1C00 0E00 5800 0680 F800 07C0 7000 0380"            /* ....X..ø..Àp.. */
+        $"3000 0300 1000 0200 1000 0200 0000 0000"            /* 0............... */
+};
+$$$
+
+#endif /* MACWS */
+
+#if XVTWS == MTFWS
+
+#transparent $$$         
+
+value black:	color('black', foreground);
+value blue:		color('blue', foreground);
+value green:	color('green2', foreground);
+value pink:		color('magenta2', foreground);
+value fill:		color('lightblue', foreground);
+
+value gammaColorTable: color_table(
+	black='X',
+	blue='B',
+	green='G',
+	pink='P',
+	fill='.',
+	background color=' ');
+
+value icon_20001: exported
+	icon(color_table=gammaColorTable,
+	'               X                ',
+	'              X.X               ',
+	'             X...X         B    ',
+	'            X.....X       B B   ',
+	'           X......XX     B   B  ',
+	'          X......X..X   BBBBB B ',
+	'         X..X...X....X B  BBB  B',
+	'        X..XX..X......B B  BB B ',
+	'       X..XX..X......B   B  BB  ',
+	'      X..XX..X......B     B B   ',
+	'     X..XX..X......B       B    ',
+	'    X..XX..X......B       B     ',
+	'   X..XX..X......B B     B.X    ',
+	'  X......X......BB  B   B...X   ',
+	' X......X......B BB  B B.....X  ',
+	'X......X......B  BBB  B.......X ',
+	' X....X........B BBBBB.........X',
+	'  X..X..........B   B.........X ',
+	'   XX............B B.........X  ',
+	'    X..GGGGGGGG...B.........X   ',
+	'     X.GG    GG............X    ',
+	'      XG G  G G...........X     ',
+	'       G  GG  G.....PPPPPPPPPP  ',
+	'       G  GG  G....P          P ',
+	'       G G  G G...P  PP  P  P  P',
+	'       GG    GG...P P  P P P   P',
+	'       GGGGGGGG...P P  P PPP   P',
+	'            X.....P  PP  P  P  P',
+	'             X.....P          P ',
+	'              X...X PPPPPPPPPP  ',
+	'               X.X              ',
+	'                X               ');
+$$$
+                                                         
+#endif /* MTFWS */

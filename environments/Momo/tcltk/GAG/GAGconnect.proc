@@ -1,0 +1,822 @@
+##	GAGconnect
+##	(GAG procedure)
+##
+##	k.ohtubo(Tubocky)
+##      H. Yoshida
+##
+##	1998.3.17
+##	Tcl/Tk version 8.0
+### 1998.6.19 patch for "NULLCOMMAND" in example34 of Alpha07 tag H. Y.
+##  1998.7.2 Added @@Ask protocol to ask user's typed-in answer
+##                       in the command line (.comm.ent).
+##                ==> this shall be replaced with type-in dialog
+## 1998 December 3 Add @@G4UIterminal case to close the G4UIterminal session.
+#                  This remedies the infinite loop of GAG for G4UIterminal session.
+
+##	Procedures
+#	Connect to GEANT
+proc GAG_Connect COMMAND {
+	global HISTORY errorCode errorInfo env
+	if [file isfile $env(G_PATH)/$COMMAND] {
+		global GEANT_ID FLAG_B FLAG_P FLAG_D
+		if [catch {open "|$env(G_PATH)/$COMMAND 2>@stdout" a+} GEANT_ID] {
+			if {$errorCode != "NONE"} {
+				set errorCode NONE
+			}
+			if {$errorInfo != ""} {
+				set errorInfo ""
+			}
+			.log.text insert end $COMMAND\n$GEANT_ID\n
+		} else {
+			if {$errorCode != "NONE"} {
+				set errorCode NONE
+			}
+			if {$errorInfo != ""} {
+				set errorInfo ""
+			}
+			.comm.label configure -text $COMMAND
+			.log.text insert end $COMMAND\n
+			set HISTORY ""
+			if [winfo exists .ch] {
+				.ch.butt.func.menu invoke 0
+			}
+			fconfigure $GEANT_ID -blocking off -buffering none
+			fileevent $GEANT_ID readable Parse_Line
+
+			.dummy configure -command {
+				set PARA [.comm.ent get]
+				if {$PARA != ""} {
+					GAG_Command $PARA
+				} else {
+					.log.text insert end \n$PROMPT
+					.log.text see end
+					scan [.log.text index end] %d.%d L T
+					incr L -1
+					.log.text mark set insert $L.end
+				}
+			}
+			set FLAG_B 0
+			set FLAG_P 0
+			set FLAG_D 0
+			GAG_Command @@GAGmodeTcl
+		}
+	} else {
+		if {$COMMAND == "exit"} {
+			.mbutt.function.command invoke last
+		} elseif [catch {eval exec $COMMAND} msg0] {
+			if {$errorCode != "NONE"} {
+				set errorCode NONE
+			}
+			if {$errorInfo != ""} {
+				set errorInfo ""
+			}
+			catch {eval $COMMAND} msg1
+			.log.text insert end $COMMAND\n$msg1\n
+			.log.text insert end "> "
+		} else {
+			if {$errorCode != "NONE"} {
+				set errorCode NONE
+			}
+			if {$errorInfo != ""} {
+				set errorInfo ""
+			}
+			.log.text insert end $COMMAND\n$msg0\n
+			.log.text insert end "> "
+		}
+		if [winfo exists .cd] {
+			Directory
+		}
+	}
+	scan [.log.text index end] %d.%d L T
+	incr L -1
+	.log.text mark set insert $L.end
+	.comm.ent delete 0 end
+	.log.text see end
+}
+
+#	Send command to GEANT
+proc GAG_Command COMMAND {
+	global HISTORY GEANT_ID FONT F_COLOR B_COLOR errorCode errorInfo
+
+	if {$GEANT_ID == ""} {
+		return 0
+	}
+
+	if [eof $GEANT_ID] {
+		catch {close $GEANT_ID}
+		Command_Passive
+		if {$errorCode != "NONE" && $errorInfo != ""} {
+			.log.text insert end "Error.\n\n$errorCode\n\n$errorInfo\n"
+			set errorInfo ""
+			set errorCode NONE
+		} elseif {$errorCode != "NONE"} {
+			.log.text insert end "Error.\n\n$errorCode\n"
+			set errorCode NONE
+		} elseif {$errorInfo != ""} {
+			.log.text insert end "Error.\n\n$errorInfo\n"
+			set errorInfo ""
+		}
+		.dummy configure -command {
+			set PARA [.comm.ent get]
+			if {$PARA != ""} {
+				GAG_Connect $PARA
+			} else {
+				.log.text insert end \n>
+				.log.text see end
+				scan [.log.text index end] %d.%d L T
+				incr L -1
+				.log.text mark set insert $L.end
+			}
+		}
+		Delete_Button
+	} else {
+		if {$COMMAND != "exit"} {
+			if {[string first "@@" $COMMAND] != 0} {
+				.log.text insert end $COMMAND\n
+				lappend HISTORY "$COMMAND"
+				if [winfo exists .ch] {
+					.ch.main.text insert end $COMMAND\n
+				}
+			}
+			Command_Active $COMMAND
+			.comm.ent delete 0 end
+		} else {
+			Message_Skeleton -icon question -button {Yes No} \
+				-message "Do you exit GEANT?"
+			if {$FONT != ""} {
+				Change_Font $FONT .msgskeleton
+			}
+			if {$F_COLOR != "" && $B_COLOR != ""} {
+				Change_Color $F_COLOR $B_COLOR .msgskeleton
+			}
+			.msgskeleton.butt.0 configure -command {
+				set COMMAND [.comm.ent get]
+				.log.text insert end $COMMAND\n
+				lappend	HISTORY $COMMAND
+				if [winfo exists .ch] {
+					.ch.main.text insert end $COMMAND\n
+				}
+				puts $GEANT_ID $COMMAND
+				catch {close $GEANT_ID}
+				if {$errorCode != "NONE"} {
+					set errorCode NONE
+				}
+				if {$errorInfo != ""} {
+					set errorInfo ""
+				}
+				.dummy configure -command {
+					set PARA [.comm.ent get]
+					if {$PARA != ""} {
+						GAG_Connect $PARA
+					} else {
+						.log.text insert end \n>
+						.log.text see end
+						scan [.log.text index end] %d.%d L T
+						incr L -1
+						.log.text mark set insert $L.end
+					}
+				}
+				Delete_Button
+				destroy .msgskeleton
+				.comm.ent delete 0 end
+			}
+			.msgskeleton.butt.1 configure -command {
+				destroy .msgskeleton
+				.comm.ent delete 0 end
+			}
+		}
+		scan [.log.text index end] %d.%d L T
+		incr L -1
+		.log.text mark set insert $L.end
+	}
+	.log.text see end
+}
+
+#	Parse Line
+proc Parse_Line {} {
+	global GEANT_ID PROMPT FLAG_B FLAG_P FLAG_D FONT F_COLOR B_COLOR \
+		errorCode errorInfo PARAM COMMAND_NAME Protocol DISABLE \
+		COMM_RANGE
+
+	if {![winfo exists .log.text]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return 0
+	}
+
+	if [eof $GEANT_ID] {
+		catch {close $GEANT_ID}
+		if {$errorCode != "NONE" && $errorInfo != ""} {
+			.log.text insert end "Error.\n\n$errorCode\n\n$errorInfo\n"
+			set errorInfo ""
+			set errorCode NONE
+		} elseif {$errorCode != "NONE"} {
+			.log.text insert end "Error.\n\n$errorCode\n"
+			set errorCode NONE
+		} elseif {$errorInfo != ""} {
+			.log.text insert end "Error.\n\n$errorInfo\n"
+			set errorInfo ""
+		}
+		.dummy configure -command {
+			set PARA [.comm.ent get]
+			if {$PARA != ""} {
+				GAG_Connect $PARA
+			} else {
+				.log.text insert end \n>
+				.log.text see end
+				scan [.log.text index end] %d.%d L T
+				incr L -1
+				.log.text mark set insert $L.end
+			}
+		}
+		Command_Passive
+		Delete_Button
+		.log.text see end
+		.comm.ent delete 0 end
+		return
+	} else {
+		set Line [read $GEANT_ID]
+		if {$Line == "\n"} {
+			.log.text insert end \n
+		}
+		set LINES [split $Line \n]
+	}
+	set n [llength $LINES]
+	for {set i 0} {$i < $n} {incr i} {
+		set SWITCH [lindex $LINES $i]
+		set SWITCH [string trimleft $SWITCH]
+		set SWITCH [lindex [split $SWITCH] 0]
+		switch -- $SWITCH {
+			"@@G4UIterminal" {
+ 			  Message_Skeleton -icon warning -button O.K. \
+				-message "This program must run in the terminal mode.  Let's close this session. GAG is ready to run other programs compiled with the GAG mode."
+			  if {$FONT != ""} {
+				  Change_Font $FONT .msgskeleton
+			  }
+			  if {$F_COLOR != "" && $B_COLOR != ""} {
+				  Change_Color $F_COLOR $B_COLOR .msgskeleton
+			  }
+			  .msgskeleton.butt.0 configure -command {
+			  set PID [pid $GEANT_ID]
+			  catch {exec kill $PID}
+			  destroy .msgskeleton
+				#exit
+			  }
+				#.msgskeleton.butt.0 configure -command {
+				#set UIterminalMode 1
+				#focus .comm.ent
+				#.comm.ent delete 0 end
+	                        #.dummy configure -command {
+        	                #        set PARA [.comm.ent get]
+                	        #        if {$PARA != ""} {
+                        	#                GAG_Command $PARA
+                                #	} else {
+                                #        	.log.text insert end \n$PROMPT
+                                #        	.log.text see end
+                                #        	scan [.log.text index end] %d.%d L T
+                                #        	incr L -1
+                                #        	.log.text mark set insert $L.end
+                                #	}
+                        	#}
+
+				#destroy .msgskeleton
+########
+				#}
+			}
+			"@@maketree_start" {
+				if {[llength [winfo children .mbutt]] > 1} {
+					Delete_Button
+				}
+				set FLAG_B 1
+			}
+			"@@maketree_end" {
+				set FLAG_B 0
+			}
+			"@@PROMPT" {
+				set PROMPT [lindex $LINES $i]
+				set HEAD [expr [string first \" $PROMPT] + 1]
+				set TAIL [expr [string last \" $PROMPT] - 1]
+				if {$HEAD <= $TAIL} {
+					set PROMPT [string range $PROMPT $HEAD $TAIL]>
+				} else {
+					set PROMPT ">"
+				}
+			}
+			"@@Ask" {
+				.log.text insert end $Line
+				.log.text see end
+				Command_Passive
+				.dummy configure -command {
+					focus .comm.ent
+					set ANSWER [.comm.ent get]
+					if {$ANSWER != ""} {
+						GAG_Command $ANSWER
+						.log.text insert end \n$ANSWER
+						.log.text see end
+					}
+				}
+			}
+			"@@parameter_start" {
+				set FLAG_P 1
+			}
+			"@@parameter_end" {
+				if {[info exists COMM_RANGE]} {
+					unset COMM_RANGE
+				}
+				if {[winfo exists .[join [split $FLAG_P "/"] ""]]} {
+					Put_Param $FLAG_P
+					.[join [split $FLAG_P "/"] ""].main.para.list selection set 0
+					focus .[join [split $FLAG_P "/"] ""].main.val.in.ent
+					set NAME [selection get]
+					if {[info exists PARAM($FLAG_P.$NAME.candidate)] \
+						&& $PARAM($FLAG_P.$NAME.candidate) != ""} {
+						Candidate $NAME
+					}
+				}
+				set FLAG_P 0
+			}
+			"@@DisableListBegin" {
+				if {[info exists DISABLE]} {
+					unset DISABLE
+				}
+				set FLAG_D 1
+			}
+			"@@DisableListEnd" {
+				if {[llength [winfo children .mbutt]] > 1} {
+					Command_Disable
+				}
+				set FLAG_D 0
+			}
+			"@@ErrResult" {
+				set Err [lindex $LINES $i]
+				set HEAD [expr [string first \" $Err] + 1]
+				set TAIL [expr [string last \" $Err] - 1]
+				if {$HEAD < $TAIL} {
+					set Err [string range $Err $HEAD $TAIL]
+				} elseif {$HEAND == $TAIL} {
+					set Err " "
+				} else {
+					set Err ""
+				}
+				Message_Skeleton -icon error -button O.K. \
+					-message $Err
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			}
+			"@@CurrentValue" {
+				set INDEX [.log.text search -backwards -regexp -- "\\?/" end 1.0]
+				scan $INDEX %d.%d LINE HEAD
+				set W [.log.text get $LINE.[expr $HEAD + 1] $LINE.end]
+				set Current [lrange [split [lindex $LINES $i]] 1 end]
+				.log.text insert end $Current\n
+				if {[llength $PARAM($COMMAND_NAME($W))] != [llength $Current]} {
+					Message_Skeleton -icon error -button O.K. \
+					-message "Warning!\nWhat's happen?"
+					if {$FONT != ""} {
+						Change_Font $FONT .msgskeleton
+					}
+					if {$F_COLOR != "" && $B_COLOR != ""} {
+						Change_Color $F_COLOR $B_COLOR .msgskeleton
+					}
+					.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+				}
+				for {set j 0} {$j < [llength $Current]} {incr j} {
+					set PARAM($COMMAND_NAME($W).[lindex $PARAM($COMMAND_NAME($W)) $j].now) [lindex $Current $j]
+				}
+				if {[winfo exists .$W]} {
+					Put_Param $COMMAND_NAME($W)
+				}
+			}
+			"@@Version" {
+				if {[lindex [split [lindex $LINES $i]] 1] != $Protocol} {
+					Message_Skeleton -icon warning -button O.K. \
+					-message "Warning!\nNo match this protocol version."
+					if {$FONT != ""} {
+						Change_Font $FONT .msgskeleton
+					}
+					if {$F_COLOR != "" && $B_COLOR != ""} {
+						Change_Color $F_COLOR $B_COLOR .msgskeleton
+					}
+					.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+				}
+			}
+			"@@State" {}
+			"" {}
+			default {
+				if {$SWITCH == $PROMPT} {
+					scan [.log.text index end] %d.%d L T
+					incr L -1
+					scan [.log.text index $L.end] %d.%d L T
+					if {[.log.text get $L.0 $L.$T] != $PROMPT} {
+						.log.text insert end $PROMPT
+						Command_Passive
+					}
+					if {[string first "@@parameter_start" [lindex $LINES $i]] > 0} {
+						set FLAG_P 1
+					} elseif {[string first "@@maketree_start" [lindex $LINES $i]] > 0} {
+						set FLAG_B 1
+					} elseif {[string first "@@parameter_end" [lindex $LINES $i]] > 0} {
+						set FLAG_P 0
+					} elseif {[string first "@@maketree_end" [lindex $LINES $i]] > 0} {
+						set FLAG_B 0
+					}
+					.log.text see end
+					scan [.log.text index end] %d.%d L T
+					incr L -1
+					.log.text mark set insert $L.end
+				} elseif {$FLAG_B == 1 && $FLAG_P != "0"} {
+					Message_Skeleton -icon error -button O.K. \
+					-message "Error!\nCheck this GEANT code."
+					if {$FONT != ""} {
+						Change_Font $FONT .msgskeleton
+					}
+					if {$F_COLOR != "" && $B_COLOR != ""} {
+						Change_Color $F_COLOR $B_COLOR .msgskeleton
+					}
+					.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+				} elseif {$FLAG_D == 1} {
+					set DISABLE [lappend DISABLE $SWITCH]
+				} elseif {$FLAG_B == 1} {
+					Make_Button [lindex $LINES $i]
+				} elseif {$FLAG_P != "0"} {
+					Make_Param [lindex $LINES $i]
+				} else {
+					.log.text insert end [lindex $LINES $i]\n
+					.log.text see end
+					scan [.log.text index end] %d.%d L T
+					incr L -1
+					.log.text mark set insert $L.end
+				}
+			}
+		}
+	}
+	if {[string index $Line [expr [string length $Line] -1]] != "\n"} {
+		if {$Line != "\n"} {
+			.log.text delete insert
+			.log.text see insert
+		}
+	}
+}
+
+#	Analyze command & Make button
+proc Make_Button LINE {
+	global FONT F_COLOR B_COLOR HELP
+
+	if {![winfo exists .mbutt]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return 0
+	}
+	if {![winfo exists .help]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return 0
+	}
+
+	set CUT [string first "@@" $LINE]
+	if {$CUT >= 0} {
+		set SWITCH [string range $LINE $CUT end]
+		set CUT [string first " " $SWITCH]
+		if {$CUT >= 0} {
+			set SWITCH [string range $SWITCH 0 [expr $CUT - 1]]
+		}
+	} else {
+		set SWITCH ""
+	}
+
+	switch -glob -- $SWITCH {
+	"@@title" {
+		set CUT [string first "\"" $LINE]
+		if {$CUT >= 0} {
+			set HELP_STRING [string range $LINE [expr $CUT + 1] end]
+			set HELP_STRING [Another_Line $HELP_STRING]
+			set CUT [string last "\"" $HELP_STRING]
+			if {$CUT >= 0} {
+				set HELP_STRING [string range $HELP_STRING 0 [expr $CUT - 1]]
+			} else {
+				Message_Skeleton -icon error -button O.K. \
+				-message "Cannot find last \".\n$HELP_STRING"
+				if {$FONT != ""} {
+					Change_Font $FONT .msgskeleton
+				}
+				if {$F_COLOR != "" && $B_COLOR != ""} {
+					Change_Color $F_COLOR $B_COLOR .msgskeleton
+				}
+				.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+			}
+		} else {
+			set HELP_STRING ""
+		}
+		set LINE [string trim [lindex [split $LINE] 0] /]
+		if {[string first / $LINE] >= 0} {
+			set LINE [string trim [lindex [split $LINE] 0] /]
+			set CUT [string first / $LINE]
+			set HEAD [string range $LINE 0 [expr $CUT - 1]]
+			set PATH [string range $LINE $CUT end]
+			set CUT [string last / $PATH]
+			set TAIL [string range $PATH [expr $CUT + 1] end]
+			set PATH [string range $PATH 0 [expr $CUT -1]]
+			set PATH [join [split $PATH "/"] "."]
+			set W .mbutt.$HEAD.menu$PATH
+			set LAST [$W index last]
+			set HELP($W.$LAST) $HELP_STRING
+		} else {
+			set W .mbutt.$LINE
+			set HELP($W) $HELP_STRING
+		}
+	}
+	"@@cascade" {
+		set LINE [string trim [lindex [split $LINE] 0] /]
+		set CUT [string first / $LINE]
+		set HEAD [string range $LINE 0 [expr $CUT - 1]]
+		set PATH [string range $LINE $CUT end]
+		set CUT [string last / $PATH]
+		set TAIL [string range $PATH [expr $CUT + 1] end]
+		set PATH [string range $PATH 0 [expr $CUT -1]]
+		set PATH [join [split $PATH "/"] "."]
+		set W .mbutt.$HEAD.menu$PATH
+		$W add cascade -label $TAIL -menu $W.$TAIL
+		menu $W.$TAIL -tearoff 0
+		set HELP($W.$TAIL.none) ""
+		bind $W.$TAIL <Motion> {
+			.help configure -text $HELP(%W.[%W index active])
+		}
+		if {$FONT != ""} {
+			Change_Font $FONT $W.$TAIL
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR $W.$TAIL
+		}
+	}
+	"@@command" {
+		set LINE [string trim [lindex [split $LINE] 0] /]
+		set CUT [string first / $LINE]
+		set HEAD [string range $LINE 0 [expr $CUT - 1]]
+		set PATH [string range $LINE $CUT end]
+		set CUT [string last / $PATH]
+		set TAIL [string range $PATH [expr $CUT + 1] end]
+		set PATH [string range $PATH 0 [expr $CUT -1]]
+		set PATH [join [split $PATH "/"] "."]
+		set W .mbutt.$HEAD.menu$PATH
+######	DEBUG 6-19
+		set NULLCOMMAND [string match *..* $W]
+		if {$NULLCOMMAND == 0} {
+		$W add command -label $TAIL -command "Param /$LINE"
+		} else {
+		.log.text insert end "Invalid command: $LINE\n"
+		}
+##### DEBUG 6-19 end
+	}
+	default {
+		set LINE [string trim $LINE /]
+		if {[string first / $LINE] >= 0} {
+			Message_Skeleton -icon error -button O.K. \
+				-message "Error!\nCheck this GEANT code.\n\n$LINE"
+			if {$FONT != ""} {
+				Change_Font $FONT .msgskeleton
+			}
+			if {$F_COLOR != "" && $B_COLOR != ""} {
+				Change_Color $F_COLOR $B_COLOR .msgskeleton
+			}
+			.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		} else {
+			menubutton .mbutt.$LINE -text $LINE -relief raised \
+				-bd 3 -menu .mbutt.$LINE.menu \
+				-highlightthickness 0
+			pack .mbutt.$LINE -side left
+
+			menu .mbutt.$LINE.menu -tearoff 0
+			set HELP(.mbutt.$LINE.menu.none) ""
+			bind .mbutt.$LINE <Enter> {
+				if [info exists HELP(%W)] {
+					.help configure -text $HELP(%W)
+				}
+			}
+			bind .mbutt.$LINE <Leave> {
+				.help configure -text ""
+			}
+			bind .mbutt.$LINE.menu <Motion> {
+				if [info exists HELP(%W.[%W index active])] {
+					.help configure -text $HELP(%W.[%W index active])
+				}
+			}
+			if {$FONT != ""} {
+				Change_Font $FONT .mbutt.$LINE
+			}
+			if {$F_COLOR != "" && $B_COLOR != ""} {
+				Change_Color $F_COLOR $B_COLOR .mbutt.$LINE
+			}
+		}
+	}
+	}
+}
+
+#	Delete Button
+proc Delete_Button {} {
+	global PARAM COMMAND_NAME FONT F_COLOR B_COLOR
+
+	if {![winfo exists .mbutt]} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		return 0
+	}
+
+	if [info exists PARAM] {
+		unset PARAM
+	}
+	if [info exists COMMAND_NAME] {
+		unset COMMAND_NAME
+	}
+
+	eval destroy [lrange [winfo children .mbutt] 1 end]
+	.comm.label configure -text Command
+	.log.text insert end "> "
+	.log.text see end
+
+	foreach W [winfo children .] {
+		switch -- $W {
+			\.msgskeleton -
+			\.mbutt -
+			\.space0 -
+			\.log -
+			\.space1 -
+			\.comm -
+			\.help -
+			\.dummy -
+			\.cd -
+			\.ch -
+			\.ss -
+			\.sl {}
+			default {
+				destroy $W
+			}
+		}
+	}
+}
+
+#	Command button state is normal
+proc Command_Passive {} {
+	. configure -cursor ""
+	.log.text configure -cursor ""
+	.comm.ent configure -cursor "" -state normal
+	.comm.ent delete 0 end
+
+	if [winfo exists .ch] {
+		.ch.main.text configure -cursor "" -state normal
+	}
+
+	.mbutt.function.command entryconfigure last -state normal
+
+	foreach W [lrange [winfo children .mbutt] 1 end] {
+		$W configure -state normal
+	}
+
+	foreach W [winfo children .] {
+		switch -- $W {
+			\.msgskeleton -
+			\.mbutt -
+			\.space0 -
+			\.log -
+			\.space1 -
+			\.comm -
+			\.help -
+			\.dummy -
+			\.cd -
+			\.ch -
+			\.ss -
+			\.sl {}
+			default {
+				$W.butt.comm configure -state normal
+			}
+		}
+	}
+}
+
+#	Command button state is disable
+proc Command_Active COMMAND {
+	global GEANT_ID
+	puts $GEANT_ID $COMMAND
+
+	. configure -cursor watch
+	.log.text configure -cursor watch
+	.comm.ent configure -cursor watch -state disabled
+
+	if [winfo exists .ch] {
+		.ch.main.text configure -cursor watch -state disabled
+	}
+
+	.mbutt.function configure -cursor ""
+	.mbutt.function.command entryconfigure last -state disabled
+
+	foreach W [lrange [winfo children .mbutt] 1 end] {
+		$W configure -state disabled
+	}
+
+	foreach W [winfo children .] {
+		switch -- $W {
+			\.msgskeleton -
+			\.mbutt -
+			\.space0 -
+			\.log -
+			\.space1 -
+			\.comm -
+			\.help -
+			\.dummy -
+			\.cd -
+			\.ch -
+			\.ss -
+			\.sl {}
+			default {
+				$W.butt.comm configure -state disabled
+			}
+		}
+	}
+}
+
+#	Disable menu button
+proc Command_Disable {} {
+	global DISABLE FONT F_COLOR B_COLOR
+
+	if {[llength [winfo children .mbutt]] <= 1} {
+		Message_Skeleton -icon warning -button O.K. \
+			-message "Warning!\nWhat's happen?"
+		if {$FONT != ""} {
+			Change_Font $FONT .msgskeleton
+		}
+		if {$F_COLOR != "" && $B_COLOR != ""} {
+			Change_Color $F_COLOR $B_COLOR .msgskeleton
+		}
+		.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+	}
+
+	foreach LIST $DISABLE {
+		set END [expr [string length $LIST] - 1]
+		if {[string index $LIST $END] == "/"} {
+			incr END -1
+			set LIST [string range $LIST 0 $END]
+		}
+
+		set END [string last "\/" $LIST]
+		if {$END == 0} {
+			set LIST [join [split $LIST "/"] "."]
+			$LIST configure -state disabled
+			return
+		} elseif {$END < 0} {
+			Message_Skeleton -icon warning -button O.K. \
+				-message "Warning!Check disable command list."
+			if {$FONT != ""} {
+				Change_Font $FONT .msgskeleton
+			}
+			if {$F_COLOR != "" && $B_COLOR != ""} {
+				Change_Color $F_COLOR $B_COLOR .msgskeleton
+			}
+			.msgskeleton.butt.0 configure -command {destroy .msgskeleton}
+		}
+
+		set Category [string range $LIST 0 [expr $END -1]]
+		set Label [string range $LIST [expr $END + 1] end]
+		set Category [join [split $Category "/"] "."]
+		set Category [join [linsert [split $Category "\."] 2 menu] "\."]
+		.mbutt$Category entryconfigure [.mbutt$Category index $Label] -state disabled
+	}
+}
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+#
+# Macro file of "skeleton.cc"
+# for tracking performance test
+#
+/control/verbose 2
+/run/verbose 2
+#
+# SimpleBox geometry made by Pb
+# Geantino 100 GeV to the direction (1.,0.,0.)
+# 10 events
+#
+/mydet/switchDetector SimpleBox
+/mydet/selectMaterial Pb
+/gun/particle geantino
+/gun/energy 100 GeV
+/gun/direction 1 0 0
+/run/initialize
+/run/beamOn 10

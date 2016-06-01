@@ -1,0 +1,101 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4PTubs.cc,v 2.0 1998/07/02 16:13:31 gunter Exp $
+// GEANT4 tag $Name: geant4-00 $
+//
+// 
+// class G4PTubs
+//
+// History:
+// 19.06.98 A.Kimura Converted G4Tubs.cc
+
+
+#include "G4VSolid.hh"
+#include "G4PTubs.hh"
+#include "G4Tubs.hh"
+
+#include "G4AffineTransform.hh"
+#include "meshdefs.hh"
+
+// Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
+//             - note if pdphi>2PI then reset to 2PI
+G4PTubs::G4PTubs(const G4Tubs* theTubs) : G4PCSGSolid(theTubs->GetName()) {
+
+    G4double pRMin = theTubs->GetInnerRadius();
+    G4double pRMax = theTubs->GetOuterRadius();
+    G4double pDz = theTubs->GetZHalfLength();
+    G4double pSPhi = theTubs->GetStartPhiAngle();
+    G4double pDPhi = theTubs->GetDeltaPhiAngle();
+
+// Check z-len
+    if (pDz>0)
+	{
+	    fDz=pDz;
+	}
+    else
+	{
+	    G4Exception("Error in G4PTubs::G4PTubs - invalid z half-length");
+	}
+
+// Check radii
+    if (pRMin<pRMax&&pRMin>=0)
+	{
+	    fRMin=pRMin; fRMax=pRMax;
+	}
+    else
+	{
+	    G4Exception("Error in G4PTubs::G4PTubs - invalid radii");
+	}
+
+// Check angles
+    if (pDPhi>=2.0*M_PI)
+	{
+	    fDPhi=2*M_PI;
+	}
+    else
+	{
+	    if (pDPhi>0)
+		{
+		    fDPhi = pDPhi;
+		}
+	    else
+		{
+		    G4Exception("Error in G4PTubs::G4PTubs - invalid dphi");
+		}
+	}
+	
+// Ensure psphi in 0-2PI or -2PI-0 range if shape crosses 0
+    fSPhi = pSPhi;
+
+    if (fSPhi<0)
+	{
+	    fSPhi=2.0*M_PI-fmod(fabs(fSPhi),2.0*M_PI);
+	}
+    else
+	{
+	    fSPhi=fmod(fSPhi,2.0*M_PI);
+	}
+
+    if (fSPhi+fDPhi>2.0*M_PI)
+	{
+	    fSPhi-=2.0*M_PI;
+	}
+}
+
+// Destructor
+G4PTubs::~G4PTubs()
+{;}
+
+// make a transient object
+G4VSolid* G4PTubs::MakeTransientObject() const {
+    G4VSolid* transientObject = new G4Tubs(GetName(),
+					 fRMin, fRMax,
+					 fDz,
+					 fSPhi, fDPhi);
+    return transientObject;
+}

@@ -1,0 +1,330 @@
+!/* +---------------------- Copyright notice -------------------------------+ */
+!/* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
+!/* |   Permission to use, copy, modify, and distribute this software       | */
+!/* |   and its documentation for any purpose and without fee is hereby     | */
+!/* |   granted, provided that the above copyright notice appear in all     | */
+!/* |   copies and that both that copyright notice and this permission      | */
+!/* |   notice appear in supporting documentation.  This software is        | */
+!/* |   provided "as is" without express or implied warranty.               | */
+!/* +---------------------- Copyright notice -------------------------------+ */
+!----------------------------
+begin OInterface
+ prefix = TEST_
+ resources = \
+Wo**XoCamera.borderWidth:3\
+Wo*shell_view_panel*XoCamera.borderColor:dimgrey
+ createCallback = osh>\
+  create OHistogram name HepJamesRandom1 dimension 1 xAxisTitle James xAxisNumberOfBins 100 xAxisMinimum 0 xAxisMaximum 1 | empty\
+  create OHistogram name HepJamesVsDRand48 dimension 2 xAxisTitle James xAxisNumberOfBins 40 xAxisMinimum 0 xAxisMaximum 1 yAxisTitle DRand48 yAxisNumberOfBins 40 yAxisMinimum 0 yAxisMaximum 1 | empty
+end
+!----------------------------
+begin OWidget
+ name = TEST_1
+ type = TopLevelShell
+ children = TEST_9
+ mappedWhenManaged = true
+ geometry = 700x500+0+0
+ title = Visualization GEANT4 TEST19
+end
+!----------------------------
+begin OWidget
+ name = TEST_9
+ type = XmForm
+ children = TEST_4 TEST_form 
+end
+!----------------------------
+begin OWidget
+ name = TEST_4
+ type = XmMenuBar
+ children = TEST_5 TEST_6 TEST_TEST_casc TEST_TEST_pdm TEST_g4_casc TEST_g4_pdm Vis3d_casc<Vis3d.odb Vis3d_pull<Vis3d.odb Wo_casc<G4oWo.odb Wo_pull<G4oWo.odb 
+ background = lightgrey
+ shadowThickness = 4
+ topShadowColor = white
+ bottomShadowColor = black
+ topAttachment = attach_form
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+end
+!----------------------------
+begin OWidget
+ name = TEST_5
+ type = XmCascadeButton
+ background = lightgrey
+ labelString = File
+ subMenuId = TEST_6
+end
+!----------------------------
+begin OWidget
+ name = TEST_6
+ type = XmPulldownMenu
+ children = TEST_exit 
+ background = lightgrey
+end
+!----------------------------
+begin OWidget
+ name = TEST_exit
+ type = XmPushButton
+ background = lightgrey
+ labelString = Exit
+ activateCallback = osh> do Wo sendExitOnly
+end
+!----------------------------
+begin OWidget
+ name = TEST_form
+ type = XmForm
+ children = TEST_camera TEST_plot1 TEST_plot2
+ background = grey
+ topAttachment = attach_widget
+ bottomAttachment = attach_form
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+ topWidget = TEST_4
+end
+!----------------------------
+begin OWidget
+ name = TEST_camera
+ type = XoCamera
+ viewLimits = -2000. 2000.
+! depthTreatment = zbuffer
+ userCallback = osh>\
+  set Widget target `thisWidget`\
+  camera=`thisCamera`\
+  set OContext color grey\
+  # For detector 4\
+  collect PhysicalVolume where name eq calo_phys | represent - | viewNode - $camera\
+  set OContext color grey\
+  collect PhysicalVolume where name eq tracker_phys | represent - | viewNode - $camera\
+  # For detector 5 (ATLAS)\
+  collect PhysicalVolume where name eq ATLexpHall_P | represent - | viewNode - $camera\
+  getCameraNodes $camera | normalizeNode - $camera
+ background = black
+ collectCallback = osh> getCameraNodes `thisCamera` | collect ONode where highlight eq 1 | get - name | dump -
+ topAttachment = attach_form
+ bottomAttachment = attach_form
+ leftAttachment = attach_form
+ rightAttachment = attach_position
+ rightPosition = 60
+end
+!----------------------------
+begin OWidget
+ name = TEST_plot1
+ type = XoPlotter
+ topAttachment = attach_form
+ leftAttachment = attach_widget
+ leftWidget = TEST_camera
+ rightAttachment = attach_form
+ bottomAttachment = attach_position
+ bottomPosition = 50
+ plottedObjects = HepJamesRandom1
+end
+!----------------------------
+begin OWidget
+ name = TEST_plot2
+ type = XoPlotter
+ topAttachment = attach_widget
+ topWidget = TEST_plot1
+ bottomAttachment = attach_form
+ leftAttachment = attach_widget
+ leftWidget = TEST_camera
+ rightAttachment = attach_form
+ plottedObjects = HepJamesVsDRand48
+ valueColorMapping = black 0.05 red 0.1 blue
+end
+!----------------------------
+begin OWidget
+ name = shell_view_panel
+ type = XmFormDialog
+ children = shell_view 
+ dialogTitle = Shell view
+end
+!----------------------------
+begin OWidget
+ name = shell_view
+ type = XoCamera
+ background = black
+ referenceCamera = TEST_camera
+ collectCallback = osh> getCameraNodes `thisCamera` | collect ONode where highlight eq 1 | get - name | dump -
+ topAttachment = attach_form
+ bottomAttachment = attach_form
+ leftAttachment = attach_form
+ rightAttachment = attach_form
+end
+!----------------------------
+begin OWidget
+ name = TEST_g4ui
+ type = XmPushButton
+ labelString = G4 commands
+ activateCallback = osh> load g4ui.odb | realize -;manageWidget g4ui_palette;raiseWidget g4ui_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = TEST_command_chooser
+ type = XmPushButton
+ labelString = G4 command chooser
+ activateCallback = osh> load G4Cmds.odb | realize - ;manageWidget G4Cmds_palette;raiseWidget G4Cmds_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = TEST_G4PV
+ type = XmPushButton
+ labelString = G4 volume chooser
+ activateCallback = osh> load G4PV.odb | realize - ;manageWidget G4PV_palette;raiseWidget G4PV_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = TEST_osh
+ type = XmPushButton
+ labelString = osh commands
+ activateCallback = osh> load osh.odb | realize -;manageWidget osh_palette;raiseWidget osh_palette_popup
+end
+!----------------------------
+begin OWidget
+ name = TEST_g4_casc
+ type = XmCascadeButton
+ background = lightgrey
+ labelString = G4
+ subMenuId = TEST_g4_pdm
+end
+!----------------------------
+begin OWidget
+ name = TEST_g4_pdm
+ type = XmPulldownMenu
+ children = TEST_g4ui TEST_command_chooser TEST_G4PV TEST_osh TEST_tracking_verbose
+ background = lightgrey
+end
+!----------------------------
+begin OWidget
+ name = TEST_tracking_verbose
+ type = XmToggleButton
+ labelString = Tracking verbose on/off
+ valueChangedCallback = osh>\
+  test `getWidgetResource TEST_tracking_verbose set` eq true  && G4 '/tracking/verbose 2'\
+  test `getWidgetResource TEST_tracking_verbose set` eq false && G4 '/tracking/verbose'
+end
+!----------------------------
+begin OWidget
+ name = TEST_TEST_casc
+ type = XmCascadeButton
+ background = lightgrey
+ labelString = TEST
+ subMenuId = TEST_TEST_pdm
+end
+!----------------------------
+begin OWidget
+ name = TEST_TEST_pdm
+ type = XmPulldownMenu
+ children = TEST_det4 TEST_ATLAS TEST_end_selection TEST_sep TEST_init TEST_startRun TEST_nextEvent TEST_abortRun TEST_cyclic
+ background = lightgrey
+end
+!----------------------------
+begin OWidget
+ name = TEST_det4
+ type = XmPushButton
+ labelString = Detector 4
+ activateCallback = osh> G4 '/test19det/detector 4'
+end
+!----------------------------
+begin OWidget
+ name = TEST_ATLAS
+ type = XmPushButton
+ labelString = ATLAS
+ createCallback = osh> setWidgetResource TEST_end_selection sensitive False
+ activateCallback = &osh>\
+  echo '- Choose sub detectors with'\
+  echo '  G4 commands (chooser) and'\
+  echo '- Click on End selection'\
+  echo '  when finished.'\
+  echo '- Click on Initialize.'\
+  setWidgetResource TEST_end_selection sensitive True\
+  G4 '/test19det/detector 5'
+end
+!----------------------------
+begin OWidget
+ name = TEST_end_selection
+ type = XmPushButton
+ labelString = End selection
+ activateCallback = osh>\
+  setWidgetResource TEST_end_selection sensitive False\
+  do Wo sendExitOnly
+end
+!----------------------------
+begin OWidget
+ name = TEST_sep
+ type = XmSeparator
+end
+!----------------------------
+begin OWidget
+ name = TEST_init
+ type = XmPushButton
+ labelString = Initialize
+ activateCallback = osh>\
+  G4 '/run/initialize'\
+  G4 '/tracking/storeTrajectory 1'\
+  G4 '/gun/particle e-'\
+  #G4 '/gun/particle pi+'\
+  G4 '/gun/direction 0.1 1 0'\
+  G4 '/gun/energy 1 GeV'\
+  callWidgetCallbacks TEST_camera userCallback
+end
+!----------------------------
+begin OWidget
+ name = TEST_represent
+ type = XmPushButton
+ labelString = Represent mother volume
+ activateCallback = osh>\
+  set OContext color pink\
+  collect PhysicalVolume where name eq ATLexpHall_P | represent - | viewNode - TEST_camera\
+end
+!----------------------------
+begin OWidget
+ name = TEST_startRun
+ type = XmPushButton
+ labelString = Start run
+ createCallback = osh> setWidgetResource TEST_nextEvent sensitive False
+ activateCallback = &osh>\
+  setWidgetResource TEST_exit      sensitive False\
+  setWidgetResource TEST_startRun  sensitive False\
+  setWidgetResource TEST_nextEvent sensitive True\
+  setWidgetResource TEST_abortRun  sensitive True\
+  eventn=`ask 'Number of event' 10`\
+  string=`printf '/run/beamOn %s' $eventn`\
+  G4 $string\
+  setWidgetResource TEST_exit sensitive True\
+  setWidgetResource TEST_startRun  sensitive True\
+  setWidgetResource TEST_nextEvent sensitive False\
+  setWidgetResource TEST_abortRun  sensitive False
+end
+!----------------------------
+begin OWidget
+ name = TEST_cyclic
+ type = XmPushButton
+ labelString = Cyclic
+ createCallback = osh> setWidgetResource TEST_nextEvent sensitive False
+ activateCallback = osh>\
+  isValid OCyclic/auto_next && delete OCyclic/auto_next\
+  delay=`ask delay(msec) 1000`\
+  script='G4> /run/beamOn 1'\
+  create OCyclic name auto_next widget `thisWidget` delay $delay script $script\
+  do OCyclic/auto_next start
+end
+!----------------------------
+begin OWidget
+ name = TEST_nextEvent
+ type = XmPushButton
+ labelString = Next event
+ activateCallback = osh> do Wo sendExitOnly
+end
+!----------------------------
+begin OWidget
+ name = TEST_abortRun
+ type = XmPushButton
+ labelString = Abort run
+ createCallback = osh>\
+  setWidgetResource TEST_nextEvent sensitive False\
+  setWidgetResource TEST_abortRun sensitive False
+ activateCallback = osh>\
+  G4 /run/abort\
+  do Wo sendExitOnly
+end
+
+
