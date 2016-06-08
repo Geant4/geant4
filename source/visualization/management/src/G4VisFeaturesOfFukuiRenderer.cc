@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisFeaturesOfFukuiRenderer.cc,v 2.2 1998/07/12 03:10:20 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisFeaturesOfFukuiRenderer.cc,v 1.2 1999/01/09 16:31:26 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 

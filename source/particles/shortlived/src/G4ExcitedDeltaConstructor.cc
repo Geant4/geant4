@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedDeltaConstructor.cc,v 2.6 1998/11/26 10:09:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitedDeltaConstructor.cc,v 1.2 1999/06/09 17:28:15 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -457,13 +457,13 @@ const G4String G4ExcitedDeltaConstructor::name[] =
 
 const G4double G4ExcitedDeltaConstructor::mass[] = 
 {
-  1.700*GeV, 1.675*GeV, 1.750*GeV, 1.850*GeV,  1.880*GeV, 
-  1.900*GeV, 1.920*GeV, 1.930*GeV, 1.950*GeV
+  1.600*GeV, 1.620*GeV, 1.700*GeV, 1.850*GeV,  1.905*GeV, 
+  1.910*GeV, 1.920*GeV, 1.930*GeV, 1.950*GeV
 };
 
 const G4double G4ExcitedDeltaConstructor::width[] = {
-  200.0*MeV, 180.0*MeV, 300.0*MeV, 240.0*MeV, 280.0*MeV,
-  250.0*MeV, 105.0*MeV, 250.0*MeV, 250.0*MeV
+  350.0*MeV, 150.0*MeV, 300.0*MeV, 240.0*MeV, 350.0*MeV,
+  250.0*MeV, 200.0*MeV, 350.0*MeV, 300.0*MeV
 };
 
 const G4int G4ExcitedDeltaConstructor::iSpin[] = 

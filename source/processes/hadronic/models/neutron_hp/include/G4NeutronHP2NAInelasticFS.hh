@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHP2NAInelasticFS.hh,v 2.2 1998/12/04 15:07:59 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NeutronHP2NAInelasticFS.hh,v 1.3 1999/07/02 09:58:09 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4NeutronHP2NAInelasticFS_h
 #define G4NeutronHP2NAInelasticFS_h 1

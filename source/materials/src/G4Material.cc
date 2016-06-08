@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.cc,v 2.7 1998/11/20 15:49:24 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Material.cc,v 1.3 1999/04/14 12:49:03 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //      ---------- class G4Material ----------
@@ -33,6 +33,7 @@
 // 09-07-98, ionisation parameters removed from the class, M.Maire
 // 05-10-98, change names: NumDensity -> NbOfAtomsPerVolume
 // 18-11-98, new interface to SandiaTable
+// 19-01-99  enlarge tolerance on test of coherence of gas conditions
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -50,6 +51,7 @@ G4MaterialTable G4Material::theMaterialTable;
 G4Material::G4Material(const G4String& name, G4double z,
                        G4double a, G4double density, 
                        G4State state, G4double temp, G4double pressure)
+:fName(name)		       
 {
     InitializePointers();
     
@@ -62,7 +64,6 @@ G4Material::G4Material(const G4String& name, G4double z,
          density = universe_mean_density;
        } 
 
-    fName     = name;
     fDensity  = density;
     fState    = state;
     fTemp     = temp;
@@ -96,6 +97,7 @@ G4Material::G4Material(const G4String& name, G4double z,
 
 G4Material::G4Material(const G4String& name, G4double density, G4int nComponents,
                        G4State state, G4double temp, G4double pressure)
+:fName(name)		       
 {
  
     InitializePointers();
@@ -109,7 +111,6 @@ G4Material::G4Material(const G4String& name, G4double density, G4int nComponents
        density = universe_mean_density;
       }
         
-    fName     = name;
     fDensity  = density;
     fState    = state;
     fTemp     = temp;
@@ -305,7 +306,7 @@ void G4Material::ComputeDerivedQuantities()
    //for gas, check coherence of the state conditions
    if (fState == kStateGas) {
       G4double ratio = TotNbOfAtomsPerVolume*k_Boltzmann*fTemp/fPressure;
-      if ((ratio<0.5)||(ratio>2.)) {
+      if ((ratio<0.1)||(ratio>10.)) {
          G4cout << "---warning from G4Material-- The state conditions of the gas: " 
               << fName << " are not consistent."
               << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
@@ -362,28 +363,50 @@ G4Material::~G4Material()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4Material::G4Material(const G4Material &right)
+G4Material::G4Material(const G4Material& right)
 {
     *this = right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-const G4Material & G4Material::operator=(const G4Material &right)
+const G4Material& G4Material::operator=(const G4Material& right)
 {
-  return right;
+  if (this != &right)
+    {
+      fName                    = right.fName;
+      fDensity                 = right.fDensity;
+      fState                   = right.fState;
+      fTemp                    = right.fTemp;
+      fPressure                = right.fPressure;
+      maxNbComponents          = right.maxNbComponents;
+      fNumberOfComponents      = right.fNumberOfComponents;
+      fNumberOfElements        = right.fNumberOfElements;
+      theElementVector         = right.theElementVector;
+      fMassFractionVector      = right.fMassFractionVector;
+      fAtomsVector             = right.fAtomsVector;
+      fMaterialPropertiesTable = right.fMaterialPropertiesTable;
+      fIndexInTable            = right.fIndexInTable;
+      VecNbOfAtomsPerVolume    = right.VecNbOfAtomsPerVolume;
+      TotNbOfAtomsPerVolume    = right.TotNbOfAtomsPerVolume;
+      TotNbOfElectPerVolume    = right.TotNbOfElectPerVolume;
+      fRadlen                  = right.fRadlen;
+      fIonisation              = right.fIonisation;
+      fSandiaTable             = right.fSandiaTable;
+     } 
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4int G4Material::operator==(const G4Material &right) const
+G4int G4Material::operator==(const G4Material& right) const
 {
   return (this == (G4Material *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4int G4Material::operator!=(const G4Material &right) const
+G4int G4Material::operator!=(const G4Material& right) const
 {
   return (this != (G4Material *) &right);
 }

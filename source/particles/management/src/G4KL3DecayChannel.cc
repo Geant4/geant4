@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KL3DecayChannel.cc,v 2.4 1998/11/18 09:46:34 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KL3DecayChannel.cc,v 1.3 1999/04/13 08:00:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -91,13 +91,13 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4KL3DecayChannel::DecayIt " << endl;
 #endif
   // fill parent particle and its mass
-  if (parent == NULL) {
+  if (parent == 0) {
     FillParent();
   }
   massK = parent->GetPDGMass();
 
   // fill daughter particles and their mass
-  if (daughters == NULL) {
+  if (daughters == 0) {
     FillDaughters();
   }
   daughterM[idPi] = daughters[idPi]->GetPDGMass();
@@ -124,7 +124,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   }
 #endif
    //create parent G4DynamicParticle at rest
-  G4ParticleMomentum* direction = new G4ParticleMomentum(1.0,0.0,0.0);
+  G4ThreeVector* direction = new G4ThreeVector(1.0,0.0,0.0);
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, *direction, 0.0);
   delete direction;
 
@@ -142,7 +142,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   phi  = 2.0*M_PI*G4UniformRand()*rad;
   sinphi = sin(phi);
   cosphi = cos(phi);
-  direction = new G4ParticleMomentum(sintheta*cosphi,sintheta*sinphi,costheta);
+  direction = new G4ThreeVector(sintheta*cosphi,sintheta*sinphi,costheta);
   G4ThreeVector momentum0 =  (*direction)*daughterP[0]; 
   G4DynamicParticle * daughterparticle 
        = new G4DynamicParticle( daughters[0], momentum0);

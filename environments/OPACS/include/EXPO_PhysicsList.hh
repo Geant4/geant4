@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: EXPO_PhysicsList.hh,v 2.1 1998/07/12 02:36:58 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: EXPO_PhysicsList.hh,v 1.3 1999/05/18 10:57:12 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -15,8 +15,6 @@
 //      This class is a class derived from G4VUserPhysicsList
 //      for constructing all particles and processes.
 //
-//	History
-//        first version              10  Jan. 1998 by H.Kurashige
 // ------------------------------------------------------------
 #ifndef EXPO_PhysicsList_h
 #define EXPO_PhysicsList_h 1
@@ -36,7 +34,7 @@ class EXPO_PhysicsList: public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     // 
-    virtual void SetCuts(G4double aCut);
+    virtual void SetCuts();
     
   protected:
     // these methods Construct particles 

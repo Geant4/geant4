@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConvexHull.hh,v 2.1 1998/10/20 16:31:16 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ConvexHull.hh,v 1.1 1999/01/07 16:07:28 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef __CONVEXHULL_H
 #define __CONVEXHULL_H

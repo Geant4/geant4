@@ -10,13 +10,16 @@
 
 # ----- Objectivity variables setup
 
-setenv OBJY_VERS 4.0.2
+if ( ! $?OBJY_VERS ) then
+  setenv OBJY_VERS 4.0.2
+endif
 
 if ( -r /afs/cern.ch/rd45/objectivity/objyenv.csh ) then 
+  echo "Setting up OBJY_VERS $OBJY_VERS ..."
   source /afs/cern.ch/rd45/objectivity/objyenv.csh 
 endif 
 
 # ----- HepODBMS variables setup
 
-setenv HEP_ODBMS_DIR        /afs/cern.ch/sw/lhcxx/specific/ibm/HepODBMS/0.0
+setenv HEP_ODBMS_DIR        /afs/cern.ch/sw/lhcxx/specific/@sys/HepODBMS/0.0
 setenv HEP_ODBMS_INCLUDES   ${HEP_ODBMS_DIR}/include

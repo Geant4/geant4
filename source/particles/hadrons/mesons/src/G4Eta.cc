@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Eta.cc,v 2.2 1998/09/24 06:08:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Eta.cc,v 1.2 1999/06/09 16:07:49 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -85,7 +85,7 @@ G4Eta::G4Eta(
 //             stable         lifetime    decay table 
 
 G4Eta G4Eta::theEta(
-		"eta",     0.54745*GeV,      1.20*keV,         0.0, 
+		"eta",     0.54730*GeV,      1.18*keV,         0.0, 
 		    0,              -1,            +1,          
 		    0,               0,            +1,             
 	      "meson",               0,             0,         221,

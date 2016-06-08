@@ -8,13 +8,23 @@
 // the z axis. It has boundaries that are straight lines of arbitrary length
 // and direction, but with corners aways on the same side of the z axis.
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #ifndef G4PolyPhiFace_hh
 #define G4PolyPhiFace_hh
 
 #include "G4VCSGface.hh"
 
+class G4ReduciblePolygon;
+
 typedef struct {
-        G4double r, z;          // position
+        G4double x, y, r, z;          // position
         G4double rNorm, 
                  zNorm;         // r/z normal
 	G4ThreeVector norm3D;	// 3D normal
@@ -30,9 +40,12 @@ typedef struct {
 class G4PolyPhiFace : public G4VCSGface {
 
 	public:
-	G4PolyPhiFace( const G4double *r, const G4double *z, const G4int n,
-		       const G4double phi, const G4double deltaPhi, const G4bool start );
+	G4PolyPhiFace( const G4ReduciblePolygon *rz,
+		       const G4double phi, const G4double deltaPhi, const G4double phiOther );
 	virtual ~G4PolyPhiFace();
+
+	G4PolyPhiFace( const G4PolyPhiFace &source );
+	G4PolyPhiFace *operator=( const G4PolyPhiFace &source );
 	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
 			  const G4bool outgoing, const G4double surfTolerance,
@@ -51,7 +64,11 @@ class G4PolyPhiFace : public G4VCSGface {
 	void CalculateExtent( const EAxis axis, 
 			      const G4VoxelLimits &voxelLimit,
 			      const G4AffineTransform &tranform,
-			      G4double &min, G4double &max        );
+			      G4SolidExtentList &extentList        );
+
+	G4VCSGface *Clone() { return new G4PolyPhiFace(*this); }
+	
+	void Diagnose( G4VSolid *solid );
 	
 	protected:
 	G4PolyPhiFaceEdge	*edges;		// The edges of the face
@@ -62,11 +79,25 @@ class G4PolyPhiFace : public G4VCSGface {
 	G4ThreeVector		surface;	// Point on surface
 	G4double		rMin, rMax,	// Extent in r
 				zMin, zMax;	// Extent in z
+	G4bool			allBehind;	// True if the entire polycone/polyhedra is behind the place
+						// of this face 
 				
+	G4bool InsideEdgesExact( const G4double r, const G4double z, 
+			  	 const G4double normSign, const G4ThreeVector &p, const G4ThreeVector &v );
 	G4bool InsideEdges( const G4double r, const G4double z );
 	G4bool InsideEdges( const G4double r, const G4double z, 
 			    G4double *distRZ2, G4PolyPhiFaceVertex **base3Dnorm=0,
 			    G4ThreeVector **head3Dnorm=0 );
+
+	inline G4double ExactZOrder( const G4double z, 
+				     const G4double qx, const G4double qy, const G4double qz, 
+				     const G4ThreeVector &v, 
+				     const G4double normSign,
+				     const G4PolyPhiFaceVertex *vert ) const;
+
+	void CopyStuff( const G4PolyPhiFace &source );
 };
+
+#include "G4PolyPhiFace.icc"
 
 #endif

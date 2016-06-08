@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.0 1998/07/02 16:41:34 gunter Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:14:02 gunter Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------

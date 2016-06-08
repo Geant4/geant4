@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserEventAction.hh,v 2.1 1998/07/12 02:53:56 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UserEventAction.hh,v 1.2 1999/04/09 03:04:00 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //
@@ -15,16 +15,17 @@
 #define G4UserEventAction_h 1
 
 class G4EventManager;
+class G4Event;
 
 class G4UserEventAction 
 {
   public:
-      virtual ~G4UserEventAction() 
-      {;}
+      G4UserEventAction() {;}
+      virtual ~G4UserEventAction() {;}
       inline void SetEventManager(G4EventManager* value)
-      { fpEventManager = value; };
-      virtual void BeginOfEventAction();
-      virtual void EndOfEventAction();
+      { fpEventManager = value; }
+      virtual void BeginOfEventAction(const G4Event* anEvent);
+      virtual void EndOfEventAction(const G4Event* anEvent);
   protected:
       G4EventManager* fpEventManager;
 };

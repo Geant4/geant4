@@ -1,7 +1,8 @@
 #ifndef G4VInElasticScatterer_h
 #define G4VInElasticScatterer_h 1
 
-#include "G4KineticTrackVector.hh"
+class G4KineticTrackVector;
+class G4KineticTrack;
 
 class G4VInElasticScatterer 
    {

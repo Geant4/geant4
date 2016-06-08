@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransportationManager.cc,v 2.0 1998/07/02 17:06:47 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4TransportationManager.cc,v 1.2 1999/07/02 15:47:28 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //  G4TransportationManager 
@@ -18,6 +18,12 @@
 //    the constructor and destructor require them.
 #include "G4PropagatorInField.hh"
 #include "G4FieldManager.hh"
+
+// This will ensure correct order of construction and destruption of 
+//  static objects.
+#include "G4NavigationLevel.hh"
+G4Allocator<G4NavigationLevel>     aNavigationLevelAllocator;
+G4Allocator<G4NavigationLevelRep>  aNavigLevelRepAllocator;
 
 G4TransportationManager  G4TransportationManager::fTransportationManager;
 

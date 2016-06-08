@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4WoMessenger.hh,v 2.3 1998/07/12 03:42:49 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4WoMessenger.hh,v 1.2 1999/04/13 01:26:20 yhajime Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4WoMessenger_h
 #define G4WoMessenger_h 1

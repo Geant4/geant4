@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonPlus.cc,v 2.2 1998/09/24 06:09:01 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KaonPlus.cc,v 1.2 1999/06/09 16:07:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -86,7 +86,7 @@ G4KaonPlus::G4KaonPlus(
 
 // In this version, charged pions are set to stable
 G4KaonPlus G4KaonPlus::theKaonPlus(
-	      "kaon+",    0.493677*GeV,       0.0*MeV,    +1.*eplus, 
+	      "kaon+",    0.493677*GeV,  5.314e-14*MeV,    +1.*eplus, 
 		    0,              -1,             0,          
 		    1,              +1,             0,             
 	      "meson",               0,             0,         321,

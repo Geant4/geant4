@@ -5,19 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.cc,v 2.0 1998/07/02 16:56:24 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MagIntegratorStepper.cc,v 1.2 1999/02/12 12:38:18 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4MagIntegratorStepper.hh"
 
-// Constructor for creation of coefficient in Lorentz motion equation 
-// as well as initialisation of geometry constants.
-// particleCharge is the particle charge in the elementary charge
-// momentumXc is the particle momentum multiplied by the speed of light in MeV,
+// Constructor for stepper abstract base class. 
 // 
 
-G4MagIntegratorStepper::G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs)
+G4MagIntegratorStepper::G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs,
+					       G4int       num_var)
 {
-   theEquation_Rhs= EqRhs;
+   fEquation_Rhs= EqRhs;
+   fNumberOfVariables = num_var;
 }
 

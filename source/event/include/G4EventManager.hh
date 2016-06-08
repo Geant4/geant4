@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.hh,v 2.2 1998/10/10 10:51:17 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EventManager.hh,v 1.2 1999/04/15 08:41:50 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //  Last Modification : 10/Dec/96 M.Asai
@@ -28,7 +28,7 @@ class G4UserSteppingAction;
 class G4EvManMessenger;
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
-#include "G4Trajectory.hh"
+#include "G4VTrajectory.hh"
 #include "G4TrackStatus.hh"
 class G4SDManager;
 #include "globals.hh"

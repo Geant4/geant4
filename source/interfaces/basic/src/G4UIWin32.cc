@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.cc,v 2.6 1998/10/23 14:39:11 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIWin32.cc,v 1.4 1999/05/06 15:21:00 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G.Barrand
 
@@ -36,6 +36,7 @@ class TextBuffer {
 public:
   TextBuffer():linei(0),linen(TEXT_MAX_LINES),endOfPage(0),heightOfPage(12) {
     lines = new G4String[linen];
+    for(int count=0;count<256;count++) spaces[count] = ' ';
   }
   ~TextBuffer() {
     delete [] lines;
@@ -102,6 +103,7 @@ public:
       int rowi = endOfPage - row;
       short y = a_rect->bottom - charHeight * (row + 1);
       if((rowi>=0)&&(rowi<linei)) {
+	TextOut (a_hdc,0,y,(char*)spaces,256); //Clear text background first.
 	const char* string = lines[rowi].data();
 	if(string!=NULL) {
 	  TextOut (a_hdc,0,y,(char*)string,strlen((char*)string));
@@ -114,16 +116,18 @@ private:
   int linen;
   int linei;
   int endOfPage,heightOfPage;
+  char spaces[256];
 };
 
 static char mainClassName[] = "G4UIWin32";
 static char textClassName[] = "G4UIWin32/Text";
 static G4bool exitSession = true;
 static G4bool exitPause = true;
+static G4bool exitHelp = true;
 static G4UIsession* tmpSession = NULL;
 
-static FARPROC oldEditWindowProc;
-static LRESULT CALLBACK EditWindowProc(HWND,UINT,WPARAM,LPARAM);
+static WNDPROC oldEditWindowProc;
+static G4bool ConvertStringToInt(const char*,int&);
 
 static int actionIdentifier = 0;
 
@@ -132,8 +136,8 @@ static unsigned CommandsHashFun(const int& identifier) {
 }
 /***************************************************************************/
 G4UIWin32::G4UIWin32 (
- HANDLE a_hInstance
-,HANDLE a_hPrevInstance
+ HINSTANCE a_hInstance
+,HINSTANCE a_hPrevInstance
 ,LPSTR  a_lpszCmdLine
 ,int    a_nCmdShow
 )
@@ -145,6 +149,9 @@ G4UIWin32::G4UIWin32 (
 ,textBuffer(NULL)
 ,textCols(80)
 ,textRows(12)
+,fHelp(false)
+,fHelpChoice(0)
+,fHistoryPos(-1)
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
@@ -164,7 +171,7 @@ G4UIWin32::G4UIWin32 (
       wc.hInstance     = a_hInstance;
       wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockObject(BLACK_BRUSH);
+      wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
       wc.lpszMenuName  = mainClassName;
       wc.lpszClassName = mainClassName;
       ::RegisterClass  (&wc);
@@ -176,7 +183,7 @@ G4UIWin32::G4UIWin32 (
       wc.hInstance     = a_hInstance;
       wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockObject(WHITE_BRUSH);
+      wc.hbrBackground = GetStockBrush(WHITE_BRUSH);
       wc.lpszMenuName  = textClassName;
       wc.lpszClassName = textClassName;
       ::RegisterClass  (&wc);
@@ -219,7 +226,11 @@ G4UIWin32::~G4UIWin32 (
     UI->SetCoutDestination(NULL);
   }
   delete textBuffer;
-  ::DestroyWindow(mainWindow);
+  if(textWindow!=NULL) ::SetWindowLong(textWindow,GWL_USERDATA,LONG(NULL));
+  if(mainWindow!=NULL) {
+    ::SetWindowLong(mainWindow,GWL_USERDATA,LONG(NULL));
+    ::DestroyWindow(mainWindow);
+  }
 }
 /***************************************************************************/
 G4UIsession* G4UIWin32::SessionStart (
@@ -278,123 +289,14 @@ void G4UIWin32::SecondaryLoop (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(interactorManager==NULL) return;
-  Prompt       (a_prompt);
-  exitPause    = false;
-  void*         event;
+  Prompt(a_prompt);
+  exitPause = false;
+  void* event;
   while((event = interactorManager->GetEvent())!=NULL) { 
     interactorManager->DispatchEvent(event);
     if(exitPause==true) break;
   }
-  Prompt       ("session");
-}
-/***************************************************************************/
-void G4UIWin32::ApplyShellCommand (
- G4String a_string
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(UI==NULL) return;
-
-  G4String     command = a_string.strip(G4String::leading);
-  if( command(0) == '#' ) { 
-
-    G4cout << command << endl; 
-
-  } else if( command == "ls" || command(0,3) == "ls " ) {
-
-    ListDirectory( command );
-
-  } else if( command == "pwd" ) { 
-
-    G4cout << "Current Working Directory : " 
-       << GetCurrentWorkingDirectory() << endl; 
-
-  } else if( command(0,2) == "cd" ) { 
-
-    ChangeDirectoryCommand ( command );
-
-  } else if( command(0,4) == "help" ) { 
-
-    //TerminalHelp( command ); 
-    G4cout << "Not implemented." << endl; 
-
-  } else if( command(0) == '?' ) { 
-
-    ShowCurrent( command );
-
-  } else if( command(0,4) == "hist" ) {
-
-    G4int nh = UI->GetNumberOfHistory();
-    for(int i=0;i<nh;i++) { 
-      G4cout << i << ": " << UI->GetPreviousCommand(i) << endl; 
-    }
-
-  } else if( command(0) == '!' ) {
-
-    G4String ss = command(1,command.length()-1);
-    G4int vl;
-    const char* tt = ss;
-    istrstream is((char*)tt);
-    is >> vl;
-    G4int nh = UI->GetNumberOfHistory();
-    if(vl>=0 && vl<nh) { 
-      G4String prev = UI->GetPreviousCommand(vl); 
-      G4cout << prev << endl;
-      ExecuteCommand (ModifyToFullPathCommand(prev));
-    } else { 
-      G4cerr << "history " << vl << " is not found." << endl; 
-    }
-
-  } else if( command(0,4) == "exit" ) { 
-
-    if( exitPause == false) { //In a secondary loop.
-      G4cout << "You are now processing RUN." << endl;
-      G4cout << "Please abort it using \"/run/abort\" command first" << endl;
-      G4cout << " and use \"continue\" command until the application" << endl;
-      G4cout << " becomes to Idle." << endl;
-    } else {
-      exitSession = true;
-    }
-
-  } else if( command(0,4) == "cont" ) { 
-
-    exitPause = true;
-
-  } else {
-
-    ExecuteCommand (ModifyToFullPathCommand(a_string));
-
-  }
-}
-/***************************************************************************/
-void G4UIWin32::ExecuteCommand (
- G4String aCommand
-)
-/***************************************************************************/
-// Should be put in G4VBasicShell.
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  if(aCommand.length()<2) return;
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(UI==NULL) return;
-  int commandStatus = UI->ApplyCommand(aCommand);
-  switch(commandStatus) {
-  case fCommandSucceeded:
-    break;
-  case fCommandNotFound:
-    G4cerr << "command not found" << endl;
-    break;
-  case fIllegalApplicationState:
-    G4cerr << "illegal application state -- command refused" << endl;
-    break;
-  case fParameterOutOfRange:
-  case fParameterUnreadable:
-  case fParameterOutOfCandidates:
-  default:
-    G4cerr << "command refused (" << commandStatus << ")" << endl;
-  }
+  Prompt("session");
 }
 /***************************************************************************/
 G4int G4UIWin32::ReceiveG4cout (
@@ -417,59 +319,35 @@ G4int G4UIWin32::ReceiveG4cerr (
   return 0;
 }
 /***************************************************************************/
-void G4UIWin32::ShowCurrent ( 
- G4String newCommand 
+G4bool G4UIWin32::GetHelpChoice(
+ G4int& aInt
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(UI==NULL) return;
-  G4String comString = newCommand(1,newCommand.length()-1);
-  G4String theCommand = ModifyToFullPathCommand(comString);
-  G4String curV = UI->GetCurrentValues(theCommand);
-  if( ! curV.isNull() ) { 
-    G4cout << "Current value(s) of the parameter(s) : " << curV << endl; 
+  fHelp = true;
+  //
+  if(interactorManager==NULL) return false;
+  Prompt("Help");
+  exitHelp = false;
+  void* event;
+  while((event = interactorManager->GetEvent())!=NULL) { 
+    interactorManager->DispatchEvent(event);
+    if(exitHelp==true) break;
   }
+  Prompt("session");
+  //
+  if(fHelp==false) return false;
+  aInt = fHelpChoice;
+  fHelp = false;
+  return true;
 }
 /***************************************************************************/
-void G4UIWin32::ChangeDirectoryCommand ( 
- G4String newCommand 
+void G4UIWin32::ExitHelp(
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4String prefix;
-  if( newCommand.length() <= 3 ) { 
-    prefix = "/"; 
-  } else {
-    G4String aNewPrefix = newCommand(3,newCommand.length()-3);
-    prefix = aNewPrefix.strip(G4String::both);
-  }
-  if(!ChangeDirectory(prefix)) { 
-    G4cout << "directory <" << prefix << "> not found." << endl; 
-  }
-}
-/***************************************************************************/
-void G4UIWin32::ListDirectory( 
- G4String newCommand 
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  G4String targetDir;
-  if( newCommand.length() <= 3 ) { 
-    targetDir = "./"; 
-  } else {
-    G4String newPrefix = newCommand(3,newCommand.length()-3);
-    targetDir = newPrefix.strip(G4String::both);
-  }
-  G4UIcommandTree* commandTree = FindDirectory( targetDir );
-  if( commandTree == NULL ) { 
-    G4cout << "Directory <" << targetDir << "> is not found." << endl; 
-  } else { 
-    commandTree->ListCurrent(); 
-  }
 }
 /***************************************************************************/
 void G4UIWin32::AddMenu (
@@ -543,36 +421,36 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
     ReleaseDC (a_window,hdc);
 
     G4UIWin32* This = (G4UIWin32*)tmpSession;
-
-    This->textWindow = CreateWindow (textClassName,NULL,
-			 WS_CHILD | WS_VISIBLE | WS_VSCROLL,
-			 0,0,
-			 This->textCols * charWidth,
-			 This->textRows * charHeight,
-			 a_window,NULL,
-			 GetWindowInstance(a_window),
-			 NULL);
-    ::SetWindowLong (This->textWindow,GWL_USERDATA,LONG(This));
-
-    This->editWindow = CreateWindow ("edit",NULL,
-			 WS_CHILD | WS_VISIBLE | WS_BORDER,
-			 0,This->textRows  * charHeight,
-			 This->textCols  * charWidth,charHeight,
-			 a_window,(HMENU)1,
-			 GetWindowInstance(a_window),
-			 NULL);
-    oldEditWindowProc = (FARPROC)GetWindowLong(This->editWindow,GWL_WNDPROC);
-    SetWindowLong (This->editWindow,GWL_WNDPROC,(LONG)EditWindowProc);
-
-    MoveWindow (a_window,
-		rect.left,rect.top,
-		2 * GetSystemMetrics(SM_CXFRAME) + 
-		This->textCols  * charWidth,
-		GetSystemMetrics(SM_CYCAPTION) + 
-		2 * GetSystemMetrics(SM_CYFRAME) + 
-		This->textRows * charHeight + charHeight,
-		TRUE);
-
+    if(This!=NULL) {
+      This->textWindow = CreateWindow (textClassName,NULL,
+				       WS_CHILD | WS_VISIBLE | WS_VSCROLL,
+				       0,0,
+				       This->textCols * charWidth,
+				       This->textRows * charHeight,
+				       a_window,NULL,
+				       GetWindowInstance(a_window),
+				       NULL);
+      ::SetWindowLong (This->textWindow,GWL_USERDATA,LONG(This));
+      
+      This->editWindow = CreateWindow ("edit",NULL,
+				       WS_CHILD | WS_VISIBLE | WS_BORDER,
+				       0,This->textRows  * charHeight,
+				       This->textCols  * charWidth,charHeight,
+				       a_window,(HMENU)1,
+				       GetWindowInstance(a_window),
+				       NULL);
+      oldEditWindowProc = (WNDPROC)GetWindowLong(This->editWindow,GWL_WNDPROC);
+      SetWindowLong (This->editWindow,GWL_WNDPROC,(LONG)EditWindowProc);
+      
+      MoveWindow (a_window,
+		  rect.left,rect.top,
+		  2 * GetSystemMetrics(SM_CXFRAME) + 
+		  This->textCols  * charWidth,
+		  GetSystemMetrics(SM_CYCAPTION) + 
+		  2 * GetSystemMetrics(SM_CYFRAME) + 
+		  This->textRows * charHeight + charHeight,
+		  TRUE);
+    }
     }return 0;
   case WM_SIZE:{
     G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
@@ -594,13 +472,15 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
     }return 0;
   case WM_SETFOCUS:{
     G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
-    SetFocus (This->editWindow);
+    if(This!=NULL) SetFocus (This->editWindow);
     }return 0;
   case WM_COMMAND:{
     G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
     if(This!=NULL) {
-      G4String command = This->GetCommand(a_wParam);
-      This->ApplyShellCommand (command);
+      if(This->fHelp==false) {
+	G4String command = This->GetCommand(a_wParam);
+	This->ApplyShellCommand (command,exitSession,exitPause);
+      }
     }
     }return 0;
   case WM_DESTROY:
@@ -668,7 +548,7 @@ LRESULT CALLBACK G4UIWin32::TextWindowProc (
   return (DefWindowProc(a_window,a_message,a_wParam,a_lParam));
 }
 /***************************************************************************/
-LRESULT CALLBACK EditWindowProc ( 
+LRESULT CALLBACK G4UIWin32::EditWindowProc ( 
  HWND   a_window
 ,UINT   a_message
 ,WPARAM a_wParam
@@ -686,9 +566,78 @@ LRESULT CALLBACK EditWindowProc (
       char buffer[128];
       GetWindowText (a_window,buffer,128);
       G4String command (buffer);
-      SetWindowText (a_window,"");
-      This->ApplyShellCommand (command);
-      }break;
+      //SetWindowText (a_window,"");
+      Edit_SetText(a_window,"");
+      Edit_SetSel(a_window,0,0);
+
+      if(This!=NULL) {
+	if(This->fHelp==true) {
+	  exitHelp = true;
+	  This->fHelp = ConvertStringToInt(command.data(),This->fHelpChoice);
+	} else {
+	  This->fHistory.insert(command);
+	  This->fHistoryPos = -1;
+	  This->ApplyShellCommand (command,exitSession,exitPause);
+	}
+      }
+
+    }break;
+    case VK_TAB:{
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
+			 GetParent(a_window),GWL_USERDATA);
+      if( (This!=NULL) && (This->fHelp==true) ) break;
+      char buffer[128];
+      Edit_GetText(a_window,buffer,128);
+
+      G4String command(buffer);
+
+      if(This!=NULL) {
+	G4String cmd = This->Complete(command);
+	const char* d = cmd.data();
+	int l = strlen(d);
+	Edit_SetText(a_window,d);
+	Edit_SetSel(a_window,l,l);
+      }
+      
+    }break;
+    case VK_UP:{
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
+			 GetParent(a_window),GWL_USERDATA);
+      if(This!=NULL) {
+	int pos = This->fHistoryPos== -1 ? 
+	  This->fHistory.entries()-1 : This->fHistoryPos-1;
+	if((pos>=0)&&(pos<This->fHistory.entries())) {
+	  G4String command = This->fHistory[pos];
+	  const char* d = command.data();
+	  int l = strlen(d);
+	  Edit_SetText(a_window,d);
+	  Edit_SetSel(a_window,l,l);
+	  //
+	  This->fHistoryPos = pos;
+	}
+      }
+    }return 0; //Do not jump into oldEditProc.
+    case VK_DOWN:{
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
+			 GetParent(a_window),GWL_USERDATA);
+      if(This!=NULL) {
+	int pos = This->fHistoryPos + 1;
+	if((pos>=0)&&(pos<This->fHistory.entries())) {
+	  G4String command = This->fHistory[pos];
+	  const char* d = command.data();
+	  int l = strlen(d);
+	  Edit_SetText(a_window,d);
+	  Edit_SetSel(a_window,l,l);
+	  //
+	  This->fHistoryPos = pos;
+	} else if(pos>=This->fHistory.entries()) {
+	  Edit_SetText(a_window,"");
+	  Edit_SetSel(a_window,0,0);
+	  //
+	  This->fHistoryPos = -1;
+	}
+      }
+    }return 0; //Do not jump into oldEditProc.
     }
   }
   return CallWindowProc(oldEditWindowProc,
@@ -717,6 +666,22 @@ void G4UIWin32::TextAppendString (
     SetScrollRange(textWindow,SB_VERT,0,linen-1,TRUE);
     SetScrollPos(textWindow,SB_VERT,linen-1,TRUE);
   }
+}
+//////////////////////////////////////////////////////////////////////////////
+G4bool ConvertStringToInt(
+ const char* aString
+,int& aInt
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  aInt = 0;
+  if(aString==NULL) return false;
+  char* s;
+  long value = strtol(aString,&s,10);
+  if(s==aString) return false;
+  aInt = value;
+  return true;
 }
 
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelProxy.hh,v 2.1 1998/11/11 11:34:08 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SmartVoxelProxy.hh,v 1.1 1999/01/07 16:07:17 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 // class G4SmartVoxelProxy

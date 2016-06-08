@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PiModel.hh,v 2.0 1998/07/02 14:09:18 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05PiModel.hh,v 1.1 1999/01/07 16:06:14 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //----------------------------------------

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitationHandler.cc,v 1.12 1998/12/15 19:27:42 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitationHandler.cc,v 1.3 1999/05/28 17:14:41 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -72,7 +72,7 @@ G4bool G4ExcitationHandler::operator!=(const G4ExcitationHandler &right) const
 }
 
 
-G4DynamicParticleVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theInitialState) const
+G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theInitialState) const
 {
 
   G4FragmentVector* theResult = 0; 
@@ -84,7 +84,8 @@ G4DynamicParticleVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   
   // Initial State De-Excitation 
 
-  if(A<GetMaxA()&&Z<GetMaxZ()) {
+  if(A<GetMaxA()&&Z<GetMaxZ()&&
+     exEnergy>G4NucleiPropertiesTable::GetBindingEnergy(Z,A)) {
 
     theResult = theFermiModel->BreakItUp(theInitialState);
 
@@ -115,7 +116,8 @@ G4DynamicParticleVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
       Z = theResult->at(i)->GetZ();
       theExcitedNucleus = *(theResult->at(i));
       // try to de-excite this fragment
-      if(A<GetMaxA()&&Z<GetMaxZ()) {
+      if(A<GetMaxA()&&Z<GetMaxZ()&&
+         exEnergy>G4NucleiPropertiesTable::GetBindingEnergy(Z,A)) {
 
 	theTempResult = theFermiModel->BreakItUp(theExcitedNucleus);
 
@@ -134,12 +136,13 @@ G4DynamicParticleVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 	// If so :
 
 	// Remove excited fragment from the result 
-	delete theResult->removeAt(i);
+	delete theResult->removeAt(i--);
 
 	// and add theTempResult elements to theResult
 	while (theTempResult->entries() > 0) 
 	  theResult->insert(theTempResult->removeFirst());
-	i--;
+	  
+	delete theTempResult;
       } else { // If not :
 	// it doesn't matter, we Follow with the next fragment but
 	// I have to make 
@@ -187,12 +190,12 @@ G4DynamicParticleVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   return Transform(theResult);
 }
 
-G4DynamicParticleVector * 
+G4ReactionProductVector * 
 G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
 {
   if (theFragmentVector == 0) return 0;
 
-  // Conversion from G4FragmentVector to G4DynamicParticleVector
+  // Conversion from G4FragmentVector to G4ReactionProductVector
   G4ParticleDefinition *theGamma = G4Gamma::GammaDefinition();
   G4ParticleDefinition *theNeutron = G4Neutron::NeutronDefinition();
   G4ParticleDefinition *theProton = G4Proton::ProtonDefinition();   
@@ -202,7 +205,7 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
   G4ParticleDefinition *theAlpha = G4Alpha::AlphaDefinition();
   G4ParticleDefinition *theKindOfFragment = 0;
   theNeutron->SetVerboseLevel(2);
-  G4DynamicParticleVector * theDynamicParticleVector = new G4DynamicParticleVector;
+  G4ReactionProductVector * theReactionProductVector = new G4ReactionProductVector;
   G4int theFragmentA, theFragmentZ;
   G4LorentzVector theFragmentMomentum;
 
@@ -230,15 +233,20 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
       theKindOfFragment = theTableOfParticles->FindIon(theFragmentZ,theFragmentA,0,theFragmentZ);
     }
     if (theKindOfFragment != 0) 
-      theDynamicParticleVector->insert(new G4DynamicParticle(theKindOfFragment, 
-							     theFragmentMomentum.vect()));
+    {
+      G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
+      theNew->SetMomentum(theFragmentMomentum.vect());
+      theNew->SetTotalEnergy(theFragmentMomentum.e());
+      theNew->SetFormationTime(theFragmentVector->at(i)->GetCreationTime());
+      theReactionProductVector->insert(theNew);
+    }
   }
   if (theFragmentVector != 0)
     { 
       theFragmentVector->clearAndDestroy();
       delete theFragmentVector;
     }
-  return theDynamicParticleVector;
+  return theReactionProductVector;
 }
 
 

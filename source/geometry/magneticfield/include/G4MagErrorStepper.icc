@@ -5,12 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.icc,v 2.4 1998/11/12 16:22:42 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MagErrorStepper.icc,v 1.4 1999/04/19 17:20:29 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 inline G4MagErrorStepper::G4MagErrorStepper(G4Mag_EqRhs *EqRhs,
 					    G4int numberOfVariables)
-     :G4MagIntegratorStepper(EqRhs),
-      theNumberOfVariables(numberOfVariables)
-  {};
+     :G4MagIntegratorStepper(EqRhs,numberOfVariables)
+  {
+      const G4int nvar = this->GetNumberOfVariables() ;
+      yMiddle=     new G4double[nvar]; 
+      dydxMid=     new G4double[nvar];
+      yInitial=    new G4double[nvar];
+      yOneStep= new G4double[nvar];
+  };
+
+inline G4MagErrorStepper::~G4MagErrorStepper()
+  {
+      delete[] yMiddle;
+      delete[] dydxMid;
+      delete[] yInitial;
+      delete[] yOneStep;
+  }

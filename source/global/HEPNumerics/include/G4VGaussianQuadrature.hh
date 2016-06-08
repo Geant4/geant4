@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGaussianQuadrature.hh,v 2.0 1998/07/02 17:31:56 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VGaussianQuadrature.hh,v 1.1 1999/01/07 16:08:55 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Base Class for realisation of numerical methodes for integration of functions
 // with signature double f(double) by Gaussian quadrature methods

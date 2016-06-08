@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VContinuousDiscreteProcess.cc,v 2.0 1998/07/02 16:39:50 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VContinuousDiscreteProcess.cc,v 1.1 1999/01/07 16:13:59 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------

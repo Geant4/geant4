@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdetd.cc,v 2.0 1998/07/02 16:16:41 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4gsdetd.cc,v 1.2 1999/05/07 04:16:17 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
@@ -29,11 +29,11 @@ void PG4gsdetd(RWCString tokens[])
     G4gsdetd(chset,chdet,nd,chnmsd,nbitsd);
 }
 
-void G4gsdetd(G4String chset, G4String, G4int nd, G4String chnmsd[],
+void G4gsdetd(G4String chset, G4String chdet, G4int nd, G4String chnmsd[],
               G4int nbitsd[])
 {
     // Get pointer to detector chset
-    G4VSensitiveDetector* sdet = G3Det.get(chset);
+    G4VSensitiveDetector* sdet = G3Det.getSD(chset, chdet);
     // Add hits to sensitive detector
     for (G4int i=0; i<nd; i++) {
       // $$$        sdet->AddDigi(chnmsd[i],nbitsd[i]);

@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPData.hh,v 2.4 1998/11/07 11:21:07 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NeutronHPData.hh,v 1.2 1999/07/02 09:58:39 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97

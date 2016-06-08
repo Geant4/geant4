@@ -13,7 +13,7 @@ ExE02StackingAction::~ExE02StackingAction()
 {;}
 
 G4ClassificationOfNewTrack 
-ExE02StackingAction::ClassifyNewTrack(G4Track *const aTrack)
+ExE02StackingAction::ClassifyNewTrack(const G4Track * aTrack)
 {
   G4ClassificationOfNewTrack classification = fKill;
   if(aTrack->GetParentID()==0)

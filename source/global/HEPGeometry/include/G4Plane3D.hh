@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Plane3D.hh,v 2.0 1998/07/02 17:31:22 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Plane3D.hh,v 1.1 1999/01/07 16:08:51 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4PLANE3D_HH
 #define G4PLANE3D_HH

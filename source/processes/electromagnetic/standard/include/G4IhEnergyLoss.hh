@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhEnergyLoss.hh,v 2.3 1998/12/07 15:50:21 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IhEnergyLoss.hh,v 1.1 1999/01/07 16:11:12 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: 
 // ------------------------------------------------------------

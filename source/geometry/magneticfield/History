@@ -1,4 +1,4 @@
-$Id: History,v 2.4 1998/11/27 22:35:43 japost Exp $
+$Id: History,v 1.12 1999/07/06 20:48:55 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,119 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July      6th, 1999   J. Apostolakis - field-01-00-07
+
+These fixes and those in field-01-00-06 and field-01-00-06a all come
+from the need to cope with the imprecision of the integration, and its
+interaction with paths that are rather straight. 
+
+G4MagIntegrationDriver: 
+ i) AccurateAdvance now that the chord distance is smaller than the curve len-
+gth (times 1+epsilon).
+
+ii) OneGoodStep and QuickAdvance considers the error of the velocity as well as
+the error of the position - and ensure that both relative errors are within
+the "eps" maximum given.
+
+G4ChordFinder:
+  Having found that the curve_length vs ABdist disrepancy has its basis in
+the imprecision of the integration:
+  i) Modified the exception in this case to happen only for very large
+   relative disrepancies ( 10 * eps ).
+ ii) Undertaken a default corrective action in all other cases
+Note that this disrepancy only happens for very straight sections of track -
+ie step lengths much smaller than the curvature of the track.
+
+July      1st, 1999   J. Apostolakis - field-01-00-06a
+
+In order to cope with the anomalous condition created by candidate fix
+in G4PropagatorInField,  we ensure that the fraction_AE is always between
+0 and 1.0.  (giving it a default value of 0.5 whenever it is wrong).
+( in G4ChordFinder::ApproxCurvePointV )
+
+June     29th, 1999   J. Apostolakis - field-01-00-06
+
+  I re-instated a check on whether the input distance along the curve between
+the two input curve points is truly greater than their linear distance.
+( in G4ChordFinder::ApproxCurvePointV )
+
+The condition that prints out a warning message has been altered to
+take into account the case of a very small final interval. 
+( in G4MagInt_Driver::AccurateAdvance )
+
+June     ??th, 1999   J. Apostolakis - field-01-00-05
+
+The condition that prints out a warning message was changed to delete 
+an incorrect comparison. 
+( in G4MagInt_Driver::AccurateAdvance )
+
+April    19th, 1999   J. Apostolakis - field-01-00-04
+
+G4MagErrorStepper: Cosmetic changes to name of data members
+
+March     4th, 1999   J. Apostolakis - field-01-00-03
+
+Corrected delete statement of arrays to use 'delete[]' instead of simple delete
+in destructors of 2 steppers (G4CashKarpRKF45, G4SimpleHeum)
+
+February 17th, 1999   J. Apostolakis -  field-01-00-02
+
+ Moved G4PropagatorInField files to geometry/volumes. 
+ Updated GNUmakefile not to depend on geometry/volumes anymore.
+   -> the known circular dependency is removed
+
+
+February 12th, 1999   J. Apostolakis -  field-spin1-works1     (act Feb17)
+
+  A tag that contains the first version that worked with spin (in Peter G.'s
+directory).   G4PropagateInSpin is still in this version.  A small change
+in a branch of the header file was needed. 
+
+
+February 10th, 1999   J. Apostolakis 
+
+All the following changes are needed for energy integration also:
+
+G4ChordFinder now passes to the constructed driver the number of variables.
+Because of the need for the stepper to know about it in its Abstract interface
+
+-> Moved theNumberOfVariables  from derived class G4MagErrorStepper
+                               to base class G4MagIntegratorStepper
+
+As a consequense the classes that derived from G4MagIntegratorStepper directly
+were changed: G4CashKarpRKF45, G4MagHelicalStepper, 
+
+
+February  9th, 1999    J. Apostolakis
+
+Equation of Motion:
+G4MagEqRhs.hh  Made SetChargeMomentumMass virtual, so that G4Mag_SpinEqRhs
+                 can initialise its constants too. 
+
+
+February  9th, 1999   P. Gumplinger
+
+Added Equation of Motion for Spin in Magnetic Field.
+
+
+February 17th, 1999   J. Apostolakis  -  field-01-00-01
+  --->  date is correct, made sure that tag does not include above fixes!
+  
+ Moved G4PropagatorInField files to geometry/volumes. 
+ Updated GNUmakefile not to depend on geometry/volumes anymore.
+   -> the known circular dependency is removed
+
+
+---------------------------------------------------------------------------
+    ------    Geant 4  Production Release   ------------
+--------------------------------------------------------------------------
+Nov   19th, 1998   J. Apostolakis  -  field-00-04-01head ===> R+D version only
+
+ G4PropagatorInField files modified:
+
+   - to store the last safety computed and its origin.
+   - to give them to a requester
+------------------------------------------------------------------
 
 Nov   19th, 1998   J. Apostolakis  -  field-00-03-03b
 

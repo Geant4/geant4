@@ -1,9 +1,9 @@
-// $Id: ExE01SteppingAction.cc,v 1.1 1998/10/14 15:20:14 allison Exp $
+// $Id: ExE01SteppingAction.cc,v 1.2 1999/04/17 04:06:49 kurasige Exp $
 
 #include "ExE01SteppingAction.hh"
 #include "ExE01RunAction.hh"
 
-void ExE01SteppingAction::UserSteppingAction(){
+void ExE01SteppingAction::UserSteppingAction(const G4Step*){
 
   HepRef(Histo1D) h1 = ExE01RunAction::get_1d();
   HepRef(Histo2D) h2 = ExE01RunAction::Get2d();

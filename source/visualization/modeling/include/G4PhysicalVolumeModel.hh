@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 2.3 1998/08/31 15:42:02 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.3 1999/05/10 14:04:24 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -39,9 +39,9 @@ public:
    const G4Transform3D& modelTransformation = G4Transform3D::Identity,
    const G4ModelingParameters* = 0);
 
-  ~G4PhysicalVolumeModel ();
+  virtual ~G4PhysicalVolumeModel ();
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
+  void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the scene.  It
   // can also provide special information through pointers to working
   // space in the scene.  These pointers must be set up (if required
@@ -52,13 +52,13 @@ public:
   // here.  To see how this works, look at the implementation of this
   // function and G4VScene::Establish/DecommissionSpecials.
 
-  virtual G4String GetCurrentTag () const;
+  G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
 
-  virtual G4String GetCurrentDescription () const;
+  G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
 
-  virtual G4bool Validate ();
+  G4bool Validate ();
   // Validate, but allow internal changes (hence non-const function).
 
   //////////////////////////////////////////////////////////

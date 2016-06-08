@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 2.2 1998/07/13 17:18:15 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleWithCuts.hh,v 1.3 1999/04/14 10:28:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -103,12 +103,12 @@ class G4ParticleWithCuts : public G4ParticleDefinition
    virtual void          SetCuts(G4double aCut);
    // Set cut values in energy derived from the cut range of aCut
 
-   virtual G4double      GetLengthCuts() const {return theCutInMaxInteractionLength;};
-   virtual G4double*     GetEnergyCuts() const {return theKineticEnergyCuts;};
+   virtual G4double        	GetLengthCuts() const;
+   virtual G4double* 	        GetEnergyCuts() const;
   
-   virtual G4double      GetEnergyThreshold(const G4Material* aMaterial) const;
+   virtual G4double      	GetEnergyThreshold(const G4Material* aMaterial) const;
+   static  void          	SetEnergyRange(G4double, G4double);
 
-   static  void          SetEnergyRange(G4double, G4double);
    protected:
     virtual   void  CalcEnergyCuts(G4double aCut);
 
@@ -167,10 +167,20 @@ class G4ParticleWithCuts : public G4ParticleDefinition
                           );
 };
 
+inline G4double	G4ParticleWithCuts::GetLengthCuts() const 
+{
+	return theCutInMaxInteractionLength;
+}
+
+inline G4double* 	G4ParticleWithCuts::GetEnergyCuts() const 
+{
+	return theKineticEnergyCuts;
+}
+  
 inline void G4ParticleWithCuts::ResetCuts()
 {
    if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-   theKineticEnergyCuts = NULL;
+   theKineticEnergyCuts = 0;
 }
 
 inline void G4ParticleWithCuts::ReCalcCuts()
@@ -179,8 +189,8 @@ inline void G4ParticleWithCuts::ReCalcCuts()
     CalcEnergyCuts(theCutInMaxInteractionLength);
   } else {
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4ParticleWithCuts::ReCalcCuts() :";
-      G4cerr << "theCutInMaxInteractionLength is not defined " << endl; 
+      G4cout << "G4ParticleWithCuts::ReCalcCuts() :";
+      G4cout << "theCutInMaxInteractionLength is not defined " << endl; 
     }
   }
 }

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LundStringFragmentation.hh,v 1.3 1998/12/09 07:59:36 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $ Maxim Komogorov
+// $Id: G4LundStringFragmentation.hh,v 1.1 1999/01/07 16:12:17 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $ Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

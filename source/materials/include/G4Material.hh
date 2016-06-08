@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 2.10 1998/11/30 13:56:57 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Material.hh,v 1.2 1999/04/14 12:48:59 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //      ------------------- class G4Material ---------------------
@@ -140,6 +140,7 @@ public:
 
     void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
                                        {fMaterialPropertiesTable = anMPT;};
+    				       
     G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
                                        {return fMaterialPropertiesTable;};
 
@@ -163,7 +164,7 @@ public:
     G4double  GetElectronDensity()        const {return TotNbOfElectPerVolume;};
     
     G4double         GetRadlen()          const {return fRadlen;};
-    G4IonisParamMat* GetIonisation()      const {return fIonisation;};   
+    G4IonisParamMat* GetIonisation()      const {return fIonisation;};
     G4SandiaTable*   GetSandiaTable()     const {return fSandiaTable;};
     
     G4double GetZ() const;

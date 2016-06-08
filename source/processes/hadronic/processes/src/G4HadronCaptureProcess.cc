@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCaptureProcess.cc,v 2.2 1998/07/13 17:26:38 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HadronCaptureProcess.cc,v 1.1 1999/01/07 16:13:36 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // G4 Process: Low-energy Neutron Capture

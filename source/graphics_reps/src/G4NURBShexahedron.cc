@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBShexahedron.cc,v 2.1 1998/07/12 02:59:21 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NURBShexahedron.cc,v 1.2 1999/05/19 08:33:48 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // hexahedron implementation
 //  OC 17 9 96
@@ -55,6 +55,14 @@
 
 		
 		}
+
+G4Visible & G4NURBShexahedron::operator = (const G4Visible &right) {
+  return G4Visible::operator = (right);
+}
+
+G4VVisPrim & G4NURBShexahedron::operator = (const G4VVisPrim &right) {
+  return G4VVisPrim::operator = (right);
+}
 
 const char*	G4NURBShexahedron::Whoami() const
 		{

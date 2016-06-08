@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmaPlusInelasticProcess.hh,v 2.0 1998/07/02 16:36:15 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiSigmaPlusInelasticProcess.hh,v 1.1 1999/01/07 16:13:32 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: AntiSigmaPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

@@ -31,6 +31,8 @@ void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
 void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirName, G4String & bit)
 {
   gammaPath = "/Inelastic/Gammas/";
+    if(!getenv("NeutronHPCrossSections")) 
+       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
   G4String tBase = getenv("NeutronHPCrossSections");
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;

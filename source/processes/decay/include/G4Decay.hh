@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.hh,v 2.2 1998/08/10 13:03:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Decay.hh,v 1.2 1999/04/13 09:56:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // ------------------------------------------------------------
@@ -55,12 +55,12 @@ class G4Decay : public G4VRestDiscreteProcess
      //   and 
      // AtRestDoIt (for decay at rest)
   
-     G4VParticleChange *PostStepDoIt(
+     virtual G4VParticleChange *PostStepDoIt(
 			     const G4Track& aTrack,
                              const G4Step& aStep
                             );
 
-     G4VParticleChange* AtRestDoIt(
+     virtual G4VParticleChange* AtRestDoIt(
 			     const G4Track& aTrack,
 			     const G4Step&  aStep
 			    );
@@ -72,7 +72,7 @@ class G4Decay : public G4VRestDiscreteProcess
     //  becasuse this table is universal for all particle types,
 
 
-    G4bool IsApplicable(const G4ParticleDefinition&);
+    virtual G4bool IsApplicable(const G4ParticleDefinition&);
     // returns "true" if the decay process can be applied to
     // the particle type. 
  
@@ -85,7 +85,7 @@ class G4Decay : public G4VRestDiscreteProcess
     // which has information of daughter particles.
 
   public:
-    G4double AtRestGetPhysicalInteractionLength(
+    virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4ForceCondition* condition
                             );

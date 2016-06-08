@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.3 1998/07/10 23:02:09 gcosmo Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:11:28 gunter Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------

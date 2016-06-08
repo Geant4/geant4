@@ -5,16 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TEST.cc,v 2.2 1998/08/12 14:20:24 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: TEST.cc,v 1.2 1999/04/16 10:03:17 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include <stdlib.h>
 
 /*G4*/
-#if defined(SOLVE_TEMPLATES) && !defined(G4_SOLVE_TEMPLATES)
-#define G4_SOLVE_TEMPLATES
-#endif
-#include <g4templates.hh>  /*Before any G4 include file.*/
 #include <G4RunManager.hh>
 
 /*OPACS*/

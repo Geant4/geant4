@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossMessenger.hh,v 2.3 1998/10/20 12:23:47 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EnergyLossMessenger.hh,v 1.1 1999/01/07 16:11:09 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 

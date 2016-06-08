@@ -102,11 +102,13 @@ public:
   G4int NumberOfFaces() const {return nb_of_surfaces;} 
 
   // Add by L. Broglia
-  G4Axis2Placement3D* GetPlace() { return place; }
-  G4BoundingBox3D*    GetBBox()  { return bbox;  } 
+  G4Axis2Placement3D* GetPlace() const { return place; }
+  G4BoundingBox3D*    GetBBox()  const { return bbox;  } 
  
 protected:
 
+  G4ThreeVectorList*
+  CreateRotatedVertices(const G4AffineTransform& pTransform) const;
   G4bool  IsConvex();
   virtual void CalcBBoxes();
   void    CheckSurfaceNormals();

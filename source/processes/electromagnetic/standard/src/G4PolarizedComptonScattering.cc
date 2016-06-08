@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolarizedComptonScattering.cc,v 2.3 1998/12/14 17:50:29 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PolarizedComptonScattering.cc,v 1.1 1999/01/07 16:11:23 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file

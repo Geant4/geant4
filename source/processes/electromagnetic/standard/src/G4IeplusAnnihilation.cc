@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeplusAnnihilation.cc,v 2.8 1998/12/09 09:15:20 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IeplusAnnihilation.cc,v 1.5 1999/06/25 14:59:19 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -75,10 +75,6 @@ G4IeplusAnnihilation::~G4IeplusAnnihilation()
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
    }
-     if (theMeanFreePathTable) {
-        theMeanFreePathTable->clearAndDestroy();
-        delete theMeanFreePathTable;
-     }
      if (theNlambdaTable) {
         theNlambdaTable->clearAndDestroy();
         delete theNlambdaTable;
@@ -174,9 +170,10 @@ void G4IeplusAnnihilation::BuildPhysicsTable(const G4ParticleDefinition& Positro
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
              Value = ComputeMeanFreePath( LowEdgeEnergy, material);  
              ptrVector->PutValue( i , Value ) ;
-           }
 
         theMeanFreePathTable->insertAt( J , ptrVector ) ;
+
+           }
 
       }
 
@@ -264,7 +261,6 @@ void G4IeplusAnnihilation::TestOfInversion(
               setw(14)<< setprecision(6) << Nlambda << "  " <<
       setw(14) << setprecision(6) << Tprime << "      " <<
               setw(12) << setprecision(3) << del << endl;
-            //  setw(12) << setprecision(3) << del  ;
     }
      }
     }
@@ -320,11 +316,12 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
                                        G4int materialIndex,
                                        G4PhysicsLogVector* nlambdaVector)
 {
-  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff ;
-  const G4int nbin = 100 ;
+  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff,l ;
+  const G4int nbin = 20 ;
   G4bool isOut ;
   const G4double small = 1.e-100;
   const G4double plowloss = 0.5 ;  //this should be a data member of en.loss!
+  const G4double lmin=1.e-100,lmax=1.e100;
 
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
@@ -340,6 +337,7 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
      Value = 0. ;
 
   nlambdaVector->PutValue(0,Value) ;
+
   Tlast = LowestKineticEnergy ;
   Vlast = Value ;
 
@@ -364,9 +362,10 @@ void G4IeplusAnnihilation::BuildNlambdaVector(
       else
        coeff=1.0 ;
 
-      Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
-                                   T,(*theMaterialTable)[materialIndex])*
-                      (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut));
+      l = (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut);
+      if((l>lmin) && (l<lmax))
+        Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
+                                   T,(*theMaterialTable)[materialIndex])*l);
     }
 
     Value *= du ;

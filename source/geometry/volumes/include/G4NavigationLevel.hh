@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.hh,v 2.0 1998/07/02 17:05:48 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NavigationLevel.hh,v 1.8 1999/05/17 13:51:51 fbehner Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // class G4NavigationLevel
 //
@@ -52,7 +52,7 @@ class G4NavigationLevel
 		     G4int                    newRepNo= -1);
 
    G4NavigationLevel();
-   G4NavigationLevel( G4NavigationLevel& );
+   G4NavigationLevel( const G4NavigationLevel& );
 
    ~G4NavigationLevel();
 
@@ -68,10 +68,16 @@ class G4NavigationLevel
    //  To try to resolve the possible problem with returning a reference.
    const G4AffineTransform* GetPtrTransform() const;
 
+   // Override "new" and "delete" to use "G4Allocator".
    inline void *operator new(size_t);
-      // Override "new"    to use "G4Allocator".
-   inline void operator delete(void *aTrack);
-      // Override "delete" to use "G4Allocator".
+   inline void operator delete(void *aLevel);
+
+   // Pre-allocated 'new' and 'delete' for use with STL 
+   //    - do not (directly) use Allocator              F.Behner/J.Apostolakis
+   inline void *operator new(size_t, void *);       // void*);
+#ifndef G4NOT_ISO_DELETES
+   inline void operator delete(void *ptr, void*);  // Not accepted Sun/HP
+#endif
 
  //  Data members: 
  // 

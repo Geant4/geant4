@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventActionMessenger.cc,v 2.1 1998/07/12 02:42:25 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05EventActionMessenger.cc,v 1.1 1999/01/07 16:06:17 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "ExN05EventActionMessenger.hh"

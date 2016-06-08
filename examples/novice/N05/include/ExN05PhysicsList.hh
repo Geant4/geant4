@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PhysicsList.hh,v 2.2 1998/08/14 08:21:17 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05PhysicsList.hh,v 1.3 1999/04/23 04:43:12 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 #ifndef ExN05PhysicsList_h
@@ -27,7 +27,7 @@ protected:
   virtual void ConstructProcess();
   
   // 
-  virtual void SetCuts(G4double aCut);
+  virtual void SetCuts();
   
 protected:
   // these methods Construct particles 
@@ -40,10 +40,10 @@ protected:
 protected:
   // these methods Construct physics processes and register them
   void AddParameterisation();
+
   virtual void ConstructGeneral();
   virtual void ConstructEM();
-  virtual void ConstructHad();
-  virtual void ConstructLeptHad();
+
   virtual void AddTransportation();
 };
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCopy.hh,v 2.2 1998/07/12 03:09:59 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisCommandsCopy.hh,v 1.3 1999/01/11 00:48:23 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // /vis~/copy/ commands
@@ -31,6 +31,7 @@ public:
   }
 };
 
+/*****************************
 //////////////////////////////////////////////  /vis~/copy/all  ////
 //copy  \hline
 //copy /vis~/copy/all &&
@@ -49,7 +50,7 @@ public:
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
       pVMan -> CopyScene ();
-      pVMan -> CopyView ();
+      pVMan -> CopyViewParameters ();
       if (pVMan -> GetVerboseLevel () > 1) {
 	pVMan -> PrintCurrentView ();
       }
@@ -82,6 +83,7 @@ public:
     }
   }
 };
+*********************/
 
 //////////////////////////////////////////  /vis~/copy/view  ////
 //copy  \hline
@@ -98,7 +100,7 @@ public:
   void SetValue () {
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
-      pVMan -> CopyView ();
+      pVMan -> CopyViewParameters ();
       if (pVMan -> GetVerboseLevel () > 1) {
 	pVMan -> PrintCurrentView ();
       }

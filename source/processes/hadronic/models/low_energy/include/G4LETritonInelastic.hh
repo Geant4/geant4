@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LETritonInelastic.hh,v 2.1 1998/07/13 17:34:08 fjones Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4LETritonInelastic.hh,v 1.1 1999/01/07 16:12:42 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Low Energy Triton Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997

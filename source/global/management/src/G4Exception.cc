@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Exception.cc,v 2.1 1998/07/13 16:55:54 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Exception.cc,v 1.4 1999/06/21 09:11:16 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -20,6 +20,7 @@
 
 #include "G4ios.hh"
 #include <stdlib.h>
+
 void G4Exception(const char* s)
 {
     if (s)
@@ -28,8 +29,25 @@ void G4Exception(const char* s)
 	}
 
    G4cerr << endl << "*** G4Exception: Aborting execution ***" << endl;
-   exit(1);
+   abort();
 }
+
+#ifdef G4USE_STL
+#include <string>
+void G4Exception(string s)
+{
+  G4Exception(s.c_str());
+}
+// Other typedefs
+#include <rw/cstring.h>
+typedef RWCString G4String;
+
+void G4Exception(G4String s)
+{
+  G4Exception(s.c_str());
+}
+#endif
+
 
 
 

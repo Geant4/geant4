@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClassicalRK4.hh,v 2.3 1998/11/17 18:20:08 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ClassicalRK4.hh,v 1.1 1999/01/07 16:07:01 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // J.Apostolakis, V.Grichine 30.1.97

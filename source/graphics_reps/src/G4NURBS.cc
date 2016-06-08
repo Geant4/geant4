@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBS.cc,v 2.3 1998/12/01 13:36:42 evc Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NURBS.cc,v 1.2 1999/05/19 08:33:46 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -32,7 +32,13 @@
 //    Here start the real world. Please, check your armored jacket.   //
 ////////////////////////////////////////////////////////////////////////
 
+G4Visible & G4NURBS::operator = (const G4Visible &right) {
+  return G4Visible::operator = (right);
+}
 
+G4VVisPrim & G4NURBS::operator = (const G4VVisPrim &right) {
+  return G4VVisPrim::operator = (right);
+}
 
 ostream & operator << (ostream & inout_outStream, const G4NURBS & in_kNurb)
 		{

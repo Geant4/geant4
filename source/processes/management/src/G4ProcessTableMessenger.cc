@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTableMessenger.cc,v 2.3 1998/08/17 03:35:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ProcessTableMessenger.cc,v 1.3 1999/06/17 09:02:15 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //---------------------------------------------------------------
@@ -51,12 +51,11 @@ G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
 
 //////////////////////////
 G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
-                        :theProcessTable(pTable)
-{
-  currentProcessTypeName  = "all";
-  currentProcessName      = "all";
-  currentParticleName     = "all";
- 
+                        :theProcessTable(pTable), 
+			 currentProcessTypeName("all"),
+			 currentProcessName("all"),
+			 currentParticleName("all")
+{ 
   //Commnad   /particle/process
   thisDirectory = new G4UIdirectory("/process/");
   thisDirectory->SetGuidance("Process Table control commands.");
@@ -71,12 +70,12 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   listCmd->SetDefaultValue("all");
   SetNumberOfProcessType();
  
-  G4String candidates = "all";
+  G4String candidates("all");
   for (G4int idx = 0; idx < NumberOfProcessType ; idx ++ ) {
     candidates += " " + 
       G4VProcess::GetProcessTypeName(G4ProcessType(idx));
   }
-  listCmd->SetCandidates(candidates);
+  listCmd->SetCandidates((const char*)(candidates));
 
   //Commnad   /particle/process/Verbose
   verboseCmd = new G4UIcmdWithAnInteger("/process/verbose",this);
@@ -86,6 +85,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   verboseCmd->SetParameterName("verbose", true);
   verboseCmd->SetDefaultValue(1);
   verboseCmd->SetRange("verbose >=0");
+  verboseCmd->AvailableForStates(PreInit,Init,Idle,GeomClosed,EventProc);
 
   //Commnad   /particle/process/dump
   dumpCmd = new G4UIcommand("/process/dump",this);
@@ -98,6 +98,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   dumpCmd->SetParameter(param);
+  dumpCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
 
   //Commnad   /particle/process/activate
   activateCmd = new G4UIcommand("/process/activate",this);
@@ -110,6 +111,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   activateCmd->SetParameter(param);
+  activateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
   
   //Commnad   /particle/process/inactivate
   inactivateCmd = new G4UIcommand("/process/inactivate",this);
@@ -123,6 +125,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   inactivateCmd->SetParameter(param);
+  inactivateCmd->AvailableForStates(Idle,GeomClosed,EventProc);
 }
 
 //////////////////
@@ -186,7 +189,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     RWCTokenizer next( newValue );
 
     // check 1st argument
-    currentProcessName = next();
+    currentProcessName = G4String(next());
     G4bool isNameFound = false;
     G4bool isProcName = false; 
     if ( procNameVector->contains(currentProcessName) ){
@@ -205,9 +208,9 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     }
   
     // check 2nd argument
-    currentParticleName = next();
+    currentParticleName = G4String(next());
     G4bool isParticleFound = false;
-    G4ParticleDefinition* currentParticle = NULL;
+    G4ParticleDefinition* currentParticle = 0;
     if ( currentParticleName == "all" ) {
       isParticleFound = true;
 
@@ -243,7 +246,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       // process/activate , inactivate
       G4bool fActive = (command==activateCmd);
       if (isProcName) {
-	if ( currentParticle == NULL ) {
+	if ( currentParticle == 0 ) {
 	  theProcessTable->SetProcessActivation(currentProcessName, 
 						fActive);
 	} else {
@@ -252,7 +255,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
 						fActive);
 	}
       } else {
-	if ( currentParticle == NULL ) {
+	if ( currentParticle == 0 ) {
 	  theProcessTable->SetProcessActivation(G4ProcessType(type),
 						fActive);
 	} else {
@@ -294,7 +297,7 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
       candidates += " " + 
 	       G4VProcess::GetProcessTypeName(G4ProcessType(idx));
     }
-    listCmd->SetCandidates(candidates);
+    listCmd->SetCandidates((const char*)(candidates));
     returnValue =  currentProcessTypeName;
 
   } else {
@@ -305,7 +308,7 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
     for (idx = 0; idx < procNameVector->length() ; idx ++ ) {
       candidates += " " + (*procNameVector)(idx);
     }
-    param->SetParameterCandidates(candidates);
+    param->SetParameterCandidates((const char*)(candidates));
     // particle name
     param = command->GetParameter(1);
     candidates = "all";
@@ -316,7 +319,7 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
       G4ParticleDefinition *particle = piter->value();
       candidates += " " + particle->GetParticleName();
     }
-    param->SetParameterCandidates(candidates);
+    param->SetParameterCandidates((const char*)(candidates));
 
     returnValue =  currentProcessName + " " + currentParticleName;
 

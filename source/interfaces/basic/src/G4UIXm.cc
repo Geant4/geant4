@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.cc,v 2.7 1998/10/23 14:39:13 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIXm.cc,v 1.4 1999/05/11 13:26:31 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G.Barrand
 
@@ -20,8 +20,11 @@
 #include <strstream.h>
 #endif
 
+#include <string.h>
+
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
+#include <X11/keysym.h>
 
 #include <Xm/Xm.h>
 #include <Xm/Command.h>
@@ -41,13 +44,14 @@
 
 static void XmTextAppendString (Widget,char*);
 
-static void commandCallback (Widget,XtPointer,XtPointer);
-static void buttonCallback (Widget,XtPointer,XtPointer);
 static void clearButtonCallback (Widget,XtPointer,XtPointer);
 static char* XmConvertCompoundStringToString (XmString,int);
+static G4bool ConvertStringToInt(const char*,int&);
+static void ExecuteChangeSizeFunction(Widget);
 
 static G4bool exitSession = true;
-static G4bool exitPause   = true;
+static G4bool exitPause = true;
+static G4bool exitHelp = true;
 static unsigned CommandsHashFun (const Widget& interactor) {
   // Is it correct to return a pointer ?
   return (unsigned)(unsigned long)interactor;
@@ -62,6 +66,8 @@ G4UIXm::G4UIXm (
 ,menuBar(NULL)
 ,text(NULL)
 ,commands(CommandsHashFun)
+,fHelp(false)
+,fHelpChoice(0)
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
@@ -72,22 +78,23 @@ G4UIXm::G4UIXm (
 
   Widget top = (Widget)interactorManager->GetMainInteractor();
 
+  Arg args[9];
+  XtSetArg(args[0],XmNkeyboardFocusPolicy,XmPOINTER); // For completion.
   shell = XtAppCreateShell ("G4UIXm","G4UIXm",
 			    topLevelShellWidgetClass,XtDisplay(top),
-			    NULL,0); 
-  Widget form = XmCreateForm (shell,"form",NULL,0);
+			    args,1); 
+  form = XmCreateForm (shell,"form",NULL,0);
   XtManageChild (form);
 
-  Arg args[9];
   XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
   XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
   XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
   menuBar = XmCreateMenuBar (form,"menuBar",args,3);
 
-  XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_NONE);
-  XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
-  XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
-  XtSetArg(args[3],XmNbottomAttachment,XmATTACH_FORM);
+  XtSetArg(args[0],XmNtopAttachment      ,XmATTACH_NONE);
+  XtSetArg(args[1],XmNleftAttachment     ,XmATTACH_FORM);
+  XtSetArg(args[2],XmNrightAttachment    ,XmATTACH_FORM);
+  XtSetArg(args[3],XmNbottomAttachment   ,XmATTACH_FORM);
   command = XmCreateCommand (form,"command",args,4);
   XtManageChild (command);
 
@@ -117,7 +124,10 @@ G4UIXm::G4UIXm (
   XtAddCallback(clearButton,XmNactivateCallback,
 		clearButtonCallback,(XtPointer)text);
   XtAddCallback(command,XmNcommandEnteredCallback,
-		commandCallback,(XtPointer)this);
+		commandEnteredCallback,(XtPointer)this);
+
+  Widget commandText = XmCommandGetChild(command,XmDIALOG_COMMAND_TEXT);
+  XtAddEventHandler(commandText,KeyPressMask,False,keyHandler,(XtPointer)this);
 
   XtRealizeWidget(shell);
   XtMapWidget(shell);
@@ -211,114 +221,6 @@ void G4UIXm::SecondaryLoop (
   Prompt("session");
 }
 /***************************************************************************/
-void G4UIXm::ApplyShellCommand (
- G4String a_string
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(UI==NULL) return;
-
-  G4String command = a_string.strip(G4String::leading);
-  if( command(0) == '#' ) { 
-
-    G4cout << command << endl; 
-
-  } else if( command == "ls" || command(0,3) == "ls " ) {
-
-    ListDirectory( command );
-
-  } else if( command == "pwd" ) { 
-
-    G4cout << "Current Working Directory : " 
-       << GetCurrentWorkingDirectory() << endl; 
-
-  } else if( command(0,2) == "cd" ) { 
-
-    ChangeDirectoryCommand ( command );
-
-  } else if( command(0,4) == "help" ) { 
-
-    //TerminalHelp( command ); 
-    G4cout << "Not implemented." << endl; 
-
-  } else if( command(0) == '?' ) { 
-
-    ShowCurrent( command );
-
-  } else if( command(0,4) == "hist" ) {
-
-    G4int nh = UI->GetNumberOfHistory();
-    for(int i=0;i<nh;i++) { 
-      G4cout << i << ": " << UI->GetPreviousCommand(i) << endl; 
-    }
-
-  } else if( command(0) == '!' ) {
-
-    G4String ss = command(1,command.length()-1);
-    G4int vl;
-    const char* tt = ss;
-    istrstream is((char*)tt);
-    is >> vl;
-    G4int nh = UI->GetNumberOfHistory();
-    if(vl>=0 && vl<nh) { 
-      G4String prev = UI->GetPreviousCommand(vl); 
-      G4cout << prev << endl;
-      ExecuteCommand (ModifyToFullPathCommand(prev));
-    } else { 
-      G4cerr << "history " << vl << " is not found." << endl; 
-    }
-
-  } else if( command(0,4) == "exit" ) { 
-
-    if( exitPause == false) { //In a secondary loop.
-      G4cout << "You are now processing RUN." << endl;
-      G4cout << "Please abort it using \"/run/abort\" command first" << endl;
-      G4cout << " and use \"continue\" command until the application" << endl;
-      G4cout << " becomes to Idle." << endl;
-    } else {
-      exitSession = true;
-    }
-
-  } else if( command(0,4) == "cont" ) { 
-
-    exitPause = true;
-
-  } else {
-
-    ExecuteCommand (ModifyToFullPathCommand(a_string));
-
-  }
-}
-/***************************************************************************/
-void G4UIXm::ExecuteCommand (
- G4String aCommand
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  if(aCommand.length()<2) return;
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(UI==NULL) return;
-  int commandStatus = UI->ApplyCommand(aCommand);
-  switch(commandStatus) {
-  case fCommandSucceeded:
-    break;
-  case fCommandNotFound:
-    G4cerr << "command not found" << endl;
-    break;
-  case fIllegalApplicationState:
-    G4cerr << "illegal application state -- command refused" << endl;
-    break;
-  case fParameterOutOfRange:
-  case fParameterUnreadable:
-  case fParameterOutOfCandidates:
-  default:
-    G4cerr << "command refused (" << commandStatus << ")" << endl;
-  }
-}
-/***************************************************************************/
 G4int G4UIXm::ReceiveG4cout (
  G4String a_string
 )
@@ -339,59 +241,35 @@ G4int G4UIXm::ReceiveG4cerr (
   return 0;
 }
 /***************************************************************************/
-void G4UIXm::ShowCurrent ( 
- G4String newCommand 
+G4bool G4UIXm::GetHelpChoice(
+ G4int& aInt
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  if(UI==NULL) return;
-  G4String comString = newCommand(1,newCommand.length()-1);
-  G4String theCommand = ModifyToFullPathCommand(comString);
-  G4String curV = UI->GetCurrentValues(theCommand);
-  if( ! curV.isNull() ) { 
-    G4cout << "Current value(s) of the parameter(s) : " << curV << endl; 
+  fHelp = true;
+  // SecondaryLoop :
+  G4Xt* interactorManager = G4Xt::getInstance ();
+  Prompt("Help");
+  exitHelp = false;
+  void* event;
+  while((event = interactorManager->GetEvent())!=NULL) { 
+    interactorManager->DispatchEvent(event);
+    if(exitHelp==true) break;
   }
+  Prompt("session");
+  //
+  if(fHelp==false) return false;
+  aInt = fHelpChoice;
+  fHelp = false;
+  return true;
 }
 /***************************************************************************/
-void G4UIXm::ChangeDirectoryCommand ( 
- G4String newCommand 
+void G4UIXm::ExitHelp(
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4String prefix;
-  if( newCommand.length() <= 3 ) { 
-    prefix = "/"; 
-  } else {
-    G4String aNewPrefix = newCommand(3,newCommand.length()-3);
-    prefix = aNewPrefix.strip(G4String::both);
-  }
-  if(!ChangeDirectory(prefix)) { 
-    G4cout << "directory <" << prefix << "> not found." << endl; 
-  }
-}
-/***************************************************************************/
-void G4UIXm::ListDirectory( 
- G4String newCommand 
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  G4String targetDir;
-  if( newCommand.length() <= 3 ) { 
-    targetDir = "./"; 
-  } else {
-    G4String newPrefix = newCommand(3,newCommand.length()-3);
-    targetDir = newPrefix.strip(G4String::both);
-  }
-  G4UIcommandTree* commandTree = FindDirectory( targetDir );
-  if( commandTree == NULL ) { 
-    G4cout << "Directory <" << targetDir << "> is not found." << endl; 
-  } else { 
-    commandTree->ListCurrent(); 
-  }
 }
 /***************************************************************************/
 void G4UIXm::AddMenu (
@@ -417,6 +295,7 @@ void G4UIXm::AddMenu (
   widget = XmCreateCascadeButton (menuBar,(char*)a_name,args,2);
   XmStringFree (cps);
   XtManageChild (widget);
+  ExecuteChangeSizeFunction(form);
 }
 /***************************************************************************/
 void G4UIXm::AddButton (
@@ -434,7 +313,7 @@ void G4UIXm::AddButton (
   if(parent==NULL) return;
   Widget widget = XmCreatePushButton(parent,(char*)a_label,NULL,0);
   XtManageChild (widget);
-  XtAddCallback (widget,XmNactivateCallback,buttonCallback,(XtPointer)this);
+  XtAddCallback (widget,XmNactivateCallback,ButtonCallback,(XtPointer)this);
   commands[widget] = a_command;
 }
 /***************************************************************************/
@@ -449,7 +328,7 @@ G4String G4UIXm::GetCommand (
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-void commandCallback (
+void G4UIXm::commandEnteredCallback (
  Widget    a_widget
 ,XtPointer a_tag
 ,XtPointer a_data
@@ -464,10 +343,35 @@ void commandCallback (
   G4String command (ss);
   XtFree   (ss);
 
-  This->ApplyShellCommand (command);
+  if(This->fHelp==true) {
+    exitHelp = true;
+    This->fHelp = ConvertStringToInt(command.data(),This->fHelpChoice);
+  } else {
+    This->ApplyShellCommand (command,exitSession,exitPause);
+  }
 
   a_widget = NULL;
   a_tag    = NULL;
+}
+/***************************************************************************/
+void G4UIXm::keyHandler (
+ Widget a_widget
+,XtPointer a_tag
+,XEvent* a_event
+,Boolean* a_dispatch
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  KeySym keySym;
+  XLookupString(&(a_event->xkey),NULL,0,&keySym,NULL);
+  if(keySym!=XK_Tab) return;
+  G4UIXm* This = (G4UIXm*)a_tag;
+  char* s = XmTextGetString(a_widget);
+  G4String ss = This->Complete(s);
+  XmTextSetString(a_widget,(char*)ss.data());
+  XtFree(s);
+  XmTextSetInsertionPosition(a_widget,XmTextGetLastPosition(a_widget));
 }
 /***************************************************************************/
 void clearButtonCallback (
@@ -481,7 +385,7 @@ void clearButtonCallback (
   XmTextSetString((Widget)a_tag,"");
 }
 /***************************************************************************/
-void buttonCallback (
+void G4UIXm::ButtonCallback (
  Widget a_widget
 ,XtPointer a_tag
 ,XtPointer
@@ -490,9 +394,10 @@ void buttonCallback (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   G4UIXm* This = (G4UIXm*)a_tag;
+  if(This->fHelp==true) return; // Disabled when in help.
   G4String ss = This->GetCommand (a_widget);
   //printf ("debug : execute:\n%s\n",ss.data());
-  This->ApplyShellCommand (ss);
+  This->ApplyShellCommand(ss,exitSession,exitPause);
 }
 /***************************************************************************/
 /***************************************************************************/
@@ -546,5 +451,34 @@ void XmTextAppendString (
   XmTextReplace(This,lastpos,lastpos,a_string);
   XmTextSetInsertionPosition(This,XmTextGetLastPosition(This));
 }
+//////////////////////////////////////////////////////////////////////////////
+G4bool ConvertStringToInt(
+ const char* aString
+,int& aInt
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  aInt = 0;
+  if(aString==NULL) return false;
+  char* s;
+  long value = strtol(aString,&s,10);
+  if(s==aString) return false;
+  aInt = value;
+  return true;
+}
+#include <X11/IntrinsicP.h>
+//////////////////////////////////////////////////////////////////////////////
+void ExecuteChangeSizeFunction (
+ Widget aWidget
+)
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  if(aWidget==NULL) return;
+  if(aWidget->core.widget_class->core_class.resize==NULL) return;
+  (aWidget->core.widget_class->core_class.resize)(aWidget);
+}
+
 
 #endif

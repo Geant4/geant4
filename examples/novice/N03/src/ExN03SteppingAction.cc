@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingAction.cc,v 2.2 1998/10/09 15:53:49 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN03SteppingAction.cc,v 1.2 1999/04/16 11:55:11 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -27,9 +27,10 @@ ExN03SteppingAction::~ExN03SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void ExN03SteppingAction::UserSteppingAction()
+void ExN03SteppingAction::UserSteppingAction(const G4Step*)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 

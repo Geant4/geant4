@@ -3,6 +3,14 @@
 //
 // Declaration of a face that represents one segmented side of a polyhedra
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #ifndef G4PolyhedraSide_hh
 #define G4PolyhedraSide_hh
 
@@ -22,8 +30,11 @@ class G4PolyhedraSide : public G4VCSGface {
 			 const G4PolyhedraSideRZ *nextRZ,
 			 const G4int    numSide,
 			 const G4double phiStart, const G4double phiTotal, 
-			 const G4bool phiIsOpen );
+			 const G4bool phiIsOpen, const G4bool isAllBehind=false );
 	virtual ~G4PolyhedraSide();
+	
+	G4PolyhedraSide( const G4PolyhedraSide &source );
+	G4PolyhedraSide *operator=( const G4PolyhedraSide &source );
 	
 	G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
 			  const G4bool outgoing, const G4double surfTolerance,
@@ -42,7 +53,9 @@ class G4PolyhedraSide : public G4VCSGface {
 	void CalculateExtent( const EAxis axis, 
 			      const G4VoxelLimits &voxelLimit,
 			      const G4AffineTransform &tranform,
-			      G4double &min, G4double &max        );
+			      G4SolidExtentList &extentList        );
+
+	G4VCSGface *Clone() { return new G4PolyhedraSide( *this ); }
 	
 	protected:
 	//
@@ -70,8 +83,10 @@ class G4PolyhedraSide : public G4VCSGface {
 	G4int	 numSide;	// Number sides
 	G4double r[2], z[2];	// r, z parameters, in specified order
 	G4double startPhi,	// Start phi (0 to 2pi), if phiIsOpen
-		 deltaPhi;	// Delta phi (0 to 2pi), if phiIsOpen
+		 deltaPhi,	// Delta phi (0 to 2pi), if phiIsOpen
+		 endPhi;	// End phi (>startPhi), if phiIsOpen
 	G4bool	 phiIsOpen;	// True if there is a phi slice
+	G4bool	 allBehind;	// True if the entire solid is "behind" this face
 	
 	G4IntersectingCone	*cone;	// Our intersecting cone
 	
@@ -93,14 +108,16 @@ class G4PolyhedraSide : public G4VCSGface {
 	G4int ClosestPhiSegment( const G4double phi );
 	
 	G4int PhiSegment( const G4double phi );
-
+	
 	G4double DistanceToOneSide( const G4ThreeVector &p,
-				    const G4PolyhedraSideVec vec,
+				    const G4PolyhedraSideVec &vec,
 				    G4double *normDist );
 
 	G4double DistanceAway( const G4ThreeVector &p,
-			       const G4PolyhedraSideVec vec,
+			       const G4PolyhedraSideVec &vec,
 			       G4double *normDist );
+			       
+	void CopyStuff( const G4PolyhedraSide &source );
 };
 
 

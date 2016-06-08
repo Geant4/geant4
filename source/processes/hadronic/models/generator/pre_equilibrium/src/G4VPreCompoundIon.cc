@@ -17,18 +17,32 @@ ProbabilityDistributionFunction(const G4double & eKin,
 {
   const G4double r0 = 1.5; // fm
   const G4double SingleParticleLevelDensity = 
-                 0.595*G4PreCompoundParameters::GetAddress()->GetLevelDensity(); // AC
+    0.595*G4PreCompoundParameters::GetAddress()->GetLevelDensity(); // AC
 
   G4double R0J = 1.1;
   G4double exEnergy = aFragment.GetExcitationEnergy()/MeV;
+  G4double probA = GetCondensationProbability()*R0J*0.104/
+    (r0*pow(GetRestA(),1.0/3.0)*sqrt(GetA()*exEnergy));
+  G4double probB =     GetExcitonLevelDensityRatio()*
+    ( (eKin-GetCoulombBarrier())/exEnergy );
+  G4double ratio = (eKin+GetBindingEnergy() )/exEnergy;
+  G4double exponent = GetRestA()-1.5;
+  if ( exponent>100. && ratio<1. ) return 0.;
+  G4double probC = pow( ratio, exponent );
+  G4double probD = pow( 1.0 - ratio,
+			aFragment.GetNumberOfExcitons()-GetA()-1.0 ) ;
+	
+//   return GetCondensationProbability()*R0J*0.104/                 
+//          (r0*pow(GetRestA(),1.0/3.0)*sqrt(GetA()*exEnergy))*   
+//          GetExcitonLevelDensityRatio()*
+//          ( (eKin-GetCoulombBarrier())/exEnergy )*
+//          pow( ( (eKin+GetBindingEnergy() )/exEnergy), GetRestA()-1.5)*
+//          pow(1.0 - (eKin + GetBindingEnergy())/exEnergy  ,
+// 	          aFragment.GetNumberOfExcitons()-GetA()-1.0 ) ;
 
-  return GetCondensationProbability()*R0J*0.104/                 
-         (r0*pow(GetRestA(),1.0/3.0)*sqrt(GetA()*exEnergy))*   
-         GetExcitonLevelDensityRatio()*
-         ( (eKin-GetCoulombBarrier())/exEnergy )*
-         pow( ( (eKin+GetBindingEnergy() )/exEnergy), GetRestA()-1.5)*
-         pow(1.0 - (eKin + GetBindingEnergy())/exEnergy  ,
-	          aFragment.GetNumberOfExcitons()-GetA()-1.0 ) ;
+  G4double prob = probA*probB*probC*probD;
+  if (prob < 1.e-100) return 0.;
+  else return prob;
 
   // Corrections in return statemet by V. Krylov:
   //    - GetA() and GetRestA() were intechanged

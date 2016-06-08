@@ -7,6 +7,8 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPFastLegendre.hh"
 #include "Randomize.hh"
+#include <iostream.h>
+
 G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
 {
   G4double result;
@@ -58,11 +60,13 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
     result = 2.*G4UniformRand()-1.;
     for(l=0; l<theCoeff[low].GetNumberOfPoly() ; l++)
     {
-      v1 += (2.*l+1)/2.*theCoeff[low].GetCoeff(l)*theLeg.Evaluate(l, result);
+      G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
+      v1 += (2.*l+1)/2.*theCoeff[low].GetCoeff(l)*legend;
     } 
     for(l=0; l<theCoeff[high].GetNumberOfPoly() ; l++)
     {
-      v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(l)*theLeg.Evaluate(l, result);
+      G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
+      v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(l)*legend;
     } 
     value = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, v1, v2);
     random = G4UniformRand();
@@ -119,11 +123,13 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
     result = 2.*G4UniformRand()-1.;
     for(l=0; l<theCoeff[low].GetNumberOfPoly() ; l++)
     {
-      v1 += (2.*l+1)/2.*theCoeff[low].GetCoeff(l)*theLeg.Evaluate(l, result);
+      G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
+      v1 += (2.*l+1)/2.*theCoeff[low].GetCoeff(l)*legend;
     } 
     for(l=0; l<theCoeff[high].GetNumberOfPoly() ; l++)
     {
-      v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(l)*theLeg.Evaluate(l, result);
+      G4double legend = theLeg.Evaluate(l, result); // @@@ done to avoid optimization error on SUN
+      v2 += (2.*l+1)/2.*theCoeff[high].GetCoeff(l)*legend;
     } 
     value = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, v1, v2);
     random = G4UniformRand();

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorTransform3D.hh,v 2.1 1998/09/10 12:56:52 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenInventorTransform3D.hh,v 1.2 1999/01/09 16:25:11 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // jck  17 Dec 1996

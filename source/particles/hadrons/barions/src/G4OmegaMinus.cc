@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OmegaMinus.cc,v 2.2 1998/09/24 09:24:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OmegaMinus.cc,v 1.2 1999/06/09 16:08:39 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -78,7 +78,7 @@ G4OmegaMinus::G4OmegaMinus(
 //             stable         lifetime    decay table 
 
 G4OmegaMinus G4OmegaMinus::theOmegaMinus(
-             "omega-",     1.67245*GeV,       0.0*MeV,    -1*eplus, 
+             "omega-",     1.67245*GeV,  8.01e-12*MeV,    -1*eplus, 
 		    3,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            +1,        3334,

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransitionRadiation.cc,v 2.2 1998/11/27 13:37:02 grichine Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4TransitionRadiation.cc,v 1.1 1999/01/07 16:11:30 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4TransitionRadiation class -- implementation file
 

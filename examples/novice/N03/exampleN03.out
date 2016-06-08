@@ -1,81 +1,80 @@
 
 ***** Table : Nb of materials = 13 *****
 
- Material: Aluminium  density:  2.700  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893  cm
+ Material: Aluminium  density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
    --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material: liquidArgon  density:  1.390  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065  cm
+ Material: liquidArgon  density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
    --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:   Copper  density:  8.960  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436  cm
+ Material:   Copper  density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
    --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:     Lead  density: 11.350  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612  mm
+ Material:     Lead  density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Water  density:  1.000  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092  cm
+ Material:    Water  density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
- Material: Scintillator  density:  1.032  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549  cm
+ Material: Scintillator  density:  1.032 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549 cm 
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.45 %  Abundance  47.37 %
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.55 %  Abundance  52.63 %
 
- Material:   quartz  density:  2.200  g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  12.295  cm
+ Material:   quartz  density:  2.200 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  12.295 cm 
    --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  46.75 %  Abundance  33.33 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  53.25 %  Abundance  66.67 %
 
- Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161   m
+ Material:      Air  density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
- Material:  Aerogel  density: 200.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.493   m
+ Material:  Aerogel  density: 200.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.493 m  
    --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  29.22 %  Abundance  11.12 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  66.49 %  Abundance  44.42 %
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.19 %  Abundance  44.37 %
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.10 %  Abundance   0.09 %
 
- Material: CarbonicGas  density: 27.000 mg/cm3  temperature: 325.00 K  pressure:  50.00 atm  RadLength:  13.406   m
+ Material: CarbonicGas  density: 27.000 mg/cm3  temperature: 325.00 K  pressure:  50.00 atm  RadLength:  13.406 m  
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
 
- Material: WaterSteam  density:  0.300 mg/cm3  temperature: 500.00 K  pressure:   2.00 atm  RadLength:   1.203  km
+ Material: WaterSteam  density:  0.300 mg/cm3  temperature: 500.00 K  pressure:   2.00 atm  RadLength:   1.203 km 
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
 
- Material: Galactic  density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000  km
+ Material: Galactic  density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469291008.000 km 
    --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:     Beam  density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786  km
+ Material:     Beam  density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786 km 
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
 
 
  The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
-ExN03PhysicsList::SetCuts:CutLength : 2 (mm)
 
-phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
-        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
+        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
-compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
         Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
 
-conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
@@ -87,7 +86,7 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -97,22 +96,22 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02  eV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
       PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
 
-MuBrems:  cross sections from R. Kokoulin 
+MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
 
-MuPairProd:  cross sections from R. Kokoulin 
+MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
 #
-# Macro file for the initialization phase of "exampleN02.cc"
+# Macro file for the initialization phase of "exampleN03.cc"
 #
 # Sets some default verbose
 # and initializes the graphic.
@@ -122,52 +121,64 @@ MuPairProd:  cross sections from R. Kokoulin
 #
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================
-                          gamma          e-         mu-      proton     neutron
-Cut in range [mm]             2           2           2           2           2
-Cut in energy [KeV]
-          Aluminium         9.6       1e+03     7.4e+03     1.9e+04        0.99
-        liquidArgon         8.6     5.6e+02     4.8e+03     1.2e+04        0.99
-             Copper          36     2.7e+03     1.3e+04     3.4e+04        0.99
-               Lead     1.2e+02     2.6e+03     1.3e+04     3.2e+04        0.99
-              Water         3.9     5.7e+02       5e+03     1.3e+04        0.99
-       Scintillator         3.1     5.8e+02       5e+03     1.3e+04        0.99
-             quartz         7.6     9.1e+02     6.9e+03     1.8e+04        0.99
-                Air        0.99        0.99          82     1.7e+02        0.99
-            Aerogel         2.3     1.8e+02     1.9e+03     4.8e+03        0.99
-        CarbonicGas        0.99          54       6e+02     1.3e+03        0.99
-         WaterSteam        0.99        0.99          30          45        0.99
-           Galactic        0.99        0.99        0.99        0.99        0.99
-               Beam        0.99        0.99        0.99        0.99        0.99
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
+Cut in energy
+          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
+        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990 eV 
+             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
+               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
+              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990 eV 
+       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990 eV 
+             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990 eV 
+                Air         990 eV          990 eV         82.2 keV         174 keV         990 eV 
+            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990 eV 
+        CarbonicGas         990 eV         54.1 keV         597 keV        1.34 MeV         990 eV 
+         WaterSteam         990 eV          990 eV         29.6 keV          45 keV         990 eV 
+           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
+               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
 ===================================================
 #
+# Create empty scene ("world" is default)
+/vis/scene/create
+#
+# Add volume to scene
+/vis/scene/add/volume
+#
+# Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
 #
-#/vis~/create_view/new_graphics_system DAWNFILE
-/vis~/create_view/new_graphics_system OGLIX
-/vis~/draw/current
-/vis~/show/view
+#/vis/sceneHandler/create DAWNFILE
+/vis/sceneHandler/create OGLIX
+#
+# Create a viewer
+/vis/viewer/create
+#
+# Draw scene
+/vis/scene/notifyHandlers
 #
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0
 /tracking/storeTrajectory 1
+#/vis/scene/include/trajectories
 Idle> /run/particle/dumpCutValues
 ============= The cut Energy ==============================
-                          gamma          e-         mu-      proton     neutron
-Cut in range [mm]             2           2           2           2           2
-Cut in energy [KeV]
-          Aluminium         9.6       1e+03     7.4e+03     1.9e+04        0.99
-        liquidArgon         8.6     5.6e+02     4.8e+03     1.2e+04        0.99
-             Copper          36     2.7e+03     1.3e+04     3.4e+04        0.99
-               Lead     1.2e+02     2.6e+03     1.3e+04     3.2e+04        0.99
-              Water         3.9     5.7e+02       5e+03     1.3e+04        0.99
-       Scintillator         3.1     5.8e+02       5e+03     1.3e+04        0.99
-             quartz         7.6     9.1e+02     6.9e+03     1.8e+04        0.99
-                Air        0.99        0.99          82     1.7e+02        0.99
-            Aerogel         2.3     1.8e+02     1.9e+03     4.8e+03        0.99
-        CarbonicGas        0.99          54       6e+02     1.3e+03        0.99
-         WaterSteam        0.99        0.99          30          45        0.99
-           Galactic        0.99        0.99        0.99        0.99        0.99
-               Beam        0.99        0.99        0.99        0.99        0.99
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
+Cut in energy
+          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
+        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990 eV 
+             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
+               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
+              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990 eV 
+       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990 eV 
+             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990 eV 
+                Air         990 eV          990 eV         82.2 keV         174 keV         990 eV 
+            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990 eV 
+        CarbonicGas         990 eV         54.1 keV         597 keV        1.34 MeV         990 eV 
+         WaterSteam         990 eV          990 eV         29.6 keV          45 keV         990 eV 
+           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
+               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
 ===================================================
 Idle> # e+ 300MeV 
 Idle> /gun/particle e+
@@ -176,42 +187,54 @@ Idle> /run/beamOn 1
 ### Run 0 start.
 Start closing geometry.
 Start Run processing.
+
+---> Event: 0
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
 >>> Event 0
      10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.9e+02 MeV       total track length:      16  cm
-        Gap: total energy:      10 MeV       total track length:     4.4  cm
-    185 trajectories stored in this event.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      14 cm 
+        Gap: total energy:      12 MeV       total track length:     5.9 cm 
+    195 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.13s Sys=0.033s
+  User=0.28s Real=0.33s Sys=0.03s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
-     Transportation,                msc,              hIoni,              eIoni
-              eBrem,            annihil,             MuIoni,            MuBrems
-         MuPairProd,               phot,              compt,               conv
+     Transportation,                msc,              hIoni,             MuIoni
+            MuBrems,         MuPairProd,              eIoni,              eBrem
+            annihil,               phot,              compt,               conv
               Decay
 Idle> #
 Idle> # switch off MultipleScattering
-Idle> /process/inactivate MultipleScattering
- illegal process (or type) name 
+Idle> /process/inactivate msc
 Idle> /run/beamOn 1
 ### Run 1 start.
 Start Run processing.
+
+---> Event: 0
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 2089514513, 1200712414
+----------------------------------------
 >>> Event 0
      9 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      16  cm
-        Gap: total energy:      12 MeV       total track length:     5.8  cm
-    187 trajectories stored in this event.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      15 cm 
+        Gap: total energy:      17 MeV       total track length:     7.6 cm 
+    195 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.12s Real=0.13s Sys=0.017s
+  User=0.25s Real=0.28s Sys=0.02s
 Idle> #
 Idle> # switch on MultipleScattering
-Idle> /process/activate MultipleScattering
- illegal process (or type) name 
+Idle> /process/activate msc
 Idle> #
 Idle> # change detector parameter
 Idle> /calor/setAbsMat Aluminium
@@ -227,22 +250,28 @@ Idle> /calor/setSizeYZ   1.5 m
 Idle> /calor/update
 
  The calorimeter is made of 30 layers of: [ 20mm of Aluminium + 50mm of Aerogel ] 
-Idle> /vis~/clear/scene
 Idle> /gun/particle gamma
 Idle> /gun/energy 500 MeV
 Idle> /run/beamOn 1
 ### Run 2 start.
 Start closing geometry.
 Start Run processing.
+
+---> Event: 0
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 900551276, 1952365952
+----------------------------------------
 >>> Event 0
-     30 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 3.8e+02 MeV       total track length:      86  cm
-        Gap: total energy:      86 MeV       total track length:     2.4   m
-    212 trajectories stored in this event.
+     21 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 4.2e+02 MeV       total track length:      98 cm 
+        Gap: total energy:      68 MeV       total track length:     1.9 m  
+    176 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.32s Real=0.35s Sys=0.033s
+  User=0.62s Real=0.71s Sys=0.09s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

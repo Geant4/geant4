@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.0 1998/07/02 16:18:12 gunter Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:10:59 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for  processes/decay library.  G.Folger 9/12/97
 # --------------------------------------------------------------

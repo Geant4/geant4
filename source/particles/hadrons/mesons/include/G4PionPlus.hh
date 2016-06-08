@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PionPlus.hh,v 2.3 1998/09/24 06:07:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PionPlus.hh,v 1.2 1999/04/13 08:34:57 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -58,6 +58,8 @@ class G4PionPlus : public G4VMeson
    );
 
  public:
+   virtual ~G4PionPlus(){}
+
    static G4PionPlus* PionPlusDefinition();
    static G4PionPlus* PionPlus() {return &thePionPlus;}
    static G4double GetCuts() {return thePionPlusLengthCut;}   

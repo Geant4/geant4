@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmVWidgetComponent.cc,v 2.0 1998/07/02 16:47:02 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmVWidgetComponent.cc,v 1.2 1999/01/09 16:23:46 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //Base class for all Motif component widgets
 

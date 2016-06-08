@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGun.cc,v 2.2 1998/07/13 16:50:14 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleGun.cc,v 1.1 1999/01/07 16:06:37 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 // G4ParticleGun

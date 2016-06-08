@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiDMesonZero.hh,v 2.2 1998/08/04 11:15:22 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiDMesonZero.hh,v 1.2 1999/04/13 08:35:48 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,12 +56,14 @@ class G4AntiDMesonZero : public G4VMeson
    );
 
  public:
+   virtual ~G4AntiDMesonZero() {}
+
    static G4AntiDMesonZero* AntiDMesonZeroDefinition();
    static G4AntiDMesonZero* AntiDMesonZero();
    static G4double GetCuts() {return theAntiDMesonZeroLengthCut;}   
    static G4double* GetCutsInEnergy() {return theAntiDMesonZeroKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 

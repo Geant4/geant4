@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.cc,v 2.8 1998/11/20 19:00:46 verderi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FastStep.cc,v 1.4 1999/05/11 14:29:38 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //$Id:
 //---------------------------------------------------------------
@@ -238,7 +238,6 @@ void G4FastStep::Initialize(const G4Track&) {
 
 G4FastStep::G4FastStep():G4VParticleChange()
 {
-  debugFlag = true;
   if (verboseLevel>2) {
     G4cerr << "G4FastStep::G4FastStep() " << endl;
   }
@@ -262,22 +261,27 @@ G4FastStep & G4FastStep::operator=(const G4FastStep &right)
 {
    if (this != &right)
    {
-      theListOfSecondaries          = right.theListOfSecondaries;
-      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-      theNumberOfSecondaries        = right.theNumberOfSecondaries;
-      theStatusChange               = right.theStatusChange;
-      theMomentumChange             = right.theMomentumChange;
-      thePolarizationChange         = right.thePolarizationChange;
-      thePositionChange             = right.thePositionChange;
-      theTimeChange                 = right.theTimeChange;
-      theEnergyChange               = right.theEnergyChange;
-      theTrueStepLength             = right.theTrueStepLength;
-      theLocalEnergyDeposit         = right.theLocalEnergyDeposit;
-      theSteppingControlFlag        = right.theSteppingControlFlag;
-      theWeightChange               = right.theWeightChange;
+     G4VParticleChange::operator=(right);
+     theListOfSecondaries          = right.theListOfSecondaries;
+     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+     theNumberOfSecondaries        = right.theNumberOfSecondaries;
+     theStatusChange               = right.theStatusChange;
+     theMomentumChange             = right.theMomentumChange;
+     thePolarizationChange         = right.thePolarizationChange;
+     thePositionChange             = right.thePositionChange;
+     theTimeChange                 = right.theTimeChange;
+     theEnergyChange               = right.theEnergyChange;
+     theTrueStepLength             = right.theTrueStepLength;
+     theLocalEnergyDeposit         = right.theLocalEnergyDeposit;
+     theSteppingControlFlag        = right.theSteppingControlFlag;
+     theWeightChange               = right.theWeightChange;
    }
    return *this;
 }
+
+
+
+
 
 G4bool G4FastStep::operator==(const G4FastStep &right) const
 {
@@ -323,9 +327,9 @@ G4Step* G4FastStep::UpdateStepForPostStep(G4Step* pStep)
   // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
-
   if (debugFlag) CheckIt(*aTrack);
 
+  
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
 }
@@ -337,7 +341,7 @@ G4Step* G4FastStep::UpdateStepForAtRest(G4Step* pStep)
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = mass = aTrack->GetDynamicParticle()->GetMass();
+  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumChange);
@@ -355,7 +359,6 @@ G4Step* G4FastStep::UpdateStepForAtRest(G4Step* pStep)
 
   // update weight
   pPostStepPoint->SetWeight( theWeightChange );
-
 
   if (debugFlag) CheckIt(*aTrack);
 
@@ -413,38 +416,79 @@ void G4FastStep::DumpInfo() const
 
 G4bool G4FastStep::CheckIt(const G4Track& aTrack)
 {
+  //
+  //      In the G4FastStep::CheckIt
+  //      We only check a bit
+  //      
+  //      If the user violates the energy,
+  //      We don't care, we agree.
+  //
+  //      But for theMomentumDirectionChange,
+  //      We do pay attention.
+  //      And if too large is its range,
+  //      We issue an Exception.
+  //
+  //
+  // It means, the G4FastStep::CheckIt issues an exception only for the
+  // theMomentumDirectionChange which should be an unit vector
+  // and it corrects it because it could cause problems for the ulterior
+  // tracking.For the rest, only warning are issued.
+
   G4bool    itsOK = true;
-  if (theEnergyChange > aTrack.GetKineticEnergy()) {
-    G4cout << " !!! the energy becomes larger than the initial energy !!!"
-         << " :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
-         << "MeV " <<endl;
+  G4bool    exitWithError = false;
+  G4double  accuracy;
+  
+  if (theEnergyChange > aTrack.GetKineticEnergy() * (1.0 - accuracyForWarning)) {
+    G4cout << "  G4FastStep::CheckIt    : ";
+    G4cout << "the energy becomes larger than the initial energy !!"
+	   << " Difference :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
+	   << "[MeV] " <<endl;
     itsOK = false;
   }
-  if ( (theEnergyChange >0.) && 
-        ( abs(theMomentumChange.mag2()-1.0) > 1.0e-5 ) ){
-    G4cout << " !!! the Momentum Change is not unit vector !!!!"
-         << " :  " << theMomentumChange.mag()
-         << endl;
+
+  G4bool itsOKforMomentum = true;
+  if ( theEnergyChange >0.) {
+    accuracy = abs(theMomentumChange.mag2()-1.0);
+    if (accuracy > accuracyForWarning) {
+      G4cout << "  G4FastStep::CheckIt    : ";
+      G4cout << "the Momentum Change is not unit vector !!"
+	     << "  Difference:  " << accuracy << endl;
+      itsOK = itsOKforMomentum = false;
+      if (accuracy > accuracyForException) exitWithError = true;
+    }
+  }
+  
+  accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;  
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4FastStep::CheckIt    : ";
+    G4cout << "the global time goes back  !!"
+	   << " Difference:  " << accuracy << "[ns] " <<endl;
     itsOK = false;
   }
-  if (theTimeChange < aTrack.GetGlobalTime()) {
-    G4cout << " !!! the global time goes back  !!!"
-         << " :  " << aTrack.GetGlobalTime()/ns
-         << " -> " << theTimeChange/ns
-         << "[ns] " <<endl;
+  
+  accuracy = (aTrack.GetProperTime() - theProperTimeChange )/ns;
+  if (accuracy) {
+    G4cout << "  G4FastStep::CheckIt    : ";
+    G4cout << "the proper time goes back  !!"
+	   << " Difference:  " <<  accuracy  << "[ns] " <<endl;
     itsOK = false;
   }
-  if (theProperTimeChange < aTrack.GetProperTime()) {
-    G4cout << " !!! the poper time goes back  !!!"
-         << " :  " << aTrack.GetProperTime()/ns
-         << " -> " << theProperTimeChange/ns
-         << "[ns] " <<endl;
-    itsOK = false;
-  }
+  
   if (!itsOK) { 
     G4cout << " G4FastStep::CheckIt " <<endl;
     G4cout << " pointer : " << this <<endl ;
     DumpInfo();
   }
+  
+  // Exit with error
+  if (exitWithError) G4Exception("G4ParticleChange::CheckIt");
+
+  //correction for Momentum only.
+  if (!itsOKforMomentum) {
+    G4double vmag = theMomentumChange.mag();
+    theMomentumChange = (1./vmag)*theMomentumChange;
+  }
+
+  itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack); 
   return itsOK;
 }

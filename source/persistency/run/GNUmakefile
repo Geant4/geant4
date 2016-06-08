@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1998/11/09 17:16:04 morita Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:10:58 gunter Exp $
 
 name := G4prun
 G4ODBMS := true

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyRangeManager.cc,v 2.3 1998/07/13 17:38:15 fjones Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EnergyRangeManager.cc,v 1.2 1999/03/29 09:35:36 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -101,14 +101,14 @@
        if( emi1 < emi2 )
        {
          if( (ema1-kineticEnergy)/(ema1-emi2)<rand )
-           m = memory;
-         else
            m = memor2;
+         else
+           m = memory;
        } else {
          if( (ema2-kineticEnergy)/(ema2-emi1)<rand )
-           m = memor2;
-         else
            m = memory;
+         else
+           m = memor2;
        }
        break;
      default:

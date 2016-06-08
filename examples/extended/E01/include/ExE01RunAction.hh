@@ -1,4 +1,4 @@
-// $Id: ExE01RunAction.hh,v 1.1 1998/10/14 15:19:39 allison Exp $
+// $Id: ExE01RunAction.hh,v 1.3 1999/04/22 21:49:17 asaim Exp $
 
 #ifndef ExE01RunAction_h
 #define ExE01RunAction_h 1
@@ -13,18 +13,16 @@ class G4Run;
 class ExE01RunAction : public G4UserRunAction
 {
   public:
-    ExE01RunAction() { runIDcounter = 0; }
-    ~ExE01RunAction() {}
+    ExE01RunAction() { }
+    virtual ~ExE01RunAction() {}
 
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 
     static HepRef(Histo1D) get_1d() { return myHisto1D; }
     static HepRef(Histo2D) Get2d() { return myHisto2D; }
 
   private:
-    G4int runIDcounter;
-
     static HepRef(Histo1D) myHisto1D;
     static HepRef(Histo2D) myHisto2D;
 

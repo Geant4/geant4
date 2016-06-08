@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FRClient.h,v 2.0 1998/07/02 16:48:04 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: FRClient.h,v 1.1 1999/01/07 16:15:09 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // FRClient.h
 // FukuiRenderer Client

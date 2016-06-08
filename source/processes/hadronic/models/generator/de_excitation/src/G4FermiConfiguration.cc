@@ -8,15 +8,21 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
 
+// V. Lara (Apr 1999)
+// Corrected a bug in calculation of probabilities found by N. Ameline
+// 
+
+
 #include "G4FermiConfiguration.hh"
 
 // Kappa = V/V_0 it is used in calculation of Coulomb energy
 // Kappa is adimensional
 const G4double G4FermiConfiguration::Kappa = 1.0;
 
+// r0 is the nuclear radius
+const G4double G4FermiConfiguration::r0 = 1.3*fermi;
 
-
-//                                 A  Z  Pol ExcitE
+//                                                       A  Z  Pol  ExcitE
 G4StableFermiFragment G4FermiConfiguration::Fragment00(  1, 0,  2,  0.00*keV );
 G4StableFermiFragment G4FermiConfiguration::Fragment01(  1, 1,  2,  0.00*keV );
 G4StableFermiFragment G4FermiConfiguration::Fragment02(  2, 1,  3,  0.00*keV );
@@ -358,19 +364,20 @@ G4bool G4FermiConfiguration::SplitNucleus(const G4int A, const G4int Z)
 
 G4double G4FermiConfiguration::CoulombBarrier(void)
 {
-  //  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
-  const G4double Coef = ((3. * 1.44) / (5. * 1.3)) * pow(1./(1.+Kappa), 1./3.);
-  G4double SumA = 0, SumZ = 0;
-  G4double CoulombEnergy = 0.;
-  for (G4int i = 0; i < Index.entries(); i++) {
-    G4double z = theListOfFragments[Index[i]-1]->GetZ();
-    G4double a = theListOfFragments[Index[i]-1]->GetA();
-    CoulombEnergy += (z*z) / pow(a, 1./3.);
-    SumA += a;
-    SumZ += z;
-  }
-  CoulombEnergy -= SumZ*SumZ/pow(SumA, 1./3.);
-  return -Coef * CoulombEnergy;
+	//  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
+	const G4double Coef = (3./5.)*1.44*MeV*fermi* pow(1./(1.+Kappa), 1./3.)/r0;
+
+	G4double SumA = 0, SumZ = 0;
+	G4double CoulombEnergy = 0.;
+	for (G4int i = 0; i < Index.entries(); i++) {
+		G4double z = theListOfFragments[Index[i]-1]->GetZ();
+		G4double a = theListOfFragments[Index[i]-1]->GetA();
+		CoulombEnergy += (z*z) / pow(a, 1./3.);
+		SumA += a;
+		SumZ += z;
+	}
+	CoulombEnergy -= SumZ*SumZ/pow(SumA, 1./3.);
+	return -Coef * CoulombEnergy;
 }
 
 
@@ -380,57 +387,66 @@ G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double To
   // Decay probability  for a given channel with K fragments
 {
   // A: Atomic Weight
-  // TotalE: Total energy of nucleus (MeV)
+	// TotalE: Total energy of nucleus (MeV)
   
-  G4int K = Index.entries();
-  G4int i;
-  const  G4double VAK = (1.3/(0.21*sqrt(0.94)))*(1.3/(0.21*sqrt(0.94)))*(1.3/(0.21*sqrt(0.94)))*
-    Kappa*sqrt(2.0/pi)/3.0;
+	G4int K = Index.entries();
+	G4int i;
   
-  G4double * GAF = new G4double[K];
-  GAF[0] = 0.0;
-  GAF[1] = 1.0/sqrt(pi);
-  for (i = 2; i < K; i++) {
-    G4double qk = 1./(1.5*i-2.5);
-    G4double gq = 1. + qk*(1./12. + qk*(1./288. - qk*(139./51840.)));
-    GAF[i] = sqrt(0.1591549*qk)/gq;
-  }
+	const G4double NucleonMass = 938.0*MeV;
+	const G4double DimCoeff = pow(r0*sqrt(NucleonMass)/hbarc,3.0)*Kappa*sqrt(2.0/pi)/3.0;
   
-  G4double DeltaEnergy = TotalE; // MeV
-  G4double Weight = 0.;
-  G4double ProdAMass = 1.;  
-  G4double ProdSpin = 1.;
+	// Calculation of 1/Gamma(3(n-1)/2)
+	G4double InvGammaFunc = 1.0;
+	if (K <= 1) InvGammaFunc = 0.0;
+	else {
+		G4double arg = 3.0*(K-1)/2.0 - 1.0;
+		while (arg > 1.1) {
+			InvGammaFunc *= arg; 
+			arg--;
+		}
+		
+		if ((K-1)%2 == 1) InvGammaFunc *= sqrt(pi)/2.0;
+		
+		InvGammaFunc = 1.0/InvGammaFunc;
+	}
+  
+  
+	G4double DeltaEnergy = TotalE; // MeV
+	G4double Weight = 0.;
+	G4double ProdAMass = 1.;  
+	G4double ProdSpin = 1.;
 
-  for (i = 0; i<K; i++) {
-    ProdAMass *= theListOfFragments[Index[i]-1]->GetA();
-    ProdSpin *= theListOfFragments[Index[i]-1]->GetPolarization();
-    DeltaEnergy -= (theListOfFragments[Index[i]-1]->GetFragmentMass()/MeV + 
-		    theListOfFragments[Index[i]-1]->GetExcitationEnergy()/MeV);
-  };
-  if ((DeltaEnergy -= CoulombBarrier()) <= 0.0) {
-    delete [] GAF;
-    return Weight;
-  }
-  ProdAMass /= A;
-  ProdAMass *= sqrt(ProdAMass)*ProdSpin;
+	for (i = 0; i<K; i++) {
+		ProdAMass *= theListOfFragments[Index[i]-1]->GetA();
+		// Spin factor S_n
+		ProdSpin *= theListOfFragments[Index[i]-1]->GetPolarization();
+		DeltaEnergy -= theListOfFragments[Index[i]-1]->GetFragmentMass() + 
+							theListOfFragments[Index[i]-1]->GetExcitationEnergy();
+	};
   
-  if (K <= 2) {
-    Weight = 1.1283792*A*Kappa*ProdAMass*sqrt(DeltaEnergy);
-    if (Index[0] == Index[1]) Weight *= 0.5;
-  } else {
-    DeltaEnergy *= 2.71828183/(1.5*K-2.5);
-    G4double VTK = A*Kappa*DeltaEnergy*sqrt(DeltaEnergy);
-    G4double VMK = 1.0, RPM= 1.0;
-    for (G4int i = 0; i < K-1; i++) {
-      VMK *= VTK;
-      G4int MRS = 1;
-      for (G4int j = i+1; j<K; j++) if(Index[i] == Index[j]) MRS++;
-      RPM *= MRS;
-    };
-    Weight = VMK*ProdAMass*GAF[K-1]/(DeltaEnergy*RPM);
-  }
-  delete [] GAF;
-  return Weight; 
+	// Check that there is enough energy to produce K fragments
+	if ((DeltaEnergy -= CoulombBarrier()) <= 0.0) return Weight; // return 0.0
+  
+	ProdAMass /= A;
+	ProdAMass *= sqrt(ProdAMass);
+  
+	if (K <= 2) {
+		Weight = InvGammaFunc*A*DimCoeff*ProdAMass*ProdSpin*sqrt(DeltaEnergy);
+		if (Index[0] == Index[1]) Weight *= 0.5; //Permutation factor G_n
+	} else {
+		G4double Base = A*DimCoeff*DeltaEnergy*sqrt(DeltaEnergy);
+		G4double Powered = 1.0;
+		G4double PermutationFactor = 1.0;
+		for (G4int i = 0; i < K-1; i++) {
+			Powered *= Base;
+			G4int N = 1;
+			for (G4int j = i+1; j<K; j++) if(Index[i] == Index[j]) N++;
+			PermutationFactor *= N;
+		};
+		Weight = Powered*ProdAMass*ProdSpin*InvGammaFunc/(DeltaEnergy*PermutationFactor);
+	}
+  
+	return Weight; 
 }
 
 
@@ -440,17 +456,17 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   G4int K = Index.entries();
   
   // Avalaible kinetic energy of system.
-  G4double AvalKineticEnergy = theNucleus.GetExcitationEnergy()/MeV +
-    G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),theNucleus.GetA())/MeV;
+  G4double AvalKineticEnergy = theNucleus.GetExcitationEnergy() +
+    G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),theNucleus.GetA());
   
   G4int i;
   for (i = 0; i < K; i++) 
-    AvalKineticEnergy -= theListOfFragments[Index[i]-1]->GetFragmentMass()/MeV;
+    AvalKineticEnergy -= theListOfFragments[Index[i]-1]->GetFragmentMass();
   
   
   // Calculate Momenta of K fragments
   RWTPtrOrderedVector<G4LorentzVector>* MomentumComponents = 
-    FragmentsMomentum(AvalKineticEnergy*MeV);
+    FragmentsMomentum(AvalKineticEnergy);
   
   G4FragmentVector * theResult = new G4FragmentVector;
   
@@ -550,19 +566,19 @@ G4FermiConfiguration::FragmentsMomentum(G4double KineticEnergy)
 
 G4double G4FermiConfiguration::RNKSI(const G4int K)
 {
-  G4double csim = (3.0*K-5.0)/(3.0*K-4.0);
-  G4double pex = 1.5*K-2.5;
-  G4double fcsim = sqrt(1.0-csim)*pow(csim,pex);
+	G4double csim = (3.0*K-5.0)/(3.0*K-4.0);
+	G4double pex = (3.0*K-5.0)/2.0;
+	G4double fcsim = sqrt(1.0-csim)*pow(csim,pex);
 
-  G4double csi = 0.0;
-  G4double fcsi= 0.0;
-  G4double rf = 0.0;
-  do {
-    csi = G4UniformRand();
-    fcsi = sqrt(1.0-csi)*pow(csi,pex);
-    rf = fcsim*G4UniformRand();
-  } while (rf > fcsi);
-  return csi;
+	G4double csi = 0.0;
+	G4double fcsi= 0.0;
+	G4double rf = 0.0;
+	do {
+		csi = G4UniformRand();
+		fcsi = sqrt(1.0-csi)*pow(csi,pex);
+		rf = fcsim*G4UniformRand();
+	} while (rf > fcsi);
+	return csi;
 }
     
 G4ParticleMomentum G4FermiConfiguration::IsotropicVector(const G4double Magnitude)

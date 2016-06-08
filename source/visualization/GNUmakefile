@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.4 1998/07/07 16:25:07 allison Exp $
+# $Id: GNUmakefile,v 1.2 1999/06/19 16:29:35 johna Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -51,10 +51,6 @@ endif
 ifdef G4VIS_BUILD_OI_DRIVER
   SUBDIRS += OpenInventor
   SUBLIBS += G4OpenInventor
-endif
-ifdef G4VIS_BUILD_RAYX_DRIVER
-  SUBDIRS += G4Ray
-  SUBLIBS += G4Ray
 endif
 
 # For VRML and VRMLFILE drivers

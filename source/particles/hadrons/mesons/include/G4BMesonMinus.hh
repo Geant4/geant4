@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BMesonMinus.hh,v 2.2 1998/08/04 11:15:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4BMesonMinus.hh,v 1.2 1999/04/13 08:37:10 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,12 +56,14 @@ class G4BMesonMinus : public G4VMeson
    );
 
  public:
+   virtual ~G4BMesonMinus(){}
+
    static G4BMesonMinus* BMesonMinusDefinition();
    static G4BMesonMinus* BMesonMinus();
    static G4double GetCuts() {return theBMesonMinusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theBMesonMinusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4BMesonMinus::SetCuts(G4double aCut)

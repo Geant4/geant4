@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTextField.hh,v 2.2 1998/08/07 12:46:30 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmTextField.hh,v 1.2 1999/01/09 16:23:02 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent

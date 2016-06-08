@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIxvtMessenger.cc,v 2.4 1998/07/13 17:13:26 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIxvtMessenger.cc,v 1.2 1999/04/13 01:25:03 yhajime Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifdef G4UI_BUILD_XVT_SESSION
 

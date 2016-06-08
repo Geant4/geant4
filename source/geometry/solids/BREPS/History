@@ -1,10 +1,129 @@
 History file for geometry/solids/BREPS
 
+----------------------------
+28/05/1999 : J. Apostolakis       breps-01-00-03a
+
+ - Tagged.
+
+28/05/1999 : S. Giani 
+
+G4BREPSolidPolyhedra.cc  
+   DistanceToOut: Introduced treatment for ray leaving from a boundary. 
+
+27/05/1999 : J. Apostolakis       breps-01-00-03
+
+ - Tagged.
+
+ Cosmetic change to G4FCylindricalSurface.cc
+
+25/05/1999 : S. Giani            
+ G4BREPSolidPolyhedra.cc(1.8) 
+	Modified comparison of square distance to use the squared tolerance 
+        (rather than the tolerance).          And used <=, instead of <.
+ G4FPlane.cc(1.5): 
+        Corrected the use of the tolerance in the intersect function
+ G4SurfaceBoundary.cc(1.4): Return 1 by convention if on surface.
+
+
+25/05/1999 : S. Magni
+
+ G4BREPSolidPCone.cc v1.12: 
+	New version of Inside function, 
+      	     that uses first intersection & dot prod with normal 
+             (instead of counting the number of distinct intersections)
+
+21/05/1999 : J. Apostolakis       breps-01-00-02
+
+ - Tagged.
+
+21/05/1999 : S. Magni
+ G4BREPSolidPCone: Further minor corrections several methods
+        - protecting HowNear with fabs when cheching against tolearance ..
+
+21/05/1999 : J. Apostolakis
+ G4BSplineSurface.hh,
+ G4PointRat.hh,
+ G4BREPSolid.cc,
+ G4ProjectedSurface.cc
+ G4Surface.cc
+ G4BREPSolid.cc
+        - changed INFINITY to kInfinity
+
+20/05/1999 : S. Giani
+ G4Line.cc:
+        - A preliminary fix to avoid 0-lenght segments has been introduced.
+
+19/05/1999 : S. Magni
+
+ G4BREPSolidPCone: Corrected several methods 
+        - constructor          to take into account the changed G4FPlane 
+
+	- Inside
+	- SurfaceNormal
+	- DistanceToIn( p, v)
+	- DistanceToOut( p, v) 
+            for 
+                corrected behaviour of HowNear, which is for finite surfaces.
+		...
+ G4FCylindricalSurface, 
+ G4FConicalSurface.cc: 
+        Corrected the following methods:
+	- Intersect
+	- HowNear
+
+12/05/1999 : S.Giani
+  
+ G4BREPSolidPolyhedra Corrections by S.Giani:
+        - Xaxis now corresponds to phi=0
+        - partial angle = phiTotal / Nsides
+        - end planes exact boundary calculation for phiTotal < 2pi 
+           (also including case with RMIN=RMAX) 
+        - Xaxis now properly rotated to compute correct scope of vertixes
+        - corrected surface orientation for outer faces parallel to Z
+        - completed explicit setting of the orientation for all faces
+        - some comparison between doubles avoided by using tolerances. 
+
+  G4FPlane corrections 
+	- The constructor using iVec now properly stores both the internal
+	  and external boundaries in the bounds vector.
+	- Proper initialization of sameSense in both the constructors. 
+	- Addition of third argument (sense) in the second constructor 
+	  to ensure consistent setting of the normal in all the client code.
 
 
 
+27/01/1999 : L. Broglia ( new tag : breps-01-00-01 )
+
+ - functions Inside, DistanceToIn and DistanceToOut
+   are re-written to satisfy requirements
+
+ - these functions are identical into G4BREPSolid
+   and into G4BREPSolidPCone & Polyhedra because
+   there are general (see ToDo.txt)
+
+ - corrections of G4BREPSolid::CalculExtent by
+   Stefano Magni 
 
 
+
+14/01/1999 : L. Broglia
+ - modification of the IntersectRay2D function
+
+     before : void IntersectRay2D(const G4Ray& ray,  
+                                  G4CurveRayIntersection& is)
+
+     now :  G4int IntersectRay2D(const G4Ray& ray)
+
+  return the number of intersections into the curve boundaries,
+
+------------------------------------------------------
+
+December, 1998 : L. Broglia
+
+ - bugs fixed in order to run correctly test05 
+   for the first product version 
+
+------------------------------------------------------
 
 November 11, 1998 : L. Broglia
 

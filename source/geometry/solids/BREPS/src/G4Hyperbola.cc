@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hyperbola.cc,v 2.8 1998/10/29 17:49:38 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Hyperbola.cc,v 1.1 1999/01/07 16:07:43 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4Hyperbola.hh"

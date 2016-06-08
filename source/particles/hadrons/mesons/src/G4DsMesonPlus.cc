@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DsMesonPlus.cc,v 2.1 1998/08/04 11:15:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DsMesonPlus.cc,v 1.2 1999/06/09 16:07:48 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4DsMesonPlus::G4DsMesonPlus(
 
 // In this version, charged pions are set to stable
 G4DsMesonPlus G4DsMesonPlus::theDsMesonPlus(
-	        "Ds+",      1.9685*GeV,       0.0*MeV,    +1.*eplus, 
+	        "Ds+",      1.9685*GeV,    1.41e-9*MeV,    +1.*eplus, 
 		    0,              -1,             0,          
 		    0,               0,             0,             
 	      "meson",               0,             0,         431,

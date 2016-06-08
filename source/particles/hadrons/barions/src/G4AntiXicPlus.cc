@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiXicPlus.cc,v 2.2 1998/09/24 09:24:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiXicPlus.cc,v 1.2 1999/06/09 16:08:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -62,7 +62,7 @@ G4AntiXicPlus::G4AntiXicPlus(
 //             stable         lifetime    decay table 
 
 G4AntiXicPlus G4AntiXicPlus::theAntiXicPlus(
-         "anti_xi_c+",      2.4656*GeV,       0.0*MeV,   -1.*eplus, 
+         "anti_xi_c+",      2.4656*GeV,   1.86e-9*MeV,   -1.*eplus, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            -1,       -4232,

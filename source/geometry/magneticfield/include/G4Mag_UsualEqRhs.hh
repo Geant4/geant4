@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mag_UsualEqRhs.hh,v 2.2 1998/11/10 18:16:49 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Mag_UsualEqRhs.hh,v 1.1 1999/01/07 16:07:05 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //  This is the standard right-hand side for equation of motion.

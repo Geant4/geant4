@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Win32.cc,v 2.5 1998/09/19 14:45:38 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Win32.cc,v 1.4 1999/05/11 12:34:38 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G.Barrand
 
@@ -39,8 +39,8 @@ G4Win32* G4Win32::getInstance (
 }
 /***************************************************************************/
 G4Win32* G4Win32::getInstance (
- HANDLE a_hInstance
-,HANDLE a_hPrevInstance
+ HINSTANCE a_hInstance
+,HINSTANCE a_hPrevInstance
 ,LPSTR  a_lpszCmdLine
 ,int    a_nCmdShow
 )
@@ -57,8 +57,8 @@ G4Win32* G4Win32::getInstance (
 }
 /***************************************************************************/
 G4Win32::G4Win32 (
- HANDLE a_hInstance
-,HANDLE a_hPrevInstance
+ HINSTANCE a_hInstance
+,HINSTANCE a_hPrevInstance
 ,LPSTR  a_lpszCmdLine
 ,int    a_nCmdShow
 )
@@ -85,7 +85,7 @@ G4Win32::G4Win32 (
       wc.hInstance     = hInstance;
       wc.hIcon         = LoadIcon  (NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockObject(BLACK_BRUSH);
+      wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
       wc.lpszMenuName  = className;
       wc.lpszClassName = className;
       ::RegisterClass  (&wc);
@@ -103,8 +103,8 @@ G4Win32::G4Win32 (
     Win32Inited = TRUE;
   }
 
-  AddDispatcher     ((G4DispatchFunction)G4Win32::dispatchWin32Event);
-  SetMainInteractor (topWindow);
+  AddDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);
+  SetMainInteractor(topWindow);
 }
 /***************************************************************************/
 G4Win32::~G4Win32 (
@@ -144,8 +144,8 @@ void G4Win32::FlushAndWaitExecution (
 }
 /***************************************************************************/
 void G4Win32::getWinMainArguments (
- HANDLE* a_hInstance
-,HANDLE* a_hPrevInstance
+ HINSTANCE* a_hInstance
+,HINSTANCE* a_hPrevInstance
 ,LPSTR*  a_lpszCmdLine
 ,int*    a_nCmdShow
 )

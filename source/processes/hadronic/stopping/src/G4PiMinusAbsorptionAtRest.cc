@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 2.8 1998/10/01 19:32:06 pia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.3 1999/05/06 14:37:01 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -130,7 +130,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double newN = A - Z - stopAbsorption.NNeutrons();
   G4double newA = newZ + newN;
   G4double pNucleus = (stopAbsorption.RecoilMomentum()).mag();
-  G4DynamicParticleVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
+  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
 
   G4int nAbsorptionProducts = 0;
   if (absorptionProducts != 0)     
@@ -155,8 +155,18 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   for (i = 0; i<nAbsorptionProducts; i++)
     { aParticleChange.AddSecondary(absorptionProducts->at(i)); }
 
-  for (i = 0; i<nFragmentationProducts; i++)
-    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
+//  for (i = 0; i<nFragmentationProducts; i++)
+//    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
+  for(i=0; i<nFragmentationProducts; i++)
+  {
+    G4DynamicParticle * aNew = 
+       new G4DynamicParticle(fragmentationProducts->at(i)->GetDefinition(),
+                             fragmentationProducts->at(i)->GetMomentum());
+    G4double newTime = aParticleChange.GetGlobalTime(fragmentationProducts->at(i)->GetFormationTime());
+    aParticleChange.AddSecondary(aNew, newTime);
+    delete fragmentationProducts->at(i);
+  }
+
   if (fragmentationProducts != 0)   delete fragmentationProducts;   
 
   if (_indexDeexcitation == 1) aParticleChange.SetLocalEnergyDeposit(excitation);

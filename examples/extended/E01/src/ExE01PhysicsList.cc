@@ -1,4 +1,4 @@
-// $Id: ExE01PhysicsList.cc,v 1.1 1998/10/14 15:20:10 allison Exp $
+// $Id: ExE01PhysicsList.cc,v 1.2 1999/04/17 04:06:46 kurasige Exp $
 
 #include "globals.hh"
 #include "ExE01PhysicsList.hh"
@@ -108,8 +108,9 @@ void ExE01PhysicsList::ConstructEM()
   }
 }
 
-void ExE01PhysicsList::SetCuts(G4double cut)
+void ExE01PhysicsList::SetCuts()
 {
+  G4double cut = defaultCutValue;
   if (verboseLevel >0){
     G4cout << "ExE01PhysicsList::SetCuts:";
     G4cout << "CutLength : " << cut/mm << " (mm)" << endl;

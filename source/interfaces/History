@@ -1,4 +1,4 @@
-$Id: History,v 2.20 1998/12/09 08:06:43 yhajime Exp $
+$Id: History,v 1.9 1999/05/31 20:48:28 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+head 31 Mai 1999  Guy Barrand
+- G4VInteractorManager::SecondaryLoop : add a message to indicate
+  that we enter a "viewer" secondary X event loop and that someone
+  add to "Escape" it from the viewer to continue.
+
+interfaces-01-00-03  19th April 1999  John Allison
+- Protected G4VBasicShell.cc with if( tempPath.length()>0 ).
+
+interfaces-01-00-02  18th April 1999  John Allison
+- Tagged.
+
+head 11th Mai 1999  Guy Barrand
+1) G4UIXm : Linux, correct geometry management of the menubar.
+
+head 06th Mai 1999  Guy Barrand
+1) G4Win32, G4UIWin32 : modifications to compile with Visual-6.0.
+
+head 16th April 1999  Guy Barrand
+1) G4VBasicShell, G4UIXm, G4UIWin32 : command completion.
+2) G4InteractorMessenger, G4VInteractorManager : code polishement.
+
+interfaces-01-00-01  15th April 1999  Hajime Yoshida/Masayasu Nagamatu
+1) some code polishment after the messages by CodeWarriers (Guy)
+2) Help functions in G4VBasicShell and related rearrangement of
+        G4UIterminal etc.. (Guy)
+3) removal of ifdef for GNU_GCC in G4UIGAG. (Hajime)
+
 interfaces-00-03-07 9th December 1998 Hajime Yoshida/Masayasu Nagamatu
 - minor improvements in Help of G4UIterminal.cc
 - G4UIGAG's Help in terminal mode is now equivalent to G4UIterminal.cc

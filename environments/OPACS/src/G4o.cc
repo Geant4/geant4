@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4o.cc,v 2.3 1998/09/16 12:08:41 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4o.cc,v 1.3 1999/05/18 10:56:53 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*
 #define DEBUG
@@ -15,20 +15,21 @@
 #include <stdio.h>
 #include <string.h>
 
-/*GEANT4*/
+// Geant4 :
 #include <G4VPhysicalVolume.hh>
 #include <G4LogicalVolume.hh>
 #include <G4PhysicalVolumeStore.hh>
 #include <G4PhysicalVolumeModel.hh>
 #include <G4ModelingParameters.hh>
 #include <G4RunManager.hh>
+#include <G4Trajectory.hh>
 
-/*For G4UI.*/
+// For G4UI :
 #include <G4UImanager.hh>
 //#include <G4ParticleTblMessenger.hh>
 #include <G4ParticleTable.hh>
 
-/*Co*/
+// Co :
 #include <CPrinter.h>
 #include <CMemory.h>
 #include <CString.h>
@@ -39,11 +40,11 @@
 #include <OShell.h>
 #include <OProcess.h>
 
-/*Go*/
+// Go :
 #include <Go.h>
 #include <GoTypes.h>
 
-/*G4o*/
+// G4o :
 #include <G4oScene.hh>
 #include <G4oDrawer.hh>
 #include <G4o.h>
@@ -215,7 +216,8 @@ ONode RepresentPhysicalVolume (
   Class.g4oScene->SetNodeName (string);
   CStringDelete               (string);
 
-  G4ModelingParameters mParams (G4ModelingParameters::wireframe,
+  G4ModelingParameters mParams (0,
+				G4ModelingParameters::wireframe,
 				true,  // Global culling.
 				true,  // Cull invisible volumes.
 				false, // Density culling.
@@ -281,7 +283,8 @@ int GetTrajectoryProperty (
   G4TrajectoryContainer* trajectoryContainer = event->GetTrajectoryContainer();
   if(trajectoryContainer==NULL) return 0;
 
-  G4Trajectory* trajectory = (*trajectoryContainer)[(size_t)a_obj-1];
+  G4Trajectory* trajectory = 
+    (G4Trajectory*)((*trajectoryContainer)[(size_t)a_obj-1]);
 
   if(strcmp(name,"identifier")==0) {
     *((Ulong*)a_addr) = (Ulong)a_obj;
@@ -323,7 +326,8 @@ ONode RepresentTrajectory (
   ONode node = ONodeCreateF (11+64,"Trajectory/%lu",a_obj);
 
   drawer->SetNode (node);
-  G4Trajectory* trajectory = (*trajectoryContainer)[(size_t)a_obj-1];
+  G4Trajectory* trajectory = 
+    (G4Trajectory*)((*trajectoryContainer)[(size_t)a_obj-1]);
 
   trajectory->DrawTrajectory(0); 
   

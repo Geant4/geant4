@@ -1,7 +1,107 @@
-$Id: History,v 2.9 1998/11/17 17:47:40 lockman Exp $
+$Id: History,v 1.18 1999/05/28 23:34:49 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-01-00-06 28-May-1999 Lockman
+- ~G3Mat,MedTable: do not destroy G4Material Objects in list. Do a clear()
+  of the list, not clearAndDestroy, then delete the list.
+- ~G3Rot,Vol,Part,EleTable: standardize printout, fix deallocation
+- G3VolTable: changed PutVTE to take a VolTableEntry*; added ListVTE method
+- G3toG4MakeSolid: added G4bool* OKAxis
+- VolTableEntry: added _OKAxis[3] to store which axes may be divided;
+  added AddMother(VolTableEntry*), GetMother(), _Mother.
+- G3toG4MakeSolid: set OKAxis
+- G3toG4EventAction: BeginOfEventAction, EndOfEventAction signature mods
+- G3toG4RunAction: BeginOfRunAction, EndOfRunAction signature mods
+- G3toG4PhysicsList: SetCuts signature mod
+- G3toG4PrimaryGeneratorAction: randomize paricle direction
+
+27-May-1999 Cosmo
+- Fixed circular dependencies in G3Pos - VolTableEntry - G3VolTable.
+- Added default empty constructor to G3Vol.
+- Removed cleantest from "clean" target in GNUmakefile.
+
+g3tog4-01-00-05 Lockman
+- G3G4Interface: G4Strings passed by reference in G4gspos, G4gsposp
+- G3PartTable: now uses RWTPtrHashDictionary instead of RWGDList
+- G3RotTable: method name "get" changed to "Get". Space for unit rotation
+  matrix at element 0 in RWTPtrOrderedVector. This matrix is instantiated
+  in G4BuildGeom prior to call list read.
+- G3VolTable: many new methods to handle VolTableEntry and G3Pos objects.
+  removed GetPV method.
+- G3toG4.hh: removed G3NegVolPars method
+- G3DetTable: commented out some G4cerr's
+- G3EleTable: some minor internal changes
+- G3PartTable: convert to use RWTPtrHashDictionary
+- Added G3Pos class
+- Added G3toG4BuildTree which calls G4LogicalVolume and G4PVPlacement based on
+  G3VolTable
+- G4BuildGeom: invokes G3toG4BuildTree to build VolTableEntry tree
+- G4ggclos: invokes G3Vol.SetFirstVTE() to find top-level VolTableEntry
+- G4makevol: Broke off creation of solids into G3toG4MakeSolid
+- G4gsatt: currently a stub
+- G4gsdvn: currently a stub
+- G4gsdvn2 currently a stub
+- G4gsdvt: currently a stub
+- G4gsdvt2 currently a stub
+- G4gsmixt:added some messages to warn about faulty mixt weights
+- G4gspos: removed G4PVPlacement calls (now done in G3toG4BuildTree)
+- G4gsposp:removed some unneeded headers
+- G4makevol: broke off solids stuff into G3toG4BuildTree
+- G4gsvolu: G4makevol(...) now returns void
+- G4VolTableEntry: now is a node tree
+- clparse: remove some commented out lines
+- cltog4:  minor changes
+- G3toG4.hh make SSVT the mother. Its also not the first volume
+- Added testmodel.dat to test divided/deferred volumes.
+
+17-May-1999 Lockman
+- converted G3PartTable to RWTPtrhaswhDictionary
+- reinstituted VolTableEntry and G3VolTable RWTPtrHashDictionary. Creation of
+  logical volume now done in G3VolTable::PutLV
+- G4makevol.cc: added interface to G4Hype
+
+g3tog4-01-00-04 11-May-1999 Lockman
+- G3VolTable: greatly simplified. No longer keep a private logical/physical
+  volume store. Use G4LogicalVolumeStore and G4PhysicalVolumeStore instead.
+  Still keep track of the G3toG4 logical/physical mother.
+- G3toG4RotationMatrix.hh: replace forward declaration of G4RotationMatrix
+  with header file
+
+g3tog4-01-00-03  6-May-1999 Lockman
+- G3MatTable, G3RotTable, G3MedTable: updated to use RWTPtrOrderedVector 
+  instead of RWTPtrHashDictionary
+
+g3tog4-01-00-02  5-May-1999 Lockman
+- temporarily comment out G4gsdv* code
+- G4gstmed: now just store a link between tracking medium number and assoicated
+  G4Material pointer
+- replaced rw/gdlist with RWTPtrHashDictionary
+- replaced iostream.h with G4ios.hh everywhere
+- added G3EleTable to manage elements in G3toG4
+- tog4.F, g3routines.F: generate gsmixt instructions in call list
+- clGeometry.cc: cleaned up and added some default commands
+- added G3toG4EventAction and EventActionMessenger classes to draw tracks
+- GNUmakefile: clean now cleans g3tog4 and all subdirectories      / 24-Apr-1999 Lockman
+- GNUmakefile: cleanf: $(RM) now runs quietly
+- GNUmakefile: re-enabled libF target
+- README: updated instructions on how to configure environment and make
+- G4BuildGeom.cc: replace checkLogVol with checkVol which prints out logical
+  volumes and their physical daughters
+- G4makevol: use G4LogicalVolume(solid, material, name) constructor.
+- test/GNUmakefile: define INCFLAGS
+- test/README: modified and shortened
+- test/src/G3toG4DetectorConstruction.cc: add SimpleConstruct() method 
+  for testing; set visibility of daughters, mother.
+- test/include/G3toG4DetectorMocnstruction.hh: added private _lv, _pv
+- test/src/G3toG4RunAction.cc: set tracking/verbose 1, run/verbose 1
+
+g3tog4-01-00-01 20-Feb-1999 Bill Lockman
+- G4makevol.cc: use G4Polycone, G4Polyhedra classes instead of BREP equivalents
+- clGeometry.cc: protect vis code; removed templates stuff
+- cltog4.cc: removed templates stuff
+
 g3tog4-00-03-04 12-Nov-1998 Bill Lockman
 - G3medtable: dynamically instantiate a G4FieldManager(field*) object and
   pass it to G4LogicalVolume by pointer.

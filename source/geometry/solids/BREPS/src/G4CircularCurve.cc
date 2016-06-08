@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CircularCurve.cc,v 2.4 1998/10/20 16:33:43 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4CircularCurve.cc,v 1.1 1999/01/07 16:07:41 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4CircularCurve.hh"

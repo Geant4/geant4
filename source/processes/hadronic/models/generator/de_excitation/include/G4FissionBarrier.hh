@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FissionBarrier.hh,v 1.1 1998/10/15 07:52:46 larazb Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FissionBarrier.hh,v 1.1 1999/01/07 16:11:43 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmaZero.hh,v 2.3 1998/09/24 06:48:54 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SigmaZero.hh,v 1.2 1999/04/13 08:28:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,12 +56,14 @@ class G4SigmaZero : public G4VBarion
    );
 
  public:
+   virtual ~G4SigmaZero(){}
+
    static G4SigmaZero* SigmaZeroDefinition();
    static G4SigmaZero* SigmaZero(){return &theSigmaZero;}
    static G4double GetCuts() {return theSigmaZeroLengthCut;}   
    static G4double* GetCutsInEnergy() {return theSigmaZeroKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

@@ -3,11 +3,20 @@
 //
 // Implemenation of the face representing one segmented side of a Polyhedra
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4PolyhedraSide.hh"
 #include "G4IntersectingCone.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
+#include "G4SolidExtentList.hh"
 
 //
 // Constructor
@@ -22,7 +31,8 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 				  const G4int theNumSide, 
 				  const G4double thePhiStart, 
 				  const G4double thePhiTotal, 
-				  const G4bool thePhiIsOpen )
+				  const G4bool thePhiIsOpen,
+				  const G4bool isAllBehind )
 {
 	//
 	// Record values
@@ -32,20 +42,16 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 	
 	G4double phiTotal;
 	
+	//
+	// Set phi to our convention
+	//
+	startPhi = thePhiStart;
+	while (startPhi < 0.0) startPhi += 2.0*M_PI;
+	
 	phiIsOpen = thePhiIsOpen;
-	if (phiIsOpen) {
-		phiTotal = thePhiTotal;
-		startPhi = thePhiStart;
-
-		//
-		// Set phi values to our conventions
-		//
-		while (startPhi < 0.0) startPhi += 2.0*M_PI;
-	}
-	else {
-		phiTotal = 2*M_PI;
-		startPhi = 0;
-	}
+	phiTotal = (phiIsOpen) ? thePhiTotal : 2*M_PI;
+	
+	allBehind = isAllBehind;
 		
 	//
 	// Make our intersecting cone
@@ -57,6 +63,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 	//
 	numSide = theNumSide;
 	deltaPhi = phiTotal/theNumSide;
+	endPhi = startPhi+phiTotal;
 	
 	vecs = new G4PolyhedraSideVec[numSide];
 	
@@ -179,82 +186,53 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 		edge->normal = eNorm.unit();	
 		
 		//
-		// Vertex normal is average of norms of attached edges 
+		// Vertex normal is average of norms of adjacent surfaces (all four)
+		// However, vec->edgeNorm is unit vector in some direction
+		// as the sum of normals of adjacent PolyhedraSide with vec.
+		// The normalization used for this vector should be the same
+		// for vec and prev.
 		//
-		eNorm = edge->normal + vec->edgeNorm[0] + prev->edgeNorm[0];
+		eNorm = vec->edgeNorm[0] + prev->edgeNorm[0];
 		edge->cornNorm[0] = eNorm.unit();
 	
-		eNorm = edge->normal + vec->edgeNorm[1] + prev->edgeNorm[1];
+		eNorm = vec->edgeNorm[1] + prev->edgeNorm[1];
 		edge->cornNorm[1] = eNorm.unit();
 	} while( prev=vec, ++vec < vecs + numSide );
 	
 	if (phiIsOpen) {
 		G4double rFact = cos(0.5*deltaPhi);
 		//
-		// If phi is open, we need to patch up the first and last edges
+		// If phi is open, we need to patch up normals of the
+		// first and last edges and their corresponding
+		// vertices.
 		//
-		G4double phi1 = startPhi - 0.5*M_PI;
-		G4ThreeVector phiNorm( cos(phi1), sin(phi1), 0 );
-		
+		// We use vectors that are in the plane of the
+		// face. This should be safe.
+		//
 		vec = vecs;
 		
-		//
-		// Edge normal is average of vec->normal and the normal
-		// of the face closing the polyhedra in phi
-		//
-		G4ThreeVector eNorm = vec->normal + phiNorm;
-		vec->edges[0]->normal = eNorm.unit();
+		G4ThreeVector normvec = vec->edges[0]->corner[0] - vec->edges[0]->corner[1];
+		normvec = normvec.cross(vec->normal);
+		if (normvec.dot(vec->surfPhi) > 0) normvec = -normvec;
+
+		vec->edges[0]->normal = normvec.unit();
+		
+		vec->edges[0]->cornNorm[0] = (vec->edges[0]->corner[0] - vec->center).unit();
+		vec->edges[0]->cornNorm[1] = (vec->edges[0]->corner[1] - vec->center).unit();
 		
 		//
-		// We need the edge normals (like above) of the adjacent
-		// G4PolyhedraSides.
+		// Repeat for ending phi
 		//
-		G4double dr = r[0]-prevRZ->r, dz = z[0]-prevRZ->z;
-		phi1 = startPhi + 0.5*deltaPhi;
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-		
-		//
-		// Average three line normals for the vertex normal
-		//
-		eNorm = eNorm.unit() + vec->edges[0]->normal + vec->edgeNorm[0];
-		vec->edges[0]->cornNorm[0] = eNorm.unit();
-		
-		//
-		// Repeat for edgeNorm[1]
-		//
-		dr = nextRZ->r-r[1], dz = nextRZ->z-z[1];
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-		eNorm = eNorm.unit() + vec->edges[0]->normal + vec->edgeNorm[1];
-		vec->edges[0]->cornNorm[1] = eNorm.unit();
-		
-		//
-		// That was bad...
-		//
-		// But, now repeat for ending phi (edge[1])
-		//
-		phi1 = startPhi + phiTotal + 0.5*M_PI;
-		phiNorm = G4ThreeVector( cos(phi1), sin(phi1), 0 );
-		
 		vec = vecs + numSide - 1;
-
-		eNorm = vec->normal + phiNorm;
-		vec->edges[1]->normal = eNorm.unit();
-
-		dr = r[0]-prevRZ->r, dz = z[0]-prevRZ->z;
-		phi1 = startPhi + phiTotal - 0.5*deltaPhi;
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-
-		eNorm = eNorm.unit() + vec->edges[1]->normal + vec->edgeNorm[0];
-		vec->edges[1]->cornNorm[0] = eNorm.unit();
-
-		dr = nextRZ->r-r[1], dz = nextRZ->z-z[1];
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-		eNorm = eNorm.unit() + vec->edges[1]->normal + vec->edgeNorm[1];
-		vec->edges[1]->cornNorm[1] = eNorm.unit();
 		
-		//
-		// Phew! I need a beer!
-		//
+		normvec = vec->edges[1]->corner[0] - vec->edges[1]->corner[1];
+		normvec = normvec.cross(vec->normal);
+		if (normvec.dot(vec->surfPhi) < 0) normvec = -normvec;
+
+		vec->edges[1]->normal = normvec.unit();
+		
+		vec->edges[1]->cornNorm[0] = (vec->edges[1]->corner[0] - vec->center).unit();
+		vec->edges[1]->cornNorm[1] = (vec->edges[1]->corner[1] - vec->center).unit();
 	}
 	
 	//
@@ -278,6 +256,85 @@ G4PolyhedraSide::~G4PolyhedraSide()
 
 
 //
+// Copy constructor
+//
+G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4PolyhedraSide *G4PolyhedraSide::operator=( const G4PolyhedraSide &source )
+{
+	if (this == &source) return this;
+	
+	delete cone;
+	delete [] vecs;
+	delete [] edges;
+	
+	CopyStuff( source );
+
+	return this;
+}
+
+
+//
+// CopyStuff
+//
+void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
+{
+	//
+	// The simple stuff
+	//
+	numSide		= source.numSide;
+	r[0]		= source.r[0];
+	r[1]		= source.r[1];
+	z[0]		= source.z[0];
+	z[1]		= source.z[1];
+	startPhi	= source.startPhi;
+	deltaPhi	= source.deltaPhi;
+	endPhi		= source.endPhi;
+	phiIsOpen	= source.phiIsOpen;
+	allBehind	= source.allBehind;
+	
+	lenRZ		= source.lenRZ;
+	lenPhi[0]	= source.lenPhi[0];
+	lenPhi[1]	= source.lenPhi[1];
+	edgeNorm	= source.edgeNorm;
+	
+	cone = new G4IntersectingCone( *source.cone );
+
+	//
+	// Duplicate edges
+	//
+	G4int	numEdges = phiIsOpen ? numSide+1 : numSide;
+	edges = new G4PolyhedraSideEdge[numEdges];
+	
+	G4PolyhedraSideEdge *edge = edges,
+			    *sourceEdge = source.edges;
+	do {
+		*edge = *sourceEdge;
+	} while( ++sourceEdge, ++edge < edges + numEdges);
+
+	//
+	// Duplicate vecs
+	//
+	vecs = new G4PolyhedraSideVec[numSide];
+	
+	G4PolyhedraSideVec *vec = vecs,
+			   *sourceVec = source.vecs;
+	do {
+		*vec = *sourceVec;
+		vec->edges[0] = edges + (sourceVec->edges[0] - source.edges);
+		vec->edges[1] = edges + (sourceVec->edges[1] - source.edges);
+	} while( ++sourceVec, ++vec < vecs + numSide );
+}
+	
+
+//
 // Intersect
 //
 // Decide if a line intersects the face.
@@ -287,7 +344,7 @@ G4PolyhedraSide::~G4PolyhedraSide()
 //	v		= (in) direction of line segment (assumed a unit vector)
 //	A, B		= (in) 2d transform variables (see note top of file)
 //	normSign	= (in) desired sign for dot product with normal (see below)
-//	surfTolerance	= (in) minimum distance from the surface (can be < 0, see below)
+//	surfTolerance	= (in) minimum distance from the surface
 //	vecs		= (in) Vector set array
 //	distance	= (out) distance to surface furfilling all requirements
 //	distFromSurface = (out) distance from the surface
@@ -306,67 +363,121 @@ G4PolyhedraSide::~G4PolyhedraSide()
 //      we are outside and want to go in, normSign should be set to -1.0.
 //      Don't set normSign to zero, or you will get no intersections!
 //
-//    * surfTolerance: see notes on argument "surfTolerance" in routine "IntersectSide".
+//    * surfTolerance: see notes on argument "surfTolerance" in routine "IntersectSidePlane".
 //      ----HOWEVER---- We should *not* apply this surface tolerance if the starting
 //      point is not within phi or z of the surface. Specifically, if the starting
 //      point p angle in x/y places it on a separate side from the intersection or
 //      if the starting point p is outside the z bounds of the segment, surfTolerance
-//      must be ignored are we should *always* accept the intersection! 
+//      must be ignored or we should *always* accept the intersection! 
 //      This is simply because the sides do not have infinite extent.
 //      
 //
 G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
 				   const G4bool outgoing, const G4double surfTolerance,
 				   G4double &distance, G4double &distFromSurface,
-				   G4ThreeVector &normal, G4bool &allBehind )
+				   G4ThreeVector &normal, G4bool &isAllBehind )
 {
-	G4int nside, i1, i2, iStart;
 	G4double normSign = outgoing ? +1 : -1;
 	
-	allBehind = true;	// this is always true for this face
+	//
+	// ------------------TO BE IMPLEMENTED---------------------
+	// Testing the intersection of individual phi faces is
+	// pretty straight forward. The simple thing therefore is to
+	// form a loop and check them all in sequence.
+	//
+	// But, I worry about one day someone making
+	// a polygon with a thousands sides. A linear search
+	// would not be ideal in such a case.
+	//
+	// So, it would be nice to be able to quickly decide
+	// which face would be intersected. One can make a very
+	// good guess by using the intersection with a cone.
+	// However, this is only reliable in 99% of the cases.
+	//
+	// My solution: make a decent guess as to the one or
+	// two potential faces might get intersected, and then
+	// test them. If we have the wrong face, use the test
+	// to make a better guess.
+	//
+	// Since we might have two guesses, form a queue of
+	// potential intersecting faces. Keep an array of 
+	// already tested faces to avoid doing one more than
+	// once.
+	//
+	// Result: at worst, an iterative search. On average,
+	// a little more than two tests would be required.
+	//
+	G4ThreeVector q = p + v;
+	
+	G4int face = 0;
+	G4PolyhedraSideVec *vec = vecs;
+	do {
+		//
+		// Correct normal?
+		//
+		G4double dotProd = normSign*v.dot(vec->normal);
+		if (dotProd <= 0) continue;
+	
+		//
+		// Is this face in front of the point along the trajectory?
+		//
+		G4ThreeVector delta = p - vec->center;
+		distFromSurface = -normSign*delta.dot(vec->normal);
+		
+		if (distFromSurface < -surfTolerance) continue;
+		
+		//
+		//                            phi
+		//      c -------- d           ^
+		//      |          |           |
+		//      a -------- b           +---> r/z
+		//
+		//
+		// Do we remain on this particular segment?
+		//
+		G4ThreeVector qc = q - vec->edges[1]->corner[0];
+		G4ThreeVector qd = q - vec->edges[1]->corner[1];
+		
+		if (normSign*qc.cross(qd).dot(v) < 0) continue;
+		
+		G4ThreeVector qa = q - vec->edges[0]->corner[0];
+		G4ThreeVector qb = q - vec->edges[0]->corner[1];
+		
+		if (normSign*qa.cross(qb).dot(v) > 0) continue;
+		
+		//
+		// We found the one and only segment we might be intersecting.
+		// Do we remain within r/z bounds?
+		//
+		
+		if (normSign*qa.cross(qc).dot(v) < 0) return false;
+		if (normSign*qb.cross(qd).dot(v) > 0) return false;
+		
+		//
+		// We allow the face to be slightly behind the trajectory
+		// (surface tolerance) only if the point p is within
+		// the vicinity of the face
+		//
+		if (distFromSurface < 0) {
+			G4ThreeVector ps = p - vec->center; 
+			
+			G4double rz = ps.dot(vec->surfRZ);
+			if (fabs(rz) > lenRZ+surfTolerance) return false; 
 
-	//
-	// Is the starting point outside z bounds?
-	//
-	iStart = (p.z() < cone->ZLo() || p.z() > cone->ZHi()) ? -1 : 0;
-	
-	if (iStart==0) {
-		//
-		// Which phi segment does the starting point p belong to?
-		//
-		iStart = PhiSegment( p.phi() );
-	}
-	
-	//
-	// Check for two possible intersections
-	//
-	nside = LineHitsSegments( p, v, &i1, &i2 );
-	
-	if (nside==0) return false;
-	
-	//
-	// Try the first side first. LineHitsSegments is suppose to return
-	// the nearest intersection first. If this succeeds, we are done.
-	//
-	if (IntersectSidePlane( p, v, vecs[i1], normSign,
-				(i1 == iStart) ? surfTolerance : 0,
-			        distance, distFromSurface )) {
-		normal = vecs[i1].normal;
-		return true;
-	}
-	
-	if (nside==2) {
-		//
-		// No luck? Well, we have the second side
-		//
-		if (IntersectSidePlane( p, v, vecs[i2], normSign,
-					(i2 == iStart) ? surfTolerance : 0,
-				        distance, distFromSurface )) {
-			normal = vecs[i2].normal;
-			return true;
+			G4double pp = ps.dot(vec->surfPhi);
+			if (fabs(pp) > lenPhi[0] + lenPhi[1]*rz + surfTolerance) return false;
 		}
-	}
-	
+			
+
+		//
+		// Intersection found. Return answer.
+		//
+		distance = distFromSurface/dotProd;
+		normal = vec->normal;
+		isAllBehind = allBehind;
+		return true;
+	} while( ++vec, ++face < numSide );
+
 	//
 	// Oh well. Better luck next time.
 	//
@@ -386,7 +497,7 @@ G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, const G4bool outgoin
 	G4ThreeVector pdotc = p - vecs[iPhi].center;
 	G4double normDist = pdotc.dot(vecs[iPhi].normal);
 	
-	if (normSign*normDist > 0) {
+	if (normSign*normDist > -0.5*kCarTolerance) {
 		return DistanceAway( p, vecs[iPhi], &normDist );
 	}
 
@@ -448,7 +559,7 @@ G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector &p,  G4double *bestDi
 //
 G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
 {
-	if (axis.perp2() < 1.0/kInfinity) {
+	if (axis.perp2() < DBL_MIN) {
 		//
 		// Special case
 		//
@@ -505,10 +616,8 @@ G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
 void G4PolyhedraSide::CalculateExtent( const EAxis axis, 
 				       const G4VoxelLimits &voxelLimit,
 				       const G4AffineTransform &transform,
-				       G4double &min, G4double &max        )
+				       G4SolidExtentList &extentList        )
 {
-	G4ClippablePolygon polygon;
-	
 	//
 	// Loop over all sides
 	//
@@ -518,7 +627,7 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 		// Fill our polygon with the four corners of
 		// this side, after the specified transformation
 		//
-		polygon.ClearAllVertices();
+		G4ClippablePolygon polygon;
 		
 		polygon.AddVertexInOrder( transform.TransformPoint( vec->edges[0]->corner[0] ) );
 		polygon.AddVertexInOrder( transform.TransformPoint( vec->edges[0]->corner[1] ) );
@@ -528,9 +637,17 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 		//
 		// Get extent
 		//	
-		polygon.Clip( voxelLimit );
-		polygon.GetExtent( axis, min, max );
+		if (polygon.PartialClip( voxelLimit, axis )) {
+			//
+			// Get dot product of normal along target axis
+			//
+			polygon.SetNormal( transform.TransformAxis(vec->normal) );
+
+			extentList.AddSurface( polygon );
+                }
 	} while( ++vec < vecs+numSide );
+	
+	return;
 }
 
 
@@ -548,6 +665,21 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 //            = +1.0 normal is unchanged
 //            = -1.0 normal is reversed (now points inward)
 //
+// Arguments:
+//	p		- (in) Point
+//	v		- (in) Direction
+//	vec		- (in) Description record of the side plane
+//	normSign	- (in) Sign (+/- 1) to apply to normal
+//	surfTolerance	- (in) Surface tolerance (generally > 0, see below)
+//	distance	- (out) Distance along v to intersection
+//	distFromSurface - (out) Distance from surface normal
+//
+// Notes:
+// 	surfTolerance	- Used to decide if a point is behind the surface,
+//			  a point is allow to be -surfTolerance behind the
+//			  surface (as measured along the normal), but *only*
+//			  if the point is within the r/z bounds + surfTolerance
+//			  of the segment.
 //
 G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4ThreeVector &v,
 					    const G4PolyhedraSideVec vec,
@@ -570,7 +702,7 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 	G4ThreeVector delta = p - vec.center;
 	distFromSurface = -normSign*delta.dot(vec.normal);
 		
-	if (distFromSurface < surfTolerance) return false;
+	if (distFromSurface < -surfTolerance) return false;
 
 	//
 	// Calculate precise distance to intersection with the side
@@ -595,6 +727,7 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 	//
 	G4ThreeVector ic = p + distance*v - vec.center;
 	G4double atRZ = vec.surfRZ.dot(ic);
+	
 	if (atRZ < 0) {
 		if (r[0]==0) return true;		// Can't miss!
 		
@@ -605,6 +738,10 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 			      qb = q - vec.edges[1]->corner[0];
 		G4ThreeVector qacb = qa.cross(qb);
 		if (normSign*qacb.dot(v) < 0) return false;
+		
+		if (distFromSurface < 0) {
+			if (atRZ < -lenRZ-surfTolerance) return false;
+		}
 	}
 	else if (atRZ > 0) {
 		if (r[1]==0) return true;		// Can't miss!
@@ -616,6 +753,10 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 			      qb = q - vec.edges[1]->corner[1];
 		G4ThreeVector qacb = qa.cross(qb);
 		if (normSign*qacb.dot(v) >= 0) return false;
+		
+		if (distFromSurface < 0) {
+			if (atRZ > lenRZ+surfTolerance) return false;
+		}
 	}
 
 	return true;
@@ -625,7 +766,7 @@ G4bool G4PolyhedraSide::IntersectSidePlane( const G4ThreeVector &p, const G4Thre
 //
 // LineHitsSegments
 //
-// Calculate which phi segments a line intersections in three dimensions.
+// Calculate which phi segments a line intersects in three dimensions.
 // No check is made as to whether the intersections are within the z bounds of
 // the segment.
 //
@@ -638,16 +779,19 @@ G4int G4PolyhedraSide::LineHitsSegments( const G4ThreeVector &p, const G4ThreeVe
 	//
 	G4int n = cone->LineHitsCone( p, v, &s1, &s2 );
 	
-	//
-	// Check intersections
-	//
 	if (n==0) return 0;
 	
+	//
+	// Try first intersection.
+	//
 	*i1 = PhiSegment( atan2( p.y() + s1*v.y(), p.x() + s1*v.x() ) );
 	if (n==1) {
 		return (*i1 < 0) ? 0 : 1;
 	}
 	
+	//
+	// Try second intersection
+	//
 	*i2 = PhiSegment( atan2( p.y() + s2*v.y(), p.x() + s2*v.x() ) );
 	if (*i1 == *i2) return 0;
 	
@@ -681,7 +825,7 @@ G4int G4PolyhedraSide::ClosestPhiSegment( const G4double phi0 )
 	G4double phi = phi0;
 	
 	while( phi < startPhi ) phi += 2*M_PI;
-	G4double d1 = phi-startPhi-deltaPhi;
+	G4double d1 = phi-endPhi;
 
 	while( phi > startPhi ) phi -= 2*M_PI;
 	G4double d2 = startPhi-phi;
@@ -725,8 +869,6 @@ G4int G4PolyhedraSide::PhiSegment( const G4double phi0 )
 }
 
 
-
-
 //
 // DistanceToOneSide
 //
@@ -737,7 +879,7 @@ G4int G4PolyhedraSide::PhiSegment( const G4double phi0 )
 // Return value = total distance from the side
 //
 G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector &p,
-					     const G4PolyhedraSideVec vec,
+					     const G4PolyhedraSideVec &vec,
 					     G4double *normDist )
 {
 	G4ThreeVector pc = p - vec.center;
@@ -761,7 +903,7 @@ G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector &p,
 // and updates normDist appropriate depending on edge normals.
 //
 G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
-					const G4PolyhedraSideVec vec,
+					const G4PolyhedraSideVec &vec,
 					G4double *normDist )
 {
 	G4double distOut2;
@@ -796,15 +938,14 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 		//
 		// Below in RZ
 		//
-		*normDist = pc.dot(vec.edgeNorm[0]);
-		
 		if (pcDotPhi < -lenPhiZ) {
 			//
 			// ...and below in phi. Find distance to point (A)
 			//
 			G4double distOutPhi = pcDotPhi+lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[0]->cornNorm[0]);
+			G4ThreeVector pa = p - vec.edges[0]->corner[0];
+			*normDist = pa.dot(vec.edges[0]->cornNorm[0]);
 		}
 		else if (pcDotPhi > lenPhiZ) {
 			//
@@ -812,14 +953,16 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOutPhi = pcDotPhi-lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[1]->cornNorm[0]);
+			G4ThreeVector pb = p - vec.edges[1]->corner[0];
+			*normDist = pb.dot(vec.edges[1]->cornNorm[0]);
 		}
 		else {
 			//
 			// ...and inside in phi. Find distance to line (C)
 			//
+			G4ThreeVector pa = p - vec.edges[0]->corner[0];
 			distOut2 = distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edgeNorm[0]);
+			*normDist = pa.dot(vec.edgeNorm[0]);
 		}
 	}
 	else if (pcDotRZ > lenRZ) {
@@ -834,7 +977,8 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOutPhi = pcDotPhi+lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[0]->cornNorm[1]);
+			G4ThreeVector pd = p - vec.edges[0]->corner[1];
+			*normDist = pd.dot(vec.edges[0]->cornNorm[1]);
 		}
 		else if (pcDotPhi > lenPhiZ) {
 			//
@@ -842,14 +986,16 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOutPhi = pcDotPhi-lenPhiZ;
 			distOut2 = distOutPhi*distOutPhi + distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edges[1]->cornNorm[1]);
+			G4ThreeVector pe = p - vec.edges[1]->corner[1];
+			*normDist = pe.dot(vec.edges[1]->cornNorm[1]);
 		}
 		else {
 			//
 			// ...and inside in phi. Find distance to line (F)
 			//
 			distOut2 = distOutZ*distOutZ;
-			*normDist = pc.dot(vec.edgeNorm[1]);
+			G4ThreeVector pd = p - vec.edges[0]->corner[1];
+			*normDist = pd.dot(vec.edgeNorm[1]);
 		}
 	}
 	else {
@@ -863,7 +1009,8 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOut = edgeNorm*(pcDotPhi+lenPhiZ);
 			distOut2 = distOut*distOut;
-			*normDist = pc.dot(vec.edges[0]->normal);
+			G4ThreeVector pd = p - vec.edges[0]->corner[1];
+			*normDist = pd.dot(vec.edges[0]->normal);
 		}
 		else if (pcDotPhi > lenPhiZ) {
 			//
@@ -871,7 +1018,8 @@ G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
 			//
 			G4double distOut = edgeNorm*(pcDotPhi-lenPhiZ);
 			distOut2 = distOut*distOut;
-			*normDist = pc.dot(vec.edges[1]->normal);
+			G4ThreeVector pe = p - vec.edges[1]->corner[1];
+			*normDist = pe.dot(vec.edges[1]->normal);
 		}
 		else {
 			//

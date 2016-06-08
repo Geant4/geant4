@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveHHScatterer.hh,v 1.1 1998/11/05 16:31:44 gunter Exp $
+// $Id: G4DiffractiveHHScatterer.hh,v 1.1 1999/01/07 16:12:00 gunter Exp $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1

@@ -11,14 +11,13 @@ class ExE02RunAction : public G4UserRunAction
 {
   public:
     ExE02RunAction();
-    ~ExE02RunAction();
+    virtual ~ExE02RunAction();
 
   public:
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 
   private:
-    G4int runIDcounter;
 };
 
 #endif

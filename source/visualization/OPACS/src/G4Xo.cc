@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xo.cc,v 2.2 1998/11/06 13:42:10 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Xo.cc,v 1.3 1999/01/11 00:47:34 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -24,8 +24,8 @@
 #include <XWidget.h>
 //G4
 #include "G4Xt.hh"
-#include "G4XoView.hh"
-#include "G4GoScene.hh"
+#include "G4XoViewer.hh"
+#include "G4GoSceneHandler.hh"
 //This
 #include "G4Xo.hh"
 
@@ -63,25 +63,25 @@ G4VInteractorManager* G4Xo::GetInteractorManager (
   return interactorManager;
 }
 /***************************************************************************/
-G4VScene* G4Xo::CreateScene (
+G4VSceneHandler* G4Xo::CreateSceneHandler (
  const G4String& name
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4GoScene* pScene = new G4GoScene (*this, name);
+  G4GoSceneHandler* pScene = new G4GoSceneHandler (*this, name);
   return     pScene;
 }
 /***************************************************************************/
-G4VView* G4Xo::CreateView (
- G4VScene& scene,
+G4VViewer* G4Xo::CreateViewer (
+ G4VSceneHandler& scene,
  const G4String& name
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4GoScene* pScene = (G4GoScene*)&scene;
-  G4VView*   pView  = new G4XoView  (*pScene, name);
+  G4GoSceneHandler* pScene = (G4GoSceneHandler*)&scene;
+  G4VViewer*   pView  = new G4XoViewer  (*pScene, name);
   return     pView;
 }
 

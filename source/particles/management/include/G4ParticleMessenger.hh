@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleMessenger.hh,v 2.3 1998/11/25 13:58:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleMessenger.hh,v 1.2 1999/04/13 07:58:31 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //---------------------------------------------------------------
@@ -69,7 +69,7 @@ class G4UIcmdWithAnInteger;
 class G4ParticleMessenger: public G4UImessenger
 {
   public:
-    G4ParticleMessenger(G4ParticleTable* pTable = NULL);
+    G4ParticleMessenger(G4ParticleTable* pTable = 0);
     virtual ~G4ParticleMessenger();
 
     void SetNewValue(G4UIcommand * command,G4String newValues);

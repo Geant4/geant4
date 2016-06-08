@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaConversion.cc,v 2.9 1998/11/13 13:41:56 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GammaConversion.cc,v 1.2 1999/03/04 16:31:24 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -404,7 +404,7 @@ G4Element* G4GammaConversion::SelectRandomAtom(const G4DynamicParticle* aDynamic
 
 void G4GammaConversion::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
+  G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 1.5 MeV to 100 GeV for all Z. \n";
            comments += "        e+e- energies according Bethe-Heitler";
                      

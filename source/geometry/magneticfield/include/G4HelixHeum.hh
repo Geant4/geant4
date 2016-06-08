@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixHeum.hh,v 2.2 1998/11/09 14:09:25 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HelixHeum.hh,v 1.1 1999/01/07 16:07:03 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // W. Wander <wwc@mit.edu> 03/11/98

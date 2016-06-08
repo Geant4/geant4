@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.2 1998/07/05 12:40:59 allison Exp $
+# $Id: GNUmakefile,v 1.11 1999/06/24 10:49:47 johna Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -20,45 +20,83 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
+G4BINDIR := $(G4BIN)/$(G4SYSTEM)
+G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
+G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
+unique := $(shell echo $$$$)
 
-.PHONY: all glob global vis clean_libs clean clean_all
+.PHONY: all glob global libmap clean_libs clean clean_all
 
 all:
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+	$(MAKE) libmap
 
 glob global:
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) global); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
 
-# Following vis target is obsolete and should be removed
-#
-vis:
-	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) global); done
-	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
-	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+libmap: $(G4LIBDIR)/liblist
+	@echo "WARNING: Making a library map of granular libraries."
+	@echo "         This is a list of libraries in order of use, and for"
+	@echo "         each library a list of other libraries used."
+	@echo "         To do this is needs a complete set of dependency"
+	@echo "         files, e.g., after gmake in the source/ directory."
+	@echo "Searching $(G4INSTALL)/source"
+	@echo '  for GNUmakefiles containing "name" and sorting...'
+	@find $(G4INSTALL)/source \
+	  -name GNUmakefile -exec $(GREP) -l 'name :=' {} \; \
+	  | sort \
+	  > /tmp/G4_all_lib_makefiles.$(unique);
+	@echo "Weeding out global level GNUmakefiles and non-libraries..."
+	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
+	do \
+	  $(GREP) -q SUBDIR $$i || \
+	  $(GREP) -q G4hepgeometry $$i || \
+	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
+	done
+	@echo "Making libname.map starter file..."
+	@touch /tmp/G4libname.map.starter.$(unique);
+	@for i in `cat /tmp/G4_granlib_makefiles.$(unique)`; \
+	do \
+	  $(GREP) 'name :=' $$i | cut -d \  -f 3 \
+	  >> /tmp/G4libname.map.starter.$(unique); \
+	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
+	done
+	@echo "Making libname.map..."
+	@rm -f $(G4LIBDIR)/libname.map;
+	G4TMP=$(G4TMP); export G4TMP; \
+	  $(G4LIBDIR)/liblist -l -d $(G4TMPDIR) \
+	  < /tmp/G4libname.map.starter.$(unique) \
+	  > $(G4LIBDIR)/libname.map
+	@rm -f /tmp/G4_all_lib_makefiles.$(unique);
+	@rm -f /tmp/G4_granlib_makefiles.$(unique);
+	@rm -f /tmp/G4libname.map.starter.$(unique);
+
+$(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
+	@echo "Compiling liblist.c..."
+	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
+	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
 
 clean_libs:
 	@echo Removing all libraries ...
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE) clean_libs); done
-ifdef CFRONT
-	@rm -rf $(G4TREP)
-endif
+	@rm -rf $(G4LIBDIR)/libname.map
 
 clean:
 	@echo Removing current $(G4SYSTEM) installation ...
-	@rm -rf $(G4TMP)/$(G4SYSTEM)
-	@rm -rf $(G4LIB)/$(G4SYSTEM)
-	@rm -rf $(G4BIN)/$(G4SYSTEM)
+	@rm -rf $(G4TMPDIR)
+	@rm -rf $(G4LIBDIR)
+	@rm -rf $(G4BINDIR)
 ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
 
-# Pay _extremely_ attention to perform the following target !!
+# Pay _extremely_ attention before executing the following target !!
 #
 clean_all:
 	@echo Removing all installations ...
@@ -68,4 +106,3 @@ clean_all:
 	@rm -rf $(G4LIB)
 	@echo Removing $(G4BIN) ...
 	@rm -rf $(G4BIN)
-

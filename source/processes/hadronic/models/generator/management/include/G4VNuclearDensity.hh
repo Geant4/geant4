@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VNuclearDensity.hh,v 1.2 1998/10/30 16:35:21 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VNuclearDensity.hh,v 1.1 1999/01/07 16:12:05 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4VNuclearDensity_h
 #define G4VNuclearDensity_h 1

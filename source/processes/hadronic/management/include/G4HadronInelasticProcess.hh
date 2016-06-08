@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronInelasticProcess.hh,v 2.1 1998/07/13 19:02:45 jwellisc Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HadronInelasticProcess.hh,v 1.1 1999/01/07 16:11:35 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Inelastic Process class
  // The specific particle inelastic processes derive from this class

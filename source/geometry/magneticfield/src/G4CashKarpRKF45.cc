@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 2.7 1998/11/19 20:57:05 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4CashKarpRKF45.cc,v 1.3 1999/03/04 13:52:31 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 //  order method (giving fifth-order accuracy) for the solution
@@ -25,7 +25,7 @@
 // Constructor
 
 G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables): 
-G4MagIntegratorStepper(EqRhs)
+G4MagIntegratorStepper(EqRhs, numberOfVariables)
 {
   fNumberOfVariables = numberOfVariables ;
 
@@ -44,14 +44,14 @@ G4MagIntegratorStepper(EqRhs)
 
 G4CashKarpRKF45::~G4CashKarpRKF45()
 {
-  delete ak2;
-  delete ak3;
-  delete ak4;
-  delete ak5;
-  delete ak6;
-  delete ak7;
-  delete yTemp;
-  delete yIn;
+  delete[] ak2;
+  delete[] ak3;
+  delete[] ak4;
+  delete[] ak5;
+  delete[] ak6;
+  delete[] ak7;
+  delete[] yTemp;
+  delete[] yIn;
 }
 
 //////////////////////////////////////////////////////////////////////

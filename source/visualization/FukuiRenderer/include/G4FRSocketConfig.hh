@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRSocketConfig.hh,v 2.2 1998/12/03 22:07:21 stanaka Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FRSocketConfig.hh,v 1.2 1999/01/09 16:11:42 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 ////////////////////////////////
 ///// G4FRSocketConfig.h   /////

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmPanningCallbacks.hh,v 2.0 1998/07/02 16:45:05 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmPanningCallbacks.hh,v 1.2 1999/01/09 16:22:58 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 
@@ -15,7 +15,7 @@
 #ifndef G4OPENGLXMPANNINGCALLBACKS_HH
 #define G4OPENGLXMPANNINGCALLBACKS_HH
 
-#include "G4OpenGLXmView.hh"
+#include "G4OpenGLXmViewer.hh"
 
 void zoom_callback (Widget w, 
 		    XtPointer clientData, 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Wo.cc,v 2.1 1998/11/06 13:42:08 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Wo.cc,v 1.3 1999/01/11 00:47:32 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -19,8 +19,8 @@
 #include <Wo.h>
 //G4
 #include "G4Xt.hh"
-#include "G4WoView.hh"
-#include "G4GoScene.hh"
+#include "G4WoViewer.hh"
+#include "G4GoSceneHandler.hh"
 //This
 #include "G4Wo.hh"
 
@@ -51,25 +51,25 @@ G4VInteractorManager* G4Wo::GetInteractorManager (
   return interactorManager;
 }
 /***************************************************************************/
-G4VScene* G4Wo::CreateScene (
+G4VSceneHandler* G4Wo::CreateSceneHandler (
  const G4String& name
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4GoScene* pScene = new G4GoScene (*this, name);
+  G4GoSceneHandler* pScene = new G4GoSceneHandler (*this, name);
   return     pScene;
 }
 /***************************************************************************/
-G4VView* G4Wo::CreateView (
- G4VScene& scene,
+G4VViewer* G4Wo::CreateViewer (
+ G4VSceneHandler& scene,
  const G4String& name
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4GoScene* pScene = (G4GoScene*)&scene;
-  G4VView*   pView  = new G4WoView (*pScene, name);
+  G4GoSceneHandler* pScene = (G4GoSceneHandler*)&scene;
+  G4VViewer*   pView  = new G4WoViewer (*pScene, name);
   return     pView;
 }
 

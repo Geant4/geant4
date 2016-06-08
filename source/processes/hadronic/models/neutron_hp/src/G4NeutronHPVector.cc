@@ -42,7 +42,7 @@
     for (ii=0; ii<nEntries/10+1; ii++) // von null weg, weil sonst <10 im argen liegt.
     {
       i = ii;
-      if(theData[10*i].GetX()+eps>e) break;
+      if(10*i==nEntries || theData[10*i].GetX()+eps>e) break;
     }
 //    if(Verbose==1) G4cout << low<<" "<<high<<" "<<i<<" "<<nEntries<<" ";
     if(i!=(nEntries/10))
@@ -220,7 +220,7 @@
       current++ ;
     }
     aBuff[count] = theData[GetVectorLength()-1];
-    delete theData;
+    delete [] theData;
     theData = aBuff;
     nEntries = count;
   }

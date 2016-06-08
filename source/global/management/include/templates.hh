@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: templates.hh,v 2.0 1998/07/02 17:33:15 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: templates.hh,v 1.2 1999/05/19 18:45:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // -*- C++ -*-
@@ -54,10 +54,6 @@ typedef float Float;
 #define DBL_MIN   2.2250738585072014e-308
 #endif
 
-#ifndef FLT_MIN   /* Min decimal value of a float */
-#define FLT_MIN   1.17549435e-38
-#endif
-
 #ifndef DBL_DIG   /* Digits of precision of a double */
 #define DBL_DIG   15
 #endif
@@ -66,16 +62,28 @@ typedef float Float;
 #define DBL_MAX   1.7976931348623157e+308
 #endif
 
+#ifndef DBL_EPSILON
+#define DBL_EPSILON   2.2204460492503131e-16
+#endif
+
+#ifndef FLT_MIN   /* Min decimal value of a float */
+#define FLT_MIN   1.17549435e-38F
+#endif
+
 #ifndef FLT_DIG   /* Digits of precision of a float */
 #define FLT_DIG   6
 #endif
 
 #ifndef FLT_MAX   /* Max decimal value of a float */
-#define FLT_MAX   3.40282347e+38
+#define FLT_MAX   3.40282347e+38F
+#endif
+
+#ifndef FLT_EPSILON
+#define FLT_EPSILON   1.192092896e-07F
 #endif
 
 #ifndef MAXFLOAT   /* Max decimal value of a float */
-#define MAXFLOAT   3.40282347e+38
+#define MAXFLOAT   3.40282347e+38F
 #endif
 
 //---------------------------------

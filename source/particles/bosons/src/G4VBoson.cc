@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBoson.cc,v 2.0 1998/07/02 17:20:54 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VBoson.cc,v 1.1 1999/01/07 16:09:49 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdvt.cc,v 2.2 1998/07/13 16:50:34 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4gsdvt.cc,v 1.3 1999/05/22 06:31:46 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
@@ -35,8 +35,8 @@ void PG4gsdvt(RWCString tokens[])
 }
 
 void G4gsdvt(G4String vname, G4String vmoth, G4double Step, G4int iaxis,
-             G4int numed, G4int ndvmx)
-{
+             G4int numed, G4int ndvmx){
+  /*
   // get the physical volume pointer of the mother from the name
   G4int npv=0;
   G4VPhysicalVolume* mothPV;
@@ -77,12 +77,13 @@ void G4gsdvt(G4String vname, G4String vmoth, G4double Step, G4int iaxis,
     
     // check for negative parameters in volume definition
     G4double *pars = NULL;
-    G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSDVN");
+    //   G4bool negpars = G3NegVolPars(pars,&npar,vname,vmoth,"GSDVN");
+    G4bool negpars = 0;
     G4double width = rangehi - c0;
     G4double offset = (rangehi + c0)/2.;
-
+    
     if ( ! negpars ) {
-        // Generate replicas
+      // Generate replicas
       G4PVReplica *pvol = new G4PVReplica(
          vname, lvol, mothPV, axiscode, ndiv, width, offset);
       G3Vol.PutPV1(&vname, pvol);
@@ -93,4 +94,6 @@ void G4gsdvt(G4String vname, G4String vmoth, G4double Step, G4int iaxis,
       G3Vol.PutPV1(&vname, pvol);
     }
   }
+  */
+  G4cerr << "G4gsdvt currently not supported" << endl;
 }

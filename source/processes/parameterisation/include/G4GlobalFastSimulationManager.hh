@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 2.5 1998/10/13 09:54:33 mora Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.3 1999/04/28 10:06:39 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  
 //---------------------------------------------------------------
@@ -31,6 +31,7 @@
 
 #include <rw/tpordvec.h>
 
+#include "G4VGlobalFastSimulationManager.hh"
 #include "G4FastSimulationManager.hh"
 #include "G4FastSimulationManagerProcess.hh"
 #include "G4StateManager.hh"
@@ -45,7 +46,8 @@ enum  listType {
 
 class G4FastSimulationMessenger;
 
-class G4GlobalFastSimulationManager : public G4VStateDependent
+class G4GlobalFastSimulationManager : public G4VStateDependent, 
+				      public G4VGlobalFastSimulationManager
 {
 public:
   // Global access to the GlobalFastSimulationManager
@@ -74,7 +76,7 @@ public:
   void InActivateFastSimulationModel(const G4String&);
 
   // G4FastSimulationProcess interface
-  G4FlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition *);
+  G4VFlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition *);
 
   // G4StateManager interface
   G4bool Notify(G4ApplicationState requestedState);

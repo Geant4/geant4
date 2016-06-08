@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuEnergyLoss.hh,v 2.1 1998/08/23 11:50:51 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IMuEnergyLoss.hh,v 1.2 1999/04/30 08:04:05 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: 
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "G4IVContinuousDiscreteProcess.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4EnergyLossTables.hh"
 #include "G4VParticleChange.hh"
 #include "globals.hh"
 #include "G4Track.hh"

@@ -37,9 +37,16 @@ inline G4double  G4BSplineCurve::GetPPoint(const G4Point3D& p)
 //////////////////////////////////////////////////////////////////////
 
 #include "G4CurveRayIntersection.hh"
-
+/*
 inline void G4BSplineCurve::IntersectRay2D(const G4Ray& ray,
 					   G4CurveRayIntersection& is)
 {
+}
+*/
+inline G4int G4BSplineCurve::IntersectRay2D(const G4Ray& ray)
+{
+  // L. Broglia
+  G4cout<<"\nWarning ! G4BSplineCurve::IntersectRay2D is empty.";
+  return 0;
 }
 

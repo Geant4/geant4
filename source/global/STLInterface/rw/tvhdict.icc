@@ -1,0 +1,19 @@
+template< class K >
+unsigned Hash<K>::operator()( const K& key ) const {
+    return Hash<K>::fhashfun( key );
+}
+
+template < class K > 		
+void Hash<K>::SetHashFun( unsigned (*hashfun)( const K& ) ) {
+  fhashfun = hashfun;
+}
+
+
+/*
+template < class K, class V >
+pair< hash_map< K, V, Hash<K>,equal_to<K> >::iterator, RWBoolean >
+RWTValHashDictionary<K,V>::insert( const pair<K,V>& x ) {
+  fhm.insert( x );
+}
+*/
+

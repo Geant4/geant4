@@ -4,6 +4,14 @@
 // Implementation of a utility class which calculates the intersection
 // of an arbitrary line with a fixed cone
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #include "G4IntersectingCone.hh"
 
 //
@@ -168,7 +176,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p, const G4ThreeVe
 		//
 		// The radical is roughly zero: check for special, very rare, cases
 		//
-		if ( (fabs(x0*tx + y0*ty) < fabs(1E-6/B)) && (a < 1/kInfinity) ) {
+		if ( (fabs(x0*tx + y0*ty) < fabs(1E-6/B)) && (a < -1/kInfinity) ) {
 			*s1 = -0.5*b/a;
 			return 1;
 		}
@@ -255,7 +263,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p, const G4ThreeVe
 		//
 		// The radical is roughly zero: check for special, very rare, cases
 		//
-		if ( (fabs(x0*tx + y0*ty) < fabs(1E-6*B)) && (a < 1/kInfinity) ) {
+		if ( (fabs(x0*tx + y0*ty) < fabs(1E-6*B)) && (a < -1/kInfinity) ) {
 			*s1 = -0.5*b/a;
 			return 1;
 		}

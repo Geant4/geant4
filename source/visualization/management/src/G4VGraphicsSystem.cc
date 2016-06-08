@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.cc,v 2.1 1998/11/06 13:43:10 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VGraphicsSystem.cc,v 1.4 1999/05/10 14:04:11 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -15,6 +15,8 @@
 #include "G4VGraphicsSystem.hh"
 
 #include "G4VisManager.hh"
+
+G4VGraphicsSystem::~G4VGraphicsSystem () {}
 
 G4VGraphicsSystem::G4VGraphicsSystem (const G4String& name,
 				      Functionality f):
@@ -42,7 +44,7 @@ G4VGraphicsSystem::G4VGraphicsSystem (const G4String& name,
 
 ostream& operator << (ostream& os, const G4VGraphicsSystem& gs) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
-  const G4SceneList& scenes = pVMan -> GetAvailableScenes ();
+  const G4SceneHandlerList& scenes = pVMan -> GetAvailableSceneHandlers ();
   os << "Graphics System: " << gs.GetName ();
   if (gs.GetNickname () != "") {
     os << ", nickname: " << gs.GetNickname ();

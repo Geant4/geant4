@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcmdWith3Vector.hh,v 2.1 1998/07/12 02:59:27 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIcmdWith3Vector.hh,v 1.1 1999/01/07 16:09:21 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 2.3 1998/11/25 16:31:26 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ViewParameters.hh,v 1.3 1999/05/25 09:14:09 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  19th July 1996
@@ -72,8 +72,7 @@ typedef RWTValOrderedVector<G4Plane3D> G4Planes;
 class G4ViewParameters {
 
   friend ostream& operator << (ostream& os, const G4ViewParameters& v);
-  friend G4bool   operator != (const G4ViewParameters& v1,
-			       const G4ViewParameters& v2);
+
 public:
 
   enum DrawingStyle {
@@ -92,6 +91,8 @@ public:
   ~G4ViewParameters ();
 
   // Note: uses default assignment operator and copy constructor.
+
+  G4bool operator != (const G4ViewParameters&) const;
 
   // Get and Is functions.
         DrawingStyle     GetDrawingStyle         () const;

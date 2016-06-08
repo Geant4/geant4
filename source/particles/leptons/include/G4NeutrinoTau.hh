@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutrinoTau.hh,v 2.3 1998/09/24 05:50:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NeutrinoTau.hh,v 1.2 1999/04/13 08:20:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,12 +56,14 @@ class G4NeutrinoTau : public G4VLepton
    );
 
  public:
+   virtual  ~G4NeutrinoTau(){} 
+
    static G4NeutrinoTau* NeutrinoTauDefinition();
    static G4NeutrinoTau* NeutrinoTau() {return &theNeutrinoTau;}
    static G4double  GetCuts() {return theNeutrinoTauLengthCut;}   
    static G4double* GetCutsInEnergy() {return theNeutrinoTauKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 2.6 1998/10/13 09:54:44 mora Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.4 1999/04/28 10:06:43 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  
 //---------------------------------------------------------------
@@ -46,6 +46,7 @@ G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()
   if(!fGlobalFastSimulationManager)
   {
     fGlobalFastSimulationManager = new G4GlobalFastSimulationManager;
+    fpConcreteInstance = fGlobalFastSimulationManager;
   }
   return fGlobalFastSimulationManager;
 }
@@ -62,6 +63,7 @@ G4GlobalFastSimulationManager::G4GlobalFastSimulationManager()
 G4GlobalFastSimulationManager::~G4GlobalFastSimulationManager()
 {
   delete fTheFastSimulationMessenger;
+  fTheFastSimulationMessenger = 0;
 }
 
 void G4GlobalFastSimulationManager::FastSimulationNeedsToBeClosed()
@@ -118,14 +120,14 @@ void G4GlobalFastSimulationManager::CloseFastSimulation()
   fClosed=true;
 }
 
-G4FlavoredParallelWorld* 
+G4VFlavoredParallelWorld* 
 G4GlobalFastSimulationManager::
 GetFlavoredWorldForThis(G4ParticleDefinition* particle)
 {
   for (G4int ipw=0; ipw<NeededFlavoredWorlds.length(); ipw++)
     if(NeededFlavoredWorlds(ipw)->GetTheParticleType()==particle)
       return NeededFlavoredWorlds(ipw);
-  return NULL;
+  return 0;
 }
 
 void 

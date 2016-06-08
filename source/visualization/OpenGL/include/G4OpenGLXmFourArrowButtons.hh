@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmFourArrowButtons.hh,v 2.0 1998/07/02 16:44:58 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmFourArrowButtons.hh,v 1.2 1999/01/09 16:22:56 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuPairProduction.cc,v 2.3 1998/12/09 09:20:47 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IMuPairProduction.cc,v 1.2 1999/05/04 14:24:23 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -809,6 +809,8 @@ void G4IMuPairProduction::BuildLambdaTable(const G4ParticleDefinition& ParticleT
       delete theMeanFreePathTable;
    }
    theMeanFreePathTable = new G4PhysicsTable( G4Material::GetNumberOfMaterials() ) ;
+   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
+
    if(&ParticleType == theMuonPlus )
      themuplusLambdaTable = theMeanFreePathTable ;
    if(&ParticleType == theMuonMinus )

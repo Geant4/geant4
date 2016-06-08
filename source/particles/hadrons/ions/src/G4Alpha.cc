@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Alpha.cc,v 2.2 1998/09/24 11:24:53 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Alpha.cc,v 1.2 1999/04/13 08:24:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -44,6 +44,10 @@ G4Alpha::G4Alpha(
  : G4VIon( aName,mass,width,charge,iSpin,iParity,
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
+{
+}
+
+G4Alpha::~G4Alpha()
 {
 }
 

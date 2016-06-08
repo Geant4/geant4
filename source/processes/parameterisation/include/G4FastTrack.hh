@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastTrack.hh,v 2.3 1998/10/13 09:54:30 mora Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FastTrack.hh,v 1.2 1999/04/14 14:25:27 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id:
 //---------------------------------------------------------------
@@ -62,7 +62,7 @@ public:
   // The fast simulation manager uses the SetCurrentTrack
   // method to setup the current G4FastTrack object 
   //------------------------------------------------------------
-  void SetCurrentTrack(const G4Track&, const G4Navigator* a = NULL);
+  void SetCurrentTrack(const G4Track&, const G4Navigator* a = 0);
 
   //------------------------------------------------------------
   // The fast simulation manager uses the OnTheBoundaryButExiting

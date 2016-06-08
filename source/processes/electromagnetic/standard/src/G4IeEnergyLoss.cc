@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeEnergyLoss.cc,v 2.9 1998/12/09 09:15:16 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IeEnergyLoss.cc,v 1.5 1999/06/18 11:30:12 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //  
 // $Id: 
 // -----------------------------------------------------------
@@ -1013,7 +1013,8 @@ G4VParticleChange* G4IeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
        if (MeanLoss < 0.) { MeanLoss = 0.; finalT = E;}
        
        //now the loss with fluctuation
-       if ((EnlossFlucFlag) && (MeanLoss > 0.) && (MeanLoss < E))
+       if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowestKineticEnergy))
+
          {
            finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
            if (finalT < 0.) finalT = E-MeanLoss;
@@ -1043,6 +1044,8 @@ G4double G4IeEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is the same as in Glandz in Geant3.
 {
+  static const G4double Tlow=10.*keV ;
+
   // check if the material has changed ( cache mechanism)
 
   if (aMaterial != lastMaterial)

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1File.cc,v 2.4 1998/11/09 19:33:18 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VRML1File.cc,v 1.3 1999/01/11 00:48:05 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4VRML1File.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -19,11 +19,11 @@
 #include <stdio.h> // sscanf
 #include <stdlib.h> // getenv
 
-#include "G4VScene.hh"
+#include "G4VSceneHandler.hh"
 
 #include "G4VRML1File.hh"
-#include "G4VRML1FileScene.hh"
-#include "G4VRML1FileView.hh"
+#include "G4VRML1FileSceneHandler.hh"
+#include "G4VRML1FileViewer.hh"
 
 #include "G4FRClient.hh"
 
@@ -38,24 +38,24 @@ G4VRML1File::~G4VRML1File()
 }
 
 
-G4VScene* G4VRML1File::CreateScene(const G4String& name) 
+G4VSceneHandler* G4VRML1File::CreateSceneHandler(const G4String& name) 
 {
-	G4VScene *p = NULL;
+	G4VSceneHandler *p = NULL;
 
-	p = new G4VRML1FileScene(*this, name);
+	p = new G4VRML1FileSceneHandler(*this, name);
 
-	G4cout << G4VRML1FileScene::GetSceneCount()
+	G4cout << G4VRML1FileSceneHandler::GetSceneCount()
 		<< " " << fName << " scenes extanct." << endl;
 
 	return p;
 }
 
-G4VView* G4VRML1File::CreateView(G4VScene& scene, const G4String& name)
+G4VViewer* G4VRML1File::CreateViewer(G4VSceneHandler& scene, const G4String& name)
 {
-	G4VView* pView = NULL;
+	G4VViewer* pView = NULL;
 
-	G4VRML1FileScene* pScene = (G4VRML1FileScene*)&scene;
-	pView = new G4VRML1FileView(*pScene, name);
+	G4VRML1FileSceneHandler* pScene = (G4VRML1FileSceneHandler*)&scene;
+	pView = new G4VRML1FileViewer(*pScene, name);
 
 	return pView;
 }

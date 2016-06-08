@@ -5,15 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VHighEnergyGenerator.hh,v 1.1 1998/08/22 08:55:44 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VHighEnergyGenerator.hh,v 1.2 1999/04/15 12:10:08 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1
 
 #include "G4Nucleus.hh"
 #include "G4Track.hh"
-#include "G4KineticTrackVector.hh"
+class G4KineticTrackVector;
 #include "G4ReactionProduct.hh"
 #include "G4V3DNucleus.hh"
 

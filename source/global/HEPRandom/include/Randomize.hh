@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Randomize.hh,v 2.1 1998/09/23 23:11:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: Randomize.hh,v 1.1 1999/01/07 16:08:58 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef randomize_h
 #define randomize_h 1

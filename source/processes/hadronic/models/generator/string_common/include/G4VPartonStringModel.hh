@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPartonStringModel.hh,v 1.2 1998/10/09 13:33:29 maxim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VPartonStringModel.hh,v 1.2 1999/04/15 12:10:15 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4VPartonStringModel_h
 #define G4VPartonStringModel_h 1
@@ -30,6 +30,7 @@
 #include "G4ExcitedStringVector.hh"
 #include "G4VStringFragmentation.hh"
 #include "G4V3DNucleus.hh"
+#include "G4KineticTrackVector.hh"
 
 class G4VPartonStringModel : public G4VHighEnergyGenerator
 

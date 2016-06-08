@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: instmgr.h,v 2.2 1998/11/17 17:21:53 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: instmgr.h,v 1.2 1999/05/21 20:20:41 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef instmgr_h

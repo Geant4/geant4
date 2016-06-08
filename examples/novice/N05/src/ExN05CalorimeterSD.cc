@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05CalorimeterSD.cc,v 2.6 1998/12/11 19:14:06 verderi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05CalorimeterSD.cc,v 1.1 1999/01/07 16:06:15 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "ExN05CalorimeterSD.hh"

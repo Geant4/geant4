@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.cc,v 2.2 1998/07/13 17:14:16 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MaterialPropertyVector.cc,v 1.2 1999/04/14 12:49:04 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -51,8 +51,10 @@ G4bool G4MaterialPropertyVector::operator ++()
 // ----------
 //
 G4MaterialPropertyVector&
-G4MaterialPropertyVector::operator =(const G4MaterialPropertyVector &right)
+G4MaterialPropertyVector::operator =(const G4MaterialPropertyVector& right)
 {
+        if (this == &right) return *this;
+	
         // clear the vector of current contents
 
 	MPV.clearAndDestroy();

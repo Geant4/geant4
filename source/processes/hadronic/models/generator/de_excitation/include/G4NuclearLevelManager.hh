@@ -20,6 +20,10 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added half-life, angular momentum, parity, emissioni type
+//              reading from experimental data. 
+//      
 // -------------------------------------------------------------------
 
 #ifndef G4NUCLEARLEVELMANAGER_HH
@@ -73,14 +77,16 @@ private:
  
   void MakeLevels();
 
-  G4int _A;
-  G4int _Z;
+  G4int _nucleusA;
+  G4int _nucleusZ;
   G4PtrLevelVector* _levels;
   
   G4double _levelEnergy;
   G4double _gammaEnergy;
   G4double _probability;
-
+  G4double _polarity;
+  G4double _halfLife;
+  G4double _angularMomentum;
 };
 
 #endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.hh,v 2.4 1998/12/11 15:38:26 stesting Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KnotVector.hh,v 1.1 1999/01/07 16:07:32 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef __KNOTVECTOR_H
 #define __KNOTVECTOR_H

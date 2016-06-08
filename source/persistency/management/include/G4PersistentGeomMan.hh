@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentGeomMan.hh,v 2.2 1998/11/10 18:23:41 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PersistentGeomMan.hh,v 1.1 1999/01/07 16:10:56 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // class G4PersistentGeomMan 
 //

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurface.cc,v 2.6 1998/11/13 13:58:30 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ConicalSurface.cc,v 1.1 1999/01/07 16:07:41 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*  /usr/local/gismo/repo/geometry/G4ConicalSurface.cc,v 1.6 1994/08/03 17:15:01 burnett Exp  */
 //  File:  G4ConicalSurface.cc

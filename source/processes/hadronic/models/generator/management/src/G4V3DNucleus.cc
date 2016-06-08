@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4V3DNucleus.cc,v 1.1 1998/08/22 08:55:54 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4V3DNucleus.cc,v 1.1 1999/01/07 16:12:07 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4V3DNucleus.hh"
 

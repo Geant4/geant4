@@ -5,23 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ggclos.cc,v 2.1 1998/07/13 16:50:30 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ggclos.cc,v 1.4 1999/05/26 03:49:48 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
-#include "G4GeometryManager.hh"
+#include "G4ios.hh"
+#include "G3VolTable.hh"
 #include "G3G4Interface.hh"
 
-void PG4ggclos()
-{
+void PG4ggclos(){
   G4ggclos();
 }
 
-void G4ggclos()
-{
-        // close out the geometry
-    
-    G4cout << "Closing geometry..." << endl;
-  G4bool optimise=false;
-  G4GeometryManager::GetInstance()->CloseGeometry(optimise);
-  G4cout << "Geometry closed." << endl;
+void G4ggclos(){
+  G4cout << "G4ggclos: setting top-level VolTableEntry" << endl;
+  G3Vol.SetFirstVTE();
 }

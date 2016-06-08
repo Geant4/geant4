@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitationHandler.hh,v 1.6 1998/12/12 12:34:57 larazb Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitationHandler.hh,v 1.2 1999/04/12 15:45:24 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -29,7 +29,8 @@
 #include "G4VPhotonEvaporation.hh"
 #include "G4Fragment.hh"
 #include "G4DynamicParticle.hh"
-#include "G4DynamicParticleVector.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 // needed for default models
@@ -54,7 +55,7 @@ private:
   
 
 public:
-  G4DynamicParticleVector * BreakItUp(const G4Fragment &theInitialState) const;
+  G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState) const;
 
   void SetEvaporation(G4VEvaporation *const  value);
 
@@ -71,7 +72,7 @@ public:
 
 private:
 
-  G4DynamicParticleVector * Transform(G4FragmentVector * theFragmentVector) const;
+  G4ReactionProductVector * Transform(G4FragmentVector * theFragmentVector) const;
 
   const G4VEvaporation * GetEvaporation() const;
 

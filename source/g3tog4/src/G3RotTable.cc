@@ -5,57 +5,32 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 2.0 1998/07/02 16:16:20 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G3RotTable.cc,v 1.6 1999/05/28 21:09:06 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
+
 #include "globals.hh"
-#include "G4RotationMatrix.hh"
+#include "G3toG4RotationMatrix.hh"
+#include "G3toG4.hh"
 #include "G3RotTable.hh"
 
-RWBoolean RotTableMatch(const RotTableEntry *RotTentry, const void *pt)
-{
-    G4int rotid;
-    rotid = *((G4int*) pt);
-    if (RotTentry->rotid == rotid)
-        {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-}
+G3RotTable::G3RotTable(){
+  _Rot = new 
+    RWTPtrOrderedVector<G3toG4RotationMatrix>;
+};
 
-G3RotTable::G3RotTable()
-{
-    RotTable = &RotT;
-}
+G3RotTable::~G3RotTable(){
+  _Rot->clearAndDestroy();
+  delete _Rot;
+  G4cout << "Deleted G3RotTable..." << endl;
+};
 
-G3RotTable::~G3RotTable()
-{
-    while (! RotTable->isEmpty()) {
-        RotTableEntry *RotTentry = RotTable->last();
-        RotTable->removeReference(RotTentry);
-        delete RotTentry;
-    }
-    delete RotTable;
-}
+G3toG4RotationMatrix*
+G3RotTable::Get(G4int RotID){
+  return (*_Rot)[RotID];
+};
 
-G4RotationMatrix *G3RotTable::get(G4int rotid)
-{
-    const void *pt;
-    if ( rotid == 0 ) return NULL;
-    pt = &rotid;
-    RotTableEntry *RotTentry = RotTable->find(RotTableMatch, pt);
-    if (RotTentry == NULL) {
-        return NULL;
-    } else {
-        return RotTentry->rotpt;
-    }
-}
-
-void G3RotTable::put(G4int *rotid, G4RotationMatrix *rotpt)
-{
-    RotTableEntry *RotTentry = new RotTableEntry;
-    RotTentry->rotid = *rotid;
-    RotTentry->rotpt = rotpt;
-    RotTable->append(RotTentry);
-}
+void 
+G3RotTable::Put(G4int RotID, G3toG4RotationMatrix *RotPT){
+  _Rot->insertAt(RotID, RotPT);
+};

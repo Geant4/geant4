@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpAbsorption.cc,v 2.6 1998/09/03 21:31:01 gum Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpAbsorption.cc,v 1.1 1999/01/07 16:14:01 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation

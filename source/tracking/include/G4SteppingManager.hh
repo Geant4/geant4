@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 2.4 1998/08/26 01:55:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SteppingManager.hh,v 1.3 1999/04/16 02:14:50 tsasaki Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -93,6 +93,7 @@ class G4SteppingManager
    void SetUserAction(G4UserSteppingAction* apAction);
    G4Track* GetTrack() const;
    void SetVerboseLevel(G4int vLevel);
+   void SetVerbose(G4VSteppingVerbose*);
    G4Step* GetStep() const;
 
 
@@ -194,7 +195,7 @@ class G4SteppingManager
 
    G4UserSteppingAction* fUserSteppingAction;
 
-   G4SteppingVerbose* fVerbose;
+   G4VSteppingVerbose* fVerbose;
 
    G4double PhysicalStep;
    G4double GeometricalStep;
@@ -486,6 +487,10 @@ class G4SteppingManager
 
   inline void G4SteppingManager::SetVerboseLevel(G4int vLevel){
     verboseLevel = vLevel; 
+  }
+
+  inline void G4SteppingManager::SetVerbose(G4VSteppingVerbose* yourVerbose){
+     fVerbose = yourVerbose;
   }
 
   inline G4Step* G4SteppingManager::GetStep() const {

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Text.cc,v 2.0 1998/07/02 17:30:41 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Text.cc,v 1.3 1999/05/25 09:10:24 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  17/11/96.
@@ -32,3 +32,25 @@ fText     ("")    ,
 fLayout   (left)  ,
 fXOffset(0.) , fYOffset(0.)
 {}
+
+G4Visible & G4Text::operator = (const G4Visible &from) {
+  return G4Visible::operator = (from);
+}
+
+G4VVisPrim & G4Text::operator = (const G4VVisPrim &from) {
+  return G4VVisPrim::operator = (from);
+}
+
+G4VMarker & G4Text::operator = (const G4VMarker &from) {
+  return G4VMarker::operator = (from);
+}
+
+G4Text & G4Text::operator = (const G4Text &from) {
+  if (&from == this) return *this;
+  G4VMarker::operator = (from);
+  fText    = from.fText;
+  fLayout  = from.fLayout;
+  fXOffset = from.fXOffset;
+  fYOffset = from.fYOffset;
+  return *this;
+}

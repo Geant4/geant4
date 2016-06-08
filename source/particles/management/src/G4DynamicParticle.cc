@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.cc,v 2.4 1998/11/25 13:59:04 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DynamicParticle.cc,v 1.4 1999/05/06 16:37:39 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -46,11 +46,11 @@ G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
 static const G4double EnergyMomentumRelationAllowance = keV;
 
 G4DynamicParticle::G4DynamicParticle():
-		   theParticleDefinition(NULL),
+		   theParticleDefinition(0),
 		   theMomentumDirection(),
 		   theKineticEnergy(0.0),
  		   theProperTime(0.0),
-                   thePreAssignedDecayProducts(NULL),
+                   thePreAssignedDecayProducts(0),
 		   verboseLevel(1)
 {  
    theDynamicalMass = 0.0; 
@@ -58,13 +58,13 @@ G4DynamicParticle::G4DynamicParticle():
 
 // -- constructors ----
 G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
-				     const G4ParticleMomentum& aMomentumDirection,
+				     const G4ThreeVector& aMomentumDirection,
 				     G4double aKineticEnergy):
 		   theParticleDefinition(aParticleDefinition),
 		   theMomentumDirection(aMomentumDirection),
 		   theKineticEnergy(aKineticEnergy),
  		   theProperTime(0.0),
-                   thePreAssignedDecayProducts(NULL),
+                   thePreAssignedDecayProducts(0),
 		   verboseLevel(1)
 {  
  theDynamicalMass = aParticleDefinition->GetPDGMass();
@@ -74,7 +74,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                                      const G4ThreeVector& aParticleMomentum):
 		   theParticleDefinition(aParticleDefinition),
        		   theProperTime(0.0),
-                   thePreAssignedDecayProducts(NULL),
+                   thePreAssignedDecayProducts(0),
 		   verboseLevel(1)
 {
   theDynamicalMass = aParticleDefinition->GetPDGMass();
@@ -96,7 +96,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 				     const G4LorentzVector   &aParticleMomentum):
 		   theParticleDefinition(aParticleDefinition),
  		   theProperTime(0.0),
-                   thePreAssignedDecayProducts(NULL),
+                   thePreAssignedDecayProducts(0),
 		   verboseLevel(1)
 {
   theDynamicalMass = aParticleDefinition->GetPDGMass();
@@ -127,7 +127,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                                      G4double totalEnergy,  
 				     const G4ThreeVector &aParticleMomentum):
                    theParticleDefinition(aParticleDefinition),
-                   thePreAssignedDecayProducts(NULL),
+                   thePreAssignedDecayProducts(0),
                    theProperTime(0.0),
 		   verboseLevel(1)
 {
@@ -138,7 +138,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
     SetMomentumDirection(aParticleMomentum.x()/pModule,
                          aParticleMomentum.y()/pModule,
                          aParticleMomentum.z()/pModule);
-    if (totalEnergy > pModule2) {
+    if (totalEnergy > pModule) {
       G4double mass = sqrt(totalEnergy*totalEnergy - pModule2);
       theDynamicalMass = mass;
       SetKineticEnergy(totalEnergy-mass);
@@ -154,18 +154,18 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 
 G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right)
 {
-  SetMass(right.theDynamicalMass);
-  SetDefinition(right.GetDefinition());
-  theMomentumDirection = right.GetMomentumDirection();
-  theKineticEnergy = right.GetKineticEnergy();
-  thePolarization = right.GetPolarization();
-  verboseLevel = right.GetVerboseLevel();
+  theDynamicalMass = right.theDynamicalMass;
+  theParticleDefinition = right.theParticleDefinition;
+  theMomentumDirection = right.theMomentumDirection;
+  theKineticEnergy = right.theKineticEnergy;
+  thePolarization = right.thePolarization;
+  verboseLevel = right.verboseLevel;
 
   // proper time is set to zero
   theProperTime = 0.0;
 
   // thePreAssignedDecayProducts must not be copied.
-  thePreAssignedDecayProducts = NULL;
+  thePreAssignedDecayProducts = 0;
 
 }
 
@@ -173,24 +173,23 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right)
 G4DynamicParticle::~G4DynamicParticle() {
 
   //  delete thePreAssignedDecayProducts
-  if (thePreAssignedDecayProducts != NULL) delete thePreAssignedDecayProducts;
-  thePreAssignedDecayProducts = NULL;
+  if (thePreAssignedDecayProducts != 0) delete thePreAssignedDecayProducts;
+  thePreAssignedDecayProducts = 0;
 }
 
 
 G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
 {
   if (this != &right) {
-    SetDefinition(right.GetDefinition());
-    SetMass(right.theDynamicalMass);
-    theMomentumDirection = right.GetMomentumDirection();
-    theKineticEnergy = right.GetKineticEnergy();
-    thePolarization = right.GetPolarization();
-    theProperTime = right.GetProperTime();
-    verboseLevel = right.GetVerboseLevel();
+    theDynamicalMass = right.theDynamicalMass;
+    theParticleDefinition = right.theParticleDefinition;
+    theMomentumDirection = right.theMomentumDirection;
+    theKineticEnergy = right.theKineticEnergy;
+    thePolarization = right.thePolarization;
+    verboseLevel = right.verboseLevel;
     
     // thePreAssignedDecayProducts must not be copied.
-    thePreAssignedDecayProducts = NULL;
+    thePreAssignedDecayProducts = 0;
   }
   return *this;
 }
@@ -249,7 +248,7 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
 
 void G4DynamicParticle::DumpInfo() const
 {
-  if (theParticleDefinition == NULL) {
+  if (theParticleDefinition == 0) {
     G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << endl; 
   } else {
     G4cout << " Particle type - " << theParticleDefinition->GetParticleName() << endl

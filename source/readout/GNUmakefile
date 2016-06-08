@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.2 1998/11/18 18:35:43 kurasige Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:14:11 gunter Exp $
 # -----------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # -----------------------------------------------------------

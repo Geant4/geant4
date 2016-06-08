@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03DetectorConstruction.cc,v 2.5 1998/10/09 15:53:49 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN03DetectorConstruction.cc,v 1.2 1999/02/03 16:07:23 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -50,6 +50,7 @@ ExN03DetectorConstruction::ExN03DetectorConstruction()
   GapThickness      =  5.*mm;
   NbOfLayers        = 10;
   CalorSizeYZ       = 10.*cm;
+  ComputeCalorParameters();
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new ExN03DetectorMessenger(this);

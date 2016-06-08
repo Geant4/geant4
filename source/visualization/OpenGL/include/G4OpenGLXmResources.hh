@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmResources.hh,v 2.1 1998/10/04 11:32:49 ajw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmResources.hh,v 1.2 1999/01/09 16:22:59 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // Default resources file for GEANT4 OpenGL Motif windows.

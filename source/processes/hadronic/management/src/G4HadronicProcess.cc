@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.cc,v 2.0 1998/07/02 16:22:25 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HadronicProcess.cc,v 1.1 1999/01/07 16:11:36 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // HPW to implement the choosing of an element for scattering.
 #include "G4HadronicProcess.hh"

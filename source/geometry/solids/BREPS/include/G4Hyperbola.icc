@@ -48,6 +48,7 @@ inline G4double G4Hyperbola::GetPPoint(const G4Point3D& pt) {
 
 #include "G4CurveRayIntersection.hh"
 
+/*
 inline void G4Hyperbola::IntersectRay2D(const G4Ray& ray,
 					G4CurveRayIntersection& is)
 {
@@ -96,3 +97,48 @@ inline void G4Hyperbola::IntersectRay2D(const G4Ray& ray,
 
   }
 }
+*/
+
+inline G4int G4Hyperbola::IntersectRay2D(const G4Ray& ray)
+{
+  // NOT VERIFIED
+
+  // similar to G4Ellipse::IntersectRay2D
+
+  // 2D operations would be faster
+  G4Point3D s= toUnitHyperbola*ray.GetStart();
+  G4Vector3D d= toUnitHyperbola*ray.GetDir();
+  
+  // solve (s+i*t)^2 = 1 for i (the distance)
+
+  G4double sd= s.x()*d.x()-s.y()*d.y();
+  G4double dd= d.x()*d.x()-d.y()*d.y(); // can be 0
+  G4double ss= s.x()*s.x()-s.y()*s.y();
+
+  if (abs(dd) < kCarTolerance*kCarTolerance) {
+
+    // coeff of i^2 == 0
+    return 0;
+
+  }
+  
+  G4int nbinter = 0;
+
+  G4double discr= sd*sd-dd*(ss-1);
+  if (discr >= 0) 
+  {
+    // 2 intersections (maybe 1, but this case is rare)
+    G4double sqrtdiscr= sqrt(discr);
+    // find the smallest positive i
+    G4double i= -sd-sqrtdiscr;
+    if (i > kCarTolerance) 
+      nbinter++;
+
+    i= -sd+sqrtdiscr;
+    if (i<kCarTolerance) 
+      nbinter++;
+  }
+    
+  return nbinter;
+}
+

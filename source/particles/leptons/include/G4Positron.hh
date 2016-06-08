@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Positron.hh,v 2.3 1998/09/24 05:50:10 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Positron.hh,v 1.2 1999/04/13 08:20:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -81,12 +81,14 @@ class G4Positron : public G4VLepton
    );
 
  public:
+   virtual ~G4Positron(){};	
+ 
    static G4Positron* PositronDefinition();
    static G4Positron* Positron();
    static G4double GetCuts() {return thePositronLengthCut;}
    static G4double* GetCutsInEnergy() {return thePositronKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4Positron::SetCuts(G4double aCut)

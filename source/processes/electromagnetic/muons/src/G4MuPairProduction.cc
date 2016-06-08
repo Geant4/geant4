@@ -5,10 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 2.10 1998/12/02 16:33:18 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MuPairProduction.cc,v 1.6 1999/06/14 13:26:35 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
-// $Id: 
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
@@ -21,6 +20,7 @@
 // **************************************************************
 // 04-06-98, in DoIt,secondary production condition:range>min(threshold,safety)
 // 26/10/98, new stuff from R. Kokoulin + cleanup , L.Urban
+// 06/05/99 , bug fixed , L.Urban
 // --------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
@@ -42,11 +42,7 @@ G4MuPairProduction::G4MuPairProduction(const G4String& processName)
     theMeanFreePathTable(NULL),
     LowestKineticEnergy (1.*GeV),
     HighestKineticEnergy (1000000.*TeV),
-    TotBin(50),
-    theElectron (G4Electron::Electron() ),
-    thePositron (G4Positron::Positron() ),
-    theMuonMinus ( G4MuonMinus::MuonMinus() ),
-    theMuonPlus ( G4MuonPlus::MuonPlus() )
+    TotBin(50)
 {  }
  
  
@@ -89,15 +85,15 @@ void G4MuPairProduction::BuildPhysicsTable(
   if(theMeanFreePathTable == NULL)
      MakeSamplingTables(&aParticleType) ;
 
-  BuildLambdaTable(aParticleType) ;
+  G4double electronCutInRange = G4Electron::Electron()->GetCuts();
+  if(electronCutInRange != lastelectronCutInRange)
+    BuildLambdaTable(aParticleType) ;
 
   G4MuEnergyLoss::BuildDEDXTable(aParticleType) ;
 
   if(&aParticleType==theMuonPlus)
     PrintInfoDefinition() ;
-  
 }
-
 
 void G4MuPairProduction::BuildLossTable(
                                    const G4ParticleDefinition& aParticleType)
@@ -153,7 +149,6 @@ void G4MuPairProduction::BuildLossTable(
         natom = theAtomicNumDensityVector[iel] ;
         loss = ComputePairLoss(&aParticleType,
                                  Z,KineticEnergy,eCut,pCut) ;   
-
         pairloss += natom*loss ;
       }
       if(pairloss<0.)
@@ -165,7 +160,6 @@ void G4MuPairProduction::BuildLossTable(
     theLossTable->insert(aVector);
   }
 }
-
 
 G4double G4MuPairProduction::ComputePairLoss(
                                      const G4ParticleDefinition* ParticleType,
@@ -180,7 +174,7 @@ G4double G4MuPairProduction::ComputePairLoss(
   wgi[] ={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
   static const G4double ak1=6.9 ;
   static const G4double ak2=1.0 ;
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
   G4double z13 = exp(log(AtomicNumber)/3.) ;
 
   G4double loss = 0.0 ;
@@ -236,6 +230,7 @@ void G4MuPairProduction::BuildLambdaTable(
    }
   theMeanFreePathTable = new 
                       G4PhysicsTable( G4Material::GetNumberOfMaterials() ) ;
+   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
 
    G4PhysicsLogVector* ptrVector;
    for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
@@ -304,7 +299,7 @@ G4double G4MuPairProduction::ComputeMicroscopicCrossSection(
   static const G4double ak1=6.9 ;
   static const G4double ak2=1.0 ;
 
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
   G4double z13 = exp(log(AtomicNumber)/3.) ;
 
   G4double CrossSection = 0.0 ;
@@ -357,7 +352,7 @@ void G4MuPairProduction::MakeSamplingTables(
 
   MinPairEnergy = 4.*electron_mass_c2 ;
 
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
 
   for (G4int iz=0; iz<nzdat; iz++)
   {
@@ -399,6 +394,7 @@ void G4MuPairProduction::MakeSamplingTables(
           proba[iz][it][nbin] = CrossSection ;
         }
       }
+      ya[NBIN]=0. ;
 
       if(CrossSection > 0.)
       {
@@ -420,7 +416,7 @@ G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
  // Calculates the double differential (DD) microscopic cross section 
  //   using the cross section formula of R.P. Kokoulin (18/01/98)
 {
-  G4double sqrte = sqrt(exp(1.)) ;
+  static const G4double sqrte = sqrt(exp(1.)) ;
 
   G4double bbbtf= 183. ;
   G4double bbbh = 202.4 ; 
@@ -595,23 +591,18 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
                                       aDynamicParticle->GetMomentumDirection();
 
    // e-e+ cut in this material
-   G4double ElectronEnergyCut = 
-                       (G4Electron::GetCutsInEnergy())[aMaterial->GetIndex()];
-   G4double PositronEnergyCut = 
-                       (G4Electron::GetCutsInEnergy())[aMaterial->GetIndex()];
+   G4double ElectronEnergyCut = electron_mass_c2+
+      ((*G4Electron::Electron()).GetCutsInEnergy())[aMaterial->GetIndex()];
+   G4double PositronEnergyCut = electron_mass_c2+
+      ((*G4Positron::Positron()).GetCutsInEnergy())[aMaterial->GetIndex()];
    G4double CutInPairEnergy = ElectronEnergyCut + PositronEnergyCut ;
+
    G4double MinPairEnergy = 4.*electron_mass_c2 ;
    if (CutInPairEnergy < MinPairEnergy) CutInPairEnergy = MinPairEnergy ;
 
    // check against insufficient energy
-    if (KineticEnergy < CutInPairEnergy )
-       {
-         aParticleChange.SetMomentumChange( ParticleDirection );
-         aParticleChange.SetEnergyChange( KineticEnergy );
-         aParticleChange.SetLocalEnergyDeposit (0.); 
-         aParticleChange.SetNumberOfSecondaries(0);
-         return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-       }
+   if(KineticEnergy < CutInPairEnergy )
+     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
    // select randomly one element constituing the material  
    G4Element* anElement = SelectRandomAtom(aMaterial);
@@ -650,7 +641,7 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
      del = abs(log(KineticEnergy)-log(tdat[it])) ;
      if(del<delmin)
      {
-       del=delmin;
+       delmin=del;
        itt=it ;
      }
    }
@@ -662,17 +653,17 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
    do {
        iy += 1 ;
       } while ((ya[iy] < yc )&&(iy < NBINminus1)) ;
-   G4double norm = 1./(1.-proba[izz][itt][iy]) ;
+   G4double norm = proba[izz][itt][iy] ;
 
-   G4double r = G4UniformRand() ;
+   G4double r = norm+G4UniformRand()*(1.-norm) ;
  
-   iy = -1 ;
+   iy -= 1 ;
    do {
         iy += 1 ;
-      } while (((norm*proba[izz][itt][iy]) < r)&&(iy < NBINminus1)) ;
+      } while ((proba[izz][itt][iy] < r)&&(iy < NBINminus1)) ;
 
    //sampling is uniformly in y in the bin
-   if( iy < NBINminus1 )
+   if( iy < NBIN )
      y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy]) ;
    else
      y = ya[iy] ;
@@ -801,7 +792,7 @@ G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
 }
 void G4MuPairProduction::PrintInfoDefinition()
 {
-  G4String comments = "cross sections from R. Kokoulin \n ";
+  G4String comments = "theoretical cross sections \n ";
            comments += "         Good description up to 1000 TeV.";
 
   G4cout << endl << GetProcessName() << ":  " << comments

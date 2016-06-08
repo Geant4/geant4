@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonZeroLInelasticProcess.hh,v 2.0 1998/07/02 16:36:27 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KaonZeroLInelasticProcess.hh,v 1.1 1999/01/07 16:13:34 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // G4 Process: KaonZeroL Inelastic Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997

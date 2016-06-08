@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GenericIon.hh,v 1.1 1998/12/05 07:54:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GenericIon.hh,v 1.2 1999/04/13 08:24:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,6 +53,8 @@ class G4GenericIon : public G4VIon
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+   virtual ~G4GenericIon();
+
    static G4GenericIon*    GenericIonDefinition();
    static G4GenericIon*    GenericIon(){return &theGenericIon;}
    static G4double GetCuts() {return theGenericIonLengthCut;}   

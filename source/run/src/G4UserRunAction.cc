@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserRunAction.cc,v 2.1 1998/07/12 03:08:39 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UserRunAction.cc,v 1.2 1999/04/09 02:28:10 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4UserRunAction.hh"
@@ -17,9 +17,9 @@ G4UserRunAction::G4UserRunAction()
 G4UserRunAction::~G4UserRunAction()
 {;}
 
-void G4UserRunAction::BeginOfRunAction(G4Run* aRun)
+void G4UserRunAction::BeginOfRunAction(const G4Run* aRun)
 {;}
 
-void G4UserRunAction::EndOfRunAction(G4Run* aRun)
+void G4UserRunAction::EndOfRunAction(const G4Run* aRun)
 {;}
 

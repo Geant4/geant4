@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILE.hh,v 2.1 1998/11/06 13:41:37 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DAWNFILE.hh,v 1.4 1999/05/10 15:38:26 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Satoshi TANAKA
 // DAWNFILE driver factory.
@@ -21,7 +21,7 @@
 #include "G4VGraphicsSystem.hh"
 
 	//----- prototype
-class G4VScene   ;
+class G4VSceneHandler   ;
 
 	//----------------------------//
 	//----- class G4DAWNFILE -----// 
@@ -30,9 +30,9 @@ class G4DAWNFILE: public G4VGraphicsSystem {
 
 public:
   G4DAWNFILE ();
-  ~G4DAWNFILE ();
-  G4VScene* CreateScene (const G4String& name = "");
-  G4VView*  CreateView  (G4VScene&, const G4String& name = "");
+  virtual ~G4DAWNFILE ();
+  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
+  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 
 private:
 

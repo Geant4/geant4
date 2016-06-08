@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EquationOfMotion.hh,v 2.4 1998/11/12 19:48:09 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EquationOfMotion.hh,v 1.1 1999/01/07 16:07:01 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Abstract Base Class for:
 //

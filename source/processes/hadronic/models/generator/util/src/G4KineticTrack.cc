@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KineticTrack.cc,v 1.5 1998/12/02 17:43:37 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KineticTrack.cc,v 1.3 1999/06/22 13:22:58 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: G4KineticTrack.cc,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------
@@ -146,6 +146,8 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
   theDaughterMass = NULL;
   theDaughterWidth = NULL;
   theActualWidth = NULL;
+  G4bool * theDaughterIsShortLived = 0;
+  
   if(nChannels!=0) theActualWidth = new G4double[nChannels];
 
   G4int index;
@@ -161,12 +163,14 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           G4ParticleDefinition* aDaughter;
           theDaughterMass = new G4double[nDaughters];
           theDaughterWidth = new G4double[nDaughters];
+	  theDaughterIsShortLived = new G4bool[nDaughters];
           G4int n;
           for (n = 0; n < nDaughters; n++)
              {
               aDaughter = theChannel->GetDaughter(n);
               theDaughterMass[n] = aDaughter->GetPDGMass();
               theDaughterWidth[n] = aDaughter->GetPDGWidth();
+	      theDaughterIsShortLived[n] = aDaughter->IsShortLived();
              }     
 
 //
@@ -176,7 +180,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           G4double theActualMom = 0.0;
           G4double thePoleMom = 0.0;
                               
-          if (theDaughterWidth[0] == 0.0 & theDaughterWidth[1] == 0.0)
+          if ( !theDaughterIsShortLived[0] && !theDaughterIsShortLived[1] )
              {
 
 //              G4cout << endl << "Both the " << nDaughters <<
@@ -188,7 +192,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
                                               theDaughterMass);
 
              }
-          else if (theDaughterWidth[0] == 0.0 & theDaughterWidth[1] != 0.0)   
+          else if ( !theDaughterIsShortLived[0] && theDaughterIsShortLived[1] )   
              {
 
 //              G4cout << endl << "Only the first of the " << nDaughters <<
@@ -198,7 +202,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
               thePoleMom = IntegrateCMMomentum(thePoleMass);
                 
              }        
-          else if (theDaughterWidth[0] != 0.0 & theDaughterWidth[1] == 0.0)   
+          else if ( theDaughterIsShortLived[0] && !theDaughterIsShortLived[1] )   
              {
 
 //              G4cout << endl << "Only the second of the " << nDaughters <<
@@ -215,13 +219,13 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
               thePoleMom = IntegrateCMMomentum(thePoleMass);
                 
              }        
-          else if (theDaughterWidth[0] != 0.0 & theDaughterWidth[1] != 0.0)   
+          else if ( theDaughterIsShortLived[0] && theDaughterIsShortLived[1] )   
              {
 
 //              G4cout << endl << "Both the " << nDaughters <<
 //                              " decay products are resonances!";
 
-              /* code has to be implemented */
+              /* @@@@@@ code has to be implemented */
 
              }        
 

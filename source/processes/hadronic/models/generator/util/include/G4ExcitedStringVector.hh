@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedStringVector.hh,v 1.1 1998/08/22 08:57:49 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitedStringVector.hh,v 1.1 1999/01/07 16:12:19 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4ExcitedStringVector_h
 #define G4ExcitedStringPartonVector_h 1

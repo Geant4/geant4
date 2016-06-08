@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NISTStepReader.cc,v 2.4 1998/11/04 14:49:56 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NISTStepReader.cc,v 1.1 1999/01/07 16:07:44 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4NISTStepReader.hh"
 

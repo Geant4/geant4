@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentEventMan.cc,v 2.1 1998/11/09 17:19:46 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PersistentEventMan.cc,v 1.1 1999/01/07 16:10:57 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // class G4PersistentEventMan 
 //

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisToOldVisCommands.cc,v 1.1 1998/12/09 23:55:00 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisToOldVisCommands.cc,v 1.3 1999/06/19 16:29:01 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Implements some /vis/ commands as /vis~/ temporarily.
@@ -67,7 +67,7 @@ void G4VisToOldVisCommands::SetNewValue
       "\n  /vis/viewer/create"
       "\nThis way you can also use \"/vis/scene/addVolume\" to select"
       "\n  sub-detector components.  (The command is still available"
-      "\n  as \"/vis~/create_view/new_graphics/system " << newValues <<
+      "\n  as \"/vis~/create_view/new_graphics_system " << newValues <<
       "\".)"
 	   << endl;
   }

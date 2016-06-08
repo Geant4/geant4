@@ -57,8 +57,8 @@ public:
 
 private:
 
-  G4int _Z;
-  G4int _A;  
+  G4int _nucleusZ;
+  G4int _nucleusA;  
   G4NuclearLevelManager _levelManager;
 
 

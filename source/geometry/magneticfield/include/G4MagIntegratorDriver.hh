@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.hh,v 2.5 1998/11/11 18:51:10 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MagIntegratorDriver.hh,v 1.1 1999/01/07 16:07:05 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  Provides Driver that talks to Integrator Stepper, and insures that 
 //  the error is within acceptable bounds.

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02EventAction.hh,v 1.3 1998/10/09 14:31:02 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02EventAction.hh,v 1.2 1999/04/24 09:38:03 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -24,8 +24,8 @@ class ExN02EventAction : public G4UserEventAction
     ~ExN02EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    void BeginOfEventAction(const G4Event*);
+    void EndOfEventAction(const G4Event*);
     
   private:
 

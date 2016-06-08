@@ -9,7 +9,8 @@
 #include "G4KineticTrackVector.hh"
 #include "G4FragmentVector.hh"
 #include "G4ParticleChange.hh"
-#include "G4DynamicParticleVector.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
 
 class G4GeneratorPrecompoundInterface : public G4VIntraNuclearTransportModel 
 {
@@ -23,7 +24,7 @@ private:
       
 public:
    G4VParticleChange* ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus);
-   G4DynamicParticleVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
+   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 
 
 private:   

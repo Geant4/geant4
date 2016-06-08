@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.0 1998/07/02 17:31:36 gunter Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:08:51 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for global HEPGeometry.  Gabriele Cosmo, 26/9/96.
 # --------------------------------------------------------------

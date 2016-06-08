@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.cc,v 2.7 1998/11/13 14:30:23 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MagHelicalStepper.cc,v 1.2 1999/02/12 12:38:50 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4MagHelicalStepper.hh"
 #include "G4ThreeVector.hh"
@@ -19,7 +19,8 @@
 // current position
 
 G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
-   : G4MagIntegratorStepper(EqRhs)
+   : G4MagIntegratorStepper(EqRhs, 6)  // integrate over 6 variables only !!
+                                       // position & velocity
 {
   fPtrMagEqOfMot = EqRhs;
 }

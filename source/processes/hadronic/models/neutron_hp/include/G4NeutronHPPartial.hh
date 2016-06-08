@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPPartial.hh,v 2.1 1998/11/07 11:21:33 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NeutronHPPartial.hh,v 1.3 1999/07/02 09:59:50 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4NeutronHPPartial_h
 #define G4NeutronHPPartial_h 1

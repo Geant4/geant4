@@ -1,4 +1,4 @@
-# $Id: G4UI_USE.gmk,v 2.7 1998/08/26 11:05:37 allison Exp $
+# $Id: G4UI_USE.gmk,v 1.1 1999/01/07 15:58:31 gunter Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.

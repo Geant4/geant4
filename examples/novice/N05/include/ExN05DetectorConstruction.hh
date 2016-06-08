@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05DetectorConstruction.hh,v 2.3 1998/12/10 04:11:02 verderi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05DetectorConstruction.hh,v 1.1 1999/01/07 16:06:11 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef ExN05DetectorConstruction_h
 #define ExN05DetectorConstruction_h 1

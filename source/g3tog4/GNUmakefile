@@ -44,13 +44,14 @@ CPPFLAGS  += \
              -I$(G4BASE)/processes/decay/include \
              -I$(G4BASE)/track/include \
              -I$(G4BASE)/tracking/include \
+             -I$(G4BASE)/digits+hits/detector/include \
+             -I$(G4BASE)/digits+hits/hits/include \
              -Itest
 ###	kludge for AIX
 
 ifeq ($(FC),xlf)
 	cpp_include_flag=-WF,-I
 ### -d writes out F*.f file
-#	FCFLAGS += -d $(patsubst -I%,$(cpp_include_flag)%,$(CPPFLAGS))
 	FCFLAGS += -d $(patsubst -I%,$(cpp_include_flag)%,-Iinclude)
 ### xlf prepends .f name with F
 	dotf_prepend=F
@@ -94,16 +95,15 @@ cernlibs := $(shell cernlib -v $(cernlibv) geant321 packlib)
 ### .PHONY targets are executed regardless of time-stamp of any file of same 
 ###  name
 
-.PHONY: global all lib bin libC libF ext geom
+.PHONY: global all lib bin libC libF
 
 ###--------------------- section to define explicit rules --------------------
-##first: lib bin
 
 first: lib
 
 global: lib
 
-all: ext lib bin examples
+all: lib bin examples
 	@echo $@ stage done in $(curdir)
 
 examples: cltog4 clGeometry
@@ -115,7 +115,7 @@ cltog4:
 clGeometry:
 	cd test; $(MAKE) "G4TARGET=clGeometry"
 
-lib: libc #libF
+lib: libc libF
 	@echo $@ stage done in $(curdir)
 
 libc : $(G4LIBDIR)/lib$(name).a
@@ -182,30 +182,16 @@ $(G4TMPDIR)/%.d: src/%.F
 
 -include $(Fdependencies)
 
-### --------------------- target for external packages-------------------------
-
-ext:
-# global targets
-	@cd $(G4BASE)/global;		$(MAKE) global
-	@cd $(G4BASE)/geometry;		$(MAKE) global
-	@cd $(G4BASE)/run;		$(MAKE)
-	@cd $(G4BASE)/event;	$(MAKE)
-	@cd $(G4BASE)/intercoms;	$(MAKE)
-	@cd $(G4BASE)/interfaces;	$(MAKE)
-	@cd $(G4BASE)/visualization;	$(MAKE)
-	@cd $(G4BASE)/tracking;		$(MAKE)
-	@cd $(G4BASE)/track;		$(MAKE)
-	@cd $(G4BASE)/particles;	$(MAKE) global	
-	@cd $(G4BASE)/processes;	$(MAKE) global
-	@cd $(G4BASE)/materials;	$(MAKE)
-	@cd $(G4BASE)/digits+hits;	$(MAKE) global
-	@cd $(G4BASE)/graphics_reps;	$(MAKE)
+clean: cleanf
 
 cleanf:
-	$(RM) $(Flibobjects)
-	$(RM) $(Fbinobjects)
-	$(RM) $(Fdependencies)
-	$(RM) $(G4BINDIR)/$(G4TARGET)
+	@$(RM) $(Flibobjects)
+	@$(RM) $(Fbinobjects)
+	@$(RM) $(Fdependencies)
+	@$(RM) $(G4BINDIR)/$(G4TARGET)
+
+cleantest:
+	cd test; $(MAKE) clean
 
 include $(G4INSTALL)/config/common.gmk
 

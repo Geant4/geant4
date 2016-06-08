@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.hh,v 2.2 1998/11/10 18:16:48 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MagIntegratorStepper.hh,v 1.2 1999/02/12 12:28:40 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Abstract base class (ie Interface)
 // -------------------
@@ -26,7 +26,7 @@ class G4MagIntegratorStepper
 {
   public:
 
-     G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs);
+     G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs, G4int num_variables);
      ~G4MagIntegratorStepper(){} ;
 
      //  "Key" methods
@@ -57,8 +57,12 @@ class G4MagIntegratorStepper
      //  Supply the standard Evaluation of the Right Hand side 
      //   of the associated equation.
      //
-     virtual void RightHandSide( const  double y[], double dydx[] )   
-	{ theEquation_Rhs-> RightHandSide(y, dydx); }
+     virtual void RightHandSide( const  double y[], double dydx[] );   
+                                        // FIXME : not virtual   JA 10/2/99
+
+     //  Get/Set the number of variables that the stepper will compile over
+     G4int  GetNumberOfVariables();
+     void   SetNumberOfVariables(G4int newNo);
 
 #if 0
      //  Supply the standard Evaluation of the Right Hand side 
@@ -79,7 +83,8 @@ class G4MagIntegratorStepper
 
   private:
 
-     G4EquationOfMotion *theEquation_Rhs;
+     G4EquationOfMotion *fEquation_Rhs;
+     G4int              fNumberOfVariables;
 
 };
 

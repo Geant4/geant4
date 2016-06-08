@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmRadioButton.cc,v 2.0 1998/07/02 16:46:49 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmRadioButton.cc,v 1.2 1999/01/09 16:23:40 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //Radio button class. Inherits from G4OpenGLXmVWidgetComponent
 

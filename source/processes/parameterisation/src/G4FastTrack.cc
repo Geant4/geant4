@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastTrack.cc,v 2.3 1998/10/13 09:54:43 mora Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FastTrack.cc,v 1.2 1999/04/14 14:25:36 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //$Id:
 //---------------------------------------------------------------
@@ -101,7 +101,7 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   // must be deleted by G4FastTrack.
   //--------------------------------------------------------
   const G4Navigator* NavigatorToUse;
-  if(theNavigator != NULL ) NavigatorToUse=theNavigator;
+  if(theNavigator != 0 ) NavigatorToUse=theNavigator;
   else
     NavigatorToUse=
       G4TransportationManager::GetTransportationManager()->
@@ -147,6 +147,7 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   // Delete the TouchableHistory created by the Navigator:
   //------------------------------------------------------
   delete history;
+  history = 0;
 }
 
 

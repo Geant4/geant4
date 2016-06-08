@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 2.17 1998/12/11 17:56:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IonTable.cc,v 1.9 1999/05/06 16:37:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -40,9 +40,6 @@
 G4IonTable::G4IonTable()
 {
   fIonList = new G4IonList();
-  protonMass=0.0;
-  neutronMass=0.0;
-  electronMass=0.0;
 }
 
 G4IonTable::~G4IonTable()
@@ -53,6 +50,8 @@ G4IonTable::~G4IonTable()
   for (idx=(fIonList->entries()-1); idx >=0 ; idx--) {
     G4ParticleDefinition* particle = (*fIonList)(idx);
     name = particle->GetParticleName();
+
+    // keep the particle object if static
     if        (name == "alpha") {
  
     } else if (name == "deuteron") {
@@ -60,18 +59,20 @@ G4IonTable::~G4IonTable()
     } else if (name ==  "triton") {
  
     } else if (name ==   "He3")  {
+
+    } else if (name ==   "GenericIon")  {
  
     } else {
       // delete if not static objects
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>1) {
-	G4cerr << "G4IonTable:~IonTable() : delete ion of  " << name << endl;
+	G4cout << "G4IonTable:~IonTable() : delete ion of  " << name << endl;
       }
 #endif
       delete particle;
     }
   }
-  // remove all scontents in the Ion List 
+  // remove all contents in the Ion List 
   fIonList->clear();
 
   delete fIonList;
@@ -84,21 +85,16 @@ G4int G4IonTable::GetVerboseLevel() const
 
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 {
+  static G4double electronMass =  0.0;
+ 
   // Search ions with A, Z 
   G4ParticleDefinition* ion;
   G4bool isFound = false;
 
-  // check if proton/neutron/electron exits and get their masses
-  if (protonMass<=0.0) {
-    G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
-    G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
-    if ((proton == NULL)||(neutron == NULL)) {
-      G4Exception("G4IonTable: G4Proton or G4Neutron is not defined !!"); 
-    }
-    protonMass = proton->GetPDGMass();
-    neutronMass = neutron->GetPDGMass();
+  // check if electron exits and get their masses
+  if (electronMass<=0.0) {
     G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-    if (electron == NULL) {
+    if (electron == 0) {
       G4Exception("G4IonTable: G4Electron is not defined !!"); 
     }
     electronMass = electron->GetPDGMass();
@@ -125,13 +121,13 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
     if ( name(0) == '?') {
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
-	G4cerr << "G4IonTable::GetIon() : can not create ions " << endl;
-	G4cerr << " Z =" << Z << "  A = " << A <<  endl;
+	G4cout << "G4IonTable::GetIon() : can not create ions " << endl;
+	G4cout << " Z =" << Z << "  A = " << A <<  endl;
       }
 #endif
-      return NULL;
+      return 0;
     } 
-    G4double mass = GetIonMass(Z, A) + electronMass*G4double(Q);
+    G4double mass =  GetNucleusMass(Z, A) + electronMass*G4double(Z-Q);
     G4double charge =  G4double(Q)*eplus;
     // create an ion
     //   spin, parity, isospin values are fixed
@@ -140,21 +136,47 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 			    J,              +1,             0,          
 			    0,               0,             0,             
 		    "nucleus",       0,             A,           0,
-			 true,            -1.0,          NULL);
+			 true,            -1.0,          0);
 
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cerr << "G4IonTable::GetIon() : create ion of " << name << endl;
+      G4cout << "G4IonTable::GetIon() : create ion of " << name << endl;
     } 
 #endif
-    char cmd[60];
-    ostrstream os(cmd,60);
-    os << "/run/particle/addProcManager "<< name << '\0';
-    G4UImanager::GetUIpointer()->ApplyCommand(cmd);
-    
-    G4ParticleDefinition* alpha=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-    if (alpha->GetEnergyCuts() != NULL) {
-      ion->SetCuts( alpha->GetLengthCuts());
+    // create command string for addProcManager
+    char cmdAdd[60];
+    ostrstream osAdd(cmdAdd,60);
+    osAdd << "/run/particle/addProcManager "<< name << '\0';
+    // set /control/verbose 0
+    G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
+    G4UImanager::GetUIpointer()->SetVerboseLevel(0);
+    // issue /run/particle/addProcManage
+    G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
+    // retreive  /control/verbose 
+    G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
+ 
+    // Set cut value same as "GenericIon"
+    G4ParticleDefinition* genericIon=G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
+
+    if (genericIon->GetEnergyCuts() != 0) {
+      ion->SetCuts( genericIon->GetLengthCuts());
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()> 1) {
+	G4cout << "G4IonTable::GetIon() : cut value =" << genericIon->GetLengthCuts()/mm << "[mm]" <<endl;
+      } 
+#endif      
+      // Build Physics Tables for the ion
+      // create command string for buildPhysicsTable
+      char cmdBld[60];
+      ostrstream osBld(cmdBld,60);
+      osBld << "/run/particle/buildPhysicsTable "<< name << '\0';
+      // set /control/verbose 0
+      tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
+      G4UImanager::GetUIpointer()->SetVerboseLevel(0);
+      // issue /run/particle/buildPhysicsTable
+      G4UImanager::GetUIpointer()->ApplyCommand(cmdBld);
+      // retreive  /control/verbose 
+      G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
     }
   }
   return ion;  
@@ -175,9 +197,24 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4int J, G4int Q) const
   return name;
 }
 
-G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
+G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 {
-  G4ParticleDefinition* ion=NULL;
+ static G4double protonMass = 0.0;
+ static G4double neutronMass = 0.0;
+
+ // check if proton/neutron/electron exits and get their masses
+  if (protonMass<=0.0) {
+    G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
+    G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
+    if ((proton == 0)||(neutron == 0)) {
+      G4Exception("G4IonTable: G4Proton or G4Neutron is not defined !!"); 
+    }
+    protonMass = proton->GetPDGMass();
+    neutronMass = neutron->GetPDGMass();
+  }
+
+  // calculate nucleus mass
+  G4ParticleDefinition* ion=0;
   G4double mass;
   if ( (Z<=2) ) {
     if ( (Z==1)&&(A==1) ) {
@@ -194,15 +231,22 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
 	  ion = G4ParticleTable::GetParticleTable()->FindParticle("He3"); // He3 
 	}
   }
-  if (ion!=NULL) {
+  if (ion!=0) {
 	mass = ion->GetPDGMass();
   }else {
     // This routine returns mass of nuclei (w/o including electron mass) 
-    mass =  G4NucleiProperties::GetAtomicMass(G4double(A),G4double(Z));
-    mass - electronMass*G4double(Z);
+    //   mass = Z*proton_mass + (A-Z)*neutron_mass - binding energy
+     G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
+     mass = G4double(Z)*protonMass + G4double(A-Z)*neutronMass - bindingEnergy;
   }
   return mass;
 }
+
+G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
+{
+   return GetNucleusMass(Z,A);
+}
+
 
 G4bool G4IonTable::IsIon(G4ParticleDefinition* particle) const
 {
@@ -216,8 +260,8 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
   } else {
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
-    //  G4cerr << "G4IonTable::Insert :" << particle->GetParticleName() ;
-    //  G4cerr << " is not ions" << endl; 
+    //  G4cout << "G4IonTable::Insert :" << particle->GetParticleName() ;
+    //  G4cout << " is not ions" << endl; 
     //}
     //#endif
   }
@@ -230,8 +274,8 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::Remove :" << particle->GetParticleName() ;
-      G4cerr << " is not ions" << endl; 
+      G4cout << "G4IonTable::Remove :" << particle->GetParticleName() ;
+      G4cout << " is not ions" << endl; 
     }
 #endif
   }

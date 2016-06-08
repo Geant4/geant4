@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopC.hh,v 2.2 1998/10/01 19:30:12 pia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PiMinusStopC.hh,v 1.1 1999/01/07 16:13:39 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

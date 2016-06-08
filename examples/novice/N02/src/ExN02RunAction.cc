@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02RunAction.cc,v 1.3 1998/10/09 14:35:34 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02RunAction.cc,v 1.2 1999/04/16 11:20:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -26,9 +26,9 @@ ExN02RunAction::~ExN02RunAction()
 {
 }
 
-void ExN02RunAction::BeginOfRunAction(G4Run* aRun)
+void ExN02RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
+  ((G4Run *)(aRun))->SetRunID(runIDcounter++);
    
   G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
 
@@ -46,7 +46,7 @@ void ExN02RunAction::BeginOfRunAction(G4Run* aRun)
 
 
 
-void ExN02RunAction::EndOfRunAction(G4Run* aRun)
+void ExN02RunAction::EndOfRunAction(const G4Run*)
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   
@@ -55,4 +55,7 @@ void ExN02RunAction::EndOfRunAction(G4Run* aRun)
     G4UImanager::GetUIpointer()->ApplyCommand("/vis~/show/view");
   }
 }
+
+
+
 

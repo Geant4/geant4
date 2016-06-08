@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.2 1998/12/05 09:45:13 kurasige Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:14:14 gunter Exp $
 # ----------------------------------------------------------
 # GNUmakefile for run library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------

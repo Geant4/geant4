@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.1 1998/11/09 17:28:33 japost Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:07:13 gunter Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for geometry/management library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------

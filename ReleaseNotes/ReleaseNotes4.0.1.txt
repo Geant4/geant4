@@ -1,0 +1,202 @@
+                 Geant4.0.1 Release Notes
+                 ------------------------
+
+                                                     14th July 1999
+
+This version of Geant4 is a "consolidation" of the first public
+release.  Its main characteristics are:
+
+  o improved reliability and robustness.
+  o the possibility of using granular (sub-category) libraries.  We
+      recommend this mode of installation and use.
+  o the possibility of using either the Standard Template Library
+      (STL) or RogueWave tools.h++, selectable at installation and use
+      time.
+  o new low energy electromagnetic processes (first version).
+  o extension of nuclear photon-evaporation to include the calculation
+      of time to production for gammas.
+  o improvements in design of the User Action classes - see below.
+
+Note that the next release, Geant4.1.0, will be offered only in the
+STL version.
+
+This code and some binary libraries are available through our "Source
+Code" Web page - see our <A
+Href="http://wwwinfo.cern.ch/asd/geant4/geant4.html">Geant4 Home
+Page</A>.
+
+Please refer to <A
+Href="http://wwwinfo.cern.ch/asd/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.
+Updates to the documentation for Geant4.0.1 are still in preparation
+and are expected to be published within three weeks.
+
+
+Contents
+--------
+
+  1. Supported and Tested Platforms
+  2. CLHEP 1.4
+  3. Using the Standard Template Library
+  4. Compiler Specific Problems
+  5. Known Run-Time Problems
+  6. Compilation Warnings
+  7. Known Run-Time Warnings
+  8. Changes of the Signatures of Methods of the User Action Classes
+
+
+1. Supported and Tested Platforms
+---------------------------------
+
+  o SUN Solaris 5.6, C++ 4.2 patch 104631-04.
+  o HP 10.20, aCC C++ B3910B A.01.18.
+  o Linux 2.0.35, gcc C++ egcs-2.91.60.  There is a bug in an egcs
+      include file which affects compilation with STL - see comments
+      below.  This configuration was tested in the RedHat 5.1
+      distribution, but versions of Geant4 have also been compiled
+      successfully in Debian and Suse distributions.
+
+Platforms also tested but giving rise to some problems - see below:
+
+  o AIX 4.3, xlC compiler.
+  o DEC V4.0, cxx C++ V6.1-027.
+  o NT 4.0 with Service Pack 4 and Cygnus Tools b20 with:
+      Visual C++ 6.0 Service Pack 2 for either STL or RogueWave, or
+      Visual C++ 5.0 Service Pack 3 for the RogueWave version only.
+
+
+2. CLHEP 1.4
+------------
+
+Geant4.0.1 requires the installation of <A
+href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">CLHEP
+1.4</A>.  The following platform specific instructions apply:
+
+  DEC: Do *not* use the compiler option "-std strict_ansi".
+
+  NT: After configure, edit the file config/CLHEP-x86-cygnus-win32 and
+        comment out "#define HEP-USE-STD 1".
+
+
+
+3. Using the Standard Template Library
+--------------------------------------
+
+The following versions of STL have been tested:
+
+   <A href="http://www.objectspace.com/">ObjectSpace</A> STL on: AIX,
+          DEC, HP, NT and SUN.
+
+   <A href="http://www.stlport.org/">STLPORT</A> STL on: NT
+
+   "Native" STL on: Linux.
+
+This is selected at installation/compile time by environment variables
+- see documentation.  Be aware that this is the first implementation
+of "The STL Interface" for which the emphasis has been on correct
+behaviour, not on performance.  Also, the size of libraries and
+executables is considerably larger.  These issues will be addressed in
+the next release.
+
+
+4. Compiler Specific Problems
+-----------------------------
+
+  o Linux with egcs-1.1.1 and 1.1.2
+
+      In order to compile with STL it is necessary to edit
+      stl_hash_fun.h in /usr/include/g++/ or /usr/local/include/g++/.
+      Lines 65-67 must be removed or commented out.  These are the
+      lines in question:
+
+        __STL_TEMPLATE_NULL struct hash<signed char> {
+          size_t operator()(unsigned char x) const { return x; }
+        };
+
+  o AIX 4.3, xlC compiler.
+
+      Geant4 does compile and link on AIX... eventually.  The compiler
+      is very slow and the executables in debug mode are very large.
+      On rsplus at CERN we had to revert to a version of the archiver
+      corresponding to AIX 4.1 in order to have templates treated
+      correctly.  This has limited our ability to test Geant4.
+
+  o DEC V4.0, cxx C++ V6.1-027.
+
+      We have found cases of mis-compilation of min and max templates
+      on DEC.  We have traced those which cause serious malfunction
+      but there is no guarantee that there are no other cases.
+      Detailed inspection of assembler output suggests that this
+      problem might not be confined to min and max.  This has been
+      reported to DEC/Compaq.  We understand a new version 6.1A of the
+      compiler is on its way.  However we cannot guarantee correct
+      execution of Geant4 on DEC with the current version of the
+      compiler.
+
+  o NT
+
+      - Note that the G4SYSTEM environment variable used for compiling
+          Geant4 on NT has changed from WIN32-VC-NICE to WIN32-VC.
+          Please check documentation on setting the environment.
+      - Testing was done using the debuggable version only.
+      - g3tog4 has not been ported to NT.
+      - During the making of dependency files during compilation there
+          are repeated warnings ("strstrea.h not found") - this is an
+          artefact of using g++ for this purpose.
+      - Ignore linker warnings: "conflicts with use of other libs".
+      - Ignore linker errors: "unresolved external symbol
+          __imp__MessageBoxA@16".
+      - There is a known problem reading the data files for neutron
+          scattering processes.  A patch resolving this problem will
+          be issued soon.
+ 
+
+
+5. Known Run-Time Problems
+--------------------------
+
+  o Reading STEP files on DEC with optimised libraries causes a Memory
+      fault - but see notes on DEC above.
+  o exampleN04 loops on DEC with optimised libraries - but see notes
+      on DEC above.
+  o On HP, an executable which uses "integral approach"
+      electromagnetic processes - G4IMultipleScattering,
+      G4IeIonisation, G4IeBremsstrahlung, G4IeplusAnnihilation,
+      G4IhIonisation - has intermittently given Bus error(coredump).
+
+
+6. Compilation Warnings
+-----------------------
+
+There are compilation warnings om some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour, but we are working
+on reducing them.
+
+
+7. Known Run-Time Warnings
+--------------------------
+
+The following messages are written to error output while tracking.  We
+believe none give rise to incorrect behaviour.
+
+  o G4PropagatorInField::LocateIntersectionPoint: Warning: Integration
+      inaccuracy requires an adjustment in the step's endpoint Two
+      mid-points are further apart than their curve length difference:
+      Dist = xxx curve length = yyy
+  o Stepsize underflow in Stepper.
+  o Warning G4Navigator::ComputeStep found slightly inaccurate
+      position...
+  o Warning in G4Navigator::ComputeStep: The Step's starting point has
+      moved...
+
+
+8. Changes of the Signatures of Methods of the User Action Classes
+------------------------------------------------------------------
+
+The signatures of all methods of all of the optional user action
+classes have been changed.  Now every method takes a constant pointer
+to an appropriate G4 object.  To cope with this change the user code
+must be modified.  The examples and documents are updated and the user
+is requested to consult to them.  We are sorry for this inconvenience
+but we concluded that this change will provide the user with a better
+and more robust code.

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.cc,v 2.2 1998/11/13 17:04:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DecayProducts.cc,v 1.4 1999/04/14 10:28:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,13 +31,13 @@ G4Allocator<G4DecayProducts> aDecayProductsAllocator;
 
 
 G4DecayProducts::G4DecayProducts()
-                :numberOfProducts(0),theParentParticle(NULL)
+                :numberOfProducts(0),theParentParticle(0)
 { 
 
 }
 
 G4DecayProducts::G4DecayProducts(const G4DynamicParticle &aParticle)
-                :numberOfProducts(0),theParentParticle(NULL)
+                :numberOfProducts(0),theParentParticle(0)
 {
   theParentParticle = new G4DynamicParticle(aParticle);
 }
@@ -62,7 +62,7 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
   if (this != &right)
   { 
     // recreate parent
-    if (theParentParticle != NULL) delete theParentParticle;
+    if (theParentParticle != 0) delete theParentParticle;
     theParentParticle = new G4DynamicParticle(*right.theParentParticle);
 
     // delete G4DynamicParticle objects
@@ -84,7 +84,7 @@ G4DecayProducts & G4DecayProducts::operator=(const G4DecayProducts &right)
 G4DecayProducts::~G4DecayProducts()
 {
   //delete parent
-  if (theParentParticle != NULL) delete theParentParticle;
+  if (theParentParticle != 0) delete theParentParticle;
   
   // delete G4DynamicParticle object
   for (G4int index=0; index < numberOfProducts; index++)
@@ -100,7 +100,7 @@ G4DynamicParticle* G4DecayProducts::PopProducts()
      numberOfProducts -= 1;   
      return  theProductVector[numberOfProducts];
    } else {
-     return NULL;
+     return 0;
    }
 }
 
@@ -111,9 +111,9 @@ G4int G4DecayProducts::PushProducts(G4DynamicParticle *aParticle)
      numberOfProducts += 1; 
    } else {
 #ifdef G4VERBOSE
-     G4cerr << "G4DecayProducts::PushProducts ";
-     G4cerr << " exceeds MaxNumberOfProducts(=" <<MaxNumberOfProducts << ")";
-     G4cerr << endl;
+     G4cout << "G4DecayProducts::PushProducts ";
+     G4cout << " exceeds MaxNumberOfProducts(=" <<MaxNumberOfProducts << ")";
+     G4cout << endl;
 #endif
    }
    return numberOfProducts;
@@ -124,18 +124,18 @@ G4DynamicParticle* G4DecayProducts::operator[](G4int anIndex) const
    if ((numberOfProducts > anIndex) && (anIndex >=0) ) {
      return  theProductVector[anIndex];
    } else {
-     return NULL;
+     return 0;
    }
 }
 
 void  G4DecayProducts::SetParentParticle(const G4DynamicParticle &aParticle)
 {
-  if (theParentParticle != NULL) delete theParentParticle;
+  if (theParentParticle != 0) delete theParentParticle;
   theParentParticle = new G4DynamicParticle(aParticle);
 }
 
 
-void G4DecayProducts::Boost(G4double totalEnergy, const G4ParticleMomentum &momentumDirection)
+void G4DecayProducts::Boost(G4double totalEnergy, const G4ThreeVector &momentumDirection)
 {
   // calcurate new beta
   G4double   mass = theParentParticle->GetMass();
@@ -152,7 +152,7 @@ void G4DecayProducts::Boost(G4double newbetax, G4double newbetay, G4double newbe
   G4double   energy  = theParentParticle->GetTotalEnergy();
   G4double   momentum  = 0.0;
 
-  G4ParticleMomentum direction(0.0,0.0,1.0);    
+  G4ThreeVector direction(0.0,0.0,1.0);    
   G4LorentzVector p4;
 
   if (energy - mass > DBL_MIN) {
@@ -206,7 +206,7 @@ G4bool G4DecayProducts::IsChecked()
   //   energy/momentum
   G4double   parent_mass = theParentParticle->GetMass();
   G4double   parent_energy  = theParentParticle->GetTotalEnergy();
-  G4ParticleMomentum direction = theParentParticle->GetMomentumDirection();
+  G4ThreeVector direction = theParentParticle->GetMomentumDirection();
   G4ThreeVector parent_momentum = direction*(theParentParticle->GetTotalMomentum());
   // check momentum dirction is a unit vector
   if ( (parent_momentum.mag() >0.0) && (abs(direction.mag()-1.0) >1.0e-6 ) ) {
@@ -263,7 +263,7 @@ void G4DecayProducts::DumpInfo()
 {
    G4cout << " ----- List of DecayProducts  -----" << endl;
    G4cout << " ------ Parent Particle ----------" << endl;
-   if (theParentParticle != NULL) theParentParticle->DumpInfo();
+   if (theParentParticle != 0) theParentParticle->DumpInfo();
    G4cout << " ------ Daughter Particles  ------" << endl;  
    for (G4int index=0; index < numberOfProducts; index++) 
    {

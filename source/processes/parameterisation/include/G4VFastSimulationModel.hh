@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VFastSimulationModel.hh,v 2.2 1998/10/13 09:54:34 mora Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VFastSimulationModel.hh,v 1.1 1999/01/07 16:14:04 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //---------------------------------------------------------------

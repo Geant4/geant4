@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oCommon.hh,v 2.2 1998/07/12 02:59:59 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4oCommon.hh,v 1.2 1999/04/13 01:26:21 yhajime Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*
    Included by G4o.h.

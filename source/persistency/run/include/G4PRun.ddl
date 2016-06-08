@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PRun.ddl,v 1.2 1998/11/09 17:17:21 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PRun.ddl,v 1.1 1999/01/07 16:10:58 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4PRun_h

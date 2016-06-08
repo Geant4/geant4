@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForDecay.hh,v 2.2 1998/07/13 17:28:32 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleChangeForDecay.hh,v 1.3 1999/04/13 09:43:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -30,7 +30,6 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
 class G4DynamicParticle;
 #include "G4VParticleChange.hh"
 
@@ -60,7 +59,7 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     // by using final state information of the track given by a physics
     // process    
  
-    // !!! No effect for  AlongStep
+    // !!! No effect for  AlongSteyp
     // virtual G4Step* UpdateStepForAlongStep(G4Step* Step);
 
     virtual G4Step* UpdateStepForAtRest(G4Step* Step);
@@ -79,7 +78,10 @@ class G4ParticleChangeForDecay: public G4VParticleChange
   protected:
     G4double theTimeChange;
     //  The change of global time of a given particle.
-
+ 
+ public:
+    // for Debug 
+    virtual G4bool CheckIt(const G4Track&);
 };
 
 inline 

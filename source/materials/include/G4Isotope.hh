@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.hh,v 2.5 1998/08/05 10:30:28 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Isotope.hh,v 1.1 1999/01/07 16:09:41 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------

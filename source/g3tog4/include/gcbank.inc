@@ -5,8 +5,8 @@
 *     based on the Program) you indicate your acceptance of this statement,
 *     and all its terms.
 *    
-*     $Id: gcbank.inc,v 2.0 1998/07/02 16:16:01 gunter Exp $
-*     GEANT4 tag $Name: geant4-00 $
+*     $Id: gcbank.inc,v 1.1 1999/01/07 16:06:45 gunter Exp $
+*     GEANT4 tag $Name: geant4-00-01 $
 *    
       INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
       INTEGER KWBANK,KWWORK,IWS

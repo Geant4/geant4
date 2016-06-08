@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionDynamics.hh,v 2.0 1998/07/02 16:38:40 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ReactionDynamics.hh,v 1.1 1999/01/07 16:13:49 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Reaction Dynamics
  // original by H.P. Wellisch

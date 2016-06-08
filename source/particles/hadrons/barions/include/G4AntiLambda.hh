@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiLambda.hh,v 2.3 1998/09/24 06:48:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiLambda.hh,v 1.2 1999/04/13 08:25:50 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,12 +56,14 @@ class G4AntiLambda : public G4VBarion
    );
 
  public:
+   virtual  ~G4AntiLambda(){}
+
    static G4AntiLambda* AntiLambdaDefinition();
    static G4AntiLambda* AntiLambda(){return &theAntiLambda;}
    static G4double GetCuts() {return theAntiLambdaLengthCut;}   
    static G4double* GetCutsInEnergy() {return theAntiLambdaKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

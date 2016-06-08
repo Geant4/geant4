@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.2 1998/11/24 13:12:11 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MuNuclearInteraction.cc,v 1.5 1999/06/14 13:46:40 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -46,6 +46,7 @@ G4MuNuclearInteraction::G4MuNuclearInteraction(const G4String& processName)
     theMuonMinus ( G4MuonMinus::MuonMinus() ),
     theMuonPlus ( G4MuonPlus::MuonPlus() ),
     thePionZero (G4PionZero::PionZero() ),
+    GramPerMole(g/mole),
     CutFixed ( 0.200*GeV)
 {  }
  
@@ -115,6 +116,8 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
      delete theMeanFreePathTable;
   }
   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
+
 
   for (G4int K=0 ; K < G4Material::GetNumberOfMaterials(); K++ )  
   { 
@@ -326,6 +329,7 @@ void G4MuNuclearInteraction::MakeSamplingTables(
           proba[iz][it][nbin] = CrossSection ;
         }
       }
+      ya[NBIN]=0. ;
 
       if(CrossSection > 0.) 
       {
@@ -398,7 +402,7 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
      del = abs(log(KineticEnergy)-log(tdat[it])) ;
      if(del<delmin)
      {
-       del=delmin;
+       delmin=del;
        itt=it ;
      }
    }
@@ -413,7 +417,7 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
       } while (((proba[izz][itt][iy]) < r)&&(iy < NBINminus1)) ;
 
    //sampling is Done uniformly in y in the bin
-   if( iy < NBINminus1 )
+   if( iy < NBIN )
      y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy] ) ;
    else
      y = ya[iy] ;
@@ -532,8 +536,6 @@ void G4MuNuclearInteraction::PrintInfoDefinition()
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
          << " in " << TotBin << " bins. \n";
 
-  G4cout << " For the moment there is no secondary, only energy loss!" << endl;
-  G4cout << " =======================================================" << endl;
   G4cout << endl;
 }
 

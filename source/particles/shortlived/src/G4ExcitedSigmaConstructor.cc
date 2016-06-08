@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 2.4 1998/11/13 12:22:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.2 1999/06/08 07:33:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -556,7 +556,7 @@ const G4String G4ExcitedSigmaConstructor::name[] = {
 
 const G4double G4ExcitedSigmaConstructor::mass[] = {
   1.384*GeV, 1.660*GeV, 1.670*GeV, 1.750*GeV,  1.775*GeV, 
-  1.915*GeV, 1.940*GeV, 1.030*GeV
+  1.915*GeV, 1.940*GeV, 2.030*GeV
 };
 
 const G4double G4ExcitedSigmaConstructor::width[] = {

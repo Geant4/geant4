@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmBox.cc,v 2.1 1998/07/13 17:11:44 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmBox.cc,v 1.2 1999/01/09 16:23:34 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //Box container class
 

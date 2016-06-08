@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventAction.hh,v 2.2 1998/12/10 04:11:11 verderi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05EventAction.hh,v 1.2 1999/04/16 12:04:57 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef ExN05EventAction_h
@@ -21,11 +21,11 @@ class ExN05EventAction : public G4UserEventAction
 {
   public:
     ExN05EventAction();
-    ~ExN05EventAction();
+    virtual ~ExN05EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
   private:
     G4int calorimeterCollID;

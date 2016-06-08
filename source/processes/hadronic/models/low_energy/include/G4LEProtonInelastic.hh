@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEProtonInelastic.hh,v 2.0 1998/07/02 16:28:36 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4LEProtonInelastic.hh,v 1.1 1999/01/07 16:12:41 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Low Energy Proton Inelastic Process
  // original by H.P. Wellisch

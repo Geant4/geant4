@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIsession.hh,v 2.2 1998/11/04 11:53:31 yhajime Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIsession.hh,v 1.1 1999/01/07 16:09:24 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $id$
 

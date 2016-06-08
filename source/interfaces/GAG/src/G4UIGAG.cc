@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 2.9 1998/12/09 08:00:23 yhajime Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIGAG.cc,v 1.3 1999/04/15 17:41:44 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal
@@ -20,11 +20,6 @@
 #  include <Strstrea.h>
 #else
 #  include <strstream.h>
-#endif
-
-#ifdef GNU_GCC
-  template class RWTValVector<G4UIcommand *>;
-  template class RWTValVector<RWCString>;
 #endif
 
 G4UIGAG::G4UIGAG(): TVersion("T1.0a"), JVersion("J1.0a")

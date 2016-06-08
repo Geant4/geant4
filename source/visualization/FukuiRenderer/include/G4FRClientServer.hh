@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRClientServer.hh,v 2.2 1998/07/13 17:10:54 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FRClientServer.hh,v 1.2 1999/01/09 16:11:40 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Satoshi TANAKA, Wed Jul  3 14:13:52 JST 1996
 ////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: G4StatMFMicrocanonical.cc,v 1.3 1998/11/12 16:19:51 allison Exp $
+// $Id: G4StatMFMicrocanonical.cc,v 1.1 1999/01/07 16:11:57 gunter Exp $
 
 #include "G4StatMFMicrocanonical.hh"
 

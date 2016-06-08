@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BMesonPlus.cc,v 2.1 1998/08/04 11:15:41 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4BMesonPlus.cc,v 1.2 1999/06/09 16:07:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4BMesonPlus::G4BMesonPlus(
 
 // In this version, charged pions are set to stable
 G4BMesonPlus G4BMesonPlus::theBMesonPlus(
-	         "B+",      5.2789*GeV,       0.0*MeV,    +1.*eplus, 
+	         "B+",      5.2789*GeV,  3.99e-10*MeV,    +1.*eplus, 
 		    0,              -1,             0,          
 		    1,              +1,             0,             
 	      "meson",               0,             0,         521,

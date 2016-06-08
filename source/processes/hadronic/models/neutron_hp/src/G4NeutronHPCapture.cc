@@ -8,6 +8,8 @@
   G4NeutronHPCapture::G4NeutronHPCapture()
   {
 //    G4cout << "Capture : start of construction!!!!!!!!"<<endl;
+    if(!getenv("NeutronHPCrossSections")) 
+       G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
     dirName = getenv("NeutronHPCrossSections");
     G4String tString = "/Capture/";
     dirName = dirName + tString;
@@ -38,7 +40,7 @@
   {
     G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
-    xSec = new G4double(n);
+    xSec = new G4double[n];
     G4double sum=0;
     G4int i, index;
     for (i=0; i<n; i++)

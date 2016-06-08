@@ -1,0 +1,16 @@
+
+template<class T> RWTPtrVector<T>::RWTPtrVector (): vector<T*>(){};
+
+template<class T> RWTPtrVector<T>::RWTPtrVector (unsigned int n) : vector<T*>(n){}
+
+template<class T> RWTPtrVector<T>::RWTPtrVector (unsigned int n, 
+						 T* const & iPtr)
+  : vector<T*>(n, iPtr){}
+
+template<class T> RWTPtrVector<T>::RWTPtrVector (const RWTPtrVector<T>& iPtr) 
+                                        : vector<T*> ( iPtr ){}
+
+template<class T> void RWTPtrVector<T>::reshape( size_t n )
+{ 
+  vector<T*>::resize(n);
+}

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PGeometryObjectMap.ddl,v 2.5 1998/07/14 14:12:35 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PGeometryObjectMap.ddl,v 1.1 1999/01/07 16:10:55 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // class G4PGeometryObjectMap 
 //

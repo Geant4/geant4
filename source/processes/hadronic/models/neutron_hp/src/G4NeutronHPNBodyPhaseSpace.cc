@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 2.2 1998/11/21 10:34:10 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.2 1999/07/02 10:01:14 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"

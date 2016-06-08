@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.11 1998/12/17 01:11:48 gcosmo Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.4 1999/04/15 15:35:55 hpw Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -262,6 +262,7 @@ G4double G4DiffractiveExcitation::ChooseX(G4double Xmin, G4double Xmax) const
 	    x=Xmin + G4UniformRand() * range;
 	}  while ( Xmin/x < G4UniformRand() );
 
+//debug-hpw	cout << "DiffractiveX "<<x<<endl;
 	return x;
 }
 

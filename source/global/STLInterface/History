@@ -1,0 +1,51 @@
+$Id: History,v 1.8 1999/07/06 15:02:39 gunter Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+                         STL Interface
+                         -------------
+
+6th July 1999   Gunter Folger
+- name for hash_map for WIN32 is hashmap.h ONLY with Object space; 
+  other implementations on WIN32 should use hash_map.h
+
+5th July 1999  Gunter Folger, John Allison (STLInterface-23)
+- Added operator= to tpsrtvec and tvvector.
+
+28th June 1999  John Allison (STLInterface-21a)
+- Fixed rwsize=N in tvalvec::resize(N) (Gunter).
+
+24th June 1999  John Allison (STLInterface-21)
+- Fixed clear problem (which wrongly made STL size 0).
+- Added bounds checking.
+
+23rd June 1999  John Allison (STLInterface-20)
+- Tagged Frank's fixes to tpordvec re insertAt(0,...) and similar.
+
+20th June 1999  John Allison (STLInterface-18)
+- Removed RWTPtrHashDictionary(size_t n):fhm(n){}.
+- Implemented RWTPtrHashDictionary::clearAndDestroy of values *and*
+  keys, protecting against duplicate entries.
+- Reimplemented RWTPtrOrderedVector::clearAndDestroy with vector<T*>
+  instead of set<T*>.
+- Prevented RWTPtrOrderedVector::resize and RWTValOrderedVector::resize
+  from reducing the size below the number if items.
+
+20th June 1999  John Allison
+- Started this file.

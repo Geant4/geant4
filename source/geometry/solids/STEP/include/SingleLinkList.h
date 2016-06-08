@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: SingleLinkList.h,v 2.0 1998/07/02 17:03:20 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: SingleLinkList.h,v 1.2 1999/05/21 20:20:36 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef singlelinklist_h
 #define	singlelinklist_h

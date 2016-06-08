@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBShexahedron.hh,v 2.1 1998/07/12 02:59:12 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NURBShexahedron.hh,v 1.3 1999/05/19 08:33:39 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Hexa hedron builder prototype
 // OC 17 9 96
@@ -37,8 +37,11 @@ class	G4NURBShexahedron : public G4NURBS
 	//  from the rear, from the upper right corner to the lower one
 	// in anticlockwise sens, then the same for front side)
 
-	public:	G4NURBShexahedron(const G4ThreeVector Corners [8]);
-virtual	const char*	Whoami() const;
+	public:
+	  G4NURBShexahedron(const G4ThreeVector Corners [8]);
+	  virtual G4Visible&  operator = (const G4Visible& right);
+	  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
+	  const char*	Whoami() const;
 	};
 
 #endif

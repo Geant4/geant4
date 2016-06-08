@@ -1,3 +1,6 @@
+#ifndef _G3MEDTABLE_
+#define _G3MEDTABLE_ 1
+
 // This code implementation is the intellectual property of
 // the RD44 GEANT4 collaboration.
 //
@@ -5,46 +8,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.hh,v 2.1 1998/07/12 02:54:13 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G3MedTable.hh,v 1.3 1999/05/06 18:01:50 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
-// G3 materials table.
-// Maps G3 material indices to their G4 material object counterparts.
-// Maintains a linked List of G3 material index/G4 material pointer pairs.
+// Maps G3 tracking media indices to G4Material*
 
-#include <rw/gdlist.h>
+#include <rw/tpordvec.h>
 
-#include "globals.hh"
-#include "G4Material.hh"
-
-class G4MagneticField;
-class G4UserLimits;
-
-struct MedTableEntry {
-    G4int medid;
-    G4Material* matpt;
-    G4MagneticField* magpt;
-    G4UserLimits* limpt;
-    G4int isvol;
-    G4double deemax;
-    G4double epsil;
-};
-declare (RWGDlist, MedTableEntry)
+class G4Material;
 
 class G3MedTable {
 private:
-    RWGDlist(MedTableEntry) MedT;
-    RWGDlist(MedTableEntry)* MedTable;
+  RWTPtrOrderedVector<G4Material>* _Med;
 public:
-    G3MedTable();
-    ~G3MedTable();
-    G4Material* GetMat(G4int medid);  // get associated material
-    G4MagneticField* GetMag(G4int medid);
-    G4UserLimits* GetLim(G4int medid);
-    void put(G4int medid, G4Material* matpt, G4MagneticField* field,
-             G4UserLimits* limits, G4int isvol,
-             G4double deemax, G4double epsil);
+  G3MedTable();
+  ~G3MedTable();
+  G4Material* get(G4int medid);
+  void put(G4int medid, G4Material* matpt);
 };
 
 extern G3MedTable G3Med;
+#endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessExpert.cc,v 2.4 1998/07/16 02:06:08 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisManMessExpert.cc,v 1.3 1999/01/11 00:48:37 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -285,7 +285,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
       // Given a physical volume...
       G4VPhysicalVolume* pPhysVol =
-	fpVMan -> GetCurrentSceneData ().GetPhysicalVolume ();
+	fpVMan -> GetCurrentScene ().GetPhysicalVolume ();
 
       // Given its transformation (normally, this would be known from
       // the hits or digis information)...

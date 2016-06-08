@@ -5,54 +5,30 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 2.0 1998/07/02 16:16:10 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G3MatTable.cc,v 1.6 1999/05/28 21:08:55 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
+
+#include "globals.hh"
 #include "G3MatTable.hh"
+#include "G4Material.hh"
 
-RWBoolean MatTableMatch(const MatTableEntry* MatTentry, const void* pt)
-{
-    G4int matid;
-    matid = *((G4int*) pt);
-    if (MatTentry->matid == matid)
-        {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-}
+G3MatTable::G3MatTable(){
+  _Mat = new 
+    RWTPtrOrderedVector<G4Material>;
+};
 
-G3MatTable::G3MatTable()
-{
-    MatTable = &MatT;
-}
+G3MatTable::~G3MatTable(){
+  _Mat->clear();
+  G4cout << "Deleted G3MatTable..." << endl;
+  delete _Mat;
+};
 
-G3MatTable::~G3MatTable()
-{
-    while (! MatTable->isEmpty()) {
-        MatTableEntry* MatTentry = MatTable->last();
-        MatTable->removeReference(MatTentry);
-        delete MatTentry;
-    }
-    delete MatTable;
-}
+G4Material*
+G3MatTable::get(G4int MatID){
+  return (*_Mat)[MatID-1];
+};
 
-G4Material* G3MatTable::get(G4int matid)
-{
-    const void* pt;
-    pt = &matid;
-    MatTableEntry* MatTentry = MatTable->find(MatTableMatch, pt);
-    if (MatTentry == NULL) {
-        return NULL;
-    } else {
-        return MatTentry->matpt;
-    }
-}
-
-void G3MatTable::put(G4int* matid, G4Material* matpt)
-{
-    MatTableEntry* MatTentry = new MatTableEntry;
-    MatTentry->matid = *matid;
-    MatTentry->matpt = matpt;
-    MatTable->append(MatTentry);
-}
+void G3MatTable::put(G4int MatID, G4Material* MatPT){
+  _Mat->insertAt(MatID-1, MatPT);
+};

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 2.6 1998/10/01 17:01:43 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4RunMessenger.cc,v 1.1 1999/01/07 16:14:18 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4RunMessenger.hh"

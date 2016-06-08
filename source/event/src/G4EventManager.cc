@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.cc,v 2.2 1998/07/13 16:50:12 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EventManager.cc,v 1.2 1999/04/15 08:41:52 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //
@@ -79,7 +79,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   if(sdManager)
   { currentEvent->SetHCofThisEvent(sdManager->PrepareNewEvent()); }
 
-  if(userEventAction) userEventAction->BeginOfEventAction();
+  if(userEventAction) userEventAction->BeginOfEventAction(currentEvent);
 
 #ifdef G4VERBOSE
   if ( verboseLevel > 1 )
@@ -127,7 +127,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #endif
 
 #ifdef G4_STORE_TRAJECTORY
-    G4Trajectory * aTrajectory = trackManager->GimmeTrajectory();
+    G4VTrajectory * aTrajectory = trackManager->GimmeTrajectory();
     if(aTrajectory)
     {
       if(!trajectoryContainer)
@@ -176,7 +176,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   currentEvent->SetTrajectoryContainer(trajectoryContainer);
 #endif
 
-  if(userEventAction) userEventAction->EndOfEventAction();
+  if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
   currentEvent = NULL;
 
 }

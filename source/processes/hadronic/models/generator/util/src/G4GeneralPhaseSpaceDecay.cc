@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeneralPhaseSpaceDecay.cc,v 1.2 1998/11/18 18:23:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GeneralPhaseSpaceDecay.cc,v 1.1 1999/01/07 16:12:23 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: G4GeneralSpaceDecay.cc,v 1.0 1998/05/21
 // ----------------------------------------------------------------

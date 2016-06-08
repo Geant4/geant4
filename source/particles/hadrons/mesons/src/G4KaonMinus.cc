@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonMinus.cc,v 2.2 1998/09/24 06:09:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KaonMinus.cc,v 1.2 1999/06/09 16:07:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -84,7 +84,7 @@ G4KaonMinus::G4KaonMinus(
 //             stable         lifetime    decay table 
 //
 G4KaonMinus G4KaonMinus::theKaonMinus(
-	      "kaon-",    0.493677*GeV,       0.0*MeV,    -1.*eplus, 
+	      "kaon-",    0.493677*GeV,   5.314e-14*MeV,    -1.*eplus, 
 		    0,              -1,             0,          
 		    1,              -1,             0,             
 	      "meson",               0,             0,        -321,

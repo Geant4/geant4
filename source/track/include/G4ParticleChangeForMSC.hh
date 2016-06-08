@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForMSC.hh,v 2.1 1998/12/02 17:19:24 urban Exp $
+// $Id: G4ParticleChangeForMSC.hh,v 1.3 1999/04/13 09:43:25 kurasige Exp $
 // GEANT4 tag $ $
 //
 // 
@@ -17,6 +17,7 @@
 // 
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 23 Mar. 1998  H.Kurahige
+//   Add Get/SetMomentumDirectionChange             6 Feb. 1999 H.Kurashige 
 //
 // -------------------------------------------------------------
 #ifndef G4ParticleChangeForMSC_h
@@ -25,7 +26,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ThreeVector.hh"
-#include "G4ParticleMomentum.hh"
+#include "G4ThreeVector.hh"
 class G4DynamicParticle;
 #include "G4VParticleChange.hh"
 
@@ -66,10 +67,13 @@ class G4ParticleChangeForMSC: public G4VParticleChange
     //   "Change", what it stores (and returns in get) are the "FINAL" 
     //   values of the Position, Momentum, etc.
 
-    const G4ParticleMomentum* GetMomentumChange() const;
+    const G4ThreeVector* GetMomentumChange() const;
     void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
     void SetMomentumChange(const G4ThreeVector& Pfinal);
-    // Get/Set theMomentumChange vector: it is the final momentum direction.
+    const G4ThreeVector* GetMomentumDirectionChange() const;
+    void SetMomentumDirectionChange(G4double Px, G4double Py, G4double Pz);
+    void SetMomentumDirectionChange(const G4ThreeVector& Pfinal);
+    // Get/Set theMomentumDirectionChange vector: it is the final momentum direction.
 
     const G4ThreeVector* GetPositionChange() const;
     void SetPositionChange(G4double x, G4double y, G4double z);
@@ -80,7 +84,7 @@ class G4ParticleChangeForMSC: public G4VParticleChange
     virtual void DumpInfo() const;
 
   protected:
-    G4ParticleMomentum theMomentumChange;
+    G4ThreeVector theMomentumDirectionChange;
     //  It is the vector containing the final momentum direction
     //  after the invoked process. The application of the change
     //  of the momentum direction of the particle is not Done here.
@@ -89,11 +93,17 @@ class G4ParticleChangeForMSC: public G4VParticleChange
     
     G4ThreeVector thePositionChange;
     //  The changed (final) position of a given particle.
-    
+
+  public:
+    // for Debug 
+    virtual G4bool CheckIt(const G4Track&);
+  
 };
 
 #include "G4ParticleChangeForMSC.icc"
 
 #endif
+
+
 
 

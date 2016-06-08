@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Alpha.hh,v 2.3 1998/09/24 11:24:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Alpha.hh,v 1.2 1999/04/13 08:24:03 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,6 +56,8 @@ class G4Alpha : public G4VIon
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+   virtual ~G4Alpha();
+  
    static G4Alpha*    AlphaDefinition();
    static G4Alpha*    Alpha(){return &theAlpha;}
    static G4double GetCuts() {return theAlphaLengthCut;}   

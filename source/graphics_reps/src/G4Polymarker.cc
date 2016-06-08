@@ -5,24 +5,36 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.cc,v 2.0 1998/07/02 17:30:59 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Polymarker.cc,v 1.4 1999/05/25 09:10:23 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  November 1996
 
 #include "G4Polymarker.hh"
 
-// Forward declaration for g++ linker.
-#ifdef GNU_GCC
-  #include <rw/tvvector.h>
-  #include "G4Point3D.hh"
-  template class RWTValVector<G4Point3D>;
-#endif
-
 G4Polymarker::G4Polymarker ():
 fMarkerType (line)
 {}
+
+G4Visible & G4Polymarker::operator = (const G4Visible &right) {
+  return G4Visible::operator = (right);
+}
+
+G4VVisPrim & G4Polymarker::operator = (const G4VVisPrim &right) {
+  return G4VVisPrim::operator = (right);
+}
+
+G4VMarker & G4Polymarker::operator = (const G4VMarker &right) {
+  return G4VMarker::operator = (right);
+}
+
+G4Polymarker & G4Polymarker::operator = (const G4Polymarker &right) {
+  if (&right == this) return *this;
+  G4VMarker::operator = (right);
+  fMarkerType = right.fMarkerType;
+  return *this;
+}
 
 ostream& operator << (ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";

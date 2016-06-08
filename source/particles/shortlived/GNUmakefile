@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.1 1998/07/02 22:09:33 gcosmo Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:10:37 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for shortlived library.  Gabriele Cosmo, 18/9/96.
 # --------------------------------------------------------------

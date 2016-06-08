@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCameraMessengers.hh,v 2.3 1998/07/12 03:44:45 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisCommandsCameraMessengers.hh,v 1.2 1999/01/09 16:30:55 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Messengers for /vis~/camera commands - John Allison  6th April 1998.

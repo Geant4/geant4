@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: g4mini.java,v 2.0 1998/07/02 16:47:50 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: g4mini.java,v 1.1 1999/01/07 16:15:09 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 import java.io.*;
 import java.net.*;

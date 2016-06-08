@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserRunAction.hh,v 2.1 1998/07/12 03:08:32 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UserRunAction.hh,v 1.2 1999/04/09 02:28:00 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4UserRunAction_h
@@ -21,8 +21,8 @@ class G4UserRunAction
     virtual ~G4UserRunAction();
 
   public:
-    virtual void BeginOfRunAction(G4Run* aRun);
-    virtual void EndOfRunAction(G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 };
 
 #endif

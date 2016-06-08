@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.cc,v 2.10 1998/11/24 16:41:23 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4BSplineSurface.cc,v 1.2 1999/05/20 17:39:21 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "EntityInst.h"
@@ -312,7 +312,7 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
   
   // Loop through the bezier List
   G4BezierSurface* bez_ptr;
-  distance = INFINITY;
+  distance = kInfinity;
 
   while(bezier_list.index != (G4Surface*)0)
   {

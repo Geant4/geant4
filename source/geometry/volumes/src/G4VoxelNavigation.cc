@@ -5,13 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.cc,v 2.6 1998/11/02 12:12:19 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VoxelNavigation.cc,v 1.3 1999/02/17 17:29:24 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // class G4VoxelNavigation Implementation
 //
-// $ Id: $
 //
 // Modified by:
 //   J. Apostolakis,  29 Apr 98 Fixed error in LocateNextVoxel that

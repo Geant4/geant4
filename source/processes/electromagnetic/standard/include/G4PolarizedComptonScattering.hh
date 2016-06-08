@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolarizedComptonScattering.hh,v 2.2 1998/11/11 13:26:19 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PolarizedComptonScattering.hh,v 1.1 1999/01/07 16:11:14 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1995

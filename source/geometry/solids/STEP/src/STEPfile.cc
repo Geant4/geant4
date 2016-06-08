@@ -1,12 +1,7 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// This code is utilised in the GEANT4 detector simulation toolkit.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// $Id: STEPfile.cc,v 2.2 1998/07/13 16:53:54 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: STEPfile.cc,v 1.2 1999/05/21 20:20:51 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 /*

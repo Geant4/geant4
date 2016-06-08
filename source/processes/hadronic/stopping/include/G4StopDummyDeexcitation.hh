@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopDummyDeexcitation.hh,v 2.2 1998/07/14 12:35:23 jwellisc Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4StopDummyDeexcitation.hh,v 1.2 1999/04/18 11:28:57 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -30,8 +30,8 @@
 #include "G4StopDeexcitationAlgorithm.hh"
 
 #include "globals.hh"
-#include "G4DynamicParticle.hh"
-#include "G4DynamicParticleVector.hh"
+#include "G4ReactionProduct.hh"
+#include "G4ReactionProductVector.hh"
 #include "G4ThreeVector.hh"
 
 class G4StopDummyDeexcitation: public G4StopDeexcitationAlgorithm
@@ -54,14 +54,14 @@ public:
   virtual ~G4StopDummyDeexcitation();
 
   // Products
-  virtual G4DynamicParticleVector* BreakUp(G4double A, G4double Z, 
+  virtual G4ReactionProductVector* BreakUp(G4double A, G4double Z, 
 				    G4double excitation, const G4ThreeVector& p);
 
 protected:
    
 private:
 
-  G4DynamicParticleVector* _products;
+  G4ReactionProductVector* _products;
 
 };
  

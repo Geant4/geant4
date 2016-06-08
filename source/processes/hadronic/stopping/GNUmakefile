@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.1 1998/10/16 16:34:14 pia Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:13:37 gunter Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic stopping library.  G.Folger 10-Dec-97
 # --------------------------------------------------------------

@@ -5,21 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsvolu.cc,v 2.3 1998/09/18 08:56:49 lockman Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4gsvolu.cc,v 1.4 1999/05/22 06:31:58 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4ios.hh"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 #include "G3MedTable.hh"
+#include "G4VSolid.hh"
+#include "G4makevol.hh"
 
-G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
-                           G4double Rpar[], G4int npar);
 G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
                        G4String shape, G4String shapem);
 
-void PG4gsvolu(RWCString tokens[])
-{
+void PG4gsvolu(RWCString tokens[]) {
     // fill the parameter containers
     G3fillParams(tokens,PTgsvolu);
 
@@ -39,8 +38,7 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
     G4double rangehi[3];
     G4double rangelo[3];
     G4bool isIndexed = npar == 0;
-    G4LogicalVolume *lvol = NULL;
-    EAxis axis;
+    G4LogicalVolume *lvol = 0;
     G4int nmax = 11;
 
     if (npar>11) nmax = npar;
@@ -51,13 +49,13 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
 
     // If volume is indexed (npar=0, gsposp used, or negative length parameters)
     // cannot Build a G4LogicalVolume now.
-    // Build a G3Vol table entry, with NULL pointer, and defer LV creation
+    // Build a G3Vol table entry, with 0 pointer, and defer LV creation
     // to the gsposp call.
     if ( npar == 0 ) {
       isIndexed = true;
     } else {
       // Negative length parameters?
-      if (G3CalcParamsFn(param, npar, NULL, shape, shape)) {
+      if (G3CalcParamsFn(param, npar, 0, shape, shape)) {
         isIndexed = true;
         G4cout << "G4gsvolu: Volume " << vname << " type " << shape <<
           " is indexed via negative parameters" << endl;
@@ -67,14 +65,12 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
       }
     }
     if ( isIndexed ) {
-      G4VSolid *solid = NULL;
-      axis = kXAxis;
-      G3Vol.PutLV(&vname,lvol,nmed,rangehi,rangelo,axis,shape,param,npar,
-                  solid);
-//      return;
+      G4VSolid *solid = 0;
+      G4cerr << "G4gsvolu: indexed volumes not implemented" << endl;
+      //      G3Vol.PutLV(&vname, lvol, nmed, shape, param, npar, solid);
     } else {
       // Else proceed with volume creation.
-      lvol = G4makevol(vname, shape, nmed, param, npar);
+      G4makevol(vname, shape, nmed, param, npar);
     }
     delete [] param;
 }

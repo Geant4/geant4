@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Wo.hh,v 2.1 1998/11/06 13:42:01 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Wo.hh,v 1.4 1999/05/10 15:38:48 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -25,9 +25,9 @@ class G4VInteractorManager;
 class G4Wo: public G4VGraphicsSystem {
 public:
   G4Wo ();
-  ~G4Wo ();
-  G4VScene*    CreateScene (const G4String& name = "");
-  G4VView*     CreateView  (G4VScene&, const G4String& name = "");
+  virtual ~G4Wo ();
+  G4VSceneHandler*    CreateSceneHandler (const G4String& name = "");
+  G4VViewer*     CreateViewer  (G4VSceneHandler&, const G4String& name = "");
   static G4VInteractorManager* GetInteractorManager ();
 };
 

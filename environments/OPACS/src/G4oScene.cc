@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oScene.cc,v 2.2 1998/07/12 02:37:06 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4oScene.cc,v 1.2 1999/04/16 10:03:38 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
@@ -42,6 +42,8 @@
 #include <G4Sphere.hh>
 #include <G4Para.hh>
 #include <G4Torus.hh>
+#include <G4Polycone.hh>
+#include <G4Polyhedra.hh>
 #include <G4Polyhedron.hh>
 #include <G4Polyline.hh>
 #include <G4Transform3D.hh>
@@ -204,6 +206,32 @@ void G4oScene::AddThis (
   printf ("debug : torus.\n");
 #endif
   AddPolyhedron (torus.CreatePolyhedron());
+}
+/***************************************************************************/
+void G4oScene::AddThis (
+ const G4Polycone& polycone
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+/*.........................................................................*/
+#ifdef DEBUG
+  printf ("debug : polycone.\n");
+#endif
+  AddPolyhedron (polycone.CreatePolyhedron());
+}
+/***************************************************************************/
+void G4oScene::AddThis (
+ const G4Polyhedra& polyhedra
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+/*.........................................................................*/
+#ifdef DEBUG
+  printf ("debug : polyhedra.\n");
+#endif
+  AddPolyhedron (polyhedra.CreatePolyhedron());
 }
 /***************************************************************************/
 void G4oScene::AddThis (

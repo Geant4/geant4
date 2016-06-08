@@ -4,10 +4,20 @@
 // Implementation of the face that bounds a polycone or polyhedra at
 // its phi opening.
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4PolyPhiFace.hh"
 #include "G4ClippablePolygon.hh"
+#include "G4ReduciblePolygon.hh"
 #include "G4AffineTransform.hh"
+#include "G4SolidExtentList.hh"
 
 //
 // Constructor
@@ -19,10 +29,21 @@
 //                 |           |          +--> z
 //                [0]---------[3]
 //
-G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z, 
-			      const G4int n, const G4double phi, 
-			      const G4double deltaPhi, const G4bool start )
+G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi, 
+			      const G4double deltaPhi, const G4double phiOther )
 {
+	numEdges = rz->NumVertices();
+	
+	rMin = rz->Amin();
+	rMax = rz->Amax();
+	zMin = rz->Bmin();
+	zMax = rz->Bmax();
+
+	//
+	// Is this the "starting" phi edge of the two?
+	//
+	G4bool start = (phiOther > phi);
+	
 	//
 	// Build radial vector
 	//
@@ -33,41 +54,37 @@ G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z,
 	//
 	G4double zSign = start ? 1 : -1;
 	normal = G4ThreeVector( zSign*radial.y(), -zSign*radial.x(), 0 );
+	
+	//
+	// Is allBehind?
+	//
+	allBehind = (zSign*(cos(phiOther)*radial.y() - sin(phiOther)*radial.x()) < 0);
+	
+	//
+	// Adjacent edges
+	//
+	G4double midPhi = phi + (start ? +0.5 : -0.5)*deltaPhi;
+	G4double cosMid = cos(midPhi), 
+                 sinMid = sin(midPhi);
 
         //
         // Allocate corners
         //
-        corners = new G4PolyPhiFaceVertex[n];
+        corners = new G4PolyPhiFaceVertex[numEdges];
 
         //
-        // Fill their positions, avoiding duplicates
+        // Fill them
         //
-        rMin = kInfinity; rMax = -kInfinity;
-        zMin = kInfinity; zMax = -kInfinity;
-
-        const G4double *rOne = r, *zOne = z, 
-                       *rNext, *zNext;
-        G4PolyPhiFaceVertex *corn = corners;
-        do {
-                rNext = rOne + 1;
-                zNext = zOne + 1;
-
-                if (rNext == r+n) {rNext = r; zNext = z;}
-		
-		if (*rNext == *rOne && *zNext == *zOne) continue;
-
-                corn->r = *rOne;
-                corn->z = *zOne;
-
-                corn++;
-
-                if (*rOne < rMin) rMin = *rOne;
-                if (*rOne > rMax) rMax = *rOne;
-                if (*zOne < zMin) zMin = *zOne;
-                if (*zOne > zMax) zMax = *zOne;
-        } while( rOne=rNext, zOne=zNext, rOne != r );
-
-        numEdges = corn-corners;
+	G4ReduciblePolygonIterator iterRZ(rz);
+	
+	G4PolyPhiFaceVertex *corn = corners;
+	iterRZ.Begin();
+	do {
+		corn->r = iterRZ.GetA();
+		corn->z = iterRZ.GetB();
+		corn->x = corn->r*radial.x();
+		corn->y = corn->r*radial.y();
+	} while( ++corn, iterRZ.Next() );
 
         //
         // Allocate edges
@@ -77,17 +94,16 @@ G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z,
         //
         // Fill them
         //
-	G4double midPhi = phi + (start ? +0.5 : -0.5)*deltaPhi;
-	G4double cosMid = cos(midPhi), 
-		 sinMid = sin(midPhi);
 	G4double rFact = cos(0.5*deltaPhi);
-	G4ThreeVector sideNorm;
+	G4double rFactNormalize = 1.0/sqrt(1.0+rFact*rFact);
 
         G4PolyPhiFaceVertex *prev = corners+numEdges-1,
                             *here = corners;
         G4PolyPhiFaceEdge   *edge = edges;
         do {
-                edge->v0 = prev;
+ 		G4ThreeVector sideNorm;
+		
+        	edge->v0 = prev;
                 edge->v1 = here;
 
                 G4double dr = here->r - prev->r,
@@ -98,44 +114,84 @@ G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z,
                 edge->tr = dr/edge->length;
                 edge->tz = dz/edge->length;
 		
-		sideNorm = G4ThreeVector( dz*rFact*cosMid, dz*rFact*sinMid, -dr );
-		sideNorm = sideNorm.unit();
+		if ((here->r < DBL_MIN) && (prev->r < DBL_MIN)) {
+			//
+			// Sigh! Always exceptions!
+			// This edge runs at r==0, so its adjoing surface is not a
+			// PolyconeSide or PolyhedraSide, but the opposite PolyPhiFace.
+			//
+			G4double zSignOther = start ? -1 : 1;
+			sideNorm = G4ThreeVector(  zSignOther*sin(phiOther), 
+					          -zSignOther*cos(phiOther), 0 );
+		}
+		else {
+			sideNorm = G4ThreeVector( edge->tz*cosMid, edge->tz*sinMid, -edge->tr*rFact );
+			sideNorm *= rFactNormalize;
+		}
 		sideNorm += normal;
+		
 		edge->norm3D = sideNorm.unit();
         } while( edge++, prev=here, ++here < corners+numEdges );
 
         //
-        // Go back an fill in corner "normals", which are just the
-        // average of the normals of the ajoining edges
+        // Go back and fill in corner "normals"
         //
         G4PolyPhiFaceEdge *prevEdge = edges+numEdges-1;
         edge = edges;
         do {
+		//
+		// Calculate vertex 2D normals (on the phi surface)
+		//
 		G4double rPart = prevEdge->tr + edge->tr;
 		G4double zPart = prevEdge->tz + edge->tz;
 		G4double norm = sqrt( rPart*rPart + zPart*zPart );
-                edge->v0->rNorm = +zPart/norm;
-                edge->v0->zNorm = -rPart/norm;
+		G4double rNorm = +zPart/norm;
+		G4double zNorm = -rPart/norm;
+		
+                edge->v0->rNorm = rNorm;
+                edge->v0->zNorm = zNorm;
 		
 		//
-		// Corner normal should be average of normals of connecting edges,
-		// or, equivalently, the average of all connecting faces.
+		// Calculate the 3D normals.
 		//
-		// prevEdge->norm3D = normal + side1.normal = A
-		// edge->norm3D     = normal + side2.normal = B
-		// A + B - normal = normal + side1.normal + side2.normal
+		// Find the vector perpendicular to the z axis
+		// that defines the plane that contains the vertex normal
 		//
+		G4ThreeVector xyVector;
 		
-		G4ThreeVector norm3D = prevEdge->norm3D + edge->norm3D - normal;
-		edge->v0->norm3D = norm3D.unit();
+		if (edge->v0->r < DBL_MIN) {
+			//
+			// This is a vertex at r==0, which is a special
+			// case. The normal we will construct lays in the
+			// plane at the center of the phi opening.
+			//
+			// We also know that rNorm < 0
+			//
+			G4double zSignOther = start ? -1 : 1;
+			G4ThreeVector normalOther(  zSignOther*sin(phiOther), 
+					           -zSignOther*cos(phiOther), 0 );
+					      
+			xyVector = - normal - normalOther;
+		}
+		else {
+			//
+			// This is a vertex at r > 0. The plane
+			// is the average of the normal and the
+			// normal of the adjacent phi face
+			//
+			xyVector = G4ThreeVector( cosMid, sinMid, 0 );
+			if (rNorm < 0)
+				xyVector -= normal;
+			else
+				xyVector += normal;
+		}
+		
+		//
+		// Combine it with the r/z direction from the face
+		//
+		edge->v0->norm3D = rNorm*xyVector.unit() + G4ThreeVector( 0, 0, zNorm );
         } while(  prevEdge=edge, ++edge < edges+numEdges );
 	
-	//
-	// Complain if something is obviously wrong
-	//
-	if (numEdges <= 2) 
-		G4Exception( "G4PolyPhiFace: more than two unique corners must be specified" );
-
 	//
 	// Build point on surface
 	//
@@ -146,11 +202,103 @@ G4PolyPhiFace::G4PolyPhiFace( const G4double *r, const G4double *z,
 
 
 //
+// Diagnose
+//
+// Throw an exception if something is found inconsistent with
+// the solid.
+//
+// For debugging purposes only
+//
+void G4PolyPhiFace::Diagnose( G4VSolid *owner )
+{
+	G4PolyPhiFaceVertex   *corner = corners;
+	do {
+		G4ThreeVector test(corner->x, corner->y, corner->z);
+		test -= 1E-6*corner->norm3D;
+		
+		if (owner->Inside(test) != kInside) 
+			G4Exception( "G4PolyPhiFace::Diagnose -- Bad vertex normal found" );
+	} while( ++corner < corners+numEdges );
+}
+
+
+//
 // Destructor
 //
 G4PolyPhiFace::~G4PolyPhiFace()
 {
 	delete [] edges;
+	delete [] corners;
+}
+
+
+//
+// Copy constructor
+//
+G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4PolyPhiFace *G4PolyPhiFace::operator=( const G4PolyPhiFace &source )
+{
+	if (this == &source) return this;
+
+	delete [] edges;
+	delete [] corners;
+	
+	CopyStuff( source );
+	
+	return this;
+}
+
+
+//
+// CopyStuff (protected)
+//
+void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
+{
+	//
+	// The simple stuff
+	//
+	numEdges	= source.numEdges;
+	normal  	= source.normal;
+	radial		= source.radial;
+	surface		= source.surface;
+	rMin		= source.rMin;
+	rMax		= source.rMax;
+	zMin		= source.zMin;
+	zMax		= source.zMax;
+	allBehind	= source.allBehind;
+	
+	//
+	// Corner dynamic array
+	//
+        corners = new G4PolyPhiFaceVertex[numEdges];
+	G4PolyPhiFaceVertex *corn = corners,
+		    	    *sourceCorn = source.corners;
+	do {
+		*corn = *sourceCorn;
+	} while( ++sourceCorn, ++corn < corners+numEdges );
+	
+	//
+	// Edge dynamic array
+	//
+        edges = new G4PolyPhiFaceEdge[numEdges];
+
+        G4PolyPhiFaceVertex *prev = corners+numEdges-1,
+                            *here = corners;
+        G4PolyPhiFaceEdge   *edge = edges,
+			    *sourceEdge = source.edges;
+        do {
+		*edge = *sourceEdge;
+                edge->v0 = prev;
+                edge->v1 = here;
+        } while( ++sourceEdge, ++edge, prev=here, ++here < corners+numEdges );
 }
 
 
@@ -160,14 +308,14 @@ G4PolyPhiFace::~G4PolyPhiFace()
 G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
 				 const G4bool outgoing, const G4double surfTolerance,
 				 G4double &distance, G4double &distFromSurface,
-				 G4ThreeVector &aNormal, G4bool &allBehind )
+				 G4ThreeVector &aNormal, G4bool &isAllBehind )
 {
 	G4double normSign = outgoing ? +1 : -1;
 	
 	//
 	// These don't change
 	//
-	allBehind = true;
+	isAllBehind = allBehind;
 	aNormal = normal;
 
 	//
@@ -185,7 +333,7 @@ G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
 	G4ThreeVector ps = p - surface;
 	distFromSurface = -normSign*ps.dot(normal);
 		
-	if (distFromSurface < surfTolerance) return false;
+	if (distFromSurface < -surfTolerance) return false;
 
 	//
 	// Calculate precise distance to intersection with the side
@@ -203,7 +351,7 @@ G4bool G4PolyPhiFace::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
 	//
 	// And is it inside the r/z extent?
 	//
-	return InsideEdges( r, ip.z() );
+	return InsideEdgesExact( r, ip.z(), normSign, p, v );
 }
 
 
@@ -219,7 +367,10 @@ G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, const G4bool outgoing 
 	G4ThreeVector ps = p - surface;
 	G4double distPhi = -normSign*normal.dot(ps);
 	
-	if (distPhi <= 0) return kInfinity;
+	if (distPhi < -0.5*kCarTolerance) 
+		return kInfinity;
+	else if (distPhi < 0)
+		distPhi = 0.0;
 	
 	//
 	// Calculate projected point in r,z
@@ -270,30 +421,15 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p, const G4double tolerance,
 	G4double distRZ2;
 	G4PolyPhiFaceVertex *base3Dnorm;
 	G4ThreeVector	    *head3Dnorm;
-	G4bool wereIn = InsideEdges( r, p.z(), &distRZ2, &base3Dnorm, &head3Dnorm );
 	
-	if (wereIn) {
+	if (InsideEdges( r, p.z(), &distRZ2, &base3Dnorm, &head3Dnorm )) {
 		//
 		// Looks like we're inside. Distance is distance in phi.
 		//
 		*bestDistance = fabs(distPhi);
-	}
-	else {
+		
 		//
-		// We're outside the extent of the face,
-		// so the distance is penalized by distance from edges in RZ
-		//
-		*bestDistance = sqrt( distPhi*distPhi + distRZ2 );
-	}
-	
-	//
-	// Can we be on the surface? Yes, but only if we're inside, or
-	// close to inside by tolerance
-	//	
-	if (wereIn || distRZ2 < tolerance*tolerance ) {
-		//
-		// Yup, answer depends on distPhi, and we can use tolerance
-		// to decide if we are on the surface
+		// Use distPhi to decide fate
 		//
 		if (distPhi < -tolerance) return kInside;
 		if (distPhi <  tolerance) return kSurface;
@@ -301,14 +437,29 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p, const G4double tolerance,
 	}
 	else {
 		//
-		// Nope. we can only be in or out, and we must
-		// used the edge normal to decide
+		// We're outside the extent of the face,
+		// so the distance is penalized by distance from edges in RZ
+		//
+		*bestDistance = sqrt( distPhi*distPhi + distRZ2 );
+		
+		//
+		// Use edge normal to decide fate
 		//
 		G4ThreeVector cc( base3Dnorm->r*radial.x(),
 				  base3Dnorm->r*radial.y(),
 				  base3Dnorm->z );
 		cc = p - cc;
-		return head3Dnorm->dot(cc) < 0 ? kInside : kOutside;
+		G4double normDist = head3Dnorm->dot(cc);
+		if ( distRZ2 > tolerance*tolerance ) {
+			//
+			// We're far enough away that kSurface is not possible
+			//
+			return normDist < 0 ? kInside : kOutside;
+		}
+		
+		if (normDist < -tolerance) return kInside;
+		if (normDist <  tolerance) return kSurface;
+		return kOutside;
 	}
 }	
 
@@ -382,7 +533,7 @@ G4double G4PolyPhiFace::Extent( const G4ThreeVector axis )
 void G4PolyPhiFace::CalculateExtent( const EAxis axis, 
 				     const G4VoxelLimits &voxelLimit,
 				     const G4AffineTransform &transform,
-				     G4double &min, G4double &max        )
+				     G4SolidExtentList &extentList        )
 {
 	//
 	// Construct a (sometimes big) clippable polygon, 
@@ -402,17 +553,138 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
 	//
 	// Clip away
 	//
-	polygon.Clip( voxelLimit );
-	
-	//
-	// Get extent
-	//
-	polygon.GetExtent( axis, min, max );
+	if (polygon.PartialClip( voxelLimit, axis )) {
+		//
+		// Add it to the list
+		//
+		polygon.SetNormal( transform.TransformAxis(normal) );
+		extentList.AddSurface( polygon );
+	}
 }
 
 
 //
 //-------------------------------------------------------
+	
+	
+//
+// InsideEdgesExact
+//
+// Decide if the point in r,z is inside the edges of our face,
+// **but** do so consistently with other faces.
+//
+// This routine has functionality similar to InsideEdges, but uses
+// an algorithm to decide if a trajectory falls inside or outside the
+// face that uses only the trajectory p,v values and the three dimensional
+// points representing the edges of the polygon. The objective is to plug up
+// any leaks between touching G4PolyPhiFaces (at r==0) and any other face
+// that uses the same convention.
+//
+// See: "Computational Geometry in C (Second Edition)"
+// http://cs.smith.edu/~orourke/
+//
+G4bool G4PolyPhiFace::InsideEdgesExact( const G4double r, const G4double z, 
+				        const G4double normSign, const G4ThreeVector &p, const G4ThreeVector &v )
+{
+	//
+	// Quick check of extent
+	//
+	if ( r < rMin-kCarTolerance || 
+	     r > rMax+kCarTolerance    ) return false;
+	     
+	if ( z < zMin-kCarTolerance || 
+	     z > zMax+kCarTolerance    ) return false;
+	
+	//
+	// Exact check: loop over all vertices
+	//
+	G4double qx = p.x() + v.x(),
+		 qy = p.y() + v.y(),
+		 qz = p.z() + v.z();
+
+	int answer = 0;
+	G4PolyPhiFaceVertex *corn = corners, 
+			    *prev = corners+numEdges-1;
+
+	G4double cornZ, prevZ;
+	
+	prevZ = ExactZOrder( z, qx, qy, qz, v, normSign, prev );
+	do {
+		//
+		// Get z order of this vertex, and compare to previous vertex
+		//
+		cornZ = ExactZOrder( z, qx, qy, qz, v, normSign, corn );
+		
+		if (cornZ < 0) {
+			if (prevZ < 0) continue;
+		}
+		else if (cornZ > 0) {
+			if (prevZ > 0) continue;
+		}
+		else {
+			//
+			// By chance, we overlap exactly (within precision) with 
+			// the current vertex. Continue if the same happened previously
+			// (e.g. the previous vertex had the same z value)
+			//
+			if (prevZ == 0) continue;
+			
+			//
+			// Otherwise, to decide what to do, we need to know what is
+			// coming up next. Specifically, we need to find the next vertex
+			// with a non-zero z order.
+			//
+			// One might worry about infinite loops, but the above conditional
+			// should prevent it
+			//
+			G4PolyPhiFaceVertex *next = corn;
+			G4double nextZ;
+			do {
+				next++;
+				if (next == corners+numEdges) next = corners;
+
+				nextZ = ExactZOrder( z, qx, qy, qz, v, normSign, next );
+			} while( nextZ == 0 );
+			
+			//
+			// If we won't be changing direction, go to the next vertex
+			//
+			if (nextZ*prevZ < 0) continue;
+		}
+	
+			
+		//
+		// We overlap in z with the side of the face that stretches from
+		// vertex "prev" to "corn". On which side (left or right) do
+		// we lay with respect to this segment?
+		//	
+		G4ThreeVector qa( qx - prev->x, qy - prev->y, qz - prev->z ),
+			      qb( qx - corn->x, qy - corn->y, qz - corn->z );
+
+		G4double aboveOrBelow = normSign*qa.cross(qb).dot(v);
+		
+		if (aboveOrBelow > 0) 
+			answer++;
+		else if (aboveOrBelow < 0)
+			answer--;
+		else {
+			//
+			// A precisely zero answer here means we exactly
+			// intersect (within roundoff) the edge of the face.
+			// Return true in this case.
+			//
+			return true;
+		}
+	} while( prevZ = cornZ, prev=corn, ++corn < corners+numEdges );
+	
+//	G4int fanswer = abs(answer);
+//	if (fanswer==1 || fanswer>2) {
+//		G4cerr << "G4PolyPhiFace::InsideEdgesExact: answer is " << answer << endl;
+//	}
+
+	return answer!=0;
+}
+	
 	
 //
 // InsideEdges (don't care aboud distance)

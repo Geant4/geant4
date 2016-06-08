@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TheoFSGenerator.hh,v 1.1 1998/08/22 08:54:31 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4TheoFSGenerator.hh,v 1.2 1999/04/12 15:45:28 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4TheoFSGenerator_h
 #define G4TheoFSGenerator_h 1

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateX.hh,v 2.1 1998/11/06 13:42:14 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLImmediateX.hh,v 1.4 1999/05/10 14:03:41 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -22,8 +22,9 @@
 class G4OpenGLImmediateX: public G4VGraphicsSystem {
 public:
   G4OpenGLImmediateX ();
-  G4VScene* CreateScene (const G4String& name = "");
-  G4VView*  CreateView  (G4VScene&, const G4String& name = "");
+  virtual ~G4OpenGLImmediateX ();
+  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
+  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
 
 #endif

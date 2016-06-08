@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopDummyDeexcitation.cc,v 2.5 1998/12/01 22:29:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4StopDummyDeexcitation.cc,v 1.2 1999/04/18 11:29:00 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -48,7 +48,7 @@ G4StopDummyDeexcitation::~G4StopDummyDeexcitation()
 {
 }
 
-G4DynamicParticleVector* G4StopDummyDeexcitation::BreakUp(G4double A, G4double Z, 
+G4ReactionProductVector* G4StopDummyDeexcitation::BreakUp(G4double A, G4double Z, 
 							 G4double excitation, 
 							 const G4ThreeVector& p)
 {

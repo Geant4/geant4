@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fancy3DNucleus.hh,v 1.4 1998/10/30 16:38:40 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Fancy3DNucleus.hh,v 1.4 1999/05/26 15:21:32 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1
@@ -48,6 +48,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void ChoosePositions();
       void ChooseFermiMomenta();
       G4double BindingEnergy();
+      G4bool ReduceSum(G4ThreeVector * momentum, G4double *);
 
   public:
       void Init(G4double theA, G4double theZ);
@@ -77,6 +78,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  
   const G4double nucleondistance;
+  
 };
 
 inline G4int G4Fancy3DNucleus::GetCharge()

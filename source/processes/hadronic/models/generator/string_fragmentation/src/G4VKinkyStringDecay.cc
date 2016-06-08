@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VKinkyStringDecay.cc,v 1.4 1998/12/13 15:46:21 pia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VKinkyStringDecay.cc,v 1.2 1999/04/15 12:10:17 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //  Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -18,6 +18,9 @@
 // -----------------------------------------------------------------------------
 
 #include "G4VKinkyStringDecay.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4KineticTrack.hh"
+#include "Randomize.hh"
 
 //*****************************************************************************************************
 

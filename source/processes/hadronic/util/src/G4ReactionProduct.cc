@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionProduct.cc,v 2.1 1998/11/06 10:59:11 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ReactionProduct.cc,v 1.1 1999/01/07 16:13:52 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SimpleHeum.cc,v 2.6 1998/11/17 18:20:11 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SimpleHeum.cc,v 1.2 1999/03/04 13:52:30 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  Simple Heum:
 //        x_1 = x_0 + h *
@@ -43,10 +43,10 @@ G4SimpleHeum::G4SimpleHeum(G4Mag_EqRhs *EqRhs, G4int num_variables):
 
 G4SimpleHeum::~G4SimpleHeum()
 {
-  delete dydxTemp;
-  delete dydxTemp2;
-  delete yTemp;
-  delete yTemp2;
+  delete[] dydxTemp;
+  delete[] dydxTemp2;
+  delete[] yTemp;
+  delete[] yTemp2;
 }
 
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.hh,v 2.4 1998/11/12 16:22:21 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MagErrorStepper.hh,v 1.4 1999/04/19 17:20:28 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Abstract base class (ie Interface)
 // -------------------
@@ -32,7 +32,7 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
   public:
 
   G4MagErrorStepper(G4Mag_EqRhs *EqRhs,G4int numberOfVariables);
-  ~G4MagErrorStepper(){} ;
+  ~G4MagErrorStepper();
   
   //   The stepper for the Runge Kutta integration. The stepsize 
   // is fixed, with the Step size given by h.
@@ -53,12 +53,18 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 			       G4double yout[] ) = 0;
   
   G4double DistChord()   const;
+
 private:
   
   // Data stored in order to find the chord
-  G4ThreeVector yInitial, yMidPoint, yFinal;
+  G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
   
-  G4int theNumberOfVariables ; 
+  // G4int theNumberOfVariables ; 
+
+  // The following arrays are used only for temporary storage
+  //   they are allocated at the class level only for efficiency -
+  //   so that calls to new and delete are not made in Stepper()
+  G4double *yInitial, *yMiddle, *dydxMid, *yOneStep;
 };
 #include  "G4MagErrorStepper.icc"
 

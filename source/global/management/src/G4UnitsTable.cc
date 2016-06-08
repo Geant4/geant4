@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 2.10 1998/12/02 09:50:27 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UnitsTable.cc,v 1.5 1999/04/13 15:23:54 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -35,10 +35,8 @@ G4UnitsTable      G4UnitDefinition::theUnitsTable;
  
 G4UnitDefinition::G4UnitDefinition(G4String name, G4String symbol,
                                    G4String category, G4double value)
+:Name(name),SymbolName(symbol),Value(value)				   
 {
-    Name       = name;
-    SymbolName = symbol;
-    Value      = value;
     //
     //does the Category objet already exist ?
     size_t nbCat = theUnitsTable.entries();
@@ -70,9 +68,16 @@ G4UnitDefinition::G4UnitDefinition(G4UnitDefinition& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-const G4UnitDefinition & G4UnitDefinition::operator=(const G4UnitDefinition& right)
+G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
 {
-  return right;
+  if (this != &right)
+    {
+      Name          = right.Name;
+      SymbolName    = right.SymbolName;
+      Value         = right.Value;
+      CategoryIndex = right.CategoryIndex;
+    }
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,8 +130,9 @@ G4String G4UnitDefinition::GetCategory(G4String string)
      }
   G4cout << "Warning from G4UnitDefinition::GetCategory(" << string << ")."
        << " The unit " << string << " does not exist in UnitsTable."
-       << " Return category = None" << endl;     
-  return "None";             
+       << " Return category = None" << endl;
+  name = "None";     
+  return name;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -266,11 +272,9 @@ void G4UnitDefinition::PrintUnitsTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
    
 G4UnitsCategory::G4UnitsCategory(G4String name)
+:Name(name),NameMxLen(0),SymbMxLen(0)
 {
-    Name = name;
     UnitsList = *(new G4UnitsContainer);
-    NameMxLen = 0;
-    SymbMxLen = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -287,9 +291,16 @@ G4UnitsCategory::G4UnitsCategory(G4UnitsCategory& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-const G4UnitsCategory & G4UnitsCategory::operator=(const G4UnitsCategory& right)
+G4UnitsCategory& G4UnitsCategory::operator=(const G4UnitsCategory& right)
 {
-  return right;
+  if (this != &right)
+    {
+      Name      = right.Name;
+      UnitsList = right.UnitsList;
+      NameMxLen = right.NameMxLen;
+      SymbMxLen = right.SymbMxLen;
+    }
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -350,18 +361,29 @@ ostream& operator<<(ostream& flux, G4BestUnit a)
   G4int len = theUnitsTable[a.IndexOfCategory]->GetSymbMxLen();
                            
   G4int    ksup(-1), kinf(-1);
-  G4double dsup(DBL_MAX), dinf(-DBL_MAX); 
-  
+  G4double umax(0.), umin(DBL_MAX);
+  G4double rsup(DBL_MAX), rinf(0.);
+   
+  G4double value =fabs(a.Value);
+
   for (G4int k=0; k<List.entries(); k++)
      {
-       G4double diff = fabs(a.Value) - (List[k]->GetValue());
-       if ((diff>=0.)&&(diff<=dsup)) { ksup=k; dsup=diff;}
-       if ((diff< 0.)&&(diff>=dinf)) { kinf=k; dinf=diff;}
+       G4double unit = List[k]->GetValue();
+            if (value==DBL_MAX) {if(unit>umax) {umax=unit; ksup=k;}}
+       else if (value<=DBL_MIN) {if(unit<umin) {umin=unit; kinf=k;}}
+       
+       else { G4double ratio = value/unit;
+              if ((ratio>=1.)&&(ratio<rsup)) {rsup=ratio; ksup=k;}
+              if ((ratio< 1.)&&(ratio>rinf)) {rinf=ratio; kinf=k;}
+	    } 
      }
-  G4int index=ksup;  if(ksup==-1) index=kinf;
-  
-  flux << a.Value/(List[index]->GetValue()) << " " << setw(len)  
-       << List[index]->GetSymbol();
+	 
+  G4int index=ksup; if(index==-1) index=kinf; if(index==-1) index=0;
+   
+  flux << a.Value/(List[index]->GetValue());
+  G4long oldform = G4cout.setf(ios::left,ios::adjustfield);
+  flux << " " << setw(len) << List[index]->GetSymbol();       
+  G4cout.setf(oldform,ios::adjustfield);     
   
   return flux;
 }       

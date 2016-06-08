@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 2.4 1998/11/25 05:50:44 tsasaki Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SteppingManager.cc,v 1.5 1999/06/29 16:16:59 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //---------------------------------------------------------------
@@ -141,6 +141,7 @@ G4StepStatus G4SteppingManager::Stepping()
      // Store the Step length (geometrical length) to G4Step and G4Track
      fStep->SetStepLength( PhysicalStep );
      fTrack->SetStepLength( PhysicalStep );
+     G4double GeomStepLength = PhysicalStep;
 
      // Store StepStatus to PostStepPoint
      fStep->GetPostStepPoint()->SetStepStatus( fStepStatus );
@@ -153,11 +154,7 @@ G4StepStatus G4SteppingManager::Stepping()
 
      // Update safety after invocation of all AlongStepDoIts
      endpointSafOrigin= fPostStepPoint->GetPosition();
-     endpointSafety=  max( proposedSafety -
-			   (fPostStepPoint->GetPosition() -
-			    fPreStepPoint->GetPosition()
-			    ).mag(),
-			   0.);
+     endpointSafety=  max( proposedSafety - GeomStepLength, 0.);
 
      fStep->GetPostStepPoint()->SetSafety( endpointSafety );
 
@@ -200,7 +197,7 @@ G4StepStatus G4SteppingManager::Stepping()
 // User intervention process.
    fStep->SetTrack(fTrack);
    if( fUserSteppingAction != NULL ) {
-      fUserSteppingAction->UserSteppingAction();
+      fUserSteppingAction->UserSteppingAction(fStep);
    }
 
 // Stepping process finish. Return the value of the StepStatus.

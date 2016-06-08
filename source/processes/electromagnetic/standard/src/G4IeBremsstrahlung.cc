@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeBremsstrahlung.cc,v 2.8 1998/12/09 09:15:19 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IeBremsstrahlung.cc,v 1.3 1999/05/03 11:04:13 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -245,12 +245,12 @@ void G4IeBremsstrahlung::BuildNlambdaVector(
                                        G4int materialIndex,
                                        G4PhysicsLogVector* nlambdaVector)
 {
-  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff ;
+  G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff,l ;
   G4double thresholdEnergy ;
-  const G4int nbin = 100 ;
+  const G4int nbin = 20 ;
   G4bool isOut ;
   const G4double small = 1.e-100;
-  const G4double plowloss = 0.5 ;
+  const G4double lmin=1.e-100,lmax=1.e100;
 
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
@@ -295,9 +295,10 @@ void G4IeBremsstrahlung::BuildNlambdaVector(
         else
           coeff=1.0 ;
 
-        Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
-                                   T,(*theMaterialTable)[materialIndex])*
-                    (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut));
+        l = (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut);
+        if((l>lmin) && (l<lmax))
+          Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
+                                   T,(*theMaterialTable)[materialIndex])*l);
       }
 
       Value *= du ;
@@ -532,7 +533,6 @@ void G4IeBremsstrahlung::BuildInverseNlambdaTable(
      // inverse can be built for "meaningful" cut value only!
       if(Smallest >= Biggest)
       {
-         G4cout << endl ;
          G4Exception(
         "Cut value is too big , smaller value should be used !");
       }
@@ -1412,7 +1412,7 @@ G4Element* G4IeBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 
 void G4IeBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
+  G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 1 KeV to 100 GeV.\n";
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";

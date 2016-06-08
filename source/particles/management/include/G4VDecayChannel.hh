@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 2.4 1998/11/18 09:46:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VDecayChannel.hh,v 1.2 1999/04/13 07:58:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // ------------------------------------------------------------
@@ -76,9 +76,9 @@ class G4VDecayChannel
      G4ParticleDefinition * GetDaughter(G4int anIndex);
 
      //get the name of the parent particle
-     G4String GetParentName() const;
+     G4String& GetParentName() const;
      //get the name of a daughter particle
-     G4String GetDaughterName(G4int anIndex) const;
+     G4String& GetDaughterName(G4int anIndex) const;
 
      // get mass of parent
      G4double GetParentMass() const; 
@@ -155,7 +155,7 @@ inline
   G4ParticleDefinition* G4VDecayChannel::GetDaughter(G4int anIndex)
  { 
   //pointers to daughter particles are filled, if they are not set yet 
-  if (daughters == NULL) FillDaughters();
+  if (daughters == 0) FillDaughters();
 
   //get the pointer to a daughter particle
   if ( (anIndex>=0) && (anIndex<numberOfDaughters) ) {
@@ -163,13 +163,14 @@ inline
   } else {
     if (verboseLevel>0)
       G4cout << "G4VDecayChannel::GetDaughter  index out of range "<<anIndex<<endl;
-    return NULL;
+    return 0;
   }
 }
 
 inline
- G4String G4VDecayChannel::GetDaughterName(G4int anIndex) const
+ G4String& G4VDecayChannel::GetDaughterName(G4int anIndex) const
 {
+  static G4String noName = "";
   if ( (anIndex>=0) && (anIndex<numberOfDaughters) ) {
     return *daughters_name[anIndex];
   } else {
@@ -177,7 +178,7 @@ inline
       G4cout << "G4VDecayChannel::GetDaughterName ";
       G4cout << "index out of range " << anIndex << endl;
     }
-    return "";
+    return noName;
   }
 }
 
@@ -199,13 +200,13 @@ inline
   G4ParticleDefinition* G4VDecayChannel::GetParent()
 { 
   //the pointer to the parent particle is filled, if it is not set yet 
-   if (parent == NULL) FillParent();
+   if (parent == 0) FillParent();
   //get the pointer to the parent particle
   return parent;
 }
 
 inline
- G4String G4VDecayChannel::GetParentName() const
+ G4String& G4VDecayChannel::GetParentName() const
 {
   return *parent_name;
 }
@@ -220,9 +221,9 @@ inline
 inline
   void G4VDecayChannel::SetParent(const G4String &particle_name)
 {
-  if (parent_name != NULL) delete parent_name;
+  if (parent_name != 0) delete parent_name;
   parent_name = new G4String(particle_name);
-  parent = NULL;
+  parent = 0;
 }
 
 inline

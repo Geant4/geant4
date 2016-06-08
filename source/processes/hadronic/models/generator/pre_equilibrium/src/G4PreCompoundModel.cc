@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PreCompoundModel.cc,v 1.13 1998/12/14 21:46:55 larazb Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PreCompoundModel.cc,v 1.6 1999/06/23 09:49:06 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // by V. Lara
 
@@ -63,95 +63,100 @@ G4bool G4PreCompoundModel::operator!=(const G4PreCompoundModel &right) const
 G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary,
 						      G4Nucleus & theNucleus)
 {
-   theResult.Initialize(thePrimary);
-   
-   // prepare fragment
-   G4Fragment anInitialState;
-   G4int anA=theNucleus.GetN();
-   anA += thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber();
-   anInitialState.SetA(anA);
-   
-   G4int aZ=theNucleus.GetZ();
-   aZ += thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge();
-   anInitialState.SetZ(aZ);
-   
-   
-   // Nucleus mass
- //  G4double nucleusMass = 
- //    (theNucleus.GetN()-theNucleus.GetZ())*G4Neutron::Neutron()->GetPDGMass()
- //    + theNucleus.GetZ()*G4Proton::Proton()->GetPDGMass() 
- //    - G4NucleiPropertiesTable::GetBindingEnergy(theNucleus.GetN() , theNucleus.GetZ());
-  G4double nucleusMass =  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ()
-		  ,theNucleus.GetN());
+  theResult.Initialize(thePrimary);
+  
+  // prepare fragment
+  G4Fragment anInitialState;
+  G4int anA=theNucleus.GetN();
+  anA += thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber();
+  anInitialState.SetA(anA);
+  
+  G4int aZ=theNucleus.GetZ();
+  aZ += thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge();
+  anInitialState.SetZ(aZ);
+  
+  
+  // Nucleus mass
+  //  G4double nucleusMass = 
+  //    (theNucleus.GetN()-theNucleus.GetZ())*G4Neutron::Neutron()->GetPDGMass()
+  //    + theNucleus.GetZ()*G4Proton::Proton()->GetPDGMass() 
+  //    - G4NucleiPropertiesTable::GetBindingEnergy(theNucleus.GetN() , theNucleus.GetZ());
+  G4double nucleusMass =  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),
+											 theNucleus.GetN());
    
    
   // Excitation Energy
-   G4double anEnergy = 0;
-   anEnergy =  nucleusMass + thePrimary.GetTotalEnergy();
+  G4double anEnergy = 0;
+  anEnergy =  nucleusMass + thePrimary.GetTotalEnergy();
   // anEnergy += -aZ*G4Proton::Proton()->GetPDGMass() 
   //   - (anA-aZ)*G4Neutron::Neutron()->GetPDGMass()
   //   -G4NucleiPropertiesTable::GetBindingEnergy(anA,aZ);
-   anEnergy -= G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ,anA);
-   anInitialState.SetExcitationEnergy(anEnergy);
-   
-   // Number of Excitons
-   anInitialState.SetNumberOfExcitons(thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
-   
-   // Number of Charged
-   anInitialState.SetNumberOfCharged(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
-   
-   // Number of Holes 
-   anInitialState.SetNumberOfHoles(0);
-   
-   // Momentum
-   G4ThreeVector p = thePrimary.GetDynamicParticle()->Get4Momentum().vect();
-   G4LorentzVector momentum(p, sqrt(p.mag2()+(anEnergy+nucleusMass) * (anEnergy+nucleusMass)) );
-   anInitialState.SetMomentum(momentum);
-   
-   
-    
-   // call excitation handler
-   const G4Fragment aFragment(anInitialState);
-   G4DynamicParticleVector * result = DeExcite(aFragment);
-   
-   // fill particle change
-   theResult.SetStatusChange(fStopAndKill);
-   theResult.SetNumberOfSecondaries(result->length());
-   for(G4int i=0; i<result->length(); i++)
-     {
-     theResult.AddSecondary(result->at(i));
-     }
-   delete result;
-   
-   //return the filled particle change
-   return &theResult;
+  anEnergy -= G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ,anA);
+  //  anInitialState.SetExcitationEnergy(anEnergy);
+  
+  // Number of Excitons
+  anInitialState.SetNumberOfExcitons(thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
+  
+  // Number of Charged
+  anInitialState.SetNumberOfCharged(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
+  
+  // Number of Holes 
+  anInitialState.SetNumberOfHoles(0);
+  
+  // Momentum
+  G4ThreeVector p = thePrimary.GetDynamicParticle()->Get4Momentum().vect();
+  G4LorentzVector momentum(p, sqrt(p.mag2()+(anEnergy+nucleusMass) * (anEnergy+nucleusMass)) );
+  anInitialState.SetMomentum(momentum);
+  
+  
+  
+  // call excitation handler
+  const G4Fragment aFragment(anInitialState);
+  G4ReactionProductVector * result = DeExcite(aFragment);
+  
+  // fill particle change
+  theResult.SetStatusChange(fStopAndKill);
+  theResult.SetNumberOfSecondaries(result->length());
+  for(G4int i=0; i<result->length(); i++)
+    {
+      G4DynamicParticle * aNew = 
+         new G4DynamicParticle(result->at(i)->GetDefinition(),
+                               result->at(i)->GetTotalEnergy(),
+                               result->at(i)->GetMomentum());
+      delete result->at(i);
+      theResult.AddSecondary(aNew);
+    }
+  delete result;
+  
+  //return the filled particle change
+  return &theResult;
 }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInitialState) const
+G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInitialState) const
 {
-
-  G4DynamicParticleVector * Result = new G4DynamicParticleVector;
+  
+  G4ReactionProductVector * Result = new G4ReactionProductVector;
   // result = GetExcitationHandler()->BreakItUp(aFragment);
   
   G4Fragment aFragment(theInitialState);
-
-
+  
+  
   // Main loop. It is performed until equilibrium deexcitation.
   for (;;) {
-
+    
     // Compute atomic numbers and charges for rest nuclei
     for (G4int i = 0; i < NumberOfPossibleFragments; i++) {
-       theChannels(i)->Init(aFragment);
+      theChannels(i)->Init(aFragment);
     }
-
+    
     // Equilibrium exciton number
     G4double EquilibriumExcitonNumber = sqrt(1.19*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*
 					     aFragment.GetA()*aFragment.GetExcitationEnergy()/MeV+0.5);
-
+    
     // Loop for transitions, it is performed while there are preequilibrium transitions.
     G4bool ThereIsTransition = false;
     do {
@@ -160,22 +165,22 @@ G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	  aFragment.SetNumberOfHoles(aFragment.GetNumberOfHoles()+1);
 	  aFragment.SetNumberOfExcitons(aFragment.GetNumberOfExcitons()+2);       
 	}
-      
+	
 	G4double TotalEmissionProbability = 0.0;
 	G4int i;
         for (i = 0; i < NumberOfPossibleFragments; i++) {
-	  theChannels(i)->CalcExcitonLevelDensityRatios(
-	                      aFragment.GetNumberOfParticles()+aFragment.GetNumberOfHoles(),
-			      aFragment.GetNumberOfParticles());	
+	  theChannels(i)->CalcExcitonLevelDensityRatios(aFragment.GetNumberOfParticles()+
+							aFragment.GetNumberOfHoles(),
+							aFragment.GetNumberOfParticles());	
 	  theChannels(i)->CalcCondensationProbability(aFragment.GetA());
-	   // Calculate emission probailities
+	  // Calculate emission probailities
 	  if (aFragment.GetNumberOfParticles() <= theChannels(i)->GetA()-0.01)
 	    // if number of particles less than a fragment atomic number 
 	    // set probability to emit a fragment 0
 	    theChannels(i)->SetEmissionProbability(0.0);
 	  else if (aFragment.GetNumberOfExcitons() <= theChannels(i)->GetA()+0.01 && 
-		aFragment.GetNumberOfExcitons() != 1)
-		theChannels(i)->SetEmissionProbability(0.0);    	  
+		   aFragment.GetNumberOfExcitons() != 1)
+	    theChannels(i)->SetEmissionProbability(0.0);    	  
 	  else if (aFragment.GetNumberOfCharged() <= theChannels(i)->GetZ()-0.01) 
 	    // if number of charged particles (protons) is less than charge of fragment
 	    // set probability to emit a fragment 0
@@ -220,7 +225,7 @@ G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	  // With weight Z/A, number of charged particles is decreased on +1
 	  if ((deltaN > 0 || aFragment.GetNumberOfCharged() > 0) &&
               (G4UniformRand() <= aFragment.GetZ()/aFragment.GetA()))
-	     aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()+deltaN/2);
+	    aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()+deltaN/2);
 	} else {
 	  // It will be fragment emission
 	  ThereIsTransition = false;
@@ -228,7 +233,7 @@ G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	  running[0] = theChannels(0)->GetEmissionProbability();
 	  for (i = 1; i < NumberOfPossibleFragments; i++) 
 	    running[i]=running[i-1]+theChannels(i)->GetEmissionProbability();
-	    
+	  
 	  // Choose an emission channel
 	  G4double ChoosedChannel = G4UniformRand()*TotalEmissionProbability;
 	  G4int aChannel = -1;
@@ -244,7 +249,57 @@ G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	  G4double KineticEnergyOfEmittedFragment = 
 	    theChannels(aChannel)->GetKineticEnergy(aFragment);
 	  
-	  //	  G4cout << "Kinetic energy of Emitted fragment " << KineticEnergyOfEmittedFragment << endl;
+
+	  // G4cout << "Kinetic energy of Emitted fragment " << KineticEnergyOfEmittedFragment << endl;
+	  
+	  // Sample Fermi momentum of emitted fragment
+	  static const G4double FermiMaxMom = 250.0; // MeV
+	  G4ThreeVector FermiMomentum(IsotropicRandom3Vector(FermiMaxMom*pow(G4UniformRand(),1./3.)));
+
+	  G4ThreeVector P12(FermiMomentum + 
+			    // (1/#Particles before emission)
+			    ( 1.0/G4double(aFragment.GetNumberOfParticles()) )*
+			    aFragment.GetMomentum().vect()
+			    );
+	  
+
+
+	  G4double p = sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+
+							    2.0*theChannels(aChannel)->GetNuclearMass()));
+	  G4ParticleMomentum momentum;
+
+
+	  if (aFragment.GetMomentum().boostVector().mag2() > 1.e-7) {
+	    // sample a non-isotropic random vector
+	    G4double CosTheta = sqrt(G4UniformRand());
+	    G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+	    G4double Phi = twopi*G4UniformRand();
+	    momentum = G4ParticleMomentum(p*cos(Phi)*SinTheta,
+					  p*sin(Phi)*SinTheta,
+					  p*CosTheta);
+	    momentum = RotateMomentum(P12,aFragment.GetMomentum().boostVector(),momentum);
+	    
+	  } else {
+	    
+	    momentum = IsotropicRandom3Vector(p);
+
+	  } 
+
+	  
+	  G4LorentzVector EmittedMomentum(momentum,
+					  sqrt(momentum.mag2()+
+					       theChannels(aChannel)->GetNuclearMass() *
+					       theChannels(aChannel)->GetNuclearMass() )
+					  );
+
+	  // Excitation energy
+	  //                    check that Excitation energy is > 0
+	  G4double CheckU = theChannels(aChannel)->GetMaximalKineticEnergy() - 
+	    KineticEnergyOfEmittedFragment + 
+	    theChannels(aChannel)->GetCoulombBarrier();
+	  if (CheckU < 0.0)
+	    G4Exception("G4PreCompoundModel::DeExcite: Excitation energy less than 0! ");
+	  
 
 	  // Update nucleus parameters
 	  // Number of excitons
@@ -253,57 +308,21 @@ G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	  // Number of charges
 	  aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
 				       G4int(theChannels(aChannel)->GetZ()));
-	  // Excitation energy
-	  //    check that Excitation energy is > 0
-	  G4double CheckU = theChannels(aChannel)->GetMaximalKineticEnergy() - 
-	    KineticEnergyOfEmittedFragment + 
-	    theChannels(aChannel)->GetCoulombBarrier();
-	  if (CheckU < 0.0)
-	    G4Exception("G4PreCompoundModel::DeExcite: Excitation energy less than 0! ");
-	  
-	  aFragment.SetExcitationEnergy(CheckU);
+
 	  // Atomic number
 	  aFragment.SetA(theChannels(aChannel)->GetRestA());
 	  
 	  // Charge
 	  aFragment.SetZ(theChannels(aChannel)->GetRestZ());
 	  
-	  // Emited fragment Velocity
-	 // G4double EmittedFragmentVel = sqrt((2.0*KineticEnergyOfEmittedFragment)/
-	//				     ( (theChannels(aChannel)->GetNuclearMass()*
-	//					theChannels(aChannel)->GetRestA())/
-	//				       (theChannels(aChannel)->GetRestA()+
-	//					theChannels(aChannel)->GetA()))
-	//				     );
-	  
-	  
-	  //G4ParticleMomentum momentum = 
- 	 //   IsotropicRandom3Vetor(EmittedFragmentVel*
- 	//			  theChannels(aChannel)->GetNuclearMass()/
- 	//			  (1.0+theChannels(aChannel)->GetA()/
- 	//			   theChannels(aChannel)->GetRestA()));
-	G4double p = sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+
-			2.0*theChannels(aChannel)->GetNuclearMass()));
-	
-	   
-	G4ParticleMomentum momentum = IsotropicRandom3Vetor(p);
-	  
-	G4LorentzVector EmittedMomentum(momentum,
-					  sqrt(momentum.mag2()+
-					       theChannels(aChannel)->GetNuclearMass() *
-					       theChannels(aChannel)->GetNuclearMass() )
-					  );
-	  
-	  
+	  //	  aFragment.SetExcitationEnergy(CheckU);
  	  G4LorentzVector RestMomentum(-momentum,
  				       sqrt(momentum.mag2()+ 
- 					    (theChannels(aChannel)->GetRestNuclearMass()+
- 					     aFragment.GetExcitationEnergy()) *
- 					    (theChannels(aChannel)->GetRestNuclearMass()+
- 					     aFragment.GetExcitationEnergy() 
- 					     ))
- 					    );
-
+ 					    (theChannels(aChannel)->GetRestNuclearMass()+CheckU)*
+ 					    (theChannels(aChannel)->GetRestNuclearMass()+CheckU)
+					    )
+				       );
+	  
 	  // Perform Lorentz boosts
 	  EmittedMomentum.boost(aFragment.GetMomentum().boostVector());
 	  RestMomentum.boost(aFragment.GetMomentum().boostVector());
@@ -314,9 +333,14 @@ G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	  // Set emitted fragment momentum
 	  theChannels(aChannel)->SetMomentum(EmittedMomentum);
 	  
+
 	  // Add emitted fragment to Result
-	  G4DynamicParticle * MyDP = new G4DynamicParticle(theChannels(aChannel)->GetDynamicParticle());
-	  Result->insert(MyDP);
+	  G4DynamicParticle MyDP = theChannels(aChannel)->GetDynamicParticle();
+	  G4ReactionProduct * theNew = new G4ReactionProduct(MyDP.GetDefinition());
+          theNew->SetMomentum(MyDP.GetMomentum());
+          theNew->SetTotalEnergy(MyDP.Get4Momentum().e());
+//	  delete MyDP;
+	  Result->insert(theNew);
 	}
       } else {
 	// Perform Equilibrium Emission
@@ -329,7 +353,7 @@ G4DynamicParticleVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 
 
 
-G4ThreeVector G4PreCompoundModel::IsotropicRandom3Vetor(G4double Magnitude) const
+G4ThreeVector G4PreCompoundModel::IsotropicRandom3Vector(G4double Magnitude) const
   // Create a unit vector with a random direction isotropically distributed
 {
 
@@ -346,15 +370,11 @@ G4ThreeVector G4PreCompoundModel::IsotropicRandom3Vetor(G4double Magnitude) cons
 
 
 void G4PreCompoundModel::PerformEquilibriumEmission(const G4Fragment & aFragment,
-						    G4DynamicParticleVector * Result) const 
+						    G4ReactionProductVector * Result) const 
 {
 
   
-  for (G4int j = 0; j < Result->entries(); j++) 
- 	G4LorentzVector mom(Result->at(j)->Get4Momentum());
- 
-      
- G4DynamicParticleVector * theEquilibriumResult;
+ G4ReactionProductVector * theEquilibriumResult;
  theEquilibriumResult = GetExcitationHandler()->BreakItUp(aFragment);
   
   while (theEquilibriumResult->entries() > 0) 
@@ -363,4 +383,26 @@ void G4PreCompoundModel::PerformEquilibriumEmission(const G4Fragment & aFragment
   delete theEquilibriumResult;
   
   return;
+}
+
+
+
+G4ParticleMomentum G4PreCompoundModel::RotateMomentum(G4ParticleMomentum Pa,
+						      G4ParticleMomentum V,
+						      G4ParticleMomentum P) const 
+{
+  G4ParticleMomentum U = Pa.unit();
+  
+  G4double Alpha1 = U * V;
+  
+  G4double Alpha2 = sqrt(V.mag2() - Alpha1*Alpha1);
+
+  G4ThreeVector N = (1./Alpha2)*U.cross(V);
+
+  G4ParticleMomentum RotatedMomentum(
+				     ( (V.x() - Alpha1*U.x())/Alpha2 ) * P.x() + N.x() * P.y() + U.x() * P.z(),
+				     ( (V.y() - Alpha1*U.y())/Alpha2 ) * P.x() + N.y() * P.y() + U.y() * P.z(),
+				     ( (V.z() - Alpha1*U.z())/Alpha2 ) * P.x() + N.z() * P.y() + U.z() * P.z()
+				     );
+  return RotatedMomentum;
 }

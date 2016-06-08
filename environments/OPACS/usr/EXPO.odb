@@ -218,7 +218,8 @@ end
 begin OWidget
  name = EXPO_EXPO_pdm
  type = XmPulldownMenu
- children = EXPO_startRun EXPO_nextEvent EXPO_abortRun EXPO_cyclic
+ children = EXPO_startRun EXPO_nextEvent EXPO_abortRun 
+!EXPO_cyclic
  background = lightgrey
 end
 !----------------------------
@@ -241,18 +242,18 @@ begin OWidget
   setWidgetResource EXPO_abortRun  sensitive False
 end
 !----------------------------
-begin OWidget
- name = EXPO_cyclic
- type = XmPushButton
- labelString = Cyclic
- createCallback = osh> setWidgetResource EXPO_nextEvent sensitive False
- activateCallback = osh>\
-  isValid OCyclic/auto_next && delete OCyclic/auto_next\
-  delay=`ask delay(msec) 1000`\
-  script='G4> /run/beamOn 1'\
-  create OCyclic name auto_next widget `thisWidget` delay $delay script $script\
-  do OCyclic/auto_next start
-end
+!begin OWidget
+! name = EXPO_cyclic
+! type = XmPushButton
+! labelString = Cyclic
+! createCallback = osh> setWidgetResource EXPO_nextEvent sensitive False
+! activateCallback = osh>\
+!  isValid OCyclic/auto_next && delete OCyclic/auto_next\
+!  delay=`ask delay(msec) 1000`\
+!  script='G4> /run/beamOn 1'\
+!  create OCyclic name auto_next widget `thisWidget` delay $delay script $script\
+!  do OCyclic/auto_next start
+!end
 !----------------------------
 begin OWidget
  name = EXPO_nextEvent

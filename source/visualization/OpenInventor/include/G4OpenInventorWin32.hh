@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorWin32.hh,v 2.0 1998/07/02 16:47:25 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenInventorWin32.hh,v 1.3 1999/05/10 15:38:57 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // OpenInventor graphics system factory.
 
@@ -20,6 +20,7 @@
 class G4OpenInventorWin32: public G4OpenInventor {
 public:
   G4OpenInventorWin32 ();
+  virtual ~G4OpenInventorWin32 ();
 };
 
 #endif

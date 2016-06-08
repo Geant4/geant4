@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 2.3 1998/10/01 17:01:38 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4RunManager.hh,v 1.2 1999/04/22 21:51:11 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -118,6 +118,7 @@ class G4RunManager
     G4bool pauseAtBeginOfEvent;
     G4bool pauseAtEndOfEvent;
 
+    G4int runIDCounter;
     G4int verboseLevel;
     G4Timer * timer;
     G4DCtable* DCtable;
@@ -184,6 +185,8 @@ class G4RunManager
       return NULL;
     }
 
+    inline void SetRunIDCounter(G4int i)
+    { runIDCounter = i; }
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
 };

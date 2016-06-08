@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.cc,v 2.3 1998/07/17 08:56:21 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Timer.cc,v 1.3 1999/05/24 20:39:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -17,6 +17,15 @@
 
 #include "G4Timer.hh"
 #include "G4ios.hh"
+
+#ifdef G4USE_STL
+  #undef times
+#endif
+
+// Global error function
+void G4Exception(const char* s=0);
+
+
 
 #ifdef WIN32
 #  include <sys/types.h>
@@ -96,8 +105,4 @@ G4double G4Timer::GetUserElapsed() const
     G4double diff=fEndTimes.tms_utime-fStartTimes.tms_utime;
     return diff/sysconf(_SC_CLK_TCK);
 }
-
-
-
-
 

@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PomeronCrossSection.hh,v 1.4 1998/12/12 19:13:51 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PomeronCrossSection.hh,v 1.2 1999/04/12 15:45:54 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -66,6 +66,15 @@ class G4PomeronCrossSection
 	void Setgamma(const G4double agam); // temporary only! GF.
         G4double SoftEikonal(G4double s, G4double impactsquare);
         G4double HardEikonal(G4double s, G4double impactsquare);
+        
+        void Pomeron_S(G4double apomeron_S){ pomeron_S = apomeron_S;}
+        void Pomeron_Gamma(G4double apomeron_Gamma){ pomeron_Gamma = apomeron_Gamma;}
+        void Pomeron_C(G4double apomeron_C){ pomeron_C = apomeron_C;}
+        void Pomeron_Rsquare(G4double apomeron_Rsquare){ pomeron_Rsquare = apomeron_Rsquare;}
+        void Pomeron_Alpha(G4double apomeron_Alpha){ pomeron_Alpha = apomeron_Alpha;}
+        void Pomeron_Alphaprime(G4double apomeron_Alphaprime){ pomeron_Alphaprime = apomeron_Alphaprime;}
+        void Pomeron_Gamma_Hard(G4double apomeron_Gamma_Hard){ pomeron_Gamma_Hard = apomeron_Gamma_Hard;}
+        void Pomeron_Alpha_Hard(G4double apomeron_Alpha_Hard){ pomeron_Alpha_Hard = apomeron_Alpha_Hard;}
 
   private: 
 	G4double PowerSoft(const G4double s);

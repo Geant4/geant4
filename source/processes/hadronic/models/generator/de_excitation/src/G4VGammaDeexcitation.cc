@@ -20,6 +20,10 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//
+//
 // -------------------------------------------------------------------
 
 #include "G4VGammaDeexcitation.hh"
@@ -32,6 +36,8 @@
 #include "G4Fragment.hh"
 #include "G4FragmentVector.hh"
 
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 G4VGammaDeexcitation::G4VGammaDeexcitation(): _verbose(0), _transition(0)
 { }
@@ -57,7 +63,7 @@ G4FragmentVector* G4VGammaDeexcitation::DoTransition()
        {
 	 products->append(gamma);
 	 UpdateNucleus(gamma);
-	 Update(gamma);
+	 Update();
        }
     }
 
@@ -84,7 +90,7 @@ G4FragmentVector* G4VGammaDeexcitation::DoChain()
 	  products->append(gamma);
 	  UpdateNucleus(gamma);
 	}
-     Update(gamma);
+     Update();
     } 
 
   if (_verbose > 1)
@@ -112,39 +118,49 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 {
   G4double eGamma = 0.;
 
-  if (_transition != 0) eGamma = _transition->GammaEnergy();
+  if (_transition != 0)
+  {
+    _transition->SelectGamma();
+    eGamma = _transition->GetGammaEnergy();
+  }
 
   if (_verbose > 1 && _transition != 0) 
-    {
-      G4cout << "G4VGammaDeexcitation::GenerateGamma - Gamma energy " << eGamma 
-	     << " ** New excitation " << _transition->GetEnergyTo() << endl;
-    }
+  {
+    G4cout << "G4VGammaDeexcitation::GenerateGamma - Gamma energy " << eGamma 
+	   << " ** New excitation " << _nucleus.GetExcitationEnergy() - eGamma
+	   << endl;
+  }
 
   // Photon momentum isotropically generated 
  
-    if (eGamma > 0.) 
-      {
-	G4double cosTheta = 1. - 2. * G4UniformRand();
-	G4double sinTheta = sqrt(1. - cosTheta * cosTheta);
-	G4double phi = twopi * G4UniformRand();
+  if (eGamma > 0.) 
+  {
+    G4double cosTheta = 1. - 2. * G4UniformRand();
+    G4double sinTheta = sqrt(1. - cosTheta * cosTheta);
+    G4double phi = twopi * G4UniformRand();
 	
-	G4ThreeVector pGamma( eGamma * sinTheta * cos(phi),
-			      eGamma * sinTheta * sin(phi),
-			      eGamma * cosTheta );
-	
-	G4LorentzVector gamma(pGamma, eGamma);
-	//	gamma.boost(_nucleus.GetMomentum().boostVector() );
-	G4Fragment* gammaFragment = new G4Fragment(gamma,G4Gamma::GammaDefinition());
+    G4ThreeVector pGamma( eGamma * sinTheta * cos(phi),
+			  eGamma * sinTheta * sin(phi),
+			  eGamma * cosTheta );
 
-        if (_verbose > 1)
-	  G4cout << "G4VGammaDeexcitation::GenerateGamma -  Gamma fragment generated " << endl;
+    G4LorentzVector gamma(pGamma, eGamma);
+    //	gamma.boost(_nucleus.GetMomentum().boostVector() );
+    G4Fragment* gammaFragment = new
+      G4Fragment(gamma,G4Gamma::GammaDefinition());
 
-	return gammaFragment;
-      }
-    else
-      {
-	return 0;
-      }
+    G4double gammaTime = _transition->GetGammaCreationTime();
+    gammaTime += _nucleus.GetCreationTime();
+    gammaFragment->SetCreationTime(gammaTime);
+
+    if (_verbose > 1)
+      G4cout << "G4VGammaDeexcitation::GenerateGamma -  Gamma fragment generated " << endl;
+
+    return gammaFragment;
+  }
+  else
+  {
+    return 0;
+  }
 }
 
 
@@ -157,26 +173,45 @@ void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
   G4LorentzVector p4Nucleus(_nucleus.GetMomentum() );
   //  p4Nucleus.boost(-_nucleus.GetMomentum().boostVector() );
   
-  G4LorentzVector p4Residual(p4Nucleus - pGamma, p4Nucleus.e() - eGamma);
+//  G4LorentzVector p4Residual(p4Nucleus - pGamma, p4Nucleus.e() - eGamma);
+
+//
+// Due to a rounding error calculation in G4Fragment excitation energy,
+// we must correct p4Residual.e() when we are near to 0.
+//
+
+// New tetravector calculation:
+
+  G4double Mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(_nucleus.GetZ(),_nucleus.GetA());
+  G4double newExcitation = p4Nucleus.mag() - Mass - eGamma;
+  if(newExcitation < 0)
+    newExcitation = 0;
+
+  G4ThreeVector p3Residual(p4Nucleus - pGamma);
+  G4double newEnergy = sqrt(p3Residual * p3Residual +
+			    (Mass + newExcitation) * (Mass + newExcitation));
+  G4LorentzVector p4Residual(p3Residual, newEnergy);
+
   //  G4LorentzVector p4Residual(-pGamma, p4Nucleus.e() - eGamma);
   //  p4Residual.boost( _nucleus.GetMomentum().boostVector() );
   
   // Update excited nucleus parameters
 
   _nucleus.SetMomentum(p4Residual);
+  _nucleus.SetCreationTime(gamma->GetCreationTime());
 
-  if (_transition != 0) 
-  {
-    G4double excitation =_transition->GetEnergyTo();
-    if (excitation < 0.) excitation = 0.0;
-    _nucleus.SetExcitationEnergy(excitation);
-  }
+//  if (_transition != 0) 
+//  {
+//    G4double excitation =_transition->GetEnergyTo();
+//    if (excitation < 0.) excitation = 0.0;
+//    _nucleus.SetExcitationEnergy(excitation);
+//  }
 
   return;
 }
 
 
-void G4VGammaDeexcitation::Update(const G4Fragment*  gamma)
+void G4VGammaDeexcitation::Update()
 {
   if (_transition !=  0) 
     { 
@@ -209,6 +244,11 @@ void G4VGammaDeexcitation::SetVerboseLevel(G4int verbose)
   _verbose = verbose;
   return;
 }
+
+
+
+
+
 
 
 

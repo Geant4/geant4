@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 2.1 1998/08/22 16:35:06 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.3 1999/02/07 17:23:22 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  10th August 1998.
@@ -42,12 +42,22 @@ void G4PhysicalVolumeSearchScene::EstablishSpecials
 }
 
 void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid& solid) {
+
   /**************************************************
   G4cout << "Required volume: \"" << fRequiredPhysicalVolumeName
 	 << "\", copy no. " << fRequiredCopyNo << endl;
   G4cout << "PhysicalVolume:  \"" << fpCurrentPV -> GetName ()
 	 << "\", copy no. " << fpCurrentPV -> GetCopyNo () << endl;
   *******************************************/
+
+  if (fRequiredPhysicalVolumeName == "list") {
+    for (G4int i = 0; i < fCurrentDepth; i++ ) G4cout << "  ";
+    G4cout << "\"" << fpCurrentPV -> GetName ()
+	   << "\", copy no. " << fpCurrentPV -> GetCopyNo ()
+	   << endl;
+    return;
+  }
+
   if (fRequiredPhysicalVolumeName == fpCurrentPV -> GetName () &&
       fRequiredCopyNo             == fpCurrentPV -> GetCopyNo ()) {
     // Current policy - take first one found!!
@@ -70,6 +80,6 @@ void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid& solid) {
 	  "\n  This function gives you access to the first occurrence only."
 	       << endl;
       }
-    }      
-  }
+    }
+  }      
 }

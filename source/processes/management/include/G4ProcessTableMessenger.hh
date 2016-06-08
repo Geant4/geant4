@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTableMessenger.hh,v 2.2 1998/08/17 03:35:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ProcessTableMessenger.hh,v 1.2 1999/04/13 09:45:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //---------------------------------------------------------------
@@ -48,10 +48,10 @@ class G4ProcessTableMessenger: public G4UImessenger
 {
   public:
     G4ProcessTableMessenger(G4ProcessTable* pTable);
-    ~G4ProcessTableMessenger();
+    virtual ~G4ProcessTableMessenger();
 
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
     G4String GetProcessTypeName(G4ProcessType aType) const;  

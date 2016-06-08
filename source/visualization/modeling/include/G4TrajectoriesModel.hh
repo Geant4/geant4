@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrajectoriesModel.hh,v 1.2 1998/08/31 15:42:03 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4TrajectoriesModel.hh,v 1.2 1999/01/11 00:48:47 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  26th August 1998.

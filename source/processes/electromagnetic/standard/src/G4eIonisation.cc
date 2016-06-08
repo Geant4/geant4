@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 2.9 1998/11/13 13:37:34 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4eIonisation.cc,v 1.3 1999/04/13 09:05:39 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // -------------------------------------------------------------
@@ -26,6 +26,7 @@
 // 07-04-98: remove 'tracking cut' of the ionizing particle, MMa 
 // 04-09-98: new methods SetBining() PrintInfo()
 // 07-09-98: Cleanup
+// 02/02/99: correction inDoIt , L.Urban
 // --------------------------------------------------------------
  
 
@@ -316,7 +317,6 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   G4Material*               aMaterial = trackData.GetMaterial() ;
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle() ;
 
-  G4double Charge = aParticle->GetDefinition()->GetPDGCharge();
   ParticleMass = aParticle->GetDefinition()->GetPDGMass();
   G4double KineticEnergy = aParticle->GetKineticEnergy();
   G4double TotalEnergy = KineticEnergy + ParticleMass;
@@ -407,23 +407,28 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   // changed energy and momentum of the actual particle
   G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
   
-  if (finalKineticEnergy > 0.)
-    {
-      G4double finalMomentum=sqrt(finalKineticEnergy*
-                         (finalKineticEnergy+2.*ParticleMass));
+  G4double Edep = 0. ;
 
-      G4double finalPx = (TotalMomentum*ParticleDirection.x()
-                        - DeltaTotalMomentum*DeltaDirection.x())/finalMomentum; 
-      G4double finalPy = (TotalMomentum*ParticleDirection.y()
-                        - DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
-      G4double finalPz = (TotalMomentum*ParticleDirection.z()
-                        - DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
+  if (finalKineticEnergy > MinKineticEnergy)
+    {
+      G4double finalPx = TotalMomentum*ParticleDirection.x()
+                        - DeltaTotalMomentum*DeltaDirection.x(); 
+      G4double finalPy = TotalMomentum*ParticleDirection.y()
+                        - DeltaTotalMomentum*DeltaDirection.y(); 
+      G4double finalPz = TotalMomentum*ParticleDirection.z()
+                        - DeltaTotalMomentum*DeltaDirection.z(); 
+      G4double finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+      finalPx /= finalMomentum ;
+      finalPy /= finalMomentum ;
+      finalPz /= finalMomentum ;
 
       aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
     }
   else
     {
       finalKineticEnergy = 0.;
+      Edep = finalKineticEnergy ;
       if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
       else             aParticleChange.SetStatusChange(fStopButAlive);
     }
@@ -431,7 +436,7 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   aParticleChange.SetEnergyChange( finalKineticEnergy );
   aParticleChange.SetNumberOfSecondaries(1);  
   aParticleChange.AddSecondary( theDeltaRay );
-  aParticleChange.SetLocalEnergyDeposit (0.);
+  aParticleChange.SetLocalEnergyDeposit (Edep);
       
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }

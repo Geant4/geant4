@@ -5,16 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05RunAction.hh,v 2.1 1998/07/12 02:42:16 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05RunAction.hh,v 1.4 1999/05/28 12:55:34 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef ExN05RunAction_h
 #define ExN05RunAction_h 1
 
-#include "G4UserRunAction.hh"
 #include "G4Timer.hh"
 #include "globals.hh"
+#include "G4UserRunAction.hh"
 
 class G4Run;
 
@@ -25,12 +25,11 @@ class ExN05RunAction : public G4UserRunAction
     ~ExN05RunAction();
 
   public:
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    void BeginOfRunAction(const G4Run* aRun);
+    void EndOfRunAction(const G4Run* aRun);
 
   private:
     G4Timer* timer;
-    G4int runIDcounter;
 };
 
 #endif

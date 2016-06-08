@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.hh,v 2.2 1998/07/12 03:00:10 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIterminal.hh,v 1.2 1999/04/13 01:26:25 yhajime Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4UIterminal_h
@@ -36,10 +36,8 @@ class G4UIterminal : public G4VBasicShell
   private:
       void ExecuteCommand(G4String);
       G4String GetCommand();
-      void ChangeDirectoryCommand(G4String);
-      void ListDirectory(G4String);
-      void TerminalHelp(G4String);
-      void ShowCurrent(G4String);
+      G4bool GetHelpChoice(G4int&);
+      void ExitHelp();
 };
 
 

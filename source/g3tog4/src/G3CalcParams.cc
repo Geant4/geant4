@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3CalcParams.cc,v 2.2 1998/10/05 15:26:08 lockman Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G3CalcParams.cc,v 1.1 1999/01/07 16:06:45 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "globals.hh"
 #include "G4LogicalVolume.hh"

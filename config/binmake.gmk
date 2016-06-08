@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 2.22 1998/12/01 22:59:47 gcosmo Exp $
+# $Id: binmake.gmk,v 1.29 1999/07/06 15:19:42 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -27,6 +27,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/particles/hadrons/barions/include \
               -I$(G4BASE)/particles/hadrons/ions/include \
               -I$(G4BASE)/particles/hadrons/mesons/include \
+              -I$(G4BASE)/particles/shortlived/include \
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/general/include \
               -I$(G4BASE)/processes/decay/include \
@@ -37,6 +38,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/muons/include \
               -I$(G4BASE)/processes/electromagnetic/utils/include \
               -I$(G4BASE)/processes/electromagnetic/xrays/include \
+              -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
               -I$(G4BASE)/processes/hadronic/management/include \
               -I$(G4BASE)/processes/hadronic/processes/include \
               -I$(G4BASE)/processes/hadronic/util/include \
@@ -58,6 +60,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/management/include \
               -I$(G4BASE)/geometry/solids/CSG/include \
               -I$(G4BASE)/geometry/solids/BREPS/include \
+              -I$(G4BASE)/geometry/solids/Boolean/include \
               -I$(G4BASE)/geometry/solids/STEP/include \
               -I$(G4BASE)/geometry/solids/STEPinterface/include \
               -I$(G4BASE)/geometry/volumes/include \
@@ -92,84 +95,162 @@ ifdef G4ODBMS
               -DHep_HAS_BUILDIN_BOOL_CONSTANTS
 endif
 
-ifndef LDLIBS
-
-ifdef G4EXLIB
-  LDLIBS := -l$(G4TARGET) $(VISLIBS) $(UILIBS)
-else
-  LDLIBS := $(VISLIBS) $(UILIBS)
-endif
-
-ifdef G4ODBMS
-  LDLIBS += -lG4persistency
-endif
-
-  LDLIBS += \
-            -lG4readout \
-            -lG4run \
-            -lG4event \
-            -lG4tracking \
-            -lG4processes \
-            -lG4particles \
-            -lG4digits+hits \
-            -lG4track \
-            -lG4materials \
-            -lG4geometry \
-            -lG4graphics_reps \
-            -lG4intercoms \
-            -lG4global \
-             $(INTYLIBS)
-endif
-
-ifdef G4ODBMS
-  LDFLAGS  += -L$(OBJY_DIR)/lib \
-              -L$(HEP_ODBMS_DIR)/lib
-
-#  Note: -loo_sahr.4.02 and -lHepODBMS should be placed
-#        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
-
-  LDLIBS += -loo_shar.4.02 -lHepODBMS
-endif
-
 CPPFLAGS += $(INCFLAGS)
 LDFLAGS += -L$(G4LIBDIR)
-LDLIBS += $(LOADLIBS)
 
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
 ifdef G4EXLIB
-G4LIBDIR := $(G4TMPDIR)
-LDFLAGS += -L$(G4LIBDIR)
-include $(G4INSTALL)/config/common.gmk
+  G4LIBDIR := $(G4TMPDIR)
+  LDFLAGS += -L$(G4LIBDIR)
+  include $(G4INSTALL)/config/common.gmk
 endif
 
-LDLIBS += $(EXTRALIBS)
+GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
+
+ifdef LDLIBS
+  USER_DEFINED_LDLIBS := 1
+endif
+
+# Because of the script for granular libraries which replaces part of LDLIBS
+# and because of the way user defined LDLIBS was augmented historically I
+# have split LDLIBS into 4 parts...
+#
+ifndef USER_DEFINED_LDLIBS
+
+# LDLIBS1 contains the very high level libraries...
+#
+ifdef G4EXLIB
+  LDLIBS1 := -l$(G4TARGET)
+endif
+
+# VISLIBS and UILIBS are now handles by the granular library script...
+#
+ifdef GLOBALLIBS
+  LDLIBS1 += $(VISLIBS) $(UILIBS)
+endif
+
+ifdef G4ODBMS
+  LDLIBS1 += -lG4persistency
+endif
+
+ifdef GLOBALLIBS
+  LDLIBS2 := -lG4readout \
+             -lG4run \
+             -lG4event \
+             -lG4tracking \
+             -lG4processes \
+             -lG4particles \
+             -lG4digits+hits \
+             -lG4track \
+             -lG4materials \
+             -lG4geometry \
+             -lG4graphics_reps \
+             -lG4intercoms \
+             -lG4global
+else
+# The next line specifically should read LDLIBS2 = , not LDLIBS2 :=, so
+#   that it is not expanded until the directory G4TMPDIR is created.
+  LDLIBS2 = $(shell \
+        G4TMP=$(G4TMP); export G4TMP; \
+	if [ \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
+	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
+	$(G4LIB)/$(G4SYSTEM)/liblist \
+	  -d $(G4TMPDIR) \
+	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
+# Extra libraries to resolve remaining circular dependencies...
+#  LDLIBS2 += 
+endif
+
+# LDLIBS3 contains the first set of low level libraries...
+#
+LDLIBS3 += $(INTYLIBS)
+
+endif # ifndef USER_DEFINED_LDLIBS
+
+# LDLIBS4 contains the next set of low level libraries which historically
+# (why?) the user is not supposed to be able to define...
+#
+ifdef G4ODBMS
+  LDFLAGS  += -L$(OBJY_DIR)/lib \
+              -L$(HEP_ODBMS_DIR)/lib
+
+#  Note: -l$(OBJY_LDLIB) and -lHepODBMS should be placed
+#        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
+
+  LDLIBS4 += -l$(OBJY_LDLIB) -lHepODBMS
+endif
+ifdef G4USE_OSPACE
+  LDLIBS4 += $(OSPACELIBS)
+endif
+
+LDLIBS4 += $(EXTRALIBS)
+LDLIBS4 += $(LOADLIBS)
+
+# Finally assemble libraries...
+#
+ifdef USER_DEFINED_LDLIBS
+  LDLIBS_PREFINAL := $(LDLIBS)
+else
+  LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS3)
+endif
+LDLIBS_PREFINAL += $(LDLIBS4)
+
+ifeq ($(G4SYSTEM),WIN32-VC)
+  WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
+  LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
+  LDLIBS = $(patsubst -l%,lib%.a,$(LDLIBS_PREFINAL))
+else
+  LDLIBS = $(LDLIBS_PREFINAL)
+endif
+
 
 sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 
-.PHONY: bin clean clean_bin
+LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last
+
+.PHONY: bin clean clean_bin debug
 
 # Make $(G4TARGET) executable.
 bin: $(G4BINDIR)/$(G4TARGET)
 
-ifeq ($(G4SYSTEM),WIN32-VC-NICE)
-  WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
-  LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
-  LDLIBS := $(patsubst -l%,lib%.a,$(LDLIBS))
+$(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
+ifndef USER_DEFINED_LDLIBS
+  ifndef GLOBALLIBS
+	@echo "WARNING: This assumes you are using granular libraries!"
+	@echo "WARNING: It looked for your global library G4global and,"
+	@echo "         not finding it, assumes you are using granular"
+	@echo "         libraries."
+	@echo "WARNING: If you did not intend this, interrupt now (CTRL-C),"
+	@echo "         and go back and make global libraries, i.e.,"
+	@echo '           cd $$G4INSTALL/source'
+	@echo "           gmake global"
+	@if [ ! \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
+	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
+	  echo "ERROR: No liblist program or library map file."; \
+	  echo "       These are needed for building with granular"; \
+	  echo "       libraries."; \
+	  echo '         cd $$G4INSTALL/source'; \
+	  echo "         gmake"; \
+	  echo "       or if you are sure you have already made all the"; \
+	  echo "       granular libraries:"; \
+	  echo "         gmake libmap"; \
+	  exit 1; fi
+  endif
 endif
-
-$(G4BINDIR)/$(G4TARGET): $(G4TMPDIR)/exe/obj.last
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
 ifdef CPPVERBOSE
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	-o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) $(LDLIBS)
+	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(LDLIBS)
 else
 	@echo Linking $(G4TARGET) ...
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
-	-o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) $(LDLIBS)
+	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
+	  $(LDLIBS)
 endif
 
 # Touch the versioning file
@@ -197,13 +278,8 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
-ifeq ($(G4SYSTEM),Linux-g++)
-	@($(ECHO) -n $(G4TMPDIR)/exe/ ; \
+	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
 	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
-else
-	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
-endif
 -include $(dependencies)
 
 clean:

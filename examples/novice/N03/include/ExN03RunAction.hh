@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03RunAction.hh,v 2.3 1998/10/09 15:48:01 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN03RunAction.hh,v 1.3 1999/04/22 21:45:15 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -30,11 +30,9 @@ class ExN03RunAction : public G4UserRunAction
    ~ExN03RunAction();
 
   public:
-    void BeginOfRunAction(G4Run*);
-    void EndOfRunAction(G4Run*);
+    void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
 
-  private:
-    G4int runIDcounter;
 };
 
 #endif

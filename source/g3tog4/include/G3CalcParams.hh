@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3CalcParams.hh,v 2.3 1998/10/05 15:26:05 lockman Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G3CalcParams.hh,v 1.1 1999/01/07 16:06:42 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // class G3CalcParams
 //

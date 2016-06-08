@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.3 1998/07/07 17:11:11 allison Exp $
+# $Id: GNUmakefile,v 1.2 1999/04/15 15:27:56 johna Exp $
 
 name := G4OPACS
 
@@ -19,6 +19,7 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
+CPPFLAGS += -I$(G4BASE)/intercoms/include
 
 ifdef G4VIS_BUILD_OPACS_DRIVER
   CPPFLAGS += -I$(COROOT)/include -I$(XXROOT)/include -I$(WOROOT)/include\

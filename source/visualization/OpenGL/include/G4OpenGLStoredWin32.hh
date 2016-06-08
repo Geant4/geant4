@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredWin32.hh,v 2.0 1998/07/02 16:44:31 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLStoredWin32.hh,v 1.3 1999/01/11 00:47:39 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // OpenGLStoredWin32 graphics system factory.
@@ -21,8 +21,8 @@
 class G4OpenGLStoredWin32: public G4VGraphicsSystem {
 public:
   G4OpenGLStoredWin32 ();
-  G4VScene* CreateScene ();
-  G4VView*  CreateView  (G4VScene&);
+  G4VSceneHandler* CreateSceneHandler ();
+  G4VViewer*  CreateViewer  (G4VSceneHandler&);
 };
 
 #endif

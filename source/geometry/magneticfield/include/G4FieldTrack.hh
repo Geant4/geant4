@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.hh,v 2.6 1998/11/18 21:13:05 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FieldTrack.hh,v 1.1 1999/01/07 16:07:02 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  
 //  Data structure bringing together a magnetic track's state.

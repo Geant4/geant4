@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LambdacPlus.cc,v 2.1 1998/08/04 11:14:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4LambdacPlus.cc,v 1.2 1999/06/09 16:08:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -61,7 +61,7 @@ G4LambdacPlus::G4LambdacPlus(
 //             stable         lifetime    decay table 
 
 G4LambdacPlus G4LambdacPlus::theLambdacPlus(
-          "lambda_c+",      2.2849*GeV,       0.0*MeV,   +1.*eplus,
+          "lambda_c+",      2.2849*GeV,   3.19e-9*MeV,   +1.*eplus,
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            +1,        4122,

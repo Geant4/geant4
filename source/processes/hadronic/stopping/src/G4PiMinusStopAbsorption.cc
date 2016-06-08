@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 2.7 1998/10/01 19:32:07 pia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.3 1999/05/27 09:59:47 pia Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -32,11 +32,12 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
+#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiProperties.hh"
 #include "G4ParticleTypes.hh"
 #include "G4Nucleus.hh"
 #include "G4ReactionKinematics.hh"
 #include "G4DynamicParticleVector.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -49,8 +50,8 @@ G4PiMinusStopAbsorption::G4PiMinusStopAbsorption(G4PiMinusStopMaterial* material
   
 {
   _materialAlgo = materialAlgo;
-  _Z = Z;
-  _A = A;
+  _nucleusZ = Z;
+  _nucleusA = A;
   _level = 0;
   _absorptionProducts = new G4DynamicParticleVector();
 }
@@ -70,8 +71,8 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 {
   RWTPtrOrderedVector<G4ParticleDefinition>* defNucleons = _materialAlgo->DefinitionVector();
 
-  G4double newA = _A;
-  G4double newZ = _Z;
+  G4double newA = _nucleusA;
+  G4double newZ = _nucleusZ;
 
   if (defNucleons != 0)
     {
@@ -87,8 +88,8 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 	}
     }
 
-  G4double binding = G4NucleiPropertiesTable::GetBindingEnergy(_Z,_A) / _A;
-  G4double mass = G4NucleiPropertiesTable::GetAtomicMass(newZ,newA);
+  G4double binding = G4NucleiPropertiesTable::GetBindingEnergy(_nucleusZ,_nucleusA) / _nucleusA;
+  G4double mass = G4NucleiProperties::GetNuclearMass(newA,newZ);
 
 
   RWTPtrOrderedVector<G4LorentzVector>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
@@ -178,13 +179,13 @@ G4double G4PiMinusStopAbsorption::Energy()
       if ((*_absorptionProducts)[i]->GetDefinition() == G4Proton::Proton()) nP++;
     }
 
-  G4double productBinding = (G4NucleiPropertiesTable::GetBindingEnergy(_Z,_A) / _A) * nAbsorptionProducts;
-  G4double mass = G4NucleiPropertiesTable::GetAtomicMass(_Z - nP,_A - (nP + nN));
+  G4double productBinding = (G4NucleiPropertiesTable::GetBindingEnergy(_nucleusZ,_nucleusA) / _nucleusA) * nAbsorptionProducts;
+  G4double mass = G4NucleiProperties::GetNuclearMass(_nucleusA - (nP + nN),_nucleusZ - nP);
   G4double pNucleus = pProducts.mag();
   G4double eNucleus = sqrt(pNucleus*pNucleus + mass*mass);
   G4double tNucleus = eNucleus - mass;
-  G4double temp = G4NucleiPropertiesTable::GetBindingEnergy(_Z - nP,_A - (nP + nN)) - 
-    G4NucleiPropertiesTable::GetBindingEnergy(_Z,_A);
+  G4double temp = G4NucleiPropertiesTable::GetBindingEnergy(_nucleusZ - nP,_nucleusA - (nP + nN)) - 
+    G4NucleiPropertiesTable::GetBindingEnergy(_nucleusZ,_nucleusA);
   energy = productEnergy + productBinding + tNucleus;
   
   if (_level > 0)

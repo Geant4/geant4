@@ -1,11 +1,11 @@
-$Id: History,v 1.1 1998/10/14 15:54:47 allison Exp $
+$Id: History,v 1.2 1999/04/17 05:27:10 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Novice Example 09 History file
+                    Extended Example 03 History file
                     ------------------------------
 This file should be used by the test developer to briefly
 summarize all major modifications introduced in the code and keep
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17 Apr., 1999 H.Kurashige 
+- Modify SetCuts() and ConstructParticle() in ExE03PhysicsList
+- Modify BeginOfRunAction() and EndOfRunAction() in ExE03RunAction
 
 14th October 1998  John Allison
 - Moved from N09.

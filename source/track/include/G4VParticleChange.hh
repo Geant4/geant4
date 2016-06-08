@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.hh,v 2.5 1998/12/11 20:53:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VParticleChange.hh,v 1.3 1999/05/06 11:42:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -48,8 +48,8 @@
 //   
 // ------------------------------------------------------------
 //   Implement Event Biasing Scheme   9 Nov.,98 H.Kurashige
-
-
+//   add CheckIt                    13  Apr.,99 H.Kurashige
+//   add accuracy leveles            5  May, 99 H.Kurashige
 #ifndef G4VParticleChange_h
 #define G4VParticleChange_h 1
 
@@ -79,6 +79,11 @@ class G4VParticleChange
     G4bool operator==(const G4VParticleChange &right) const;
     G4bool operator!=(const G4VParticleChange &right) const;
     // "equal" means that teo objects have the same pointer.
+
+  protected:
+    // hide copy constructor and assignment operaor as protected
+    G4VParticleChange(const G4VParticleChange &right);
+    G4VParticleChange & operator=(const G4VParticleChange &right);
  
   public:
     // --- the following methods are for updating G4Step -----   
@@ -197,11 +202,22 @@ class G4VParticleChange
     G4int verboseLevel;
     //  The Verbose level
 
-  protected:
-    // hide copy constructor and assignment operaor as protected
-    G4VParticleChange(const G4VParticleChange &right);
-    G4VParticleChange & operator=(const G4VParticleChange &right);
-
+  public:
+    // CheckIt method is provided for debug
+    virtual G4bool CheckIt(const G4Track&);
+ 
+    // CheckIt method is activated 
+    // if debug flag is set and 'G4VERBOSE' is defined 
+    void   ClearDebugFlag();
+    void   SetDebugFlag();
+    G4bool GetDebugFlag() const; 
+        
+  protected: 
+    G4bool   debugFlag;
+ 
+    // accuracy levels
+    static const G4double accuracyForWarning;
+    static const G4double accuracyForException; 
 
   //---- following methods and members are used for Event Biasing
   public:
@@ -209,7 +225,7 @@ class G4VParticleChange
     virtual void   SwOnEB();
     virtual void   SwOffEB();
     virtual G4bool IsEBActive() const;
-    virtual G4VEvtBiasMechanism* GetEBMechanism() const;
+    virtual G4VEvtBiasMechanism* GetEBMechanism();
 
   protected:
     G4VEvtBiasMechanism* theEBMechanism;

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.1 1998/08/22 01:33:47 gcosmo Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:14:19 gunter Exp $
 # ----------------------------------------------------------
 # GNUmakefile for track library.  Gabriele Cosmo, 3/4/1997.
 # ----------------------------------------------------------

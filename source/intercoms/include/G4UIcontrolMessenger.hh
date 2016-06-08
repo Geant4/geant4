@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcontrolMessenger.hh,v 2.3 1998/10/01 15:49:53 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIcontrolMessenger.hh,v 1.1 1999/01/07 16:09:23 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4UIcontrolMessenger_h

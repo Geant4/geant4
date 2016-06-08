@@ -1,4 +1,4 @@
-$Id: G4NURBS.txt,v 2.0 1998/07/02 17:29:39 gunter Exp $
+$Id: G4NURBS.txt,v 1.1 1999/01/07 16:09:09 gunter Exp $
 Olivier Crumeyrolle, 17th September 1996.
 
 		The G4NURBS C++ class library

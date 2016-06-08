@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IVRestDiscreteProcess.cc,v 2.0 1998/07/02 16:39:41 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IVRestDiscreteProcess.cc,v 1.4 1999/04/30 08:02:31 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -22,13 +22,14 @@
 
 #include "G4IVRestDiscreteProcess.hh"
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess()
-                   :G4VProcess("No Name Discrete Process") 
+                   :G4VProcess("No Name Discrete Process"),BIGSTEP(1.e10)
+
 {
   G4Exception("G4IVRestDiscreteProcess:: default constructor is called");
 }
 
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess(const G4String& aName , G4ProcessType aType)
-                  : G4VProcess(aName, aType)
+                  : G4VProcess(aName, aType),BIGSTEP(1.e10)
 {
 }
 
@@ -37,17 +38,17 @@ G4IVRestDiscreteProcess::~G4IVRestDiscreteProcess()
 }
 
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess(G4IVRestDiscreteProcess& right)
-                  : G4VProcess(right)
+                  : G4VProcess(right),BIGSTEP(1.e10)
 {
 }
 
+G4double G4IVRestDiscreteProcess::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            )
+{
+  G4double value = DBL_MAX ;
 
-
-
-
-
-
-
-
-
-
+  return value;
+}

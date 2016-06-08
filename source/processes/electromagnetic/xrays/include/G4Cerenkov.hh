@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.hh,v 2.2 1998/08/25 22:05:48 gum Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Cerenkov.hh,v 1.1 1999/01/07 16:11:28 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

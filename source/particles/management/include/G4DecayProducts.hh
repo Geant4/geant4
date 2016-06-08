@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.hh,v 2.1 1998/07/13 17:17:47 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DecayProducts.hh,v 1.3 1999/04/13 07:58:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // ------------------------------------------------------------
@@ -55,11 +55,11 @@ class G4DecayProducts
    //    theParentPaticle is used to get information of parent particle 
    //    when decay products are filled 
    //    new G4DynamicParticle object is created in set methods  
-    G4DynamicParticle* GetParentParticle() const {return theParentParticle;};
+    const G4DynamicParticle* GetParentParticle() const {return theParentParticle;};
     void SetParentParticle(const G4DynamicParticle &aParticle);
 
    //  boost all products
-    void Boost(G4double totalEnergy, const G4ParticleMomentum &momentumDirection);
+    void Boost(G4double totalEnergy, const G4ThreeVector &momentumDirection);
     void Boost(G4double betax, G4double betay, G4double betaz);
  
   //   push-pop  methods for decay products pointer

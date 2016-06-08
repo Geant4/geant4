@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PGeometryObjectMap.cc,v 2.2 1998/07/14 14:15:04 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PGeometryObjectMap.cc,v 1.2 1999/04/29 09:08:32 morita Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // class G4PGeometryObjectMap 
 //
@@ -18,9 +18,8 @@
 
 #include "G4PGeometryObjectMap.hh"
 
-// tell C++ compiler to generate code of parametrized class for eacy class
+// tell C++ compiler to generate code of parametrized class for each class
 // (Required by Objectivity/DB)
-implement(HepRefVArray,G4PVPhysicalVolume)
 implement(HepRefVArray,G4PLogicalVolume)
 implement(HepRefVArray,G4PVSolid)
 

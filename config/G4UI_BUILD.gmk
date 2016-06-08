@@ -1,4 +1,4 @@
-# $Id: G4UI_BUILD.gmk,v 2.7 1998/10/23 15:14:36 barrand Exp $
+# $Id: G4UI_BUILD.gmk,v 1.1 1999/01/07 15:58:31 gunter Exp $
 # -------------------------------------------------------------
 # Interfaces-specific CPPFLAGS for BUILD phase.
 #   John Allison, 6th July 1998.

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixImplicitEuler.cc,v 2.2 1998/11/10 18:17:14 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HelixImplicitEuler.cc,v 1.1 1999/01/07 16:07:09 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4HelixImplicitEuler.hh"
 #include "G4ThreeVector.hh"

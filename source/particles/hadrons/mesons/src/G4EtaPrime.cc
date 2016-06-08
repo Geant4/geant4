@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EtaPrime.cc,v 2.2 1998/09/24 06:08:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EtaPrime.cc,v 1.2 1999/06/09 16:07:50 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -82,7 +82,7 @@ G4EtaPrime::G4EtaPrime(
 //             stable         lifetime    decay table 
 
 G4EtaPrime G4EtaPrime::theEtaPrime(
-	  "eta_prime",     0.95777*GeV,     0.201*MeV,         0.0, 
+	  "eta_prime",     0.95777*GeV,     0.203*MeV,         0.0, 
 		    0,              -1,            +1,          
 		    0,               0,            +1,             
 	      "meson",               0,             0,         331,

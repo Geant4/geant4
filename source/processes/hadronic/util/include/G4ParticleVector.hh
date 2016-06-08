@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleVector.hh,v 2.1 1998/07/13 17:27:23 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleVector.hh,v 1.1 1999/01/07 16:13:49 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // ------------------------------------------------------------
 // HPW decoupling theo models from RW (Mon Mar 16 1998)

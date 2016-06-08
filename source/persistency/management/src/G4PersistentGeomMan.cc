@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentGeomMan.cc,v 2.2 1998/11/10 18:27:43 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PersistentGeomMan.cc,v 1.2 1999/03/29 16:05:27 morita Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // class G4PersistentGeomMan 
 //
@@ -102,7 +102,7 @@ G4bool G4PersistentGeomMan::Store( HepDbApplication* dbApp,
   else
   {
      G4cerr << "G4PersistentGeomMan::Store" <<
-      " -- the object map already defined in the geometry database." < endl;
+      " -- the object map already defined in the geometry database." << endl;
      G4cerr << "  Geometry not stored." << endl;
      dbApp->abort();
      return false;

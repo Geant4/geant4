@@ -21,6 +21,9 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//      
 // -------------------------------------------------------------------
 //
 //  Header file for G4ContinuumGammaTransition
@@ -40,23 +43,28 @@ public:
 
   // Constructor
   G4ContinuumGammaTransition(const G4NuclearLevelManager& levelManager,
-			     G4int Z, G4int A, G4double excitation, G4int verbose);
+			     G4int Z, G4int A, G4double excitation,
+			     G4int verbose);
 
   // Destructor
   ~G4ContinuumGammaTransition();
 
   // Functions
 
-  virtual G4double GammaEnergy();
-  virtual G4double GetEnergyTo() const;
+//--  virtual G4double GammaEnergy();
+//--  virtual G4double GetEnergyTo() const;
   virtual void SetEnergyFrom(const G4double energy);
+  virtual G4double GetGammaEnergy();
+  virtual G4double GetGammaCreationTime();
+  virtual void SelectGamma();
 
 private:
 
   G4double E1Pdf(G4double energy);
+  G4double GammaTime();
 
-  G4int _A;
-  G4int _Z;
+  G4int _nucleusA;
+  G4int _nucleusZ;
   G4double _eMin;
   G4double _eMax;
   G4double _maxLevelE;
@@ -64,6 +72,7 @@ private:
   G4double _excitation;
   G4double _eGamma;
   G4NuclearLevelManager _levelManager;
+  G4double _gammaCreationTime;
 
 };
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForDecay.cc,v 2.2 1998/07/20 06:11:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleChangeForDecay.cc,v 1.3 1999/05/06 11:42:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -31,7 +31,7 @@ G4ParticleChangeForDecay::G4ParticleChangeForDecay():G4VParticleChange()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForDecay::G4ParticleChangeForDecay() " << endl;
+    G4cout << "G4ParticleChangeForDecay::G4ParticleChangeForDecay() " << endl;
   }
 #endif
 }
@@ -40,22 +40,21 @@ G4ParticleChangeForDecay::~G4ParticleChangeForDecay()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForDecay::~G4ParticleChangeForDecay() " << endl;
+    G4cout << "G4ParticleChangeForDecay::~G4ParticleChangeForDecay() " << endl;
   }
 #endif
 }
 
 // copy and assignment operators are implemented as "shallow copy"
-G4ParticleChangeForDecay::G4ParticleChangeForDecay(const G4ParticleChangeForDecay &right)
+G4ParticleChangeForDecay::G4ParticleChangeForDecay(const G4ParticleChangeForDecay &right): G4VParticleChange(right)
 {
-   *this = right;
+  theTimeChange = right.theTimeChange;
 }
 
 
 G4ParticleChangeForDecay & G4ParticleChangeForDecay::operator=(const G4ParticleChangeForDecay &right)
 {
-   if (this != &right)
-   {
+   if (this != &right){
       theListOfSecondaries = right.theListOfSecondaries;
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
@@ -63,6 +62,8 @@ G4ParticleChangeForDecay & G4ParticleChangeForDecay::operator=(const G4ParticleC
       theTrueStepLength = right.theTrueStepLength;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
+     
+     theTimeChange = right.theTimeChange;
    }
    return *this;
 }
@@ -117,6 +118,12 @@ G4Step* G4ParticleChangeForDecay::UpdateStepForAtRest(G4Step* pStep)
   pPostStepPoint->AddProperTime( theTimeChange  
                                  - pPreStepPoint->GetGlobalTime());
 
+
+#ifdef G4VERBOSE
+  G4Track*     aTrack  = pStep->GetTrack();
+  if (debugFlag) CheckIt(*aTrack);
+#endif
+
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
 }
@@ -130,6 +137,42 @@ void G4ParticleChangeForDecay::DumpInfo() const
   G4cout << "        Time (ns)           : " 
        << setw(20) << theTimeChange/ns
        << endl;
+}
+
+G4bool G4ParticleChangeForDecay::CheckIt(const G4Track& aTrack)
+{
+  G4bool    exitWithError = false;
+
+  G4double  accuracy;
+
+  // global time should not go back
+  G4bool itsOK =true;
+  accuracy = -1.0*(theTimeChange - aTrack.GetGlobalTime())/ns;
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4ParticleChangeForDecay::CheckIt    : ";
+    G4cout << "the global time goes back  !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[ns] " <<endl;
+    itsOK = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+  }
+
+  // dump out information of this particle change
+  if (!itsOK) { 
+    G4cout << " G4ParticleChangeForDecay::CheckIt " <<endl;
+    G4cout << " pointer : " << this <<endl ;
+    DumpInfo();
+  }
+
+  // Exit with error
+  if (exitWithError) G4Exception("G4ParticleChangeForDecay::CheckIt");
+
+  // correction
+  if (!itsOK) {
+    theTimeChange = aTrack.GetGlobalTime();
+  }
+
+  itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
+  return itsOK;
 }
 
 

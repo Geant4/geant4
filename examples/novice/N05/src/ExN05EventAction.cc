@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventAction.cc,v 2.7 1998/12/11 19:14:07 verderi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05EventAction.cc,v 1.2 1999/04/16 12:05:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "ExN05EventAction.hh"
@@ -34,7 +34,7 @@ ExN05EventAction::ExN05EventAction()
 ExN05EventAction::~ExN05EventAction()
 {;}
 
-void ExN05EventAction::BeginOfEventAction()
+void ExN05EventAction::BeginOfEventAction(const G4Event*)
 {
   if(drawFlag)
     {
@@ -46,16 +46,14 @@ void ExN05EventAction::BeginOfEventAction()
     }
 }
 
-void ExN05EventAction::EndOfEventAction()
+void ExN05EventAction::EndOfEventAction(const G4Event* evt )
 {
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   G4String colNam;
   calorimeterCollID    = SDman->GetCollectionID(colNam="CalCollection");
   hadCalorimeterCollID = SDman->GetCollectionID(colNam="HadCollection");
   
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-  
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+   G4cout << ">>> Event " << evt->GetEventID() << endl;
   
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
   ExN05CalorimeterHitsCollection* CaloHC    = NULL;

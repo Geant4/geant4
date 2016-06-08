@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quarks.hh,v 2.1 1998/07/13 17:19:07 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Quarks.hh,v 1.2 1999/04/13 08:18:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -46,10 +46,21 @@ class G4Quarks : public G4VShortLivedParticle
    );
    G4Quarks*    QuarksDefinition(){return this;};
    G4Quarks*    Quarks(){return this;};
+   virtual      ~G4Quarks(){}
 };
 
 
 #endif
+
+
+
+
+
+
+
+
+
+
 
 
 

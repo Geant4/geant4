@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsatt.cc,v 2.1 1998/07/12 02:54:22 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4gsatt.cc,v 1.3 1999/05/22 06:31:38 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include <rw/cstring.h>
 #include "G3toG4.hh"
@@ -28,7 +28,6 @@ void PG4gsatt(RWCString tokens[])
 void G4gsatt(G4String name, G4String attr, G4int ival)
 {
     // get logical volume pointer
-    G4LogicalVolume *lvol = G3Vol.GetLVx(name);
-    // apply attribute
-// $$$    lvol->ApplyAttribute(attr, ival);
-}
+    G4LogicalVolume *lvol = G3Vol.GetVTE(name)->GetLV();
+    G4cerr << "G4gsatt not implemented" << endl;
+};

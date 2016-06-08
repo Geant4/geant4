@@ -26,7 +26,7 @@ ExN04EventAction::ExN04EventAction()
 ExN04EventAction::~ExN04EventAction()
 {;}
 
-void ExN04EventAction::BeginOfEventAction()
+void ExN04EventAction::BeginOfEventAction(const G4Event*)
 {
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   if(trackerCollID<0||calorimeterCollID<0||muonCollID<0)
@@ -43,10 +43,8 @@ void ExN04EventAction::BeginOfEventAction()
   }
 }
 
-void ExN04EventAction::EndOfEventAction()
+void ExN04EventAction::EndOfEventAction(const G4Event* evt)
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-
   G4cout << ">>> Event " << evt->GetEventID() << endl;
 
   if(trackerCollID<0||calorimeterCollID<0||muonCollID<0) return;

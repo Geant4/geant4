@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiDMesonZero.cc,v 2.1 1998/08/04 11:15:38 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiDMesonZero.cc,v 1.2 1999/06/09 16:07:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4AntiDMesonZero::G4AntiDMesonZero(
 
 // In this version, charged pions are set to stable
 G4AntiDMesonZero G4AntiDMesonZero::theAntiDMesonZero(
-	    "anti_D0",      1.8645*GeV,       0.0*MeV,          0., 
+	    "anti_D0",      1.8645*GeV,  1.586e-9*MeV,          0., 
 		    0,              -1,             0,          
 		    1,              +1,             0,             
 	      "meson",               0,             0,        -421,

@@ -40,7 +40,7 @@
 // Constructor
 //
 
-G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation(): _Z(0), _A(0)
+G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation(): _nucleusZ(0), _nucleusA(0)
 { }
 
 
@@ -55,11 +55,11 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
   G4int A = nucleus.GetA();
   G4double excitation = nucleus.GetExcitationEnergy();
 
-  if (_A != A || _Z != Z)
+  if (_nucleusA != A || _nucleusZ != Z)
     {
       _levelManager.SetNucleus(Z,A);
-      _A = A;
-      _Z = Z;
+      _nucleusA = A;
+      _nucleusZ = Z;
     }
 
   if (_verbose > 1)

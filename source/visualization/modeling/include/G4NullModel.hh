@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NullModel.hh,v 2.1 1998/08/31 15:42:01 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NullModel.hh,v 1.3 1999/05/10 14:04:23 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  4th April 1998.
@@ -24,12 +24,12 @@ public:
 
   G4NullModel (const G4ModelingParameters* = 0);
 
-  ~G4NullModel ();
+  virtual ~G4NullModel ();
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
+  void DescribeYourselfTo (G4VGraphicsScene&);
   // An exception is thrown if this is called!!!!!!!!!!!!!!!!!!!!
 
-  virtual G4bool Validate ();
+  G4bool Validate ();
   // Validate, but allow internal changes (hence non-const function).
 
   /////////////////////////////////////////////////

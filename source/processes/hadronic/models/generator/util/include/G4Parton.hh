@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parton.hh,v 1.1 1998/08/22 08:57:56 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Parton.hh,v 1.6 1999/04/15 08:59:44 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4Parton_h
@@ -25,10 +25,13 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include <iostream.h>
+#include "G4ParticleTable.hh"
 
 class G4Parton
 {
    public:
+      G4Parton(){PDGencoding=0;}
       G4Parton(G4int PDGencoding);
       G4Parton(const G4Parton &right);
 
@@ -41,18 +44,29 @@ class G4Parton
       int operator!=(const G4Parton &right) const;
       
       G4int GetPDGcode() const;
+      
+      G4ParticleDefinition * GetDefinition();
 
+      void DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection);      
+      
       const G4ThreeVector & GetPosition()const;
       void SetPosition(const G4ThreeVector &aPosition);
 
-      const G4LorentzVector & Get4Momentum() const;
+      const G4LorentzVector & Get4Momentum() const; 
       void Set4Momentum(const G4LorentzVector & aMomentum);
+      
+      void SetX(G4double anX) { theX = anX; }
 
    private:
+      G4double GetMass();
       
+    private:  
       G4int PDGencoding;
+      G4ParticleDefinition * theDefinition;
       G4LorentzVector theMomentum;
       G4ThreeVector   thePosition;
+      
+      G4double theX;
       
 };
 
@@ -92,15 +106,18 @@ inline void G4Parton::Set4Momentum(const G4LorentzVector & aMomentum)
 	theMomentum=aMomentum;
 }
 
-inline const G4Parton & G4Parton::operator=(const G4Parton &right)
+
+inline
+G4double G4Parton::GetMass()
 {
-	PDGencoding=right.GetPDGcode();
-	theMomentum=right.Get4Momentum();
-	thePosition=right.GetPosition();
-		
-	return *this;
+	return theDefinition->GetPDGMass();
 }
 
+inline
+G4ParticleDefinition * G4Parton::GetDefinition()
+{
+	return theDefinition;
+}
 
 
 #endif

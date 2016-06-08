@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.0 1998/07/02 16:56:47 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999/02/17 16:57:35 japost Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/magneticfield library.  G.Cosmo, 22/01/97.
 
@@ -14,8 +14,5 @@ CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/management/include
 
 include $(G4INSTALL)/config/common.gmk

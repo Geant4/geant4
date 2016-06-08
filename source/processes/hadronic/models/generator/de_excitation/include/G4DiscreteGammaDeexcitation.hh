@@ -52,8 +52,8 @@ public:
   virtual G4bool CanDoTransition() const;
 
 private:
-  G4int _Z;
-  G4int _A;
+  G4int _nucleusZ;
+  G4int _nucleusA;
   G4double _tolerance;
   G4NuclearLevelManager _levelManager;
 };

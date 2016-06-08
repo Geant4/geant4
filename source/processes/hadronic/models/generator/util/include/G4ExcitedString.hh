@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedString.hh,v 1.10 1998/12/16 14:59:35 gugu Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitedString.hh,v 1.2 1999/02/19 13:28:07 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4ExcitedString_h
@@ -53,7 +53,7 @@ class G4ExcitedString
 
       const G4ThreeVector & GetPosition() const;
 
-      void SetPosition(const G4ThreeVector &aPosition);
+      void SetPosition(const G4ThreeVector &aPosition); 
 
       const G4PartonVector * GetPartonList() const;
       

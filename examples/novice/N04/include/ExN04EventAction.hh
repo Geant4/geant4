@@ -12,8 +12,8 @@ class ExN04EventAction : public G4UserEventAction
     ~ExN04EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    void BeginOfEventAction(const G4Event*);
+    void EndOfEventAction(const G4Event*);
 
   private:
     G4int trackerCollID;

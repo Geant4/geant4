@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransitionRadiation.hh,v 2.1 1998/11/27 13:35:12 grichine Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4TransitionRadiation.hh,v 1.2 1999/04/13 09:26:51 grichine Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4TransitionRadiation  -- header file
 //
@@ -32,8 +32,9 @@
 
 #include "G4VDiscreteProcess.hh"
 #include "G4Material.hh"
+// #include "G4OpBoundaryProcess.hh"
 
-class G4TransitionRadiation : public G4VDiscreteProcess
+class G4TransitionRadiation : public   G4VDiscreteProcess    
 {
 public:
 

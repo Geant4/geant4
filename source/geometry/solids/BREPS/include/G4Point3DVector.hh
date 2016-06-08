@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DVector.hh,v 2.3 1998/10/20 16:31:29 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Point3DVector.hh,v 1.1 1999/01/07 16:07:34 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef included_G4Point3DVector
 #define included_G4Point3DVector

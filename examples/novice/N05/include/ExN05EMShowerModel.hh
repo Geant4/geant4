@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EMShowerModel.hh,v 2.1 1998/12/10 04:07:36 verderi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05EMShowerModel.hh,v 1.1 1999/01/07 16:06:12 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //----------------------------------------------

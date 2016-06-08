@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.hh,v 2.4 1998/10/09 15:48:01 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN03PhysicsList.hh,v 1.2 1999/04/16 11:55:04 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -29,10 +29,19 @@ class ExN03PhysicsList: public G4VUserPhysicsList
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
  
-    void SetCuts(G4double);
+    virtual void SetCuts();
+
+  public:
+    // Set/Get cut values 
+    void      SetCutForGamma(G4double);
+    void      SetCutForElectron(G4double);
+    void      SetCutForProton(G4double);           
+    G4double  GetCutForGamma() const;
+    G4double  GetCutForElectron() const;
+    G4double  GetCutForProton() const;
     
   protected:
     // these methods Construct particles 
@@ -45,6 +54,12 @@ class ExN03PhysicsList: public G4VUserPhysicsList
   // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
+
+  private:
+    G4double cutForGamma;
+    G4double cutForElectron; 
+    G4double cutForProton;
+
 };
 
 #endif

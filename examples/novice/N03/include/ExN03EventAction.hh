@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.hh,v 2.3 1998/10/09 15:48:01 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN03EventAction.hh,v 1.3 1999/04/16 11:55:03 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -27,17 +27,19 @@ class ExN03EventAction : public G4UserEventAction
 {
   public:
     ExN03EventAction();
-   ~ExN03EventAction();
+    virtual ~ExN03EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void   BeginOfEventAction(const G4Event*);
+    virtual void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag(G4String val)  {drawFlag = val;};
+    void SetDrawFlag   (G4String val)  {drawFlag = val;};
+    void SetPrintModulo(G4int    val)  {printModulo = val;};
     
   private:
-    G4int    calorimeterCollID;                // Hits collection ID
-    G4String drawFlag;                         // control the drawing of event
+    G4int                       calorimeterCollID;                
+    G4String                    drawFlag;
+    G4int                       printModulo;                         
     ExN03EventActionMessenger*  eventMessenger;
 };
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.5 1998/11/06 18:03:59 hpw Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:11:37 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------

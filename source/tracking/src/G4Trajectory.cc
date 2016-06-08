@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 2.2 1998/07/13 17:29:00 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Trajectory.cc,v 1.4 1999/05/25 21:04:36 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // ---------------------------------------------------------------
@@ -23,7 +23,7 @@
 
 
 #include "G4Trajectory.hh"
-
+#include "G4TrajectoryPoint.hh"
 #include "G4ParticleTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4Polyline.hh"
@@ -32,8 +32,23 @@
 #include "G4VisAttributes.hh"
 #include "G4VVisManager.hh"
 
+G4Allocator<G4Trajectory> aTrajectoryAllocator;
+
 ///////////////////////////////////////////
-G4Trajectory::G4Trajectory(G4Track* aTrack)
+G4Trajectory::G4Trajectory()
+///////////////////////////////////////////
+{
+   G4ParticleDefinition * fpParticleDefinition = 0;
+   ParticleName = "";
+   PDGCharge = 0;
+   PDGEncoding = 0;
+   fTrackID = 0;
+   fParentID = 0;
+   positionRecord = 0;
+}
+
+///////////////////////////////////////////
+G4Trajectory::G4Trajectory(const G4Track* aTrack)
 ///////////////////////////////////////////
 {
    G4ParticleDefinition * fpParticleDefinition = aTrack->GetDefinition();
@@ -42,13 +57,25 @@ G4Trajectory::G4Trajectory(G4Track* aTrack)
    PDGEncoding = fpParticleDefinition->GetPDGEncoding();
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
-   positionRecord.insert(aTrack->GetPosition());
+   positionRecord = new RWTPtrOrderedVector<G4VTrajectoryPoint>;
+   positionRecord->insert(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
 
 //////////////////////////////////////////
-G4Trajectory::G4Trajectory(G4Trajectory &)
+G4Trajectory::G4Trajectory(G4Trajectory & right)
 //////////////////////////////////////////
 {
+  ParticleName = right.ParticleName;
+  PDGCharge = right.PDGCharge;
+  PDGEncoding = right.PDGEncoding;
+  fTrackID = right.fTrackID;
+  fParentID = right.fParentID;
+  positionRecord = new RWTPtrOrderedVector<G4VTrajectoryPoint>;
+  for(int i=0;i<right.positionRecord->entries();i++)
+  {
+    G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
+    positionRecord->insert(new G4TrajectoryPoint(*rightPoint));
+  }
 }
 
 
@@ -56,27 +83,30 @@ G4Trajectory::G4Trajectory(G4Trajectory &)
 G4Trajectory::~G4Trajectory()
 /////////////////////////////
 {
+  positionRecord->clearAndDestroy();
+  delete positionRecord;
 }
 
 ///////////////////////////////////
-void G4Trajectory::ShowTrajectory()
+void G4Trajectory::ShowTrajectory() const
 ///////////////////////////////////
 {
    G4cout << endl << "TrackID =" << fTrackID 
         << ":ParentID=" << fParentID << endl;
    G4cout << "Particle name : " << ParticleName 
         << "  Charge : " << PDGCharge << endl;
-   G4cout << "  Current trajectory has " << positionRecord.entries() 
+   G4cout << "  Current trajectory has " << positionRecord->entries() 
         << " points." << endl;
 
-   for( size_t i=0 ; i < positionRecord.entries() ; i++){
+   for( size_t i=0 ; i < positionRecord->entries() ; i++){
+       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
        G4cout << "Point[" << i << "]" 
-            << " Position= " << positionRecord[i].GetPosition() << endl;
+            << " Position= " << aTrajectoryPoint->GetPosition() << endl;
    }
 }
 
 ///////////////////////////////////////////////
-void G4Trajectory::DrawTrajectory(G4int i_mode)
+void G4Trajectory::DrawTrajectory(G4int i_mode) const
 ///////////////////////////////////////////////
 {
 
@@ -86,8 +116,9 @@ void G4Trajectory::DrawTrajectory(G4int i_mode)
    if(i_mode>=0)
    {
      G4Polyline pPolyline;
-     for (int i = 0; i < positionRecord.entries() ; i++) {
-       pos = positionRecord[i].GetPosition();
+     for (int i = 0; i < positionRecord->entries() ; i++) {
+       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
+       pos = aTrajectoryPoint->GetPosition();
        pPolyline.append( pos );
      }
 
@@ -106,8 +137,9 @@ void G4Trajectory::DrawTrajectory(G4int i_mode)
 
    if(i_mode!=0)
    {
-     for(int j=0; j<positionRecord.entries(); j++) {
-       pos = positionRecord[j].GetPosition();
+     for(int j=0; j<positionRecord->entries(); j++) {
+       G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[j]);
+       pos = aTrajectoryPoint->GetPosition();
        G4Circle circle( pos );
        circle.SetScreenSize(0.001*i_mode);
        circle.SetFillStyle(G4Circle::filled);
@@ -121,11 +153,11 @@ void G4Trajectory::DrawTrajectory(G4int i_mode)
 }
 
 ////////////////////////////////////////////
-void G4Trajectory::AppendStep(G4Step* aStep)
+void G4Trajectory::AppendStep(const G4Step* aStep)
 ////////////////////////////////////////////
 {
-   positionRecord.append( aStep->GetPostStepPoint()->
-                                 GetPosition() );
+   positionRecord->append( new G4TrajectoryPoint(aStep->GetPostStepPoint()->
+                                 GetPosition() ));
 }
   
 /////////////////////////////////////////////

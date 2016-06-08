@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02SteppingAction.cc,v 1.3 1998/10/09 14:35:35 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02SteppingAction.cc,v 1.2 1999/04/16 11:20:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -19,10 +19,8 @@ ExN02SteppingAction::ExN02SteppingAction(ExN02DetectorConstruction* myDC, ExN02E
 :myDetector(myDC), eventAction(myEA)
 { }
 
-void ExN02SteppingAction::UserSteppingAction()
+void ExN02SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  G4Step* aStep = GetSteppingManager()->GetStep();
-  
   // collect the energy deposited in the absorber
   
   const G4VPhysicalVolume* currentVolume = aStep->GetPreStepPoint()-> GetPhysicalVolume();

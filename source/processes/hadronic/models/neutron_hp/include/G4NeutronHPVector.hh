@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 2.6 1998/11/07 11:21:37 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NeutronHPVector.hh,v 1.2.2.3 1999/07/02 12:27:09 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
@@ -88,6 +88,7 @@ class G4NeutronHPVector
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
+    if(i==-1) G4Exception("G4NeutronHPVector::GetX: Trying to read zero length vector");
     return theData[i].GetX();
   }
   inline G4double GetY(G4int i) 
@@ -151,6 +152,8 @@ class G4NeutronHPVector
     nEntries=0;   
     theManager.CleanUp();
   }
+
+  // merges the vectors active and passive into *this
   inline void Merge(G4NeutronHPVector * active, G4NeutronHPVector * passive)
   {
     CleanUp();

@@ -5,22 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmixt.cc,v 2.3 1998/11/07 04:12:12 lockman Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4gsmixt.cc,v 1.4 1999/05/18 02:40:46 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
-// ---------------------------------------------------------------------------
-// History:
-// 25-Feb-1997 Lockman - added units to density, atomic weight
-// ---------------------------------------------------------------------------
 
-#include "G4ios.hh"
-#include <strstream.h>
 #include <iomanip.h>
 #include <math.h>
+#include "globals.hh"
 #include "G3toG4.hh"
+#include "G3EleTable.hh"
 #include "G3MatTable.hh"
-#include "G4Isotope.hh"
-#include "G4Element.hh"
 #include "G4Material.hh"
 
 void PG4gsmixt(RWCString tokens[])
@@ -33,59 +27,62 @@ void PG4gsmixt(RWCString tokens[])
     G4int imate = Ipar[0];
     G4int nlmat = Ipar[1];
     G4double dens = Rpar[0]*g/cm3;
-    for (int i=0; i<abs(nlmat); i++){
-        Rpar[i]=Rpar[i]*g/mole;
-    };
-    G4double *a = &Rpar[1];
-    G4double *z = &Rpar[1+abs(nlmat)];
-    G4double *wmat = &Rpar[1+2*abs(nlmat)];
+    G4double *a = Rpar + 1;
+    G4double *z = Rpar + 1+abs(nlmat);
+    G4double *wmat = Rpar + 1 + 2*abs(nlmat);
 
+    for (int i=0; i<abs(nlmat); i++){
+      Rpar[i]=Rpar[i]*g/mole;
+    };
     G4gsmixt(imate,name,a,z,dens,nlmat,wmat);
 }
 
 void G4gsmixt(G4int imate, G4String name, G4double a[], G4double z[],
-              G4double dens, G4int nlmat, G4double wmat[])
-{
-  // Build material components as 'elements'
-  char indx[5], symbol[20];
-  G4Element* el;
-  G4String elName, elSymbol;
-  G4bool isMixture = true;
-  G4Material* gmate = new G4Material(name, dens, nlmat);
+              G4double dens, G4int nlmat, G4double wmat[]){
+  G4int nmate = abs(nlmat);
+  G4String sname = name.strip(RWCString::both);
+  G4double theDensity = dens*g/cm3;
 
-  G4double wt=0., zeff=0., aeff=0., frac;
-
-      // for case of proportions given in atom counts (nlmat<0),
-      // convert to weight fractions
-
-  ostrstream ostr_indx(indx, sizeof indx);
-  ostrstream ostr_symb(symbol, sizeof symbol);
-  
-  for (G4int i=0; i<abs(nlmat); i++) {
-//    printf(indx,"%d\n",i);
-//    printf(symbol,"Z%dA%d\n",int(z[i]),int(a[i]));
-      ostr_indx << setw(3) << i;
-      ostr_symb << setw(3) << int(z[i]) << " " << setw(3) << int(a[i]);
-      elName = "Material "+name+" component "+indx;
-      elSymbol = symbol;
-      G4cout << "elName: " << elName << endl;
-      G4cout << "elSymbol: " << elSymbol << endl;
-
-          //
-          // mod 25-Feb-1997 Lockman, removed isMixture to match
-          // G4Element interface
-          //
-      
-//    el = new G4Element(elName, elSymbol, z[i], a[i], isMixture);
-    el = new G4Element(elName, elSymbol, z[i], a[i]);
-    if ( nlmat < 0 ) {
-      gmate->AddElement(el, int(wmat[i]));
+  G4Material* theMixture = new G4Material(name, dens, nmate); 
+  G4bool ok=true;
+  for (int i=0; i< nmate; i++){
+    G4Element* theElement = G3Ele.GetEle(z[i]);
+    if (nlmat>0) {
+      G4double fractionmass = wmat[i];
+      ok = ok && abs(fractionmass)<=1.;
+      theMixture->AddElement(theElement, fractionmass);
+    } else if (nlmat<0) {
+      G4int natoms = wmat[i];
+      ok = ok && wmat[i] == natoms;
+      theMixture->AddElement(theElement, natoms);
     } else {
-      gmate->AddElement(el, wmat[i]);
+      ok=false;
     }
   }
-  // add the material to the List
-  G3Mat.put(&imate,gmate);
+  if (ok) {
+    G3Mat.put(imate, theMixture);
+  } else {
+    if (nlmat>0) {
+      G4cerr << "G4gsmixt: for mixture '" << name 
+	     << "' some |weights|>1 : " << endl;
+      for (G4int i=0;i<nlmat; i++) {
+	G4cerr << "Component " << setw(3) << i+1 << " fraction: "
+	       << setw(10) << wmat[i] << endl;
+      }
+    } else if (nlmat<0) {
+      G4cerr << "G4gsmixt: for mixture '" << name 
+	     << "' some #natoms are non-integer: " << endl;
+      for (G4int i=0;i<nlmat; i++) {
+	G4cerr << "Component " << setw(3) << i+1 << " #atoms "
+	       << setw(10) << wmat[i] << endl;
+      }
+    } else {
+      G4cerr << "G4gsmixt: Number of components for mixture '" 
+	     << name << "' (" << nlmat << ") not allowed." << endl;
+    }
+  }
 }
+
+
 
 

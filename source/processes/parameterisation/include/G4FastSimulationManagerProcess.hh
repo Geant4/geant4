@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 2.4 1998/12/08 04:06:44 verderi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.3 1999/04/28 10:06:39 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -42,7 +42,6 @@
 #include "G4TouchableHistory.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VParticleChange.hh"
-#include "G4FlavoredParallelWorld.hh"
 
 //------------------------------------------
 //
@@ -62,7 +61,7 @@ public:
 				 "G4FastSimulationManagerProcess",
 				 G4ProcessType
 				 theType = fParameterisation);
-  ~G4FastSimulationManagerProcess();
+  virtual ~G4FastSimulationManagerProcess();
   
   //--------------------------------------------------------------
   //     Process interface

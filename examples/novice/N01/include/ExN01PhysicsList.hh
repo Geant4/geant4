@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN01PhysicsList.hh,v 2.1 1998/07/12 02:40:52 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN01PhysicsList.hh,v 1.2 1999/04/16 10:48:49 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //
@@ -36,11 +36,15 @@ class ExN01PhysicsList: public G4VUserPhysicsList
     // Construct particle and physics process
     void ConstructParticle();
     void ConstructProcess();
-    void SetCuts(G4double cut);
+    void SetCuts();
 
 };
 
 #endif
+
+
+
+
 
 
 

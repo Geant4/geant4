@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DList.hh,v 2.0 1998/07/02 17:30:02 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Point3DList.hh,v 1.2 1999/05/12 16:10:51 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  July 1995
@@ -26,10 +26,7 @@ friend ostream& operator << (ostream& os, const G4Point3DList& points);
 public:
 
   virtual ~G4Point3DList();
-  //  Destructor.
 
 };
-
-#include "G4Point3DList.icc"
 
 #endif

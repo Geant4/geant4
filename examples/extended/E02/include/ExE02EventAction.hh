@@ -9,11 +9,11 @@ class ExE02EventAction : public G4UserEventAction
 {
   public:
     ExE02EventAction();
-    ~ExE02EventAction();
+    virtual ~ExE02EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
   private:
     G4int colID1;

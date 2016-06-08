@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FTFParticipants.hh,v 1.2 1998/08/26 17:12:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FTFParticipants.hh,v 1.1 1999/01/07 16:12:00 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4FTFParticipants_h

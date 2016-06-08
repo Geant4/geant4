@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessLights.cc,v 2.3 1998/07/13 17:12:35 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisManMessLights.cc,v 1.3 1999/01/11 00:48:38 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -70,7 +70,7 @@ void G4VisManMessenger::DoCommandLights (const G4String& commandPath,
       }
     }
     if (ViewValid ()) {
-      fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
+      fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
       fpVMan -> Draw ();    
       fpVMan -> Show ();    
     }

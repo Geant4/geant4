@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mag_EqRhs.hh,v 2.4 1998/11/12 16:23:25 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Mag_EqRhs.hh,v 1.2 1999/02/12 12:29:42 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // The right hand size of the equation of motion of a particle 
@@ -43,7 +43,7 @@ class G4Mag_EqRhs : public G4EquationOfMotion
 
      G4double FCof() const { return fCof_val; }
 
-     void  SetChargeMomentumMass( const G4double particleCharge, // in e+ units
+     virtual void  SetChargeMomentumMass( const G4double particleCharge, // in e+ units
 			          const G4double MomentumXc,
 				  const G4double mass);
      

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oState.cc,v 2.2 1998/07/13 17:29:32 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4oState.cc,v 1.2 1999/04/16 10:03:39 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //#define DEBUG
 

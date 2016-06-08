@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.cc,v 2.6 1998/12/16 12:54:18 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IhIonisation.cc,v 1.4 1999/05/03 11:04:14 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -240,18 +240,21 @@ void G4IhIonisation::BuildNlambdaVector(
                                        G4PhysicsLogVector* nlambdaVector)
 {
   G4double LowEdgeEnergy,T,Tlast,dEdx,Value,Vlast,u,du,coeff ;
-  G4double thresholdEnergy ;
-  const G4int nbin = 100 ;
+  G4double Tcut,thresholdEnergy,w1,w2,l ;
+  const G4int nbin = 20  ;
   G4bool isOut ;
   const G4double small = 1.e-100;
-  const G4double plowloss = 0.5 ;  //this should be a data member of en.loss!
+  const G4double lmin=1.e-100,lmax=1.e100;
 
   const G4MaterialTable* theMaterialTable=
                           G4Material::GetMaterialTable();
 
-  //  it is a lower limit for the threshold energy ....?????
-    thresholdEnergy =    DeltaCutInKineticEnergy[materialIndex];
-
+  //  the threshold energy for delta production
+    Tcut =  DeltaCutInKineticEnergy[materialIndex];
+    w1 = electron_mass_c2*(2.*ParticleMass-Tcut) ;
+    w2 = electron_mass_c2+ParticleMass ;
+    thresholdEnergy = 0.5*(sqrt(w1*w1+2.*electron_mass_c2*Tcut*w2*w2)-w1)
+                      /electron_mass_c2 ;
   // here assumed that the threshold energy for the process >=
   //                LowestKineticEnergy (temporarily )
   if(thresholdEnergy >= LowestKineticEnergy)
@@ -292,9 +295,10 @@ void G4IhIonisation::BuildNlambdaVector(
       else
        coeff=1.0 ;
 
-      Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
-                                 T,(*theMaterialTable)[materialIndex])*
-                   (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut));
+      l = (*theMeanFreePathTable)[materialIndex]->GetValue(T,isOut);
+      if((l>lmin) && (l<lmax))
+        Value += coeff*T/(G4EnergyLossTables::GetPreciseDEDX(&aParticleType,
+                                 T,(*theMaterialTable)[materialIndex])*l) ;
     }
 
     Value *= du ;
@@ -307,7 +311,6 @@ void G4IhIonisation::BuildNlambdaVector(
 
     Tlast = LowEdgeEnergy ;
     Vlast = Value ;
-
   }
 
 }
@@ -551,7 +554,6 @@ void G4IhIonisation::BuildInverseNlambdaTable(
      // inverse can be built for "meaningful" cut value only!
       if(Smallest >= Biggest)
       {
-         G4cout << endl ;
          G4Exception(
         "Cut value is too big , smaller value should be used !");
       }
@@ -1013,15 +1015,17 @@ G4VParticleChange* G4IhIonisation::PostStepDoIt(const G4Track& trackData,
    finalKineticEnergy = KineticEnergy - DeltaKineticEnergy ;
    if (finalKineticEnergy > 0.)
      {
-      // changed energy and momentum of the actual particle
-      finalMomentum=sqrt(finalKineticEnergy*
-                         (finalKineticEnergy+2.*ParticleMass)) ;
-      finalPx = (TotalMomentum*ParticleDirection.x()
-                 -DeltaTotalMomentum*DeltaDirection.x())/finalMomentum ; 
-      finalPy = (TotalMomentum*ParticleDirection.y()
-                 -DeltaTotalMomentum*DeltaDirection.y())/finalMomentum ; 
-      finalPz = (TotalMomentum*ParticleDirection.z()
-                 -DeltaTotalMomentum*DeltaDirection.z())/finalMomentum ; 
+      finalPx = TotalMomentum*ParticleDirection.x()
+                        - DeltaTotalMomentum*DeltaDirection.x();
+      finalPy = TotalMomentum*ParticleDirection.y()
+                        - DeltaTotalMomentum*DeltaDirection.y();
+      finalPz = TotalMomentum*ParticleDirection.z()
+                        - DeltaTotalMomentum*DeltaDirection.z();
+      finalMomentum =
+                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+      finalPx /= finalMomentum ;
+      finalPy /= finalMomentum ;
+      finalPz /= finalMomentum ;
 
       aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
      }

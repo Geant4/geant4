@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InteractionContent.hh,v 1.2 1998/10/16 07:35:52 maxim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4InteractionContent.hh,v 1.1 1999/01/07 16:12:14 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4InteractionContent_h

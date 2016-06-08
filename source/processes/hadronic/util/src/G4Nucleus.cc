@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleus.cc,v 2.6 1998/10/05 09:12:40 pia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Nucleus.cc,v 1.3 1999/03/29 09:48:41 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -54,10 +54,16 @@
     G4double random = G4UniformRand();
     G4double sum = 0;
     const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-    for( G4int i=0; i<aMaterial->GetNumberOfElements(); ++i )
+    G4int i;
+    for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
     {
       sum += aMaterial->GetAtomicNumDensityVector()[i];
-      if( sum > random ) {
+    }
+    G4double running = 0;
+    for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
+    {
+      running += aMaterial->GetAtomicNumDensityVector()[i];
+      if( running/sum > random ) {
         aEff = (*theElementVector)(i)->GetA()*mole/g;
         zEff = (*theElementVector)(i)->GetZ();
         break;
@@ -108,8 +114,8 @@
     
     G4int myZ = G4int(Z + 0.5);
     G4int myA = G4int(A + 0.5);
-    if( myZ < 0 )return 0.0;
-    if( myZ > myA )return 0.0;
+    if( myA <= 0 )return DBL_MAX;
+    if( myZ > myA)return DBL_MAX;
     if( myA == 1 )
     {
       if( myZ == 0 )return neutron_mass*MeV;

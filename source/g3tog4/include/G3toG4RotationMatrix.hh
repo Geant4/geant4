@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4RotationMatrix.hh,v 2.1 1998/11/07 04:11:44 lockman Exp $
+// $Id: G3toG4RotationMatrix.hh,v 1.1 1999/01/07 16:06:44 gunter Exp $
 //
 #ifndef _G3toG4ROTATION_
 #define _G3toG4ROTATION_

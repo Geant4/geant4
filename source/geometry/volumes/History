@@ -1,0 +1,110 @@
+$Id: History,v 1.14 1999/07/01 18:05:46 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+July      1st, 1999   J. Apostolakis - field-01-00-06a
+
+In G4PropagatorInField   --> method LocateIntersectionPoint():
+
+  Integration inaccuracies cause an internal step's mid-point and endpoint
+    to be further apart than their curve length difference.  (Unphysical)
+
+  In order to compensate, we re-compute the step's endpoint.  [ This also
+    requires modification in G4ChordFinder::ApproxCurvePointV  ]
+
+A better solution would be to re-start/re-structure the loop to handle this
+sort of case.   But this would be a more major change ...
+
+May      19, 99      J.Apostolakis, F. Behner
+
+   In G4Navigator: Changed cout -> G4cout
+		   Changed protection for printing of Physical volume name:
+		    (because of warning on SUN;  same functionality)
+
+
+   In G4NavigationLevel, created an optional operator delete(void *, void *)
+    this is accepted by DEC, and not accepted by SUN, HP
+    new flag created in architecture for protection: ~ G4NO_ISO_DELETES 
+
+May      17, 99      J. Allison.
+   In G4NavigationLevel, changed operator new(size_t, G4NavigationLevel *)
+   to operator new(size_t, void *) because the former is not accepted
+   by Sun CC 4.2 (with STL Interface.)
+
+May       3, 99      J. Apostolakis 
+   testG4ReplicaNavigation.cc
+      Changed comparison of doubles, to give it a tolerance.  
+
+April     8, 99      (committed & recorded J. Apostolakis  May 3rd)
+   G4NavigationLevel.{hh,icc}: Minor Changes 
+      added const to copy constructor and
+      new 'new' operator with size_t - for STL use with preallocated containers" 
+
+
+March    19, 99      J. Apostolakis        geomvol-01-00-03
+
+   New tag for replica fix.
+
+
+March    18, 99      J. Apostolakis
+
+   A fix for looping in Replicas:
+        In the case where a zero step is done in Replicas, we must allow
+    ReplicaNavigator to handle the case itself - or else we loop.
+
+March    11, 99      J. Apostolakis
+
+   G4GRSVolume.icc: corrected G4Exception messages.
+
+February 18, 99      J. Apostolakis        
+
+ include/G4VoxelNavigation.hh
+ src/G4VoxelNavigation.cc    : overwrote versions 1.2 with production version
+      --->  when changes are refined and retested, they could be reincorporated
+
+February 17, 99      J. Apostolakis        geomvol-01-00-02
+
+ Moved G4PropagatorInField here from magneticfield to remove correct
+  dependency.
+
+February 15, 99      J. Apostolakis        geomvol-01-00-01
+
+   Only fixes in G4Navigator's incorporated.
+   GNUmakefile corrected (for SUN-CC).
+
+January      99,     J. Apostolakis
+
+Fix for ComputeSafety in Navigator:                              G4Navigator.cc
+            the voxel information that was used was incorrect       v 1.3
+                -> it resulted in wrong value of safety
+
+
+December     98                                   geant4-00-RandD
+
+ include/G4VoxelNavigation.hh
+ src/G4VoxelNavigation.cc    : versions 1.2 are trial versions from beta "head"
+
+December     98                                   
+
+Trial fix for navigation in replicas                             G4Navigator.cc
+                                                                    v 1.2
+         (a problem persists with this version)
+
+
+December     98                                   geant4-00
+
+   Code moved: production tag from beta repository.

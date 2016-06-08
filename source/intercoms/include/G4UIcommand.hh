@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.hh,v 2.3 1998/10/20 03:41:30 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIcommand.hh,v 1.2 1999/05/07 10:50:42 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -78,7 +78,10 @@ class G4UIcommand
       inline G4UIparameter * GetParameter(int i) const
       { return parameter[i]; }
       inline void SetParameter(G4UIparameter *const newParameter)
-      { parameter.insert( newParameter ); }
+      {
+	parameter.insert( newParameter );
+	newVal.resize( parameter.entries() );
+      }
       inline void SetGuidance(const char * aGuidance)
       { 
         G4String * theGuidance = new G4String( aGuidance );

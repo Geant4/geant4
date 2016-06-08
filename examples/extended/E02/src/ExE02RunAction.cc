@@ -8,17 +8,15 @@
 
 ExE02RunAction::ExE02RunAction()
 {
-  runIDcounter = 0;
 }
 
 ExE02RunAction::~ExE02RunAction()
 {
 }
 
-void ExE02RunAction::BeginOfRunAction(G4Run* aRun)
+void ExE02RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
-  if(runIDcounter==1)
+  if(aRun->GetRunID()==0)
   {
     G4VPersistencyManager* persM 
       = G4VPersistencyManager::GetPersistencyManager();
@@ -32,7 +30,7 @@ void ExE02RunAction::BeginOfRunAction(G4Run* aRun)
   }
 }
 
-void ExE02RunAction::EndOfRunAction(G4Run* aRun)
+void ExE02RunAction::EndOfRunAction(const G4Run* )
 {
 }
 

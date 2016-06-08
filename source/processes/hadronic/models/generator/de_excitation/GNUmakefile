@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1998/08/22 09:07:55 hpw Exp $
+# $Id: GNUmakefile,v 1.2 1999/06/05 13:08:11 stesting Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -37,3 +37,13 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
            
 include $(G4INSTALL)/config/common.gmk
 
+CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
+CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
+
+ifeq ($(G4SYSTEM),HP-aCC)
+COMPILER := $(shell aCC -V 2>&1)
+ifeq ($(COMPILER), aCC: HP ANSI C++ B3910B A.01.15)
+$(G4TMP)/$(G4SYSTEM)/$(name)/G4Evaporation.o: src/G4Evaporation.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4Evaporation.cc
+endif
+endif

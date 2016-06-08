@@ -5,19 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SceneList.hh,v 2.0 1998/07/02 16:48:25 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SceneList.hh,v 1.3 1999/01/11 00:48:14 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
-// John Allison  May 1996
+// John Allison  9th August 1998
 
 #ifndef G4SCENELIST_HH
 #define G4SCENELIST_HH
 
+#include "G4Scene.hh"
 #include <rw/tpordvec.h>
-#include "G4VScene.hh"
 
-class G4SceneList: public RWTPtrOrderedVector<G4VScene> {
-};
+class G4SceneList: public RWTPtrOrderedVector <G4Scene> {};
 
 #endif

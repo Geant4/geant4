@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.cc,v 2.8 1998/11/11 11:22:03 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SphericalSurface.cc,v 1.1 1999/01/07 16:07:46 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*  $Header: /private/Net/unixhub/u1/ea/liml/gismo/gismo-0.2/geometry/RCS/G4SphericalSurface.cc,v 1.10 1992/08   */
 //  File:  G4SphericalSurface.cc

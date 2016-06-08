@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oScene.hh,v 2.2 1998/07/12 02:37:01 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4oScene.hh,v 1.2 1999/04/16 10:03:27 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
@@ -32,14 +32,16 @@ class G4LogicalVolume;
 class G4oScene : public G4VGraphicsScene {
 public:
   //Inherited
-  void AddThis (const G4Box&    box);
-  void AddThis (const G4Cons&   cons);
-  void AddThis (const G4Tubs&   tubs);
-  void AddThis (const G4Trd&    trd);
-  void AddThis (const G4Trap&   trap);
-  void AddThis (const G4Sphere& sphere);
-  void AddThis (const G4Para&   para  );
-  void AddThis (const G4Torus&  torus );
+  void AddThis (const G4Box&);
+  void AddThis (const G4Cons&);
+  void AddThis (const G4Tubs&);
+  void AddThis (const G4Trd&);
+  void AddThis (const G4Trap&);
+  void AddThis (const G4Sphere&);
+  void AddThis (const G4Para&);
+  void AddThis (const G4Torus&);
+  void AddThis (const G4Polycone&);
+  void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid& solid);  // For solids not above.
 
   void PreAddThis        (const G4Transform3D& objectTransformation,

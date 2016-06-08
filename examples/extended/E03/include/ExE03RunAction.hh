@@ -12,15 +12,14 @@ class ExE03RunAction : public G4UserRunAction
 {
   public:
     ExE03RunAction();
-    ~ExE03RunAction();
+    virtual ~ExE03RunAction();
 
   public:
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 
   private:
     G4Timer* timer;
-    G4int runIDcounter;
 };
 
 #endif

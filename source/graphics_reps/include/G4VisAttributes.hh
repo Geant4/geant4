@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.hh,v 2.2 1998/11/25 16:01:15 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisAttributes.hh,v 1.3 1999/05/25 09:10:14 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  23rd October 1996
@@ -22,8 +22,6 @@
 class G4VisAttributes {
 
   friend ostream& operator << (ostream& os, const G4VisAttributes& a);
-  friend G4bool   operator != (const G4VisAttributes& a1,
-			       const G4VisAttributes& a2);
 
 public:
 
@@ -38,6 +36,9 @@ public:
 
   static const G4VisAttributes Invisible;
   // Constructors - end snippet.
+
+  G4bool operator != (const G4VisAttributes& a) const;
+  G4bool operator == (const G4VisAttributes& a) const;
 
   G4bool          IsVisible                      () const;
   G4bool          IsDaughtersInvisible           () const;

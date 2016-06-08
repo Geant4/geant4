@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.cc,v 2.3 1998/08/16 02:36:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ProcTblElement.cc,v 1.2 1999/04/13 09:47:57 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -24,8 +24,8 @@
 // default constructor ////////////////////////
 G4ProcTblElement::G4ProcTblElement()
 {
-  pProcess = NULL;
-  pProcMgrVector=NULL;
+  pProcess = 0;
+  pProcMgrVector=0;
 }
 
 //////////////////////////
@@ -50,7 +50,7 @@ G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
 // destructor ////////////////////////
 G4ProcTblElement::~G4ProcTblElement()
 {
-  if (pProcMgrVector != NULL) {
+  if (pProcMgrVector != 0) {
     pProcMgrVector->clear();
     delete pProcMgrVector;
   }
@@ -63,7 +63,7 @@ G4ProcTblElement & G4ProcTblElement::operator=(G4ProcTblElement &right)
   if (this != &right) {
     pProcess       = right.pProcess;
     // copy all contents in  pProcMgrVector
-    if (pProcMgrVector != NULL) {
+    if (pProcMgrVector != 0) {
       pProcMgrVector->clear();
       delete pProcMgrVector;
     }

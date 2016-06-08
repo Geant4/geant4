@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPVParameterisation.cc,v 2.0 1998/07/02 16:57:32 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VPVParameterisation.cc,v 1.1 1999/01/07 16:07:22 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Default implementations for Parameterisations that do not
 //    parameterise solid and/or material

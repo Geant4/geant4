@@ -1,7 +1,8 @@
 #ifndef G4VAnnihilator_h
 #define G4VAnnihilator_h 1
 
-#include "G4KineticTrackVector.hh"
+class G4KineticTrackVector;
+class G4KineticTrack;
 
 
 class G4VAnnihilator 

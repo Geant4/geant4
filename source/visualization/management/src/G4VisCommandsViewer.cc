@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 2.3 1998/12/09 23:56:30 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisCommandsViewer.cc,v 1.6 1999/05/10 14:04:18 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -26,23 +26,25 @@
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
+G4VVisCommandViewer::~G4VVisCommandViewer () {}
+
 G4String G4VVisCommandViewer::ShortName (const G4String& name) {
-  G4String shortName = name;
-  if (name.contains (' ')) {
-    shortName = name (0, name.first (' '));
+  G4String shortName (name);
+  if (shortName.contains (' ')) {
+    shortName = shortName (0, shortName.first (' '));
   }
   return shortName;
 }
 
 void G4VVisCommandViewer::UpdateCandidateLists () {
 
-  const G4SceneList& sceneHandlerList = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& sceneHandlerList = fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.entries ();
 
   fViewerNameList = G4String ();
   for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
-    G4VScene* sceneHandler = sceneHandlerList [iHandler];
-    const G4VViewList& viewerList = sceneHandler -> GetViewList ();
+    G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
+    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
     for (int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
       const G4String& viewerName = viewerList [iViewer] -> GetName ();
       fViewerNameList += ShortName (viewerName) + " ";
@@ -99,7 +101,7 @@ G4String G4VisCommandViewerCreate::NextName () {
   const int charLength = 100;
   char nextName [charLength];
   ostrstream ost (nextName, charLength);
-  G4VScene* sceneHandler = fpVisManager -> GetCurrentScene ();
+  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   ost << "viewer-" << fId << " (";
   if (sceneHandler) {
     ost << sceneHandler -> GetGraphicsSystem () -> GetName ();
@@ -113,7 +115,8 @@ G4String G4VisCommandViewerCreate::NextName () {
 
 G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand* command) {
   G4String currentValue;
-  G4VScene* currentSceneHandler = fpVisManager -> GetCurrentScene ();
+  G4VSceneHandler* currentSceneHandler =
+    fpVisManager -> GetCurrentSceneHandler ();
   if (currentSceneHandler) {
     currentValue = currentSceneHandler -> GetName ();
   }
@@ -152,11 +155,11 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
   newName = newName.strip (G4String::both, ' ');
   newName = newName.strip (G4String::both, '"');
 
-  const G4SceneList& sceneHandlerList = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& sceneHandlerList = fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.entries ();
   if (nHandlers <= 0) {
     G4cout << "G4VisCommandViewerCreate::SetNewValue: no scene handlers."
-      "\n  Create a scene handler with \"/vis/create/sceneHandler\""
+      "\n  Create a scene handler with \"/vis/sceneHandler/create\""
 	   << endl;
     return;
   }
@@ -177,9 +180,9 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 
   // Valid index.  Set current scene handler and graphics system in
   // preparation for creating viewer.
-  G4VScene* sceneHandler = sceneHandlerList [iHandler];
-  if (sceneHandler != fpVisManager -> GetCurrentScene ()) {
-    fpVisManager -> SetCurrentScene (sceneHandler);
+  G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
+  if (sceneHandler != fpVisManager -> GetCurrentSceneHandler ()) {
+    fpVisManager -> SetCurrentSceneHandler (sceneHandler);
   }
 
   // Now deal with name of viewer.
@@ -190,8 +193,8 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
   if (newName == nextName) fId++;
 
   for (iHandler = 0; iHandler < nHandlers; iHandler++) {
-    G4VScene* sceneHandler = sceneHandlerList [iHandler];
-    const G4VViewList& viewerList = sceneHandler -> GetViewList ();
+    G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
+    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
     for (int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
       if (viewerList [iViewer] -> GetName () == newName ) {
 	G4cout << "Viewer \"" << newName << "\" already exists." << endl;
@@ -201,7 +204,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
   }
 
   // Create viewer.
-  fpVisManager -> CreateView (newName);
+  fpVisManager -> CreateViewer (newName);
   G4cout << "New viewer \"" << newName << "\" created." << endl;
 
   UpdateCandidateLists ();
@@ -245,34 +248,67 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
   G4int verbosity;
   istrstream is ((char*)newValue.data());
   is >> name >> verbosity;
+  G4String shortName = ShortName (name);
 
-  G4bool found = false;
-  const G4SceneList& sceneHandlerList = fpVisManager -> GetAvailableScenes ();
+  const G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
+  G4String currentViewerShortName;
+  if (currentViewer) {
+    currentViewerShortName = ShortName (currentViewer -> GetName ());
+  }
+  else {
+    currentViewerShortName = "none";
+  }
+
+  const G4SceneHandlerList& sceneHandlerList = fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.entries ();
+  G4bool found = false;
+  G4bool foundCurrent = false;
   for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
-    G4VScene* sceneHandler = sceneHandlerList [iHandler];
-    const G4VViewList& viewerList = sceneHandler -> GetViewList ();
-    for (int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
-      if (name != "all") {
-	if (name != viewerList [iViewer] -> GetName ()) continue;
-      }
-      found = true;
-      G4cout << "Scene handler \"" << sceneHandler -> GetName ()
-	     << "\": viewer \"" << viewerList [iViewer] -> GetName () 
-	     << "\"";
-      if (verbosity > 0) {
-	G4cout << "\n  " << *(viewerList [iViewer]);
+    G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
+    const G4Scene* pScene = sceneHandler -> GetScene ();
+    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
+    G4cout << "Scene handler \"" << sceneHandler -> GetName ()
+	   << "\", scene \"" << pScene -> GetName () << "\":";
+    G4int nViewers = viewerList.entries ();
+    if (nViewers == 0) {
+      G4cout << "\n            No viewers for this scene handler." << endl;
+    }
+    else {
+      for (int iViewer = 0; iViewer < nViewers; iViewer++) {
+	const G4VViewer* thisViewer = viewerList [iViewer];
+	G4String thisName = thisViewer -> GetName ();
+	G4String thisShortName = ShortName (thisName);
+	if (name != "all") {
+	  if (thisShortName != shortName) continue;
+	}
+	found = true;
+	G4cout << "\n  ";
+	if (thisShortName == currentViewerShortName) {
+	  foundCurrent = true;
+	  G4cout << "(current)";
+	}
+	else {
+	  G4cout << "         ";
+	}
+	G4cout << " viewer \"" << thisName << "\"";
+	if (verbosity > 0) {
+	  G4cout << "\n  " << *thisViewer << '\n';
+	}
       }
       G4cout << endl;
     }
   }
 
+  if (!foundCurrent) {
+    G4cout << "No valid current viewer - please create or select one." << endl;
+  }
+
   if (!found) {
-    G4cout << "No viewers found";
+    G4cout << "No viewers";
     if (name != "all") {
       G4cout << " of name \"" << name << "\"";
     }
-    G4cout << "." << endl;
+    G4cout << " found." << endl;
   }
 }
 
@@ -297,7 +333,7 @@ G4VisCommandViewerRemove::~G4VisCommandViewerRemove () {
 }
 
 G4String G4VisCommandViewerRemove::GetCurrentValue (G4UIcommand* command) {
-  G4VView* viewer = fpVisManager -> GetCurrentView ();
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
   }
@@ -310,22 +346,25 @@ void G4VisCommandViewerRemove::SetNewValue (G4UIcommand* command,
 					    G4String newValue) {
   G4String& removeName = newValue;
   G4String removeShortName = ShortName (removeName);
-  G4VView* currentViewer = fpVisManager -> GetCurrentView ();
+  G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
   G4String currentName;
   if (currentViewer) {
     currentName = currentViewer -> GetName ();
   }
+  else {
+    currentName = "none";
+  }
   G4String currentShortName = ShortName (currentName);
 
-  const G4SceneList& sceneHandlerList = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& sceneHandlerList = fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.entries ();
   G4int iHandler, iViewer;
-  G4VScene* sceneHandler;
-  G4VView* viewer;
+  G4VSceneHandler* sceneHandler;
+  G4VViewer* viewer;
   G4bool found = false;
   for (iHandler = 0; iHandler < nHandlers; iHandler++) {
     sceneHandler = sceneHandlerList [iHandler];
-    const G4VViewList& viewerList = sceneHandler -> GetViewList ();
+    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
     for (iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
       viewer = viewerList [iViewer];
       const G4String& viewerName = viewer -> GetName ();
@@ -345,10 +384,10 @@ void G4VisCommandViewerRemove::SetNewValue (G4UIcommand* command,
 
   G4cout << "Viewer \"" << removeName << "\" removed." << endl;
   if (removeShortName == currentShortName) {
-    fpVisManager -> DeleteCurrentView ();
+    fpVisManager -> DeleteCurrentViewer ();
   }
   else {
-    sceneHandler -> SetViewList ().remove (viewer);
+    sceneHandler -> SetViewerList ().remove (viewer);
     G4cout << "Current viewer unchanged." << endl;
   }
 
@@ -377,7 +416,7 @@ G4VisCommandViewerSelect::~G4VisCommandViewerSelect () {
 
 G4String G4VisCommandViewerSelect::GetCurrentValue 
 (G4UIcommand* command) {
-  G4VView* viewer = fpVisManager -> GetCurrentView ();
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
   }
@@ -391,15 +430,16 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
   G4String& selectName = newValue;
   G4String selectShortName = ShortName (selectName);
 
-  const G4SceneList& sceneHandlerList = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& sceneHandlerList =
+    fpVisManager -> GetAvailableSceneHandlers ();
   G4int nHandlers = sceneHandlerList.entries ();
   G4int iHandler, iViewer;
-  G4VScene* sceneHandler;
-  G4VView* viewer;
+  G4VSceneHandler* sceneHandler;
+  G4VViewer* viewer;
   G4bool found = false;
   for (iHandler = 0; iHandler < nHandlers; iHandler++) {
     sceneHandler = sceneHandlerList [iHandler];
-    const G4VViewList& viewerList = sceneHandler -> GetViewList ();
+    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
     for (iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
       viewer = viewerList [iViewer];
       if (selectShortName == ShortName (viewer -> GetName ())) {
@@ -407,17 +447,19 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
 	break;
       }
     }
+    if (found) break;
   }
 
   G4cout << "Viewer \"" << selectName << "\"";
   if (found) {
-    if (ShortName (fpVisManager -> GetCurrentView () -> GetName ())
-	== selectShortName) {
+    G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
+    if (currentViewer &&
+	ShortName (currentViewer -> GetName ())	== selectShortName) {
       G4cout << " already selected." << endl;
     }
     else {
       G4cout << " being selected." << endl;
-      fpVisManager -> SetCurrentView (viewer);
+      fpVisManager -> SetCurrentViewer (viewer);
     }
   }
   else {

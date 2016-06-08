@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsClear.hh,v 2.2 1998/07/12 03:09:58 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisCommandsClear.hh,v 1.3 1999/01/11 00:48:19 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // /vis~/clear/ commands
@@ -31,6 +31,7 @@ public:
   }
 };
 
+/****************
 /////////////////////////////////////////  /vis~/clear/scene  ////
 //clear \hline
 //clear /vis~/clear/scene &&
@@ -53,6 +54,7 @@ public:
     }
   }
 };
+******************/
 
 ////////////////////////////////////////  /vis~/clear/view ////
 //clear \hline
@@ -75,6 +77,7 @@ public:
   }
 };
 
+/****************************
 ///////////////////////////////////////  /vis~/clear/view_and_scene  ////
 //clear \hline
 //clear /vis~/clear/view\_and\_scene &&
@@ -99,5 +102,6 @@ public:
     }
   }
 };
+********************/
 
 #endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LELambdaInelastic.cc,v 2.3 1998/07/13 17:24:28 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4LELambdaInelastic.cc,v 1.1 1999/01/07 16:12:47 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Lambda Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

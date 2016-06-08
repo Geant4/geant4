@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiNeutronAnnihilationAtRest.cc,v 2.3 1998/08/16 23:59:15 lfelawka Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiNeutronAnnihilationAtRest.cc,v 1.1 1999/01/07 16:13:42 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

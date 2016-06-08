@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DeuteronInelasticProcess.hh,v 2.0 1998/07/02 16:36:19 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DeuteronInelasticProcess.hh,v 1.1 1999/01/07 16:13:33 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Deuteron Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997

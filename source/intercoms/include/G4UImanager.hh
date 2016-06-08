@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.hh,v 2.5 1998/12/02 09:57:48 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UImanager.hh,v 1.1 1999/01/07 16:09:23 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4UImanager_h

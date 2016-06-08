@@ -1,14 +1,14 @@
-OPACS as a visualization environment for G4
+OPACS as a visualization environment for Geant4
 -------------------------------------------
   The OPACS html address is :
 
    http://www.lal.in2p3.fr/OPACS
 
-  To have OPACS using G4 :
+  To have OPACS using Geant4 :
 
   - Install the OPACS v3 by following
     the web installation page.
-     For G4 take the group :
+     For Geant4 take the group :
       WoXoXm  if you have MOTIF
       WoXoXaw if you have Xaw
      For example on a UNIX with MOTIF only :
@@ -29,8 +29,7 @@ OPACS as a visualization environment for G4
       UNIX> rm WoXoXm.tar
     ( UNIX> rm WoXoXaw.tar )
       UNIX> cd OPACS/v3
-      UNIX> chmod u+x conf.sh    
-      UNIX> ./conf.sh
+      UNIX> <edit the setup.csh, setup.sh> to handle your environment.
        csh> source setup.csh
        (sh> . ./setup.sh)
       UNIX> make WoXo
@@ -54,44 +53,36 @@ OPACS as a visualization environment for G4
   - Execute OPACS setup script :
        csh> source <OPACS_HOME>/OPACS/v3/setup.csh
 
-  - Bring G4/prototype and reconstruct G4 libraries.
+  - Bring Geant4/source and reconstruct libraries.
 
-  - Bring G4/environments/OPACS.
+  - Bring Geant4/environments/OPACS.
 
-  - Reconstruct G4/environments/OPACS :
-      UNIX> cd <G4>/environments/OPACS/mgr
-      UNIX> <edit setup.csh> to change paths.
+  - Reconstruct Geant4/environments/OPACS :
+      UNIX> cd <Geant4>/environments/OPACS/mgr
+      UNIX> <edit setup.csh> to handle your environment.
        csh> source setup.csh
        (sh> . ./setup.sh)
       UNIX> make <config>
     ( UNIX> gmake <config> )
     where <config> is a compilation "configuration".
     For example :
-      UNIX> make OSF1
+      UNIX> make OSF1-cxx
       UNIX> make HP-UX-aCC
     The compilation "configs" are defined in the file :
       mgr/Config.mk
     If the existing "configs" do not match your environment, 
     edit this file. Existing configs are :
-      OSF1
-      HP-UX
+      OSF1-cxx
       HP-UX-aCC
-      ULTRIX
-      Linux
-      AIX     
-      IRIX    (not tested yet)   
-      SunOS   (not tested yet)   
-      insure
       Linux-gxx
+      SunOS-CC
     At the end of installation you should
     find in the parallel <config> directory the
-    G4o library and some executables :
+    G4o library and the executable :
       EXPO.exe
-      TEST.exe
-      ATLAS.exe
-    Run them by doing :
+    Run it by doing :
       UNIX> cd ../usr
-      UNIX> ../<config>/<app>.exe
+      UNIX> ../<config>/EXPO.exe
 
   As usual, when you have something in an Xo window
  you can manipulate it with :
@@ -100,9 +91,14 @@ OPACS as a visualization environment for G4
  menu to do things, like changing "Ctrl" action,
  setting ZBuffer, etc...
 
+  The "experiment" EXPO is a very simple example 
+ to help starting some Geant4 application working 
+ with OPACS. Most of the interactivity is handled 
+ in the OPACS/usr/EXPO*odb,osh files.
 
-
-
+  NOTE : the app/TEST.cc application is for developer
+         testing purpose and is not reconstructed 
+         by default.
 
 
 

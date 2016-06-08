@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oDrawer.cc,v 2.2 1998/09/16 12:08:44 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4oDrawer.cc,v 1.2 1999/04/16 10:03:36 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*
   From geant4/visualization/management/src/G4VisManager.cc.

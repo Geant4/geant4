@@ -5,9 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPCone.hh,v 2.1 1998/10/20 16:31:07 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4BREPSolidPCone.hh,v 1.2 1999/01/27 16:15:08 broglia Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
+//
+// The polyconical solid G4BREPSolidPCone is a shape defined by a set of 
+// inner and outer conical or cylindrical surface sections and two planes 
+// perpendicular to the Z axis. Each conical surface is defined by its 
+// radius at two different planes perpendicular to the Z-axis. Inner and 
+// outer conical surfaces are defined using common Z planes. 
+//
+
 #ifndef __G4BREPSolidPCone
 #define __G4BREPSolidPCone
 #include "G4BREPSolid.hh"

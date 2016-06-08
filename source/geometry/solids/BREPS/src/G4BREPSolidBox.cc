@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidBox.cc,v 2.3 1998/10/20 16:33:37 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4BREPSolidBox.cc,v 1.1 1999/01/07 16:07:38 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4BREPSolidBox.hh"
 #include "G4FPlane.hh"

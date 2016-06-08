@@ -5,14 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.icc,v 2.8 1998/10/13 08:24:29 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EnergyLossTables.icc,v 1.6 1999/04/15 07:46:13 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id:
 // Inline members of the G4EnergyLossTables class
 //
 // first version created by P.Urban , 06/04/1998
 // modified by L.Urban , 27/05/98
+// cache mechanism , L.Urban , 11/02/99
+// bug fixed , L.Urban , 12/04/99
 //
 
 inline unsigned G4EnergyLossTables::HashFun(
@@ -109,8 +111,14 @@ inline G4double G4EnergyLossTables::GetDEDX(
     G4double KineticEnergy,
     G4Material *aMaterial)
 {
-  G4EnergyLossTablesHelper t= GetTables(aParticle);
-  const G4PhysicsTable* rangeTable= t.theRangeTable;
+  if(aParticle != lastParticle)
+  {
+    t= GetTables(aParticle);
+    lastParticle = aParticle ;
+    Chargesquare = (aParticle->GetPDGCharge())*
+                   (aParticle->GetPDGCharge())/
+                   QQPositron ;
+  }
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
 
   G4int materialIndex = aMaterial->GetIndex();
@@ -120,8 +128,7 @@ inline G4double G4EnergyLossTables::GetDEDX(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     dEdx = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
-            (*dEdxTable)(materialIndex)->GetValue(
+     dEdx =(*dEdxTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
   } else if (scaledKineticEnergy>t.theHighestKineticEnergy) {
@@ -136,8 +143,7 @@ inline G4double G4EnergyLossTables::GetDEDX(
 
   }
 
-  G4double Charge = aParticle->GetPDGCharge() ;
-  G4double Chargesquare = Charge*Charge ;
+
   return dEdx*Chargesquare;
 }
 
@@ -146,7 +152,11 @@ inline G4double G4EnergyLossTables::GetLabTime(
     G4double KineticEnergy,
     G4Material *aMaterial)
 {
-  G4EnergyLossTablesHelper t= GetTables(aParticle);
+  if(aParticle != lastParticle)
+  {
+    t= GetTables(aParticle);
+    lastParticle = aParticle ;
+  }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ; 
@@ -183,7 +193,11 @@ inline G4double G4EnergyLossTables::GetDeltaLabTime(
     G4double KineticEnergyEnd,
     G4Material *aMaterial)
 {
-  G4EnergyLossTablesHelper t= GetTables(aParticle);
+  if(aParticle != lastParticle)
+  {
+    t= GetTables(aParticle);
+    lastParticle = aParticle ;
+  }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
@@ -253,7 +267,11 @@ inline G4double G4EnergyLossTables::GetProperTime(
     G4double KineticEnergy,
     G4Material *aMaterial)
 {
-  G4EnergyLossTablesHelper t= GetTables(aParticle);
+  if(aParticle != lastParticle)
+  {
+    t= GetTables(aParticle);
+    lastParticle = aParticle ;
+  }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
@@ -291,7 +309,11 @@ inline G4double G4EnergyLossTables::GetDeltaProperTime(
     G4double KineticEnergyEnd,
     G4Material *aMaterial)
 {
-  G4EnergyLossTablesHelper t= GetTables(aParticle);
+  if(aParticle != lastParticle)
+  {
+    t= GetTables(aParticle);
+    lastParticle = aParticle ;
+  }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
 
   const G4double parlowen=0.4 , ppar=0.5-parlowen ;
@@ -360,7 +382,14 @@ inline G4double G4EnergyLossTables::GetRange(
     G4double KineticEnergy,
     G4Material *aMaterial)
 {
-  G4EnergyLossTablesHelper t= GetTables(aParticle);
+  if(aParticle != lastParticle)
+  {
+    t= GetTables(aParticle);
+    lastParticle = aParticle ;
+    Chargesquare = (aParticle->GetPDGCharge())*
+                   (aParticle->GetPDGCharge())/
+                    QQPositron ;
+  }
   const G4PhysicsTable* rangeTable= t.theRangeTable;
   const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
 
@@ -371,7 +400,7 @@ inline G4double G4EnergyLossTables::GetRange(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-    Range = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
+    Range = scaledKineticEnergy/t.theLowestKineticEnergy*
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
@@ -390,10 +419,68 @@ inline G4double G4EnergyLossTables::GetRange(
 
   }
 
-  G4double Charge = aParticle->GetPDGCharge() ;
-  G4double Chargesquare = Charge*Charge ;
   return Range/(Chargesquare*t.theMassRatio);
 }
+inline G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                     const G4ParticleDefinition *aParticle,
+                                           G4double range,
+                                           G4Material *aMaterial)
+// it returns the value of the kinetic energy for a given range
+{
+  if( aParticle != lastParticle)
+  {
+    t= GetTables(aParticle);
+    lastParticle = aParticle;
+    Chargesquare = (aParticle->GetPDGCharge())*
+                   (aParticle->GetPDGCharge())/
+                    QQPositron ;
+  }
+  const G4PhysicsTable* rangeTable= t.theRangeTable;
+  const G4PhysicsTable*  dEdxTable= t.theDEDXTable;
+  const G4PhysicsTable*  inverseRangeTable= t.theInverseRangeTable;
+
+  G4double scaledrange,scaledKineticEnergy ;
+  G4bool isOut ;
+
+  G4int materialIndex = aMaterial->GetIndex() ;
+
+  if(materialIndex != oldIndex)
+  {
+    oldIndex = materialIndex ;
+    rmin = (*inverseRangeTable)(materialIndex)->
+                              GetLowEdgeEnergy(0) ;
+    rmax = (*inverseRangeTable)(materialIndex)->
+                   GetLowEdgeEnergy(t.theNumberOfBins-2) ;
+    Thigh = (*inverseRangeTable)(materialIndex)->
+                              GetValue(rmax,isOut) ;
+  }
+
+  scaledrange = range*Chargesquare*t.theMassRatio ;
+
+  if(scaledrange < rmin)
+  {
+    scaledKineticEnergy = t.theLowestKineticEnergy*
+                                scaledrange/rmin ;
+  }
+  else
+  {
+    if(scaledrange < rmax)
+    {
+      scaledKineticEnergy = (*inverseRangeTable)(materialIndex)->
+                              GetValue( scaledrange,isOut) ;
+    }
+    else
+    {
+      scaledKineticEnergy = Thigh +
+                      (scaledrange-rmax)*
+                      (*dEdxTable)(materialIndex)->
+                                 GetValue(Thigh,isOut) ;
+    }
+  }
+
+  return scaledKineticEnergy/t.theMassRatio ;
+}
+
 
 
 

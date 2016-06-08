@@ -5,10 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 2.30 1998/12/11 08:29:07 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FPlane.cc,v 1.6 1999/06/08 11:22:07 sgiani Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
-
+// Corrections by S.Giani:
+// - The constructor using iVec now properly stores both the internal and
+//   external boundaries in the bounds vector.
+// - Proper initialization of sameSense in both the constructors. 
+// - Addition of third argument (sense) in the second constructor to ensure
+//   consistent setting of the normal in all the client code.
+// - Proper use of the tolerance in the Intersect function.
 
 #include "G4FPlane.hh"
 #include "G4CompositeCurve.hh"
@@ -25,15 +31,17 @@ G4FPlane::G4FPlane( const G4Vector3D& direction,
   G4Point3D Pt2 = Pt0 + axis.cross(direction);
 
   G4Ray::CalcPlane3Pts( Pl, Pt0, Pt1, Pt2 );
- 
+
   active   = 1;
+  sameSense = 1;
   CalcNormal();
   distance = kInfinity;
   Type     = 1;
 }
 
 
-G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec)
+G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec, int
+sense)
   : pplace( (*pVec)[0]-(*pVec)[1],                    // direction
 	    ((*pVec)[pVec->length()-1]-(*pVec)[0])
 	    .cross((*pVec)[0]-(*pVec)[1]),            // axis
@@ -46,18 +54,38 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec)
   G4CompositeCurve* polygon;
 
   projectedBoundary = new G4SurfaceBoundary;
-  
+
+  sameSense = sense;
+
+  // Outer boundary
+
   polygon= new G4CompositeCurve(*pVec);
+ 
+  for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+    polygon->GetSegments()[i]->SetSameSense(sameSense);
+
   bounds.insert(polygon);
+  
+  // Eventual inner boundary
   
   if (iVec) 
   {
     polygon= new G4CompositeCurve(*iVec);
+
+    for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+    polygon->GetSegments()[i]->SetSameSense(sameSense);
+
     bounds.insert(polygon);
   }
   
-  SetBoundaries(&bounds);
+  // Set sense for boundaries  
+  
+  for (G4int j=0; j< bounds.length(); j++) 
+    bounds[j]->SetSameSense(sameSense);
+  
 
+  SetBoundaries(&bounds);
+      
   CalcNormal();
   IsConvex();
   distance = kInfinity;
@@ -147,10 +175,12 @@ int G4FPlane::IsConvex()
 
 int G4FPlane::Intersect(const G4Ray& rayref)
 {
-  Intersected =1;
+  // This function count the number of intersections of a 
+  // bounded surface by a ray.
+  
 
-  // closest_hit = pplace.EvaluateIntersection(rayref);
-  // L. Broglia : before in G4Placement
+  // Find the intersection with the infinite plane
+  Intersected =1;
 
   // s is solution, line is p + tq, n is G4Plane Normal, r is point on G4Plane 
   // all parameters are pointers to arrays of three elements
@@ -170,9 +200,9 @@ int G4FPlane::Intersect(const G4Ray& rayref)
 
   b = norm.x() * dirx + norm.y() * diry + norm.z() * dirz;
 
-  if ( fabs(b) < 0.001 )    
+  if ( fabs(b) < perMillion )    
   {
-   // G4cout << "\nLine is parallel to G4Plane.No Hit.";
+    // G4cout << "\nLine is parallel to G4Plane.No Hit.";
   }  
   else
   {
@@ -192,12 +222,21 @@ int G4FPlane::Intersect(const G4Ray& rayref)
     solx = startx + t * dirx;
     soly = starty + t * diry;
     solz = startz + t * dirz;
-    
-    if(((dirx < 0 && solx < startx)||(dirx >= 0 && solx >= startx))&&
-       ((diry < 0 && soly < starty)||(diry >= 0 && soly >= starty))&&
-       ((dirz < 0 && solz < startz)||(dirz >= 0 && solz >= startz)))
-      hitpoint= G4Point3D(solx,soly, solz);
 
+    // solve tolerance problem
+    if( (t*dirx >= -kCarTolerance/2) && (t*dirx <= kCarTolerance/2) )
+      solx = startx;
+
+    if( (t*diry >= -kCarTolerance/2) && (t*diry <= kCarTolerance/2) )
+      soly = starty;
+
+    if( (t*dirz >= -kCarTolerance/2) && (t*dirz <= kCarTolerance/2) )
+      solz = startz;
+    
+    if( ( (dirx < 0 && solx < startx)||(dirx >= 0 && solx >= startx) ) &&
+	( (diry < 0 && soly < starty)||(diry >= 0 && soly >= starty) ) &&
+	( (dirz < 0 && solz < startz)||(dirz >= 0 && solz >= startz) )    )
+      hitpoint= G4Point3D(solx, soly, solz);
   }
    
   // closest_hit is a public Point3D in G4Surface
@@ -205,70 +244,59 @@ int G4FPlane::Intersect(const G4Ray& rayref)
   
   if(closest_hit.x() == kInfinity)
   {
+    // no hit
     active=0;
     Distance(kInfinity);
     return 0;
   }
   else
   {
-    Distance( RayStart.distance2(closest_hit) );
- 
-    if(distance < kCarTolerance*0.5)
-    {
-      // the point is on the surface
-      active=1;             //active=0;
-      Distance(0);          //Distance(kInfinity);
-      return 1;             //return 0;
-    }
+    // calculate the squared distance from the point to the intersection
+    // and set it in the distance data member (all clients know they have
+    // to take the sqrt)
+    Distance( RayStart.distance2(closest_hit) );   
 
-    G4Point3D hit = closest_hit;    
+    // now, we have to verify that the hit point founded
+    // is included into the G4FPlane boundaries
 
     // project the hit to the xy plane,
     // with the same projection that took the boundary
     // into projectedBoundary
-    G4Point3D projectedHit= pplace.GetToPlacementCoordinates() * hit;
+    G4Point3D projectedHit= pplace.GetToPlacementCoordinates() * closest_hit;
     
     // test ray from the hit on the xy plane
+    G4Ray testRay( projectedHit, G4Vector3D(1, 0.01, 0) );
+
     // check if it intersects the boundary
-    G4Ray testRay(projectedHit, G4Vector3D(1, 0, 0));
+    G4int nbinter = projectedBoundary->IntersectRay2D(testRay);
 
-    G4CurveRayIntersection is;
-    projectedBoundary->IntersectRay2D(testRay, is);
-
-    // if not, we are outside
-    if ( is.GetDistance() >= kInfinity ) 
+    // If this number is par, it`s signify that the projected point  
+    // is outside the projected surface, so the hit point is outside
+    // the bounded surface
+    if(nbinter&1)
     {
+      // the intersection point is into the boundaries
+      // check if the intersection point is on the surface
+      if(distance <= kCarTolerance*0.5*kCarTolerance*0.5)
+      {
+	// the point is on the surface, set the distance to 0            
+	Distance(0);         
+      }
+      else
+      {
+	// the point is outside the surface
+      }
+      
+      return 1 ;      
+    }
+    else
+    {
+      // the intersection point is out the boundaries
+      // it is not a real intersection
       active=0;
       Distance(kInfinity);
       return 0;
     }
-   
-    // if yes, we have to check on which side of the intersected 
-    // curve the hit lies
-    G4Vector3D tangent;
-    
-    projectedBoundary->Tangent(is, tangent);
-    
-    // L. Broglia
-    // Now replace tangent into the pplace
-    tangent = pplace.GetFromPlacementCoordinates() * tangent;
-
-    // (let's assume that the tangent is defined)
-    // criterion for outside: (d x t).z() < 0
-    // d = hit - is  &  t = tangent
-    
-    G4Point3D  Is =  pplace.GetFromPlacementCoordinates() * (is.GetPoint());
-    G4Vector3D d  = hit - Is;
-   
-    if ( (d.cross(tangent)).z() < 0 )          
-    {
-      active=0;
-      Distance(kInfinity);
-      return 0;
-    }
-    
-    // a real intersection point
-    return 1;
   }
 }
 
@@ -278,7 +306,9 @@ G4double G4FPlane::ClosestDistanceToPoint(const G4Point3D& Pt)
   // Calculates signed distance of point Pt to G4Plane Pl
   // Be careful, the equation of the plane is :
   // ax + by + cz = d
-  return ( Pt.x()*Pl.a + Pt.y()*Pl.b + Pt.z()*Pl.c - Pl.d);
+  G4double dist = Pt.x()*Pl.a + Pt.y()*Pl.b + Pt.z()*Pl.c - Pl.d;
+
+  return dist;
 }
 
 
@@ -290,15 +320,11 @@ void G4FPlane::InitBounded()
     surfaceBoundary.Project( pplace.GetToPlacementCoordinates() );
 }
 
-G4double G4FPlane::HowNear( const G4Vector3D& x ) const
+G4double G4FPlane::HowNear( const G4Vector3D& Pt ) const
 {
-  const G4Point3D Pt = x;
-  //G4double d = ClosestDistanceToPoint(Pt);
-  //return d;
-  return ( Pt.x()*Pl.a + Pt.y()*Pl.b + Pt.z()*Pl.c - Pl.d);
+  G4double hownear = Pt.x()*Pl.a + Pt.y()*Pl.b + Pt.z()*Pl.c - Pl.d;
+
+  return hownear;
 }
-
-
-
 
 

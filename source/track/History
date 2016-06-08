@@ -1,4 +1,4 @@
-$Id: History,v 2.13 1998/12/15 13:45:31 kurasige Exp $
+$Id: History,v 1.9 1999/05/06 11:42:48 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 6, 1999 H.Kurashige (track-01-00-06)
+-  Modified CheckIt methods of G4VParticleChange and derived classes 
+
+Apr 28, 1999 H.Kurashige (track-01-00-05b)
+-  Protect proton mass against glanular libraly for G4Mars5Gev...(Makoto)
+-  Fixed error messages in G4ParticleChange::CheckIt (Hisaya)
+-  Remove "include/G4VProcess.hh" from G4Step.cc (Hisaya)
+
+Apr 13, 1999 H.Kurashige (track-01-00-04)
+- Code polishing according to the messages by CodeWizard 
+- Added new virtual method of G4bool CheckIt(const G4Track&) in G4VParticleChange
+
+Feb 17, 1999 H.Kurashige (track-01-00-03)
+-  Removed G4Step::ShowStep() (Takashi)
+-  Fixed bugs in G4ParticleChange.icc (Hisaya)
+
+Feb 9, 1999 H.Kurashige (track-01-00-02)
+-  Modified G4TrackFastVector (Hisaya)
+-  Modified G4ParticleChange::CheckIt (Hisaya)
+
+Feb 6, 1999 H.Kurashige (track-01-00-01)
+-  Added Get/SetMomentumDirectionChange in G4ParticleChange (Hisaya)
+-  Removed using G4ParticleMomentum (Hisaya)
+
 December 15,  1998 H.Kurashige (track-00-04-05)
 - G4ParticleChange::CheckIt is activated in VERBOSE mode (Hisaya) 
 

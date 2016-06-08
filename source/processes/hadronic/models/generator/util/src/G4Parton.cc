@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parton.cc,v 1.1 1998/08/22 08:58:11 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Parton.cc,v 1.3 1999/04/15 08:59:49 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -23,7 +23,45 @@
 G4Parton::G4Parton(G4int PDGcode)
 {
 	PDGencoding=PDGcode;
+	theX = 0;
+	theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);;
+	if (theDefinition == NULL)
+	{
+	  cout << "Encoding = "<<PDGencoding<<endl;
+	  G4Exception("G4Parton::GetDefinition(): Encoding not in particle table");
+	}
+}
+
+G4Parton::G4Parton(const G4Parton &right)
+{
+	PDGencoding = right.PDGencoding;
+	theMomentum = right.theMomentum;
+	thePosition = right.thePosition;
+	theX = right.theX;
+	theDefinition = right.theDefinition;
+}
+
+const G4Parton & G4Parton::operator=(const G4Parton &right)
+{
+	PDGencoding=right.GetPDGcode();
+	theMomentum=right.Get4Momentum();
+	thePosition=right.GetPosition();
+	theX = right.theX;
+	theDefinition = right.theDefinition;
+		
+	return *this;
 }
 
 G4Parton::~G4Parton()
 {}
+
+void G4Parton::DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection)
+{
+	G4double Mass = GetMass();
+	G4LorentzVector a4Momentum = Get4Momentum();
+	aLightConeMomentum*=theX;
+	G4double TransverseMass2 = sqr(a4Momentum.px()) + sqr(a4Momentum.py()) + sqr(Mass);
+	a4Momentum.setPz(0.5*(aLightConeMomentum - TransverseMass2/aLightConeMomentum)*(aDirection? 1: -1)); 
+	a4Momentum.setE( 0.5*(aLightConeMomentum + TransverseMass2/aLightConeMomentum));
+	Set4Momentum(a4Momentum);
+}  

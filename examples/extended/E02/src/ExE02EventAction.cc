@@ -19,7 +19,7 @@ ExE02EventAction::ExE02EventAction()
 ExE02EventAction::~ExE02EventAction()
 {;}
 
-void ExE02EventAction::BeginOfEventAction()
+void ExE02EventAction::BeginOfEventAction(const G4Event* )
 {
   if(colID1<0||colID2<0)
   {
@@ -30,10 +30,8 @@ void ExE02EventAction::BeginOfEventAction()
   }
 }
 
-void ExE02EventAction::EndOfEventAction()
+void ExE02EventAction::EndOfEventAction(const G4Event* evt)
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-
   G4cout << ">>> Event " << evt->GetEventID() << endl;
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();

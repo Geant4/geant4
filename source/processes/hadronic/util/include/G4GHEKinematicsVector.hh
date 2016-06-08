@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GHEKinematicsVector.hh,v 2.3 1998/07/13 21:44:25 jwellisc Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GHEKinematicsVector.hh,v 1.1 1999/01/07 16:13:48 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998

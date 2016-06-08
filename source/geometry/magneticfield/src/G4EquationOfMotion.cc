@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EquationOfMotion.cc,v 2.3 1998/11/12 19:48:23 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EquationOfMotion.cc,v 1.1 1999/01/07 16:07:08 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4EquationOfMotion.hh"
 

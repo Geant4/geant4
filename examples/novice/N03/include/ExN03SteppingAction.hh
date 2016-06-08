@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03SteppingAction.hh,v 2.2 1998/10/09 15:48:01 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN03SteppingAction.hh,v 1.2 1999/04/16 11:55:06 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -24,9 +24,9 @@ class ExN03SteppingAction : public G4UserSteppingAction
 {
   public:
     ExN03SteppingAction();
-   ~ExN03SteppingAction();
+    virtual ~ExN03SteppingAction();
 
-    void UserSteppingAction();
+    virtual void UserSteppingAction(const G4Step*);
 };
 
 #endif

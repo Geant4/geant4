@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02MagneticField.hh,v 1.1 1998/10/09 14:31:03 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02MagneticField.hh,v 1.1 1999/01/07 16:05:47 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //    A class for control of the Magnetic Field of the detector.

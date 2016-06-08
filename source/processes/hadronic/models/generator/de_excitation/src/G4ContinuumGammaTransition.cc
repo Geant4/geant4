@@ -21,6 +21,9 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//      
 // -------------------------------------------------------------------
 //
 //  Class G4ContinuumGammaTransition.cc
@@ -34,25 +37,28 @@
 // Constructor
 //
 
-G4ContinuumGammaTransition::G4ContinuumGammaTransition(const G4NuclearLevelManager& levelManager,
-						       G4int Z, G4int A, G4double excitation,
-						       G4int verbose):
-  _Z(Z), _A(A), _excitation(excitation), _levelManager(levelManager) 
+G4ContinuumGammaTransition::G4ContinuumGammaTransition(
+                            const G4NuclearLevelManager& levelManager,
+			    G4int Z, G4int A,
+			    G4double excitation,
+			    G4int verbose):
+  _nucleusZ(Z), _nucleusA(A), _excitation(excitation), _levelManager(levelManager) 
 {
   const G4PtrLevelVector* levels = levelManager.GetLevels();
   G4double eTolerance = 0.;
   if (levels != 0)
+  {
+    G4int lastButOne = levelManager.NumberOfLevels() - 2;
+    if (lastButOne >= 0)
     {
-      G4int lastButOne = levelManager.NumberOfLevels() - 2;
-      if (lastButOne >= 0)
-	{
-	  eTolerance = levelManager.MaxLevelEnergy() - levels->at(lastButOne)->Energy();
-	  if (eTolerance < 0.) eTolerance = 0.;
-	}
+      eTolerance = levelManager.MaxLevelEnergy() - levels->at(lastButOne)->Energy();
+      if (eTolerance < 0.) eTolerance = 0.;
     }
+  }
 
   _verbose = verbose;
   _eGamma = 0.;
+  _gammaCreationTime = 0.;
 
   _maxLevelE = levelManager.MaxLevelEnergy() + eTolerance;
   _minLevelE = levelManager.MinLevelEnergy();
@@ -60,7 +66,7 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(const G4NuclearLevelManag
   // Energy range for photon generation; upper limit is defined 5*Gamma(GDR) from GDR peak
   _eMin = 0.001 * MeV;
   // Giant Dipole Resonance energy
-  G4double energyGDR = (40.3 / pow(_A,0.2) ) * MeV;
+  G4double energyGDR = (40.3 / pow(_nucleusA,0.2) ) * MeV;
   // Giant Dipole Resonance width
   G4double widthGDR = 0.30 * energyGDR;
   // Extend 
@@ -80,7 +86,7 @@ G4ContinuumGammaTransition::~G4ContinuumGammaTransition() {}
 // Override GammaEnergy function from G4VGammaTransition
 //
 
-G4double G4ContinuumGammaTransition::GammaEnergy()
+void G4ContinuumGammaTransition::SelectGamma()
 {
 
   _eGamma = 0.;
@@ -109,7 +115,8 @@ G4double G4ContinuumGammaTransition::GammaEnergy()
 	   << "   finalExcitation = " << finalExcitation 
 	   << " random = " << random << endl;
 
-  if (finalExcitation < 0)
+//  if (finalExcitation < 0)
+  if(finalExcitation < _minLevelE/2.)
     {
       _eGamma = _excitation;
       finalExcitation = 0.;
@@ -122,15 +129,23 @@ G4double G4ContinuumGammaTransition::GammaEnergy()
       _eGamma = _eGamma + diff;
     }  
 
-  return _eGamma;  
+  _gammaCreationTime = GammaTime();
+
+  if(_verbose > 10)
+    G4cout << "*---*---* G4ContinuumTransition: _gammaCreationTime = "
+	   << _gammaCreationTime/second << endl;
+
+  return;  
 }
 
-G4double G4ContinuumGammaTransition::GetEnergyTo() const
+G4double G4ContinuumGammaTransition::GetGammaEnergy()
 {
-  G4double excitation = _excitation - _eGamma;
-  if (excitation < 0.) excitation = 0.;
-  return excitation ;  
+  return _eGamma;
+}
 
+G4double G4ContinuumGammaTransition::GetGammaCreationTime()
+{
+  return _gammaCreationTime;
 }
 
 
@@ -150,13 +165,13 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   if( (_excitation - e) < 0.0 || e < 0 || _excitation < 0) return theProb;
 
   G4ConstantLevelDensityParameter ldPar;
-  G4double aLevelDensityParam = ldPar.LevelDensityParameter(_A,_Z,_excitation);
+  G4double aLevelDensityParam = ldPar.LevelDensityParameter(_nucleusA,_nucleusZ,_excitation);
 
   G4double levelDensBef = exp(2.0*sqrt(aLevelDensityParam*_excitation));
   G4double levelDensAft = exp(2.0*sqrt(aLevelDensityParam*(_excitation - e)));
 
   if(_verbose > 20)
-    G4cout << _A << " LevelDensityParameter = " <<  aLevelDensityParam
+    G4cout << _nucleusA << " LevelDensityParameter = " <<  aLevelDensityParam
 	   << " Bef Aft " << levelDensBef << " " << levelDensAft << endl;
   
   // Now form the probability density
@@ -164,10 +179,10 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   // Define constants for the photoabsorption cross-section (the reverse
   // process of our de-excitation)
 
-  //  G4double sigma0 = 2.5 * _A * millibarn;  
-  G4double sigma0 = 2.5 * _A;  
+  //  G4double sigma0 = 2.5 * _nucleusA * millibarn;  
+  G4double sigma0 = 2.5 * _nucleusA;  
 
-  G4double Egdp = (40.3 / pow(_A,0.2) )*MeV;
+  G4double Egdp = (40.3 / pow(_nucleusA,0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
   G4double normC = 1.0 / (pi * hbarc)*(pi * hbarc);
@@ -189,3 +204,41 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
 
   return theProb;
 }
+
+
+G4double G4ContinuumGammaTransition::GammaTime()
+{
+
+  G4double GammaR = 0.30 * (40.3 / pow(_nucleusA,0.2) )*MeV;
+  G4double tau = hbar_Planck/GammaR;
+
+  G4double tMin = 0;
+  G4double tMax = 10.0 * tau;
+  G4int nBins = 200;
+  G4double sampleArray[200];
+
+  for(G4int i = 0;i<nBins;i++)
+  {
+    G4double t = tMin + ((tMax-tMin)/nBins)*i;
+    sampleArray[i] = (exp(-t/tau))/tau;
+  }
+
+  G4RandGeneralTmp randGeneral(sampleArray, nBins);
+  G4double random = randGeneral.shoot();
+  
+  G4double creationTime = tMin + (tMax - tMin) * random;
+
+  return creationTime;
+}
+
+
+
+
+
+
+
+
+
+
+
+

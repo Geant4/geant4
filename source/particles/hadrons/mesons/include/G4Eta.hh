@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Eta.hh,v 2.3 1998/09/24 06:07:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Eta.hh,v 1.2 1999/04/13 08:38:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -58,12 +58,14 @@ class G4Eta : public G4VMeson
    );
 
  public:
+   virtual ~G4Eta(){}
+
    static G4Eta*      EtaDefinition();
    static G4Eta*      Eta(){return &theEta;}
    static G4double GetCuts() {return theEtaLengthCut;}   
    static G4double* GetCutsInEnergy() {return theEtaKineticEnergyCuts;};
 
-   void        SetCuts(G4double aCut);
+   virtual void        SetCuts(G4double aCut);
 };
 
 #endif

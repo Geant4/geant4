@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisExtent.cc,v 2.2 1998/08/22 16:20:43 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisExtent.cc,v 1.3 1999/05/25 09:10:29 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // A.Walkden 28/11/95
@@ -47,7 +47,7 @@ G4Point3D G4VisExtent::GetExtentCentre () const {
 G4double G4VisExtent::GetExtentRadius () const {
   return sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
 	       ((fYmax - fYmin) * (fYmax - fYmin)) +
-	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2;
+	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
 }
  
 ostream& operator << (ostream& os, const G4VisExtent& e) {
@@ -58,11 +58,11 @@ ostream& operator << (ostream& os, const G4VisExtent& e) {
   return os;
 }
 
-G4bool operator != (const G4VisExtent& e1, const G4VisExtent& e2) {
-  return ((e1.fXmin != e2.fXmin) ||
-	  (e1.fXmax != e2.fXmax) ||
-	  (e1.fYmin != e2.fYmin) ||
-	  (e1.fYmax != e2.fYmax) ||
-	  (e1.fZmin != e2.fZmin) ||
-	  (e1.fZmax != e2.fZmax));
+G4bool G4VisExtent::operator != (const G4VisExtent& e) const {
+  return ((fXmin != e.fXmin) ||
+	  (fXmax != e.fXmax) ||
+	  (fYmin != e.fYmin) ||
+	  (fYmax != e.fYmax) ||
+	  (fZmin != e.fZmin) ||
+	  (fZmax != e.fZmax));
 }

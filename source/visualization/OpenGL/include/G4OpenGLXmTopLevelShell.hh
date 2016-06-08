@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTopLevelShell.hh,v 2.0 1998/07/02 16:45:28 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmTopLevelShell.hh,v 1.2 1999/01/09 16:23:03 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //Top level shell class
@@ -24,7 +24,7 @@ class G4OpenGLXmTopLevelShell : public G4OpenGLXmVWidgetShell
 {
 
 public:
-  G4OpenGLXmTopLevelShell(G4OpenGLXmView*, char*);   //constructor
+  G4OpenGLXmTopLevelShell(G4OpenGLXmViewer*, char*);   //constructor
   ~G4OpenGLXmTopLevelShell();  //destructor
 
   void AddChild (G4OpenGLXmVWidgetContainer*);

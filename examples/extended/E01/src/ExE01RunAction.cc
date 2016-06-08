@@ -1,4 +1,4 @@
-// $Id: ExE01RunAction.cc,v 1.1 1998/10/14 15:20:12 allison Exp $
+// $Id: ExE01RunAction.cc,v 1.3 1999/04/22 21:49:21 asaim Exp $
 
 #include "ExE01RunAction.hh"
 #include "G4Run.hh"
@@ -8,10 +8,8 @@
 HepRef(Histo1D) ExE01RunAction::myHisto1D;
 HepRef(Histo2D) ExE01RunAction::myHisto2D;
 
-void ExE01RunAction::BeginOfRunAction(G4Run* aRun)
+void ExE01RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  aRun->SetRunID(runIDcounter++);
-
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/event/Verbose 0");
   UI->ApplyCommand("/tracking/Verbose 0");
@@ -36,7 +34,7 @@ void ExE01RunAction::BeginOfRunAction(G4Run* aRun)
     Histo2D("HepJamesVsDRand48", nBins2d, xlow, xhigh, nBins2d, ylow, yhigh);
 }
 
-void ExE01RunAction::EndOfRunAction(G4Run* aRun)
+void ExE01RunAction::EndOfRunAction(const G4Run*)
 {
   // Print histograms
   HistPrintout p(G4cout);

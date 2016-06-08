@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fragment.hh,v 1.10 1998/12/16 11:46:47 larazb Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Fragment.hh,v 1.5 1999/05/26 16:52:25 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -25,6 +25,10 @@
 #include "G4NucleiProperties.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "Randomize.hh"
+#include "G4Proton.hh"
+#include "G4Neutron.hh"
+
 
 class G4ParticleDefinition;
 
@@ -34,19 +38,33 @@ typedef RWTPtrOrderedVector<G4Fragment> G4FragmentVector;
 class G4Fragment 
 {
 public:
+  // Default constructor
   G4Fragment();
+
+  // Destructor
   ~G4Fragment();
+
+  // Copy constructor
   G4Fragment(const G4Fragment &right);
+
+  // Several constructors
+
+  // A,Z and 4-momentum
   G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMomentum);
+
+  // 4-momentum and pointer to G4particleDefinition (for gammas)
   G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * aParticleDefinition);
-  G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, const G4LorentzVector aMomentum,
-	     const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, const G4int aNumberOfHoles,
-	     const G4int aNumberOfCharged);
-  G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, 
-	     const G4LorentzVector aMomentum, 
-	     const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, 
-	     const G4int aNumberOfHoles, const G4int aNumberOfCharged,
-	     G4ParticleDefinition * aParticleDefinition);
+
+  
+//   G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, const G4LorentzVector aMomentum,
+// 	     const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, const G4int aNumberOfHoles,
+// 	     const G4int aNumberOfCharged);
+
+//   G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, 
+// 	     const G4LorentzVector aMomentum, 
+// 	     const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, 
+// 	     const G4int aNumberOfHoles, const G4int aNumberOfCharged,
+// 	     G4ParticleDefinition * aParticleDefinition);
     
   const G4Fragment & operator=(const G4Fragment &right);
   G4bool operator==(const G4Fragment &right) const;
@@ -86,9 +104,22 @@ public:
   inline G4ParticleDefinition * GetParticleDefinition(void) const;
   void SetParticleDefinition(G4ParticleDefinition * aParticleDefinition);
 
-  void DumpInfo() const;
-  
+  G4double GetCreationTime(void) const;
+  void SetCreationTime(const G4double time);
+
+
+// Some utility methods
+
+	inline G4double GetGroundStateMass(void) const;
+	
+	inline G4double GetBindingEnergy(void) const;
+
 private:
+
+  G4double CalculateExcitationEnergy(const G4LorentzVector value) const;
+
+  G4ThreeVector IsotropicRandom3Vector(const G4double Magnitude = 1.0) const;
+  
 
   G4double theA;
   
@@ -106,8 +137,12 @@ private:
   
   G4int numberOfCharged;
 
+
+  // Gamma evaporation requeriments
+
   G4ParticleDefinition * theParticleDefinition;
   
+  G4double theCreationTime;
 };
 
 // Class G4Fragment 
@@ -134,12 +169,18 @@ inline void G4Fragment::SetZ(const G4double value)
 
 inline G4double G4Fragment::GetExcitationEnergy()  const
 {
+  // temporary fix for what seems to be
+  // a problem with rounding errors for on-shell lorentz-vectors in CLHEP.
+  // HPW Apr 1999 @@@@@@@ 
+  
+  if(abs(theExcitationEnergy)<10*eV) return 0; 
   return theExcitationEnergy;
 }
 
 inline void G4Fragment::SetExcitationEnergy(const G4double value)
 {
-  theExcitationEnergy = value;
+  //   theExcitationEnergy = value;
+  G4cout << "Warning: G4Fragment::SetExcitationEnergy() is a dummy method. Please, avoid to use it." << endl;
 }
 
 inline const G4LorentzVector G4Fragment::GetMomentum()  const
@@ -150,6 +191,7 @@ inline const G4LorentzVector G4Fragment::GetMomentum()  const
 inline void G4Fragment::SetMomentum(const G4LorentzVector value)
 {
   theMomentum = value;
+  theExcitationEnergy = CalculateExcitationEnergy(value);
 }
 
 inline const G4ThreeVector G4Fragment::GetAngularMomentum()  const
@@ -209,11 +251,30 @@ inline void G4Fragment::SetParticleDefinition(G4ParticleDefinition * aParticleDe
 }
 
 
-
-inline void G4Fragment::DumpInfo() const
+inline G4double G4Fragment::GetCreationTime(void) const 
 {
-  G4cout << this;
+  return theCreationTime;
 }
+
+inline void G4Fragment::SetCreationTime(const G4double time)
+{
+  theCreationTime = time;
+}
+
+inline G4double G4Fragment::GetGroundStateMass(void) const
+{
+	if (theA == 0) return 0.0; // photon
+	else return G4ParticleTable::GetParticleTable()->
+					GetIonTable()->GetIonMass(theZ,theA);
+}
+	
+inline G4double G4Fragment::GetBindingEnergy(void) const
+{
+	return -GetGroundStateMass()+(theA-theZ)*G4Neutron::Neutron()->GetPDGMass()
+										 + theZ*G4Proton::Proton()->GetPDGMass();
+}
+
+
 #endif
 
 

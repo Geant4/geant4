@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05MaxTimeCuts.cc,v 2.3 1998/08/16 14:09:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05MaxTimeCuts.cc,v 1.1 1999/01/07 16:06:17 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------

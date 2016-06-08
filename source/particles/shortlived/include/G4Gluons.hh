@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Gluons.hh,v 2.1 1998/07/13 17:19:05 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Gluons.hh,v 1.2 1999/04/13 08:18:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -46,10 +46,34 @@ class G4Gluons : public G4VShortLivedParticle
    );
    G4Gluons*    GluonsDefinition(){return this;};
    G4Gluons*    Gluons(){return this;};
+   virtual      ~G4Gluons(){}
 };
 
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

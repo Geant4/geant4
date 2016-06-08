@@ -67,7 +67,7 @@ G4FragmentVector * G4Be8FermiFragment::GetFragment(const G4LorentzVector & aMome
 //     2.0*G4NucleiPropertiesTable::GetMassExcess(2,4); // alphas
   G4double AvalKineticE =  sqrt(aMomentum.e()*aMomentum.e() - 
 				aMomentum.vect().mag2())  -// Be8
-    2.0*AtomNum[0]; // alphas
+    2.0*Masses[0]; // alphas
 
 
   RWTPtrOrderedVector<G4LorentzVector> * SubFragsMomentum =

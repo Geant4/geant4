@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02MagneticField.cc,v 1.2 1998/12/04 20:25:22 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02MagneticField.cc,v 1.1 1999/01/07 16:05:49 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  
 //   User Field class implementation.

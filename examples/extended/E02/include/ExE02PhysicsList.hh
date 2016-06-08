@@ -1,4 +1,4 @@
-// $Id: ExE02PhysicsList.hh,v 1.1 1998/10/14 15:25:44 allison Exp $
+// $Id: ExE02PhysicsList.hh,v 1.2 1999/04/17 04:50:02 kurasige Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -26,7 +26,7 @@ class ExE02PhysicsList: public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     // 
-    virtual void SetCuts(G4double aCut);
+    virtual void SetCuts();
     
   protected:
     // these methods Construct particles 

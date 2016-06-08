@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.cc,v 2.1 1998/12/02 17:15:44 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4eBremsstrahlungPlus.cc,v 1.6 1999/04/13 09:05:45 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -28,6 +28,7 @@
 // 20-03-97 : new energy loss+ionisation+brems scheme, L.Urban
 // 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
 // 13-08-98 : new methods SetBining() PrintInfo()
+// 03-03-99 : Bug fixed in LPM effect, L.Urban
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlungPlus.hh"
@@ -67,7 +68,7 @@ G4eBremsstrahlungPlus::~G4eBremsstrahlungPlus()
 
 void G4eBremsstrahlungPlus::SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins)
 {
-  LowestKineticEnergy = lowE; G4double HighestKineticEnergy = highE; TotBin = nBins;
+  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE; TotBin = nBins;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,14 +107,14 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
   G4double KineticEnergy,TotalEnergy,bremloss,Z,x,
            losslim,loss,rate,natom,Cut;
 
-  const G4double MinKineticEnergy = 1.*keV;
+  const G4double MinKinEnergy = 1.*keV;
   const G4double MinCut = 1.*keV;
   const G4double Thigh = 100.*GeV;
   const G4double Cuthigh = 50.*GeV;
   const G4double Factorhigh = 36./(1450.*GeV);
   const G4double coef1 = -0.5, coef2 = 2./9.;
 
-  G4double  ParticleMass = aParticleType.GetPDGMass() ;
+  ParticleMass = aParticleType.GetPDGMass() ;
   G4double* GammaCutInKineticEnergy = G4Gamma::Gamma()->GetEnergyCuts();
   
   //  create table
@@ -155,7 +156,7 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
 
           bremloss = 0.;
 
-          if (KineticEnergy>MinKineticEnergy)
+          if (KineticEnergy>MinKinEnergy)
             {
              if (Cut > KineticEnergy) Cut = KineticEnergy ;
 
@@ -166,7 +167,7 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
                 natom = theAtomicNumDensityVector[iel] ;
                 if (KineticEnergy <= Thigh)
                   {
-                   //loss for MinKineticEnergy<KineticEnergy<=100 GeV
+                   //loss for MinKinEnergy<KineticEnergy<=100 GeV
                    x=log(TotalEnergy/ParticleMass);
                    loss = ComputeBremLoss(Z,natom,KineticEnergy,Cut,x) ;
                    if (&aParticleType==G4Positron::Positron())
@@ -236,13 +237,19 @@ void G4eBremsstrahlungPlus::BuildLossTable(const G4ParticleDefinition& aParticle
                uu = u*u ;
                if(u<=kmax)
                {
-                 s2lpm=LPMEnergy*u/TotalEnergysquare ;
                  sp=uu/(uu+MigdalConstant*TotalEnergysquare*
                            (material->GetElectronDensity())) ;
-                 w=s2lpm*(1.+1./sp) ;
-                 fac=0.5*(sqrt(w*w+4.*s2lpm)-w)/sp;
-                 if(fac>1.)
-                 fac=1. ;
+                 s2lpm=LPMEnergy*u/TotalEnergysquare ;
+                 if(s2lpm<1.)
+                 {
+                   w=s2lpm*(1.+sp) ;
+                   fac=sp*(sqrt(w*w+4.*s2lpm*sp*sp)-w)/
+                          (sqrt(1.+2.*sp+5.*sp*sp)-1.-sp) ;
+                 }
+                 else
+                 {
+                   fac=sp ;
+                 }
                }
                else
                {
@@ -845,11 +852,10 @@ G4VParticleChange* G4eBremsstrahlungPlus::PostStepDoIt(const G4Track& trackData,
      G4double Spol  = GammaEnergy*GammaEnergy/(GammaEnergy*GammaEnergy +
                       MigdalConstant*(aMaterial->GetElectronDensity())*
                       TotalEnergysquare) ;
-     G4double w = S2LPM*(1.+1./Spol) ;
-     G4double Supr = 0.5*(sqrt(w*w+4.*S2LPM)-w)/Spol ;
-
-     //
-     if (G4UniformRand() > Supr )
+     G4double w=S2LPM*(1.+Spol) ;
+     G4double Supr=Spol*(sqrt(w*w+4.*S2LPM*Spol*Spol)-w)/
+                   (sqrt(1.+2.*Spol+5.*Spol*Spol)-1.-Spol) ;
+     if (G4UniformRand() > Supr)
        GammaEnergy = 0. ;
    }
 
@@ -927,7 +933,7 @@ G4Element* G4eBremsstrahlungPlus::SelectRandomAtom(G4Material* aMaterial) const
 
 void G4eBremsstrahlungPlus::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
+  G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 1 KeV to 100 GeV.\n";
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";

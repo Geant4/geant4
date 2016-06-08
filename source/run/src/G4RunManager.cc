@@ -5,10 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 2.10 1998/10/01 17:01:42 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4RunManager.cc,v 1.5 1999/05/17 16:17:44 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
+
+// On Sun, to prevent conflict with ObjectSpace, G4Timer.hh has to be
+// loaded *before* globals.hh...
+#include "G4Timer.hh"
 
 #include "G4RunManager.hh"
 
@@ -28,7 +32,6 @@
 #include "G4UImanager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessTable.hh"
-#include "G4Timer.hh"
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
 
@@ -46,7 +49,7 @@ G4RunManager::G4RunManager()
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
  geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
  runAborted(false),pauseAtBeginOfEvent(false),pauseAtEndOfEvent(false),
- geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL)
+ geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -69,6 +72,7 @@ G4RunManager::~G4RunManager()
   if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << endl;
   delete timer;
   delete runMessenger;
+  physicsList->RemoveProcessManager();
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
   delete previousEvents;
@@ -161,6 +165,7 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 void G4RunManager::RunInitialization()
 {
   currentRun = new G4Run();
+  currentRun->SetRunID(runIDCounter);
   currentRun->SetDCtable(DCtable);
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
   if(fSDM)
@@ -267,6 +272,7 @@ void G4RunManager::RunTermination()
   if(fPersM) fPersM->Store(currentRun);
   delete currentRun;
   currentRun = NULL;
+  runIDCounter++;
 
   stateManager->SetNewState(Idle);
 }
@@ -335,7 +341,7 @@ void G4RunManager::InitializeCutOff()
   if(physicsList)
   {
     if(verboseLevel>1) G4cout << "physicsList->setCut() start." << endl;
-    physicsList->SetCutsWithDefault();
+    physicsList->SetCuts();
   }
   cutoffInitialized = true;
 }

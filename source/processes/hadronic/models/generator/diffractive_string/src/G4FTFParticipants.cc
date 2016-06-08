@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FTFParticipants.cc,v 1.3 1998/11/05 16:32:47 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FTFParticipants.cc,v 1.1 1999/01/07 16:12:01 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

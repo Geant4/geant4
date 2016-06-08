@@ -49,45 +49,43 @@ G4bool G4FermiConfigurationList::Initialize(const G4int A, const G4int Z, const 
   //
   // let's split nucleus into k = 2,...,6 fragments
   //
-  Configurations.clear();
-  NormalizedWeights.clear();
-  G4FermiConfiguration aConfiguration;
-  RWTValOrderedVector<G4double> NOTNormalizedWeights;
-  G4double NormStatWeight = 0.0;
-  for (G4int k = 2; k <= 6; k++) {
-    // Initialize Configuration for k fragments
-    aConfiguration.Initialize(k);
-    G4bool SplitSuccesed;
-    do {
-      // Splits the nucleus into k fragments
-      SplitSuccesed = aConfiguration.SplitNucleus(A,Z);
-      if (SplitSuccesed) {
-	TotNumOfConfigurations++;
-	NumOfConfigurations[k-1]++;
+	Configurations.clear();
+	NormalizedWeights.clear();
+	G4FermiConfiguration aConfiguration;
+	RWTValOrderedVector<G4double> NOTNormalizedWeights;
+	G4double NormStatWeight = 0.0;
+	for (G4int k = 2; k <= 6; k++) {
+		// Initialize Configuration for k fragments
+		aConfiguration.Initialize(k);
+		G4bool SplitSuccesed;
+		do {
+			// Splits the nucleus into k fragments
+			SplitSuccesed = aConfiguration.SplitNucleus(A,Z);
+			if (SplitSuccesed) {
+				TotNumOfConfigurations++;
+				NumOfConfigurations[k-1]++;
 
-	// Non-Normalized statistical weight (decay probavility) for given channel with k fragments
-	// Decay probability returns very big numbers--> I put a temporal scale factor 10^-6
-	G4double StatWeight = aConfiguration.DecayProbability(A,TotalEnergyRF)*1.0e-6;
-	NormStatWeight += StatWeight;
-	// Statistical weights (it will be normalized...)
-	NOTNormalizedWeights.insert(StatWeight);	
+				// Non-Normalized statistical weight for given channel with k fragments
+				G4double StatWeight = aConfiguration.DecayProbability(A,TotalEnergyRF);
+				NormStatWeight += StatWeight;
+				// Statistical weights (it will be normalized...)
+				NOTNormalizedWeights.insert(StatWeight);	
 
-	G4int NumeroDeConf = Configurations.entries();
-	// Store configuration
-	Configurations.insert(aConfiguration);
-      }
-      // Repeat splitting into k fragments (it may be several posibilities for a choosen K)
-    } while (SplitSuccesed);
-  }
+				// Store configuration
+				Configurations.insert(aConfiguration);
+			}
+			// Repeat splitting into k fragments (it may be several posibilities for a choosen K)
+		} while (SplitSuccesed);
+	}
 
-  if (NormStatWeight > 0.0) {
-    // Let's normalize statistical weights of channels
-    for (G4int i = 0; i < TotNumOfConfigurations; i++) 
-      NormalizedWeights.insert(NOTNormalizedWeights(i)/NormStatWeight);
+	if (NormStatWeight > 0.0) {
+		// Let's normalize statistical weights of channels
+		for (G4int i = 0; i < TotNumOfConfigurations; i++) 
+			NormalizedWeights.insert(NOTNormalizedWeights(i)/NormStatWeight);
     
-    return true;
-  }
-  else return false;
+		return true;
+	}
+	else return false;
 
 }
 
@@ -95,14 +93,14 @@ G4bool G4FermiConfigurationList::Initialize(const G4int A, const G4int Z, const 
 
 G4FermiConfiguration G4FermiConfigurationList::ChooseConfiguration(void)
 {
-  G4double RandomWeight =  G4UniformRand();
-  G4double AcumWeight = 0.0;
-  G4int thisConfig = 0;
-  do {
-    AcumWeight += NormalizedWeights(thisConfig);  // We are adding the prob. of each configuration
-    thisConfig++;
-  } while ((thisConfig <= TotNumOfConfigurations) && (AcumWeight < RandomWeight));
+	G4double RandomWeight =  G4UniformRand();
+	G4double AcumWeight = 0.0;
+	G4int thisConfig = 0;
+	do {
+		AcumWeight += NormalizedWeights(thisConfig);  // We are adding the prob. of each configuration
+		thisConfig++;
+	} while ((thisConfig <= TotNumOfConfigurations) && (AcumWeight < RandomWeight));
 
-  return Configurations(thisConfig - 1);
+	return Configurations(thisConfig - 1);
 
 }

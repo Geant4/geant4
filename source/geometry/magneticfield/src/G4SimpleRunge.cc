@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SimpleRunge.cc,v 2.8 1998/11/19 20:54:58 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SimpleRunge.cc,v 1.1 1999/01/07 16:07:12 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  Simple Runge:
 //

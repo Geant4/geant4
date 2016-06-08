@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: mgrnodearray.h,v 2.3 1998/07/14 03:15:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: mgrnodearray.h,v 1.2 1999/05/21 20:20:42 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef mgrnodearray_h

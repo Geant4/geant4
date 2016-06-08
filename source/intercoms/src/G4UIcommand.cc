@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.cc,v 2.7 1998/11/25 16:15:25 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIcommand.cc,v 1.2 1999/05/19 17:33:00 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -93,7 +93,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         correctParameters.append(" ");
       }
       aToken = parameterToken();
-      if( aToken(0)=='"' )
+      if( aToken.length()>0 && aToken(0)=='"' )
       {
         while( aToken(aToken.length()-1) != '"' )
         {

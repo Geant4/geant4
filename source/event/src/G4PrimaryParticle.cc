@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.cc,v 2.3 1998/10/10 10:51:24 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PrimaryParticle.cc,v 1.1 1999/01/07 16:06:39 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4PrimaryParticle.hh"

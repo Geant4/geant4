@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmVWidgetObject.cc,v 2.0 1998/07/02 16:47:05 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLXmVWidgetObject.cc,v 1.2 1999/01/09 16:23:47 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //Virtual base class for all Motif widgets.
 
@@ -20,7 +20,7 @@ G4OpenGLXmVWidgetObject::G4OpenGLXmVWidgetObject ()
 G4OpenGLXmVWidgetObject::~G4OpenGLXmVWidgetObject ()
 {}
 
-G4OpenGLXmView* G4OpenGLXmVWidgetObject::GetView ()
+G4OpenGLXmViewer* G4OpenGLXmVWidgetObject::GetView ()
 {
   return pView;
 }

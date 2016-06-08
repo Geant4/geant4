@@ -1,0 +1,39 @@
+#
+# Build stand-alone DistanceToIn tests for HP
+#
+# boxtoinf77.hp - gnobox.f test
+# boxtoincpp.hp - DistanceToIn test [note: calls not virtual - modified
+#                                    G4Box.hh/.cc]
+# boxtoincpp.hp_fastfabs - DistanceToIn test, with `custom' inline fabs 
+#
+
+all: boxtoinf77.hp boxtoincpp.hp boxtoincpp.hp_fastfabs
+
+boxtoinf77.hp: boxtoinf77.o gnobox.o
+	f77 +O3 -o boxtoinf77.hp boxtoinf77.o gnobox.o
+
+boxtoinf77.o: boxtoinf77.f
+	f77 -c +O3 boxtoinf77.f
+ 
+gnobox.o: gnobox.f
+	f77 -c +O3 gnobox.f
+
+boxtoincpp.hp: boxtoincpp.o G4Box.o
+	CC +O3 -o boxtoincpp.hp boxtoincpp.o G4Box.o -Wl,-a,archive -DNDEBUG -lm
+boxtoincpp.hp_fastfabs: boxtoincpp.o G4Box_fastfabs.o
+	CC +O3 -o boxtoincpp.hp_fastfabs boxtoincpp.o G4Box_fastfabs.o -Wl,-a,archive -DNDEBUG -lm
+
+boxtoincpp.o: boxtoincpp.cc
+	CC +O3 -c boxtoincpp.cc
+
+G4Box.o: G4Box.cc
+	CC +O3 -c G4Box.cc
+
+G4Box_fastfabs.o: G4Box_fastfabs.cc
+	CC +O3 -c G4Box_fastfabs.cc
+
+clean:
+	rm -f *.o boxtoinf77.hp boxtoincpp.hp boxtoincpp.hp_fastfabs
+
+
+ 

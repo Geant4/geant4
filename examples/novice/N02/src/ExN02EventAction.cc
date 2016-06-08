@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02EventAction.cc,v 1.3 1998/10/09 14:35:32 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02EventAction.cc,v 1.2 1999/04/24 09:38:04 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -27,13 +27,11 @@ ExN02EventAction::ExN02EventAction()
 ExN02EventAction::~ExN02EventAction()
 {}
 
-void ExN02EventAction::BeginOfEventAction()
+void ExN02EventAction::BeginOfEventAction(const G4Event*)
 {}
 
-void ExN02EventAction::EndOfEventAction()
+void ExN02EventAction::EndOfEventAction(const G4Event* evt)
 {
-  const G4Event* evt = fpEventManager->GetConstCurrentEvent();
-
   G4cout << ">>> Event " << evt->GetEventID() << endl;
   
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();

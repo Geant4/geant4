@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.hh,v 2.4 1998/11/18 11:06:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Step.hh,v 1.3 1999/04/13 09:43:26 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //---------------------------------------------------------------
@@ -96,7 +96,8 @@ class G4Step
 
    void CopyPostToPreStepPoint( );
 
-   void ShowStep() const ;
+//TS moved to SteppingVerbose
+//   void ShowStep() const ;
      // Print all information of the Step to stdout
 
    G4Polyline* CreatePolyline () const;
@@ -227,7 +228,7 @@ class G4Step
      fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
      fpPreStepPoint->SetSafety(0.);
      fpPreStepPoint->SetStepStatus(fUndefined);
-     fpPreStepPoint->SetProcessDefinedStep(NULL);
+     fpPreStepPoint->SetProcessDefinedStep(0);
      fpPreStepPoint->SetMass(fpTrack->GetDynamicParticle()->GetMass());    
      fpPreStepPoint->SetWeight(fpTrack->GetWeight());
 

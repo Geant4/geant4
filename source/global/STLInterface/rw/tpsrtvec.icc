@@ -1,0 +1,20 @@
+
+template<class T> T* RWTPtrSortedVector<T>::remove( const T* a )  {
+  iterator i = multimap<T,T*>::find (*a);
+  T* retval = (*i).second;
+  erase ( i );
+	return retval;
+}
+template<class T> size_t RWTPtrSortedVector<T>::removeAll( const T* a )  {
+  pair<iterator,iterator> p = equal_range ( *a );
+	iterator i1 = p.first;
+	iterator i2 = p.second;
+	iterator i;
+	size_t cnt = 0;
+	for (i=i1; i!=i2; i++) {
+		cout << "remove all : " << (*i).first << "  " << (*i).second << endl;
+		erase ( i );
+		cnt++;
+  }
+	return cnt;
+}

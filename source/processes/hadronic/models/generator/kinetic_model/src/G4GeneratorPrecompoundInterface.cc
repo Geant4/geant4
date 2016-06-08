@@ -16,10 +16,10 @@
      return new G4ParticleChange;
    }
    
-   G4DynamicParticleVector* G4GeneratorPrecompoundInterface::
+   G4ReactionProductVector* G4GeneratorPrecompoundInterface::
    Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
    {
-     G4DynamicParticleVector * theTotalResult = new G4DynamicParticleVector;
+     G4ReactionProductVector * theTotalResult = new G4ReactionProductVector;
 
      // decay the strong resonances
      G4KineticTrackVector *result1, *secondaries, *result;
@@ -31,7 +31,7 @@
        G4ParticleDefinition * pdef;
        pdef=result1->at(aResult)->GetDefinition();
        secondaries=NULL;
-       if ( pdef->GetPDGWidth() > 0 || pdef->GetPDGLifeTime() < 1*ns )
+       if ( pdef->IsShortLived() )
        {
 	  secondaries = result1->at(aResult)->Decay();
        }
@@ -69,15 +69,24 @@
        if(aTrack->GetDefinition() != G4Proton::Proton() && 
           aTrack->GetDefinition() != G4Neutron::Neutron())
        {
-         theTotalResult->insert(new G4DynamicParticle(aTrack->GetDefinition(), aTrack->Get4Momentum()));            
+	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
+	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
+	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
+         theTotalResult->insert(theNew);            
        }
        else if(aTrack->Get4Momentum().t() - aTrack->Get4Momentum().mag()>80*MeV)
        {
-         theTotalResult->insert(new G4DynamicParticle(aTrack->GetDefinition(), aTrack->Get4Momentum()));            
+	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
+	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
+	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
+         theTotalResult->insert(theNew);            
        }
        else if(aTrack->GetPosition().mag() > theNucleus->GetNuclearRadius())
        {
-         theTotalResult->insert(new G4DynamicParticle(aTrack->GetDefinition(), aTrack->Get4Momentum()));            
+	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
+	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
+	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
+         theTotalResult->insert(theNew);            
        }
        else
        {
@@ -120,11 +129,11 @@
      anInitialState.SetNumberOfHoles(numberOfHoles);
      anInitialState.SetNumberOfExcitons(numberOfEx);
      anInitialState.SetMomentum(exciton4Momentum);
-     anInitialState.SetExcitationEnergy(exEnergy);
+//      anInitialState.SetExcitationEnergy(exEnergy); // now a redundant call.
 
      // call pre-compound
      const G4Fragment aFragment(anInitialState);
-     G4DynamicParticleVector * aPreResult = theDeExcitation->DeExcite(aFragment);
+     G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
    
      // fill pre-compound part into the result, and return
      for(G4int ll=0; ll<aPreResult->entries(); ll++)

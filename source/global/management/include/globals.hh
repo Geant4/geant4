@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 2.6 1998/09/24 01:06:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: globals.hh,v 1.8 1999/05/25 03:44:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // Global Constants and typedefs
@@ -44,25 +44,21 @@
 #undef abs
 #endif
 
+#ifdef G4USE_STL
+#include <algorithm>
+#define CLHEP_MAX_MIN_DEFINED
+#endif
+// min, max, abs and sqr are in TemplateFunctions.h.
 // Includes also CLHEP.h with typedef for numeric types and
 // implicit inclusions of <stdlib.h>, <limits.h>, <math.h>.
 #include <CLHEP/config/TemplateFunctions.h>
 
-// Typedefs to decouple from library classes
+// Include base types
+#include "G4Types.hh"
+
+// Other typedefs
 #include <rw/cstring.h>
 typedef RWCString G4String;
-
-// Typedefs for numeric types
-// [NOTE: Will in future need to be made more sophisticated]
-typedef HepDouble G4double;
-typedef HepFloat G4float;
-typedef HepInt G4int;
-#ifdef G4_HAVE_BOOL
-  typedef bool G4bool;
-#else
-  typedef HepBoolean G4bool;
-#endif
-typedef long G4long;
 
 // Includes some additional definitions
 #include "templates.hh"
@@ -78,10 +74,10 @@ static double cbrt(double x) { return pow(x,1./3.); }
 
 // Global error function
 void G4Exception(const char* s=0);
-
+#ifdef G4USE_STL
+#include <string>
+void G4Exception(string s);
+void G4Exception(G4String s);
+#endif
 #endif /* GLOBALS_HH */
-
-
-
-
 

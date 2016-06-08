@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronElasticProcess.cc,v 2.2 1998/07/13 17:26:40 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HadronElasticProcess.cc,v 1.1 1999/01/07 16:13:37 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // G4 Process: Low-energy Elastic scattering

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.cc,v 2.12 1998/11/28 08:24:17 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleWithCuts.cc,v 1.5 1999/06/09 08:56:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -30,6 +30,14 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4PhysicsLogVector.hh"
+#include "G4ios.hh"
+
+#ifdef WIN32
+#  include <Strstrea.h>
+#else
+#  include <strstream.h>
+#endif
+
 
 G4double  G4ParticleWithCuts::LowestEnergy = 0.99e-3*MeV;
 G4double  G4ParticleWithCuts::HighestEnergy = 100.0e6*MeV;
@@ -59,10 +67,10 @@ G4ParticleWithCuts::G4ParticleWithCuts(
                                pType, lepton, baryon, encoding, stable,
                                lifetime, decaytable, shortlived), 
          NumberOfElements(0),
-	 theLossTable(NULL),
+	 theLossTable(0),
    //-- members initialisation for SetCuts ------------------------------
          theCutInMaxInteractionLength(-1.0),
-         theKineticEnergyCuts(NULL)
+         theKineticEnergyCuts(0)
 {  		   
    // -- set ApplyCutsFlag in default   ----------
          SetApplyCutsFlag(false);
@@ -174,25 +182,20 @@ void G4ParticleWithCuts::BuildLossTable()
                G4LossTable(G4Element::GetNumberOfElements());
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>2) {
-      G4cerr << "G4ParticleWithCuts::BuildLossTable() ";
-      G4cerr << "Create theLossTable[" << theLossTable << "]";
-      G4cerr << " NumberOfElements=" << NumberOfElements <<endl;
+      G4cout << "G4ParticleWithCuts::BuildLossTable() ";
+      G4cout << "Create theLossTable[" << theLossTable << "]";
+      G4cout << " NumberOfElements=" << NumberOfElements <<endl;
     }
 #endif
   } else {
-    if (NumberOfElements != G4Element::GetNumberOfElements())
-    {
-      G4String aErrorMessage("Error in G4ParticlWithCuts::BuildLossTable()");
-#ifdef G4VERBOSE
-      if (GetVerboseLevel()>0) {
-        G4cerr << aErrorMessage;
-        G4cerr << "[" <<  this->GetParticleName() << "] " <<endl;
-        G4cerr <<"inconsistent G4Element::GetNumberOfElements";
-        G4cerr << G4Element::GetNumberOfElements();
-        G4cerr << " previous value" << NumberOfElements << endl;
-      }
-#endif
-      G4Exception((const char*)aErrorMessage);
+    if (NumberOfElements != G4Element::GetNumberOfElements()){
+      char errMsg[1024];
+      ostrstream errOs(errMsg,1024);
+      errOs << "Error in G4ParticlWithCuts::BuildLossTable()";
+      errOs << "[" <<  this->GetParticleName() << "] ";
+      errOs << "  :  inconsistent G4Element::GetNumberOfElements =" << G4Element::GetNumberOfElements();
+      errOs << " previous value" << NumberOfElements << '\0';
+      G4Exception(errMsg);
     }
   }
 
@@ -250,10 +253,10 @@ G4double G4ParticleWithCuts::ConvertCutToKineticEnergy(G4RangeVector* rangeVecto
   {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "Error in G4ParticleWithCuts::ConvertCutToKineticEnergy" <<endl;
-      G4cerr << "******** ConvertCutToKineticEnergy for " << GetParticleName(); 
-      G4cerr << " ********************" << endl;
-      G4cerr << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<endl; 
+      G4cout << "Error in G4ParticleWithCuts::ConvertCutToKineticEnergy" <<endl;
+      G4cout << "******** ConvertCutToKineticEnergy for " << GetParticleName(); 
+      G4cout << " ********************" << endl;
+      G4cout << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<endl; 
     }
 #endif
     return  DBL_MAX;
@@ -281,29 +284,21 @@ G4double G4ParticleWithCuts::ConvertCutToKineticEnergy(G4RangeVector* rangeVecto
 
 void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut) 
 {
+  char errMsg[1024];
+  ostrstream errOs(errMsg,1024);
   // check LowestEnergy/ HighestEnergy/TotBin 
   if (TotBin<1) {
-    G4String aErrorMessage("Error in G4ParticlWithCuts::G4ParticlWithCuts");
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cerr << aErrorMessage;
-      G4cerr << "[" << this->GetParticleName() << "]" << endl;
-      G4cerr << "not defined or illegal TotBin [" << TotBin << "]" <<endl;
-    }
-#endif
-    G4Exception((const char*)aErrorMessage);
+    errOs <<  "Error in G4ParticlWithCuts::G4ParticlWithCuts" ;
+    errOs << "[" << this->GetParticleName() << "]";
+    errOs << " :  not defined or illegal TotBin [" << TotBin << "]" << '\0';
+    G4Exception(errMsg);
   }
   if ( (LowestEnergy<0.0)||(HighestEnergy<=LowestEnergy) ){
-    G4String aErrorMessage("Error in G4ParticlWithCuts::G4ParticlWithCuts");
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cerr << aErrorMessage;
-      G4cerr << "[" << this->GetParticleName() << "]" << endl;
-      G4cerr << " illegal energy range" << "(" << LowestEnergy/GeV;
-      G4cerr << "," << HighestEnergy/GeV << ") [GeV]" <<endl;
-    }
-#endif
-    G4Exception((const char*)aErrorMessage);
+    errOs << "Error in G4ParticlWithCuts::G4ParticlWithCuts";
+    errOs << "[" << this->GetParticleName() << "]";
+    errOs << " :  illegal energy range" << "(" << LowestEnergy/GeV;
+    errOs << "," << HighestEnergy/GeV << ") [GeV]" << '\0';
+    G4Exception(errMsg);
   }
 
   // Set cut in stopping range
@@ -318,48 +313,52 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
                     
   G4double Charge = this->GetPDGCharge() ;
 
-  G4ParticleDefinition* theProton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
-
   G4bool useProtonCut =
-                       ((GetParticleName() != "gamma" ) &&
-		        (GetParticleName() != "e-"    ) &&
-			(GetParticleName() != "e+"    ) &&
-			(GetParticleName() != "mu-"   ) &&
-			(GetParticleName() != "mu+"   ) &&
-			(GetParticleName() != "proton" ) &&
-			(GetParticleName() != "anti_proton" ) && 
-			(Charge != 0.)                             );
-  if (useProtonCut) {
-    if (theProton ==NULL) {
+           ((GetParticleName() != "gamma" ) &&
+            (GetParticleName() != "e-"    ) &&
+            (GetParticleName() != "e+"    ) &&
+            (GetParticleName() != "mu-"   ) &&
+            (GetParticleName() != "mu+"   ) &&
+            (GetParticleName() != "proton" ) &&
+            (GetParticleName() != "anti_proton" ) && 
+            (Charge != 0.)                             );
+
+  static G4ParticleDefinition* theProton =0;   
+
+  // check if the proton exists or not 
+  if ((useProtonCut) && (theProton ==0)) {
+    theProton =   G4ParticleTable::GetParticleTable()->FindParticle("proton");
+    if (theProton ==0) {
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
-	G4cerr << " G4ParticleWithCuts::CalcEnergyCuts  ";
-	G4cerr << " proton is not defined !!" << endl;
+	    G4cout << " G4ParticleWithCuts::CalcEnergyCuts  ";
+	    G4cout << " proton is not defined !!" << endl;
       }
 #endif
       useProtonCut = false;
     }
-    if (theProton->GetEnergyCuts()==NULL) {
-#ifdef G4VERBOSE                                            
-      if (GetVerboseLevel()>0) {                          
-	G4cerr << " G4ParticleWithCuts::CalcEnergyCuts  ";
-	G4cerr << " proton energy cut is not defined !!" << endl;    
-      }                                                   
-#endif                                                      
-      G4Exception("G4ParticleWithCuts::CalcEnergyCuts");  
-    }
-  }
+  } 
 
-  if ( useProtonCut && 
-       ( abs(aCut-theProton->GetLengthCuts())<1.*nanometer) ){
-     // use energy cuts for Proton
+  if (useProtonCut) {
+    // check if cuts for the proton are defined or not
+    if (theProton->GetEnergyCuts()==0) {
+      errOs << " G4ParticleWithCuts::CalcEnergyCuts  ";
+      errOs << "   proton energy cut is not defined !!" << '\0';    
+      G4Exception(errMsg);  
+    }
+    //  check if the cut in range is same as one fro the proton
+    useProtonCut =  ( abs(aCut-theProton->GetLengthCuts())<1.*nanometer );  
+  }	
+
+  if (useProtonCut) {
+    // use energy cuts for Proton
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>2) {
-      G4cerr << " G4ParticleWithCuts: [" << GetParticleName() <<"]";
-      G4cerr << " user Proton Cut " << endl;
+      G4cout << " G4ParticleWithCuts: [" << GetParticleName() <<"]";
+      G4cout << " uses Proton Cut " << endl;
     }
 #endif                                                      
-    G4double ChargeSquare = Charge*Charge ;
+    G4double ChargeSquare = Charge*Charge/(eplus*eplus) ;
     G4double massRatio = proton_mass_c2/(this->GetPDGMass()) ;
     
     for (G4int J=0; J<materialTable->length(); J +=1) {
@@ -367,14 +366,14 @@ void  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
       // cut energy is rescaled by using charge and mass ratio
       theKineticEnergyCuts[J] = ChargeSquare*protonEnergyCut/massRatio ; 
       if(theKineticEnergyCuts[J] < LowestEnergy) {
-	theKineticEnergyCuts[J] = LowestEnergy ;
+        theKineticEnergyCuts[J] = LowestEnergy ;
       }
     }
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>2) {
-      G4cerr << " G4ParticleWithCuts: [" << GetParticleName() <<"]";
-      G4cerr << " calcurate by using its own loss table  " << endl;
+      G4cout << " G4ParticleWithCuts: [" << GetParticleName() <<"]";
+      G4cout << " calcurate by using its own loss table  " << endl;
     }
 #endif
     // Build the energy loss table
@@ -481,15 +480,13 @@ void G4ParticleWithCuts::BuildRangeVector(
   const G4ElementVector* elementVector = aMaterial->GetElementVector();
   const G4double* atomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
   G4int NumEl = aMaterial->GetNumberOfElements();
-  if (rangeVector == NULL) {
-    G4String aErrorMessage("Error in G4ParticleWithCuts::BuildRangeVector()");
-#ifdef G4VERBOSE
-    if (GetVerboseLevel() >0) {
-      G4cerr << aErrorMessage << "[" << this->GetParticleName() << "] " << endl;
-      G4cerr << "NULL pointer is found in absorptionLengthVector" << endl;
-    }
-#endif
-    G4Exception((const char*)aErrorMessage);
+  if (rangeVector == 0) {
+    char errMsg[1024];
+    ostrstream errOs(errMsg,1024);
+    errOs << "Error in G4ParticleWithCuts::BuildRangeVector()";
+    errOs << "[" << this->GetParticleName() << "] ";
+    errOs << " :  0 pointer is found in absorptionLengthVector" << '\0';
+    G4Exception(errMsg);
   }
 
   // calculate parameters of the low energy part first
@@ -556,11 +553,11 @@ void G4ParticleWithCuts::BuildRangeVector(
   if ( theCutInMaxInteractionLength >= rmax) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "Error in G4ParticleWithCuts::BuildRangeVector()" << endl;
-      G4cerr << " SetCuts for " << GetParticleName() << endl;
-      G4cerr << "The maximal meaningful cut is " << rmax/mm << " mm." << endl;
-      G4cerr << "All the " << GetParticleName() << "will be killed !" << endl;
-      G4cerr << "in the material " << aMaterial->GetName() << "." << endl;
+      G4cout << "Error in G4ParticleWithCuts::BuildRangeVector()" << endl;
+      G4cout << " SetCuts for " << GetParticleName() << endl;
+      G4cout << "The maximal meaningful cut is " << rmax/mm << " mm." << endl;
+      G4cout << "All the " << GetParticleName() << "will be killed !" << endl;
+      G4cout << "in the material " << aMaterial->GetName() << "." << endl;
     }
 #endif
   }

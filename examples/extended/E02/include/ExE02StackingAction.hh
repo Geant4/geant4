@@ -13,12 +13,12 @@ class ExE02StackingAction : public G4UserStackingAction
 {
   public:
     ExE02StackingAction();
-    ~ExE02StackingAction();
+    virtual ~ExE02StackingAction();
 
   public:
-    G4ClassificationOfNewTrack ClassifyNewTrack(G4Track *const aTrack);
-    void NewStage();
-    void PrepareNewEvent();
+   virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+   virtual void NewStage();
+   virtual void PrepareNewEvent();
 
 };
 

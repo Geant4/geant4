@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.hh,v 2.3 1998/07/13 17:13:51 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IonisParamMat.hh,v 1.2 1999/04/14 12:48:59 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 

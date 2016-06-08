@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.hh,v 2.4 1998/10/27 12:24:39 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MuIonisation.hh,v 1.2 1999/03/15 13:35:34 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 // ------------------------------------------------------------
@@ -36,7 +36,6 @@
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
-#include "G4Electron.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
  
@@ -98,19 +97,8 @@ class G4MuIonisation : public G4MuEnergyLoss
     G4double HighestKineticEnergy;
     G4int TotBin;
 
-    // cut in range
-    G4double CutInRange ;
-    G4double lastCutInRange ;
-
-    // particles , cuts in kinetic energy ........
-    const G4Electron* theElectron;
-    const G4MuonPlus* theMuonPlus;
-    const G4MuonMinus* theMuonMinus;
-
-    const G4double* ParticleCutInKineticEnergy;
     const G4double* DeltaCutInKineticEnergy ; 
  
-    G4double ParticleCutInKineticEnergyNow ; 
     G4double DeltaCutInKineticEnergyNow ;
 };
  

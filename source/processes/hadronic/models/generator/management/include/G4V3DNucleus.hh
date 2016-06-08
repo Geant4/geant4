@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4V3DNucleus.hh,v 1.2 1998/10/30 16:36:36 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4V3DNucleus.hh,v 1.2 1999/04/15 12:10:07 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1
 
-#include "G4Nucleon.hh"
+class G4Nucleon;
 #include "G4DynamicParticle.hh"
 
 class G4V3DNucleus 

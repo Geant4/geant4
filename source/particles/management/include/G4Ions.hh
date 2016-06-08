@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.hh,v 2.1 1998/07/13 17:17:58 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Ions.hh,v 1.2 1999/04/13 07:58:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -48,12 +48,14 @@ class G4Ions : public G4ParticleWithCuts
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-   G4Ions*    IonsDefinition(){return this;};
-   G4Ions*    Ions(){return this;};
-   G4double   GetCuts() {return theIonsLengthCut;}   
-   G4double*  GetCutsInEnergy() {return theIonsKineticEnergyCuts;};
+   virtual    			~G4Ions(){};
+   G4Ions*    			IonsDefinition(){return this;};
+   G4Ions*    			Ions(){return this;};
 
-   void SetCuts(G4double aCut); 
+   virtual G4double 	   	GetCuts() {return theIonsLengthCut;}   
+   virtual const G4double* 	GetCutsInEnergy() {return theIonsKineticEnergyCuts;};
+
+   virtual void 			SetCuts(G4double aCut); 
 };
 
 inline void G4Ions::SetCuts(G4double aCut)

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HitsModel.cc,v 1.2 1998/08/31 15:42:15 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HitsModel.cc,v 1.3 1999/05/10 14:04:28 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  26th August 1998.
@@ -14,9 +14,12 @@
 
 #include "G4HitsModel.hh"
 
+#include "G4ModelingParameters.hh"
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
+
+G4HitsModel::~G4HitsModel () {}
 
 G4HitsModel::G4HitsModel () {
   fGlobalTag = "G4HitsModel for all hits.";
@@ -24,14 +27,16 @@ G4HitsModel::G4HitsModel () {
 }
 
 void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
-  G4RunManager* runManager = G4RunManager::GetRunManager ();
-  const G4Event* event = runManager -> GetCurrentEvent ();
-  if (event) {
-    G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
-    if (HCE) {
-      G4int nHC = HCE -> GetCapacity ();
-      for (int iHC = 0; iHC < nHC; iHC++) {
-	HCE -> GetHC (iHC) -> DrawAllHits ();
+  if (fpMP && fpMP -> IsViewHits ()) {
+    G4RunManager* runManager = G4RunManager::GetRunManager ();
+    const G4Event* event = runManager -> GetCurrentEvent ();
+    if (event) {
+      G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
+      if (HCE) {
+	G4int nHC = HCE -> GetCapacity ();
+	for (int iHC = 0; iHC < nHC; iHC++) {
+	  HCE -> GetHC (iHC) -> DrawAllHits ();
+	}
       }
     }
   }

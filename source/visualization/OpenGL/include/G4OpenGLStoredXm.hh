@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredXm.hh,v 2.1 1998/11/06 13:42:21 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLStoredXm.hh,v 1.3 1999/01/11 00:47:40 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -22,8 +22,8 @@
 class G4OpenGLStoredXm: public G4VGraphicsSystem {
 public:
   G4OpenGLStoredXm ();
-  G4VScene* CreateScene (const G4String& name = "");
-  G4VView*  CreateView  (G4VScene&, const G4String& name = "");
+  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
+  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
 };
 
 #endif

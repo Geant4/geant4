@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AtomicShells.cc,v 2.4 1998/11/16 17:26:45 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AtomicShells.cc,v 1.1 1999/01/07 16:09:43 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 

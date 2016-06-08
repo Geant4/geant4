@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 1998/12/01 17:37:17 pavliouk Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:12:03 gunter Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------

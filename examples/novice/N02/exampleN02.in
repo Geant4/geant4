@@ -7,9 +7,7 @@
 /gun/particle e+
 /run/beamOn 1
 
-/run/beamOn 10
-
 /tracking/verbose 0
 /run/beamOn 100
-# /run/beamOn 1000
+
 exit

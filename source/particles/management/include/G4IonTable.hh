@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 2.4 1998/11/18 09:45:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4IonTable.hh,v 1.5 1999/05/06 16:37:36 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -19,6 +19,7 @@
 // ------------------------------------------------------------
 //      modified GetIon                 02 Aug., 98 H.Kurashige
 //      added Remove()                  06 Nov.,98 H.Kurashige
+//      add GetNucleusMass              15 Mar. 99  H.Kurashige
 
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
@@ -51,7 +52,11 @@ class G4IonTable
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int J, G4int Q);
    // get a pointer to the ion with A,Z,J,Q 
    // The ion will be created if not exist yet
-   
+   //   Z: Atomic Number
+   //   A: Atomic Mass
+   //   J: Total Angular momentum
+   //   Q: Total charge  
+  
    G4bool                IsIon(G4ParticleDefinition*) const;
    // return true if the particle is ion
   
@@ -60,7 +65,12 @@ class G4IonTable
 
    G4String             GetIonName(G4int Z, G4int A, G4int J, G4int Q) const;
    // get ion name
+
    G4double             GetIonMass(G4int Z, G4int A) const;
+   G4double             GetNucleusMass(G4int Z, G4int A) const;
+   // These two methods returns Nucleus (i.e. full ionized atom) mass 
+   // ,where Z is Atomic Number (number of protons) and
+   //  A is Atomic Number (number of nucleons)
 
    G4int                 Entries() const;
    G4bool                Contains(const G4ParticleDefinition *particle) const;
@@ -74,8 +84,7 @@ class G4IonTable
 
  private:
    G4IonList*                  fIonList;
-   G4double                    electronMass, protonMass, neutronMass;
-      
+
    enum { numberOfElements = 110};
    static const G4String       elementName[numberOfElements];
 

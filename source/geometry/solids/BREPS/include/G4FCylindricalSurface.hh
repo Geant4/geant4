@@ -5,15 +5,31 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 2.7 1998/12/10 11:00:52 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FCylindricalSurface.hh,v 1.4 1999/05/19 16:55:46 magni Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef __FCYLINDER_H
 #define __FCYLINDER_H
 
-#include "G4FConicalSurface.hh"
-//#include "G4CylindricalSurface.hh"
+#include "G4PointRat.hh"
+#include "G4Axis2Placement3D.hh"
+#include "G4Surface.hh"
+
+
+//     Position.axis|        radius
+//                 >|---|<---------
+//                  |   
+//    --        +---|---+  
+//  l  |        |   |   |
+//  e  |        |   |   | 
+//  n  |        |   |   |  
+//  g  |        |   |   |   
+//  t  |        |   |   |    
+//  h  |        |   |   |     
+//    --        +---|---+  
+//               Position
  
+
 
 class G4FCylindricalSurface: public G4Surface
 {
@@ -22,7 +38,7 @@ class G4FCylindricalSurface: public G4Surface
   G4Axis2Placement3D Position;
   G4double  radius; 
   G4double  length;
- 
+
 
  public:
 
@@ -32,16 +48,16 @@ class G4FCylindricalSurface: public G4Surface
     length = 1.0; 
   }
   
-  //  Normal constructor:   
-  //  first argument  is the origin of the G4FCylindricalSurface
-  //  second argument is the axis   of the G4FCylindricalSurface
-  //  third argument  is the radius of the G4FCylindricalSurface
-  //  fourth argument is the length of the G4FCylindricalSurface
-  G4FCylindricalSurface(const G4Point3D&  o, 
-			const G4Vector3D& a,
-			const G4double    r, 
-			const G4double    l );
-  
+  // Constructor utilized by the G4BREPSolidPCone
+  //  first argument  is the origin 
+  //  second argument is the axis  
+  //  third argument  is the radius 
+  //  fourth argument is the length 
+  G4FCylindricalSurface( const G4Point3D&  o, 
+			 const G4Vector3D& a,
+			 const G4double    r, 
+			 const G4double    l );
+
   //  destructor 
   ~G4FCylindricalSurface() {}
   
@@ -58,34 +74,26 @@ class G4FCylindricalSurface: public G4Surface
     return G4String("Cylindrical_Surface");
   }
   
-  //
-  int Intersect(const G4Ray&);	
-  
-  /* L. Broglia
-     this function is already declared in G4Surface
-  G4double ClosestDistanceToPoint(const G4Vector3D& Pt)
-  {
-    return HowNear(Pt);
-  }
-  */
+  // This function count the number of intersections of a 
+  // bounded cylindrical surface by a ray.
+  // At first, calculates the intersections with the infinite 
+  // cylindrical surfsace. After, count the intersections within the
+  // finite cylindrical surface boundaries, and set "distance" to the 
+  // closest distance from the start point to the nearest intersection
+  // If the point is on the surface it returns or the intersection with
+  // the opposite surface or kInfinity
 
-  virtual G4double HowNear( const G4Vector3D& x ) const;
+  // If no intersection is founded, set distance = kInfinity and
+  // return 0
+  int Intersect(const G4Ray&);	
+
+  // Shortest distance from the point x to the G4FCylindricalSurface.
+  // The distance will be always positive. 
+   virtual G4double HowNear( const G4Vector3D& x ) const;
 
   //
   void CalcBBox();
   
-  //
-  inline void Comp( G4Vector3D& v, G4Point3D& min , G4Point3D& max)
-  {
-    if(v.x() > max.x()) max.setX(v.x());
-    if(v.y() > max.y()) max.setY(v.y());
-    if(v.z() > max.z()) max.setZ(v.z());
-    
-    if(v.x() < min.x()) min.setX(v.x());
-    if(v.y() < min.y()) min.setY(v.y());
-    if(v.z() < min.z()) min.setZ(v.z());
-  }
-
   //  function to return class name   
   virtual char *NameOf() const 
   {
@@ -130,6 +138,10 @@ class G4FCylindricalSurface: public G4Surface
   
   void SetRadius( G4double r );
 
+  // Re-calculates the private values of the G4FCylindrical surface
+  // before the Intersect and HowNear function if the G4FCylindrical
+  // was created by the STEP interface
+  void InitValues();
 };
 
 #endif

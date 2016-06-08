@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2.hh,v 2.2 1998/11/09 19:33:01 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VRML2.hh,v 1.5 1999/05/10 15:39:10 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4VRML2.hh
 // Satoshi Tanaka and Yasuhide Sawada
 
-#if defined (G4VIS_BUILD_VRML_DRIVER) || (G4VIS_USE_VRML)
+#if defined (G4VIS_BUILD_VRML_DRIVER) || defined (G4VIS_USE_VRML)
 
 #ifndef G4VRML2_HH
 #define G4VRML2_HH
@@ -19,7 +19,7 @@
 #include "G4VGraphicsSystem.hh"
 #include "FRClient.h"
 
-class G4VScene;
+class G4VSceneHandler;
 
 #include "G4VRMLNetConfig.hh"
 	//#define FR_VRML_DEFAULT_PORT	40801
@@ -29,9 +29,9 @@ class G4VScene;
 class G4VRML2: public G4VGraphicsSystem {
 public:
 	G4VRML2(); 
-	~G4VRML2();
-	G4VScene* CreateScene(const G4String& name = "");
-	G4VView*  CreateView(G4VScene&, const G4String& name = "");
+	virtual ~G4VRML2();
+	G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
+	G4VViewer*  CreateViewer(G4VSceneHandler&, const G4String& name = "");
 
 public:
 	const G4String& getHostName() { return fHostName; }

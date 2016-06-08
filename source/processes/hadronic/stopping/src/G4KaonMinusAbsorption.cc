@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonMinusAbsorption.cc,v 2.4 1998/08/17 00:06:08 lfelawka Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KaonMinusAbsorption.cc,v 1.1 1999/01/07 16:13:43 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

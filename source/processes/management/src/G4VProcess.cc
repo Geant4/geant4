@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.cc,v 2.5 1998/08/16 02:36:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VProcess.cc,v 1.3 1999/04/14 10:50:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -28,15 +28,10 @@
 #include "G4ElementVector.hh"
 #include "G4VProcess.hh"
 
-//G4VProcess::G4VProcess()
-//{
-//  G4Exception("G4VProcess:: default constructor is called");
-//}
-
 G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                   : theProcessName(aName),
 		    theProcessType(aType),
-		    pParticleChange(NULL),
+		    pParticleChange(0),
                     theNumberOfInteractionLengthLeft(-1.0),
                     currentInteractionLength(-1.0),
                     verboseLevel(0)
@@ -49,7 +44,7 @@ G4VProcess::~G4VProcess()
 }
 
 G4VProcess::G4VProcess(G4VProcess& right):
-	    pParticleChange(NULL),
+	    pParticleChange(0),
             theProcessName(right.theProcessName),
             theProcessType(right.theProcessType),
             theNumberOfInteractionLengthLeft(-1.0),
@@ -83,7 +78,7 @@ void G4VProcess::StartTracking()
   theNumberOfInteractionLengthLeft = -1.0;
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4VProcess::StartTracking() [" << theProcessName << "]" <<endl;
+    G4cout << "G4VProcess::StartTracking() [" << theProcessName << "]" <<endl;
   }
 #endif
 }
@@ -92,7 +87,7 @@ void G4VProcess::EndTracking()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4VProcess::EndTracking() [" << theProcessName << "]" <<endl;
+    G4cout << "G4VProcess::EndTracking() [" << theProcessName << "]" <<endl;
   }
 #endif
   theNumberOfInteractionLengthLeft = -1.0;
@@ -100,30 +95,42 @@ void G4VProcess::EndTracking()
 }
 
 
-G4String G4VProcess::GetProcessTypeName(G4ProcessType aType ) 
+const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType ) 
 {
+  static G4String typeNotDefined= "NotDefined";
+  static G4String typeTransportation = "Transportation";
+  static G4String typeElectromagnetic = "Electromagnetic";
+  static G4String typeOptical = "Optical";
+  static G4String typeHadronic = "Hadronic";
+  static G4String typePhotolepton_hadron = "Photolepton_hadron";
+  static G4String typeDecay = "Decay";
+  static G4String typeGeneral = "General";
+  static G4String typeParameterisation = "Parameterisation";
+  static G4String typeUserDefined = "UserDefined";
+  static G4String noType = "------";   // Do not modify this !!!!
+
   if (aType ==   fNotDefined) {
-    return "NotDefined";
+    return  typeNotDefined;
   } else if  (aType ==   fTransportation ) {
-    return "Transportation";
+    return typeTransportation;
   } else if  (aType ==   fElectromagnetic ) {
-    return "Electromagnetic";
+    return typeElectromagnetic;
   } else if  (aType ==   fOptical ) {
-    return "Optical";
+    return typeOptical;
   } else if  (aType ==   fHadronic ) {
-    return "Hadronic";
+    return typeHadronic;
   } else if  (aType ==   fPhotolepton_hadron ) {
-    return "Photolepton_hadron";
+    return typePhotolepton_hadron;
   } else if  (aType ==   fDecay ) {
-    return "Decay";
+    return typeDecay;
   } else if  (aType ==   fGeneral ) {
-    return "General";
+    return typeGeneral;
   } else if  (aType ==   fParameterisation ) {
-    return "Parameterisation";
+    return typeParameterisation;
   } else if  (aType ==   fUserDefined ) {
-    return "UserDefined";
+    return typeUserDefined;
   } else {
-    return "------";   // Do not modify this end mark !!!!       
+    return noType;  
   }
 }
 
@@ -135,12 +142,12 @@ G4VProcess & G4VProcess::operator=(const G4VProcess &)
 
 G4int G4VProcess::operator==(const G4VProcess &right) const
 {
-  return (this == (G4VProcess *) &right);
+  return (this == &right);
 }
 
 G4int G4VProcess::operator!=(const G4VProcess &right) const
 {
-  return (this != (G4VProcess *) &right);
+  return (this !=  &right);
 }
 
 void G4VProcess::DumpInfo() const

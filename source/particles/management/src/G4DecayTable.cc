@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.cc,v 2.2 1998/10/13 11:25:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DecayTable.cc,v 1.4 1999/05/25 02:01:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -19,10 +19,11 @@
 //      27 July 1996 H.Kurashige
 // ------------------------------------------------------------
 
+#include "globals.hh"
 #include "G4DecayTable.hh"
 #include "Randomize.hh"
 
-G4DecayTable::G4DecayTable():parent(NULL)
+G4DecayTable::G4DecayTable():parent(0)
 {
   channels =  new G4VDecayChannelVector;
 }
@@ -34,12 +35,12 @@ G4DecayTable::~G4DecayTable()
 }    
 
 void G4DecayTable::Insert( G4VDecayChannel * aChannel){
-  if (parent == NULL) { parent = aChannel->GetParent(); }
+  if (parent == 0) { parent = (G4ParticleDefinition*)(aChannel->GetParent()); }
   if (parent != aChannel->GetParent()) {
 #ifdef G4VERBOSE
-    G4cerr << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) ";
-    G4cerr << "       " << parent->GetParticleName();
-    G4cerr << " input:" << aChannel->GetParent()->GetParticleName() << endl;
+    G4cout << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) ";
+    G4cout << "       " << parent->GetParticleName();
+    G4cout << " input:" << aChannel->GetParent()->GetParticleName() << endl;
 #endif
   } else {
     channels->insert(aChannel);

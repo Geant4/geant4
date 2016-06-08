@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NullModel.cc,v 2.2 1998/08/31 15:42:16 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NullModel.cc,v 1.2 1999/01/11 00:48:52 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  4th April 1998.

@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: scl_hash.h,v 2.0 1998/07/02 17:03:57 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: scl_hash.h,v 1.2 1999/05/21 20:20:43 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef SCL_HASH_H
@@ -41,6 +41,12 @@
  * not subject to copyright.
  *
  * $Log: scl_hash.h,v $
+ * Revision 1.2  1999/05/21 20:20:43  japost
+ * Deleted incorrect RD44/Geant4 copyright statement
+ *
+ * Revision 1.1  1999/01/07 16:08:09  gunter
+ * Files from release of geant4.0.0- tag geant4-00
+ *
  * Revision 2.0  1998/07/02 17:03:57  gunter
  * Set version 2.0
  *

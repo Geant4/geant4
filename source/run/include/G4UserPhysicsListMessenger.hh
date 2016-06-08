@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 2.3 1998/07/12 16:03:36 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.3 1999/04/15 04:13:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -26,10 +26,13 @@
 //    DumpList * Dump List of particles in G4VUserPhysicsList.
 //    dumpCutValue * Dump cut value information
 //    Verbose * Set the Verbose level of G4VUserPhysicsList.
+//    addProcessManager * add process manager
+//    buildPhysicsTable * build physics table
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
 //        second version                  24 Jan. 1998 by H.Kurashige 
+//        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
@@ -49,16 +52,20 @@ class G4UIcmdWithAString;
 
 class G4UserPhysicsListMessenger: public G4UImessenger
 {
+  private:
+  // hide default constructor
+    G4UserPhysicsListMessenger(){}
+
   public:
     G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList);
     virtual ~G4UserPhysicsListMessenger();
     
   public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual  void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual  G4String GetCurrentValue(G4UIcommand * command);
 
   protected:
-    G4VUserPhysicsList* theParticleList;
+    G4VUserPhysicsList* thePhysicsList;
     
   private: //commands
     G4UIdirectory *             theDirectory;
@@ -67,6 +74,7 @@ class G4UserPhysicsListMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   dumpListCmd;
     G4UIcmdWithAString *        dumpCutValuesCmd;
     G4UIcmdWithAString *        addProcManCmd;
+    G4UIcmdWithAString *        buildPTCmd;
 };
 
 #endif

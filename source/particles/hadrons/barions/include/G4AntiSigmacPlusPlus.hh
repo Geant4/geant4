@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmacPlusPlus.hh,v 2.2 1998/08/04 05:00:01 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiSigmacPlusPlus.hh,v 1.2 1999/04/13 08:25:16 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -57,12 +57,14 @@ class G4AntiSigmacPlusPlus : public G4VBarion
    );
 
  public:
+   virtual ~G4AntiSigmacPlusPlus(){}
+
    static G4AntiSigmacPlusPlus* AntiSigmacPlusPlusDefinition();
    static G4AntiSigmacPlusPlus* AntiSigmacPlusPlus();
    static G4double GetCuts() {return theAntiSigmacPlusPlusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theAntiSigmacPlusPlusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4AntiSigmacPlusPlus::SetCuts(G4double aCut)

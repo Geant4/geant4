@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 2.3 1998/08/16 02:36:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ProcTblElement.hh,v 1.3 1999/06/01 14:52:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -32,7 +32,8 @@
 class G4ProcTblElement
 {
   // this class is used by G4ProcessTable ONLY for booking !!!
-  private:
+  friend class G4ProcessTable;
+  protected:
     G4ProcTblElement();
 
   public:
@@ -50,20 +51,21 @@ class G4ProcTblElement
     G4int operator!=(const G4ProcTblElement &right) const;
     // equal / unequal operator
 
+  protected:
     typedef RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
 
-    G4int Length() const ;
-    void  Insert(G4ProcessManager* aProcMgr);
-    void  Remove(G4ProcessManager* aProcMgr);
+    inline G4int Length() const ;
+    inline void  Insert(G4ProcessManager* aProcMgr);
+    inline void  Remove(G4ProcessManager* aProcMgr);
 
-    G4VProcess*       GetProcess() const;
-    G4String          GetProcessName() const;
+    inline G4VProcess*       GetProcess() const;
+    inline const G4String&   GetProcessName() const;
  
-    G4ProcessManager* GetProcessManager(G4int index) const;
-    G4ProcMgrVector*  GetProcMgrVector() const;
+    inline G4ProcessManager* GetProcessManager(G4int index) const;
+    const G4ProcMgrVector*   GetProcMgrVector() const { return pProcMgrVector; }
   
-    G4int             GetIndex(const G4ProcessManager* pManager) const ;
-    G4bool            Contains(const G4ProcessManager* pManager) const ;
+    inline G4int      GetIndex(const G4ProcessManager* pManager) const ;
+    inline G4bool     Contains(const G4ProcessManager* pManager) const ;
 
   private:
     G4VProcess*       pProcess;

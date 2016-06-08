@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1998/10/19 16:47:11 grichine Exp $
+# $Id: GNUmakefile,v 1.2 1999/04/15 12:23:41 johna Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for geometry/CSG library.  Gabriele Cosmo, 16/11/96.
 # ----------------------------------------------------------------
@@ -11,7 +11,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4BASE)/graphics_reps/include \
+CPPFLAGS += -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \

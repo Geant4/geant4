@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.cc,v 2.3 1998/11/18 11:06:49 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VParticleChange.cc,v 1.3 1999/05/06 11:42:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -25,6 +25,9 @@
 #include "G4TrackFastVector.hh"
 #include "G4Mars5GeVMechanism.hh"
 
+const G4double G4VParticleChange::accuracyForWarning = 1.0e-9;
+const G4double G4VParticleChange::accuracyForException = 0.001;
+
 G4VParticleChange::G4VParticleChange():
    theNumberOfSecondaries(0),
    theSizeOftheListOfSecondaries(G4TrackFastVectorSize),
@@ -32,10 +35,15 @@ G4VParticleChange::G4VParticleChange():
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
    theParentWeight(1.0),
-   theEBMechanism(NULL),
+   theEBMechanism(0),
    fUseEB(false),
    verboseLevel(1)
 {
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
    theListOfSecondaries = new G4TrackFastVector();
 }
 
@@ -46,10 +54,16 @@ G4VParticleChange::G4VParticleChange(G4bool useEB):
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
    theParentWeight(1.0),
-   fUseEB(useEB),
    verboseLevel(1)
 {
-   theListOfSecondaries = new G4TrackFastVector();
+   fUseEB = useEB;
+   // debug flag (activate CheckIt() )
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
+  theListOfSecondaries = new G4TrackFastVector();
    // register  G4EvtBiasMechanism as a default
    theEBMechanism = new G4Mars5GeVMechanism();
 }
@@ -67,19 +81,44 @@ G4VParticleChange::~G4VParticleChange() {
       if ( (*theListOfSecondaries)[index] ) delete (*theListOfSecondaries)[index] ;
     }
   }
-  if (theEBMechanism !=NULL) delete theEBMechanism;
+  if (theEBMechanism !=0) delete theEBMechanism;
   delete theListOfSecondaries; 
 }
 
 // copy and assignment operators are implemented as "shallow copy"
-G4VParticleChange::G4VParticleChange(const G4VParticleChange &right)
+G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
+   theNumberOfSecondaries(0),
+   theSizeOftheListOfSecondaries(G4TrackFastVectorSize),
+   theStatusChange(fAlive),
+   theSteppingControlFlag(NormalCondition),     
+   theLocalEnergyDeposit(0.0),
+   theParentWeight(1.0),
+   fUseEB(false),
+   verboseLevel(1)
 {
-   *this = right;
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
+
+  theListOfSecondaries = right.theListOfSecondaries;
+  theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+  theNumberOfSecondaries = right.theNumberOfSecondaries;
+  theStatusChange = right.theStatusChange;
+  theTrueStepLength = right.theTrueStepLength;
+  theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+  theSteppingControlFlag = right.theSteppingControlFlag;
 }
 
 
 G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
 {
+   debugFlag = false;
+#ifdef G4VERBOSE
+  // activate CHeckIt if in VERBOSE mode
+  debugFlag = true;
+#endif
    if (this != &right)
    {
       theListOfSecondaries = right.theListOfSecondaries;
@@ -136,6 +175,7 @@ void G4VParticleChange::DumpInfo() const
   G4cout << "        Energy Deposit (MeV): " 
        << setw(20) << theLocalEnergyDeposit/MeV
        << endl;
+
   G4cout << "        Track Status        : " 
        << setw(20);
        if( theStatusChange == fAlive ){
@@ -166,6 +206,59 @@ void G4VParticleChange::DumpInfo() const
   }
   G4cout << endl;      
 }
+
+G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
+{
+
+  G4bool    exitWithError = false;
+  G4double  accuracy;
+  G4double  newEnergyDeposit;
+
+  // Energy deposit should not be negative
+  G4bool itsOKforEnergy = true;
+  accuracy = -1.0*theLocalEnergyDeposit/MeV;
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4VParticleChange::CheckIt    : ";
+    G4cout << "the energy deposit  is negative  !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    itsOKforEnergy = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+  }
+ 
+  // true path length should not be negative
+  G4bool itsOKforStepLength = true;
+  accuracy = -1.0*theTrueStepLength/mm;
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4VParticleChange::CheckIt    : ";
+    G4cout << "the true step length is negative  !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
+    itsOKforStepLength = false;
+    if (accuracy > accuracyForException) exitWithError = true;
+  }
+
+  G4bool itsOK = itsOKforStepLength && itsOKforEnergy ;
+  // dump out information of this particle change
+  if (! itsOK ){
+    G4cout << " G4VParticleChange::CheckIt " <<endl;
+    G4cout << " pointer : " << this <<endl ;
+    DumpInfo();
+  }
+
+  // Exit with error
+  if (exitWithError) G4Exception("G4VParticleChange::CheckIt");
+
+  // correction 
+  if ( !itsOKforStepLength ) {
+    theTrueStepLength =  (1.e-12)*mm;
+  } 
+  if ( !itsOKforEnergy ) {
+    theLocalEnergyDeposit = 0.0;
+  }
+  return itsOK;
+}
+
+
+
 
 
 

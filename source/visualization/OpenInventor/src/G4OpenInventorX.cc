@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorX.cc,v 2.6 1998/12/08 09:51:40 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenInventorX.cc,v 1.3 1999/05/10 15:39:02 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -17,8 +17,8 @@
 #include <Inventor/Xt/SoXt.h>
 
 #include "G4OpenInventorX.hh"
-#include "G4OpenInventorScene.hh"
-#include "G4OpenInventorView.hh"
+#include "G4OpenInventorSceneHandler.hh"
+#include "G4OpenInventorViewer.hh"
 
 #include "G4Xt.hh"
 
@@ -37,5 +37,7 @@ G4OpenInventorX::G4OpenInventorX ()
 
   InitHEPVis();
 }
+
+G4OpenInventorX::~G4OpenInventorX () {}
 
 #endif

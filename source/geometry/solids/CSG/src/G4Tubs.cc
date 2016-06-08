@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 2.3 1998/10/09 17:17:21 grichine Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Tubs.cc,v 1.7 1999/06/04 12:43:35 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // class G4Tubs
@@ -14,6 +14,7 @@
 // Implementation
 // 18.06.98 n-normalisation in DistanceToOut(p.v) V. Grichine
 // 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
+// 23.03.99 V.Grichine, bug fixed in DistanceToIn(p,v)
 
 
 #include "G4Tubs.hh"
@@ -137,8 +138,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    xMax=xoffset+fRMax;
 	    if (pVoxelLimit.IsXLimited())
 		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()
-			||xMax<pVoxelLimit.GetMinXExtent())
+		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
+			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
 			{
 			    return false;
 			}
@@ -160,8 +161,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    yMax=yoffset+fRMax;
 	    if (pVoxelLimit.IsYLimited())
 		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()
-			||yMax<pVoxelLimit.GetMinYExtent())
+		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
+			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
 			{
 			    return false;
 			}
@@ -184,8 +185,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    zMax=zoffset+fDz;
 	    if (pVoxelLimit.IsZLimited())
 		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()
-			||zMax<pVoxelLimit.GetMinZExtent())
+		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
+			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
 			{
 			    return false;
 			}
@@ -662,6 +663,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
      if (p.z()*v.z()<0)		// at +Z going in -Z or visa versa
      {
 	s=(fabs(p.z())-fDz)/fabs(v.z());     // Z intersect distance
+        if(s<0.0) s = 0.0 ;                  // negative dist -> zero
 	xi=p.x()+s*v.x();         	     // Intersection coords
         yi=p.y()+s*v.y();
 	rho2=xi*xi+yi*yi;

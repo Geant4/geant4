@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05MinRangeCuts.hh,v 2.2 1998/08/16 14:09:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05MinRangeCuts.hh,v 1.2 1999/06/09 10:33:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -32,7 +32,7 @@ class ExN05MinRangeCuts : public ExN05SpecialCuts
 
      ExN05MinRangeCuts(const G4String& processName ="ExN05MinRangeCuts" );
 
-     ~ExN05MinRangeCuts();
+     virtual ~ExN05MinRangeCuts();
 
      // PostStep GPIL
      virtual G4double PostStepGetPhysicalInteractionLength(

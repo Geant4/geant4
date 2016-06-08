@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.hh,v 2.6 1998/10/27 12:15:58 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4eIonisation.hh,v 1.2 1999/02/16 13:34:48 urban Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------

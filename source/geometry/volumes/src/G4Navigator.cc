@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 2.6 1998/11/25 17:57:23 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Navigator.cc,v 1.6 1999/05/17 14:19:09 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -71,13 +71,13 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose > 0 ) 
     {
-      cout << "G4Navigator::LocateGlobalPointAndSetup: " << endl; 
-      cout.precision(8);
-      cout << " I was called with the following arguments: " << endl
-	   << " Globalpoint = " << globalPoint << endl
-	   << " relativeSearch   = " <<  relativeSearch  << endl;
+      G4cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << endl; 
+      G4cout.precision(8);
+      G4cout << " I was called with the following arguments: " << endl
+	     << " Globalpoint = " << globalPoint << endl
+	     << " relativeSearch   = " <<  relativeSearch  << endl;
        //       << " = " << << endl
-      cout << " Upon entering my state is: " << endl;
+      G4cout << " Upon entering my state is: " << endl;
       PrintState();
     }
 #endif
@@ -109,8 +109,11 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 
 	      // A fix for the case where a volume is "entered" at an edge
 	      //   and a coincident surface exists outside it.
-	      //  This stops it from exiting further volumes and cycling
-	      if( fLastStepWasZero )
+	      //  - This stops it from exiting further volumes and cycling
+	      //  - However ReplicaNavigator treats this case itself
+	      if( fLocatedOnEdge 
+                  && (VolumeType(fBlockedPhysicalVolume) != kReplica ))
+                                                    // ( fLastStepWasZero )
 		{ 
 		  fExiting= false;
 		}
@@ -321,11 +324,13 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
     
   if( fVerbose > 1 )
     {
-      cout.precision(6);
+      G4cout.precision(6);
 
-      cout << " Return value = new volume = "
-           <<  (targetPhysical==0 ? G4String("None") :
-		                    targetPhysical->GetName() )  << endl;
+      G4String curPhysVol_Name("None");
+      if (targetPhysical!=0)
+	 curPhysVol_Name= targetPhysical->GetName();
+      G4cout << " Return value = new volume = "
+	     << curPhysVol_Name  << endl;
     }
 #endif
 
@@ -393,6 +398,9 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
     }
 #endif
 
+  static G4double fAccuracyForWarning=   kCarTolerance,
+                  fAccuracyForException= 1000*kCarTolerance;
+
   G4ThreeVector newLocalPoint =ComputeLocalPoint(pGlobalpoint);
   if( newLocalPoint != fLastLocatedPointLocal )
     {
@@ -432,17 +440,62 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 	G4double safetyPlus = safety + kCarTolerance;
 	assert( moveLenSq <= sqr(safetyPlus) );
 #endif 	
+	//  Check that the starting point of this step is 
+	//   within the isotropic safety sphere of the last point
+	//   to a accuracy/precision  given by 
+	//       fAccuracyForWarning
+	//   If so give warning.  If it fails by more than
+	//       fAccuracyForException
+        //   exit with error.
+  
 	if(  shiftOriginSafSq >= sqr(fPreviousSafety) ){
 	   G4double shiftOrigin=sqrt(shiftOriginSafSq);
-	   if( shiftOrigin > fPreviousSafety + kCarTolerance ){
-	      G4cerr << " ERROR in G4Navigator::ComputeStep: " << endl
-		   << "The Step's starting point has moved " << sqrt(moveLenSq)
-		   << " since the last call to one of the Locate methods " << endl
-		   << " This has resulted in moving " << shiftOrigin
-		   << " from the last point at which the safety was calculated "
-		   << endl 
-		   << " which is more than the computed safety= " 
-		   << fPreviousSafety << "at that point." << endl;
+	   G4double diffShiftSaf=  shiftOrigin - fPreviousSafety;
+	   G4bool isError; 
+
+	   if( diffShiftSaf > fAccuracyForWarning ){
+              isError = ( diffShiftSaf >= fAccuracyForException );
+	      G4cerr.precision(10);
+              if ( isError )
+		G4cerr << "Accuracy ERROR found in G4Navigator::ComputeStep: " << endl;
+              else
+		G4cerr << "Warning G4Navigator::ComputeStep found slightly inaccurate position:" << endl;
+
+	      G4cerr << "     The Step's starting point has moved " 
+		     << sqrt(moveLenSq)/mm << " mm " << endl
+		     << "     since the last call to a Locate method." << endl;
+	      G4cerr << "     This has resulted in moving " 
+		     << shiftOrigin/mm << " mm " 
+		     << " from the last point at which the safety " 
+		     << "     was calculated " << endl;
+	      G4cerr << "     which is more than the computed safety= " 
+		     << fPreviousSafety/mm << " mm  at that point." << endl;
+	      G4cerr << "     This difference is " 
+		     << diffShiftSaf /mm << " mm." << endl;
+
+#ifdef G4VERBOSE
+              static G4int warnNow= 0;
+	      if( ((++warnNow % 100) == 1) ) {   //  || (warnNow < 4) ){ 
+	          G4cerr << "  This problem can be due to either " << endl;
+		  G4cerr << "    - a process that has proposed a displacement"
+			 <<     " larger than the current safety , or" << endl;
+		  G4cerr << "    - inaccuracy in the computation of the safety" << endl;
+		  G4cerr << "    - if you are using a magnetic field, a known conflict about the safety exists in this case."
+			 << endl;
+		  G4cerr << "  We suggest that you " << endl
+                     <<  "   - find i) what particle is being tracked, and "
+			 << " ii) through what part of your geometry " << endl
+		     <<  "      for example by reruning this event with " << endl
+		     <<  "         /tracking/verbose 1 "  << endl
+                     << "    - check which processes you declare for this particle"
+			 << " (and look at non-standard ones) "  << endl
+                     <<  "   - if possible create a detailed logfile "
+		         << " of this event using:" << endl
+                     <<  "         /tracking/verbose 6 "
+                     << endl;
+	      }
+              // G4cerr << "    -  ." << endl;
+#endif 
 	   }
 #ifdef DEBUG
 	   else
@@ -454,7 +507,7 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 	   }
 #endif
 	}
-	G4double safetyPlus = fPreviousSafety+ kCarTolerance;
+	G4double safetyPlus = fPreviousSafety+ fAccuracyForException;
 	assert( shiftOriginSafSq <= sqr(safetyPlus) );
 
 	// Relocate the point within the same volume
@@ -518,6 +571,9 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
     }
   else
     {
+      // In the case of a replica, 
+      //   it must handles the exiting edge/corner problem by itself
+      G4bool exitingReplica= fExitedMother;
       Step=freplicaNav.ComputeStep(pGlobalpoint,
 				   pDirection,
 				   fLastLocatedPointLocal,
@@ -527,10 +583,12 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				   fHistory,
 				   fValidExitNormal,
 				   fExitNormal,
-				   fExiting,
+				   exitingReplica,
 				   fEntering,
 				   &fBlockedPhysicalVolume,
 				   fBlockedReplicaNo);
+      // still ok to set it ??
+      fExiting= exitingReplica;
      }
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
@@ -698,7 +756,7 @@ G4ThreeVector  G4Navigator::GetLocalExitNormal(G4bool* valid)
 }
 
 //   It assumes that it assumes that it will be 
-//  i) called with the Point equal to the EndPoint of the ComputeStep.
+//  i) called at the Point in the same volume as the EndPoint of the ComputeStep.
 // ii) after (or at the end of) ComputeStep OR after the relocation.
 
 G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
@@ -710,16 +768,19 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
   if( fVerbose > 0 ) 
     {
-      cout << "*** G4Navigator::ComputeSafety: ***" << endl; 
-      cout.precision(8);
-      cout << " I was called with the following arguments: " << endl
+      G4cout << "*** G4Navigator::ComputeSafety: ***" << endl; 
+      G4cout.precision(8);
+      G4cout << " I was called with the following arguments: " << endl
 	   << " Globalpoint = " << pGlobalpoint << endl;
       //       cout << "  pMaxLength  = " << pMaxLength  << endl;
 
-      cout << " Upon entering my state is: " << endl;
+      G4cout << " Upon entering my state is: " << endl;
       PrintState();
     }
 #endif
+
+  // Pseudo-relocate to this point (updates voxel information only).
+  LocateGlobalPointWithinVolume( pGlobalpoint );
 
   if( ! (fEnteredDaughter || fExitedMother ) )
     {
@@ -800,45 +861,51 @@ void  G4Navigator::PrintState()
 {
   if( fVerbose >= 4 )
     {
-      cout.precision(3);
-      cout << " Upon exiting my state is: " << endl;
-      cout << "  ValidExitNormal= " << fValidExitNormal << endl
+      G4cout.precision(3);
+      G4cout << " Upon exiting my state is: " << endl;
+      G4cout << "  ValidExitNormal= " << fValidExitNormal << endl
 	   << "  ExitNormal     = " << fExitNormal      << endl
 	   << "  Exiting        = " << fExiting         << endl
 	   << "  Entering       = " << fEntering        << endl
-	   << "  BlockedPhysicalVolume= " <<  (fBlockedPhysicalVolume==0 ? G4String("None") :
-					       fBlockedPhysicalVolume->GetName() )              << endl
+	   << "  BlockedPhysicalVolume= " ;
+      if (fBlockedPhysicalVolume==0 )
+	 G4cout << "None";
+      else
+ 	 G4cout << fBlockedPhysicalVolume->GetName();
+      G4cout << endl
 	   << "  BlockedReplicaNo     = " <<  fBlockedReplicaNo       << endl
 	   << "  LastStepWasZero      = " <<   fLastStepWasZero       << endl
 	   << endl;   
     }
   if( ( 1 < fVerbose) && (fVerbose < 4) )
     {
-      cout.precision(3);
-      cout << setw(18) << " ExitNormal "  << " "     
-	   << setw( 9) << " Valid "       << " "     
+      G4cout.precision(3);
+      G4cout << setw(18) << " ExitNormal "  << " "     
+	   << setw( 5) << " Valid "       << " "     
 	   << setw( 9) << " Exiting "     << " "      
 	   << setw( 9) << " Entering"     << " " 
 	   << setw(15) << " Blocked:Volume "  << " "   
 	   << setw( 9) << " ReplicaNo"        << " "  
 	   << setw( 8) << " LastStepZero  "   << " "   
 	   << endl;   
-      cout << setw(24)  << fExitNormal       << " "
-	   << setw( 3)  << fValidExitNormal  << " "   
+      G4cout << setw(18)  << fExitNormal       << " "
+	   << setw( 5)  << fValidExitNormal  << " "   
 	   << setw( 9)  << fExiting          << " "
-	   << setw( 9)  << fEntering         << " "
-	   << setw(15)  << (fBlockedPhysicalVolume==0 ? G4String("None") :
-				    fBlockedPhysicalVolume->GetName() )   << " "   
-	   << setw( 9)  << fBlockedReplicaNo  << " "
+	   << setw( 9)  << fEntering         << " ";
+      if (fBlockedPhysicalVolume==0 )
+	 G4cout << setw(15) << "None";
+      else
+ 	 G4cout << setw(15)<< fBlockedPhysicalVolume->GetName();
+      G4cout << setw( 9)  << fBlockedReplicaNo  << " "
 	   << setw( 8)  << fLastStepWasZero   << " "
 	   << endl;   
     }
   if( fVerbose > 2 ) 
     {
-      cout.precision(8);
-      cout << " Current Localpoint = " << fLastLocatedPointLocal << endl;
-      cout << " PreviousSftOrigin  = " << fPreviousSftOrigin << endl;
-      cout << " PreviousSafety     = " <<  fPreviousSafety << endl; 
+      G4cout.precision(8);
+      G4cout << " Current Localpoint = " << fLastLocatedPointLocal << endl;
+      G4cout << " PreviousSftOrigin  = " << fPreviousSftOrigin << endl;
+      G4cout << " PreviousSafety     = " <<  fPreviousSafety << endl; 
     }
 }
 

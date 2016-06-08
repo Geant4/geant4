@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.cc,v 2.1 1998/07/13 17:14:14 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MaterialPropertiesTable.cc,v 1.2 1999/04/14 12:49:03 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -32,8 +32,10 @@ unsigned hashString(const G4String &str) { return str.hash(); }
         //////////////
 
 G4MaterialPropertiesTable&
-G4MaterialPropertiesTable::operator =(const G4MaterialPropertiesTable &right)
+G4MaterialPropertiesTable::operator =(const G4MaterialPropertiesTable& right)
 {
+        if (this == &right) return *this;
+	
 	// clear any current contents of MPT
 
         MPT.clearAndDestroy();

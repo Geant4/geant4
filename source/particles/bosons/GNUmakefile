@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.0 1998/07/02 17:20:57 gunter Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:09:47 gunter Exp $
 # ----------------------------------------------------------
 # GNUmakefile for bosons library.  Gabriele Cosmo, 18/9/96.
 # ----------------------------------------------------------

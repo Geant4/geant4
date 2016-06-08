@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTable.hh,v 2.1 1998/11/18 09:46:04 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NucleiPropertiesTable.hh,v 1.5 1999/05/26 14:05:15 larazb Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997
@@ -28,6 +28,7 @@
 //
 // Migrate into particles category by H.Kurashige (17 Nov. 98)
 // Subtract electron mass by H.Kurashige
+// Avoid substraction of electron mass in Atomic masses by V.Lara (12 May 99)
 // -------------------------------------------------------------------
 #include "globals.hh"
 
@@ -65,61 +66,26 @@ public:
   // Other Operations 
 
   // Operation: GetMassExcess
-  static inline G4double GetMassExcess(G4int Z, G4int A) 
-  {
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) {
-	return MassExcess[i]*keV;
-    } else {
-        return 0.0;
-    }
-  }
+  static G4double GetMassExcess(G4int Z, G4int A); 
 
+
+	// Operation: GetNuclearMass
+	static G4double GetNuclearMass(G4int Z, G4int A);
 
   // Operation: GetBindingEnergy
-  static inline G4double GetBindingEnergy(G4int Z, G4int A)
-  {
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) return BindingEnergy[i]*keV;
-    else return 0.0;
-  }
+  static G4double GetBindingEnergy(G4int Z, G4int A);
 
   // Operation: GetBetaDecayEnergy
-  static inline G4double GetBetaDecayEnergy(G4int Z, G4int A)
-  {
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) return BetaEnergy[i]*keV;
-    else return 0.0;
-  }
+  static G4double GetBetaDecayEnergy(G4int Z, G4int A);
 
   // Operation: GetAtomicMass .. in Geant4 Energy units!
-  //   subtract electron mass  by H.K  
-  static inline G4double GetAtomicMass(G4int Z, G4int A)
-  {
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) {
-      return AtomicMass[i]*amu_c2-Z*electron_mass_c2;
-    } else {
-      return 0.0;
-    }
-  }
-
+  static G4double GetAtomicMass(G4int Z, G4int A);
 
   // Operation: GetName
-  static inline G4String GetName(G4int Z, G4int A)
-  {
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) return Name[i];
-    else return " ";
-  }
+  static const char*& GetName(G4int Z, G4int A);
 
   // Is the nucleus (A,Z) in table?
-  static inline G4bool IsInTable(G4int Z, G4int A)
-  {
-    if (Z <= A && A >= 1 && A <= 273 && GetIndex(Z, A) >= 0) return true;
-    else return false;
-  }
-
+  static G4bool IsInTable(G4int Z, G4int A);
 
   static G4int MaxZ(G4int A);
   static G4int MinZ(G4int A);
@@ -160,7 +126,8 @@ private:
 
   
   // Chemical Symbol
-  static G4String Name[nEntries];
+  static const char* Name[nEntries];
+  static const char* noName;
 
     
   // Table of Z (number of protons) and A (number of nucleons)
@@ -176,8 +143,67 @@ private:
 
 
 };
+  
+inline G4double G4NucleiPropertiesTable::GetMassExcess(G4int Z, G4int A) 
+{
+    G4int i=GetIndex(Z, A);
+    if (i >= 0) {
+		return MassExcess[i]*keV;
+    } else {
+        return 0.0;
+    }
+}
+
+inline G4double G4NucleiPropertiesTable::GetBindingEnergy(G4int Z, G4int A)
+{
+    G4int i=GetIndex(Z, A);
+    if (i >= 0){
+	    return BindingEnergy[i]*keV;
+    } else { 
+	    return 0.0;
+    }
+}
+
+inline G4double  G4NucleiPropertiesTable::GetBetaDecayEnergy(G4int Z, G4int A)
+{
+    G4int i=GetIndex(Z, A);
+    if (i >= 0){
+	 	return BetaEnergy[i]*keV;
+    } else { 
+		return 0.0;
+  	}
+}
+
+inline G4double  G4NucleiPropertiesTable::GetAtomicMass(G4int Z, G4int A)
+{
+    G4int i=GetIndex(Z, A);
+    if (i >= 0) {
+      return AtomicMass[i]*amu_c2;
+    } else {
+      return 0.0;
+    }
+}
+  
+inline const char*& G4NucleiPropertiesTable::GetName(G4int Z, G4int A)
+{
+    G4int i=GetIndex(Z, A);
+    if (i >= 0){
+	   	return Name[i];
+    } else { 
+		return noName;
+    }
+}
+
+inline G4bool G4NucleiPropertiesTable::IsInTable(G4int Z, G4int A)
+{
+    return (Z <= A && A >= 1 && A <= 273 && GetIndex(Z, A) >= 0);
+}
 
 
 #endif
+
+
+
+
 
 

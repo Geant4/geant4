@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.hh,v 2.4 1998/12/09 23:56:22 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VVisCommand.hh,v 1.3 1999/05/10 14:04:05 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -22,8 +22,9 @@ class G4UIcmdWithAString;
 
 class G4VVisCommand: public G4UImessenger {
 public:
-  // Uses compiler defaults for destructor, copy constructor and assignment.
+  // Uses compiler defaults for copy constructor and assignment.
   G4VVisCommand ();
+  virtual ~G4VVisCommand ();
   static void SetVisManager (G4VisManager*);
 protected:
   static G4VisManager* fpVisManager;

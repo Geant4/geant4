@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: meshdefs.hh,v 2.0 1998/07/02 16:57:08 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: meshdefs.hh,v 1.1 1999/01/07 16:07:19 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // Tube/Cone Meshing constants for extent calculations

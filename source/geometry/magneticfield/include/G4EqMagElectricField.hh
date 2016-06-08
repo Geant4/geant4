@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EqMagElectricField.hh,v 2.4 1998/11/18 16:36:22 grichine Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4EqMagElectricField.hh,v 1.1 1999/01/07 16:07:01 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  This is the right-hand side of equation of motion in a combined
 //   electric and magnetic field.

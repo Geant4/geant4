@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scintillation.cc,v 2.2 1998/12/02 16:35:00 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Scintillation.cc,v 1.2 1999/05/06 00:23:37 gum Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -170,7 +170,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		// Generate random photon direction
 
                 G4double cost = 1. - 2.*G4UniformRand();
-                G4double sint = sqrt((1.-cost)*(1.-cost));
+                G4double sint = sqrt((1.-cost)*(1.+cost));
 
 		G4double phi = 2*M_PI*G4UniformRand();
 		G4double sinp = sin(phi);

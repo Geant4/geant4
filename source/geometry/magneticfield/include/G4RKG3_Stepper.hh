@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RKG3_Stepper.hh,v 2.2 1998/11/10 18:16:50 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4RKG3_Stepper.hh,v 1.2 1999/02/12 12:30:39 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // J.Apostolakis, V.Grichine 30.01.97
@@ -17,7 +17,8 @@
 class G4RKG3_Stepper : public G4MagIntegratorStepper
 {
 public:
-        G4RKG3_Stepper(G4Mag_EqRhs *EqRhs): G4MagIntegratorStepper(EqRhs){};
+        G4RKG3_Stepper(G4Mag_EqRhs *EqRhs): G4MagIntegratorStepper(EqRhs,6){};
+                       // integrate over 6 variables only:  position & velocity
        ~G4RKG3_Stepper(){};
 
 	//  The method it must provide, even if less efficiently

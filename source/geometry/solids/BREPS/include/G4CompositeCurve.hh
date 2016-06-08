@@ -28,7 +28,8 @@ public:
 	
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);
 
-  virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
+  // virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
+  virtual G4int IntersectRay2D(const G4Ray& ray);
 
   virtual G4double  GetPMax();
   virtual G4Point3D GetPoint(G4double param);

@@ -69,6 +69,8 @@ private:
   // Kappa = V/V_0 it is used in calculation of Coulomb energy
   static const G4double Kappa;
 
+	// Nuclear radius r0 (is a model parameter)
+	static const G4double r0;
 
 
 

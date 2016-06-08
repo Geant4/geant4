@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.icc,v 2.2 1998/11/09 02:37:43 stanaka Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VMarker.icc,v 1.2 1999/05/12 16:10:55 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -26,18 +26,6 @@ inline G4VMarker::G4VMarker (const G4VMarker& marker):
   fFillStyle  (marker.fFillStyle),
   fInfo       (marker.fInfo)
 {}  
-
-
-inline G4VMarker& G4VMarker::operator = (const G4VMarker& right) {
-  ((G4VVisPrim*) this) -> operator = (right);
-  fPosition   = right.fPosition;
-  fWorldSize  = right.fWorldSize;  
-  fScreenSize = right.fScreenSize;
-  fFillStyle  = right.fFillStyle;
-  fInfo       = right.fInfo;
-
-  return *this;
-}
 
 inline G4VMarker::G4VMarker (const G4Point3D& pos):
   fPosition   (pos),

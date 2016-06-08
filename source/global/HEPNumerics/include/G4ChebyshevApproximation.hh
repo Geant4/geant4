@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChebyshevApproximation.hh,v 2.0 1998/07/02 17:31:58 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ChebyshevApproximation.hh,v 1.1 1999/01/07 16:08:53 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Class creating the Chebyshev approximation for a function pointed by fFunction
 // data member. The Chebyshev polinom approximation provides an efficient evaluation

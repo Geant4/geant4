@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCreateView.hh,v 2.3 1998/10/14 14:15:07 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisCommandsCreateView.hh,v 1.3 1999/01/11 00:48:24 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // /vis~/create_view/ commands
@@ -43,8 +43,8 @@ public:
   void SetValue () {
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
-      pVMan -> CreateScene ();
-      pVMan -> CreateView ();
+      pVMan -> CreateSceneHandler ();
+      pVMan -> CreateViewer ();
       if (pVMan -> GetVerboseLevel () > 1) {
 	pVMan -> PrintCurrentScene ();
       }
@@ -67,7 +67,7 @@ public:
   void SetValue () {
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
-      pVMan -> CreateView ();
+      pVMan -> CreateViewer ();
       if (pVMan -> GetVerboseLevel () > 1) {
 	pVMan -> PrintCurrentView ();
       }

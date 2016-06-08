@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parabola.hh,v 2.3 1998/10/20 16:31:26 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Parabola.hh,v 1.2 1999/01/14 16:01:38 broglia Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef __PARABOLICCURVE_H
@@ -24,7 +24,8 @@ public:
 
   virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);
 
-  virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
+  // virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
+  virtual G4int IntersectRay2D(const G4Ray& ray);
 
   virtual G4double  GetPMax();
   virtual G4Point3D GetPoint(G4double param);

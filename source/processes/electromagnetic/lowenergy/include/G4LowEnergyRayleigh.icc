@@ -1,0 +1,61 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4LowEnergyRayleigh.icc,v 1.7 1999/07/06 15:03:20 aforti Exp $
+// GEANT4 tag $Name: geant4-00-01 $
+//
+// 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file
+//
+//      For information related to this code contact:
+//      CERN, CN Division, ASD group
+//      History: first implementation, based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4LowEnergyRayleigh physics process ---------
+//                   by Michel Maire, April 1996
+// ***************************************************************
+// 10-06-96, updated by M.Maire
+// 06-01-97, crossection table + meanfreepath table, M.Maire
+// 12-03-97, new Physics scheme
+// 21-11-97, change for lowest energy limit default action
+// ---------------------------------------------------------------
+
+inline G4bool G4LowEnergyRayleigh::IsApplicable(const G4ParticleDefinition& particle){
+   return ( &particle == G4Gamma::Gamma() ); 	
+}
+
+inline G4double G4LowEnergyRayleigh::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*){
+
+// returns the gamma mean free path in GEANT4 internal units
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   G4bool isOutRange ;
+
+   if (GammaEnergy > HighestEnergyLimit){
+     MeanFreePath = DBL_MAX;
+   }	
+   else if(GammaEnergy < LowestEnergyLimit){
+
+	MeanFreePath = DBL_MIN;
+   }
+   else {
+
+       MeanFreePath = util.DataLogInterpolation(GammaEnergy, 
+	                                   aMaterial->GetIndex(), 
+                                           theMeanFreePathTable);	
+   }	
+
+   return MeanFreePath;
+}
+
+
+
+
+

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 2.8 1998/11/24 16:41:12 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4BSplineSurface.hh,v 1.2 1999/05/21 18:40:16 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef __BSPLINESURFACE_H
 #define __BSPLINESURFACE_H
@@ -54,7 +54,7 @@ public:
     bezier_list.EmptyList();
     projected_list.EmptyList();
     Intersected=0;
-    distance = INFINITY;
+    distance = kInfinity;
   }
 
   // get for controlpoints

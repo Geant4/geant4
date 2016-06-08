@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicInteraction.cc,v 2.2 1998/07/13 17:22:13 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HadronicInteraction.cc,v 1.1 1999/01/07 16:11:36 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Interaction  base class
  // original by H.P. Wellisch

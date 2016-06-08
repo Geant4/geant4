@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Colour.cc,v 2.1 1998/07/13 16:56:14 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Colour.cc,v 1.2 1999/05/25 09:10:20 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison 20th October 1996
@@ -19,12 +19,12 @@ ostream& operator << (ostream& os, const G4Colour& c) {
 	    << ',' << c.alpha << ')';
 }
 
-G4bool operator != (const G4Colour& c1, const G4Colour& c2) {
+G4bool G4Colour::operator != (const G4Colour& c) const {
   if (
-      (c1.red   != c2.red)   ||
-      (c1.green != c2.green) ||
-      (c1.blue  != c2.blue)  ||
-      (c1.alpha != c2.alpha)
+      (red   != c.red)   ||
+      (green != c.green) ||
+      (blue  != c.blue)  ||
+      (alpha != c.alpha)
       )
     return true;
   return false;

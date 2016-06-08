@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: instmgr.cc,v 2.3 1998/11/17 17:22:03 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: instmgr.cc,v 1.3 1999/05/21 20:21:09 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 /*
@@ -373,8 +373,6 @@ int InstMgr::GetIndex(const char* entityKeyword, int starting_index)
 {
   // L. Broglia
   // When the entity is founded, put return index
-
-  G4cout<<"Warning : GetSTEPentity modified by L. Broglia"<<endl;
 
   MgrNode *node;
   STEPentity *se;

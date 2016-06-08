@@ -1,4 +1,4 @@
-// $Id: ExE01PhysicsList.hh,v 1.1 1998/10/14 15:19:38 allison Exp $
+// $Id: ExE01PhysicsList.hh,v 1.2 1999/04/17 04:06:41 kurasige Exp $
 // ------------------------------------------------------------
 #ifndef ExE01PhysicsList_h
 #define ExE01PhysicsList_h 1
@@ -18,7 +18,7 @@ class ExE01PhysicsList: public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     // 
-    virtual void SetCuts(G4double cut);
+    virtual void SetCuts();
     
   protected:
     // these methods Construct particles 

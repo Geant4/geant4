@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PionPlus.cc,v 2.2 1998/09/24 06:09:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PionPlus.cc,v 1.2 1999/06/09 16:07:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -75,7 +75,7 @@ G4PionPlus::G4PionPlus(
 
 // In this version, charged pions are set to stable
 G4PionPlus G4PionPlus::thePionPlus(
-		 "pi+",  0.1395700*GeV,       0.0*MeV,    +1.*eplus, 
+		 "pi+",  0.1395700*GeV,  2.5284e-14*MeV,    +1.*eplus, 
 		    0,              -1,             0,          
 		    2,              +2,            -1,             
 	      "meson",               0,             0,         211,

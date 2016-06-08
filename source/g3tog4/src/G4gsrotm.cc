@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsrotm.cc,v 2.4 1998/11/07 04:12:16 lockman Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4gsrotm.cc,v 1.4 1999/05/26 03:50:18 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include "G4ThreeVector.hh"
 #include "G3toG4.hh"
@@ -20,12 +20,14 @@ void PG4gsrotm(RWCString tokens[])
 
     // interpret the parameters
     G4int irot = Ipar[0];
+    
+    // the angles in Geant are in degrees
     G4double theta1 = Rpar[0];
-    G4double phi1 = Rpar[1];
+    G4double phi1   = Rpar[1];
     G4double theta2 = Rpar[2];
-    G4double phi2 = Rpar[3];
+    G4double phi2   = Rpar[3];
     G4double theta3 = Rpar[4];
-    G4double phi3 = Rpar[5];
+    G4double phi3   = Rpar[5];
 
     G4gsrotm(irot, theta1,phi1, theta2,phi2, theta3,phi3);
 }
@@ -65,11 +67,11 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
     
     G3toG4RotationMatrix* rotp = new G3toG4RotationMatrix;
 
-    rotp->SetRotationMatrixByRow(x,y,z);
+    rotp->SetRotationMatrixByRow(x, y, z);
     
         // add it to the List
 
-    G3Rot.put(&irot, rotp);
+    G3Rot.Put(irot, rotp);
 }
 
 

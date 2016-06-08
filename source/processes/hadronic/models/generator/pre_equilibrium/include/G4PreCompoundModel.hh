@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PreCompoundModel.hh,v 1.5 1998/12/12 12:32:22 larazb Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PreCompoundModel.hh,v 1.4 1999/04/15 12:10:14 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // by V. Lara
 
@@ -28,6 +28,7 @@
 #include "G4VPreCompoundFragment.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4ExcitationHandler.hh"
+#include "G4Fragment.hh"
 #include "Randomize.hh"
 
 
@@ -58,7 +59,7 @@ private:
 public:
   G4VParticleChange * ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus);
   
-  G4DynamicParticleVector* DeExcite(const G4Fragment& aFragment) const;
+  G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
 
 private:  
 
@@ -75,11 +76,14 @@ private:
 
 
 
-  G4ThreeVector IsotropicRandom3Vetor(G4double Magnitude = 1.0) const;
+  G4ThreeVector IsotropicRandom3Vector(G4double Magnitude = 1.0) const;
 
 
   void PerformEquilibriumEmission(const G4Fragment & aFragment, 
-				  G4DynamicParticleVector * theResult) const;
+				  G4ReactionProductVector * theResult) const;
+
+	G4ParticleMomentum RotateMomentum(G4ParticleMomentum Pa, G4ParticleMomentum V,
+				    G4ParticleMomentum P) const;
 
 };
 

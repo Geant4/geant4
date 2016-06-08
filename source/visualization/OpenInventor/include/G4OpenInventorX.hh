@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorX.hh,v 2.0 1998/07/02 16:47:27 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenInventorX.hh,v 1.3 1999/05/10 15:38:58 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -22,6 +22,7 @@
 class G4OpenInventorX: public G4OpenInventor {
 public:
   G4OpenInventorX ();
+  virtual ~G4OpenInventorX ();
 };
 
 #endif

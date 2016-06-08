@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEKaonMinusInelastic.cc,v 2.4 1998/12/14 15:33:15 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4LEKaonMinusInelastic.cc,v 1.1 1999/01/07 16:12:45 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: Low Energy KaonMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 12-Feb-1997

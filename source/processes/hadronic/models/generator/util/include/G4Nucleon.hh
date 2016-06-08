@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleon.hh,v 1.1 1998/08/22 08:57:56 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Nucleon.hh,v 1.2 1999/04/15 08:53:32 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4Nucleon_h
 #define G4Nucleon_h 1
@@ -67,7 +67,7 @@ class G4Nucleon : public G4VKineticNucleon
     inline void Hit(G4VSplitableHadron * aHit) { theSplitableHadron=aHit;}
     inline G4VSplitableHadron * GetSplitableHadron() const { return theSplitableHadron;}
     
-    inline G4bool AreYouHit() 
+    inline G4bool AreYouHit() const 
     { 
       G4bool result = true;
       if (theSplitableHadron==NULL) result = false;
@@ -85,6 +85,7 @@ class G4Nucleon : public G4VKineticNucleon
 
 };
 
+ostream & operator << (ostream &, const G4Nucleon&);
 
 inline int G4Nucleon::operator==(const G4Nucleon &right) const
 {

@@ -5,85 +5,31 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.cc,v 2.1 1998/07/12 02:54:18 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G3MedTable.cc,v 1.6 1999/05/28 21:08:58 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
+
+#include "globals.hh"
 #include "G3MedTable.hh"
+#include "G4Material.hh"
 
-RWBoolean MedTableMatch(const MedTableEntry *MedTentry, const void *pt)
-{
-    G4int medid;
-    medid = *((G4int*) pt);
-    if (MedTentry->medid == medid)
-        {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-}
+G3MedTable::G3MedTable(){
+  _Med = new 
+    RWTPtrOrderedVector<G4Material>;
+};
 
-G3MedTable::G3MedTable()
-{
-    MedTable = &MedT;
-}
+G3MedTable::~G3MedTable(){
+  _Med->clear();
+  delete _Med;
+  G4cout << "Deleted G3MedTable..." << endl;
+};
 
-G3MedTable::~G3MedTable()
-{
-    while (! MedTable->isEmpty()) {
-        MedTableEntry *MedTentry = MedTable->last();
-        MedTable->removeReference(MedTentry);
-        delete MedTentry;
-    }
-    delete MedTable;
-}
+G4Material*
+G3MedTable::get(G4int MedID){
+  return (*_Med)[MedID-1];
+};
 
-G4Material *G3MedTable::GetMat(G4int medid)
-{
-    const void *pt;
-    pt = &medid;
-    MedTableEntry *MedTentry = MedTable->find(MedTableMatch, pt);
-    if (MedTentry == NULL) {
-        return NULL;
-    } else {
-        return MedTentry->matpt;
-    }
-}
-
-G4MagneticField *G3MedTable::GetMag(G4int medid)
-{
-    const void *pt;
-    pt = &medid;
-    MedTableEntry *MedTentry = MedTable->find(MedTableMatch, pt);
-    if (MedTentry == NULL) {
-        return NULL;
-    } else {
-        return MedTentry->magpt;
-    }
-}
-
-G4UserLimits *G3MedTable::GetLim(G4int medid)
-{
-    const void *pt;
-    pt = &medid;
-    MedTableEntry *MedTentry = MedTable->find(MedTableMatch, pt);
-    if (MedTentry == NULL) {
-        return NULL;
-    } else {
-        return MedTentry->limpt;
-    }
-}
-
-void G3MedTable::put( G4int medid, G4Material *matpt, G4MagneticField *magpt,
-                      G4UserLimits *limpt, G4int isvol, 
-                      G4double deemax, G4double epsil)
-{
-    MedTableEntry *MedTentry = new MedTableEntry;
-    MedTentry->medid = medid;
-    MedTentry->matpt = matpt;
-    MedTentry->magpt = magpt;
-    MedTentry->limpt = limpt;
-    MedTentry->isvol = isvol;
-    MedTentry->deemax = deemax;
-    MedTentry->epsil = epsil;
-    MedTable->insert(MedTentry);
-}
+void 
+G3MedTable::put(G4int MedID, G4Material* MatPT){
+  _Med->insertAt(MedID-1, MatPT);
+};

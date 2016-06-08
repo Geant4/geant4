@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05CalorimeterHit.hh,v 2.2 1998/07/12 02:42:10 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05CalorimeterHit.hh,v 1.2 1999/05/19 09:50:30 fbehner Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef ExN05CalorimeterHit_h
@@ -34,6 +34,10 @@ class ExN05CalorimeterHit : public G4VHit
 
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
+      void *operator new(size_t,void*p){return p;}
+#ifndef G4NOT_ISO_DELETES
+      void operator delete(void *aHit,void*){}
+#endif
 
       void Draw();
       void Print();
@@ -81,5 +85,6 @@ inline void ExN05CalorimeterHit::operator delete(void *aHit)
 }
 
 #endif
+
 
 

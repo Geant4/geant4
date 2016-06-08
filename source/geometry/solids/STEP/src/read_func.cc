@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: read_func.cc,v 2.2 1998/07/13 16:54:28 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: read_func.cc,v 1.2 1999/05/21 20:21:10 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifdef __O3DB__
 #include <OpenOODB.h>

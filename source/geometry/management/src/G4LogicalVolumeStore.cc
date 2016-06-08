@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeStore.cc,v 2.1 1998/07/12 02:55:38 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4LogicalVolumeStore.cc,v 1.2 1999/05/10 17:08:53 fbehner Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4LogicalVolumeStore
 //
@@ -27,7 +27,7 @@ G4LogicalVolumeStore::G4LogicalVolumeStore() : RWTPtrOrderedVector<G4LogicalVolu
 // Destructor
 G4LogicalVolumeStore::~G4LogicalVolumeStore()
 {
- while (!isEmpty()) delete first();
+ while (!isEmpty()) removeFirst();
 }
 
 // Static class variable

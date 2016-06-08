@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWo.hh,v 2.3 1998/10/23 14:42:27 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIWo.hh,v 1.2 1999/04/13 01:26:20 yhajime Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4UIWo_h
 #define G4UIWo_h 

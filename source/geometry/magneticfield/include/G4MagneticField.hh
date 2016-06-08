@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagneticField.hh,v 2.4 1998/11/19 20:45:02 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MagneticField.hh,v 1.1 1999/01/07 16:07:06 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //  Magnetic Field abstract class,  implements inquiry function interface.

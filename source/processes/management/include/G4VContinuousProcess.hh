@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VContinuousProcess.hh,v 2.4 1998/10/16 13:21:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VContinuousProcess.hh,v 1.2 1999/04/13 09:45:10 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -46,9 +46,9 @@ class G4VContinuousProcess : public G4VProcess
 			   G4ProcessType   aType = fNotDefined );
       G4VContinuousProcess(G4VContinuousProcess &);
 
-      ~G4VContinuousProcess();
+      virtual ~G4VContinuousProcess();
 
-      G4double AlongStepGetPhysicalInteractionLength(
+      virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double  previousStepSize,
 			     G4double  currentMinimumStep,
@@ -56,33 +56,33 @@ class G4VContinuousProcess : public G4VProcess
                              G4GPILSelection* selection
 			    );
 
-       G4VParticleChange* AlongStepDoIt(
+      virtual G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
 			    );
 
      //  no operation in  AtRestDoIt and  PostStepDoIt
-      G4double PostStepGetPhysicalInteractionLength(
+      virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track&,
 			     G4double,
 			     G4ForceCondition* 
 			    ){ return -1.0; };
 
-      G4double AtRestGetPhysicalInteractionLength(
+      virtual G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,
 			     G4ForceCondition* 
 			    ) { return -1.0; };
 
      //  no operation in  AtRestDoIt and PostStepDoIt
-       G4VParticleChange* AtRestDoIt(
+      virtual G4VParticleChange* AtRestDoIt(
 			     const G4Track& ,
 			     const G4Step&
-			    ) {return NULL;};
+			    ) {return 0;};
 
-       G4VParticleChange* PostStepDoIt(
+      virtual G4VParticleChange* PostStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
-			    ) {return NULL;};
+			    ) {return 0;};
  
   protected:
     virtual G4double GetContinuousStepLimit(const G4Track& aTrack,

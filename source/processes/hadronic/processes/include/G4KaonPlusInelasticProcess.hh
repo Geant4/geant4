@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonPlusInelasticProcess.hh,v 2.0 1998/07/02 16:36:26 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KaonPlusInelasticProcess.hh,v 1.1 1999/01/07 16:13:34 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: KaonPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Feb-1997

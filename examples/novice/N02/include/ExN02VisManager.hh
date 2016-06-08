@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02VisManager.hh,v 1.3 1998/10/09 14:31:09 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02VisManager.hh,v 1.2 1999/06/24 07:48:46 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 
@@ -31,6 +31,8 @@
 #ifndef ExN02VisManager_h
 #define ExN02VisManager_h 1
 
+#ifdef G4VIS_USE
+
 #include "G4VisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -46,5 +48,7 @@ private:
   void RegisterGraphicsSystems ();
 
 };
+
+#endif
 
 #endif

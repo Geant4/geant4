@@ -100,7 +100,7 @@
         result.SetA(myA);
         result.SetZ(myZ);
       }
-      if (abs(myZ-Z)>5||myZ==0||myA==0)
+      if (abs(myZ-Z)>theMaxOffSet||myZ==0||myA==0)
         if(inc>0)
         {
           inc*= -1;
@@ -116,7 +116,7 @@
           theFileName = "";
           return result;
         }
-      if (abs(myA-A)>5)
+      if (abs(myA-A)>theMaxOffSet)
       {
         first = true;
         myA = A;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.3 1998/12/09 07:30:23 gunter Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.2 1999/04/12 15:45:54 hpw Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -36,6 +36,10 @@ class G4DiffractiveExcitation
 
       G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
       G4ExcitedString * String(G4VSplitableHadron * aHadron, G4bool isProjectile) const;
+      
+//      void SetPtWidth(G4double aValue) { widthOfPtSquare = aValue*aValue; }
+//      void SetExtraMass(G4double aValue) { minExtraMass = aValue; }
+//      void SetMinimumMass(G4double aValue) { minmass = aValue; }
 
 
   private:

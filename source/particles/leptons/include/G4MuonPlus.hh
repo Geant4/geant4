@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonPlus.hh,v 2.3 1998/09/24 05:49:53 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MuonPlus.hh,v 1.2 1999/04/13 08:20:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -58,12 +58,14 @@ class G4MuonPlus : public G4VLepton
     );
 
  public:
+   virtual ~G4MuonPlus(){}
+
    static G4MuonPlus* MuonPlusDefinition();
    static G4MuonPlus* MuonPlus();
    static G4double  GetCuts() {return theMuonPlusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theMuonPlusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4MuonPlus::SetCuts(G4double aCut)

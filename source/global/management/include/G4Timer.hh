@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 2.2 1998/07/17 08:51:44 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Timer.hh,v 1.6 1999/05/24 20:39:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -83,7 +83,7 @@
    };
 #endif  /* WIN32 */
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 class ostream;
 
@@ -125,4 +125,9 @@ inline G4bool G4Timer::IsValid() const
     return fValidTimes;
 }
 
+#ifdef G4USE_STL
+  #define times ostimes
 #endif
+
+#endif
+

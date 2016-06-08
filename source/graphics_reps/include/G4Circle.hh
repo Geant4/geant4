@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Circle.hh,v 2.0 1998/07/02 17:30:39 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Circle.hh,v 1.2 1999/06/05 15:13:10 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  17/11/96.
@@ -17,11 +17,22 @@
 #include "G4VMarker.hh"
 
 class G4Circle: public G4VMarker {
+
 public:
+
   G4Circle ();
   G4Circle (const G4Point3D& pos);
   G4Circle (const G4VMarker& marker);
-};
+  virtual ~G4Circle ();
+
+  //////////////////////////////////////////////////////
+  // Assignment...
+  virtual G4Visible&  operator = (const G4Visible& right);
+  virtual G4VVisPrim& operator = (const G4VVisPrim& right);
+  virtual G4VMarker&  operator = (const G4VMarker& right);
+  virtual G4Circle &  operator = (const G4Circle& right);
+
+ };
 
 #include "G4Circle.icc"
 

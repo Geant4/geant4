@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 2.10 1998/11/17 10:59:19 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PhotoElectricEffect.cc,v 1.7 1999/06/08 13:29:23 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -30,6 +30,9 @@
 // 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of Atomic shells in PostStepDoIt
+// 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma
+// 20-05-99, protection against very low energy photons ,L.Urban
+// 08-06-99, removed this above protection from the DoIt. mma
 // --------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -44,7 +47,7 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName)
   : G4VDiscreteProcess (processName),             // initialization
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),
-    LowestEnergyLimit (10*keV),
+    LowestEnergyLimit (50*keV),
     HighestEnergyLimit(50*MeV),
     NumbBinTable(100)
 { }
@@ -143,7 +146,7 @@ void G4PhotoElectricEffect::BuildPhysicsTable(const G4ParticleDefinition& Photon
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4double G4PhotoElectricEffect::ComputeCrossSectionPerAtom (G4double PhotonEnergy,
-                                                                G4double AtomicNumber)
+                                                            G4double AtomicNumber)
  
 // Calculates the microscopic cross section in GEANT4 internal units.
 // A parametrized formula from L. Urban is used to estimate the total cross section.
@@ -195,6 +198,21 @@ G4double G4PhotoElectricEffect::ComputeCrossSectionPerAtom (G4double PhotonEnerg
 
  return CrossSection;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+                                                          
+G4double G4PhotoElectricEffect::ComputeSandiaCrossSection(G4double PhotonEnergy,
+                                                          G4double AtomicNumber)
+{  
+  G4double energy2 = PhotonEnergy*PhotonEnergy, energy3 = PhotonEnergy*energy2, 
+           energy4 = energy2*energy2;
+
+  G4double* SandiaCof 
+           = G4SandiaTable::GetSandiaCofPerAtom((int)AtomicNumber,PhotonEnergy);
+
+  return SandiaCof[0]/PhotonEnergy + SandiaCof[1]/energy2 +
+	 SandiaCof[2]/energy3      + SandiaCof[3]/energy4; 
+}
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -206,15 +224,13 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
 // GEANT4 internal units
 //
  
-{
-   aParticleChange.Initialize(aTrack);
+{  aParticleChange.Initialize(aTrack);
    G4Material* aMaterial = aTrack.GetMaterial();
 
    const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
 
    G4double PhotonEnergy = aDynamicPhoton->GetKineticEnergy();
    G4ParticleMomentum PhotonDirection = aDynamicPhoton->GetMomentumDirection();
-
    
    // select randomly one element constituing the material.
    G4Element* anElement = SelectRandomAtom(aDynamicPhoton, aMaterial);
@@ -250,14 +266,11 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    //
    // Kill the incident photon 
    //
-
-   aParticleChange.SetMomentumChange( 0., 0., 0. ) ;
-   aParticleChange.SetEnergyChange( 0. ) ;
-   aParticleChange.SetLocalEnergyDeposit( PhotonEnergy - ElecKineEnergy ) ;  
-   aParticleChange.SetStatusChange( fStopAndKill ) ; 
+   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);  
+   aParticleChange.SetStatusChange(fStopAndKill); 
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
-   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
+   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -275,26 +288,25 @@ G4PhotoElectricEffect::SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,
   const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
 
   G4double PartialSumSigma = 0. ;
-  G4double rval = G4UniformRand()/MeanFreePath;
+  G4double rval = G4UniformRand();
  
   for ( G4int elm=0 ; elm < NumberOfElements ; elm++ )
       { PartialSumSigma += NbOfAtomsPerVolume[elm] *
                    GetCrossSectionPerAtom(aDynamicPhoton,
                                           (*theElementVector)(elm));
-        if (rval <= PartialSumSigma) return ((*theElementVector)(elm));
+        if (rval <= PartialSumSigma*MeanFreePath) return ((*theElementVector)(elm));
       }
-  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
-  return NULL;
+  return ((*theElementVector)(NumberOfElements-1));    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PhotoElectricEffect::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
+  G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 10 KeV to 50 MeV for all Z";
-                     
+           comments += "Sandia crossSection below 50 KeV";
+	             
   G4cout << endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.1 1998/08/22 08:55:58 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.2 1999/07/06 07:28:06 fjones Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -15,6 +15,8 @@
 //      For information related to this code contact:
 //      CERN, CN Division, ASD Group
 //      History: first implementation, A. Feliciello, 30th June 1998
+//               Removed delete of DeExcitation model, deleted elsewhere.
+//                  F.W.Jones, 06-JUL-99
 // -----------------------------------------------------------------------------
 
 #include "G4VIntraNuclearTransportModel.hh"
@@ -42,7 +44,8 @@ G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right)
 G4VIntraNuclearTransportModel::~G4VIntraNuclearTransportModel()
 {
   if(the3DNucleus!=NULL) delete the3DNucleus;
-  if(theDeExcitation!=NULL) delete theDeExcitation;
+  // This is deleted by ~G4HadronicInteractionRegistry
+  // if(theDeExcitation!=NULL) delete theDeExcitation;
 }
 
 

@@ -5,17 +5,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: EXPO.cc,v 2.3 1998/08/12 14:21:12 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: EXPO.cc,v 1.4 1999/05/18 13:27:23 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #include <stdlib.h>
 
-/*G4*/
-#if defined(SOLVE_TEMPLATES) && !defined(G4_SOLVE_TEMPLATES)
-#define G4_SOLVE_TEMPLATES
-#endif
-#include <g4templates.hh>  /*Before any G4 include file.*/
+/*Geant4*/
 #include <G4RunManager.hh>
+
+#ifdef __sun
+#include "EXPO_Templates.hh"
+// This :
+/*
+template class RWTValOrderedVector<MyTrackerHit>;
+template class RWTValOrderedVector<MyCalorimeterHit>;
+template class RWTValVector<MyTrackerHit>;
+template class RWTValVector<MyCalorimeterHit>;
+template class G4Allocator<MyCalorimeterHit>;
+template class G4Allocator<MyTrackerHit>;
+*/
+#endif
+
 
 /*OPACS*/
 /*begin Want_h*/
@@ -68,8 +78,7 @@ public:
   ~EXPO_RunAction() {
     delete timer;
   }
-  void BeginOfRunAction(G4Run* aRun) {
-    aRun->SetRunID(runIDcounter++);
+  void BeginOfRunAction(const G4Run* aRun) {
     CWarnF ("### Run %d start.\n",aRun->GetRunID());
     timer->Start();
 #ifdef HAS_HO
@@ -78,7 +87,7 @@ public:
     myHisto2D = OHistogramGetIdentifier("HepJamesVsDRand48");
 #endif /*HAS_HO*/
   }
-  void EndOfRunAction(G4Run* aRun) {
+  void EndOfRunAction(const G4Run* aRun) {
     timer->Stop();
     if (timer->IsValid()) {
       CWarnF ("number of event = %d User=%gs Real=%gs Sys=%gs\n",
@@ -112,9 +121,9 @@ public:
   }
   ~EXPO_EventAction() {
   }
-  void BeginOfEventAction() {
+  void BeginOfEventAction(const G4Event*) {
   }
-  void EndOfEventAction() {
+  void EndOfEventAction(const G4Event*) {
   }
 };
 
@@ -126,7 +135,7 @@ private:
 public:
   EXPO_SteppingAction(){};
   ~EXPO_SteppingAction(){};
-  void UserSteppingAction() {
+  void UserSteppingAction(const G4Step*) {
 #ifdef HAS_HO
     OHistogram h1 = EXPO_RunAction::get_1d();
     OHistogram h2 = EXPO_RunAction::Get2d();

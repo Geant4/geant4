@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPartonStringModel.cc,v 1.10 1998/12/16 14:59:13 gugu Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VPartonStringModel.cc,v 1.2 1999/04/15 09:32:43 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -103,6 +103,10 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 // 	G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << endl; 	
 // 	G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << endl;
 //  	G4cout << " strings["<<astring<<"] Position " << strings->at(astring)->GetPosition() << endl;
+// 	G4cout << "Parton Left  " << strings->at(astring)->GetLeftParton()->Get4Momentum() << endl;
+// 	G4cout << " code " << strings->at(astring)->GetLeftParton()->GetPDGcode()<< endl;
+// 	G4cout << "Parton Right  " << strings->at(astring)->GetRightParton()->Get4Momentum() << endl;
+// 	G4cout << " code " << strings->at(astring)->GetRightParton()->GetPDGcode()<< endl;
   
   	generatedKineticTracks=stringFragmentationModel->FragmentString(*strings->at(astring));
 
@@ -110,7 +114,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 
 	if (generatedKineticTracks == NULL) 
 	{
-		G4cout << "No KineticTracks produced" << endl;
+		G4cout << "G4VPartonStringModel:No KineticTracks produced" << endl;
 		continue;
 	}
 	
@@ -142,13 +146,13 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 //	G4cout << " KTsum Momentum " << KTsum << endl;
 //	G4cout << " KTsum  Mass     " << KTsum.mag() << endl;
 	
-	if  ( abs( KTsum1.e() -  strings->at(astring)->Get4Momentum().e() ) > 1. ) 
+	if  ( abs( KTsum1.e() -  strings->at(astring)->Get4Momentum().e() ) > 1. * MeV ) 
 	{
 	   NeedEnergyCorrector=true;
 	   
 // 	   G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << endl;  
-// 	   G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << endl;
-// 	   G4cout <<" number of generated tracks : " << generatedKineticTracks->entries() << endl;
+//  	   G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << endl;
+//  	   G4cout <<" number of generated tracks : " << generatedKineticTracks->entries() << endl;
 // 	   for ( G4int bTrack=0; bTrack<generatedKineticTracks->entries();bTrack++)
 // 	   {
 // 	   	G4cout << " Particle : " << 

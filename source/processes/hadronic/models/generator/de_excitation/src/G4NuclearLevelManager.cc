@@ -20,6 +20,10 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added half-life, angular momentum, parity, emissioni type
+//              reading from experimental data. 
+//      
 // -------------------------------------------------------------------
 
 #include "G4NuclearLevelManager.hh"
@@ -29,13 +33,17 @@
 #include "G4ios.hh"
 #include <stdlib.h>
 #include <fstream.h>
+#ifdef WIN32
+#include <strstrea.h>
+#else
 #include <strstream.h>
+#endif
 
 G4NuclearLevelManager::G4NuclearLevelManager():
-  _A(0), _Z(0), _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
+  _nucleusA(0), _nucleusZ(0), _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
 { }
 
-G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A): _Z(Z), _A(A)
+G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A): _nucleusZ(Z), _nucleusA(A)
 { 
 
 
@@ -59,10 +67,10 @@ G4NuclearLevelManager::~G4NuclearLevelManager()
 
 void G4NuclearLevelManager::SetNucleus(G4int Z, G4int A)
 {
-  if (_Z != Z || _A != A)
+  if (_nucleusZ != Z || _nucleusA != A)
     {
-      _A = A;
-      _Z = Z;
+      _nucleusA = A;
+      _nucleusZ = Z;
       MakeLevels();
     }
 
@@ -74,15 +82,18 @@ G4bool G4NuclearLevelManager::IsValid(G4int Z, G4int A) const
 
   if (A < 0 || Z < 0 || A < Z) valid = false;
 
-  G4String dirName = getenv("G4LEVELGAMMADATA");
+  char* env = getenv("G4LEVELGAMMADATA");
+  if (env == 0)
+    G4Exception("G4NuclearLevelManager - Please set the G4LEVELGAMMADATA environment variable");
+  G4String dirName(env);
   char name[100] = {""};
   ostrstream ost(name, 100, ios::out);
   ost << dirName << "/" << "z" << Z << ".a" << A;
   G4String file(name); 
-
+  
   ifstream inFile(file);
   if (! inFile) valid = false;  
-  
+
   return valid;
 }
 
@@ -171,9 +182,11 @@ G4bool G4NuclearLevelManager::Read(ifstream& dataFile)
 
   if (dataFile >> _levelEnergy)
     {
-      dataFile >> _gammaEnergy >> _probability;
+      dataFile >> _gammaEnergy >> _probability >> _polarity >> _halfLife
+	       >> _angularMomentum;
       _levelEnergy *= keV;
       _gammaEnergy *= keV;
+      _halfLife *= second;
 
       // The following adjustment is needed to take care of anomalies in 
       // data files, where some transitions show up with relative probability
@@ -193,17 +206,20 @@ G4bool G4NuclearLevelManager::Read(ifstream& dataFile)
 
 void G4NuclearLevelManager::MakeLevels()
 {
-  G4String dirName = getenv("G4LEVELGAMMADATA");
+  char* env = getenv("G4LEVELGAMMADATA");
+  if (env == 0)
+    G4Exception("G4NuclearLevelManager: please set the G4LEVELGAMMADATA environment variable");
+  G4String dirName(env);
   char name[100] = {""};
   ostrstream ost(name, 100, ios::out);
-  ost << dirName << "/" << "z" << _Z << ".a" << _A;
+  ost << dirName << "/" << "z" << _nucleusZ << ".a" << _nucleusA;
   G4String file(name); 
-
+  
   ifstream inFile(file, ios::in);
   
   if (! inFile) 
     {
-      //      G4cout << " G4NuclearLevelManager: (" << _Z << "," << _A 
+      //      G4cout << " G4NuclearLevelManager: (" << _nucleusZ << "," << _nucleusA 
       //  	     << ") does not have LevelsAndGammas file" << endl;
       return;
     }
@@ -219,12 +235,18 @@ void G4NuclearLevelManager::MakeLevels()
   G4DataVector eLevel;
   G4DataVector eGamma;
   G4DataVector wGamma;
+  G4DataVector pGamma; // polarity
+  G4DataVector hLevel; // half life
+  G4DataVector aLevel; // angular momentum
 
   while (Read(inFile))
     {
       eLevel.insert(_levelEnergy);
       eGamma.insert(_gammaEnergy);
       wGamma.insert(_probability);
+      pGamma.insert(_polarity);
+      hLevel.insert(_halfLife);
+      aLevel.insert(_angularMomentum);
     }
 
   // ---- MGP ---- Don't forget to close the file 
@@ -235,8 +257,11 @@ void G4NuclearLevelManager::MakeLevels()
   //  G4cout << " ==== MakeLevels ===== " << nData << " data read " << endl;
 
   G4double thisLevelEnergy = eLevel.at(0);
+  G4double thisLevelHalfLife = 0.;
+  G4double thisLevelAngMom = 0.;
   G4DataVector thisLevelEnergies;
   G4DataVector thisLevelWeights;
+  G4DataVector thisLevelPolarities;
 
   G4double e = -1.;
   G4int i;
@@ -244,26 +269,39 @@ void G4NuclearLevelManager::MakeLevels()
     {
       e = eLevel.at(i);
       if (e != thisLevelEnergy)
-	{
-	  //	  G4cout << "Making a new level... " << e << " " 
-	  //		 << thisLevelEnergies.entries() << " " 
-	  //		 << thisLevelWeights.entries() << endl;
-
-	  G4NuclearLevel* newLevel = new G4NuclearLevel(thisLevelEnergy,thisLevelEnergies,thisLevelWeights);
+      {
+	//	  G4cout << "Making a new level... " << e << " " 
+	//		 << thisLevelEnergies.entries() << " " 
+	//		 << thisLevelWeights.entries() << endl;
+	
+	G4NuclearLevel* newLevel = new G4NuclearLevel(thisLevelEnergy,
+						      thisLevelHalfLife,
+						      thisLevelAngMom,
+						      thisLevelEnergies,
+						      thisLevelWeights,
+						      thisLevelPolarities);
 	  _levels->insert(newLevel);
 	  // Reset data vectors
 	  thisLevelEnergies.clear();
 	  thisLevelWeights.clear();
+	  thisLevelPolarities.clear();
 	  thisLevelEnergy = e;
 	}
       // Append current data
       thisLevelEnergies.insert(eGamma.at(i));
       thisLevelWeights.insert(wGamma.at(i));
+      thisLevelPolarities.insert(pGamma.at(i));
+      thisLevelHalfLife = hLevel.at(i);
+      thisLevelAngMom = aLevel.at(i);
     }
   // Make last level
   if (e > 0.)
     {
-      G4NuclearLevel* newLevel = new G4NuclearLevel(e,thisLevelEnergies,thisLevelWeights);
+      G4NuclearLevel* newLevel = new G4NuclearLevel(e,thisLevelHalfLife,
+						    thisLevelAngMom,
+						    thisLevelEnergies,
+						    thisLevelWeights,
+						    thisLevelPolarities);
       _levels->insert(newLevel);
     }
 
@@ -276,10 +314,11 @@ void G4NuclearLevelManager::PrintAll()
   G4int nLevels = 0;
   if (_levels != 0) nLevels = _levels->entries();
 
-  G4cout << " ==== G4NuclearLevelManager ==== (" << _Z << ", " << _A << ") has " 
-	 << nLevels << " levels" << endl
-	 << "Highest level is at energy " << MaxLevelEnergy() << " MeV " << endl
-	 << "Lowest level is at energy " << MinLevelEnergy() << " MeV " << endl;
+  G4cout << " ==== G4NuclearLevelManager ==== (" << _nucleusZ << ", " << _nucleusA
+	 << ") has " << nLevels << " levels" << endl
+	 << "Highest level is at energy " << MaxLevelEnergy() << " MeV "
+	 << endl << "Lowest level is at energy " << MinLevelEnergy()
+	 << " MeV " << endl;
 
   G4int i = 0;
   for (i=0; i<nLevels; i++)
@@ -292,8 +331,11 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
   _levelEnergy = right._levelEnergy;
   _gammaEnergy = right._gammaEnergy;
   _probability = right._probability;
-  _A = right._A;
-  _Z = right._Z;
+  _polarity = right._polarity;
+  _halfLife = right._halfLife;
+  _angularMomentum = right._angularMomentum;
+  _nucleusA = right._nucleusA;
+  _nucleusZ = right._nucleusZ;
   if (right._levels != 0)   
     {
       _levels = new G4PtrLevelVector;
@@ -309,3 +351,12 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
       _levels = 0;
     }
 }
+
+
+
+
+
+
+
+
+

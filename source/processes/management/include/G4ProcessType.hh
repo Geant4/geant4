@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessType.hh,v 2.1 1998/08/16 02:36:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ProcessType.hh,v 1.2 1999/04/13 09:45:06 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //---------------------------------------------------------------

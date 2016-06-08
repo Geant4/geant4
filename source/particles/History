@@ -1,4 +1,4 @@
-$Id: History,v 2.29 1998/12/11 18:13:16 kurasige Exp $
+$Id: History,v 1.21 1999/06/16 12:05:07 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,84 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- June 16, 99 H.Kurashige 
+- Fixed a bug in G4VDecayChannel::FillDaughters (partman-01-00-11)
+- Fixed a branching ratio for b1(1235) in G4ExcitedMesonConstructor
+					  (shortlived-01-00-06)
+
+- June 16, 99 H.Kurashige (particles-01-00-08a)  
+- Fixed a bug of initialization for massKdiff and widthKdiff in G4ExcitedMeson Constructor.cc (shortlived-01-00-05)
+
+- June 10, 99 H.Kurashige (particles-01-00-08)  
+- Fixed a bug in  G4ParticleWithCuts::CalcEnergyCuts(G4double aCut)
+                  (partman-01-00-10) 
+- Fixed mass, width, encoding for some resonaces (shortlived-01-00-04)
+- Added mass width for relatively long life particles
+                  (leptons-01-00-02, hadrons,01-00-02)
+
+- June 8, 99 H.Kurashige (particles-01-00-07, shortlived-01-00-03)
+- Fixed Sigma(2040) mass in G4ExcitedSigmaConstructor 
+
+- May 26, 99  J.Allison (partman-01-00-09)
+- In G4NucleiProperties.hh (Vicente Lara):
+  Added GetNuclearMass, GetBindingEnergy
+  Corrected GetMassExcess.
+- In G4NucleiPropertiesTabel.hh:
+  Added GetNuclearMass (VL).
+  Changed G4String to const char* in (JA):
+    static const char*& GetName(G4int Z, G4int A);
+    static const char* Name[nEntries];
+    static const char* noName;
+- Split G4NucleiPropertiesTable.cc into G4NucleiPropertiesTableA.cc
+  and G4NucleiPropertiesTableA.cc (JA).
+- G4DecayTable.cc: Added inclusion of globals.hh to make it
+  self-consistent (Gabriele, May 25).
+
+- May 19, 99  H.Kurashige (partman-01-00-08)
+- In G4ParticleTable destructor, use clear() and remove destruction of keys 
+
+- May 18, 99  J.Allison
+- In G4ParticleTable destructor, #ifdef G4USE_STL use clearAndDestroy().
+- Bug fixed in GetAtomicMass due to substraction of electron mass for get
+  the nuclear masses - Vicente Lara.
+
+- May  6, 99 H.Kurashige (partman-01-00-07)
+- Fix a bug in G4DynamicParticle
+- Fix bugs in G4IonTable::GetNucleusMass
+
+- Apr. 23, 99  H.Kurashige (particles-01-00-06, partman-01-00-06,
+			    shortlived-01-00-02)
+- Retrieve modification for the correct mass formulae of ions
+  (particles-01-00-04,05,05a does not include bug fixes in particles-01-00-03)
+- Set G4ParticleTable::RemoveAllParticles as "protected"
+- Bug fixes in G4ExcitedMesonConstructor::ConstructMeson
+
+- Apr. 16, 99  H.Kurashige (particles-01-00-05a, partman-01-00-05a)
+-  Fixed a bug in G4ParticleWithCuts to ensure unit independence (Laszlo)
+
+- Apr. 15, 99  H.Kurashige (particles-01-00-05, partman-01-00-05)
+-  Added invocation of G4VUserPhysicsList::BuildPhysicsTable for ions created on the fly (G4IonTable::GetIon)
+-  Removed comment out statements in G4ParticleDefinition constructor
+
+- Apr. 13,99  H.Kurashige (particles-01-00-04, partman-01-00-04, 
+			   leptons-01-00-01,   bosons-01-00-01,
+			   hadrons-01-00-01, shortlived-01-00-01)
+- Clean up codes  H.Kurashige
+
+
+- Apr. 2,99   H.Kurashige (particles-01-00-03, partman-01-00-03)
+- Fixed mass fomulae in G4IonTable 
+
+- Feb 6, 99   H.Kurashige (particles-01-00-02 ,partman-01-00-02)
+- Migrate G4ParticleTypes.hh into process/management
+- Remove using G4ParticleMomentum
+
+- Feb 4, 99  H.Kurashige (particles-01-00-01)
+- Re-fixed bugs in destrction of ions  (Hisaya)
+
+- Dec. 15, 98 H.Kurashige(particles-00-04-08)
+- Fixed bugs in destrction of ions  (Hisaya)
+
 - Dec 11, 98  H.Kurashige (particles-00-04-07a)
 - Fixed bugs in G4IonTable::GetIonMass (Hisaya)
 

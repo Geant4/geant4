@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sort.hh,v 2.1 1998/10/20 16:31:33 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Sort.hh,v 1.1 1999/01/07 16:07:35 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //  File: G4Sort.h
 //  Author:  Alan Breakstone

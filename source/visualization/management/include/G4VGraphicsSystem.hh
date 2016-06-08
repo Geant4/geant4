@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.hh,v 2.1 1998/11/06 13:43:02 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VGraphicsSystem.hh,v 1.3 1999/01/11 00:48:14 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -17,8 +17,8 @@
 
 #include "globals.hh"
 
-class G4VScene;
-class G4VView;
+class G4VSceneHandler;
+class G4VViewer;
 
 class G4VGraphicsSystem {
 
@@ -50,8 +50,9 @@ public:
   // For RWTPtrOrderedVector...
   G4bool operator == (const G4VGraphicsSystem& system) const;
 
-  virtual G4VScene* CreateScene (const G4String& name)            = 0;
-  virtual G4VView*  CreateView  (G4VScene&, const G4String& name) = 0;
+  virtual G4VSceneHandler* CreateSceneHandler (const G4String& name) = 0;
+
+  virtual G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& name) = 0;
 
   // Access functions.
   const G4String& GetName          () const;

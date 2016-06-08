@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.hh,v 2.3 1998/10/13 05:48:33 masayasu Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIGAG.hh,v 1.2 1999/04/13 01:26:18 yhajime Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4UIGAG.hh
 // GAG(Geant4 adaptive GUI) interface class

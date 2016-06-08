@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05SteppingAction.cc,v 2.0 1998/07/02 14:10:07 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05SteppingAction.cc,v 1.2 1999/04/16 12:05:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "ExN05SteppingAction.hh"
@@ -24,14 +24,14 @@ ExN05SteppingAction::ExN05SteppingAction()
   new ExN05SteppingActionMessenger(this);
 }
 
-void ExN05SteppingAction::UserSteppingAction()
+void ExN05SteppingAction::UserSteppingAction(const G4Step*)
 {
   if(drawFlag)
   {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
     if (pVVisManager) {
-      const G4SteppingManager* pSM = GetSteppingManager();
+      const G4SteppingManager* pSM = fpSteppingManager;
       G4Polyline polyline;
 
       G4double charge = pSM->GetTrack()->GetDefinition()->GetPDGCharge();

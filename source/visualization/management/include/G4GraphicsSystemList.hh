@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GraphicsSystemList.hh,v 2.0 1998/07/02 16:49:36 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GraphicsSystemList.hh,v 1.2 1999/01/09 16:30:38 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  2nd April 1996

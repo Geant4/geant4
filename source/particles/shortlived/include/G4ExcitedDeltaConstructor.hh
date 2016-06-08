@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedDeltaConstructor.hh,v 1.3 1998/11/25 14:02:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitedDeltaConstructor.hh,v 1.1 1999/01/07 16:10:37 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------

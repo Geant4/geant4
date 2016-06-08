@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.2 1998/10/21 11:13:12 grichine Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:07:22 gunter Exp $
 # --------------------------------------------------------------
 # Makes libraries for each subdomain: 
 #         STEP, BREPS, CSG, STEPinterface.

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mars5GeVMechanism.cc,v 2.4 1998/12/12 12:52:49 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Mars5GeVMechanism.cc,v 1.2 1999/04/24 09:02:22 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,7 +55,8 @@ G4Mars5GeVMechanism::G4Mars5GeVMechanism(const G4String& name):
    EthForIncident(5.0*GeV)
 {
    theParticleTable = G4ParticleTable::GetParticleTable();
-   ProtonMass = theParticleTable->FindParticle("proton")->GetPDGMass();
+   G4ParticleDefinition* pProton = theParticleTable->FindParticle("proton");
+   if(pProton) ProtonMass = pProton->GetPDGMass();
 
    // set some constants 
    selec3.Eth = 1.0*MeV;

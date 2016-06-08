@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussChebyshevQ.hh,v 2.0 1998/07/02 17:31:43 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GaussChebyshevQ.hh,v 1.1 1999/01/07 16:08:53 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Class for Gauss-Chebyshev quadrature method
 // Roots of ortogonal polynoms and corresponding weights are calculated based on

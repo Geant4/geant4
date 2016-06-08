@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Electron.hh,v 2.3 1998/09/24 05:49:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Electron.hh,v 1.2 1999/04/13 08:20:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -69,12 +69,14 @@ class G4Electron : public G4VLepton
    );
 
  public:
+   virtual ~G4Electron(){}
+
    static G4Electron* ElectronDefinition();
    static G4Electron* Electron();
    static G4double GetCuts() {return theElectronLengthCut;}   
    static G4double* GetCutsInEnergy() {return theElectronKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4Electron::SetCuts(G4double aCut)

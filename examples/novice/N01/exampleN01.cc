@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN01.cc,v 2.3 1998/12/08 16:37:27 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: exampleN01.cc,v 1.1 1999/01/07 16:05:41 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NormalNavigation.hh,v 2.1 1998/11/02 12:11:54 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NormalNavigation.hh,v 1.1 1999/01/07 16:08:44 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // class G4NormalNavigation: Utility for navigation in volumes

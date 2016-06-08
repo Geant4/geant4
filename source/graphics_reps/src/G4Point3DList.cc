@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Point3DList.cc,v 2.1 1998/07/13 16:56:18 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Point3DList.cc,v 1.2 1999/05/12 16:11:03 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  July 1995
@@ -14,6 +14,8 @@
 #include "G4Point3DList.hh"
 
 #include "G4ios.hh"
+
+G4Point3DList::~G4Point3DList () {}
 
 ostream& operator << (ostream& os, const G4Point3DList& points)
 {

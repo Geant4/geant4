@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.2 1998/11/27 08:26:52 pavliouk Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VIntraNuclearTransportModel.hh,v 1.3 1999/04/15 12:10:09 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -26,9 +26,10 @@
 #include "G4V3DNucleus.hh"
 #include "G4VPreCompoundModel.hh"
 #include "G4HadronicInteraction.hh"
-#include "G4DynamicParticleVector.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
 #include "G4Track.hh"
-
+class G4KineticTrackVector;
 
 
 class G4VIntraNuclearTransportModel : public G4HadronicInteraction
@@ -51,7 +52,7 @@ class G4VIntraNuclearTransportModel : public G4HadronicInteraction
       virtual G4VParticleChange* ApplyYourself(const G4Track& aTrack, 
                                               G4Nucleus& theNucleus) = 0;
 
-      virtual G4DynamicParticleVector* Propagate(G4KineticTrackVector* theSecondaries,
+      virtual G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
                                                  G4V3DNucleus* theNucleus) = 0;
 
       void SetDeExcitation(G4VPreCompoundModel* const  value);

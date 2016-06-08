@@ -2,7 +2,7 @@
 begin Make
   package = G4o
 !  has  = X11 Xext GL G4 RW
-  has  = X11 Xext Xt Xmu Xm GL RW CLHEP G4 G4TEST G4ATLAS Wo WoXm Xo
+  has  = X11 Xext Xt Xmu Xm GL RW CLHEP G4 Wo WoXm Xo
   libs = \
 X11:     libX11\
 Xext:    libXext\
@@ -11,8 +11,6 @@ Xmu:     libXmu\
 Xm:      libXm\
 GL:      libGL libGLU libGLX\
 G4:      libg4\
-G4TEST:  libg4test\
-G4ATLAS: libg4atlas\
 RW:      librw\
 CLHEP:   libCLHEP\
 G4o:     libc libm libCo libGo libG4o\
@@ -29,14 +27,6 @@ begin OModule
 !  distributed = no
 end
 !----------------------------
-begin OModule
-  name = TEST
-  type = application
-  language = c++
-  libs = libg4test libg4atlas libG4o libg4 libCLHEP librw libWoGL libXo libhtmlw libWoXm libXm libWoXaw libXaw libWo libXx libXmu libXt libGo libGLX libGLU libGL libXext libX11 libHo libCo libwww libm libcxx
-  distributed = no
-end
-!----------------------------
 !----------------------------
 !----------------------------
 begin OModule
@@ -48,23 +38,29 @@ begin OModule
   name  = G4o
   inLib = libG4o
   language  = c++
+  extension = cc
 end
 !----------------------------
 begin OModule
   name  = G4oScene
   inLib = libG4o
   language = c++
+  extension = cc
 end
 !----------------------------
 begin OModule
   name  = G4oDrawer
   inLib = libG4o
   language = c++
+  extension = cc
 end
 !----------------------------
 begin OModule
   name  = G4oState
   inLib = libG4o
   language = c++
+  extension = cc
 end
+
+
 

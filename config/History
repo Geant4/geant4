@@ -1,5 +1,5 @@
-$Id: History,v 2.65 1998/12/15 19:29:12 gcosmo Exp $
-$Name: geant4-00 $
+$Id: History,v 1.50 1999/07/06 17:54:47 johna Exp $
+$Name: geant4-00-01 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,176 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th July 1999  John Allison (config-01-00-10)
+- Changed -L/usr/X11/lib to -L/usr/X11R6/lib for Linux.
+
+6th July 1999  Gunter Folger (config-01-00-09)
+- Adapt architecture.gmk for use of STL with WIN32-VC
+  Remove NICE from G4SYSTEM name WIN32-VC in architecture, globlib and 
+  binmake.gmk
+
+3rd July 1999  John Allison (config-01-00-08a)
+- Added full-stop after i.e in binmake.gmk.
+
+2nd July 1999  John Allison (config-01-00-08)
+- Protected liblist against duplicate library names.
+
+29th June 1999  Gabriele Cosmo (config-01-00-07)
+- architecture.gmk: fixed bug in SUN-CC setup concerning XMLIBS and XMFLAGS.
+  -lXm was missing.
+
+25th June 1999  Gabriele Cosmo
+- Use $G4LIB/$G4SYSTEM instead of $G4LIBDIR in binmake.gmk for invoking
+  liblist and search for libname.map (granular libraries setup).
+
+24th June 1999  John Allison
+- Use liblist and libname.map in $G4LIBDIR.
+
+19th June 1999  John Allison
+- Removed references to G4Ray in G4VIS_BUILD.gmk and G4VIS_USE.gmk.
+
+9th June 1999  Gunter Folger
+- Adapt liblist.c for Windows, all changes contained withing #ifdef WIN32 blocks. 
+
+4th June 1999  John Allison
+- Corrected USER_DEFINED_LDLIBS action.
+- Changed `export G4TMP=$(G4TMP);' to `G4TMP=$(G4TMP); export G4TMP;'
+- Added -I$(G4BASE)/geometry/solids/Boolean/include.
+- Introduced LDLIBS_PREFINAL (Gunter).
+
+2nd June 1999  John Allison
+- Changed more occurrences of := to = to fix crash of liblist at startup.
+
+1st June 1999  John Allison
+- Changed LDLIBS2 := to LDLIBS2 = in binmake.gmk.
+- Reverted $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET) to $(G4TMPDIR).
+- Added /$(G4TARGET) to liblist -d $(G4WORKDIR)/tmp/$(G4SYSTEM) in binmake.gmk.
+
+31st May 1999  John Allison
+- Added -I$(G4BASE)/processes/electromagnetic/lowenergy/include.
+
+27th May 1999  Gabriele Cosmo (config-01-00-06)
+- architecture.gmk: set default $G4INSTALL path to $HOME/geant4 (was still referring
+  to geant4beta...).
+- Restored default CLHEP_BASE_DIR to /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro.
+- architecture.gmk: added -DG4NOT_ISO_DELETES for NT setup (G.Folger).
+
+25th May 1999  Gabriele Cosmo
+- architecture.gmk: fixed bug in SUN-CC setup. Replaced VISLIBS with LOADLIBS to
+  specify inclusion of socket libraries -lsocket -lnsl.
+- binmake.gmk: fixed path to libname.map in the definition of LDLIBS2 for the
+  granular libs setup.
+
+19th May 1999  John Allison
+- Force linking of static library, libCLHEP.a.
+
+18th May 1999  John Allison
+- Specify -DG4NOT_ISO_DELETES in any case (not just G4USE_STL) and only
+  for HP, Sun and AIX.
+
+17th May 1999  Gabriele Cosmo
+- Added -DG4NOT_ISO_DELETES for DEC and AIX and moved inside G4USE_STL or
+  G4USE_OSPACE scope for all platforms which need it.
+- Added path to wrappers for AIX.
+
+17th May 1999  John Allison
+- Added -DG4NOT_ISO_DELETES for Sun and HP.
+- Changed order of -I$(OSPACEDIR)/ospace/std and -I$(OSPACEDIR)/ospace/stl.
+
+13th May 1999  Gabriele Cosmo (config-01-00-05)
+- architecture.gmk: G4USE_OSPACE setup is now independent from G4USE_STL which
+  is now devoted for generic STL setup. Added -DOS_NO_TYPEDEF_5 option to HP-aCC
+  for ObjectSpace.
+
+12th May 1999  Gabriele Cosmo
+- architecture.gmk: modified path to STL wrapper files directory to point to
+  $RWINC/wrappers/$G4SYSTEM. Wrappers are now differenciated according to
+  the architecture type.
+
+11th May 1999  Gabriele Cosmo
+- architecture.gmk: merged Isidro's OSPACE setup for HP-aCC.
+  Reorganised OSPACE options by introducing OSPACEINC variable.
+
+10th May 1999  Guy Barrand
+- interactivity.gmk ; put OpenGL things after OPACS things to have 
+  correct link order.
+
+10th May 1999  John Allison
+- Added -I$(OSPACEDIR)/ospace/stl for Sun.
+
+7th May 1999  John Allison
+- Added GREP := grep except for SUN.
+- Introduced STLInterface/wrappers directory. Testing on OSF+ObjectSpace (G.Cosmo).
+
+6th May 1999  Gabriele Cosmo
+- Introduced G4USE_OSPACE for ObjectSpace STL. If defined G4USE_STL is
+  set as well. Modified architecture.gmk and binmake.gmk.
+
+6th May 1999  John Allison
+- Removed extra library for circular dependencies.  Now all solved!
+
+5th May 1999  Gabriele Cosmo
+- Fixed typo in architecture.gmk and defined OSPACEDIR to point to the G4
+  dev area where links to the ObjectSpace installations at CERN have been
+  created for all platforms. "pro" version points to ObjectSpace 2.1.
+
+5th May 1999  John Allison
+- Eliminated all references to RW in the case of G4USE_STL.
+- Added OSPACE variables.
+
+28th April 1999  Gabriele Cosmo (config-01-00-04)
+- architecture.gmk: moved link for CLHEP to "new" to test the new version
+  1.4 of CLHEP. It will become "pro" again as soon as the new CLHEP will be
+  validated. NOTE: for DEC-cxx a custom CLHEP installation is used in order
+  to deactivate the ISO-ANSI options now set by default in CLHEP.
+
+19th April 1999  Gabriele Cosmo (config-01-00-03)
+- architecture.gmk: introduced CCFLAGS for all platforms. Set CCFLAGS to
+  "-Ae +DAportable" for HP-aCC to overcome compilation problems on liblist.c
+
+18th April 1999  Youhei Morita
+- architecture.gmk, binmake.gmk: introduced OBJY_LDLIB variable for
+  defining Objectivity library within G4ODBMS.
+
+13th April 1999  Gabriele Cosmo
+- architecture.gmk: added the following options in compilation:
+  o HP-aCC, SGI-CC: +Onolimit, -Olimit 5000 respectively.
+    Not suppress any optimization specifying a high or unlimited memory
+    limitation.
+  o DEC-cxx: -timplicit_local.
+    Get rid of the template repository by generating explicit template
+    instantiations used in the code with internal linkage.
+    
+13th April 1999  John Allison
+- In binmake.gmk: - moved libmap target to source/GNUmakefile.
+                  - extensive tidying.
+
+12th April 1999  John Allison
+- In liblist.c:  - fixed bug to distinguish, e.g., track from tracking.
+                 - improved printing.
+                 - improved "Usage" comments.
+                 - improved protection against bad input format.
+- In binmake.gmk, used $(ECHO) to solve platform dependency of echo.
+- In binmake.gmk for granular libraries:
+   - fully implemented -d option.
+   - Gave /tmp files a unique name.
+   - Removed repeated libraries - no longer necessary, all circular
+       dependencies seem solved.
+
+9th April 1999  Frank Behner
+- Fixed bug in liblist in -d option
+- Changed binmake.gmk to use liblist -d
+
+18th February 1999  John Allison
+- Added G4USE_STL flag.
+- Added code for linking granular libraries.
+
+1st January 1999  Gunter Folger (config-01-00-02)
+- Add FCLIBS for SUN.
+
+January 29th 1999 - John Allison (config-01-00-01)
+- Changed rd44 to sw/geant4.
 
 December 15th, 1998 - G.Cosmo (config-00-04-11)
 - Added G4_HAVE_BOOL to DEC-cxx.

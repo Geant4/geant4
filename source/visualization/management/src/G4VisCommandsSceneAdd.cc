@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 2.6 1998/11/29 15:34:08 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.5 1999/04/16 09:06:09 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -17,7 +17,7 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
-#include "G4GlobalFastSimulationManager.hh"
+#include "G4VGlobalFastSimulationManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4FlavoredParallelWorldModel.hh"
@@ -43,10 +43,12 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetGuidance
     ("1st parameter: volume name (default \"world\").");
   fpCommand -> SetGuidance
+    ("               \"list\" to list all volumes.");
+  fpCommand -> SetGuidance
     ("2nd parameter: copy number (default 0).");
   fpCommand -> SetGuidance
     ("3rd parameter: depth of descending geometry hierarchy"
-     " (default G4SceneData::UNLIMITED (-1)).");
+     " (default G4Scene::UNLIMITED (-1)).");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("volume", 's', omitable = true);
   parameter -> SetDefaultValue ("world");
@@ -55,7 +57,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue (0);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("depth", 'i', omitable = true);
-  parameter -> SetDefaultValue (G4SceneData::UNLIMITED);
+  parameter -> SetDefaultValue (G4Scene::UNLIMITED);
   fpCommand -> SetParameter (parameter);
 }
 
@@ -64,13 +66,13 @@ G4VisCommandSceneAddVolume::~G4VisCommandSceneAddVolume () {
 }
 
 G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand* command) {
-  return "";
+  return "world 0 -1";
 }
 
 void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
-  if (list.isEmpty ()) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
     return;
@@ -101,13 +103,23 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     }
   }
   else {
+ 
+    // Create search scene, model and modeling parameters with
+    // long-enough life...
     G4PhysicalVolumeSearchScene searchScene (name, copyNo);
     G4PhysicalVolumeModel searchModel (world);
+    G4ModelingParameters mp;
+    searchModel.SetModelingParameters (&mp);
+
+    // Initiate search...
     searchModel.DescribeYourselfTo (searchScene);
+
+    // OK, what have we got...?
     foundVolume = searchScene.GetFoundVolume ();
     const G4Transform3D&
       transformation = searchScene.GetFoundTransformation ();
     foundDepth = searchScene.GetFoundDepth ();
+
     if (foundVolume) {
       model = new G4PhysicalVolumeModel (foundVolume,
 					 requestedDepthOfDescent,
@@ -120,10 +132,10 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
   }
 
   if (model) {
-    const G4String& currentSceneName =
-      fpVisManager -> GetCurrentSceneData ().GetName ();
-    (list [currentSceneName]).AddRunDurationModel (model);
-    UpdateVisManagerSceneDataAndViewParameters (currentSceneName);
+    G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+    const G4String& currentSceneName = pScene -> GetName ();
+    pScene -> AddRunDurationModel (model);
+    UpdateVisManagerSceneAndViewParameters (currentSceneName);
     G4cout << "First occurrence of \"" << foundVolume -> GetName ()
 	   << "\", copy no. " << copyNo
 	   << ", found at depth " << foundDepth
@@ -160,40 +172,40 @@ G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
-  const G4String& currentSceneName =
-    fpVisManager -> GetCurrentSceneData ().GetName ();
+  G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pCurrentScene -> GetName ();
 
-  G4SceneDataObjectList& list = fpVisManager -> SetSceneDataObjectList ();
-  if (list.isEmpty ()) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
     return;
   }
 
-  G4GlobalFastSimulationManager* theGlobalFastSimulationManager;
+  G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
   if(!(theGlobalFastSimulationManager = 
-       G4GlobalFastSimulationManager::GetGlobalFastSimulationManager())){
+       G4VGlobalFastSimulationManager::GetConcreteInstance ())){
     G4cout<< "WARNING: no G4GlobalFastSimulationManager" << endl;
     return;
   }
-
+  
   G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
-
+  
   if(newValue=="all") {
-    G4FlavoredParallelWorld* CurrentFlavoredWorld;
+    G4VFlavoredParallelWorld* CurrentFlavoredWorld;
     for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	 iParticle++)
       if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
 	 GetFlavoredWorldForThis(theParticleTable->
 				 GetParticle(iParticle)))
-	(list [currentSceneName]).AddRunDurationModel
+	pCurrentScene -> AddRunDurationModel
 	  (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
-    UpdateVisManagerSceneDataAndViewParameters ();
+    UpdateVisManagerSceneAndViewParameters ();
     G4cout << "Ghosts added to the Scene, refresh the view to see it."
 	   << endl;
     return;
   }
-
+  
   G4ParticleDefinition* currentParticle = 
     theParticleTable->FindParticle(newValue);
   if (currentParticle == NULL) {
@@ -201,12 +213,12 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4FlavoredParallelWorld* worldForThis;
+  G4VFlavoredParallelWorld* worldForThis;
   if(worldForThis=theGlobalFastSimulationManager->
      GetFlavoredWorldForThis(currentParticle)) {
-    (list [currentSceneName]).AddRunDurationModel
+    pCurrentScene -> AddRunDurationModel
       (new G4FlavoredParallelWorldModel (worldForThis));
-    UpdateVisManagerSceneDataAndViewParameters (currentSceneName);
+    UpdateVisManagerSceneAndViewParameters (currentSceneName);
     G4cout << "Ghosts added to the Scene, refresh the view to see it."
            << endl;
   }

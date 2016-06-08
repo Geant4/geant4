@@ -1,0 +1,131 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4PAIonisation.icc,v 1.3 1999/05/26 13:56:56 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
+//
+// 
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      ------------ G4PAIonisation physics process ------------
+//                  by Laszlo Urban, 30 May 1997
+// ***************************************************************
+// It is the first implementation of the NEW IONISATION PROCESS.               
+// It calculates the ionisation of charged hadrons.
+// ***************************************************************
+// corrected by L.Urban on 24/09/97
+// ---------------------------------------------------------------
+
+
+////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double
+ G4PAIonisation::GetConstraints(const G4DynamicParticle *aParticle,
+                                              G4Material *aMaterial    ) 
+{  
+  G4int index = aMaterial->GetIndex() ;
+
+//  G4cout<<"G4PAIonisation::GetConstraints is called"<<endl ;
+
+  if(index != fMatIndex)
+  {
+    return DBL_MAX ;
+  } 
+  else
+  {
+    if(aMaterial->GetState() == kStateGas) 
+    {
+      return 10*mm ;
+    }
+    else
+    {
+      return 0.01*mm ;
+    }
+  }
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double 
+G4PAIonisation::GetContinuousStepLimit( const G4Track& track ,
+                                              G4double ,
+                                              G4double currentMinimumStep ,
+                                              G4double&                     )
+{
+ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if( (Step > 0.0) && (Step < currentMinimumStep) ) currentMinimumStep = Step ;
+
+  return Step ;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4double G4PAIonisation::GetMeanFreePath(
+                                               const G4Track& trackData,
+                                               G4double previousStepSize,
+                                               G4ForceCondition* condition) 
+{
+//   G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<endl ;
+ 
+   *condition = NotForced ;
+   
+   G4Material* aMaterial = trackData.GetMaterial() ;
+
+   if( aMaterial->GetIndex() != fMatIndex ) 
+   {
+     return DBL_MAX;
+   }
+   else 
+   {
+     return 1*mm ;
+   }
+}
+
+//////////////////////////////////////////////////////////////////////
+//
+//
+
+inline G4bool G4PAIonisation::IsApplicable(
+                            const G4ParticleDefinition& particle)
+{
+   return(particle.GetPDGCharge() != 0.);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//         
+
+inline
+G4double G4PAIonisation::GetSandiaPhotoAbsCof(G4int i, G4int j) const 
+{
+   if(i < 0 || i >= fSandiaIntervalNumber || j < 0 || j > 4)
+   {
+      G4Exception("Invalid arguments in G4Material::GetSandiaPhotoAbsCof") ;
+   }
+   return fSandiaPhotoAbsCof[i][j] ;
+}
+
+
+//
+//
+/////////////////////////////////////////////////////////////////////////

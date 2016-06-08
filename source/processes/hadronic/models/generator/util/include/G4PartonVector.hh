@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PartonVector.hh,v 1.1 1998/08/22 08:57:57 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PartonVector.hh,v 1.1 1999/01/07 16:12:22 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4PartonVector_h
 #define G4PartonVector_h 1

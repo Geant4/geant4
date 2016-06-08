@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SolidStore.cc,v 2.1 1998/07/12 02:55:40 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SolidStore.cc,v 1.2 1999/05/18 15:26:56 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // G4SolidStore
 //
@@ -27,7 +27,7 @@ G4SolidStore::G4SolidStore() : RWTPtrOrderedVector<G4VSolid>(100)
 // Destructor
 G4SolidStore::~G4SolidStore() 
 {
-  while (!isEmpty()) delete first();
+  clearAndDestroy();
 }
 
 // Static class variable

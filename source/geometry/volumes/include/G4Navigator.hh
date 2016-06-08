@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.hh,v 2.4 1998/11/27 19:30:59 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Navigator.hh,v 1.1 1999/01/07 16:08:43 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // class G4Navigator Paul Kent July 95/96

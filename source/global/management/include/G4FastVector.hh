@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastVector.hh,v 2.2 1998/10/17 12:44:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FastVector.hh,v 1.1 1999/01/07 16:09:00 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------

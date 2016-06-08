@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.2 1998/11/06 14:01:53 allison Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:09:08 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for graphics_reps library.  John Allison, 19/7/96.
 # --------------------------------------------------------------

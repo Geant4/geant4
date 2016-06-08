@@ -5,21 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FlavoredParallelWorldModel.cc,v 2.1 1998/08/22 16:35:04 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FlavoredParallelWorldModel.cc,v 1.3 1999/04/16 09:05:41 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
 // Model for flavored parallel world volumes.
 
 #include "G4FlavoredParallelWorldModel.hh"
 
-#include "G4FlavoredParallelWorld.hh"
+#include "G4VFlavoredParallelWorld.hh"
 #include "G4VisAttributes.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
 G4FlavoredParallelWorldModel::G4FlavoredParallelWorldModel
-(G4FlavoredParallelWorld* FPW,
+(G4VFlavoredParallelWorld* FPW,
  G4int soughtDepth,
  const G4Transform3D& modelTransformation,
  const G4ModelingParameters* mp)

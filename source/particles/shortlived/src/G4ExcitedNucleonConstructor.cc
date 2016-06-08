@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedNucleonConstructor.cc,v 2.6 1998/11/26 10:09:22 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ExcitedNucleonConstructor.cc,v 1.2 1999/06/09 17:28:17 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -537,9 +537,9 @@ const G4double G4ExcitedNucleonConstructor::mass[] = {
 };
 
 const G4double G4ExcitedNucleonConstructor::width[] = {
-  200.0*MeV, 125.0*MeV, 150.0*MeV, 150.0*MeV, 140.0*MeV,
-  120.0*MeV, 100.0*MeV, 110.0*MeV, 150.0*MeV, 500.0*MeV,
-  550.0*MeV, 250.0*MeV, 550.0*MeV
+  350.0*MeV, 120.0*MeV, 150.0*MeV, 150.0*MeV, 150.0*MeV,
+  130.0*MeV, 100.0*MeV, 100.0*MeV, 150.0*MeV, 500.0*MeV,
+  550.0*MeV, 250.0*MeV, 450.0*MeV
 };
 
 const G4int G4ExcitedNucleonConstructor::iSpin[] = {

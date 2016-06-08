@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiQuarks.hh,v 2.1 1998/07/13 17:19:01 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DiQuarks.hh,v 1.2 1999/04/13 08:18:26 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -46,6 +46,7 @@ class G4DiQuarks : public G4VShortLivedParticle
    );
    G4DiQuarks*    DiQuarksDefinition(){return this;};
    G4DiQuarks*    DiQuarks(){return this;};
+   virtual        ~G4DiQuarks(){}
 };
 
 

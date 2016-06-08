@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02PhysicsList.hh,v 1.4 1998/10/09 14:31:03 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02PhysicsList.hh,v 1.2 1999/04/16 11:19:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -52,8 +52,9 @@ class ExN02PhysicsList: public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     // 
-    virtual void SetCuts(G4double aCut);
-    
+    virtual void SetCuts();
+
+   
   protected:
     // these methods Construct particles 
     virtual void ConstructBosons();

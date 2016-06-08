@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: stat.h,v 2.3 1998/08/25 02:52:41 lfelawka Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: stat.h,v 1.2 1999/05/21 20:20:45 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifdef __O3DB__

@@ -5,8 +5,8 @@
 *     based on the Program) you indicate your acceptance of this statement,
 *     and all its terms.
 *    
-*     $Id: mztog4.F,v 2.1 1998/09/18 08:57:52 lockman Exp $
-*     GEANT4 tag $Name: geant4-00 $
+*     $Id: mztog4.F,v 1.1 1999/01/07 16:06:54 gunter Exp $
+*     GEANT4 tag $Name: geant4-00-01 $
 *    
       subroutine mztog4
 ************************************************************************

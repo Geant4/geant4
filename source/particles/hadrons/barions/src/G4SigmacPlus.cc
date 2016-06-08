@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmacPlus.cc,v 2.1 1998/08/04 11:15:01 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SigmacPlus.cc,v 1.1 1999/01/07 16:10:02 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------

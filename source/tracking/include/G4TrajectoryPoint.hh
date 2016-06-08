@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrajectoryPoint.hh,v 2.1 1998/07/12 03:09:01 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4TrajectoryPoint.hh,v 1.3 1999/04/15 08:47:08 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 //---------------------------------------------------------------
@@ -29,18 +29,17 @@
 //
 // ---------------------------------------------------------------
 
-class G4TrajectoryPoint;
-
 #ifndef G4TrajectoryPoint_h
 #define G4TrajectoryPoint_h 1
 
+#include "G4VTrajectoryPoint.hh"
 #include "globals.hh"                // Include from 'global'
 #include "G4ThreeVector.hh"          // Include from 'geometry'
 #include "G4Allocator.hh"            // Include from 'particle+matter'
 
 
 ////////////////////////
-class G4TrajectoryPoint
+class G4TrajectoryPoint : public G4VTrajectoryPoint
 //////////////////////// 
 {
 
@@ -52,7 +51,7 @@ class G4TrajectoryPoint
    G4TrajectoryPoint();
    G4TrajectoryPoint(G4ThreeVector pos);
    G4TrajectoryPoint(const G4TrajectoryPoint &right);
-   ~G4TrajectoryPoint();
+   virtual ~G4TrajectoryPoint();
 
 // Operators
    inline void *operator new(size_t);

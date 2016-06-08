@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventor.cc,v 2.6 1998/12/08 09:51:38 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenInventor.cc,v 1.5 1999/05/12 14:00:58 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -19,8 +19,8 @@
 #include <HEPVis/nodekits/SoDetectorTreeKit.h>
 
 #include "G4OpenInventor.hh"
-#include "G4OpenInventorScene.hh"
-#include "G4OpenInventorView.hh"
+#include "G4OpenInventorSceneHandler.hh"
+#include "G4OpenInventorViewer.hh"
 
 
 G4OpenInventor::G4OpenInventor (
@@ -32,29 +32,26 @@ G4OpenInventor::G4OpenInventor (
 ,interactorManager(NULL)
 {
 }
+
+G4OpenInventor::~G4OpenInventor () {}
+
 void G4OpenInventor::SetInteractorManager (G4VInteractorManager* im) {
   interactorManager = im;
 }
 G4VInteractorManager* G4OpenInventor::GetInteractorManager () {
   return interactorManager;
 }
-G4VScene* G4OpenInventor::CreateScene (const G4String& name) {
-  G4VScene* p = new G4OpenInventorScene (*this, name);
-  G4cout << G4OpenInventorScene::GetSceneCount ()
+G4VSceneHandler* G4OpenInventor::CreateSceneHandler (const G4String& name) {
+  G4VSceneHandler* p = new G4OpenInventorSceneHandler (*this, name);
+  G4cout << G4OpenInventorSceneHandler::GetSceneCount ()
        << ' ' << fName << " scenes extanct." << endl;
   return    p;
 }
 
-G4VView* G4OpenInventor::CreateView (G4VScene& scene, const G4String& name) 
+G4VViewer* G4OpenInventor::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
 {
-  G4OpenInventorScene* pScene = (G4OpenInventorScene*)&scene;
-  G4OpenInventorView*  pView  = new G4OpenInventorView (*pScene, name);
-  if (pView -> GetOIVisualFound ()) {
-  }
-  else {
-    delete pView;
-    pView  = NULL;
-  }
+  G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
+  G4OpenInventorViewer*  pView  = new G4OpenInventorViewer (*pScene, name);
   return   pView;
 }
 

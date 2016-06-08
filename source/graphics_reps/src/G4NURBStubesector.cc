@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBStubesector.cc,v 2.2 1998/07/13 16:56:16 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NURBStubesector.cc,v 1.3 1999/05/19 08:33:49 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -190,6 +190,14 @@
 		}
 
 
+G4Visible & G4NURBStubesector::operator = (const G4Visible &right) {
+  return G4Visible::operator = (right);
+}
+
+G4VVisPrim & G4NURBStubesector::operator = (const G4VVisPrim &right) {
+  return G4VVisPrim::operator = (right);
+}
+
 const char*	G4NURBStubesector::Whoami() const
 		{
 		return mpwhoami;
@@ -197,7 +205,7 @@ const char*	G4NURBStubesector::Whoami() const
 
 		G4NURBStubesector::~G4NURBStubesector()
 		{
-		if (mpwhoami) { delete mpwhoami; mpwhoami = NULL; };
+		if (mpwhoami) { delete [] mpwhoami; mpwhoami = NULL; };
 		}
 
 

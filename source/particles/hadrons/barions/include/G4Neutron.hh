@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Neutron.hh,v 2.3 1998/09/24 06:48:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Neutron.hh,v 1.2 1999/04/13 08:32:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -44,8 +44,8 @@ class G4Neutron : public G4VBarion
    static G4double  theNeutronLengthCut;
    static G4double* theNeutronKineticEnergyCuts;
 
- public:
-   G4Neutron(
+ private:
+  G4Neutron(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
        G4int               iSpin,        G4int               iParity,    
@@ -56,12 +56,16 @@ class G4Neutron : public G4VBarion
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+
+ public:
+   virtual ~G4Neutron(){}
+
    static G4Neutron* NeutronDefinition();
    static G4Neutron* Neutron(){return &theNeutron;}
    static G4double GetCuts() {return theNeutronLengthCut;}   
    static G4double* GetCutsInEnergy() {return theNeutronKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

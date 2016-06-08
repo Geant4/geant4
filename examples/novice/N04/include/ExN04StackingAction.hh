@@ -17,15 +17,15 @@ class ExN04StackingAction : public G4UserStackingAction
 {
   public:
     ExN04StackingAction();
-    ~ExN04StackingAction();
+    virtual ~ExN04StackingAction();
 
   public:
-    G4ClassificationOfNewTrack ClassifyNewTrack(G4Track *const aTrack);
-    void NewStage();
-    void PrepareNewEvent();
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+    virtual void NewStage();
+    virtual void PrepareNewEvent();
 
   private:
-    G4bool InsideRoI(G4Track *const aTrack,G4double ang);
+    G4bool InsideRoI(const G4Track * aTrack,G4double ang);
     G4VHitsCollection* GetCollection(G4String colName);
     
     ExN04TrackerHitsCollection* trkHits;

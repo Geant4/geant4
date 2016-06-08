@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: SystemOfUnits.h,v 2.4 1998/09/01 10:45:38 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: SystemOfUnits.h,v 1.1 1999/01/07 16:09:04 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -*- C++ -*-
 // 

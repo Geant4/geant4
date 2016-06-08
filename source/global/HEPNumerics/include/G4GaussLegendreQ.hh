@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussLegendreQ.hh,v 2.1 1998/07/12 02:58:44 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4GaussLegendreQ.hh,v 1.1 1999/01/07 16:08:54 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Class for Gauss-Legendre integration method
 // Roots of ortogonal polynoms and corresponding weights are calculated based on

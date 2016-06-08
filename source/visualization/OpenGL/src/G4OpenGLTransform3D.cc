@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLTransform3D.cc,v 2.0 1998/07/02 16:46:23 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLTransform3D.cc,v 1.2 1999/01/09 16:23:29 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // Andrew Walkden  24th October 1996

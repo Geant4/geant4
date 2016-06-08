@@ -1,12 +1,12 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: Registry_inline.cc,v 2.1 1998/07/12 02:57:31 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: Registry_inline.cc,v 1.2 1999/05/21 20:20:48 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 /*

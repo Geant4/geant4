@@ -5,8 +5,8 @@
 *     based on the Program) you indicate your acceptance of this statement,
 *     and all its terms.
 *    
-*     $Id: G3toG4.inc,v 2.1 1998/09/18 08:54:55 lockman Exp $
-*     GEANT4 tag $Name: geant4-00 $
+*     $Id: G3toG4.inc,v 1.1 1999/01/07 16:06:44 gunter Exp $
+*     GEANT4 tag $Name: geant4-00-01 $
 *    
       integer maxlines
       parameter (maxlines = 750) ! max no. of cmd lines per C++ source file

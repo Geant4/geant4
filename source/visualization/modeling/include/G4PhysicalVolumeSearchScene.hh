@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 2.2 1998/08/22 16:34:59 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.4 1999/05/10 14:04:25 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  10th August 1998.
@@ -25,6 +25,8 @@
 #include "G4Sphere.hh"
 #include "G4Para.hh"
 #include "G4Torus.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
@@ -33,7 +35,7 @@ class G4PhysicalVolumeSearchScene: public G4VGraphicsScene {
 public:
   G4PhysicalVolumeSearchScene
   (const G4String& requiredPhysicalVolumeName, G4int requiredCopyNo);
-  ~G4PhysicalVolumeSearchScene ();
+  virtual ~G4PhysicalVolumeSearchScene ();
   void AddThis (const G4Box& s) {FindVolume (s);}
   void AddThis (const G4Cons & s) {FindVolume (s);}
   void AddThis (const G4Tubs& s) {FindVolume (s);}
@@ -42,6 +44,8 @@ public:
   void AddThis (const G4Sphere& s) {FindVolume (s);}
   void AddThis (const G4Para& s) {FindVolume (s);}
   void AddThis (const G4Torus& s) {FindVolume (s);}
+  void AddThis (const G4Polycone& s) {FindVolume (s);}
+  void AddThis (const G4Polyhedra& s) {FindVolume (s);}
   void AddThis (const G4VSolid& s) {FindVolume (s);}
   void PreAddThis (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);

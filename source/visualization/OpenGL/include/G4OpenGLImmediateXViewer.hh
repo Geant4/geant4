@@ -1,0 +1,42 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4OpenGLImmediateXViewer.hh,v 1.2 1999/05/10 14:03:42 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
+//
+// 
+// Andrew Walkden  7th February 1997
+// Class G4OpenGLImmediateXViewer : a class derived from G4OpenGLXViewer and
+//                                  G4OpenGLImmediateViewer.
+
+#ifdef G4VIS_BUILD_OPENGLX_DRIVER
+
+#ifndef G4OpenGLIMMEDIATEXVIEWER_HH
+#define G4OpenGLIMMEDIATEXVIEWER_HH
+
+#include "G4VViewer.hh"
+#include "G4OpenGLImmediateViewer.hh"
+#include "G4OpenGLXViewer.hh"
+
+#include "globals.hh"
+#include <rw/tvordvec.h>
+
+class G4OpenGLImmediateSceneHandler;
+
+class G4OpenGLImmediateXViewer:
+public G4OpenGLXViewer, public G4OpenGLImmediateViewer{
+  
+public:
+  G4OpenGLImmediateXViewer (G4OpenGLImmediateSceneHandler& scene,
+			  const G4String& name = "");
+  virtual ~G4OpenGLImmediateXViewer ();
+  void DrawView ();
+};
+
+#endif
+
+#endif

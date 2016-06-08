@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AtomicShells.hh,v 2.4 1998/11/16 17:26:41 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AtomicShells.hh,v 1.1 1999/01/07 16:09:39 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Class consists of atomic subshell binding energies in   eV !!!
 // for first 100 elements

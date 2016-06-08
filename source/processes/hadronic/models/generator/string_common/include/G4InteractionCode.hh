@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InteractionCode.hh,v 1.1 1998/08/22 08:57:15 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4InteractionCode.hh,v 1.1 1999/01/07 16:12:14 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4InteractionCode_h
 #define G4InteractionCode_h 1

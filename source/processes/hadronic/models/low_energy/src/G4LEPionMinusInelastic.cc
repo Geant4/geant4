@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEPionMinusInelastic.cc,v 2.4 1998/12/14 15:33:15 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4LEPionMinusInelastic.cc,v 1.1 1999/01/07 16:12:47 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
  // Hadronic Process: PionMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996

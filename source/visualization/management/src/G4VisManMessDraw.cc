@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 2.7 1998/08/14 08:48:45 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisManMessDraw.cc,v 1.4 1999/04/16 09:06:09 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -23,7 +23,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-#include "G4GlobalFastSimulationManager.hh"
+#include "G4VGlobalFastSimulationManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4FlavoredParallelWorldModel.hh"
@@ -226,24 +226,24 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
       G4cout<< "grafic system not yet avaliable." << endl;
       return;
     }
-    G4GlobalFastSimulationManager* theGlobalFastSimulationManager;
+    G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
     if(!(theGlobalFastSimulationManager = 
-	 G4GlobalFastSimulationManager::GetGlobalFastSimulationManager())){
+	 G4VGlobalFastSimulationManager::GetConcreteInstance ())){
       G4cout<< "WARNING: none G4GlobalFastSimulationManager" << endl;
       return;
     }
     G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
-
-    G4SceneData& currentScene = theVisManager -> SetCurrentSceneData ();
+    
+    G4Scene* currentScene = theVisManager -> GetCurrentScene ();
     // Ok, lets look on the parameters
     if(newValues=="all") {
-      G4FlavoredParallelWorld* CurrentFlavoredWorld;
+      G4VFlavoredParallelWorld* CurrentFlavoredWorld;
       for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	   iParticle++)
 	if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
 	   GetFlavoredWorldForThis(theParticleTable->
 				   GetParticle(iParticle)))
-	  currentScene.AddRunDurationModel
+	  currentScene -> AddRunDurationModel
 	    (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
 	     << endl;
@@ -255,13 +255,13 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
       G4cout << newValues << ": not found this particle name!" << endl;
       return;
     }
-    G4FlavoredParallelWorld* worldForThis;
+    G4VFlavoredParallelWorld* worldForThis;
     if(worldForThis=theGlobalFastSimulationManager->
        GetFlavoredWorldForThis(currentParticle)) {
-      currentScene.AddRunDurationModel
+      currentScene -> AddRunDurationModel
 	(new G4FlavoredParallelWorldModel (worldForThis));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
-	   << endl;
+	     << endl;
     }
     else G4cout << "There are no ghosts for "<<newValues<<endl;
   }

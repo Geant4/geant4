@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIparameter.cc,v 2.5 1998/11/13 11:36:39 asaim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UIparameter.cc,v 1.1 1999/01/07 16:09:28 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4UIparameter.hh"

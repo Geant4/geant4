@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UniformMagField.cc,v 2.4 1998/11/27 16:15:53 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4UniformMagField.cc,v 1.1 1999/01/07 16:07:12 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //

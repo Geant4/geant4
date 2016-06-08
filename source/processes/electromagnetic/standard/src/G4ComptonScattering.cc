@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonScattering.cc,v 2.10 1998/12/15 13:06:43 maire Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ComptonScattering.cc,v 1.2 1999/03/04 16:31:23 maire Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -282,7 +282,7 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
 
 void G4ComptonScattering::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
+  G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 10 KeV to (100/Z) GeV. \n";
            comments += "        Scattered gamma energy according Klein-Nishina.";
                      

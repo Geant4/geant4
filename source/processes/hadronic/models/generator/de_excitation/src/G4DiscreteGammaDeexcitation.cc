@@ -27,7 +27,7 @@
 #include "G4NuclearLevelManager.hh"
 
 
-G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation(): _Z(0),_A(0)
+G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation(): _nucleusZ(0),_nucleusA(0)
 {
   _tolerance = 0.1 * MeV;
 }
@@ -49,11 +49,11 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 	  << "G4DiscreteGammaDeexcitation::CreateTransition - (A,Z) is valid " 
 	  << endl;
       
-      if (_A != A || _Z != Z) 
+      if (_nucleusA != A || _nucleusZ != Z) 
 	{
 	  _levelManager.SetNucleus(Z,A);
-	  _A = A;
-	  _Z = Z;
+	  _nucleusA = A;
+	  _nucleusZ = Z;
 	}
       
       G4double excitation = nucleus.GetExcitationEnergy();

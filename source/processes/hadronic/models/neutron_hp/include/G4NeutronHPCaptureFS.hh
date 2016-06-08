@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPCaptureFS.hh,v 2.2 1998/12/04 15:08:00 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4NeutronHPCaptureFS.hh,v 1.4 1999/07/06 14:16:55 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4NeutronHPCaptureFS_h
 #define G4NeutronHPCaptureFS_h 1
@@ -28,6 +28,7 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   G4NeutronHPCaptureFS()
   {
     hasXsec = false; 
+    targetMass = 0;
   }
   
   ~G4NeutronHPCaptureFS()

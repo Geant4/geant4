@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InterpolationScheme.hh,v 2.1 1998/11/07 11:20:56 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4InterpolationScheme.hh,v 1.2 1999/07/02 09:58:05 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4InterpolationScheme_h
 #define G4InterpolationScheme_h 1

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorWin32.cc,v 2.7 1998/12/08 09:51:39 barrand Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenInventorWin32.cc,v 1.3 1999/05/10 15:39:01 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // OpenInventor graphics system factory.
 
@@ -16,8 +16,8 @@
 
 #include "G4OpenInventorWin32.hh"
 
-#include "G4OpenInventorScene.hh"
-#include "G4OpenInventorView.hh"
+#include "G4OpenInventorSceneHandler.hh"
+#include "G4OpenInventorViewer.hh"
 
 #include "G4Win32.hh"
 
@@ -34,5 +34,7 @@ G4OpenInventorWin32::G4OpenInventorWin32 ()
 
   InitHEPVis();
 }
+
+G4OpenInventorWin32::~G4OpenInventorWin32 () {}
 
 #endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurface.hh,v 2.5 1998/11/11 18:42:25 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4CylindricalSurface.hh,v 1.1 1999/01/07 16:07:30 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*  /usr/local/gismo/repo/geometry/G4CylindricalSurface.h,v 1.16 1993/12/30 02:14:08 rensing Exp  */
 //  File:  G4CylindricalSurface.h

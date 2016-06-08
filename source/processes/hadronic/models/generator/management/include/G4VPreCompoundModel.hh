@@ -5,15 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPreCompoundModel.hh,v 1.5 1998/11/13 17:27:29 larazb Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VPreCompoundModel.hh,v 1.2 1999/04/12 15:45:38 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4VPreCompoundModel_h
 #define G4VPreCompoundModel_h 1
 
 #include "G4HadronicInteraction.hh"
-#include "G4DynamicParticleVector.hh"
+#include "G4ReactionProductVector.hh"
+#include "G4ReactionProduct.hh"
 class G4Track;
 class G4VParticleChange;
 class G4Nucleus;
@@ -42,7 +43,7 @@ public:
   virtual G4VParticleChange * 
           ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus) = 0;
   
-  virtual G4DynamicParticleVector* 
+  virtual G4ReactionProductVector* 
           DeExcite(const G4Fragment& aFragment) const = 0;
 
   void SetExcitationHandler(G4ExcitationHandler *const  value);

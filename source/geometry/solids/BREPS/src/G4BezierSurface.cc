@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BezierSurface.cc,v 2.8 1998/11/24 16:41:24 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4BezierSurface.cc,v 1.1 1999/01/07 16:07:40 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // L. Broglia, 10/10/98
 // Error in line 331 and replaced addition of coordinates by 

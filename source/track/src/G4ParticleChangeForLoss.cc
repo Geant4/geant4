@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForLoss.cc,v 2.1 1998/12/02 17:20:26 urban Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.3 1999/05/06 11:42:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -31,7 +31,7 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss():G4VParticleChange()
   debugFlag = false;
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForLoss::G4ParticleChangeForLoss() " << endl;
+    G4cout << "G4ParticleChangeForLoss::G4ParticleChangeForLoss() " << endl;
   }
 #endif
 }
@@ -40,7 +40,7 @@ G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4ParticleChangeForLoss::~G4ParticleChangeForLoss() " << endl;
+    G4cout << "G4ParticleChangeForLoss::~G4ParticleChangeForLoss() " << endl;
   }
 #endif
 }
@@ -49,7 +49,7 @@ G4ParticleChangeForLoss::~G4ParticleChangeForLoss()
 G4ParticleChangeForLoss::G4ParticleChangeForLoss(const G4ParticleChangeForLoss &right): G4VParticleChange(right)
 {
    if (verboseLevel>1) {
-    G4cerr << "G4ParticleChangeForLoss::  copy constructor is called " << endl;
+    G4cout << "G4ParticleChangeForLoss::  copy constructor is called " << endl;
    }
    theEnergyChange = right.theEnergyChange;
 }
@@ -58,10 +58,18 @@ G4ParticleChangeForLoss::G4ParticleChangeForLoss(const G4ParticleChangeForLoss &
 G4ParticleChangeForLoss & G4ParticleChangeForLoss::operator=(const G4ParticleChangeForLoss &right)
 {
    if (verboseLevel>1) {
-    G4cerr << "G4ParticleChangeForLoss:: assignment operator is called " << endl;
+    G4cout << "G4ParticleChangeForLoss:: assignment operator is called " << endl;
    }
    if (this != &right)
    {
+      theListOfSecondaries = right.theListOfSecondaries;
+      theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+      theNumberOfSecondaries = right.theNumberOfSecondaries;
+      theStatusChange = right.theStatusChange;
+      theTrueStepLength = right.theTrueStepLength;
+      theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+      theSteppingControlFlag = right.theSteppingControlFlag;
+     
       theEnergyChange = right.theEnergyChange;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit ;
    }
@@ -113,7 +121,9 @@ G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
     pPostStepPoint->SetKineticEnergy(0.0);
   }
 
+#ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);
+#endif
 
   //  Update the G4Step specific attributes 
   return UpdateStepInfo(pStep);
@@ -137,19 +147,44 @@ void G4ParticleChangeForLoss::DumpInfo() const
 G4bool G4ParticleChangeForLoss::CheckIt(const G4Track& aTrack)
 {
   G4bool    itsOK = true;
-  if (theEnergyChange > aTrack.GetKineticEnergy()) {
-    G4cout << " !!! the energy becomes larger than the initial energy !!!"
-         << " :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
-         << "MeV " <<endl;
+  G4bool    exitWithError = false;
+
+  G4double  accuracy;
+
+  // Energy should not be lager than initial value
+  accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
+  if (accuracy > accuracyForWarning) {
+    G4cout << "  G4ParticleChangeForLoss::CheckIt    : ";
+    G4cout << "the energy becoes larger than the initial value !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
     itsOK = false;
+    if (accuracy > accuracyForException) exitWithError = true;
   }
+
+  // dump out information of this particle change
   if (!itsOK) { 
-    G4cout << " G4ParticleChange::CheckIt " <<endl;
+    G4cout << " G4ParticleChangeForLoss::CheckIt " <<endl;
     G4cout << " pointer : " << this <<endl ;
     DumpInfo();
   }
+
+  // Exit with error
+  if (exitWithError) G4Exception("G4ParticleChangeForLoss::CheckIt");
+
+  //correction
+  if (!itsOK) {
+    theEnergyChange = aTrack.GetKineticEnergy();
+  }
+
+  itsOK = (itsOK) && G4VParticleChange::CheckIt(aTrack);
   return itsOK;
 }
+
+
+
+
+
+
 
 
 

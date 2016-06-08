@@ -20,6 +20,9 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//      
 // -------------------------------------------------------------------
 
 #ifndef G4VGAMMATRANSITION_HH
@@ -35,9 +38,13 @@ public:
 
   virtual ~G4VGammaTransition() {};
   
-  virtual G4double GammaEnergy() = 0;
+  virtual void SelectGamma() = 0;
+  virtual G4double GetGammaEnergy() = 0;
+  virtual G4double GetGammaCreationTime() = 0;
 
-  virtual G4double GetEnergyTo() const = 0;
+//--  virtual G4double GammaEnergy() = 0;
+
+//--  virtual G4double GetEnergyTo() const = 0;
 
   virtual void SetEnergyFrom(const G4double energy) = 0;
 

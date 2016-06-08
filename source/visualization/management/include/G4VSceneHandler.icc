@@ -1,0 +1,102 @@
+// This code implementation is the intellectual property of
+// the RD44 GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4VSceneHandler.icc,v 1.5 1999/05/12 13:57:26 barrand Exp $
+// GEANT4 tag $Name: geant4-00-01 $
+//
+// 
+// John Allison  19th July 1996.
+
+inline G4bool G4VSceneHandler::operator == (const G4VSceneHandler& scene) const {
+  return this == &scene;
+}
+
+inline void G4VSceneHandler::EndModeling () {}
+
+inline void G4VSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+                                  const G4VisAttributes& visAttribs) {
+  fpObjectTransformation = &objectTransformation;
+  fpVisAttribs = &visAttribs;
+}
+
+inline void G4VSceneHandler::PostAddThis () {}
+
+inline void G4VSceneHandler::ClearStore () {}
+inline void G4VSceneHandler::ClearTransientStore () {}
+
+inline G4VGraphicsSystem* G4VSceneHandler::GetGraphicsSystem () const {
+  return &fSystem;
+}
+
+inline G4int G4VSceneHandler::GetSceneId () const {
+  return fSceneId;
+}
+
+inline G4int G4VSceneHandler::GetViewCount () const {
+  return fViewCount;
+}
+
+inline
+G4double G4VSceneHandler::GetMarkerDiameter (const G4VMarker& marker,
+                                      G4VSceneHandler::MarkerSizeType& sizeType) {
+  return GetMarkerSize (marker, sizeType);
+}
+
+inline
+G4double G4VSceneHandler::GetMarkerRadius (const G4VMarker& marker,
+                                    G4VSceneHandler::MarkerSizeType& sizeType) {
+  return GetMarkerSize (marker, sizeType) / 2.;
+}
+
+inline G4int G4VSceneHandler::IncrementViewCount () {
+  return fViewCount++;
+}
+
+inline const G4String& G4VSceneHandler::GetName () const {
+  return fName;
+}
+
+inline void G4VSceneHandler::SetName (const G4String& name) {
+  fName = name;
+}
+
+inline G4Scene* G4VSceneHandler::GetScene () const {
+  return fpScene;
+}
+
+inline const G4ViewerList& G4VSceneHandler::GetViewerList () const {
+  return fViewerList;
+}
+
+inline const G4VModel* G4VSceneHandler::GetModel () const {
+  return fpModel;
+}
+
+inline G4VViewer* G4VSceneHandler::GetCurrentViewer () const {
+  return fpViewer;
+}
+
+inline void G4VSceneHandler::SetCurrentViewer (G4VViewer* pViewer) {
+  fpViewer = pViewer;
+}
+
+inline G4ViewerList& G4VSceneHandler::SetViewerList () {
+  return fViewerList;
+}
+
+inline void
+G4VSceneHandler::SetModel (const G4VModel* pModel) {
+  fpModel = pModel;
+}
+
+inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {
+  return GetColour (visible);
+}
+
+inline const G4Colour& G4VSceneHandler::GetTextColor (const G4Text& text) {
+  return GetTextColour (text);
+}

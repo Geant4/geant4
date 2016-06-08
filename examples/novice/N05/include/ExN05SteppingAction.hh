@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05SteppingAction.hh,v 2.1 1998/07/12 02:42:17 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN05SteppingAction.hh,v 1.2 1999/04/16 12:05:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef ExN05SteppingAction_h
@@ -19,9 +19,9 @@ class ExN05SteppingAction : public G4UserSteppingAction
 {
   public:
     ExN05SteppingAction();
-    ~ExN05SteppingAction(){};
+    virtual ~ExN05SteppingAction(){};
 
-    void UserSteppingAction();
+    virtual void UserSteppingAction(const G4Step*);
 
   private:
     G4bool drawFlag;

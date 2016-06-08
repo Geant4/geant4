@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 2.4 1998/08/10 13:12:32 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VProcess.hh,v 1.3 1999/04/14 10:50:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -61,7 +61,7 @@ class G4VProcess
 		 G4ProcessType   aType = fNotDefined );
 
   //  copy constructor copys the name but does not copy the 
-  //  physics table (NULL pointer is assigned)
+  //  physics table (0 pointer is assigned)
       G4VProcess(G4VProcess &right);
 
       virtual ~G4VProcess();
@@ -153,7 +153,7 @@ class G4VProcess
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
 
-      G4String GetProcessName() const;
+      const G4String& GetProcessName() const;
       //  Returns the name of the process.
 
       G4ProcessType GetProcessType() const;
@@ -162,20 +162,15 @@ class G4VProcess
       void SetProcessType(G4ProcessType );
       //  Set the process type.
 
-      static G4String GetProcessTypeName(G4ProcessType );
+      static const G4String& GetProcessTypeName(G4ProcessType );
       //  Returns the process type name
 
       virtual void StartTracking();
       virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
+ 
 
   protected:
-       //--- Removed    ----//
-      //  G4PhysicsTable* thePhysicsTable;
-      //  A Physics Table can be either a cross-sections table or
-      //  an energy table (or can be used for other specific
-      //  purposes).
-
       G4VParticleChange* pParticleChange;
       //  The pointer to G4VParticleChange object 
       //  which is modified and returned by address by the DoIt() method.
@@ -237,7 +232,8 @@ class G4VProcess
 // -----------------------------------------
 #include "Randomize.hh"              
 
-inline G4String G4VProcess::GetProcessName() const
+inline 
+ const G4String& G4VProcess::GetProcessName() const
 {
   return theProcessName;
 }
@@ -275,3 +271,23 @@ inline void G4VProcess::ClearNumberOfInteractionLengthLeft()
 }
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

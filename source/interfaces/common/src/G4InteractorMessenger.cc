@@ -68,9 +68,9 @@ void G4InteractorMessenger::SetNewValue (
   G4String* params = new G4String [paramn];
   if(GetValues(newValue,paramn,params)==true) {
     if(command==addMenu) {
-      session->AddMenu(params[0],params[1]);
+      session->AddMenu((const char*)params[0],(const char*)params[1]);
     } else if(command==addButton) {
-      session->AddButton(params[0],params[1],params[2]);
+      session->AddButton((const char*)params[0],(const char*)params[1],(const char*)params[2]);
     }
   }
   delete [] params;
@@ -84,17 +84,17 @@ G4bool GetValues (
   RWCTokenizer newValueToken( newValue );
   G4String aToken;
   for( int i=0; i<paramn;i++ ) {
-    aToken = newValueToken();
+    aToken = (G4String)newValueToken();
     if( aToken(0)=='"' ) {
       while( aToken(aToken.length()-1) != '"' ) {
-	G4String additionalToken = newValueToken();
+	G4String additionalToken = (G4String)newValueToken();
 	if( additionalToken.isNull() ) { 
 	  return false;
 	}
 	aToken += " ";
 	aToken += additionalToken;
       }
-      aToken = aToken.strip(G4String::both,'"');
+      aToken = (G4String)aToken.strip(G4String::both,'"');
     }
     if( aToken.isNull() ) {
       return false;

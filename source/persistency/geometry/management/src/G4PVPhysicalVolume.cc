@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVPhysicalVolume.cc,v 2.6 1998/11/15 14:04:17 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PVPhysicalVolume.cc,v 1.1 1999/01/07 16:10:49 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //                         Takashi.Sasaki@kek.jp

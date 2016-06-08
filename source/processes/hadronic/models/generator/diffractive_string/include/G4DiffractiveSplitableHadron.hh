@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveSplitableHadron.hh,v 1.4 1998/11/05 17:55:38 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DiffractiveSplitableHadron.hh,v 1.2 1999/04/15 12:10:06 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4DiffractiveSplitableHadron_h
@@ -23,7 +23,8 @@
 // ------------------------------------------------------------
 
 #include "G4VSplitableHadron.hh"
-
+#include "G4Nucleon.hh"
+#include "G4Parton.hh"
 
 class G4DiffractiveSplitableHadron : public G4VSplitableHadron
 {

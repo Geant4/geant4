@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PomeronCrossSection.cc,v 1.7 1998/12/10 08:58:23 maxim Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PomeronCrossSection.cc,v 1.2 1999/04/12 15:45:57 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4PomeronCrossSection.hh"
@@ -157,12 +157,15 @@ void G4PomeronCrossSection::Setgamma(const G4double agam)
 
 void G4PomeronCrossSection::InitForNucleon()
 {
-	pomeron_S=		3.0*GeV*GeV;
+//	pomeron_S=		3.0*GeV*GeV;
+	pomeron_S=		2.7*GeV*GeV;
 //	pomeron_Gamma=		2.16/GeV/GeV;
-	pomeron_Gamma=		3.96/GeV/GeV;
+//	pomeron_Gamma=		3.96/GeV/GeV;
+	pomeron_Gamma=		(2.6+3.96)/GeV/GeV;
 	pomeron_C=		1.4;
 	pomeron_Rsquare=	3.56/GeV/GeV;
-	pomeron_Alpha=		1.0808;
+//	pomeron_Alpha=		1.0808;
+	pomeron_Alpha=		0.9808;
 	pomeron_Alphaprime=	0.25/GeV/GeV;     
         pomeron_Gamma_Hard =    0.0002/GeV/GeV;  // Note! if pomeron_Gamma_Hard != 0 to fit total pp-crosscection
                                                  // pomeron_Gamma_Soft shold be 2.35/GeV/GeV

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPVPlacement.ddl,v 2.3 1998/11/10 18:29:53 morita Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PPVPlacement.ddl,v 1.1 1999/01/07 16:10:47 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //          P-versieon of G4PVPlacement      Takashi.Sasaki@kek.jp

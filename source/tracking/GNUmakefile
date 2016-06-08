@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.2 1998/11/18 17:46:01 kurasige Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:14:28 gunter Exp $
 # ----------------------------------------------------------
 # GNUmakefile for tracking library.  Katsuya Amako, 5/9/95.
 # ----------------------------------------------------------

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 2.3 1998/11/18 09:46:36 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4MuonDecayChannel.cc,v 1.4 1999/04/14 10:28:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -78,8 +78,8 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4MuonDecayChannel::DecayIt ";
 #endif
 
-  if (parent == NULL) FillParent();  
-  if (daughters == NULL) FillDaughters();
+  if (parent == 0) FillParent();  
+  if (daughters == 0) FillDaughters();
  
   // parent mass
   G4double parentmass = parent->GetPDGMass();
@@ -93,7 +93,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   }
 
    //create parent G4DynamicParticle at rest
-  G4ParticleMomentum dummy;
+  G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -123,7 +123,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   phi  = 2.0*M_PI*G4UniformRand()*rad;
   sinphi = sin(phi);
   cosphi = cos(phi);
-  G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
+  G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle 
          = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
@@ -139,7 +139,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   G4double sinphin = sin(phin);
   G4double cosphin = cos(phin);
 
-  G4ParticleMomentum direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
+  G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
   G4DynamicParticle * daughterparticle1 
          = new G4DynamicParticle( daughters[1], direction1*(vmass/2.));
   G4DynamicParticle * daughterparticle2
@@ -161,26 +161,9 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
  // output message
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cout << "     daughter 0:" << daughtermomentum[0]/GeV << "[GeV/c]" <<endl;
-    G4cout << "     daughter 1:" << daughtermomentum[1]/GeV << "[GeV/c]" <<endl;
-    G4cout << "     daughter 2:" << daughtermomentum[2]/GeV << "[GeV/c]" <<endl;
-  }
-#endif
-//  if (!products->IsChecked()) {
-//    G4cout << " daughter 0:" << daughtermomentum[0]/GeV << "[GeV/c]" <<endl;
-//    G4cout << " daughter 1:" << daughtermomentum[1]/GeV << "[GeV/c]" <<endl;
-//    G4cout << " daughter 2:" << daughtermomentum[2]/GeV << "[GeV/c]" <<endl;
-//    G4cout << " costheta = " << costheta << " sinphi = " << sinphi  <<endl;
-//    G4cout << " costhetan = " << costhetan << " sinphin = " << sinphin  <<endl;
-//    products->DumpInfo();
-//    G4Exception(" ");
-//  }  
-
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
-     G4cout << "G4MuonDecayChannel::DecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
-     products->DumpInfo();
+    G4cout << "G4MuonDecayChannel::DecayIt ";
+    G4cout << "  create decay products in rest frame " <<endl;
+    products->DumpInfo();
   }
 #endif
   return products;

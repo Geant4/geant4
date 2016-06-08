@@ -125,7 +125,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
   // Be carreful ! pointdistance is the squared distance
   return sqrt(pointDistance);
   
-  //  G4double PointDistance=INFINITY;
+  //  G4double PointDistance=kInfinity;
   //  G4double TmpDistance=0;
   //  PointDistance = OuterBoundary->ClosestDistanceToPoint(Pt);
   //  TmpDistance =0;
@@ -138,7 +138,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
 
   //G4double G4Boundary::ClosestDistanceToPoint(const G4ThreeVec& Pt)
   //{
-  //  G4double PointDistance = INFINITY;
+  //  G4double PointDistance = kInfinity;
   //  G4double TmpDistance = 0;
   //  for(int a =0; a < NumberOfPoints;a++)
   //    {

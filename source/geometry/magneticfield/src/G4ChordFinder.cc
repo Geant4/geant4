@@ -5,12 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 2.6 1998/11/13 14:30:21 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ChordFinder.cc,v 1.6 1999/07/12 09:36:17 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
-// 25.02.97 John Apostolakis,  desigh and implimentation 
-// 05.03.97 V. Grichine , makeup to G4 'standard'
+// 25.02.97 John Apostolakis,  design and implimentation 
+// 05.03.97 V. Grichine , style modification
 
 #include "G4ChordFinder.hh"
 #include "G4MagIntegratorDriver.hh"
@@ -48,8 +48,9 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   {
      fAllocatedStepper= false; 
   }
-  fIntgrDriver = new G4MagInt_Driver(stepMinimum, pItsStepper);
-			    
+  fIntgrDriver = new G4MagInt_Driver(stepMinimum, 
+				     pItsStepper, 
+				     pItsStepper->GetNumberOfVariables() );
 }
 
 // ......................................................................
@@ -145,7 +146,8 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 #endif
 
      // We check whether the criterion is met here.
-     validEndPoint = AcceptableMissDist(dChordStep);
+     validEndPoint = AcceptableMissDist(dChordStep); 
+                      //  && (dyErr < eps) ;
 
      if( ! validEndPoint ) {
          // This is needed to decide new step size until QuickAdvance does it
@@ -198,12 +200,6 @@ G4double G4ChordFinder::NewStep(
   return stepTrial;
 }
 
-// 
-//   G4FieldTrack G4NewMagTr::ApproxCurvePointV( 
-//			      const G4FieldTrack& CurveA_PointVelocity, 
-//			      const G4FieldTrack& CurveB_PointVelocity, 
-//			      const G4ThreeVector& CurrentE_Point,
-//			      const G4double eps_step)
 //
 //   Given a starting curve point A (CurveA_PointVelocity),  a later 
 //  curve point B (CurveB_PointVelocity) and a point E which is (generally)
@@ -235,33 +231,56 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   
   curve_length= 
        CurveB_PointVelocity.CurveS() - CurveA_PointVelocity.CurveS();  
-#ifdef DEBUG
-  const G4double  per_million=1e-6; 
-  if( ABdist * > curve_length * (1. + per_million ) ){
-    G4cerr << " Error in ApproxCurvePoint \n" <<
+
+  // const 
+  G4double  integrationInaccuracyLimit= max( perMillion, 0.5*eps_step ); 
+  if( curve_length < ABdist * (1. - integrationInaccuracyLimit) ){ 
+//  #ifdef G4DEBUG
+    G4cerr << " Warning in G4ChordFinder::ApproxCurvePoint: " << endl <<
       " The two points are further apart than the curve length " << endl <<
       " Dist = "         << ABdist  << 
-      " curve length = " << curve_length  << endl;
+      " curve length = " << curve_length 
+	   << " relativeDiff = " << (curve_length-ABdist)/ABdist 
+	   << endl;
+//  #endif
+    if( curve_length < ABdist * (1. - 10*eps_step) ) {
+//    #ifdef G4DEBUG
+      G4cerr << " ERROR: the size of the above difference exceeds allowed limits.  Aborting." 
+	     << endl;
+//    #endif
+      G4Exception("G4ChordFinder::ApproxCurvePoint> Unphysical curve length.");
+    }
+    // Take default corrective action: 
+    //    -->  adjust the maximum curve length. 
+    //  NOTE: this case only happens for relatively straight paths.
+    curve_length = ABdist; 
   }
-#endif
+
   G4double  new_st_length; 
 
   if ( ABdist > 0.0 ){
      AE_fraction = ChordAE_Vector.mag() / ABdist;
-     new_st_length= AE_fraction * curve_length; 
   }else{
-     G4cerr << " Error in ApproxCurvePoint: A and B are the same point\n" <<
+     G4cerr << " Error in G4ChordFinder::ApproxCurvePoint: A and B are the same point\n" <<
       " Chord AB length = " << ChordAE_Vector.mag()  << endl << endl;
      AE_fraction = 0.5;                         // Guess .. ?; 
-     new_st_length= AE_fraction * curve_length; // Is this correct ??
   }
   
   if( (AE_fraction> 1.0 + perMillion) || (AE_fraction< 0.) ){
-    G4cerr << " Error in ApproxCurvePoint: AE > AB or AE/AB <= 0 " << endl <<
+    G4cerr << " G4ChordFinder::ApproxCurvePointV: Warning: Anomalous condition:AE > AB or AE/AB <= 0 " << endl <<
       "   AE_fraction = " <<  AE_fraction << endl <<
       "   Chord AE length = " << ChordAE_Vector.mag()  << endl << 
       "   Chord AB length = " << ABdist << endl << endl;
+    G4cerr << " OK if this condition occurs after a recalculation of 'B'" << endl
+	   << " Otherwise it is an error. " << endl ; 
+     // This course can now result if B has been re-evaluated, 
+     //   without E being recomputed   (1 July 99)
+     //  In this case this is not a "real error" - but it undesired
+     //   and we cope with it by a default corrective action ...
+     AE_fraction = 0.5;                         // Default value
   }
+
+  new_st_length= AE_fraction * curve_length; 
 
   if ( AE_fraction > 0.0 ) { 
      G4bool good_advance = 

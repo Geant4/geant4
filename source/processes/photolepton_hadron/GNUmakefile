@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1998/10/27 04:25:57 kurasige Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:14:07 gunter Exp $
 # ---------------------------------------------------------------------
 # GNUmakefile for photolepton_hadron library.  Gabriele Cosmo, 18/9/96.
 # ---------------------------------------------------------------------

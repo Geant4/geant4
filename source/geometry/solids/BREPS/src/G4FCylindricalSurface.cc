@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 2.14 1998/12/10 17:26:42 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FCylindricalSurface.cc,v 1.8 1999/05/27 10:44:55 japost Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
 //  File:  FG4Cylinder.cc
@@ -29,6 +29,7 @@
 #include "G4Sort.hh"
 
 
+
 G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o, 
 					      const G4Vector3D& a,
 					      const G4double r, 
@@ -39,11 +40,11 @@ G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o,
   //  radius r, and length l
   G4Vector3D dir(1,1,1);
   Position.Init(dir, a, o);
-  origin = o;
 
+  origin = o;
+  radius = r;
   
   //  Require length to be positive or zero
-  //	if ( l > 0.0 )
   if ( l >= 0.0 )
     length = l;
   else 
@@ -66,7 +67,6 @@ G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o,
     
     radius = 0.0;
   }
-
 }
 
 
@@ -137,149 +137,113 @@ void G4FCylindricalSurface::CalcBBox()
 
 int G4FCylindricalSurface::Intersect( const G4Ray& ry )  
 {
-  //  Distance along a Ray (straight line with G4ThreeVec) to leave or enter
-  //  a G4CylindricalSurface.  The input variable which_way should be set 
-  //  to +1 to indicate leaving a G4CylindricalSurface, -1 to indicate 
-  //  entering a G4CylindricalSurface.
-  //  p is the point of intersection of the Ray with the G4CylindricalSurface.
-  //  If the G4Vector3D of the Ray is opposite to that of the Normal to
-  //  the G4CylindricalSurface at the intersection point, it will not leave 
-  //  the G4CylindricalSurface.
-  //  Similarly, if the G4Vector3D of the Ray is along that of the Normal 
-  //  to the G4CylindricalSurface at the intersection point, it will not enter
-  //  the G4CylindricalSurface.
-  //  This method is called by all finite shapes sub-classed to 
-  //  G4CylindricalSurface.
-  //  Use the virtual function table to check if the intersection point
-  //  is within the boundary of the finite shape.
-  //  A negative result means no intersection.
-  //  If no valid intersection point is found, set the distance
-  //  and intersection point to large numbers.
+  // This function count the number of intersections of a 
+  // bounded cylindrical surface by a ray.
+  // At first, calculates the intersections with the infinite 
+  // cylindrical surfsace. After, count the intersections within the
+  // finite cylindrical surface boundaries, and set "distance" to the 
+  // closest distance from the start point to the nearest intersection
+  // If the point is on the surface it returns or the intersection with
+  // the opposite surface or kInfinity
 
-  // int which_way = -1; 
-  //Originally a parameter.Read explanation above. 
-  
-  int which_way=1;
-  
-  if(!Inside(ry.GetStart()))
-    which_way = -1;	   
-  
-  distance = FLT_MAXX;
-  G4Vector3D lv ( FLT_MAXX, FLT_MAXX, FLT_MAXX );
-  
-  closest_hit = lv;
+  // If no intersection is founded, set distance = kInfinity and
+  // return 0
 
-  //  Origin and G4Vector3D unit vector of Ray.
-  G4Vector3D x    = ry.GetStart();
+  distance    = kInfinity;
+  closest_hit = PINFINITY;
+
+  // origin and direction of the ray
+  G4Point3D  x    = ry.GetStart();
   G4Vector3D dhat = ry.GetDir();
 
-  //  Axis unit vector of the G4CylindricalSurface.
-  G4Vector3D ahat = GetAxis();
-  int isoln   = 0, 
-      maxsoln = 2;
-  
-  //  array of solutions in distance along the Ray
+  // cylinder axis 
+  G4Vector3D ahat  = Position.GetAxis();
+ 
+  //  array of solutions in distance along the ray
   G4double s[2];
-  s[0] = -1.0; 
-  s[1] = -1.0 ;
+  s[0]=-1.0;
+  s[1]=-1.0;
 
-  //  calculate the two solutions (quadratic equation)
-  G4Vector3D d    = x - GetOrigin();
-  G4double   radiu = GetRadius();
-
-  //quit with no intersection if the radius of the G4CylindricalSurface is zero
-  //	if ( radiu <= 0.0 )
-  //		return 0;
-	
-  G4double dsq  = d * d;
-  G4double da   = d * ahat;
-  G4double dasq = da * da;
-  G4double rsq  = radiu * radiu;
-  G4double qsq  = dsq - dasq;
-  G4double dira = dhat * ahat;
-  G4double a    = 1.0 - dira * dira;
+  // calculate the two intersections (quadratic equation)   
+  G4Vector3D gamma =  x - Position.GetLocation();
   
-  if ( a <= 0.0 )
-    return 0;
-	
-  G4double b       = 2. * ( d * dhat - da * dira );
-  G4double c       = rsq - qsq;
-  G4double radical = b * b + 4. * a * c; 
-	
+  G4double ga = gamma * ahat;
+  G4double da = dhat * ahat;
+
+  G4double A = da * da - dhat * dhat;
+  G4double B = 2 * ( -gamma * dhat + ga * da );
+  G4double C =  -gamma * gamma + ga * ga  + radius * radius ;
+
+  G4double radical = B * B  -  4.0 * A * C; 
+
   if ( radical < 0.0 ) 
+    // no intersection
     return 0;
-
-  G4double root = sqrt( radical );
-  s[0] = ( - b + root ) / ( 2. * a );
-  s[1] = ( - b - root ) / ( 2. * a );
-
-  //  order the possible solutions by increasing distance along the Ray
-  //  (G4Sorting routines are in support/G4Sort.h)
-  G4Sort_double( s, isoln, maxsoln-1 );
-
-  //  now loop over each positive solution, keeping the first one (smallest
-  //  distance along the Ray) which is within the boundary of the sub-shape
-  //  and which also has the correct G4Vector3D with respect to the Normal to
-  //  the G4CylindricalSurface at the intersection point
-  for ( isoln = 0; isoln < maxsoln; isoln++ ) 
+  else 
   {
-    if ( s[isoln] >= kCarTolerance*0.5 ) 
-    {
-      if ( s[isoln] >= FLT_MAXX )  // quit if too large
-	return 0;
-      
-      distance = s[isoln];
-      closest_hit = ry.GetPoint( distance );
-      G4double  tmp =  dhat * (Normal( closest_hit ));
-      
-      // L. Broglia
-      // After this test, somtimes we have the distance, 
-      // sometimes we have the squared distance
-      // For the moment, I delete this test
-      //if ((tmp * which_way) >= 0.0 )
-	//if ( WithinBoundary( closest_hit ) == 1 )
-            distance =  distance*distance;
-      
-      return 1;
-    }
-    else
-      if ( s[isoln] >= -kCarTolerance*0.5 ) 
-      {
-	// the point is on the surface
-	distance = 0;
-	return 1;
-      }          
+    G4double root = sqrt( radical );
+    s[0] = ( - B + root ) / ( 2. * A );
+    s[1] = ( - B - root ) / ( 2. * A );
   }
   
-  //  get here only if there was no solution within the boundary, Reset
-  //  distance and intersection point to large numbers
-  distance = FLT_MAXX;
-  closest_hit = lv;
-  return 0;
+  // validity of the solutions
+  // the hit point must be into the bounding box of the cylindrical surface
+  G4Point3D p0 = x + s[0]*dhat;
+  G4Point3D p1 = x + s[1]*dhat;
+
+  if( !GetBBox()->Inside(p0) )
+    s[0] = kInfinity;
+
+  if( !GetBBox()->Inside(p1) )
+    s[1] = kInfinity;
+  
+  //  now loop over each positive solution, keeping the first one (smallest
+  //  distance along the Ray) which is within the boundary of the sub-shape
+  G4int nbinter = 0;
+  distance = kInfinity;
+
+  for ( G4int i = 0; i < 2; i++ ) 
+  {  
+    if(s[i] < kInfinity) {
+      if ( s[i] >= kCarTolerance*0.5 ) {
+	nbinter ++;
+       	// real intersection
+	// set the distance if it is the smallest
+	if( distance > s[i]*s[i]) {
+	  distance = s[i]*s[i];
+	}
+      }
+    }    
+  }
+
+  return nbinter;
 }
 
 
 G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
 {
-  //  Distance from the point x to the infinite G4CylindricalSurface.
-  //  The distance will be positive if the point is Inside the 
-  //  G4FCylindricalSurface, negative if the point is outside.
+  // Shortest distance from the point x to the G4FCylindricalSurface.
+  // The distance will be always positive 
 
-  G4Vector3D d = x - origin;
-  G4double dA = d * Position.GetAxis();
-  G4double rad = sqrt( d.mag2() - dA*dA );
-  G4double hownear;
+  G4double   hownear;
 
-  if(dA > length)
-    hownear = length - dA;
-  else if(dA < 0)
-    hownear = dA;
-  else
-    hownear = radius - rad;
- 
+  G4Vector3D upcorner = G4Vector3D ( radius, 0 , origin.z()+length);
+  G4Vector3D downcorner = G4Vector3D ( radius, 0 , origin.z());
+  G4Vector3D xd;  
+  
+  xd = G4Vector3D ( sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
+    
+  
+  G4double Zinter = (xd.z()) ;
+  
+  if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ) {
+    hownear = fabs( radius - xd.x() );
+  } else {
+    hownear = min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+  }
+
   return hownear;
 }
-
 
 int G4FCylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
 {
@@ -315,6 +279,9 @@ G4Vector3D G4FCylindricalSurface::SurfaceNormal( const G4Point3D& p ) const
   
   if ( nmag != 0.0 )
     n = n * (1/nmag);
+
+  if( !sameSense )
+    n = -n;
   
   return n;
 }

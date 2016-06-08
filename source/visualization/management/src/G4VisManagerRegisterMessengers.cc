@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 2.10 1998/12/09 23:55:57 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.6 1999/05/25 09:14:21 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // G4VisManager::RegisterMessengers - John Allison 30/July/1998.
@@ -48,20 +48,6 @@ Introduction
 ============
 
 This note defines the concepts of scene, scene handler and viewers.
-For reasons which are lost in history they correspond to confusingly
-differently named objects in Geant4.  What we would like to call a
-scene is a G4SceneData object and a G4VScene object is a scene
-handler.  Similarly a viewer is represented by a G4VView object.
-However, this is historical, and changing C++ names is a pain.  I dont
-plan to change names right now!!
-
-The situation ca be summarised as follows:
-
-   Working Concept (Terms Used Below)     Geant4 C++ Object
-   ----------------------------------     -----------------
-       scene                              G4SceneData
-       scene handler                      Sub-class of G4VScene
-       viewer                             Sub-class of G4VView
 
 Scenes
 ======
@@ -88,7 +74,7 @@ manages a list of scenes.
 * /vis/scene/set/hitOption accumulate|byEvent
 * /vis/scene/set/notifyOption immediate|delayed
 * /vis/scene/set/modelingStyle [<modeling-style>]
-* /vis/scene/notifyHandlers
+/vis/scene/notifyHandlers
 
 
 Scene Handlers
@@ -99,7 +85,8 @@ into something that the graphics system can understand.
 
 The commands would look something like:
 
-/vis/sceneHandler/create <graphics-system> [<scene-handler-name>]
+/vis/sceneHandler/create
+       <graphics-system> [<scene-handler-name>] [<scene-name>]
 /vis/sceneHandler/attach [<scene-name>]
 /vis/sceneHandler/list
 /vis/sceneHandler/select [<scene-handler-name>]
@@ -193,7 +180,7 @@ or some such.
   command -> SetGuidance ("Operations on Geant4 scenes.");
   fMessengerList.append (new G4VisCommandSceneCreate);
   fMessengerList.append (new G4VisCommandSceneList);
-  // fMessengerList.append (new G4VisCommandSceneNotifyHandlers); (Not ready!)
+  fMessengerList.append (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.append (new G4VisCommandSceneSelect);
   fMessengerList.append (new G4VisCommandSceneRemove);
   command = new G4UIdirectory ("/vis/scene/add/");
@@ -227,20 +214,20 @@ or some such.
   // Clear - OLD STYLE!!
   fMessengerList.append
     (new G4VisCommandDirectoryMessenger <G4VisCommandClear>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandClearScene>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandClearScene>);
   fMessengerList.append
     (new G4VisSimpleCommandMessenger <G4VisCommandClearView>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandClearViewAndScene>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandClearViewAndScene>);
 
   // Copy - OLD STYLE!!
   fMessengerList.append
     (new G4VisCommandDirectoryMessenger <G4VisCommandCopy>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandCopyAll>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandCopyScene>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandCopyAll>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandCopyScene>);
   fMessengerList.append
     (new G4VisSimpleCommandMessenger <G4VisCommandCopyView>);
 

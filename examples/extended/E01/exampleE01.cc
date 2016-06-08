@@ -1,4 +1,4 @@
-// $Id: exampleE01.cc,v 1.2 1998/12/08 16:37:23 allison Exp $
+// $Id: exampleE01.cc,v 1.1 1999/01/07 16:05:17 gunter Exp $
 
 #include "ExE01DetectorConstruction.hh"
 #include "ExE01RunAction.hh"

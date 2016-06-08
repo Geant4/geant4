@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DalitzDecayChannel.cc,v 2.4 1998/11/18 09:46:32 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DalitzDecayChannel.cc,v 1.3 1999/04/13 08:00:14 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -44,7 +44,8 @@ G4DalitzDecayChannel::G4DalitzDecayChannel(
   SetParent(theParentName);
   SetBR(theBR);
   SetNumberOfDaughters(3);
-  SetDaughter(idGamma, "gamma");
+  G4String gammaName = "gamma";
+  SetDaughter(idGamma, gammaName);
   SetDaughter(idLepton, theLeptonName);
   SetDaughter(idAntiLepton, theAntiLeptonName);
   //
@@ -62,14 +63,14 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4DalitzDecayChannel::DecayIt ";
 #endif 
-  if (parent == NULL) FillParent();  
-  if (daughters == NULL) FillDaughters();
+  if (parent == 0) FillParent();  
+  if (daughters == 0) FillDaughters();
 
   // parent mass
   G4double parentmass = parent->GetPDGMass();
  
  //create parent G4DynamicParticle at rest
-  G4ParticleMomentum dummy;
+  G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
  
   //daughters'mass
@@ -101,7 +102,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
   G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ParticleMomentum gdirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4ThreeVector gdirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
 
   //create G4DynamicParticle for gamma 
   G4DynamicParticle * gammaparticle
@@ -117,7 +118,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
   phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ParticleMomentum ldirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4ThreeVector ldirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
   //create G4DynamicParticle for leptons  in the rest frame of (l+ l-)system
   G4DynamicParticle * leptonparticle 
     = new G4DynamicParticle(daughters[idLepton] , 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 2.16 1998/12/10 17:26:41 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FConicalSurface.cc,v 1.8 1999/05/19 16:57:11 magni Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
 //  File:  G4FConicalSurface.cc
@@ -27,6 +27,7 @@
 //
 //  End ---------------------------------------------------------------
 
+
 #include "G4FConicalSurface.hh"
 #include "G4Sort.hh"
 #include "G4CircularCurve.hh"
@@ -37,25 +38,20 @@ G4FConicalSurface::G4FConicalSurface(const G4Point3D&  o,
 				     G4double          l, 
 				     G4double          sr, 
 				     G4double          lr 
-				    ) //: G4ConicalSurface( o, a, 1.0 )
-                                      //: G4Surface( o ) doesn`t exist
+				    ) 
 {
-  //  Make a G4FConicalSurface with origin o, axis a, length l, small radius 
-  //  sr, and large radius lr. The angle is calculated below and the SetAngle
-  //  function of G4ConicalSurface is used to set it properly from the default
+  // Make a G4FConicalSurface with origin o, axis a, length l, small radius 
+  // sr, and large radius lr. The angle is calculated below and the SetAngle
+  // function of G4ConicalSurface is used to set it properly from the default
   // value used above in the initialization.
  
-  // L. Broglia
-  // Position.SetSrfPoint(o);
-  // Position.SetAxis(a);
-  // Create the position with origin o, axis a, and a direction wich
-  // is not important
+  // Create the position with origin o, axis a, and a direction
+
   G4Vector3D dir(1,1,1);
   Position.Init(dir, a, o);
   origin = o;
   
   //  Require length to be nonnegative
-  //	if ( l > 0.0 )
   if (l >=0)
     length = l;
   else 
@@ -255,234 +251,152 @@ void G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
 
 int G4FConicalSurface::Intersect(const G4Ray& ry )
 { 
-  //  Distance along a Ray (straight line with G4Vector3D) to leave or enter
-  //  a G4FConicalSurface.  The input variable which_way should be set to +1 to
-  //  indicate leaving a G4ConicalSurface, -1 to indicate entering a 
-  //  G4ConicalSurface.
-  //  p is the point of intersection of the Ray with the G4ConicalSurface.
-  //  If the G4Vector3D of the Ray is opposite to that of the Normal to
-  //  the G4FConicalSurface at the intersection point, it will not leave the 
-  //  G4FConicalSurface.
-  //  Similarly, if the G4Vector3D of the Ray is along that of the Normal 
-  //  to the G4ConicalSurface at the intersection point, it will not enter the
-  //  G4ConicalSurface.
-  //  This method is called by all finite shapes sub-classed to 
-  //  G4ConicalSurface.
-  //  Use the virtual function table to check if the intersection point
-  //  is within the boundary of the finite shape.
-  //  A negative result means no intersection.
-  //  If no valid intersection point is found, set the distance
-  //  and intersection point to large numbers.
- 
-  int which_way;
- 
-  if(Inside(ry.GetStart()))
-    which_way = 1;
-  else
-    which_way = -1;	   
-  
-  distance = FLT_MAXX;
+  // This function count the number of intersections of a 
+  // bounded conical surface by a ray.
+  // At first, calculates the intersections with the semi-infinite 
+  // conical surfsace. After, count the intersections within the
+  // finite conical surface boundaries, and set "distance" to the 
+  // closest distance from the start point to the nearest intersection
+  // If the point is on the surface it returns or the intersection with
+  // the opposite surface or kInfinity
+  // If no intersection is founded, set distance = kInfinity and
+  // return 0
 
-  G4Vector3D lv ( FLT_MAXX, FLT_MAXX, FLT_MAXX );
-  closest_hit = lv;
+  distance    = kInfinity;
+  closest_hit = PINFINITY;
 
-  //  Origin and G4Vector3D unit vector of Ray.
-
-  G4Vector3D x    = ry.GetStart();
+  // origin and direction of the ray
+  G4Point3D  x    = ry.GetStart();
   G4Vector3D dhat = ry.GetDir();
 
-  //  Cone angle and axis unit vector.
-  G4double ta = tan_angle;
+  // cone angle and axis
+  G4double   ta   = tan_angle;
   G4Vector3D ahat = Position.GetAxis();
-  int isoln = 0, maxsoln = 2;
  
-  //  array of solutions in distance along the Ray
+  //  array of solutions in distance along the ray
   G4double s[2];
   s[0]=-1.0;
   s[1]=-1.0;
 
-  // L. Broglia
-  //  calculate the two solutions (quadratic equation)
-    
+  // calculate the two intersections (quadratic equation)   
   G4Vector3D gamma =  x - Position.GetLocation();
   
-  G4double T  = 1.0  +  ta * ta;
+  G4double t  = 1  +  ta * ta;
   G4double ga = gamma * ahat;
   G4double da = dhat * ahat;
-  /*
-  G4double A  = 1.0 - T * da * da;
-  G4double B  = 2.0 * ( gamma * dhat - T * ga * da );
-  G4double C  = gamma * gamma - T * ga * ga;
-  */
 
-  G4double A = - 1.0 + T * da * da;
-  G4double B = 2 * ( -gamma * dhat + T * ga * da - large_radius * ta * da);
-  G4double C = ( -gamma * gamma + T * ga * ga 
+  G4double A = t * da * da - dhat * dhat;
+  G4double B = 2 * ( -gamma * dhat + t * ga * da - large_radius * ta * da);
+  G4double C = ( -gamma * gamma + t * ga * ga 
 		 - 2 * large_radius * ta * ga
 		 + large_radius * large_radius );
 
+  G4double radical = B * B  -  4.0 * A * C; 
 
-  //  if quadratic term vanishes, just do the simple solution
-  if ( fabs( A ) < FLT_EPSILO ) 
-    if ( B == 0.0 )
-      return 1;
-    else
-      s[0] = -C / B;
-  
-  //  Normal quadratic case, no intersection if radical is less than zero
+  if ( radical < 0.0 ) 
+    // no intersection
+    return 0;
   else 
   {
-    G4double radical = B * B  -  4.0 * A * C; 
-
-    if ( radical < 0.0 ) 
-      return 0;
-    else 
-    {
-      G4double root = sqrt( radical );
-      s[0] = ( - B + root ) / ( 2. * A );
-      s[1] = ( - B - root ) / ( 2. * A );
-    }
+    G4double root = sqrt( radical );
+    s[0] = ( - B + root ) / ( 2. * A );
+    s[1] = ( - B - root ) / ( 2. * A );
   }
-
-
-
   
+  // validity of the solutions
+  // the hit point must be into the bounding box of the conical surface
+  G4Point3D p0 = x + s[0]*dhat;
+  G4Point3D p1 = x + s[1]*dhat;
+  
+  if( !GetBBox()->Inside(p0) )
+    s[0] = kInfinity;
 
-  //  order the possible solutions by increasing distance along the Ray
-  //  (G4Sorting routines are in support/G4Sort.h)
-  G4Sort_double( s, isoln, maxsoln-1 );
+  if( !GetBBox()->Inside(p1) )
+    s[1] = kInfinity;
+ 
+  // now loop over each positive solution, keeping the first one (smallest
+  // distance along the ray) which is within the boundary of the sub-shape
+  G4int nbinter = 0;
+  distance = kInfinity;
 
-  //  now loop over each positive solution, keeping the first one (smallest
-  //  distance along the Ray) which is within the boundary of the sub-shape
-  //  and which also has the correct G4Vector3D with respect to the Normal to
-  //  the G4ConicalSurface at the intersection point
-  for ( isoln = 0; isoln < maxsoln; isoln++ ) 
-  {
-    if ( s[isoln] >= kCarTolerance*0.5 ) 
-    {
-      if ( s[isoln] >= FLT_MAXX )  // quit if too large
-	return 0;
-      
-      distance = s[isoln];
-      closest_hit = ry.GetPoint( distance );
-      
-
-      //  Following line necessary to select non-reflective solutions.
-      if ((( ahat * ( closest_hit - Position.GetLocation() ) > 0.0 )       && 
-	   ((( dhat * SurfaceNormal( closest_hit ) * which_way ) >= 0.0 )) &&
-	   ( fabs(HowNear( closest_hit )) < 0.1))                             )
-      {
-	if ( WithinBoundary ( closest_hit ) == 1 ) 
-	{
-	  distance =  distance*distance;
-	  return 1;
-	}	
+  for ( G4int i = 0; i < 2; i++ ) 
+  {  
+    if(s[i] < kInfinity) {
+      if ( (s[i] > kCarTolerance*0.5)  ) {
+	nbinter++;
+  	if ( distance > (s[i]*s[i]) ) {
+	  distance = s[i]*s[i];
+	}
       }
-      distance =  distance*distance;
-      return 1;
     }
-    else
-      if ( s[isoln] >= -kCarTolerance*0.5 ) 
-      {
-	// the point is on the surface
-	distance = 0;
-	return 1;
-      }   
   }
 
-  //  get here only if there was no solution within the boundary, Reset
-  //  distance and intersection point to large numbers
-  distance = FLT_MAXX;
-  closest_hit = lv;
-  
-  return 0;
+  return nbinter;
 }
 
 
 G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
 { 
-  // Distance from the point x to the semi-infinite G4FConicalSurface.
-  // The distance will be positive if the point is Inside the G4ConicalSurface,
-  // negative if the point is outside.
-  // Note that this may not be correct for a bounded conical object
-  // subclassed to G4ConicalSurface.
+//  Shortest distance from the point x to the G4FConicalSurface.
+//  The distance will be always positive
+//  This function works only with Cone axis equal (0,0,1) or (0,0,-1), it project
+//  the surface and the point on the x,z plane and compute the distance in analytical
+//  way
   
-  G4Vector3D d       = x - origin;
-  G4double   dA      = d * Position.GetAxis();
-  G4double   rad     = sqrt( d.mag2() - dA*dA );
-  G4double   teta    = atan2( (large_radius - small_radius) , length );
-  G4double   radiu   = fabs( rad - large_radius + dA*tan_angle );
   G4double   hownear ;
 
-  if (dA > length)
-    hownear =dA - length;
-  else if (dA < 0)
-    hownear =dA;
-  else
-    hownear = radiu * cos(teta);
+  G4Vector3D upcorner = G4Vector3D ( small_radius, 0 , origin.z()+Position.GetAxis().z()*length);
+  G4Vector3D downcorner = G4Vector3D ( large_radius, 0 , origin.z());
+  G4Vector3D xd;  
+  
+  xd = G4Vector3D ( sqrt ( x.x()*x.x() + x.y()*x.y() ) , 0 , x.z() );
+    
+  G4double m = (upcorner.z() - downcorner.z()) / (upcorner.x() - downcorner.x());
+  G4double q = (downcorner.z()*upcorner.x() - upcorner.z()*downcorner.x()) /
+               (upcorner.x() - downcorner.x());
+  
+  G4double Zinter = (xd.z()*m*m + xd.x()*m +q)/(1+m*m) ;
+  
+  if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ||
+       ((Zinter >= upcorner.z()) && (Zinter <=downcorner.z())) ) {
+    hownear = fabs(m*xd.x()-xd.z()+q)/sqrt(1+m*m);
+    return hownear;
+  } else {
+    hownear = min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+    return hownear;
+  }
 
-  return hownear;
+
 }
 
 
-// Add by L. Broglia
-// Verify this function
 G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 {  
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
   //  on (or nearly on) the G4ConicalSurface
-  G4Vector3D s    = p - origin;
-  G4double   smag = s.mag2();
+  G4Vector3D s  = p - origin;
+  G4double   da = s * Position.GetAxis();
+  G4double   r  = sqrt( s*s - da*da);
+  G4double   z  = tan_angle * r; 
   
-  //  if the point happens to be at the origin, calculate a unit vector Normal
-  //  to the axis, with zero z component
-  if ( smag == 0.0 )
-  {
-    G4double ax = Position.GetAxis().x();
-    G4double ay = Position.GetAxis().y();
-    G4double ap = sqrt( ax * ax  +  ay * ay );
+  if (Position.GetAxis().z() < 0)
+    z = -z; 
 
-    if ( ap == 0.0 )
-      return G4Vector3D( 1.0, 0.0, 0.0 );
-    else
-      return G4Vector3D( ay / ap, -ax / ap, 0.0 );
-  }
+  G4Vector3D n(p.x(), p.y(), z);
+  n = n.unit();
+  
+  if( !sameSense )
+    n = -n;
 
-  //  otherwise do the calculation of the Normal to the conical surface
-  else 
-  {
-    G4double l = s * Position.GetAxis();
-
-    s = s*(1/smag);
-    G4Vector3D q    = origin  +  l * Position.GetAxis();
-    G4Vector3D v    = p - q;
-
-    G4double   sl   = v.mag2() * 
-      sin( atan2((large_radius - small_radius), length) );
-    
-    G4Vector3D n    = v - sl * s;
-
-    G4double   nmag = n.mag2(); 
-
-    if ( nmag != 0.0 )
-      n=n*(1/nmag);
-    
-    return n;
-  }
+  return n; 
 }
 
-// Add by L. Broglia
 int G4FConicalSurface::Inside ( const G4Vector3D& x ) const
 { 
   // Return 0 if point x is outside G4ConicalSurface, 1 if Inside.
-  // Outside means that the distance to the G4ConicalSurface would be negative.
-  // Use the HowNear function to calculate this distance.
   if ( HowNear( x ) >= -0.5*kCarTolerance )
     return 1;
   else
     return 0; 
 }
-
-
-
 

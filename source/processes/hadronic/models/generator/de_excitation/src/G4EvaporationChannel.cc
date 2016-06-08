@@ -96,7 +96,8 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
 
     // Coulomb Barrier calculation
     CoulombBarrier = CalcCoulombBarrier(AResidual,ZResidual)*MeV;
-
+	
+    
     // Binding Enegy (for separate fragment from nucleus)
     BindingEnergy = CalcBindingEnergy(anA,aZ)*MeV;
 
@@ -145,6 +146,13 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 
   G4LorentzVector EvaporatedMomentum( momentum, EvaporatedEnergy );
   EvaporatedMomentum.boost( theNucleus.GetMomentum().boostVector() );
+  
+  // to avoid rounding errors in Lorentz boost which then produce 
+  // evaporated fragments with excitation energies ~10^-10 eV
+  EvaporatedMomentum.setE(sqrt(EvaporatedMomentum.vect().mag2()+EvaporatedMass*EvaporatedMass));
+  
+  
+  
 
   G4Fragment * EvaporatedFragment = new G4Fragment( A, Z, EvaporatedMomentum );
   if ( !EvaporatedFragment )
@@ -152,13 +160,15 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 
   G4LorentzVector FragmentMomentum( theNucleus.GetMomentum() );
   FragmentMomentum.boost( -theNucleus.GetMomentum().boostVector() );
+  
 
   G4LorentzVector ResidualMomentum( -momentum, FragmentMomentum.e() - EvaporatedEnergy );
   ResidualMomentum.boost( theNucleus.GetMomentum().boostVector() );
+
   
   G4Fragment * ResidualFragment = new G4Fragment( AResidual, ZResidual, ResidualMomentum );
   if ( !ResidualFragment )
-    G4Exception( "G4EvaporationChannel::BreakUp: Can't create G4Fragment! ");
+		G4Exception( "G4EvaporationChannel::BreakUp: Can't create G4Fragment! ");
 
 
   G4FragmentVector * theResult = new G4FragmentVector;
@@ -184,6 +194,7 @@ G4double G4EvaporationChannel::CalcCoulombBarrier(const G4int ARes, const G4int 
   }
   return Barrier;
 }
+
 
 
 G4double G4EvaporationChannel::CalcBindingEnergy(const G4int anA, const G4int aZ)

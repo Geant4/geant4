@@ -20,21 +20,31 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added half-life, angular momentum, parity, emissioni type
+//              reading from experimental data. 
+//      
 // -------------------------------------------------------------------
 
 #include "G4NuclearLevel.hh"
 
 #include "globals.hh"
 
-G4NuclearLevel::G4NuclearLevel(const G4double energy, 
-			       const G4DataVector& eGamma, const G4DataVector& wGamma)
+G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
+			       const G4double angularMomentum,
+			       const G4DataVector& eGamma,
+			       const G4DataVector& wGamma,
+			       const G4DataVector& polarities)
 {
   _energy = energy;
+  _halfLife = halfLife;
+  _angularMomentum = angularMomentum;
   G4int i;
   for (i=0; i<eGamma.entries(); i++)
     {
       _energies.insert(eGamma.at(i));
       _weights.insert(wGamma.at(i));
+      _polarities.insert(polarities.at(i));
     }
   _nGammas = _energies.entries();
   MakeProbabilities();
@@ -87,9 +97,24 @@ const G4DataVector& G4NuclearLevel::GammaCumulativeProbabilities() const
 }
  
 
+const G4DataVector& G4NuclearLevel::GammaPolarities() const
+{
+  return _polarities;
+}
+ 
 G4double G4NuclearLevel::Energy() const
 {
   return _energy;
+}
+ 
+G4double G4NuclearLevel::AngularMomentum() const
+{
+  return _angularMomentum;
+}
+ 
+G4double G4NuclearLevel::HalfLife() const
+{
+  return _halfLife;
 }
  
 
@@ -101,7 +126,9 @@ G4int G4NuclearLevel::NumberOfGammas() const
 
 void G4NuclearLevel::PrintAll() const 
 {
-  G4cout << "---- Level energy = " << _energy << ", " << _nGammas << " photons" << endl;
+  G4cout << "---- Level energy = " << _energy << ", angular momentum = "
+	 << _angularMomentum << ", half life " << _halfLife
+	 << ", " << _nGammas << " photons" << endl;
   G4int i;
   G4cout << "     Gammas: ";
   for (i=0; i<_nGammas; i++) { G4cout << _energies.at(i) << " "; }
@@ -111,6 +138,8 @@ void G4NuclearLevel::PrintAll() const
   for (i=0; i<_nGammas; i++) { G4cout << _prob.at(i) << " "; }
   G4cout << endl << "     Cumulative probabilities: ";
   for (i=0; i<_nGammas; i++) { G4cout << _cumProb.at(i) << " "; }
+  G4cout << endl << "     Polarities: ";
+  for (i=0; i<_nGammas; i++) { G4cout << _polarities.at(i) << " "; }
   G4cout << endl;      
 
   return;

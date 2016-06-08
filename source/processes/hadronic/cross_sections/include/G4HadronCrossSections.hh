@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSections.hh,v 2.1 1998/11/07 03:27:24 fjones Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4HadronCrossSections.hh,v 1.1 1999/01/07 16:11:31 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // GEANT4 Hadron physics class -- header file

@@ -1,0 +1,48 @@
+$Id: History,v 1.6 1999/06/17 09:06:22 kurasige Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+- June 17, 99 H.Kurashige (procman-01-00-04)
+- Disable Activate/InactivateProcess methods in G4ProcessManager 
+  (and related UI commands) in "Init" state 
+
+- May 3,  99 H.Kurashige (procman-01-00-03a)
+- Add G4ProcessManager::GetProcessActivation 
+
+- Apr 30, 99 H.Kurashige (procman-01-00-03)
+- Remove G4EnergyLossTable from G4IVRestDiscreteProcess and 
+  G4IVContinousDiscreteProcess (Laszlo)
+
+- Apr 17, 99 H.Kurashige (procman-01-00-02a)
+- correct G4IVContinousDiscreteProcess.cc
+
+- Apr 13, 99 H.Kurashige (procman-01-00-02)
+- clean up codes (Hisaya)
+
+- Feb 6, 99   H.Kurashige (procman-01-00-01)
+-  Add G4ParticleTypes.hh (migrated from particles/management) (Hisaya)
+-  Allow registration of processes to shortlived particles (Hisaya)
+
+
+Feb 6, 99   H.Kurashige -
+- Created.
+
+
+
+
+
+

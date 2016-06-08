@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 2.9 1998/12/08 16:37:30 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: exampleN03.cc,v 1.7 1999/06/04 12:50:35 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -23,6 +23,8 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UIXm.hh"
+#include "Randomize.hh"
 
 #ifdef G4VIS_USE
 #include "ExN03VisManager.hh"
@@ -34,18 +36,13 @@
 #include "ExN03RunAction.hh"
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
-
-
-#ifdef GNU_GCC
-#include <rw/tpordvec.h>
-#include "ExN03CalorHit.hh"
-template class RWTPtrOrderedVector <ExN03CalorHit>;
-template class RWTPtrVector <ExN03CalorHit>;
-template class G4Allocator <ExN03CalorHit>;
-#endif
+#include "Randomize.hh"
 
 int main(int argc,char** argv) {
 
+  // choose the Random engine
+  HepRandom::setTheEngine(new RanecuEngine);
+   
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -53,6 +50,18 @@ int main(int argc,char** argv) {
   ExN03DetectorConstruction* detector = new ExN03DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ExN03PhysicsList);
+  
+ G4UIsession* session=0;
+  
+  if (argc==1)   // Define UI session for interactive mode.
+    {
+      // G4UIterminal is a (dumb) terminal.
+#ifdef G4UI_USE_XM
+      session = new G4UIXm(argc,argv);
+#else
+      session = new G4UIterminal;
+#endif
+    }
   
 #ifdef G4VIS_USE
   // visualization manager
@@ -72,10 +81,9 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
-  if (argc==1)   // Define UI session for interactive mode.
+  if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-      G4UIsession * session = new G4UIterminal;
       UI->ApplyCommand("/control/execute prerunN03.mac");    
       session->SessionStart();
       delete session;

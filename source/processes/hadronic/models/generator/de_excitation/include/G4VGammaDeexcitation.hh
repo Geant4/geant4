@@ -20,6 +20,9 @@
 //
 //      Modifications: 
 //      
+//        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
+//              Added creation time evaluation for products of evaporation
+//      
 // -------------------------------------------------------------------
 
 #ifndef G4VGAMMADEEXCITATION_HH
@@ -61,7 +64,7 @@ protected:
 
   void Initialize();
   void UpdateNucleus(const G4Fragment* gamma);
-  void Update(const G4Fragment* gamma);
+  void Update();
 
   G4VGammaTransition* _transition;  // Owned pointer
   G4int _verbose;

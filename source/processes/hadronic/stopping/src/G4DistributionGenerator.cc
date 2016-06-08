@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DistributionGenerator.cc,v 2.2 1998/07/13 17:26:46 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DistributionGenerator.cc,v 1.2 1999/05/25 00:24:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -24,7 +24,7 @@
 //      Modifications: 
 // -------------------------------------------------------------------
 
-
+#include "globals.hh"
 #include "G4DistributionGenerator.hh"
 #include "G4ios.hh"
 #include <assert.h>

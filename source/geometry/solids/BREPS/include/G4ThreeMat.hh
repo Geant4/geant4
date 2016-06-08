@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.hh,v 2.3 1998/10/20 16:31:36 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4ThreeMat.hh,v 1.1 1999/01/07 16:07:36 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 /*  G4ThreeMat.h,v 1.7 1993/12/30 02:15:55 rensing Exp  */
 //  File: G4ThreeMat.h

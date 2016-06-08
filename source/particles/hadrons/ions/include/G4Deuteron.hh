@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Deuteron.hh,v 2.3 1998/09/24 11:24:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Deuteron.hh,v 1.2 1999/04/13 08:24:04 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,6 +56,8 @@ class G4Deuteron : public G4VIon
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+   virtual ~G4Deuteron();
+
    static G4Deuteron* DeuteronDefinition();
    static G4Deuteron* Deuteron(){return &theDeuteron;}
    static G4double GetCuts() {return theDeuteronLengthCut;}   
@@ -73,3 +75,9 @@ inline void G4Deuteron::SetCuts(G4double aCut)
 }
 
 #endif
+
+
+
+
+
+

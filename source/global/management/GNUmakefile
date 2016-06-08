@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 2.3 1998/12/02 17:50:11 gcosmo Exp $
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:08:59 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for global management.  Gabriele Cosmo, 26/9/96.
 # --------------------------------------------------------------

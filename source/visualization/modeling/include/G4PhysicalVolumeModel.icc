@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.icc,v 2.0 1998/07/02 16:50:29 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4PhysicalVolumeModel.icc,v 1.2 1999/01/11 00:48:45 allison Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison  31st December 1997.

@@ -5,14 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StringModel.hh,v 1.1 1998/08/22 08:57:16 hpw Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4StringModel.hh,v 1.2 1999/04/15 12:10:15 hpw Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 #ifndef G4StringModel_h
 #define G4StringModel_h 1
 
 #include "G4VHighEnergyGenerator.hh"
 #include "G4EventGenerator.hh"
+#include "G4KineticTrackVector.hh"
 class G4V3DNucleus;
 class G4VStringFragmentation;
 

@@ -1,4 +1,4 @@
-// $Id: ExE01SteppingAction.hh,v 1.1 1998/10/14 15:19:40 allison Exp $
+// $Id: ExE01SteppingAction.hh,v 1.2 1999/04/17 04:06:43 kurasige Exp $
 
 #ifndef ExE01SteppingAction_h
 #define ExE01SteppingAction_h 1
@@ -16,9 +16,9 @@ class ExE01SteppingAction : public G4UserSteppingAction {
 
   public:
     ExE01SteppingAction(){};
-    ~ExE01SteppingAction(){};
+    virtual ~ExE01SteppingAction(){};
 
-    void UserSteppingAction();
+    virtual void UserSteppingAction(const G4Step*);
 };
 
 #endif

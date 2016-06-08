@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SimpleIntegration.hh,v 2.1 1998/07/12 02:58:44 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SimpleIntegration.hh,v 1.1 1999/01/07 16:08:54 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // Class for realisation of simple numerical methodes for integration of functions
 // with signature: double f(double). The methods based mainly on algorithms given in

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Colour.hh,v 2.0 1998/07/02 17:29:51 gunter Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Colour.hh,v 1.2 1999/05/25 09:10:07 johna Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // John Allison 20th October 1996
@@ -19,10 +19,10 @@ class ostream;
 
 class G4Colour {
   friend ostream& operator << (ostream& os, const G4Colour& c);
-  friend G4bool   operator != (const G4Colour& c1, const G4Colour& c2);
 public:
   G4Colour (G4double r = 1., G4double g = 1., G4double b = 1.,
 	    G4double a = 1.);
+  G4bool operator != (const G4Colour& c) const;
   G4double GetRed   () const;
   G4double GetGreen () const;
   G4double GetBlue  () const;

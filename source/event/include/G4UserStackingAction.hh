@@ -5,11 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserStackingAction.hh,v 2.1 1998/07/12 02:53:56 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
-//
-//
-//  Last Modification : 09/Dec/96 M.Asai
+// $Id: G4UserStackingAction.hh,v 1.2 1999/04/09 03:04:01 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #ifndef G4UserStackingAction_h
@@ -28,7 +25,7 @@ class G4UserStackingAction
       G4StackManager * stackManager;
   public:
       inline void SetStackManager(G4StackManager * value)
-      { stackManager = value; };
+      { stackManager = value; }
 
   public:
 //---------------------------------------------------------------
@@ -36,7 +33,7 @@ class G4UserStackingAction
 //---------------------------------------------------------------
 //
       virtual G4ClassificationOfNewTrack 
-        ClassifyNewTrack(G4Track *const aTrack);
+        ClassifyNewTrack(const G4Track* aTrack);
 //
 //    Reply G4ClassificationOfNewTrack determined by the
 //  newly coming G4Track.

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TauMinus.cc,v 2.2 1998/09/24 05:53:26 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4TauMinus.cc,v 1.2 1999/06/09 15:37:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -99,7 +99,7 @@ G4TauMinus::G4TauMinus(
 //             stable         lifetime    decay table 
 
 G4TauMinus G4TauMinus::theTauMinus(
-		"tau-",     1.7771*GeV,       0.0*MeV,    -1.*eplus, 
+		"tau-",    1.77705*GeV,   2.27e-9*MeV,    -1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,          15,

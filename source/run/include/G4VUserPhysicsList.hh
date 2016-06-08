@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.hh,v 2.3 1998/12/05 09:45:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4VUserPhysicsList.hh,v 1.4 1999/04/16 09:32:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -20,9 +20,9 @@
 //           Construct particles
 //        G4VUserPhysicsList::constructPhysics() 
 //           Construct procesess and register them to particles
-//        G4VUserPhysicsList::SetCuts(G4double aValue)
-//           set a cut value in range to all particles
-//           (and rebuilding physics table will be invoked)
+//        G4VUserPhysicsList::SetCuts()
+//           set cut values in range to all particles
+//           (and rebuilding physics table will be invoked )
 // 
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
@@ -37,6 +37,10 @@
 //          add    AddProcessManager
 //       modified                        05 Dec. 1998 by H.Kurashige
 //          add    ConstructAllParticles()
+//        modified                        14, Apr 1999 by H.Kurashige
+//          change BuildPhysicsTable as public
+//          removed ConstructAllParticles() and related methods  
+//          changed SetCuts method argument
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
@@ -59,7 +63,8 @@ class G4VUserPhysicsList
     // particles and processes are created    
     void Construct();
  
-   protected:
+
+  protected:
     // These two methods of  ConstructParticle() and ConstructProcess()
     // will be invoked in the Construct() method. 
 
@@ -76,26 +81,18 @@ class G4VUserPhysicsList
    //  !! Caution: this class must not be overriden !!
     void AddTransportation();
 
-   // Construct All particles 
-    virtual void ConstructAllParticles();
-    // these methods Construct all particles in each category
-    virtual void ConstructAllBosons();
-    virtual void ConstructAllLeptons();
-    virtual void ConstructAllMesons();
-    virtual void ConstructAllBarions();
-    virtual void ConstructAllIons();
-    virtual void ConstructAllShortLiveds();
-
+  /////////////////////////////////////
   public:  
    //  "SetCuts" method sets a cut value for all particle types 
    //   in the particle table
-    virtual void SetCuts(G4double aCut) = 0;
-
-   //  "SetCutsWithDefault" method sets a cut value with the default
-   //   cut values for all particle types in the particle table
-    void SetCutsWithDefault();   
+   virtual void SetCuts() = 0; 
 
   protected:
+   //  "SetCutsWithDefault" method sets a cut value with the default
+   //   cut values for all particle types in the particle table
+   void SetCutsWithDefault();   
+
+  public:
     // 
     void BuildPhysicsTable(G4ParticleDefinition* );    
  
@@ -145,6 +142,7 @@ class G4VUserPhysicsList
     // this is the default cut value for all particles
     G4double defaultCutValue;
 
+  /////////////////////////////////////
   public:
     // Print out the List of registered particles types
     void DumpList() const;
@@ -159,6 +157,11 @@ class G4VUserPhysicsList
     // adds new ProcessManager to all particles in the Particle Table
     //   this routine is used in Construct()
     void InitializeProcessManager();
+
+  public:
+    // remove and delete ProcessManagers for all particles in tha Particle Table
+    //    this routine is invoked from RunManager 
+    void RemoveProcessManager();
 
   public:
     // add process manager for particles created on-the-fly 
@@ -187,10 +190,6 @@ class G4VUserPhysicsList
 
 };
 
-inline void G4VUserPhysicsList::SetCutsWithDefault()
-{
-  SetCuts(defaultCutValue);
-}  
 
 inline void G4VUserPhysicsList::Construct()
 {
@@ -214,8 +213,8 @@ inline void G4VUserPhysicsList::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
   if (verboseLevel >1){
-    G4cerr << "G4VUserPhysicsList::SetVerboseLevel  :";
-    G4cerr << " Verbose level is set to " << verboseLevel << endl;
+    G4cout << "G4VUserPhysicsList::SetVerboseLevel  :";
+    G4cout << " Verbose level is set to " << verboseLevel << endl;
   }
 }
 

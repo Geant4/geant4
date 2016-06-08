@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4He3.cc,v 2.2 1998/09/24 11:24:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4He3.cc,v 1.2 1999/04/13 08:24:12 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -41,7 +41,12 @@ G4He3::G4He3(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+} 
+
+G4He3::~G4He3()
+{
 }
+
 
 // ......................................................................
 // ...                 static member definitions                      ...

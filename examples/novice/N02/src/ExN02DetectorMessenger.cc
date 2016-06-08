@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.4 1998/10/09 14:35:32 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: ExN02DetectorMessenger.cc,v 1.1 1999/01/07 16:05:49 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 

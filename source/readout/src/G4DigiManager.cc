@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DigiManager.cc,v 2.2 1998/07/13 17:28:17 urbi Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4DigiManager.cc,v 1.1 1999/01/07 16:14:14 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 
 #include "G4DigiManager.hh"

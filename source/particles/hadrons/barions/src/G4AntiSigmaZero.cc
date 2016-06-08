@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmaZero.cc,v 2.2 1998/09/24 09:24:05 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4AntiSigmaZero.cc,v 1.2 1999/06/09 16:08:32 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -73,7 +73,7 @@ G4AntiSigmaZero::G4AntiSigmaZero(
 //             stable         lifetime    decay table 
 
 G4AntiSigmaZero G4AntiSigmaZero::theAntiSigmaZero(
-        "anti_sigma0",      1.19255*GeV,      0.0*MeV,          0.0, 
+        "anti_sigma0",      1.19255*GeV,   8.9e-3*MeV,          0.0, 
 		    1,              +1,             0,          
 		    2,               0,             0,             
 	     "baryon",               0,            -1,        -3212,

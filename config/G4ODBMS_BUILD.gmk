@@ -1,4 +1,4 @@
-# $Id: G4ODBMS_BUILD.gmk,v 2.1 1998/07/09 13:00:42 morita Exp $
+# $Id: G4ODBMS_BUILD.gmk,v 1.1 1999/01/07 15:58:31 gunter Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for HepODBMS and Objectivity/DB.
 #   Youhei Morita, 9th July 1998.

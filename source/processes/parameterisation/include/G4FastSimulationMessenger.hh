@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationMessenger.hh,v 2.3 1998/10/13 09:54:26 mora Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FastSimulationMessenger.hh,v 1.2 1999/04/14 14:25:24 mora Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 // 
 //	GEANT 4 class header file 
@@ -36,7 +36,7 @@ class G4FastSimulationMessenger: public G4UImessenger
 {
 public:
   G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM);
-  ~G4FastSimulationMessenger();
+  virtual ~G4FastSimulationMessenger();
   
 public:
   void SetNewValue(G4UIcommand * command,G4String newValues);

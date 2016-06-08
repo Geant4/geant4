@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KL3DecayChannel.hh,v 2.2 1998/11/18 09:46:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4KL3DecayChannel.hh,v 1.1 1999/01/07 16:10:28 gunter Exp $
+// GEANT4 tag $Name: geant4-00-01 $
 //
 //
 // ------------------------------------------------------------
