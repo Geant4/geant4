@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FCylindricalSurface.hh,v 1.3 1999/01/27 16:11:58 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 #ifndef __FCYLINDER_H
 #define __FCYLINDER_H

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Line.hh,v 1.2 1999/01/14 16:05:26 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 #ifndef __LINE_H
 #define __LINE_H 

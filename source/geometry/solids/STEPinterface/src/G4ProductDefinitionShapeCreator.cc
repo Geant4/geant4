@@ -14,9 +14,6 @@ void G4ProductDefinitionShapeCreator::CreateG4Geometry(STEPentity& Ent)
   // Made by L. Broglia
   STEPattribute *Attr;
 
-  // tmp
-  G4cout<<"Warning ! G4ProductDefinitionShapeCreator called ..."<<endl;
-  
   G4String attrName("description");
   Attr = GetNamedAttribute(attrName, Ent);
 

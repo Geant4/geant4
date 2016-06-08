@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4CircularCurve.hh,v 1.2 1999/01/14 15:59:57 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 #ifndef __CIRCULARCURVE_H
 #define __CIRCULARCURVE_H 

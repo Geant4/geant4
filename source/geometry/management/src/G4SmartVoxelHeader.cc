@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 2.1 1998/11/11 11:38:22 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4SmartVoxelHeader.cc,v 1.3 1999/02/15 10:54:22 japost Exp $
+// GEANT4 tag $Name: geommng-01-00-02 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -16,6 +16,8 @@
 // Define G4GEOMETRY_VOXELDEBUG for debugging information on G4cout
 //
 // History:
+// 12.02.99 Introduction of new quality/smartless: max for (slices/candid) S.G.
+// 11.02.99 Voxels at lower levels are now built for collapsed slices      S.G.
 // 21.07.95 Full implementation, supporting non divided physical volumes
 // 14.07.95 Initial version - stubb definitions only
 
@@ -409,7 +411,7 @@ void G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
     BuildEquivalentSliceNos();
     CollectEquivalentNodes();	// Collect common nodes
     RefineNodes(pVolume,pLimits); // Refine nodes creating headers
-    CollectEquivalentHeaders();	// Collect any common headers
+// No common headers can exist because collapsed by construction
 }
 
 // Destructor - Delete all proxies and underlying objects
@@ -779,10 +781,23 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 //
 //   mother width/half min daughter width +1
     G4double noNodesExactD=((motherMaxExtent-motherMinExtent)*2.0/minWidth)+1.0;
-    G4int noNodesExactI=G4int (noNodesExactD);
 
-    G4int noNodes=((noNodesExactD-noNodesExactI)>=0.5) ? noNodesExactI+1 : noNodesExactI;
+// Compare with "smartless quality", i.e. the average number of slices used per
+// contained volume:
 
+G4double smartlessComputed = noNodesExactD / nCandidates;
+
+G4double smartlessUser = pVolume->GetSmartless();
+
+G4double smartless = (smartlessComputed <= smartlessUser) ? 
+                      smartlessComputed :  smartlessUser  ;
+
+G4double noNodesSmart = smartless * nCandidates;
+
+G4int    noNodesExactI = G4int(noNodesSmart);
+
+G4int    noNodes = ((noNodesSmart-noNodesExactI)>=0.5) ?
+                     noNodesExactI + 1 : noNodesExactI ; 
 //
 //
 
@@ -1043,10 +1058,8 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 			    delete targetNode;
 
 // Create new headers + proxies and replace in fslices
-			    for (replaceNo=minNo;replaceNo<=maxNo;replaceNo++)
-				{
 				    newLimits=pLimits;
-				    newLimits.AddLimit(faxis,fminExtent+sliceWidth*replaceNo,fminExtent+sliceWidth*(replaceNo+1));
+				    newLimits.AddLimit(faxis,fminExtent+sliceWidth*minNo,fminExtent+sliceWidth*(maxNo+1));
 				    replaceHeader=new G4SmartVoxelHeader(pVolume,newLimits,targetList,replaceNo);
 				    if (!replaceHeader)
 					{
@@ -1059,6 +1072,9 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 					{
 					    G4Exception("G4SmartVoxelHeader::RefineNodes - Refined VoxelProxy new failed");
 					}
+			    for (replaceNo=minNo;replaceNo<=maxNo;replaceNo++)
+				{
+
 				    fslices(replaceNo)=replaceHeaderProxy;
 				}
 // Finished replacing current `equivalent' group

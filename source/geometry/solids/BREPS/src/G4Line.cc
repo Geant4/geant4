@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Line.cc,v 1.2 1999/01/14 16:06:46 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 #include "G4Line.hh"
 

@@ -1,0 +1,52 @@
+$Id: History,v 1.4 1999/02/17 03:33:53 davidw Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Feb 16,   99   David Williams
+
+  Repaired bugs in G4Polycone (G4PolyconeSide.cc) as found in
+  test/testG4Polycone and missed in below.
+  
+  Updated definition of DistanceToIn(p) and DistanceToOut(p) to
+  return zero when the point p is on the surface of the solid.
+
+Feb 12,   99   David Williams
+
+  src/G4PolyconeSide.cc updated (revision 1.4) to fix a bug discovered by
+  test/testG4Polycone.
+
+Feb   9,  99   David C. Williams      (davidw@scipp.ucsc.edu)
+
+   I've committed new versions of the CSG Polycone and Polyhedra in the
+ geant4 repository, including a new utility class called
+ G4ReduciblePolygon. The new versions fix several subtle bugs which my  
+ "test3" batch geometry testing code uncovered. In addition, the new class
+ G4ReduciblePolygon is used to run strict tests on the validity of input
+ parameters.
+   To fix a bug in Polyhedra, I had to back out some fancy code that
+ allowed it to calculate intersections at a speed that was independent of
+ the number of sides. The new version now runs at a speed proportional to
+ the number of sides, and is thus much slower for polyhedras with many
+ sides. I can fix this, but I thought it would be best to get the bug fixes
+ in as soon as possible.
+
+
+Feb  10,  99   John Apostolakis   
+
+  History file created.
+  

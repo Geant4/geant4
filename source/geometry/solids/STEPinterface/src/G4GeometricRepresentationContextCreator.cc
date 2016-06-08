@@ -17,9 +17,6 @@ void G4GeometricRepresentationContextCreator::CreateG4Geometry(STEPentity& Ent)
   // Made by L. Broglia
   STEPattribute *Attr;
 
-  // tmp
-  G4cout<<"Warning ! G4GeometricRepresentationContextCreator called ..."<<endl;
-  
   G4String attrName("coordinate_space_dimension");
   Attr = GetNamedAttribute(attrName, Ent);
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BSplineCurve.hh,v 1.3 1999/01/19 10:12:56 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 #ifndef __BSPLINECURVE_H
 #define __BSPLINECURVE_H 

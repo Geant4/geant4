@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FConicalSurface.hh,v 1.2 1999/01/27 16:11:57 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 #ifndef __FCONIC_H
 #define __FCONIC_H

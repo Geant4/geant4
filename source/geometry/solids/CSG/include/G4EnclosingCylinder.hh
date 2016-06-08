@@ -5,6 +5,14 @@
 // is clearly outside a polyhedra or ploycone or deciding if
 // a trajectory is clearly going to miss said shapes.
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #ifndef G4EnclosingCylinder_hh
 #define G4EnclosingCylinder_hh
 
@@ -12,15 +20,17 @@
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
 
+class G4ReduciblePolygon;
+
 class G4EnclosingCylinder {
 	public:
-	G4EnclosingCylinder( const G4double r[], const G4double z[], const G4int n,
+	G4EnclosingCylinder( const G4ReduciblePolygon *rz,
 			     const G4bool phiIsOpen, 
 			     const G4double startPhi, const G4double totalPhi );
 	~G4EnclosingCylinder();
 	
-	G4bool Outside( const G4ThreeVector &p ) const;
-	G4bool Misses( const G4ThreeVector &p, const G4ThreeVector &v ) const;
+	G4bool MustBeOutside( const G4ThreeVector &p ) const;
+	G4bool ShouldMiss( const G4ThreeVector &p, const G4ThreeVector &v ) const;
 	
 	protected:
 	G4double radius; 	// radius of our cylinder
@@ -34,6 +44,8 @@ class G4EnclosingCylinder {
 		 dx1, dy1;
 	G4double rx2, ry2,
 		 dx2, dy2;
+		 
+	G4bool	 concave;	// True, if x/y cross section is concave
 		
 };
 

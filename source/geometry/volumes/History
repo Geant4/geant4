@@ -1,0 +1,67 @@
+$Id: History,v 1.8 1999/03/19 11:56:01 japost Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+March    19, 99      J. Apostolakis        geomvol-01-00-03
+
+   New tag for replica fix.
+
+
+March    18, 99      J. Apostolakis
+
+   A fix for looping in Replicas:
+        In the case where a zero step is done in Replicas, we must allow
+    ReplicaNavigator to handle the case itself - or else we loop.
+
+March    11, 99      J. Apostolakis
+
+   G4GRSVolume.icc: corrected G4Exception messages.
+
+February 17, 99      J. Apostolakis        geomvol-01-00-02
+
+ include/G4VoxelNavigation.hh
+ src/G4VoxelNavigation.cc    : overwrote versions 1.2 with production version
+      --->  when changes are refined and retested, they could be reincorporated
+
+February 15, 99      J. Apostolakis        geomvol-01-00-01
+
+   Only fixes in G4Navigator's incorporated.
+   GNUmakefile corrected (for SUN-CC).
+
+January      99,     J. Apostolakis
+
+Fix for ComputeSafety in Navigator:                              G4Navigator.cc
+            the voxel information that was used was incorrect       v 1.3
+                -> it resulted in wrong value of safety
+
+
+December     98                                   geant4-00-RandD
+
+ include/G4VoxelNavigation.hh
+ src/G4VoxelNavigation.cc    : versions 1.2 are trial versions from beta "head"
+
+December     98                                   
+
+Trial fix for navigation in replicas                             G4Navigator.cc
+                                                                    v 1.2
+         (a problem persists with this version)
+
+
+December     98                                   geant4-00
+
+   Code moved: production tag from beta repository.

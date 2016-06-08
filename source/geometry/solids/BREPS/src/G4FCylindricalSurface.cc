@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FCylindricalSurface.cc,v 1.6 1999/01/27 16:12:03 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
 //  File:  FG4Cylinder.cc

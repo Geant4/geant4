@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 2.3 1998/10/09 17:17:19 grichine Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Cons.cc,v 1.2 1999/02/15 15:36:30 japost Exp $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 // class G4Cons
 //
@@ -943,7 +943,7 @@ G4double G4Cons::DistanceToIn(const G4ThreeVector& p,
        }
        else  //    travel || cone surface from its origin
        {
-          return kInfinity ;
+          s = kInfinity ;
        }
     }
 
@@ -2651,3 +2651,5 @@ G4NURBS* G4Cons::CreateNURBS () const
 }
 
 //  ******************************* End of G4Cons.cc file **********************************
+
+

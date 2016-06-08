@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 2.6 1998/11/25 17:57:23 japost Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Navigator.cc,v 1.4 1999/03/19 10:23:09 japost Exp $
+// GEANT4 tag $Name: geomvol-01-00-03a $
 //
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -71,7 +71,7 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 #ifdef G4VERBOSE
   if( fVerbose > 0 ) 
     {
-      cout << "G4Navigator::LocateGlobalPointAndSetup: " << endl; 
+      cout << "*** G4Navigator::LocateGlobalPointAndSetup: ***" << endl; 
       cout.precision(8);
       cout << " I was called with the following arguments: " << endl
 	   << " Globalpoint = " << globalPoint << endl
@@ -109,8 +109,11 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
 
 	      // A fix for the case where a volume is "entered" at an edge
 	      //   and a coincident surface exists outside it.
-	      //  This stops it from exiting further volumes and cycling
-	      if( fLastStepWasZero )
+	      //  - This stops it from exiting further volumes and cycling
+	      //  - However ReplicaNavigator treats this case itself
+	      if( fLocatedOnEdge 
+                  && (VolumeType(fBlockedPhysicalVolume) != kReplica ))
+                                                    // ( fLastStepWasZero )
 		{ 
 		  fExiting= false;
 		}
@@ -518,6 +521,9 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
     }
   else
     {
+      // In the case of a replica, 
+      //   it must handles the exiting edge/corner problem by itself
+      G4bool exitingReplica= fExitedMother;
       Step=freplicaNav.ComputeStep(pGlobalpoint,
 				   pDirection,
 				   fLastLocatedPointLocal,
@@ -527,10 +533,12 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				   fHistory,
 				   fValidExitNormal,
 				   fExitNormal,
-				   fExiting,
+				   exitingReplica,
 				   fEntering,
 				   &fBlockedPhysicalVolume,
 				   fBlockedReplicaNo);
+      // still ok to set it ??
+      fExiting= exitingReplica;
      }
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
@@ -698,7 +706,7 @@ G4ThreeVector  G4Navigator::GetLocalExitNormal(G4bool* valid)
 }
 
 //   It assumes that it assumes that it will be 
-//  i) called with the Point equal to the EndPoint of the ComputeStep.
+//  i) called at the Point in the same volume as the EndPoint of the ComputeStep.
 // ii) after (or at the end of) ComputeStep OR after the relocation.
 
 G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
@@ -720,6 +728,9 @@ G4double G4Navigator::ComputeSafety(const G4ThreeVector &pGlobalpoint,
       PrintState();
     }
 #endif
+
+  // Pseudo-relocate to this point (updates voxel information only).
+  LocateGlobalPointWithinVolume( pGlobalpoint );
 
   if( ! (fEnteredDaughter || fExitedMother ) )
     {
@@ -816,15 +827,15 @@ void  G4Navigator::PrintState()
     {
       cout.precision(3);
       cout << setw(18) << " ExitNormal "  << " "     
-	   << setw( 9) << " Valid "       << " "     
+	   << setw( 5) << " Valid "       << " "     
 	   << setw( 9) << " Exiting "     << " "      
 	   << setw( 9) << " Entering"     << " " 
 	   << setw(15) << " Blocked:Volume "  << " "   
 	   << setw( 9) << " ReplicaNo"        << " "  
 	   << setw( 8) << " LastStepZero  "   << " "   
 	   << endl;   
-      cout << setw(24)  << fExitNormal       << " "
-	   << setw( 3)  << fValidExitNormal  << " "   
+      cout << setw(18)  << fExitNormal       << " "
+	   << setw( 5)  << fValidExitNormal  << " "   
 	   << setw( 9)  << fExiting          << " "
 	   << setw( 9)  << fEntering         << " "
 	   << setw(15)  << (fBlockedPhysicalVolume==0 ? G4String("None") :

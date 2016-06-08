@@ -3,6 +3,14 @@
 //
 // Implemenation of the face representing one conical side of a polycone
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4PolyconeSide.hh"
 #include "G4IntersectingCone.hh"
@@ -61,27 +69,48 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 	rNorm = +zS;
 	zNorm = -rS;
 	
-	G4double rAdj = r[0]-prevRZ->r, zAdj = z[0]-prevRZ->z;
-	G4double lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
-	rAdj /= lAdj;
-	zAdj /= lAdj;
+	if (r[0] < 1/kInfinity) {
+		//
+		// This segment begins at R=0 
+		//
+		prevRNorm = 0;
+		rNormEdge[0] = rNorm;
+		zNormEdge[0] = zNorm;
+	}
+	else {
+		G4double rAdj = r[0]-prevRZ->r, zAdj = z[0]-prevRZ->z;
+		G4double lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
+		rAdj /= lAdj;
+		zAdj /= lAdj;
+
+		prevRNorm = zAdj;
+
+		rNormEdge[0] = rNorm + zAdj;
+		zNormEdge[0] = zNorm - rAdj;
+		lAdj = sqrt( rNormEdge[0]*rNormEdge[0] + zNormEdge[0]*zNormEdge[0] );
+		rNormEdge[0] /= lAdj;
+		zNormEdge[0] /= lAdj;
+	}
 	
-	rNormEdge[0] = rNorm + zAdj;
-	zNormEdge[0] = zNorm - rAdj;
-	lAdj = sqrt( rNormEdge[0]*rNormEdge[0] + zNormEdge[0]*zNormEdge[0] );
-	rNormEdge[0] /= lAdj;
-	zNormEdge[0] /= lAdj;
-	
-	rAdj = nextRZ->r-r[1], zAdj = nextRZ->z-z[1];
-	lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
-	rAdj /= lAdj;
-	zAdj /= lAdj;
-	
-	rNormEdge[1] = rNorm + zAdj;
-	zNormEdge[1] = zNorm - rAdj;
-	lAdj = sqrt( rNormEdge[1]*rNormEdge[1] + zNormEdge[1]*zNormEdge[1] );
-	rNormEdge[1] /= lAdj;
-	zNormEdge[1] /= lAdj;
+	if (r[1] < 1/kInfinity) {
+		//
+		// This segment ends at R=0
+		//
+		rNormEdge[1] = rNorm;
+		zNormEdge[1] = zNorm;
+	}
+	else {
+		G4double rAdj = nextRZ->r-r[1], zAdj = nextRZ->z-z[1];
+		G4double lAdj = sqrt( rAdj*rAdj + zAdj*zAdj );
+		rAdj /= lAdj;
+		zAdj /= lAdj;
+
+		rNormEdge[1] = rNorm + zAdj;
+		zNormEdge[1] = zNorm - rAdj;
+		lAdj = sqrt( rNormEdge[1]*rNormEdge[1] + zNormEdge[1]*zNormEdge[1] );
+		rNormEdge[1] /= lAdj;
+		zNormEdge[1] /= lAdj;
+	}
 }
 
 
@@ -143,7 +172,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 			// Apply tolerance, but only if the point is outside 
 			// the edges of the cone
 			//
-			if (distFromSurface > (distOutside2 > 0 ? 0 : surfTolerance)) {
+			if (distFromSurface > (distOutside2 > 0 ? 0 : -surfTolerance)) {
 				//
 				// Good intersection. Return now, since it is the closest.
 				//
@@ -188,7 +217,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 			// Apply tolerance, but only if the point is outside 
 			// the edges of the cone
 			//
-			if (distFromSurface > (distOutside2 > 0 ? 0 : surfTolerance)) {
+			if (distFromSurface > (distOutside2 > 0 ? 0 : -surfTolerance)) {
 				//
 				// Good intersection. Return now, since it is the closest.
 				//
@@ -213,22 +242,22 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, const G4bool outgoing
 	//
 	// We have two tries for each hemisphere. Try the closest first.
 	//
-	distFrom = DistanceAway( p, false, distOut2, 0 );
-	if (distFrom*normSign > 0) {
+	distFrom = normSign*DistanceAway( p, false, distOut2, 0 );
+	if (distFrom > -0.5*kCarTolerance ) {
 		//
 		// Good answer
 		//
 		if (distOut2 > 0) 
 			return sqrt( distFrom*distFrom + distOut2 );
-		else
+		else 
 			return fabs(distFrom);
 	}
 	
 	//
 	// Try second side. 
 	//
-	distFrom = DistanceAway( p,  true, distOut2, 0 );
-	if (distFrom*normSign > 0) {
+	distFrom = normSign*DistanceAway( p,  true, distOut2, 0 );
+	if (distFrom > -0.5*kCarTolerance) {
 
 		if (distOut2 > 0) 
 			return sqrt( distFrom*distFrom + distOut2 );
@@ -352,6 +381,7 @@ G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
 }
 
 
+
 //
 // CalculateExtent
 //
@@ -363,11 +393,6 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 				      G4double &min, G4double &max        )
 {
 	G4ClippablePolygon polygon;
-	
-	//
-	// The following code does not work correctly and needs to be
-	// fixed...   DCW 12/10/98
-	//
 	
 	//
 	// Here we will cheat (ala G4Cons) and divide our conical section
@@ -392,28 +417,71 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	//
 	// Determine radius factor to keep segments outside
 	//
-	G4double rFudge = 1.0/cos(sigPhi);
+	G4double rFudge = 1.0/cos(0.5*sigPhi);
+	
+	//
+	// Decide which radius to use on each end of the side,
+	// and whether a transition mesh is required
+	//
+	G4double r0, r1, r2;
+	
+	if (rNorm < -1/kInfinity) {
+		//
+		// This side faces *inward*
+		//
+		r0 = r[0];
+		r1 = r[1];
+		
+		//
+		// A transition is required if the previous side
+		// faced outward
+		//
+		r2 = (prevRNorm > 1/kInfinity) ? r0*rFudge : -1;
+	}
+	else if (rNorm > 1/kInfinity) {
+		//
+		// This side faces *outward*
+		//
+		r0 = r[0]*rFudge;
+		r1 = r[1]*rFudge;
+		
+		//
+		// A transition is required if the previous side
+		// faced inward
+		//
+		r2 = (prevRNorm < -1/kInfinity) ? r[0] : -1;
+	}
+	else {
+		//
+		// This side is perpendicular to the z axis (is a disk)
+		//
+		r0 = r[0];
+		r1 = r[1];
+		if (r0 > r1) r0 *= rFudge; else r1 *= rFudge;
+	}
 	
 	//
 	// Loop
 	//
 	G4double phi = startPhi, 
-	         cosPhi = rFudge*cos(phi), 
-		 sinPhi = rFudge*sin(phi);
+	         cosPhi = cos(phi), 
+		 sinPhi = sin(phi);
 	
-	G4ThreeVector v0( r[0]*cosPhi, r[0]*sinPhi, z[0] ),
-		      v1( r[1]*cosPhi, r[1]*sinPhi, z[1] ),
-		      w0, w1;
+	G4ThreeVector v0( r0*cosPhi, r0*sinPhi, z[0] ),
+		      v1( r1*cosPhi, r1*sinPhi, z[1] ),
+		      v2( r2*cosPhi, r2*sinPhi, z[0] ),
+		      w0, w1, w2;
 	transform.ApplyPointTransform( v0 );
 	transform.ApplyPointTransform( v1 );
+	transform.ApplyPointTransform( v2 );
 
 	do {
 		phi += sigPhi;
-	        cosPhi = rFudge*cos(phi), 
-		sinPhi = rFudge*sin(phi);
+	        cosPhi = cos(phi), 
+		sinPhi = sin(phi);
 		
-		w0 = G4ThreeVector( r[0]*cosPhi, r[0]*sinPhi, z[0] );
-		w1 = G4ThreeVector( r[1]*cosPhi, r[1]*sinPhi, z[1] );
+		w0 = G4ThreeVector( r0*cosPhi, r0*sinPhi, z[0] );
+		w1 = G4ThreeVector( r1*cosPhi, r1*sinPhi, z[1] );
 		transform.ApplyPointTransform( w0 );
 		transform.ApplyPointTransform( w1 );
 		
@@ -433,7 +501,27 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 		//
 		polygon.Clip( voxelLimit );
 		polygon.GetExtent( axis, min, max );
+		
+		if (r2 >= 0) {
+			//
+			// Repeat, for transition piece
+			//
+			w2 = G4ThreeVector( r2*cosPhi, r2*sinPhi, z[0] );
+			transform.ApplyPointTransform( w2 );
 
+			polygon.ClearAllVertices();
+		
+			polygon.AddVertexInOrder( v2 );
+			polygon.AddVertexInOrder( v0 );
+			polygon.AddVertexInOrder( w0 );
+			polygon.AddVertexInOrder( w2 );
+			
+			polygon.Clip( voxelLimit );
+			polygon.GetExtent( axis, min, max );
+			
+			v2 = w2;
+		}
+		
 		//
 		// Next vertex
 		//		
@@ -556,7 +644,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &p, G4ThreeVector &norma
 	//
 	if (rx<0) rx = p.perp();
 	
-	if (rx < -1.0/kInfinity) 
+	if (rx < 1.0/kInfinity) 
 		normal = G4ThreeVector( 0, 0, zNorm < 0 ? -1 : 1 );
 	else
 		normal = G4ThreeVector( rNorm*p.x()/rx, rNorm*p.y()/rx, zNorm );

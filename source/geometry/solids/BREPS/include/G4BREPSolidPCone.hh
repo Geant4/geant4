@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BREPSolidPCone.hh,v 1.2 1999/01/27 16:15:08 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 //
 // The polyconical solid G4BREPSolidPCone is a shape defined by a set of 

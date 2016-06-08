@@ -3,27 +3,31 @@
 //
 // Implementation of a utility class for a quick check of geometry
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 
 #include "G4EnclosingCylinder.hh"
+#include "G4ReduciblePolygon.hh"
 
 //
 // Constructor
 //
-G4EnclosingCylinder::G4EnclosingCylinder( const G4double r[], const G4double z[], const  G4int n,
+G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
 					  const G4bool thePhiIsOpen, 
 					  const G4double theStartPhi, const G4double theTotalPhi )
 {
 	//
-	// Obtain larges r and smallest and larges z
+	// Obtain largest r and smallest and largest z
 	//
-	radius = r[0];
-	zLo = zHi = z[0];
-	const G4double *rr = r, *zz = z;
-	while( ++zz, ++rr < r+n ) {
-		if (*rr > radius) radius = *rr;
-		if (*zz > zHi ) zHi = *zz;
-		if (*zz < zLo ) zLo = *zz;
-	}
+	radius = rz->Amax();
+	zHi = rz->Bmax();
+	zLo = rz->Bmin();
 	
 	//
 	// Save phi info
@@ -41,6 +45,8 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4double r[], const G4double z[]
 		ry2 = sin(startPhi+totalPhi);
 		dx2 = -ry2*10*kCarTolerance;
 		dy2 = +rx2*10*kCarTolerance;
+		
+		concave = totalPhi > M_PI;
 	}
 	
 	//
@@ -64,16 +70,21 @@ G4EnclosingCylinder::~G4EnclosingCylinder() {;}
 //
 // If one is not certain, return false
 //
-G4bool G4EnclosingCylinder::Outside( const G4ThreeVector &p ) const
+G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector &p ) const
 {
 	if (p.perp() > radius) return true;
 	if (p.z() < zLo) return true;
 	if (p.z() > zHi) return true;
 
 	if (phiIsOpen) {
-		if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) > 0) return false;
-		if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) < 0) return false;
-		return true;
+		if (concave) {
+			if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) < 0) return false;
+			if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) > 0) return false;
+		}
+		else {
+			if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) > 0) return true;
+			if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) < 0) return true;
+		}
 	}
 	
 	return false;
@@ -87,9 +98,9 @@ G4bool G4EnclosingCylinder::Outside( const G4ThreeVector &p ) const
 //
 // If one is not sure, return false
 //
-G4bool G4EnclosingCylinder::Misses( const G4ThreeVector &p, const G4ThreeVector &v ) const
+G4bool G4EnclosingCylinder::ShouldMiss( const G4ThreeVector &p, const G4ThreeVector &v ) const
 {
-	if (!Outside(p)) return false;
+	if (!MustBeOutside(p)) return false;
 	
 	G4double cross = p.x()*v.y() - p.y()*v.x();
 	if (cross > radius) return true;

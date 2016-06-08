@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FConicalSurface.cc,v 1.7 1999/01/27 16:12:02 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
 //  File:  G4FConicalSurface.cc

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FPlane.cc,v 1.3 1999/01/27 16:13:18 broglia Exp $
-// GEANT4 tag $Name: breps-01-00-01 $
+// GEANT4 tag $Name: geomsolids-01-00-01 $
 //
 
 
