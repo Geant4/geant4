@@ -311,6 +311,21 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+
+G4int G4BoundingBox3D::Inside(const G4Point3D& Pt)
+{
+  if( ( Pt.x() >= box_min.x() && Pt.x() <= box_max.x() ) &&
+      ( Pt.y() >= box_min.y() && Pt.y() <= box_max.y() ) &&
+      ( Pt.z() >= box_min.z() && Pt.z() <= box_max.z() )    )
+    return 1;
+  else
+    return 0;
+}
+
+
+
+
 
 
 

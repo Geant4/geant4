@@ -1,5 +1,5 @@
-$Id: History,v 2.65 1998/12/15 19:29:12 gcosmo Exp $
-$Name: geant4-00 $
+$Id: History,v 1.2 1999/01/29 16:21:13 stesting Exp $
+$Name: config-01-00-01 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+January 29th 1999 - John Allison (config-01-00-01)
+- Changed rd44 to sw/geant4.
 
 December 15th, 1998 - G.Cosmo (config-00-04-11)
 - Added G4_HAVE_BOOL to DEC-cxx.

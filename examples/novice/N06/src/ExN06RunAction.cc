@@ -29,7 +29,7 @@ void ExN06RunAction::BeginOfRunAction(G4Run* aRun)
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/event/verbose 1");
-  UI->ApplyCommand("/tracking/verbose 1");
+  //UI->ApplyCommand("/tracking/verbose 1");
 
   G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
   timer->Start();
@@ -41,4 +41,3 @@ void ExN06RunAction::EndOfRunAction(G4Run* aRun)
   G4cout << "number of event = " << aRun->GetNumberOfEvent() 
        << " " << *timer << endl;
 }
-

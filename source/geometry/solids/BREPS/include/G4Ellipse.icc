@@ -47,6 +47,7 @@ inline G4double G4Ellipse::GetPPoint(const G4Point3D& pt) {
 
 #include "G4CurveRayIntersection.hh"
 
+/*
 inline void G4Ellipse::IntersectRay2D(const G4Ray& ray,
 				      G4CurveRayIntersection& is)
 {
@@ -85,3 +86,46 @@ inline void G4Ellipse::IntersectRay2D(const G4Ray& ray,
 
   }
 }
+*/
+
+inline G4int G4Ellipse::IntersectRay2D(const G4Ray& ray)
+{
+  // transform s.t. the ellipse becomes the unit circle
+  // with the center at the origin
+
+  // 2D operations would be faster
+  G4Point3D  s= toUnitCircle*ray.GetStart();
+  G4Vector3D d= toUnitCircle*ray.GetDir();
+  
+  // solve (s+i*t)^2 = 1 for i (the distance)
+  G4double sd= s*d;
+  G4double dd= d.mag2(); // never 0
+  G4double ss= s.mag2();
+
+  G4double discr= sd*sd-dd*(ss-1);
+  G4int nbinter = 0;
+  G4double i;
+
+  if (discr > 0) 
+  {
+    // 2 intersections 
+    G4double sqrtdiscr= sqrt(discr);
+   
+    // if i is positive, we have an intersection
+    i= -sd-sqrtdiscr;
+    if (i > kCarTolerance) 
+      nbinter++;
+      
+    i= -sd+sqrtdiscr;
+    if (i > kCarTolerance) 
+      nbinter++;      
+  }
+  
+  // if the ray is tangent on the circle
+  if (discr == 0)
+    nbinter = 1;
+
+  return nbinter;
+}
+
+

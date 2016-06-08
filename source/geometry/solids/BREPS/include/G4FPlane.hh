@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.hh,v 2.15 1998/12/09 14:49:17 broglia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4FPlane.hh,v 1.3 1999/01/27 16:13:09 broglia Exp $
+// GEANT4 tag $Name: breps-01-00-01 $
 //
 // L. Broglia
 // 
@@ -95,7 +95,10 @@ public:
 
   G4Vector3D SurfaceNormal(const G4Point3D& Pt)const 
   {
-    return NormalX->GetDir();
+    if( !sameSense )
+      return -NormalX->GetDir();
+    else
+      return NormalX->GetDir();
   }
   
   virtual char *Name() const { return "G4FPlane"; }

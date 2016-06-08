@@ -1,0 +1,321 @@
+Juanary 20, 1999
+Lionel Broglia Patron
+
+Working note
+
+This document describes the modifications to be done into 
+BREPS and STEPintervace classes
+
+
+============================================
+    BREPS
+
+ - implement G4BSplineCurve::IntersectRay2D
+
+As the same as all the curve classes, IntersectRay2D(ray) is a function which
+return the number of intersections of the curve by the ray included into the
+curve's boundaries. (see G4Line::IntersectRay2D for exemple)
+
+
+ - problem with nbintersect when the hitpoint is on the curve boundary
+
+In this case, the point is considerated into the surface, so return an odd 
+specific value (999). (done for G4Line)
+
+
+ - implement swept surface (later)
+
+ - Be carreful into G4BREPSolidxxx::Inside :
+      if we obtain the same distance with 2 intersections, 
+      it is necessary to count one only (done for PCone & PGone)
+
+ - Utilize the DistanceTo and Inside functions of PCone, which are 
+   general, in G4BREPSolid.
+   After, utilize specific functions for each particular solid to 
+   have a faster algorithm
+
+
+
+
+============================================
+    STEPinterface
+
+ - take the name of the solids
+
+ - write out STEP (later)
+
+ - Problem with STEP conical surface (same for cylindrical)
+     for the moment the interface create a G4ConicalSurface,
+     but I want to create a G4FConicalSurface
+
+In STEP, a conical surface is defined by a semi-infinite cone and 1 or 2 plane
+which delimite the length of the cone. The semi-infinite cone is defined by a 
+G4Axis2Placement3D (location and axis), a radius and an angle. The radius is 
+the radius of the cone at the location. For the moment, a STEP conical surface
+is saved as a G4ConicalSurface(placement, angle).
+
+On the contrary a G4FConicalSurface is defined by a placement, a large_radius,
+a small_radius and a length :
+
+//     Position.axis|
+//                  |
+//    --         ---|---   small_radius  
+//  l  |        /   |   \
+//  e  |       /    |    \
+//  n  |      /     |     \
+//  g  |     /      |      \
+//  t  |    /       |       \
+//  h  |   /        |        \
+//    --   ---------|---------  large_radius
+//               Position
+
+
+In the same way, In STEP, a cylindrical surface is defined by an infinite 
+cylinder and 1 or 2 plane which delimite the length of the cylinder. The 
+semi-infinite cylinder is defined by a G4Axis2Placement3D (location and axis) 
+and a radius. For the moment, a STEP cylindrical surface is saved as a 
+G4CylindricalSurface(placement, radius).
+
+On the contrary a G4FCylindricalSurface is defined by a placement, a radius and
+a length :
+
+//     Position.axis|        radius
+//                 >|---|<---------
+//                  |   
+//    --        +---|---+  
+//  l  |        |   |   |
+//  e  |        |   |   | 
+//  n  |        |   |   |  
+//  g  |        |   |   |   
+//  t  |        |   |   |    
+//  h  |        |   |   |     
+//    --        +---|---+  
+//               Position
+
+It is necessary to find a way to save a STEP conical or cylindrical surface in
+a G4FConicalSurface or G4FCylindricalSurface because the algorithms of Inside
+and DistanceToX are written and run correctly for PCone and PGone which utilize
+these surfaces.
+
+One solution is to create with the STEP interface the G4FConicalSurface 
+or the G4FCylindricalSurface with new creators. And before execute the 
+Intersect or the HowNear function, recalculate the good values.
+
+
+
+==> Tests
+
+ - verify the validity of the results of the simple tests
+ - new simple specific test for curve and surface
+ - compare with CSG test
+ - new more general test
+                        
+
+======================================
+Function explanation
+
+Inside(Pt)
+
+	// This function returns whether the point is inside, 
+	// outside or on the surface of the solid
+
+
+DistanceToIn(Pt)
+
+	// Calculates the shortest distance ("safety") from a point
+	// outside the solid to any boundary of this solid.
+	// Return 0 if the point is already inside.
+
+
+DistanceToIn(Pt, Vec)
+
+	// Calculates the distance from a point outside the solid
+	// to the solid`s boundary along a specified direction vector.
+	// 	
+	// Note : Intersections with boundaries less than the 
+	//	  tolerance must be ignored if the direction 
+	// 	  is away from the boundary
+
+
+DistanceToOut(Pt)
+
+	// Calculates the shortest distance ("safety") from a point
+	// inside the solid to any boundary of this solid.
+	// Return 0 if the point is already outside.	
+
+
+DistanceToOut(Pt, Vec)
+
+	// Calculates the distance from a point inside the solid
+	// to the solid`s boundary along a specified direction vector.
+	// Return 0 if the point is already outside.	
+	//
+	// Note : If the shortest distance to a boundary is less 
+	// 	  than the tolerance, it is ignored. This allows
+	// 	  for a point within a tolerant boundary to leave
+	//	  immediately
+
+ 
+Problem with DistanceToIn(Pt) and DistanceToOut(Pt) :
+
+  Problem with the G4FPlane : there is no inside and no outside...
+  So, to test if the point is inside to return 0, utilize the Inside
+  function. But I don`t know if it is really needed because dToIn is 
+  called only if the point is outside...
+  So for the moment, I cannot ensure to return 0 if the point is inside for 
+  DistanceToOut and outside for DistanceToIn.
+
+
+
+G4BREPSolid is utilized for the creation of solid with STEP interface. For
+the moment, the G4BREPSolid::Inside function utilize some other G4BREPSolid
+functions which are redondant in some cases, and I don`t understand exactly 
+what they done. 
+
+These functions are identical into PCone and Polyhedra and I think there are 
+general functions, so try to copy them into the G4BREPSolid class. 
+
+After that, it's possible to optimize these functions into each specific solid
+(PCone, Pgone, Box, etc...) 
+
+
+
+These 5 functions utilized other functions :
+ - TestSurfaceBBoxes  (solid function)
+ - SurfaceNormal      (solid function)
+ - HowNear            (surface function)
+ - Intersect          (surface function)
+
+
+TestSurfaceBBoxes(ray)
+
+	// Test if the bounding box of each surface is intersected
+	// by the ray. If not, the surface become deactive.
+
+This function is placed at the begining of all the DistanceTo and Inside 
+functions. It is utilized to deactive the surface which bounding box is not 
+intersected by the ray. In this way, we do not make the complicate and long 
+Intersect function for the surfaces we are sure that they are not intersected.
+
+
+
+SurfaceNormal(Pt)
+
+	// This function calculates the normal of the 
+	// solid boundary surface on a point on this surface
+	// Note : the sense of the normal depends on the sense of the surface 
+
+This solid function check on which of its surface the point is, and after call
+the SurfaceNormal(Pt) function of this surface. The sense of the normal depends
+on the sense of the surface : if it's an inner surface the sense is 0, and if 
+it's an outer surface the sense is 1. 
+The normal calculate at first is by default away from the boundary. But if the
+sense is 0 the normal is the opposite. 
+
+
+
+HowNear(Pt)
+
+	// Shortest distance from the point x to the G4...Surface.
+	// The distance will be positive if the point is outside 
+	// the G4...Surface, negative if the point is inside.
+
+In the case of the G4FPlane, HowNear is the closest distance from the point to
+the infinite plane.
+
+In the case of the G4FCylindrical and G4FConical surface, the closest distance
+from the point to the infinite volume is calculated at first. But if this 
+distance correspond to the distance from the start point to a point outside the
+surface boundary, return the distance from the point to the nearest plane
+which delimite the surface length. 
+
+Be careful !
+Insure that HowNear < 0 correspond to point inside
+	    HowNear > 0 correspond to point outside
+	    HowNear = 0 correspond to point on the surface
+
+The sign is needed for DistanceToIn(pt) and DistanceToOut(pt)
+Problem : for the plane, there is no inside and no outside !
+ (see the comments for these 2 functions)
+
+
+
+Intersect(Ray)
+
+	// This function count the number of intersections of a 
+	// bounded surface by a ray.
+
+
+Set "distance" to the closest distance from the start point to the nearest 
+intersection and return the number of intersections. If no intersection is 
+founded, set distance = kInfinity and return 0.
+
+If this number is par, it`s signify that the start point of the ray is outside
+the volume bounded by the surface. So, for the case of the solid Inside
+calculation, ignored this intersections because the point is outside this 
+part of the volume.
+
+
+In the case of the intersection of the ray and a G4FPlane, we calculate at 
+first the intersection with the infinite plane. After, we have to determine if
+the intersection is inside the finite plane. 
+
+To do that, the intersection point and the curve boudary of the finite plane
+are projected in 2D both. So we determine if the projected hit is inside or 
+outside the projected surface. 
+
+To do that, the function IntersectRay2D is utilized, which return the number of
+intersections of a test ray which started point is the projected hit with the
+projected curve boundaries. If the number of intersections is odd, the 
+projected hit is inside the projected boundary, so the intersection point is 
+inside the G4FPlane and we find a real intersection.
+
+In the same way, into each curve IntersectRay2D function, all the intersections
+are calculated at first, and after we determine which intersection is on the 
+bounded curve and in the direction of the ray. In case of the projected point
+is on the curve, the projectedhit is considerated inside the projected surface.
+So return immediately a specific odd value (999).
+ 
+For the moment, only the G4Line:IntersectRay2D is completed, do the same for 
+each curve.
+
+
+In the case of the G4FConicalSurface and G4FCylindricalSurface, the Intersect
+function is easier. At first, all the intersections of the infinite surface by
+the ray are calculated. After, we determine if the intersection points are in 
+the direction of the ray and are inside the bounding box of the surface.
+
+
+
+
+Generality :
+
+ - there are unnecessary #include, especially in STEPinterface
+
+ - utilize G4int, G4double, G4bool instead of int, double, bool ...
+
+ - look inside G4Ray class : there are plane functions inside !!!
+
+ - replace : #define toto  3.25 
+   by      : const double toto=3.25
+
+   placed all this constant values in a .hh file (maybe G4Globals.hh)
+
+ - utilize the HEP classes and the function of the HEP classes
+   ex : replace G4Plane by HepPlane if it is possible
+	replace G4ThreeMat by HepMatrix or HepTransform3D
+ ( see http://wwwinfo.cern.ch/asd/lhc++/clhep/manual/RefGuide/index.html ) 
+
+ - see if FLT_MAXX can replaced by kInfinity and FLT_EPSILO by kCarTolerance
+
+
+
+
+
+
+
+
+
+
+
+

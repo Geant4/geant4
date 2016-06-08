@@ -98,7 +98,7 @@ G4SurfaceBoundary* G4SurfaceBoundary::Project(const G4Transform3D& tr)
   return lof;
 }
 
-
+/*
 void G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray,
 				       G4CurveRayIntersection& is)
 {
@@ -115,6 +115,26 @@ void G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray,
   }
 
   lastIntersection= is;
+}
+*/
+
+G4int G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray)
+{
+  G4int nbinter = 0, temp = 0;
+
+  for (G4int i=0; i < bounds.entries(); i++) 
+  {   
+    G4Curve& c = *bounds.at(i);
+    temp = c.IntersectRay2D(ray);
+
+    // test if the point is on the surface boundary
+    if( temp==999 )
+      return 999;
+    else
+      nbinter +=temp; 
+  }
+
+  return nbinter;
 }
 
 

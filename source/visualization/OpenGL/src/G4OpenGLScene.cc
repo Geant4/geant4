@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLScene.cc,v 2.8 1998/11/06 13:42:32 allison Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4OpenGLScene.cc,v 1.1.4.1 1999/01/29 13:31:08 johna Exp $
+// GEANT4 tag $Name: vis-01-00-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -407,11 +407,12 @@ void G4OpenGLScene::AddPrimitive (const G4Polyhedron& polyhedron) {
 		  vertex[edgeCount].z());
       edgeCount++;
     } while (notLastEdge);
-    while (edgeCount++ < 4) {  // duplicate last real vertex.
+    while (edgeCount < 4) {  // duplicate last real vertex.
       vertex[edgeCount] = vertex[edgeCount-1];
       glVertex3d (vertex[edgeCount].x(),
 		  vertex[edgeCount].y(), 
 		  vertex[edgeCount].z());
+      edgeCount++;
     }
     
     //do it all over again for hlr 2nd pass...
