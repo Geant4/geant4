@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VGraphicsSystem.cc,v 1.6 2001/02/23 15:43:24 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VGraphicsSystem.cc,v 1.7.2.1 2001/06/28 19:16:13 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // John Allison  27th March 1996
@@ -52,19 +68,19 @@ G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs) {
   if (gs.GetDescription () != "") {
     os << "\n  Description: " << gs.GetDescription ();
   }
-  os << "\n  Functionality: " << gs.GetFunctionality ();
+  os << "\n  Functionality: " << G4int(gs.GetFunctionality());
   if (pVMan -> GetVerboseLevel () > 1) {
-    G4int nScenes = scenes.size ();
+    size_t nScenes = scenes.size ();
     if (nScenes) {
       G4int nScenesOfThisSystem = 0;
-      for (int i = 0; i < nScenes; i++) {
+      for (size_t i = 0; i < nScenes; i++) {
 	if (scenes [i] -> GetGraphicsSystem () == &gs) {
 	  nScenesOfThisSystem++;
 	}
       }
       if (nScenesOfThisSystem) {
 	os << "\n  Its scenes are: ";
-	for (int i = 0; i < nScenes; i++) {
+	for (size_t i = 0; i < nScenes; i++) {
 	  if (scenes [i] -> GetGraphicsSystem () == &gs) {
 	    os << "\n  " << *(scenes [i]);
 	  }

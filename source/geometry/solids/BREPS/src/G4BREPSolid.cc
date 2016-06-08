@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4BREPSolid.cc,v 1.17 2000/11/20 17:54:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4BREPSolid.cc,v 1.18.2.1 2001/06/28 19:08:49 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -668,7 +684,8 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   G4Point3D Max = bbox->GetBoxMax();
 
   G4ThreeVectorList *vertices;
-  vertices=new G4ThreeVectorList(8);
+  vertices=new G4ThreeVectorList();
+  vertices->reserve(8);
     
   if (vertices)
     {
@@ -681,14 +698,14 @@ G4BREPSolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
       G4ThreeVector vertex6(Max.x(),Max.y(),Max.z());
       G4ThreeVector vertex7(Min.x(),Max.y(),Max.z());
 
-      vertices->insert(pTransform.TransformPoint(vertex0));
-      vertices->insert(pTransform.TransformPoint(vertex1));
-      vertices->insert(pTransform.TransformPoint(vertex2));
-      vertices->insert(pTransform.TransformPoint(vertex3));
-      vertices->insert(pTransform.TransformPoint(vertex4));
-      vertices->insert(pTransform.TransformPoint(vertex5));
-      vertices->insert(pTransform.TransformPoint(vertex6));
-      vertices->insert(pTransform.TransformPoint(vertex7));
+      vertices->push_back(pTransform.TransformPoint(vertex0));
+      vertices->push_back(pTransform.TransformPoint(vertex1));
+      vertices->push_back(pTransform.TransformPoint(vertex2));
+      vertices->push_back(pTransform.TransformPoint(vertex3));
+      vertices->push_back(pTransform.TransformPoint(vertex4));
+      vertices->push_back(pTransform.TransformPoint(vertex5));
+      vertices->push_back(pTransform.TransformPoint(vertex6));
+      vertices->push_back(pTransform.TransformPoint(vertex7));
     }
   else
     {

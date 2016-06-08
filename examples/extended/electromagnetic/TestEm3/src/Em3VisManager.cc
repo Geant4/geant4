@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: Em3VisManager.cc,v 1.2 1999/12/15 14:49:05 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: Em3VisManager.cc,v 1.3.2.1 2001/06/28 19:06:59 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // John Allison 24th January 1998.
@@ -19,6 +35,10 @@
 #include "Em3VisManager.hh"
 
 // Supported drivers...
+
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
@@ -56,8 +76,8 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
-#ifdef G4VIS_USE_RAYX
-#include "G4RayX.hh"
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
 #endif
 
 #ifdef G4VIS_USE_VRML
@@ -77,6 +97,10 @@ Em3VisManager::Em3VisManager () {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em3VisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -114,8 +138,8 @@ void Em3VisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
-#ifdef G4VIS_USE_RAYX
-  RegisterGraphicsSystem (new G4RayX);
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
 #ifdef G4VIS_USE_VRML

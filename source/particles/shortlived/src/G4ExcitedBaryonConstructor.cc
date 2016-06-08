@@ -1,18 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ExcitedBaryonConstructor.cc,v 1.4 2000/02/27 07:48:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ExcitedBaryonConstructor.cc,v 1.5.2.1 2001/06/28 19:11:16 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
-//      For information related to this code contact:
-//      CERN, IT Division, ASD Group
+//
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
 // ---------------------------------------------------------------
@@ -29,12 +44,10 @@
 
 
 G4ExcitedBaryonConstructor::G4ExcitedBaryonConstructor(G4int nStates,
-						       G4int isoSpin):
-         NumberOfStates(nStates),iIsoSpin(isoSpin),
-         iConjugation(0), iGParity(0), leptonNumber(0), baryonNumber(1),
-	 type("baryon")
+						       G4int isoSpin)
+    :    NumberOfStates(nStates), iIsoSpin(isoSpin), type("baryon"),
+         iConjugation(0), iGParity(0), leptonNumber(0), baryonNumber(1)
 {
- 
 }
 
 G4ExcitedBaryonConstructor::~G4ExcitedBaryonConstructor()
@@ -133,7 +146,6 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
 
 G4double  G4ExcitedBaryonConstructor::GetCharge(G4int iIsoSpin3)
 {
-  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   G4double charge = 0.0;
   static G4double quark_charge[7] = 
   {
@@ -159,22 +171,3 @@ G4int     G4ExcitedBaryonConstructor::GetEncoding(G4int iIsoSpin3, G4int idxStat
   }
   return encoding;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

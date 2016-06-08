@@ -1,23 +1,48 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
+//
+// $Id: G4PreCompoundTransitions.cc,v 1.6.2.1 2001/06/28 19:13:35 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // by V. Lara
 
 #include "G4PreCompoundTransitions.hh"
 
+#include "G4EvaporationLevelDensityParameter.hh"
+#include "G4PairingCorrection.hh"
+
+
 G4PreCompoundTransitions::
 G4PreCompoundTransitions(const G4Fragment & aFragment)
 {
   // Fermi energy
-  const G4double FermiEnergy = 45.0*MeV;
-  // 
-  const G4double r0 = 0.6*fermi;
-
+  const G4double FermiEnergy = G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
+  
+	// Nuclear radius
+  const G4double r0 = G4PreCompoundParameters::GetAddress()->GetTransitionsr0();
+   
+  // In order to calculate the level density parameter
+  G4EvaporationLevelDensityParameter theLDP;
 
   // Number of holes
   G4double H = aFragment.GetNumberOfHoles();
@@ -26,9 +51,13 @@ G4PreCompoundTransitions(const G4Fragment & aFragment)
   // Number of Excitons 
   G4double N = P+H;
 
+  // Nucleus 
+  G4double A = aFragment.GetA();
+  G4double Z = aFragment.GetZ();
+  G4double U = aFragment.GetExcitationEnergy();
 
   // Relative Energy (T_{rel})
-  G4double RelativeEnergy = (8.0/5.0)*FermiEnergy + aFragment.GetExcitationEnergy()/N;
+  G4double RelativeEnergy = (8.0/5.0)*FermiEnergy + U/N;
   
   // Relative Velocity: 
   // <V_{rel}>^2
@@ -61,8 +90,9 @@ G4PreCompoundTransitions(const G4Fragment & aFragment)
   if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
 
   // g = 0.595aA; GE = g*E where E is Excitation Energy
-  G4double GE = 0.595*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*
-                aFragment.GetA()*aFragment.GetExcitationEnergy();
+  G4double a = theLDP.LevelDensityParameter(A,Z,U-G4PairingCorrection::GetPairingCorrection(A,Z));
+  //  G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  G4double GE = 0.595*a*A*U;
 
 
   // F(p,h) = 0.25*(p^2 + h^2 + p - h) - 0.5*h
@@ -70,7 +100,7 @@ G4PreCompoundTransitions(const G4Fragment & aFragment)
   // F(p+1,h+1)
   G4double Fph1 = Fph + N/2.0;
   // (n+1)/n ((g*E - F(p,h))/(g*E - F(p+1,h+1)))^(n+1)
-  G4double ProbFactor = pow((GE-Fph)/(GE-Fph1),N+1.0);
+  G4double ProbFactor = ((N+1.0)/N) * pow((GE-Fph)/(GE-Fph1),N+1.0);
 
 
   // Transition probability for \Delta n = -2 (at F(p,h) = 0)
@@ -81,7 +111,7 @@ G4PreCompoundTransitions(const G4Fragment & aFragment)
 
   // Transition probability for \Delta n = 0 (at F(p,h) = 0)
   //  TransitionProb3 = TransitionProb1*(P+H+1.0)*(P*(P-1.0)+4.0*P*H+H*(H-1.0))/((P+H)*GE);
-  TransitionProb3 = TransitionProb1 * ProbFactor * ((N+1.0)/N) *(P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
+  TransitionProb3 = TransitionProb1 * ProbFactor * (P*(P-1.0) + 4.0*P*H + H*(H-1.0))/(GE-Fph);
   if (TransitionProb3 < 0.0) TransitionProb3 = 0.0; 
   
 
@@ -90,8 +120,8 @@ G4PreCompoundTransitions(const G4Fragment & aFragment)
 
 const G4PreCompoundTransitions & G4PreCompoundTransitions::operator=(const G4PreCompoundTransitions &right)
 {
-    G4Exception("G4PreCompoundTransitions::operator= meant to not be accessable");
-    return *this;
+  G4Exception("G4PreCompoundTransitions::operator= meant to not be accessable");
+  return *this;
 }
 
 
@@ -110,25 +140,26 @@ G4bool G4PreCompoundTransitions::operator!=(const G4PreCompoundTransitions &righ
 
 G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragment)
 {
-	G4Fragment result(aFragment);
-	G4double ChosenTransition = G4UniformRand()*this->GetTotalProbability();
-	G4int deltaN = 0;
-	if (ChosenTransition <= TransitionProb1) 
-	{
-		// Number of excitons is increased on \Delta n = +2
-		deltaN = 2;
-	} 
-	else if (ChosenTransition <= TransitionProb1+TransitionProb2) 
-	{
-		// Number of excitons is increased on \Delta n = -2
-		deltaN = -2;
-	}
-	result.SetNumberOfExcitons(result.GetNumberOfExcitons()+deltaN);
-	result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
-	// With weight Z/A, number of charged particles is decreased on +1
-	if ((deltaN > 0 || result.GetNumberOfCharged() > 0) &&
-       (G4UniformRand() <= result.GetZ()/result.GetA())){
-		result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2);
-	}  
-	return result;
+  G4Fragment result(aFragment);
+  G4double ChosenTransition = G4UniformRand()*this->GetTotalProbability();
+  G4int deltaN = 0;
+  if (ChosenTransition <= TransitionProb1) 
+    {
+      // Number of excitons is increased on \Delta n = +2
+      deltaN = 2;
+    } 
+  else if (ChosenTransition <= TransitionProb1+TransitionProb2) 
+    {
+      // Number of excitons is increased on \Delta n = -2
+      deltaN = -2;
+    }
+  result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
+  result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
+  // With weight Z/A, number of charged particles is decreased on +1
+  if ((deltaN > 0 || result.GetNumberOfCharged() > 0) &&
+      (G4UniformRand() <= result.GetZ()/result.GetA())){
+    result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2);
+  }  
+  return result;
 }
+

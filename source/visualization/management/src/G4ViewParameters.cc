@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ViewParameters.cc,v 1.11 2001/02/23 15:47:24 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ViewParameters.cc,v 1.12.2.1 2001/06/28 19:16:14 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // John Allison  19th July 1996
@@ -241,7 +257,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       G4cout << "Difference in no of cutaway planes." << G4endl;
     }
     else {
-      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+      for (size_t i = 0; i < fCutawayPlanes.size (); i++) {
 	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i]))
 	  G4cout << "Difference in cutaway plane no. " << i << G4endl;
       }
@@ -310,7 +326,7 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Cutaway flag: ";
   if (v.fCutaway) {
     os << "true, cutaway planes: ";
-    for (int i = 0; i < v.fCutawayPlanes.size (); i++) {
+    for (size_t i = 0; i < v.fCutawayPlanes.size (); i++) {
       os << ' ' << v.fCutawayPlanes[i];
     }
   }
@@ -446,7 +462,7 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
     if (fCutawayPlanes.size () != v.fCutawayPlanes.size ())
       return true;
     else {
-      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+      for (size_t i = 0; i < fCutawayPlanes.size (); i++) {
 	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i])) return true;
       }
     }

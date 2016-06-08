@@ -24,3 +24,7 @@
 *  prodcut(k+2) = dcute/m for this medium           (data card CUTPR)
 *  prodcut(k+3) = ppcutm  for this medium           (data card CUTPR)
 *
+
+      COMMON/STEPMAX/stepmax
+*
+*  stepmax = max allowed step length                (data card STMAX)

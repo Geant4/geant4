@@ -30,3 +30,8 @@
   *HISTO  id1  nbin  vmin  vmax 
   *HISTO  id2  nbin  vmin  vmax
   ...etc...........
+  
+ It is possible to set the max allowed step size STEMAX,
+ via the data card:
+ STEPMX  stepmax (in cm)
+ (However this value will be taken into account only if auto=0)

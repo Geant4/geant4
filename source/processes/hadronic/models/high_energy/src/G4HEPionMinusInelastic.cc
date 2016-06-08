@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HEPionMinusInelastic.cc,v 1.3 1999/12/15 14:52:57 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4HEPionMinusInelastic.cc,v 1.4.4.1 2001/06/28 19:13:58 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 
@@ -225,7 +241,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
        counter = -1;
        for( np=0; np<(numSec/3); np++ ) 
           {
-            for( nm=G4std::max(0,np-1); nm<=(np+1); nm++ ) 
+            for( nm=Imax(0,np-1); nm<=(np+1); nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -294,7 +310,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
 //                                            suppress high multiplicity events at low momentum
 //                                            only one additional pion will be produced
        G4double cech[] = {1., 0.95, 0.79, 0.32, 0.19, 0.16, 0.14, 0.12, 0.10, 0.08};
-       G4int iplab = G4std::max(9, G4int( incidentTotalMomentum*5.));
+       G4int iplab = Imax(9, G4int( incidentTotalMomentum*5.));
        if( G4UniformRand() < cech[iplab] )
          {
            if( targetCode == protonCode )
@@ -353,7 +369,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
 
        for( nt=1; nt<=numSec; nt++ ) 
          {
-           test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+           test = exp( Amin( expxu, Amax( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
            dum = M_PI*nt/(2.0*n*n);
            if( fabs(dum) < 1.0 ) 
              if( test >= 1.0e-10 )anpn += dum*test;
@@ -368,7 +384,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
            counter = -1;
            for( np=0; np<numSec/3; np++ ) 
               {
-                for( nm=G4std::max(0,np-1); nm<=(np+1); nm++ ) 
+                for( nm=Imax(0,np-1); nm<=(np+1); nm++ ) 
                    {
                      for( nz=0; nz<numSec/3; nz++ ) 
                         {
@@ -377,7 +393,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>0) && (nt<=numSec) ) 
                                 {
-                                  test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                                  test = exp( Amin( expxu, Amax( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                                   dum = (M_PI/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                                   if( fabs(dum) < 1.0 ) 
                                         if( test >= 1.0e-10 )excs += dum*test;
@@ -408,7 +424,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
                               nt = np+nm+nz;
                               if( (nt>=1) && (nt<=numSec) ) 
                                 {
-                                  test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                                  test = exp( Amin( expxu, Amax( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                                   dum = (M_PI/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                                   if( fabs(dum) < 1.0 ) 
                                       if( test >= 1.0e-10 )excs += dum*test;
@@ -441,7 +457,7 @@ G4HEPionMinusInelastic::FirstIntInCasPionMinus( G4bool &inElastic,
            else
              {
                pv[0] = PionZero;
-               pv[0] = Neutron;
+               pv[1] = Neutron;
              }
          }
        else      

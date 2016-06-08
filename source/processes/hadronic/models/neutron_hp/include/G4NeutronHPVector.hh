@@ -1,14 +1,28 @@
-// This code implementation is the intellectual property of
-// neutron_hp -- header file
-// J.P. Wellisch, Nov-1996
-// A prototype of the low energy neutron transport model.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4NeutronHPVector.hh,v 1.14 2000/11/20 10:07:41 hpw Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4NeutronHPVector.hh,v 1.15.2.1 2001/06/28 19:14:21 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
@@ -126,7 +140,47 @@ class G4NeutronHPVector
   }
   
   G4double GetXsec(G4double e);
-
+  G4double GetXsec(G4double e, G4int min)
+  {
+    G4int i;
+    for(i=min ; i<nEntries; i++)
+    {
+      if(theData[i].GetX()>e) break;
+    }
+    G4int low = i-1;
+    G4int high = i;
+    if(i==0)
+    {
+      low = 0;
+      high = 1;
+    }
+    else if(i==nEntries)
+    {
+      low = nEntries-2;
+      high = nEntries-1;
+    }
+    G4double y;
+    if(e<theData[nEntries-1].GetX()) 
+    {
+      // Protect against doubled-up x values
+      if( (theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
+      {
+        y = theData[low].GetY();
+      }
+      else
+      {
+        y = theInt.Interpolate(theManager.GetScheme(high), e, 
+                               theData[low].GetX(), theData[high].GetX(),
+		  	       theData[low].GetY(), theData[high].GetY());
+      }
+    }
+    else
+    {
+      y=theData[nEntries-1].GetY();
+    }
+    return y;
+  }
+  
   inline G4double GetY(G4double x)  {return GetXsec(x);}
   inline G4int GetVectorLength() const {return nEntries;}
 

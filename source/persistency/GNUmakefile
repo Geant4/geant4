@@ -6,7 +6,7 @@
 # include/*.ddl -> $(G4TMP)/$(G4SYSTEM)/*.hh     -> $(G4SCHEMA_INCLUDE)/*.hh
 #                  $(G4TMP)/$(G4SYSTEM)/*_ref.hh -> $(G4SCHEMA_INCLUDE)/*.hh
 #                  $(G4TMP)/$(G4SYSTEM)/*_ddl.cc -> $(G4TMP)/$(G4SYSTEM)/*_ddl.o
-# (schema) ------> $(G4TMPSCHEMA_BOOT) -----------> $(G4SCHEMA_BOOT)
+# (schema) ------> $(G4SCHEMA_BOOT) --------------> $(G4SCHEMA_BOOT)
 #  src/*.cc --------------------------------------> $(G4TMP)/$(G4SYSTEM)/*.o
 #
 # You must have unique G4SCHEMA_FDID assigned by your local 
@@ -42,16 +42,15 @@ all:
 	exit 1
 endif
 
-cleandb:
-ifndef G4SCHEMA_FDID
-	@echo G4SCHEMA_FDID is not defined.  Stop.
-	exit 1
-endif
+cleandb: cleanall newdb
+
+cleanall:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
-	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA
-	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA.FDDB
-	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/*.G4TMPSCHEMA.DB
-	@echo Copying schema to $(G4TMPSCHEMA_BOOT) for FDID $(G4SCHEMA_FDID)
+
+newdb:
+	@rm -f $(G4SCHEMA_BOOT_DIR)/G4SCHEMA
+	@rm -f $(G4SCHEMA_BOOT_DIR)/G4SCHEMA.FDDB
+	@rm -f $(G4SCHEMA_BOOT_DIR)/*.G4SCHEMA.DB
 	@$(HEP_ODBMS_DIR)/etc/getdb $(HEP_ODBMS_DIR)/schema/HEP_BASE \
-	  $(G4TMPSCHEMA_BOOT) $(G4SCHEMA_FDID)
+	  $(G4SCHEMA_BOOT) $(G4SCHEMA_FDID)
 

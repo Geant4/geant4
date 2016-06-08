@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: globals.hh,v 1.15 2000/01/19 11:12:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: globals.hh,v 1.16.2.1 2001/06/28 19:10:04 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // Global Constants and typedefs
@@ -23,6 +39,7 @@
 // 22.09.98 G.Cosmo - Removed min/max/sqr/abs functions and replaced with
 //                    inclusion of CLHEP/config/TemplateFunctions.h for CLHEP-1.3
 // 15.12.99 G.Gracia - Included min, max definitions for NT with ISO standard
+// 15.06.01 G.Cosmo - Removed cbrt() definition
 
 #ifndef GLOBALS_HH
 #define GLOBALS_HH
@@ -69,11 +86,6 @@
 
 // Includes some additional definitions
 #include "templates.hh"
-
-// cbrt() function - define G4_NO_CBRT if the function is not available
-#ifdef G4_NO_CBRT
-  static double cbrt(double x) { return pow(x,1./3.); }
-#endif
 
 // System of Units and Physical Constants
 ////#include <CLHEP/Units/PhysicalConstants.h>

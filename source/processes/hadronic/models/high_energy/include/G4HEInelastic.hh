@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HEInelastic.hh,v 1.4 2000/07/09 09:48:10 hpw Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4HEInelastic.hh,v 1.6.4.1 2001/06/28 19:13:50 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // G4 Gheisha High Energy (GHE) model class -- header file
@@ -38,10 +54,6 @@ class G4HEInelastic : public G4HadronicInteraction
  public: 
          G4HEInelastic()
             { 
-              SetMinEnergy(20*GeV);
-              SetMaxEnergy(10*TeV);
-              MAXPART = 512;
-              verboseLevel = 0;
               SetParticles();
               conserveEnergy = false;
             };
@@ -61,6 +73,11 @@ class G4HEInelastic : public G4HadronicInteraction
          G4bool     EnergyConservation(void)
                          { return conserveEnergy;} 
 
+         G4double   Amin(G4double a, G4double b);
+         G4double   Amax(G4double a, G4double b);
+         G4int      Imin(G4int a, G4int b);
+         G4int      Imax(G4int a, G4int b);
+ 
          void       FillParticleChange(G4HEVector pv[], G4int aVecLength);
 
          G4double   pmltpc(G4int np, G4int nm, G4int nz, G4int n, G4double b, G4double c);

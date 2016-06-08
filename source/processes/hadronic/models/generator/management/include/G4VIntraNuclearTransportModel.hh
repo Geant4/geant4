@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.6 2000/12/14 09:36:03 hpw Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VIntraNuclearTransportModel.hh,v 1.6.6.2 2001/06/28 20:19:56 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
 //      History: first implementation, A. Feliciello, 30th June 1998
 //      A.Pavliouk 26.11.98
 //          In Set...() methods a pointer is deleted now before new

@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
@@ -114,6 +136,7 @@
   
   G4double G4NeutronHPVector::GetXsec(G4double e) 
   {
+    if(nEntries == 0) return 0;
     if(!theHash.Prepared()) Hash();
     G4int min = theHash.GetMinIndex(e);
     G4int i;
@@ -173,7 +196,7 @@
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPVector");
     if(i==nPoints)
     {
-      nPoints *= 1.5;
+      nPoints = static_cast<G4int>(1.5*nPoints);
       G4NeutronHPDataPoint * buff = new G4NeutronHPDataPoint[nPoints];
       for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
       delete [] theData;
@@ -264,7 +287,8 @@
       for(G4int j=start; j<current; j++)
       {
 	x = theData[j].GetX();
-	y = theInt.Lin(x, x1, x2, y1, y2);
+	if(x1-x2 == 0) y = (y2+y1)/2.;
+	else y = theInt.Lin(x, x1, x2, y1, y2);
 	if (abs(y-theData[j].GetY())>precision*y)
 	{
 	  aBuff[++count] = theData[current-1]; // for this one, everything was fine

@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.9 2000/11/03 10:29:51 pia Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4hLowEnergyLoss.hh,v 1.10.2.2 2001/06/28 20:19:27 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // $Id: 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4hEnergyLoss physics process -----------
@@ -30,13 +44,9 @@
 // The energy loss for other charged hadrons is calculated from the p/pbar
 // tables with scaled kinetic energy.
 //
-// **************************************************************************** 
-// It is assumed that the cut in range is the same for all the charged hadrons! 
-// ****************************************************************************
-//
-// 7/10/98 some bugs fixed + some cleanup , L.Urban 
-// 22/10/98 cleanup , L.Urban
-// 02/02/99 several bugs fixed, L.Urban
+// 7/10/98  L.Urban some bugs fixed + some cleanup 
+// 22/10/98 L.Urban cleanup
+// 02/02/99 L.Urban several bugs fixed
 // 31/03/00 V.Ivanchenko rename to lowenergy as G4hLowEnergyLoss.hh 
 // 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
 //

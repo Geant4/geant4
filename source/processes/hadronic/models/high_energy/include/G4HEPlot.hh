@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HEPlot.hh,v 1.3 1999/12/15 14:52:54 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4HEPlot.hh,v 1.4.4.1 2001/06/28 19:13:52 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // G4 Gheisha friend class G4HEPlot  -- header file
@@ -17,7 +33,7 @@
 
 class G4HEPlot
  {
-  protected:
+  public:
      G4double Xstart;
      G4double Xbin;
      G4double Weight;
@@ -29,8 +45,6 @@ class G4HEPlot
      G4double WeightUnderflow;
      G4double* Xvalue;
      G4double* Yvalue;
-
-  public:
 
    G4HEPlot(){ };
 
@@ -73,13 +87,17 @@ class G4HEPlot
 
    void Scale( G4double s, const G4HEPlot & p);
 
-   void XScale( G4double a, G4double b, const G4HEPlot & p); 
+   void XScale( G4double a, G4double b); 
+
+   void Shift( G4int nshift);
 
    void Log( G4double s, const G4HEPlot & p);
 
    void Sqrt( G4double s, const G4HEPlot & p);
 
    void Reset();
+
+   void LinearFit(G4double& a, G4double& b);
 
    void Fill(G4double x, G4double w);
 

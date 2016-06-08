@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 // MODULE:        G4GeneralParticleSource.hh
@@ -9,23 +31,16 @@
 // Customer:      ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
+// $Id: G4GeneralParticleSource.hh,v 1.3 2001/06/29 08:05:59 gcosmo Exp $
+// GEANT4 tag $Name: event-V03-01-01 $
+///////////////////////////////////////////////////////////////////////////////
 //
-// DESCRIPTION
-// -----------
+// Class Description:
+//
 // The General Particle Source is designed to extend the functionality of the
 // G4ParticleGun class. It is designed to allow specification of input
 // particles in terms of position, direction (or angular) and energy
 // distributions.  This class is derived from G4VPrimaryGenerator.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//
-// Version 1.0, 28 February 2000, C Ferguson, Created.
-//
-// Version 1.1, 18 October 2000, Modified to inherit from G4VPrimaryGenerator.
-// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -321,9 +336,23 @@
 //
 // void SetVerbosity(G4int)
 //    Sets the verbosity level.
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//
+// CHANGE HISTORY
+// --------------
+//
+// Version 1.0, 28 February 2000, C Ferguson, Created.
+//
+// Version 1.1, 18 October 2000, Modified to inherit from G4VPrimaryGenerator.
+// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
+#ifndef G4GeneralParticleSource_h
+#define G4GeneralParticleSource_h 1
+
 #include "G4VPrimaryGenerator.hh"
 #include "G4Navigator.hh"
 #include "G4PhysicsOrderedFreeVector.hh"
@@ -607,10 +636,4 @@ private:
   
 };
 
-
-
-
-
-
-
-
+#endif

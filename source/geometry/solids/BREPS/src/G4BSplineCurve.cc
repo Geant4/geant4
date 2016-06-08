@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4BSplineCurve.cc,v 1.5 2000/11/08 14:22:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4BSplineCurve.cc,v 1.7.2.1 2001/06/28 19:08:50 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -30,8 +46,9 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
 {
   degree= degree0;
    
-  G4int nbpoints =  controlPointsList0->length();
-  controlPointsList = new G4Point3DVector(nbpoints);
+  G4int nbpoints =  controlPointsList0->size();
+  controlPointsList = new G4Point3DVector();
+  controlPointsList->reserve(nbpoints);
 
   G4int a;  
   for(a = 0; a < nbpoints; a++)
@@ -39,22 +56,23 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
     (*controlPointsList)[a] = (*controlPointsList0)[a];
   }
  
-  G4int nbknots = knots0->length();
-  knots = new G4doubleVector(nbknots);
+  G4int nbknots = knots0->size();
+  knots = new G4doubleVector();
+  knots->reserve(nbknots);
   for(a = 0; a < nbknots; a++)
   {
     (*knots)[a] = (*knots0)[a];
   }
 
-  G4int nbweights = weightsData0->length();
-  weightsData  = new G4doubleVector(nbweights);
+  G4int nbweights = weightsData0->size();
+  weightsData  = new G4doubleVector();
+  weightsData->reserve(nbweights);
   for(a = 0; a < nbweights; a++)
   {
     (*weightsData)[a] = (*weightsData0)[a];
   }
   
-
-  SetBounds((*knots)[0], (*knots)[knots->length()-1]);
+  SetBounds((*knots)[0], (*knots)[knots->size()-1]);
 }
 
 
@@ -159,13 +177,13 @@ G4Curve* G4BSplineCurve::Project(const G4Transform3D& tr)
   // just transform + project all control points
   // what about self intersections?
   
-  G4int            n                    = controlPointsList->length();
+  G4int            n                    = controlPointsList->size();
   G4Point3DVector* newControlPointsList = new G4Point3DVector(n);
 
-  for (G4int i=0; i<n; i++) 
+  for (G4int i=0; i<n; i++)
   {
-    G4Point3D& p= (*newControlPointsList)(i);
-    p= tr*(*controlPointsList)(i);
+    G4Point3D& p= (*newControlPointsList)[i];
+    p= tr*(*controlPointsList)[i];
     p.setZ(0);
   }
 
@@ -270,11 +288,11 @@ int G4BSplineCurve::Inside( const G4Point3d& Hit, const G4Ray& rayref)
 void G4BSplineCurve::InitBounded()
 {
   // just like in the old functions
-  G4int pointCount = controlPointsList->length();
-  bBox.Init( (*controlPointsList)(0) );
+  G4int pointCount = controlPointsList->size();
+  bBox.Init( (*controlPointsList)[0] );
   for (G4int i=1; i<pointCount; i++) 
   {
-    bBox.Extend( (*controlPointsList)(i) );
+    bBox.Extend( (*controlPointsList)[i] );
   }
 }
 

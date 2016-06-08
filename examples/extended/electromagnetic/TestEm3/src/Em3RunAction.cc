@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: Em3RunAction.cc,v 1.8 2001/03/26 16:01:58 maire Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: Em3RunAction.cc,v 1.11.2.1 2001/06/28 19:06:59 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 
@@ -86,7 +102,11 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //histograms
   //
-  bookHisto();     
+  bookHisto();
+  
+  //example of print dEdx tables
+  //
+  ////PrintDedxTables();     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -176,6 +196,86 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
     }                         
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4EnergyLossTables.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em3RunAction::PrintDedxTables()
+{
+  //Print dE/dx tables with binning identical to the Geant3 JMATE bank.
+  //The printout is readable as Geant3 ffread data cards (by the Geant3 program g4mat).
+  //  
+  const G4double tkmin=10*keV, tkmax=10*TeV;
+  const G4int nbin=90;  
+  G4double tk[nbin];
+    
+  const G4int ncolumn = 5;  
+													      							            
+  //compute the kinetic energies
+  //  
+  const G4double dp = log10(tkmax/tkmin)/nbin;
+  const G4double dt = pow(10.,dp);
+  tk[0] = tkmin;  
+  for (G4int i=1; i<nbin; ++i) tk[i] = tk[i-1]*dt;
+
+  //print the kinetic energies
+  //
+  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  G4int  oldprec = G4cout.precision(3);
+     
+  G4cout << "\n kinetic energies \n ";
+  for (G4int j=0; j<nbin; ++j) {
+    G4cout << G4BestUnit(tk[j],"Energy") << "\t";     
+    if ((j+1)%ncolumn == 0) G4cout << "\n ";
+  }
+  G4cout << G4endl; 
+
+  //print the dE/dx tables
+  //
+  G4cout.setf(G4std::ios::scientific,G4std::ios::floatfield);
+      		    
+  G4ParticleDefinition* 
+  part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
+  
+  for (G4int iab=0;iab < Detector->GetNbOfAbsor(); iab++)
+     {
+      G4Material* mat = Detector->GetAbsorMaterial(iab);
+      G4cout << "\nLIST";
+      G4cout << "\nC \nC  dE/dx (MeV/cm) for " << part->GetParticleName() << " in "
+             << mat ->GetName() << "\nC";
+      G4cout << "\nKINE   (" << part->GetParticleName() << ")"; 	     
+      G4cout << "\nMATE   (" << mat ->GetName() << ")";
+      G4cout.precision(2);
+      G4cout << "\nERAN  " << tkmin/GeV << " (ekmin)\t"
+                           << tkmax/GeV << " (ekmax)\t"
+			   << nbin      << " (nekbin)";
+      G4double cutgam = (G4Gamma::Gamma()->GetCutsInEnergy())[mat->GetIndex()];
+      if (cutgam < tkmin) cutgam = tkmin; if (cutgam > tkmax) cutgam = tkmax;
+      G4double cutele = (G4Electron::Electron()->GetCutsInEnergy())[mat->GetIndex()];
+      if (cutele < tkmin) cutele = tkmin; if (cutele > tkmax) cutele = tkmax;      			   			   
+      G4cout << "\nCUTS  " << cutgam/GeV << " (cutgam)\t" << cutele/GeV << " (cutele)";
+      			   
+      G4cout.precision(6);            
+      G4cout << "\nG4VAL \n ";
+      for (G4int l=0;l<nbin; ++l)
+         {
+           G4double dedx = G4EnergyLossTables::GetDEDX(part,tk[l],mat);
+           G4cout << dedx/(MeV/cm) << "\t";
+	   if ((l+1)%ncolumn == 0) G4cout << "\n ";
+         }
+      G4cout << G4endl; 
+     }
+     
+  G4cout.precision(oldprec);
+  G4cout.setf(oldform,G4std::ios::floatfield);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

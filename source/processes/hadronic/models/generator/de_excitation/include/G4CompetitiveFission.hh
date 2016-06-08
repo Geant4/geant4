@@ -1,10 +1,28 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
+//
+// $Id: G4CompetitiveFission.hh,v 1.4.2.1 2001/06/28 19:12:59 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -24,6 +42,8 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "Randomize.hh"
+
+//#define debug
 
 class G4CompetitiveFission : public G4VEvaporationChannel
 {
@@ -46,26 +66,26 @@ public:
   void Initialize(const G4Fragment & fragment);
 
   inline void SetFissionBarrier(G4VFissionBarrier * aBarrier)
-    {
-      if (MyOwnFissionBarrier) delete theFissionBarrierPtr;
-      theFissionBarrierPtr = aBarrier;
-      MyOwnFissionBarrier = false;
-    }
+  {
+    if (MyOwnFissionBarrier) delete theFissionBarrierPtr;
+    theFissionBarrierPtr = aBarrier;
+    MyOwnFissionBarrier = false;
+  }
 
   inline void SetEmissionStrategy(G4VEmissionProbability * aFissionProb)
-    {
-      if (MyOwnFissionProbability) delete theFissionProbabilityPtr;
-      theFissionProbabilityPtr = aFissionProb;
-      MyOwnFissionProbability = false;
-    }
+  {
+    if (MyOwnFissionProbability) delete theFissionProbabilityPtr;
+    theFissionProbabilityPtr = aFissionProb;
+    MyOwnFissionProbability = false;
+  }
 
 
   inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
-    { 
-      if (MyOwnLevelDensity) delete theLevelDensityPtr;
-      theLevelDensityPtr = aLevelDensity;
-      MyOwnLevelDensity = false;
-    }
+  { 
+    if (MyOwnLevelDensity) delete theLevelDensityPtr;
+    theLevelDensityPtr = aLevelDensity;
+    MyOwnLevelDensity = false;
+  }
 
 
   inline G4double GetFissionBarrier(void) const { return FissionBarrier; }
@@ -113,7 +133,6 @@ private:
 
 
   // Sample Kinetic energy of fission products
-
   G4double FissionKineticEnergy(const G4double A, const G4double Z,
 				const G4double Af1, const G4double Zf1,
 				const G4double Af2, const G4double Zf2,
@@ -128,14 +147,13 @@ private:
 
 
 
-	G4double FissionPairingCorrection(const G4int A, const G4int Z) const;
-
-
-
-
   G4ThreeVector IsotropicVector(const G4double Magnitude = 1.0);
 
 
+#ifdef debug
+  void CheckConservation(const G4Fragment & theInitialState,
+			 G4FragmentVector * Result) const;
+#endif
 
 
 };

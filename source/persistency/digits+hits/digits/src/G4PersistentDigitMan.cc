@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PersistentDigitMan.cc,v 1.4 1999/11/28 21:54:14 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PersistentDigitMan.cc,v 1.5.2.1 2001/06/28 19:11:24 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4PersistentDigitMan 
 //
@@ -16,7 +32,7 @@
 #include "G4PersistentDigitMan.hh"
 
 
-G4PersistentDigitMan* G4PersistentDigitMan::f_PersistentDigitMan = NULL;
+G4PersistentDigitMan* G4PersistentDigitMan::f_PersistentDigitMan = 0;
 
 G4PersistentDigitMan* G4PersistentDigitMan::GetPersistentDigitMan()
 {
@@ -31,7 +47,7 @@ G4PersistentDigitMan* G4PersistentDigitMan::get_PersistentDigitManIfExist()
 { return f_PersistentDigitMan; }
 
 G4PersistentDigitMan::G4PersistentDigitMan()
- : f_CurrentPDCofThisEvent(NULL)
+ : f_CurrentPDCofThisEvent(0)
 {;}
 
 G4PersistentDigitMan::~G4PersistentDigitMan()

@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VDecayChannel.cc,v 1.8 2000/05/29 01:30:52 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VDecayChannel.cc,v 1.9.2.1 2001/06/28 19:11:14 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      27 July 1996 H.Kurashige
 //      30 May 1997  H.Kurashige
@@ -30,11 +44,13 @@ const G4String G4VDecayChannel::noName = " ";
 
 G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
                :kinematics_name(aName),
-		verboseLevel(Verbose),rbranch(0.0),
+		rbranch(0.0),
 		numberOfDaughters(0),
-		parent_name(0),parent(0),parent_mass(0.0),
-		daughters_name(0),daughters(0),daughters_mass(0),
-		particletable(0)		
+		parent_name(0), daughters_name(0),
+		particletable(0),
+		parent(0), daughters(0),
+		parent_mass(0.0), daughters_mass(0),
+		verboseLevel(Verbose)		
 {
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -49,11 +65,13 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
 			       const G4String& theDaughterName3,
 			       const G4String& theDaughterName4 )
                :kinematics_name(aName),
-		verboseLevel(1),rbranch(theBR),
+		rbranch(theBR),
 		numberOfDaughters(theNumberOfDaughters),
-		parent_name(0),parent(0),parent_mass(0.0),
-		daughters_name(0),daughters(0),daughters_mass(0),
-		particletable(0)		
+		parent_name(0), daughters_name(0),
+		particletable(0),
+		parent(0), daughters(0),
+		parent_mass(0.0), daughters_mass(0),
+		verboseLevel(1)		
 {
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();

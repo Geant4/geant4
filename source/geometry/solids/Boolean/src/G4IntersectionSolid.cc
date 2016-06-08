@@ -1,21 +1,39 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4IntersectionSolid.cc,v 1.11 2001/03/19 10:30:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4IntersectionSolid.cc,v 1.12.2.1 2001/06/28 19:08:57 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
 // History:
 //
-// 12.09.98 V.Grichine 
-// 29.07.99 V.Grichine, modifications in DistanceToIn(p,v)
+// 29.05.01 V.Grichine, bug was fixed in DistanceToIn(p,v)
 // 16.03.01 V.Grichine, modifications in CalculateExtent() and Inside()
 //                      based on D.Williams proposal
+// 29.07.99 V.Grichine, modifications in DistanceToIn(p,v)
+// 12.09.98 V.Grichine, implementation based on discussions with J. Apostolakis and 
+//                      S. Giani 
 
 #include "G4IntersectionSolid.hh"
 // #include "G4DisplacedSolid.hh"
@@ -206,14 +224,27 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
     {
       do
       {
-        disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
-   
+	if( fPtrSolidB->Inside(p+dist*v) == kInside    )
+	{
+	  disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
+	}
+	else
+	{
+          disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
+	}
         if( disTmp != kInfinity )
         {
           dist += disTmp ;
           if(Inside(p+dist*v) == kOutside  )
 	  {
-            disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+	    if( fPtrSolidA->Inside(p+dist*v) == kInside    )
+	    {
+	      disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v) ; 
+	    }
+	    else
+	    {
+              disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+	    }
             if( disTmp != kInfinity  )
 	    {
               dist += disTmp ;
@@ -240,14 +271,27 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
     {     
       do 
       {
-        disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
-   
+	if( fPtrSolidA->Inside(p+dist*v) == kInside    )
+	{
+	  disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v) ; 
+	}
+	else
+	{
+          disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+	}   
         if( disTmp != kInfinity )
         {
           dist += disTmp ;
           if(Inside(p+dist*v) == kOutside  )
 	  {
-            disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
+	    if( fPtrSolidB->Inside(p+dist*v) == kInside    )
+	    {
+	      disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
+	    }
+	    else
+	    {
+              disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
+	    }
             if( disTmp != kInfinity  )
 	    {
               dist += disTmp ;
@@ -273,14 +317,27 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
     {
       do
       {
-        disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
-   
+	if( fPtrSolidB->Inside(p+dist*v) == kInside    )
+	{
+	  disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
+	}
+	else
+	{
+          disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
+	}
         if( disTmp != kInfinity )
         {
           dist += disTmp ;
           if(Inside(p+dist*v) == kOutside  )
 	  {
-            disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+	    if( fPtrSolidA->Inside(p+dist*v) == kInside    )
+	    {
+	      disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v) ; 
+	    }
+	    else
+	    {
+              disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
+	    }
             if( disTmp != kInfinity  )
 	    {
               dist += disTmp ;

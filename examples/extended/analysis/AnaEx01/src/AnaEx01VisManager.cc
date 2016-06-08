@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: AnaEx01VisManager.cc,v 1.1.1.1 2000/09/14 11:37:21 barrand Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: AnaEx01VisManager.cc,v 1.2.2.1 2001/06/28 19:06:46 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // John Allison 24th January 1998.
@@ -19,6 +35,10 @@
 #include "AnaEx01VisManager.hh"
 
 // Supported drivers...
+
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
 
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
@@ -56,6 +76,10 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
+#endif
+
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
 #include "G4VRML2.hh"
@@ -66,10 +90,6 @@
 #include "G4VRML2File.hh"
 #endif
 
-#ifdef G4VIS_USE_RAYTRACER
-#include "G4RayTracer.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 AnaEx01VisManager::AnaEx01VisManager () {}
@@ -77,6 +97,10 @@ AnaEx01VisManager::AnaEx01VisManager () {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void AnaEx01VisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -114,6 +138,10 @@ void AnaEx01VisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
+#endif
+
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
@@ -122,10 +150,6 @@ void AnaEx01VisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VRMLFILE
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
-#endif
-
-#ifdef G4VIS_USE_RAYTRACER
-  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
   if (fVerbose > 0) {

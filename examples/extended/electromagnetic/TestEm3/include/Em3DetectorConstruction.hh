@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: Em3DetectorConstruction.hh,v 1.2 1999/12/15 14:49:01 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: Em3DetectorConstruction.hh,v 1.3.2.1 2001/06/28 19:06:56 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 
@@ -24,6 +40,8 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
+class G4UserLimits;
+
 class Em3DetectorMessenger;
 class Em3CalorimeterSD;
 
@@ -47,7 +65,8 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      void SetCalorSizeYZ(G4double);          
      void SetNbOfLayers (G4int);   
       
-     void SetMagField(G4double);
+     void SetMagField   (G4double);
+     void SetMaxStepSize(G4double);
      
      G4VPhysicalVolume* Construct();
 
@@ -105,6 +124,7 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiAbsor[MaxAbsor]; //pointer to the physical Absorbers
      
      G4UniformMagField* magField;         //pointer to the magnetic field
+     G4UserLimits*      userLimits;       //pointer to the userLimits class     
      
      Em3DetectorMessenger* detectorMessenger;  //pointer to the Messenger
      Em3CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector

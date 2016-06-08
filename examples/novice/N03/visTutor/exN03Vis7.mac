@@ -3,8 +3,10 @@
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
-#  DATE: October  17, 2000                                            # 
+#  DATE:                                                              #
+#        June     20, 2001                                            #
 #        November 26, 2000                                            #
+#        October  17, 2000                                            #  
 #                                                                     #
 #  CONTENTS: A macro to demonstrate the VRMLFILE driver               #
 #                                                                     #
@@ -34,15 +36,18 @@
 #     ( The default value is "1".)                                    #
 #                                                                     #
 #  ADDITIONAL NOTES:                                                  #
+#   The VRML-file viewer "vrmlview" is obtainable from the following  #
+#   Web site:                                                         #
+#      http://www.sim.no/downloads.html                               #
 #                                                                     #
 #######################################################################
 
 ###################################################
-# Visualization of detector geometry and events 
+# Visualization of detector geometry and events  
 # with the VRML2FILE driver.
 #
-# Note: "/vis/viewer/set/style wireframe" means 
-#       "half-transparent" in the VRML2FILE driver. 
+# Note: "/vis/viewer/set/style wireframe" means  
+#       "half-transparent" in the VRML2FILE driver.  
 #       It is a convention of this driver.
 ###################################################
 
@@ -52,12 +57,12 @@
 # Invoke the VRML2FILE driver
 /vis/open VRML2FILE
 
-# Create a new scene 
+# Create a new scene  
 /vis/scene/create
 
-# Attach the current scene handler 
+# Attach the current scene handler  
 # to the current scene
-/vis/sceneHandler/attach 
+/vis/sceneHandler/attach  
 
 # Add the world volume to the current scene
 /vis/scene/add/volume
@@ -65,7 +70,7 @@
 # Visualize one event added to the current scene
 #  Note: The command /vis/scene/add/trajectories
 #        is not necessary in exampleN03,
-#        since the C++ method DrawTrajectory() is 
+#        since the C++ method DrawTrajectory() is  
 #        described in the event action.
 #/vis/scene/add/trajectories
 /vis/viewer/set/style wireframe

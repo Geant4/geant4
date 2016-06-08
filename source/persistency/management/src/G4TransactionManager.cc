@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4TransactionManager.cc,v 1.6 1999/12/15 14:51:27 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4TransactionManager.cc,v 1.7.2.1 2001/06/28 19:11:35 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4TransactionManager 
 //
@@ -136,7 +152,7 @@ G4bool G4TransactionManager::DoStart(ETypeOfDB dbtype,
   }
 
   HepDatabaseRef aDBref = f_dbApp->db( DBName(dbtype) );
-  if( aDBref == NULL )
+  if( aDBref == 0 )
   {
     G4cerr << "G4TransactionManager: Could not create or find /"
            << DBName(dbtype) << "/ database." << G4endl;
@@ -145,7 +161,7 @@ G4bool G4TransactionManager::DoStart(ETypeOfDB dbtype,
   SetDB( dbtype, aDBref );
 
   HepContainerRef aContRef = f_dbApp->container(ContainerName(dbtype));
-  if( aContRef == NULL )
+  if( aContRef == 0 )
   {
     G4cerr << "G4TransactionManager: Could not create or find /"
            << ContainerName(dbtype) << "/ container." << G4endl;

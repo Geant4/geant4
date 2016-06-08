@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VeLowEnergyLoss.hh,v 1.3 2000/11/03 10:29:51 pia Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VeLowEnergyLoss.hh,v 1.4.2.2 2001/06/28 20:19:25 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 3.4.2000 Veronique Lefebure:
 //          Move utils/include/G4VEnergyLoss.hh to 
@@ -15,8 +31,6 @@
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
-//	For information related to this code contact:
-//	CERN, CN Division, ASD group
 // 
 // Class Description 
 //
@@ -179,6 +193,9 @@ class G4VeLowEnergyLoss : public G4VContinuousDiscreteProcess
     static void BuildRangeVector(G4PhysicsTable* theDEDXTable,
                         G4double Tmin,G4double Tmax,G4int nbin,
                         G4int materialIndex,G4PhysicsLogVector* rangeVector);
+
+    static void BuildRangeVectorNew(const G4PhysicsTable*,G4int,
+                                          G4int,G4PhysicsLogVector*);
 
     static G4double RangeIntLin(G4PhysicsVector* physicsVector
                                                         ,G4int nbin);

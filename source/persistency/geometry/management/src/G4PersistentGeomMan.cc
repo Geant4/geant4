@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PersistentGeomMan.cc,v 1.14 2000/06/09 12:56:44 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PersistentGeomMan.cc,v 1.15.2.1 2001/06/28 19:11:29 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4PersistentGeomMan 
 //
@@ -58,7 +74,7 @@
 #include "G4ios.hh"
 
 G4PersistentGeomMan::G4PersistentGeomMan()
- : f_GeomMap(NULL), f_GeomMapScopeName("Geant4 Geometry Object Map")
+ : f_GeomMap(0), f_GeomMapScopeName("Geant4 Geometry Object Map")
 {;}
 
 G4PersistentGeomMan::~G4PersistentGeomMan()
@@ -110,7 +126,7 @@ G4bool G4PersistentGeomMan::Store( HepDbApplication* dbApp,
   HepRef(G4PVPhysicalVolume) persWorld =
                   MakePersistentObject( (G4VPhysicalVolume*)aWorld );
 
-  if ( persWorld != NULL )
+  if ( persWorld != 0 )
   {
     // set the persistent World Volume to f_GeomMap
     f_GeomMap->SetWorldVolume( persWorld );
@@ -127,7 +143,7 @@ G4bool G4PersistentGeomMan::Store( HepDbApplication* dbApp,
 G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
                                       G4VPhysicalVolume*& theWorld)
 {
-  theWorld = NULL;
+  theWorld = 0;
 
   G4VMaterialMap* f_Materialmap = G4VMaterialMap::GetMaterialMap();
   if(f_verboseLevel>0)
@@ -148,7 +164,7 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   }
   // ----------------------- Objectivity Feature ----------------------- //
 
-  if ( f_GeomMap == NULL )
+  if ( f_GeomMap == 0 )
   {
     G4cerr << "G4PersistentGeomMan::Retrieve()"
            << " -- error in searching the geometry object map: "
@@ -186,7 +202,7 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   // Locate the persistent world physics volume
   HepRef(G4PVPhysicalVolume) persWorld = f_GeomMap->GetWorldVolume();
 
-  if ( persWorld == NULL )
+  if ( persWorld == 0 )
   {
     G4cerr << "G4PersistentGeomMan::Retrieve"
            << " -- geometry object map does not have world volume."
@@ -197,10 +213,10 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   // start the recursive data member copy
   // to create the transient geometry object tree
 
-  HepRef(G4PVPhysicalVolume) persMother = NULL;
+  HepRef(G4PVPhysicalVolume) persMother = 0;
   theWorld = MakeTransientObject( persWorld, persMother );
   
-  if ( theWorld == NULL )
+  if ( theWorld == 0 )
   {
     G4cerr << "G4PersistentGeomMan::Retrieve"
            << " -- transient world volume is empty."
@@ -221,7 +237,7 @@ HepRef(G4PVPhysicalVolume) G4PersistentGeomMan::MakePersistentObject (
      G4cerr << "G4PersistentGeomMan::MakePersistentObject" <<
       " -- Physical Volume recursive depth reached to G4_PHYS_VOLUME_DEPTH_MAX."
        << G4endl;
-    return NULL;
+    return 0;
   }
 
   if( f_verboseLevel>2 && f_nRecursive % 1000 == 0 )
@@ -231,7 +247,7 @@ HepRef(G4PVPhysicalVolume) G4PersistentGeomMan::MakePersistentObject (
 
   // check if the persistent version of thePhysVol exists
   HepRef(G4PVPhysicalVolume) persPhysVol = f_GeomMap->LookUp(thePhysVol);
-  if (  persPhysVol == NULL )
+  if (  persPhysVol == 0 )
   {
     // Get the Logical Volume in thePhysVol
     G4LogicalVolume* theLogVol = thePhysVol->GetLogicalVolume();
@@ -240,7 +256,7 @@ HepRef(G4PVPhysicalVolume) G4PersistentGeomMan::MakePersistentObject (
     HepRef(G4PLogicalVolume) persLogVol =
                                MakePersistentObject( theLogVol );
 #ifdef G4DEBUG
-    assert( persLogVol != NULL );
+    assert( persLogVol != 0 );
 #endif
 
     // Construct the persistent version of thePhysVol for each type of volume
@@ -261,7 +277,7 @@ HepRef(G4PVPhysicalVolume) G4PersistentGeomMan::MakePersistentObject (
         break;
       }
 #ifdef G4DEBUG
-    assert( persPhysVol != NULL );
+    assert( persPhysVol != 0 );
 #endif
 
     // register persPhysVol to the geometry object lookup table
@@ -278,7 +294,7 @@ HepRef(G4PLogicalVolume) G4PersistentGeomMan::MakePersistentObject (
 {
   // check if the persistent version of theLogVol exists
   HepRef(G4PLogicalVolume) persLogVol = f_GeomMap->LookUp(theLogVol);
-  if ( persLogVol == NULL )
+  if ( persLogVol == 0 )
   {
     // get the solid of the transient logical volume
     G4VSolid* theSolid = theLogVol->GetSolid();
@@ -289,7 +305,7 @@ HepRef(G4PLogicalVolume) G4PersistentGeomMan::MakePersistentObject (
     // Construct the persistent version of theLogVol
     persLogVol = new(f_container) G4PLogicalVolume(theLogVol, persSolid);
 #ifdef G4DEBUG
-    assert( persLogVol != NULL );
+    assert( persLogVol != 0 );
 #endif
 
     // register persLogVol to the geometry object lookup table
@@ -307,7 +323,7 @@ HepRef(G4PLogicalVolume) G4PersistentGeomMan::MakePersistentObject (
             MakePersistentObject( dPhysVol );
 
       // add persistent daughter volume to the persistent logical volume
-      if ( persDaughterPhysVol != NULL )
+      if ( persDaughterPhysVol != 0 )
         persLogVol->AddDaughter( persDaughterPhysVol );
 
     } // end of for(G4int i=0;i<nDaughters;i++)
@@ -322,7 +338,7 @@ HepRef(G4PVSolid) G4PersistentGeomMan::MakePersistentObject (
 {
   // check if the persistent version of theSolid exists
   HepRef(G4PVSolid) persSolid = f_GeomMap->LookUp(theSolid);
-  if ( persSolid == NULL )
+  if ( persSolid == 0 )
   {
     G4GeometryType theSolidType = theSolid->GetEntityType();
 
@@ -375,8 +391,8 @@ HepRef(G4PVSolid) G4PersistentGeomMan::MakePersistentObject (
       G4VSolid* aSolidA = boolSolid->GetConstituentSolid(0);
       G4VSolid* aSolidB = boolSolid->GetConstituentSolid(1);
 #ifdef G4DEBUG
-      assert(aSolidA!=NULL);
-      assert(aSolidB!=NULL);
+      assert(aSolidA!=0);
+      assert(aSolidB!=0);
 #endif
       HepRef(G4PVSolid) persSolidA = MakePersistentObject(aSolidA);
       HepRef(G4PVSolid) persSolidB = MakePersistentObject(aSolidB);
@@ -407,7 +423,7 @@ HepRef(G4PVSolid) G4PersistentGeomMan::MakePersistentObject (
       G4DisplacedSolid* dispSolid = (G4DisplacedSolid*) theSolid;
       G4VSolid* movedSolid = dispSolid->GetConstituentMovedSolid();
 #ifdef G4DEBUG
-      assert(movedSolid!=NULL);
+      assert(movedSolid!=0);
 #endif
       HepRef(G4PVSolid) persMovedSolid = MakePersistentObject(movedSolid);
 
@@ -426,7 +442,7 @@ HepRef(G4PVSolid) G4PersistentGeomMan::MakePersistentObject (
 #endif
 
     // register persSolid to the geometry object lookup table
-    if ( persSolid != NULL )
+    if ( persSolid != 0 )
       f_GeomMap->Add( theSolid, persSolid );
 
   } // end of if f_GeomMap->LookUp(theSolid)
@@ -446,7 +462,7 @@ G4VPhysicalVolume* G4PersistentGeomMan::MakeTransientObject (
      G4cerr << "G4PersistentGeomMan::MakeTransientObject" <<
       " -- Physical Volume recursive depth reached to G4_PHYS_VOLUME_DEPTH_MAX."
        << G4endl;
-    return NULL;
+    return 0;
   }
 
   if( f_verboseLevel>2 && f_tRecursive % 1000 == 0 )
@@ -456,7 +472,7 @@ G4VPhysicalVolume* G4PersistentGeomMan::MakeTransientObject (
 
   // check if the transient version of persPhysVol exists
   G4VPhysicalVolume* thePhysVol = f_GeomMap->LookUp(persPhysVol);
-  if (  thePhysVol == NULL )
+  if (  thePhysVol == 0 )
   {
     // Get the Logical Volume in persPhysVol
     HepRef(G4PLogicalVolume) persLogVol = persPhysVol->GetLogicalVolume();
@@ -465,7 +481,7 @@ G4VPhysicalVolume* G4PersistentGeomMan::MakeTransientObject (
     G4LogicalVolume* theLogVol =
          MakeTransientObject( persLogVol, persPhysVol );
 #ifdef G4DEBUG
-    assert( theLogVol != NULL );
+    assert( theLogVol != 0 );
 #endif
 
     // Construct the transient version of persPhysVol
@@ -473,7 +489,7 @@ G4VPhysicalVolume* G4PersistentGeomMan::MakeTransientObject (
         thePhysVol = persPhysVol->MakeTransientObject(
                          theLogVol, f_GeomMap->LookUp(persMotherVol) );
 #ifdef G4DEBUG
-    assert( thePhysVol != NULL );
+    assert( thePhysVol != 0 );
 #endif
 
     // register thePhysVol to the geometry object lookup table
@@ -490,19 +506,19 @@ G4LogicalVolume* G4PersistentGeomMan::MakeTransientObject (
 {
   // check if the transient version of persLogVol exists
   G4LogicalVolume* theLogVol = f_GeomMap->LookUp(persLogVol);
-  if ( theLogVol == NULL )
+  if ( theLogVol == 0 )
   {
     // get the solid of the persistent logical volume
     HepRef(G4PVSolid) persSolid = persLogVol->GetSolid();
 #ifdef G4DEBUG
-    assert( persSolid != NULL );
+    assert( persSolid != 0 );
 #endif
 
     // check if the transient version of persSolid exists
     G4VSolid* theSolid = f_GeomMap->LookUp(persSolid);
 
 #ifdef G4DEBUG
-    if ( theSolid == NULL )
+    if ( theSolid == 0 )
     {
       G4cerr << "G4PersistentGeomMan::MakeTransientObject" <<
        " -- transient Solid not found for the persistent Solid" << G4endl;
@@ -510,7 +526,7 @@ G4LogicalVolume* G4PersistentGeomMan::MakeTransientObject (
 #endif
 
     // Lookup the material from name
-    G4Material* theMaterial = NULL;
+    G4Material* theMaterial = 0;
     if( f_MaterialMap )
     {
       theMaterial = f_MaterialMap->LookUp(persLogVol->GetMaterialName());
@@ -519,7 +535,7 @@ G4LogicalVolume* G4PersistentGeomMan::MakeTransientObject (
     // Construct the persistent version of theLogVol with theSolid
     theLogVol = persLogVol->MakeTransientObject(theSolid, theMaterial);
 #ifdef G4DEBUG
-    assert( theLogVol != NULL );
+    assert( theLogVol != 0 );
 #endif
 
     // register theLogVol to the geometry object lookup table
@@ -538,7 +554,7 @@ G4LogicalVolume* G4PersistentGeomMan::MakeTransientObject (
             MakeTransientObject( persDaughterPhysVol, persMotherVol );
 
       // add transient daughter volume to the transient logical volume
-      if ( theDaughterPhysVol != NULL )
+      if ( theDaughterPhysVol != 0 )
         theLogVol->AddDaughter( theDaughterPhysVol );
 
     } // end of for(G4int i=0;i<nDaughters;i++)
@@ -553,7 +569,7 @@ G4VSolid* G4PersistentGeomMan::MakeTransientObject (
 {
   // check if the persistent version of theSolid exists
   G4VSolid* transSolid = f_GeomMap->LookUp(persSolid);
-  if ( transSolid == NULL )
+  if ( transSolid == 0 )
   {
     G4GeometryType theSolidType = persSolid->GetEntityType();
 
@@ -568,8 +584,8 @@ G4VSolid* G4PersistentGeomMan::MakeTransientObject (
       HepRef(G4PVSolid) aSolidA = boolSolid->GetConstituentSolid(0);
       HepRef(G4PVSolid) aSolidB = boolSolid->GetConstituentSolid(1);
 #ifdef G4DEBUG
-      assert(aSolidA!=NULL);
-      assert(aSolidB!=NULL);
+      assert(aSolidA!=0);
+      assert(aSolidB!=0);
 #endif
       G4VSolid* transSolidA = MakeTransientObject(aSolidA);
       G4VSolid* transSolidB = MakeTransientObject(aSolidB);
@@ -584,7 +600,7 @@ G4VSolid* G4PersistentGeomMan::MakeTransientObject (
                             (HepRef(G4PDisplacedSolid)) persSolid;
       HepRef(G4PVSolid) movedSolid = dispSolid->GetConstituentMovedSolid();
 #ifdef G4DEBUG
-      assert(movedSolid!=NULL);
+      assert(movedSolid!=0);
 #endif
       G4VSolid* transMovedSolid = MakeTransientObject(movedSolid);
       transSolid = dispSolid->MakeTransientDisplacedSolid( transMovedSolid );
@@ -595,7 +611,7 @@ G4VSolid* G4PersistentGeomMan::MakeTransientObject (
       transSolid = persSolid->MakeTransientObject();
     }
 #ifdef G4DEBUG
-    assert( transSolid != NULL );
+    assert( transSolid != 0 );
 #endif
     f_GeomMap->Add( persSolid, transSolid );
   }

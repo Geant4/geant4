@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
@@ -45,13 +67,16 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
-  if(!dbool)
+  if(!dbool || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
   {
+    if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
     hasAnyData = false;
     hasFSData = false; 
     hasXsec = false;
     return;
   }
+    theBaseA = A;
+    theBaseZ = G4int(Z+.5);
 #ifdef G4USE_STD_NAMESPACE
   G4std::ifstream theData(filename, G4std::ios::in);
 #else
@@ -62,6 +87,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
     hasAnyData = false;
     hasFSData = false; 
     hasXsec = false;
+    theData.close();
     return; // no data for exactly this isotope and FS
   }
   // here we go
@@ -122,6 +148,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
       G4Exception("Data-type unknown to G4NeutronHPInelasticBaseFS");
     }
   }
+  theData.close();
 }
   
 void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack, 
@@ -149,7 +176,8 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
       targetMass = theAngularDistribution->GetTargetMass();
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
-  theTarget = aNucleus.GetThermalNucleus(targetMass);
+  G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
+  theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 
 // prepare energy in target rest frame
   G4ReactionProduct boosted;

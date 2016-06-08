@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.6 2001/03/07 15:29:50 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4OpenGLXmViewer.cc,v 1.8.2.1 2001/06/28 19:15:47 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -200,7 +216,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (style_cascade,
      (char*)"rep_style",
      0,
-     G4OpenGLXmViewer::rep_style_callback,
+     rep_style_callback,
      XmVaRADIOBUTTON, polyhedron_str, 'P', NULL, NULL,
      XmVaRADIOBUTTON, nurbs_str, 'N', NULL, NULL,
      XmNradioBehavior, True, 
@@ -219,11 +235,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   style = fVP.GetRepStyle();
   
   if (style == G4ViewParameters::polyhedron) {
-    if(special_widget = XtNameToWidget(rep_style_pullright, "button_0")) {
+    special_widget = XtNameToWidget(rep_style_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (style == G4ViewParameters::nurbs) {
-    if(special_widget = XtNameToWidget(rep_style_pullright, "button_1")) {
+    special_widget = XtNameToWidget(rep_style_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -244,7 +262,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (style_cascade,
      (char*)"drawing_style",
      1,
-     G4OpenGLXmViewer::drawing_style_callback,
+     drawing_style_callback,
      XmVaRADIOBUTTON, wireframe_str, 'W', NULL, NULL,
      XmVaRADIOBUTTON, hlr_str, 'L', NULL, NULL,
      XmVaRADIOBUTTON, hsr_str, 'S', NULL, NULL,
@@ -263,19 +281,23 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   d_style = fVP.GetDrawingStyle();
   
   if (d_style == G4ViewParameters::wireframe) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_0")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (d_style == G4ViewParameters::hlr) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_1")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (d_style == G4ViewParameters::hsr) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_2")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_2");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (d_style == G4ViewParameters::hlhsr) {
-    if(special_widget = XtNameToWidget(drawing_style_pullright, "button_3")) {
+    special_widget = XtNameToWidget(drawing_style_pullright, "button_3");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -297,7 +319,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (style_cascade,
      (char*)"background_color",
      2,
-     G4OpenGLXmViewer::background_color_callback,
+     background_color_callback,
      XmVaRADIOBUTTON, white_str, 'W', NULL, NULL,
      XmVaRADIOBUTTON, black_str, 'B', NULL, NULL,
      XmNradioBehavior, True, 
@@ -311,13 +333,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (white_background == true) {
-    if(special_widget = XtNameToWidget(background_color_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(background_color_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (white_background == false) {
-    if(special_widget = XtNameToWidget(background_color_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(background_color_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -338,7 +360,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (menubar,
      (char*)"actions",
      1,
-     G4OpenGLXmViewer::actions_callback,
+     actions_callback,
      XmVaPUSHBUTTON, rot_str, 'R', NULL, NULL,
      XmVaPUSHBUTTON, pan_str, 'P', NULL, NULL,
      XmVaPUSHBUTTON, set_str, 'S', NULL, NULL,
@@ -364,7 +386,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (menubar,
      (char*)"miscellany",
      2,
-     G4OpenGLXmViewer::misc_callback,
+     misc_callback,
      XmVaPUSHBUTTON, misc_str, 'M', NULL, NULL,
      XmVaPUSHBUTTON, exit_str, 'E', NULL, NULL,
      XmVaPUSHBUTTON, print_str, 'P', NULL, NULL,
@@ -415,7 +437,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (spec_cascade,
      (char*)"transparency",
      0,
-     G4OpenGLXmViewer::transparency_callback,
+     transparency_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
      XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
      XmNradioBehavior, True, 
@@ -429,13 +451,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (transparency_enabled == false) {
-    if(special_widget = XtNameToWidget(transparency_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(transparency_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (transparency_enabled == true) {
-    if(special_widget = XtNameToWidget(transparency_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(transparency_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -447,7 +469,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (spec_cascade,
      (char*)"antialias",
      1,
-     G4OpenGLXmViewer::antialias_callback,
+     antialias_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
      XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
      XmNradioBehavior, True, 
@@ -461,13 +483,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (antialiasing_enabled == false) {
-    if(special_widget = XtNameToWidget(antialias_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(antialias_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (antialiasing_enabled == true) {
-    if(special_widget = XtNameToWidget(antialias_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(antialias_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -479,7 +501,7 @@ void G4OpenGLXmViewer::CreateMainWindow () {
     (spec_cascade,
      (char*)"haloing",
      2,
-     G4OpenGLXmViewer::haloing_callback,
+     haloing_callback,
      XmVaRADIOBUTTON, off_str, 'f', NULL, NULL,
      XmVaRADIOBUTTON, on_str, 'n', NULL, NULL,
      XmNradioBehavior, True, 
@@ -493,13 +515,13 @@ void G4OpenGLXmViewer::CreateMainWindow () {
      NULL);
   
   if (haloing_enabled == false) {
-    if(special_widget = XtNameToWidget(haloing_pullright, 
-				       "button_0")) {
+    special_widget = XtNameToWidget(haloing_pullright, "button_0");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else if (haloing_enabled == true) {
-    if(special_widget = XtNameToWidget(haloing_pullright,
-				       "button_1")) {
+    special_widget = XtNameToWidget(haloing_pullright, "button_1");
+    if(special_widget) {
       XtVaSetValues (special_widget, XmNset, True, NULL);
     }
   } else {
@@ -528,12 +550,12 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   
   XtAddCallback (glxarea, 
 		 XmNexposeCallback, 
-		 G4OpenGLXmViewer::expose_callback, 
+		 expose_callback, 
 		 this);
 
   XtAddCallback (glxarea, 
 		 XmNresizeCallback, 
-		 G4OpenGLXmViewer::resize_callback, 
+		 resize_callback, 
 		 this);
 
   XmMainWindowSetAreas (main_win,  // main widget, children are specified 
@@ -564,26 +586,26 @@ G4OpenGLXmViewer::G4OpenGLXmViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
 G4OpenGLXViewer (scene),
-zoom_low (fVP.GetZoomFactor() / 10.0),
 zoom_high (fVP.GetZoomFactor() * 10.0),
+zoom_low (fVP.GetZoomFactor() / 10.0),
 dolly_low (fVP.GetDolly() - 1000.0),
 dolly_high (fVP.GetDolly() + 1000.0),
-rot_sens (4.),
-frameNo (0),
-wob_sens (20.),
+fov (0.0),
 rot_sens_limit (90.),
 pan_sens_limit (100.),
-fov (0.0),
+rot_sens (4.),
+wob_sens (20.),
 original_vp(fVP.GetViewpointDirection()),
-fppanning_top (NULL),
+frameNo (0),
 fprotation_top (NULL),
-fpmiscellany_top (NULL),
-fpsetting_top (NULL),
-fpprint_top (NULL),
-fppanning_slider (NULL),
 fprotation_slider (NULL),
+fppanning_top (NULL),
+fppanning_slider (NULL),
 fpzoom_slider (NULL),
-fpdolly_slider (NULL)
+fpdolly_slider (NULL),
+fpsetting_top (NULL),
+fpmiscellany_top (NULL),
+fpprint_top (NULL)
 {
 
   WinSize_x = 100;

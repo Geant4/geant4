@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000/11/20 18:14:53 gcosmo Exp $
+$Id: History,v 1.6 2001/06/18 08:41:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 18, 2001           Gabriele Cosmo (STEP-V03-01-00)
+- dirobj.cc: removed usage of strdup() to allow porting on Linux-g++ -ansi
+  setup. Replaced with existing solution for __O3DB__.
+
+April 20, 2001          Gabriele Cosmo
+- Minor fixes for removing some pedantic warnings from Linux-g++,
+  modified files: scl_hash.cc, scl_string.cc.
 
 November 20, 2000	Gabriele Cosmo (STEP-V02-00-00)
 - Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:

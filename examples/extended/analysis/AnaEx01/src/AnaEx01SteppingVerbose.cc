@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: AnaEx01SteppingVerbose.cc,v 1.1.1.1 2000/09/14 11:37:21 barrand Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: AnaEx01SteppingVerbose.cc,v 1.2.2.1 2001/06/28 19:06:46 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 //---------------------------------------------------------------
@@ -95,12 +111,12 @@ void AnaEx01SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
+	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+                        lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
@@ -114,7 +130,6 @@ void AnaEx01SteppingVerbose::StepInfo()
 		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
 	  G4cout << G4endl;
 	}
-              
 	G4cout << "    :-----------------------------"
 	       << "----------------------------------"
 	       << "-- EndOf2ndaries Info ---------------"

@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LEKaonMinusInelastic.cc,v 1.2 1999/12/15 14:53:08 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LEKaonMinusInelastic.cc,v 1.4.2.1 2001/06/28 19:14:06 gunter Exp $
+// GEANT4 tag $Name:  $
 //
  // Hadronic Process: Low Energy KaonMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 12-Feb-1997
@@ -214,11 +230,11 @@
     G4ParticleDefinition *aSigmaMinus = G4SigmaMinus::SigmaMinus();
     G4ParticleDefinition *aSigmaZero = G4SigmaZero::SigmaZero();
     const G4double cech[] = {1.,1.,1.,0.70,0.60,0.55,0.35,0.25,0.18,0.15};
-    G4int iplab = G4std::min( 9.0, pOriginal/GeV*5.0 );
+    G4int iplab = G4int(G4std::min( 9.0, pOriginal/GeV*5.0 ));
     if( (pOriginal <= 2.0*GeV) && (G4UniformRand() < cech[iplab]) )
     {
       np = nm = nz = nt = 0;
-      iplab = G4std::min( 19.0, pOriginal/GeV*10.0 );
+      iplab = G4int(G4std::min( 19.0, pOriginal/GeV*10.0 ));
       const G4double cnk0[] = {0.17,0.18,0.17,0.24,0.26,0.20,0.22,0.21,0.34,0.45,
                                0.58,0.55,0.36,0.29,0.29,0.32,0.32,0.33,0.33,0.33};
       if( G4UniformRand() <= cnk0[iplab] )

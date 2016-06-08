@@ -1,20 +1,34 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.13 2001/02/05 17:45:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.16.2.2 2001/06/28 20:19:23 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      ------------ G4LowEnergyBremsstrahlung physics process ------
 //                     by A.Forti  1999/03/27 19:18:13
 //
@@ -73,7 +87,7 @@ private:
   void BuildZVec();
   void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
 
-  void ComputePartialSumSigma(const G4double KineticEnergy, 
+  void ComputepartialSumSigma(const G4double KineticEnergy, 
 			      const G4Material* aMaterial,
 			      const G4double threshold);
   
@@ -105,14 +119,14 @@ private:
 
   G4LowEnergyUtilities util;
   // partial sum of total crosssection
-  G4OrderedTable PartialSumSigma;
+  G4OrderedTable partialSumSigma;
   
-  G4double LowestKineticEnergy;      
-  G4double HighestKineticEnergy;     
+  G4double lowestKineticEnergy;      
+  G4double highestKineticEnergy;     
   
   G4double lowEnergyCut;    // lower limit of the energy sampling formula
-  G4int    TotBin;                   // number of bins in the tables 
-  G4double CutForLowEnergySecondaryPhotons;
+  G4int    totBin;                   // number of bins in the tables 
+  G4double cutForLowEnergySecondaryPhotons;
 
 };
 

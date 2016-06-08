@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: HepPolyhedron.cc,v 1.5 2001/02/06 22:07:51 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: HepPolyhedron.cc,v 1.8.2.1 2001/06/28 19:10:13 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 //
@@ -30,8 +46,13 @@
 // 19.03.00 E.Chernyaev
 // - implemented boolean operations (add, subtract, intersect) on polyhedra;
 //
+// 25.05.01 E.Chernyaev
+// - added GetSurfaceArea() and GetVolume();
+//
   
 #include "HepPolyhedron.h"
+#include <CLHEP/Units/SystemOfUnits.h>
+#include <CLHEP/config/TemplateFunctions.h>
 
 /***********************************************************************
  *                                                                     *
@@ -1172,6 +1193,56 @@ HepBoolean HepPolyhedron::GetNextUnitNormal(HepNormal3D &normal) const
   HepBoolean rep = GetNextNormal(normal);
   normal = normal.unit();
   return rep;
+}
+
+double HepPolyhedron::GetSurfaceArea() const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetSurfaceArea              Date:    25.05.01  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Returns area of the surface of the polyhedron.            *
+ *                                                                     *
+ ***********************************************************************/
+{
+  double s = 0.;
+  for (int iFace=1; iFace<=nface; iFace++) {
+    int i0 = abs(pF[iFace].edge[0].v);
+    int i1 = abs(pF[iFace].edge[1].v);
+    int i2 = abs(pF[iFace].edge[2].v);
+    int i3 = abs(pF[iFace].edge[3].v);
+    if (i3 == 0) i3 = i0;
+    s += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).mag();
+  }
+  return s/2.;
+}
+
+double HepPolyhedron::GetVolume() const
+/***********************************************************************
+ *                                                                     *
+ * Name: HepPolyhedron::GetVolume                   Date:    25.05.01  *
+ * Author: E.Chernyaev                              Revised:           *
+ *                                                                     *
+ * Function: Returns volume of the polyhedron.                         *
+ *                                                                     *
+ ***********************************************************************/
+{
+  double v = 0.;
+  for (int iFace=1; iFace<=nface; iFace++) {
+    int i0 = abs(pF[iFace].edge[0].v);
+    int i1 = abs(pF[iFace].edge[1].v);
+    int i2 = abs(pF[iFace].edge[2].v);
+    int i3 = abs(pF[iFace].edge[3].v);
+    HepPoint3D g;
+    if (i3 == 0) {
+      i3 = i0;
+      g  = (pV[i0]+pV[i1]+pV[i2]) * (1./3.);
+    }else{
+      g  = (pV[i0]+pV[i1]+pV[i2]+pV[i3]) * 0.25;
+    }
+    v += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).dot(g);
+  }
+  return v/6.;
 }
 
 HepPolyhedronTrd2::HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,

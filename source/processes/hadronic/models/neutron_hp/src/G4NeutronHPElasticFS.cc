@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
@@ -89,6 +111,7 @@
       G4cout << "unusable number for repFlag: repFlag="<<repFlag<<G4endl;
       G4Exception("G4NeutronHPElasticFS::Init -- unusable number for repFlag");
     }
+    theData.close();
   }
   G4ParticleChange * G4NeutronHPElasticFS::ApplyYourself(const G4Track & theTrack)
   {  
@@ -106,7 +129,8 @@
     
     G4ReactionProduct theTarget; 
     G4Nucleus aNucleus;
-    theTarget = aNucleus.GetThermalNucleus( targetMass );
+    G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
+    theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 //     G4cout << "Nucleus-test"<<" "<<targetMass<<" ";
 //     G4cout << theTarget.GetMomentum().x()<<" ";
 //     G4cout << theTarget.GetMomentum().y()<<" ";

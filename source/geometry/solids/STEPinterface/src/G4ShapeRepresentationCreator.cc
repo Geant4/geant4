@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ShapeRepresentationCreator.cc,v 1.3 2000/02/25 16:36:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ShapeRepresentationCreator.cc,v 1.4.2.1 2001/06/28 19:09:19 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ----------------------------------------------------------------------
@@ -57,11 +73,11 @@ void G4ShapeRepresentationCreator::CreateG4Geometry(STEPentity& Ent)
       place =(G4Axis2Placement3D*)G4GeometryTable::CreateObject(*TmpEnt);
 
       if (place)
-        placements->append(place);
+        placements->push_back(place);
       en = (EntityNode*)en->NextNode();
     }
   
-  G4int placementNum = placements->entries();
+  G4int placementNum = placements->size();
   if (placementNum != placementCount)
     G4cerr << "WARNING - G4ShapeRepresentationCreator::CreateG4Geometry" << G4endl
            << "\tTotal of " << placementNum << " G4Axis2Placement3D components created, out of "

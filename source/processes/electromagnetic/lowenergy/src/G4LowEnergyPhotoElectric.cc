@@ -1,20 +1,34 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.27 2001/02/05 17:45:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.31.2.2 2001/06/28 20:19:30 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      ------------ G4LowEnergyPhotoelctric: low energy modifications --------
 //                   by Alessandra Forti, October 1998
 // **************************************************************
@@ -34,6 +48,7 @@
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
 // 07-09-99, if no e- emitted: edep=photon energy, mma
+// 24.04.01 V.Ivanchenko remove RogueWave 
 //                                  
 // --------------------------------------------------------------
 
@@ -44,34 +59,35 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Electron.hh"
 
-typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4std::vector<G4DynamicParticle*> G4ParticleVector;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 // constructor
  
 G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName),             // initialization
-    LowestEnergyLimit (250*eV),
-    HighestEnergyLimit(100*GeV),
-    theCrossSectionTable(0),
-    theBindingEnergyTable(0),
-    theMeanFreePathTable(0),
-    theFluorTransitionTable(0),
-    allAtomShellCrossSec(0),
-    CutForLowEnergySecondaryPhotons(0.),
-    ZNumVec(0),
-    ZNumVecFluor(0),
-    NumbBinTable(200)
+  lowestEnergyLimit (250*eV),
+  highestEnergyLimit(100*GeV),
+  NumbBinTable(200),
+  CutForLowEnergySecondaryPhotons(0.),
+  theCrossSectionTable(0),
+  theMeanFreePathTable(0),
+  allAtomShellCrossSec(0),
+  theFluorTransitionTable(0),
+  theBindingEnergyTable(0),
+  ZNumVec(0),
+  ZNumVecFluor(0),
+  MeanFreePath(0.)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
-     G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/MeV << "MeV " << G4endl;
+     G4cout << "lowestEnergy: " << lowestEnergyLimit/keV << "keV ";
+     G4cout << "highestEnergy: " << highestEnergyLimit/MeV << "MeV " << G4endl;
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
  
 // destructor
  
@@ -82,12 +98,14 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
    }
 
    if (theBindingEnergyTable) {
-      theBindingEnergyTable->clearAndDestroy();
+     //      theBindingEnergyTable->clearAndDestroy();
+      theBindingEnergyTable->clear();
       delete theBindingEnergyTable;
    }
 
    if (theMeanFreePathTable) {
-      theMeanFreePathTable->clearAndDestroy();
+     //      theMeanFreePathTable->clearAndDestroy();
+      theMeanFreePathTable->clear();
       delete theMeanFreePathTable;
    }
 
@@ -113,14 +131,14 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
 
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
  
 void G4LowEnergyPhotoElectric::SetCutForLowEnSecPhotons(G4double cut){
 
   CutForLowEnergySecondaryPhotons = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& PhotonType)
 
@@ -141,7 +159,7 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 // CONSTRUCT THE CROSS SECTION TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
 void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
@@ -154,18 +172,19 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "phot/pe-cs-");
      
-     theCrossSectionTable->insert(oneAtomCS);
+    //     theCrossSectionTable->insert(oneAtomCS);
+     theCrossSectionTable->push_back(oneAtomCS);
    
   }//end for on atoms
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 // CONSTRUCT THE SUBSHELL CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EPDL DATA
 void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
@@ -178,18 +197,19 @@ void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
    allAtomShellCrossSec = new allAtomTable();
    G4int dataNum = 2;
  
-   for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+   for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
      G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
      oneAtomTable* oneAtomShellCS = util.BuildSecondLevelTables(AtomInd, dataNum, "phot/pe-ss-cs-");
      
-     allAtomShellCrossSec->insert(oneAtomShellCS);
+     //     allAtomShellCrossSec->insert(oneAtomShellCS);
+     allAtomShellCrossSec->push_back(oneAtomShellCS);
    
    }//end for on atoms
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 // CONSTRUCT THE BE TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
 void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
@@ -203,7 +223,7 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
   theBindingEnergyTable = util.BuildSecondLevelTables(0,dataNum,"fluor/binding");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 // CONSTRUCT THE FTP TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EADL DATA
 void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
@@ -217,12 +237,13 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
   ZNumVecFluor = new G4DataVector(*ZNumVec);
   G4int dataNum = 3;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     if(AtomInd > 5){
       
       oneAtomTable* oneAtomShellFL = util.BuildSecondLevelTables(AtomInd, dataNum, "fluor/fl-tr-pr-");
-      theFluorTransitionTable->insert(oneAtomShellFL);
+      //      theFluorTransitionTable->insert(oneAtomShellFL);
+      theFluorTransitionTable->push_back(oneAtomShellFL);
     }
     else{
       ZNumVecFluor->remove(AtomInd);
@@ -230,7 +251,7 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
   }//end for on atoms
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 //
 // vector mapping the elements of the material table 
@@ -265,7 +286,7 @@ void G4LowEnergyPhotoElectric::BuildZVec(){
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 // Compute total cross section from subshell integrated cross section: needed for 
 // selection of the first subshell ionized.
@@ -280,7 +301,7 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
   const oneAtomTable* oneAtomCS
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
+  for(size_t ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec = 0;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
@@ -303,7 +324,7 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
   return TotalCrossSection ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
 
@@ -326,9 +347,9 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
     //create physics vector then fill it ....
     // WARNING: Lower limit of total cross sections in the data is the binding energy 
     // of the relative subshell. MeanFreePath table require a common lowest limit.
-    // This LowestEnergyLimit is at the moment fixed at 250 ev.
+    // This lowestEnergyLimit is at the moment fixed at 250 ev.
  
-    ptrVector = new  G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit, NumbBinTable);
+    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, NumbBinTable);
     
     material = (*theMaterialTable)(J);
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -341,7 +362,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
       
       G4double SIGMA = 0;
       
-      for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
 	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
 	const G4FirstLevel* oneAtomCS
@@ -361,7 +382,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//    .. 
 
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
@@ -377,7 +398,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
   const G4double PhotonEnergy = aDynamicPhoton->GetKineticEnergy();
-  if(PhotonEnergy <= LowestEnergyLimit){
+  if(PhotonEnergy <= lowestEnergyLimit){
     
     aParticleChange.SetStatusChange(fStopAndKill);
     aParticleChange.SetEnergyChange(0.);
@@ -414,9 +435,9 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   G4ParticleVector photvec;
-  G4int photInd = 0; 
+  // G4int photInd = 0; 
   G4ParticleVector elecvec;
-  G4int elecInd = 0; 
+  // G4int elecInd = 0; 
 
   // primary outcoming electron
   G4double ElecKineEnergy = (PhotonEnergy - BindingEn);
@@ -430,7 +451,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     
     G4DynamicParticle* aElectron = new G4DynamicParticle (G4Electron::Electron(), 
 							  PhotonDirection, ElecKineEnergy) ;
-    elecvec.append(aElectron);
+    elecvec.push_back(aElectron);
   } // END OF CUTS
   
   else{
@@ -487,7 +508,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
 					     fluorPar[2]*MeV);
-	    photvec.append(newPart);
+	    //	    photvec.append(newPart);
+	    photvec.push_back(newPart);
 	  }
 	}
 	else{
@@ -509,7 +531,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
 					     lastTransEnergy) ;
-	    photvec.append(newPart);
+	    photvec.push_back(newPart);
            
 	  }
 	  thePrimShVec.insert(thePrimaryShell);
@@ -519,8 +541,9 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       }
     } //END OF THE CHECK ON ATOMIC NUMBER
     
-    G4int numOfElec = elecvec.entries(), numOfPhot = photvec.entries();
-    G4int numOfDau = numOfElec + numOfPhot;
+    G4int numOfElec = elecvec.size();
+    G4int numOfPhot = photvec.size();
+    G4int numOfDau  = numOfElec + numOfPhot;
 
     aParticleChange.SetNumberOfSecondaries(numOfDau);
     G4int l = 0;
@@ -556,7 +579,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
                                                   const G4double IncEnergy)
@@ -568,7 +591,7 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
   const oneAtomTable* oneAtomCS 
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->entries(); ind++){
+  for(size_t ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
@@ -593,7 +616,7 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 G4Element*
 G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton,
@@ -614,13 +637,13 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
   for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
 
     G4double crossSection;
-    if (GammaEnergy <  LowestEnergyLimit)
+    if (GammaEnergy <  lowestEnergyLimit)
 
       crossSection = 0. ;
 
     else {
 
-      if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+      if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
 
       G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
       const G4FirstLevel* oneAtomCS
@@ -636,7 +659,7 @@ G4LowEnergyPhotoElectric::SelectRandomAtom(const G4DynamicParticle* aDynamicPhot
   }
   return (*theElementVector)(0);
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 //
 // Select a random transition with the transition probabilities and the partial sum 
@@ -654,8 +677,8 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   // when the last subshell is reached CollIsFull becomes FALSE.
   G4bool ColIsFull = FALSE;
   G4int ShellNum = 0;
-  G4double TotalSum = 0; 
-  G4int maxNumOfShells = TransitionTable->entries()-1;
+  //  G4double TotalSum = 0; 
+  G4int maxNumOfShells = TransitionTable->size()-1;
 
   if(thePrimShell <= 0) {
      G4cerr<<"*** Unvalid Primary shell: "<<thePrimShell<<G4endl;
@@ -693,7 +716,8 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
       G4double PartSum = 0;
       
       TransProb = 1; 
-      while(TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->size()){
+      G4int trSize = (*(*TransitionTable)[ShellNum])[ProbCol]->size();
+      while(TransProb < trSize){
 	
 	PartSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
 	
@@ -717,7 +741,7 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   return ColIsFull;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//    ..
 
 
 

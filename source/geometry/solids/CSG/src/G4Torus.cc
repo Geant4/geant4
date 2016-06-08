@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Torus.cc,v 1.23 2001/01/29 13:12:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Torus.cc,v 1.24.2.1 2001/06/28 19:09:02 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // class G4Torus
@@ -884,7 +900,7 @@ G4bool G4Torus::CalculateExtent(const EAxis pAxis,
     pMin = +kInfinity ;
     pMax = -kInfinity ;
 
-    noEntries          = vertices->entries() ;
+    noEntries          = vertices->size() ;
     noBetweenSections4 = noEntries - noPolygonVertices ;
 	    
     for (i=0;i<noEntries;i+=noPolygonVertices)
@@ -2115,7 +2131,8 @@ G4ThreeVectorList*
   {
     sAngle = fSPhi ;
   }
-  vertices = new G4ThreeVectorList(noCrossSections*4) ;
+  vertices = new G4ThreeVectorList();
+  vertices->reserve(noCrossSections*4) ;
   
   if (vertices)
   {
@@ -2136,10 +2153,10 @@ G4ThreeVectorList*
 		    vertex2=G4ThreeVector(rMaxX,rMaxY,+fRmax);
 		    vertex3=G4ThreeVector(rMinX,rMinY,+fRmax);
 
-		    vertices->insert(pTransform.TransformPoint(vertex0));
-		    vertices->insert(pTransform.TransformPoint(vertex1));
-		    vertices->insert(pTransform.TransformPoint(vertex2));
-		    vertices->insert(pTransform.TransformPoint(vertex3));
+		    vertices->push_back(pTransform.TransformPoint(vertex0));
+		    vertices->push_back(pTransform.TransformPoint(vertex1));
+		    vertices->push_back(pTransform.TransformPoint(vertex2));
+		    vertices->push_back(pTransform.TransformPoint(vertex3));
     }
     noPolygonVertices = 4 ;
   }

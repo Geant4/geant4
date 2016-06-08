@@ -1,18 +1,32 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.8 2000/02/27 07:48:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ExcitedMesonConstructor.cc,v 1.9.2.2 2001/06/28 20:19:16 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
-//      For information related to this code contact:
-//      CERN, IT Division, ASD Group
 //      History: first implementation, based on object model of
 //      10 oct 1998  H.Kurashige
 // ---------------------------------------------------------------
@@ -29,10 +43,9 @@
 
 
 G4ExcitedMesonConstructor::G4ExcitedMesonConstructor(G4int nStates,
-						       G4int isoSpin):
-         leptonNumber(0), baryonNumber(0),type("meson")
+						       G4int isoSpin)
+    :   type("meson"), leptonNumber(0), baryonNumber(0)
 {
- 
 }
 
 G4ExcitedMesonConstructor::~G4ExcitedMesonConstructor()
@@ -171,7 +184,6 @@ G4int  G4ExcitedMesonConstructor::GetQuarkContents(G4int iQ,
 
 G4double  G4ExcitedMesonConstructor::GetCharge(G4int iIsoSpin3, G4int idxType )
 {
-  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
   static G4double quark_charge[7] = 
   {
     0., -1./3., +2./3., -1./3., +2./3., -1./3., +2./3.

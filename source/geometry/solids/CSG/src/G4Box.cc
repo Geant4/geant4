@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Box.cc,v 1.13 2001/02/01 08:22:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Box.cc,v 1.15.2.1 2001/06/28 19:09:00 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 //
@@ -696,6 +712,7 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 {
   G4double safx1,safx2,safy1,safy2,safz1,safz2,safe;
 
+#ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
      G4cout.precision(16) ;
@@ -708,9 +725,11 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-  G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
-     //    G4cout<<"G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
+     G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
+     // G4cout << "G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
   }
+#endif
+
   safx1 = fDx - p.x() ;
   safx2 = fDx + p.x() ;
   safy1 = fDy - p.y() ;
@@ -743,7 +762,8 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 G4ThreeVectorList*
 G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
-  G4ThreeVectorList* vertices = new G4ThreeVectorList(8) ;
+  G4ThreeVectorList* vertices = new G4ThreeVectorList();
+  vertices->reserve(8);
 
   if (vertices)
   {
@@ -756,14 +776,14 @@ G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
     G4ThreeVector vertex6(fDx,fDy,fDz) ;
     G4ThreeVector vertex7(-fDx,fDy,fDz) ;
 
-    vertices->insert(pTransform.TransformPoint(vertex0));
-    vertices->insert(pTransform.TransformPoint(vertex1));
-    vertices->insert(pTransform.TransformPoint(vertex2));
-    vertices->insert(pTransform.TransformPoint(vertex3));
-    vertices->insert(pTransform.TransformPoint(vertex4));
-    vertices->insert(pTransform.TransformPoint(vertex5));
-    vertices->insert(pTransform.TransformPoint(vertex6));
-    vertices->insert(pTransform.TransformPoint(vertex7));
+    vertices->push_back(pTransform.TransformPoint(vertex0));
+    vertices->push_back(pTransform.TransformPoint(vertex1));
+    vertices->push_back(pTransform.TransformPoint(vertex2));
+    vertices->push_back(pTransform.TransformPoint(vertex3));
+    vertices->push_back(pTransform.TransformPoint(vertex4));
+    vertices->push_back(pTransform.TransformPoint(vertex5));
+    vertices->push_back(pTransform.TransformPoint(vertex6));
+    vertices->push_back(pTransform.TransformPoint(vertex7));
   }
   else
   {

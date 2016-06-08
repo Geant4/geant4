@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PersistentHitMan.cc,v 1.4 1999/11/28 21:54:16 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PersistentHitMan.cc,v 1.5.2.1 2001/06/28 19:11:25 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4PersistentHitMan 
 //
@@ -16,7 +32,7 @@
 #include "G4PersistentHitMan.hh"
 
 
-G4PersistentHitMan* G4PersistentHitMan::f_PersistentHitMan = NULL;
+G4PersistentHitMan* G4PersistentHitMan::f_PersistentHitMan = 0;
 
 G4PersistentHitMan* G4PersistentHitMan::GetPersistentHitMan()
 {
@@ -31,7 +47,7 @@ G4PersistentHitMan* G4PersistentHitMan::get_PersistentHitManIfExist()
 { return f_PersistentHitMan; }
 
 G4PersistentHitMan::G4PersistentHitMan()
- : f_CurrentPHCofThisEvent(NULL)
+ : f_CurrentPHCofThisEvent(0)
 {;}
 
 G4PersistentHitMan::~G4PersistentHitMan()

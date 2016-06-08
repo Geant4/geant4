@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisCommandsScene.cc,v 1.16 2001/02/23 15:43:27 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisCommandsScene.cc,v 1.17.2.1 2001/06/28 19:16:15 gunter Exp $
+// GEANT4 tag $Name:  $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -328,6 +344,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
 	  aViewer -> ClearView ();
+	  aViewer -> SetView ();
 	  aViewer -> DrawView ();
 	  // Triggers rebuild of graphical database by notifying the scene
 	  // handler.  The viewer is supposed to be smart enough to know

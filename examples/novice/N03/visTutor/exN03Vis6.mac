@@ -34,14 +34,14 @@
 /vis/sceneHandler/create OIX
 /vis/viewer/create
 
-# Add detector geometry to the current scene
+# Add the world volume to the current scene
 /vis/scene/add/volume
 #/vis/scene/add/trajectories
 /tracking/storeTrajectory 1
 
 # Bird-eye view of events
-/vis/camera/reset
-/vis/camera/viewpoint    45 45 
+/vis/viewer/reset
+/vis/viewer/viewpointThetaPhi   45 45 
 
 # Attach the just created Go scene graph to the viewer.
 /vis/viewer/update

@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: Em3DetectorConstruction.cc,v 1.2 1999/12/15 14:49:03 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: Em3DetectorConstruction.cc,v 1.3.2.1 2001/06/28 19:06:58 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 
@@ -28,6 +44,7 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+#include "G4UserLimits.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -57,6 +74,9 @@ Em3DetectorConstruction::Em3DetectorConstruction()
   NbOfLayers        = 50;
   CalorSizeYZ       = 40.*cm;
   ComputeCalorParameters();
+  
+  // create UserLimits
+  userLimits = new G4UserLimits();
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new Em3DetectorMessenger(this);
@@ -65,7 +85,7 @@ Em3DetectorConstruction::Em3DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em3DetectorConstruction::~Em3DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete userLimits; delete detectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -132,7 +152,7 @@ density = 1.390*g/cm3;
 a = 39.95*g/mole;
 G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
 
-density = 7.700*g/cm3;
+density = 7.870*g/cm3;
 a = 55.85*g/mole;
 G4Material* Fe = new G4Material(name="Iron"     , z=26., a, density);
 
@@ -143,6 +163,10 @@ G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
 density = 19.30*g/cm3;
 a = 183.85*g/mole;
 G4Material* W = new G4Material(name="Tungsten"  , z=74., a, density);
+
+density = 19.32*g/cm3;
+a = 196.97*g/mole;
+G4Material* Au = new G4Material(name="Gold"     , z=79., a, density);
 
 density = 11.35*g/cm3;
 a = 207.19*g/mole;
@@ -322,7 +346,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   // Absorbers
   //
   for (G4int j=0; j<MaxAbsor; j++)  
-     { solidAbsor[j]=NULL; logicAbsor[j]=NULL; physiAbsor[j]=NULL;}  
+     { solidAbsor[j]=NULL; logicAbsor[j]=NULL; physiAbsor[j]=NULL;}
 
   G4double xfront = -0.5*LayerThickness;  
   for (G4int k=0; k<NbOfAbsor; k++)
@@ -332,6 +356,8 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
       logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
       			                  AbsorMaterial[k], //its material
       			                  "Absorber");      //its name
+					  
+      logicAbsor[k]->SetUserLimits(userLimits);					  
 
       G4double xcenter = xfront+0.5*AbsorThickness[k];
       xfront += AbsorThickness[k];       			                  
@@ -484,6 +510,20 @@ void Em3DetectorConstruction::SetMagField(G4double fieldValue)
     fieldMgr->SetDetectorField(magField);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em3DetectorConstruction::SetMaxStepSize(G4double val)
+{
+  // set the maximum allowed step size
+  //
+  if (val <= DBL_MIN)
+    { G4cout << "\n --->warning from SetMaxStepSize: maxStep " 
+             << val  << " out of range. Command refused" << G4endl;
+      return;
+    }       
+  userLimits->SetMaxAllowedStep(val);
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   

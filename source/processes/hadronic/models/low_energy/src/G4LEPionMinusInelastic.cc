@@ -1,9 +1,25 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 //
  // Hadronic Process: PionMinus Inelastic Process
@@ -206,7 +222,7 @@
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
-    G4int ieab = availableEnergy*5.0/GeV;
+    G4int ieab = G4int(availableEnergy*5.0/GeV);
     const G4double supp[] = {0.,0.4,0.55,0.65,0.75,0.82,0.86,0.90,0.94,0.98};
     G4double test, w0, wp, wt, wm;
     if( (availableEnergy<2.0*GeV) && (G4UniformRand()>=supp[ieab]) )
@@ -217,7 +233,7 @@
       // charge exchange reaction is included in inelastic cross section
         
       const G4double cech[] = {1.,0.95,0.79,0.32,0.19,0.16,0.14,0.12,0.10,0.08};
-      G4int iplab = G4std::min( 9.0, pOriginal/GeV*5.0 );
+      G4int iplab = G4int(G4std::min( 9.0, pOriginal/GeV*5.0 ));
       if( G4UniformRand() <= cech[iplab] )
       {
         if( targetParticle.GetDefinition() == aProton )

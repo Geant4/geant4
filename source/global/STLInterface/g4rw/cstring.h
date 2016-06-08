@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: cstring.h,v 1.9 2000/11/20 17:26:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: cstring.h,v 1.10.2.1 2001/06/28 19:09:57 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 //---------------------------------------------------------------
@@ -35,6 +51,8 @@
   #define strcasecmp _stricmp
 #endif
 
+typedef G4std::string::size_type str_size;
+
 class G4String;
 
 class G4SubString
@@ -48,10 +66,10 @@ public:
   inline G4SubString& operator=(const G4String&);
   inline G4SubString& operator=(const G4SubString&);
  
-  inline char& operator()(size_t);
-  inline char  operator()(size_t) const;
-  inline char& operator[](size_t);
-  inline char  operator[](size_t) const;
+  inline char& operator()(str_size);
+  inline char  operator()(str_size) const;
+  inline char& operator[](str_size);
+  inline char  operator[](str_size) const;
 
   inline G4int operator!() const;
 
@@ -60,8 +78,8 @@ public:
   inline G4bool operator!=(G4String) const;
   inline G4bool operator!=(const char*) const;
 
-  inline size_t length() const;
-  inline size_t start() const;
+  inline str_size length() const;
+  inline str_size start() const;
 
   // For detecting null substrings
   //
@@ -69,11 +87,11 @@ public:
 
 private:
 
-  inline G4SubString(G4String&, size_t, size_t);
+  inline G4SubString(G4String&, str_size, str_size);
 
   G4String*    mystring;     
-  size_t        mystart;
-  size_t        extent;
+  str_size     mystart;
+  str_size     extent;
 
   friend class G4String;
 
@@ -102,8 +120,8 @@ public:
   inline G4String& operator=(const std_string&);
   inline G4String& operator=(const char*);
 
-  inline char operator () (size_t) const; 
-  inline char& operator () (size_t);
+  inline char operator () (str_size) const; 
+  inline char& operator () (str_size);
 
   inline G4String& operator+=(const G4SubString&);
   inline G4String& operator+=(const char*);
@@ -116,7 +134,7 @@ public:
 
   //inline G4String operator () (unsigned int, unsigned int);
   inline operator const char*() const;
-  inline G4SubString operator()(size_t, size_t);
+  inline G4SubString operator()(str_size, str_size);
 
   inline G4int compareTo(const char*, caseCompare mode=exact);
   inline G4int compareTo(const G4String&, caseCompare mode=exact);
@@ -128,10 +146,10 @@ public:
   
   inline G4String& replace (unsigned int, unsigned int, 
                              const char*, unsigned int );
-  inline G4String& replace(size_t, size_t, const char*);
+  inline G4String& replace(str_size, str_size, const char*);
 
-  inline G4String& remove(size_t);
-  inline G4String& remove(size_t, size_t);
+  inline G4String& remove(str_size);
+  inline G4String& remove(str_size, str_size);
 
   inline G4int first(char) const;
   inline G4int last(char) const;
@@ -150,9 +168,9 @@ public:
 
   inline G4bool isNull() const;
 
-  inline size_t index (const char*, G4int pos=0) const; 
-  inline size_t index (char, G4int pos=0) const; 
-  inline size_t index (const G4String&, size_t, size_t, caseCompare) const;
+  inline str_size index (const char*, G4int pos=0) const; 
+  inline str_size index (char, G4int pos=0) const; 
+  inline str_size index (const G4String&, str_size, str_size, caseCompare) const;
 
   inline const char* data() const;
 

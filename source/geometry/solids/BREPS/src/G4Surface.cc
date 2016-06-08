@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Surface.cc,v 1.7 2000/11/20 17:54:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Surface.cc,v 1.8.2.1 2001/06/28 19:08:53 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -158,19 +174,19 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
   G4double tmpDistance;
   const G4CurveVector& bounds= surfaceBoundary.GetBounds();
 
-  G4int entr = bounds.entries();
+  G4int entr = bounds.size();
 
   for (G4int i=0; i<entr; i++) 
   {
-    G4Curve* c= bounds(i);
+    G4Curve* c= bounds[i];
 
     if (c->GetEntityType() == "G4CompositeCurve") 
     {
       G4CompositeCurve* cc= (G4CompositeCurve*)c;
       const G4CurveVector& segments= cc->GetSegments();
-      for (size_t i=0; i<segments.entries(); i++) 
+      for (size_t i=0; i<segments.size(); i++) 
       {
-	G4Curve* ccc= segments(i);
+	G4Curve* ccc= segments[i];
 	tmpDistance= (G4Point3D(Pt.x(), Pt.y(), Pt.z())-ccc->GetEnd()).mag2();
 	if (pointDistance > tmpDistance) 
 	{

@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ParticleDefinition.hh,v 1.8 2001/03/12 05:58:21 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ParticleDefinition.hh,v 1.10.2.2 2001/06/28 20:19:09 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
-//	For information related to this code contact:
-//	CERN, CN Division, ASD group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 // ---------------- G4ParticleDefinition ----------------
@@ -120,8 +134,8 @@ class G4ParticleDefinition
       G4int    GetPDGiSpin() const { return thePDGiSpin; }
       G4int    GetPDGiParity() const { return thePDGiParity; }
       G4int    GetPDGiConjugation() const { return thePDGiConjugation; }
-      G4double GetPDGIsospin() const { return thePDGiIsospin; }
-      G4double GetPDGIsospin3() const { return thePDGiIsospin3; }
+      G4double GetPDGIsospin() const { return thePDGIsospin; }
+      G4double GetPDGIsospin3() const { return thePDGIsospin3; }
       G4int    GetPDGiIsospin() const { return thePDGiIsospin; }
       G4int    GetPDGiIsospin3() const { return thePDGiIsospin3; }
       G4int    GetPDGiGParity() const { return thePDGiGParity; }
@@ -236,15 +250,15 @@ class G4ParticleDefinition
       G4int thePDGiConjugation;
       //  This charge conjugation quantum number in units of 1.
 
+      G4int thePDGiGParity;
+      //  The value of the G-parity quantum number.
+
       G4int thePDGiIsospin;
       G4int thePDGiIsospin3;
       //  The isospin and its 3rd-component in units of 1/2.
       G4double thePDGIsospin;
       G4double thePDGIsospin3;
       //  The isospin quantum number in units of 1.
-
-      G4int thePDGiGParity;
-      //  The value of the G-parity quantum number.
 
       G4int theLeptonNumber;
       //  The lepton quantum number.
@@ -416,24 +430,3 @@ inline void             G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

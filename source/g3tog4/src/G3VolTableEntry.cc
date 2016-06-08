@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G3VolTableEntry.cc,v 1.6 2000/11/28 12:07:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G3VolTableEntry.cc,v 1.7.2.1 2001/06/28 19:08:04 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // modified by I.Hrivnacova, 13.10.99
 
@@ -170,7 +186,7 @@ void G3VolTableEntry::SetHasNegPars(G4bool hasNegPars) {
 }
 
 void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
-  if (fG3Pos.entries()>0 && copy>=0 && copy<fG3Pos.entries()) 
+  if (fG3Pos.entries()>0 && copy>=0 && copy<G4int(fG3Pos.entries())) 
     fG3Pos.removeAt(copy);
 }
 
@@ -249,7 +265,7 @@ G3VolTableEntry::GetNoClones() {
 
 G3VolTableEntry* 
 G3VolTableEntry::GetDaughter(G4int i) {
-  if (i<fDaughters.entries() && i>=0)
+  if (i<G4int(fDaughters.entries()) && i>=0)
     return fDaughters[i];
   else 
     return 0;
@@ -257,7 +273,7 @@ G3VolTableEntry::GetDaughter(G4int i) {
 
 G3VolTableEntry*
 G3VolTableEntry::GetMother(G4int i){
-  if (i<fMothers.entries() && i>=0)
+  if (i<G4int(fMothers.entries()) && i>=0)
     return fMothers[i];
   else
     return 0;
@@ -274,7 +290,7 @@ G3VolTableEntry::GetMother(){
 
 G3VolTableEntry*
 G3VolTableEntry::GetClone(G4int i){
-  if (i<fClones.entries() && i>=0)
+  if (i<G4int(fClones.entries()) && i>=0)
     return fClones[i];
   else
     return 0;

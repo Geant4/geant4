@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4UIcommandTree.cc,v 1.5 2001/02/08 06:07:20 asaim Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4UIcommandTree.cc,v 1.6.2.1 2001/06/28 19:10:18 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 
 #include "G4UIcommandTree.hh"
@@ -57,7 +73,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
     return;
   }
   int i = remainingPath.first('/');
-  if( i == G4std::string::npos )
+  if( i == int(G4std::string::npos) )
   {
     // Find command
     int n_commandEntry = command.size();
@@ -102,7 +118,7 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
   else
   {
     int i = remainingPath.first('/');
-    if( i == G4std::string::npos )
+    if( i == int(G4std::string::npos) )
     {
       // Find command
       int n_commandEntry = command.size();
@@ -147,7 +163,7 @@ G4UIcommand * G4UIcommandTree::FindPath(G4String commandPath)
   G4String remainingPath = commandPath;
   remainingPath.remove(0,pathName.length());
   int i = remainingPath.first('/');
-  if( i == G4std::string::npos )
+  if( i == int(G4std::string::npos) )
   {
     // Find command
     int n_commandEntry = command.size();
@@ -176,7 +192,6 @@ void G4UIcommandTree::ListCurrent()
 {
   G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
-  int i = 0;
   G4cout << " Sub-directories : " << G4endl;
   int n_treeEntry = tree.size();
   for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )

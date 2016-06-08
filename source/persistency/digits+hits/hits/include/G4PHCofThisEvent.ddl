@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PHCofThisEvent.ddl,v 1.9 2000/12/15 08:04:14 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PHCofThisEvent.ddl,v 1.10.2.1 2001/06/28 19:11:24 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 
 // Class Description:
@@ -60,7 +76,7 @@ class G4PHCofThisEvent
         G4int n = 0;
         for(int i=0;i<HC.size();i++)
         {
-          if( HC[i] != NULL ) n++;
+          if( HC[i] != 0 ) n++;
         }
         return n;
       }

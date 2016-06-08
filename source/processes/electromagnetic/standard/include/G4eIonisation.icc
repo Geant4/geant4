@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4eIonisation.icc,v 1.3 1999/12/15 14:51:49 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4eIonisation.icc,v 1.4.2.2 2001/06/28 20:19:49 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ---------------------------------------------------------------
 //      GEANT 4 class inlined methods file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      ------------ G4eIonisation physics process ------------
 //                  by Laszlo Urban, 20 March 1997
 // ***************************************************************
@@ -22,6 +36,7 @@
 // ***************************************************************
 //
 // 24-11-97: correction on MeanFreePath for KinEnergy > HighestLimit
+// 28-05-01: V.Ivanchenko minor changes to provide ANSI -wall compilation 
 //
 // ---------------------------------------------------------------
 
@@ -55,7 +70,7 @@ inline G4double G4eIonisation::GetMeanFreePath(
      MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
                     GetValue( KineticEnergy, isOutRange);
      }
-
+   
    return MeanFreePath ;
 }
 
@@ -66,8 +81,7 @@ inline G4double G4eIonisation::GetLambda(
                               G4Material* material)
 {
   G4bool isOut;
-  const G4MaterialTable* theMaterialTable =
-                       G4Material::GetMaterialTable() ;
+  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
  
   G4double lambda = (*theMeanFreePathTable)
                     [material->GetIndex()]->

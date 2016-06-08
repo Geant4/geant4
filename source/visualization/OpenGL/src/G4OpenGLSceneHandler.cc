@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.8 2001/01/25 15:28:09 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4OpenGLSceneHandler.cc,v 1.10.2.1 2001/06/28 19:15:43 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -88,12 +104,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   glDisable (GL_LIGHTING);
   glBegin (GL_LINE_STRIP);
 
-  G4int nPoints = line.entries ();
+  G4int nPoints = line.size ();
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
-    x = line(iPoint).x(); 
-    y = line(iPoint).y();
-    z = line(iPoint).z();
+    x = line[iPoint].x(); 
+    y = line[iPoint].y();
+    z = line[iPoint].z();
     glVertex3d (x, y, z);
   }
   glEnd ();
@@ -108,7 +124,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
     << "\" at " << text.GetPosition ()
     << ", size " << size
     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
-    << ", type " << sizeType
+    << ", type " << G4int(sizeType)
     << G4endl;
 }
 

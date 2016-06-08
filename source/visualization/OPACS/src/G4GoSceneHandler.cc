@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4GoSceneHandler.cc,v 1.10 2001/01/25 15:28:09 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4GoSceneHandler.cc,v 1.11.2.1 2001/06/28 19:15:36 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -87,17 +103,17 @@ void G4GoSceneHandler::AddPrimitive (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polyline&) " << line.entries () << G4endl;
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polyline&) " << line.size () << G4endl;
 #endif
   SetColour        (GetColour(line));
-  int              nPoints = line.entries ();
+  int              nPoints = line.size ();
   OPointList       points;
   points           = OPointListCreate(nPoints);
   for (int iPoint = 0; iPoint < nPoints; iPoint++) {
     OPointListSetIthEntry   (points,iPoint,
-			     line(iPoint).x(), 
-			     line(iPoint).y(),
-			     line(iPoint).z());
+			     line[iPoint].x(), 
+			     line[iPoint].y(),
+			     line[iPoint].z());
   }
   GoAddLinesToNode (fGoNode,points);
   OPointListDelete (points);
@@ -111,17 +127,17 @@ void G4GoSceneHandler::AddPrimitive (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polymarker&) " << line.entries () << G4endl;
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polymarker&) " << line.size () << G4endl;
 #endif
   SetColour  (GetColour(line));
-  int        nPoints = line.entries ();
+  int        nPoints = line.size ();
   OPointList points;
   points     = OPointListCreate(nPoints);
   for (int iPoint = 0; iPoint < nPoints; iPoint++) {
     OPointListSetIthEntry   (points,iPoint,
-			     line(iPoint).x(), 
-			     line(iPoint).y(),
-			     line(iPoint).z());
+			     line[iPoint].x(), 
+			     line[iPoint].y(),
+			     line[iPoint].z());
   }
   GoAddMarkersToNode (fGoNode,points);
   OPointListDelete   (points);

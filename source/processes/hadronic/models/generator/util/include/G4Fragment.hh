@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Fragment.hh,v 1.7 1999/12/15 14:52:50 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Fragment.hh,v 1.8.2.1 2001/06/28 19:13:47 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -33,11 +49,16 @@
 class G4ParticleDefinition;
 
 class G4Fragment;     // Forward deckaration
-typedef G4RWTPtrOrderedVector<G4Fragment> G4FragmentVector;
+//typedef G4RWTPtrOrderedVector<G4Fragment> G4FragmentVector;
+typedef G4std::vector<G4Fragment*> G4FragmentVector;
+
 
 class G4Fragment 
 {
 public:
+
+  // ============= CONSTRUCTORS ==================
+
   // Default constructor
   G4Fragment();
 
@@ -55,16 +76,7 @@ public:
   // 4-momentum and pointer to G4particleDefinition (for gammas)
   G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * aParticleDefinition);
 
-  
-//   G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, const G4LorentzVector aMomentum,
-// 	     const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, const G4int aNumberOfHoles,
-// 	     const G4int aNumberOfCharged);
-
-//   G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, 
-// 	     const G4LorentzVector aMomentum, 
-// 	     const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, 
-// 	     const G4int aNumberOfHoles, const G4int aNumberOfCharged,
-// 	     G4ParticleDefinition * aParticleDefinition);
+  // ============= OPERATORS ==================
     
   const G4Fragment & operator=(const G4Fragment &right);
   G4bool operator==(const G4Fragment &right) const;
@@ -73,6 +85,7 @@ public:
   friend G4std::ostream& operator<<(G4std::ostream&, const G4Fragment*);
   friend G4std::ostream& operator<<(G4std::ostream&, const G4Fragment&);
 
+  // ============= METHODS ==================
 
   inline G4double GetA(void) const;
   void SetA(const G4double value);
@@ -90,7 +103,7 @@ public:
   void SetAngularMomentum(const G4ThreeVector value);
   
   G4int GetNumberOfExcitons(void) const;
-  void SetNumberOfExcitons(const G4int value);
+  //  void SetNumberOfExcitons(const G4int value);
   
   G4int GetNumberOfHoles(void) const;
   void SetNumberOfHoles(const G4int value);
@@ -99,7 +112,7 @@ public:
   void SetNumberOfCharged(const G4int value);
 
   G4int GetNumberOfParticles(void) const;
-
+  void SetNumberOfParticles(const G4int value);
 
   inline G4ParticleDefinition * GetParticleDefinition(void) const;
   void SetParticleDefinition(G4ParticleDefinition * aParticleDefinition);
@@ -110,9 +123,9 @@ public:
 
 // Some utility methods
 
-	inline G4double GetGroundStateMass(void) const;
-	
-	inline G4double GetBindingEnergy(void) const;
+  inline G4double GetGroundStateMass(void) const;
+  
+  inline G4double GetBindingEnergy(void) const;
 
 private:
 
@@ -120,6 +133,8 @@ private:
 
   G4ThreeVector IsotropicRandom3Vector(const G4double Magnitude = 1.0) const;
   
+
+  // ============= DATA MEMBERS ==================
 
   G4double theA;
   
@@ -131,7 +146,7 @@ private:
   
   G4ThreeVector theAngularMomentum;
   
-  G4int numberOfExcitons;
+  G4int numberOfParticles;
   
   G4int numberOfHoles;
   
@@ -206,12 +221,12 @@ inline void G4Fragment::SetAngularMomentum(const G4ThreeVector value)
 
 inline G4int G4Fragment::GetNumberOfExcitons()  const
 {
-  return numberOfExcitons;
+  return numberOfParticles + numberOfHoles;
 }
 
-inline void G4Fragment::SetNumberOfExcitons(const G4int value)
+inline void G4Fragment::SetNumberOfParticles(const G4int value)
 {
-  numberOfExcitons = value;
+  numberOfParticles = value;
 }
 
 inline G4int G4Fragment::GetNumberOfHoles()  const
@@ -231,12 +246,13 @@ inline G4int G4Fragment::GetNumberOfCharged()  const
 
 inline void G4Fragment::SetNumberOfCharged(const G4int value)
 {
-  numberOfCharged = value;
+  if (value <= numberOfParticles) numberOfCharged = value;
+  else G4Exception("G4Fragment::SetNumberOfCharged: Number of charged particles can't be greater than number of particles");
 }
 
 inline G4int G4Fragment::GetNumberOfParticles()  const
 {
-  return numberOfExcitons - numberOfHoles;
+  return numberOfParticles;
 }
 
 

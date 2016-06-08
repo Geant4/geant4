@@ -1,15 +1,29 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      History: New Implementation
 //    
 //      ---------- G4QAOLowEnergyLoss physics process -------
@@ -18,6 +32,7 @@
 // Modified:
 // 16/09/2000 S. Chauvie  Oscillator for all materials
 // 23/05/2000 MGP  Made compliant to design
+// 01/06/2001 V.Ivanchenko replace names by Z
 //  
 // Class description:
 // Quantal Harmonic Oscillator Model for energy loss of low energy antiprotons 
@@ -96,8 +111,8 @@ private:
   G4double GetL2(G4double normEnergy) const;
   // terms in Z^4
   
-  //  material at now avaliable for the model
-  static const G4String materialAvailable[6];
+  // Z of element at now avaliable for the model
+  static const G4int materialAvailable[6];
   
   // number, energy and oscillator strenghts
   // for an harmonic oscillator model of material

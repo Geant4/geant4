@@ -1,9 +1,39 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4PreCompoundEmission.cc,v 1.3.2.1 2001/06/28 19:13:34 gunter Exp $
+// GEANT4 tag $Name:  $
+//
+// Hadronic Process: Nuclear Preequilibrium
+// by V. Lara 
+
+
 #include "G4PreCompoundEmission.hh"
 
 const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompoundEmission &right)
 {
-    G4Exception("G4PreCompoundEmission::operator= meant to not be accessable");
-    return *this;
+  G4Exception("G4PreCompoundEmission::operator= meant to not be accessable");
+  return *this;
 }
 
 
@@ -18,125 +48,210 @@ G4bool G4PreCompoundEmission::operator!=(const G4PreCompoundEmission &right) con
 }
 
 
+G4PreCompoundEmission::G4PreCompoundEmission(const G4Fragment& aFragment)
+{
+  // Assume that projectile is a proton
+  ProjEnergy = aFragment.GetExcitationEnergy();
+}
+
+
 G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {
-	// Choose a Fragment for emission
-	G4VPreCompoundFragment * theFragment = theFragmentsVector.ChooseFragment();
+  // Choose a Fragment for emission
+  G4VPreCompoundFragment * theFragment = theFragmentsVector.ChooseFragment();
 
-	// Kinetic Energy of emitted fragment
-	G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
-	  	  
-	// Sample the Fermi momentum of emitted fragment
-	static const G4double FermiMaxMom = 250.0*MeV;
-	G4ThreeVector FermiMomentum(IsotropicRandom3Vector(FermiMaxMom*pow(G4UniformRand(),1./3.)));
+  // Kinetic Energy of emitted fragment
+  G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
 
-	// Get the fragment momentum
-	G4ThreeVector P12(aFragment.GetMomentum().vect());	
-	// Share the fragment momentum between the particles system
-	P12 *= 1.0/G4double(aFragment.GetNumberOfParticles());
-	// Add the Fermi momentum
-	P12 += FermiMomentum;
-			
-	// Calculate the momentum magnitude of emitted fragment 	
-	G4double EmittedMass = theFragment->GetNuclearMass();
-	G4double p = sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+2.0*EmittedMass));
-	// And sample a direction for it
-	G4ParticleMomentum momentum;	  				
-	if (aFragment.GetMomentum().boostVector().mag2() > 1.e-7) {
-		// sample a non-isotropic random vector
-		G4double CosTheta = sqrt(G4UniformRand());
-		G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
-		G4double Phi = twopi*G4UniformRand();
-		momentum = G4ParticleMomentum(p*cos(Phi)*SinTheta,
-												p*sin(Phi)*SinTheta,
-												p*CosTheta);
-		momentum = RotateMomentum(P12,aFragment.GetMomentum().boostVector(),momentum);
-	} else {
-		momentum = IsotropicRandom3Vector(p);
-	}
+  // Calculate the fragment momentum (three vector)
+  G4ThreeVector momentum = AngularDistribution(theFragment,aFragment,KineticEnergyOfEmittedFragment);
 	
-	// Now we can calculate the four momentum 
-	G4LorentzVector EmittedMomentum(momentum,sqrt(momentum.mag2()+EmittedMass*EmittedMass));
+  // Mass of emittef fragment
+  G4double EmittedMass = theFragment->GetNuclearMass();
+
 	
-
-	// Excitation energy
-	G4double anU = theFragment->GetMaximalKineticEnergy() - KineticEnergyOfEmittedFragment + 
-						  theFragment->GetCoulombBarrier();
+  // Now we can calculate the four momentum 
+  // both options are valid and give the same result but 2nd one is faster
+  //  G4LorentzVector EmittedMomentum(momentum,sqrt(momentum.mag2()+EmittedMass*EmittedMass));
+  G4LorentzVector EmittedMomentum(momentum,EmittedMass+KineticEnergyOfEmittedFragment);
 	
-	// check that Excitation energy is > 0
-	if (anU < 0.0) G4Exception("G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
+  // Perform Lorentz boost
+  EmittedMomentum.boost(aFragment.GetMomentum().boostVector());  
 
-	// Update nucleus parameters
-	// Number of excitons
-	aFragment.SetNumberOfExcitons(aFragment.GetNumberOfExcitons()-
-															G4int(theFragment->GetA()));
-	// Number of charges
-	aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
-				 	      								G4int(theFragment->GetZ()));
+  // Set emitted fragment momentum
+  theFragment->SetMomentum(EmittedMomentum);	
 
-	// Atomic number
-	aFragment.SetA(theFragment->GetRestA());
+
+  // NOW THE RESIDUAL NUCLEUS
+  // ------------------------
+
+  // Now the residual nucleus. 
+  // The energy conservation says that 
+  G4double ResidualEcm = 
+    aFragment.GetGroundStateMass() + aFragment.GetExcitationEnergy() // initial energy in cm
+    - (EmittedMass+KineticEnergyOfEmittedFragment); 
+
+  // Then the four momentum for residual is 
+  G4LorentzVector RestMomentum(-momentum,ResidualEcm);
+  G4LorentzVector RestMomentum2(aFragment.GetMomentum()-EmittedMomentum);
+
+
+  // Just for test
+  // Excitation energy
+  //  G4double anU = ResidualEcm - theFragment->GetRestNuclearMass();
+  // This is equivalent
+  //  G4double anU = theFragment->GetMaximalKineticEnergy() - KineticEnergyOfEmittedFragment + 
+  //    theFragment->GetCoulombBarrier();
+	
+  // check that Excitation energy is >= 0
+  G4double anU = RestMomentum.m()-theFragment->GetRestNuclearMass();
+  if (anU < 0.0) G4Exception("G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
+
+  
+  
+  // Update nucleus parameters:
+  // --------------------------
+  // Number of excitons
+  aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
+				G4int(theFragment->GetA()));
+  // Number of charges
+  aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
+			       G4int(theFragment->GetZ()));
+
+  // Atomic number
+  aFragment.SetA(theFragment->GetRestA());
 	  
-	// Charge
-	aFragment.SetZ(theFragment->GetRestZ());
+  // Charge
+  aFragment.SetZ(theFragment->GetRestZ());
 
 
-	// Calculate the residual Fragment momentum
-	G4double ResidualMass = theFragment->GetRestNuclearMass()+anU;
-	G4LorentzVector RestMomentum(-momentum,sqrt(momentum.mag2()+ ResidualMass*ResidualMass));	  
+  // Perform Lorentz boosts
+  RestMomentum.boost(aFragment.GetMomentum().boostVector());
 
-	// Perform Lorentz boosts
-   EmittedMomentum.boost(aFragment.GetMomentum().boostVector());
-	RestMomentum.boost(aFragment.GetMomentum().boostVector());
-
-
-	// Update nucleus momentum
-	aFragment.SetMomentum(RestMomentum);
+  // Update nucleus momentum
+  aFragment.SetMomentum(RestMomentum);
 	
-	// Set emitted fragment momentum
-	theFragment->SetMomentum(EmittedMomentum);	
-
-	G4DynamicParticle MyDP = theFragment->GetDynamicParticle();
-	G4ReactionProduct * theNew = new G4ReactionProduct(MyDP.GetDefinition());
-	theNew->SetMomentum(MyDP.GetMomentum());
-	theNew->SetTotalEnergy(MyDP.Get4Momentum().e());
-
-	return theNew;
+  // Create a G4ReactionProduct 
+  G4ReactionProduct * MyRP = theFragment->GetReactionProduct();
+  return MyRP;
 }
 
 
-G4ThreeVector G4PreCompoundEmission::IsotropicRandom3Vector(G4double Magnitude) const
-  // Create a unit vector with a random direction isotropically distributed
+G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
+							 const G4Fragment& aFragment,
+							 const G4double KineticEnergyOfEmittedFragment) const
 {
+  G4double p = aFragment.GetNumberOfParticles();
+  G4double h = aFragment.GetNumberOfHoles();
+  G4double U = aFragment.GetExcitationEnergy();
+	
+  // Kinetic Energy of emitted fragment
+  // G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
+	
+  // Emission particle separation energy
+  G4double Bemission = theFragment->GetBindingEnergy();
+	
+  // Fermi energy
+  G4double Ef = G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
+	
+  //
+  G4double g = 0.595*aFragment.GetA()*G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+	
+  // Average exciton energy relative to bottom of nuclear well
+  G4double Eav = 2.0*p*(p+1.0)/((p+h)*g);
+	
+  // Excitation energy relative to the Fermi Level
+  //	G4double Uf = U - (p - h)*Ef;
+  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
 
-  G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
-  G4double Phi = twopi*G4UniformRand();
-  G4ThreeVector Vector(Magnitude*cos(Phi)*SinTheta,
-                       Magnitude*sin(Phi)*SinTheta,
-                       Magnitude*CosTheta);
+	
+  Eav *= rho(p+1,h,g,Uf,Ef)/rho(p,h,g,Uf,Ef);
+	
+  Eav += - Uf/(p+h) + Ef;
+	
+  G4double zeta = G4std::max(1.0,9.3/sqrt(KineticEnergyOfEmittedFragment/MeV));
+	
+  G4double an = 3.0*sqrt((ProjEnergy+Ef)*(KineticEnergyOfEmittedFragment+Bemission+Ef))/
+    (zeta*2.0*aFragment.GetNumberOfExcitons()*Eav);
+  //			(zeta*(aFragment.GetNumberOfExcitons()-1.0)*Eav);
+			
+			
+  G4double normalization = pi*bessi0(an);
+	
+	
+  G4double theta = 0.0;
+  G4double distrib = 0.0;
+  do {
+    theta = pi*G4UniformRand();
+    distrib = exp(an*cos(theta))/normalization;
+  } while ( G4UniformRand() > distrib );
+	
+  G4double phi = twopi*G4UniformRand();
+	
+  // Calculate the momentum magnitude of emitted fragment 	
+  G4double EmittedMass = theFragment->GetNuclearMass();
+  G4double pmag = sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+2.0*EmittedMass));
+  
+  G4double sinTheta = sin(theta);
+  G4double cosTheta = sqrt(1.0-sinTheta*sinTheta);
 
-  return Vector;
-		
+  G4ThreeVector momentum = G4ParticleMomentum(pmag*cos(phi)*sinTheta,pmag*sin(phi)*sinTheta,pmag*cosTheta);
+	
+  return momentum;
 }
 
 
-G4ParticleMomentum G4PreCompoundEmission::RotateMomentum(G4ParticleMomentum Pa,
-						      G4ParticleMomentum V,
-						      G4ParticleMomentum P) const 
+G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4double g, 
+				    const G4double E, const G4double Ef) const
 {
-  G4ParticleMomentum U = Pa.unit();
-  
-  G4double Alpha1 = U * V;
-  
-  G4double Alpha2 = sqrt(V.mag2() - Alpha1*Alpha1);
+  G4double fact[30];
+  fact[0] = 1;
+  for (G4int n = 1; n < 21; n++) {
+    fact[n] = fact[n-1]*G4double(n);
+  }
+	
+  G4double aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
+	
+  G4double tot = 0.0;
+  for (G4int j = 0; j <= h; j++) {
+    G4double t1 = pow(-1.0, G4double(j));
+    G4double t2 = fact[j]/ (fact[G4int(h)-j]*fact[G4int(h)]);
+    G4double t3 = E - G4double(j)*Ef - aph;
+    if (t3 < 0.0) t3 = 0.0;
+    t3 = pow(t3,p+h-1);
+    tot += t1*t2*t3;
+  }
+	
+  tot *= pow(g,p+h)/(fact[G4int(p)]*fact[G4int(h)]*fact[G4int(p+h)-1]);
 
-  G4ThreeVector N = (1./Alpha2)*U.cross(V);
+  return tot;
+}
 
-  G4ParticleMomentum RotatedMomentum(
-				     ( (V.x() - Alpha1*U.x())/Alpha2 ) * P.x() + N.x() * P.y() + U.x() * P.z(),
-				     ( (V.y() - Alpha1*U.y())/Alpha2 ) * P.x() + N.y() * P.y() + U.y() * P.z(),
-				     ( (V.z() - Alpha1*U.z())/Alpha2 ) * P.x() + N.z() * P.y() + U.z() * P.z()
-				     );
-  return RotatedMomentum;
+G4double G4PreCompoundEmission::bessi0(const G4double x) const
+  // Returns the modified Bessel function I_0(x) for any real x.
+{
+  G4double ax,ans; 
+  G4double y;     
+
+  if ((ax=fabs(x)) < 3.75) {      /* Polynomial fit. */
+    y=x/3.75; 
+    y*=y; 
+    ans=1.0+y*(3.5156229+y*(3.0899424+
+			    y*(1.2067492+
+			       y*(0.2659732+
+				  y*(0.360768e-1+
+				     y*0.45813e-2))))); 
+  } else {
+    y=3.75/ax; 
+    ans=(exp(ax)/sqrt(ax))*(0.39894228+y*(0.1328592e-1+
+					  y*(0.225319e-2+
+					     y*(-0.157565e-2+
+						y*(0.916281e-2+
+						   y*(-0.2057706e-1+
+						      y*(0.2635537e-1+
+							 y*(-0.1647633e-1+
+							    y*0.392377e-2))))))));
+  } 
+  return ans; 
+	
 }

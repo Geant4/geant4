@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PGeometryObjectMap.cc,v 1.6 2000/11/17 05:10:03 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PGeometryObjectMap.cc,v 1.7.2.1 2001/06/28 19:11:28 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4PGeometryObjectMap 
 //
@@ -56,7 +72,7 @@ G4PGeometryObjectMap::~G4PGeometryObjectMap()
 HepRef(G4PVPhysicalVolume) G4PGeometryObjectMap::LookUp(
                                       G4VPhysicalVolume* inGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noPhysVol;i++)
   {
     if( transPhysVolPtrs->Get(i) == inGeomObj )
@@ -65,15 +81,15 @@ HepRef(G4PVPhysicalVolume) G4PGeometryObjectMap::LookUp(
     }
   }
 
-  return NULL;
+  return 0;
 }
 
 void G4PGeometryObjectMap::Add(         G4VPhysicalVolume*  inGeomObj,
                                 HepRef(G4PVPhysicalVolume) outGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   HepRef(G4PVPhysicalVolume) aGeomObj = LookUp( inGeomObj );
-  if( aGeomObj == NULL )
+  if( aGeomObj == 0 )
   {
 //    assert( inGeomObj == aGeomObj );
     noPhysVol++;
@@ -88,7 +104,7 @@ void G4PGeometryObjectMap::Add(         G4VPhysicalVolume*  inGeomObj,
 G4VPhysicalVolume* G4PGeometryObjectMap::LookUp(
                                HepRef(G4PVPhysicalVolume) inGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noPhysVol;i++)
   {
     if( persPhysVolPtrs[i] == inGeomObj )
@@ -97,13 +113,13 @@ G4VPhysicalVolume* G4PGeometryObjectMap::LookUp(
     }
   }
 
-  return NULL;
+  return 0;
 }
 
 void G4PGeometryObjectMap::Add( HepRef(G4PVPhysicalVolume)  inGeomObj,
                                         G4VPhysicalVolume* outGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noPhysVol;i++)
   {
     if( persPhysVolPtrs[i] == inGeomObj )
@@ -120,7 +136,7 @@ void G4PGeometryObjectMap::Add( HepRef(G4PVPhysicalVolume)  inGeomObj,
 HepRef(G4PLogicalVolume) G4PGeometryObjectMap::LookUp(
                                       G4LogicalVolume* inGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noLogVol;i++)
   {
     if( transLogVolPtrs->Get(i) == inGeomObj )
@@ -129,15 +145,15 @@ HepRef(G4PLogicalVolume) G4PGeometryObjectMap::LookUp(
     }
   }
 
-  return NULL;
+  return 0;
 }
 
 void G4PGeometryObjectMap::Add(         G4LogicalVolume*  inGeomObj,
                                 HepRef(G4PLogicalVolume) outGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   HepRef(G4PLogicalVolume) aGeomObj = LookUp( inGeomObj );
-  if( aGeomObj == NULL )
+  if( aGeomObj == 0 )
   {
 //    assert( inGeomObj == aGeomObj );
     noLogVol++;
@@ -152,7 +168,7 @@ void G4PGeometryObjectMap::Add(         G4LogicalVolume*  inGeomObj,
 G4LogicalVolume* G4PGeometryObjectMap::LookUp(
                                HepRef(G4PLogicalVolume) inGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noLogVol;i++)
   {
     if( persLogVolPtrs[i] == inGeomObj )
@@ -161,13 +177,13 @@ G4LogicalVolume* G4PGeometryObjectMap::LookUp(
     }
   }
 
-  return NULL;
+  return 0;
 }
 
 void G4PGeometryObjectMap::Add( HepRef(G4PLogicalVolume)  inGeomObj,
                                         G4LogicalVolume* outGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noLogVol;i++)
   {
     if( persLogVolPtrs[i] == inGeomObj )
@@ -189,7 +205,7 @@ HepRef(G4PVSolid) G4PGeometryObjectMap::LookUp( G4VSolid* inGeomObj )
   cout << "  G4VSolid info: " << inGeomObj << G4endl;
 #endif
 
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noSolids;i++)
   {
 #ifdef G4PERSISTENCY_DEBUG
@@ -206,15 +222,15 @@ HepRef(G4PVSolid) G4PGeometryObjectMap::LookUp( G4VSolid* inGeomObj )
     }
   }
 
-  return NULL;
+  return 0;
 }
 
 void G4PGeometryObjectMap::Add(         G4VSolid*  inGeomObj,
                                 HepRef(G4PVSolid) outGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   HepRef(G4PVSolid) aGeomObj = LookUp( inGeomObj );
-  if( aGeomObj == NULL )
+  if( aGeomObj == 0 )
   {
 //    assert( inGeomObj == aGeomObj );
     noSolids++;
@@ -237,7 +253,7 @@ G4VSolid* G4PGeometryObjectMap::LookUp(
   inGeomObj.print(stdout);
 #endif
 
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noSolids;i++)
   {
 #ifdef G4PERSISTENCY_DEBUG
@@ -253,13 +269,13 @@ G4VSolid* G4PGeometryObjectMap::LookUp(
     }
   }
 
-  return NULL;
+  return 0;
 }
 
 void G4PGeometryObjectMap::Add( HepRef(G4PVSolid)  inGeomObj,
                                         G4VSolid* outGeomObj )
 {
-  assert(inGeomObj != NULL);
+  assert(inGeomObj != 0);
   for(G4int i=0;i<noSolids;i++)
   {
     if( persSolidPtrs[i] == inGeomObj )
@@ -281,7 +297,7 @@ G4VSolid* G4PGeometryObjectMap::GetSolid(G4int i)
   }
   else
   {
-    return NULL;
+    return 0;
   }
 }
 
@@ -293,7 +309,7 @@ HepRef(G4PVSolid) G4PGeometryObjectMap::GetPSolid(G4int i)
   }
   else
   {
-    return NULL;
+    return 0;
   }
 }
 
@@ -314,15 +330,15 @@ void G4PGeometryObjectMap::InitTransientMap()
   G4int i;
   for(i=0;i<noPhysVol;i++)
   {
-    transPhysVolPtrs->Insert(i, NULL);
+    transPhysVolPtrs->Insert(i, 0);
   }
   for(i=0;i<noLogVol;i++)
   {
-    transLogVolPtrs->Insert(i, NULL);
+    transLogVolPtrs->Insert(i, 0);
   }
   for(i=0;i<noSolids;i++)
   {
-    transSolidPtrs->Insert(i, NULL);
+    transSolidPtrs->Insert(i, 0);
   }
 
 }

@@ -1,28 +1,42 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.16 2001/02/05 17:45:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LowEnergyGammaConversion.cc,v 1.19.2.2 2001/06/28 20:19:29 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      GEANT4 Collaboration
 //      ------------ G4LowEnergyGammaConversion physics process --------
 //                   by A.Forti 1999/03/02
 //
 // 14.03.2000 Veronique Lefebure;
-// Change initialisation of LowestEnergyLimit from 1.22 to 1.022.
+// Change initialisation of lowestEnergyLimit from 1.22 to 1.022.
 // Note that the hard coded value 1.022 should be used instead of
 // 2*electron_mass_c2 in order to agree with the value of the data bank EPDL97
-//
+// 24.04.01 V.Ivanchenko remove RogueWave 
 // **************************************************************
 
 // This Class Header
@@ -43,14 +57,14 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
     theMeanFreePathTable(0),
     ZNumVec(0),
     //Use lowest limit of EPDL97 which is larger than 2*electron_mass_c2 = 1.02199812 MeV
-    LowestEnergyLimit (1.022000*MeV),
-    HighestEnergyLimit(100*GeV),
+    lowestEnergyLimit (1.022000*MeV),
+    highestEnergyLimit(100*GeV),
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
-     G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/GeV << "GeV " << G4endl;
+     G4cout << "lowestEnergy: " << lowestEnergyLimit/keV << "keV ";
+     G4cout << "highestEnergy: " << highestEnergyLimit/GeV << "GeV " << G4endl;
    }
 }
  
@@ -97,13 +111,14 @@ void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "pair/pp-cs-");
      
-     theCrossSectionTable->insert(oneAtomCS);
+    //     theCrossSectionTable->insert(oneAtomCS);
+     theCrossSectionTable->push_back(oneAtomCS);
    
   }//end for on atoms
 }
@@ -255,12 +270,19 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 // distribution with respect to the Z axis along the parent photon.
 
   G4double LocalEnerDeposit = 0. ;
-  aParticleChange.SetNumberOfSecondaries(2) ; 
   
+  aParticleChange.SetNumberOfSecondaries(2) ; 
   G4double ElectKineEnergy = G4std::max(0.,ElectTotEnergy - electron_mass_c2) ;
 
-  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, aMaterial)
-      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
+  //  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, aMaterial)
+  //      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
+  if((G4EnergyLossTables::GetRange(G4Electron::Electron(),
+        ElectKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
+         ||
+        (ElectKineEnergy >
+        (G4Electron::Electron()->GetCutsInEnergy())[aMaterial->GetIndex()]))
+
+      {
 
     G4ThreeVector ElectDirection ( dirx, diry, dirz );
     ElectDirection.rotateUz(GammaDirection);   
@@ -330,7 +352,7 @@ void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
   for ( G4int J = 0 ; J < NumbOfMaterials; J++ ) { // For each material 
   
     //create physics vector then fill it ....
-    ptrVector = new  G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit, NumbBinTable);
+    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, NumbBinTable);
     
     material = (*theMaterialTable)(J);
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -344,7 +366,7 @@ void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
       const G4double BigPath= DBL_MAX;
       G4double SIGMA = 0 ;
       
-      for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
 	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
 	const G4FirstLevel* oneAtomCS
@@ -383,10 +405,10 @@ G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle*
   for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
 
     G4double crossSection;
-    if (GammaEnergy <  LowestEnergyLimit)
+    if (GammaEnergy <  lowestEnergyLimit)
       crossSection = 0. ;
     else {
-      if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+      if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
 
       G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
       const G4FirstLevel* oneAtomCS

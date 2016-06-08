@@ -1,18 +1,32 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.12 2000/08/10 22:13:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4hIonisation.cc,v 1.13.2.2 2001/06/28 20:19:50 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4hIonisation physics process -----------
@@ -32,6 +46,7 @@
 //            simulate energy losses of ions; correction to
 //            cross section for particles with spin 1 is inserted
 //            as well
+// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
  
 
@@ -48,10 +63,10 @@ G4double G4hIonisation::Tmincut = 1.*keV  ;
  
 G4hIonisation::G4hIonisation(const G4String& processName)
    : G4VhEnergyLoss(processName),
-     theMeanFreePathTable(NULL),
+     theMeanFreePathTable(0),
+     theElectron ( G4Electron::Electron()),
      theProton (G4Proton::Proton()),
-     theAntiProton (G4AntiProton::AntiProton()),
-     theElectron ( G4Electron::Electron() )
+     theAntiProton (G4AntiProton::AntiProton())
 { }
      
 G4hIonisation::~G4hIonisation() 
@@ -119,7 +134,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
   G4double LowEdgeEnergy , ionloss ;
   G4double deltaloss ;
   G4double  RateMass ;
-  G4bool isOutRange ;
+  //G4bool isOutRange ;
   static const G4MaterialTable* theMaterialTable=
                                    G4Material::GetMaterialTable();
   const G4double twoln10 = 2.*log(10.) ;
@@ -182,7 +197,7 @@ void G4hIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
     DeltaCutInKineticEnergyNow = G4std::max(DeltaCutInKineticEnergy[J],Tmincut) ;
 
     // some local variables -------------------
-    G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
+    G4double tau,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
 
     // now comes the loop for the kinetic energy values*****************
 
@@ -295,7 +310,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
       G4double chargeSquare = Charge*Charge ;
       G4double LowEdgeEnergy , Value ,sigma ;
-      G4bool isOutRange ;
+      //G4bool isOutRange ;
       const G4MaterialTable* theMaterialTable=
                                          G4Material::GetMaterialTable();
 

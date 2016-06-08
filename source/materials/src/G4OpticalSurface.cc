@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4OpticalSurface.cc,v 1.4 1999/12/15 14:50:51 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4OpticalSurface.cc,v 1.5.2.1 2001/06/28 19:10:31 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -105,9 +121,9 @@ void G4OpticalSurface::DumpInfo() const
 	// Dump info for surface
 
 	G4cout << 
-        "  Surface type   = " << theType   << G4endl <<
-	"  Surface finish = " << theFinish << G4endl <<
-	"  Surface model  = " << theModel  << G4endl;
+        "  Surface type   = " << G4int(theType)   << G4endl <<
+	"  Surface finish = " << G4int(theFinish) << G4endl <<
+	"  Surface model  = " << G4int(theModel)  << G4endl;
 
 	G4cout << G4endl;
 

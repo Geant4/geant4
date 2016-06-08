@@ -1,10 +1,28 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
+//
+// $Id: G4PreCompoundProton.hh,v 1.6.2.1 2001/06/28 19:13:33 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // by V. Lara
 
@@ -12,53 +30,57 @@
 #define G4PreCompoundProton_h 1
 
 #include "G4VPreCompoundNucleon.hh"
-#include "G4DynamicParticle.hh"
+#include "G4ReactionProduct.hh"
 #include "G4Proton.hh"
 #include "G4PreCompoundParameters.hh"
 #include "Randomize.hh"
+
+#include "G4ProtonCoulombBarrier.hh"
 
 
 class G4PreCompoundProton : public G4VPreCompoundNucleon
 {
 public:
-	// default constructor
-	G4PreCompoundProton():G4VPreCompoundNucleon(1,1) {}
+  // default constructor
+  G4PreCompoundProton():G4VPreCompoundNucleon(1,1,&theProtonCoulombBarrier,"Proton") {}
 
-	// copy constructor
-	G4PreCompoundProton(const G4PreCompoundProton &right): G4VPreCompoundNucleon(right) {}
+  // copy constructor
+  G4PreCompoundProton(const G4PreCompoundProton &right): G4VPreCompoundNucleon(right) {}
 
-	// destructor
-	~G4PreCompoundProton() {};
+  // destructor
+  ~G4PreCompoundProton() {};
 
-	// operators  
-	const G4PreCompoundProton & operator=(const G4PreCompoundProton &right) {
-		if (&right != this) this->G4VPreCompoundNucleon::operator=(right);
-		return *this;
-	};
+  // operators  
+  const G4PreCompoundProton & operator=(const G4PreCompoundProton &right) {
+    if (&right != this) this->G4VPreCompoundNucleon::operator=(right);
+    return *this;
+  };
 
-	G4bool operator==(const G4PreCompoundProton &right) const
-	{ return G4VPreCompoundNucleon::operator==(right);}
+  G4bool operator==(const G4PreCompoundProton &right) const
+  { return G4VPreCompoundNucleon::operator==(right);}
 
   
-	G4bool operator!=(const G4PreCompoundProton &right) const
-	{ return G4VPreCompoundNucleon::operator!=(right);}
+  G4bool operator!=(const G4PreCompoundProton &right) const
+  { return G4VPreCompoundNucleon::operator!=(right);}
 
 
-	const G4DynamicParticle GetDynamicParticle() const
-	{
-		G4DynamicParticle theDynamicParticle(G4Proton::ProtonDefinition(),GetMomentum());
-      return theDynamicParticle;
-    }
+  G4ReactionProduct * GetReactionProduct() const
+  {
+    G4ReactionProduct * theReactionProduct = new G4ReactionProduct(G4Proton::ProtonDefinition());
+    theReactionProduct->SetMomentum(GetMomentum().vect());
+    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+    return theReactionProduct;
+  }
 
 
-	G4double ProbabilityDistributionFunction(const G4double & eKin, const G4Fragment & aFragment);
+  G4double ProbabilityDistributionFunction(const G4double & eKin, const G4Fragment & aFragment);
 
-	// Gives the kinetic energy for fragments in pre-equilibrium decay
-	G4double GetKineticEnergy(const G4Fragment & aFragment);
+  // Gives the kinetic energy for fragments in pre-equilibrium decay
+  G4double GetKineticEnergy(const G4Fragment & aFragment);
 
 private:
-
-	virtual G4double GetBarrierPenetrationFactor(const G4double aZ) const;
+		
+  G4ProtonCoulombBarrier theProtonCoulombBarrier;
 
 };
 

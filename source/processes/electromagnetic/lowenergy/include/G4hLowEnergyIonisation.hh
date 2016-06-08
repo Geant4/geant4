@@ -1,15 +1,29 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4hLowEnergyIonisation physics process -----
@@ -43,6 +57,7 @@
 // Nuclear stopping powers:    "ICRU_49" (default), "Ziegler1977",
 //                             "Ziegler1985"
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
+// and in the Physics Reference Manual
 
 // ------------------------------------------------------------
 
@@ -79,7 +94,7 @@ public: // With description
   // True for all charged hadrons/ions
     
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) ;
-  // Build physics table during inicialisation
+  // Build physics table during initialisation
 
   G4double GetMeanFreePath(const G4Track& track,
 			         G4double previousStepSize,
@@ -92,25 +107,26 @@ public: // With description
   void SetHighEnergyForProtonParametrisation(G4double energy) 
                              {protonHighEnergy = energy;} ;
   // Definition of the boundary proton energy. For higher energies
-  // Bethe-Bloch formula is used, for lower energies parametrisation
-  // of the energy losses is performed. 
+  // Bethe-Bloch formula is used, for lower energies a parametrisation
+  // of the energy losses is performed. Default is 2 MeV.
 
   void SetLowEnergyForProtonParametrisation(G4double energy) 
                              {protonLowEnergy = energy;} ;
-  // Definition of the boundary proton energy. For lower energies
-  // Free Electron Gas model is used for the energy losses
+  // Set of the boundary proton energy. For lower energies
+  // the Free Electron Gas model is used for the energy losses.
+  // Default is 1 keV.
 
   void SetHighEnergyForAntiProtonParametrisation(G4double energy) 
                              {antiProtonHighEnergy = energy;} ;
-  // Definition of the boundary antiproton energy. For higher energies
+  // Set of the boundary antiproton energy. For higher energies
   // Bethe-Bloch formula is used, for lower energies parametrisation
   // of the energy losses is performed. Default is 2 MeV.
 
   void SetLowEnergyForAntiProtonParametrisation(G4double energy) 
                               {antiProtonLowEnergy = energy;} ;
-  // Definition of the boundary antiproton energy. For lower energies
-  // Free Electron Gas model is used for the energy losses. Default
-  // is 1 keV.
+  // Set of the boundary antiproton energy. For lower energies
+  // the Free Electron Gas model is used for the energy losses. 
+  // Default is 1 keV.
 
   G4double GetContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
@@ -135,10 +151,10 @@ public: // With description
   // This method switch off calculation of the nuclear stopping power.
   
   void SetBarkasOn() {theBarkas = true;};
-  // This method switch on calculation of the Barkas and Bloch effects 
+  // This method switch on calculation of the Barkas and Bloch effects. 
   
   void SetBarkasOff() {theBarkas = false;};
-  // This method switch off calculation of the Barkas and Bloch effects
+  // This method switch off calculation of the Barkas and Bloch effects.
                                        
   G4VParticleChange* AlongStepDoIt(const G4Track& trackData , 
                                    const G4Step& stepData ) ;
@@ -146,7 +162,7 @@ public: // With description
 
   G4VParticleChange* PostStepDoIt(const G4Track& track,
 				  const G4Step& Step  ) ;                 
-  // Simulation of delta rays production
+  // Simulation of delta rays production.
     
   G4double ComputeDEDX(const G4ParticleDefinition* aParticle,
                        const G4Material* material,

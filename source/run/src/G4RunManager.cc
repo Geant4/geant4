@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4RunManager.cc,v 1.23 2001/04/05 09:18:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4RunManager.cc,v 1.25.2.1 2001/06/28 19:15:20 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 
@@ -69,8 +85,8 @@ G4RunManager::G4RunManager()
   randomNumberStatusDir = "./";
   G4cout 
   << "**********************************************" << G4endl
-  << " Geant4 version $Name: geant4-03-01 $" << G4endl
-  << "                                (06-Apr-2001)" << G4endl
+  << " Geant4 version $Name:  $" << G4endl
+  << "                                (29-Jun-2001)" << G4endl
   << "             Copyright : Geant4 Collaboration" << G4endl
   << "**********************************************" << G4endl;
 }

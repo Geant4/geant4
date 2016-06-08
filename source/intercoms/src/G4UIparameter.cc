@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4UIparameter.cc,v 1.4 1999/12/15 14:50:42 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4UIparameter.cc,v 1.5.2.1 2001/06/28 19:10:18 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 
 #include "G4UIparameter.hh"
@@ -537,7 +553,7 @@ Eval2(yystype arg1, int op, yystype arg2)
     if( (arg1.type != IDENTIFIER) && (arg2.type != IDENTIFIER)) {
         G4cerr << parameterName
              << ": meaningless comparison "
-             << arg1.type << " " << arg2.type << G4endl;
+             << int(arg1.type) << " " << int(arg2.type) << G4endl;
         paramERR = 1;
     }
     char type = toupper( parameterType );
@@ -590,7 +606,7 @@ Eval2(yystype arg1, int op, yystype arg2)
 int G4UIparameter::
 CompareInt(int arg1, int op, int arg2)
 {   
-    int result;
+    int result=-1;
     G4String opr;
     switch (op) {
        case GT:  result = ( arg1 >  arg2); opr= ">" ;  break;
@@ -615,7 +631,7 @@ CompareInt(int arg1, int op, int arg2)
 int G4UIparameter::
 CompareDouble(double arg1, int op, double arg2)
 {   
-    int result;
+    int result=-1;
     G4String opr;
     switch (op) {
         case GT:  result = ( arg1 >  arg2); opr= ">";   break;

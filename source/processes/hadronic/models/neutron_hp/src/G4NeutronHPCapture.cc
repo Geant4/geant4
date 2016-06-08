@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
@@ -10,6 +32,8 @@
 
   G4NeutronHPCapture::G4NeutronHPCapture()
   {
+    SetMinEnergy( 0.0 );
+    SetMaxEnergy( 20.*MeV );
 //    G4cout << "Capture : start of construction!!!!!!!!"<<G4endl;
     if(!getenv("NeutronHPCrossSections")) 
        G4Exception("Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
@@ -39,119 +63,40 @@
 //    G4cout << "Leaving G4NeutronHPCapture::~G4NeutronHPCapture"<<G4endl;
   }
   
+  #include "G4NeutronHPThermalBoost.hh"
   G4VParticleChange * G4NeutronHPCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   {
     G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
-    xSec = new G4double[n];
-    G4double sum=0;
-    G4int i, index;
-    const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
-    G4double rWeight;    
-    for (i=0; i<n; i++)
+    G4int index = theMaterial->GetElement(0)->GetIndex();
+    if(n!=1)
     {
-      index = theMaterial->GetElement(i)->GetIndex();
-      rWeight = NumAtomsPerVolume[i];
-      xSec[i] = theCapture[index].GetXsec(aTrack.GetKineticEnergy());
-      xSec[i] *= rWeight;
-      sum+=xSec[i];
-    }
-    G4double random = G4UniformRand();
-    G4double running = 0;
-    for (i=0; i<n; i++)
-    {
-      running += xSec[i];
-      index = theMaterial->GetElement(i)->GetIndex();
-      if(random<=running/sum) break;
-    }
-    delete [] xSec;
-    if(aTrack.GetKineticEnergy()<100*keV)
-    {
-      G4NeutronHPDeExGammas theGammas;
-      G4int aA = theMaterial->GetElement(i)->GetN();
-      G4int aZ = theMaterial->GetElement(i)->GetZ();
-      char the[100] = {""};
-      G4std::ostrstream ost(the, 100, G4std::ios::out);
-      ost
-      <<getenv("NeutronHPCrossSections")<<"/Inelastic/Gammas/"<<"z"<<aZ<<".a"<<aA;
-      G4String * aName = new G4String(the);
-#ifdef G4USE_STD_NAMESPACE
-      G4std::ifstream from(*aName, G4std::ios::in);
-#else
-      ifstream from(*aName, ios::in|ios::nocreate);
-#endif
-      G4std::ifstream theGammaData(*aName, G4std::ios::in);
-     
-      theGammas.Init(theGammaData);
-      G4double theGammaEnergy = aTrack.GetKineticEnergy();
-      theGammaEnergy+=G4Neutron::Neutron()->GetPDGMass();
-      theGammaEnergy+=
-             G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ,aA);
-      theGammaEnergy-=
-             G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ,aA+1);
-    
-      if(theGammaEnergy<1.1*theGammas.GetLevelEnergy(theGammas.GetNumberOfLevels()-1))
+      xSec = new G4double[n];
+      G4double sum=0;
+      G4int i, index;
+      const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+      G4double rWeight;    
+      G4NeutronHPThermalBoost aThermalE;
+      for (i=0; i<n; i++)
       {
-        G4ReactionProductVector * thePhotons = 0;
-        G4ReactionProductVector * theOtherPhotons = NULL;
-        G4int iLevel;
-        while(theGammaEnergy>=theGammas.GetLevelEnergy(0))
-        {
-          for(iLevel=theGammas.GetNumberOfLevels()-1; iLevel>=0; iLevel--)
-          {
-    	    if(theGammas.GetLevelEnergy(iLevel)<theGammaEnergy) break;
-          }
-          if(iLevel==0||iLevel==theGammas.GetNumberOfLevels()-1)
-          {
- 	    theOtherPhotons = theGammas.GetDecayGammas(iLevel);
-          }
-          else
-          {
-  	    G4double random = G4UniformRand();
-	    G4double eLow  = theGammas.GetLevelEnergy(iLevel);
-	    G4double eHigh = theGammas.GetLevelEnergy(iLevel+1);
-	    if(random > (eHigh-eLow)/(theGammaEnergy-eLow)) iLevel++;
-	    theOtherPhotons = theGammas.GetDecayGammas(iLevel);
-          }
-          if(thePhotons==NULL) thePhotons = new G4ReactionProductVector;
-          if(theOtherPhotons != NULL)
-          {
-            for(G4int ii=0; ii<theOtherPhotons->length(); ii++)
-            {
-              thePhotons->insert(theOtherPhotons->at(ii));
-            }
-            delete theOtherPhotons; 
-          }
-          theGammaEnergy -= theGammas.GetLevelEnergy(iLevel);
-          if(iLevel == -1) break;
-        }  
-      
-        // clean up the primary neutron
-        theResult.SetStatusChange(fStopAndKill);
-      
-        // fill particle change
-        theResult.Initialize(aTrack);
-        G4int nSecondaries = thePhotons->length();
-        theResult.SetNumberOfSecondaries(nSecondaries);
-        theResult.SetStatusChange(fStopAndKill);
-        G4DynamicParticle * theSec;
-        for(G4int gammaCount=0; gammaCount<nSecondaries; gammaCount++)
-        {
-          theSec = new G4DynamicParticle;    
-          theSec->SetDefinition(thePhotons->at(gammaCount)->GetDefinition());
-          theSec->SetMomentum(thePhotons->at(gammaCount)->GetMomentum());
-          theResult.AddSecondary(theSec); 
-          delete thePhotons->at(gammaCount);
-        }
-        delete thePhotons;
-      
-        // return   
-        if(0!=nSecondaries) return &theResult;
+        index = theMaterial->GetElement(i)->GetIndex();
+        rWeight = NumAtomsPerVolume[i];
+        xSec[i] = theCapture[index].GetXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+  		                                                     theMaterial->GetElement(i),
+  								     theMaterial->GetTemperature()));
+        xSec[i] *= rWeight;
+        sum+=xSec[i];
       }
-      return theCapture[index].ApplyYourself(aTrack);
+      G4double random = G4UniformRand();
+      G4double running = 0;
+      for (i=0; i<n; i++)
+      {
+        running += xSec[i];
+        index = theMaterial->GetElement(i)->GetIndex();
+        if(random<=running/sum) break;
+      }
+      if(i==n) i=G4std::max(0, n-1);
+      delete [] xSec;
     }
-    else
-    {
-      return theCapture[index].ApplyYourself(aTrack);
-    }
+    return theCapture[index].ApplyYourself(aTrack);
   }

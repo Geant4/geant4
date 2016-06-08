@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HELambdaInelastic.hh,v 1.4 2000/12/14 09:02:42 hpw Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4HELambdaInelastic.hh,v 1.6.4.1 2001/06/28 19:13:51 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -18,13 +34,6 @@
 #ifndef G4HELambdaInelastic_h
 #define G4HELambdaInelastic_h 1
 
-// Class Description
-// Final state production model for Lambda inelastic scattering above 20 GeV; 
-// To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
-// the corresponding process.
-// Class Description - End
-
 #include "G4HEInelastic.hh"
 
 class G4HELambdaInelastic : public G4HEInelastic  
@@ -32,7 +41,10 @@ class G4HELambdaInelastic : public G4HEInelastic
  public: 
         G4HELambdaInelastic() : G4HEInelastic()
            {
-             G4int    vecLen       = 0;
+              theMinEnergy =  20*GeV;
+              theMaxEnergy = 10*TeV;
+              MAXPART      = 2048;
+              verboseLevel = 0; 
            }
 
         ~G4HELambdaInelastic(){ };
@@ -43,8 +55,6 @@ class G4HELambdaInelastic : public G4HEInelastic
 
         G4int  GetNumberOfSecondaries()
                { return vecLength; }         
-
- private:
 
         void   FirstIntInCasLambda(G4bool &inElastic, const G4double availableEnergy,
                                    G4HEVector pv[],

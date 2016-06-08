@@ -1,12 +1,26 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Nucleus.cc,v 1.5 2000/08/03 08:50:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
 //
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -24,14 +38,38 @@
 #include "G4Nucleus.hh"
 #include "Randomize.hh"
  
- G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass) const
+G4ReactionProduct G4Nucleus::
+GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) const
+{
+  G4double velMag = aVelocity.mag();
+  G4ReactionProduct result;
+  G4double value = 0;
+  G4double random = 1;
+  G4double norm = 3.*sqrt(k_Boltzmann*temp*aMass*G4Neutron::Neutron()->GetPDGMass());
+  norm /= G4Neutron::Neutron()->GetPDGMass();
+  norm *= 5.;
+  norm += velMag;
+  norm /= velMag;
+  while(value/norm<random)
   {
+     result = GetThermalNucleus(aMass, temp);
+     G4ThreeVector targetVelocity = 1./result.GetMass()*result.GetMomentum();
+     value = (targetVelocity+aVelocity).mag()/velMag;
+     random = G4UniformRand();
+  }
+  return result;
+}
+
+G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double temp) const
+  {
+    G4double currentTemp = temp;
+    if(currentTemp < 0) currentTemp = theTemp;
     G4ReactionProduct theTarget;    
     theTarget.SetMass(targetMass*G4Neutron::Neutron()->GetPDGMass());
     G4double px, py, pz;
-    px = GetThermalPz(theTarget.GetMass(), theTemp);
-    py = GetThermalPz(theTarget.GetMass(), theTemp);
-    pz = GetThermalPz(theTarget.GetMass(), theTemp);
+    px = GetThermalPz(theTarget.GetMass(), currentTemp);
+    py = GetThermalPz(theTarget.GetMass(), currentTemp);
+    pz = GetThermalPz(theTarget.GetMass(), currentTemp);
     theTarget.SetMomentum(px, py, pz);
     G4double tMom = sqrt(px*px+py*py+pz*pz);
     G4double tEtot = sqrt((tMom+theTarget.GetMass())*

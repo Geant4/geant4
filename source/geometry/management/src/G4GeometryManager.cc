@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4GeometryManager.cc,v 1.2 1999/12/15 14:49:52 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4GeometryManager.cc,v 1.3.2.1 2001/06/28 19:08:30 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4GeometryManager
 //
@@ -70,10 +86,10 @@ void G4GeometryManager::BuildOptimisations(const G4bool allOpts)
      G4SmartVoxelHeader *head;
      G4int nVolumes,n;
      Store=G4LogicalVolumeStore::GetInstance();
-     nVolumes=Store->entries();
+     nVolumes=Store->size();
      for (n=0;n<nVolumes;n++)
 	 {
-	     volume=Store->operator()(n);
+	     volume=(*Store)[n];
 // For safety, check if there are any existing voxels and delete before
 // replacement
 	     head = volume->GetVoxelHeader();
@@ -126,10 +142,10 @@ void G4GeometryManager::DeleteOptimisations()
      G4LogicalVolume *volume;
      G4SmartVoxelHeader *head;
      G4int nVolumes,n;
-     nVolumes=Store->entries();
+     nVolumes=Store->size();
      for (n=0;n<nVolumes;n++)
 	 {
-	     volume=Store->operator()(n);
+	     volume=(*Store)[n];
 	     head=volume->GetVoxelHeader();
 	     if (head)
 		 {

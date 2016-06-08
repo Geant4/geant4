@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Fragment.cc,v 1.8.2.1 2000/11/23 08:31:22 hpw Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Fragment.cc,v 1.9.2.1 2001/06/28 19:13:48 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -21,7 +37,7 @@ G4Fragment::G4Fragment() :
   theExcitationEnergy(0.0),
   theMomentum(0),
   theAngularMomentum(0),
-  numberOfExcitons(0),
+  numberOfParticles(0),
   numberOfHoles(0),
   numberOfCharged(0),
   theParticleDefinition(0),
@@ -38,7 +54,7 @@ G4Fragment::G4Fragment(const G4Fragment &right)
    theExcitationEnergy = right.theExcitationEnergy;
    theMomentum  = right.theMomentum;
    theAngularMomentum = right.theAngularMomentum;
-   numberOfExcitons = right.numberOfExcitons;
+   numberOfParticles = right.numberOfParticles;
    numberOfHoles = right.numberOfHoles;
    numberOfCharged = right.numberOfCharged;
    theParticleDefinition = right.theParticleDefinition;
@@ -55,7 +71,7 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
   theA(A),
   theZ(Z),
   theMomentum(aMomentum),
-  numberOfExcitons(0),
+  numberOfParticles(0),
   numberOfHoles(0),
   numberOfCharged(0),
   theParticleDefinition(0),
@@ -79,7 +95,7 @@ G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * a
   theA(0),
   theZ(0),
   theMomentum(aMomentum),
-  numberOfExcitons(0),
+  numberOfParticles(0),
   numberOfHoles(0),
   numberOfCharged(0),
   theParticleDefinition(aParticleDefinition),
@@ -92,40 +108,6 @@ G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * a
 
 
 
-// G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, 
-// 		       const G4LorentzVector aMomentum, 
-// 		       const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, 
-// 		       const G4int aNumberOfHoles, const G4int aNumberOfCharged) : 
-//   theA(A),
-//   theZ(Z),
-//   theExcitationEnergy(anExEnergy),
-//   theMomentum(aMomentum),
-//   theAngularMomentum(anAngularMomentum),
-//   numberOfExcitons(aNumberOfExcitons),
-//   numberOfHoles(aNumberOfHoles),
-//   numberOfCharged(aNumberOfCharged),
-//   theParticleDefinition(0)
-// {}
-
-// G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4double anExEnergy, 
-// 		       const G4LorentzVector aMomentum, 
-// 		       const G4ThreeVector anAngularMomentum, const G4int aNumberOfExcitons, 
-// 		       const G4int aNumberOfHoles, const G4int aNumberOfCharged,
-// 		       G4ParticleDefinition * aParticleDefinition) : 
-//   theA(A),
-//   theZ(Z),
-//   theExcitationEnergy(anExEnergy),
-//   theMomentum(aMomentum),
-//   theAngularMomentum(anAngularMomentum),
-//   numberOfExcitons(aNumberOfExcitons),
-//   numberOfHoles(aNumberOfHoles),
-//   numberOfCharged(aNumberOfCharged),
-//   theParticleDefinition(aParticleDefinition)
-// {}
-
-
-
-
 const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
 {
   if (this != &right) {
@@ -134,7 +116,7 @@ const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theExcitationEnergy = right.theExcitationEnergy;
     theMomentum  = right.theMomentum;
     theAngularMomentum = right.theAngularMomentum;
-    numberOfExcitons = right.numberOfExcitons;
+    numberOfParticles = right.numberOfParticles;
     numberOfHoles = right.numberOfHoles;
     numberOfCharged = right.numberOfCharged;
     theParticleDefinition = right.theParticleDefinition;
@@ -175,10 +157,10 @@ G4std::ostream& operator << (G4std::ostream &out, const G4Fragment *theFragment)
 
   // What about Angular momentum???
 
-  if (theFragment->numberOfExcitons != 0) {
+  if (theFragment->GetNumberOfExcitons() != 0) {
     out << G4endl;
     out << "          " 
-	<< "#Excitons = " << theFragment->numberOfExcitons 
+	<< "#Particles = " << theFragment->numberOfParticles 
 	<< ", #Holes = "   << theFragment->numberOfHoles
 	<< ", #Charged = " << theFragment->numberOfCharged;
   }

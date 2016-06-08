@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ReplicaNavigation.cc,v 1.8 2001/03/09 15:32:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ReplicaNavigation.cc,v 1.9.2.1 2001/06/28 19:09:44 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -331,7 +347,7 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
 	    {
 	      // Leaving immediately by starting phi
 	      //
-	      Dist=0;
+	      Dist=(compE<0) ? 0 : kInfinity;
 	    }
 	}
       else
@@ -639,12 +655,12 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 			localDirection);
       if (sampleStep<ourStep)
 	{
+	  if ((sampleStep == 0) && (sampleSafety<0.5*kCarTolerance))
+	    ourStep=sampleStep+kCarTolerance;
+	  else
+	    ourStep=sampleStep;
 	  exiting=true;
 	  validExitNormal=false;
-	  if (sampleStep != 0)
-	    ourStep=sampleStep;
-	  else
-	    ourStep=sampleStep+kCarTolerance;
 	}
     }
 

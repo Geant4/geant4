@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PropagatorInField.hh,v 1.10.4.1 2001/02/20 18:23:31 japost Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PropagatorInField.hh,v 1.15.2.1 2001/06/28 19:09:40 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // class G4PropagatorInField 
@@ -73,12 +89,6 @@ class G4PropagatorInField
    inline G4bool         IsParticleLooping() const;
      // Return the state after the Step
 
-   inline G4double  DeltaIntersection() const; 
-     // The accuracy of finding an intersection
-
-   G4double  DeltaOneStep();
-     // The accuracy of a single Step
-
    inline G4double  GetEpsilonStep() const;
      // Relative accuracy for current Step (Calc.)
    inline void      SetEpsilonStep(G4double newEps);
@@ -100,13 +110,14 @@ class G4PropagatorInField
      // Accuracy for one tracking/physics step.
                                     
    inline void    SetAccuraciesWithDeltaOneStep(G4double deltaOneStep);  
-     // Sets both accuracies, maintaining a particular ratio
-     // for accuracties of volume Intersection and Integration (in One Step)
+     // Sets both accuracies for the Global (Detector) field, 
+     // maintaining a particular ratio for accuracties 
+     // of volume Intersection and Integration (in One Step).
 
-   inline void    SetDeltaOneStep(G4double deltaOneStep);  
-     // Set accuracy for integration of one step.   (only)
    inline void    SetDeltaIntersection(G4double deltaIntersection);
      // Set accuracy of  intersection of a volume.  (only)
+   inline void    SetDeltaOneStep(G4double deltaOneStep);  
+     // Set accuracy for integration of one step.   (only)
 
    inline G4int   GetMaxLoopCount() const;
    inline void    SetMaxLoopCount(G4int new_max);
@@ -122,6 +133,10 @@ class G4PropagatorInField
      // Print Method - useful mostly for debugging.
 
    inline G4FieldTrack GetEndState() const;
+
+     // Minimum for Relative accuracy of any Step 
+   inline G4double  GetMinimumEpsilonStep() const;
+   inline void      SetMinimumEpsilonStep(G4double newEpsMin);
 
  public:  // without description
 
@@ -147,7 +162,10 @@ class G4PropagatorInField
  private:
 
    G4FieldManager *fDetectorFieldMgr; 
-     // The  Field Manager of the whole Detector.
+     // The  Field Manager of the whole Detector.  (default)
+
+   G4FieldManager *fCurrentFieldMgr;
+     // The  Field Manager of the current volume (may be the one above.)
 
    G4Navigator   *fNavigator;
 
@@ -165,15 +183,12 @@ class G4PropagatorInField
    G4int  fVerboseLevel;
      // For debuging purposes
 
-   //  Values for the required accuracies
-   //
-   G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
-   G4double  fDelta_Intersection_Val;    //  for boundary intersection
+   //  Values for the small possible relative accuracy of a step
+   //       (corresponding to the greatest possible integration accuracy)
 
-   //  Their default values ...  (set in G4PropagatemagField.cc)
-   //
-   static const G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
-   static const G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
+     // Minimum for Relative accuracy of any Step 
+   G4double  fEpsilonMin; 
+   static const G4double  fEpsilonMinDefault;               // 1.0e-10 ;  
 
    G4int  fmax_loop_count;
 
@@ -191,3 +206,5 @@ class G4PropagatorInField
 #include "G4PropagatorInField.icc"
 
 #endif 
+
+

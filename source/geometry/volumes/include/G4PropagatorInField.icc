@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PropagatorInField.icc,v 1.13.4.1 2001/02/20 18:23:32 japost Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PropagatorInField.icc,v 1.18.2.2 2001/06/28 20:18:53 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ------------------------------------------------------------------------
 //	GEANT 4  include file implementation
 //
-//	For information related to this code contact:
-//	GEANT4 Collaboration
 // ------------------------------------------------------------------------
 // 
 // 25.10.96 John Apostolakis, design and implementation 
@@ -28,13 +42,12 @@
 inline
 G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator, 
 		                         G4FieldManager *detectorFieldMgr)
-  : fDetectorFieldMgr(detectorFieldMgr),
+  : fDetectorFieldMgr(detectorFieldMgr), 
+    fCurrentFieldMgr(detectorFieldMgr), 
     fNavigator(theNavigator),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
-			G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0),
+			G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fVerboseLevel(0),
-    fDelta_One_Step_Value(fDefault_Delta_One_Step_Value),
-    fDelta_Intersection_Val(fDefault_Delta_Intersection_Val),
     fmax_loop_count(10000)
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
@@ -51,7 +64,7 @@ G4ChordFinder* G4PropagatorInField::GetChordFinder()
 {
       // Now only the "Chord Finder" of the global Field Mgr is used
       //  ... 
-      return fDetectorFieldMgr->GetChordFinder(); 
+      return fCurrentFieldMgr->GetChordFinder(); 
 }
 
 inline
@@ -110,33 +123,36 @@ void     G4PropagatorInField::SetMaxLoopCount(G4int new_max)
 inline
 G4double G4PropagatorInField::GetDeltaIntersection() const
 {
-  return fDelta_Intersection_Val;
+      return fCurrentFieldMgr->GetDeltaIntersection();
 } 
 
 inline
 G4double G4PropagatorInField::GetDeltaOneStep() const
 {
-  return fDelta_One_Step_Value;
-}                                    
+      return fCurrentFieldMgr->GetDeltaOneStep();
+}
 
 inline
 void
 G4PropagatorInField::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
 { 
-  fDelta_One_Step_Value= valDeltaOneStep;  
-  fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
+   fDetectorFieldMgr->SetAccuraciesWithDeltaOneStep(valDeltaOneStep);
+   //  this->SetDeltaOneStep(valDeltaOneStep);
+   // this->SetDeltaIntersection( 0.4 * fDelta_One_Step_Value);
 }
 
 inline
 void G4PropagatorInField::SetDeltaOneStep(G4double valDeltaOneStep)
 { 
-  fDelta_One_Step_Value= valDeltaOneStep;  
+   fDetectorFieldMgr->SetDeltaOneStep( valDeltaOneStep); 
+   // fCurrentFieldMgr->SetDeltaOneStep( valDeltaOneStep);  
 }
 
 inline
 void G4PropagatorInField::SetDeltaIntersection(G4double valDeltaIntersection)
 {
-  fDelta_Intersection_Val = valDeltaIntersection;
+  fDetectorFieldMgr->SetDeltaIntersection(valDeltaIntersection);
+   // fCurrentFieldMgr->SetDeltaOneStep( valDeltaOneStep); 
 }
 
 inline
@@ -155,4 +171,18 @@ inline
 G4FieldTrack G4PropagatorInField::GetEndState() const
 {
   return End_PointAndTangent;
+}
+
+// Minimum for Relative accuracy of any Step 
+inline 
+G4double  G4PropagatorInField::GetMinimumEpsilonStep() const
+{
+  return fEpsilonMin; 
+}
+
+inline 
+void      G4PropagatorInField::SetMinimumEpsilonStep(G4double newEpsMin)
+{
+  if( (newEpsMin > 0.0) && (fabs(1.0+newEpsMin)>1.0) )
+    fEpsilonMin= newEpsMin;
 }

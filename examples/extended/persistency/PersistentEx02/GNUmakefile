@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 1999/12/01 15:29:08 morita Exp $
+# $Id: GNUmakefile,v 1.5 2001/03/15 22:57:02 morita Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -10,25 +10,23 @@ name := PersistentEx02
 G4ODBMS := true
 G4TARGET := $(name)
 G4EXLIB := true
+PWD := $(shell (dirname `pwd`/dummy | sed -e 's/ //g'))
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../..
+  G4INSTALL = $(PWD)/../../../..
 endif
 
-.PHONY: all doall
+.PHONY: all
 
-all: cleandb headers
-	@(G4ODBMS_DEPEND=1; export G4ODBMS_DEPEND; $(MAKE) doall)
-
-doall: lib bin
+all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
 G4OODDLX_BOOT := $(G4EXAMPLE_BOOT)
 
-include $(G4INSTALL)/config/binmake.gmk
-
   CPPFLAGS += \
-              -Iinclude \
+              -I$(PWD)/include \
               -I$(G4TMPDIR)
+
+include $(G4INSTALL)/config/binmake.gmk
 

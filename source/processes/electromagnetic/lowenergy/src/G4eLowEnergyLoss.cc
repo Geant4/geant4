@@ -1,18 +1,32 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.7 2000/09/20 16:49:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4eLowEnergyLoss.cc,v 1.9.2.2 2001/06/28 20:19:32 gunter Exp $
+// GEANT4 tag $Name:  $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4eLowEnergyLoss physics process -----------
@@ -41,7 +55,7 @@
 #include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 // Initialisation of static data members
 // -------------------------------------
@@ -90,29 +104,29 @@ G4double         G4eLowEnergyLoss::LOGRTable ;
 
 G4EnergyLossMessenger* G4eLowEnergyLoss::eLossMessenger         = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
  
 // constructor and destructor
  
 G4eLowEnergyLoss::G4eLowEnergyLoss(const G4String& processName)
    : G4VeLowEnergyLoss (processName),
      theLossTable(0),
-     theDEDXTable(0),
-     Charge(-1.),lastCharge(0.),
      MinKineticEnergy(1.*eV),
+     Charge(-1.),lastCharge(0.),
+     theDEDXTable(0),
      //linLossLimit(0.02)
-     linLossLimit(0.05),
+     CounterOfProcess(0),
      RecorderOfProcess(0),
      fdEdx(0),
      fRangeNow(0),
-     CounterOfProcess(0)
+     linLossLimit(0.05)
 {
  
  //create (only once) EnergyLoss messenger 
  if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4eLowEnergyLoss::~G4eLowEnergyLoss() 
 {
@@ -123,7 +137,7 @@ G4eLowEnergyLoss::~G4eLowEnergyLoss()
        }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//     
 
 void G4eLowEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
@@ -308,7 +322,7 @@ void G4eLowEnergyLoss::BuildDEDXTable(
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
       
 G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
                                                  const G4Step&  stepData)
@@ -324,7 +338,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   //  G4cout << "MGP -- Along eInit " << E/keV << " keV " << G4endl;
   
   G4Material* aMaterial = trackData.GetMaterial();
-  G4int index = aMaterial->GetIndex();
+  //  G4int index = aMaterial->GetIndex();
   
   G4double Step = stepData.GetStepLength();
 
@@ -386,6 +400,6 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   return &fParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 

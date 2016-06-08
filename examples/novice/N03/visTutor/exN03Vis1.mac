@@ -3,11 +3,13 @@
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
-#  DATE: November 10, 1999                                            #
-#        May      20, 2000                                            # 
-#        June     06, 2000                                            # 
-#        October  17, 2000                                            # 
+#  DATE:                                                              #
+#        June     20, 2001                                            #
 #        November 26, 2000                                            #
+#        October  17, 2000                                            # 
+#        June     06, 2000                                            # 
+#        May      20, 2000                                            # 
+#        November 10, 1999                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of detector geometry     #
 #                                                                     #
@@ -33,7 +35,7 @@
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
 #  ADDITIONAL NOTES:                                                  #
-#    The compound command "/vis/open <graphics-system-name>"          #
+#    The compound command "/vis/open <vis-driver-name>"               #
 #    is equivalent to the following set of commands:                  #
 #                                                                     #
 #      /vis/sceneHandler/create $1                                    #
@@ -47,11 +49,10 @@
 #      /vis/sceneHandler/attach                                       #
 #      /vis/viewer/refresh                                            #
 #                                                                     #
-#    WARNING: You need one more command "/vis/viewer/update" for      #
-#             flushing in using post-processin visualization drivers  #
+#    WARNING: You should execute "/vis/viewer/update"  after          #
+#             "/vis/drawVolume" in order to complete visualization    #
+#             when you use  post-processin visualization drivers      #
 #             such as the DAWNFILE, VRMLFILE, OpenGL Motif drivers.   #
-#             You can execute, e.g. "/vis/draw/axes" before executing #
-#             "/vis/viewer/update" to visualize coordinate axes.      #
 #                                                                     #
 #######################################################################
 
@@ -65,16 +66,16 @@
 
 # Visualize the detector geometry 
 #  with the defalut camera parameters
-/vis/camera/reset
+/vis/viewer/reset
 /vis/drawVolume
 /vis/viewer/update
 
 # Slide show (spinning) of the view visualized above.
 #  Draw 60 frames with steps of 3 degrees.
-/vis/camera/reset
-/vis/camera/viewpoint  20 20
-/vis/camera/zoom       0.8 
-/vis/camera/spin       60 3
+/vis/viewer/reset
+/vis/viewer/viewpointThetaPhi  20 20
+/vis/viewer/zoom               0.8 
+/vis/camera/spin               60 3
 
 # Bird's-eye view of the detector geometry 
 #
@@ -84,15 +85,14 @@
 #     x-axis:red,  y-axis:green,  z-axis:blue
 #     origin: (0,0,0),  length: 500
 #
-/vis/camera/reset
-/vis/camera/viewpoint  20 70
-/vis/camera/zoom       0.8 
+/vis/viewer/reset
+/vis/viewer/viewpointThetaPhi  20 70
+/vis/viewer/zoom               0.8 
 /vis/drawVolume
-/vis/draw/axes         0 0 0 500
 /vis/viewer/update
 
 ##########################################################
-# Visualization with DAWNFILE driver
+# Visualization with the DAWNFILE driver
 #
 #  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
@@ -100,7 +100,7 @@
 #  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel 
-#    or by editing the file by hand.
+#    or by editing the EPS file by hand.
 #
 #  * Set an environmental variable if you wish to 
 #    skip DAWN GUI:
@@ -112,43 +112,52 @@
 
 # Bird's-eye view of a detector component (Absorber)
 #  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
-#  zoom factor: 0.9 of the full screen size
+#  zoom factor: 1.1 of the full screen size
 #  coordinate axes:
 #     x-axis:red,  y-axis:green,  z-axis:blue
 #     origin: (0,0,0),  length: 500
 #
-/vis/camera/reset
-/vis/camera/zoom       0.9 
-/vis/camera/viewpoint  35 35
-/vis/drawVolume        Absorber 
-/vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm  50 -100 -200   Absorber 
+/vis/viewer/reset
+/vis/viewer/zoom               1.1
+/vis/viewer/viewpointThetaPhi  35 35
+/vis/scene/create                                              
+/vis/scene/add/volume    Absorber 
+/vis/scene/add/axes      0 0 0 500
+/vis/scene/add/text      0 0 0 mm  40 -100 -120   Absorber 
+/vis/sceneHandler/attach
+/vis/viewer/refresh
 /vis/viewer/update
 
 # Bird's-eye view of a detector component (Gap)
-/vis/camera/reset
-/vis/camera/zoom       0.9 
-/vis/camera/viewpoint  35 35
-/vis/drawVolume        Gap 
-/vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm 50 -100 -200   Gap
+/vis/viewer/reset
+/vis/viewer/zoom               1.1
+/vis/viewer/viewpointThetaPhi  35 35
+/vis/scene/create                                              
+/vis/scene/add/volume     Gap 
+/vis/scene/add/axes  	  0 0 0 500
+/vis/scene/add/text       0 0 0 mm  50 -100 -120   Gap 
+/vis/sceneHandler/attach
+/vis/viewer/refresh
 /vis/viewer/update
 
 # Bird's-eye view of the whole detector components
 #  * The argument "world" of the command 
 #    "/vis/scene/add/volume" is omittable.
-#  * "/vis/set/culling off" makes the invisible 
+#  * "/vis/viewer/set/culling false" makes the invisible 
 #    world volume visible.
 #    (The invisibility of the world volume is set 
 #     in ExN03DetectorConstruction.cc.)
-/vis/camera/reset
-/vis/camera/zoom       0.9 
-/vis/camera/viewpoint  35 35
-/vis/set/culling       off
-/vis/drawVolume
-/vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm 50 -50 -200   world
+/vis/viewer/reset
+/vis/viewer/zoom               1.1
+/vis/viewer/viewpointThetaPhi  35 35
+/vis/viewer/set/culling         global false
+/vis/scene/create                                              
+/vis/scene/add/volume 
+/vis/scene/add/axes      0 0 0 500
+/vis/scene/add/text      0 0 0 mm 50 -100 -190   World
+/vis/sceneHandler/attach
+/vis/viewer/refresh
 /vis/viewer/update
 
 # Make the culling on for next visualization
-/vis/set/culling       on
+/vis/viewer/set/culling       global true

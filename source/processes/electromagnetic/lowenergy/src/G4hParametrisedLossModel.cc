@@ -1,16 +1,30 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
-// For information related to this code contact:
-// Geant4 Collaboration
 //
 // File name:     G4hParametrisedLossModel
 //
@@ -22,6 +36,7 @@
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/08/2000  V.Ivanchenko TRIM85 model is added
 // 03/10/2000  V.Ivanchenko CodeWizard clean up
+// 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
 //
 // Class Description: 
 //
@@ -102,6 +117,8 @@ void G4hParametrisedLossModel::InitializeMe()
     highEnergyLimit = 2.0*MeV;
     lowEnergyLimit  = 1.0*keV;
   }  
+  //G4cout << "G4hParametrisedLossModel: the model <" << modelName 
+  //       << "> is accepted" << G4endl;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -135,6 +152,9 @@ G4double G4hParametrisedLossModel::TheValue(
                         * proton_mass_c2/(aParticle->GetPDGMass());
 
   G4double eloss = StoppingPower(material,scaledEnergy) * theZieglerFactor; 
+
+  // G4cout << "G4hParametrisedLossModel: the model <" << modelName 
+  //       << "> return " << eloss*mm/MeV << G4endl;
 
   return eloss;
 }
@@ -196,7 +216,7 @@ G4double G4hParametrisedLossModel::StoppingPower(
                           const G4Material* material,
                                 G4double kineticEnergy) 
 {
-  G4double eloss = 0.0, eloss125 = 0.0;
+  G4double eloss = 0.0;
   const G4int numberOfElements = material->GetNumberOfElements() ;
   const G4double* theAtomicNumDensityVector =
                                  material->GetAtomicNumDensityVector() ;
@@ -344,7 +364,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   } ;
 
   // Search for the compaund in the table
-  for (G4int i=0; i<numberOfMolecula; i++)
+  for (size_t i=0; i<numberOfMolecula; i++)
     { 
       if(chFormula == name[i]) { 
         G4double exp125 = expStopping[i] * 

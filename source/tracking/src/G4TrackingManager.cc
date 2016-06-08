@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4TrackingManager.cc,v 1.7 2001/02/09 01:35:06 tsasaki Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4TrackingManager.cc,v 1.8.2.1 2001/06/28 19:15:31 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 //---------------------------------------------------------------
@@ -21,11 +37,9 @@
 //---------------------------------------------------------------
 
 #include "G4TrackingManager.hh"
-#include "G4TrackingMessenger.hh"
 #include "G4Trajectory.hh"
 #include "G4ios.hh"
 
-G4TrackingMessenger * messenger;
 //////////////////////////////////////
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////

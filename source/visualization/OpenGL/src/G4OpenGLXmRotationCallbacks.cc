@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.8 2001/01/25 12:09:57 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.10.2.1 2001/06/28 19:15:46 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -30,10 +46,10 @@ void G4OpenGLXmViewer::theta_rotation_callback (Widget w,
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->rotate_right = G4OpenGLXmViewer::get_boolean_userData (w);
+  pView->rotate_right = get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
-    G4OpenGLXmViewer::rotate_in_theta (pView, NULL);
+    rotate_in_theta (pView, NULL);
   } else if (cbs->reason == XmCR_DISARM) {
     XtRemoveTimeOut (pView->rotation_timer);
   }
@@ -88,7 +104,7 @@ void G4OpenGLXmViewer::rotate_in_theta (XtPointer clientData,
   pView->rotation_timer = XtAppAddTimeOut 
     (pView->app,
      timer_id == NULL ? 500 : 1,
-     G4OpenGLXmViewer::rotate_in_theta,
+     rotate_in_theta,
      pView);
 }  
 
@@ -99,10 +115,10 @@ void G4OpenGLXmViewer::phi_rotation_callback (Widget w,
   XmArrowButtonCallbackStruct *cbs = (XmArrowButtonCallbackStruct*) callData;
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
 
-  pView->rotate_up = G4OpenGLXmViewer::get_boolean_userData (w);
+  pView->rotate_up = get_boolean_userData (w);
 
   if (cbs->reason == XmCR_ARM) {
-    G4OpenGLXmViewer::rotate_in_phi (pView, NULL);
+    rotate_in_phi (pView, NULL);
   } else if (cbs->reason == XmCR_DISARM) {
     XtRemoveTimeOut (pView->rotation_timer);
   }
@@ -154,7 +170,7 @@ void G4OpenGLXmViewer::rotate_in_phi (XtPointer clientData,
   pView->rotation_timer = XtAppAddTimeOut 
     (pView->app,
      timer_id == NULL ? 500 : 1,
-     G4OpenGLXmViewer::rotate_in_phi,
+     rotate_in_phi,
      pView);
 }
 
@@ -190,7 +206,7 @@ void G4OpenGLXmViewer::set_rot_subject_callback (Widget w,
 {
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   
-  G4int choice = G4OpenGLXmViewer::get_int_userData (w);
+  G4int choice = get_int_userData (w);
   
   switch (choice) {
   case 0: 
@@ -224,7 +240,7 @@ void G4OpenGLXmViewer::wobble_callback (Widget w,
   pView->wobble_timer = XtAppAddTimeOut
     (pView->app,
      (long unsigned int) (1000. * (1. / pView->wob_sens)),
-     G4OpenGLXmViewer::wobble_timer_callback,
+     wobble_timer_callback,
      pView);
 }  
 
@@ -233,7 +249,6 @@ void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
 {
   G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*)clientData;
   const G4Vector3D& up = pView->fVP.GetUpVector();
-  const G4Vector3D& vp = pView->fVP.GetViewpointDirection();
   G4Vector3D third_axis = up.cross(pView->original_vp);
   G4double pi_div_by_ten = M_PI / 10.0;
   G4Vector3D d_up = 0.1 * (sin ((G4double)pView->frameNo * pi_div_by_ten * 2.)) * up;
@@ -258,7 +273,7 @@ void G4OpenGLXmViewer::wobble_timer_callback (XtPointer clientData,
     pView->wobble_timer = XtAppAddTimeOut
       (pView->app,
        (long unsigned int) (1000. * (1. / pView->wob_sens)),
-       G4OpenGLXmViewer::wobble_timer_callback,
+       wobble_timer_callback,
        pView);
   }
 }

@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LogicalVolume.hh,v 1.6 2000/11/01 15:39:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LogicalVolume.hh,v 1.7.2.1 2001/06/28 19:08:25 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // class G4LogicalVolume
@@ -39,7 +55,7 @@
 //
 // Data members:
 //
-//    G4RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters
+//    G4std::vector<G4VPhysicalVolume*> fDaughters
 //    - Vector of daughters. Given initial size of 0.
 //    G4FieldManager *fFieldManager
 //    - Pointer (possibly NULL) to (magnetic or other) field manager object.
@@ -68,6 +84,7 @@
 //    - Weight used in the event biasing technique.
 
 // History:
+// 18.04.01 G.Cosmo: Migrated to STL vector
 // 12.02.99 S.Giani: Added user defined optimisation quality
 // 09.11.98 J. Apostolakis:  Changed G4MagneticField to G4FieldManager
 // 09.11.98 M. Verderi & JA. : added  BiasWeight member and Get/Set methods
@@ -82,7 +99,7 @@
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"	// Need operator == for vector fdaughters
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include <assert.h>
 
 // Forward declarations
@@ -97,6 +114,8 @@ class G4FastSimulationManager;
 
 class G4LogicalVolume
 {
+  typedef G4std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
+
   public:  // with description
   
     G4LogicalVolume(G4VSolid *pSolid, G4Material *pMaterial,
@@ -206,7 +225,7 @@ class G4LogicalVolume
 
     // Data members:   
 
-    G4RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters;    
+    G4PhysicalVolumeList fDaughters;
       // Vector of daughters. Given initial size of 0.
     G4FieldManager *fFieldManager;
       // Pointer (possibly NULL) to (magnetic or other) field manager object.

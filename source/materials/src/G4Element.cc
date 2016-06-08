@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Element.cc,v 1.4 2001/03/12 17:48:48 maire Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Element.cc,v 1.7.2.1 2001/06/28 19:10:30 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -23,6 +39,8 @@
 // 09-07-98: Ionisation parameters removed from the class, M.Maire
 // 16-11-98: name Subshell -> Shell; GetBindingEnergy() (mma)
 // 09-03-01: assignement operator revised (mma)
+// 02-05-01: check identical Z in AddIsotope (marc)
+// 03-05-01, flux.precision(prec) at begin/end of operator<<
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -39,16 +57,16 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
                      G4double zeff, G4double aeff)
 :fName(name),fSymbol(symbol)		     
 {
-    if (zeff<1.) G4Exception
-      (" ERROR! It is not allowed to create an Element with Z < 1" );
+    if (zeff<1.) G4Exception (" ERROR from G4Element::G4Element !"
+       " It is not allowed to create an Element with Z < 1" );
 
-    if (aeff/(g/mole)<zeff) G4Exception
-      (" ERROR! Attempt to create an Element with N < Z !!!" );
+    if (aeff/(g/mole)<zeff) G4Exception (" ERROR from G4Element::G4Element !"
+       " Attempt to create an Element with N < Z !!!" );
 
     if ((zeff-G4int(zeff)) > perMillion)
-      G4cerr << name <<
-      " : WARNING ! Trying to define an element as a mixture directly via effective Z."
-           << G4endl;
+      G4cerr << name << " : WARNING from G4Element::G4Element !"  
+         " Trying to define an element as a mixture directly via effective Z."
+         << G4endl;
 
     InitializePointers();
 
@@ -96,27 +114,31 @@ G4Element::G4Element(const G4String& name, const G4String& symbol, G4int nIsotop
 void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
     if (theIsotopeVector == NULL)
-       G4Exception("ERROR!!! - Trying to add an Isotope before contructing the element.");
+       G4Exception ("ERROR from G4Element::AddIsotope!"
+       " Trying to add an Isotope before contructing the element.");
 
     // filling ...
     if ( fNumberOfIsotopes < theIsotopeVector->length() ) {
+       // check same Z
+       if (fNumberOfIsotopes==0) fZeff = G4double(isotope->GetZ());
+       else if (G4double(isotope->GetZ()) != fZeff) 
+          G4Exception ("ERROR from G4Element::AddIsotope!"
+	   " Try to add isotopes with different Z");
+       //Z ok   
        fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
        (*theIsotopeVector)(fNumberOfIsotopes) = isotope;
-       fNumberOfIsotopes ++;
+       ++fNumberOfIsotopes;
       } 
-    else
-       G4Exception
-      ("ERROR!!! - Attempt to add more than the declared number of constituent isotopes.");
+    else G4Exception ("ERROR from G4Element::AddIsotope!"  
+       " Attempt to add more than the declared number of isotopes.");
 
     // filled.
     if ( fNumberOfIsotopes == theIsotopeVector->length() ) {
-      // Compute Zeff, Neff, Aeff
-      G4int i;
+      // Compute Neff, Aeff
       G4double wtSum=0.0;
 
-      fZeff = G4double( (*theIsotopeVector)(0)->GetZ() );
       fNeff = fAeff = 0.0;
-      for (i=0;i<fNumberOfIsotopes;i++) {
+      for (size_t i=0;i<fNumberOfIsotopes;i++) {
         fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)(i)->GetN();
         fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)(i)->GetA();
         wtSum +=  fRelativeAbundanceVector[i];
@@ -126,8 +148,8 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
       
       fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
       fAtomicShells     = new G4double[fNbOfAtomicShells];
-      for (i=0;i<fNbOfAtomicShells;i++)
-         fAtomicShells[i] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,i);
+      for (G4int j=0;j<fNbOfAtomicShells;j++)
+         fAtomicShells[j] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,j);
          
       ComputeDerivedQuantities();
 
@@ -255,7 +277,7 @@ const G4Element& G4Element::operator=(const G4Element& right)
         {
 	 theIsotopeVector         = new G4IsotopeVector(fNumberOfIsotopes);
 	 fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
-	 for (G4int i=0;i<fNumberOfIsotopes;i++)
+	 for (size_t i=0;i<fNumberOfIsotopes;i++)
 	    {
              (*theIsotopeVector)[i]      = (*right.theIsotopeVector)[i];
              fRelativeAbundanceVector[i] = right.fRelativeAbundanceVector[i];
@@ -286,6 +308,7 @@ G4int G4Element::operator!=(const G4Element& right) const
 G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
 { 
   long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  long prec = flux.precision(3);
   
   flux
     << " Element: " << G4std::setw(8) << element->fName << G4std::setw(3) << element->fSymbol
@@ -294,12 +317,13 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
     << "   A = " << G4std::setw(6) << G4std::setprecision(2) << (element->fAeff)/(g/mole) 
     << " g/mole";
    
-  for (G4int i=0; i<element->fNumberOfIsotopes; i++)
+  for (size_t i=0; i<element->fNumberOfIsotopes; i++)
   flux 
     << "\n   ---> " << (*(element->theIsotopeVector))[i] 
     << "   abundance: " << G4std::setw(6) << G4std::setprecision(2) 
     << (element->fRelativeAbundanceVector[i])/perCent << " %";
     
+  flux.precision(prec);        
   flux.setf(mode,G4std::ios::floatfield);         
   return flux;
 }
@@ -320,7 +344,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4ElementTable ElementTable)
    flux << "\n***** Table : Nb of elements = " << ElementTable.length() 
         << " *****\n" << G4endl;
         
-   for (G4int i=0; i<ElementTable.length(); i++) flux << ElementTable[i] 
+   for (size_t i=0; i<ElementTable.length(); i++) flux << ElementTable[i] 
                                                       << G4endl << G4endl;
 
    return flux;

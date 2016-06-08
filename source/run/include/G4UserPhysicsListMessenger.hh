@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.6 2000/11/08 10:01:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4UserPhysicsListMessenger.hh,v 1.7.2.1 2001/06/28 19:15:19 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 //---------------------------------------------------------------
@@ -29,13 +45,14 @@
 //    buildPhysicsTable * build physics table
 //    storePhysicsTable * store physics table into files
 //    retreivePhysicsTable * retreive physics table from files
-//    
+//    setStoredInAscii * Switch on/off ascii mode in store/retreive Physics Table
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
 //        second version                  24 Jan. 1998 by H.Kurashige 
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add store/retreivePhysicsTable  08 Nov. 2000 by H.Kurashige
+//        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
@@ -80,6 +97,7 @@ public: // with description
     G4UIcmdWithAString *        buildPTCmd;
     G4UIcmdWithAString *        storeCmd;
     G4UIcmdWithAString *        retrieveCmd;
+    G4UIcmdWithAnInteger *      asciiCmd;
 };
 
 #endif

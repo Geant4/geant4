@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PLogicalVolume.cc,v 1.5 2000/06/09 12:56:44 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PLogicalVolume.cc,v 1.6.2.1 2001/06/28 19:11:28 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 //                                      Takashi.Sasaki@kek.jp
@@ -81,8 +97,8 @@ G4LogicalVolume* G4PLogicalVolume::MakeTransientObject(
                                              G4Material* theMaterial)
 {
   // These are null poineters temporaly 
-  G4SmartVoxelHeader*    fVoxel = NULL;
-  const G4VisAttributes* fVisAttributes = NULL;
+  G4SmartVoxelHeader*    fVoxel = 0;
+  const G4VisAttributes* fVisAttributes = 0;
 
 //    G4LogicalVolume(G4VSolid *pSolid, G4Material *pMaterial,
 //		    const G4String& name,
@@ -132,7 +148,7 @@ void G4PLogicalVolume::RemoveDaughter(const HepRef(G4PVPhysicalVolume) p)
   for ( G4int i=0; i<NoOfDaughters; i++) 
     if ( fDaughters[i] == p )
     {
-      fDaughters.replace_element_at(NULL,i);
+      fDaughters.replace_element_at(0,i);
       NoOfDaughters--; 
     }
 }

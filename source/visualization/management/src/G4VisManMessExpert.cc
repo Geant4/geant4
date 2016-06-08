@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisManMessExpert.cc,v 1.6 2001/02/23 15:43:30 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisManMessExpert.cc,v 1.7.2.1 2001/06/28 19:16:16 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -227,8 +243,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
       G4Colour c(1.0, 0.0, 0.0);
       G4VisAttributes a(c);
       line.SetVisAttributes(&a);
-      line.append (G4Point3D (x0,y0,z0));
-      line.append (G4Point3D (x1,y1,z1));
+      line.push_back (G4Point3D (x0,y0,z0));
+      line.push_back (G4Point3D (x1,y1,z1));
       fpVMan -> Draw (line);
       line.clear ();
     }
@@ -364,7 +380,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 	G4int nPoints = G4int (100 * G4UniformRand());
 	G4double tStart = twopi * G4UniformRand();
 	for (i = 0, t = tStart; i < nPoints; t += dt, a *= fa, z += dz, i++) {
-	  polymarker.append (G4Point3D (x0 + a * cos (t),
+	  polymarker.push_back (G4Point3D (x0 + a * cos (t),
 					y0 + a * sin (t), z0 + z));
 	}
 	G4double red   = G4UniformRand();
@@ -389,7 +405,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
       G4double a = 2000., fa = 0.999;
       G4double z = -500., dz = 1.;
       for (int i = 0; i < 1000; t += dt, a *= fa, z += dz, i++) {
-        line.append (G4Point3D (a * cos (t), a * sin (t), z));
+        line.push_back (G4Point3D (a * cos (t), a * sin (t), z));
       }
       fpVMan -> Draw (line);
     }
@@ -417,7 +433,7 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 	G4int nPoints = G4int (1000 * G4UniformRand());
 	G4double tStart = twopi * G4UniformRand();
 	for (i = 0, t = tStart; i < nPoints; t += dt, a *= fa, z += dz, i++) {
-	  line.append (G4Point3D (x0 + a * cos (t), y0 + a * sin (t), z0 + z));
+	  line.push_back (G4Point3D (x0 + a * cos (t), y0 + a * sin (t), z0 + z));
 	}
 	G4Colour c (G4UniformRand(), G4UniformRand(), G4UniformRand());
 	G4VisAttributes a(c);

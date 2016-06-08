@@ -1,12 +1,26 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HadronicProcess.cc,v 1.8 1999/12/15 14:52:08 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
 //
  // HPW to implement the choosing of an element for scattering.
 #include "g4std/fstream"
@@ -38,19 +52,21 @@
     }
     
     const G4double *theAtomicNumberDensity = aMaterial->GetAtomicNumDensityVector();
+    G4double aTemp = aMaterial->GetTemperature();
     G4double crossSectionTotal = 0;
     G4int i;
+    G4std::vector<G4double> runningSum;
     for( i=0; i < numberOfElements; ++i )
-      crossSectionTotal += theAtomicNumberDensity[i] *
-        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i) );
+    {
+      runningSum.push_back(theAtomicNumberDensity[i] *
+        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i), aTemp));
+      crossSectionTotal+=runningSum[i];
+    }
     
-    G4double crossSectionSum= 0.;
-    G4double random = G4UniformRand()*crossSectionTotal;
+    G4double random = G4UniformRand();
     for( i=0; i < numberOfElements; ++i )
     { 
-      crossSectionSum += theAtomicNumberDensity[i] *
-        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i) );
-      if( random<=crossSectionSum )
+      if( random<=runningSum[i]/crossSectionTotal )
       {
         currentZ = G4double((*theElementVector)(i)->GetZ());
         currentN = (*theElementVector)(i)->GetN();

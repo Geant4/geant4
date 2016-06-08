@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.21 2001/02/23 15:43:32 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisManager.cc,v 1.26.2.1 2001/06/28 19:16:17 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -50,7 +66,9 @@ G4VisManager::G4VisManager ():
   fpScene          (0),
   fpSceneHandler   (0),
   fpViewer         (0),
-  fVerbose         (0)  // All other objects use default constructors.
+  fVerbose         (0),
+  fpMessenger      (0),
+  fpStateDependent (0)   // All other objects use default constructors.
 {
   if (fpInstance) {
     G4Exception
@@ -72,7 +90,7 @@ G4VisManager::G4VisManager ():
 
 G4VisManager::~G4VisManager () {
   fpInstance = 0;
-  int i;
+  size_t i;
   for (i = 0; i < fSceneList.size (); ++i) {
     delete fSceneList[i];
   }
@@ -88,6 +106,9 @@ G4VisManager::~G4VisManager () {
     delete fMessengerList[i];
   }
   delete fpMessenger;
+  for (i = 0; i < fDirectoryList.size (); ++i) {
+    delete fDirectoryList[i];
+  }
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -139,6 +160,12 @@ void G4VisManager::Initialise () {
 #endif
 #ifdef G4VIS_BUILD_RAYTRACER_DRIVER
       "\n    G4VIS_USE_RAYTRACER"
+#endif
+#ifdef G4VIS_BUILD_ASCIITREE_DRIVER
+      "\n    G4VIS_USE_ASCIITREE"
+#endif
+#ifdef G4VIS_BUILD_GAGTREE_DRIVER
+      "\n    G4VIS_USE_GAGTREE"
 #endif
       "\n  Thus, in your main() you have something like:"
       "\n    G4VisManager* visManager = new MyVisManager;"
@@ -312,6 +339,7 @@ void G4VisManager::ClearView () {
 void G4VisManager::Draw () {
   if (IsValidView ()) {
     fpViewer -> SetViewParameters (fVP);
+    fpViewer -> SetView ();
     fpViewer -> DrawView ();
   }
 }
@@ -465,7 +493,6 @@ void G4VisManager::CreateSceneHandler (G4String name) {
   if (fpGraphicsSystem) {
     G4VSceneHandler* pSceneHandler =
       fpGraphicsSystem -> CreateSceneHandler (name);
-    G4VViewer* pViewer;
     if (pSceneHandler) {
       fAvailableSceneHandlers.push_back (pSceneHandler);
       fpSceneHandler = pSceneHandler;                         // Make current.
@@ -616,7 +643,7 @@ void G4VisManager::GeometryHasChanged () {
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   if (!pWorld) {
-    G4cout << "  The world has ended!!!  (Is this serious?)" << G4endl;
+    G4cout << "  There is no world volume!" << G4endl;
   }
 
   // Check scenes.
@@ -875,6 +902,12 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #ifdef G4VIS_BUILD_RAYTRACER_DRIVER
        << "\n  RayTracer (produces JPEG file)"
 #endif
+#ifdef G4VIS_BUILD_ASCIITREE_DRIVER
+       << "\n  ASCII Tree (produces ASCII file of geometry hierarchy)"
+#endif
+#ifdef G4VIS_BUILD_GAGTREE_DRIVER
+       << "\n  GAG Tree (produces ascii file of geometry hierarchy for GAG)"
+#endif
        << G4endl;
 }
 
@@ -926,7 +959,7 @@ void G4VisManager::EndOfEvent () {
     const G4std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
     fpSceneHandler->ClearTransientStore(); //GB
-    for (int i = 0; i < EOEModelList.size (); i++) {
+    for (size_t i = 0; i < EOEModelList.size (); i++) {
       G4VModel* pModel = EOEModelList [i];
       pModel -> SetModelingParameters (pMP);
       pModel -> DescribeYourselfTo (*fpSceneHandler);
@@ -944,8 +977,8 @@ G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
 
 G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   G4String viewerShortName = ViewerShortName (viewerName);
-  G4int nHandlers = fAvailableSceneHandlers.size ();
-  G4int iHandler, iViewer;
+  size_t nHandlers = fAvailableSceneHandlers.size ();
+  size_t iHandler, iViewer;
   G4VSceneHandler* sceneHandler;
   G4VViewer* viewer;
   G4bool found = false;
@@ -1097,6 +1130,32 @@ public:
 G4RayTracer::G4RayTracer ():
   G4VGraphicsSystem ("RayTracer",
                      "RayTracer",
+		     G4VGraphicsSystem::noFunctionality) {}
+
+#endif
+
+#ifndef G4VIS_BUILD_ASCIITREE_DRIVER
+
+class G4ASCIITree: public G4VGraphicsSystem {
+public:
+  G4ASCIITree ();
+};
+G4ASCIITree::G4ASCIITree ():
+  G4VGraphicsSystem ("ASCIITree",
+                     "ATree",
+		     G4VGraphicsSystem::noFunctionality) {}
+
+#endif
+
+#ifndef G4VIS_BUILD_GAGTREE_DRIVER
+
+class G4GAGTree: public G4VGraphicsSystem {
+public:
+  G4GAGTree ();
+};
+G4GAGTree::G4GAGTree ():
+  G4VGraphicsSystem ("GAGTree",
+                     "GAGTree",
 		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif

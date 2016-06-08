@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4DecayProducts.cc,v 1.6 2000/10/20 11:35:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4DecayProducts.cc,v 1.7.2.1 2001/06/28 19:11:07 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ------------------------------------------------------------
-//      GEANT 4 class header file
+//      GEANT 4 class implementation file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      10 July 1996 H.Kurashige
 //      21 Oct  1996 H.Kurashige
@@ -112,7 +126,8 @@ G4int G4DecayProducts::PushProducts(G4DynamicParticle *aParticle)
    } else {
 #ifdef G4VERBOSE
      G4cout << "G4DecayProducts::PushProducts ";
-     G4cout << " exceeds MaxNumberOfProducts(=" <<MaxNumberOfProducts << ")";
+     G4cout << " exceeds MaxNumberOfProducts(="
+            << G4int(MaxNumberOfProducts) << ")";
      G4cout << G4endl;
 #endif
    }
@@ -204,7 +219,6 @@ G4bool G4DecayProducts::IsChecked() const
   G4bool returnValue = true;
   // check parent 
   //   energy/momentum
-  G4double   parent_mass = theParentParticle->GetMass();
   G4double   parent_energy  = theParentParticle->GetTotalEnergy();
   G4ThreeVector direction = theParentParticle->GetMomentumDirection();
   G4ThreeVector parent_momentum = direction*(theParentParticle->GetTotalMomentum());

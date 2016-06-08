@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.10 2001/03/29 13:46:18 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisCommandsViewerSet.cc,v 1.12.2.1 2001/06/28 19:16:16 gunter Exp $
+// GEANT4 tag $Name:  $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -117,12 +133,12 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet () {
   fpCommandProjection->SetParameter(parameter);
 
   fpCommandSectionPlane = new G4UIcommand 
-    ("/vis/viewer/set/section_plane",this);
+    ("/vis/viewer/set/sectionPlane",this);
   fpCommandSectionPlane -> SetGuidance
     (
      "Set plane for drawing section (DCUT).  Specify plane by"
      "\nx y z units nx ny nz, e.g., for a y-z plane at x = 1 cm:"
-     "\n/vis~/set/section_plane on 1 0 0 cm 1 0 0"
+     "\n/vis/viewer/set/sectionPlane on 1 0 0 cm 1 0 0"
      );
   parameter  =  new G4UIparameter("Selector",'c',true);
   parameter  -> SetDefaultValue  ("?");

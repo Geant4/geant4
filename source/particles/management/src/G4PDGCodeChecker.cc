@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PDGCodeChecker.cc,v 1.3 1999/12/15 14:51:14 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PDGCodeChecker.cc,v 1.4.2.2 2001/06/28 20:19:13 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD Group
 //      History: first implementation, based on object model of
 //      17 Aug 1999 H.Kurashige
 // **********************************************************************
@@ -89,6 +103,15 @@ G4int G4PDGCodeChecker::CheckForBaryons()
   if (abs(tempPDGcode)%10000 == 3122) { 
     // Lambda
     quark2=2;  quark3 = 1; spin = 1;
+  } else if (abs(tempPDGcode)%10000 == 3124) { 
+    // Lambda*
+    quark2=2;  quark3 = 1; spin = 3;
+  } else if (abs(tempPDGcode)%10000 == 3126) { 
+    // Lambda*
+    quark2=2;  quark3 = 1; spin = 5;
+  } else if (abs(tempPDGcode)%10000 == 3128) { 
+    // Lambda*
+    quark2=2;  quark3 = 1; spin = 7;
   } else if (abs(tempPDGcode)%10000 == 4122) { 
     // Lambda_c
     quark2=2;  quark3 = 1; spin = 1;

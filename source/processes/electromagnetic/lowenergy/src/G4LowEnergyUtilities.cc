@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.8 2001/02/05 17:45:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LowEnergyUtilities.cc,v 1.9.2.1 2001/06/28 19:11:51 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
@@ -18,7 +34,8 @@
 // 
 // Creation date: 2 March 1999
 //
-// Modifications: 16/11/2000 MG Pia    Replaced HepString with G4String
+// Modifications: 16.11.00 MG Pia    Replaced HepString with G4String
+//                24.04.01 V.Ivanchenko remove RogueWave 
 //      
 // --------------------------------------------------------------
 
@@ -82,7 +99,8 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
   
   for(G4int j = 0; j < ParNum; j++){ 
     
-    oneShellPar->insertAt(j,new G4DataVector());
+    //    oneShellPar->insertAt(j,new G4DataVector());
+    oneShellPar->push_back(new G4DataVector());
   }
   
   G4double a = 0;
@@ -96,12 +114,14 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
       
       if(s == 0){
 	
-	oneAtomPar->insert(oneShellPar);
+	//	oneAtomPar->insert(oneShellPar);
+	oneAtomPar->push_back(oneShellPar);
 	oneShellPar = new oneShellTable();
 	
 	for(G4int j = 0; j < ParNum; j++){ 
 	  
-	  oneShellPar->insertAt(j,new G4DataVector());
+	  //	  oneShellPar->insertAt(j,new G4DataVector());
+	  oneShellPar->push_back(new G4DataVector());
 	}
       }
       
@@ -181,7 +201,8 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
   
   for(G4int j = 0; j < ParNum; j++){ 
     
-    oneAtomPar->insertAt(j,new G4DataVector());
+    //    oneAtomPar->insertAt(j,new G4DataVector());
+    oneAtomPar->push_back(new G4DataVector());
   }
   
   G4double a = 0;

@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisManMessDraw.cc,v 1.7 2001/02/23 15:43:29 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisManMessDraw.cc,v 1.10.2.1 2001/06/28 19:16:16 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -142,6 +158,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 
   /////////////////////////////////////////  /vis~/draw/axes  ////
   if (commandPath == "/vis~/draw/axes") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/scene/add/axes\".");
     if (ViewValid ()) {
       G4double x0, y0, z0;
       G4double length ;
@@ -166,22 +183,22 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 
 		//----- Draw x-axis
       x_axis.SetVisAttributes(&ax);
-      x_axis.append (G4Point3D (x0*unit,y0,z0));
-      x_axis.append ( G4Point3D ( (x0 +length) , y0, z0 ) );
+      x_axis.push_back (G4Point3D (x0*unit,y0,z0));
+      x_axis.push_back ( G4Point3D ( (x0 +length) , y0, z0 ) );
       fpVMan -> Draw (x_axis);
       x_axis.clear ();
 
 		//----- Draw y-axis
       y_axis.SetVisAttributes(&ay);
-      y_axis.append (G4Point3D (x0,y0,z0));
-      y_axis.append ( G4Point3D ( x0 , (y0 +length ) , z0 ) );
+      y_axis.push_back (G4Point3D (x0,y0,z0));
+      y_axis.push_back ( G4Point3D ( x0 , (y0 +length ) , z0 ) );
       fpVMan -> Draw (y_axis);
       y_axis.clear ();
 
 		//----- Draw z-axis
       z_axis.SetVisAttributes(&az);
-      z_axis.append (G4Point3D (x0,y0,z0));
-      z_axis.append ( G4Point3D ( x0 , y0 , ( z0 +length ) ) );
+      z_axis.push_back (G4Point3D (x0,y0,z0));
+      z_axis.push_back ( G4Point3D ( x0 , y0 , ( z0 +length ) ) );
       fpVMan -> Draw (z_axis);
       z_axis.clear ();
 
@@ -190,6 +207,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 
   /////////////////////////////////////////  /vis~/draw/text  ////
   if (commandPath == "/vis~/draw/text") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/scene/add/text\".");
     if (ViewValid ()) {
       G4double x, y, z;
       G4double font_size, x_offset, y_offset;
@@ -244,9 +262,9 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
       G4VFlavoredParallelWorld* CurrentFlavoredWorld;
       for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	   iParticle++)
-	if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
-	   GetFlavoredWorldForThis(theParticleTable->
-				   GetParticle(iParticle)))
+	CurrentFlavoredWorld = theGlobalFastSimulationManager->
+	  GetFlavoredWorldForThis(theParticleTable->GetParticle(iParticle));
+	if(CurrentFlavoredWorld)
 	  currentScene -> AddRunDurationModel
 	    (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
@@ -259,9 +277,9 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
       G4cout << newValues << ": not found this particle name!" << G4endl;
       return;
     }
-    G4VFlavoredParallelWorld* worldForThis;
-    if(worldForThis=theGlobalFastSimulationManager->
-       GetFlavoredWorldForThis(currentParticle)) {
+    G4VFlavoredParallelWorld* worldForThis =
+      theGlobalFastSimulationManager->GetFlavoredWorldForThis(currentParticle);
+    if(worldForThis) {
       currentScene -> AddRunDurationModel
 	(new G4FlavoredParallelWorldModel (worldForThis));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."

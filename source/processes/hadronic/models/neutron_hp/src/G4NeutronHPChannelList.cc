@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
@@ -38,8 +60,10 @@
     }
   }
     
+  #include "G4NeutronHPThermalBoost.hh"
   G4ParticleChange * G4NeutronHPChannelList::ApplyYourself(const G4Element * anElement, const G4Track & aTrack)
   {
+    G4NeutronHPThermalBoost aThermalE;
     G4int i, ii;
     // decide on the isotope
     G4int numberOfIsos;
@@ -57,7 +81,11 @@
       {
 	if(theChannels[ii]->HasAnyData(i))
 	{
-	  running[i] +=theChannels[ii]->GetWeightedXsec(aTrack.GetKineticEnergy(), i);
+          running[i] +=theChannels[ii]->GetWeightedXsec(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+		                                                  theChannels[ii]->GetN(i),
+								  theChannels[ii]->GetZ(i),
+						  		  aTrack.GetMaterial()->GetTemperature()),
+					                i);
 	}
       }
     }
@@ -78,7 +106,11 @@
       if(i!=0) running[i] = running[i-1];
       if(theChannels[i]->HasAnyData(isotope))
       {
-        running[i] += theChannels[i]->GetFSCrossSection(aTrack.GetKineticEnergy(), isotope);
+        running[i] += theChannels[i]->GetFSCrossSection(aThermalE.GetThermalEnergy(aTrack.GetDynamicParticle(),
+		                                                  theChannels[i]->GetN(isotope),
+								  theChannels[i]->GetZ(isotope),
+						  		  aTrack.GetMaterial()->GetTemperature()),
+					                isotope);
       }
     }
     G4int lChan=0;

@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.3 2000/01/29 00:41:49 asaim Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.5 2001/06/19 20:38:12 johna Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -78,8 +78,16 @@ ifdef G4VIS_BUILD_VRMLFILE_DRIVER
 endif
 # End of VRML and VRMLFILE drivers
 
+ifdef G4VIS_BUILD_ASCIITREE_DRIVER
+  G4VIS_BUILD = 1
+  CPPFLAGS += -DG4VIS_BUILD_ASCIITREE_DRIVER
+endif
+
+ifdef G4VIS_BUILD_GAGTREE_DRIVER
+  G4VIS_BUILD = 1
+  CPPFLAGS += -DG4VIS_BUILD_GAGTREE_DRIVER
+endif
+
 ifdef G4VIS_BUILD
   CPPFLAGS += -DG4VIS_BUILD
 endif
-
-

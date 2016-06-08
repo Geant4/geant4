@@ -1,15 +1,36 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4FermiConfiguration.hh,v 1.5.2.1 2001/06/28 19:13:02 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
 
 #ifndef G4FermiConfiguration_h
 #define G4FermiConfiguration_h 1
+
+#include <deque>
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -24,11 +45,8 @@
 #include "G4IonTable.hh"
 #include "G4Fragment.hh"
 
-#include "g4rw/tvvector.h"
-#include "g4rw/tvordvec.h"
 
-
-  static const G4int NumberOfFragments = 100;
+static const G4int NumberOfFragments = 100;
 
 class G4FermiConfiguration 
 {
@@ -58,8 +76,7 @@ private:
   G4double CoulombBarrier(void);
 
 
-  //  G4RWTPtrOrderedVector<G4ParticleMomentum>* FragmentsMomentum(G4double KineticEnergy);
-  G4RWTPtrOrderedVector<G4LorentzVector>* FragmentsMomentum(G4double KineticEnergy);
+  G4std::deque<G4LorentzVector*>* FragmentsMomentum(G4double KineticEnergy);
   
   G4double RNKSI(const G4int K);
 
@@ -69,8 +86,8 @@ private:
   // Kappa = V/V_0 it is used in calculation of Coulomb energy
   static const G4double Kappa;
 
-	// Nuclear radius r0 (is a model parameter)
-	static const G4double r0;
+  // Nuclear radius r0 (is a model parameter)
+  static const G4double r0;
 
 
 
@@ -191,7 +208,7 @@ private:
   //  G4VFermiFragment * theConfiguration[MaxConfigSize];
 
   //  G4int Index[MaxConfigSize];
-  G4RWTValOrderedVector<G4int> Index;
+  G4std::vector<G4int> Index;
 
 };
 

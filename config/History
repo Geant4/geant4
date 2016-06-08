@@ -1,5 +1,6 @@
-$Id: History,v 1.132.2.1 2001/03/22 14:00:01 gunter Exp $
-$Name: geant4-03-01 $
+$Id: History,v 1.149 2001/06/29 12:49:25 gcosmo Exp $
+$Name:  $
+
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +18,68 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-22 March 2001 Gunter Folger (config-V03-00-03)
+29th June 2001 Gabriele Cosmo (config-V03-01-10)
+- Updated source scripts for 'Configure'.
+
+26th June 2001 Youhei Morita (config-V03-01-09)
+- globlib.gmk: added block for copying headers for persistency in $G4INCLUDE
+  when invoking the 'includes' target.
+
+25th June 2001 Youhei Morita (config-V03-01-08)
+- Restored lib_d target (again) in common.gmk with a protection of G4ODBMS.
+- Linux-g++.gmk (G.Cosmo)
+  o Commented out -ansi setup for public release
+  o Fixed logic for activating G4OODDLX_FLAGS on egcs compiler
+
+22nd June Gabriele Cosmo (config-V03-01-07)
+- common.gmk (G.Folger):
+  o removed lib_d target (again).
+  o restored G4SKIP_DEPEND.
+- Linux-g++.gmk:
+  o added temporary cludge for identify compiler version
+    and define G4DDLX_FLAGS for egcs-1.1.2.
+- binmake.gmk:
+  o added mechanism to correctly handle include paths when source headers
+    are centrally installed in $G4INCLUDE. Temporarly disabled, requires
+    update (re-design?) of liblist.c to properly generate the list of
+    libraries from the map.
+    Once activated, also G4UI_USE.gmk, G4VIS_USE.gmk and analysis.gmk
+    have to be modified accordingly.
+
+22nd June 2001 Youhei Morita (config-V03-01-06)
+- Restored lib_d target in common.gmk with a protection of G4ODBMS.
+- Get rid of G4SKIP_DEPEND in binmake.gmk.
+- Comment out G4DDLX_FLAGS options in sys/Linux-g++.gmk for gcc-2.95.2.
+
+21st June 2001 Gunter Folger (config-V03-01-05)
+- Removed bin_d and lib_d targets and thus the re-start of make.
+
+21st June 2001 Gunter Folger (config-V03-01-04)
+- common.gmk, binmake.gmk: run gmake via $(MAKE).
+
+19th June 2001 John Allison (config-V03-01-03)
+- Added GAG_TREE to G4VIS_BUILD.gmk and G4VIS_USE.gmk.
+
+20th June 2001 (Japan Time - still 19th in Europe!)
+               Youhei Morita (config-V03-01-02)
+- A few bug fixes in binmake.gmk, common_objy.gmk, sys/SUN-CC5.gmk,
+  sys/Linux-g++.gmk, sys/Win32-g++.gmk.
+
+19th June 2001 Gabriele Cosmo
+- Removed G4_NO_CBRT flag from WIN32-VC setup. No more necessary.
+
+30th May 2001 Gunter Folger
+- Do changes for persistency from Youhei: common.gmk is now split in three,
+  one general, and one for specific for transient and persistent each. 
+  Dependencies now much better handled in persistency.
+
+2nd May 2001 Gabriele Cosmo (config-V03-01-01)
+- Added options "-Wall -ansi -pedantic" to Linux-g++ setup.
+
+10th April 2001  John Allison  (config-V03-01-00)
+- Added G4VIS_BUILD_ASCIITREE_DRIVER and G4VIS_USE_ASCIITREE to G4VIS*gmk.
+
+22nd March 2001 Gunter Folger (config-V03-00-03)
 - binmake.gmk, only store in executable PATH to libs from example/test; 
   other libs should be taken/found from LD_LIBRARY_PATH
 - sys/{Linux-g++,SUN-CC}.gmk: enable storing of PATH to libs in executable 

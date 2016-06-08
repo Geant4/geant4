@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PropagatorInField.cc,v 1.12.4.1 2001/02/20 18:23:32 japost Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PropagatorInField.cc,v 1.19.2.1 2001/06/28 19:09:44 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // 
@@ -32,56 +48,40 @@
 //const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
-// -------------------------------------------------------------------------
-#if OLD_SIGNATURE_IS_INVALID
-G4double 
-G4PropagatorInField::
-  ComputeStep(const  G4ThreeVector &   StartPointA,
-	      const  G4ThreeVector &   Velocity,              // Unit or non 
-	             G4double          CurrentProposedStepLength,
-	             G4double	       &currentSafety,             // In/Out 
-     	             G4VPhysicalVolume *pPhysVol )
-// Compute the next geometric Step for simple magnetic field
-{
-  G4FieldTrack  aFieldTrack = 
-    G4FieldTrack(  StartPointA, 
-		   Velocity, 
-		   0.0,          // length of path
-		   0.0,          // energy
-	      // PROBLEM ---> zero energy will create zero momentum !!
-                   0.0,          // lab tof
-		   0.0,          // proper tof
-		   0 );
+const G4double  G4PropagatorInField::fEpsilonMinDefault = 1.0e-10 ;  
 
-  //  Do the Transport in the field (non recti-linear)
-  return this->ComputeStep( aFieldTrack,
-			    CurrentProposedStepLength, 
-			    currentSafety );
-}
-#endif
-
-// -------------------------------------------------------------------------
-G4double 
-G4PropagatorInField::
-  ComputeStep(G4FieldTrack& pFieldTrack,
-	      G4double      CurrentProposedStepLength,
-	      G4double&     currentSafety,                // IN/OUT
-	      G4VPhysicalVolume *pPhysVol)
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Compute the next geometric Step
+
+
+G4double G4PropagatorInField::
+         ComputeStep( G4FieldTrack&      pFieldTrack,
+	              G4double           CurrentProposedStepLength,
+	              G4double&          currentSafety,                // IN/OUT
+	              G4VPhysicalVolume* pPhysVol)
 {
   // Parameters for adaptive Runge-Kutta integration
-  //
+  
   G4double      h_TrialStepSize;        // 1st Step Size 
   G4double      TruePathLength= CurrentProposedStepLength;
   G4double      StepTaken= 0.0; 
-  G4double      s_length_taken; 
+  G4double      s_length_taken, epsilon ; 
   G4bool        intersects;
   G4bool        first_substep= true;
 
   G4double	    NewSafety;
   fParticleIsLooping= false;
 
+  // Set the field manager if the volume has one, else use the global one
+  fCurrentFieldMgr = fDetectorFieldMgr;
+  if( pPhysVol) {
+     G4FieldManager *newFieldMgr=0;
+     newFieldMgr= pPhysVol->GetLogicalVolume()->GetFieldManager(); 
+     if ( newFieldMgr ) 
+        fCurrentFieldMgr = newFieldMgr;
+  }
+  
   G4FieldTrack  CurrentState(pFieldTrack);
 
 #if 0
@@ -98,15 +98,21 @@ G4PropagatorInField::
   // (used to calculate the relative accuracy) must be guessed.
   //
   
-  if( CurrentProposedStepLength >= kInfinity ){
+  if( CurrentProposedStepLength >= kInfinity )
+  {
      G4ThreeVector StartPointA, VelocityUnit;
      StartPointA = pFieldTrack.GetPosition();
      VelocityUnit= pFieldTrack.GetMomentumDir();
+
      CurrentProposedStepLength= 1.e3 *  ( 10.0 * cm + 
 		  fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) ) ;
   }
-  this->SetEpsilonStep( GetDeltaOneStep() / CurrentProposedStepLength);
+  epsilon = GetDeltaOneStep() / CurrentProposedStepLength ;
+
+  if( epsilon < fEpsilonMin ) epsilon = fEpsilonMin ;
+
+  this->SetEpsilonStep( epsilon );
 
   if( fNoZeroStep > fThresholdNo_ZeroSteps ) {
      G4double stepTrial; //  = fMidPoint_CurveLen_of_LastAttempt;

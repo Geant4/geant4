@@ -1,7 +1,7 @@
-# $Id: binmake.gmk,v 1.56.2.1 2001/03/22 13:54:24 gunter Exp $
+# $Id: binmake.gmk,v 1.63 2001/06/22 16:11:21 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
-#                          Gabriele Cosmo, 25/06/1998.
+#    First implementation: Gabriele Cosmo, 25/06/1998.
 # ----------------------------------------------------------
 
 ifndef LDFLAGS
@@ -10,12 +10,20 @@ endif
 
 G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 
+# Define variable checking for existence of centrally installed headers.
+# If check will be true, avoid explicit definition of paths to INCFLAGS.
+#
+# G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && echo 1)
+
 include $(G4INSTALL)/config/G4UI_USE.gmk
 include $(G4INSTALL)/config/G4VIS_USE.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 include $(G4INSTALL)/config/analysis.gmk
 
 ifndef INCFLAGS
+# ifeq ($(G4INCLUDE_EXEC),1)
+#   INCFLAGS := -I$(G4INCLUDE)
+# else
   INCFLAGS := \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
@@ -83,9 +91,11 @@ ifndef INCFLAGS
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include \
               -I$(G4BASE)/g3tog4/include
+# endif
 endif
 
 ifdef G4ODBMS
+# ifneq ($(G4INCLUDE_EXEC),1)
   INCFLAGS += \
               -I$(G4BASE)/persistency/global/include \
               -I$(G4BASE)/persistency/digits+hits/hits/include \
@@ -95,8 +105,9 @@ ifdef G4ODBMS
               -I$(G4BASE)/persistency/geometry/solids/CSG/include \
               -I$(G4BASE)/persistency/geometry/solids/Boolean/include \
               -I$(G4BASE)/persistency/geometry/management/include \
-              -I$(G4BASE)/persistency/management/include \
-              -I$(G4SCHEMA_INCLUDE) \
+              -I$(G4BASE)/persistency/management/include
+# endif
+  INCFLAGS += -I$(G4SCHEMA_INCLUDE) \
               -I$(OBJY_DIR)/include \
               -I$(HEP_ODBMS_DIR)/include \
               -DHep_HAS_BUILDIN_BOOL_CONSTANTS
@@ -125,8 +136,8 @@ ifdef G4EXLIB
   LDFLAGS += -L$(G4LIBDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
-#        for the example dependant directory, keep the path to the shared lib 
-#          in the executable.
+#         For the example dependent directory, keep the 
+#         path to the shared lib in the executable.
       LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
     endif
   endif
@@ -253,7 +264,13 @@ else
 .PHONY: bin clean clean_bin debug cleandb newboot newfd
 endif
 
+#
+# Target "bin" requires dependency files when G4ODBMS=1.
+# gmake must be recursively called with MAKE_DFILES=1.
+#
+
 # Make $(G4TARGET) executable.
+
 bin: $(G4BINDIR)/$(G4TARGET)
 
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
@@ -313,10 +330,6 @@ else
 endif
 
 # Make the $(G4TARGET).d file and include it.
-ifdef G4SKIP_DEPEND
-$(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
-	@echo Skip dependency file creation for file $< ...
-else
 $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
@@ -324,6 +337,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+ifneq ($(dependencies),)
 -include $(dependencies)
 endif
 
@@ -347,6 +361,14 @@ ifdef G4ODBMS
 
 cleandb: clean newboot
 
+$(G4EXAMPLE_BOOT):
+	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4SCHEMA_DIR)/G4SCHEMA \
+	                            $(G4EXAMPLE_BOOT) $(G4SCHEMA_FDID)
+
 newboot:
 	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
 	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name)
@@ -355,17 +377,22 @@ newboot:
 	@$(HEP_ODBMS_DIR)/etc/getdb $(G4SCHEMA_DIR)/G4SCHEMA \
 	                            $(G4EXAMPLE_BOOT) $(G4SCHEMA_FDID)
 
-newfd:
-ifndef G4EXAMPLE_FDID
-	@echo G4EXAMPLE_FDID is not defined.  Stop.
-	exit 1
-endif
+$(G4EXAMPLE_FD):
 	@echo Creating new runtime federated database $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
 	@rm -f $(G4EXAMPLE_FD_DIR)/$(name)
 	@rm -f $(G4EXAMPLE_FD_DIR)/$(name).FDDB
 	@rm -f $(G4EXAMPLE_FD_DIR)/*.$(name).DB
 	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
 	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
+
+newfd:
+	@echo Creating new runtime federated database $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_FD_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
+	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
+
 endif
 ############################- targets for G4ODBMS -############################
 

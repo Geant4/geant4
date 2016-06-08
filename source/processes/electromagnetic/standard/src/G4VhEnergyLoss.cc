@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VhEnergyLoss.cc,v 1.16 2001/03/27 15:10:52 maire Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VhEnergyLoss.cc,v 1.17.2.1 2001/06/28 19:12:38 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 
 // -----------------------------------------------------------
@@ -25,6 +41,7 @@
 // 18/08/00 : V.Ivanchenko bug fixed in GetConstrained 
 // 23/01/01 : bug fixed in AlongStepDoIt , L.Urban
 // 27/03/01 : commented out the printing of subcutoff energies
+// 28/05/01 : V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -375,7 +392,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
   // it calculates dEdx and the range as well....
 
   G4double KineticEnergy,StepLimit;
-  G4bool isOut ;
+  //G4bool isOut ;
 
   Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus ;
 
@@ -488,10 +505,11 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
  if(subSecFlag)
  {
   G4double MinDeltaEnergyNow,Tc,TmintoProduceDelta,w,ww ;
-  G4double rcut,T0,presafety,postsafety,safety,
-           delta,fragment,Tmax,mass ;
-  G4double frperstep,x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
-  G4double epsil = MinKineticEnergy/2. ;
+  G4double rcut,T0,presafety,postsafety,safety,delta,Tmax,mass ;
+  G4double fragment = Step;
+  G4double frperstep = 1.0;
+  G4double x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
+  //G4double epsil = MinKineticEnergy/2. ;
 
   MinDeltaEnergyNow = MinDeltaEnergy[index] ;
   Tc=G4Electron::Electron()->GetCutsInEnergy()[index];
@@ -591,10 +609,9 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
         if(N > 0)
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,delToverTc,
-                   delTkin,delLoss,rate,
-                   urandom ;
-          G4StepPoint *point ;
+                   Pnew,delToverTc,urandom;
+	  //delTkin,delLoss,rate,
+          //G4StepPoint *point ;
   
           Tkin = E ;
           Etot = Tkin+mass ;

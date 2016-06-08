@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
@@ -31,7 +53,9 @@
       targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(theBaseZ+eps, theBaseA+eps)-
                        theBaseZ* G4Electron::Electron()->GetPDGMass() ) /
                      G4Neutron::Neutron()->GetPDGMass();
-    theTarget = aNucleus.GetThermalNucleus(targetMass);
+    G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
+    G4double temperature = theTrack.GetMaterial()->GetTemperature();
+    theTarget = aNucleus.GetBiasedThermalNucleus(targetMass, neutronVelocity, temperature);
 
 // go to nucleus rest system
     theNeutron.Lorentz(theNeutron, -1*theTarget);
@@ -51,20 +75,20 @@
       G4Fragment nucleus(theBaseA+1, theBaseZ ,p4);
       G4PhotonEvaporation photonEvaporation;
       G4FragmentVector* products = photonEvaporation.BreakItUp(nucleus);
-      G4int i;
+      G4FragmentVector::iterator i;
       thePhotons = new G4ReactionProductVector;
-      for(i=0; i<products->entries(); i++)
+      for(i=products->begin(); i!=products->end(); i++)
       {
         G4ReactionProduct * theOne = new G4ReactionProduct;
         theOne->SetDefinition( G4Gamma::Gamma() );
         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
-        if(products->at(i)->GetMomentum().mag() > 10*MeV) 
+        if((*i)->GetMomentum().mag() > 10*MeV) 
                  theOne->SetDefinition( 
                  theTable->FindIon(theBaseZ, theBaseA+1, 0, theBaseZ) );
-        theOne->SetMomentum( products->at(i)->GetMomentum().vect() ) ;
-        theOne->SetTotalEnergy( products->at(i)->GetMomentum().t() );
+        theOne->SetMomentum( (*i)->GetMomentum().vect() ) ;
+        theOne->SetTotalEnergy( (*i)->GetMomentum().t() );
         thePhotons->insert(theOne);
-        delete products->at(i);
+        delete *i;
       } 
       delete products;
     }
@@ -73,11 +97,44 @@
 
     G4int nPhotons = 0;
     if(thePhotons!=NULL) nPhotons=thePhotons->length();
-    theResult.SetNumberOfSecondaries(nPhotons);
+    G4int nParticles = nPhotons;
+    if(1==nPhotons) nParticles = 2;
+    theResult.SetNumberOfSecondaries(nParticles);
+
+    // back to lab system
+    for(i=0; i<nPhotons; i++)
+    {
+      thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), theTarget);
+    }
+    
+    // Recoil, if only one gamma
+    if (1==nPhotons)
+    {
+       G4DynamicParticle * theOne = new G4DynamicParticle;
+       G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+                                        ->FindIon(theBaseZ, theBaseA+1, 0, theBaseZ);
+       theOne->SetDefinition(aRecoil);
+       // Now energy; 
+       // Can be done slightly better @
+       G4ThreeVector aMomentum =  theTrack.GetMomentum()
+                                 +theTarget.GetMomentum()
+				 -thePhotons->at(0)->GetMomentum();
+
+       G4ThreeVector theMomUnit = aMomentum.unit();
+       G4double aKinEnergy =  theTrack.GetKineticEnergy()
+                             +theTarget.GetKineticEnergy(); // gammas come from Q-value
+       G4double theResMass = aRecoil->GetPDGMass();
+       G4double theResE = aRecoil->GetPDGMass()+aKinEnergy;
+       G4double theAbsMom = sqrt(theResE*theResE - theResMass*theResMass);
+       G4ThreeVector theMomentum = theAbsMom*theMomUnit;
+       theOne->SetMomentum(theMomentum);
+       theResult.AddSecondary(theOne);
+    }
+
+    // Now fill in the gammas.
     for(i=0; i<nPhotons; i++)
     {
       // back to lab system
-      thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), theTarget);
       G4DynamicParticle * theOne = new G4DynamicParticle;
       theOne->SetDefinition(thePhotons->at(i)->GetDefinition());
       theOne->SetMomentum(thePhotons->at(i)->GetMomentum());
@@ -85,7 +142,6 @@
       delete thePhotons->at(i);
     }
     delete thePhotons; 
-
 // clean up the primary neutron
     theResult.SetStatusChange(fStopAndKill);
     return &theResult;
@@ -97,9 +153,9 @@
     G4bool dbool;
     G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, tString, dbool);
     G4String filename = aFile.GetName();
-    theBaseA = aFile.GetA();
-    theBaseZ = aFile.GetZ();
-    if(!dbool)
+    theBaseA = A;
+    theBaseZ = G4int(Z+.5);
+    if(!dbool || ( Z<2.5 && ( abs(theBaseZ - Z)>0.0001 || abs(theBaseA - A)>0.0001)))
     {
       hasAnyData = false;
       hasFSData = false; 
@@ -115,4 +171,5 @@
       theFinalStatePhotons.InitAngular(theData); 
       theFinalStatePhotons.InitEnergies(theData); 
     }
+    theData.close();
   }

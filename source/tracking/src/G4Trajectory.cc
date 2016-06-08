@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Trajectory.cc,v 1.11 2001/02/09 01:38:14 tsasaki Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Trajectory.cc,v 1.12.2.1 2001/06/28 19:15:31 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // ---------------------------------------------------------------
@@ -75,7 +91,7 @@ G4Trajectory::G4Trajectory(G4Trajectory & right)
   //  G4std::vector<G4VTrajectoryPoint*> *positionRecord;
   positionRecord = new TrajectoryPointContainer();
 
-  for(int i=0;i<right.positionRecord->size();i++)
+  for(size_t i=0;i<right.positionRecord->size();i++)
   {
     G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);
     positionRecord->push_back(new G4TrajectoryPoint(*rightPoint));
@@ -88,7 +104,7 @@ G4Trajectory::~G4Trajectory()
 /////////////////////////////
 {
   //  positionRecord->clearAndDestroy();
-  G4int i;
+  size_t i;
   for(i=0;i<positionRecord->size();i++){
     delete  (*positionRecord)[i];
   }
@@ -126,10 +142,10 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
    if(i_mode>=0)
    {
      G4Polyline pPolyline;
-     for (int i = 0; i < positionRecord->size() ; i++) {
+     for (size_t i = 0; i < positionRecord->size() ; i++) {
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
        pos = aTrajectoryPoint->GetPosition();
-       pPolyline.append( pos );
+       pPolyline.push_back( pos );
      }
 
      G4Colour colour;
@@ -147,7 +163,7 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
 
    if(i_mode!=0)
    {
-     for(int j=0; j<positionRecord->size(); j++) {
+     for(size_t j=0; j<positionRecord->size(); j++) {
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[j]);
        pos = aTrajectoryPoint->GetPosition();
        G4Circle circle( pos );

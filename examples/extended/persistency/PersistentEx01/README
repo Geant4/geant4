@@ -1,4 +1,4 @@
-$Id: README,v 1.7 1999/12/05 22:22:25 morita Exp $
+$Id: README,v 1.8 2001/06/19 15:03:58 morita Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -91,7 +91,7 @@ such as
 
 in your .cshrc file.
 
-For zsh and alike, copy "g4odbms_setup.csh" to your local directory, 
+For zsh and alike, copy "g4odbms_setup.sh" to your local directory, 
 edit the version numbers, then put a line such as
 
    . g4odbms_setup.sh

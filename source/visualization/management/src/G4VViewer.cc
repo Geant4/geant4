@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VViewer.cc,v 1.11 2001/02/23 15:43:25 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VViewer.cc,v 1.13.2.1 2001/06/28 19:16:14 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // John Allison  27th March 1996
@@ -17,12 +33,12 @@
 #include "G4ios.hh"
 #include "g4std/strstream"
 
+#include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4Scene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
-#include "G4Event.hh"
 
 G4VViewer::G4VViewer (G4VSceneHandler& sceneHandler,
 		      G4int id, const G4String& name):
@@ -42,6 +58,12 @@ fNeedKernelVisit (true)
   }
   fShortName = fName (0, fName.find (' '));
   fShortName.strip ();
+
+  G4VisManager* pVisMan = G4VisManager::GetInstance();
+  G4double xHint = pVisMan->GetCurrentViewParameters().GetWindowSizeHintX();
+  G4double yHint = pVisMan->GetCurrentViewParameters().GetWindowSizeHintY();
+  fVP.SetWindowSizeHint(xHint,yHint);
+  fDefaultVP.SetWindowSizeHint(xHint,yHint);
 }
 
 G4VViewer::~G4VViewer () {}

@@ -1,5 +1,25 @@
-#ifndef G4GeneralParticleSourceMessenger_h
-#define G4GeneralParticleSourceMessenger_h 1
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 // MODULE:       G4GeneralParticleSourceMessenger.hh
@@ -11,24 +31,16 @@
 // Customer:     ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
+// $Id: G4GeneralParticleSourceMessenger.hh,v 1.3 2001/06/29 08:06:00 gcosmo Exp $
+// GEANT4 tag $Name: event-V03-01-01 $
+///////////////////////////////////////////////////////////////////////////////
 //
-// DESCRIPTION
-// -----------
+// Class Description:
 //
 // The function of the G4GeneralParticleSourceMessenger is to allow the user to
 // enter commands either in interactive command line mode or through macros to
 // control the G4GeneralParticleSource. The G4GeneralParticleSourceMessenger
 // class is based on G4ParticleGunMessenger.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//
-// Version 1.0, 28 February 2000, C Ferguson, Created.
-//
-// Version 1.1, 19 October 2000, Modified to inherit from G4VPrimaryGenerator.
-// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -48,8 +60,22 @@
 // G4String GetCurrentValue(G4UIcommand *command)
 //     Allows the user to retrieve the current values of parameters.
 //     Not implemented yet.
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// CHANGE HISTORY
+// --------------
+//
+// Version 1.0, 28 February 2000, C Ferguson, Created.
+//
+// Version 1.1, 19 October 2000, Modified to inherit from G4VPrimaryGenerator.
+// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
+//
+#ifndef G4GeneralParticleSourceMessenger_h
+#define G4GeneralParticleSourceMessenger_h 1
+
 #include "G4UImessenger.hh"
 #include "globals.hh"
 //#include "UIcmdWithNucleusAndUnit.hh"

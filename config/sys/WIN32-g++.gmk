@@ -47,7 +47,7 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
   endif
   ifdef G4ODBMS
-    G4OODDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
+    G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
   endif
 
   define build-granular-shared-lib

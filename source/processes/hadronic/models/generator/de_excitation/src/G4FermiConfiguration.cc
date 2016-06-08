@@ -1,15 +1,32 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4FermiConfiguration.cc,v 1.5.2.1 2001/06/28 19:13:16 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
-
-// V. Lara (Apr 1999)
-// Corrected a bug in calculation of probabilities found by N. Ameline
+//
 // 
 
 
@@ -136,115 +153,115 @@ G4StableFermiFragment G4FermiConfiguration::Fragment99( 16, 8,  3,  7.12*keV );
 
                    
 G4VFermiFragment * G4FermiConfiguration::theListOfFragments[NumberOfFragments] = {
-  &G4FermiConfiguration::Fragment00, 
-  &G4FermiConfiguration::Fragment01, 
-  &G4FermiConfiguration::Fragment02, 
-  &G4FermiConfiguration::Fragment03, 
-  &G4FermiConfiguration::Fragment04, 
-  &G4FermiConfiguration::Fragment05, 
-  &G4FermiConfiguration::Fragment06, 
-  &G4FermiConfiguration::Fragment07, 
-  &G4FermiConfiguration::Fragment08, 
-  &G4FermiConfiguration::Fragment09, 
+    &G4FermiConfiguration::Fragment00, 
+    &G4FermiConfiguration::Fragment01, 
+    &G4FermiConfiguration::Fragment02, 
+    &G4FermiConfiguration::Fragment03, 
+    &G4FermiConfiguration::Fragment04, 
+    &G4FermiConfiguration::Fragment05, 
+    &G4FermiConfiguration::Fragment06, 
+    &G4FermiConfiguration::Fragment07, 
+    &G4FermiConfiguration::Fragment08, 
+    &G4FermiConfiguration::Fragment09, 
 
-  &G4FermiConfiguration::Fragment10, 
-  &G4FermiConfiguration::Fragment11, 
-  &G4FermiConfiguration::Fragment12, 
-  &G4FermiConfiguration::Fragment13, 
-  &G4FermiConfiguration::Fragment14, 
-  &G4FermiConfiguration::Fragment15, 
-  &G4FermiConfiguration::Fragment16, 
-  &G4FermiConfiguration::Fragment17, 
-  &G4FermiConfiguration::Fragment18, 
-  &G4FermiConfiguration::Fragment19, 
+    &G4FermiConfiguration::Fragment10, 
+    &G4FermiConfiguration::Fragment11, 
+    &G4FermiConfiguration::Fragment12, 
+    &G4FermiConfiguration::Fragment13, 
+    &G4FermiConfiguration::Fragment14, 
+    &G4FermiConfiguration::Fragment15, 
+    &G4FermiConfiguration::Fragment16, 
+    &G4FermiConfiguration::Fragment17, 
+    &G4FermiConfiguration::Fragment18, 
+    &G4FermiConfiguration::Fragment19, 
 
-  &G4FermiConfiguration::Fragment20, 
-  &G4FermiConfiguration::Fragment21, 
-  &G4FermiConfiguration::Fragment22, 
-  &G4FermiConfiguration::Fragment23, 
-  &G4FermiConfiguration::Fragment24, 
-  &G4FermiConfiguration::Fragment25, 
-  &G4FermiConfiguration::Fragment26, 
-  &G4FermiConfiguration::Fragment27, 
-  &G4FermiConfiguration::Fragment28, 
-  &G4FermiConfiguration::Fragment29,
+    &G4FermiConfiguration::Fragment20, 
+    &G4FermiConfiguration::Fragment21, 
+    &G4FermiConfiguration::Fragment22, 
+    &G4FermiConfiguration::Fragment23, 
+    &G4FermiConfiguration::Fragment24, 
+    &G4FermiConfiguration::Fragment25, 
+    &G4FermiConfiguration::Fragment26, 
+    &G4FermiConfiguration::Fragment27, 
+    &G4FermiConfiguration::Fragment28, 
+    &G4FermiConfiguration::Fragment29,
 
-  &G4FermiConfiguration::Fragment30, 
-  &G4FermiConfiguration::Fragment31, 
-  &G4FermiConfiguration::Fragment32, 
-  &G4FermiConfiguration::Fragment33, 
-  &G4FermiConfiguration::Fragment34,
-  &G4FermiConfiguration::Fragment35, 
-  &G4FermiConfiguration::Fragment36, 
-  &G4FermiConfiguration::Fragment37, 
-  &G4FermiConfiguration::Fragment38, 
-  &G4FermiConfiguration::Fragment39,
+    &G4FermiConfiguration::Fragment30, 
+    &G4FermiConfiguration::Fragment31, 
+    &G4FermiConfiguration::Fragment32, 
+    &G4FermiConfiguration::Fragment33, 
+    &G4FermiConfiguration::Fragment34,
+    &G4FermiConfiguration::Fragment35, 
+    &G4FermiConfiguration::Fragment36, 
+    &G4FermiConfiguration::Fragment37, 
+    &G4FermiConfiguration::Fragment38, 
+    &G4FermiConfiguration::Fragment39,
 
-  &G4FermiConfiguration::Fragment40, 
-  &G4FermiConfiguration::Fragment41, 
-  &G4FermiConfiguration::Fragment42, 
-  &G4FermiConfiguration::Fragment43, 
-  &G4FermiConfiguration::Fragment44,
-  &G4FermiConfiguration::Fragment45, 
-  &G4FermiConfiguration::Fragment46, 
-  &G4FermiConfiguration::Fragment47, 
-  &G4FermiConfiguration::Fragment48, 
-  &G4FermiConfiguration::Fragment49,
+    &G4FermiConfiguration::Fragment40, 
+    &G4FermiConfiguration::Fragment41, 
+    &G4FermiConfiguration::Fragment42, 
+    &G4FermiConfiguration::Fragment43, 
+    &G4FermiConfiguration::Fragment44,
+    &G4FermiConfiguration::Fragment45, 
+    &G4FermiConfiguration::Fragment46, 
+    &G4FermiConfiguration::Fragment47, 
+    &G4FermiConfiguration::Fragment48, 
+    &G4FermiConfiguration::Fragment49,
 
-  &G4FermiConfiguration::Fragment50, 
-  &G4FermiConfiguration::Fragment51, 
-  &G4FermiConfiguration::Fragment52, 
-  &G4FermiConfiguration::Fragment53, 
-  &G4FermiConfiguration::Fragment54,
-  &G4FermiConfiguration::Fragment55, 
-  &G4FermiConfiguration::Fragment56, 
-  &G4FermiConfiguration::Fragment57, 
-  &G4FermiConfiguration::Fragment58, 
-  &G4FermiConfiguration::Fragment59,
+    &G4FermiConfiguration::Fragment50, 
+    &G4FermiConfiguration::Fragment51, 
+    &G4FermiConfiguration::Fragment52, 
+    &G4FermiConfiguration::Fragment53, 
+    &G4FermiConfiguration::Fragment54,
+    &G4FermiConfiguration::Fragment55, 
+    &G4FermiConfiguration::Fragment56, 
+    &G4FermiConfiguration::Fragment57, 
+    &G4FermiConfiguration::Fragment58, 
+    &G4FermiConfiguration::Fragment59,
 
-  &G4FermiConfiguration::Fragment60, 
-  &G4FermiConfiguration::Fragment61, 
-  &G4FermiConfiguration::Fragment62, 
-  &G4FermiConfiguration::Fragment63, 
-  &G4FermiConfiguration::Fragment64,
-  &G4FermiConfiguration::Fragment65, 
-  &G4FermiConfiguration::Fragment66, 
-  &G4FermiConfiguration::Fragment67, 
-  &G4FermiConfiguration::Fragment68, 
-  &G4FermiConfiguration::Fragment69,
+    &G4FermiConfiguration::Fragment60, 
+    &G4FermiConfiguration::Fragment61, 
+    &G4FermiConfiguration::Fragment62, 
+    &G4FermiConfiguration::Fragment63, 
+    &G4FermiConfiguration::Fragment64,
+    &G4FermiConfiguration::Fragment65, 
+    &G4FermiConfiguration::Fragment66, 
+    &G4FermiConfiguration::Fragment67, 
+    &G4FermiConfiguration::Fragment68, 
+    &G4FermiConfiguration::Fragment69,
 
-  &G4FermiConfiguration::Fragment70, 
-  &G4FermiConfiguration::Fragment71, 
-  &G4FermiConfiguration::Fragment72, 
-  &G4FermiConfiguration::Fragment73, 
-  &G4FermiConfiguration::Fragment74,
-  &G4FermiConfiguration::Fragment75, 
-  &G4FermiConfiguration::Fragment76, 
-  &G4FermiConfiguration::Fragment77, 
-  &G4FermiConfiguration::Fragment78, 
-  &G4FermiConfiguration::Fragment79,
+    &G4FermiConfiguration::Fragment70, 
+    &G4FermiConfiguration::Fragment71, 
+    &G4FermiConfiguration::Fragment72, 
+    &G4FermiConfiguration::Fragment73, 
+    &G4FermiConfiguration::Fragment74,
+    &G4FermiConfiguration::Fragment75, 
+    &G4FermiConfiguration::Fragment76, 
+    &G4FermiConfiguration::Fragment77, 
+    &G4FermiConfiguration::Fragment78, 
+    &G4FermiConfiguration::Fragment79,
 
-  &G4FermiConfiguration::Fragment80, 
-  &G4FermiConfiguration::Fragment81, 
-  &G4FermiConfiguration::Fragment82, 
-  &G4FermiConfiguration::Fragment83, 
-  &G4FermiConfiguration::Fragment84,
-  &G4FermiConfiguration::Fragment85, 
-  &G4FermiConfiguration::Fragment86, 
-  &G4FermiConfiguration::Fragment87, 
-  &G4FermiConfiguration::Fragment88, 
-  &G4FermiConfiguration::Fragment89,
+    &G4FermiConfiguration::Fragment80, 
+    &G4FermiConfiguration::Fragment81, 
+    &G4FermiConfiguration::Fragment82, 
+    &G4FermiConfiguration::Fragment83, 
+    &G4FermiConfiguration::Fragment84,
+    &G4FermiConfiguration::Fragment85, 
+    &G4FermiConfiguration::Fragment86, 
+    &G4FermiConfiguration::Fragment87, 
+    &G4FermiConfiguration::Fragment88, 
+    &G4FermiConfiguration::Fragment89,
 
-  &G4FermiConfiguration::Fragment90, 
-  &G4FermiConfiguration::Fragment91, 
-  &G4FermiConfiguration::Fragment92, 
-  &G4FermiConfiguration::Fragment93, 
-  &G4FermiConfiguration::Fragment94,
-  &G4FermiConfiguration::Fragment95, 
-  &G4FermiConfiguration::Fragment96, 
-  &G4FermiConfiguration::Fragment97, 
-  &G4FermiConfiguration::Fragment98, 
-  &G4FermiConfiguration::Fragment99
+    &G4FermiConfiguration::Fragment90, 
+    &G4FermiConfiguration::Fragment91, 
+    &G4FermiConfiguration::Fragment92, 
+    &G4FermiConfiguration::Fragment93, 
+    &G4FermiConfiguration::Fragment94,
+    &G4FermiConfiguration::Fragment95, 
+    &G4FermiConfiguration::Fragment96, 
+    &G4FermiConfiguration::Fragment97, 
+    &G4FermiConfiguration::Fragment98, 
+    &G4FermiConfiguration::Fragment99
 };
 
 
@@ -257,7 +274,7 @@ G4FermiConfiguration::G4FermiConfiguration()
 
 G4FermiConfiguration::G4FermiConfiguration(const G4FermiConfiguration &right)
 {
-  Index = right.Index;
+    Index = right.Index;
 }
 
 
@@ -268,328 +285,338 @@ G4FermiConfiguration::~G4FermiConfiguration()
 
 const G4FermiConfiguration & G4FermiConfiguration::operator=(const G4FermiConfiguration &right)
 {
-  Index = right.Index;
-  return *this;
+    Index = right.Index;
+    return *this;
 }
 
 
 G4bool G4FermiConfiguration::operator==(const G4FermiConfiguration &right) const
 {
-  if (Index.entries() == right.Index.entries()) {
-    for (G4int i = 0; i < Index.entries(); i++) {
-      if (Index(i) != right.Index(i)) return false;
+    if (Index.size() == right.Index.size()) {
+	for (G4int i = 0; i < Index.size(); i++) {
+	    if (Index[i] != right.Index[i]) return false;
+	}
+	return true;
     }
-    return true;
-  }
-  else return false;
+    else return false;
 }
 
 G4bool G4FermiConfiguration::operator!=(const G4FermiConfiguration &right) const
 {
-  return !(*this == right);
+    return !(*this == right);
 }
 
 
 void G4FermiConfiguration::Initialize(const G4int max)
 {
-  Index.clear();
-  for (G4int i = 0;  i < max; i++) Index.insert(1);
+    Index.clear();
+    for (G4int i = 0;  i < max; i++) Index.push_back(1);
 }
 
 
 G4bool G4FermiConfiguration::SplitNucleus(const G4int A, const G4int Z)
 {
-  // Splits nucleus (A,Z) into K fragments
-  // Returns TRUE if splitting is succesful and FALSE in other case
+    // Splits nucleus (A,Z) into K fragments
+    // Returns TRUE if splitting is succesful and FALSE in other case
   
-  G4int K = Index.entries();
+    G4int K = Index.size();
 
 
-  G4int L = 0;
-  G4int SumA = 0, SumZ = 0;
-  for (;;) {
-    L++;
-    if (L < K) {
-      Index[L-1]++;
-      if (Index[L-1] > Index[L]) {
-	Index[L-1] = 1;
-	continue;
-      } else {
-	SumA = 0;
-	for (G4int i = 1; i <= K; i++) SumA += theListOfFragments[Index[i-1]-1]->GetA();
-	if (SumA > A) {
-	  Index[L-1] = 1;
-	  continue;
-	} else if (SumA < A) {
-	  L = 0;
-	  continue;
+    G4int L = 0;
+    G4int SumA = 0, SumZ = 0;
+    for (;;) {
+	L++;
+	if (L < K) {
+	    //      Index[L-1]++;
+	    Index[L-1] = Index[L-1]+1;
+	    if (Index[L-1] > Index[L]) {
+		Index[L-1] = 1;
+		continue;
+	    } else {
+		SumA = 0;
+		for (G4int i = 1; i <= K; i++) SumA += theListOfFragments[Index[i-1]-1]->GetA();
+		if (SumA > A) {
+		    Index[L-1] = 1;
+		    continue;
+		} else if (SumA < A) {
+		    L = 0;
+		    continue;
+		} else {
+		    SumZ = 0;
+		    for (G4int i = 1; i <= K; i++) SumZ += theListOfFragments[Index[i-1]-1]->GetZ();
+		    if (SumZ != Z) {
+			L = 0;
+			continue;
+		    } else {
+			return true;
+		    }
+		}
+	    }
 	} else {
-	  SumZ = 0;
-	  for (G4int i = 1; i <= K; i++) SumZ += theListOfFragments[Index[i-1]-1]->GetZ();
-	  if (SumZ != Z) {
-	    L = 0;
-	    continue;
-	  } else {
-	    return true;
-	  }
+	    //      Index[L-1]++;
+	    Index[L-1] = Index[L-1]+1;
+	    if (Index[L-1] > 100) {
+		return false;
+	    } else {
+		SumA = 0;
+		for (G4int i = 1; i <= K; i++) SumA += theListOfFragments[Index[i-1]-1]->GetA();
+		if (SumA < A) {
+		    L = 0;
+		    continue;
+		} else if (SumA == A) {
+		    SumZ = 0;
+		    for (G4int i = 1; i <= K; i++) SumZ += theListOfFragments[Index[i-1]-1]->GetZ();
+		    if (SumZ != Z) {
+			L = 0;
+			continue;
+		    } else {
+			return true;
+		    }
+		} else {
+		    return false;
+		}
+	    }
 	}
-      }
-    } else {
-      Index[L-1]++;
-      if (Index[L-1] > 100) {
-	return false;
-      } else {
-	SumA = 0;
-	for (G4int i = 1; i <= K; i++) SumA += theListOfFragments[Index[i-1]-1]->GetA();
-	if (SumA < A) {
-	  L = 0;
-	  continue;
-	} else if (SumA == A) {
-	  SumZ = 0;
-	  for (G4int i = 1; i <= K; i++) SumZ += theListOfFragments[Index[i-1]-1]->GetZ();
-	  if (SumZ != Z) {
-	    L = 0;
-	    continue;
-	  } else {
-	    return true;
-	  }
-	} else {
-	  return false;
-	}
-      }
     }
-  }
 }
 
 
 G4double G4FermiConfiguration::CoulombBarrier(void)
 {
-	//  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
-	const G4double Coef = (3./5.)*1.44*MeV*fermi* pow(1./(1.+Kappa), 1./3.)/r0;
+    //  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
+    const G4double Coef = (3./5.)*1.44*MeV*fermi* pow(1./(1.+Kappa), 1./3.)/r0;
 
-	G4double SumA = 0, SumZ = 0;
-	G4double CoulombEnergy = 0.;
-	for (G4int i = 0; i < Index.entries(); i++) {
-		G4double z = theListOfFragments[Index[i]-1]->GetZ();
-		G4double a = theListOfFragments[Index[i]-1]->GetA();
-		CoulombEnergy += (z*z) / pow(a, 1./3.);
-		SumA += a;
-		SumZ += z;
-	}
-	CoulombEnergy -= SumZ*SumZ/pow(SumA, 1./3.);
-	return -Coef * CoulombEnergy;
+    G4double SumA = 0, SumZ = 0;
+    G4double CoulombEnergy = 0.;
+    for (G4int i = 0; i < Index.size(); i++) {
+	G4double z = theListOfFragments[Index[i]-1]->GetZ();
+	G4double a = theListOfFragments[Index[i]-1]->GetA();
+	CoulombEnergy += (z*z) / pow(a, 1./3.);
+	SumA += a;
+	SumZ += z;
+    }
+    CoulombEnergy -= SumZ*SumZ/pow(SumA, 1./3.);
+    return -Coef * CoulombEnergy;
 }
 
 
 
 
 G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double TotalE)
-  // Decay probability  for a given channel with K fragments
+    // Decay probability  for a given channel with K fragments
 {
-  // A: Atomic Weight
-	// TotalE: Total energy of nucleus (MeV)
+    // A: Atomic Weight
+    // TotalE: Total energy of nucleus (MeV)
   
-	G4int K = Index.entries();
-	G4int i;
+    G4int K = Index.size();
+    G4int i;
   
-	const G4double NucleonMass = 938.0*MeV;
-	const G4double DimCoeff = pow(r0*sqrt(NucleonMass)/hbarc,3.0)*Kappa*sqrt(2.0/pi)/3.0;
+    const G4double NucleonMass = 938.0*MeV;
+    const G4double DimCoeff = pow(r0*sqrt(NucleonMass)/hbarc,3.0)*Kappa*sqrt(2.0/pi)/3.0;
   
-	// Calculation of 1/Gamma(3(n-1)/2)
-	G4double InvGammaFunc = 1.0;
-	if (K <= 1) InvGammaFunc = 0.0;
-	else {
-		G4double arg = 3.0*(K-1)/2.0 - 1.0;
-		while (arg > 1.1) {
-			InvGammaFunc *= arg; 
-			arg--;
-		}
-		
-		if ((K-1)%2 == 1) InvGammaFunc *= sqrt(pi)/2.0;
-		
-		InvGammaFunc = 1.0/InvGammaFunc;
+    // Calculation of 1/Gamma(3(n-1)/2)
+    G4double InvGammaFunc = 1.0;
+    if (K <= 1) InvGammaFunc = 0.0;
+    else {
+	G4double arg = 3.0*(K-1)/2.0 - 1.0;
+	while (arg > 1.1) {
+	    InvGammaFunc *= arg; 
+	    arg--;
 	}
+		
+	if ((K-1)%2 == 1) InvGammaFunc *= sqrt(pi)/2.0;
+		
+	InvGammaFunc = 1.0/InvGammaFunc;
+    }
   
   
-	G4double DeltaEnergy = TotalE; // MeV
-	G4double Weight = 0.;
-	G4double ProdAMass = 1.;  
-	G4double ProdSpin = 1.;
+    G4double DeltaEnergy = TotalE; // MeV
+    G4double Weight = 0.;
+    G4double ProdAMass = 1.;  
+    G4double ProdSpin = 1.;
 
-	for (i = 0; i<K; i++) {
-		ProdAMass *= theListOfFragments[Index[i]-1]->GetA();
-		// Spin factor S_n
-		ProdSpin *= theListOfFragments[Index[i]-1]->GetPolarization();
-		DeltaEnergy -= theListOfFragments[Index[i]-1]->GetFragmentMass() + 
-							theListOfFragments[Index[i]-1]->GetExcitationEnergy();
+    for (i = 0; i<K; i++) {
+	ProdAMass *= theListOfFragments[Index[i]-1]->GetA();
+	// Spin factor S_n
+	ProdSpin *= theListOfFragments[Index[i]-1]->GetPolarization();
+	DeltaEnergy -= theListOfFragments[Index[i]-1]->GetFragmentMass() + 
+	    theListOfFragments[Index[i]-1]->GetExcitationEnergy();
+    };
+  
+    // Check that there is enough energy to produce K fragments
+    if ((DeltaEnergy -= CoulombBarrier()) <= 0.0) return Weight; // return 0.0
+  
+    ProdAMass /= A;
+    ProdAMass *= sqrt(ProdAMass);
+  
+    if (K <= 2) {
+	Weight = InvGammaFunc*A*DimCoeff*ProdAMass*ProdSpin*sqrt(DeltaEnergy);
+	if (Index[0] == Index[1]) Weight *= 0.5; //Permutation factor G_n
+    } else {
+	G4double Base = A*DimCoeff*DeltaEnergy*sqrt(DeltaEnergy);
+	G4double Powered = 1.0;
+	G4double PermutationFactor = 1.0;
+	for (G4int i = 0; i < K-1; i++) {
+	    Powered *= Base;
+	    G4int N = 1;
+	    for (G4int j = i+1; j<K; j++) if(Index[i] == Index[j]) N++;
+	    PermutationFactor *= N;
 	};
+	Weight = Powered*ProdAMass*ProdSpin*InvGammaFunc/(DeltaEnergy*PermutationFactor);
+    }
   
-	// Check that there is enough energy to produce K fragments
-	if ((DeltaEnergy -= CoulombBarrier()) <= 0.0) return Weight; // return 0.0
-  
-	ProdAMass /= A;
-	ProdAMass *= sqrt(ProdAMass);
-  
-	if (K <= 2) {
-		Weight = InvGammaFunc*A*DimCoeff*ProdAMass*ProdSpin*sqrt(DeltaEnergy);
-		if (Index[0] == Index[1]) Weight *= 0.5; //Permutation factor G_n
-	} else {
-		G4double Base = A*DimCoeff*DeltaEnergy*sqrt(DeltaEnergy);
-		G4double Powered = 1.0;
-		G4double PermutationFactor = 1.0;
-		for (G4int i = 0; i < K-1; i++) {
-			Powered *= Base;
-			G4int N = 1;
-			for (G4int j = i+1; j<K; j++) if(Index[i] == Index[j]) N++;
-			PermutationFactor *= N;
-		};
-		Weight = Powered*ProdAMass*ProdSpin*InvGammaFunc/(DeltaEnergy*PermutationFactor);
-	}
-  
-	return Weight; 
+    return Weight; 
 }
 
 
 G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucleus)
 {
  
-  G4int K = Index.entries();
+    G4int K = Index.size();
   
-  // Avalaible kinetic energy of system.
-  G4double AvalKineticEnergy = theNucleus.GetExcitationEnergy() +
-    G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),theNucleus.GetA());
+    // Avalaible kinetic energy of system.
+    G4double AvalKineticEnergy = theNucleus.GetExcitationEnergy() +
+	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),theNucleus.GetA());
   
-  G4int i;
-  for (i = 0; i < K; i++) 
-    AvalKineticEnergy -= theListOfFragments[Index[i]-1]->GetFragmentMass();
+    G4int i;
+    for (i = 0; i < K; i++) 
+	AvalKineticEnergy -= theListOfFragments[Index[i]-1]->GetFragmentMass();
   
   
-  // Calculate Momenta of K fragments
-  G4RWTPtrOrderedVector<G4LorentzVector>* MomentumComponents = 
-    FragmentsMomentum(AvalKineticEnergy);
+    // Calculate Momenta of K fragments
+    G4std::deque<G4LorentzVector*>* MomentumComponents = 
+	FragmentsMomentum(AvalKineticEnergy);
+
   
-  G4FragmentVector * theResult = new G4FragmentVector;
+    G4FragmentVector * theResult = new G4FragmentVector;
   
-  // Go back to the Lab Frame
-  for (i = 0; i < K; i++) {
+    // Go back to the Lab Frame
+    for (i = 0; i < K; i++) {
     
-    G4LorentzVector FourMomentum(*(MomentumComponents->at(i)));
+	G4LorentzVector FourMomentum(*(MomentumComponents->operator[](i)));
 
     
-    // Lorentz boost
-    FourMomentum.boost(theNucleus.GetMomentum().boostVector());
+	// Lorentz boost
+	FourMomentum.boost(theNucleus.GetMomentum().boostVector());
     
-    G4FragmentVector * fragment = theListOfFragments[Index[i]-1]->GetFragment(FourMomentum);
+	G4FragmentVector * fragment = theListOfFragments[Index[i]-1]->GetFragment(FourMomentum);
     
-    do {
-      theResult->insert(fragment->removeFirst());
-    } while (fragment->entries() > 0);
+	do {
+	    theResult->push_back(*(fragment->end()-1));
+	    fragment->pop_back();
+	} while (!fragment->empty());
     
-    delete fragment;
-  }
+	delete fragment;
+    }
   
-  MomentumComponents->clearAndDestroy();
-  delete MomentumComponents;
+    //  MomentumComponents->clearAndDestroy();
+    while (!MomentumComponents->empty()) {
+	delete MomentumComponents->back();
+	MomentumComponents->pop_back();
+    }
+    delete MomentumComponents;
   
-  return theResult;
+    return theResult;
 }
 
 
 
-G4RWTPtrOrderedVector<G4LorentzVector>* 
+G4std::deque<G4LorentzVector*>* 
 G4FermiConfiguration::FragmentsMomentum(G4double KineticEnergy)
 {
-  // Calculates momentum for K fragments (Kopylov's method of sampling is used)
-  // KinetEnergy is the available kinetic energy
+    // Calculates momentum for K fragments (Kopylov's method of sampling is used)
+    // KinetEnergy is the available kinetic energy
   
 
-  G4int K = Index.entries();
+    G4int K = Index.size();
 
   
-  G4RWTPtrOrderedVector<G4LorentzVector>* MomentumList = 
-    new G4RWTPtrOrderedVector<G4LorentzVector>(K);
+    G4std::deque<G4LorentzVector*>* MomentumList = 
+	new G4std::deque<G4LorentzVector*>(K);
   
-  G4double AvalaibleMass = 0; 
-  for (G4int i=0; i<K; i++) AvalaibleMass += theListOfFragments[Index[i]-1]->GetFragmentMass();
+    G4double AvalaibleMass = 0; 
+    for (G4int i=0; i<K; i++) AvalaibleMass += theListOfFragments[Index[i]-1]->GetFragmentMass();
   
-  G4double PFragMagCM = 0.0;
-  G4double Mass = AvalaibleMass+KineticEnergy;
-  G4LorentzVector PFragCM(0.0,0.0,0.0,0.0);
-  G4LorentzVector PFragLab(0.0,0.0,0.0,0.0);
-  G4LorentzVector PRestCM(0.0,0.0,0.0,0.0);
-  G4LorentzVector PRestLab(0.0,0.0,0.0,Mass);
+    G4double PFragMagCM = 0.0;
+    G4double Mass = AvalaibleMass+KineticEnergy;
+    G4LorentzVector PFragCM(0.0,0.0,0.0,0.0);
+    G4LorentzVector PFragLab(0.0,0.0,0.0,0.0);
+    G4LorentzVector PRestCM(0.0,0.0,0.0,0.0);
+    G4LorentzVector PRestLab(0.0,0.0,0.0,Mass);
 
-  for (G4int l = 0; l < K-1; l++) {
-    G4int LK = K - l;
-    G4double FragMass = theListOfFragments[Index[LK-1]-1]->GetFragmentMass();
-    AvalaibleMass -= FragMass;
+    for (G4int l = 0; l < K-1; l++) {
+	G4int LK = K - l;
+	G4double FragMass = theListOfFragments[Index[LK-1]-1]->GetFragmentMass();
+	AvalaibleMass -= FragMass;
 
-    if (LK > 2) KineticEnergy *= RNKSI(LK-1); 
-    else KineticEnergy = 0.0;
+	if (LK > 2) KineticEnergy *= RNKSI(LK-1); 
+	else KineticEnergy = 0.0;
 
-    G4double RestMass = AvalaibleMass + KineticEnergy;
+	G4double RestMass = AvalaibleMass + KineticEnergy;
 
-    PFragMagCM = sqrt(
-		      abs((Mass*Mass - (FragMass + RestMass)*(FragMass + RestMass))*
-			  (Mass*Mass - (FragMass - RestMass)*(FragMass - RestMass)))
-		      )/ (2.0*Mass);
+	PFragMagCM = sqrt(
+	    abs((Mass*Mass - (FragMass + RestMass)*(FragMass + RestMass))*
+		(Mass*Mass - (FragMass - RestMass)*(FragMass - RestMass)))
+	    )/ (2.0*Mass);
     
 
-    // Create a unit vector with a random direction isotropically distributed
-    G4ParticleMomentum RandVector(IsotropicVector(PFragMagCM)); 
+	// Create a unit vector with a random direction isotropically distributed
+	G4ParticleMomentum RandVector(IsotropicVector(PFragMagCM)); 
     
-    PFragCM.setVect(RandVector);
-    //    PFragCM.setE((Mass*Mass + FragMass*FragMass - RestMass*RestMass)/(2.0*Mass));
-    PFragCM.setE(sqrt(RandVector.mag2()+FragMass*FragMass));
+	PFragCM.setVect(RandVector);
+	//    PFragCM.setE((Mass*Mass + FragMass*FragMass - RestMass*RestMass)/(2.0*Mass));
+	PFragCM.setE(sqrt(RandVector.mag2()+FragMass*FragMass));
 
-    PRestCM.setVect(-RandVector);
-    //    PRestCM.setE((Mass*Mass + RestMass*RestMass - FragMass*FragMass)/(2.0*Mass));
-    PRestCM.setE(sqrt(RandVector.mag2()+RestMass*RestMass));
+	PRestCM.setVect(-RandVector);
+	//    PRestCM.setE((Mass*Mass + RestMass*RestMass - FragMass*FragMass)/(2.0*Mass));
+	PRestCM.setE(sqrt(RandVector.mag2()+RestMass*RestMass));
 
 
-    G4ThreeVector BoostV = PRestLab.boostVector();
+	G4ThreeVector BoostV = PRestLab.boostVector();
 
-    PFragLab = PFragCM;
-    PFragLab.boost(BoostV);
-    PRestLab = PRestCM;
-    PRestLab.boost(BoostV);
+	PFragLab = PFragCM;
+	PFragLab.boost(BoostV);
+	PRestLab = PRestCM;
+	PRestLab.boost(BoostV);
     
-    MomentumList->prepend(new G4LorentzVector(PFragLab));
+	//    MomentumList->prepend(new G4LorentzVector(PFragLab));
+	MomentumList->push_front(new G4LorentzVector(PFragLab));
 
-    Mass = RestMass;
-  }
+	Mass = RestMass;
+    }
   
-  MomentumList->prepend(new G4LorentzVector(PRestLab));
-  return MomentumList;
+    //  MomentumList->prepend(new G4LorentzVector(PRestLab));
+    MomentumList->push_front(new G4LorentzVector(PRestLab));
+    return MomentumList;
 }
 
 
 G4double G4FermiConfiguration::RNKSI(const G4int K)
 {
-	G4double csim = (3.0*K-5.0)/(3.0*K-4.0);
-	G4double pex = (3.0*K-5.0)/2.0;
-	G4double fcsim = sqrt(1.0-csim)*pow(csim,pex);
+    G4double csim = (3.0*K-5.0)/(3.0*K-4.0);
+    G4double pex = (3.0*K-5.0)/2.0;
+    G4double fcsim = sqrt(1.0-csim)*pow(csim,pex);
 
-	G4double csi = 0.0;
-	G4double fcsi= 0.0;
-	G4double rf = 0.0;
-	do {
-		csi = G4UniformRand();
-		fcsi = sqrt(1.0-csi)*pow(csi,pex);
-		rf = fcsim*G4UniformRand();
-	} while (rf > fcsi);
-	return csi;
+    G4double csi = 0.0;
+    G4double fcsi= 0.0;
+    G4double rf = 0.0;
+    do {
+	csi = G4UniformRand();
+	fcsi = sqrt(1.0-csi)*pow(csi,pex);
+	rf = fcsim*G4UniformRand();
+    } while (rf > fcsi);
+    return csi;
 }
     
 G4ParticleMomentum G4FermiConfiguration::IsotropicVector(const G4double Magnitude)
-  // Samples a isotropic random vectorwith a magnitud given by Magnitude.
-  // By default Magnitude = 1.0
+    // Samples a isotropic random vectorwith a magnitud given by Magnitude.
+    // By default Magnitude = 1.0
 {
-  G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-  G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
-  G4double Phi = twopi*G4UniformRand();
-  G4ParticleMomentum Vector(Magnitude*cos(Phi)*SinTheta,
-			    Magnitude*sin(Phi)*SinTheta,
-			    Magnitude*CosTheta);
-  return Vector;
+    G4double CosTheta = 1.0 - 2.0*G4UniformRand();
+    G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+    G4double Phi = twopi*G4UniformRand();
+    G4ParticleMomentum Vector(Magnitude*cos(Phi)*SinTheta,
+			      Magnitude*sin(Phi)*SinTheta,
+			      Magnitude*CosTheta);
+    return Vector;
 }

@@ -15,6 +15,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 June, 01    Y.Morita (persistency-V03-01-00)
+- new tag for release 3.2
+
+28 April, 01   Y.Morita
+- Change NULL to 0
+
+25 April, 01   G.Cosmo
+- Removed redundant declarations of G4ThreeVectorList in CSG schemas:
+  G4PPara.ddl, G4PSphere.ddl and G4PTrap.ddl.
+  Required to cowork with recent migration to STL vector of geometry code.
+
+15 March, 01   Y.Morita (persistency-V03-00-02)
+- Updated GNUmakefile for new config.
+
 14 March, 01   Y.Morita (persistency-V03-00-01)
 - G4PDCofThisEvent.ddl: fixed a bug in GetNumberOfCollections()
 

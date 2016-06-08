@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4UIcommandTree.hh,v 1.6 2001/02/08 06:07:18 asaim Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4UIcommandTree.hh,v 1.7.2.1 2001/06/28 19:10:15 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 
 #ifndef G4UIcommandTree_h
@@ -61,7 +77,7 @@ class G4UIcommandTree
       { return tree[i-1]; };
       inline G4UIcommandTree * GetTree(G4String comName)
       { 
-        for( int i=0; i < tree.size(); i++)
+        for( size_t i=0; i < tree.size(); i++)
         {
           if( comName == tree[i]->GetPathName() )
           { return tree[i]; }

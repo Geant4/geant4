@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001/03/19 12:13:38 japost Exp $
+$Id: History,v 1.11 2001/06/01 13:38:41 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr  11, 2001   J. Apostolakis   transport-V03-01-02
+------------------------------
+Corrected the last update of G4Transportation.cc, which overwrote the 
+value of the spin in the cases where a particle was not charged (eg photon) or
+a charged particle was not in a field. 
+
+Apr  11, 2001   P. Gumplinger   transport-V03-01-01
+-----------------------------
+Updated G4Transportation.cc to make spin tracking work correctly:
+- Replaced the line originally commented out:
+    // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
+  with: 
+    fTransportEndSpin = aFieldTrack.GetSpin();
+- Added to the AlongStepDoIt() the following call:
+    fParticleChange.SetPolarizationChange(fTransportEndSpin);
+
+
 Mar  19, 2001   J. Apostolakis  transport-V03-00-01
 ------------------------------
 G4Transportation modified to use new FieldTrack, and get Kinetic Energy from it. 

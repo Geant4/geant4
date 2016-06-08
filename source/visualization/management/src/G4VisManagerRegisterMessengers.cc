@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.27 2001/02/23 15:43:32 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.30.2.1 2001/06/28 19:16:17 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // G4VisManager::RegisterMessengers - John Allison 30/July/1998.
@@ -115,8 +131,11 @@ NI                      [<copy-no>] [<depth>]
   Adds logical volume to current scene.
 
 /vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
-  default:                     world                0         -1
+  default:                     world                -1         -1
   Adds physical volume to current scene.
+  If copy-no is negative, first occurrence of physical-volume-name is
+    selected.
+  If depth is negative, search is made to all depths.
 
 /vis/scene/add/hits [<sensitive-volume-name>]
   default:              (argument not impl'd yet.)
@@ -144,10 +163,10 @@ NI /vis/scene/set/modelingStyle [<modeling-style>]
   Refreshes all viewers of current scene.
   Does not issue "update" (see /vis/viewer/update).
 
-NI /vis/scene/add/axes
+/vis/scene/add/axes
   Adds to current scene.
 
-NI /vis/scene/add/text
+/vis/scene/add/text
   Adds to current scene.
 
 
@@ -407,6 +426,12 @@ default:          error                600
   /vis/viewer/create ! ! $2
 
 NI /vis/draw <physical-volume-name> clashes with old /vis~/draw/, so...
+
+/vis/drawTree [<physical-volume-name>] [<system>]
+default:           world                ATree
+  /vis/open $2
+  /vis/drawVolume $1
+
 /vis/drawVolume [<physical-volume-name>]
 default:             world
   /vis/scene/create
@@ -438,43 +463,52 @@ default: 0 0 0 0 cm 1 0 cm
 
   G4VVisCommand::SetVisManager (this);
 
-  G4UIcommand* command;
-  command = new G4UIdirectory ("/vis/");
-  command -> SetGuidance ("Visualization commands.");
+  G4UIcommand* directory;
+
+  directory = new G4UIdirectory ("/vis/");
+  directory -> SetGuidance ("Visualization commands.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandEnable);
   fMessengerList.push_back (new G4VisCommandVerbose);
 
-  command = new G4UIdirectory ("/vis/scene/");
-  command -> SetGuidance ("Operations on Geant4 scenes.");
+  directory = new G4UIdirectory ("/vis/scene/");
+  directory -> SetGuidance ("Operations on Geant4 scenes.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneCreate);
   fMessengerList.push_back (new G4VisCommandSceneList);
   fMessengerList.push_back (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.push_back (new G4VisCommandSceneSelect);
   fMessengerList.push_back (new G4VisCommandSceneRemove);
 
-  command = new G4UIdirectory ("/vis/scene/add/");
-  command -> SetGuidance ("Add model to current scene.");
+  directory = new G4UIdirectory ("/vis/scene/add/");
+  directory -> SetGuidance ("Add model to current scene.");
+  fDirectoryList.push_back (directory);
+  fMessengerList.push_back (new G4VisCommandSceneAddAxes);
   fMessengerList.push_back (new G4VisCommandSceneAddGhosts);
   fMessengerList.push_back (new G4VisCommandSceneAddHits);
   fMessengerList.push_back (new G4VisCommandSceneAddLogicalVolume);
+  fMessengerList.push_back (new G4VisCommandSceneAddText);
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
   fMessengerList.push_back (new G4VisCommandSceneAddVolume);
 
-  command = new G4UIdirectory ("/vis/scene/include/");
-  command -> SetGuidance ("Deprecated commands; now in /vis/scene/add/.");
+  directory = new G4UIdirectory ("/vis/scene/include/");
+  directory -> SetGuidance ("Deprecated commands; now in /vis/scene/add/.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneIncludeHits);
   fMessengerList.push_back (new G4VisCommandSceneIncludeTrajectories);
 
-  command = new G4UIdirectory ("/vis/sceneHandler/");
-  command -> SetGuidance ("Operations on Geant4 scene handlers.");
+  directory = new G4UIdirectory ("/vis/sceneHandler/");
+  directory -> SetGuidance ("Operations on Geant4 scene handlers.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandSceneHandlerAttach);
   fMessengerList.push_back (new G4VisCommandSceneHandlerCreate);
   fMessengerList.push_back (new G4VisCommandSceneHandlerList);
   fMessengerList.push_back (new G4VisCommandSceneHandlerSelect);
   fMessengerList.push_back (new G4VisCommandSceneHandlerRemove);
 
-  command = new G4UIdirectory ("/vis/viewer/");
-  command -> SetGuidance ("Operations on Geant4 viewers.");
+  directory = new G4UIdirectory ("/vis/viewer/");
+  directory -> SetGuidance ("Operations on Geant4 viewers.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandViewerClear);
   fMessengerList.push_back (new G4VisCommandViewerCreate);
   fMessengerList.push_back (new G4VisCommandViewerDolly);
@@ -489,11 +523,13 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandViewerViewpoint);
   fMessengerList.push_back (new G4VisCommandViewerZoom);
 
-  command = new G4UIdirectory ("/vis/viewer/set/");
-  command -> SetGuidance ("Set view parameters of current viewer.");
+  directory = new G4UIdirectory ("/vis/viewer/set/");
+  directory -> SetGuidance ("Set view parameters of current viewer.");
+  fDirectoryList.push_back (directory);
   fMessengerList.push_back (new G4VisCommandsViewerSet);
 
   // Compound commands...
+  fMessengerList.push_back (new G4VisCommandDrawTree);
   fMessengerList.push_back (new G4VisCommandDrawVolume);
   fMessengerList.push_back (new G4VisCommandDrawView);
   fMessengerList.push_back (new G4VisCommandOpen);

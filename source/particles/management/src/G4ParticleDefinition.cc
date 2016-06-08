@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ParticleDefinition.cc,v 1.10 2000/10/20 11:35:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ParticleDefinition.cc,v 1.11.2.1 2001/06/28 19:11:12 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-//	For information related to this code contact:
-//	CERN, IT Division, ASD Group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //      ---------------- G4ParticleDefinition -----------------
@@ -71,23 +85,23 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGiIsospin3(iIsospin3),
 		   thePDGIsospin(iIsospin*0.5),
 		   thePDGIsospin3(iIsospin3*0.5),
-		   theParticleType(pType), 
-		   theParticleSubType(""), 
 		   theLeptonNumber(lepton),
 		   theBaryonNumber(baryon),
+		   theParticleType(pType), 
+		   theParticleSubType(""), 
 		   thePDGEncoding(encoding),
 		   theAntiPDGEncoding(-1*encoding),
+		   fShortLivedFlag(shortlived),
 		   thePDGStable(stable), 
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
 		   theProcessManager(0),
-		   fShortLivedFlag(shortlived),
 		   fApplyCutsFlag(false),
                    verboseLevel(1)
 {
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
-   G4ParticleDefinition *ptr = theParticleTable->Insert(this);
+   theParticleTable->Insert(this);
 
    // check quark contents
 #ifdef G4VERBOSE

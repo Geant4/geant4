@@ -1,20 +1,34 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.28 2001/02/05 17:45:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.34.2.2 2001/06/28 20:19:28 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      ------------ G4LowEnergyBremsstrahlung: low energy modifications --------
 //                   by Alessandra Forti, March 1999
 //
@@ -24,14 +38,15 @@
 // - First implementation of continuous energy loss.
 // 17.02.2000 Veronique Lefebure
 //  - correct bug : the gamma energy was not deposited when the gamma was 
-//    not produced when its energy was < CutForLowEnergySecondaryPhotons
+//    not produced when its energy was < cutForLowEnergySecondaryPhotons
 //
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Modified PostStepDoIt to insert sampling with with EEDL data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
-// 20/09/00 update printout V.Ivanchenko
+// 20.09.00 update printout V.Ivanchenko
+// 24.04.01 V.Ivanchenko remove RogueWave 
 // --------------------------------------------------------------
 
 #include "G4LowEnergyBremsstrahlung.hh"
@@ -40,7 +55,7 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
  
 // constructor
  
@@ -52,14 +67,14 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName
     BTable(0),
     ZNumVec(0),
     lowEnergyCut(0.1*eV),
-    CutForLowEnergySecondaryPhotons(0.)
+    cutForLowEnergySecondaryPhotons(0.)
 { 
-    LowestKineticEnergy  = GetLowerBoundEloss();
-    HighestKineticEnergy = GetUpperBoundEloss();
-    TotBin = GetNbinEloss();
+    lowestKineticEnergy  = GetLowerBoundEloss();
+    highestKineticEnergy = GetUpperBoundEloss();
+    totBin = GetNbinEloss();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
  
 // destructor
  
@@ -89,25 +104,24 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
         delete BTable;
      }
 
-   if (&PartialSumSigma) {
+   if (&partialSumSigma) {
 
-      PartialSumSigma.clearAndDestroy();
+      partialSumSigma.clearAndDestroy();
    }
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 // SET CUT FOR LOW ENERGY SECONDARY PHOTONS A. FORTI
 void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut){
 
-  CutForLowEnergySecondaryPhotons = cut;
+  cutForLowEnergySecondaryPhotons = cut;
 }
 
   // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE
 void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
 
- 
   BuildZVec();
 
   // energy sampling formula coefficient
@@ -116,6 +130,8 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
   BuildCrossSectionTable() ;
   
   BuildLossTable(aParticleType) ;
+
+
   if (&aParticleType==G4Electron::Electron()){
 
     RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable ;
@@ -132,12 +148,9 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
  
   BuildDEDXTable(aParticleType) ;
  
- 
- 
-
 
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
   // CONSTRUCT THE CROSS SECTION TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC. 
 void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
@@ -150,13 +163,14 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "brem/br-cs-");
     
-    theCrossSectionTable->insert(oneAtomCS);
+    //    theCrossSectionTable->insert(oneAtomCS);
+    theCrossSectionTable->push_back(oneAtomCS);
     
   }//end for on atoms
 }
@@ -240,9 +254,9 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
   for (G4int J=0; J<numOfMaterials; J++){
     
       // create physics vector and fill it
-      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy,
-							   HighestKineticEnergy,
-							   TotBin);
+      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(lowestKineticEnergy,
+							   highestKineticEnergy,
+							   totBin);
       // get material parameters needed for the energy loss calculation
       const G4Material* material= (*theMaterialTable)[J];
 
@@ -255,7 +269,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
       const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
       
       // now comes the loop for the kinetic energy values
-      for (G4int i = 0 ; i < TotBin ; i++){
+      for (G4int i = 0 ; i < totBin ; i++){
 
            const G4double LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
            G4double ionloss = 0.;          
@@ -272,7 +286,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 }
 
       
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//     
 
 //
 // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
@@ -284,7 +298,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
 // tables are Build for MATERIALS. see GENERAL part of processes in GEANT4
   // manual
 {
-   G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2.;
+   G4double FixedEnergy = (lowestKineticEnergy + highestKineticEnergy)/2.;
 
    //create table
    if (theMeanFreePathTable) {
@@ -297,8 +311,8 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
    G4Material* material;
    G4double* CutInKineticEnergy = G4Gamma::Gamma()->GetCutsInEnergy() ;
 
-   PartialSumSigma.clearAndDestroy();
-   PartialSumSigma.resize(NumbOfMaterials);
+   partialSumSigma.clearAndDestroy();
+   partialSumSigma.resize(NumbOfMaterials);
 
    G4double LowEdgeEnergy , Value;
    theMeanFreePathTable = new G4PhysicsTable(NumbOfMaterials);
@@ -307,21 +321,21 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
    for ( G4int J=0 ; J < NumbOfMaterials; J++ ){ 
      
      //create physics vector then fill it ....
-     ptrVector = new G4PhysicsLogVector(LowestKineticEnergy, HighestKineticEnergy,
-					TotBin ) ;
+     ptrVector = new G4PhysicsLogVector(lowestKineticEnergy, highestKineticEnergy,
+					totBin ) ;
      
      material= (*theMaterialTable)(J);
      const G4ElementVector* theElementVector = material->GetElementVector();
      const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
      const G4double Threshold = CutInKineticEnergy[J] ;
         
-     for ( G4int i = 0 ; i < TotBin ; i++ ){
+     for ( G4int i = 0 ; i < totBin ; i++ ){
        
        LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
        const G4double BigPath= DBL_MAX;
        G4double SIGMA = 0 ;
        
-       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+       for (  size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	 
 	 G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
          G4double interCrsSec = GetCrossSectionWithCut(AtomIndex, LowEdgeEnergy,Threshold);
@@ -335,18 +349,18 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
      
      theMeanFreePathTable->insert( ptrVector );
      
-     // Compute the PartialSumSigma table at a given fixed energy
-     ComputePartialSumSigma(FixedEnergy, material,Threshold) ;       
+     // Compute the partialSumSigma table at a given fixed energy
+     ComputepartialSumSigma(FixedEnergy, material,Threshold) ;       
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 //
 // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
 // LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
 //
-void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(const G4double KineticEnergy,
+void G4LowEnergyBremsstrahlung::ComputepartialSumSigma(const G4double KineticEnergy,
 						       const G4Material* aMaterial,
 						       const G4double Threshold)
 
@@ -359,7 +373,7 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(const G4double KineticEne
    const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
    const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
 
-   PartialSumSigma[Imate] = new G4DataVector();
+   partialSumSigma[Imate] = new G4DataVector();
 
    G4double SIGMA = 0. ;
 
@@ -371,11 +385,11 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(const G4double KineticEne
      
      SIGMA += theAtomNumDensityVector[Ielem]*interCrsSec;
 	 
-     PartialSumSigma[Imate]->push_back(SIGMA);
+     partialSumSigma[Imate]->push_back(SIGMA);
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 							   const G4Step& stepData){
@@ -401,7 +415,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   //	 << ElectKinEn/keV << " keV " << G4endl;
   // MGP end
 
-  if(ElectKinEn <= LowestKineticEnergy){
+  if(ElectKinEn <= lowestKineticEnergy){
     
     aParticleChange.SetStatusChange(fStopAndKill);
     aParticleChange.SetEnergyChange(0.);
@@ -429,7 +443,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   
   // limits of the energy sampling
   G4double TotalEnergy = ElectKinEn + electron_mass_c2;
-  G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
+  //  G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
   
   //
   // The emitted gamma energy is from EEDL data fitted with A/E+B function.
@@ -455,7 +469,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   G4double IntegrProb = p1+p2;  
   G4double R1 = G4UniformRand()*IntegrProb;
   
-  G4double GammaEnergy;
+  G4double GammaEnergy = 0.;
 
   if(R1 <= p1){ 
     
@@ -612,7 +626,7 @@ G4double G4LowEnergyBremsstrahlung::GetEnergyLossWithCut(const G4double AtomicNu
    loss+=SmallLoss;
   return loss ;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 G4double G4LowEnergyBremsstrahlung::GetCrossSection(const G4double AtomicNumber,
                                                     const G4double KineticEnergy){
 						    
@@ -647,7 +661,7 @@ G4double G4LowEnergyBremsstrahlung::GetCrossSectionWithCut(const G4double Atomic
     return CrossSection*fraction;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
 // LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
 G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
@@ -658,13 +672,13 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
+  G4double rval = G4UniformRand()*((*partialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
+    if (rval <= (*partialSumSigma[Index])[i]) return ((*theElementVector)(i));
   return (*theElementVector)(0);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
@@ -680,7 +694,7 @@ void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 
 }         
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//    
 
 
 

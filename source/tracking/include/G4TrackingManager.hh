@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4TrackingManager.hh,v 1.11 2001/01/12 05:55:28 tsasaki Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4TrackingManager.hh,v 1.12.2.1 2001/06/28 19:15:29 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 //---------------------------------------------------------------
@@ -38,6 +54,7 @@ class G4TrackingManager;
 /////#include "G4Hit.hh"               // Include from 'Hit/dig'
 #include "G4SteppingManager.hh"        // Include from 'tracking'
 #include "G4Track.hh"                  // Include from 'tracking'
+#include "G4TrackingMessenger.hh"
 #include "G4TrackVector.hh"            // Include from 'tracking'
 #include "G4TrackStatus.hh"            // Include from 'tracking'
 #include "G4StepStatus.hh"             // Include from 'tracking'
@@ -128,7 +145,7 @@ public: // without description
    G4VTrajectory* fpTrajectory;
    G4bool StoreTrajectory;
    G4int verboseLevel;
-
+   G4TrackingMessenger* messenger;
 };
 
 

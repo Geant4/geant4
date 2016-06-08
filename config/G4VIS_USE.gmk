@@ -1,4 +1,4 @@
-# $Id: G4VIS_USE.gmk,v 1.3 2000/01/29 00:41:49 asaim Exp $
+# $Id: G4VIS_USE.gmk,v 1.5 2001/06/19 20:38:31 johna Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
@@ -89,6 +89,20 @@ ifdef G4VIS_USE_VRML_OR_VRMLFILE
   G4VIS_USE = 1
   CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
   VISLIBS += -lG4VRML
+endif
+
+ifdef G4VIS_USE_ASCIITREE
+  G4VIS_USE_TREE = 1
+  CPPFLAGS += -DG4VIS_USE_ASCIITREE
+endif
+ifdef G4VIS_USE_GAGTREE
+  G4VIS_USE_TREE = 1
+  CPPFLAGS += -DG4VIS_USE_GAGTREE
+endif
+ifdef G4VIS_USE_TREE
+  G4VIS_USE = 1
+  CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
+  VISLIBS += -lG4Tree
 endif
 
 ifdef G4VIS_USE

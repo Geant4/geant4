@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Tubs.cc,v 1.28 2001/02/21 15:47:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Tubs.cc,v 1.30.2.1 2001/06/28 19:09:03 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // class G4Tubs
@@ -1551,6 +1567,8 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
   G4double safe, rho, safeR1, safeR2, safeZ ;
   G4double safePhi, phiC, cosPhiC, sinPhiC, ePhi ;
   rho = sqrt(p.x()*p.x() + p.y()*p.y()) ;
+
+#ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
     G4cout.precision(16) ;
@@ -1565,9 +1583,10 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
- // G4Exception("Invalid call in G4Tubs::DistanceToOut(p),  point p is outside") ;
-    G4cout << "G4Tubs::DistanceToOut(p), point p is outside !?" << G4endl ;
+    G4Exception("Invalid call in G4Tubs::DistanceToOut(p),  point p is outside") ;
+    // G4cout << "G4Tubs::DistanceToOut(p), point p is outside !?" << G4endl ;
   }
+#endif
 
   if ( fRMin )
   {
@@ -1648,7 +1667,8 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   if (fDPhi == M_PI*2.0 && fSPhi == 0 ) sAngle = -meshAngle*0.5 ;
   else                                  sAngle =  fSPhi ;
     
-  vertices = new G4ThreeVectorList(noCrossSections*4);
+  vertices = new G4ThreeVectorList();
+  vertices->reserve(noCrossSections*4);
     
   if ( vertices )
   {
@@ -1669,10 +1689,10 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
       vertex2 = G4ThreeVector(rMaxX,rMaxY,+fDz) ;
       vertex3 = G4ThreeVector(rMinX,rMinY,+fDz) ;
 
-      vertices->insert(pTransform.TransformPoint(vertex0)) ;
-      vertices->insert(pTransform.TransformPoint(vertex1)) ;
-      vertices->insert(pTransform.TransformPoint(vertex2)) ;
-      vertices->insert(pTransform.TransformPoint(vertex3)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex0)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex1)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex2)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex3)) ;
     }
   }
   else

@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              G4RadioactiveDecay.cc
@@ -204,8 +226,8 @@ void G4RadioactiveDecay::SelectAVolume(const G4String aVolume)
   G4LogicalVolumeStore *theLogicalVolumes;
   G4LogicalVolume *volume;
   theLogicalVolumes=G4LogicalVolumeStore::GetInstance();
-  for (G4int i = 0; i < theLogicalVolumes->entries(); i++){
-    volume=theLogicalVolumes->operator()(i);
+  for (G4int i = 0; i < theLogicalVolumes->size(); i++){
+    volume=(*theLogicalVolumes)[i];
     if (volume->GetName() == aVolume) {
       ValidVolumes.push_back(aVolume);
       G4std::sort(ValidVolumes.begin(), ValidVolumes.end());
@@ -214,7 +236,7 @@ void G4RadioactiveDecay::SelectAVolume(const G4String aVolume)
       if (GetVerboseLevel()>0)
 	G4cout << " RDM Applies to : " << aVolume << G4endl; 
 #endif
-    }else if(i ==  theLogicalVolumes->entries())
+    }else if(i ==  theLogicalVolumes->size())
       {
 	G4cerr << "SelectAVolume: "<<aVolume << " is not a valid logical volume name"<< G4endl; 
       }
@@ -230,8 +252,8 @@ void G4RadioactiveDecay::DeselectAVolume(const G4String aVolume)
   G4LogicalVolumeStore *theLogicalVolumes;
   G4LogicalVolume *volume;
   theLogicalVolumes=G4LogicalVolumeStore::GetInstance();
-  for (G4int i = 0; i < theLogicalVolumes->entries(); i++){
-    volume=theLogicalVolumes->operator()(i);
+  for (G4int i = 0; i < theLogicalVolumes->size(); i++){
+    volume=(*theLogicalVolumes)[i];
     if (volume->GetName() == aVolume) {
       G4std::vector<G4String>::iterator location;
       location = G4std::find(ValidVolumes.begin(),ValidVolumes.end(),aVolume);
@@ -245,7 +267,7 @@ void G4RadioactiveDecay::DeselectAVolume(const G4String aVolume)
       if (GetVerboseLevel()>0)
 	G4cout << " DeselectVolume: " << aVolume << " is removed from list"<<G4endl; 
 #endif
-    }else if(i ==  theLogicalVolumes->entries())
+    }else if(i ==  theLogicalVolumes->size())
       {
 	G4cerr << " DeselectVolume:" << aVolume << "is not a valid logical volume name"<< G4endl; 
       }
@@ -266,8 +288,8 @@ void G4RadioactiveDecay::SelectAllVolumes()
   if (GetVerboseLevel()>0)
     G4cout << " RDM Applies to all Volumes"  << G4endl;
 #endif
-  for (G4int i = 0; i < theLogicalVolumes->entries(); i++){
-    volume=theLogicalVolumes->operator()(i);
+  for (G4int i = 0; i < theLogicalVolumes->size(); i++){
+    volume=(*theLogicalVolumes)[i];
     ValidVolumes.push_back(volume->GetName());    
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0)

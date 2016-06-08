@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 #ifndef G4ParaFissionModel_h
 #define G4ParaFissionModel_h
 
@@ -54,9 +76,9 @@ public:
     
     anInitialState.SetA(anA);
     anInitialState.SetZ(aZ);
+    anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
     anInitialState.SetNumberOfCharged(numberOfCh);
     anInitialState.SetNumberOfHoles(numberOfHoles);
-    anInitialState.SetNumberOfExcitons(numberOfEx);
     anInitialState.SetMomentum(fragment4Momentum);
 
     // do the fission
@@ -64,15 +86,15 @@ public:
     
     // deexcite the fission fragments and fill result
     vector<G4DynamicParticle *> theResult;
-    G4int ll = theFissionResult->length();
+    G4int ll = theFissionResult->size();
     for(G4int i=0; i<ll; i++)
     {
       G4ReactionProductVector * theExcitationResult = 0; 
-      if(theFissionResult->at(i)->GetExcitationEnergy()>1.*eV)
+      if((*theFissionResult)[i]->GetExcitationEnergy()>1.*eV)
       {
-        G4Fragment * aFragment = theFissionResult->at(i);
+        G4Fragment * aFragment = (*theFissionResult)[i];
 	G4double exenergy = aFragment->GetExcitationEnergy();
-	theExcitationResult = theHandler.BreakItUp(*(theFissionResult->at(i)));
+	theExcitationResult = theHandler.BreakItUp(*(*theFissionResult)[i]);
 	// add secondaries
 	for(G4int j=0; j<theExcitationResult->length(); j++)
 	{
@@ -86,8 +108,8 @@ public:
       {
         // add secondary
 	G4DynamicParticle* p0 = new G4DynamicParticle;
-	p0->SetDefinition(theFissionResult->at(i)->GetParticleDefinition());
-	p0->SetMomentum(theFissionResult->at(i)->GetMomentum().vect());
+	p0->SetDefinition((*theFissionResult)[i]->GetParticleDefinition());
+	p0->SetMomentum((*theFissionResult)[i]->GetMomentum().vect());
         theResult.push_back(p0);
       }
     }

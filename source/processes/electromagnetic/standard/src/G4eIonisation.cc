@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.10 2000/05/23 14:42:21 urban Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4eIonisation.cc,v 1.11.2.2 2001/06/28 20:19:50 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4eIonisation physics process -----------
@@ -28,6 +42,7 @@
 // 07-09-98: Cleanup
 // 02/02/99: correction inDoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // --------------------------------------------------------------
  
 #include "G4eIonisation.hh"
@@ -356,7 +371,7 @@ G4VParticleChange* G4eIonisation::PostStepDoIt( const G4Track& trackData,
   G4double TotalEnergy = KineticEnergy + ParticleMass;
   G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
   G4double TotalMomentum = sqrt(Psquare);
-  G4double Esquare=TotalEnergy*TotalEnergy;
+  //G4double Esquare=TotalEnergy*TotalEnergy;
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
   //  get kinetic energy cut for the electron

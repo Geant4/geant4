@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4DynamicParticleVector.hh"
 #include "G4IonTable.hh"
@@ -95,8 +117,8 @@
          // now calculate  A, Z of the fragment, momentum, number of exciton states
          anA++;;
          numberOfEx++;
-         aZ += aTrack->GetDefinition()->GetPDGCharge();
-         numberOfCh += aTrack->GetDefinition()->GetPDGCharge();
+         aZ += G4int(aTrack->GetDefinition()->GetPDGCharge());
+         numberOfCh += G4int(aTrack->GetDefinition()->GetPDGCharge());
          exciton3Momentum += aTrack->Get4Momentum().vect();
          exEnergy += (aTrack->Get4Momentum().t()-aTrack->Get4Momentum().m());
        }
@@ -111,31 +133,35 @@
          numberOfHoles++;
          numberOfEx++;
          anA--;
-         aZ -= theCurrentNucleon->GetDefinition()->GetPDGCharge();
+         aZ -= G4int(theCurrentNucleon->GetDefinition()->GetPDGCharge());
          exciton3Momentum -= theCurrentNucleon->Get4Momentum().vect();
          exEnergy+=theCurrentNucleon->GetBindingEnergy();
        }
        theCurrentNucleon = theNucleus->GetNextNucleon();
      }   
      
-     G4double residualMass =  
-              G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ ,anA);
-     residualMass += exEnergy;
-     G4LorentzVector exciton4Momentum(exciton3Momentum, 
-                                      sqrt(exciton3Momentum.mag2()+residualMass*residualMass));
+     if(!theDeExcitation)
+     {
+       // G4Exception("Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
+     }
+     else if(0!=anA && 0!=aZ)
+     {
+       G4double residualMass =  
+                G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ ,anA);
+       residualMass += exEnergy;
+       G4LorentzVector exciton4Momentum(exciton3Momentum, 
+                                        sqrt(exciton3Momentum.mag2()+residualMass*residualMass));
      
-     anInitialState.SetA(anA);
-     anInitialState.SetZ(aZ);
-     anInitialState.SetNumberOfCharged(numberOfCh);
-     anInitialState.SetNumberOfHoles(numberOfHoles);
-     anInitialState.SetNumberOfExcitons(numberOfEx);
-     anInitialState.SetMomentum(exciton4Momentum);
+       anInitialState.SetA(anA);
+       anInitialState.SetZ(aZ);
+       anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
+       anInitialState.SetNumberOfCharged(numberOfCh);
+       anInitialState.SetNumberOfHoles(numberOfHoles);
+       anInitialState.SetMomentum(exciton4Momentum);
 //      anInitialState.SetExcitationEnergy(exEnergy); // now a redundant call.
 
      // call pre-compound
-     const G4Fragment aFragment(anInitialState);
-     if(theDeExcitation)
-     {
+       const G4Fragment aFragment(anInitialState);
        G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
      
        // fill pre-compound part into the result, and return
@@ -151,8 +177,8 @@
      }
      // now return
      
-     
      result->clearAndDestroy();
      delete result;
      return theTotalResult;
    }
+  

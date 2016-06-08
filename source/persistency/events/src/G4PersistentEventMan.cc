@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PersistentEventMan.cc,v 1.15 1999/12/02 19:40:51 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PersistentEventMan.cc,v 1.16.2.1 2001/06/28 19:11:26 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4PersistentEventMan 
 //
@@ -29,7 +45,7 @@
 #include "G4ios.hh"
 
 G4PersistentEventMan::G4PersistentEventMan()
- : f_PHCMan(NULL), f_PDCMan(NULL), f_currentEventID(0)
+ : f_PHCMan(0), f_PDCMan(0), f_currentEventID(0)
 {;}
 
 G4PersistentEventMan::G4PersistentEventMan(
@@ -52,13 +68,13 @@ G4bool G4PersistentEventMan::Store( HepDbApplication* dbApp,
   // Create persistent event
   f_currentPEvent = new(f_container) G4PEvent(anEvent, aPHC, aPDC);
 
-  if( aPHC != NULL )
-  { f_PHCMan->SetCurrentPHCofThisEvent(NULL); }
+  if( aPHC != 0 )
+  { f_PHCMan->SetCurrentPHCofThisEvent(0); }
 
-  if( aPDC != NULL )
-  { f_PDCMan->SetCurrentPDCofThisEvent(NULL); }
+  if( aPDC != 0 )
+  { f_PDCMan->SetCurrentPDCofThisEvent(0); }
 
-  if( f_currentPEvent != NULL )
+  if( f_currentPEvent != 0 )
   {
     f_currentEventID = anEvent->GetEventID();
     return true;
@@ -74,7 +90,7 @@ G4bool G4PersistentEventMan::Retrieve( HepDbApplication* dbApp,
                                        G4Event*& anEvent )
 {
   G4bool theStatus = false;
-  anEvent = NULL;
+  anEvent = 0;
 
   ooItr(G4PEvent) pevt_iterator;
 
@@ -90,7 +106,7 @@ G4bool G4PersistentEventMan::Retrieve( HepDbApplication* dbApp,
   if( pevt_iterator.next() )
   {
     G4Event* anEvt = pevt_iterator->MakeTransientObject();
-    if( anEvt != NULL )
+    if( anEvt != 0 )
     {
       anEvent = anEvt;
       theStatus = true;

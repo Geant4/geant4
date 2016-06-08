@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4GeometryTable.cc,v 1.7 2000/11/20 18:17:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4GeometryTable.cc,v 1.8.2.1 2001/06/28 19:09:17 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,9 +54,9 @@ G4bool G4GeometryTable::ExistsInTable(G4String& objectName)
 {
   G4bool existsInTable = false;
 
-  for(size_t a=0;a<RegisteredObjects.length();a++)
+  for(size_t a=0;a<RegisteredObjects.size();a++)
   {
-    G4GeometryCreator* gcTmp =  RegisteredObjects(a);
+    G4GeometryCreator* gcTmp =  RegisteredObjects[a];
     G4String rName = gcTmp->Name();
     if(rName == objectName) existsInTable = true;
   }
@@ -53,14 +69,14 @@ void G4GeometryTable::RegisterObject(G4GeometryCreator* gc)
   G4String newName = gc->Name();
   
   if(!ExistsInTable(newName))
-    RegisteredObjects.append(gc);
+    RegisteredObjects.push_back(gc);
 }
 
 G4GeometryCreator* G4GeometryTable::GetObject(G4String objectName)
 {
-  for(size_t a=0; a<RegisteredObjects.length(); a++)
+  for(size_t a=0; a<RegisteredObjects.size(); a++)
   {
-    G4GeometryCreator* gcTmp =  RegisteredObjects(a);
+    G4GeometryCreator* gcTmp =  RegisteredObjects[a];
     G4String rName = gcTmp->Name();
     
     if(rName == objectName)
@@ -133,7 +149,7 @@ void G4GeometryTable::PrintObjectNames()
   G4GeometryCreator* gc=0;
   G4int a=0;
 
-  G4int objectCount = RegisteredObjects.length();
+  G4int objectCount = RegisteredObjects.size();
   if(!objectCount)
     {
       G4cout << "No registered objects in table." << G4endl;

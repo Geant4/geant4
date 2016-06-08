@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: HepPolyhedron.h,v 1.5 2001/02/06 22:07:49 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: HepPolyhedron.h,v 1.8.2.1 2001/06/28 19:10:10 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // Class Description:
@@ -79,6 +95,9 @@
 //                            returns false when finished all faces;
 //   GetNextUnitNormal (normal) - get normals of unit length of each face
 //                            in order; returns false when finished all faces;
+//   GetSurfaceArea()       - get surface area of the polyhedron;
+//   GetVolume()            - get volume of the polyhedron;
+//   GetNumberOfRotationSteps()   - get number of steps for whole circle;
 //   SetNumberOfRotationSteps (n) - set number of steps for whole circle;
 //   ResetNumberOfRotationSteps() - reset number of steps for whole circle
 //                            to default value;
@@ -126,19 +145,14 @@
 // 19.03.00 E.Chernyaev
 // - added boolean operations (add, subtract, intersect) on polyhedra;
 //
+// 25.05.01 E.Chernyaev
+// - added GetSurfaceArea() and GetVolume();
+//
 
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
 
-#include <CLHEP/config/CLHEP.h>
-#include <CLHEP/config/iostream.h>
-#include <CLHEP/config/TemplateFunctions.h>
-#include <CLHEP/Units/SystemOfUnits.h>
 #include <CLHEP/Geometry/Point3D.h>
-#include <CLHEP/Geometry/Vector3D.h>
-#include <CLHEP/Geometry/Normal3D.h>
-#include <CLHEP/Geometry/Plane3D.h>
-#include <CLHEP/Geometry/Transform3D.h>
 
 #ifndef HepStd
 #ifndef HEP_USE_STD
@@ -189,9 +203,6 @@ class HepPolyhedron {
 
   // Create HepPolyhedron for prism with quadrilateral base
   void CreatePrism();
-
-  // Get number of steps for whole circle
-  int GetNumberOfRotationSteps() { return fNumberOfRotationSteps; }
 
   // Generate facets by revolving an edge around Z-axis
   void RotateEdge(int k1, int k2, HepDouble r1, HepDouble r2,
@@ -295,6 +306,15 @@ class HepPolyhedron {
   HepPolyhedron add(const HepPolyhedron &p) const;
   HepPolyhedron subtract(const HepPolyhedron &p) const;
   HepPolyhedron intersect(const HepPolyhedron &p) const;
+
+  // Get area of the surface of the polyhedron
+  double GetSurfaceArea() const;
+
+  // Get volume of the polyhedron
+  double GetVolume() const;
+
+  // Get number of steps for whole circle
+  static int GetNumberOfRotationSteps() { return fNumberOfRotationSteps; }
 
   // Set number of steps for whole circle
   static void SetNumberOfRotationSteps(int n);

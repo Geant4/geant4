@@ -3,11 +3,13 @@
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
-#  DATE: November 10, 1999                                            #
-#        May      20, 2000                                            # 
-#        June     06, 2000                                            # 
-#        October  17, 2000                                            # 
+#  DATE:                                                              #
+#        June     20, 2001                                            #
 #        November 26, 2000                                            #
+#        October  17, 2000                                            # 
+#        June     06, 2000                                            # 
+#        May      20, 2000                                            # 
+#        November 10, 1999                                            #
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating various drawing styles   #
 #                                                                     #
@@ -33,7 +35,7 @@
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
 #  ADDITIONAL NOTES:                                                  #
-#    The compound command "/vis/open <graphics-system-name>"          #
+#    The compound command "/vis/open <vis-driver-name>"               #
 #    is equivalent to the following set of commands:                  #
 #                                                                     #
 #      /vis/sceneHandler/create $1                                    #
@@ -46,9 +48,9 @@
 ##############################################
 /tracking/storeTrajectory 1
 
-######################################################
-# Visualization with OGLIX (OpenGL Immediate X) driver
-######################################################
+###########################################################
+# Visualization with the OGLIX (OpenGL Immediate X) driver
+###########################################################
 
 # Invoke the OGLIX driver 
 /vis/open OGLIX
@@ -56,10 +58,10 @@
 # Create a new scene
 /vis/scene/create
 
-# Add detector geometry to the current scene
+# Add the world volume to the current scene
 /vis/scene/add/volume
 
-# Attach the current visualization driver 
+# Attach the current scene handler
 # to the current scene (omitable)
 /vis/sceneHandler/attach
 
@@ -71,13 +73,13 @@
 
 # Bird-eye view of events with 
 #  the hidden-surface drawing style
-/vis/camera/reset
-/vis/camera/viewpoint    45 45 
-/vis/viewer/set/style    surface
-/run/beamOn              10
+/vis/viewer/reset
+/vis/viewer/viewpointThetaPhi  45 45 
+/vis/viewer/set/style          surface
+/run/beamOn                    10
 
 ##########################################################
-# Visualization with DAWNFILE driver
+# Visualization with the DAWNFILE driver
 #
 #  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
@@ -85,7 +87,7 @@
 #  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel
-#    or by editing the file by hand.
+#    or by editing the EPS file by hand.
 #
 #  * Set an environmental variable if you wish to 
 #    skip DAWN GUI:
@@ -99,10 +101,10 @@
 # Create a new scene
 /vis/scene/create
 
-# Add detector geometry to the current scene
+# Add the world volume to the current scene
 /vis/scene/add/volume
 
-# Attach the current visualization driver 
+# Attach the current scene handler
 # to the current scene (omitable)
 /vis/sceneHandler/attach
 
@@ -112,28 +114,25 @@
 #        described in the event action.
 #/vis/scene/add/trajectories
 
-# Set camera 
-#  Camera is zoomed up by 1.5 times of the standard setting.
-/vis/camera/reset 
-/vis/camera/zoom 1.5
-/vis/camera/viewpoint    45 45 
-
 # Bird-eye view of events with the 
 #  wireframe drawing style
-/vis/viewer/set/style    wireframe
-/run/beamOn              5
+/vis/viewer/reset 
+/vis/viewer/zoom               1.5
+/vis/viewer/viewpointThetaPhi  45 45 
+/vis/viewer/set/style          wireframe
+/run/beamOn                    5
 
 # Bird-eye view of events with the 
 #  hidden-surface drawing style
-/vis/viewer/set/style    surface
-/run/beamOn              50
+/vis/viewer/set/style          surface
+/run/beamOn                    50
 
 # Cull detector geometry and show only trajectories.
-/vis/camera/reset 
-/vis/set/culling         on 
-/vis/set/cull_by_density on 999
-/vis/viewer/set/style    wireframe
-/run/beamOn              10
+/vis/viewer/reset 
+/vis/viewer/set/culling     global  true
+/vis/viewer/set/culling     density true 999
+/vis/viewer/set/style       wireframe
+/run/beamOn                 10
 
 # Reset the culling policy for next visualization
 #  The default culling policy is:
@@ -141,5 +140,4 @@
 #   invisible       : on 
 #   low density     : off 
 #   covered daughter: off
-/vis/set/cull_by_density off
-
+/vis/viewer/set/culling  density false

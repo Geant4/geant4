@@ -1,20 +1,34 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.21 2001/02/05 17:45:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LowEnergyCompton.cc,v 1.25.2.2 2001/06/28 20:19:29 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      ------------ G4LowEnergyCompton low energy modifications --------
 //                   by Alessandra Forti, October 1998
 // **************************************************************
@@ -23,6 +37,7 @@
 // Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
+// 24.04.01 V.Ivanchenko remove RogueWave 
 // --------------------------------------------------------------
 
 // This Class Header
@@ -37,17 +52,17 @@
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
     theCrossSectionTable(0),
-    theMeanFreePathTable(0),
     theScatteringFunctionTable(0),
+    theMeanFreePathTable(0),
     ZNumVec(0),
-    LowestEnergyLimit (250*eV),              // initialization
-    HighestEnergyLimit(100*GeV),
-    NumbBinTable(200)
+    lowestEnergyLimit (250*eV),              // initialization
+    highestEnergyLimit(100*GeV),
+    numbBinTable(200)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
-     G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << G4endl;
+     G4cout << "lowestEnergy: " << lowestEnergyLimit/keV << "keV ";
+     G4cout << "highestEnergy: " << highestEnergyLimit/TeV << "TeV " << G4endl;
    }
 }
  
@@ -104,13 +119,14 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
     G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-cs-");
     
-    theCrossSectionTable->insert(oneAtomCS);
+    //    theCrossSectionTable->insert(oneAtomCS);
+    theCrossSectionTable->push_back(oneAtomCS);
     
   }//end for on atoms
 }
@@ -125,13 +141,14 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
   theScatteringFunctionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
     G4FirstLevel* oneAtomSF = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-sf-");
      
-     theScatteringFunctionTable->insert(oneAtomSF);
+    //     theScatteringFunctionTable->insert(oneAtomSF);
+     theScatteringFunctionTable->push_back(oneAtomSF);
    
   }//end for on atoms
 }
@@ -189,7 +206,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
-  if(GammaEnergy0 <= LowestEnergyLimit){
+  if(GammaEnergy0 <= lowestEnergyLimit){
     
     aParticleChange.SetStatusChange(fStopAndKill);
     aParticleChange.SetEnergyChange(0.);
@@ -205,7 +222,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
   // Select randomly one element 
   G4Material* aMaterial = aTrack.GetMaterial();
-  const G4int numOfElem = aMaterial->GetNumberOfElements();
+  //  const G4int numOfElem = aMaterial->GetNumberOfElements();
   
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
   G4int elementZ = (G4int) theElement->GetZ();
@@ -300,6 +317,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
+
+
 // used log-log interpolation instead of linear interpolation to build the MFP 
 // as reported in the stepanek paper 
 void G4LowEnergyCompton::BuildMeanFreePathTable(){
@@ -320,20 +339,20 @@ void G4LowEnergyCompton::BuildMeanFreePathTable(){
   for ( G4int J = 0 ; J < NumbOfMaterials; J++ ) { // For each material 
   
     //create physics vector then fill it ....
-    ptrVector = new  G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit, NumbBinTable);
+    ptrVector = new  G4PhysicsLogVector(lowestEnergyLimit, highestEnergyLimit, numbBinTable);
     
     material = (*theMaterialTable)(J);
     const G4ElementVector* theElementVector = material->GetElementVector();
     const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
     
-    for ( G4int i = 0 ; i < NumbBinTable ; i++ ){ 
+    for ( G4int i = 0 ; i < numbBinTable ; i++ ){ 
       //For each energy
       
       LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
       
       const G4double BigPath= DBL_MAX;
       G4double SIGMA = 0 ;
-      for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 
 	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
 	const G4FirstLevel* oneAtomCS
@@ -371,15 +390,15 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
   G4double PartialSumSigma = 0.;
 
   G4double rval = 0;
-  rval = G4UniformRand()/MeanFreePath;
+  rval = G4UniformRand()/meanFreePath;
 
   for ( G4int i=0 ; i < NumberOfElements ; i++ ){ 
 
     G4double crossSection;
-    if (GammaEnergy <  LowestEnergyLimit)
+    if (GammaEnergy <  lowestEnergyLimit)
       crossSection = 0. ;
     else {
-      if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
+      if (GammaEnergy > highestEnergyLimit) GammaEnergy = 0.99*highestEnergyLimit ;
       
       G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
       const G4FirstLevel* oneAtomCS

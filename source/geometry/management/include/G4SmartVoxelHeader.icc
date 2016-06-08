@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4SmartVoxelHeader.icc,v 1.1 2000/04/20 16:49:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4SmartVoxelHeader.icc,v 1.2.2.1 2001/06/28 19:08:26 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // G4SmartVoxelHeader Inline implementation
@@ -19,7 +35,7 @@ G4int G4SmartVoxelHeader::GetMaxEquivalentSliceNo() const
 }
 
 inline
-void G4SmartVoxelHeader::SetMaxEquivalentSliceNo(const G4int pMax)
+void G4SmartVoxelHeader::SetMaxEquivalentSliceNo(G4int pMax)
 {
   fmaxEquivalent=pMax;
 }
@@ -31,7 +47,7 @@ G4int G4SmartVoxelHeader::GetMinEquivalentSliceNo() const
 }
 
 inline
-void G4SmartVoxelHeader::SetMinEquivalentSliceNo(const G4int pMin)
+void G4SmartVoxelHeader::SetMinEquivalentSliceNo(G4int pMin)
 {
   fminEquivalent=pMin;
 }
@@ -57,11 +73,11 @@ G4double G4SmartVoxelHeader::GetMinExtent() const
 inline
 G4int G4SmartVoxelHeader::GetNoSlices() const
 {
-  return fslices.entries();
+  return fslices.size();
 }
 
 inline
-G4SmartVoxelProxy* G4SmartVoxelHeader::GetSlice(const G4int n) const
+G4SmartVoxelProxy* G4SmartVoxelHeader::GetSlice(G4int n) const
 {
-  return fslices(n);
+  return fslices[n];
 }

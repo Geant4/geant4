@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ProcessTable.cc,v 1.6 2000/11/03 03:44:52 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ProcessTable.cc,v 1.7.2.2 2001/06/28 20:20:13 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
-//	For information related to this code contact:
-//	CERN, IT Division, ASD group
 //	History: first implementation, based on object model of
 //	4th Aug 1998, H.Kurashige
 // ------------------------------------------------------------
@@ -63,7 +77,7 @@ G4ProcessTable::~G4ProcessTable()
   }
 
   if ( fProcTblVector != 0) {
-    G4ProcTableVector::iterator idx;
+    // G4ProcTableVector::iterator idx;
     
     // destruction of processes has moved to G4VUserPhysicsList
     // for (idx=fProcTblVector->begin(); idx!=fProcTblVector->end(); ++idx) {
@@ -229,12 +243,12 @@ G4int  G4ProcessTable::Remove( G4VProcess* aProcess,
 
   G4ProcTableVector::iterator itr; 
   G4int idxTbl=0;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   G4bool isFound = false;
   // loop over all elements
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr, ++idxTbl) {
     anElement = (*itr);
-    G4int idx;
+
     // check if this process is included
     if (aProcess == anElement->GetProcess()) {
       isFound = anElement->Contains(aProcMgr);
@@ -297,7 +311,7 @@ G4VProcess* G4ProcessTable::FindProcess(const G4String& processName,
   G4ProcTableVector::iterator itr;   
   G4int idxTbl = 0;
   G4bool isFound = false;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr, ++idxTbl) {
     anElement = (*itr);
     // check name
@@ -485,7 +499,7 @@ void G4ProcessTable::SetProcessActivation( G4ProcessType   processType,
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << " G4ProcessTable::SetProcessActivation:" ;
-    G4cout << " The ProcessType[" << processType << "] "<< G4endl;
+    G4cout << " The ProcessType[" << G4int(processType) << "] "<< G4endl;
   }
 #endif
 
@@ -523,7 +537,7 @@ void G4ProcessTable::SetProcessActivation(
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << " G4ProcessTable::SetProcessActivation:" ;
-    G4cout << " The ProcessType[" << processType << "] "<< G4endl;
+    G4cout << " The ProcessType[" << G4int(processType) << "] "<< G4endl;
   }
 #endif
   
@@ -550,9 +564,9 @@ void G4ProcessTable::DumpInfo(G4VProcess* process,
 {
   G4ProcTableVector::iterator itr; 
   G4int idxTbl=0;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   G4bool isFoundInTbl = false;
-  G4ProcessManager* manager;
+  G4ProcessManager* manager=0;
   G4int idx;
   // loop over all elements
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr, ++idxTbl) {

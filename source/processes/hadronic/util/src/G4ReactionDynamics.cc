@@ -1,9 +1,25 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 //
  // Hadronic Process: Reaction Dynamics
@@ -98,6 +114,10 @@
       currentParticle = *vec[0];
       targetParticle = *vec[1];
       for( i=0; i<(vecLen-2); ++i )*vec[i] = *vec[i+2];
+      G4ReactionProduct *temp = vec[vecLen-1];
+      delete temp;
+      temp = vec[vecLen-2];
+      delete temp;
       vecLen -= 2;
       currentMass = currentParticle.GetMass()/GeV;
       incidentHasChanged = true;
@@ -233,9 +253,9 @@
             forwardEnergy += vec[i]->GetMass()/GeV;
             for( G4int j=i; j<(vecLen-1); j++ )*vec[j] = *vec[j+1];    // shift up
             --forwardCount;
-            forwardParticlesLeft = 1;
-            //G4ReactionProduct *temp = vec[vecLen];
-            //delete temp;
+            forwardParticlesLeft = 1;  
+            G4ReactionProduct *temp = vec[vecLen-1];
+            delete temp;
             if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
             break;  // --+
           }         //   |
@@ -250,8 +270,8 @@
         // above two lines modified 20-oct-97: were just simple equalities
         --forwardCount;
         for( G4int j=0; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];
-        //G4ReactionProduct *temp = vec[vecLen];
-        //delete temp;
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
         break;
       }
@@ -278,8 +298,8 @@
             for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];   // shift up
             --backwardCount;
             backwardParticlesLeft = 1;
-            //G4ReactionProduct *temp = vec[vecLen];
-            //delete temp;
+            G4ReactionProduct *temp = vec[vecLen-1];
+            delete temp;
             if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
             break;
           }
@@ -292,8 +312,8 @@
         targetParticle = *vec[0];
         --backwardCount;
         for( G4int j=0; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];
-        //G4ReactionProduct *temp = vec[vecLen];
-        //delete temp;
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
         break;
       }
@@ -345,6 +365,7 @@
                          1.43,1.67,2.0,2.5,3.33,5.00,10.00};
     G4int backwardNucleonCount = 0;       // number of nucleons in backward hemisphere
     G4double totalEnergy, kineticEnergy, vecMass;
+
     for( i=(vecLen-1); i>=0; --i )
     {
       if( vec[i]->GetNewlyAdded() )           // added from intranuclear cascade
@@ -581,8 +602,8 @@
           backwardEnergy += vecMass;
         }
         for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];    // shift up
-        //G4ReactionProduct *temp = vec[vecLen];
-        //delete temp;
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
         pseudoParticle[6] = pseudoParticle[4] + pseudoParticle[5];
@@ -594,6 +615,7 @@
         if( phi < 0.0 )phi = twopi - phi;
       }
     }   // closes main for loop
+
     //
     //  for the incident particle:  it was placed in the forward hemisphere
     //   set pt and phi values, they are changed somewhat in the iteration loop
@@ -1197,7 +1219,7 @@
       G4double spall = numberofFinalStateNucleons;
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       AddBlackTrackParticles( epnb, npnb, edta, ndta, sprob, kineticMinimum, kineticFactor,
-                              modifiedOriginal, spall, targetNucleus,
+                             modifiedOriginal, spall, targetNucleus,
                               vec, vecLen );
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
@@ -1469,6 +1491,8 @@
       }           // breaks go down to here
       if( secondaryDeleted )
       {      
+        G4ReactionProduct *temp = vec[vecLen-1];
+        delete temp;
         --vecLen;
         // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
@@ -1500,6 +1524,8 @@
         }
         if( secondaryDeleted )
         {
+          G4ReactionProduct *temp = vec[vecLen-1];
+          delete temp;
           --vecLen;
           // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         }
@@ -1527,6 +1553,8 @@
           }
           if( secondaryDeleted )
           {
+            G4ReactionProduct *temp = vec[vecLen-1];
+            delete temp;
             --vecLen;
             // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
           }
@@ -3075,7 +3103,11 @@
         else
           p2->SetDefinition( anAlpha );
         spall += p2->GetMass()/GeV * sp1;
-        if( spall > atomicWeight )break;
+        if( spall > atomicWeight )
+	{
+	  delete p2;
+	  break;
+	}
         vec.SetElement( vecLen, p2 );
         vec[vecLen]->SetNewlyAdded( true );
         vec[vecLen]->SetKineticEnergy( kinetic*GeV );
@@ -3484,6 +3516,8 @@
       if( energyCheck < 0.0 )      // chop off the secondary List
       {
         vecLen = G4std::max( 0, --i ); // looks like a memory leak @@@@@@@@@@@@
+	G4int j;
+	for(j=i; j<vecLen; j++) delete vec[j];
         break;
       }
     }
@@ -3761,6 +3795,8 @@
       else
         v[2]->SetMomentum( v[2]->GetMomentum() * (p/pp) );
     }
+    G4int del;
+    for(del=0; del<vecLen; del++) delete vec[del];
     vecLen = 0;
     if( particleIsDefined )
     {

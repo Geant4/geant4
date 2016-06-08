@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PEvent.cc,v 1.11 1999/12/15 14:51:20 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PEvent.cc,v 1.12.2.1 2001/06/28 19:11:26 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 
 // G4PEvent
@@ -17,21 +33,21 @@
 
 G4PEvent::G4PEvent()
 :eventID(0),
- thePrimaryVertex(NULL),numberOfPrimaryVertex(0),HC(NULL),DC(NULL)
+ thePrimaryVertex(0),numberOfPrimaryVertex(0),HC(0),DC(0)
 {;}
 
 G4PEvent::G4PEvent(const G4Event *evt)
 :eventID(0),
- thePrimaryVertex(NULL),numberOfPrimaryVertex(0),HC(NULL),DC(NULL)
+ thePrimaryVertex(0),numberOfPrimaryVertex(0),HC(0),DC(0)
 {
-  InitPEvent(evt, NULL, NULL);
+  InitPEvent(evt, 0, 0);
 }
 
 G4PEvent::G4PEvent(const G4Event *evt,
                    HepRef(G4PHCofThisEvent) pHC,
                    HepRef(G4PDCofThisEvent) pDC)
 :eventID(0),
- thePrimaryVertex(NULL),numberOfPrimaryVertex(0),HC(NULL),DC(NULL)
+ thePrimaryVertex(0),numberOfPrimaryVertex(0),HC(0),DC(0)
 {
   InitPEvent(evt, pHC, pDC);
 }
@@ -46,9 +62,9 @@ void G4PEvent::InitPEvent(const G4Event *evt,
   if(PV) thePrimaryVertex = new(ooThis()) G4PPrimaryVertex(PV);
   numberOfPrimaryVertex = evt->GetNumberOfPrimaryVertex();
 
-  if(pHC!=NULL) HC = pHC;
+  if(pHC!=0) HC = pHC;
 
-  if(pDC!=NULL) DC = pDC;
+  if(pDC!=0) DC = pDC;
 
 //  const G4TrajectoryContainer* TC = evt->GetTrajectoryContainer();
 //  if(TC) trajectoryContainer = new G4PTrajectoryContainer(TC);
@@ -57,19 +73,19 @@ void G4PEvent::InitPEvent(const G4Event *evt,
 
 G4PEvent::~G4PEvent()
 {
-  if(thePrimaryVertex != NULL)
+  if(thePrimaryVertex != 0)
   {
     G4PPrimaryVertex* aPPV = (HepRef(G4PPrimaryVertex)) thePrimaryVertex;
     HepDelete(aPPV);
   }
 
-  if(HC != NULL)
+  if(HC != 0)
   {
     G4PHCofThisEvent* aHC = (HepRef(G4PHCofThisEvent)) HC;
     HepDelete(aHC);
   }
 
-  if(DC != NULL)
+  if(DC != 0)
   {
     G4PDCofThisEvent* aDC = (HepRef(G4PDCofThisEvent)) DC;
     HepDelete(aDC);
@@ -83,12 +99,12 @@ G4Event* G4PEvent::MakeTransientObject()
 {
   G4Event* anEvt = new G4Event(eventID);
 
-  if(thePrimaryVertex != NULL)
+  if(thePrimaryVertex != 0)
   {
     G4PrimaryVertex* aPV = thePrimaryVertex->MakeTransientObject();
     for( G4int i = 0; i<numberOfPrimaryVertex; i++ )
     {
-      if( aPV != NULL )
+      if( aPV != 0 )
       {
         anEvt->AddPrimaryVertex(aPV);
         aPV = aPV->GetNext();
@@ -100,9 +116,9 @@ G4Event* G4PEvent::MakeTransientObject()
   // to transient G4Event ... this requires an introduction of
   // G4VHCofThisEvent and G4VDCofThisEvent in G4Event
   // (will be implemented in next release)
-  // if(HC != NULL)
+  // if(HC != 0)
   //   anEvt->SetHCofThisEvent( HC );
-  // if(DC != NULL)
+  // if(DC != 0)
   //   anEvt->SetDCofThisEvent( DC );
 
   return anEvt;

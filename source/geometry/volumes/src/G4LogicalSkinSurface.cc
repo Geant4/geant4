@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.5 2000/11/20 19:05:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4LogicalSkinSurface.cc,v 1.6.2.1 2001/06/28 19:09:43 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 ////////////////////////////////////////////////////////////////////////
 // G4LogicalSkinSurface Implementation
@@ -45,8 +61,7 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
     LogVolume(logicalVolume)
 {
   // Store in the table of Surfaces
-  theSurfaceTable.insert(this);
-  theIndexInTable = theSurfaceTable.index(this);
+  theSurfaceTable.push_back(this);
 }
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface &right)
@@ -54,7 +69,6 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface &right)
 {
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     LogVolume = right.LogVolume;
-    theIndexInTable = right.theIndexInTable;
     theSurfaceTable = right.theSurfaceTable;
 }
 
@@ -74,7 +88,6 @@ G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface &right)
     SetName(right.GetName());
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     LogVolume = right.LogVolume;
-    theIndexInTable = right.theIndexInTable;
     theSurfaceTable = right.theSurfaceTable;
   }
   return *this;
@@ -97,13 +110,13 @@ G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface &right) const
 
 size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 {
-	return theSurfaceTable.length();
+	return theSurfaceTable.size();
 }
 
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
-	for (size_t i=0; i<theSurfaceTable.length(); i++) {
+	for (size_t i=0; i<theSurfaceTable.size(); i++) {
 		if(theSurfaceTable[i]->GetLogicalVolume() == vol)
 			return theSurfaceTable[i];
 	}
@@ -118,7 +131,7 @@ void G4LogicalSkinSurface::DumpInfo()
     G4cout << "***** Surface Table : Nb of Surfaces = "
            << GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
-    for (size_t i=0; i<theSurfaceTable.length(); i++) {
+    for (size_t i=0; i<theSurfaceTable.size(); i++) {
       G4LogicalSkinSurface *pSkinSurface= theSurfaceTable[i];
       G4cout << theSurfaceTable[i]->GetName() << " : " << G4endl <<
 	" Skin of logical volume " << pSkinSurface->GetLogicalVolume()->GetName  ()

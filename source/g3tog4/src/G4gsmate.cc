@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4gsmate.cc,v 1.6 1999/12/15 14:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4gsmate.cc,v 1.7.2.1 2001/06/28 19:08:07 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -30,7 +46,7 @@ void PG4gsmate(G4String tokens[])
   G4double z = Rpar[1];
   G4double dens = Rpar[2];
   G4double radl = Rpar[3];
-  G4double absl = Rpar[4];
+  // G4double absl = Rpar[4];
   G4double *ubuf = &Rpar[5];
 
   G4gsmate(imate, name, a, z, dens, radl, nwbf, ubuf);
@@ -92,7 +108,7 @@ void G4gsmate(G4int imate, G4String name, G4double ain, G4double zin,
   G4double a = ain*g/mole;
   G4double dens = densin*g/cm3;
 
-  G4Material* material;
+  G4Material* material=0;
   
   G4String sname = name.strip(G4String::both);
   if (sname == "AIR") {

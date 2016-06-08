@@ -1,18 +1,32 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Transportation.cc,v 1.14 2001/02/20 14:41:35 japost Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Transportation.cc,v 1.16.2.2 2001/06/28 20:20:14 gunter Exp $
+// GEANT4 tag $Name:  $
 // 
 // ------------------------------------------------------------
 //	GEANT 4  include file implementation
 //
-//	For information related to this code contact:
-//	CERN, IT Division
 // ------------------------------------------------------------
 //
 // This class is a process responsible for the transportation of 
@@ -22,7 +36,8 @@
 // It is also tasked with part of updating the "safety".
 //
 // =======================================================================
-// Modified:   
+// Modified:
+//            11 Aprl 2001, P. Gumplinger: correction for spin tracking   
 //            20 Febr 2001, J. Apostolakis:  update for new FieldTrack
 //            22 Sept 2000, V. Grichine:     update of Kinetic Energy
 //             9 June 1999, J. Apostolakis & S.Giani: protect full relocation
@@ -207,10 +222,11 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
 
      fTransportEndPosition = startPosition + geometryStepLength*startMomentumDir ;
 
-     // Momentum (& its direction) is unchanged
+     // Momentum direction, energy and polarisation are unchanged by transport
 
      fTransportEndMomentumDir   = startMomentumDir ; 
      fTransportEndKineticEnergy = track.GetKineticEnergy() ;
+     fTransportEndSpin          = track.GetPolarization();
      fParticleIsLooping         = false ;
      fMomentumChanged           = false ; 
   }
@@ -289,7 +305,8 @@ AlongStepGetPhysicalInteractionLength(  const G4Track&  track,
      fTransportEndKineticEnergy  = aFieldTrack.GetKineticEnergy() ; 
 
      //   fTransportEndKineticEnergy = track.GetKineticEnergy() ;
-     // fTransportEndPolarization= aFieldTrack.GetSpin() ; // Not yet possible
+
+     fTransportEndSpin = aFieldTrack.GetSpin();
 
      fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
      endpointDistance   = (fTransportEndPosition - startPosition).mag() ;
@@ -352,6 +369,8 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   fParticleChange.SetMomentumChange(fTransportEndMomentumDir) ;
   fParticleChange.SetEnergyChange(fTransportEndKineticEnergy) ;
   fParticleChange.SetMomentumChanged(fMomentumChanged) ;
+
+  fParticleChange.SetPolarizationChange(fTransportEndSpin);
 
   G4double deltaTime = 0.0 ;
 

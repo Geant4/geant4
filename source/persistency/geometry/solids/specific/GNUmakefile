@@ -1,19 +1,20 @@
-# $Id: GNUmakefile,v 1.1 2000/05/11 10:09:07 morita Exp $
+# $Id: GNUmakefile,v 1.2 2001/03/15 22:58:54 morita Exp $
 
 name := G4pspecsolids
 G4ODBMS := true
 G4ODBMS_INSTALLATION := true
+PWD := $(shell (dirname `pwd`/dummy | sed -e 's/ //g'))
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../..
+  G4INSTALL = $(PWD)/../../../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-G4OODDLX_BOOT := $(G4TMPSCHEMA_BOOT)
+G4OODDLX_BOOT := $(G4SCHEMA_BOOT)
 
 CPPFLAGS  += \
-             -Iinclude \
+             -I$(PWD)/include \
              -I$(G4SCHEMA_HEADER_DIR) \
              -I$(G4TMP)/$(G4SYSTEM)/G4pgeomGlobal \
              -I$(G4TMP)/$(G4SYSTEM)/G4pcsg \

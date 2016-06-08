@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Scene.cc,v 1.6 2001/02/23 15:43:22 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Scene.cc,v 1.7.2.1 2001/06/28 19:16:13 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -107,7 +123,7 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel) {
 }
 
 void G4Scene::Clear () {
-  int i;
+  size_t i;
   for (i = 0; i < fRunDurationModelList.size(); ++i) {
     delete fRunDurationModelList[i];
   }
@@ -118,16 +134,18 @@ void G4Scene::Clear () {
 
 G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
 
+  size_t i;
+
   os << "Scene data:";
 
   os << "\n  Run-duration model list:";
-  for (int i = 0; i < d.fRunDurationModelList.size (); i++) {
+  for (i = 0; i < d.fRunDurationModelList.size (); i++) {
     os << "\n  " << *(d.fRunDurationModelList[i]);
   }
 
   os << "\n  End-of-event model list:";
-  for (int ii = 0; ii < d.fEndOfEventModelList.size (); ii++) {
-    os << "\n  " << *(d.fEndOfEventModelList[ii]);
+  for (i = 0; i < d.fEndOfEventModelList.size (); i++) {
+    os << "\n  " << *(d.fEndOfEventModelList[i]);
   }
 
   os << "\n  Extent or bounding box: " << d.fExtent;
@@ -145,7 +163,7 @@ G4bool G4Scene::operator != (const G4Scene& s) const {
       !(fStandardTargetPoint == s.fStandardTargetPoint)
       ) return true;
 
-  for (int i = 0; i < fRunDurationModelList.size (); i++) {
+  for (size_t i = 0; i < fRunDurationModelList.size (); i++) {
     if (fRunDurationModelList[i] != s.fRunDurationModelList[i])
       return true;
   }

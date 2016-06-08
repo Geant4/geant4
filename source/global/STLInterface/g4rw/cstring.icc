@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: cstring.icc,v 1.9 2000/11/20 20:03:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: cstring.icc,v 1.10.2.1 2001/06/28 19:09:57 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 //---------------------------------------------------------------
@@ -26,7 +42,7 @@ G4SubString::G4SubString(const G4SubString&s)
   extent=s.extent;
 }
 
-G4SubString::G4SubString(G4String& str, size_t s, size_t e)
+G4SubString::G4SubString(G4String& str, str_size s, str_size e)
   : mystring(&str),mystart(s),extent(e)
 {
 } 
@@ -51,22 +67,22 @@ G4SubString& G4SubString::operator=(const char*s)
   return *this;
 }
 
-char& G4SubString::operator()(size_t i)
+char& G4SubString::operator()(str_size i)
 {
   return mystring->operator[](mystart+i);
 }
 
-char  G4SubString::operator()(size_t i) const
+char  G4SubString::operator()(str_size i) const
 {
   return mystring->operator[](mystart+i);
 }
 
-char&  G4SubString::operator[](size_t i)
+char&  G4SubString::operator[](str_size i)
 {
   return mystring->operator[](mystart+i);
 }
 
-char  G4SubString::operator[](size_t i) const
+char  G4SubString::operator[](str_size i) const
 {
   return mystring->operator[](mystart+i);
 }
@@ -96,12 +112,12 @@ G4bool G4SubString::operator!=(const char* s) const
   return mystring->substr(mystart,extent) != G4std::string(s) ? true:false;
 }
 
-size_t G4SubString::length() const
+str_size G4SubString::length() const
 {
   return extent;
 }
 
-size_t G4SubString::start() const
+str_size G4SubString::start() const
 {
   return mystart;
 }
@@ -160,12 +176,12 @@ G4String& G4String::operator=(const char* s)
 //       one returned by the original RW function.
 //       Users should not rely on the specific return value.
 //
-char G4String::operator () (size_t i) const
+char G4String::operator () (str_size i) const
 {
   return operator[](i);
 }
 
-char& G4String::operator () (size_t i)
+char& G4String::operator () (str_size i)
 {
   return std_string::operator[](i);
 }
@@ -236,9 +252,9 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
   char* buf1 = new char[strlen(s1)+1];
   char* buf2 = new char[strlen(s2)+1];
 
-  for (size_t i=0; i<=strlen(s1); i++)
+  for (str_size i=0; i<=strlen(s1); i++)
     buf1[i] = tolower(s1[i]);
-  for (size_t j=0; j<=strlen(s2); j++)
+  for (str_size j=0; j<=strlen(s2); j++)
     buf2[j] = tolower(s2[j]);
 
   G4int res = strcmp(buf1, buf2);
@@ -299,20 +315,20 @@ G4String& G4String::replace (unsigned int start, unsigned int nbytes,
   return *this;                                                              
 }                                                                          
 
-G4String& G4String::replace(size_t pos, size_t n, const char* s)
+G4String& G4String::replace(str_size pos, str_size n, const char* s)
 {
   std_string::replace(pos,n,s);
   return *this;
 }
 
-G4String& G4String::remove(size_t n)
+G4String& G4String::remove(str_size n)
 {
   if(n<size())
     erase(n,size()-n);
   return *this;
 }
 
-G4String& G4String::remove(size_t pos, size_t N)
+G4String& G4String::remove(str_size pos, str_size N)
 {
   erase(pos,N+pos);
   return *this;
@@ -350,7 +366,7 @@ G4String G4String::strip (G4int stripType, char c)
 {
   G4String retVal = *this;
   if(length()==0) return retVal;
-  size_t i;
+  str_size i;
   switch ( stripType ) {
   case leading: 
     {
@@ -383,7 +399,7 @@ G4String G4String::strip (G4int stripType, char c)
 
 void G4String::toLower ( void )
 {
-  for (size_t i=0; i<size();i++)
+  for (str_size i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
     std_string::operator[](i) = tolower(std_string::operator[](i));
@@ -393,7 +409,7 @@ void G4String::toLower ( void )
 
 void G4String::toUpper ( void )
 {
-  for (size_t i=0; i<size();i++)
+  for (str_size i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
     std_string::operator[](i) = toupper(std_string::operator[](i));
@@ -408,23 +424,23 @@ G4bool G4String::isNull() const
 
 // "cs" optional parameter is NOT implemented !
 //
-size_t G4String::index( const G4String& s, size_t ln, 
-                        size_t st, G4String::caseCompare cs ) const
+str_size G4String::index( const G4String& s, str_size ln, 
+                          str_size st, G4String::caseCompare cs ) const
 {
   return std_string::find( s.c_str(), st, ln );
 }
 
-size_t G4String::index (const char* str, G4int pos) const
+str_size G4String::index (const char* str, G4int pos) const
 {
   return std_string::find(str,pos);
 }
 
-size_t G4String::index (char c, G4int pos) const
+str_size G4String::index (char c, G4int pos) const
 {
   return std_string::find(c,pos);
 }
 
-G4SubString G4String::operator()(size_t start, size_t extent)
+G4SubString G4String::operator()(str_size start, str_size extent)
 {
   return G4SubString(*this,start,extent);
 }
@@ -441,7 +457,7 @@ unsigned int G4String::hash( caseCompare cmp ) const
   for ( ; *s; ++s)
     h = 5*h + *s;
 
-  return size_t(h);
+  return str_size(h);
 }
 
 unsigned int G4String::stlhash() const
@@ -451,7 +467,7 @@ unsigned int G4String::stlhash() const
   for ( ; *s; ++s)
     h = 5*h + *s;
 
-  return size_t(h);
+  return str_size(h);
 }
 
 unsigned G4String::hash(const G4String& s)

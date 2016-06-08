@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULES:              G4NuclearDecayChannel.cc
@@ -341,7 +363,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
     //    if (gammas!=0) nGammas=gammas->entries();
     // in the case of BreakItUp(nucleus), the returned G4FragmentVector contains the residual nuclide
     // as its last entry.
-    if (gammas > 0) nGammas=gammas->entries()-1;
+    if (gammas > 0) nGammas=gammas->size()-1;
   //
   //
   // Go through each gamma and add it to the decay product.  The angular distribution
@@ -355,7 +377,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       G4double phi      = twopi * G4UniformRand();
       G4ParticleMomentum gDirection
         (sintheta*cos(phi),sintheta*sin(phi),costheta);
-      G4double gEnergy = gammas->at(ig)->GetMomentum().e();
+      G4double gEnergy = gammas->operator[](ig)->GetMomentum().e();
       G4DynamicParticle *theGammaRay = new
         G4DynamicParticle (G4Gamma::GammaDefinition(), gDirection, gEnergy);
       products->PushProducts (theGammaRay);
@@ -365,7 +387,11 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   // Delete/reset variables associated with the gammas.
   //
     //    if (nGammas != 0) gammas->clearAndDestroy();
-    gammas->clearAndDestroy();
+    while (!gammas->empty()) {
+      delete *(gammas->end()-1);
+      gammas->pop_back();
+   }
+//    gammas->clearAndDestroy();
     delete gammas;
     delete deexcitation;
   //

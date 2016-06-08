@@ -1,16 +1,30 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//      
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      CERN, Geneva, Switzerland
 //
 //      File name:     G4PhotonEvaporation
@@ -79,16 +93,16 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
   G4FragmentVector* contProducts = _contDeexcitation->DoTransition();  
 
   G4int nCont = 0;
-  if (contProducts != 0) nCont = contProducts->entries();
+  if (contProducts != 0) nCont = contProducts->size();
 
-  G4int i;
+  G4FragmentVector::iterator i;
   if (nCont > 0)
     {
       G4Fragment modifiedNucleus = _contDeexcitation->GetNucleus();
       _discrDeexcitation->SetNucleus(modifiedNucleus);
-      for (i=0; i<nCont; i++)
+      for (i = contProducts->begin(); i != contProducts->end(); i++)
 	{
-	  products->insert(contProducts->at(i));
+	  products->push_back(*i);
 	}
     }
   else
@@ -97,36 +111,38 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
       G4FragmentVector* discrProducts = _discrDeexcitation->DoTransition();
       
       G4int nDiscr = 0;
-      if (discrProducts != 0) nDiscr = discrProducts->entries();
+      if (discrProducts != 0) nDiscr = discrProducts->size();
       
       if (_verbose > 0)
 	G4cout << " = BreakUp = " << nDiscr 
 	       << " gammas from DiscreteDeexcitation " 
 	       << G4endl;
       
-      for (i=0; i<nDiscr; i++)
+      for (i = discrProducts->begin(); i != discrProducts->end(); i++)
 	{
-	  products->insert(discrProducts->at(i));
+	  products->push_back(*i);
 	}
+      discrProducts->clear();
       delete discrProducts;
     }
 
 
   _gammaE = 0.;
-  if (products->entries() > 0)
+  if (products->size() > 0)
     {
-      _gammaE = products->at(0)->GetMomentum().e();
+      _gammaE = (*(products->begin()))->GetMomentum().e();
     }
 
+  contProducts->clear();
   delete contProducts;  // delete vector, not fragments 
 
   // Add deexcited nucleus to products
   G4Fragment* finalNucleus = new G4Fragment(_discrDeexcitation->GetNucleus());
-  products->insert(finalNucleus);
+  products->push_back(finalNucleus);
 
 
   if (_verbose > 0)
-    G4cout << "*-*-*-* Photon evaporation: " << products->entries() << G4endl;
+    G4cout << "*-*-*-* Photon evaporation: " << products->size() << G4endl;
 
   return products;
 }
@@ -147,20 +163,20 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 
   // Products from continuum gamma transitions
   G4int nCont = 0;
-  if (contProducts != 0) nCont = contProducts->entries();
+  if (contProducts != 0) nCont = contProducts->size();
 
   if (_verbose > 0)
     G4cout << " = BreakItUp = " << nCont 
 	   << " gammas from ContinuumDeexcitation " << G4endl;
 
-  G4int i;
+  G4FragmentVector::iterator i;
   if (nCont > 0)
     {
       G4Fragment modifiedNucleus = _contDeexcitation->GetNucleus();
       _discrDeexcitation->SetNucleus(modifiedNucleus);
-      for (i=0; i<nCont; i++)
+      for (i = contProducts->begin(); i != contProducts->end(); i++)
 	{
-	  products->insert(contProducts->at(i));
+	  products->push_back(*i);
 	}
     }
 
@@ -168,29 +184,35 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   G4FragmentVector* discrProducts = _discrDeexcitation->DoChain();
 
   G4int nDiscr = 0;
-  if (discrProducts != 0) nDiscr = discrProducts->entries();
+  if (discrProducts != 0) nDiscr = discrProducts->size();
 
   if (_verbose > 0)
     G4cout << " = BreakItUp = " << nDiscr 
 	   << " gammas from DiscreteDeexcitation " << G4endl;
 
-  for (i=0; i<nDiscr; i++)
+  for (i = discrProducts->begin(); i != discrProducts->end(); i++)
     {
-      products->insert(discrProducts->at(i));
+      products->push_back(*i);
     }
 
   // Add deexcited nucleus to products
   G4Fragment* finalNucleus = new G4Fragment(_discrDeexcitation->GetNucleus());
-  products->insert(finalNucleus);
+  products->push_back(finalNucleus);
 
   if (_verbose > 0)
     G4cout << " = BreakItUp = Nucleus added to products" << G4endl;
 
-  delete contProducts;  // delete vector, not fragments 
-  delete discrProducts;
+   contProducts->clear();
+   discrProducts->clear();
+   delete contProducts;  // delete vector, not fragments 
+   delete discrProducts;
 
   if (_verbose > 0)
-    G4cout << "*-*-* Photon evaporation: " << products->entries() << G4endl;
+    G4cout << "*-*-* Photon evaporation: " << products->size() << G4endl;
+
+#ifdef debug
+  CheckConservation(nucleus,products);
+#endif
 
   return products;
 }
@@ -227,3 +249,63 @@ void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)
 
   return;
 }
+
+
+#ifdef debug
+void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
+					    G4FragmentVector * Result) const
+{
+  G4double ProductsEnergy =0;
+  G4ThreeVector ProductsMomentum;
+  G4int ProductsA = 0;
+  G4int ProductsZ = 0;
+  G4FragmentVector::iterator h;
+  for (h = Result->begin(); h != Result->end(); h++) {
+    G4LorentzVector tmp = (*h)->GetMomentum();
+    ProductsEnergy += tmp.e();
+    ProductsMomentum += tmp.vect();
+    ProductsA += G4int((*h)->GetA());
+    ProductsZ += G4int((*h)->GetZ());
+  }
+
+  if (ProductsA != theInitialState.GetA()) {
+    G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
+    G4cout << "G4PhotonEvaporation.cc: Barionic Number Conservation test for evaporation fragments" 
+	   << G4endl; 
+    G4cout << "Initial A = " << theInitialState.GetA() 
+	   << "   Fragments A = " << ProductsA << "   Diference --> " 
+	   << theInitialState.GetA() - ProductsA << G4endl;
+  }
+  if (ProductsZ != theInitialState.GetZ()) {
+    G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!" << G4endl;
+    G4cout << "G4PhotonEvaporation.cc: Charge Conservation test for evaporation fragments" 
+	   << G4endl; 
+    G4cout << "Initial Z = " << theInitialState.GetZ() 
+	   << "   Fragments Z = " << ProductsZ << "   Diference --> " 
+	   << theInitialState.GetZ() - ProductsZ << G4endl;
+  }
+  if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
+    G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
+    G4cout << "G4PhotonEvaporation.cc: Energy Conservation test for evaporation fragments" 
+	   << G4endl; 
+    G4cout << "Initial E = " << theInitialState.GetMomentum().e()/MeV << " MeV"
+	   << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
+	   << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
+  } 
+  if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
+      abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
+      abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
+    G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
+    G4cout << "G4PhotonEvaporation.cc: Momentum Conservation test for evaporation fragments" 
+	   << G4endl; 
+    G4cout << "Initial P = " << theInitialState.GetMomentum().vect() << " MeV"
+	   << "   Fragments P = " << ProductsMomentum  << " MeV   Diference --> " 
+	   << theInitialState.GetMomentum().vect() - ProductsMomentum << " MeV" << G4endl;
+  }
+  return;
+}
+#endif
+
+
+
+

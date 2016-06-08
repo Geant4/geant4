@@ -1,15 +1,29 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4hLowEnergyIonisation physics process -------
@@ -48,6 +62,9 @@
 //                utils tag not being accepted yet by system testing)
 // 21 Nov.  2000 V.Ivanchenko Fix a problem in fluctuations
 // 23 Nov.  2000 V.Ivanchenko Ion type fluctuations only for charge>0
+// 10 May   2001 V.Ivanchenko Clean up againist Linux compilation with -Wall
+// 23 May   2001 V.Ivanchenko Minor fix in PostStepDoIt
+// 07 June  2001 V.Ivanchenko Clean up AntiProtonDEDX + add print out
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -68,19 +85,19 @@
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
   : G4hLowEnergyLoss(processName),
-    theMeanFreePathTable(NULL),
+    theBetheBlochModel(0),
+    theProtonModel(0),
+    theAntiProtonModel(0),
+    theIonEffChargeModel(0),
+    theNuclearStoppingModel(0),
+    theIonChuFluctuationModel(0),
+    theIonYangFluctuationModel(0),
     theProtonTable("ICRU_R49p"),
     theAntiProtonTable("ICRU_R49p"),
     theNuclearTable("ICRU_R49"),
-    theBetheBlochModel(NULL),
-    theProtonModel(NULL),
-    theAntiProtonModel(NULL),
-    theNuclearStoppingModel(NULL),
-    theIonEffChargeModel(NULL),
-    theIonChuFluctuationModel(NULL),
-    theIonYangFluctuationModel(NULL),
     nStopping(true),
     theBarkas(true),
+    theMeanFreePathTable(0),
     paramStepLimit (0.005)
 { 
   InitializeMe();
@@ -176,6 +193,10 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   
   //  just call BuildLossTable+BuildLambdaTable
 {
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable for "
+           << aParticleType.GetParticleName() << G4endl;
+  }
   InitializeParametrisation() ;
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
@@ -190,7 +211,7 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     {
 
       if( (ptableElectronCutInRange != electronCutInRange)  
-	  || (theDEDXpTable == NULL))
+	  || (theDEDXpTable == 0))
 	{
 	  BuildLossTable(*theProton) ;
 	  RecorderOfpProcess[CounterOfpProcess] = theLossTable ;
@@ -200,19 +221,34 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     } else{
 
       if( (pbartableElectronCutInRange != electronCutInRange)  
-	  || (theDEDXpbarTable == NULL))
+	  || (theDEDXpbarTable == 0))
 	{
 	  BuildLossTable(*theAntiProton) ;
 	  RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable ;
 	  CounterOfpbarProcess++;
 	}
     }
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
+           << "Loss table is built" << G4endl;
+  }
   
   BuildLambdaTable(aParticleType) ;
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: "
+           << "DEDX table will be built" << G4endl;
+  }
 
   BuildDEDXTable(aParticleType) ;
 
   if((&aParticleType == theProton) ) PrintInfoDefinition() ;
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable: end for "
+           << aParticleType.GetParticleName() << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -225,7 +261,6 @@ void G4hLowEnergyIonisation::BuildLossTable(
   G4double lowEdgeEnergy , ionloss, ionlossBB, paramB ;
   G4double lowEnergy, highEnergy;
   G4Proton* theProton = G4Proton::Proton();
-  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
   if(aParticleType == *theProton) {
     lowEnergy = protonLowEnergy ;
@@ -326,8 +361,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
   // Build mean free path tables for the delta ray production process
   //     tables are built for MATERIALS 
   
-  G4double lowEdgeEnergy , value ,sigma ;
-  G4bool isOutRange ;
+  G4double lowEdgeEnergy, value;
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   charge = aParticleType.GetPDGCharge()/eplus ;
   chargeSquare = charge*charge ;
@@ -470,8 +504,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
   G4double stepLimit = 0.0 ;
-  G4bool isOut ;
-  G4double dx, s, highEnergy;
+  G4double dx, highEnergy;
   
   G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
@@ -594,7 +627,6 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   
   const G4DynamicParticle* particle = trackData.GetDynamicParticle() ;
   
-  G4int index = material->GetIndex() ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
   G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double tscaled= kineticEnergy*massRatio ; 
@@ -723,6 +755,13 @@ G4double G4hLowEnergyIonisation::ProtonParametrisedDEDX(
   // Delta rays energy
   eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
 
+  if(verboseLevel > 1) {
+    G4cout << "p E(MeV)= " << kineticEnergy/MeV
+           << " dE/dx(MeV/mm)= " << eloss*mm/MeV 
+           << " for " << material->GetName() 
+           << " model: " << theProtonModel << G4endl;
+  }
+
   if(eloss < 0.0) eloss = 0.0 ;  
   
   return eloss ;
@@ -736,36 +775,42 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
 {
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
   G4double eloss = 0.0 ;
-  G4double goldenRule = 1.0 ;
 
-  // Choose the model
-  G4VLowEnergyModel * theModel ;
+  // Antiproton model is used
   if(theAntiProtonModel->IsInCharge(theAntiProton,material)) {
-    theModel = theAntiProtonModel ;
+    if(kineticEnergy < antiProtonLowEnergy) {
+      eloss = theAntiProtonModel->TheValue(theAntiProton,material,
+                                           antiProtonLowEnergy);
+    
+    // Parametrisation 
+    } else {
+      eloss = theAntiProtonModel->TheValue(theAntiProton,material,
+                                           kineticEnergy);
+    }
+
+  // The proton model is used + Barkas correction
   } else { 
-    theModel = theProtonModel ;
-    // goldenRule = AntiProtonGoldenRule(kineticEnergy) ;
-  }
-
-    // Free Electron Gas Model is not used for antiprotons  
-  if(kineticEnergy < antiProtonLowEnergy) {
-    eloss = theModel->TheValue(theAntiProton, material, antiProtonLowEnergy);
-    //          * sqrt(kineticEnergy/protonLowEnergy) ;
+    if(kineticEnergy < antiProtonLowEnergy) {
+      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,
+                                       antiProtonLowEnergy);
     
-    // Parametrisation using golden rule for antiprotons
-  } else {
-    eloss = theModel->TheValue(theAntiProton, material, kineticEnergy) ;
+    // Parametrisation 
+    } else {
+      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,
+                                       kineticEnergy);
+    }
+    if(theBarkas) eloss -= 2.0*BarkasTerm(material, kineticEnergy);
   }
-    
-  // Taken into account golden rule for antiprotons
-  eloss *= goldenRule ;
-
-    // Proton model is used
-  if(theBarkas && (theModel == theProtonModel)) 
-                  eloss -= 2.0*BarkasTerm(material, kineticEnergy);
   
   // Delta rays energy
   eloss -= DeltaRaysEnergy(material,kineticEnergy,proton_mass_c2) ;
+
+  if(verboseLevel > 0) {
+    G4cout << "pbar E(MeV)= " << kineticEnergy/MeV
+           << " dE/dx(MeV/mm)= " << eloss*mm/MeV 
+           << " for " << material->GetName() 
+           << " model: " << theProtonModel << G4endl;
+  }
 
   if(eloss < 0.0) eloss = 0.0 ;  
   
@@ -784,7 +829,6 @@ G4double G4hLowEnergyIonisation::DeltaRaysEnergy(
   G4double deltaCutNow = deltaCutInKineticEnergy[(material->GetIndex())] ;   
   G4double electronDensity = material->GetElectronDensity();
   G4double eexc = material->GetIonisation()->GetMeanExcitationEnergy();
-  G4double eexc2 = eexc*eexc ;
 
   G4double tau = kineticEnergy/particleMass ;    
   G4double rateMass = electron_mass_c2/particleMass ;
@@ -821,12 +865,11 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
            betasquare,MaxKineticEnergyTransfer,
            DeltaKineticEnergy,DeltaTotalMomentum,costheta,sintheta,phi,
            dirx,diry,dirz,finalKineticEnergy,finalPx,finalPy,finalPz,
-           x,xc,te2,grej,Psquare,Esquare,summass,rate,grejc,finalMomentum ;
+           x,xc,grej,Psquare,Esquare,summass,rate,finalMomentum ;
   
   aParticleChange.Initialize(trackData) ;
   G4Material* aMaterial = trackData.GetMaterial() ;
   G4double Eexc = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
-  G4double Eexc2 = Eexc*Eexc ;
   
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
   
@@ -858,8 +901,8 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       // pathological case (it should not happen ,
       // there is no change at all).....
       
-      // return &aParticleChange;
-      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+      return &aParticleChange;
+      //return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
     }
   else
     {
@@ -957,7 +1000,6 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   aParticleChange.AddSecondary( theDeltaRay );
   aParticleChange.SetLocalEnergyDeposit (Edep);
   
-  //ResetNumberOfInteractionLengthLeft();
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
@@ -1008,18 +1050,53 @@ G4double G4hLowEnergyIonisation::BarkasTerm(const G4Material* material,
 //
 {
   static double FTable[47][2] = { 
-    0.02, 21.5,	0.03, 20.0,	0.04, 18.0,	0.05, 15.6,
-    0.06, 15.0,	0.07, 14.0,   	0.08, 13.5,   	0.09, 13,
-    0.1,  12.2,  	0.2,   9.25,  	0.3,   7.0,     0.4,   6.0,   
-    0.5,  4.5, 	0.6,   3.5,   	0.7,   3.0,     0.8,   2.5,   
-    0.9,  2.0,  	1.0,   1.7,  	1.2,   1.2,   	1.3,   1.0,     
-    1.4,  0.86,  	1.5,   0.7,	1.6,   0.61,  	1.7,   0.52,  
-    1.8,  0.5,   	1.9,   0.43,	2.0,   0.42,  	2.1,   0.3,   
-    2.4,  0.2,	3.0,   0.13,  	3.08,  0.1,   	3.1,   0.09, 
-    3.3,  0.08,     3.5,   0.07,  	3.8,   0.06,	4.0,   0.051, 
-    4.1,  0.04,  	4.8,   0.03,    5.0,   0.024,   5.1,   0.02,
-    6.0,  0.013,    6.5,   0.01,	7.0,   0.009, 	7.1,   0.008,
-    8.0,  0.006, 	9.0,   0.0032, 10.0,   0.0025 };
+   { 0.02, 21.5},
+   { 0.03, 20.0},	
+   { 0.04, 18.0},	
+   { 0.05, 15.6},
+   { 0.06, 15.0},	
+   { 0.07, 14.0},	
+   { 0.08, 13.5},	
+   { 0.09, 13.},
+   { 0.1,  12.2},  	
+   { 0.2,  9.25},  	
+   { 0.3,  7.0},  
+   { 0.4,  6.0},
+   { 0.5,  4.5}, 	
+   { 0.6,  3.5},	
+   { 0.7,  3.0},  
+   { 0.8,  2.5},
+   { 0.9,  2.0},  	
+   { 1.0,  1.7},  	
+   { 1.2,  1.2},	
+   { 1.3,  1.0},  
+   { 1.4,  0.86},  	
+   { 1.5,  0.7},	
+   { 1.6,  0.61},  	
+   { 1.7,  0.52},  
+   { 1.8,  0.5},	
+   { 1.9,  0.43},	
+   { 2.0,  0.42},  	
+   { 2.1,  0.3},
+   { 2.4,  0.2},	
+   { 3.0,  0.13},  	
+   { 3.08, 0.1},	
+   { 3.1,  0.09}, 
+   { 3.3,  0.08},  
+   { 3.5,  0.07},  	
+   { 3.8,  0.06},	
+   { 4.0,  0.051}, 
+   { 4.1,  0.04},  	
+   { 4.8,  0.03}, 
+   { 5.0,  0.024},
+   { 5.1,  0.02},
+   { 6.0,  0.013},
+   { 6.5,  0.01},
+   { 7.0,  0.009}, 	
+   { 7.1,  0.008},
+   { 8.0,  0.006}, 	
+   { 9.0,  0.0032}, 
+   { 10.0, 0.0025} };
 
   // Information on particle and material
   G4double kinE  = kineticEnergy ;
@@ -1190,7 +1267,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   G4int p1,p2,p3;
   G4int nb;
   G4double corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
-  G4double dp1,dp3;
+  G4double dp3;
 
   G4double f1Fluct     = material->GetIonisation()->GetF1fluct();
   G4double f2Fluct     = material->GetIonisation()->GetF2fluct();

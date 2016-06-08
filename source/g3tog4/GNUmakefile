@@ -110,7 +110,7 @@ all: lib
 
 lib: libc libF
 
-ifneq ($(G4MAKESHLIB),)
+ifneq ($(G4LIB_BUILD_SHARED),)
 libc : $(G4LIBDIR)/lib$(name).$(SHEXT)
 else
 libc : $(G4LIBDIR)/lib$(name).a

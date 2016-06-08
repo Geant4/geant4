@@ -1,14 +1,28 @@
-// This code implementation is the intellectual property of
-// neutron_hp -- header file
-// J.P. Wellisch, Nov-1996
-// A prototype of the low energy neutron transport model.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.3 1999/07/02 09:59:00 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4NeutronHPFinalState.hh,v 1.4.2.1 2001/06/28 19:14:15 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h
@@ -53,6 +67,7 @@ public:
   virtual G4double GetXsec(G4double anEnergy) { return 0; }
   virtual G4NeutronHPVector * GetXsec() { return NULL; }
   
+  void     SetA_Z(G4double anA, G4double aZ) {theBaseA = anA; theBaseZ = aZ; }
   G4double GetZ() { return theBaseZ; }
   G4double GetN() { return theBaseA; }
   

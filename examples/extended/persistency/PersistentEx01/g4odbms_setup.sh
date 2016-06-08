@@ -10,23 +10,43 @@
 
 # ----- Use HepODBMS
 
-G4USE_HEPODBMS=1; export G4USE_HEPODBMS
+export G4USE_HEPODBMS=1
 
-# ----- Objectivity variables setup
+# ----- LHCXX related variables
 
-if [ -z "$OBJY_VERS" ] ; then
-  OBJY_VERS=5.1
-  export OBJY_VERS
+if [ -z "$LHCXXTOP" ] ; then
+  export LHCXXTOP=/afs/cern.ch/sw/lhcxx
 fi
 
-if [ -r /afs/cern.ch/rd45/objectivity/objyenv.sh ] ; then 
-  echo "Setting up OBJY_VERS $OBJY_VERS ..."
-  . /afs/cern.ch/rd45/objectivity/objyenv.sh 
-fi 
+export CC_COMP=""
+case $G4SYSTEM in
+SUN-CC5)
+    export PLATF=sol7
+    export CC_COMP=CC-5.2/
+    export OBJY_VERS=6.1.3
+    export HEP_ODBMS_VER=0.3.2.10
+    ;;
+Linux-g++)
+    export PLATF=@sys
+    export CC_COMP=gcc-2.95.2/
+    export OBJY_VERS=6.0
+    export HEP_ODBMS_VER=0.3.2.3
+    ;;
+default)
+    echo "Objectivity and HepODBMS versions not specified for G4SYSTEM = $G4SYSTEM."
+    ;;
+esac
 
 # ----- HepODBMS variables setup
 
-HEP_ODBMS_DIR=/afs/cern.ch/sw/lhcxx/specific/@sys/HepODBMS/0.3.0.1
-export HEP_ODBMS_DIR
-HEP_ODBMS_INCLUDES=${HEP_ODBMS_DIR}/include
-export HEP_ODBMS_INCLUDES
+export HEP_ODBMS_DIR=$LHCXXTOP/specific/$PLATF/${CC_COMP}HepODBMS/${HEP_ODBMS_VER}
+export HEP_ODBMS_INCLUDES=${HEP_ODBMS_DIR}/include
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$HEP_ODBMS_DIR/lib
+
+# ----- Objectivity variables setup
+
+if [ -r /afs/cern.ch/rd45/objectivity/objyenv.sh ] ; then 
+  export OBJY_DIR=$LHCXXTOP/specific/$PLATF/${CC_COMP}Objectivity/${OBJY_VERS}
+  . /afs/cern.ch/rd45/objectivity/objyenv.sh
+fi
+

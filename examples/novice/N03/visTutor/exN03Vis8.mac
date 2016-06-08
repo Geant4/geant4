@@ -4,8 +4,9 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
-#        October  17, 2000                                            # 
+#        June     20, 2001                                            #
 #        November 26, 2000                                            #
+#        October  17, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A macro to demonstrate creation of a "multi-page"        #
 #            PostScript file                                          #
@@ -49,33 +50,38 @@
 # Invoke the DAWNFILE driver 
 /vis/open DAWNFILE
 
-# Generate page 1
-/vis/camera/reset
-/vis/camera/zoom       0.9 
-/vis/camera/viewpoint  35 35
-/vis/drawVolume        Absorber 
-/vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm  50 -150 -200   Page1/3:Absorber 
+# Set viewing parameters
+/vis/viewer/reset
+/vis/viewer/zoom               0.9 
+/vis/viewer/viewpointThetaPhi  35 35
+
+# Generate page 1: Absorber
+/vis/scene/create                                              
+/vis/scene/add/volume     Absorber 
+/vis/scene/add/axes       0 0 0 500
+/vis/scene/add/text       0 0 0 mm  30 -150 -200   Page1/3:Absorber 
+/vis/sceneHandler/attach
+/vis/viewer/refresh
 /vis/viewer/update
 
-# Generate page 2
-/vis/camera/reset
-/vis/camera/zoom       0.9 
-/vis/camera/viewpoint  35 35
-/vis/drawVolume        Gap 
-/vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm 50 -100 -200   Page2/3:Gap
+# Generate page 2: Gap
+/vis/scene/create                                              
+/vis/scene/add/volume     Gap
+/vis/scene/add/axes       0 0 0 500
+/vis/scene/add/text       0 0 0 mm 30 -100 -200   Page2/3:Gap
+/vis/sceneHandler/attach
+/vis/viewer/refresh
 /vis/viewer/update
 
-# Generate page 3
-/vis/camera/reset
-/vis/camera/zoom       0.9 
-/vis/camera/viewpoint  35 35
-/vis/set/culling       off
-/vis/drawVolume
-/vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm 50 -100 -200   Page3/3:world
+# Generate page 3: World
+/vis/viewer/set/culling   global  false
+/vis/scene/create                                              
+/vis/scene/add/volume     
+/vis/scene/add/axes       0 0 0 500
+/vis/scene/add/text       0 0 0 mm 50 -100 -200   Page3/3:world
+/vis/sceneHandler/attach
+/vis/viewer/refresh
 /vis/viewer/update
 
 # Make the culling on for next visualization
-/vis/set/culling       on
+/vis/viewer/set/culling   global  true

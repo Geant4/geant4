@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HadronCrossSections.cc,v 1.3 2001/02/26 17:09:14 hpw Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4HadronCrossSections.cc,v 1.4.2.1 2001/06/28 19:12:54 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -1485,7 +1501,7 @@ G4HadronCrossSections::GetCaptureCrossSection(
 
    G4double ekx = G4std::max(ek, 1.e-9);
    G4double z = anElement->GetZ();
-   G4int izno = z + 0.01;
+   G4int izno = static_cast<G4int> (z + 0.01);
    if (izno > 100) izno = 100;      // Not in GHESIG
    izno = izno - 1;      // For array indexing
    G4double sigcap = 11.12*cscap[izno]/pow(ekx*1.e6, 0.577);

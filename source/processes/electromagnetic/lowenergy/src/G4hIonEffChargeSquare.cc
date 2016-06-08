@@ -1,16 +1,30 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
-// For information related to this code contact:
-// Geant4 Collaboration
 //
 // File name:     G4hIonEffChargeSquare
 //
@@ -212,8 +226,6 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     lF /= norm ;
   }
 
-  G4double w, q ;
-
   // Helium ion case
   if( ionCharge < 2.5 ) {
 
@@ -224,7 +236,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
       y *= e ;
       x += y * c[i] ;
     }
-    q = 7.6 -  e ; 
+    G4double q = 7.6 -  e ; 
     q = 1.0 + ( 0.007 + 0.00005 * z ) * exp( -q*q ) ;
     return  4.0 * q * q * (1.0 - exp(-x)) ;
 

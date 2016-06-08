@@ -1,9 +1,28 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4EvaporationChannel.hh,v 1.5.2.1 2001/06/28 19:13:01 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -28,21 +47,29 @@
 class G4EvaporationChannel : public G4VEvaporationChannel
 {
 public:
-  // only available constructor
+  // Available constructors
   G4EvaporationChannel(const G4int theA, const G4int theZ,
-  								G4VEmissionProbability * aEmissionStrategy,
-								G4VCoulombBarrier * aCoulombBarrier);
+		       G4VEmissionProbability * aEmissionStrategy,
+		       G4VCoulombBarrier * aCoulombBarrier);
+
+  G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String & aName,
+		       G4VEmissionProbability * aEmissionStrategy,
+		       G4VCoulombBarrier * aCoulombBarrier);
+
+  G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String * aName,
+		       G4VEmissionProbability * aEmissionStrategy,
+		       G4VCoulombBarrier * aCoulombBarrier);
 
 public:
   // destructor
   ~G4EvaporationChannel();
   
-	void SetEmissionStrategy(G4VEmissionProbability * aEmissionStrategy)
-	{theEvaporationProbabilityPtr = aEmissionStrategy;}
+  void SetEmissionStrategy(G4VEmissionProbability * aEmissionStrategy)
+  {theEvaporationProbabilityPtr = aEmissionStrategy;}
   
-	void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
-	{theCoulombBarrierPtr = aCoulombBarrier;} 
-	
+  void SetCoulombBarrierStrategy(G4VCoulombBarrier * aCoulombBarrier)
+  {theCoulombBarrierPtr = aCoulombBarrier;} 
+  
 protected:
   // default constructor
   G4EvaporationChannel() {};
@@ -72,26 +99,26 @@ public:
 
 
   inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
-    {
-      if (MyOwnLevelDensity) delete theLevelDensityPtr;
-      theLevelDensityPtr = aLevelDensity;
-      MyOwnLevelDensity = false;
-    }
-
+  {
+    if (MyOwnLevelDensity) delete theLevelDensityPtr;
+    theLevelDensityPtr = aLevelDensity;
+    MyOwnLevelDensity = false;
+  }
+  
 public:
 
 
   inline G4double GetEmissionProbability(void) const 
-    {return EmissionProbability;}
-
-
+  {return EmissionProbability;}
+  
+  
   inline G4double GetMaximalKineticEnergy(void) const 
-    { return MaximalKineticEnergy; }
-
+  { return MaximalKineticEnergy; }
+  
   // ----------------------
-
+  
 private: 
-
+  
   // Calculate Binding Energy for separate fragment from nucleus
   G4double CalcBindingEnergy(const G4int anA, const G4int aZ);
 
@@ -103,9 +130,6 @@ private:
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(const G4double Magnitude  = 1.0);
-
-	G4double PairingCorrection(const G4int A, const G4int Z) const;
-
 
 	// Data Members
 	// ************
@@ -128,9 +152,9 @@ private:
   G4bool MyOwnLevelDensity;
   G4VLevelDensityParameter * theLevelDensityPtr;
   
-	// For Coulomb Barrier calculation
-	G4VCoulombBarrier * theCoulombBarrierPtr;
-	G4double CoulombBarrier;
+  // For Coulomb Barrier calculation
+  G4VCoulombBarrier * theCoulombBarrierPtr;
+  G4double CoulombBarrier;
 
   //---------------------------------------------------
 

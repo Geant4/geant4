@@ -25,9 +25,11 @@
       CALL FFKEY('MATE' ,materAbs(1),MaxAbs,'INTEGER')
       CALL FFKEY('THICK',thickAbs(1),MaxAbs,'REAL')
 * *** production cuts (bcute, dcute and ppcutm) for each absorber       
-      CALL FFKEY('CUTPR',prodcut(1) ,4*MaxAbs,'REAL')
+      CALL FFKEY('CUTPR',prodcut(1) ,4*MaxAbs,'REAL')      
 * *** histograms
-      CALL FFKEY('HISTO',idhist,4,'MIXED')            
+      CALL FFKEY('HISTO',idhist,4,'MIXED')
+* *** max allowed step size       
+      CALL FFKEY('STEPMX',stepmax,1,'REAL')                  
 *
 * *** read data cards
       CALL GFFGO 
@@ -41,7 +43,7 @@
       CALL UGEOM                                                                
 *                                                                               
 * *** Energy loss and cross-sections initialisations                            
-      CALL GPHYSI                                                               
+      CALL GPHYSI                               
 * 
       CALL GPRINT('MATE',0)                                                     
       CALL GPRINT('TMED',0)                                                     

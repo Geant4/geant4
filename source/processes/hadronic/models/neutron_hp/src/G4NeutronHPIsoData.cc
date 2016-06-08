@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
@@ -20,10 +42,16 @@
     ifstream theChannel(filename,ios::in|ios::nocreate);
 #endif
     
-    if(!theChannel) return false;
+    if(Z==1 && (aFile.GetZ()!=Z || abs(aFile.GetA()-A)>0.0001) )
+    {
+      if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
+      theChannel.close();
+      return false;
+    }
+    if(!theChannel) {theChannel.close(); return false;}
     // accommodating deficiencie of some compilers
-    if(theChannel.eof()) return false; 
-    if(!theChannel) return false;
+    if(theChannel.eof()) {theChannel.close(); return false;} 
+    if(!theChannel) {theChannel.close(); return false;}
     G4int count;
     G4int dummy; 
     theChannel >> dummy >> dummy;
@@ -36,6 +64,7 @@
 //     G4int hpw;
 //     G4cin >> hpw;
 //    theChannelData->Dump();
+    theChannel.close();
     return result;
   }
   
@@ -59,7 +88,7 @@
     dirName = baseName+"/Capture";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theCaptureData = theChannelData;
-    theChannelData = NULL;
+     theChannelData = NULL;
     dirName = baseName+"/Elastic";
     Init(A, Z, abun, dirName, "/CrossSection/");
     theElasticData = theChannelData;

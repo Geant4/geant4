@@ -1,14 +1,28 @@
-// This code implementation is the intellectual property of
-// neutron_hp -- header file
-// J.P. Wellisch, Nov-1996
-// A prototype of the low energy neutron transport model.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4NeutronHPChannel.hh,v 1.4 1999/07/06 16:56:21 stesting Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4NeutronHPChannel.hh,v 1.5.2.1 2001/06/28 19:14:12 gunter Exp $
+// GEANT4 tag $Name:  $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -95,6 +109,9 @@ public:
   G4ParticleChange * ApplyYourself(const G4Track & theTrack, G4int isoNumber=-1);
     
   inline G4int GetNiso() {return niso;}
+  
+  inline G4double GetN(G4int i) {return theFinalStates[i]->GetN();}
+  inline G4double GetZ(G4int i) {return theFinalStates[i]->GetZ();}
   
   inline G4bool HasDataInAnyFinalState()
   {

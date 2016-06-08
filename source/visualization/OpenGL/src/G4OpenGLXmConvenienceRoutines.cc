@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.3 1999/12/15 14:54:09 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.5.2.1 2001/06/28 19:15:44 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -19,7 +35,6 @@
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
-//#include "G4OpenGLXmConvenienceRoutines.hh"
 #include "G4OpenGLXmViewer.hh"
 
 void G4OpenGLXmViewer::Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
@@ -216,17 +231,20 @@ void G4OpenGLXmViewer::Add_radio_box (char* label_string,
 				       NULL);
 
   XmString lab = XmStringCreateLocalized (label_string);
-  Widget label = XtVaCreateManagedWidget ("radio_label",
-					  xmLabelWidgetClass,
-					  radio_box,
-					  XmNalignment, XmALIGNMENT_CENTER,
-					  XmNlabelString, lab,
-					  XtNvisual, pView->vi->visual,
-					  XtNdepth, pView->vi->depth,
-					  XtNcolormap, pView->cmap,
-					  XtNborderColor, pView->borcol,
-					  XtNbackground, pView->bgnd,
-					  NULL);
+
+  // Unused!
+  //Widget label = XtVaCreateManagedWidget ("radio_label",
+  //				  xmLabelWidgetClass,
+  //				  radio_box,
+  //				  XmNalignment, XmALIGNMENT_CENTER,
+  //				  XmNlabelString, lab,
+  //				  XtNvisual, pView->vi->visual,
+  //				  XtNdepth, pView->vi->depth,
+  //				  XtNcolormap, pView->cmap,
+  //				  XtNborderColor, pView->borcol,
+  //				  XtNbackground, pView->bgnd,
+  //				  NULL);
+
   XmStringFree (lab);
 
   for (i = 0; i < num_buttons; i++) {
@@ -277,20 +295,23 @@ void G4OpenGLXmViewer::Add_set_field (char* w_name,
   strcat (text_field_name, "_text_field");
   
   XmString local_text = XmStringCreateLocalized (local_w_text);
-  Widget label = XtVaCreateManagedWidget (label_name, 
-					  xmLabelWidgetClass,
-					  *row_col_box,
-					  XmNlabelString, local_text,
-					  XtNvisual, pView->vi->visual, 
-					  XtNdepth, pView->vi->depth, 
-					  XtNcolormap, pView->cmap, 
-					  XtNborderColor, pView->borcol,
-					  XtNbackground, pView->bgnd,
-					  NULL);
+
+  // Unused!
+  //  Widget label = XtVaCreateManagedWidget (label_name, 
+  //				  xmLabelWidgetClass,
+  //				  *row_col_box,
+  //				  XmNlabelString, local_text,
+  //				  XtNvisual, pView->vi->visual, 
+  //				  XtNdepth, pView->vi->depth, 
+  //				  XtNcolormap, pView->cmap, 
+  //				  XtNborderColor, pView->borcol,
+  //				  XtNbackground, pView->bgnd,
+  //				  NULL);
+
   XmStringFree (local_text);
 
   char initial[50];
-  sprintf (initial, "%6.2f\0", *val);
+  sprintf (initial, "%6.2f", *val);
   
   *wid = XtVaCreateManagedWidget (text_field_name,
 				  xmTextFieldWidgetClass,
@@ -305,7 +326,7 @@ void G4OpenGLXmViewer::Add_set_field (char* w_name,
 
   XtAddCallback (*wid, 
 		 XmNvalueChangedCallback,
-		 G4OpenGLXmViewer::get_double_value_callback,
+		 get_double_value_callback,
 		 val);
 
   Widget sep = XtVaCreateManagedWidget ("sep",
@@ -405,17 +426,19 @@ void G4OpenGLXmViewer::Add_slider_box (char* label_string,
 
   XmString lab = XmStringCreateLocalized (label_string);
 
-  Widget label = XtVaCreateManagedWidget ("slider_label",
-					  xmLabelWidgetClass,
-					  slider_box,
-					  XmNlabelString, lab,
-					  XmNalignment, XmALIGNMENT_CENTER,
-					  XtNvisual, pView->vi->visual,
-					  XtNdepth, pView->vi->depth,
-					  XtNcolormap, pView->cmap,
-					  XtNborderColor, pView->borcol,
-					  XtNbackground, pView->bgnd,
-					  NULL);
+  // Unused!
+  //Widget label = XtVaCreateManagedWidget ("slider_label",
+  //				  xmLabelWidgetClass,
+  //				  slider_box,
+  //				  XmNlabelString, lab,
+  //				  XmNalignment, XmALIGNMENT_CENTER,
+  //				  XtNvisual, pView->vi->visual,
+  //				  XtNdepth, pView->vi->depth,
+  //				  XtNcolormap, pView->cmap,
+  //				  XtNborderColor, pView->borcol,
+  //				  XtNbackground, pView->bgnd,
+  //				  NULL);
+
   XmStringFree (lab);
   
   for (i = 0; i < num_sliders; i++) {

@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4gsdk.cc,v 1.3 1999/12/05 17:50:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4gsdk.cc,v 1.4.2.1 2001/06/28 19:08:07 gunter Exp $
+// GEANT4 tag $Name:  $
 
 #include "G4Decay.hh"
 #include "G3toG4.hh"
@@ -19,7 +35,6 @@ void PG4gsdk(G4String tokens[])
 
     // interpret the parameters
     G4int ipart = Ipar[0];
-    G4int inum = Ipar[1];
     G4int *mode = &Ipar[3];
     G4double *bratio = Rpar;
 
@@ -28,6 +43,7 @@ void PG4gsdk(G4String tokens[])
 
 void G4gsdk(G4int ipart, G4double bratio[], G4int mode[])
 {
+/*
     // create decay object for the particle
     G4Decay *decay = new G4Decay();
     // add decay modes
@@ -39,4 +55,5 @@ void G4gsdk(G4int ipart, G4double bratio[], G4int mode[])
     // associate decay object with particle ipart
     G4ParticleDefinition *part = G3Part.Get(ipart);
 // $$$    part->SetDecay(decay);
+*/
 }

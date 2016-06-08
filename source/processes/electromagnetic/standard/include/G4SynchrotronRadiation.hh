@@ -1,23 +1,37 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.4 2001/02/05 17:53:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4SynchrotronRadiation.hh,v 1.5.2.2 2001/06/28 20:19:46 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      
 //      History: 
 //      21-5-98  1 version , V. Grichine
-//                   
+//      28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 
 //
 // ------------------------------------------------------------
@@ -130,7 +144,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
    const G4DynamicParticle* aDynamicParticle;
    G4Material* aMaterial;
    G4double MeanFreePath;
-   G4bool isOutRange ;
+   //G4bool isOutRange ;
  
    *condition = NotForced ;
 

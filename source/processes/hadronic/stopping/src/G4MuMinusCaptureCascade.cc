@@ -1,23 +1,41 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 //
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
 //      ------------ G4MuonMinusCaptureAtRest physics process --------
-//                   by Vladimir Ivanchenko
+//                   
 //                     E-mail: Vladimir.Ivantchenko@cern.ch
-//                            April 2000
+//
+//   Created:   02.04.00 V.Ivanchenko
+//
+//   Modified:  06.04.01 V.Ivanchenko Bug in theta distribution fixed
+//
 // **************************************************************
 //-----------------------------------------------------------------------------
 
@@ -105,12 +123,12 @@ G4ThreeVector G4MuMinusCaptureCascade::GetRandomVec()
    // generate uniform vector
    //
 
-   G4double Theta = (2.0 * G4UniformRand() - 1.0) * pi ;
-   G4double Phi  = twopi * G4UniformRand() ;
-   G4double sinTheta = sin(Theta);
+   G4double cosTheta = 2.0 * G4UniformRand() - 1.0;
+   G4double sinTheta = sqrt(1.0 - cosTheta*cosTheta);
+   G4double Phi  = twopi * G4UniformRand();
    G4double dirx = sinTheta * cos(Phi); 
    G4double diry = sinTheta * sin(Phi); 
-   G4double dirz = cos(Theta); 
+   G4double dirz = cosTheta; 
 
    return G4ThreeVector(dirx, diry, dirz);
 }

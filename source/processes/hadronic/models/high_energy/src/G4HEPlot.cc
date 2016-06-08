@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HEPlot.cc,v 1.3 1999/12/15 14:52:57 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4HEPlot.cc,v 1.4.4.1 2001/06/28 19:13:59 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 
@@ -162,35 +178,44 @@ G4HEPlot::Scale( G4double s, const G4HEPlot & p)
    }
 
 void
-G4HEPlot::XScale(G4double a, G4double b, const G4HEPlot & p)
+G4HEPlot::XScale(G4double a, G4double b)
    {
-     G4int i;
-     Entries = 0;
-     EntriesOverflow = 0;
-     EntriesUnderflow = 0;
-     Weight = 0.;
-     WeightOverflow = 0.;
-     WeightUnderflow = 0.;
-     Xstart = p.Xstart;
-     Xbin = p.Xbin;
-     Nbin = p.Nbin;
-     for(i=0; i<Nbin; i++)
-       {
-         Xvalue[i] = p.Yvalue[i];
-         Yvalue[i] = 0.;
-       }
-     G4double xval = Xstart - Xbin/2.;
-     for(i=0; i<Nbin; i++)
-       {
-         xval += Xbin;
-         Fill(xval*a + b, Xvalue[i]); 
-       }
-    for(i=0; i<Nbin; i++)
+     Xstart = b + Xstart;
+     Xbin   = a*Xbin;
+     for(G4int i=0; i<Nbin; i++)
        {
          Xvalue[i] = Xstart + i*Xbin;
-       } 
+       }
    }      
 
+void
+G4HEPlot::Shift(G4int nshift)
+   {
+     G4int i;
+     if(nshift < 0)
+     {
+       for(i=0;i<Nbin-nshift;i++)
+       {
+          Yvalue[i] = Yvalue[i-nshift];
+       }
+       for(i=Nbin-nshift;i<Nbin;i++)
+       {
+          Yvalue[i] = 0.;
+       }
+     }
+     if(nshift > 0)
+     {
+       for(i=Nbin-1;i>nshift-1;i--)
+       {
+          Yvalue[i] = Yvalue[i-nshift];
+       }
+       for(i=0;i<nshift;i++)
+       {
+          Yvalue[i] = 0.;
+       }
+       return; 
+     }
+   }    
 void 
 G4HEPlot::Log( G4double s, const G4HEPlot & p)
    {
@@ -253,6 +278,30 @@ G4HEPlot::Reset()
      Weight = 0.;
      WeightOverflow = 0.;
      WeightUnderflow = 0.;
+     return;
+   }
+
+void
+G4HEPlot::LinearFit(G4double& a, G4double& b)
+   {
+     G4double a11 = 0.;
+     G4double a12 = 0.;
+     G4double a22 = 0.;
+     G4double b1  = 0.;
+     G4double b2  = 0.;
+     for(G4int i = 0; i<Nbin; i++)
+     {
+       if(Yvalue[i] != 0.)
+       {
+          a11 += (Xvalue[i]+Xbin/2.)*(Xvalue[i]+Xbin/2.);
+          a12 += (Xvalue[i]+Xbin/2.);
+          a22 += 1.;
+          b1  += Yvalue[i]*(Xvalue[i]+Xbin/2.);
+          b2  += Yvalue[i];
+       }
+     }
+     b = (b1*a12-b2*a11)/(a12*a12-a11*a22);
+     a = (b1 - b*a12)/a11;
      return;
    }
 
@@ -329,7 +378,7 @@ G4HEPlot::GetFromFile(G4int aPlot, G4String aName)
            {
              if(ip == aPlot) 
                {
-                 if(Nbin != nb) Init(nb, xs, xb);
+                 if(Nbin == 0) Init(nb, xs, xb);
                }
              for (G4int i=0; i<nb; i++)
                {

@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4ProcessManager.cc,v 1.16 2000/06/15 15:34:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4ProcessManager.cc,v 1.17.2.2 2001/06/28 20:20:12 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-//	For information related to this code contact:  public:
-//	CERN, CN Division, ASD Group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 // ------------------------------------------------------------
@@ -211,7 +225,8 @@ G4int G4ProcessManager::GetProcessVectorIndex(
 	G4cout << " is not registered yet ";
       }
       if (ivec <0) {
-	G4cout << " illegal DoIt Index [= " << idx << "," << typ << "]";
+	G4cout << " illegal DoIt Index [= " << G4int(idx) << ","
+	                                    << G4int(typ) << "]";
       }
       G4cout << G4endl;
     }
@@ -432,7 +447,7 @@ G4int G4ProcessManager::AddProcess(
 
     } else {
       //add aProcess in ordering of ordProcVector
-      G4ProcessVector* pVector = theProcVector[ivec];
+      // G4ProcessVector* pVector = theProcVector[ivec];
       // find insert position
       G4int ip = FindInsertPosition(pAttr->ordProcVector[ivec], ivec);
       // insert 
@@ -593,7 +608,7 @@ void G4ProcessManager::SetProcessOrdering(
       G4cout <<  aErrorMessage << G4endl;
       G4cout << "particle[" + theParticleType->GetParticleName() +"] " ;
       G4cout << "process[" + aProcess->GetProcessName() + "]"<<  G4endl;
-      G4cout << " illegal DoIt Index [= " << idDoIt << "]";
+      G4cout << " illegal DoIt Index [= " << G4int(idDoIt) << "]";
       G4cout << G4endl;
     }
 #endif
@@ -657,7 +672,7 @@ void G4ProcessManager::SetProcessOrderingToFirst(
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << "G4ProcessManager::SetProcessOrdering: ";
-      G4cout << " illegal DoIt Index [= " << idDoIt << "]";
+      G4cout << " illegal DoIt Index [= " << G4int(idDoIt) << "]";
       G4cout << G4endl;
     }
 #endif

@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisManMessSet.cc,v 1.11 2001/02/23 15:43:31 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisManMessSet.cc,v 1.12.2.1 2001/06/28 19:16:16 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -493,7 +509,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       }
       fpVMan -> SetCurrentViewParameters ().SetRepStyle (repStyle);
       if (fpVMan -> GetVerboseLevel () > 0) {
-	G4cout << "Representation style changed to " << repStyle << G4endl;
+	G4cout << "Representation style changed to "
+	       << G4int(repStyle) << G4endl;
 	if (fpVMan -> GetVerboseLevel () > 1) {
 	  fpVMan -> PrintCurrentView ();
 	}
@@ -668,8 +685,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	G4cout << "Available views:";
 	for (int iView = 0; iView < nViewTotal; iView++) {
 	  const G4VViewer* pView = vList [iView];
-	  const G4VSceneHandler* pScene = pView -> GetSceneHandler ();
-	  const G4VGraphicsSystem* pSystem = pScene -> GetGraphicsSystem ();
 	  G4cout << "\n  " << iView << ") " << pView -> GetName ();
 	}
 	G4cout << "\nChoose by specifying integer parameter.";

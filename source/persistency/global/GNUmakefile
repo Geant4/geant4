@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2000/06/09 12:54:38 morita Exp $
+# $Id: GNUmakefile,v 1.6 2001/03/15 22:58:55 morita Exp $
 
 name := G4pglobal
 G4ODBMS := true
@@ -9,7 +9,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-G4OODDLX_BOOT := $(G4TMPSCHEMA_BOOT)
+G4OODDLX_BOOT := $(G4SCHEMA_BOOT)
 
 # $(G4TMPDIR) will be overrided in common.gmk later.
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)

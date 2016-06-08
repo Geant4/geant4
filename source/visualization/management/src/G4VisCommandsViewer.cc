@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VisCommandsViewer.cc,v 1.25 2001/04/02 10:08:46 johna Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VisCommandsViewer.cc,v 1.26.2.1 2001/06/28 19:16:15 gunter Exp $
+// GEANT4 tag $Name:  $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -51,7 +67,7 @@ void G4VVisCommandViewer::UpdateCandidateLists () {
   for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
     G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
-    for (int iViewer = 0; iViewer < viewerList.size (); iViewer++) {
+    for (size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       viewerNameList += viewerList [iViewer] -> GetShortName () + " ";
     }
   }
@@ -250,7 +266,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
   for (iHandler = 0; iHandler < nHandlers; iHandler++) {
     G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
-    for (int iViewer = 0; iViewer < viewerList.size (); iViewer++) {
+    for (size_t iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       if (viewerList [iViewer] -> GetShortName () == newShortName ) {
 	G4cout << "Viewer \"" << newShortName << "\" already exists."
 	       << G4endl;
@@ -261,9 +277,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 
   fpVisManager->SetCurrentViewParameters().SetWindowSizeHint
     (windowSizeHint, windowSizeHint);
-  // Currently the viewer does not pick up the above.  So a viewer
-  // picks up a default set of view parameters adn thus, the default
-  // window size for the moment.
+  // These are picked up in the G4VViewer contructor.
 
   // Create viewer.
   fpVisManager -> CreateViewer (newName);
@@ -693,10 +707,12 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
 	   << G4endl;
     return;
   }
+  scene -> AddWorldIfEmpty ();
 
   G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
 	 << G4endl;
   viewer -> ClearView ();
+  viewer -> SetView ();
   viewer -> DrawView ();
   G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
     "\n  (You might also need \"/vis/viewer/update\".)" << G4endl;

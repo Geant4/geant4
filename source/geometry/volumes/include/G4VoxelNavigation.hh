@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4VoxelNavigation.hh,v 1.7 2000/11/01 16:51:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4VoxelNavigation.hh,v 1.8.2.1 2001/06/28 19:09:42 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // 
 // class G4VoxelNavigation
@@ -36,8 +52,7 @@
 #include "G4SmartVoxelProxy.hh"
 #include "G4SmartVoxelNode.hh"
 #include "G4SmartVoxelHeader.hh"
-#include "g4rw/tvvector.h"
-#include "g4rw/tpvector.h"
+#include "g4std/vector"
 
 class G4VoxelNavigation
 {
@@ -90,19 +105,19 @@ class G4VoxelNavigation
       // Note: fVoxelDepth==0+ => fVoxelAxisStack(0+) contains axes of voxel
       //       fVoxelDepth==-1 -> not in voxel
 
-    G4RWTValVector<EAxis> fVoxelAxisStack;
+    G4std::vector<EAxis> fVoxelAxisStack;
       // Voxel axes
 
-    G4RWTValVector<G4int> fVoxelNoSlicesStack;
+    G4std::vector<G4int> fVoxelNoSlicesStack;
       // No slices per voxel at each level
 
-    G4RWTValVector<G4double> fVoxelSliceWidthStack; 
+    G4std::vector<G4double> fVoxelSliceWidthStack; 
       // Width of voxels at each level 
 
-    G4RWTValVector<G4int> fVoxelNodeNoStack;	  
+    G4std::vector<G4int> fVoxelNodeNoStack;	  
       // Node no point is inside at each level 
 				
-    G4RWTPtrVector<G4SmartVoxelHeader> fVoxelHeaderStack;
+    G4std::vector<G4SmartVoxelHeader*> fVoxelHeaderStack;
       // Voxel headers at each level
 
     G4SmartVoxelNode* fVoxelNode;

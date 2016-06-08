@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4AdvancedFaceCreator.cc,v 1.3 2000/02/25 16:36:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4AdvancedFaceCreator.cc,v 1.4.2.1 2001/06/28 19:09:14 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // ----------------------------------------------------------------------
 // Class G4AdvancedFaceCreator
@@ -56,12 +72,12 @@ void G4AdvancedFaceCreator::CreateG4Geometry(STEPentity& Ent)
     {
       G4CompositeCurve* pcc= new G4CompositeCurve;
       pcc->Init(*((G4CurveVector*)tmp));
-      boundaryVec->insert(pcc);
+      boundaryVec->push_back(pcc);
     }
     Node = Node->NextNode();
   }      
   
-  G4int boundNum = boundaryVec->entries();
+  G4int boundNum = boundaryVec->size();
   if (boundNum != boundaryCount)
     G4cerr << "WARNING - G4AdvancedFaceCreator::CreateG4Geometry" << G4endl
            << "\tTotal of " << boundNum << " G4CompositeCurve components created, out of "

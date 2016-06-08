@@ -1,23 +1,35 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Trd.cc,v 1.7 2000/11/20 17:58:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Trd.cc,v 1.8.2.1 2001/06/28 19:09:03 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // Implementation for G4Trd class
 //
-// $ Id: $ 
-//
 // History:
 // ~1996,  V. Grichine, 1st implementation based on old code of P. Kent
 // 07.05.00, V. Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
-
-
 
 #include "G4Trd.hh"
 
@@ -29,8 +41,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-
-#include <math.h>
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -1144,7 +1154,8 @@ G4ThreeVectorList*
 G4Trd::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
     G4ThreeVectorList *vertices;
-    vertices=new G4ThreeVectorList(8);
+    vertices=new G4ThreeVectorList();
+    vertices->reserve(8);
     if (vertices)
 	{
 	    G4ThreeVector vertex0(-fDx1,-fDy1,-fDz);
@@ -1156,14 +1167,14 @@ G4Trd::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 	    G4ThreeVector vertex6(fDx2,fDy2,fDz);
 	    G4ThreeVector vertex7(-fDx2,fDy2,fDz);
 
-	    vertices->insert(pTransform.TransformPoint(vertex0));
-	    vertices->insert(pTransform.TransformPoint(vertex1));
-	    vertices->insert(pTransform.TransformPoint(vertex2));
-	    vertices->insert(pTransform.TransformPoint(vertex3));
-	    vertices->insert(pTransform.TransformPoint(vertex4));
-	    vertices->insert(pTransform.TransformPoint(vertex5));
-	    vertices->insert(pTransform.TransformPoint(vertex6));
-	    vertices->insert(pTransform.TransformPoint(vertex7));
+	    vertices->push_back(pTransform.TransformPoint(vertex0));
+	    vertices->push_back(pTransform.TransformPoint(vertex1));
+	    vertices->push_back(pTransform.TransformPoint(vertex2));
+	    vertices->push_back(pTransform.TransformPoint(vertex3));
+	    vertices->push_back(pTransform.TransformPoint(vertex4));
+	    vertices->push_back(pTransform.TransformPoint(vertex5));
+	    vertices->push_back(pTransform.TransformPoint(vertex6));
+	    vertices->push_back(pTransform.TransformPoint(vertex7));
 	}
     else
 	{

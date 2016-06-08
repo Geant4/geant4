@@ -1,0 +1,319 @@
+To add a graphics system implement 3 new classes:
+ 
+  class G4XXX: public G4VGraphicsSystem
+  class G4XXXSceneHandler: public G4VSceneHandler
+  class G4XXXViewer: virtual public G4VViewer
+
+Introduce two new environment variables G4VIS_BUILD_XXX_DRIVER and GG4VIS_USE_XXX and make the attached modifications to:
+
+  source/visualization/management/include/MyVisManager.cc
+  (similarly all examples vis managers)
+  source/visualization/management/src/G4VisManager.cc
+  config/G4VIS_BUILD.gmk
+  config/G4VIS_USE.gmk
+
+===================================================================
+include/G4XXX.hh
+===================================================================
+#ifndef G4XXX_HH
+#define G4XXX_HH
+
+#include "G4VGraphicsSystem.hh"
+
+class G4XXX: public G4VGraphicsSystem {
+public:
+  G4XXX ();
+  virtual ~G4XXX ();
+  G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
+  G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
+};
+#include "G4XXX.hh"
+#include "G4XXXSceneHandler.hh"
+#include "G4XXXViewer.hh"
+
+#endif
+===================================================================
+
+===================================================================
+include/G4XXXSceneHandler.hh
+===================================================================
+#ifndef G4XXXSCENEHANDLER_HH
+#define G4XXXSCENEHANDLER_HH
+
+#include "G4VSceneHandler.hh"
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Tubs.hh"
+#include "G4Trd.hh"
+#include "G4Trap.hh"
+#include "G4Sphere.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
+
+class G4VPhysicalVolume;
+class G4LogicalVolume;
+
+class G4XXXSceneHandler: public G4VSceneHandler {
+
+public:
+  G4XXXSceneHandler(G4VGraphicsSystem& system,
+                      const G4String& name);
+  virtual ~G4XXXSceneHandler ();
+  void AddThis (const G4Box& s) {Dump (s);}
+  void AddThis (const G4Cons & s) {Dump (s);}
+  void AddThis (const G4Tubs& s) {Dump (s);}
+  void AddThis (const G4Trd& s) {Dump (s);}
+  void AddThis (const G4Trap& s) {Dump (s);}
+  void AddThis (const G4Sphere& s) {Dump (s);}
+  void AddThis (const G4Para& s) {Dump (s);}
+  void AddThis (const G4Torus& s) {Dump (s);}
+  void AddThis (const G4Polycone& s) {Dump (s);}
+  void AddThis (const G4Polyhedra& s) {Dump (s);}
+  void AddThis (const G4VSolid& s) {Dump (s);}
+  void PreAddThis (const G4Transform3D& objectTransformation,
+                   const G4VisAttributes&);
+  void PostAddThis ();
+  void EstablishSpecials (G4PhysicalVolumeModel&);
+  G4int                GetFoundDepth          () const;
+  G4VPhysicalVolume*   GetFoundVolume         () const;
+  const G4Transform3D& GetFoundTransformation () const;
+
+  ////////////////////////////////////////////////////////////////
+  // Functions not used but required by the abstract interface.
+
+  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
+  virtual void EndPrimitives () {}
+  virtual void AddPrimitive (const G4Polyline&)   {}
+  virtual void AddPrimitive (const G4Text&)       {}
+  virtual void AddPrimitive (const G4Circle&)     {}
+  virtual void AddPrimitive (const G4Square&)     {}
+  virtual void AddPrimitive (const G4Polymarker&) {}
+  virtual void AddPrimitive (const G4Polyhedron&) {}
+  virtual void AddPrimitive (const G4NURBS&)      {}
+
+  static G4int GetSceneCount();
+
+protected:
+  void                 Dump (const G4VSolid&);
+  static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
+  static G4int         fSceneCount;    // No. of extanct scene handlers.
+  G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
+  G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
+  G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
+  const G4Transform3D* fpCurrentObjectTransformation;
+};
+
+#include "G4XXXSceneHandler.icc"
+
+#endif
+===================================================================
+
+===================================================================
+include/G4XXXViewer.hh
+===================================================================
+#ifndef G4XXXVIEWER_HH
+#define G4XXXVIEWER_HH
+
+#include "G4VViewer.hh"
+
+class G4XXXViewer: virtual public G4VViewer {
+public:
+  G4XXXViewer(G4VSceneHandler&,const G4String& name);
+  virtual ~G4XXXViewer();
+  void SetView();
+  void ClearView();
+  void DrawView();
+private:
+  G4int fFileCount;
+};
+
+#endif
+===================================================================
+
+===================================================================
+src/G4XXX.cc
+===================================================================
+G4XXX::G4XXX ():
+  G4VGraphicsSystem ("Full Name",
+                     "Nickname",
+                     "A description - could run to many lines - "
+                     "\n advantages, disadvantages, etc.",
+                     G4VGraphicsSystem::<type>)  // See enum.
+  {}
+
+G4XXX::~G4XXX () {}
+
+G4VSceneHandler* G4XXX::CreateSceneHandler (const G4String& name) {
+  G4VSceneHandler* pScene = new G4XXXSceneHandler (*this, name);
+  G4cout << G4XXXSceneHandler::GetSceneCount ()
+         << ' ' << fName << " scene handlers extanct." << G4endl;
+  return  pScene;
+}
+
+G4VViewer* G4XXX::CreateViewer (G4VSceneHandler& scene,
+                                  const G4String& name) {
+  G4VViewer* pView =
+    new G4XXXViewer ((G4XXXSceneHandler&) scene, name);
+  if (pView) {
+    if (pView -> GetViewId () < 0) {
+      G4cerr << "G4XXX::CreateViewer: error flagged by negative"
+        " view id in G4XXXViewer creation."
+        "\n Destroying view and returning null pointer."
+           << G4endl;
+      delete pView;
+      pView = 0;
+    }
+  }
+  else {
+    G4cerr << "G4XXX::CreateViewer: null pointer on"
+      " new G4XXXViewer." << G4endl;
+  }
+  return pView;
+}
+===================================================================
+
+===================================================================
+src/G4XXXSceneHandler.cc
+===================================================================
+#include "G4XXXSceneHandler.hh"
+
+#include "G4VSolid.hh"
+#include "G4PhysicalVolumeModel.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+
+G4int G4XXXSceneHandler::fSceneIdCount = 0;
+// Counter for XXX scene handlers.
+
+G4int G4XXXSceneHandler::fSceneCount = 0;
+// No. of extanct scene handlers.
+
+G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,
+                                         const G4String& name):
+  G4VSceneHandler(system, fSceneIdCount++, name),
+  fCurrentDepth                 (0),
+  fpCurrentPV                   (0),
+  fpCurrentLV                   (0),
+  fpCurrentObjectTransformation (0)
+{
+  fSceneCount++;
+}
+
+G4XXXSceneHandler::~G4XXXSceneHandler () {}
+
+void G4XXXSceneHandler::EstablishSpecials
+(G4PhysicalVolumeModel& pvModel) {
+  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
+                                        &fpCurrentPV,
+                                        &fpCurrentLV);
+}
+
+void G4XXXSceneHandler::Dump (const G4VSolid& solid) {
+  for (G4int i = 0; i < fCurrentDepth; i++ ) G4cout << "  ";
+  G4cout << "\"" << fpCurrentPV -> GetName ()
+         << "\", copy no. " << fpCurrentPV -> GetCopyNo ()
+         << G4endl;
+  return;
+}
+===================================================================
+
+===================================================================
+src/G4XXXViewer.cc
+===================================================================
+#include "G4XXXViewer.hh"
+
+#include "G4ios.hh"
+#include "g4std/strstream"
+
+#include "G4VSceneHandler.hh"
+
+G4XXXViewer::G4XXXViewer
+(G4VSceneHandler& sceneHandler, const G4String& name):
+  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {}
+
+G4XXXViewer::~G4XXXViewer() {}
+
+void G4XXXViewer::SetView() {}
+
+void G4XXXViewer::ClearView() {}
+
+void G4XXXViewer::DrawView() {
+  NeedKernelVisit ();  // Always need to visit G4 kernel.
+  ProcessView ();
+}
+
+===================================================================
+Index: source/visualization/management/include/MyVisManager.cc
+===================================================================
+RCS file: /afs/cern.ch/sw/geant4/cvs/geant4/source/visualization/management/include/MyVisManager.cc,v
+retrieving revision 1.5
+diff -r1.5 MyVisManager.cc
+67a68,71
+> #ifdef G4VIS_USE_XXX
+> #include "G4XXX.hh"
+> #endif
+> 
+119a124,127
+> #endif
+> 
+> #ifdef G4VIS_USE_XXX
+>   RegisterGraphicsSystem (new G4XXX);
+
+===================================================================
+Index: source/visualization/management/src/G4VisManager.cc
+===================================================================
+RCS file: /afs/cern.ch/sw/geant4/cvs/geant4/source/visualization/management/src/G4VisManager.cc,v
+retrieving revision 1.21
+diff -r1.21 G4VisManager.cc
+142a143,145
+> #ifdef G4VIS_BUILD_XXX_DRIVER
+>       "\n    G4VIS_USE_XXX"
+> #endif
+877a881,883
+> #ifdef G4VIS_BUILD_XXX_DRIVER
+>        << "\n  Brief description)"
+> #endif
+1099a1106,1118
+> 		     G4VGraphicsSystem::noFunctionality) {}
+> 
+> #endif
+> 
+> #ifndef G4VIS_BUILD_XXX_DRIVER
+> 
+> class G4XXX: public G4VGraphicsSystem {
+> public:
+>   G4XXX ();
+> };
+> G4XXX::G4XXX ():
+>   G4VGraphicsSystem ("Full name",
+>                      "Mick name",
+
+===================================================================
+Index: config/G4VIS_BUILD.gmk
+===================================================================
+RCS file: /afs/cern.ch/sw/geant4/cvs/geant4/config/G4VIS_BUILD.gmk,v
+retrieving revision 1.3
+diff -r1.3 G4VIS_BUILD.gmk
+80a81,85
+> ifdef G4VIS_BUILD_XXX_DRIVER
+>   G4VIS_BUILD = 1
+>   CPPFLAGS += -DG4VIS_BUILD_XXX_DRIVER
+> endif
+>
+
+===================================================================
+Index: config/G4VIS_USE.gmk
+===================================================================
+RCS file: /afs/cern.ch/sw/geant4/cvs/geant4/config/G4VIS_USE.gmk,v
+retrieving revision 1.3
+diff -r1.3 G4VIS_USE.gmk
+93a94,100
+> ifdef G4VIS_USE_XXX
+>   G4VIS_USE = 1
+>   CPPFLAGS += -DG4VIS_USE_XXX
+>   CPPFLAGS += -I$(G4BASE)/visualization/XXX/include
+>   VISLIBS += -lG4Tree
+> endif
+> 

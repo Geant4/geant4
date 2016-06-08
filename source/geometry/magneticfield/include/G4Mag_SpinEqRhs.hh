@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.4 2000/11/01 15:15:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4Mag_SpinEqRhs.hh,v 1.5.2.1 2001/06/28 19:08:16 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // class G4Mag_SpinEqRhs
@@ -19,6 +35,7 @@
 
 // History:
 // - Created: J.Apostolakis, P.Gumplinger - February 8th, 1999.
+// - Modified: P.Gumplinger - April 11th, 2001.
 
 #ifndef G4MAG_SPIN_EQRHS
 #define G4MAG_SPIN_EQRHS
@@ -50,6 +67,10 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs
      G4double omegac;
      G4double anomaly;
      G4double ParticleCharge;
+
+     G4double E;
+     G4double gamma;
+     G4double beta;
 
 };
 

@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.  
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4PersistentRunMan.cc,v 1.8 1999/11/28 21:54:22 morita Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4PersistentRunMan.cc,v 1.9.2.1 2001/06/28 19:11:36 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // class G4PersistentRunMan 
 //
@@ -38,7 +54,7 @@ G4bool G4PersistentRunMan::Store( HepDbApplication* dbApp,
   // Create persistent run
   f_currentPRun = new(f_container) G4PRun(aRun);
 
-  if( f_currentPRun == NULL )
+  if( f_currentPRun == 0 )
     return false;
 
   f_currentRunID = aRun->GetRunID();
@@ -50,7 +66,7 @@ G4bool G4PersistentRunMan::Retrieve( HepDbApplication* dbApp,
                                      G4Run*& aRun)
 {
   G4bool theStatus = false;
-  aRun = NULL;
+  aRun = 0;
 
   ooItr(G4PRun) pRun_iterator;
 
@@ -66,7 +82,7 @@ G4bool G4PersistentRunMan::Retrieve( HepDbApplication* dbApp,
   if( pRun_iterator.next() )
   {
     G4Run* run = pRun_iterator->MakeTransientObject();
-    if( run != NULL )
+    if( run != 0 )
     {
       aRun = run;
       theStatus = true;

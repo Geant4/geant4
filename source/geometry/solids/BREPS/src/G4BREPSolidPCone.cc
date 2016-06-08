@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.17 2000/11/20 17:54:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4BREPSolidPCone.cc,v 1.18.2.1 2001/06/28 19:08:50 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -123,7 +139,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	else
 	  tmp1->SetSameSense(0);
 
-	cv1.append(tmp1);
+	cv1.push_back(tmp1);
       }
 
       if(R2 != 0)  
@@ -135,7 +151,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	  tmp2->SetSameSense(0);
 	else
 	  tmp2->SetSameSense(1);
-	cv1.append(tmp2);
+	cv1.push_back(tmp2);
       }
 	
       SurfaceVec[b]   = new G4FPlane(PlaneDir, PlaneAxis, LocalOrigin);
@@ -279,13 +295,13 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMIN[0]);
     tmp->SetBounds(ArcStart1a, ArcStart1a);
     tmp->SetSameSense(0);
-    cv.append(tmp);
+    cv.push_back(tmp);
   
     tmp = new G4CircularCurve;
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, Origin), RMAX[0]);
     tmp->SetBounds(ArcStart1b, ArcStart1b);
     tmp->SetSameSense(1);
-    cv.append(tmp);
+    cv.push_back(tmp);
 
     SurfaceVec[nb_of_surfaces-2] = new G4FPlane(PlaneDir, -PlaneAxis, Origin);
     SurfaceVec[nb_of_surfaces-2]->SetBoundaries(&cv);
@@ -311,14 +327,14 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 	      RMIN[sections]);
     tmp->SetBounds(ArcStart2a, ArcStart2a);
     tmp->SetSameSense(0);
-    cv.append(tmp);
+    cv.push_back(tmp);
     
     tmp = new G4CircularCurve;
     tmp->Init(G4Axis2Placement3D(PlaneDir, PlaneAxis, LocalOrigin), 
 	      RMAX[sections]);
     tmp->SetBounds(ArcStart2b, ArcStart2b);
     tmp->SetSameSense(1);
-    cv.append(tmp);
+    cv.push_back(tmp);
   
     SurfaceVec[nb_of_surfaces-1]= new G4FPlane(PlaneDir, PlaneAxis, LocalOrigin);
     SurfaceVec[nb_of_surfaces-1]->SetBoundaries(&cv);

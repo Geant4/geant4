@@ -1,12 +1,28 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4HEVector.hh,v 1.4 1999/12/15 16:42:00 gunter Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4HEVector.hh,v 1.5.4.1 2001/06/28 19:13:52 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file
@@ -37,6 +53,7 @@ class G4HEVector
      G4String particleName;
      G4String particleType;
      G4int    baryon;
+     G4int    strangeness;
      enum {NumberOfQuarkFlavor = 8};
      G4int theQuarkContent[NumberOfQuarkFlavor];
      G4int theAntiQuarkContent[NumberOfQuarkFlavor];
@@ -61,6 +78,7 @@ class G4HEVector
      particleName     = "";
      particleType     = "";
      baryon           = 0;
+     strangeness      = 0;
    }
 
 
@@ -80,31 +98,33 @@ class G4HEVector
      particleName  = p.particleName;
      particleType  = p.particleType;
      baryon        = p.baryon;
+     strangeness   = p.strangeness;
    }
 
 
   G4HEVector & operator = ( const G4HEVector & p )
    {
-     if ( this != &p ) {
-       px            = p.px;
-       py            = p.py;
-       pz            = p.pz;
-       energy        = p.energy;
-       kineticEnergy = p.kineticEnergy;
-       mass          = p.mass;
-       charge        = p.charge;
-       timeOfFlight  = p.timeOfFlight;
-       side          = p.side;
-       flag          = p.flag;
-       code          = p.code;
-       particleName  = p.particleName;
-       particleType  = p.particleType;
-       baryon        = p.baryon;
-     }
+     px            = p.px;
+     py            = p.py;
+     pz            = p.pz;
+     energy        = p.energy;
+     kineticEnergy = p.kineticEnergy;
+     mass          = p.mass;
+     charge        = p.charge;
+     timeOfFlight  = p.timeOfFlight;
+     side          = p.side;
+     flag          = p.flag;
+     code          = p.code;
+     particleName  = p.particleName;
+     particleType  = p.particleType;
+     baryon        = p.baryon;
+     strangeness   = p.strangeness;
      return *this;
    }
 
    ~G4HEVector(){ };
+
+   G4double Amax(G4double a, G4double b);
 
    G4String getParticleName(G4int code, G4int baryon);
  
@@ -173,6 +193,8 @@ class G4HEVector
    G4String getName();
 
    G4int getBaryonNumber();
+
+   G4int getStrangenessNumber();
 
    G4int getQuarkContent(G4int flavor);
 

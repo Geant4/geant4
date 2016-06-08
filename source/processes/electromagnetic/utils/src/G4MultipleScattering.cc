@@ -1,19 +1,33 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.6 2001/01/11 10:44:34 urban Exp $
-// GEANT4 tag $Name: geant4-03-01 $
+//
+// $Id: G4MultipleScattering.cc,v 1.8.2.2 2001/06/28 20:19:51 gunter Exp $
+// GEANT4 tag $Name:  $
 //
 // $Id: 
 // --------------------------------------------------------------
 //    GEANT 4 class implementation file
 //
-//    For information related to this code contact:
-//    CERN, IT Division, ASD Group
 //    History: based on object model of
 //    2nd December 1995, G.Cosmo
 //   -------- G4MultipleScattering physics process ------------
@@ -28,6 +42,8 @@
 // 20/06/00: nuclear size correction for particles other than e+/e- only ,  L.Urban
 // 10/08/00 values of some data members has been changed, L.Urban
 // 09/11/00 bug corrected in sigma computation, L.Urban
+// 16/05/01 value of cpar changed back to the old value, L.Urban
+// 18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -36,10 +52,7 @@
 
   G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
-       theTransportMeanFreePathTable(NULL),
-       lastMaterial(NULL),
-       lastKineticEnergy(0.),
-       materialIndex(0),
+       theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),
        range(1.e10*mm),
        alpha1(5.),
@@ -50,14 +63,18 @@
        TotBin(100),
        theElectron(G4Electron::Electron()),
        thePositron(G4Positron::Positron()),
+       lastMaterial(0),
+       lastKineticEnergy(0.),
+       materialIndex(0),
        tLast (0.0),
        zLast (0.0),
        Tlimit(1.*keV),
        scatteringparameter(0.9),
        tuning (1.00),
-       cpar (0.0),
-       NuclCorrPar (0.0615),FactPar(0.40),
-       fLatDisplFlag(true) 
+       cpar (1.50),
+       fLatDisplFlag(true), 
+       NuclCorrPar (0.0615),
+       FactPar(0.40)
   { }
 
   G4MultipleScattering::~G4MultipleScattering()
@@ -420,10 +437,8 @@
     static const G4double tausmall = 5.e-5,taubig =50.,
           kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
     const G4DynamicParticle* aParticle ;
-    G4Material* aMaterial ;
     G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
-             dirx,diry,dirz,w,w1,etau,rmean,safetyminustolerance,
-             xnew,ynew,znew ;
+             dirx,diry,dirz,w,w1,etau,rmean,safetyminustolerance;
     G4double rand ;
     G4bool isOut;
 
