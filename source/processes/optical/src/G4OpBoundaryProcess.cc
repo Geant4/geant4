@@ -20,6 +20,8 @@
 //                           comparison not sharp for: abs(cost1) < 1.0
 //                           remove sin1, sin2 in lines 556,567
 //                           (thanks to Stefano Magni)
+//              1999-10-10 - Accommodate changes done in DoAbsorption by
+//                           changing logic in DielectricMetal
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -378,16 +380,17 @@ void G4OpBoundaryProcess::DielectricMetal()
            if( !G4BooleanRand(theReflectivity) ) {
 
 	     DoAbsorption();
+             break;
 
            }
            else {
 
 	     DoReflection();
 
-	   }
+             OldMomentum = NewMomentum;
+             OldPolarization = NewPolarization;
 
-	   OldMomentum = NewMomentum;
-	   OldPolarization = NewPolarization;
+	   }
 
 	} while (NewMomentum * theGlobalNormal < 0.0);
 }

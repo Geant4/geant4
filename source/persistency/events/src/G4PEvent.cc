@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PEvent.cc,v 1.1 1999/01/07 16:10:47 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PEvent.cc,v 1.3 1999/10/21 09:15:22 morita Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 
 // G4PEvent
@@ -19,7 +19,7 @@ G4PEvent::G4PEvent()
   eventID =0;
   // initialization of thePrimaryVertex is not necessary
   // since Objectivity/DB will do it for you...
-    HepRef(G4PPrimaryVertex) thePrimaryVertex = NULL;
+  // thePrimaryVertex = NULL;
   numberOfPrimaryVertex = 0;
 //  HC = NULL;
 //  trajectoryContainer = NULL;
@@ -31,9 +31,9 @@ G4PEvent::G4PEvent(const G4Event *evt)
 
   const G4PrimaryVertex* PV = evt->GetPrimaryVertex();
   if(PV)
-  { HepRef(G4PPrimaryVertex) thePrimaryVertex = new G4PPrimaryVertex(PV); }
+  { thePrimaryVertex = new G4PPrimaryVertex(PV); }
   else
-  {  HepRef(G4PPrimaryVertex) thePrimaryVertex = NULL; }
+  {  thePrimaryVertex = NULL; }
 
 //  const G4TrajectoryContainer* TC = evt->GetTrajectoryContainer();
 //  if(TC)

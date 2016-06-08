@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 1999/06/24 10:49:47 johna Exp $
+# $Id: GNUmakefile,v 1.13 1999/10/04 17:46:52 johna Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -42,7 +42,7 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "WARNING: Making a library map of granular libraries."
 	@echo "         This is a list of libraries in order of use, and for"
 	@echo "         each library a list of other libraries used."
-	@echo "         To do this is needs a complete set of dependency"
+	@echo "         To do this it needs a complete set of dependency"
 	@echo "         files, e.g., after gmake in the source/ directory."
 	@echo "Searching $(G4INSTALL)/source"
 	@echo '  for GNUmakefiles containing "name" and sorting...'
@@ -67,7 +67,7 @@ libmap: $(G4LIBDIR)/liblist
 	done
 	@echo "Making libname.map..."
 	@rm -f $(G4LIBDIR)/libname.map;
-	G4TMP=$(G4TMP); export G4TMP; \
+	@G4TMP=$(G4TMP); export G4TMP; \
 	  $(G4LIBDIR)/liblist -l -d $(G4TMPDIR) \
 	  < /tmp/G4libname.map.starter.$(unique) \
 	  > $(G4LIBDIR)/libname.map

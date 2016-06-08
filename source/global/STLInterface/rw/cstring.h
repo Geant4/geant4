@@ -99,7 +99,7 @@ public:
   RWCString (){}
   RWCString ( const RWCString& s):std_string(s){}
   RWCString( const RWCSubString&s ):std_string(*(s.mystring),s.mystart,s.extent){}
-  RWCString ( const std_string s ):std_string(s){}
+  RWCString ( const std_string& s ):std_string(s){}
 
   RWCString& operator=(const RWCString&s)
     {
@@ -270,7 +270,10 @@ public:
     }
 
   // useful for supplying hash functions to template hash collection ctors:
-  static unsigned hash(const RWCString&);
+  static unsigned hash(const RWCString&s)
+    {
+      return s.hash();
+    }
 
 };
 
@@ -341,15 +344,17 @@ RWCString::RWCString ( const char * astring ) : std_string ( astring ) {}
 
 void RWCString::toLower ( void ) {
   for (int i=0; i<=size();i++) {
-    //GB:HP-UX-aCC,Linux-KCC (*this)[i] = tolower((*this)[i]);
-    at(i) = tolower(at(i)); 
+    //GB:HP-UX-aCC,Linux-KCC 
+    std_string::operator[](i) = tolower(std_string::operator[](i));
+    //at(i) = tolower(at(i)); 
   } 
 }
 
 void RWCString::toUpper ( void ) {
   for (int i=0; i<=size();i++) {
-    //GB:HP-UX-aCC,Linux-KCC (*this)[i] = toupper((*this)[i]);
-    at(i) = toupper(at(i)); 
+    //GB:HP-UX-aCC,Linux-KCC 
+    std_string::operator[](i) = tolower(std_string::operator[](i));
+    //at(i) = toupper(at(i)); 
   }
 }
 

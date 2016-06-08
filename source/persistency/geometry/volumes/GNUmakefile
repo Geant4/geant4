@@ -5,7 +5,10 @@ G4ODBMS := true
 ifndef G4INSTALL
   G4INSTALL = ../../../..
 endif
+
 include $(G4INSTALL)/config/architecture.gmk
+
+G4OODDLX_BOOT := $(G4TMPSCHEMA_BOOT)
 
 # $(G4TMPDIR) will be overriden in common.gmk later.
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)

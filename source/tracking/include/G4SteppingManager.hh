@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.3 1999/04/16 02:14:50 tsasaki Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SteppingManager.hh,v 1.6 1999/10/14 05:39:43 tsasaki Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // 
 //---------------------------------------------------------------
@@ -52,7 +52,7 @@ class G4VSensitiveDetector;
 #include "G4UserSteppingAction.hh"    // Include from 'tracking'
 #include "G4Step.hh"                  // Include from 'tracking'
 #include "G4StepPoint.hh"             // Include from 'tracking'
-#include "G4SteppingVerbose.hh"       // Include from 'tracking'
+#include "G4VSteppingVerbose.hh"       // Include from 'tracking'
 #include "G4VTouchable.hh"            // Include from 'geometry'
 #include "G4TouchableHistory.hh"      // Include from 'geometry'
 
@@ -163,8 +163,8 @@ class G4SteppingManager
    G4double GetphysIntLength();
    G4ForceCondition GetfCondition();
    G4GPILSelection  GetfGPILSelection();
-
-
+  //
+   G4bool KillVerbose;
 //---------   
    private:
 //---------   

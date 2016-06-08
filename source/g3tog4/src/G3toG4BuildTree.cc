@@ -26,7 +26,7 @@ G3toG4BuildTree(VolTableEntry* CurVTE){
     //   << TheG3Pos->GetCopy() << endl;
     // Position it
     new G4PVPlacement((G4RotationMatrix*) 
-		      G3Rot.Get(TheG3Pos->GetIrot()),   // rotation matrix
+		      G3Rot.get(TheG3Pos->GetIrot()),   // rotation matrix
 		      *(TheG3Pos->GetPos()),            // its position
 		      CurLog,                           // its LogicalVolume 
 		      TheG3Pos->GetName(),              // PV name

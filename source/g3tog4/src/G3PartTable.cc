@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3PartTable.cc,v 1.4 1999/05/28 21:09:02 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G3PartTable.cc,v 1.5 1999/07/29 03:43:30 lockman Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 
 #include <strstream.h>
@@ -20,7 +20,7 @@ G3PartTable::G3PartTable(){
 G3PartTable::~G3PartTable(){
   _PTD->clearAndDestroy();
   delete _PTD;
-  G4cout << "Deleted G3PartTable..." << endl;
+  // G4cout << "Deleted G3PartTable..." << endl;
 };
 
 G4ParticleDefinition*

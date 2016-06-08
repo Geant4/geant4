@@ -22,10 +22,8 @@ using std::sort;
 template <class T>
 class RWTPtrSortedVector : public vector<T*> {
  
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef T** iterator;
-  typedef T* const* const_iterator;
-#endif
+typedef typename vector<T*>::iterator iterator;
+typedef typename vector<T*>::const_iterator const_iterator;
  
 public:
   RWTPtrSortedVector(size_t n=RWDEFAULT_CAPACITY):vector<T*>(n),rwsize(0)
@@ -49,7 +47,7 @@ public:
 
   T* const& operator [] (size_t n) const
     {
-      if(n<0 || n>=rwsize)
+      if(n>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrSortedVector",rwsize,n));
       return vector<T*>::operator[](n);
     }
@@ -60,7 +58,7 @@ public:
 
   T*& at(size_t n )
     {
-      if(n<0 || n>=rwsize)
+      if(n>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrSortedVector",rwsize,n));
       if(n<vector<T*>::size() && rwsize<=n) rwsize=n+1;
       return vector<T*>::operator[](n);
@@ -68,7 +66,7 @@ public:
 
   T*  at(size_t n ) const
     {
-      if(n<0 || n>=rwsize)
+      if(n>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrSortedVector",rwsize,n));
       return vector<T*>::operator[](n);
     }
@@ -230,12 +228,4 @@ private:
 	
 };
 #endif
-
-
-
-
-
-
-
-
 

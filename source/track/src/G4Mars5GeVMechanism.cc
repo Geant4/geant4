@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mars5GeVMechanism.cc,v 1.2 1999/04/24 09:02:22 asaim Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Mars5GeVMechanism.cc,v 1.3 1999/07/14 01:37:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // 
 // ------------------------------------------------------------
@@ -269,9 +269,9 @@ void G4Mars5GeVMechanism::CreatePion(G4int ib, G4int pType, G4double  pE)
     if ( pE  > PionProductionEth ) {
       if ( Rkaon(ib,selec1.Tprod,pE) > G4UniformRand()) {
 	if (selec1.Tprod==MarsPIminus) {
-	  selec1.Tprod==MarsKminus;
+	  selec1.Tprod=MarsKminus;
 	} else {
-	  selec1.Tprod==MarsKplus;
+	  selec1.Tprod=MarsKplus;
 	}
       }
     }

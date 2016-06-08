@@ -3,6 +3,7 @@
 // History:
 //
 // 12.09.98 V.Grichine 
+// 29.07.99 V.Grichine, modifications in DistanceToIn(p,v)
 
 #include "G4IntersectionSolid.hh"
 // #include "G4DisplacedSolid.hh"
@@ -177,7 +178,7 @@ G4double
 G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
                                    const G4ThreeVector& v  ) const 
 {
-  G4double dist = 0.0, disTmp ;
+  G4double dist = 0.0, disTmp = 0.0 ;
   if( Inside(p) == kInside )
   {
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v),  point p is inside") ;
@@ -186,7 +187,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
   {
     if( fPtrSolidA->Inside(p) != kOutside    )
     {
-      while( Inside(p+dist*v) == kOutside )
+      do
       {
         disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
    
@@ -215,10 +216,12 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
           return kInfinity ;
         } 
       }
+      while( Inside(p+dist*v) == kOutside ) ;
+      // while( fPtrSolidB->Inside(p) != kOutside ) ;
     }
     else  if(  fPtrSolidB->Inside(p) != kOutside    )
     {     
-      while( Inside(p+dist*v) == kOutside )
+      do 
       {
         disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
    
@@ -247,10 +250,11 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
           return kInfinity ;
         } 
       }
+      while( Inside(p+dist*v) == kOutside ) ;
     }
     else
     {
-      while( Inside(p+dist*v) == kOutside )
+      do
       {
         disTmp = fPtrSolidB->DistanceToIn(p+dist*v,v) ;
    
@@ -279,6 +283,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p,
           return kInfinity ;
         } 
       }
+      while( Inside(p+dist*v) == kOutside ) ;
     }
   }
   return dist ;  
@@ -334,9 +339,12 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
   {
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v),  point p is outside") ;
   }
-  
-  return min(fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n),
-	     fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ) ; 
+  G4double distA = fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n) ;
+  G4double distB = fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ;
+  G4double dist = min(distA,distB) ; 
+  return dist ; 
+  //  return min(fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n),
+  //	     fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ) ; 
 }
 
 //////////////////////////////////////////////////////////////

@@ -15,10 +15,8 @@ using std::vector;
 
 template<class T> class RWTValVector : public vector<T> {
  
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef T* iterator;
-  typedef const T* const_iterator;
-#endif
+typedef typename vector<T>::iterator iterator;
+typedef typename vector<T>::const_iterator const_iterator;
  
 public:
   RWTValVector ():rwsize(0){}
@@ -42,7 +40,7 @@ public:
 
   T& operator()(size_t i) 
     {
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValVector operator()",rwsize,i));
       if(i<vector<T>::size() && rwsize<i) rwsize=i+1;
       return vector<T>::operator[](i); 
@@ -52,7 +50,7 @@ public:
 
   T& operator[](size_t i) 
     {
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValVector operator[]",rwsize,i));
       if(i<vector<T>::size() && rwsize<i) rwsize=i+1;
       return vector<T>::operator[](i); 
@@ -60,7 +58,7 @@ public:
 
   const T& operator[](size_t i) const 
     { 
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValVector const operator[]",rwsize,i));
       return vector<T>::operator[](i); 
     }
@@ -97,5 +95,4 @@ private:
 
 };
 #endif
-
 

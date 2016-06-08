@@ -40,42 +40,29 @@ using std::set;
 
 
 template < class PK >
-class HashPtr {
+class G4HashPtr {
 public:
-  HashPtr(unsigned (*f)( const PK &)=HashDefault):fhashfun(f){}
-  HashPtr(const HashPtr<PK>&s):fhashfun(s.fhashfun){}
+  G4HashPtr(unsigned (*f)( const PK &)=HashDefault):fhashfun(f){}
+  G4HashPtr(const G4HashPtr<PK>&s):fhashfun(s.fhashfun){}
   unsigned operator()( PK* key ) const;
   void SetHashFun( unsigned (*hashfun)( const PK& ) );
 private:
   unsigned (*fhashfun)( const PK & );  
 };
 
-#define hash_dict_t hash_map< K*, V*, HashPtr<K>,Equal_Ptr_To<K> >
+#define hash_dict_t hash_map< K*, V*, G4HashPtr<K>,Equal_Ptr_To<K> >
 
 template < class K, class V >
 class RWTPtrHashDictionary 
 {
 
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef os_hash_table_iterator
-    <
-    OS_PAIR( K*, V* ),
-    OS_DIFF_TYPE( OS_PAIR( K*, V* ) )
-    >  iterator;
-  typedef os_hash_table_const_iterator
-    <
-    OS_PAIR( K*, V* ),
-    OS_DIFF_TYPE( OS_PAIR( K*, V* ) )
-    >  const_iterator;
-#else
-  typedef hash_dict_t::iterator iterator;
-  typedef hash_dict_t::const_iterator const_iterator;
-#endif
+typedef typename hash_dict_t::iterator iterator;
+typedef typename hash_dict_t::const_iterator const_iterator;
 
 public:
 
   RWTPtrHashDictionary( unsigned (*hashfun)( const K& key ),size_t n=100)
-    :fhm(n,HashPtr<K>(hashfun),Equal_Ptr_To<K>()){}
+    :fhm(n,G4HashPtr<K>(hashfun),Equal_Ptr_To<K>()){}
     
   //  Default copy constructor ?
   RWTPtrHashDictionary( const RWTPtrHashDictionary<K,V>& aPtrHashDict ):
@@ -216,21 +203,8 @@ private:
 template < class K, class V >
 class RWTPtrHashDictionaryIterator {
 
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef os_hash_table_iterator
-    <
-    OS_PAIR( K*, V* ),
-    OS_DIFF_TYPE( OS_PAIR( K*, V* ) )
-    >  iterator;
-  typedef os_hash_table_const_iterator
-    <
-    OS_PAIR( K*, V* ),
-    OS_DIFF_TYPE( OS_PAIR( K*, V* ) )
-    >  const_iterator;
-#else
-  typedef hash_dict_t::iterator iterator;
-  typedef hash_dict_t::const_iterator const_iterator;
-#endif
+typedef typename hash_dict_t::iterator iterator;
+typedef typename hash_dict_t::const_iterator const_iterator;
 
 public:
   RWTPtrHashDictionaryIterator(RWTPtrHashDictionary<K,V>&adict):
@@ -269,12 +243,12 @@ private:
 };
 
 template< class PK >
-unsigned HashPtr<PK>::operator()( PK * key ) const {
+unsigned G4HashPtr<PK>::operator()( PK * key ) const {
     return fhashfun( *key );
 }
 
 template< class PK > 
-void HashPtr<PK>::SetHashFun( unsigned (*hashfun)( const PK& ) ) {
+void G4HashPtr<PK>::SetHashFun( unsigned (*hashfun)( const PK& ) ) {
   fhashfun = hashfun;
 }
 

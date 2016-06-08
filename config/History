@@ -1,5 +1,5 @@
-$Id: History,v 1.50 1999/07/06 17:54:47 johna Exp $
-$Name: geant4-00-01 $
+$Id: History,v 1.61 1999/10/26 08:11:47 gcosmo Exp $
+$Name: geant4-00-01-patch1 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th October 1999  Gabriele Cosmo (config-V00-01-03)
+- Removed AIX-xlC as default platform for G4SYSTEM in architecture.gmk.
+  Configuration is still kept but no longer supported.
+
+26th October 1999  Youhei Morita
+- architecture.gmk: include $(HEP_ODBMS_DIR)/etc/$(OS).mk instead of
+  defininig load module separately.  Defined G4ODBMS_LIBS.
+- binmake.gmk: Use G4ODBMS_LIBS.
+
+20th October 1999  Gabriele Cosmo (config-V00-01-02)
+- architecture.gmk: removed option -DOS_NO_TYPEDEF_5 from HP-aCC
+  OSpace setup. Not anymore needed.
+
+20th October 1999  John Allison
+- architecture.gmk: removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES (was needed
+                    only for HP aCC; now not needed at all).
+
+19th Octobre 1999  Youhei Morita
+- common.gmk: Surpress verbose output for G4ODBMS if CPPVERBOSE 
+              is not defined.
+
+7th October 1999  John Allison (config-V00-01-01)
+- Removed WARNINGs about granular libraries.  Now standard usage.  Simple
+  using messages printed.
+
+17th Sep 1999  Youhei Morita
+- architecture.gmk: Defined G4TMPSCHEMA_DIR, G4TMPSCHEMA_BOOT
+                    Added OBJY_LDLIB definition for Objectivity 5.1
+- binmake.gmk: LDLIBS1 += -lG4persistency
+- common.gmk: Changed ooddlx boot file option to G4OODDLX_BOOT
+- globlib.gmk: Changed G4EXAMPLE_BOOT to G4TMPSCHEMA_BOOT
+- G4ODBMS_BUILD.gmk: Defined HEP_ODBMS_EXPORT for HepODBMS 0.3.0.x
+
+27th July 1999  Gonzalo Gracia Abril
+- Changed OSPACELIBS := '-libpath:c:\dev\ospace\lib std-2.1-vc5.0-mt.lib'
+  to      OSPACELIBS := '-libpath:$(OSPACEDIR)\lib std-2.1-vc5.0-mt.lib'
+  in architecture.gmk for NT  
+
+20th July 1999  John Allison (config-V00-01-00)
+- Added EXTRA_LINK_DEPENDENCIES to binmake.gmk.
 
 6th July 1999  John Allison (config-01-00-10)
 - Changed -L/usr/X11/lib to -L/usr/X11R6/lib for Linux.

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.7 1999/05/12 13:59:23 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VisManager.cc,v 1.9 1999/08/27 15:50:39 johna Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -20,7 +20,6 @@
 #include "G4VisFeaturesOfDAWNFILE.hh"
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VisFeaturesOfOpenInventor.hh"
-#include "G4VisFeaturesOfRay.hh"
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
 #include "G4VViewer.hh"
@@ -118,9 +117,6 @@ void G4VisManager::Initialise () {
 #endif
 #ifdef G4VIS_BUILD_OIWIN32_DRIVER
       "\n    G4VIS_USE_OIWIN32"
-#endif
-#ifdef G4VIS_BUILD_RAYX_DRIVER
-      "\n    G4VIS_USE_RAYX"
 #endif
 #ifdef G4VIS_BUILD_VRML_DRIVER
       "\n    G4VIS_USE_VRML"
@@ -673,35 +669,39 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   fpGraphicsSystem = pSystem;
   G4cout << "G4VisManager::SetCurrentGraphicsSystem: system now "
 	 << pSystem -> GetName ();
-  const G4SceneHandlerList& sceneHandlerList = fAvailableSceneHandlers;
-  G4int nSH = sceneHandlerList.entries ();  // No. of scene handlers.
-  G4int iSH;
-  for (iSH = 0; iSH < nSH; iSH++) {
-    if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
-  }
-  if (iSH < nSH) {
-    fpSceneHandler = sceneHandlerList [iSH];
-    G4cout << "\n  Scene Handler now "
-	   << fpSceneHandler -> GetName ();
-    const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
-    if (viewerList.entries ()) {
-      fpViewer = viewerList [0];
-      G4cout << "\n  Viewer now " << fpViewer -> GetName ();
-      IsValidView ();  // Checks.
+  // If current scene handler is of same graphics system, leave unchanged.
+  // Else find the most recent scene handler of same graphics system.
+  // Or clear pointers.
+  if (!(fpSceneHandler && fpSceneHandler -> GetGraphicsSystem () == pSystem)) {
+    const G4SceneHandlerList& sceneHandlerList = fAvailableSceneHandlers;
+    G4int nSH = sceneHandlerList.entries ();  // No. of scene handlers.
+    G4int iSH;
+    for (iSH = nSH - 1; iSH >= 0; iSH--) {
+      if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
+    }
+    if (iSH >= nSH) {
+      fpSceneHandler = sceneHandlerList [iSH];
+      G4cout << "\n  Scene Handler now "
+	     << fpSceneHandler -> GetName ();
+      const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
+      if (viewerList.entries ()) {
+	fpViewer = viewerList [0];
+	G4cout << "\n  Viewer now " << fpViewer -> GetName ();
+      }
+      else {
+	fpViewer = 0;
+	// Make it impossible for user action code to Draw.
+	fpConcreteInstance = 0;
+      }
     }
     else {
+      fpSceneHandler = 0;
       fpViewer = 0;
       // Make it impossible for user action code to Draw.
-      fpConcreteInstance = 0;
+    fpConcreteInstance = 0;
     }
   }
-  else {
-    fpSceneHandler = 0;
-    fpViewer = 0;
-    // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
-  }
-  G4cout << endl; 
+  G4cout << endl;
 }
 
 void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
@@ -813,8 +813,6 @@ void G4VisManager::PrintAllGraphicsSystems () const {
        << G4VisFeaturesOfOpenGLSXm ()
        << "\n\n  Open Inventor"
        << G4VisFeaturesOfOpenInventor ()
-       << "\n\n  G4RayX (ray tracing on X Windows)\n"
-       << G4VisFeaturesOfRayX ()
        << "\n\n  VRML1     (produces VRML 1 file over network)"
        << "\n\n  VRML1File (produces VRML 1 file locally    )"
        << "\n\n  VRML2     (produces VRML 2 file over network), in preparation"
@@ -847,9 +845,6 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #endif
 #ifdef G4VIS_BUILD_OIWIN32_DRIVER
        << "\n  Open Inventor Win32"
-#endif
-#ifdef G4VIS_BUILD_RAYX_DRIVER
-       << "\n  G4RayX (ray tracing on X Windows)"
 #endif
 #ifdef G4VIS_BUILD_VRML_DRIVER
        << "\n  VRML1 (produces VRML 1 file over network)"
@@ -925,14 +920,24 @@ G4bool G4VisManager::IsValidView () {
   if (fpScene != fpSceneHandler -> GetScene ()) {
     G4cout << "G4VisManager::IsValidView ():";
     if (fpSceneHandler -> GetScene ()) {
-      G4cout << "\n  Pointers of current scene \""
+      G4cout <<
+	"\n  The current scene \""
 	     << fpScene -> GetName ()
-	     << "\" and scene \""
-	     << fpSceneHandler -> GetScene () -> GetName ()
-	     << "\" of current scene handler \""
+	     << "\" is not handled by"
+	"\n  the current scene handler \""
 	     << fpSceneHandler -> GetName ()
-	     << "\" do not correspond."
-	"\n  This shouldn't happen.  Please report circumstances."
+	     << "\""
+	"\n  (it currently handles scene \""
+	     << fpSceneHandler -> GetScene () -> GetName ()
+	     << "\")."
+	"\n  Either:"
+	"\n  (a) attach it to the scene handler with"
+	"\n      /vis/sceneHandler/attach "
+	     << fpScene -> GetName ()
+	     <<	", or"
+	"\n  (b) create a new scene handler with "
+	"\n      /vis/sceneHandler/create <graphics-system>,"
+	"\n      in which case it should pick up the the new scene."
 	     << endl;
     }
     else {
@@ -1085,19 +1090,6 @@ public:
 G4OpenInventorWin32::G4OpenInventorWin32 ():
   G4VGraphicsSystem ("OpenInventorWin32",
 		     "OIWIN32",
-		     G4VGraphicsSystem::noFunctionality) {}
-
-#endif
-
-#ifndef G4VIS_BUILD_RAYX_DRIVER
-
-class G4RayX: public G4VGraphicsSystem {
-public:
-  G4RayX ();
-};
-G4RayX::G4RayX ():
-  G4VGraphicsSystem ("G4RayX",
-		     "RayX",
 		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif

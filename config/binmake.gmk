@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.29 1999/07/06 15:19:42 gunter Exp $
+# $Id: binmake.gmk,v 1.33 1999/10/26 07:54:16 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -131,11 +131,12 @@ ifdef GLOBALLIBS
   LDLIBS1 += $(VISLIBS) $(UILIBS)
 endif
 
-ifdef G4ODBMS
-  LDLIBS1 += -lG4persistency
-endif
-
 ifdef GLOBALLIBS
+
+  ifdef G4ODBMS
+    LDLIBS1 += -lG4persistency
+  endif
+
   LDLIBS2 := -lG4readout \
              -lG4run \
              -lG4event \
@@ -176,10 +177,10 @@ ifdef G4ODBMS
   LDFLAGS  += -L$(OBJY_DIR)/lib \
               -L$(HEP_ODBMS_DIR)/lib
 
-#  Note: -l$(OBJY_LDLIB) and -lHepODBMS should be placed
+#  Note: $(G4ODBMS_LIBS) should be placed
 #        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
 
-  LDLIBS4 += -l$(OBJY_LDLIB) -lHepODBMS
+  LDLIBS4 += $(G4ODBMS_LIBS)
 endif
 ifdef G4USE_OSPACE
   LDLIBS4 += $(OSPACELIBS)
@@ -210,7 +211,7 @@ sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 
-LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last
+LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
 
 .PHONY: bin clean clean_bin debug
 
@@ -220,14 +221,7 @@ bin: $(G4BINDIR)/$(G4TARGET)
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
 ifndef USER_DEFINED_LDLIBS
   ifndef GLOBALLIBS
-	@echo "WARNING: This assumes you are using granular libraries!"
-	@echo "WARNING: It looked for your global library G4global and,"
-	@echo "         not finding it, assumes you are using granular"
-	@echo "         libraries."
-	@echo "WARNING: If you did not intend this, interrupt now (CTRL-C),"
-	@echo "         and go back and make global libraries, i.e.,"
-	@echo '           cd $$G4INSTALL/source'
-	@echo "           gmake global"
+	@echo "Using granular libraries."
 	@if [ ! \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
 	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
 	  echo "ERROR: No liblist program or library map file."; \
@@ -239,6 +233,8 @@ ifndef USER_DEFINED_LDLIBS
 	  echo "       granular libraries:"; \
 	  echo "         gmake libmap"; \
 	  exit 1; fi
+  else
+	@echo "Using global libraries."
   endif
 endif
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi

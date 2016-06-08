@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DataInterpolation.cc,v 1.1 1999/01/07 16:08:55 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4DataInterpolation.cc,v 1.2 1999/08/24 12:00:12 johna Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 #include "G4DataInterpolation.hh"
 
@@ -15,7 +15,8 @@
 
 G4DataInterpolation::G4DataInterpolation( G4double pX[], 
 	                                  G4double pY[], 
-			                  G4int number    )
+			                  G4int number    ):
+  fSecondDerivative (0)
 {
    G4int i ;
    fNumber = number ;

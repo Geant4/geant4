@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.1 1999/01/07 16:05:57 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.2 1999/07/13 12:17:55 maire Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // 
 
@@ -25,9 +25,9 @@ ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(ExN03PrimaryGener
 { 
   RndmCmd = new G4UIcmdWithAString("/gun/random",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : on, off(default)");
+  RndmCmd->SetGuidance("  Choice : on(default), off");
   RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("off");
+  RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
   RndmCmd->AvailableForStates(PreInit,Idle);
 }

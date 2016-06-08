@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.hh,v 1.1 1999/01/07 16:14:16 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4RunMessenger.hh,v 1.3 1999/07/25 05:05:19 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // 
 //	GEANT 4 class header file 
@@ -36,6 +36,7 @@
 class G4RunManager;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithABool;
 class G4UIcommand;
@@ -68,7 +69,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
     G4UIcmdWithoutParameter *   cutCmd;
-    
+    G4UIcmdWithAnInteger *      storeRandCmd;
+    G4UIcmdWithAString *        restoreRandCmd;   
 };
 
 #endif

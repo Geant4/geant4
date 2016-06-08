@@ -13,10 +13,8 @@ using std::vector;
 
 template<class T> class RWTPtrVector : public vector<T*> {
  
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef T** iterator;
-  typedef T* const* const_iterator;
-#endif
+typedef typename vector<T*>::iterator iterator;
+typedef typename vector<T*>::const_iterator const_iterator;
  
 public:
 

@@ -15,10 +15,8 @@
 template<class T> class RWTValOrderedVector : public vector<T> 
 {
  
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef T* iterator;
-  typedef const T* const_iterator;
-#endif
+typedef typename vector<T>::iterator iterator;
+typedef typename vector<T>::const_iterator const_iterator;
  
 public:
   RWTValOrderedVector(size_t capacity=RWDEFAULT_CAPACITY):vector<T>(capacity),rwsize(0){}
@@ -38,7 +36,7 @@ public:
 
   T& operator()(size_t i) 
     {
-      //if(i<0 || i>=rwsize)
+      //if(i>=rwsize)
       //	RWTHROW(RWBoundsErr("RWTValOrderedVector ()",rwsize,i));
       if(i<vector<T>::size() && rwsize<=i) rwsize=i+1;
       return vector<T>::operator[](i); 
@@ -46,14 +44,14 @@ public:
 
   const T& operator()(size_t i) const
    { 
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValOrderedVector const()",rwsize,i));
       return vector<T>::operator[](i);
    }
 
   T& operator[](size_t i) 
     {
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValOrderedVector []",rwsize,i));
 //      if(i<vector<T>::size() && rwsize<=i) rwsize=i+1;
       return vector<T>::operator[](i); 
@@ -61,21 +59,21 @@ public:
 
   const T& operator[](size_t i) const 
     { 
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValOrderedVector const []",rwsize,i));
       return vector<T>::operator[](i); 
     }
 
   T& at(size_t n )
     {
-      if(n<0 || n>=rwsize)
+      if(n>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValOrderedVector at",rwsize,n));
       return operator()(n);
     }
 
   T  at(size_t n ) const
     {
-      if(n<0 || n>=rwsize)
+      if(n>=rwsize)
 	RWTHROW(RWBoundsErr("RWTValOrderedVector const at",rwsize,n));
       return operator()(n);
     }
@@ -206,7 +204,7 @@ template<class T> size_t RWTValOrderedVector<T>::removeAll
 template<class T>
 T RWTValOrderedVector<T>::removeAt( size_t i )  
 {
-  if(i<0 || i>=rwsize)
+  if(i>=rwsize)
     RWTHROW(RWBoundsErr("RWTValOrderedVector removeAt",rwsize,i));
   T tmp = operator[](i);
   iterator it=vector<T>::begin();
@@ -271,7 +269,7 @@ RWBoolean RWTValOrderedVector<T>::insert ( const T& a )
 template<class T>
 void RWTValOrderedVector<T>::insertAt ( size_t i, const T& a ) 
 {
-  if(i<0 || i>rwsize)
+  if(i>rwsize)
     RWTHROW(RWBoundsErr("RWTValOrderedVector insertAt",rwsize,i));
   if(rwsize<vector<T>::size())
     {
@@ -289,9 +287,4 @@ void RWTValOrderedVector<T>::insertAt ( size_t i, const T& a )
     }
 }
 #endif
-
-
-
-
-
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.3 1999/04/15 17:41:44 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UIGAG.cc,v 1.5 1999/10/12 12:02:29 stesting Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal
@@ -174,8 +174,12 @@ G4String G4UIGAG::GetCommand()
     }else{
       G4cout << "@@Ready" << endl;
     }
-    newCommand.readLine( cin );
+    newCommand.readLine( cin, FALSE );
     if (!cin.good()) { cin.clear(); newCommand = nullString; iExit=false;break;}
+
+    newCommand = newCommand.strip(G4String::leading);
+    if( newCommand.length() < 1) { break; }
+
     while( newCommand(newCommand.length()-1) == '_' )
     {
       G4String newLine;
@@ -186,6 +190,8 @@ G4String G4UIGAG::GetCommand()
     }
 
     G4String nC = newCommand.strip(G4String::leading);
+    if( nC.length() < 1) { break; }
+
     // -------------------- nC.toUpper();
     if( nC == "@@GAGmodeJAVA" ) {
       uiMode = java_mode;

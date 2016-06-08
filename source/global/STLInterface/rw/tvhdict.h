@@ -18,42 +18,29 @@
 #include "rw/rwstlhash.h"
 
 template < class K >
-class Hash {
+class G4Hash {
 public:
-  Hash(unsigned (*f)( const K& )=HashDefault):fhashfun(f){}
+  G4Hash(unsigned (*f)( const K& )=HashDefault):fhashfun(f){}
   unsigned operator()( const K& key ) const;
   void SetHashFun( unsigned (*hashfun )( const K& ) );
 private:
   unsigned (*fhashfun)( const K& );  
 };
 
-#define hash_dict_t  hash_map< K, V, Hash<K>,equal_to<K> >
+#define hash_dict_t  hash_map< K, V, G4Hash<K>,equal_to<K> >
 
 template < class K, class V >
 class RWTValHashDictionary {
 
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef os_hash_table_iterator
-    <
-    OS_PAIR( K, V ),
-    OS_DIFF_TYPE( OS_PAIR( K, V ) )
-    >  iterator;
-  typedef os_hash_table_const_iterator
-    <
-    OS_PAIR( K, V ),
-    OS_DIFF_TYPE( OS_PAIR( K, V ) )
-    >  const_iterator;
-#else
-  typedef hash_dict_t::iterator iterator;
-  typedef hash_dict_t::const_iterator const_iterator;
-#endif
+typedef typename hash_dict_t::iterator iterator;
+typedef typename hash_dict_t::const_iterator const_iterator;
 
 public:
 
   RWTValHashDictionary(){}
 
   RWTValHashDictionary( unsigned (*hashfun)( const K& key) ,size_t n=100):
-    fhm(n,Hash<K>(hashfun),equal_to<K>()){}
+    fhm(n,G4Hash<K>(hashfun),equal_to<K>()){}
 
   //pair<iterator, RWBoolean> insert(const pair<K,V>& x);
   V& operator[]( const K& key ) { return fhm[key]; }
@@ -109,21 +96,8 @@ private:
 template < class K, class V >
 class RWTValHashDictionaryIterator {
 
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef os_hash_table_iterator
-    <
-    OS_PAIR( K, V ),
-    OS_DIFF_TYPE( OS_PAIR( K, V ) )
-    >  iterator;
-  typedef os_hash_table_const_iterator
-    <
-    OS_PAIR( K, V ),
-    OS_DIFF_TYPE( OS_PAIR( K, V ) )
-    >  const_iterator;
-#else
-  typedef hash_dict_t::iterator iterator;
-  typedef hash_dict_t::const_iterator const_iterator;
-#endif
+typedef typename hash_dict_t::iterator iterator;
+typedef typename hash_dict_t::const_iterator const_iterator;
  
 public:
   RWTValHashDictionaryIterator(RWTValHashDictionary<K,V>&adict):

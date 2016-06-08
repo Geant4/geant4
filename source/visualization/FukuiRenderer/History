@@ -1,3 +1,8 @@
+DAWN-V00-01-01  Satoshi TANAKA	Aug 26, 1999  
+- Protection for invalid calling of BeginModeling
+- .DAWN.history ==> .DAWN_1.history 
+   **** It means DAWN version 3.80a or  after is  required ***
+
 DAWN-00-03-06	Satoshi TANAKA	Dec 04, 1998  
 - Maximun number of generated g4.prim files in the destination
   directory is customizable as: "setenv G4DAWNFILE_MAX_FILE_NUM  N"

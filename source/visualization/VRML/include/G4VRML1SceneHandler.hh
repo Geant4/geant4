@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandler.hh,v 1.2 1999/05/10 15:39:08 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VRML1SceneHandler.hh,v 1.3 1999/10/01 02:46:06 stanaka Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // G4VRML1SceneHandler.hh
 // Yasuhide Sawada & Satoshi Tanaka
@@ -16,7 +16,7 @@
 #ifndef G4VRML1_SCENE_HANDLER_HH
 #define G4VRML1_SCENE_HANDLER_HH
 
-#include <rw/tvhdict.h>
+//#include <rw/tvhdict.h>
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"

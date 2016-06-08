@@ -1,0 +1,23 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+21th October 1999  Peter Gumplinger (op-V00-01-01)
+- G4OpBoundaryProcess.hh and G4OpBoundaryProcess.cc have been modified
+  (Fill NewMomentum/NewPolarization in DoAbsorption. These members need
+  to be filled since DoIt calls aParticleChange.SetMomentumChange etc.
+  upon return (thanks to: Clark McGrew)

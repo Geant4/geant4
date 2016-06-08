@@ -20,10 +20,8 @@ using std::set;
 
 template<class T> class RWTPtrOrderedVector : public vector<T*> {
 
-#ifdef G4USE_EXPLICIT_TYPES_IN_TEMPLATES
-  typedef T** iterator;
-  typedef T* const* const_iterator;
-#endif
+typedef typename vector<T*>::iterator iterator;
+typedef typename vector<T*>::const_iterator const_iterator;
 
 public:
   RWTPtrOrderedVector(size_t capacity=RWDEFAULT_CAPACITY):
@@ -43,7 +41,7 @@ public:
 
   T*& operator()(size_t i) 
     {
-      //if(i<0 || i>=rwsize)
+      //if(i>=rwsize)
       //	RWTHROW(RWBoundsErr("RWTPtrOrderedVector ()",rwsize,i));
       if(i<vector<T*>::size() && rwsize<=i) rwsize=i+1;
       return vector<T*>::operator[](i); 
@@ -51,14 +49,14 @@ public:
 
   T* const& operator()(size_t i) const 
     { 
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrOrderedVector const ()",rwsize,i));
       return vector<T*>::operator[](i); 
     }
 
   T*& operator[](size_t i) 
     {
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrOrderedVector []",rwsize,i));
       //if(i<vector<T*>::size() && rwsize<=i) rwsize=i+1;
       return vector<T*>::operator[](i); 
@@ -66,7 +64,7 @@ public:
 
   T* const& operator[](size_t i) const 
     {      
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrOrderedVector const []",rwsize,i));
        return vector<T*>::operator[](i); 
     }
@@ -124,14 +122,14 @@ public:
 
   T*& at ( size_t i ) 
     { 
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrOrderedVector at",rwsize,i));
       return operator()(i); 
     }
 
   T*const& at ( size_t i ) const 
     {       
-      if(i<0 || i>=rwsize)
+      if(i>=rwsize)
 	RWTHROW(RWBoundsErr("RWTPtrOrderedVector const at",rwsize,i));
       return operator()(i); 
     }
@@ -272,7 +270,7 @@ size_t RWTPtrOrderedVector<T>::removeAll( const T* a )
 template<class T> 
 T* RWTPtrOrderedVector<T>::removeAt( size_t i )  
 {
-  if(i<0 || i>=rwsize)
+  if(i>=rwsize)
     RWTHROW(RWBoundsErr("RWTPtrOrderedVector removeAt",rwsize,i));
   iterator it=vector<T*>::begin();
   int j;
@@ -322,7 +320,7 @@ void RWTPtrOrderedVector<T>::resize(size_t N)
 template<class T>	
 void RWTPtrOrderedVector<T>::insertAt ( size_t i, T* a ) 
 {
-  if(i<0 || i>rwsize)
+  if(i>rwsize)
     RWTHROW(RWBoundsErr("RWTPtrOrderedVector insertAt",rwsize,i));
   if(rwsize<vector<T*>::size())
     {
@@ -368,11 +366,4 @@ T* RWTPtrOrderedVector<T>::removeLast ()
 
 
 #endif
-
-
-
-
-
-
-
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.2 1999/04/22 21:51:11 asaim Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4RunManager.hh,v 1.5 1999/07/25 15:37:23 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // 
 // ------------------------------------------------------------
@@ -103,6 +103,11 @@ class G4RunManager
     G4UserRunAction * userRunAction;
     G4VUserPrimaryGeneratorAction * userPrimaryGeneratorAction;
 
+    G4UserEventAction * userEventAction;
+    G4UserStackingAction * userStackingAction;
+    G4UserTrackingAction * userTrackingAction;
+    G4UserSteppingAction * userSteppingAction;
+
   private:
     G4RunMessenger* runMessenger;
 
@@ -128,6 +133,12 @@ class G4RunManager
     RWTPtrOrderedVector<G4Event>* previousEvents;
     G4int n_perviousEventsToBeStored;
 
+    G4int storeRandomNumberStatus;
+
+  public:
+    virtual void StoreRandomNumberStatus(G4int eventID=-1);
+    virtual void RestoreRandomNumberStatus(G4String fileN);
+
   public:
     inline void SetUserInitialization(G4VUserDetectorConstruction* userInit)
     { userDetector = userInit; }
@@ -138,13 +149,46 @@ class G4RunManager
     inline void SetUserAction(G4VUserPrimaryGeneratorAction* userAction)
     { userPrimaryGeneratorAction = userAction; }
     inline void SetUserAction(G4UserEventAction* userAction)
-    { eventManager->SetUserAction(userAction); }
+    { 
+      eventManager->SetUserAction(userAction); 
+      userEventAction = userAction;
+    }
     inline void SetUserAction(G4UserStackingAction* userAction)
-    { eventManager->SetUserAction(userAction); }
+    { 
+      eventManager->SetUserAction(userAction); 
+      userStackingAction = userAction;
+    }
     inline void SetUserAction(G4UserTrackingAction* userAction)
-    { eventManager->SetUserAction(userAction); }
+    { 
+      eventManager->SetUserAction(userAction); 
+      userTrackingAction = userAction;
+    }
     inline void SetUserAction(G4UserSteppingAction* userAction)
-    { eventManager->SetUserAction(userAction); }
+    { 
+      eventManager->SetUserAction(userAction); 
+      userSteppingAction = userAction;
+    }
+    inline const G4VUserDetectorConstruction* GetUserDetectorConstruction() const
+    { return userDetector; }
+    inline const G4VUserPhysicsList* GetUserPhysicsList() const
+    { return physicsList; }
+    inline const G4UserRunAction* GetUserRunAction() const
+    { return userRunAction; }
+    inline const G4VUserPrimaryGeneratorAction* GetUserPrimaryGeneratorAction() const
+    { return userPrimaryGeneratorAction; }
+    inline const G4UserEventAction* GetUserEventAction() const
+    { return userEventAction; }
+    inline const G4UserStackingAction* GetUserStackingAction() const
+    { return userStackingAction; }
+    inline const G4UserTrackingAction* GetUserTrackingAction() const
+    { return userTrackingAction; }
+    inline const G4UserSteppingAction* GetUserSteppingAction() const
+    { return userSteppingAction; }
+
+    inline void SetRandomNumberStore(G4int i)
+    { storeRandomNumberStatus = i; }
+    inline G4int GetRandomNumberStore() const
+    { return storeRandomNumberStatus; }
 
     inline void GeometryHasBeenModified()
     { geometryNeedsToBeClosed = true; }

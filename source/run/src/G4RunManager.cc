@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.5 1999/05/17 16:17:44 stesting Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4RunManager.cc,v 1.8 1999/07/25 15:37:25 asaim Exp $
+// GEANT4 tag $Name: geant4-00-01-patch1 $
 //
 // 
 
@@ -16,6 +16,7 @@
 
 #include "G4RunManager.hh"
 
+#include "Randomize.hh"
 #include "G4Run.hh"
 #include "G4RunMessenger.hh"
 #include "G4VUserDetectorConstruction.hh"
@@ -36,6 +37,12 @@
 #include "G4VVisManager.hh"
 
 #include "G4ios.hh"
+#ifdef WIN32
+#  include <Strstrea.h>
+#else
+#  include <strstream.h>
+#endif
+
 
 G4RunManager* G4RunManager::fRunManager = NULL;
 
@@ -44,12 +51,14 @@ G4RunManager* G4RunManager::GetRunManager()
 
 G4RunManager::G4RunManager()
 :userDetector(NULL),physicsList(NULL),
- userRunAction(NULL),userPrimaryGeneratorAction(NULL),
+ userRunAction(NULL),userPrimaryGeneratorAction(NULL),userEventAction(NULL),
+ userStackingAction(NULL),userTrackingAction(NULL),userSteppingAction(NULL),
  currentRun(NULL),currentEvent(NULL),n_perviousEventsToBeStored(0),
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
  geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
  runAborted(false),pauseAtBeginOfEvent(false),pauseAtEndOfEvent(false),
- geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0)
+ geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0),
+ storeRandomNumberStatus(0)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -188,6 +197,9 @@ void G4RunManager::RunInitialization()
   { previousEvents->insert((G4Event*)NULL); }
 
   runAborted = false;
+
+  if(storeRandomNumberStatus==1 || storeRandomNumberStatus==-1) StoreRandomNumberStatus();
+  
   if(verboseLevel>0) G4cout << "Start Run processing." << endl;
 }
 
@@ -212,6 +224,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   for( i_event=0; i_event<n_event; i_event++ )
   {
     stateManager->SetNewState(EventProc);
+
     if(pauseAtBeginOfEvent) stateManager->Pause("BeginOfEvent");
 
     currentEvent = GenerateEvent(i_event);
@@ -248,7 +261,11 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
     G4Exception
     ("G4RunManager::BeamOn - G4VUserPrimaryGeneratorAction is not defined.");
   }
+
   G4Event* anEvent = new G4Event(i_event);
+
+  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2) StoreRandomNumberStatus(anEvent->GetEventID());
+
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
 }
@@ -376,7 +393,33 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   geometryNeedsToBeClosed = true;
 }
 
-
+void G4RunManager::StoreRandomNumberStatus(G4int eventID)
+{
+  G4String fileN = "RandEngine";
+  if(storeRandomNumberStatus>0 && currentRun != NULL)
+  {
+    char st[20];
+    ostrstream os(st,20);
+    os << currentRun->GetRunID() << '\0';
+    fileN += "R";
+    fileN += st;
+  }
+  if(storeRandomNumberStatus==2 && eventID>=0)
+  {
+    char st[20];
+    ostrstream os(st,20);
+    os << eventID << '\0';
+    fileN += "E";
+    fileN += st;
+  }
+  fileN += ".stat";
+  HepRandom::saveEngineStatus(fileN);
+}
+  
+void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
+{
+  HepRandom::restoreEngineStatus(fileN);
+}
 
 
 

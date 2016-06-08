@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999/07/06 15:02:39 gunter Exp $
+$Id: History,v 1.11 1999/10/07 17:25:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,12 @@ committal in the CVS repository !
 
                          STL Interface
                          -------------
+
+6th October 1999   Frank Behner (STLInterface-V00-01-01)
+- Changed tolower/toupper to old implementation in cstring.h.
+
+4th August 1999   Frank Behner (STLInterface-V00-01-00)
+- Implementation of RWCString::hash(const RWCString&).
 
 6th July 1999   Gunter Folger
 - name for hash_map for WIN32 is hashmap.h ONLY with Object space; 

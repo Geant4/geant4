@@ -6,12 +6,12 @@ class _WidgetRec;
 
 inline unsigned HashDefault( const G4ParticleDefinition* const & p)
 {
-  return (unsigned) p;
+  return (long) p;
 }
 
 inline unsigned HashDefault( _WidgetRec* const & p)
 {
-  return (unsigned) p;
+  return (long) p;
 }
 
 inline unsigned HashDefault( const int& p) 
