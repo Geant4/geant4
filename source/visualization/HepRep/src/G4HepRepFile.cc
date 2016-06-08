@@ -21,8 +21,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFile.cc,v 1.4 2002/02/02 04:00:22 perl Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4HepRepFile.cc,v 1.6 2002/12/13 11:18:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Joseph Perl  1 October 2001
@@ -41,8 +63,8 @@ static HepRepXMLWriter* hepRepXMLWriter;
 G4HepRepFile::G4HepRepFile():
   G4VGraphicsSystem("G4HepRepFile",
 		    "HepRepFile",
-		    "A template graphics driver",
-		    G4VGraphicsSystem::noFunctionality) {
+		    "A HepRep (format 1) ascii file driver",
+		    G4VGraphicsSystem::threeD) {
         hepRepXMLWriter = new HepRepXMLWriter();
 }
 

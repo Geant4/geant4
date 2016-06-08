@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.11 2002/01/15 12:27:30 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4CompetitiveFission.cc,v 1.13 2002/12/12 19:17:19 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -219,7 +219,7 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     G4Fragment * Fragment2 = new G4Fragment( A2, Z2, FourMomentum2);
     if (!Fragment2) G4Exception("G4CompetitiveFission::BreakItUp: Can't create Fragment2! ");
 
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
     Fragment1->SetCreatorModel(G4String("G4CompetitiveFission"));
     Fragment2->SetCreatorModel(G4String("G4CompetitiveFission"));
 #endif

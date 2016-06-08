@@ -1,0 +1,105 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4Para.icc,v 1.1 2002/10/28 11:43:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4Para.icc
+//
+// Implementation of inline methods of G4Para
+// --------------------------------------------------------------------
+
+inline
+G4double G4Para::GetZHalfLength() const
+{
+  return fDz ;
+}
+
+inline
+G4ThreeVector G4Para::GetSymAxis() const
+{
+  G4double cosTheta = 1.0/sqrt(1+fTthetaCphi*fTthetaCphi +
+                               fTthetaSphi*fTthetaSphi) ;
+
+  return G4ThreeVector(fTthetaCphi*cosTheta,
+                       fTthetaSphi*cosTheta,
+                       cosTheta) ;
+}
+
+inline
+G4double G4Para::GetYHalfLength() const
+{
+  return fDy ;
+}
+
+inline
+G4double G4Para::GetXHalfLength() const
+{
+  return fDx ;
+}
+
+inline
+G4double G4Para::GetTanAlpha() const
+{
+  return fTalpha ;
+}
+    
+inline
+void G4Para::SetXHalfLength(G4double val)
+{
+  fDx= val;
+}
+
+inline
+void G4Para::SetYHalfLength(G4double val)
+{
+  fDy= val;
+}
+
+inline
+void G4Para::SetZHalfLength(G4double val)
+{
+  fDz= val;
+}
+
+inline
+void G4Para::SetAlpha(G4double alpha)
+{
+  fTalpha= tan(alpha);
+}
+
+inline
+void G4Para::SetTanAlpha(G4double val)
+{
+  fTalpha= val;
+}
+
+inline
+void G4Para::SetThetaAndPhi(double pTheta, double pPhi)    
+{
+  fTthetaCphi=tan(pTheta)*cos(pPhi);
+  fTthetaSphi=tan(pTheta)*sin(pPhi);
+}

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.8 2002/02/24 01:35:50 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4HitsModel.cc,v 1.9 2002/10/24 15:07:21 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  26th August 1998.
@@ -52,7 +52,14 @@ void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
       if (HCE) {
 	G4int nHC = HCE -> GetCapacity ();
 	for (int iHC = 0; iHC < nHC; iHC++) {
-	  HCE -> GetHC (iHC) -> DrawAllHits ();
+	  G4VHitsCollection* HC = HCE -> GetHC (iHC);
+	  if (HC) {
+	    size_t nHits = HC -> GetSize ();
+	    for(size_t iHit = 0; iHit < nHits; ++iHit) {
+	      G4VHit* hit = HC -> GetHit (iHit);
+	      sceneHandler.AddThis (*hit);
+	    }
+	  }
 	}
       }
     }

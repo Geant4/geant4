@@ -28,10 +28,10 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-/event/drawTracks all
+/testem/event/drawTracks all
 #
 # set magnetic field for visualization only, and limit 
 # the step for a proper visualization of the tracjectories
 #
-/calor/setField 100 tesla
-/tracking/stepMax 1 m
+/testem/det/setField 100 tesla
+/testem/tracking/stepMax 1 m

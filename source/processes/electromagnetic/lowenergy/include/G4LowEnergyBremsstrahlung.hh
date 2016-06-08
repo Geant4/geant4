@@ -22,8 +22,8 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.28 2001/11/29 22:47:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.30 2002/07/19 17:44:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Author: A. Forti
 //

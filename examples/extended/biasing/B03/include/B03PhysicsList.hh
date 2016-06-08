@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B03PhysicsList.hh,v 1.2 2002/04/19 10:54:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: B03PhysicsList.hh,v 1.3 2002/11/08 17:35:18 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef B03PhysicsList_h
@@ -42,16 +42,15 @@ class B03PhysicsList : public G4VUserPhysicsList
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
-    // 
     virtual void SetCuts();
     
   protected:
-  // these methods Construct physics processes and register them
+    // these methods Construct physics processes and register them
     virtual void ConstructGeneral();
     virtual void ConstructEM();
     virtual void ConstructHad();
     virtual void ConstructLeptHad();
- //
+
     void  ConstructAllBosons();
     void  ConstructAllLeptons();
     void  ConstructAllMesons();

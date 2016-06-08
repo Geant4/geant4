@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999/06/05 13:08:11 stesting Exp $
+# $Id: GNUmakefile,v 1.4 2002/11/15 16:56:38 flei Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -13,6 +13,10 @@ include $(G4INSTALL)/config/architecture.gmk
 
 G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
 
+ifdef PRECOMPOUND_TEST
+  CPPFLAGS += -DPRECOMPOUND_TEST
+endif
+
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
@@ -21,6 +25,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
             -I$(G4BASE)/processes/hadronic/management/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/processes/include \

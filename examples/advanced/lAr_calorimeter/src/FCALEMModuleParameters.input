@@ -1,0 +1,32 @@
+//---------------------
+//   FCAL EM Module
+//---------------------
+EmModuleRMin     = 0.0*cm;
+EmModuleRMax     = 45.15*cm;
+EmModuleLenght   = 22.3*cm;
+EmModuleStartPhi = 0.0*deg;
+EmModuleDPhi     = 90.0*deg;
+
+FCALEmSmart      = 0.2;
+
+//---------------------
+//  FCAL Cable Troff  
+//---------------------
+NCableTroff          = 4;
+F1CableTroffRMin     = 44.16*cm;
+F1CableTroffRMax     = 45.15*cm;
+F1CableTroffLenght   = 22.3*cm;
+F1CableTroffStartPhi = 8.438*deg;
+F1CableTroffDPhi     = 5.624*deg;
+F1CableTroffRotZ     = 22.5*deg;
+
+
+//-----------------------
+//  Active LArg Gap
+//-----------------------
+F1LArGapRmin     = 0.236*cm; 
+F1LArGapRmax     = 0.263*cm;
+F1LArGapLenght   = 22.3*cm;
+F1LArGapStartPhi = 0.0*deg;
+F1LArGapDPhi     = 2*pi;
+

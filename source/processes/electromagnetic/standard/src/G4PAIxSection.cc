@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.10 2002/04/09 17:34:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PAIxSection.cc,v 1.13 2002/10/14 17:34:12 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // G4PAIxSection.cc -- class implementation file

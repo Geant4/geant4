@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.8 2001/08/16 23:54:15 japost Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ChordFinder.hh,v 1.9 2002/11/09 03:05:13 japost Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // class G4ChordFinder
@@ -101,6 +101,10 @@ class G4ChordFinder
 			      G4double&    dyErr,      //  Error of endpoint 
 			      G4double     epsStep );  
 
+      void     PrintDchordTrial(G4int     noTrials, 
+				G4double  stepTrial, 
+				G4double  oldStepTrial, 
+				G4double  dChordStep);
    private:  // ............................................................
 
       G4ChordFinder(const G4ChordFinder&);
@@ -121,6 +125,7 @@ class G4ChordFinder
       G4bool fAllocatedStepper;
       G4EquationOfMotion* fEquation; 
       G4MagIntegratorStepper* fDriversStepper; 
+      G4int                   fNoTrials, fNoCalls;
 };
 
 // Inline function implementation:

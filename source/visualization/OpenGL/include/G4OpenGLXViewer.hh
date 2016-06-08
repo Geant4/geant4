@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.13 2002/02/24 01:47:52 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLXViewer.hh,v 1.16 2002/11/11 18:12:02 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
 // G4OpenGLXViewer : Class to provide XWindows specific
 //                   functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #ifndef G4OPENGLXVIEWER_HH
 #define G4OPENGLXVIEWER_HH

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserStackingAction.cc,v 1.4 2001/07/11 09:58:54 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4UserStackingAction.hh"

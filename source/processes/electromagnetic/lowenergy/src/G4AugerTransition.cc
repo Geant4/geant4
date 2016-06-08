@@ -145,10 +145,10 @@ G4double G4AugerTransition::AugerTransitionProbability(G4int index, G4int startS
 
   const G4DataVector *probabilities = AugerTransitionProbabilities(startShellId);
   G4DataVector::const_iterator pos = probabilities->begin();
-  G4double* probability =  new G4double;
-  *probability = *(pos+index);
-  return  *probability;
-  delete probability;
+  G4double probability; // =  new G4double;
+  probability = *(pos+index);
+  return  probability;
+  //delete probability;
 }
 
 G4int G4AugerTransition::TransitionOriginatingShellId(G4int index) const

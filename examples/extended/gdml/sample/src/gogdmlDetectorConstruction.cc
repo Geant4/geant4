@@ -21,14 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: gogdmlDetectorConstruction.cc,v 1.2 2002/06/03 12:09:36 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: gogdmlDetectorConstruction.cc,v 1.3 2002/08/19 07:27:51 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
 // Comments
 //
 // --------------------------------------------------------------
+
+#include "globals.hh"
 
 #include "gogdmlDetectorConstruction.hh"
 

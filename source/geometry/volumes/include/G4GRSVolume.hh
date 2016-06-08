@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolume.hh,v 1.5 2001/07/11 10:00:27 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GRSVolume.hh,v 1.6 2002/07/23 08:50:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // class G4GRSVolume
@@ -37,6 +37,7 @@
 
 // History:
 // - Created. Paul Kent, August 1996
+// ********************************************************************
 
 #ifndef G4GRSVOLUME_HH
 #define G4GRSVOLUME_HH
@@ -52,11 +53,11 @@ class G4GRSVolume : public G4VTouchable
   public:  // with description
 
     G4GRSVolume(G4VPhysicalVolume *pVol,
-	        const G4RotationMatrix *pRot,
-	        const G4ThreeVector &tlate);
+          const G4RotationMatrix *pRot,
+          const G4ThreeVector &tlate);
     G4GRSVolume(G4VPhysicalVolume *pVol,
-	        const G4RotationMatrix &rot,
-	        const G4ThreeVector &tlate);
+          const G4RotationMatrix &rot,
+          const G4ThreeVector &tlate);
     ~G4GRSVolume();
 
     inline G4VPhysicalVolume* GetVolume(G4int depth=0) const;

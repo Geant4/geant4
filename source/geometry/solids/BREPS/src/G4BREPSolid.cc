@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.20 2001/07/20 11:52:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolid.cc,v 1.22 2002/11/06 23:29:32 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -43,15 +43,30 @@
 #include "G4ToroidalSurface.hh"
 #include "G4SphericalSurface.hh"
 
+/*
+  G4int               Box, Convex, AxisBox, PlaneSolid;
+  G4Axis2Placement3D* place;
+  G4BoundingBox3D*    bbox;   
+  G4double            intersectionDistance;
+  G4int               active;
+  G4int               startInside;
+  G4int               nb_of_surfaces;
+  G4Point3D           intersection_point;
+  G4Surface**         SurfaceVec;
+  G4double            RealDist;
+  G4String            solidname; 
+  G4int               Id;
+*/
+
 G4Ray G4BREPSolid::Track;
 G4double G4BREPSolid::ShortestDistance= kInfinity;
 G4int G4BREPSolid::NumberOfSolids=0;
 
 G4BREPSolid::G4BREPSolid(const G4String& name)
  : G4VSolid(name),
-   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0),
+   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
-   solidname(name)
+   nb_of_surfaces(0), SurfaceVec(0), solidname(name)
 {
 }
 
@@ -59,7 +74,7 @@ G4BREPSolid::G4BREPSolid( const G4String& name        ,
 			  G4Surface**     srfVec      , 
 			  G4int           numberOfSrfs  )
  : G4VSolid(name),
-   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0),
+   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
    nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec)
 {
@@ -71,12 +86,14 @@ G4BREPSolid::~G4BREPSolid()
   if(place)
     delete place;
   
-  delete bbox;
+  if(bbox)
+    delete bbox;
   
   for(G4int a=0;a<nb_of_surfaces;a++)
     delete SurfaceVec[a];
   
-  delete [] SurfaceVec;
+  if( nb_of_surfaces > 0 && SurfaceVec != 0)
+    delete [] SurfaceVec;
 }
 
 void G4BREPSolid::Initialize()
@@ -1466,4 +1483,18 @@ G4Point3D G4BREPSolid::Scope() const
   scope.setZ(fabs(Max.z()) - fabs(Min.z()));	  
   
   return scope;
+}
+
+
+G4std::ostream& G4BREPSolid::StreamInfo(G4std::ostream& os) const
+{
+  os << "-----------------------------------------------------------\n"
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: " << GetEntityType() << "\n"
+     << " Parameters: \n"
+     << "   Number of solids: " << NumberOfSolids << "\n"
+     << "-----------------------------------------------------------\n";
+
+  return os;
 }

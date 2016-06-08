@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.9 2001/07/11 10:01:06 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: HepPolyhedron.h,v 1.12 2002/11/20 14:18:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // Class Description:
@@ -148,19 +148,14 @@
 // 25.05.01 E.Chernyaev
 // - added GetSurfaceArea() and GetVolume();
 //
+// 05.11.02 E.Chernyaev
+// - added createTwistedTrap() and createPolyhedron();
+//
 
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
 
 #include <CLHEP/Geometry/Point3D.h>
-
-#ifndef HepStd
-#ifndef HEP_USE_STD
-#define HepStd
-#else
-#define HepStd std
-#endif
-#endif
 
 #ifndef DEFAULT_NUMBER_OF_STEPS
 #define DEFAULT_NUMBER_OF_STEPS 24
@@ -192,7 +187,7 @@ class HepPolyhedron {
   HepPoint3D *pV;
   G4Facet    *pF;
 
-  // Allocate memory for HepPolyhedron
+  // Re-allocate memory for HepPolyhedron
   void AllocateMemory(int Nvert, int Nface);
 
   // Find neighbouring facet
@@ -205,19 +200,19 @@ class HepPolyhedron {
   void CreatePrism();
 
   // Generate facets by revolving an edge around Z-axis
-  void RotateEdge(int k1, int k2, HepDouble r1, HepDouble r2,
+  void RotateEdge(int k1, int k2, double r1, double r2,
                   int v1, int v2, int vEdge,
-                  HepBoolean ifWholeCircle, int ns, int &kface);
+                  bool ifWholeCircle, int ns, int &kface);
 
   // Set side facets for the case of incomplete rotation
   void SetSideFacets(int ii[4], int vv[4],
-                     int *kk, HepDouble *r,
-                     HepDouble dphi, int ns, int &kface);
+                     int *kk, double *r,
+                     double dphi, int ns, int &kface);
 
   // Create HepPolyhedron for body of revolution around Z-axis
-  void RotateAroundZ(int nstep, HepDouble phi, HepDouble dphi,
+  void RotateAroundZ(int nstep, double phi, double dphi,
                      int np1, int np2,
-                     const HepDouble *z, HepDouble *r,
+                     const double *z, double *r,
                      int nodeVis, int edgeVis);
 
   // For each edge set reference to neighbouring facet
@@ -228,10 +223,7 @@ class HepPolyhedron {
 
  public:
   // Constructor
-  HepPolyhedron(int Nvert=0, int Nface=0)
-    : nvert(Nvert), nface(Nface),
-      pV(Nvert ? new HepPoint3D[Nvert+1] : 0),
-      pF(Nface ? new G4Facet[Nface+1] : 0) {}
+  HepPolyhedron() : nvert(0), nface(0), pV(0), pF(0) {}
 
   // Copy constructor
   HepPolyhedron(const HepPolyhedron & from);
@@ -252,30 +244,30 @@ class HepPolyhedron {
   HepPolyhedron & Transform(const HepTransform3D & t);
 
   // Get next vertex index of the quadrilateral
-  HepBoolean GetNextVertexIndex(int & index, int & edgeFlag) const;
+  bool GetNextVertexIndex(int & index, int & edgeFlag) const;
 
   // Get vertex by index 
   HepPoint3D GetVertex(int index) const;
 
   // Get next vertex + edge visibility of the quadrilateral
-  HepBoolean GetNextVertex(HepPoint3D & vertex, int & edgeFlag) const;
+  bool GetNextVertex(HepPoint3D & vertex, int & edgeFlag) const;
 
   // Get next vertex + edge visibility + normal of the quadrilateral
-  HepBoolean GetNextVertex(HepPoint3D & vertex, int & edgeFlag,
+  bool GetNextVertex(HepPoint3D & vertex, int & edgeFlag,
 			   HepNormal3D & normal) const;
 
   // Get indeces of the next edge with indeces of the faces
-  HepBoolean GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag,
+  bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag,
 				int & iface1, int & iface2) const;
 
   // Get indeces of the next edge
-  HepBoolean GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag) const;
+  bool GetNextEdgeIndeces(int & i1, int & i2, int & edgeFlag) const;
 
   // Get next edge
-  HepBoolean GetNextEdge(HepPoint3D &p1, HepPoint3D &p2, int &edgeFlag) const;
+  bool GetNextEdge(HepPoint3D &p1, HepPoint3D &p2, int &edgeFlag) const;
 
   // Get next edge
-  HepBoolean GetNextEdge(HepPoint3D &p1, HepPoint3D &p2, int &edgeFlag,
+  bool GetNextEdge(HepPoint3D &p1, HepPoint3D &p2, int &edgeFlag,
 			 int &iface1, int &iface2) const;
 
   // Get face by index
@@ -287,7 +279,7 @@ class HepPolyhedron {
 		int *edgeFlags = 0, HepNormal3D *normals = 0) const;
 
   // Get next face with normals at the nodes
-  HepBoolean GetNextFacet(int &n, HepPoint3D *nodes,
+  bool GetNextFacet(int &n, HepPoint3D *nodes,
 			  int *edgeFlags=0, HepNormal3D *normals=0) const;
 
   // Get normal of the face given by index
@@ -297,10 +289,10 @@ class HepPolyhedron {
   HepNormal3D GetUnitNormal(int iFace) const;
 
   // Get normal of the next face
-  HepBoolean GetNextNormal(HepNormal3D &normal) const;
+  bool GetNextNormal(HepNormal3D &normal) const;
 
   // Get normal of unit length of the next face 
-  HepBoolean GetNextUnitNormal(HepNormal3D &normal) const;
+  bool GetNextUnitNormal(HepNormal3D &normal) const;
 
   // Boolean operations 
   HepPolyhedron add(const HepPolyhedron &p) const;
@@ -314,21 +306,51 @@ class HepPolyhedron {
   double GetVolume() const;
 
   // Get number of steps for whole circle
-  static int GetNumberOfRotationSteps() { return fNumberOfRotationSteps; }
+  static int GetNumberOfRotationSteps();
 
   // Set number of steps for whole circle
   static void SetNumberOfRotationSteps(int n);
 
   // Reset number of steps for whole circle to default value
-  static void ResetNumberOfRotationSteps() {
-    fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
-  }
+  static void ResetNumberOfRotationSteps();
+
+  /**
+   * Creates polyhedron for twisted trapezoid.
+   * The trapezoid is given by two bases perpendicular to the z-axis.
+   * 
+   * @param  Dz  half length in z
+   * @param  xy1 1st base (at z = -Dz)
+   * @param  xy2 2nd base (at z = +Dz)
+   * @return status of the operation - is non-zero in case of problem
+   */
+  int createTwistedTrap(double Dz,
+			const double xy1[][2], const double xy2[][2]);
+
+  /**
+   * Creates user defined polyhedron.
+   * This function allows to the user to define arbitrary polyhedron.
+   * The faces of the polyhedron should be either triangles or planar
+   * quadrilateral. Nodes of a face are defined by indexes pointing to
+   * the elements in the xyz array. Numeration of the elements in the
+   * array starts from 1 (like in fortran). The indexes can be positive
+   * or negative. Negative sign means that the corresponding edge is
+   * invisible. The normal of the face should be directed to exterior
+   * of the polyhedron. 
+   * 
+   * @param  Nnodes number of nodes
+   * @param  Nfaces number of faces
+   * @param  xyz    nodes
+   * @param  faces  faces (quadrilaterals or triangles)
+   * @return status of the operation - is non-zero in case of problem
+   */
+  int createPolyhedron(int Nnodes, int Nfaces,
+		       const double xyz[][3], const int faces[][4]);
 };
 
 class HepPolyhedronTrd2 : public HepPolyhedron {
  public:
-  HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,
-		    HepDouble Dy1, HepDouble Dy2, HepDouble Dz);
+  HepPolyhedronTrd2(double Dx1, double Dx2,
+		    double Dy1, double Dy2, double Dz);
   virtual ~HepPolyhedronTrd2();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -337,8 +359,8 @@ class HepPolyhedronTrd2 : public HepPolyhedron {
 
 class HepPolyhedronTrd1 : public HepPolyhedronTrd2 {
  public:
-  HepPolyhedronTrd1(HepDouble Dx1, HepDouble Dx2,
-		    HepDouble Dy, HepDouble Dz);
+  HepPolyhedronTrd1(double Dx1, double Dx2,
+		    double Dy, double Dz);
   virtual ~HepPolyhedronTrd1();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -347,7 +369,7 @@ class HepPolyhedronTrd1 : public HepPolyhedronTrd2 {
 
 class HepPolyhedronBox : public HepPolyhedronTrd2 {
  public:
-  HepPolyhedronBox(HepDouble Dx, HepDouble Dy, HepDouble Dz);
+  HepPolyhedronBox(double Dx, double Dy, double Dz);
   virtual ~HepPolyhedronBox();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -356,11 +378,11 @@ class HepPolyhedronBox : public HepPolyhedronTrd2 {
 
 class HepPolyhedronTrap : public HepPolyhedron {
 public:
-  HepPolyhedronTrap(HepDouble Dz, HepDouble Theta, HepDouble Phi,
-		    HepDouble Dy1,
-		    HepDouble Dx1, HepDouble Dx2, HepDouble Alp1,
-		    HepDouble Dy2,
-		    HepDouble Dx3, HepDouble Dx4, HepDouble Alp2);
+  HepPolyhedronTrap(double Dz, double Theta, double Phi,
+		    double Dy1,
+		    double Dx1, double Dx2, double Alp1,
+		    double Dy2,
+		    double Dx3, double Dx4, double Alp2);
   virtual ~HepPolyhedronTrap();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -369,8 +391,8 @@ public:
 
 class HepPolyhedronPara : public HepPolyhedronTrap {
 public:
-  HepPolyhedronPara(HepDouble Dx, HepDouble Dy, HepDouble Dz,
-		    HepDouble Alpha, HepDouble Theta, HepDouble Phi);
+  HepPolyhedronPara(double Dx, double Dy, double Dz,
+		    double Alpha, double Theta, double Phi);
   virtual ~HepPolyhedronPara();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -379,9 +401,9 @@ public:
 
 class HepPolyhedronCons : public HepPolyhedron {
 public:
-  HepPolyhedronCons(HepDouble Rmn1, HepDouble Rmx1, 
-		    HepDouble Rmn2, HepDouble Rmx2, HepDouble Dz,
-		    HepDouble Phi1, HepDouble Dphi); 
+  HepPolyhedronCons(double Rmn1, double Rmx1, 
+		    double Rmn2, double Rmx2, double Dz,
+		    double Phi1, double Dphi); 
   virtual ~HepPolyhedronCons();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -390,8 +412,8 @@ public:
 
 class HepPolyhedronCone : public HepPolyhedronCons {
 public:
-  HepPolyhedronCone(HepDouble Rmn1, HepDouble Rmx1, 
-		    HepDouble Rmn2, HepDouble Rmx2, HepDouble Dz);
+  HepPolyhedronCone(double Rmn1, double Rmx1, 
+		    double Rmn2, double Rmx2, double Dz);
   virtual ~HepPolyhedronCone();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -400,8 +422,8 @@ public:
 
 class HepPolyhedronTubs : public HepPolyhedronCons {
 public:
-  HepPolyhedronTubs(HepDouble Rmin, HepDouble Rmax, HepDouble Dz, 
-		    HepDouble Phi1, HepDouble Dphi);
+  HepPolyhedronTubs(double Rmin, double Rmax, double Dz, 
+		    double Phi1, double Dphi);
   virtual ~HepPolyhedronTubs();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -410,7 +432,7 @@ public:
 
 class HepPolyhedronTube : public HepPolyhedronCons {
 public:
-  HepPolyhedronTube (HepDouble Rmin, HepDouble Rmax, HepDouble Dz);
+  HepPolyhedronTube (double Rmin, double Rmax, double Dz);
   virtual ~HepPolyhedronTube();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -419,10 +441,10 @@ public:
 
 class HepPolyhedronPgon : public HepPolyhedron {
 public:
-  HepPolyhedronPgon(HepDouble phi, HepDouble dphi, int npdv, int nz,
-		    const HepDouble *z,
-		    const HepDouble *rmin,
-		    const HepDouble *rmax);
+  HepPolyhedronPgon(double phi, double dphi, int npdv, int nz,
+		    const double *z,
+		    const double *rmin,
+		    const double *rmax);
   virtual ~HepPolyhedronPgon();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -431,10 +453,10 @@ public:
 
 class HepPolyhedronPcon : public HepPolyhedronPgon {
 public:
-  HepPolyhedronPcon(HepDouble phi, HepDouble dphi, int nz,
-		    const HepDouble *z,
-		    const HepDouble *rmin,
-		    const HepDouble *rmax);
+  HepPolyhedronPcon(double phi, double dphi, int nz,
+		    const double *z,
+		    const double *rmin,
+		    const double *rmax);
   virtual ~HepPolyhedronPcon();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -443,9 +465,9 @@ public:
 
 class HepPolyhedronSphere : public HepPolyhedron {
 public:
-  HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
-		      HepDouble phi, HepDouble dphi,
-		      HepDouble the, HepDouble dthe);
+  HepPolyhedronSphere(double rmin, double rmax,
+		      double phi, double dphi,
+		      double the, double dthe);
   virtual ~HepPolyhedronSphere();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);
@@ -454,8 +476,8 @@ public:
 
 class HepPolyhedronTorus : public HepPolyhedron {
 public:
-  HepPolyhedronTorus(HepDouble rmin, HepDouble rmax, HepDouble rtor,
-                    HepDouble phi, HepDouble dphi);
+  HepPolyhedronTorus(double rmin, double rmax, double rtor,
+                    double phi, double dphi);
   virtual ~HepPolyhedronTorus();
   virtual HepPolyhedron& operator = (const HepPolyhedron& from) {
     return HepPolyhedron::operator = (from);

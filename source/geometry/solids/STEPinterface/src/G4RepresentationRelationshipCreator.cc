@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RepresentationRelationshipCreator.cc,v 1.8 2002/02/07 10:12:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4RepresentationRelationshipCreator.cc,v 1.9 2002/11/21 16:49:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -49,6 +49,12 @@ G4RepresentationRelationshipCreator::G4RepresentationRelationshipCreator()
 }
 
 G4RepresentationRelationshipCreator::~G4RepresentationRelationshipCreator() {}
+
+G4RepresentationRelationshipCreator
+G4RepresentationRelationshipCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
 {

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.85 2002/06/03 00:07:17 pia Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4LowEnergyIonisation.cc,v 1.90 2002/10/28 09:43:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 // 
 // --------------------------------------------------------------
 //
@@ -89,6 +89,9 @@
 // 31.05.02 V.Ivanchenko    Add path of Fluo + Auger cuts to 
 //                          AtomicDeexcitation
 // 03.06.02 MGP             Restore fStopAndKill
+// 19.06.02 VI              Additional printout
+// 30.07.02 VI              Fix in restricted energy loss
+// 20.09.02 VI              Remove ActivateFlurescence from SetCut...
 //
 // --------------------------------------------------------------
 
@@ -208,7 +211,8 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
   if(verboseLevel > 0) {
     G4cout << "The MeanFreePath table is built"
            << G4endl;
-      }
+    if(verboseLevel > 1) theMeanFreePath->PrintData();
+  }
 
   // Build common DEDX table for all ionisation processes
  
@@ -217,7 +221,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
   if (verboseLevel > 0) {
     G4cout << "G4LowEnergyIonisation::BuildPhysicsTable end"
            << G4endl;
-      }
+  }
 }
 
 
@@ -270,7 +274,6 @@ void G4LowEnergyIonisation::BuildLossTable(
 
     // the cut cannot be below lowest limit
     G4double tCut = G4Electron::Electron()->GetEnergyThreshold(material);
-		     //GetCutsInEnergy())[m];
     if(tCut > highKineticEnergy) tCut = highKineticEnergy;
     cutForDelta.push_back(tCut);
 
@@ -301,24 +304,28 @@ void G4LowEnergyIonisation::BuildLossTable(
 
           G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
-          G4double pro = energySpectrum->Probability(Z, 0.0, tCut, 
-                                                             lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
-          ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
-          if(verboseLevel > 1) {
+          ionloss   += e * cs * theAtomicNumDensityVector[iel];
+          if(verboseLevel > 1 || (Z == 14 && lowEdgeEnergy>1. && lowEdgeEnergy<0.)) {
             G4cout << "Z= " << Z
                    << " shell= " << n
                    << " E(keV)= " << lowEdgeEnergy/keV
                    << " Eav(keV)= " << e/keV
-                   << " pro= " << pro
                    << " cs= " << cs
 	           << " loss= " << ionloss
+	           << " rho= " << theAtomicNumDensityVector[iel]
                    << G4endl;
           }
         }
         G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
         ionloss   += esp * theAtomicNumDensityVector[iel];
       }	
+      if(verboseLevel > 1 || (m == 0 && lowEdgeEnergy>=1. && lowEdgeEnergy<=0.)) {
+            G4cout << "Sum: " 
+                   << " E(keV)= " << lowEdgeEnergy/keV
+	           << " loss(MeV/mm)= " << ionloss*mm/MeV
+                   << G4endl;
+      }
       aVector->PutValue(i,ionloss);
     }
     theLossTable->insert(aVector);
@@ -347,7 +354,7 @@ void G4LowEnergyIonisation::BuildLossTable(
           G4double pro = energySpectrum->Probability(Z, 0.0, tCut, 
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
-          eAverage   += e * cs * pro * theAtomicNumDensityVector[iel];
+          eAverage   += e * cs * theAtomicNumDensityVector[iel];
           cross      += cs * pro * theAtomicNumDensityVector[iel];
           if(verboseLevel > 1) {
             G4cout << "Z= " << Z
@@ -687,14 +694,12 @@ void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForPhotons = cut;
   deexcitationManager.SetCutForSecondaryPhotons(cut);
-  ActivateFluorescence(true);
 }   
 
 void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
 {
   cutForElectrons = cut;
   deexcitationManager.SetCutForAugerElectrons(cut);
-  ActivateFluorescence(true);
 }
 
 void G4LowEnergyIonisation::ActivateAuger(G4bool val)

@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.hh,v 1.6 2001/07/13 15:00:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VHitsCollection.hh,v 1.10 2002/10/30 16:20:06 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4VHitsCollection_h
 #define G4VHitsCollection_h 1
 
+class G4VHit;
 #include "globals.hh"
 
 // class description:
@@ -61,6 +62,14 @@ class G4VHitsCollection
       { return collectionName; }
       inline G4String GetSDname()
       { return SDname; }
+
+  public:
+      // GetHit and GetSize are given a default implementation here so
+      // that the template G4THitsCollection can be used, but they
+      // are re-implemented G4THitsCollection.
+      virtual G4VHit* GetHit(size_t i) const { return 0; } 
+      virtual size_t GetSize() const { return 0; };
+
 };
 
 #endif

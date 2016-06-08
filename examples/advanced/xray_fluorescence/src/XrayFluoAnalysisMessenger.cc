@@ -22,13 +22,14 @@
 //
 //
 // $Id: XrayFluoAnalysisMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
+// 29 Nov 2002 minor upgrade (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
@@ -42,11 +43,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoAnalysisMessenger::XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* analysisManager)
-  :XrayFluoAnalysis(analysisManager)
+  :xrayFluoAnalysis(analysisManager)
 
 { 
   XrayFluoAnalysisDir = new G4UIdirectory("/analysis/");
-  XrayFluoAnalysisDir->SetGuidance("esperimento analysis control.");
+  XrayFluoAnalysisDir->SetGuidance("analysis control.");
+
+  ouputFileCommand = new G4UIcmdWithAString("/analysis/outputFile",this);
+  ouputFileCommand->SetGuidance("specify the name of the output file (lowercase for Hbook)");
+  ouputFileCommand->SetGuidance("default: xrayfluo.hbk");
+  ouputFileCommand->SetParameterName("choice",true);
+  ouputFileCommand->SetDefaultValue("xrayfluo.hbk");
+  //DrawCmd->SetCandidates("none charged neutral all");
+  ouputFileCommand->AvailableForStates(G4State_Idle);
   
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -62,6 +71,9 @@ XrayFluoAnalysisMessenger::~XrayFluoAnalysisMessenger()
 
 void XrayFluoAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
+
+if(command == ouputFileCommand)
+    {xrayFluoAnalysis->SetOutputFileName(newValue);}
 
    
 }

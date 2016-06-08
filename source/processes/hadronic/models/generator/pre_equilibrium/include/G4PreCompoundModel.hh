@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.hh,v 1.15 2002/06/06 17:09:10 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PreCompoundModel.hh,v 1.17 2002/12/12 19:17:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by V. Lara
 
@@ -50,7 +50,6 @@
 
 //#define debug
 //#define verbose
-//#define pctest
 
 class G4PreCompoundModel : public G4VPreCompoundModel
 {
@@ -75,7 +74,7 @@ public:
 
     G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
 
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
     static G4Fragment GetInitialFragmentForTest()
 	{ return G4PreCompoundModel::theInitialFragmentForTest; }
     static G4std::vector<G4String*> * GetCreatorModels()
@@ -95,7 +94,7 @@ private:
 
     G4ParticleChange theResult;
 
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
     static G4Fragment theInitialFragmentForTest;
     static G4std::vector<G4String*> theCreatorModels;
 #endif

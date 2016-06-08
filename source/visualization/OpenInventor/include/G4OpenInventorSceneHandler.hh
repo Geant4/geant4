@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.12 2001/08/24 21:48:32 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.13 2002/12/11 16:08:20 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -80,6 +80,8 @@ public:
   void AddThis (const G4Polycone&);
   void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid&);
+  void AddThis (const G4VTrajectory&);
+  void AddThis (const G4VHit&);
 
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();

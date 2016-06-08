@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.6 2002/01/09 17:24:13 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.7 2002/12/05 01:07:01 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -46,7 +46,7 @@ ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(PreInit,Idle);
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

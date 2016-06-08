@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.hh,v 1.6 2001/07/11 09:59:17 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PVPlacement.hh,v 1.7 2002/10/14 07:42:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // class G4PVPlacement
@@ -123,6 +123,7 @@ class G4PVPlacement : public G4VPhysicalVolume
 
     virtual G4bool IsMany() const;
     virtual G4bool IsReplicated() const;
+    virtual G4bool IsParameterised() const;
     virtual G4VPVParameterisation* GetParameterisation() const;
     virtual void GetReplicationData(EAxis& axis,
                                    G4int& nReplicas,

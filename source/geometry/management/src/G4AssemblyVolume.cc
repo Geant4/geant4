@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.10 2002/06/24 07:15:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4AssemblyVolume.cc,v 1.13 2002/09/10 17:07:15 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -42,8 +42,10 @@ unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 // Default constructor
 //
 G4AssemblyVolume::G4AssemblyVolume()
+: fAssemblyID( 0 )
 {
   InstanceCountPlus();
+  SetAssemblyID( GetInstanceCount() );
   SetImprintsCount( 0 );
 }
 
@@ -192,7 +194,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // ZZZ - the log. volume index inside the assembly volume
     G4std::strstream pvName;
     pvName << "av_"
-           << GetInstanceCount()
+           << GetAssemblyID()
            << "_impr_"
            << GetImprintsCount()
            << "_"
@@ -253,6 +255,8 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
   // We start from the first available index
   numberOfDaughters++;
 
+  ImprintsCountPlus();
+  
   for( unsigned int   i = 0; i < fTriplets.size(); i++ )
   {
     // Generate the unique name for the next PV instance
@@ -266,7 +270,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // ZZZ - the log. volume index inside the assembly volume
     G4std::strstream pvName;
     pvName << "av_"
-           << GetInstanceCount()
+           << GetAssemblyID()
            << "_impr_"
            << GetImprintsCount()
            << "_"

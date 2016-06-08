@@ -21,16 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.10 2002/05/15 10:22:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VoxelNavigation.cc,v 1.11 2002/08/06 10:35:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // class G4VoxelNavigation Implementation
 //
+// Author: P.Kent, 1996
 //
-// Modified by:
-//   J. Apostolakis,  29 Apr 98 Fixed error in LocateNextVoxel that
-//                              ignored voxels at lower levels 
 // ********************************************************************
 
 #include "G4VoxelNavigation.hh"

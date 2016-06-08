@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: volumeSubscriber.cc,v 1.3 2002/06/03 12:09:36 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: volumeSubscriber.cc,v 1.5 2002/08/19 07:39:29 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -184,7 +184,8 @@ public:
                   }
                   // At this point we should have everything ready to create a child
                   if( doAssemblyInprint ) {
-                    alog->MakeImprint( plog, *ppos, prot );
+                    //std::cout << "Imprinting assembly volume: " << vr->get_ref() << std::endl;
+                    alog->MakeImprint( vnew, *ppos, prot );
                   } else {
                     std::strstream pvname;
                     pvname << "pv_" << vr->get_ref() << "_" << (cidx-2) << std::ends;

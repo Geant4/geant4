@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10CalorHit.cc,v 1.2 2001/07/11 09:57:23 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 

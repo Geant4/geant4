@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.hh,v 1.3 2002/04/10 13:14:16 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4MassImportanceProcess.hh,v 1.6 2002/10/16 16:26:58 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4MassImportanceProcess
@@ -41,22 +41,24 @@
 
 #include "G4VProcess.hh"
 #include "G4ImportancePostStepDoIt.hh"
+#include "G4VTrackTerminator.hh"
+#include "G4ImportanceFinder.hh"
 
 class G4VImportanceAlgorithm;
-class G4ImportanceFinder;
 class G4VIStore;
 
-class G4MassImportanceProcess : public G4VProcess
+class G4MassImportanceProcess : public G4VProcess, public G4VTrackTerminator
 {
 
 public:  // with description
 
   G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 			  const G4VIStore &aIstore,
+			  const G4VTrackTerminator *TrackTerminator,
 			  const G4String &aName = "MassImportanceProcess");
     // creates a G4ParticleChange
 
-  ~G4MassImportanceProcess();
+  virtual ~G4MassImportanceProcess();
     // delete the G4ParticleChange
 
   virtual G4double 
@@ -67,33 +69,45 @@ public:  // with description
   virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
     // manage the importance sampling in the "mass" geometry
 
+  virtual void KillTrack() const;
+    // used in case no scoring process follows that does the killing
+
+  virtual const G4String &GetName() const;
+
+
 public:  // without description
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
 
-  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+  virtual G4double 
+  AlongStepGetPhysicalInteractionLength(const G4Track&,
 					G4double  ,
 					G4double  ,
 					G4double& ,
-					G4GPILSelection*) {return -1.0;}
+					G4GPILSelection*);
+  virtual G4double 
+  AtRestGetPhysicalInteractionLength(const G4Track& ,
+				     G4ForceCondition*);
   
-  G4double AtRestGetPhysicalInteractionLength(const G4Track& ,
-				     G4ForceCondition*) {return -1.0;}
-  
-  G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) {return 0;}
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) {return 0;}
+  virtual G4VParticleChange* 
+  AtRestDoIt(const G4Track&, const G4Step&);
+
+
+  virtual G4VParticleChange* 
+  AlongStepDoIt(const G4Track&, const G4Step&);
   
 private:
-
+  
   G4MassImportanceProcess(const G4MassImportanceProcess &);
   G4MassImportanceProcess &operator=(const G4MassImportanceProcess &);
-
+  
 private:
 
   G4ParticleChange *fParticleChange;
-  G4ImportancePostStepDoIt fImportancePostStepDoIt;
+  const G4VTrackTerminator *fTrackTerminator;
   const G4VImportanceAlgorithm &fImportanceAlgorithm;
-  G4ImportanceFinder *fImportanceFinder;
+  G4ImportanceFinder fImportanceFinder;
+  G4ImportancePostStepDoIt fImportancePostStepDoIt;
 };
 
 #endif

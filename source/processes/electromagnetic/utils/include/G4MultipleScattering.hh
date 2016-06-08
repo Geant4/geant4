@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.9 2002/05/24 06:11:24 urban Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4MultipleScattering.hh,v 1.11 2002/10/30 11:30:47 urban Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //------------- G4MultipleScattering physics process --------------------------
 //               by Laszlo Urban, March 2001
@@ -39,7 +39,7 @@
 //          (L.Urban)
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 24-05-02 changes in data members, L.Urban
-//
+// 30-10-02 changes in data members, L.Urban 
 //------------------------------------------------------------------------------
 
 // class description
@@ -150,26 +150,21 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
      // to reduce the energy/step dependence
 
    void SetBoundary(G4bool value)  {boundary = value;};
+   void Setfacxsi(G4double value)      {facxsi = value;
+                                    G4cout << " facxsi=" << facxsi << G4endl;};
    void SetFacrange(G4double val)  {facrange=val;
-                                    nsmallstep = G4int(1./facrange) ;
-                                    G4cout << " f=" << facrange 
-                                           << "  n=" << nsmallstep << G4endl ;};
+                                    nsmallstep = G4int(log((cf+facrange-1.)/
+                                                 facrange)/log(cf))+1 ;
+                                    G4cout << " fr=" << facrange 
+                                           << "  nsmall=" << nsmallstep << G4endl ;};
      // Steplimit after boundary crossing = facrange*range
      // estimated nb of steps at boundary nsmallstep = 1/facrange
-
-     // parameters needed near to boundary
-
-   void SetTuning(G4double value)               {tuning = value;};
-   void SetCparm (G4double value)               {cparm  = value;};
-   void SetTlim  (G4double value)               {Tlim   = value;};
-     // tuning of the transport mean free path
 
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
      // lateral displacement to be/not to be computed
    
    void SetNuclCorrPar(G4double val)            {NuclCorrPar = val;};
    void SetFactPar(G4double val)                {FactPar = val;};
-     // corrs to transport cross section for high energy 
 
  protected:    // with description
 
@@ -206,8 +201,9 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    // model parameters
    G4bool   boundary;                         // spec. handling near boundaries
-   G4double facrange,tlimit;
+   G4double facrange,tlimit,tlimitmin,cf;
    G4int stepno,stepnolastmsc,nsmallstep ;
+   G4double laststep ;
    G4GPILSelection  valueGPILSelectionMSC;
 
    G4double pcz,zmean;                        // z(geom.step length)
@@ -215,10 +211,6 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4double range,T1,lambda1,cth1,z1,t1,dtrl; // used to reduce the energy
                                               // (or step length) dependence
-
-   G4double tuning;                            //  param. for lambda tuning
-   G4double cparm;                             //          "
-   G4double Tlim ;                             //          "
 
    // with/without lateral displacement
    G4bool fLatDisplFlag;
@@ -228,6 +220,11 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4double FactPar;
 
    G4ParticleChangeForMSC fParticleChange; 
+
+   G4double alfa1,alfa2,alfa3,xsi,c0,facxsi ;    // angle distr. parameters
+                                                 // facxsi : some tuning 
+                                                 // possibility in the tail 
+
 };
 
 #include "G4MultipleScattering.icc"

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.10 2002/06/18 16:39:23 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Evaporation.hh,v 1.12 2002/12/12 19:17:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -39,7 +39,6 @@
 class G4VEvaporationFactory;
 
 //#define debug
-//#define pctest
 
 class G4Evaporation : public G4VEvaporation
 {

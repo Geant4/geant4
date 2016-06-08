@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrajectoriesModel.icc,v 1.6 2001/08/24 20:36:24 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 
 inline G4String G4TrajectoriesModel::GetCurrentTag () const {
   return fGlobalTag;

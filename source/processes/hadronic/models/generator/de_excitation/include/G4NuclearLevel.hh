@@ -14,16 +14,17 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
 //      CERN, Geneva, Switzerland
 //
 //      File name:     G4NuclearLevel
@@ -33,6 +34,9 @@
 //      Creation date: 25 October 1998
 //
 //      Modifications: 
+//        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
+//              Added K->N+ internal  conversion coefficiencies and their access
+//              functions      
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added half-life, angular momentum, parity, emissioni type
@@ -44,6 +48,7 @@
 #define G4NUCLEARLEVEL_HH
 
 #include "globals.hh"
+#include "G4NuclearLevel.hh"
 #include "G4DataVector.hh"
 
 class G4NuclearLevel 
@@ -53,7 +58,13 @@ public:
 
   G4NuclearLevel(const G4double energy, const G4double halfLife,
 		 const G4double angularMomentum, const G4DataVector& eGamma,
-		 const G4DataVector& wGamma, const G4DataVector& polarities);
+		 const G4DataVector& wGamma, const G4DataVector& polarities,
+		 const G4DataVector& kCC, const G4DataVector& l1CC,
+		 const G4DataVector& l2CC, const G4DataVector& l3CC,
+		 const G4DataVector& m1CC, const G4DataVector& m2CC,
+		 const G4DataVector& m3CC, const G4DataVector& m4CC,
+		 const G4DataVector& m5CC, const G4DataVector& nPlusCC,
+		 const G4DataVector& totalCC);
 
   G4NuclearLevel() {};
   ~G4NuclearLevel();
@@ -67,6 +78,28 @@ public:
   const G4DataVector& GammaCumulativeProbabilities() const;
 
   const G4DataVector& GammaPolarities() const;
+
+  const G4DataVector& KConvertionProbabilities() const;
+
+  const G4DataVector& L1ConvertionProbabilities() const;
+
+  const G4DataVector& L2ConvertionProbabilities() const;
+
+  const G4DataVector& L3ConvertionProbabilities() const;
+
+  const G4DataVector& M1ConvertionProbabilities() const;
+
+  const G4DataVector& M2ConvertionProbabilities() const;
+
+  const G4DataVector& M3ConvertionProbabilities() const;
+
+  const G4DataVector& M4ConvertionProbabilities() const;
+
+  const G4DataVector& M5ConvertionProbabilities() const;
+
+  const G4DataVector& NPlusConvertionProbabilities() const;
+
+  const G4DataVector& TotalConvertionProbabilities() const;
 
   G4double Energy() const;
 
@@ -97,6 +130,18 @@ private:
   G4DataVector _prob;
   G4DataVector _cumProb;
   G4DataVector _polarities;
+  G4DataVector _kCC;
+  G4DataVector _l1CC;  
+  G4DataVector _l2CC;  
+  G4DataVector _l3CC;  
+  G4DataVector _m1CC;  
+  G4DataVector _m2CC;  
+  G4DataVector _m3CC;  
+  G4DataVector _m4CC;  
+  G4DataVector _m5CC;  
+  G4DataVector _nPlusCC;  
+  G4DataVector _totalCC;  
+
   G4double _energy;
   G4double _halfLife;
   G4double _angularMomentum;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.4 2002/02/24 01:48:26 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.5 2002/10/16 10:44:16 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -58,7 +58,10 @@ void G4OpenGLWin32Viewer::GetWin32Connection () {
 void G4OpenGLWin32Viewer::CreateGLWin32Context () {
 // create a GL context
 // set attributes of window now the GL context has been created
-
+    G4cout <<
+      "ERROR: G4OpenGLWin32Viewer::CreateGLWin32Context:"
+      "\n  **** WIN32 VIEWER NOT YET IMPLEMENTED ****"
+           << G4endl;
 }
 
 void G4OpenGLWin32Viewer::CreateMainWindow () {

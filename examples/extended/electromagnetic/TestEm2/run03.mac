@@ -1,4 +1,4 @@
-# $Id: run03.mac,v 1.5 2001/10/31 17:34:12 maire Exp $
+# $Id: run03.mac,v 1.8 2002/10/31 13:58:29 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -10,16 +10,19 @@
 #
 /control/verbose 2
 #
-/run/particle/setCut 5.0 mm
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts 5.0 mm
 /run/initialize
 #
-/calor/setMat Water
-/calor/setLbin 9 1.11
-/calor/setRbin 6 0.111
-/calor/update
+/testem/det/setMat Water
+/testem/det/setLbin 9 1.11
+/testem/det/setRbin 6 0.111
+/testem/det/update
 #
 /run/verbose 2
-/event/printModulo 10
+/testem/event/printModulo 10
 #
 /gun/particle e-
 /gun/energy 1 GeV

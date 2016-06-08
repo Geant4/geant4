@@ -1,29 +1,52 @@
-global tree, hm
 
-# Here use the name of the hbook you want to analyze
-tree = tf.create("gammaraytel.hbook",1,1,"hbook")
-tree.thisown=1
-hm = af.createHistogramFactory(tree)
+# Creating a memory-mapped tree
+
+tree=tf.create()                                                 
+
+# Creating a histogram factory mapped to the tree
+
+hf=af.createHistogramFactory( tree )                             
+
+# Open an existing HBook file
+
+treeHBook=tf.create("gammaraytel.hbook", "hbook", 1, 0 )              
+
+# Mounting the hbook tree under the master memory tree.
+
+tree.mkdir( "hbook" )
+tree.mount( "/hbook", treeHBook, "/" )
 
 # Retrieve histograms and load them into memory:
-hE    = tree.findH1D("10")
-hPl   = tree.findH1D("20")
-hXZ   = tree.findH2D("30")
-hYZ   = tree.findH2D("40")
+
+# Fetching the histograms from hbook
+
+hE=tree.findH1D( "/hbook/10" )
+hPl=tree.findH1D( "/hbook/20" )
+hXZ=tree.findH2D("/hbook/30")
+hYZ=tree.findH2D("/hbook/40")
 
 # set plotter to 2*2 zones
-pl.createRegions(2,2)
+#pl.createRegions(2,2)
+#>>> NOTE! ONLY SINGLE REGION IN THIS VERSION!
 
-# ... and plot the histograms
-pl.plot(hE      ) ; pl.show() ; pl.next()
-pl.plot(hPl      ) ; pl.show() ; pl.next()
-pl.plot(hXZ   ) ; pl.show() ; pl.next()
-pl.plot(hYZ  ) ; pl.show() ; pl.next()
+# plot the histograms
 
-# get the primary ntuple from the NtupleManager (just a check)
-nt1 = tree.findTuple("1")
+pr = pl.currentRegion()
+pr.plot(hE,"")
+pl.refresh()
 
+wait()
 
+pr.clear()
+pr.plot(hPl,"")
+pl.refresh()
+
+wait()
+
+del hf
+del tree
+del treeHBook
+exit()
 
 
 

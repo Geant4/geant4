@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPGeoDriver.hh,v 1.3 2002/04/10 13:13:07 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VPGeoDriver.hh,v 1.6 2002/10/14 12:36:01 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VPGeoDriver
@@ -41,25 +41,28 @@
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include "G4PTouchableKey.hh"
+#include "G4GeometryCell.hh"
+
+class G4VPhysicalVolume;
 
 class G4VPGeoDriver
 {
 
 public:  // with description
 
-  virtual ~G4VPGeoDriver(){}
+  G4VPGeoDriver();
+  virtual ~G4VPGeoDriver();
   
-  virtual G4PTouchableKey LocateOnBoundary(const G4ThreeVector &aPosition, 
-		                           const G4ThreeVector &aDirection) = 0;
+  virtual G4GeometryCell LocateOnBoundary(const G4ThreeVector &aPosition, 
+					  const G4ThreeVector &aDirection) = 0;
     // The location of a track according to it's position
     // and direction in case the track crosses a boundary
     // of a "parallel" geometry.
     // Must be called in the PostDOIT of the ParallelTransportation.
     // (The track crosses the boundary if PostDOIT gets called.)
   
-  virtual G4PTouchableKey GetCurrentTouchableKey() const = 0;
-    // get the current G4PTouchableKey of the "parallel" geometry
+  virtual G4GeometryCell GetCurrentGeometryCell() const = 0;
+    // get the current G4GeometryCell of the "parallel" geometry
 
   virtual G4double ComputeStepLengthInit(const G4ThreeVector &aPosition, 
                                          const G4ThreeVector &aDirection) = 0;

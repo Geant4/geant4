@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh,v 1.3 2002/04/10 13:13:06 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4IStore.hh,v 1.9 2002/10/22 13:18:44 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4IStore
@@ -31,8 +31,13 @@
 //
 // An implementation of a "importance store" with the interface
 // G4VIStore. See description in G4VIStore.
-// This implementation uses G4PtkImportance as the container
+// This implementation uses G4GeometryCellImportance as the container
 // to store the "cells" together with the importance values.
+// Giving a cell the importance 0 is allowed as
+// a flagging that no biasing should happen between this
+// cell and it's neighbors
+// If a cell is not known by the importance store no biasing
+// should be applied between this cell and it's nighbors.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -40,24 +45,40 @@
 #define G4IStore_hh G4IStore_hh 
 
 #include "G4VIStore.hh"
-#include "G4PtkImportance.hh"
+#include "G4GeometryCellImportance.hh"
 
 class G4IStore : public G4VIStore
 {
 
 public:  // with description
 
-  G4IStore(G4VPhysicalVolume &worldvolume);
+  explicit G4IStore(const G4VPhysicalVolume &worldvolume);
     // initialise the importance store for the given geometry
 
-  ~G4IStore();
+  virtual ~G4IStore();
     // destruct
 
-  void AddImportanceRegion(G4double importance,
+  virtual G4double GetImportance(const G4GeometryCell &gCell) const;
+    // derive a importance value of a "cell" addresed by a G4GeometryCell
+    // from the store.
+
+  virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
+    // returns true if the gCell is in the store, else false 
+
+
+  virtual const G4VPhysicalVolume &GetWorldVolume() const;
+    // return a reference to the wolrd volume of the 
+    // "importance" geometry
+
+  void AddImportanceGeometryCell(G4double importance,
+			   const G4GeometryCell &gCell);
+  void AddImportanceGeometryCell(G4double importance,
 			   const G4VPhysicalVolume &,
 			   G4int aRepNum = 0);
     // Add a "cell" together with a importance value to the store.
 
+  void ChangeImportance(G4double importance,
+			const G4GeometryCell &gCell);
   void ChangeImportance(G4double importance,
 			const G4VPhysicalVolume &,
 			G4int aRepNum = 0);
@@ -65,29 +86,19 @@ public:  // with description
 
   G4double GetImportance(const G4VPhysicalVolume &,
 			 G4int aRepNum = 0) const ;
-    // derive the importance value of a "cell" from the store.
-
-  G4double GetImportance(const G4PTouchableKey &ptk) const;
-    // derive a importance value of a "cell" addresed by a G4PTouchableKey
-    // from the store.
-
-  G4VPhysicalVolume &GetWorldVolume();
-    // return a reference to the wolrd volume of the 
-    // "importance" geometry
   
 private:
 
   G4bool IsInWorld(const G4VPhysicalVolume &) const;
-  void SetInternalIterator(const G4VPhysicalVolume &,
-			   G4int aRepNum) const;
+  void SetInternalIterator(const G4GeometryCell &gCell) const;
   void Error(const G4String &m) const;
-
+  
 private:
  
-  G4VPhysicalVolume &fWorldVolume;
-  G4PtkImportance fPtki;
+  const G4VPhysicalVolume &fWorldVolume;
+  G4GeometryCellImportance fGeometryCelli;
 
-  mutable G4PtkImportance::const_iterator fCurrentIterator;
+  mutable G4GeometryCellImportance::const_iterator fCurrentIterator;
 };
 
 #endif

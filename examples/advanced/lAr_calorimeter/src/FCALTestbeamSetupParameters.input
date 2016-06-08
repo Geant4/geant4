@@ -1,0 +1,183 @@
+MotherSizeX = 500.*cm;
+MotherSizeY = 500.*cm ;
+MotherSizeZ = 3300.*cm;
+
+//---------------------------
+// Sciantillators S1, S2, S3
+//---------------------------
+ScintS1andS3SizeX  = 3.5*cm;
+ScintS1andS3SizeY = 3.5*cm;
+ScintS1andS3SizeZ = 0.5*cm;
+
+ScintS2SizeX	  = 7.5*cm;
+ScintS2SizeY      = 15.*cm;
+ScintS2SizeZ	  = 0.5*cm;
+
+ScintS1_S3PosX    = 0.*cm; 
+ScintS1_S3PosY    = 0.*cm;
+ScintS1PosZ       = 3221.5*cm;
+ScintS2PosZ       = 3107.5*cm;
+ScintS3PosZ       = 3104.5*cm;
+
+
+//----------
+//  MWPC's
+//----------
+MWPCSizeX   = 6.4*cm;
+MWPCSizeY   = 6.4*cm;
+MWPCSizeZ   = 2.*cm;
+MWPCPosX    = 0.;
+MWPCPosY    = 0.;
+MWPCPosZ[0] = 2591.*cm;
+MWPCPosZ[1] = 895.*cm; 
+MWPCPosZ[2] = 440.*cm;
+MWPCPosZ[3] = 352.*cm;
+MWPCPosZ[4] = 349.*cm;
+
+
+//-------------------
+//   Hole Counter
+//-------------------
+HoleCntrSizeX      = 10.0*cm;
+HoleCntrSizeY      = 40.0*cm;
+HoleCntrScintSizeZ = 1.0*cm;
+HoleCntrAbsrbSizeZ = 0.5*cm;         // Absrb = Pb or Al
+
+HoleCntrScintPosX  = 0.0*cm;
+HoleCntrScintPosY  = 18.75*cm; 
+HoleCntrScintPosZ  = 289.0*cm;
+
+HoleCntrPbPosX     = 0.0*cm;
+HoleCntrPbPosY     = 18.75*cm;
+HoleCntrPbPosZ     = 290.5*cm;
+
+HoleCntrAlPosX     = 0.0*cm;
+HoleCntrAlPosY     = 18.75*cm;
+HoleCntrAlPosZ     = 291.5*cm;
+
+ScintHoleRmin      = 0.0*cm;
+ScintHoleRmax      = 2.5*cm;
+ScintHoleLenght    = 1.0*cm;
+AbsrbHoleRmin      = 0.0*cm;         // Absrb = Pb or Al
+AbsrbHoleRmax      = 2.75*cm;
+AbsrbHoleLenght    = 0.5*cm;
+HoleStartPhi	   = 0.;
+HoleDPhi           = 2.*pi;
+
+HolePosX           = 0.0*cm;
+HolePosY           = -18.75*cm;
+HolePosZ           = 0.0*cm;
+
+//------------------
+//  Lead Wall     
+//------------------
+LeadWallSizeX     = 100.0*cm;
+LeadWallSizeY     = 67.5*cm;
+LeadWallSizeZ     = 0.55*cm;
+
+LeadWallSlitSizeX = 2.5*cm;
+LeadWallSlitSizeY = 10.0*cm;  
+LeadWallSlitSizeZ = 0.55*cm;
+
+LeadWallPosX      = 0.0*cm;
+LeadWallPosY      = 0.0*cm;
+LeadWallPosZ      = 249.55*cm;
+
+//------------------
+//  Iron Wall     
+//------------------
+IronWallSizeX     = 130.0*cm;
+IronWallSizeY     = 75.0*cm;
+IronWallSizeZ     = 20.0*cm;
+
+IronWallSlitSizeX = 5.0*cm;
+IronWallSlitSizeY = 30.0*cm;  
+IronWallSlitSizeZ = 20.0*cm;
+
+IronWallPosX      = 0.0*cm;
+IronWallPosY      = 0.0*cm;
+IronWallPosZ      = 162.0*cm;
+
+
+//----------------
+// Tail Catcher
+//----------------
+NBigScint       = 3;
+BigScintSizeX   = 60.0*cm;
+BigScintSizeY   = 60.0*cm;
+NSmallScint     = 4;
+SmallScintSizeX = 20.0*cm;
+SmallScintSizeY = 20.0*cm;
+ScintSizeZ	= 1.0*cm;
+ScintPosX	= 0.0*cm;
+ScintPosY	= 0.0*cm;
+ScintPosZ[0]	= -188.0*cm;     // Big Scintillators
+ScintPosZ[1]    = -208.0*cm;
+ScintPosZ[2]    = -229.0*cm;
+ScintPosZ[3]    = -247.0*cm;     // Small Scintillators
+ScintPosZ[4]    = -261.0*cm;
+ScintPosZ[5]    = -275.0*cm;
+ScintPosZ[6]    = -289.0*cm;
+
+NBigIron           = 2;
+BigIronSizeX   = 60.0*cm;
+BigIronSizeY   = 60.0*cm;
+NSmallIron     = 4;
+SmallIronSizeX = 20.0*cm;
+SmallIronSizeY = 20.0*cm;
+IronSizeZ      = 5.0*cm;
+IronPosX       = 0.0*cm;
+IronPosY       = 0.0*cm;
+IronPosZ[0]    = -200.0*cm;   // Big Iron Plates     
+IronPosZ[1]    = -219.0*cm;
+IronPosZ[2]    = -240.0*cm;   // Small Iron Plates
+IronPosZ[3]    = -254.0*cm;
+IronPosZ[4]    = -268.0*cm;
+IronPosZ[5]    = -282.0*cm;
+
+//-------------------------
+//  Concrete Walls A and B
+//-------------------------
+ConcWallSizeX  = 130.0*cm;
+ConcWallSizeY  = 120.*cm;
+ConcWallSizeZ  = 80.*cm;
+ConcWallPosX   = 0.0*cm;
+ConcWallPosY   = 0.0*cm;
+ConcWallAPosZ  = -375.0*cm;
+ConcWallBPosZ  = -535.0*cm;
+
+ConcWallInsSizeX = 40.0*cm;
+ConcWallInsSizeY = 40.0*cm;
+ConcWallInsSizeZ = 80.0*cm;
+ConcWallInsPosZ  = 0.0*cm;
+
+//------------------
+//  Muon Counter
+//------------------
+MuCntrSIzeX = 20.0*cm;
+MuCntrSIzeY = 20.0*cm;
+MuCntrSIzeZ = 1.0*cm;
+MuCntrPosX  = 0.0*cm;
+MuCntrPosY  = 0.0*cm;  
+MuCntrPosZ  = -681.0*cm;
+
+
+
+//------------------
+//     Cryostat
+//------------------
+CryostatPosX = 0.;
+CryostatPosY = 50.*cm;
+CryostatPosZ = 0.;
+
+
+
+/*
+EMModulePosX = 0.;
+EMModulePosY = 0.;
+EMModulePosZ = -1.691*cm;
+
+HadModulePosX = 0.;
+HadModulePosY = 0.;
+HadModulePosZ = -48.991*cm;
+*/

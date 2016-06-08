@@ -1,3 +1,36 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// GEANT4 tag $Name:
+//
+// Author: Alex Howard (a.s.howard@ic.ac.uk)
+//
+// History:
+// -----------
+//
+// 23rd November 2002 Modified GXe and LXe material tables to include new
+//                    scintillation method - Alex Howard
+//
   G4double density,      // density
     a,                   // atomic mass
     z;                   // atomic number
@@ -33,9 +66,19 @@
   G4double LXe_RIND[NUMENTRIES]  = { 1.59 , 1.57, 1.54 };
   G4double LXe_ABSL[NUMENTRIES]  = { 35.*cm, 35.*cm, 35.*cm}; //atten length
   G4MaterialPropertiesTable *LXe_mt = new G4MaterialPropertiesTable();
-  LXe_mt->AddProperty("SCINTILLATION", LXe_PP, LXe_SCINT, NUMENTRIES);
+  LXe_mt->AddProperty("FASTCOMPONENT", LXe_PP, LXe_SCINT, NUMENTRIES);
+  LXe_mt->AddProperty("SLOWCOMPONENT", LXe_PP, LXe_SCINT, NUMENTRIES);
   LXe_mt->AddProperty("RINDEX",        LXe_PP, LXe_RIND,  NUMENTRIES);
   LXe_mt->AddProperty("ABSLENGTH",     LXe_PP, LXe_ABSL,  NUMENTRIES);
+  LXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
+  // and 13eV creation energy for photons - may be 15eV?
+  // Fano factor assumed 1; should be much less for Xe ~ 0.13
+  // but the Fano factor is already partially included in the correlated 
+  // electron production - therefore not the absolute Fano factor here:
+  LXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
+  LXe_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
+  LXe_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
+  LXe_mt->AddConstProperty("YIELDRATIO",1.0);
   LXe->SetMaterialPropertiesTable(LXe_mt);
 
   //  G4double GXe_PP[NUMENTRIES]    = { 7.07*eV, 7.07*eV };
@@ -44,9 +87,15 @@
   G4double GXe_RIND[NUMENTRIES]  = { 1.00, 1.00, 1.00 };
   G4double GXe_ABSL[NUMENTRIES]  = { 100*m, 100*m, 100*m}; //atten length
   G4MaterialPropertiesTable *GXe_mt = new G4MaterialPropertiesTable();
-  GXe_mt->AddProperty("SCINTILLATION", GXe_PP, GXe_SCINT, NUMENTRIES);
+  GXe_mt->AddProperty("FASTCOMPONENT", GXe_PP, GXe_SCINT, NUMENTRIES);
+  GXe_mt->AddProperty("SLOWCOMPONENT", GXe_PP, GXe_SCINT, NUMENTRIES);
   GXe_mt->AddProperty("RINDEX",        GXe_PP, GXe_RIND,  NUMENTRIES);
   GXe_mt->AddProperty("ABSLENGTH",     GXe_PP, GXe_ABSL,  NUMENTRIES);
+  GXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV); // include QE 20%
+  GXe_mt->AddConstProperty("RESOLUTIONSCALE",1.0);
+  GXe_mt->AddConstProperty("FASTTIMECONSTANT",20.*ns);
+  GXe_mt->AddConstProperty("SLOWTIMECONSTANT",45.*ns);
+  GXe_mt->AddConstProperty("YIELDRATIO",1.0);
   GXe->SetMaterialPropertiesTable(GXe_mt);
 
 
@@ -111,6 +160,7 @@
   metalPb->AddElement(Pb, 1);
 
 
+/*
   // Americium: - NOTE it's AmO2..........
   G4Isotope* Am241 = new G4Isotope
     (name="Americium241", iz= 95, in=241, a=241.0*g/mole);
@@ -121,8 +171,8 @@
     (name="AmericiumSource", density=13.61*g/cm3, ncomponents=2);
   sourceAm->AddElement(Am, 1);
   sourceAm->AddElement(O , 2);
+*/
 
-  /*
   // using Uranium because Americium not yet defined for RDM
   G4Isotope* U235 = new G4Isotope
     (name="Uranium235", iz= 92, in=235, a=235.0*g/mole);
@@ -132,7 +182,6 @@
   G4Material* sourceAm = new G4Material
     (name="UraniumSource", density=13.61*g/cm3, ncomponents=1);
   sourceAm->AddElement(U, 1);
-  */
 
   // air
   G4Element* N = new G4Element

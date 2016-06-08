@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Fragment.hh,v 1.13 2002/06/07 15:30:55 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Fragment.hh,v 1.15 2002/12/12 19:17:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -50,9 +50,6 @@ class G4ParticleDefinition;
 
 class G4Fragment;     // Forward deckaration
 typedef G4std::vector<G4Fragment*> G4FragmentVector;
-
-//#define pctest
-
 
 class G4Fragment 
 {
@@ -128,7 +125,7 @@ public:
   
   inline G4double GetBindingEnergy(void) const;
 
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST 
   G4String GetCreatorModel() const { return theCreatorModel; }
   void SetCreatorModel(const G4String & aModel) 
   { theCreatorModel = aModel; }
@@ -166,7 +163,7 @@ private:
   
   G4double theCreationTime;
 
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST 
   G4String theCreatorModel;
 #endif 
 };

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIcommandStatus.hh,v 1.4 2001/10/04 23:15:27 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4UIcommandStatus_h

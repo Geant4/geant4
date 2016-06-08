@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.hh,v 1.3 2002/04/10 13:13:06 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelNavigator.hh,v 1.9 2002/10/14 12:36:00 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelNavigator
@@ -42,9 +42,10 @@
 #include "G4VPGeoDriver.hh"
 #include "geomdefs.hh"
 
-class G4VTouchable;
-class G4Navigator;
-class G4PTouchableKey ;
+#include "G4TouchableHandle.hh"
+#include "G4Navigator.hh"
+
+class G4GeometryCell ;
 class G4VPhysicalVolume;
 
 class G4ParallelNavigator : public G4VPGeoDriver
@@ -52,14 +53,15 @@ class G4ParallelNavigator : public G4VPGeoDriver
 
 public:  // with description
 
-  G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume);
+  explicit G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume);
     // initialise and create G4Navigator and a TouchableHistory
 
-  ~G4ParallelNavigator();
+  virtual ~G4ParallelNavigator();
     // delete Touchable and Navigator
 
-  G4PTouchableKey LocateOnBoundary(const G4ThreeVector &aPosition, 
-		                   const G4ThreeVector &aDirection);
+   virtual G4GeometryCell 
+   LocateOnBoundary(const G4ThreeVector &aPosition, 
+		    const G4ThreeVector &aDirection);
     // The location of a track according to it's position
     // and direction in case the track crosses a boundary
     // of a "parallel" geometry.
@@ -67,22 +69,27 @@ public:  // with description
     // (The track crosses the boundary if PostDOIT gets called.)
   
 
-  G4PTouchableKey GetCurrentTouchableKey() const;
-    // get the current G4PTouchableKey of the "parallel" geometry
+  virtual G4GeometryCell GetCurrentGeometryCell() const;
+    // get the current G4GeometryCell of the "parallel" geometry
 
-  G4double ComputeStepLengthInit(const G4ThreeVector &aPosition, 
-				 const G4ThreeVector &aDirection);
+   virtual G4double 
+   ComputeStepLengthInit(const G4ThreeVector &aPosition, 
+			 const G4ThreeVector &aDirection);
     // compute step length for a starting track. 
   
-  G4double ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition, 
-					  const G4ThreeVector &aDirection);
+  virtual  G4double 
+  ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition, 
+				 const G4ThreeVector &aDirection);
     // compute the step length after a track crossed a boundary
     // in a "parallel" geometry
   
-  G4double ComputeStepLengthInVolume(const G4ThreeVector &aPosition, 
-				     const G4ThreeVector &aDirection);
+   virtual G4double 
+   ComputeStepLengthInVolume(const G4ThreeVector &aPosition, 
+			     const G4ThreeVector &aDirection);
     // compute step length when track moves inside a volume.  
   
+  void SetVerboseity(G4int v);
+
 private:
 
   G4ParallelNavigator(const G4ParallelNavigator &);
@@ -92,9 +99,18 @@ private:
 				    const G4ThreeVector &aPosition, 
 				    const G4ThreeVector &aDirection);
 
+  G4double GetStepLength(const G4String &methodname,
+			 const G4ThreeVector &aPosition, 
+			 const G4ThreeVector &aDirection);
+  
+  G4double GetStepLengthUseLocate(const G4String &methodname,
+				  const G4ThreeVector &aPosition, 
+				  const G4ThreeVector &aDirection);
+  
   void Locate(const G4ThreeVector &aPosition, 
 	      const G4ThreeVector &aDirection,
-	      G4bool histsearch); 
+	      G4bool historysearch,
+	      G4bool useDirection); 
 			
   void Error(const G4String &m,
              const G4ThreeVector &pos,
@@ -104,9 +120,11 @@ private:
 
 private:
   
-  G4Navigator &fNavigator;
-  G4VTouchable *fCurrentTouchable;
+  G4Navigator fNavigator;
   G4int fNlocated;
+  G4int fMaxShiftedTrys;  
+  G4TouchableHandle fCurrentTouchableH;
+  G4int fVerbose;
 };
 
 #endif

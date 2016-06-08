@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.cc,v 1.5 2002/05/31 08:06:34 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ImportancePostStepDoIt.cc,v 1.8 2002/11/04 10:47:56 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,20 +31,25 @@
 //
 // ----------------------------------------------------------------------
 
-#include "g4std/strstream"
-
 #include "G4ImportancePostStepDoIt.hh"
 #include "G4Track.hh"
 #include "G4ParticleChange.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4Nsplit_Weight.hh"
+#include "G4VTrackTerminator.hh"
+#include "g4std/strstream"
 
-G4ImportancePostStepDoIt::G4ImportancePostStepDoIt(){}
+
+G4ImportancePostStepDoIt::
+G4ImportancePostStepDoIt(const G4VTrackTerminator &TrackTerminator)
+  :
+  fTrackTerminator(TrackTerminator)
+{}
 G4ImportancePostStepDoIt::~G4ImportancePostStepDoIt(){}
 
 void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack, 
 				    G4ParticleChange *aParticleChange,
-				    const G4Nsplit_Weight nw)
+				    const G4Nsplit_Weight &nw)
 {  
   // evaluate results from sampler
   if (nw.fN>1) {
@@ -57,14 +62,19 @@ void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack,
   }
   else if (nw.fN==0) {
     // kill track
-    aParticleChange->SetStatusChange(fStopAndKill);
+    fTrackTerminator.KillTrack();
   }
   else {
     // wrong answer
-    G4std::ostrstream os;
-    os << "G4ImportancePostStepDoIt::DoIt: sampler returned nw = " 
-       << nw << '\0' << G4endl;
-    G4Exception(os.str());
+    char st[200];
+    G4std::ostrstream os(st,200);
+    os << "G4ImportancePostStepDoIt::DoIt: sampler returned nw = "
+       << nw
+       << "\n"
+       << '\0';
+    G4String m(st);
+    
+    G4Exception(m);
   }
 }
 

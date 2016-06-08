@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.78 2002/06/27 14:24:28 gcosmo Exp $
+# $Id: architecture.gmk,v 1.84 2002/12/04 14:44:23 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -13,33 +13,15 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          Linux-g++   Linux (Red Hat 6.1 or 7.2), gcc-2.95.2 (default)
+#          Linux-g++   Linux (Red Hat 7.3), gcc-2.95.2 or gcc-3.2 (default)
 #
-#          Linux-egcs  Linux (Red Hat 6.1), egcs-1.1.2
+#          SUN-CC      SunOS 5.8, CC 5.3 or 5.4
 #
-#          SUN-CC      SunOS 5.7, CC 5.2 
-#
-#          WIN32-VC    Windows/2000 and Microsoft Visual C++ 6.0 - SP5
+#          WIN32-VC    Windows/2000/XP and Microsoft Visual C++ 6.0 - SP5
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 
-# Definition of HEP_ODBMS_LIBS, OBJY_LIBS and OSPACE_LIBS by HepODBMS.
-# Note: If G4ODBMS is defined, it calls for HEP_ODBMS setup files in
-#       $(HEP_ODBMS_DIR)/etc/.
-#
-ifdef G4ODBMS
-  # variables LHCXXTOP and PLATF are used in HepODBMS setup
-  include $(HEP_ODBMS_DIR)/etc/$(OS).mk
-  G4ODBMS_LIBS := $(HEP_ODBMS_LIBS) $(OBJY_LIBS) $(OSPACE_LIBS)
-endif
-
 MAKEFLAGS= --no-print-directory
-
-# If not specified, the default platform for G4SYSTEM is Linux-g++ ...
-#
-ifndef G4SYSTEM
-  G4SYSTEM := Linux-g++
-endif
 
 # If not specified, the default path for G4 installation G4INSTALL is
 # set to $HOME/geant4 ...
@@ -87,19 +69,27 @@ ifndef G4INCLUDE
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4INCLUDE) ] && mkdir -p $(G4INCLUDE) )
 
-# backwards compatiblity
+# Backwards compatibility
+#
 ifneq ($(G4MAKESHLIB),)
   G4LIB_BUILD_SHARED = 1
 endif
 
-# defaults for library BUILD. No default for USE, ie. take what is found.
+# Defaults for library BUILD. No default for USE, ie. take what is found.
+# Default is building static libraries.
+#
 ifeq ($(G4LIB_BUILD_SHARED),)
   ifeq ($(G4LIB_BUILD_STATIC),)
-#    default is building static libs
     G4LIB_BUILD_STATIC = 1
   endif  
 endif
 
+# Specify if to build the G3TOG4 module or not. Default is NO.
+#
+ifneq ($(G4LIB_BUILD_G3TOG4),)
+  G4LIB_BUILD_G3TOG4 = 1
+  G4USE_G3TOG4 = 1
+endif
 
 # If not specified, the default path for G4 binaries G4BIN is
 # set to $G4WORKDIR/bin/$G4SYSTEM ...
@@ -108,56 +98,6 @@ ifndef G4BIN
   G4BIN := $(G4WORKDIR)/bin
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4BIN) ] && mkdir -p $(G4BIN) )
-
-#################### schema directories & setup for G4ODBMS ###################
-#
-ifdef G4ODBMS
-# If not specified, the default path for G4 schema G4SCHEMA_DIR is
-# set to $G4LIB/$G4SYSTEM/schema ...
-#
-ifndef G4SCHEMA_DIR
-  G4SCHEMA_DIR     := $(G4LIB)/$(G4SYSTEM)/schema
-  G4SCHEMA_BOOT    := $(G4SCHEMA_DIR)/G4SCHEMA
-  G4SCHEMA_INCLUDE := $(G4SCHEMA_DIR)/include
-endif
-ifndef G4SCHEMA_FDID
-  G4SCHEMA_FDID := 207
-endif
-
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_DIR) ] && mkdir -p $(G4SCHEMA_DIR) )
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4SCHEMA_INCLUDE) ] && mkdir -p $(G4SCHEMA_INCLUDE) )
-
-# If not specified, the default path for G4 example schema G4EXAMPLE_BOOT_DIR is
-# set to $G4WORKDIR/exampleSchema (for persistency examples)...
-#
-ifndef G4EXAMPLE_BOOT_DIR
-  G4EXAMPLE_BOOT_DIR := $(G4WORKDIR)/exampleSchema/$(G4SYSTEM)
-endif
-
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_BOOT_DIR) ] && mkdir -p $(G4EXAMPLE_BOOT_DIR) )
-
-ifndef G4EXAMPLE_BOOT
-  G4EXAMPLE_BOOT = $(G4EXAMPLE_BOOT_DIR)/$(name)
-endif
-
-# If not specified, the default path for G4 example runtime federated
-# database directory G4EXAMPLE_FD_DIR is set to $G4WORKDIR/exampleFD
-# (for persistency examples)...
-#
-ifndef G4EXAMPLE_FD_DIR
-  G4EXAMPLE_FD_DIR := $(G4WORKDIR)/exampleFD/$(G4SYSTEM)
-endif
-
-G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4EXAMPLE_FD_DIR) ] && mkdir -p $(G4EXAMPLE_FD_DIR) )
-G4DDLX_FLAGS := -DTEMPLATEP_HIDES_FNCD
-
-ifndef G4EXAMPLE_FD
-  G4EXAMPLE_FD = $(G4EXAMPLE_FD_DIR)/$(name)
-endif
-
-endif
-#
-########################### end setup for G4ODBMS #############################
 
 # If G4DEBUG or G4NO_OPTIMISE are not specified,
 # the default compilation is optimised ...
@@ -190,23 +130,6 @@ ifndef CLHEP_LIB
     CLHEP_LIB         := CLHEP
   endif
 endif
-
-# Native STL is the default
-#
-CPPFLAGS += -DG4USE_STL
-
-# Path to ObjectSpace STL (NOT supported. Kept for backward compatibility)
-#
-ifdef G4USE_OSPACE
-  #
-  # ObjectSpace STL implementation
-  #
-  ifndef OSPACE_BASE_DIR
-    OSPACE_BASE_DIR := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
-  endif
-  OSPACEINC       := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl
-  OSPACELIBS      := -L$(OSPACE_BASE_DIR)/lib -lospace
-endif   #OSPACE
 
 # Paths for G4 data
 #
@@ -262,9 +185,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   LOADLIBS  := $(CLHEP_LIB)
 else
   LDFLAGS   := -L$(CLHEP_LIB_DIR)
-#  LDFLAGS   := 
   LOADLIBS  := -l$(CLHEP_LIB)
-#  LOADLIBS  := $(CLHEP_LIB_DIR)/lib$(CLHEP_LIB).a
   LOADLIBS  += -lm
 endif
 
@@ -395,3 +316,9 @@ ifdef CFRONT
   G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4TREP)/exec ] &&mkdir -p $(G4TREP)/exec )
 endif
 
+# If G4SYSTEM is not specified or not valid, issue an ERROR !
+#
+#$(G4INSTALL)/config/sys/$(G4SYSTEM).gmk:
+#	@echo "ERROR - G4SYSTEM is not defined in the environment"
+#	@echo "        or $(G4SYSTEM) architecture is not a valid one !"
+#	exit 1

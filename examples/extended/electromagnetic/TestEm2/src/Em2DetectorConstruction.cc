@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.7 2001/11/28 18:57:24 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em2DetectorConstruction.cc,v 1.9 2002/10/29 19:10:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,6 +112,8 @@ void Em2DetectorConstruction::DefineMaterials()
   //  
   // define materials
   //
+
+    G4Material* ma = 0;
        
   //Air
     density = 1.29*mg/cm3;
@@ -123,21 +126,23 @@ void Em2DetectorConstruction::DefineMaterials()
     G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
     H2O->AddElement(H, natoms=2);
     H2O->AddElement(O, natoms=1);
+    //  G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
+    //  H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
     
   //liquid argon
     a = 39.95*g/mole;
     density = 1.390*g/cm3;
-    G4Material* lAr = new G4Material(name="lAr", z=18., a, density);
+    ma = new G4Material(name="lAr", z=18., a, density);
         
   //Al
     a = 26.98*g/mole;
     density = 2.7*g/cm3;
-    G4Material* Al = new G4Material(name="Al", z=13., a, density);
+    ma = new G4Material(name="Al", z=13., a, density);
         
   //Fe
     a = 55.85*g/mole;
     density = 7.87*g/cm3;
-    G4Material* Fe = new G4Material(name="Fe", z=26., a, density);
+    ma = new G4Material(name="Fe", z=26., a, density);
     
   //BGO
     density = 7.10*g/cm3;

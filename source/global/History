@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2002/05/30 11:58:14 gcosmo Exp $
+$Id: History,v 1.107 2002/12/06 19:26:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 6, 2002 G.Cosmo (global-V04-01-05)
+- G4Integrator.icc: fixed some uninitialised variables.
+- Fixed unit test for G4Integrator.
+
+December 4, 2002 M.Asai (global-V04-01-03, global-V04-01-04)
+- Migration to new G4ApplicationState.
+
+November 20, 2002 G.Cosmo (global-V04-01-02)
+- G4UnitsTable[.hh.cc]: made GetUnitsTable static method non inlined.
+- G4Integrator[.icc]: plugged minor memory leak.
+
+August 19, 2002 M.Asai (global-V04-01-01)
+- Introducing a new G4Exception scheme.
+ Added : G4VStateDependent.hh G4VStateDependent.cc G4ExceptionSeverity.hh
+ Modified : G4Exception.cc G4StateManager.hh globals.hh
+
+June 21, 2002 G.Cosmo (global-V04-01-00)
+- G4Allocator.hh: changed definition of page size to become data-member of
+  G4Allocator. fPageSize is now computed according to the size of the object
+  to be allocated. The default size is 1024 bytes for objects whose size is
+  less than 512 bytes, 10 times the size of the object otherwise.
+  To be benchmarked before put it in production.
 
 May 30, 2002 G.Cosmo (global-V04-00-08)
 - G4DataVector.cc: initialise to zero values in collection for contructor

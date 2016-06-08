@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeomTestVolPoint.cc,v 1.1 2001/10/17 13:00:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file

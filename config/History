@@ -1,6 +1,5 @@
-$Id: History,v 1.193 2002/06/26 17:27:18 gcosmo Exp $
-$Name: geant4-04-01 $
-
+$Id: History,v 1.209 2002/12/10 14:05:59 gcosmo Exp $
+$Name: geant4-05-00 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +16,76 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4th December 2002  Gabriele Cosmo (config-V04-01-08)
+- Removed obsolete setup for ObjectSpace-STL (G4USE_OSPACE and related
+  variables). Removed obsolete variable G4USE_STL.
+- Updated Configure scripts.
+
+2nd December 2002  John Allison (config-V04-01-07)
+- common.gmk, binmake.gmk: New dependency file algorithm that avoids
+  leaving corrupt .d files when #include'd files cannot be found.
+- Removed obsolete schema targets in common.gmk.
+
+25th November 2002  Gabriele Cosmo (config-V04-01-06)
+- Removed ODBMS setup. Now library for persistency is built as part of the
+  kernel and specific implementations for persistency have been moved to
+  examples. Setup for ODBMS no more required. G4USE_HEPODBMS is no longer
+  used.
+- Updated configuration file AIX-xlC.gmk to port code on AIX with xlC 6.0
+  (K.Murakami).
+
+22nd November 2002  Gabriele Cosmo (config-V04-01-05)
+- liblist.c:
+  o Enhanced script to provide the whole list of installed libraries
+    in the correct order, without requiring parsing of dependencies.
+    The functionality is achieved by invoking "liblist" with option '-m",
+      i.e. - liblist -m [libpath] < libname.map
+    where [libpath] is the path where libraries are placed
+    (i.e. $G4LIB/$G4SYSTEM).
+- binmake.gmk:
+  o Use "liblist -m [libpath]" to retrieve the list of libraries to link in
+    case headers are installed in $G4INCLUDE, and granular libraries are used.
+- G4UI_USE.gmk, G4VIS_USE.gmk:
+  o Protected specification of -I paths for headers, in case $G4INCLUDE is
+    used. A single -I$G4INCLUDE path will be used for compilation in such case.
+
+16th November 2002  Hans-Peter Wellisch
+- binmake.gmk:
+  o Added hadronic/models/cascade/cascade and
+    hadronic/models/generator/scattering include paths.
+
+8th November 2002  Gabriele Cosmo (config-V04-01-04)
+- Darwin-g++.gmk:
+  o Updated setup to support MacOS 10.2 (H.Burkhardt).
+
+30th October 2002  Gabriele Cosmo (config-V04-01-03)
+- architecture.gmk:
+  o Issue an error if G4SYSTEM is not defined in the environment or not valid.
+  o Define G4LIB_BUILD_G3TOG4 and G4USE_G3TOG4 for optional installation and
+    usage of the g3tog4 module.
+  o Updated list of supported systems/compilers.
+- binmake.gmk:
+  o Include path and library for g3tog4 module only if G4USE_G3TOG4 is defined.
+    Implies proper handling of G4USE_G3TOG4 in source/GNUmakefile.
+- Removed obsolete OSPACE setup for WIN32-VC, HP-aCC, DEC-cxx. Still kept for
+  platforms with ODBMS setup.
+- SUN-CC.gmk: removed -L/usr/lib path specification from LOADLIBS definition.
+
+10th September 2002  Gabriele Cosmo (config-V04-01-02)
+- Linux-g++.gmk: added assignment 'CC := gcc' for default 'cc' compiler.
+
+26th August 2002  Gabriele Cosmo (config-V04-01-01)
+- binmake.gmk: added include path to persistency/run/include which was
+  missing. Removed unnecessary processes/general/include.
+
+8th July 2002  John Allison
+- liblist.c: added protection and warning for file/directory not found
+  in parsedir.  Also small cosmetic improvements.
+
+4th July 2002  Gabriele Cosmo (config-V04-01-00)
+- Upgraded WIN32-g++ to compile with -ansi and gcc-2.95.3 for most recent versions
+  of CygWin.
 
 26th June 2002  Gabriele Cosmo (config-V04-00-10)
 - Moved STEP PERL scripts to examples/extended/geometry/cad/scripts.

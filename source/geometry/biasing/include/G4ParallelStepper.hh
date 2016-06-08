@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.hh,v 1.3 2002/04/10 13:13:06 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelStepper.hh,v 1.6 2002/10/22 13:18:45 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelStepper
@@ -38,7 +38,7 @@
 #define G4ParallelStepper_hh G4ParallelStepper_hh
 
 #include "G4VParallelStepper.hh"
-#include "G4PStep.hh"
+#include "G4GeometryCellStep.hh"
 
 class G4ParallelStepper : public G4VParallelStepper
 {
@@ -48,28 +48,29 @@ public:  // with description
   G4ParallelStepper();
     // imitilisation
 
-  ~G4ParallelStepper();
+  G4ParallelStepper(const G4ParallelStepper &);
+    // create new G4GeometryCellStep
+
+  virtual ~G4ParallelStepper();
     // delete G4Pstep if created
 
-  G4ParallelStepper(const G4ParallelStepper &);
-    // create new G4PStep
+  virtual G4GeometryCellStep GetPStep() const;
+    // get the current G4GeometryCellStep
+  
+  virtual void Init(const G4GeometryCell &agCell);
+    // initialise the parallel stepper and the G4GeometryCellStep
+    // pre and post G4GeometryCell of the step are set equal
+
+  virtual void Update(const G4GeometryCell &agCell);
+    // to be called when crossing a boundary of the 
+    // "parallel" geometry to update the G4GeometryCellStep
+
+  virtual void UnSetCrossBoundary();
+    // to be called to unset the fCrossBoundary member of the G4GeometryCellStep
+
 
   G4ParallelStepper &operator=(const G4ParallelStepper &);
-    // create new G4PStep
-
-  G4PStep GetPStep() const {return *fPStep;}
-    // get the current G4PStep
-  
-  void Init(const G4PTouchableKey &aptk);
-    // initialise the parallel stepper and the G4PStep
-    // pre and post G4PTouchableKey of the step are set equal
-
-  void Update(const G4PTouchableKey &aptk);
-    // to be called when crossing a boundary of the 
-    // "parallel" geometry to update the G4PStep
-
-  void UnSetCrossBoundary();
-    // to be called to unset the fCrossBoundary member of the G4PStep
+    // create new G4GeometryCellStep
 
 private:
 
@@ -77,7 +78,9 @@ private:
 
 private:
 
-  G4PStep *fPStep;
+  G4GeometryCellStep *fPStep;
 };
+
+
 
 #endif

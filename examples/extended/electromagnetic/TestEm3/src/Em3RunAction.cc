@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.17 2002/06/05 16:42:24 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em3RunAction.cc,v 1.19 2002/12/12 11:19:38 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -44,15 +44,7 @@
 #include "g4std/iomanip"
 
 #ifndef G4NOHIST
- #include "AIDA/IAnalysisFactory.h"
- #include "AIDA/ITreeFactory.h"
- #include "AIDA/ITree.h"
- #include "AIDA/IHistogramFactory.h"
- #include "AIDA/IHistogram1D.h"
- #include "AIDA/IAxis.h"
- #include "AIDA/IAnnotation.h"
- #include "AIDA/ITupleFactory.h"
- #include "AIDA/ITuple.h"
+ #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,13 +56,15 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 
 #ifndef G4NOHIST
    // Creating the analysis factory
- IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
  // Creating the tree factory
- ITreeFactory* tf = af->createTreeFactory();
+ AIDA::ITreeFactory* tf = af->createTreeFactory();
  
  // Creating a tree mapped to an hbook file.
- tree = tf->create("testem3.paw", false, false, "hbook");
+ G4bool readOnly  = false;
+ G4bool createNew = true;
+ tree = tf->create("testem3.paw", "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
  hf   = af->createHistogramFactory(*tree);
@@ -140,7 +134,7 @@ void Em3RunAction::bookHisto()
   for (G4int k=0; k<NbOfAbsor; ++k)
      {
       if (histo[k]==0)
-        { histo[k] = hf->create1D(id[k+1],title+id[k],nbins,vmin,vmax);
+        { histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
           G4cout << "bookHisto: " << k << " " << histo[k] << G4endl;
 	}  
      }   
@@ -155,7 +149,7 @@ void Em3RunAction::SetHisto(G4int k,G4int nbins,G4double vmin,G4double vmax)
   // (re)book histograms
   const G4String title  = "Edep/Ebeam in absorber ";
   const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};  
-  histo[k] = hf->create1D(id[k+1],title+id[k],nbins,vmin,vmax);
+  histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
   G4cout << "SetHisto: " << k << " " << histo[k] << G4endl;  
 #endif   
 }
@@ -175,8 +169,13 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
   
-  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-  G4int  oldprec = G4cout.precision(2);
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else 
+  G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
+  G4int  prec = G4cout.precision(2);
     
   G4cout << "\n-------------------------------------------------------------\n"
          << G4std::setw(51) << "total energy dep" 
@@ -205,8 +204,8 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
     
   G4cout << "\n-------------------------------------------------------------";
   G4cout << G4endl;  
-  G4cout.setf(oldform,G4std::ios::floatfield);
-  G4cout.precision(oldprec);
+  G4cout.setf(mode,G4std::ios::floatfield);
+  G4cout.precision(prec);
     
   // show Rndm status
   HepRandom::showEngineStatus();
@@ -242,8 +241,13 @@ void Em3RunAction::PrintDedxTables()
 
   //print the kinetic energies
   //
-  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-  G4int  oldprec = G4cout.precision(3);
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else 
+  long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
+  G4int  prec = G4cout.precision(3);
      
   G4cout << "\n kinetic energies \n ";
   for (G4int j=0; j<nbin; ++j) {
@@ -290,8 +294,8 @@ void Em3RunAction::PrintDedxTables()
       G4cout << G4endl; 
      }
      
-  G4cout.precision(oldprec);
-  G4cout.setf(oldform,G4std::ios::floatfield);     
+  G4cout.precision(prec);
+  G4cout.setf(mode,G4std::ios::floatfield);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

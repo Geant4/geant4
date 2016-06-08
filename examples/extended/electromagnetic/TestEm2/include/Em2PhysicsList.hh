@@ -21,55 +21,46 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsList.hh,v 1.5 2001/10/25 15:12:06 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em2PhysicsList.hh,v 1.7 2002/10/31 13:58:32 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
-// 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old Em2PhysicsList
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2PhysicsList_h
 #define Em2PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
 class Em2PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em2PhysicsList: public G4VUserPhysicsList
+class Em2PhysicsList: public G4VModularPhysicsList
 {
   public:
     Em2PhysicsList();
    ~Em2PhysicsList();
 
-  protected:
-    // Construct particles
-    void ConstructParticle();
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions(); 
-     
-  public:
+    void AddPhysicsList(const G4String& name);
+    
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
-    void SetCutForProton(G4double);
+    void SetCutForPositron(G4double);
        
-  protected:
-    // Construct processes and register them
-    void ConstructProcess();  
-    void ConstructGeneral();
-    void ConstructEM();
-
   private:
     G4double cutForGamma;
     G4double cutForElectron; 
-    G4double cutForProton;
+    G4double cutForPositron;
     G4double currentDefaultCut;
+
+    G4bool   emPhysicsListIsRegistered;
     
     Em2PhysicsListMessenger* pMessenger;         
 };

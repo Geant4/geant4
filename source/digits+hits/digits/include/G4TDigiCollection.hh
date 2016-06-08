@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TDigiCollection.hh,v 1.10 2001/07/13 15:00:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4TDigiCollection_h

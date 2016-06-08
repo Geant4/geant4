@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.cc,v 1.2 2002/04/19 10:54:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: B01PhysicsList.cc,v 1.4 2002/11/07 13:48:02 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "globals.hh"
 #include "g4std/iomanip"                
 
 #include "B01PhysicsList.hh"
+
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -44,7 +45,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 
-B01PhysicsList::B01PhysicsList() : G4VUserPhysicsList()
+B01PhysicsList::B01PhysicsList():  G4VUserPhysicsList()
 {
   SetVerboseLevel(1);
 }

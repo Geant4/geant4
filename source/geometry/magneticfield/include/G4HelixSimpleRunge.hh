@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HelixSimpleRunge.hh,v 1.5 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // W. Wander <wwc@mit.edu> 03/12/98

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.10 2001/09/10 10:49:51 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VVisCommand.cc,v 1.11 2002/11/27 12:32:31 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -92,19 +92,6 @@ G4int G4VVisCommand::GetNewIntValue(const G4String& paramString)
   G4std::istrstream is((char*)t);
   is >> vl;
   return vl;
-}
-
-G4double G4VVisCommand::GetNewDoubleValue(const G4String& paramString)
-{
-  G4double vl;
-  char unts[30];
-  
-  const char* t = paramString;
-  G4std::istrstream is((char*)t);
-  is >> vl >> unts;
-  G4String unt = unts;
-  
-  return (vl*ValueOf(unt));
 }
 
 G4ThreeVector G4VVisCommand::GetNew3VectorValue(const G4String& paramString)

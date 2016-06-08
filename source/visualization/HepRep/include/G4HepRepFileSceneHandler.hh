@@ -21,10 +21,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.7 2002/02/02 04:00:14 perl Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// 
+//
+// $Id: G4HepRepFileSceneHandler.hh,v 1.10 2002/12/13 11:17:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
+//
+//
 // Joseph Perl  27th January 2002
 // A base class for a scene handler to export geometry and trajectories
 // to the HepRep xml file format.
@@ -73,6 +95,8 @@ public:
   void AddThis(const G4Polycone&);
   void AddThis(const G4Polyhedra&);
   void AddThis(const G4VSolid&);
+  void AddThis (const G4VTrajectory&);
+  void AddThis (const G4VHit&);
   // void PreAddThis(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddThis();
@@ -122,8 +146,6 @@ protected:
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
-  const G4ModelingParameters* fpOriginalMP;  // Keeps pointer to original.
-  G4ModelingParameters* fpNonCullingMP;      // For temporary non-culling.
 
 private:
   HepRepXMLWriter *hepRepXMLWriter;

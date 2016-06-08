@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.5 2001/07/11 09:59:30 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolidCylinder.hh,v 1.7 2002/12/03 14:32:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidCylinder
@@ -63,12 +63,23 @@ class G4BREPSolidCylinder : public G4BREPSolid
   ~G4BREPSolidCylinder();
     // Empty destructor.
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
  private:
 
     G4BREPSolidCylinder(const G4BREPSolidCylinder&);
     G4BREPSolidCylinder& operator=(const G4BREPSolidCylinder&);
       // Private copy constructor and assignment operator.
 
+  struct G4BREPCylinderParams
+  {
+    G4ThreeVector origin;
+    G4ThreeVector axis;
+    G4ThreeVector direction;
+    G4double      length;
+    G4double      radius;
+  } constructorParams;
 };
 
 #endif

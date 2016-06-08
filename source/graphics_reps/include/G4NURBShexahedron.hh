@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NURBShexahedron.hh,v 1.6 2001/07/11 10:01:02 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hexa hedron builder prototype
 // OC 17 9 96

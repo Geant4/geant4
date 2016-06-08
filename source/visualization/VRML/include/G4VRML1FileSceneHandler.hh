@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.11 2002/06/23 03:31:42 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.12 2002/12/11 15:57:53 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // G4VRML1FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -62,6 +62,12 @@ public:
           G4VSceneHandler::AddThis (polyhedra);
         }
         void AddThis(const G4VSolid&);
+        void AddThis ( const G4VTrajectory& traj) {
+          G4VSceneHandler::AddThis(traj);
+        }
+        void AddThis ( const G4VHit& hit) {
+          G4VSceneHandler::AddThis(hit);
+        }
 
 	void BeginPrimitives(const G4Transform3D& objectTransformation);
 	void EndPrimitives();

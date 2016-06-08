@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -49,7 +49,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4NucleusLimits::G4NucleusLimits ()
-  : aMin(1), aMax(240), zMin(0), zMax(100)
+  : aMin(1), aMax(250), zMin(0), zMax(100)
   //
   //
   // Default constructor sets the limits to cover all nuclei with Z<100.
@@ -62,18 +62,18 @@ G4NucleusLimits::G4NucleusLimits
 {
   //
   //
-  // check that aMin1 is within [1, 240].
+  // check that aMin1 is within [1, 250].
   //
   if (aMin1 < 1) {aMin = 1;}
-  else if (aMin1 > 240) {aMin = 240;}
+  else if (aMin1 > 250) {aMin = 240;}
   else {aMin = aMin1;}
 
   //
   //
-  // check that aMax1 is within [1, 240].
+  // check that aMax1 is within [1, 250].
   //
   if (aMax1 < 1) {aMax = 1;}
-  else if (aMax1 > 240) {aMax = 240;}
+  else if (aMax1 > 250) {aMax = 250;}
   else {aMax = aMax1;}
 
   //

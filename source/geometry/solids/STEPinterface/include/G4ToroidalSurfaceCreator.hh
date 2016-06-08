@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurfaceCreator.hh,v 1.4 2001/07/11 10:00:06 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ToroidalSurfaceCreator.hh,v 1.5 2002/11/21 16:49:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ToroidalSurfaceCreator
@@ -56,7 +56,7 @@ class G4ToroidalSurfaceCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
     const char* Name() const { return "Toroidal_Surface"; }
-    static G4ToroidalSurfaceCreator GetInstance() { return csc; }
+    static G4ToroidalSurfaceCreator GetInstance();
 
   // Members
 

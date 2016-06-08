@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.3 2002/05/31 08:06:34 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelImportanceProcess.cc,v 1.8 2002/11/04 10:47:56 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,15 +34,23 @@
 #include "G4ParallelImportanceProcess.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "g4std/strstream"
+#include "G4VTrackTerminator.hh"
 
 G4ParallelImportanceProcess::
 G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
-		    G4VPGeoDriver &pgeodriver,
-		    G4VParallelStepper &aStepper, 
-		    const G4String &aName)
- : G4ParallelTransport(pgeodriver, aStepper, aName),
-   fParticleChange(G4ParallelTransport::fParticleChange),
-   fImportanceSplitExaminer(aImportanceSplitExaminer)
+			    G4VPGeoDriver &pgeodriver,
+			    G4VParallelStepper &aStepper, 
+			    const G4VTrackTerminator *TrackTerminator,
+			    const G4String &aName)
+ : 
+  G4ParallelTransport(pgeodriver, aStepper, aName),
+  fTrackTerminator(TrackTerminator ? TrackTerminator : this),
+  fParticleChange(G4ParallelTransport::fParticleChange),
+  fImportanceSplitExaminer(aImportanceSplitExaminer),
+  fImportancePostStepDoIt(*fTrackTerminator)
+{}
+
+G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
 {}
 
 
@@ -65,4 +73,15 @@ void G4ParallelImportanceProcess::Error(const G4String &m)
 {
   G4cout << "ERROR - G4ImportanceProcess::" << m << G4endl;
   G4Exception("Program aborted.");
+}
+
+
+
+void G4ParallelImportanceProcess::KillTrack() const{
+  fParticleChange->SetStatusChange(fStopAndKill);
+}
+
+
+const G4String &G4ParallelImportanceProcess::GetName() const {
+  return G4ParallelTransport::GetProcessName();
 }

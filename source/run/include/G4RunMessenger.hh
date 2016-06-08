@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.8 2001/11/23 16:20:30 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4RunMessenger.hh,v 1.9 2002/08/08 17:29:26 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 //	GEANT 4 class header file 
@@ -82,7 +82,8 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithABool *          optCmd;
     G4UIcmdWithABool *          brkBoECmd;
     G4UIcmdWithABool *          brkEoECmd;
-    G4UIcmdWithoutParameter *   abortCmd;
+    G4UIcmdWithABool *          abortCmd;
+    G4UIcmdWithoutParameter *   abortEventCmd;
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
     G4UIcmdWithoutParameter *   cutCmd;

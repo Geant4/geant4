@@ -21,14 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHit.hh,v 1.6 2001/07/13 15:00:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VHit.hh,v 1.9 2002/10/28 11:08:48 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4VHit_h
 #define G4VHit_h 1
 
 #include "globals.hh"
+#include "g4std/vector"
+#include "g4std/map"
+
+class G4AttDef;
+class G4AttValue;
 
 // class description:
 //
@@ -50,7 +55,22 @@ class G4VHit
       virtual void Draw();
       virtual void Print();
 
+      virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const
+      { return 0; }
+      // If implemented by a derived class, returns a pointer to a map
+      // of attribute definitions for the attribute values below.  The
+      // user must test the validity of this pointer.  See
+      // G4Trajectory for an example of a concrete implementation of
+      // this method.
+      virtual const G4std::vector<G4AttValue>* CreateAttValues() const
+      { return 0; }
+      // If implemented by a derived class, returns a pointer to a
+      // list of attribute values suitable, e.g., for picking.  Each
+      // must refer to an attribute definition in the above map; its
+      // name is the key.  The user must test the validity of this
+      // pointer and delete the list after use.  See G4Trajectory for
+      // an example of a concrete implementation of this method.
+
 };
 
 #endif
-

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Assembly.cc,v 1.5 2001/07/11 09:59:40 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

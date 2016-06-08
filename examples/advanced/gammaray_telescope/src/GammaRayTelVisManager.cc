@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: GammaRayTelVisManager.cc,v 1.6 2001/11/23 17:39:04 santin Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: GammaRayTelVisManager.cc,v 1.7 2002/11/13 19:17:13 duns Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -45,6 +45,7 @@
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
 //#include "G4HepRepFile.hh"
+//#include "G4HepRep.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -101,6 +102,7 @@ void GammaRayTelVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
   //  RegisterGraphicsSystem (new G4HepRepFile);
+  //  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);

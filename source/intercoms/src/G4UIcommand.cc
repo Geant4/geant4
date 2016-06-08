@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.19 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4UIcommand.cc,v 1.21 2002/12/05 16:25:34 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -35,11 +35,13 @@
 #include "G4Tokenizer.hh"
 #include "G4ios.hh"
 
-G4UIcommand::G4UIcommand():paramERR(0) { }
+G4UIcommand::G4UIcommand()
+:messenger(0),token(IDENTIFIER),paramERR(0)
+{;}
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
 			 G4UImessenger * theMessenger)
-:messenger(theMessenger), paramERR(0)
+:messenger(theMessenger),token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;
   if(!theMessenger)
@@ -55,12 +57,12 @@ G4UIcommand::G4UIcommand(const char * theCommandPath,
   G4UIcommandCommonConstructorCode (comStr);
   G4String nullString;
   availabelStateList.clear();
-  availabelStateList.push_back(PreInit);
-  availabelStateList.push_back(Init);
-  availabelStateList.push_back(Idle);
-  availabelStateList.push_back(GeomClosed);
-  availabelStateList.push_back(EventProc);
-  availabelStateList.push_back(Abort);
+  availabelStateList.push_back(G4State_PreInit);
+  availabelStateList.push_back(G4State_Init);
+  availabelStateList.push_back(G4State_Idle);
+  availabelStateList.push_back(G4State_GeomClosed);
+  availabelStateList.push_back(G4State_EventProc);
+  availabelStateList.push_back(G4State_Abort);
 }
 
 void G4UIcommand::G4UIcommandCommonConstructorCode

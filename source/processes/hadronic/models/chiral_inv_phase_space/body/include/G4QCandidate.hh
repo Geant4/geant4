@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.hh,v 1.13 2001/11/26 14:11:45 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4QCandidate.hh,v 1.15 2002/12/12 19:14:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -118,8 +118,7 @@ inline void G4QCandidate::ClearParClustVector()
 
 inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)
 {
-  G4QParentCluster* npCl = new G4QParentCluster(pCl);
-  thePClusters.push_back(npCl);                              // Fill new instance of PCl
+  thePClusters.push_back(pCl);                              // Fill new instance of PCl
 }
 inline void G4QCandidate::SetPossibility(G4bool choice)         {possible=choice;}
 inline void G4QCandidate::SetParPossibility(G4bool choice)      {parPossible=choice;}

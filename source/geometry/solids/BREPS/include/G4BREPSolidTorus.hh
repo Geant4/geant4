@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.hh,v 1.5 2001/07/11 09:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolidTorus.hh,v 1.7 2002/12/03 14:32:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidTorus
@@ -62,12 +62,24 @@ class G4BREPSolidTorus : public G4BREPSolid
   ~G4BREPSolidTorus();
     // Empty destructor.
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
  private:
 
   G4BREPSolidTorus(const G4BREPSolidTorus&);
   G4BREPSolidTorus& operator=(const G4BREPSolidTorus&);
     // Private copy constructor and assignment operator.
 
+  struct G4BREPTorusParams
+  {
+    G4ThreeVector origin;
+    G4ThreeVector axis;
+    G4ThreeVector direction;
+    G4double      MinRadius;
+    G4double      MaxRadius;
+  } constructorParams;
+  
 };
 
 #endif

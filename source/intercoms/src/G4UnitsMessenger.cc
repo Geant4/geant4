@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsMessenger.cc,v 1.3 2001/07/11 10:01:17 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4UnitsMessenger.cc,v 1.4 2002/12/04 18:30:43 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -44,7 +44,7 @@ G4UnitsMessenger::G4UnitsMessenger()
       
   ListCmd = new G4UIcmdWithoutParameter("/units/list",this);
   ListCmd->SetGuidance("full list of available units.");
-  ListCmd->AvailableForStates(Idle);
+  ListCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

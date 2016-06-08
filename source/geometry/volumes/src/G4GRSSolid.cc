@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.cc,v 1.4 2001/07/11 10:00:32 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GRSSolid.cc,v 1.5 2002/08/06 08:23:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // class G4GRSSolid Implementation
+//
+// ********************************************************************
 
 #include "G4GRSSolid.hh"
 

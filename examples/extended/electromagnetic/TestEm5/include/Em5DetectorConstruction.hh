@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em5DetectorConstruction.hh,v 1.4 2001/10/16 11:56:27 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 

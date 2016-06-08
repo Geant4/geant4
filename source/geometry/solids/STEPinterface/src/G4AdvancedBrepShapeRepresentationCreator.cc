@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.6 2001/07/11 10:00:07 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4AdvancedBrepShapeRepresentationCreator.cc,v 1.7 2002/11/21 16:49:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4AdvancedBrepShapeRepresentationCreator
@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include <stdio.h>
+
 #include "G4AdvancedBrepShapeRepresentationCreator.hh"
 #include "G4GeometryTable.hh"
 
@@ -52,6 +53,11 @@ G4AdvancedBrepShapeRepresentationCreator::
 G4AdvancedBrepShapeRepresentationCreator::
    ~G4AdvancedBrepShapeRepresentationCreator(){}
 
+G4AdvancedBrepShapeRepresentationCreator
+G4AdvancedBrepShapeRepresentationCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4AdvancedBrepShapeRepresentationCreator::CreateG4Geometry(STEPentity& sEnt)
 {

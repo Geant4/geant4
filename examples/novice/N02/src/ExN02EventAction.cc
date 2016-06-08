@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02EventAction.cc,v 1.8 2002/01/09 17:24:10 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

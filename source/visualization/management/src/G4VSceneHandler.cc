@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.23 2001/09/10 10:52:01 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VSceneHandler.cc,v 1.25 2002/11/11 18:37:13 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -52,6 +52,7 @@
 #include "G4Visible.hh"
 #include "G4VisAttributes.hh"
 #include "G4VModel.hh"
+#include "G4TrajectoriesModel.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Tubs.hh"
@@ -65,6 +66,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
+#include "G4VTrajectory.hh"
+#include "G4VHit.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -179,6 +182,15 @@ void G4VSceneHandler::AddThis (const G4VSolid& solid) {
   RequestPrimitives (solid);
 }
 
+void G4VSceneHandler::AddThis (const G4VTrajectory& traj) {
+  
+  traj.DrawTrajectory(((G4TrajectoriesModel*)fpModel)->GetDrawingMode());
+}
+
+void G4VSceneHandler::AddThis (const G4VHit& hit) {
+  ((G4VHit&)hit).Draw(); // Cast to non-const because Draw is non-const!!!!
+}
+
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
   fViewerList.push_back (pViewer);
 }
@@ -194,7 +206,7 @@ void G4VSceneHandler::BeginModeling () {
 
 void G4VSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
-  if (!GetModel ()) G4Exception ("G4VSceneHandler::BeginPrimitives: NO MODEL!!!");
+  if (!fpModel) G4Exception ("G4VSceneHandler::BeginPrimitives: NO MODEL!!!");
   fpObjectTransformation = &objectTransformation;
 }
 
@@ -360,12 +372,12 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 }
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  if (!GetModel ())
+  if (!fpModel)
     G4Exception ("G4VSceneHandler::RequestPrimitives: NO MODEL!!!");
   G4Polyhedron* pPolyhedron;
   G4NURBS*      pNURBS;
   BeginPrimitives (*fpObjectTransformation);
-  switch (GetModel () -> GetModelingParameters () -> GetRepStyle ()) {
+  switch (fpModel -> GetModelingParameters () -> GetRepStyle ()) {
   case G4ModelingParameters::nurbs:
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
@@ -390,7 +402,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   case G4ModelingParameters::polyhedron:
   default:
     G4Polyhedron::SetNumberOfRotationSteps
-	(GetModel () -> GetModelingParameters () -> GetNoOfSides ());
+	(fpModel -> GetModelingParameters () -> GetNoOfSides ());
     pPolyhedron = solid.CreatePolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.6 2001/12/07 11:18:38 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4InelasticInteraction.hh,v 1.7 2002/12/12 19:16:53 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
  // Hadronic Process: Inelastic Interaction 
  // This class is an abstract base class, since the pure virtual

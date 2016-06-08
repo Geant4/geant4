@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -320,8 +320,8 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 
     targetParticle->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
-    G4double ektotal = newP->GetKineticEnergy() + 
-                       targetParticle->GetKineticEnergy();
+    // G4double ektotal = newP->GetKineticEnergy() + 
+    //                    targetParticle->GetKineticEnergy();
 
     if (verboseLevel > 1) {
       G4cout << "  particle 1 momentum in LAB " 

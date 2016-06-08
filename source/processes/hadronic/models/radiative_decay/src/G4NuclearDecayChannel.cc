@@ -39,6 +39,9 @@
 // 29 February 2000, P R Truscott, DERA UK
 // 0.b.3 release.
 //
+// 18 October 2002, F Lei
+//            modified link metheds in DecayIt() to G4PhotoEvaporation() in order to
+//            use the new Internal Coversion feature.      
 // 13 April 2000, F Lei, DERA UK
 //            Changes made are:
 //            1) Use PhotonEvaporation instead of DiscreteGammaDeexcitation
@@ -47,6 +50,7 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
+#include "G4NuclearLevelManager.hh"
 #include "G4NuclearDecayChannel.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -56,10 +60,8 @@
 #include "G4IonTable.hh"
 
 #include "G4BetaFermiFunction.hh"
-#include "G4DiscreteGammaDeexcitation.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4VGammaDeexcitation.hh"
-#include "G4Gamma.hh"
+#include "G4AtomicDeexcitation.hh"
 
 
 const G4double G4NuclearDecayChannel:: pTolerance = 0.001;
@@ -84,7 +86,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
-    {G4cout <<"G4NuclearDecayChannel constructor for " <<theMode <<G4endl;}
+    {G4cout <<"G4NuclearDecayChannel constructor for " <<G4int(theMode) <<G4endl;}
 #endif
   SetParent(theParentNucleus);
   FillParent();
@@ -113,7 +115,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
-    {G4cout <<"G4NuclearDecayChannel constructor for " <<theMode <<G4endl;}
+    {G4cout <<"G4NuclearDecayChannel constructor for " <<G4int(theMode) <<G4endl;}
 #endif
   SetParent (theParentNucleus);
   FillParent();
@@ -149,7 +151,7 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
-    {G4cout <<"G4NuclearDecayChannel constructor for " <<theMode <<G4endl;}
+    {G4cout <<"G4NuclearDecayChannel constructor for " <<G4int(theMode) <<G4endl;}
 #endif
   SetParent (theParentNucleus);
   FillParent();
@@ -200,9 +202,9 @@ void G4NuclearDecayChannel::FillDaughterNucleus (G4int index, G4int A, G4int Z,
   // Determine the excitation state corresponds to an actual level in the
   // photo-evaporation data.  Flag an error if the difference is too large.
   //
+  /*
   if (theDaughterExcitation > 0.0) {
-    G4NuclearLevelManager levelManager = G4NuclearLevelManager
-      (daughterZ, daughterA);
+    G4NuclearLevelManager levelManager = G4NuclearLevelManager(daughterZ, daughterA);
     if ( levelManager.NumberOfLevels() ) {
       const G4NuclearLevel* level = levelManager.NearestLevel (theDaughterExcitation);
 
@@ -247,6 +249,10 @@ void G4NuclearDecayChannel::FillDaughterNucleus (G4int index, G4int A, G4int Z,
     daughterExcitation = 0.0;
     daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, 0.0*keV);
   }
+  */
+  daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, theDaughterExcitation*MeV);
+  daughterExcitation = theDaughterExcitation;
+ 
   SetDaughter(index, daughterNucleus);
 }
 
@@ -297,10 +303,10 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
     {
     case 0:
       if (GetVerboseLevel()>0)
-      {
-        G4cout << "G4NuclearDecayChannel::DecayIt ";
-        G4cout << " daughters not defined " <<G4endl;
-      }
+	{
+	  G4cout << "G4NuclearDecayChannel::DecayIt ";
+	  G4cout << " daughters not defined " <<G4endl;
+	}
       break;
     case 1:
       products =  OneBodyDecayIt();
@@ -315,101 +321,152 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
       G4cerr <<"Error in G4NuclearDecayChannel::DecayIt" <<G4endl;
       G4cerr <<"Number of daughters in decay = " <<numberOfDaughters <<G4endl;
       G4Exception ("G4NuclearDecayChannel::DecayIt");
-  }
+    }
   if ((products == NULL) && (GetVerboseLevel()>0)) {
     G4cerr << "G4NuclearDecayChannel::DecayIt ";
     G4cerr << *parent_name << " can not decay " << G4endl;
     DumpInfo();
   }
+
+  // It seems the ARM  in G4 is not working properly yet. So this feature will not be released yet!
   //
+  // now we have to take care of the EC product which have go through the ARM
+  if (decayMode == 3 || decayMode == 4 || decayMode == 5) {
+    G4int eShell = 0;
+    switch (decayMode)
+      {
+      case KshellEC:
+	//
+	{
+	  eShell = 1;
+	}
+	break;
+      case LshellEC:
+	//
+	{
+	  eShell = G4int(G4UniformRand()*3)+1;
+	}
+	break;
+      case MshellEC:
+	//
+	{
+	  eShell = G4int(G4UniformRand()*5)+4;
+	}
+	break;
+      case ERROR:
+      default:
+	G4cout << " There is an  error in decay mode selection! exit RDM now" << G4endl;
+	exit(0);		      
+      }
+    G4int aZ = daughterZ;
+
+    G4AtomicDeexcitation* atomDeex = new G4AtomicDeexcitation();
+    //no Auger electron generation 
+    atomDeex->ActivateAugerElectronProduction(0);
+    G4std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
+
+    // pop up the daughter before insertion
+    dynamicDaughter = products->PopProducts();
+    for (size_t i = 0;  i < armProducts->size(); i++)
+      products->PushProducts ((*armProducts)[i]);
+    delete armProducts;
+    delete atomDeex;
+    products->PushProducts (dynamicDaughter); 
+  }
+  
+
   //
   // If the decay is to an excited state of the daughter nuclide, we need
   // to apply the photo-evaporation process.
   //
   if (daughterExcitation > 0.0)
-  {
-  //
-  //
-  // Pop the daughter nucleus off the product vector - we need to retain
-  // the momentum of this particle.
-  //
-    dynamicDaughter = products->PopProducts();
-    G4LorentzVector daughterMomentum = dynamicDaughter->Get4Momentum();
-    G4ThreeVector const daughterMomentum1(static_cast<const G4LorentzVector> (daughterMomentum));
-  //
-  //
-  // Now define a G4Fragment with the correct A, Z and excitation, and declare and
-  // initialise a G4DiscreteGammaDeexcitation object.
-  //
-
-    //  daughterMomentum.setT(daughterMomentum.t()+G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( daughterZ, daughterA )+daughterExcitation);
-
-    daughterMomentum.setT(daughterMomentum.t()+daughterExcitation);
-    G4Fragment nucleus(daughterA, daughterZ, daughterMomentum);
-    //G4LorentzVector p4(0.,0.,0.,G4NucleiProperties::GetNuclearMass(daughterA,daughterZ)
-    //	       +daughterExcitation);
-    //G4Fragment nucleus(daughterA, daughterZ, p4);
-    //    nucleus.SetExcitationEnergy(daughterExcitation);
+    {
+      //
+      //
+      // Pop the daughter nucleus off the product vector - we need to retain
+      // the momentum of this particle.
+      //
+      dynamicDaughter = products->PopProducts();
+      G4LorentzVector daughterMomentum = dynamicDaughter->Get4Momentum();
+      G4ThreeVector const daughterMomentum1(static_cast<const G4LorentzVector> (daughterMomentum));
+      //
+      //
+      // Now define a G4Fragment with the correct A, Z and excitation, and declare and
+      // initialise a G4DiscreteGammaDeexcitation object.
+      //
+    
+      //  daughterMomentum.setT(daughterMomentum.t()+G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( daughterZ, daughterA )+daughterExcitation);
+    
+      //    daughterMomentum.setT(daughterMomentum.t()+daughterExcitation);
+      G4Fragment nucleus(daughterA, daughterZ, daughterMomentum);
+      //G4LorentzVector p4(0.,0.,0.,G4NucleiProperties::GetNuclearMass(daughterA,daughterZ)
+      //	       +daughterExcitation);
+      //G4Fragment nucleus(daughterA, daughterZ, p4);
+      //    nucleus.SetExcitationEnergy(daughterExcitation);
    
 
-    // G4VGammaDeexcitation* deexcitation = new G4DiscreteGammaDeexcitation;
-    G4PhotonEvaporation* deexcitation = new G4PhotonEvaporation;
-    deexcitation->SetVerboseLevel(GetVerboseLevel());
-    deexcitation->Initialize(nucleus);
-  //
-  //
-  // Get the gammas by deexciting the nucleus.
-  //
-    G4FragmentVector* gammas = deexcitation->BreakItUp(nucleus);
-    G4int nGammas=0;
-    //    if (gammas!=0) nGammas=gammas->entries();
-    // in the case of BreakItUp(nucleus), the returned G4FragmentVector contains the residual nuclide
-    // as its last entry.
-    if (gammas > 0) nGammas=gammas->size()-1;
-  //
-  //
-  // Go through each gamma and add it to the decay product.  The angular distribution
-  // of the gammas is isotropic, and the residual nucleus is assumed not to suffer
-  // any recoil as a result of this de-excitation.
-  //
-    for (G4int ig=0; ig<nGammas; ig++)
-    {
-      G4double costheta = 2.0*G4UniformRand() - 1.0;
-      G4double sintheta = sqrt((1.0 - costheta) * (1.0+costheta));
-      G4double phi      = twopi * G4UniformRand();
-      G4ParticleMomentum gDirection
-        (sintheta*cos(phi),sintheta*sin(phi),costheta);
-      G4double gEnergy = gammas->operator[](ig)->GetMomentum().e();
-      G4DynamicParticle *theGammaRay = new
-        G4DynamicParticle (G4Gamma::GammaDefinition(), gDirection, gEnergy);
-      products->PushProducts (theGammaRay);
+      // G4VGammaDeexcitation* deexcitation = new G4DiscreteGammaDeexcitation;
+      G4PhotonEvaporation* deexcitation = new G4PhotonEvaporation;
+      deexcitation->SetVerboseLevel(GetVerboseLevel());
+      //    deexcitation->Initialize(nucleus);
+      deexcitation->SetICM(true);
+      if (decayMode == 0) {
+	deexcitation->RDMForced(true);
+      } else {
+	deexcitation->RDMForced(false);
+      }
+      // ARM in G4 is applied but no auger electrons!
+      deexcitation->SetARM(true);
+      //      deexcitation->SetARM(false);
+      deexcitation->SetMaxHalfLife(1e-6*second);
+      //
+      // Get the gammas by deexciting the nucleus.
+      //
+      G4FragmentVector* gammas = deexcitation->BreakItUp(nucleus);
+      // in the case of BreakItUp(nucleus), the returned G4FragmentVector contains the residual nuclide
+      // as its last entry.
+      G4int nGammas=gammas->size()-1;
+      //
+      //
+      // Go through each gamma/e- and add it to the decay product.  The angular distribution
+      // of the gammas is isotropic, and the residual nucleus is assumed not to suffer
+      // any recoil as a result of this de-excitation.
+      //
+      for (G4int ig=0; ig<nGammas; ig++)
+	{
+	  //	  G4double costheta = 2.0*G4UniformRand() - 1.0;
+	  //	  G4double sintheta = sqrt((1.0 - costheta) * (1.0+costheta));
+	  //	  G4double phi      = twopi * G4UniformRand();
+	  // G4ParticleMomentum gDirection
+	  //  (sintheta*cos(phi),sintheta*sin(phi),costheta);
+	  //G4double gEnergy = gammas->operator[](ig)->GetMomentum().e() 
+	  //  - gammas->operator[](ig)->GetParticleDefinition()->GetPDGMass() ;
+	  G4DynamicParticle *theGammaRay = new
+	    G4DynamicParticle (gammas->operator[](ig)->GetParticleDefinition(),
+			       gammas->operator[](ig)->GetMomentum());
+	  theGammaRay -> SetProperTime(gammas->operator[](ig)->GetCreationTime());
+	  products->PushProducts (theGammaRay);
+	}
+      //
+      //      now the nucleus
+      G4double finalDaughterExcitation = gammas->operator[](nGammas)->GetExcitationEnergy();
+      G4IonTable *theIonTable =  (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
+      dynamicDaughter = new G4DynamicParticle
+	(theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),
+	 daughterMomentum1);
+      products->PushProducts (dynamicDaughter); 
+      //
+      // Delete/reset variables associated with the gammas.
+      //
+      //    if (nGammas != 0) gammas->clearAndDestroy();
+      while (!gammas->empty()) {
+	delete *(gammas->end()-1);
+	gammas->pop_back();
+      }
+      //    gammas->clearAndDestroy();
+      delete gammas;
+      delete deexcitation;
     }
-  //
-  //
-  // Delete/reset variables associated with the gammas.
-  //
-    //    if (nGammas != 0) gammas->clearAndDestroy();
-    while (!gammas->empty()) {
-      delete *(gammas->end()-1);
-      gammas->pop_back();
-   }
-//    gammas->clearAndDestroy();
-    delete gammas;
-    delete deexcitation;
-  //
-  //
-  // Finally, add the residual nucleus to the product vector.  Note that for the
-  // moment the daughter is assumed to end-up in the GROUND STATE, since
-  // G4PhotoEvaporation cannot be made to stop when it reaches a long-lived
-  // isomer.
-  //
-    G4double finalDaughterExcitation = 0.0*MeV;
-    G4IonTable *theIonTable =  (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
-    dynamicDaughter = new G4DynamicParticle
-      (theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),
-      daughterMomentum1);
-    products->PushProducts (dynamicDaughter); 
-  }
   return products;
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -499,7 +556,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
       G4cout<< " Q =  " <<Q<<G4endl;
       G4cout<< " daughterA =  " <<daughterA<<G4endl;
       G4cout<< " daughterZ =  " <<daughterZ<<G4endl;
-      G4cout<< " decayMode = " <<decayMode << G4endl;
+      G4cout<< " decayMode = " <<static_cast<G4int>(decayMode) << G4endl;
       G4cout<< " FermiFN =  " <<FermiFN<<G4endl;
     }
     do

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FieldTrack.hh,v 1.8 2001/10/25 17:02:16 japost Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // class G4FieldTrack

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4FermiBreakUp.cc,v 1.7 2002/01/15 12:30:31 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4FermiBreakUp.cc,v 1.9 2002/12/12 19:17:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -98,7 +98,7 @@ G4FragmentVector * G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
 
     // Get the fragments corresponding to chosen configuration.
     G4FragmentVector * theResult = theConfiguration.GetFragments(theNucleus);
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
     for (G4FragmentVector::iterator i = theResult->begin(); i != theResult->end(); i++)
     {
 	(*i)->SetCreatorModel("G4FermiBreakUp");

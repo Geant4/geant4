@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VWeightWindowAlgorithm.hh,v 1.2 2002/05/30 16:00:55 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VWeightWindowAlgorithm.hh,v 1.5 2002/10/14 12:36:01 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VWeightWindowAlgorithm
@@ -50,7 +50,8 @@ class G4VWeightWindowAlgorithm
 
 public:  // with description
 
-  virtual ~G4VWeightWindowAlgorithm(){}
+  G4VWeightWindowAlgorithm();
+  virtual ~G4VWeightWindowAlgorithm();
 
   virtual void SetUpperLimit(G4double Upper) = 0;
     // set upper limiting factor for window

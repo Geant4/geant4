@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.hh,v 1.5 2001/07/11 09:59:07 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ClassicalRK4.hh,v 1.6 2002/11/20 17:56:35 japost Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // class G4ClassicalRK4
@@ -85,7 +85,7 @@ class G4ClassicalRK4 : public G4MagErrorStepper
 
   private:
 
-    G4int fNumberOfVariables ; // is set default to 6 in constructor
+    // G4int fNumberOfVariables ; // is set default to 6 in constructor
 
     G4double *dydxm, *dydxt, *yt; // scratch space - not state 
 };

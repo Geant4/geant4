@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN03CalorHit.cc,v 1.5 2002/01/09 17:24:12 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 

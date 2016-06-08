@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.cc,v 1.7 2001/12/04 11:40:28 flongo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: GammaRayTelRunAction.cc,v 1.8 2002/11/14 10:55:17 flongo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -71,8 +71,11 @@ void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
   char name[15];
 
   // Open the file for the tracks of this run
+
+#ifdef G4STORE_DATA
   sprintf(name,"Tracks_%d.dat", aRun->GetRunID());
   outFile.open(name);
+#endif
 
   // Prepare the visualization
   if (G4VVisManager::GetConcreteInstance())
@@ -98,7 +101,9 @@ void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
   }
 
   // Close the file with the hits information
+#ifdef G4STORE_DATA
   outFile.close();
+#endif
 
   // If analysis is used, print out the histograms
 #ifdef G4ANALYSIS_USE

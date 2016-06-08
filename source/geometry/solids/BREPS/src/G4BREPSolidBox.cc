@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.cc,v 1.6 2001/07/20 12:47:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolidBox.cc,v 1.7 2002/11/06 23:29:33 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -84,6 +84,16 @@ G4BREPSolidBox::G4BREPSolidBox(const G4String& name,
   PVec[3] = Pt8;  
   SurfaceVec[5] = new G4FPlane(&PVec);
 
+  // Save the constructor parameters
+  constructorParams[0] = Pt1;
+  constructorParams[1] = Pt2;
+  constructorParams[2] = Pt3;
+  constructorParams[3] = Pt4;
+  constructorParams[4] = Pt5;
+  constructorParams[5] = Pt6;
+  constructorParams[6] = Pt7;
+  constructorParams[7] = Pt8;
+  
   Initialize();
   
 }
@@ -115,3 +125,22 @@ EInside G4BREPSolidBox::Inside(register const G4ThreeVector& Pt) const
   
   return kSurface;
 }
+
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidBox::StreamInfo(G4std::ostream& os) const
+{
+     G4BREPSolid::StreamInfo( os )
+     << "\n"
+     << "   Pt1: " << constructorParams[0]
+     << "   Pt2: " << constructorParams[1]
+     << "   Pt3: " << constructorParams[2]
+     << "   Pt4: " << constructorParams[3]
+     << "\n   Pt5: " << constructorParams[4]
+     << "   Pt6: " << constructorParams[5]
+     << "   Pt7: " << constructorParams[6]
+     << "   Pt8: " << constructorParams[7]
+     << "\n-----------------------------------------------------------\n";
+
+  return os;
+}
+

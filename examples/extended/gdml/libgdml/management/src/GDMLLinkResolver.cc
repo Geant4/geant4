@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GDMLLinkResolver.cc,v 1.2 2002/06/03 12:09:31 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: GDMLLinkResolver.cc,v 1.3 2002/07/24 17:48:42 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -97,7 +97,7 @@ StatusCode GDMLLinkResolver::Run()
     std::cerr << "\nAn error occured: '" << xmlfile << "'\n"
               << "Exception message is: \n"
               << msg
-              << "\n" << endl;
+              << "\n" << std::endl;
     if( msg != 0 )
     {
       delete [] msg;

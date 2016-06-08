@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2002/05/31 16:06:53 maire Exp $
+$Id: README,v 1.9 2002/12/11 17:12:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,18 +21,26 @@ $Id: README,v 1.6 2002/05/31 16:06:53 maire Exp $
      the commands defined in the DetectorMessenger class.
   
      Material can be choosen: Air Water lAr Al Fe BGO PbWO4 Pb.
-     eg: /calor/setMat PbWO4
+     eg: /testem/det/setMat PbWO4
       
      The size of the slices and rings are expressed in radiation length units
      and can be changed.
-     eg: /calor/setLbin 20   1.    ---> 20 slices of 1. radl
-         /calor/setRbin  5   0.25  --->  5 rings of 0.25 radl
-         /calor/update             ---> rebuild the geometry
+     eg: /testem/det/setLbin 20   1.    ---> 20 slices of 1. radl
+         /testem/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
+         /testem/det/update             ---> rebuild the geometry
       
      An uniform magnetic field along the cylinder axis can be set.
-     eg: /calor/setField 5 tesla 
- 	    
- 2- AN EVENT : THE PRIMARY GENERATOR
+     eg: /testem/det/setField 5 tesla 
+     
+ 2- PHYSICS LISTS
+
+    Physics Lists are subdivided on 4 following modules:
+    1. "particles" - particle definitions  
+    2. "general" - decays and transportation  
+    3. "standard" (alternative) - standard EM physics
+    4. "model"    (alternative) - standard EM physics using model approach
+      	    
+ 3- AN EVENT : THE PRIMARY GENERATOR
  
      The primary kinematic consists of a single particle which hits the
      cylinder perpendicular to the input face. The type of the particle
@@ -42,7 +50,7 @@ $Id: README,v 1.6 2002/05/31 16:06:53 maire Exp $
  	
      A RUN is a set of events.
  				
- 3- VISUALIZATION
+ 4- VISUALIZATION
  
      The Visualization Manager is set in the main().
      The initialisation of the drawing is done via the commands
@@ -56,7 +64,7 @@ $Id: README,v 1.6 2002/05/31 16:06:53 maire Exp $
      Optionaly one can choose to draw all particles, only the charged one,
      or none. This command is defined in EventActionMessenger class.
  	
- 4- PHYSICS DEMO
+ 5- PHYSICS DEMO
  
      The particle's type and the physic processes which will be available
      in this example are set in PhysicsList class.
@@ -65,10 +73,10 @@ $Id: README,v 1.6 2002/05/31 16:06:53 maire Exp $
      allows to activate/inactivate the processes one by one.
      
      The threshold for producing secondaries can be changed.
-     eg: /run/particle/setCut 100 microm
+     eg: /testem/phys/setCuts 100 microm
          /run/initialize
 	  	
- 5- HOW TO START ?
+ 6- HOW TO START ?
  
      - compile and link to generate an executable
  		% cd TestEm2
@@ -80,9 +88,8 @@ $Id: README,v 1.6 2002/05/31 16:06:53 maire Exp $
      - execute TestEm2 in 'interactive mode' with visualization
  		% TestEm2
  		....
- 		Idle> type your commands. For instance:
- 		Idle> /control/execute newgeom.mac
- 		....
+ 		Idle> type your commands
+  		....
  		Idle> exit
  	
  7- HISTOGRAMS
@@ -110,21 +117,18 @@ $Id: README,v 1.6 2002/05/31 16:06:53 maire Exp $
  Note that histograms are disabled via the flag G4NOHIST in the GNUmakefile.
  
 
- 7- Using the Anaphe implementation of the AIDA 2.2 histograms:
+ 8- Using the Anaphe implementation of the AIDA 3.0 histograms:
  --------------------------------------------------------------
 
- In order to use the Anaphe implementation of the AIDA 2.2 interfaces, 
- prepare some environment variables by source-ing one of the following 
- startup scripts (depending on your compiler version):
+ In order to use the Anaphe implementation of the AIDA 3.0 interfaces, 
+ the 'aida-config' command (which is used in the GNUmakefile) is 
+ available at:
+ /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/aida-config 
 
- # gcc-2.95.2
- source $LHCXXTOP/share/LHCXX/4.0.1/install/sharedstart.sh or .csh
+ In order to run the executable, you need to source the following
+ script (once):
+ $HOME/bin/setupAnaphe.csh  (or $HOME/bin/setupAnaphe)
 
- # egcs_1.1.2 (aka gcc 2.91.66)
- source $LHCXXTOP/share/LHCXX/4.0.1-sec/install/sharedstart.sh or .csh
-
- At CERN, $LHCXXTOP is /afs/cern.ch/sw/lhcxx, you may want to use a
- more recent release, check http:/cern.ch/anaphe for more information.
-
- After this, you will have access to the 'aida-config' command which
- is used in the GNUmakefile.
+ At cern 'setupAnaphe' is available at: 
+ /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
+ (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)

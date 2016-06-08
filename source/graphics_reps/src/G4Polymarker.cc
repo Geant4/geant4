@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Polymarker.cc,v 1.7 2001/07/11 10:01:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  November 1996

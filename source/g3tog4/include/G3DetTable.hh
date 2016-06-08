@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3DetTable.hh,v 1.7 2001/07/11 09:58:57 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // G3DetTable class
 

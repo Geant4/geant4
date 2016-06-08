@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.hh,v 1.5 2002/05/15 10:23:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParameterisedNavigation.hh,v 1.6 2002/07/23 08:50:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // class G4ParameterisedNavigation
@@ -35,6 +35,7 @@
 
 // History:
 // - Created. Paul Kent, Aug 96
+// ********************************************************************
 
 #ifndef G4PARAMETERISEDNAVIGATION_HH
 #define G4PARAMETERISEDNAVIGATION_HH
@@ -51,7 +52,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
-
 #include "G4BlockingList.hh"
 
 class G4ParameterisedNavigation : public G4VoxelNavigation
@@ -103,7 +103,7 @@ class G4ParameterisedNavigation : public G4VoxelNavigation
     EAxis fVoxelAxis;
     G4int fVoxelNoSlices;
     G4double fVoxelSliceWidth; 
-    G4int fVoxelNodeNo;	  
+    G4int fVoxelNodeNo;  
     G4SmartVoxelHeader* fVoxelHeader;
 };
 

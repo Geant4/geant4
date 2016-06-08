@@ -1,0 +1,79 @@
+//---------------------
+//   FCAL Had Module
+//---------------------
+HadModuleRMin     = 7.923*cm;
+HadModuleRMax     = 45.15*cm;
+HadModuleLenght   = 22.3*cm;
+HadModuleStartPhi = 0.;
+HadModuleDPhi     = 90.*deg;
+
+FCAL2HadSmart      = 0.2;
+
+
+//---------------------
+//  Tungsten Absorber
+//---------------------
+WAbsorberRMin     = 7.923*cm;
+WAbsorberRMax     = 45.15*cm;
+WAbsorberLenght   = 19.8*cm;
+WAbsorberStartPhi = 0.;
+WAbsorberDPhi     = 90.*deg;
+
+//---------------------
+//   Copper Plates   
+//---------------------
+CuPlateLenght = 1.25*cm;
+CuPlateAPosZ  = 21.05*cm;
+CuPlateBPosZ  = -21.05*cm;
+
+
+//-------------------------------
+// Had Module (F2)  Cable Troff
+//-------------------------------
+NCableTroff       = 4;
+F2TroffRmin       = 44.16*cm;
+F2TroffRmax       = 45.15*cm;	
+F2TroffMainLenght = 19.8*cm;  // 22.3*cm;
+F2TroffABLenght   = 1.25*cm;
+F2TroffStartPhi   = 8.438*deg;
+F2TroffDphi       = 5.624*deg;
+
+F2TroffRotZ       = 22.5*deg;
+F2TroffABPosZ     = 21.05*cm;
+
+//----------------------
+//  LArg Gaps  + F2 Rod
+//----------------------
+F2LArGapRmin     = 0.0*cm;
+F2LArGapRmax     = 0.284*cm; 
+F2LArGapLenght   = 22.3*cm; 
+F2LArGapStartPhi = 0.0*deg;
+F2LArGapDphi     = 2*pi;
+
+
+F2RodRmin        = 0.0*cm;
+F2RodRmax        = 0.247*cm;
+F2RodLenght      = 22.3*cm;
+F2RodStartPhi    = 0.0*deg;
+F2RodDphi        = 2*pi;
+
+
+
+/*
+
+LArgGapRMin = 2.375*mm;
+LArgGapRMax = 2.625*mm;
+LArgGapDZ = 223.*mm;
+LArgGapSPhi = 0.;
+LArgGapDPhi = 2*pi;
+
+CopperRodRMin = 0.;
+CopperRodRMax = 2.375*mm;  
+CopperRodDZ = 223.*mm;
+CopperRodSPhi = 0.;
+CopperRodDPhi = 2*pi;
+*/
+
+
+
+

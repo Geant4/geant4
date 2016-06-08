@@ -1,3 +1,6 @@
+VRML-V04-01-00 November 10 2002
+- Bug fixing for marker size (*.icc files)
+
 VRML-V03-02-01 18th September 2001  
 - Updation for automatic visualization at Hebden Bridge mini-workshop.
 - Filename incrementation is made the same as the DAWNFILE driver

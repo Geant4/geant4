@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2002/04/19 08:22:38 gcosmo Exp $
+$Id: History,v 1.8 2002/07/30 07:26:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 30th, 2002          G.Cosmo  (geomver-V04-01-00)
+- G4GeomTestVolume.cc: fixed recursive call to G4GeomTestVolume passing also
+  'tolerance' as argument in the recursive test algorithm.
 
 Apr 19th, 2002          G.Cosmo  (geomver-V04-00-00)
 - Moved inline constructors and destructors to no inline.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis1PlacementCreator.hh,v 1.4 2001/07/11 10:00:03 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Axis1PlacementCreator.hh,v 1.5 2002/11/21 16:49:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4Axis1PlacementCreator
@@ -56,7 +56,7 @@ class G4Axis1PlacementCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
     const char* Name() const { return "Axis1_Placement"; }
-    static G4Axis1PlacementCreator GetInstance() { return csc; }
+    static G4Axis1PlacementCreator GetInstance();
 
   // Members
 

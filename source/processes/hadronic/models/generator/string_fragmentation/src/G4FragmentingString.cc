@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.cc,v 1.4 2002/06/13 09:04:12 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
-//
 
 
 // ------------------------------------------------------------
@@ -98,8 +95,8 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 	Pplus  = old.Pplus  - (momentum->e() + momentum->pz());
 	Pminus = old.Pminus - (momentum->e() - momentum->pz());
 	
-	G4double Eold=0.5 * (old.Pplus + old.Pminus);
-	G4double Enew=0.5 * (Pplus + Pminus);
+	//G4double Eold=0.5 * (old.Pplus + old.Pminus);
+	//G4double Enew=0.5 * (Pplus + Pminus);
 }
 
 

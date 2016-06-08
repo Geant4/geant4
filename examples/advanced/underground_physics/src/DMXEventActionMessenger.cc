@@ -77,14 +77,14 @@ DMXEventActionMessenger::DMXEventActionMessenger(DMXEventAction* EvAct)
   DrawColsCmd->SetGuidance("  Choice : custom, standard(default)");
   DrawColsCmd->SetParameterName("drawColsFlag", false);
   DrawColsCmd->SetCandidates("custom standard");
-  DrawColsCmd->AvailableForStates(Idle);
+  DrawColsCmd->AvailableForStates(G4State_Idle);
 
   DrawTrksCmd = new G4UIcmdWithAString("/dmx/draw/drawTracks",this);
   DrawTrksCmd->SetGuidance("Draw the tracks in the event");
   DrawTrksCmd->SetGuidance("  Choice : none, charged, noscint, all(default)");
   DrawTrksCmd->SetParameterName("drawTrksFlag", false);
   DrawTrksCmd->SetCandidates("none charged noscint all");
-  DrawTrksCmd->AvailableForStates(Idle);
+  DrawTrksCmd->AvailableForStates(G4State_Idle);
 
   DrawHitsCmd = new G4UIcmdWithABool("/dmx/draw/drawHits",this);
   DrawHitsCmd->SetGuidance("Set flag to draw hits in PMT.");
@@ -96,7 +96,7 @@ DMXEventActionMessenger::DMXEventActionMessenger(DMXEventAction* EvAct)
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(Idle);     
+  PrintCmd->AvailableForStates(G4State_Idle);     
 
 }
 

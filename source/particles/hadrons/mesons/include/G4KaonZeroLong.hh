@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4KaonZeroLong.hh,v 1.8 2001/10/28 05:01:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // ------------------------------------------------------------

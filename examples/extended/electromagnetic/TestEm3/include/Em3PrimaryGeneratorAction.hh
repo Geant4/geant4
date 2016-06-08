@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3PrimaryGeneratorAction.hh,v 1.6 2001/10/22 10:58:50 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 

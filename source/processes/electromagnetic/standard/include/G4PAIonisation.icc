@@ -124,7 +124,7 @@ GetMeanFreePath( const G4Track&          trackData,
 
     for(iTkin=0;iTkin<G4PAIonisation::GetBinNumber();iTkin++)
     {
-      if(scaledE < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) // <= ?
+      if(scaledE < GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin)) // <= ?
       {
         break ;
       } 
@@ -143,8 +143,8 @@ GetMeanFreePath( const G4Track&          trackData,
       }
       else
       {
-        E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-        E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+        E1 = GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin - 1) ; 
+        E2 = GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin)     ;
         W  = 1.0/(E2 - E1) ;
         W1 = (E2 - scaledE)*W ;
         W2 = (scaledE - E1)*W ;
@@ -173,7 +173,7 @@ GetFreePath( G4double scaledTkin, G4double charge2 )
 
   for( iTkin = 0 ; iTkin < G4PAIonisation::GetBinNumber() ; iTkin++ )
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ; 
+    if(scaledTkin < GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin))  break ; 
   }
   iPlace = iTkin - 1 ; 
 
@@ -189,8 +189,8 @@ GetFreePath( G4double scaledTkin, G4double charge2 )
     }
     else
     {
-      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+      E1 = GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin)     ;
       W  = 1.0/(E2 - E1) ;
       W1 = (E2 - scaledTkin)*W ;
       W2 = (scaledTkin - E1)*W ;
@@ -219,7 +219,7 @@ GetdEdx( G4double scaledTkin, G4double charge2 )
 
   for( iTkin = 0 ; iTkin < G4PAIonisation::GetBinNumber() ; iTkin++ )
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ; 
+    if(scaledTkin < GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin))  break ; 
   }
   iPlace = iTkin - 1 ; 
 
@@ -235,8 +235,8 @@ GetdEdx( G4double scaledTkin, G4double charge2 )
     }
     else
     {
-      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+      E1 = GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = GetProtonEnergyVector()->GetLowEdgeEnergy(iTkin)     ;
       W  = 1.0/(E2 - E1) ;
       W1 = (E2 - scaledTkin)*W ;
       W2 = (scaledTkin - E1)*W ;

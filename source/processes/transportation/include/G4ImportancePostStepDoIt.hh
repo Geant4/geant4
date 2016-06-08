@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.hh,v 1.4 2002/05/31 08:06:34 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ImportancePostStepDoIt.hh,v 1.6 2002/10/16 16:26:58 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportancePostStepDoIt
@@ -43,13 +43,16 @@ class G4ParticleChange;
 class G4Track;
 class G4Step;
 class G4Nsplit_Weight;
+class G4VTrackTerminator;
+
 
 class G4ImportancePostStepDoIt
 {
 
 public:  // with description
 
-  G4ImportancePostStepDoIt();
+  explicit G4ImportancePostStepDoIt(const G4VTrackTerminator &
+				    TrackTerminator);
     // simply construct
 
   ~G4ImportancePostStepDoIt();
@@ -57,15 +60,18 @@ public:  // with description
   
   void DoIt(const G4Track& aTrack, 
 	    G4ParticleChange *aParticleChange, 
-	    const G4Nsplit_Weight nw);
+	    const G4Nsplit_Weight &nw);
     // Do the PostStepDoIt part common to importance sampling in the 
     // "mass" and "parallel" geometry.
   
 private:
-
   void Split(const G4Track &aTrack,
 	     const G4Nsplit_Weight &nw,
 	     G4ParticleChange *aParticleChange);
+
+  const G4VTrackTerminator &fTrackTerminator;
+
+
 };
 
 #endif

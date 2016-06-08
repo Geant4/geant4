@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.7 2001/11/13 05:13:38 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VParticleChange.hh,v 1.8 2002/11/20 16:52:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -239,7 +239,11 @@ class G4VParticleChange
     void   ClearDebugFlag();
     void   SetDebugFlag();
     G4bool GetDebugFlag() const; 
-        
+
+  protected:
+    const G4double GetAccuracyForWarning() const;
+    const G4double GetAccuracyForException() const;
+
   protected: 
     G4bool   debugFlag;
  
@@ -259,19 +263,3 @@ class G4VParticleChange
 #include "G4VParticleChange.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

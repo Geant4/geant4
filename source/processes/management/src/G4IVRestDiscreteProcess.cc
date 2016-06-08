@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IVRestDiscreteProcess.cc,v 1.6 2001/07/11 10:08:19 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // $Id: 
 // --------------------------------------------------------------

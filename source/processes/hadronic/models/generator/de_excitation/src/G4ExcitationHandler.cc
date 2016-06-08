@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -41,7 +41,7 @@
 
 
 G4ExcitationHandler::G4ExcitationHandler():
-  maxZForFermiBreakUp(8),maxAForFermiBreakUp(16),minEForMultiFrag(4.0*MeV),
+  maxZForFermiBreakUp(1),maxAForFermiBreakUp(1),minEForMultiFrag(4.0*GeV),
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
   MyOwnPhotonEvaporationClass(true)
 {                                                                          
@@ -98,6 +98,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   G4int Z = G4int(theInitialState.GetZ());
   G4FragmentVector* theTempResult = 0; 
   G4Fragment theExcitedNucleus;
+//  G4cerr << "Excitation energy in deexcitation"<<theInitialState.GetExcitationEnergy()<<G4endl;
 
   // Test applicability
   if (A > 4) {
@@ -172,6 +173,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
       }
     theResultList.clear();
   } else {  // if A > 4
+    theResult = new G4FragmentVector();
     theResult->push_back(new G4Fragment(theInitialState));
   }
 
@@ -199,7 +201,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 	for (G4FragmentVector::reverse_iterator ri = theTempResult->rbegin();
 	     ri != theTempResult->rend(); ++ri)
 	  {
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
 	    if ((*ri)->GetA() == 0)
 	      (*ri)->SetCreatorModel(G4String("G4PhotonEvaporation"));
 	    else
@@ -239,7 +241,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 
        
 	
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
 	theHandlerPhoton->SetCreatorModel("G4ExcitationHandler");
 #endif
 	theResultList.push_back( theHandlerPhoton );
@@ -314,7 +316,7 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
 	theNew->SetMomentum(theFragmentMomentum.vect());
 	theNew->SetTotalEnergy(theFragmentMomentum.e());
 	theNew->SetFormationTime((*i)->GetCreationTime());
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
 	theNew->SetCreatorModel((*i)->GetCreatorModel());
 #endif
 	theReactionProductVector->push_back(theNew);

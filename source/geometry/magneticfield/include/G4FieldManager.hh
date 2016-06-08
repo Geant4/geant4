@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.7 2001/11/28 18:44:43 japost Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4FieldManager.hh,v 1.8 2002/07/24 10:43:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //  
 // class G4FieldManager
@@ -120,10 +120,8 @@ class G4FieldManager
      G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
      G4double  fDelta_Intersection_Val;    //  for boundary intersection
 
-     //  Their default values ...  (set in G4PropagatemagField.cc)
-     //
-     static const G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
-     static const G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
+     G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
+     G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
 };
 
 // Our current design envisions that one Field manager is valid for a region of the detector.

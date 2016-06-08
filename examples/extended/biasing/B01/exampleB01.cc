@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.10 2002/05/31 11:46:23 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: exampleB01.cc,v 1.16 2002/11/07 13:50:29 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -31,34 +31,44 @@
 // --------------------------------------------------------------
 // Comments
 //
+// This example intends to show how to use importance sampling and scoring
+// in the mass (tracking) geometry.
+// A simple geometry consisting of a 180 cm high concrete cylinder
+// divided into 18 slabs of 10cm each is created. 
+// Importance values are assigned to the 18 concrete slabs in the
+// detector construction class for simplicity.
+// Pairs of G4GeometryCell and importance values are stored in
+// the importance store.
+// The G4Scorer is used for the scoring. This is a top level
+// class using the frame work provided for scoring.
 // 
+
 // --------------------------------------------------------------
 
-#include "g4std/set"
-#include "g4std/iomanip"
+#include "g4std/iostream"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4RunManager.hh"
+#include "G4UImanager.hh"
 
 #include "B01DetectorConstruction.hh"
 #include "B01PhysicsList.hh"
 #include "B01PrimaryGeneratorAction.hh"
 
-// Files specific for scoring 
-#include "B01Scorer.hh"
-#include "G4Sigma.hh"
-#include "G4MassScoreSampler.hh"
+// Files specific for biasing and scoring
+#include "G4Scorer.hh"
+#include "G4MassGeometrySampler.hh"
+#include "G4IStore.hh"
 
-// helper function for print out
-G4std::string FillString(const G4std::string &name, char c, G4int n, G4bool back = true);
+// a score table
+#include "G4ScoreTable.hh"
+
 
 int main(int argc, char **argv)
 {  
-
   G4std::ostream *myout = &G4cout;
-  G4int numberOfEvent = 1000;
+  G4int numberOfEvent = 100;
 
-  G4String random_status_out_file, random_status_in_file;
   G4long myseed = 345354;
 
   HepRandom::setTheSeed(myseed);
@@ -66,102 +76,31 @@ int main(int argc, char **argv)
   G4RunManager *runManager = new G4RunManager;
   
   // create the detector      ---------------------------
-  runManager->SetUserInitialization(new B01DetectorConstruction);
+  B01DetectorConstruction *detector = new B01DetectorConstruction();
+  runManager->SetUserInitialization(detector);
   //  ---------------------------------------------------
   runManager->SetUserInitialization(new B01PhysicsList);
   runManager->SetUserAction(new B01PrimaryGeneratorAction);
   runManager->Initialize();
 
-  // create scorer and sampler to score neutrons in the detector
-  B01Scorer mScorer;
-  G4MassScoreSampler msm(mScorer, "neutron"); // to be don after 
-  msm.Initialize();                           // runManager->Initialize()
+  // the IStore is filled during detector construction
+  G4IStore &aIstore = *detector->GetIStore();
+
+  // create the importance and scoring sampler for biasing and scoring 
+  // in the tracking world
+
+  G4Scorer scorer; 
+
+  G4MassGeometrySampler mgs("neutron");
+  mgs.PrepareScoring(&scorer);
+  mgs.PrepareImportanceSampling(&aIstore, 0);
+  mgs.Configure();
 
   runManager->BeamOn(numberOfEvent);
 
-  // ======= after running ============================
-
-  // print all the numbers calculated from the scorer
-  *myout << "output mScorer, mass geometry, neutron" << G4endl;
-  *myout << mScorer << G4endl;
-  *myout << "----------------------------------------------"  << G4endl;
-
-  // print some exclusive numbers
-
-  // head line
-  G4int FieldName = 25;
-  G4int FieldValue = 12;
-  G4std::string vname = FillString("Volume name", ' ', FieldName+1);
-  *myout << vname << '|';
-  vname = FillString(" AV E/Track ", ' ', FieldValue+1, false);
-  *myout << vname << '|';
-  vname = FillString(" sigma", ' ', FieldValue+1);
-  *myout << vname << '|';
-  vname = FillString("Coll_Ent.Tr", ' ', FieldValue+1, false);
-  *myout << vname << '|';
-  *myout << G4endl;
-
-
-
-  const G4PMapPtkTallys &m = mScorer.GetMapPtkTallys();
-  for (G4PMapPtkTallys::const_iterator mit = m.begin();
-       mit != m.end(); mit++) {
-    G4PTouchableKey ptk = (*mit).first; // get a key identifying a volume
-    G4PMapNameTally mtallies = (*mit).second; // get tallies of the volume
-    G4String name(ptk.fVPhysiclaVolume->GetName()); // print volume name
-    G4int nEnteringTracks = 0;
-    G4double colli_EnteringTrack = 0;
-    G4double meanTrackEnergy = 0, sigmaTrackEnergy = 0;
-    for (G4PMapNameTally::iterator mt = mtallies.begin();
-	 mt != mtallies.end(); mt++) {
-      G4String tmp((*mt).first);
-      if (tmp == "HistorysEntering") {
-	nEnteringTracks = G4int((*mt).second.GetXsum());
-      }
-      if (tmp == "EnergyEnteringHistory") {
-	meanTrackEnergy =  (*mt).second.GetMean();
-	sigmaTrackEnergy = (*mt).second.GetSigma();
-      }
-      if (tmp == "Collisions") {
-	if (!nEnteringTracks) {
-	  G4cout << "exampleB01: Error nEnteringTracks=0" <<G4endl;
-	}
-	else {
-	  colli_EnteringTrack =  (*mt).second.GetXsum() / nEnteringTracks;
-	}
-      }
-    }
-
-
-    // print values
-
-    G4std::string fname = FillString(name, '.', FieldName);
-    *myout << fname << " |";
-    *myout << G4std::setw(FieldValue) << meanTrackEnergy << " |"; 
-    *myout << G4std::setw(FieldValue) << sigmaTrackEnergy << " |";
-    *myout << G4std::setw(FieldValue) << colli_EnteringTrack << " |";
-    *myout << G4endl;
-  }
+  // print a table of the scores
+  G4ScoreTable sp(&aIstore);
+  sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
 
   return 0;
-}
-
-G4std::string FillString(const G4std::string &name, char c, G4int n, bool back)
-{
-  G4std::string fname;
-  G4int k = n - name.size();
-  if (k > 0) {
-    if (back) {
-      fname = name;
-      fname += G4std::string(k,c);
-    }
-    else {
-      fname = G4std::string(k,c);
-      fname += name;
-    }
-  }
-  else {
-    fname = name;
-  }
-  return fname;
 }

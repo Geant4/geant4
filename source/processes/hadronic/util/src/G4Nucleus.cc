@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -280,6 +280,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
       pnBlackTrackEnergy *= 1.0 - 0.5*G4UniformRand();
       dtaBlackTrackEnergy *= 1.0 - 0.5*G4UniformRand();
     }
+//    G4cout << "EvaporationEffects "<<kineticEnergy<<" "
+//           <<pnBlackTrackEnergy+dtaBlackTrackEnergy<<endl;
     return (pnBlackTrackEnergy+dtaBlackTrackEnergy)*GeV;
   }
  

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Fragment.cc,v 1.14 2002/06/10 13:27:54 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Fragment.cc,v 1.16 2002/12/12 19:17:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -42,7 +42,7 @@ G4Fragment::G4Fragment() :
   numberOfCharged(0),
   theParticleDefinition(0),
   theCreationTime(0.0)
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST 
   ,theCreatorModel("No name")
 #endif
 {
@@ -62,7 +62,7 @@ G4Fragment::G4Fragment(const G4Fragment &right)
    numberOfCharged = right.numberOfCharged;
    theParticleDefinition = right.theParticleDefinition;
    theCreationTime = right.theCreationTime;
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST 
    theCreatorModel = right.theCreatorModel;
 #endif
 }
@@ -82,7 +82,7 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
   numberOfCharged(0),
   theParticleDefinition(0),
   theCreationTime(0.0)
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
   ,theCreatorModel("No name")
 #endif
 {
@@ -111,7 +111,7 @@ G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * a
   numberOfCharged(0),
   theParticleDefinition(aParticleDefinition),
   theCreationTime(0.0)
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST 
   ,theCreatorModel("No name")
 #endif
 {
@@ -134,7 +134,7 @@ const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     numberOfCharged = right.numberOfCharged;
     theParticleDefinition = right.theParticleDefinition;
     theCreationTime = right.theCreationTime;
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST 
     theCreatorModel = right.theCreatorModel;
 #endif
   }

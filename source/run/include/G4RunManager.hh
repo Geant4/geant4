@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.22 2001/11/23 16:20:30 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4RunManager.hh,v 1.26 2002/11/27 17:55:07 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -80,11 +80,13 @@ class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
 class G4Run;
+class G4ExceptionHandler;
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include "g4std/vector"
+////////#include <signal.h>
 
 class G4RunManager
 {
@@ -92,6 +94,11 @@ class G4RunManager
     static G4RunManager* GetRunManager();
     //  Static method which returns the singleton pointer of G4RunManager or
     // its derived class.
+  public:
+////////    static G4int RegisterInteruption(int interuptionSignal = SIGQUIT);
+    //  Static method to define the interuption key
+////////    static void ReceiveInteruption(int sig);
+    //  Static method to accept interuption signal
 
   private:
     static G4RunManager* fRunManager;
@@ -129,10 +136,18 @@ class G4RunManager
     //  Usually, this method is invoked from InitializeGeometry() protected method
     // of this class. But, in case all of geometry has already created and kept in
     // the ODBMS, the pointer to the world physical volume can be set by this method.
-    virtual void AbortRun();
+    virtual void ResetNavigator() const;
+    // Resets state of navigator for tracking, needed for geometry updates.
+    virtual void AbortRun(G4bool softAbort=false);
     //  This method safely aborts the current event loop even if an event is in progress.
     // This method is available for Geant4 states of GeomClosed and EventProc. The state
     // will be changed to Idle, so that another event loop can be done.
+    //  If softAbort is true, the event loop is aborted after processing the current
+    // event, while the current event is aborted if it is false.
+    virtual void AbortEvent();
+    //  This method aborts the currently processing event, remaining events in the
+    // current event loop will be processed. This method is available only for
+    // EventProc state.
 
   protected: // with description
 
@@ -190,6 +205,7 @@ class G4RunManager
 
   private:
     G4RunMessenger* runMessenger;
+    G4ExceptionHandler* defaultExceptionHandler;
 
   protected:
     G4bool geometryInitialized;

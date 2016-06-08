@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DAWNFILE.cc,v 1.9 2001/07/27 22:32:59 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE factory.

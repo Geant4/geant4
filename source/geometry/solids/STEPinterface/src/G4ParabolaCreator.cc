@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParabolaCreator.cc,v 1.3 2001/07/11 10:00:11 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParabolaCreator.cc,v 1.4 2002/11/21 16:49:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -46,6 +46,11 @@ G4ParabolaCreator::G4ParabolaCreator()
 }
 
 G4ParabolaCreator::~G4ParabolaCreator() {}
+
+G4ParabolaCreator G4ParabolaCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4ParabolaCreator::CreateG4Geometry(STEPentity& Ent)
 {

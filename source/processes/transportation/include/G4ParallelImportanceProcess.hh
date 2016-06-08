@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.hh,v 1.5 2002/05/31 10:16:01 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelImportanceProcess.hh,v 1.8 2002/10/16 16:26:58 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelImportanceProcess
@@ -40,11 +40,12 @@
 
 #include "G4ParallelTransport.hh"
 #include "G4ImportancePostStepDoIt.hh"
+#include "G4VTrackTerminator.hh"
 
 class G4VImportanceSplitExaminer;
 class G4Nsplit_Weight;
 
-class G4ParallelImportanceProcess : public G4ParallelTransport
+class G4ParallelImportanceProcess : public G4ParallelTransport, public G4VTrackTerminator
 {
 
 public:  // with description
@@ -52,25 +53,39 @@ public:  // with description
   G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
 			      G4VPGeoDriver &pgeodriver, 
 			      G4VParallelStepper &aStepper,
+			      const G4VTrackTerminator *TrackTerminator,
 			      const G4String &aName = "ParallelImportanceProcess");  
     // initialise G4ParallelTransport and members
 
-  G4VParticleChange *PostStepDoIt(const G4Track&,
-				  const G4Step&);
+  virtual ~G4ParallelImportanceProcess();
+
+  virtual G4VParticleChange *PostStepDoIt(const G4Track&,
+					  const G4Step&);
     // do the "parallel transport" and importance sampling.
+
+  virtual void KillTrack() const;
+    // used in case no scoring process follows that does the killing
+
+  virtual const G4String &GetName() const;
+
 
 private:
 
   G4ParallelImportanceProcess(const G4ParallelImportanceProcess &);
   G4ParallelImportanceProcess &operator=(const G4ParallelImportanceProcess &);
   
-  void Error(const G4String &m);
+  virtual void Error(const G4String &m);
 
 private:
 
+  const G4VTrackTerminator *fTrackTerminator;
   G4ParticleChange *fParticleChange;
   const G4VImportanceSplitExaminer &fImportanceSplitExaminer;  
   G4ImportancePostStepDoIt fImportancePostStepDoIt;
 };
 
 #endif
+
+
+
+

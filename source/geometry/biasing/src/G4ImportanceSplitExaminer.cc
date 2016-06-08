@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSplitExaminer.cc,v 1.1 2002/05/31 08:07:47 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ImportanceSplitExaminer.cc,v 1.6 2002/10/22 13:18:47 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -32,7 +32,6 @@
 // ----------------------------------------------------------------------
 
 #include "G4ImportanceSplitExaminer.hh"
-#include "G4ImportanceFinder.hh"
 #include "G4VParallelStepper.hh"
 #include "G4VImportanceAlgorithm.hh"
 
@@ -42,19 +41,19 @@ G4ImportanceSplitExaminer(const G4VImportanceAlgorithm &aIalg,
 		    const G4VIStore &istore)
  : fIalgorithm(aIalg),
    fPStepper(astepper),
-   fIfinder(*(new G4ImportanceFinder(istore)))
+   fIfinder(istore)
 {}
 
 G4ImportanceSplitExaminer::~G4ImportanceSplitExaminer()
-{
-  delete &fIfinder;
-}
+{}
+
   
 G4Nsplit_Weight G4ImportanceSplitExaminer::Examine(G4double w) const
 {
-  G4PStep pstep = fPStepper.GetPStep();
-  return fIalgorithm.
-    Calculate(fIfinder.GetIPre_over_IPost(pstep.fPreTouchableKey,
-					  pstep.fPostTouchableKey), 
+  G4GeometryCellStep pstep = fPStepper.GetPStep();
+  G4Nsplit_Weight nw = fIalgorithm.
+    Calculate(fIfinder.GetImportance(pstep.GetPreGeometryCell()),
+	      fIfinder.GetImportance(pstep.GetPostGeometryCell()), 
 	      w);
+  return nw;
 }

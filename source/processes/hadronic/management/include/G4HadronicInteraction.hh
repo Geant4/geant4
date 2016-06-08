@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.8 2001/11/26 16:28:18 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4HadronicInteraction.hh,v 1.10 2002/12/12 19:16:52 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
  // Hadronic Interaction  abstract base class
  // This class is the base class for the model classes.
@@ -67,7 +67,9 @@
     }
     
     virtual ~G4HadronicInteraction()
-    { }
+    {
+      G4HadronicInteractionRegistry::RemoveMe(this);
+    }
     
  private:
     

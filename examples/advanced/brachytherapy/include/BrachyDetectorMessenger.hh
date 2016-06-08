@@ -21,8 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorMessenger.hh,v 1.2 2002/06/18 22:24:22 guatelli Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+//    *****************************************
+//    *                                       *
+//    *      BrachyDetectrorMessenger.hh      *
+//    *                                       *
+//    *****************************************
+//
+// $Id: BrachyDetectorMessenger.hh,v 1.4 2002/11/18 15:18:36 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -36,6 +42,8 @@
 #include "G4UImessenger.hh"
 
 class BrachyDetectorConstruction;
+class BrachyFactoryIr;
+class BrachyRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
@@ -46,19 +54,24 @@ class G4UIcmdWithoutParameter;
 
 class BrachyDetectorMessenger: public G4UImessenger
 {
-public:
-  BrachyDetectorMessenger(BrachyDetectorConstruction* );
-  ~BrachyDetectorMessenger();
+  public:
+    BrachyDetectorMessenger(BrachyDetectorConstruction* );
+   ~BrachyDetectorMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  BrachyDetectorConstruction* Detector;
-    
-  G4UIdirectory*             detDir;
-  G4UIcmdWithAString*        AbsMaterCmd;
-    
-  G4UIcmdWithoutParameter*   UpdateCmd;
+    void SetNewValue(G4UIcommand*, G4String);
+  
+  private:
+
+BrachyDetectorConstruction*  Detector;
+G4UIcmdWithAString*        selDetCmd;
+G4UIcmdWithAString*        switchCmd;
+G4UIcmdWithAString*        cleanCmd;
+G4UIdirectory*             detDir;
+G4UIdirectory*           mydetDir;
+G4UIcmdWithAString*        AbsMaterCmd;
+G4int  detectorChoice; 
+G4int flag;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

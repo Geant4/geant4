@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NuclearFermiDensity.cc,v 1.9 2002/04/24 13:10:50 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4NuclearFermiDensity.cc,v 1.11 2002/12/12 19:17:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4NuclearFermiDensity.hh"
@@ -39,19 +39,5 @@ G4NuclearFermiDensity::G4NuclearFermiDensity(G4double anA, G4double aZ)
 }
 
 G4NuclearFermiDensity::~G4NuclearFermiDensity() {}
-    
-G4double G4NuclearFermiDensity::GetRelativeDensity(const G4ThreeVector & aPosition) const
-{
-	return 1./(1.+exp((aPosition.mag()-theR)/a));
-}
-    
-G4double G4NuclearFermiDensity::GetRadius(const G4double maxRelativeDensity) const
-{
-     return (maxRelativeDensity>0 && maxRelativeDensity <= 1 ) ?
-           (theR + a*log((1-maxRelativeDensity+exp(-1*theR/a))/maxRelativeDensity))  : DBL_MAX;
-}
+        
 
-G4double   G4NuclearFermiDensity::GetDeriv(const G4ThreeVector & aPosition) const
-{
-     return -exp((aPosition.mag()-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
-}

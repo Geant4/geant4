@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.cc,v 1.3 2002/04/09 16:23:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ImportanceFinder.cc,v 1.9 2002/11/04 10:43:07 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,7 +35,7 @@
 #include "G4VParallelStepper.hh"
 #include "G4ImportanceFinder.hh"
 #include "G4VIStore.hh"
-#include "G4PStepStream.hh"
+#include "G4GeometryCellStepStream.hh"
 
 G4ImportanceFinder::G4ImportanceFinder(const G4VIStore &aIStore)
   : fIStore(aIStore)
@@ -45,19 +45,16 @@ G4ImportanceFinder::~G4ImportanceFinder()
 {}
 
 G4double
-G4ImportanceFinder::GetIPre_over_IPost(const G4PTouchableKey &prekey,
-		                       const G4PTouchableKey &postkey) const
+G4ImportanceFinder::GetImportance(const G4GeometryCell &gCell) const
 {  
-  G4double  ipre = fIStore.GetImportance(prekey);
-  G4double ipost = fIStore.GetImportance(postkey);
-
-  if (ipre <= 0 || ipost <=0 ) {
+  G4double  imp = fIStore.GetImportance(gCell);
+  // importances < 0 are not allowed
+  if (imp < 0) {
     G4std::ostrstream os;
-    os << "ipre <= 0 || ipost <=0, preTouchableKey = " << prekey 
-       << ", postTouchableKey = " << postkey << '\0';
+    os << "imp < 0: GeometryCell = " << gCell  << '\0';
     Error(os.str());
   }
-  return ipre/ipost;
+  return imp;
 }
 
 void G4ImportanceFinder::Error(const G4String &m) const

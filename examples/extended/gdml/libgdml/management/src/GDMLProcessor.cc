@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GDMLProcessor.cc,v 1.2 2002/06/03 12:09:31 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: GDMLProcessor.cc,v 1.3 2002/08/19 07:35:50 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -36,6 +36,8 @@
 extern "C" void GDMLProcessLibLoad();
 extern "C" void GDMLSubscriberLibLoad();
 
+const double defaultTemp  = STP_Temperature;
+const double defaultPress = STP_Pressure;
 
 static GDMLProcessor* sProcessor = 0;
 

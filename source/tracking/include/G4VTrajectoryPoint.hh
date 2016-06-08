@@ -21,27 +21,72 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectoryPoint.hh,v 1.5 2001/07/11 10:08:42 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VTrajectoryPoint.hh,v 1.9 2002/10/28 11:10:58 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
-
-// class description
-//  The base class for the trajectory class
+//
+//---------------------------------------------------------------
+//
+// G4VTrajectoryPoint.hh
+//
+// class description:
+//   This class is the abstract base class which represents the point
+//   which consists of a trajectory.
+//   It includes information of a the point.
+//
+// ---------------------------------------------------------------
 
 #ifndef G4VTrajectoryPoint_h
 #define G4VTrajectoryPoint_h 1
 
+#include "globals.hh"
+#include "g4std/vector"
+#include "g4std/map"
+#include "G4ThreeVector.hh"
+
+class G4AttDef;
+class G4AttValue;
+
 class G4VTrajectoryPoint
 {
-   public:
+ public: // with description
 
+ // Constructor/Destructor
    G4VTrajectoryPoint() {;}
    virtual ~G4VTrajectoryPoint() {;}
 
+ // Operators
    inline int operator==(const G4VTrajectoryPoint& right) const
-   { return (this==&right); }
-};
+   { return (this==&right); };
 
+ // Get/Set functions
+   virtual const G4ThreeVector GetPosition() const = 0;
+
+ // Get method for a vector of auxiliary points
+   virtual const G4std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
+   { return 0; }
+   // If implemented by a derived class, returns a pointer to a list
+   // of auxiliary points, e.g., intermediate points used during the
+   // calculation of the step that can be used for drawing a smoother
+   // trajectory.  The user must test the validity of this pointer.
+
+ // Get method for HEPRep style attribute definitions
+   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const
+   { return 0; }
+   // If implemented by a derived class, returns a pointer to a map of
+   // attribute definitions for the attribute values below.  The user
+   // must test the validity of this pointer.
+
+ // Get method for HEPRep style attribute values
+   virtual G4std::vector<G4AttValue>* CreateAttValues() const
+   { return 0; }
+   // If implemented by a derived class, returns a pointer to a list
+   // of attribute values suitable, e.g., for picking.  Each must
+   // refer to an attribute definition in the above map; its name is
+   // the key.  The user must test the validity of this pointer and
+   // delete the list after use.
+
+};
 
 #endif
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsbool.cc,v 1.1 2001/11/08 16:08:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by I.Hrivnacova, 13.10.01
 

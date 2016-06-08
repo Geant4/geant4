@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.icc,v 1.7 2001/07/11 10:00:40 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Integrator.icc,v 1.9 2002/12/05 15:39:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Implementation of G4Integrator methods. 
 //
@@ -372,6 +372,8 @@ G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b, G4int nLegen
       integral += fWeight[i]*( (typeT.*f)(xMean + dx) + 
                                (typeT.*f)(xMean - dx)    ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral *= xDiff ;
 } 
 
@@ -443,6 +445,9 @@ Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre)
       dx = xDiff*fAbscissa[i] ;
       integral += fWeight[i]*( (*f)(xMean + dx) + (*f)(xMean - dx)    ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
+
    return integral *= xDiff ;
 } 
 
@@ -756,6 +761,8 @@ G4Integrator<T,F>::Chebyshev( T& typeT, F f, G4double a,
       dx = xDiff*fAbscissa[i] ;
       integral += fWeight[i]*(typeT.*f)(xMean + dx)  ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral *= xDiff ;
 }
 
@@ -799,6 +806,8 @@ G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double),
       dx = xDiff*fAbscissa[i] ;
       integral += fWeight[i]*(*f)(xMean + dx)  ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral *= xDiff ;
 }
 
@@ -821,7 +830,7 @@ G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha, G4int nLaguerre )
    const G4double tolerance = 1.0e-10 ;
    const G4int maxNumber = 12 ;
    G4int i, j, k ;
-   G4double newton, newton1, temp1, temp2, temp3, temp, cofi ;
+   G4double newton=0., newton1, temp1, temp2, temp3, temp, cofi ;
    G4double integral = 0.0 ;
 
    G4int fNumber = nLaguerre ;
@@ -832,7 +841,7 @@ G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha, G4int nLaguerre )
    {
       if(i == 1)
       {
-newton = (1.0 + alpha)*(3.0 + 0.92*alpha)/(1.0 + 2.4*fNumber + 1.8*alpha) ;
+	 newton = (1.0 + alpha)*(3.0 + 0.92*alpha)/(1.0 + 2.4*fNumber + 1.8*alpha) ;
       }
       else if(i == 2)
       {
@@ -841,7 +850,7 @@ newton = (1.0 + alpha)*(3.0 + 0.92*alpha)/(1.0 + 2.4*fNumber + 1.8*alpha) ;
       else
       {
 	 cofi = i - 2 ;
-newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
+	 newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
 	           (newton - fAbscissa[i-3])/(1.0 + 0.3*alpha) ;
       }
       for(k=1;k<=maxNumber;k++)
@@ -880,6 +889,8 @@ newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
    {
       integral += fWeight[i]*(typeT.*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -906,7 +917,7 @@ G4Integrator<T,F>::Laguerre( G4double (*f)(G4double),
    const G4double tolerance = 1.0e-10 ;
    const G4int maxNumber = 12 ;
    G4int i, j, k ;
-   G4double newton, newton1, temp1, temp2, temp3, temp, cofi ;
+   G4double newton=0., newton1, temp1, temp2, temp3, temp, cofi ;
    G4double integral = 0.0 ;
 
    G4int fNumber = nLaguerre ;
@@ -965,6 +976,8 @@ newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
    {
       integral += fWeight[i]*(*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1015,7 +1028,7 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite)
    
    G4int i, j, k ;
    G4double integral = 0.0 ;
-   G4double newton, newton1, temp1, temp2, temp3, temp ;
+   G4double newton=0., newton1, temp1, temp2, temp3, temp ;
 
    G4double piInMinusQ = pow(pi,-0.25) ;    // 1.0/sqrt(sqrt(pi)) ??
 
@@ -1082,6 +1095,8 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite)
      integral += fWeight[i]*( (typeT.*f)(fAbscissa[i]) + 
                               (typeT.*f)(-fAbscissa[i])   ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1108,7 +1123,7 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    
    G4int i, j, k ;
    G4double integral = 0.0 ;
-   G4double newton, newton1, temp1, temp2, temp3, temp ;
+   G4double newton=0., newton1, temp1, temp2, temp3, temp ;
 
    G4double piInMinusQ = pow(pi,-0.25) ;    // 1.0/sqrt(sqrt(pi)) ??
 
@@ -1174,6 +1189,8 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    {
      integral += fWeight[i]*( (*f)(fAbscissa[i]) + (*f)(-fAbscissa[i])   ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1194,8 +1211,8 @@ G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha,
   const G4double tolerance = 1.0e-12 ;
   const G4double maxNumber = 12 ;
   G4int i, k, j ;
-  G4double alphaBeta, alphaReduced, betaReduced, root1, root2, root3 ;
-  G4double a, b, c, newton1, newton2, newton3, newton, temp, root, rootTemp ;
+  G4double alphaBeta, alphaReduced, betaReduced, root1=0., root2=0., root3=0. ;
+  G4double a, b, c, newton1, newton2, newton3, newton, temp, root=0., rootTemp ;
 
   G4int     fNumber   = nJacobi ;
   G4double* fAbscissa = new G4double[fNumber] ;
@@ -1291,6 +1308,8 @@ G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha,
    {
       integral += fWeight[i]*(typeT.*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1317,8 +1336,8 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
   const G4double tolerance = 1.0e-12 ;
   const G4double maxNumber = 12 ;
   G4int i, k, j ;
-  G4double alphaBeta, alphaReduced, betaReduced, root1, root2, root3 ;
-  G4double a, b, c, newton1, newton2, newton3, newton, temp, root, rootTemp ;
+  G4double alphaBeta, alphaReduced, betaReduced, root1=0., root2=0., root3=0. ;
+  G4double a, b, c, newton1, newton2, newton3, newton, temp, root=0., rootTemp ;
 
   G4int     fNumber   = nJacobi ;
   G4double* fAbscissa = new G4double[fNumber] ;
@@ -1414,6 +1433,8 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
    {
       integral += fWeight[i]*(*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 

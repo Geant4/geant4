@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.9 2001/09/17 07:40:32 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.11 2002/12/11 15:58:02 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996
@@ -91,6 +91,12 @@ public:
     G4VSceneHandler::AddThis (polyhedra);
   }
   void AddThis ( const G4VSolid& solid  );
+  void AddThis ( const G4VTrajectory& traj) {
+    G4VSceneHandler::AddThis(traj);
+  }
+  void AddThis ( const G4VHit& hit) {
+    G4VSceneHandler::AddThis(hit);
+  }
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.
 
@@ -239,6 +245,9 @@ private:
   G4bool		flag_saving_g4_prim ;	
 
   const int		COMMAND_BUF_SIZE    ;
+
+  G4int                 fPrec, fPrec2 ;
+
 };
 
 #endif

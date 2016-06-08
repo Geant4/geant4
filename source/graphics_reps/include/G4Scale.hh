@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.hh,v 1.3 2001/09/10 10:28:24 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Scale.hh,v 1.5 2002/11/27 12:24:01 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  21st July 2001.
@@ -75,14 +75,16 @@ public: // With description
   G4double        GetYmid() const;
   G4double        GetZmid() const;
 
-  static G4String GuidanceString;
+  static const G4String& GetGuidanceString();
 
 private:
+
   G4double fLength;
   G4String fAnnotation;
   Direction fDirection;
   G4bool fAutoPlacing;
   G4double fXmid, fYmid, fZmid;
+  static const G4String GuidanceString;
 };
 
 #include "G4Scale.icc"

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4DetectorConstruction.cc,v 1.2 2001/07/11 09:58:11 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in

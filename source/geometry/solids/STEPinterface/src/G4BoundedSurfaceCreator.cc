@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundedSurfaceCreator.cc,v 1.6 2001/07/11 10:00:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BoundedSurfaceCreator.cc,v 1.7 2002/11/21 16:49:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BoundedSurfaceCreator
@@ -50,6 +50,11 @@ G4BoundedSurfaceCreator::G4BoundedSurfaceCreator()
 }
 
 G4BoundedSurfaceCreator::~G4BoundedSurfaceCreator() {}
+
+G4BoundedSurfaceCreator G4BoundedSurfaceCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {

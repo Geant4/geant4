@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2002/03/26 16:46:08 dressel Exp $
+# $Id: GNUmakefile,v 1.7 2002/11/07 13:47:59 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,6 +13,8 @@ endif
 
 .PHONY: all
 all: lib bin
-CPPFLAGS += 
+
+
+CPPFLAGS +=
 
 include $(G4INSTALL)/config/binmake.gmk

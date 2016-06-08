@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.8 2001/11/28 17:54:46 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em3RunActionMessenger.cc,v 1.10 2002/12/12 11:19:39 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -42,7 +42,7 @@
 Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
 :Em3Run(run)
 {    
-  HistoCmd = new G4UIcommand("/run/setHisto",this);
+  HistoCmd = new G4UIcommand("/testem/run/setHisto",this);
   HistoCmd->SetGuidance("Set histo Edep/Ebeam in absorber k");
   HistoCmd->SetGuidance("  histo=absor number : from 0 to NbOfAbsor-1");
   HistoCmd->SetGuidance("  number of bins; Emin/Ebeam; Emax/Ebeam");
@@ -67,7 +67,7 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
   VmaxPrm->SetParameterRange("Vmax>=0.&&Vmax<=1.");
   HistoCmd->SetParameter(VmaxPrm);  
   //
-  HistoCmd->AvailableForStates(Idle);    
+  HistoCmd->AvailableForStates(G4State_Idle);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

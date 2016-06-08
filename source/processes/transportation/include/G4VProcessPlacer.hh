@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer.hh,v 1.4 2002/05/24 08:17:19 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VProcessPlacer.hh,v 1.7 2002/10/16 16:26:58 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VProcessPlacer
@@ -46,8 +46,8 @@ class G4VProcessPlacer
 
 public:  // with description
 
-  G4VProcessPlacer(const G4String &particlename){}
-  virtual ~G4VProcessPlacer(){}
+  G4VProcessPlacer();
+  virtual ~G4VProcessPlacer();
 
   virtual void AddProcessAsLastDoIt(G4VProcess *process) = 0;
     // place a post step do it process such that the 
@@ -59,7 +59,7 @@ public:  // with description
     // PostStepDoIt function is called second
     // THE ORDER CHANGES BY SUBSEQUENT CALLS         
 
-  void RemoveProcess(G4VProcess *process);
+  virtual void RemoveProcess(G4VProcess *process) = 0;
     // removes a given process 
 
 

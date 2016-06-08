@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeometryCreator.hh,v 1.7 2001/07/11 10:00:05 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryCreator

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -33,6 +33,18 @@
 //      Creation date: 23 October 1998
 //
 //      Modifications: 
+//
+//        8 March 2002,  Fan Lei (flei@space.qinetiq.com)
+//              added 
+//              1) SetRDM () to switch on/off IC process
+//              2) GetOrbitNumber () to return the CE oribit number
+//              3) GetBondEnergy() for the converted e-
+//              4) IsaGamma() to separate CE from gamma
+//
+//        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
+//              i) added G4int _nucleusZ initialise it through the constructor
+//              ii) modified SelectGamma() to allow the generation of conversion electrons      
+//              iii) added #include G4AtomicShells.hh
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
@@ -52,6 +64,7 @@ public:
 
   // Constructor
   G4DiscreteGammaTransition(const G4NuclearLevel& level);
+  G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z);
 
   // Destructor
   ~G4DiscreteGammaTransition();
@@ -60,20 +73,30 @@ public:
 
 public:
 
-//--  virtual G4double GammaEnergy();
-//--  virtual G4double GetEnergyTo() const;
   virtual void SetEnergyFrom(const G4double energy);
   virtual G4double GetGammaEnergy();
   virtual G4double GetGammaCreationTime();
   virtual void SelectGamma();
-  
+
+  void SetICM(G4bool ic) { _icm = ic;};
+  G4double GetBondEnergy () {return _bondE;};
+  G4int GetOrbitNumber () {return _orbitE;};
+  G4bool IsAGamma() {return _aGamma;};
+ 
 private:
+  
+  G4int _nucleusZ;
+  G4int _orbitE;
+  G4double _bondE;
+  G4bool _aGamma;
+  G4bool _icm;
+
   G4double _gammaEnergy;
   G4NuclearLevel _level;     
   G4double _excitation;
   G4double _gammaCreationTime;
-
 };
 
 
 #endif
+

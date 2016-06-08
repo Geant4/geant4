@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis2Placement2dCreator.cc,v 1.3 2001/07/11 10:00:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Axis2Placement2dCreator.cc,v 1.4 2002/11/21 16:49:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4Axis2Placement2dCreator
@@ -45,6 +45,11 @@ G4Axis2Placement2dCreator::G4Axis2Placement2dCreator()
 }
 
 G4Axis2Placement2dCreator::~G4Axis2Placement2dCreator() {}
+
+G4Axis2Placement2dCreator G4Axis2Placement2dCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4Axis2Placement2dCreator::CreateG4Geometry(STEPentity& Ent)
 {

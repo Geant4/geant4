@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.14 2001/11/07 10:39:46 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Trajectory.hh,v 1.17 2002/10/28 11:10:57 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 //---------------------------------------------------------------
@@ -98,9 +98,11 @@ public: // with description
    { return PDGCharge; }
    inline G4int GetPDGEncoding() const
    { return PDGEncoding; }
+   inline G4ThreeVector GetInitialMomentum() const
+   { return initialMomentum; }
 
 // Other member functions
-   virtual void ShowTrajectory() const;
+   virtual void ShowTrajectory(G4std::ostream& os=G4cout) const;
    virtual void DrawTrajectory(G4int i_mode=0) const;
    virtual void AppendStep(const G4Step* aStep);
    virtual int GetPointEntries() const { return positionRecord->size(); }
@@ -109,6 +111,9 @@ public: // with description
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
    G4ParticleDefinition* GetParticleDefinition();
+
+   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const;
+   virtual G4std::vector<G4AttValue>* CreateAttValues() const;
 
 //---------
    private:
@@ -120,6 +125,7 @@ public: // with description
   G4int                     PDGEncoding;
   G4double                  PDGCharge;
   G4String                  ParticleName;
+  G4ThreeVector             initialMomentum;
 
 };
 

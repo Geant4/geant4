@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.cc,v 1.7 2001/11/07 13:15:18 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VSteppingVerbose.cc,v 1.9 2002/12/04 23:00:51 tsasaki Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //  
 //---------------------------------------------------------------
@@ -44,8 +44,17 @@
 #include "G4SteppingManager.hh"
 
 G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
-G4VSteppingVerbose::G4VSteppingVerbose(){;}
+G4VSteppingVerbose::G4VSteppingVerbose() :verboseLevel(0){;}
 G4VSteppingVerbose::~G4VSteppingVerbose(){;}
+void G4VSteppingVerbose::SetInstance(G4VSteppingVerbose* Instance)
+    {
+      fInstance = Instance;
+    }
+G4VSteppingVerbose* G4VSteppingVerbose::GetInstance()
+    {
+      return fInstance;
+    }
+
 //////////////////////////////////////////////////////////////////
 void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)
 //////////////////////////////////////////////////////////////////
@@ -98,9 +107,6 @@ void G4VSteppingVerbose::CopyState()
    MAXofAtRestLoops = fManager->GetMAXofAtRestLoops();
    MAXofAlongStepLoops = fManager->GetMAXofAlongStepLoops();
    MAXofPostStepLoops = fManager->GetMAXofPostStepLoops();
-
-   currentMinimumStep = fManager->GetcurrentMinimumStep();
-   numberOfInteractionLengthLeft = fManager->GetnumberOfInteractionLengthLeft();
 
    fAtRestDoItProcTriggered = fManager->GetfAtRestDoItProcTriggered();
    fAlongStepDoItProcTriggered = fManager->GetfAlongStepDoItProcTriggered();

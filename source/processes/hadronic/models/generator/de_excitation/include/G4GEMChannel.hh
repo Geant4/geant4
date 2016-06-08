@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh,v 1.2 2002/06/07 15:30:54 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GEMChannel.hh,v 1.3 2002/11/12 02:10:57 larazb Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -44,7 +44,6 @@
 #include "G4IonTable.hh"
 
 //#define debug
-//#define pctest
 
 class G4GEMChannel : public G4VEvaporationChannel
 {

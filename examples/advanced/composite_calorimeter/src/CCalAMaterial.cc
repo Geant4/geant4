@@ -1,0 +1,126 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalAMaterial.cc
+// Description: Specialised class to store information to make G4Material 
+//              from atomic proportion
+///////////////////////////////////////////////////////////////////////////////
+#include "CCalAMaterial.hh"
+
+CCalAMaterial::CCalAMaterial(G4String mat, G4double dens, int nconst, 
+			     CCalAMaterial** constituents, G4double* weights) {
+  name=mat;
+  nElem=0;
+  int i=0;
+  for (i=0; i<nconst; i++)
+    nElem += (constituents[i]->NElements());
+
+  theElements = new G4String[nElem];
+  theWeights  = new double[nElem];
+
+  double factor;
+  int nelem=0;
+  for (i=0; i<nconst; i++) {
+    factor=constituents[i]->Aeff();
+    for (int j=0; j<constituents[i]->NElements(); j++) {
+      theElements[nelem] = constituents[i]->Element(j);
+      theWeights[nelem]  = constituents[i]->Weight(j)* weights[i] * factor;
+      nelem++;
+    }
+  }
+
+  if (dens>0) 
+    density=dens;
+  else //Let's compute density
+    computeDensity(nconst,(CCalMaterial**)constituents, weights, FTVolume);
+
+  computeAeff(nconst, constituents, weights);
+  closeMaterial();
+}
+
+CCalAMaterial::CCalAMaterial(G4String elemat, double Aeff, double dens) {
+  name=elemat;
+  density=dens;
+  nElem=1;
+  theElements = new G4String[nElem];
+  theWeights  = new double[nElem];
+  
+  theElements[0] = elemat;
+  theWeights[0]  = 1;
+
+  aEff=Aeff;
+}
+
+CCalAMaterial::~CCalAMaterial() {
+  //The base class destructor is called?
+}
+
+CCalAMaterial::CCalAMaterial(const CCalAMaterial& mat){
+  name    = mat.name;
+  density = mat.density;
+  nElem   = mat.nElem;
+  theElements = new G4String[nElem];
+  theWeights  = new double[nElem];
+  for (int i=0; i<nElem; i++){
+    theElements[i]=mat.theElements[i];
+    theWeights[i]=mat.theWeights[i];
+  }
+}
+
+CCalAMaterial& CCalAMaterial::operator=(const CCalAMaterial& mat){
+  if(theElements)
+    delete[] theElements;
+  if(theWeights)
+    delete[] theWeights;
+
+  name=mat.name;
+  density=mat.density;
+  nElem=mat.nElem;
+  aEff=mat.aEff;
+  
+  theElements = new G4String[nElem];
+  theWeights  = new double[nElem];
+  for (int i=0; i<nElem; i++){
+    theElements[i]=mat.theElements[i];
+    theWeights[i]=mat.theWeights[i];
+  }
+  return *this;
+}
+
+void CCalAMaterial::computeAeff(int nconst, 
+				CCalAMaterial** constituents, 
+				double* weights){
+  aEff=0;
+  for (int i=0; i<nconst; i++)
+    aEff += weights[i] * constituents[i]->Aeff();
+}
+
+G4std::ostream& operator<<(G4std::ostream& os, const CCalAMaterial& mat) {
+  os << mat.name << G4endl;
+  os << "Density= " << mat.density << " g/cm3. Number of Elements: "
+     << mat.nElem 
+     << ". Aeff= " << mat.aEff << G4endl;
+  for (int i=0; i<mat.nElem; i++)
+    os << '\t' << mat.theElements[i] << '\t' << mat.theWeights[i] << G4endl;
+  return os;
+}

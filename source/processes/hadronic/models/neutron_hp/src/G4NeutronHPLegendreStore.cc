@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -106,7 +106,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
   G4double result;
   
   G4int i0;
-  G4int low, high;
+  G4int low(0), high(0);
   G4NeutronHPFastLegendre theLeg;
   for (i0=0; i0<nEnergy; i0++)
   {

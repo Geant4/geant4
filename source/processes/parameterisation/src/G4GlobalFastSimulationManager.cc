@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.8 2001/10/26 14:43:37 mverderi Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.12 2002/12/04 21:29:50 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //  
 //---------------------------------------------------------------
@@ -62,7 +62,7 @@ G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()
   if(!fGlobalFastSimulationManager)
   {
     fGlobalFastSimulationManager = new G4GlobalFastSimulationManager;
-    fpConcreteInstance = fGlobalFastSimulationManager;
+    SetConcreteInstance(fGlobalFastSimulationManager);
   }
   return fGlobalFastSimulationManager;
 }
@@ -246,9 +246,24 @@ G4bool
 G4GlobalFastSimulationManager::Notify(G4ApplicationState requestedState)
 { 
   G4StateManager * stateManager = G4StateManager::GetStateManager();
-  if((stateManager->GetPreviousState()==Idle) &&
-     (requestedState==GeomClosed) &&
+  if((stateManager->GetPreviousState()==G4State_Idle) &&
+     (requestedState==G4State_GeomClosed) &&
      (!fClosed))
     G4Exception("G4GlobalFastSimulationManager fatal error : \n1) you are using ghost volumes;\n2) In this case the G4GlobalFastSimulationManager MUST be closed BEFORE\n  closing the geometry;\n3) To do this put in your code the call \n  G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->\n    CloseFastSimulation();\n  just before closing the geometry.");
   return true;
+}
+
+G4VFastSimulationModel* 
+G4GlobalFastSimulationManager::GetFastSimulationModel(const G4String& modelName,
+						      const G4VFastSimulationModel* previousFound) const
+{
+  G4VFastSimulationModel* model = 0;
+  // -- flag used to navigate accross the various managers;
+  bool foundPrevious(false);
+  for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
+    {
+      model = ManagedManagers[ifsm]->GetFastSimulationModel(modelName, previousFound, foundPrevious);
+      if (model) break;
+    }
+  return model;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsCollection.hh,v 1.9 2001/07/13 15:00:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4THitsCollection.hh,v 1.11 2002/10/18 14:36:11 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4THitsCollection_h
@@ -100,6 +100,12 @@ template <class T> class G4THitsCollection : public G4HitsCollection
         return theHitsCollection->size();
       }
       //  Returns the number of hit objects stored in this collection
+
+  public:
+      virtual G4VHit* GetHit(size_t i) const
+      { return (*((G4std::vector<T*>*)theCollection))[i]; }
+      virtual size_t GetSize() const
+      { return ((G4std::vector<T*>*)theCollection)->size(); }
 
 };
 

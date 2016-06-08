@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidSphere.hh,v 1.6 2001/07/11 09:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolidSphere.hh,v 1.8 2002/12/03 14:32:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidSphere
@@ -96,6 +96,9 @@ class G4BREPSolidSphere : public G4BREPSolid
     // solid to any boundary of this solid.
     // Return 0 if the point is already outside.	
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
  public:  // without description
 
   inline void SphReset() { active=1; }
@@ -106,6 +109,13 @@ class G4BREPSolidSphere : public G4BREPSolid
   G4BREPSolidSphere& operator=(const G4BREPSolidSphere&);
     // Private copy constructor and assignment operator.
 
+  struct G4BREPSphereParams
+  {
+    G4Vector3D origin;
+	  G4Vector3D xhat;
+	  G4Vector3D zhat;
+	  G4double   radius;
+  } constructorParams;
 };
 
 #endif

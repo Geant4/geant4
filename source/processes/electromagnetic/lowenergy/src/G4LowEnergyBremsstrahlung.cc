@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.54 2001/11/29 19:01:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.55 2002/07/30 18:14:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 // 
 // --------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 // 18.10.2001 MGP Revision to improve code quality 
 // 28.10.2001 VI  Update printout
 // 29.11.2001 VI  New parametrisation
+// 30.07.2002 VI  Fix in restricted energy loss
 //
 // --------------------------------------------------------------
 
@@ -208,7 +209,6 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
     // the cut cannot be below lowest limit
     G4double tCut = G4std::min(highKineticEnergy,
 			       ((G4Gamma::Gamma())->GetEnergyThreshold(material)));
-			       //			       ((G4Gamma::Gamma())->GetCutsInEnergy())[j]);
     cutForSecondaryPhotons.push_back(tCut);
 
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -231,15 +231,13 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
       for (size_t iel=0; iel<NumberOfElements; iel++ ) {
         G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
         G4double e = energySpectrum->AverageEnergy(Z, 0.0, tCut, lowEdgeEnergy); 
-        G4double pro = energySpectrum->Probability(Z, 0.0, tCut, lowEdgeEnergy); 
         G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy);
-        ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
+        ionloss   += e * cs  * theAtomicNumDensityVector[iel];
         if(verboseLevel > 1) {
           G4cout << "Z= " << Z
                  << "; tCut(keV)= " << tCut/keV
                  << "; E(keV)= " << lowEdgeEnergy/keV
                  << "; Eav(keV)= " << e/keV
-                 << "; pro= " << pro
                  << "; cs= " << cs
 		 << "; loss= " << ionloss
                  << G4endl;

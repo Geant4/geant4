@@ -1,0 +1,9 @@
+#. HCal visualisation attributtes
+#. visType	visualisable?	R	G	B	WireFrame
+"Sensitive"	1		0.0	0.0	1.0	0
+"Electronics"	0		0.0	0.0	0.0	1
+"Support"	0		0.0	0.0	0.2	1
+"Cable"		0		0.8	0.8	0.1	1
+"Absorber"	1		0.6	0.1	0.1	0
+"OtherServices"	0		0.2	0.4	0.2	1
+"PseudoVolumes"	0		0.2	0.4	0.2	1

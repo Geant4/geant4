@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.45 2002/04/26 21:23:31 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VisManager.cc,v 1.48 2002/11/20 17:19:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -232,7 +232,7 @@ void G4VisManager::Enable() {
 }
 
 void G4VisManager::Disable() {
-  fpConcreteInstance = 0;
+  SetConcreteInstance(0);
   if (fVerbosity >= confirmations) {
     G4cout <<
       "G4VisManager::Disable: visualization disabled."
@@ -288,15 +288,10 @@ void G4VisManager::Draw (const G4Circle& circle,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (circle);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -304,15 +299,10 @@ void G4VisManager::Draw (const G4NURBS& nurbs,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (nurbs);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -320,15 +310,10 @@ void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polyhedron);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -336,15 +321,10 @@ void G4VisManager::Draw (const G4Polyline& line,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (line);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -352,15 +332,10 @@ void G4VisManager::Draw (const G4Polymarker& polymarker,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polymarker);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -368,15 +343,10 @@ void G4VisManager::Draw (const G4Scale& scale,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (scale);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -384,15 +354,10 @@ void G4VisManager::Draw (const G4Square& square,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (square);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -400,15 +365,10 @@ void G4VisManager::Draw (const G4Text& text,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (text);
     fpSceneHandler -> EndPrimitives ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -425,15 +385,10 @@ void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
-    G4VModel* pModel = new G4NullModel (pMP);
-    fpSceneHandler -> SetModel (pModel);
+    CheckModel();
     fpSceneHandler -> PreAddThis (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
     fpSceneHandler -> PostAddThis ();
-    fpSceneHandler -> SetModel (0);
-    delete pModel;
-    delete pMP;
   }
 }
 
@@ -479,7 +434,7 @@ void G4VisManager::CreateViewer (G4String name) {
       fpSceneHandler -> AddViewerToList (fpViewer);
       fpSceneHandler -> SetCurrentViewer (fpViewer);
       // Make it possible for user action code to Draw.
-      fpConcreteInstance = this;
+      SetConcreteInstance(this);
 
       const G4ViewParameters& vp = fpViewer->GetViewParameters();
       G4bool warn = false;
@@ -496,7 +451,7 @@ void G4VisManager::CreateViewer (G4String name) {
 	  G4cout <<
 	    "WARNING: objects with visibility flag set to \"false\""
 	    " will not be drawn!"
-	    "\n  \"/vis/set/culling off\" to Draw such objects."
+	    "\n  \"/vis/viewer/set/culling global false\" to Draw such objects."
 		 << G4endl;
 	}
       }
@@ -510,15 +465,14 @@ void G4VisManager::CreateViewer (G4String name) {
 	warn = true;
 	if (fVerbosity >= warnings) {
 	  G4cout <<
-	    "WARNING: covered objects in solid mode will not be part of"
-	    " the scene!"
-	    "\n  \"/vis/set/cull_covered_daughters off\" to reverse this."
+	    "WARNING: covered objects in solid mode will not be rendered!"
+	    "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
 		 << G4endl;
 	}
       }
       if (warn) {
 	if (fVerbosity >= warnings) {
-	  G4cout << "  Also see other \"/vis/set\" commands."
+	  G4cout << "  Also see other \"/vis/viewer/set\" commands."
 		 << G4endl;
 	}
       }
@@ -568,7 +522,7 @@ void G4VisManager::DeleteCurrentSceneHandler () {
     fpSceneHandler = fAvailableSceneHandlers [0];
     fpViewer = 0;
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: scene handler is now \""
 	     << fpSceneHandler -> GetName ();
@@ -580,7 +534,7 @@ void G4VisManager::DeleteCurrentSceneHandler () {
     fpSceneHandler = 0;
     fpViewer  = 0;
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: There are now no scene handlers left."
@@ -619,7 +573,7 @@ void G4VisManager::DeleteCurrentViewer () {
     fpViewer = 0;
     fpSceneHandler -> SetCurrentViewer (0);
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: There are now no viewers left for this scene handler."
@@ -765,14 +719,14 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
       else {
 	fpViewer = 0;
 	// Make it impossible for user action code to Draw.
-	fpConcreteInstance = 0;
+	SetConcreteInstance(0);
       }
     }
     else {
       fpSceneHandler = 0;
       fpViewer = 0;
       // Make it impossible for user action code to Draw.
-      fpConcreteInstance = 0;
+      SetConcreteInstance(0);
     }
   }
 }
@@ -816,7 +770,7 @@ void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
   else {
     fpViewer = 0;
     // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+    SetConcreteInstance(0);
     if (fVerbosity >= warnings) {
       G4cout <<
 	"WARNING: No viewers for this scene handler - please create one."
@@ -1030,32 +984,30 @@ void G4VisManager::BeginOfEvent () {
 
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
-  if (fpConcreteInstance && IsValidView ()) {
+  if (GetConcreteInstance() && IsValidView ()) {
     ClearTransientStoreIfMarked();
-    G4ModelingParameters* pMP =
-      fpSceneHandler -> CreateModelingParameters ();
+    fVisManagerModelingParameters
+      = *(fpSceneHandler -> CreateModelingParameters ());
     const G4std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
     for (size_t i = 0; i < EOEModelList.size (); i++) {
       G4VModel* pModel = EOEModelList [i];
-      pModel -> SetModelingParameters (pMP);
+      pModel -> SetModelingParameters (&fVisManagerModelingParameters);
       fpSceneHandler -> SetModel (pModel);
       pModel -> DescribeYourselfTo (*fpSceneHandler);
-      pModel -> SetModelingParameters (0);
-      fpSceneHandler -> SetModel (0);
     }
-    delete pMP;
     if (fpScene->GetRefreshAtEndOfEvent()) {
       fpViewer->ShowView();  // ...for systems needing post processing.
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
+    fpSceneHandler -> SetModel (0);  // Flags invalid model.
   }
 }
 
 void G4VisManager::EndOfRun () {
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
-  if (fpConcreteInstance && IsValidView ()) {
-    fpSceneHandler->SetMarkForClearingTransientStore(false);
+  if (GetConcreteInstance() && IsValidView ()) {
+    fpSceneHandler->SetMarkForClearingTransientStore(true);
   }
 }
 
@@ -1065,6 +1017,18 @@ void G4VisManager::ClearTransientStoreIfMarked(){
     fpSceneHandler->SetMarkForClearingTransientStore(false);
     fpSceneHandler->ClearTransientStore();
   }
+}
+
+void G4VisManager::CheckModel () {
+  G4VModel* pModel = fpSceneHandler->GetModel();
+  if (!pModel) {  // provide a null model.
+    pModel = &fVisManagerNullModel;
+    fpSceneHandler -> SetModel (pModel);
+  }
+  // Ensure modeling parameters are right for this view...
+  fVisManagerModelingParameters
+    = *(fpSceneHandler -> CreateModelingParameters ());
+  pModel->SetModelingParameters (&fVisManagerModelingParameters);
 }
 
 G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
@@ -1172,7 +1136,7 @@ G4bool G4VisManager::IsValidView () {
 
   if (!fInitialised) Initialise ();
 
-  fpConcreteInstance = 0;
+  SetConcreteInstance(0);
   // Unless we survive a few preliminary tests, users must not use.
 
   if (!fpGraphicsSystem) return false;
@@ -1236,7 +1200,7 @@ G4bool G4VisManager::IsValidView () {
     return false;
   }
 
-  fpConcreteInstance = this;  // Unless we find another problem, users can use!
+  SetConcreteInstance(this);  // Unless we find another problem, users can use!
   G4bool isValid = true;
   if (fpScene -> IsEmpty ()) {  // Add world by default if possible...
     G4bool warn(fVerbosity >= warnings);
@@ -1251,7 +1215,7 @@ G4bool G4VisManager::IsValidView () {
 	       << G4endl;
       }
       isValid = false;
-      fpConcreteInstance = 0;  // Users must not use!
+      SetConcreteInstance(0);  // Users must not use!
     }
     else {
       G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/viewer/reset");

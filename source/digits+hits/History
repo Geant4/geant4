@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2001/07/13 15:00:02 gcosmo Exp $
+$Id: History,v 1.16 2002/11/27 19:03:42 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,39 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 27, 2002, M.Asai (digits_hits-V04-01-05)
+- Fix memory leak in G4SDManager.
+
+Nov 18, 2002, M.Asai (digits_hits-V04-01-04)
+- Tag for Geant4 5.0 release.
+
+Nov 04, 2002, G.Cosmo (digits_hits-V04-01-03)
+- Fixed compilation errors on SUN-CC (usage of G4std:: namespace) in
+  "detector" module. (M.Dressel)
+
+Nov 01, 2002, M.Asai (digits_hits-V04-01-02)
+- Tag for Geant4 5.0 tag-set#1.
+
+Nov 1, 2002, J.Allison  (digits+hits-V04-01-01 - does not include V04-01-00)
+- Canonical tag of hits-traj03a.
+
+Oct 30, 2002, M.Asai/J.Allison (hits-traj03a)
+- Added default implementation of G4VHitsCollection::GetHit and GetSize.
+
+Oct 28, 2002, J.Allison (hits-traj03 - does *not* include digits_hits-V04-01-00)
+- Changed GetAttDefs return signature to map.
+- Changed GetAttValues to CreateAttValues.
+- Improved description in G4VHit.
+
+Oct 24, 2002, M.Asai/J.Allison (hits-traj02)
+- Added virtual const G4std::vector<G4AttDef>* GetAttDefs/Values to G4VHit.hh.
+- Added GetHit and GetSize to G4VHitsCollection.
+
+Oct 23, 2002, M.Dressel (digits_hits-V04-01-00)
+- Added classes for event scoring in module "detector":
+  G4CellScoreComposer[.hh.cc], G4CellScoreValues.hh,
+  G4CellStoreScorer[.hh.cc], G4TrackLogger[.hh.cc].
 
 Jul 13, 2001, G.Cosmo (digits+hits-V03-02-00)
 - Cleanup of pedantic warnings in Linux-g++ ANSI setup.

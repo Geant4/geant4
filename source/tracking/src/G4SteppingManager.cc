@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.28 2002/02/07 04:00:22 tsasaki Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4SteppingManager.cc,v 1.30 2002/12/04 23:00:50 tsasaki Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 //---------------------------------------------------------------
@@ -71,7 +71,7 @@ G4SteppingManager::G4SteppingManager()
    else { 
       fVerbose = G4VSteppingVerbose::GetInstance();
       fVerbose -> SetManager(this);
-	  KillVerbose = false;
+      KillVerbose = false;
    }
 #endif
    SetNavigator(G4TransportationManager::GetTransportationManager()
@@ -87,6 +87,7 @@ G4SteppingManager::G4SteppingManager()
    SetNavigator(G4TransportationManager::GetTransportationManager()
      ->GetNavigatorForTracking());
 
+   physIntLength = DBL_MAX; 
 //   fTouchableHandle = new G4TouchableHistory();
 }
 
@@ -247,6 +248,17 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
    fTrack = valueTrack;
    Mass = fTrack->GetDynamicParticle()->GetMass();
+
+   PhysicalStep = 0.;
+   GeometricalStep = 0.;
+   CorrectedStep = 0.;
+   PreStepPointIsGeom = false;
+   FirstStep = false;
+   fStepStatus = fUndefined;
+
+   TempInitVelocity = 0.;
+   TempVelocity = 0.;
+   sumEnergyChange = 0.;
 
 
 // If the primary track has 'Suspend' or 'PostponeToNextEvent' state,

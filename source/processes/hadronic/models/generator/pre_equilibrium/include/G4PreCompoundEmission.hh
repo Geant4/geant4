@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.hh,v 1.8 2001/12/13 12:04:18 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PreCompoundEmission.hh,v 1.9 2002/12/12 19:17:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 

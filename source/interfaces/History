@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2002/06/14 09:16:24 gcosmo Exp $
+$Id: History,v 1.60 2002/12/05 16:33:41 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 December 2002, Makoto Asai (interfaces-V04-01-01, interfaces-V04-01-02)
+- Migration to new G4ApplicationState.
+
+15 November 2002, Hajime Yoshida (interfaces-V04-01-00)
+- basic/src/G4UIArrayStrings.cc is now working for "konsole" type termcap.
+	by Koichi Murakami
+
+09 November 2002, Hajime Yoshida (interfaces-V04-00-05)
+- G4UIGainServer.cc uses socklen_t as before. It must work for Solaris CC and HP.
+- test/G4cout_test01 updated. An example of setCoutDestination(UI) by a user.
+
+06 November 2002, Guy Barrand
+- G4Xt.cc, G4UIXm.cc, G4UIXaw.cc : fix some warings.
+
+14 June 2002, Hajime Yoshida (interfaces-V04-00-04)
+- G4UIGainServer.cc/hh have a protection: #ifndef WIN32 ~ #endif not to compile
+	on WIndows.
+
 14 June 2002, Hajime Yoshida (interfaces-V04-00-04)
 - Added protection #ifndef WIN32 to new class G4UIGainServer in definition
   and body, to prevent compilation on Windows platforms.
@@ -28,6 +46,9 @@ committal in the CVS repository !
 
 12 June 2002, Hajime Yoshida (interfaces-V04-00-02)
 - Introduced new class G4UIGainServer, socket extension for G4UIGAG.
+- added GAG/src/G4UIGainSErver.cc and GAG/include/G4UIGainServer.hh
+- G4UIGainServer is the new member of libG4UIGAG.so(a)
+	(no modification to GNUmakefiles)
 
 26 April 2002, Makoto Asai (interfaces-V04-00-01)
 - Corresponds to interfaces change in intercoms category (intercoms-V04-00-00)

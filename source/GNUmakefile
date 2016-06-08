@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.35 2001/12/13 11:38:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.38 2002/11/25 11:58:25 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -12,12 +12,11 @@
 #
 # (The .o files(s) are made by implicit rules.)
 
-MAKEFLAGS= --no-print-directory
-
-SUBDIR1 = global particles processes geometry digits+hits
-SUBDIR2 = event tracking track materials run graphics_reps intercoms parameterisations readout
-SUBDIR3 = g3tog4 interfaces visualization
-SUBDIR4 = persistency
+SUBDIR1 =  global particles processes geometry digits+hits
+SUBDIR2 =  event tracking track materials run graphics_reps intercoms
+SUBDIR2 += parameterisations persistency readout
+SUBDIR3 =  interfaces visualization
+SUBDIR4 =  g3tog4
 
 ifndef G4INSTALL
   G4INSTALL = ..
@@ -32,34 +31,20 @@ unique := $(shell echo $$$$)
 .PHONY: all glob global libmap includes clean_libs clean clean_all
 
 all:
-ifdef G4USE_HEPODBMS
-	@$(ECHO) Making granular libraries with HepODBMS option ...
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) cleandb); done;:
-	@if [ ! -f $(G4LIBDIR)/schema/G4SCHEMA ] ; then \
-	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
-	 fi
-endif
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
-ifdef G4USE_HEPODBMS
+ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	$(MAKE) libmap
 
 glob global:
-ifdef G4USE_HEPODBMS
-	@$(ECHO) Making global libraries with HepODBMS option ...
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) cleandb); done;:
-	@if [ ! -f $(G4LIBDIR)/schema/G4SCHEMA ] ; then \
-	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
-	 fi
-endif
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
-ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) && $(MAKE) global); done;:
+ifdef G4USE_G3TOG4
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 
 
@@ -111,7 +96,7 @@ includes:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
-ifdef G4USE_HEPODBMS
+ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@); done
 endif
 
@@ -120,8 +105,8 @@ clean_libs:
 	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) clean_libs); done
 	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) clean_libs); done
-ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@ cleandb); done
+ifdef G4USE_G3TOG4
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) clean_libs); done
 endif
 	@rm -rf $(G4LIBDIR)/libname.map
 
@@ -131,9 +116,6 @@ clean:
 	@rm -rf $(G4LIBDIR)
 	@rm -rf $(G4BINDIR)
 	@rm -rf $(G4INSTALL)/.config/bin/$(G4SYSTEM)
-ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) $@ cleandb); done
-endif
 ifdef CFRONT
 	@rm -rf $(G4TREP)
 endif
@@ -150,9 +132,5 @@ clean_all:
 	@rm -rf $(G4BIN)
 	@echo Removing $(G4INCLUDE) ...
 	@rm -rf $(G4INCLUDE)
-ifdef G4USE_HEPODBMS
-	@echo Removing ODBMS federations and directories ...
-	@rm -rf $(G4INSTALL)/exampleSchema $(G4INSTALL)/exampleFD
-endif
 	@echo Removing installation configurations ...
 	@rm -rf $(G4INSTALL)/.config

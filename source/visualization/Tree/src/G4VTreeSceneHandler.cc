@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.6 2001/07/25 21:02:28 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VTreeSceneHandler.cc,v 1.7 2002/12/11 16:08:55 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -65,21 +65,8 @@ void G4VTreeSceneHandler::EstablishSpecials
 
 void G4VTreeSceneHandler::BeginModeling() {
   G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
-  // Force culling off...
-  if (fpModel) {
-    fpOriginalMP = fpModel->GetModelingParameters();
-    if (fpOriginalMP) {
-      fpNonCullingMP = new G4ModelingParameters(*fpOriginalMP);
-      fpNonCullingMP->SetCulling(false);
-      fpModel->SetModelingParameters(fpNonCullingMP);
-    }
-  }
 }
 
 void G4VTreeSceneHandler::EndModeling() {
-  if (fpModel && fpOriginalMP) {
-    fpModel->SetModelingParameters(fpOriginalMP);
-    delete fpNonCullingMP;
-  }
   G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
 }

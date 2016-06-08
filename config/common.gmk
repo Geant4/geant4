@@ -1,12 +1,9 @@
-# $Id: common.gmk,v 1.30 2001/06/25 10:58:51 morita Exp $
+# $Id: common.gmk,v 1.34 2002/12/04 08:36:14 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
 # Libraries are created according to G4SYSTEM. G.Cosmo, 11/6/96.
 # Introduced G4LIBDIR and G4TMPDIR. G.Cosmo, 23/6/98.
-# Introduced G4SCHEMA_HEADER_DIR and G4SCHEMA_SRC_DIR. Y.Morita, 16/11/99.
-# Actual targets splitted into common_kernel.gmk and common_objy.gmk,
-#                                                      Y.Morita, 15/3/01.
 
 ifndef G4LIBDIR
   G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
@@ -26,33 +23,15 @@ ifneq ($(G4LIB_BUILD_STATIC),)
 endif
 
 # GPPFLAGS is defined here to make the .d file(s) and include it(them).
-# This variable is actually used in common_kernel.gmk and common_objy.gmk.
 
-ifdef G4ODBMS
-  GPPFLAGS := "-MM"
-else
-  GPPFLAGS := "-M"
-endif
+GPPFLAGS := "-M"
 
 ###############################################################################
 #
 # Actual gmake targets.
 #
 
-#
-# Target "lib" requires dependency files when G4ODBMS=1.
-# gmake must be recursively called with MAKE_DFILES=1.
-#
-
-ifdef G4ODBMS
-lib: 
-	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
-	@(MAKE_DFILES=1; export MAKE_DFILES; $(MAKE) lib_d)
-
-lib_d: $(g4libraries_to_build)
-else
 lib: $(g4libraries_to_build)
-endif
 
 ifneq ($(G4LIB_BUILD_SHARED),)
 # Make shared library.
@@ -76,42 +55,56 @@ endif
 
 ###############################################################################
 #
-# Actual targets for .o, .d files and others are defined in
-# common_kernel.gmk and common_objy.gmk.
+# Actual targets for .o, .d files
 #
-ifndef G4ODBMS
 
-  include $(G4INSTALL)/config/common_kernel.gmk
-
+$(G4TMPDIR)/%.o: src/%.cc
+ifdef CPPVERBOSE
+	$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
 else
-
-  include $(G4INSTALL)/config/common_objy.gmk
-
+	@echo Compiling $*.cc ...
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $(OUT_OBJ)$(G4TMPDIR)/$(*F).o src/$*.cc
 endif
-###############################################################################
+
+# .PHONY targets are executed regardless of time-stamp of any file of
+# same name.
+.PHONY: all obj lib clean clean_libs includes
+
+obj: $(G4TMPDIR)/obj.last
 
 # Touch the versioning file
-$(G4TMPDIR)/obj.last: $(objects) $(schema_o)
+$(G4TMPDIR)/obj.last: $(objects)
 	@touch $@
 
 # Make the .d file(s) and include it(them).
-# g++ -MM (or -M) is good at this, except it forgets the subdirectory
-# (hence the use of $G4TMP/).
-# schema_hh and schema_ref_hh are defined in common_objy.gmk.
 
-$(G4TMPDIR)/%.d: src/%.cc $(schema_hh) $(schema_ref_hh)
+# The ideas for this come from the GNU Make Manual, Section 4.12,
+# Generating Prerequisites Automatically.  The g++ compiler has an
+# option -M or -MM to write to standard output a list of dependencies
+# based on the #include statements.  The "sed" adds the dependency
+# file itself as a second target.  The result is a mini-makefile which
+# specifies the .o and .d files as targets which depend on all the
+# files found through the #include statements.  This file is then
+# included, causing GNU Make to honour these dependencies.
+
+# The "set -e" causes the shell to exit with an error when the "g++"
+# fails (otherwise it would only notice the last command in the
+# pipeline, namely "sed").  GNU Make notices the error and exits
+# sooner than it otherwise would (still not as soon as I expect,
+# though!).  Even then, an empty file is made, so "[ -s $@ ] || rm -f
+# $@" removes it ([ -s filename ] gives zero exit code only if file
+# exists and has a size greater than zero).  This avoids making
+# corrupt .d files which would play havoc with your next build.
+
+$(G4TMPDIR)/%.d: src/%.cc
 	@echo Making dependency for file $< ...
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir -p $(G4TMPDIR)  ;fi
-	@($(ECHO) $(G4TMPDIR)/\\c ; \
-	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/$*.o!& $@!' >$@
+	@set -e;\
+	g++ $(GPPFLAGS) $(CPPFLAGS) $< |\
+	sed 's!$*\.o!$(G4TMPDIR)/& $@!' >$@;\
+	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
-ifndef G4ODBMS
 -include $(dependencies)
-else
-ifdef MAKE_DFILES
--include $(dependencies)
-endif
-endif
 endif
 
 #
@@ -138,9 +131,6 @@ clean:
 	@echo Cleaning up ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
-ifdef schema_hh
-	@rm -f $(schema_hh) $(schema_ref_hh)
-endif
 	@rm -rf $(G4TMPDIR)
 endif
 
@@ -151,4 +141,3 @@ clean_libs:
 	@if [ -f $(G4LIBDIR)/lib$(name).$(SHEXT) ] ; then \
 	$(ECHO) Removing library lib$(name).$(SHEXT) ... ; \
 	$(RM) -f $(G4LIBDIR)/lib$(name).$(SHEXT) ; fi
-

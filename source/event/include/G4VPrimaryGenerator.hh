@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPrimaryGenerator.hh,v 1.6 2001/11/21 13:48:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4VPrimaryGenerator_h

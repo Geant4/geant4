@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -35,6 +35,17 @@
 //
 //      Modifications: 
 //      
+//        8 March 2002, Fan Lei (flei@space.qinetiq.com)
+//   
+//        Implementation of Internal Convertion process in discrete deexcitation
+//        The following public methods have been added. 
+//
+//       void SetICM (G4bool);
+//       void CallFromRDM(G4bool);
+//       void SetMaxHalfLife(G4double) ;
+//       void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
+//       G4ElectronOccupancy GetEOccupancy () ;
+//
 // -------------------------------------------------------------------
 
 #include "G4PhotonEvaporation.hh"
@@ -49,16 +60,16 @@
 #include "G4ContinuumGammaDeexcitation.hh"
 #include "G4DiscreteGammaDeexcitation.hh"
 #include "G4E1Probability.hh"
-
+#include "G4AtomicDeexcitation.hh"
 
 G4PhotonEvaporation::G4PhotonEvaporation()
+  :_verbose(0),_myOwnProbAlgorithm (true),
+   _eOccupancy(0), _vShellNumber(-1),_gammaE(0.),_applyARM(false)
 { 
   _probAlgorithm = new G4E1Probability;
-  _myOwnProbAlgorithm = true;
   _discrDeexcitation = new G4DiscreteGammaDeexcitation;
   _contDeexcitation = new G4ContinuumGammaDeexcitation;
-  _verbose = 0;
-  _gammaE = 0.;
+  (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetICM(false);
 }
 
 
@@ -144,10 +155,6 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
   if (_verbose > 0)
     G4cout << "*-*-*-* Photon evaporation: " << products->size() << G4endl;
 
-#ifdef debug
-  CheckConservation(nucleus,products);
-#endif
-
   return products;
 }
 
@@ -186,6 +193,10 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 
   // Products from discrete gamma transitions
   G4FragmentVector* discrProducts = _discrDeexcitation->DoChain();
+  _eOccupancy = _discrDeexcitation->GetEO();
+  _vShellNumber = _discrDeexcitation->GetVacantSN();
+  // _eOccupancy.DumpInfo() ;
+  _discrDeexcitation->SetVaccantSN(-1);
 
   G4int nDiscr = 0;
   if (discrProducts != 0) nDiscr = discrProducts->size();
@@ -199,25 +210,52 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
       products->push_back(*i);
     }
 
+  // now to see if apply Atomic relaxation model or not
+  // only when there is a vacant orbital electron
+  
+  if (_applyARM && _vShellNumber != -1) 
+    {
+      G4int aZ = G4int(_discrDeexcitation->GetNucleus().GetZ());
+      G4int eShell = _vShellNumber+1;
+      if ( eShell > 0 ) {
+	G4AtomicDeexcitation* atomDeex = new G4AtomicDeexcitation();
+	// no auger electron for now
+	atomDeex->ActivateAugerElectronProduction(0);
+	G4std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
+	G4DynamicParticle* aParticle;	
+	if (_verbose > 0)
+	  G4cout << " = BreakItUp = " << armProducts->size()
+		 << " particles from G4AtomicDeexcitation " << G4endl;
+	for (size_t i = 0;  i < armProducts->size(); i++)
+	  {
+	    aParticle = (*armProducts)[i] ;
+	    G4LorentzVector lParticle = aParticle->Get4Momentum();
+	    G4Fragment* aFragment = new
+	      G4Fragment(lParticle,aParticle->GetDefinition());
+	    aFragment->SetCreationTime(aParticle->GetProperTime());
+	    products->push_back(aFragment);
+	  }
+	delete armProducts;
+	delete atomDeex;
+      }
+    }
   // Add deexcited nucleus to products
   G4Fragment* finalNucleus = new G4Fragment(_discrDeexcitation->GetNucleus());
   products->push_back(finalNucleus);
-
   if (_verbose > 0)
     G4cout << " = BreakItUp = Nucleus added to products" << G4endl;
-
-   contProducts->clear();
-   discrProducts->clear();
-   delete contProducts;  // delete vector, not fragments 
-   delete discrProducts;
 
   if (_verbose > 0)
     G4cout << "*-*-* Photon evaporation: " << products->size() << G4endl;
 
 #ifdef debug
-  CheckConservation(nucleus,products);
+  if ( armProducts->size() == 0)
+    CheckConservation(nucleus,products);
 #endif
-
+  contProducts->clear();
+  discrProducts->clear();
+  delete contProducts;  // delete vector, not fragments 
+  delete discrProducts;
   return products;
 }
 
@@ -254,6 +292,29 @@ void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)
   return;
 }
 
+void G4PhotonEvaporation::SetICM(G4bool ic)
+{
+ (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetICM(ic);
+ return;
+}
+
+void G4PhotonEvaporation::SetMaxHalfLife(G4double hl)
+{
+ (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetHL(hl);
+ return;
+}
+
+void G4PhotonEvaporation::RDMForced(G4bool fromRDM)
+{
+ (dynamic_cast <G4DiscreteGammaDeexcitation*> (_discrDeexcitation))->SetRDM(fromRDM);
+ return;
+}
+
+void G4PhotonEvaporation::SetEOccupancy(G4ElectronOccupancy eo)
+{
+  _discrDeexcitation->SetEO(eo);
+  return;
+}
 
 #ifdef debug
 void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
@@ -309,7 +370,6 @@ void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
   return;
 }
 #endif
-
 
 
 

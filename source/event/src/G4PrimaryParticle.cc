@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.7 2001/07/13 15:01:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PrimaryParticle.cc,v 1.9 2002/08/19 20:20:18 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4PrimaryParticle.hh"
@@ -35,33 +35,38 @@ G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
 G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(0),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
+ mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
+ Weight0(1.0),properTime(0.0)
 {;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
 :PDGcode(Pcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
+ mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
+ Weight0(1.0),properTime(0.0)
 { G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
                         G4double px,G4double py,G4double pz)
 :PDGcode(Pcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
+ mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
+ Weight0(1.0),properTime(0.0)
 { G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode)
 :G4code(Gcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
+ mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
+ Weight0(1.0),properTime(0.0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz)
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
+ mass(0.),charge(DBL_MAX),polX(0.),polY(0.),polZ(0.),
+ Weight0(1.0),properTime(0.0)
 { PDGcode = Gcode->GetPDGEncoding(); }
 
 G4PrimaryParticle::~G4PrimaryParticle()
@@ -98,7 +103,11 @@ void G4PrimaryParticle::Print() const
   if(G4code != 0)
   { G4cout << G4code->GetParticleName() << G4endl; }
   else
-  { G4cout << "is not defined in G4." << G4endl; }
+  { G4cout << " is not defined in G4." << G4endl; }
+  if(charge<DBL_MAX)
+  { G4cout << " Assigned charge : " << charge << G4endl; }
+  else
+  { G4cout << " Charge will be taken from PDG charge." << G4endl; }
   G4cout << "     Momentum ( " << Px << ", " << Py << ", " << Pz << " )" << G4endl;
   G4cout << "     Polarization ( " << polX << ", " << polY << ", "
                                  << polZ << " )" << G4endl;

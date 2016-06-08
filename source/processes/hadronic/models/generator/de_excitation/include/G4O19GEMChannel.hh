@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4O19GEMChannel.hh,v 1.1 2002/06/06 17:52:13 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)

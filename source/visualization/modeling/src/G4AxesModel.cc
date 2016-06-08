@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AxesModel.cc,v 1.5 2001/08/14 18:43:29 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  3rd April 2001

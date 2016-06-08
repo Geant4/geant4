@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.7 2001/07/11 10:01:04 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VisAttributes.hh,v 1.10 2002/11/20 14:18:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  23rd October 1996
@@ -48,10 +48,14 @@
 #ifndef __G4VISATTRIBUTES_HH__
 #define __G4VISATTRIBUTES_HH__
 
-#include "G4ios.hh"
 #include "globals.hh"
+#include "g4std/vector"
+
 #include "G4Colour.hh"
 #include "G4Color.hh"
+
+class G4AttValue;
+class G4AttDef;
 
 class G4VisAttributes {
 
@@ -69,6 +73,8 @@ public: // With description
 
   static const G4VisAttributes Invisible;
 
+  static const G4VisAttributes& GetInvisible();
+
   G4bool operator != (const G4VisAttributes& a) const;
   G4bool operator == (const G4VisAttributes& a) const;
 
@@ -79,7 +85,9 @@ public: // With description
   LineStyle       GetLineStyle                   () const;
   G4double        GetLineWidth                   () const;
   G4bool          IsForceDrawingStyle            () const;
-  ForcedDrawingStyle GetForcedDrawingStyle () const;
+  ForcedDrawingStyle GetForcedDrawingStyle       () const;
+  const G4std::vector<G4AttValue>* GetAttValues  () const;
+  const G4std::vector<G4AttDef>*   GetAttDefs    () const;
 
   void SetVisibility         (G4bool);
   void SetDaughtersInvisible (G4bool);
@@ -93,6 +101,8 @@ public: // With description
   void SetLineWidth          (G4double);
   void SetForceWireframe     (G4bool);
   void SetForceSolid         (G4bool);
+  void SetAttValues          (const G4std::vector<G4AttValue>*);
+  void SetAttDefs            (const G4std::vector<G4AttDef>*);
 
 private:
 
@@ -102,8 +112,10 @@ private:
   LineStyle   fLineStyle;
   G4double    fLineWidth;          // Units of "normal" device linewidth, e.g.,
                                    // pixels for screen, 0.1 mm for paper.
-  G4bool      fForceDrawingStyle;  // To override view parameters.
-  ForcedDrawingStyle fForcedStyle;
+  G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
+  ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
+  const G4std::vector<G4AttValue>* fAttValues;  // For picking, etc.
+  const G4std::vector<G4AttDef>*   fAttDefs;    // Corresponding definitions.
 };
 
 #include "G4VisAttributes.icc"

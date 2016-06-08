@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeomTestLogger.hh,v 1.2 2001/10/22 13:04:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShapeRepresentationRelationshipCreator.hh,v 1.4 2001/07/11 10:00:06 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ShapeRepresentationRelationshipCreator.hh,v 1.5 2002/11/21 16:49:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ShapeRepresentationRelationshipCreator
@@ -56,7 +56,7 @@ class G4ShapeRepresentationRelationshipCreator: private G4GeometryCreator
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
     const char* Name() const { return "Shape_Representation_Relationship"; }
-    static G4ShapeRepresentationRelationshipCreator GetInstance() { return csc; }
+    static G4ShapeRepresentationRelationshipCreator GetInstance();
 
   // Members
 

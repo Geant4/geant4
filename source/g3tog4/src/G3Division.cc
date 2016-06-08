@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3Division.cc,v 1.14 2001/11/21 14:25:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 

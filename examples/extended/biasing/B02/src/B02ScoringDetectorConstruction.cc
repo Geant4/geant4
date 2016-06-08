@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B02ScoringDetectorConstruction.cc,v 1.4 2002/04/19 12:01:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: B02ScoringDetectorConstruction.cc,v 1.5 2002/07/11 08:12:22 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "globals.hh"
@@ -76,7 +76,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
   // physical world
 
-  name = "score_worldCylinder_phys";
+  name = "score_world_phys";
   G4VPhysicalVolume* score_worldCylinder_phys =
     new G4PVPlacement(0, G4ThreeVector(0,0,0), score_worldCylinder_log,
 		      name, 0, false, 0);

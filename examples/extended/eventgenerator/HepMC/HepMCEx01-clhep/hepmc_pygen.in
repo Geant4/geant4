@@ -1,0 +1,7 @@
+/mydet/RoIangle 10 deg
+/mydet/reqmuon 1
+/mydet/isomuon 1
+/control/execute pyset.mac
+/run/beamOn 5
+/generator/pythia/pystat 1
+

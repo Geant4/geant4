@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VInteractorManager.cc,v 1.11 2001/12/03 08:07:45 barrand Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // G.Barrand
 

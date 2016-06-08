@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RKG3_Stepper.hh,v 1.8 2001/07/11 09:59:09 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // class G4RKG3_Stepper

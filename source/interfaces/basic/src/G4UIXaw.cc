@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXaw.cc,v 1.4 2001/07/11 10:01:21 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4UIXaw.cc,v 1.5 2002/11/06 08:12:37 barrand Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // G.Barrand
 
@@ -62,7 +62,7 @@ G4UIXaw::G4UIXaw (
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
-  G4Xt*     interactorManager = G4Xt::getInstance (argc,argv,"Xaw");
+  G4Xt*     interactorManager = G4Xt::getInstance (argc,argv,(char*)"Xaw");
   Widget    top = (Widget)interactorManager->GetMainInteractor();
 
   shell     = XtAppCreateShell      ("G4UIXaw","G4UIXaw",topLevelShellWidgetClass,XtDisplay(top),NULL,0); 

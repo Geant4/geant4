@@ -14,61 +14,59 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroSInelastic.hh,v 1.5 2001/08/01 17:10:50 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4LEKaonZeroSInelastic.hh,v 1.7 2002/12/12 19:18:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
- // Hadronic Process: Low Energy KaonZeroS Inelastic Process
- // J.L. Chuma, TRIUMF, 12-Feb-1997
- // Last modified: 27-Mar-1997
- 
+//
+// G4 Gheisha High Energy model class -- header file
+// H. Fesefeldt, RWTH Aachen 23-October-1996
+// Last modified: 10-December-1996
+
+// A prototype of the Gheisha High Energy collision model.
+
 #ifndef G4LEKaonZeroSInelastic_h
 #define G4LEKaonZeroSInelastic_h 1
- 
-// Class Description
-// Final state production model for KaonZeroShost inelastic scattering below 20 GeV; 
-// To be used in your physics list in case you need this physics.
-// In this case you want to register an object of this class with 
-// the corresponding process.
-// Class Description - End
 
-#include "G4InelasticInteraction.hh"
- 
- class G4LEKaonZeroSInelastic : public G4InelasticInteraction
- {
- public:
-    
-    G4LEKaonZeroSInelastic() : G4InelasticInteraction()
+#include "G4LEKaonZeroInelastic.hh"
+#include "G4LEAntiKaonZeroInelastic.hh"
+#include "Randomize.hh"
+
+class G4LEKaonZeroSInelastic : public G4InelasticInteraction  
+{
+  public: 
+    G4LEKaonZeroSInelastic() 
     {
       SetMinEnergy( 0.0 );
       SetMaxEnergy( 25.*GeV );
     }
-    
-    ~G4LEKaonZeroSInelastic()
-    { }
-    
-    G4VParticleChange *ApplyYourself( const G4Track &aTrack,
-                                      G4Nucleus &targetNucleus );
-    
- private:
-    
-    void Cascade(                               // derived from CASK0
-      G4FastVector<G4ReactionProduct,128> &vec,
-      G4int &vecLen,
-      const G4DynamicParticle *originalIncident,
-      G4ReactionProduct &currentParticle,
-      G4ReactionProduct &targetParticle,
-      G4bool &incidentHasChanged, 
-      G4bool &targetHasChanged,
-      G4bool &quasiElastic );
-    
- };
- 
-#endif
- 
+
+    ~G4LEKaonZeroSInelastic(){ }
+
+    G4VParticleChange * ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
+    {
+      if(G4UniformRand() < 0.50)
+      {
+         return theKaonZeroInelastic.ApplyYourself(aTrack, targetNucleus);
+      }
+      else
+      {
+         return theAntiKaonZeroInelastic.ApplyYourself(aTrack, targetNucleus);
+      }
+    } 
+        
+  private:
+    G4LEKaonZeroInelastic theKaonZeroInelastic;
+    G4LEAntiKaonZeroInelastic theAntiKaonZeroInelastic;
+	
+
+};
+#endif                     
+                                         
+

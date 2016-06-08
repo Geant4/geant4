@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.10 2002/02/24 01:35:52 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4TrajectoriesModel.cc,v 1.12 2002/11/11 18:39:28 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  26th August 1998.
@@ -36,7 +36,8 @@
 
 G4TrajectoriesModel::~G4TrajectoriesModel () {}
 
-G4TrajectoriesModel::G4TrajectoriesModel () {
+G4TrajectoriesModel::G4TrajectoriesModel (G4int drawingMode):
+fDrawingMode(drawingMode) {
   fGlobalTag = "G4TrajectoriesModel for all trajectories.";
   fGlobalDescription = fGlobalTag;
 }
@@ -49,11 +50,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
     if (TC) {
       G4int nT = TC -> entries ();
       for (int iT = 0; iT < nT; iT++) {
-	// GB : default representation should be the most efficent one.
-        // Representation with a circle at each step should be an option 
-        // choosable from a command.
-	// (*TC) [iT] -> DrawTrajectory (50);
-	(*TC) [iT] -> DrawTrajectory ();
+	sceneHandler.AddThis (*((*TC) [iT]));
       }
     }
   }

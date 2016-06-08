@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -81,6 +81,8 @@ class G4KineticTrack : public G4VKineticNucleon
       
       const G4LorentzVector& Get4Momentum() const;
       void Set4Momentum(const G4LorentzVector& a4Momentum);
+      void Update4Momentum(G4double aEnergy);			// update E and p, not changing mass
+      void Update4Momentum(const G4ThreeVector & aMomentum);	// idem
 
       const G4LorentzVector& GetInitialCoordinates() const;
 
@@ -92,17 +94,17 @@ class G4KineticTrack : public G4VKineticNucleon
       G4double* GetActualWidth() const;
 
       G4double GetActualMass() const;
+      G4int GetnChannels() const;
       
   private:
 
 
-      G4int GetnChannels() const;
       void SetnChannels(const G4int aChannel);
 
       void SetActualWidth(G4double* anActualWidth); 
       
       G4double EvaluateTotalActualWidth();
-                                       
+
       G4double EvaluateCMMomentum (const G4double mass,
                                    const G4double* m_ij) const;                                 
       
@@ -140,7 +142,7 @@ public:
       G4double theFormationTime;
 
       G4ThreeVector thePosition;
-      
+
       G4LorentzVector the4Momentum;
       
       G4LorentzVector theInitialCoordinates;
@@ -154,7 +156,7 @@ public:
 
 
   private:
- 
+
       // Temporary storage for daughter masses and widths
       // (needed because Integrand Function cannot take > 1 argument)
 
@@ -211,6 +213,25 @@ inline const G4LorentzVector& G4KineticTrack::Get4Momentum() const
 inline void G4KineticTrack::Set4Momentum(const G4LorentzVector& a4Momentum)
 {
   the4Momentum = a4Momentum;
+}
+
+inline void G4KineticTrack::Update4Momentum(G4double aEnergy)
+{
+  G4double newP=0;
+  if ( aEnergy > GetActualMass() )
+  {
+      newP = sqrt(sqr(aEnergy) - the4Momentum.mag2());
+  } else
+  {
+      aEnergy=GetActualMass();
+  }
+  the4Momentum = G4LorentzVector(newP*the4Momentum.vect().unit(), aEnergy);
+}
+
+inline void G4KineticTrack::Update4Momentum(const G4ThreeVector & aMomentum)
+{
+  G4double newE=sqrt(the4Momentum.mag2() + aMomentum.mag2());
+  the4Momentum = G4LorentzVector(aMomentum, newE);
 }
 
 
@@ -275,7 +296,7 @@ inline G4double G4KineticTrack::SampleResidualLifetime()
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
  G4double tau = hbar_Planck * (-1.0 / theTotalActualWidth);
  G4double theResidualLifetime = tau * log(G4UniformRand());
- return theResidualLifetime;
+ return theResidualLifetime*the4Momentum.gamma();
 }
 
 

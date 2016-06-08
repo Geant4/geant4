@@ -79,7 +79,6 @@ void G4GAGTreeSceneHandler::InitializePVList(void)
 //-----
 void G4GAGTreeSceneHandler::BeginModeling () 
 {
-  // To re-use "culling off" code.
   G4VTreeSceneHandler::BeginModeling ();  
 
   // Initialize the stack the the tree generation
@@ -127,7 +126,6 @@ void G4GAGTreeSceneHandler::EndModeling ()
   // Clear the stack for the tree generation
   ClearPVList();
 
-  // To re-use "culling off" code.
   G4VTreeSceneHandler::EndModeling ();  
 }
 

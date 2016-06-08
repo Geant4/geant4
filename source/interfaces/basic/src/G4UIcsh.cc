@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIcsh.cc,v 1.6 2002/02/26 02:09:08 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4UIcsh.hh"

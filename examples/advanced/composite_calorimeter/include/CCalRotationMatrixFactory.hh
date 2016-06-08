@@ -1,0 +1,67 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalRotationMatrixFactory.hh
+// Description: CCalRotationFactory is a singleton class to get from a file
+//              the information to build CCal Rotation matrices.
+///////////////////////////////////////////////////////////////////////////////
+#ifndef CCalRotationMatrixFactory_h
+#define CCalRotationMatrixFactory_h 1
+
+#include "g4std/map"
+#include "G4RotationMatrix.hh"
+
+typedef G4RotationMatrix* G4RotationMatrixPtr;
+typedef G4std::map<G4String, G4RotationMatrixPtr, G4std::less<G4String> > G4RotationMatrixTable;
+typedef G4std::map<G4String, G4RotationMatrixPtr, G4std::less<G4String> >::iterator G4RotationMatrixTableIterator;
+
+
+//typedef RWTPtrOrderedVector<G4RotationMatrix> G4RotationMatrixTable;
+//  Is an instantiation of the template class RWTPtrOrderedVector.
+
+class CCalRotationMatrixFactory {
+public:
+  ~CCalRotationMatrixFactory();
+
+  static CCalRotationMatrixFactory* getInstance();
+  static CCalRotationMatrixFactory* getInstance(const G4String& rotfile);
+  static void setFileName(const G4String& rotfile);
+
+  G4RotationMatrix* findMatrix(const G4String&);
+  G4RotationMatrix* AddMatrix(const G4String& name, 
+			      G4double th1, G4double phi1,  //Axis angles
+			      G4double th2, G4double phi2,  //in rads
+			      G4double th3, G4double phi3); //
+
+private:
+  CCalRotationMatrixFactory();
+
+private:
+  static CCalRotationMatrixFactory* instance;
+  static G4String file;
+
+  G4RotationMatrixTable theMatrices; //Where the matrices are stored.
+};
+
+G4std::ostream& operator<<(G4std::ostream&, const G4RotationMatrix &);
+#endif

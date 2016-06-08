@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VBasicShell.cc,v 1.9 2002/04/26 21:28:26 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "g4std/vector"

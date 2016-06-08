@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.30 2002/06/19 15:49:34 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.34 2002/12/11 16:10:06 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -47,6 +47,7 @@
 #include "G4ApplicationState.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
@@ -384,7 +385,7 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
     ("Defaults: 1 m x 1 0 0 auto 0 0 0 m");
   fpCommand -> SetGuidance 
     ("Adds an annotated scale line to the current scene.");
-  fpCommand -> SetGuidance (G4Scale::GuidanceString);
+  fpCommand -> SetGuidance (G4Scale::GetGuidanceString());
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
@@ -617,8 +618,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/text", this);
-  fpCommand -> SetGuidance 
-    ("Adds text at (x, y, z) unit font_size x_offset y_offset text.");
+  fpCommand -> SetGuidance
+    ("Adds text at (x*unit, y*unit, z*unit) with font_size x_offset y_offset.");
   fpCommand -> SetGuidance
     ("Font size and offsets in pixels.");
   G4UIparameter* parameter;
@@ -701,13 +702,27 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
 ////////////// /vis/scene/add/trajectories ///////////////////////////////////
 
 G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
-  fpCommand = new G4UIcmdWithoutParameter
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAnInteger
     ("/vis/scene/add/trajectories", this);
+  fpCommand -> SetGuidance
+    ("/vis/scene/add/trajectories [drawing-mode]");
+  fpCommand -> SetGuidance
+    ("Default integer parameter: 0");
   fpCommand -> SetGuidance
     ("Adds trajectories to current scene.");
   fpCommand -> SetGuidance
-    ("Trajectories are drawn at end of event when the scene in which"
-     " they are added is current.");
+    ("Causes trajectories, if any, to be drawn at the end of processiing an"
+     "\nevent. The drawing mode is an integer that is passed to the"
+     "\nDrawTrajectory method.  The default implementation in G4VTrajectory,"
+     "\nif drawing-mode > 0, draws the trajectory as a polyline and, if"
+     "\ndrawing-mode != 0, draws markers of screen size abs(drawing-mode)/1000"
+     "\nin pixels at each step and auxiliary point, if any.  So drawing-mode"
+     "\n== 5000 is a good choice."
+     "\nEnable storing with \"/tracking/storeTrajectory 1\"."
+     "\nSee also \"/vis/scene/endOfEventAction\".");
+  fpCommand -> SetParameterName ("drawing-mode", omitable = true);
+  fpCommand -> SetDefaultValue (0);
 }
 
 G4VisCommandSceneAddTrajectories::~G4VisCommandSceneAddTrajectories () {
@@ -732,7 +747,11 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4TrajectoriesModel* model = new G4TrajectoriesModel;
+  G4int drawingMode;
+  const char* s = newValue;
+  G4std::istrstream is ((char*)s);
+  is >> drawingMode;
+  G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {

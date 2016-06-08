@@ -22,9 +22,10 @@
 //
 //
 // $Id: XrayFluoAnalysisMessenger.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// 29 Nov 2002 minor updates (Alfonso.mantero@ge.infn.it)
 //
 // History:
 // -----------
@@ -51,7 +52,10 @@ class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
+class G4UIcmdWithAString;
 class XrayFluoAnalysisMessenger: public G4UImessenger
+
 {
 public:
   XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* );
@@ -62,9 +66,12 @@ public:
 private:
 
   //pointer to XrayFluoAnalysisManager
-  XrayFluoAnalysisManager* XrayFluoAnalysis;
-  G4UIdirectory*              XrayFluoAnalysisDir;
- 
+  XrayFluoAnalysisManager* xrayFluoAnalysis;
+  G4UIdirectory* XrayFluoAnalysisDir;
+  G4UIcmdWithAString* ouputFileCommand;
+
 };
 #endif
 #endif
+
+

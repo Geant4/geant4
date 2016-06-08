@@ -28,6 +28,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     CCFLAGS   += -fPIC
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
+  CC := gcc
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
@@ -47,9 +48,6 @@ ifeq ($(G4SYSTEM),Linux-g++)
   OIVFLAGS  += -I$(OIHOME)/include 
   G4USE_STD_NAMESPACE := yes
   CPPFLAGS += -DG4USE_STD_NAMESPACE
-  ifdef G4ODBMS
-    G4DDLX_FLAGS += -DG4std=""
-  endif
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \

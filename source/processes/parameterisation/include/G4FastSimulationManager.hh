@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.hh,v 1.7 2001/07/11 10:08:23 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4FastSimulationManager.hh,v 1.8 2002/11/02 00:10:34 mverderi Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -145,6 +145,13 @@ public:  // without description
   void ListModels(const G4ParticleDefinition*) const;
   void ListModels(const G4String& aName) const;
   const G4Envelope* GetEnvelope() const;
+
+  G4VFastSimulationModel* GetFastSimulationModel(const G4String& modelName,
+						 const G4VFastSimulationModel* previousFound,
+						 bool &foundPrevious) const;
+  
+
+
 
   //
   //----------------------------------------------

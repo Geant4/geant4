@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorld.hh,v 1.3 2002/04/10 13:13:06 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelWorld.hh,v 1.6 2002/10/14 12:36:00 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelWorld
@@ -51,20 +51,12 @@ class G4ParallelWorld
 
 public:  // with description
 
-  G4ParallelWorld(G4VPhysicalVolume &worldvolume);
+  explicit G4ParallelWorld(G4VPhysicalVolume &worldvolume);
     // initialisation and create G4ParallelStepper and a G4VPGeoDriver
 
   ~G4ParallelWorld();
     // delete G4ParallelStepper and a G4VPGeoDriver
 
-  G4ParallelWorld(const G4ParallelWorld &rhs);
-    // create G4ParallelStepper and a G4VPGeoDriver
-  
-  G4ParallelWorld &operator=(const G4ParallelWorld &rhs);
-    // create G4ParallelStepper and a G4VPGeoDriver
-
-  G4VPhysicalVolume *GetWorldVolume() const;
-    // get the world volume 
 
   G4VParallelStepper &GetParallelStepper();
     // get the parallel stepper
@@ -74,7 +66,12 @@ public:  // with description
 
 private:
 
-  G4VPhysicalVolume *fWorldVolume;
+  G4ParallelWorld(const G4ParallelWorld &rhs);
+    // create G4ParallelStepper and a G4VPGeoDriver
+  
+  G4ParallelWorld &operator=(const G4ParallelWorld &rhs);
+    // create G4ParallelStepper and a G4VPGeoDriver
+
   G4VParallelStepper *fPstepper;
   G4VPGeoDriver *fPdriver;
 };

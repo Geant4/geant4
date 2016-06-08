@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleChange.cc,v 1.21 2001/12/24 05:14:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------

@@ -26,4 +26,4 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-/event/drawTracks
+/testem/event/drawTracks

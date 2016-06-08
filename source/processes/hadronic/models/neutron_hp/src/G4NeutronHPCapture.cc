@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -66,6 +66,7 @@
   #include "G4NeutronHPThermalBoost.hh"
   G4VParticleChange * G4NeutronHPCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   {
+    if(getenv("NeutronHPCapture")) G4cout <<" ####### G4NeutronHPCapture called"<<G4endl;
     G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
     G4int index = theMaterial->GetElement(0)->GetIndex();
@@ -73,7 +74,7 @@
     {
       xSec = new G4double[n];
       G4double sum=0;
-      G4int i, index;
+      G4int i;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
       G4double rWeight;    
       G4NeutronHPThermalBoost aThermalE;

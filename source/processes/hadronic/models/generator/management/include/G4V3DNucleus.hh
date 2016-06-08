@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.8 2002/06/06 10:07:14 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4V3DNucleus.hh,v 1.10 2002/12/12 19:17:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1
@@ -58,6 +58,7 @@ class G4V3DNucleus
       virtual G4double GetNuclearRadius() = 0;
       virtual G4double GetNuclearRadius(const G4double maxRelativeDensity) = 0;
       virtual G4double GetOuterRadius() = 0;
+      virtual G4double CoulombBarrier() = 0;
       virtual void DoLorentzBoost(const G4LorentzVector & theBoost) = 0;
       virtual void DoLorentzBoost(const G4ThreeVector & theBeta) = 0;
       virtual void DoLorentzContraction(const G4LorentzVector & theBoost) = 0;

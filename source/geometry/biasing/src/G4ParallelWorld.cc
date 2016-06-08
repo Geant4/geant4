@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorld.cc,v 1.2 2002/04/09 16:23:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelWorld.cc,v 1.6 2002/11/04 10:43:07 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -37,41 +37,22 @@
 #include "G4VPhysicalVolume.hh"
 
 G4ParallelWorld::G4ParallelWorld(G4VPhysicalVolume &worldvolume)
- : fWorldVolume(&worldvolume),
-   fPstepper(new G4ParallelStepper),
-   fPdriver(new G4ParallelNavigator(*fWorldVolume))
-{}
+ : fPstepper(new G4ParallelStepper),
+   fPdriver(new G4ParallelNavigator(worldvolume))
+{
+  if (!fPstepper) {
+    G4Exception("ERROR: G4ParallelWorld::G4ParallelWorld: new failed to create a G4ParallelStepper");
+  }
+  if (!fPdriver) {
+     G4Exception("ERROR: G4ParallelWorld::G4ParallelWorld: new failed to create a G4ParallelNavigator");
+  }
+}
 
 G4ParallelWorld::~G4ParallelWorld()
 {
   delete fPdriver;
   delete fPstepper;
 }
-
-G4ParallelWorld::G4ParallelWorld(const G4ParallelWorld &rhs)
- : fWorldVolume(rhs.GetWorldVolume())
-{
-   fPstepper = new G4ParallelStepper;
-   fPdriver = new G4ParallelNavigator(*fWorldVolume);
-}
-
-G4ParallelWorld &G4ParallelWorld::operator=(const G4ParallelWorld &rhs)
-{
-  if (this!=&rhs) {
-
-    fWorldVolume = rhs.GetWorldVolume();
-    fPstepper = new G4ParallelStepper;
-    fPdriver = new G4ParallelNavigator(*fWorldVolume);
-  }
-  return *this;
-}
-
-
-G4VPhysicalVolume *G4ParallelWorld::GetWorldVolume() const
-{
-  return fWorldVolume;
-}
-
 
 G4VParallelStepper &G4ParallelWorld::GetParallelStepper()
 {

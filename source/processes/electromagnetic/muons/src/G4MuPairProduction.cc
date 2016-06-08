@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuPairProduction.cc,v 1.26 2001/11/09 13:52:32 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
 //                by Laszlo Urban, May 1998 

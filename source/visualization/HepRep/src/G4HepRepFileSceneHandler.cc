@@ -21,10 +21,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.7 2002/02/03 22:22:58 perl Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// 
+//
+// $Id: G4HepRepFileSceneHandler.cc,v 1.10 2002/12/13 11:18:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
+//
+//
 // Joseph Perl  27th January 2002
 // A base class for a scene handler to export geometry and trajectories
 // to the HepRep xml file format.
@@ -45,6 +67,8 @@
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
+#include "G4VTrajectory.hh"
+#include "G4VHit.hh"
 
 //HepRep
 #include "HepRepXMLWriter.hh"
@@ -79,22 +103,9 @@ void G4HepRepFileSceneHandler::EstablishSpecials
 
 void G4HepRepFileSceneHandler::BeginModeling() {
   G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
-  // Force culling off...
-  if (fpModel) {
-    fpOriginalMP = fpModel->GetModelingParameters();
-    if (fpOriginalMP) {
-      fpNonCullingMP = new G4ModelingParameters(*fpOriginalMP);
-      fpNonCullingMP->SetCulling(false);
-      fpModel->SetModelingParameters(fpNonCullingMP);
-    }
-  }
 }
 
 void G4HepRepFileSceneHandler::EndModeling() {
-  if (fpModel && fpOriginalMP) {
-    fpModel->SetModelingParameters(fpOriginalMP);
-    delete fpNonCullingMP;
-  }
   G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.
 }
 
@@ -237,6 +248,19 @@ void G4HepRepFileSceneHandler::AddThis(const G4VSolid& solid) {
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
 }
 
+void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
+#ifdef G4HEPREPFILEDEBUG
+    G4cout << "G4HepRepFileSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
+#endif
+    G4VSceneHandler::AddThis (traj);
+}
+
+void G4HepRepFileSceneHandler::AddThis (const G4VHit& hit) {
+#ifdef G4HEPREPFILEDEBUG
+    G4cout << "G4HepRepFileSceneHandler::AddThis(G4VHit&) " << G4endl;
+#endif
+    G4VSceneHandler::AddThis (hit);
+}
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 #ifdef G4HEPREPFILEDEBUG
@@ -272,7 +296,7 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
   hepRepXMLWriter->addAttValue("MarkSize", 4);
 
   hepRepXMLWriter->addPrimitive();
-    
+
   for (size_t i=0; i < line.size(); i++) {
      G4Point3D vertex = (*fpObjectTransformation) * line[i];
      hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
@@ -303,7 +327,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 
   hepRepXMLWriter->addAttValue("MarkName", "Dot");
   hepRepXMLWriter->addAttValue("MarkSize", 4);
-  
+
   hepRepXMLWriter->addPrimitive();
 
   G4Point3D center = (*fpObjectTransformation) * circle.GetPosition();
@@ -389,7 +413,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     length = sprintf (newFileSpec, "%s%d%s","G4Data",fileCounter,".heprep");
     hepRepXMLWriter->open(newFileSpec);
     fileCounter++;
-    
+
     hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
     hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
     hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
@@ -420,7 +444,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     }
 
     hepRepXMLWriter->addInstance();
-    
+
     // Handle Type declaration for Detector Geometry,
     // replacing G4's top geometry level name "worldPhysical" with the
     // name "Detector Geometry".
@@ -435,13 +459,13 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
       hepRepXMLWriter->addType("G4 Culled Layer", hepRepXMLWriter->typeDepth + 1);
       hepRepXMLWriter->addInstance();
     }
-    
+
     if (fCurrentDepth!=0) {
     // Add the HepRepType for the current volume.
       hepRepXMLWriter->addType(fpCurrentPV->GetName(),fCurrentDepth);
       hepRepXMLWriter->addInstance();
     }
- 
+
     // Additional attributes.
     hepRepXMLWriter->addAttValue("LVol", fpCurrentLV->GetName());
     hepRepXMLWriter->addAttValue("Solid", fpCurrentLV->GetSolid()->GetName());
@@ -451,7 +475,7 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     hepRepXMLWriter->addAttValue("State", fpCurrentLV->GetMaterial()->GetState());
     hepRepXMLWriter->addAttValue("Radlen", fpCurrentLV->GetMaterial()->GetRadlen());
   }
-  
+
   hepRepXMLWriter->addAttValue("DrawAs",primName);
   hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
 
@@ -460,17 +484,17 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
   float redness = colour.GetRed();
   float greenness = colour.GetGreen();
   float blueness = colour.GetBlue();
-  
+
   if (redness==0. && greenness==0. && blueness==0.) {
     redness = 1.;
     greenness = 1.;
     blueness = 1.;
   }
-  
+
   if (strcmp(primName,"Point")==0)
     hepRepXMLWriter->addAttValue("MarkColor",redness,greenness,blueness);
   else
-    hepRepXMLWriter->addAttValue("LineColor",redness,greenness,blueness); 
+    hepRepXMLWriter->addAttValue("LineColor",redness,greenness,blueness);
 
   // Handle visibility attribute.
   const G4VisAttributes* visAtts = visible.GetVisAttributes();

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.4 2001/07/11 09:59:10 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ClassicalRK4.cc,v 1.6 2002/11/20 17:56:35 japost Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #include "G4ClassicalRK4.hh"
 #include "G4ThreeVector.hh"
@@ -33,12 +33,14 @@
 // Constructor sets the number of variables (default = 6)
 
 G4ClassicalRK4::G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
-  : G4MagErrorStepper(EqRhs, numberOfVariables),
-    fNumberOfVariables(numberOfVariables)
+  : G4MagErrorStepper(EqRhs, numberOfVariables)
+    // fNumberOfVariables(numberOfVariables)
 {
-   dydxm = new G4double[fNumberOfVariables];
-   dydxt = new G4double[fNumberOfVariables]; 
-   yt    = new G4double[fNumberOfVariables]; 
+   unsigned int noVariables= G4std::max(numberOfVariables,8); // For Time .. 7+1
+ 
+   dydxm = new G4double[noVariables];
+   dydxt = new G4double[noVariables]; 
+   yt    = new G4double[noVariables]; 
 }
 
 ////////////////////////////////////////////////////////////////
@@ -68,10 +70,15 @@ G4ClassicalRK4::DumbStepper( const G4double  yIn[],
 			           G4double  h,
 			           G4double  yOut[])
 {
-  const G4int nvar = fNumberOfVariables;   //  GetNumberOfVariables(); 
+  const G4int nvar = this->GetNumberOfVariables();   //  fNumberOfVariables(); 
   G4int i;
   G4double  hh = h*0.5 , h6 = h/6.0  ;
 
+  // Initialise time to t0, needed when it is not updated by the integration.
+  //        [ Note: Only for time dependent fields (usually electric) 
+  //                  is it neccessary to integrate the time.] 
+  yt[7]   = yIn[7]; 
+  yOut[7] = yIn[7];
 
   for(i=0;i<nvar;i++)
   {

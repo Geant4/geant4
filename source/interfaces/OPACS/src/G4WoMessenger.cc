@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4WoMessenger.cc,v 1.4 2001/07/11 10:01:18 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifdef G4UI_BUILD_WO_SESSION
 

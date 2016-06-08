@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.24 2001/11/09 13:52:32 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4MuIonisation.cc,v 1.26 2002/12/04 15:45:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // --------------- G4MuIonisation physics process ------------------------------
 //                 by Laszlo Urban, September 1997 
@@ -40,6 +40,7 @@
 // 29-10-01 all static functions no more inlined (mma)  
 // 07-11-01 correction(Tmax+xsection computation) L.Urban
 // 08-11-01 particleMass becomes a local variable (mma)
+// 04-12-02 fix misprint in majorant in PostStep (VI)
 // -----------------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -477,7 +478,7 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
  G4double x,twoep,a1,grej;
  const G4double alphaprime = fine_structure_const/twopi; 
  G4double a0=log(2.*TotalEnergy/particleMass); 
- G4double grejc=(1.-xc*(betasquare*xc-xc*te2))*(1.+ alphaprime*a0*a0);
+ G4double grejc=(1.-xc*betasquare+te2)*(1.+ alphaprime*a0*a0);
  do { x=xc/(1.-(1.-xc)*G4UniformRand());
       twoep = 2.*x*MaxKineticEnergyTransfer;
       a1    = log(1.+twoep/electron_mass_c2);

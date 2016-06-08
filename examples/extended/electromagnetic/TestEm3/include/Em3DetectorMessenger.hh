@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.hh,v 1.5 2001/10/22 10:58:48 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em3DetectorMessenger.hh,v 1.6 2002/12/12 11:19:37 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -55,7 +55,7 @@ class Em3DetectorMessenger: public G4UImessenger
   private:
     Em3DetectorConstruction* Em3Detector;
     
-    G4UIdirectory*             Em3detDir;
+    G4UIdirectory*             testemDir;
 
     G4UIcmdWithADoubleAndUnit* SizeYZCmd;
     G4UIcmdWithAnInteger*      NbLayersCmd;

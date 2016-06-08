@@ -43,15 +43,15 @@
 /dmx/gun/radius 650 mum
 /dmx/gun/halfz 300.0 nm
 #/dmx/gun/centre 0 0 82.750 mm
-/dmx/gun/centre 0 0 -311.75 mm
+/dmx/gun/centre 0 0 -302.65 mm
 #/dmx/gun/centre 0 0 0 mm
 /dmx/gun/confine americium_phys
 #
 # set to 0 if too many tracks to store
 /tracking/storeTrajectory 0
 #
-/dmx/hitsfile alpha.out
-/dmx/histogramfile alpha.his
+/dmx/hitsfile alpha_1000.out
+/dmx/histogramfile alpha_1000.his
 
 /run/beamOn 1000
 #

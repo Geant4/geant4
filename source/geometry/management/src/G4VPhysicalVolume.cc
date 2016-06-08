@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.4 2001/07/11 09:59:21 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VPhysicalVolume.cc,v 1.5 2002/10/14 07:42:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -55,6 +55,11 @@ G4VPhysicalVolume::G4VPhysicalVolume(G4RotationMatrix *pRot,
 G4VPhysicalVolume::~G4VPhysicalVolume() 
 {
     G4PhysicalVolumeStore::DeRegister(this);
+}
+
+G4int G4VPhysicalVolume::GetMultiplicity() const
+{
+  return 1;
 }
 
 G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const

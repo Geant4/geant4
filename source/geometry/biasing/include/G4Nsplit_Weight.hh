@@ -21,16 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nsplit_Weight.hh,v 1.5 2002/04/10 13:13:06 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Nsplit_Weight.hh,v 1.9 2002/11/20 13:18:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4Nsplit_Weight
 //
 // Class description:
 // 
-// A struct used by importance sampling. It contains the number of tracks
-// a mother track should be split into and their weight.
+// A class (struct) used by importance sampling. It contains the number
+// of tracks a mother track should be split into and their weight.
  
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -39,10 +39,9 @@
 
 #include "globals.hh"
 
-struct G4Nsplit_Weight
+class G4Nsplit_Weight
 {
-  G4Nsplit_Weight(G4int an, G4double aw): fN(an), fW(aw){}
-    // initialise members
+  public:
 
   G4int fN;
     // number of tracks a mother track should be split into
@@ -54,6 +53,7 @@ struct G4Nsplit_Weight
 
 G4std::ostream& operator<<(G4std::ostream &out, 
 			   const G4Nsplit_Weight &nw);
+
 
 #endif
 

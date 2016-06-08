@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleGunMessenger.cc,v 1.8 2002/02/26 16:34:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4ParticleGunMessenger.hh"

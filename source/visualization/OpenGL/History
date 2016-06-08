@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2002/02/24 01:47:46 johna Exp $
+$Id: History,v 1.23 2002/11/27 12:46:55 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,27 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+27th November 2002  John Allison  (vis-V04-01-08)
+- Improved algorithm of CompareForKernelVisit.
+
+11th November 2002  John Allison  (opengl-V04-01-02)
+- Corrected inclusion of G4OpenGLXViewer #ifdef X_DRIVER.
+- Added G4OpenGLSceneHandler::AddThis for trajectories and hits - simply
+  call default but there as a marker and encourager.
+- Added tracking and digits+hits/hits to GNUmakefile.
+
+16th October 2002  John Allison  (opengl-V04-01-01)
+- Fix for WIN32.  Now compiles but viewer not implemented.
+
+24th June 2002  John Allison  (opengl-V04-01-00)
+- Further cosmetic changes in G4OpenGLXViewer.cc for DEC compiler.
+
+10th June 2002  John Allison  (opengl-V04-00-03)
+- Cosmetic changes for SUN-CC in G4OpenGLXmConvenienceRoutines.cc.
+
+6th June 2002  John Allison  (opengl-V04-00-02)
+- Cosmetic changes for GNU compiler in G4OpenGLXViewer.cc.
 
 23rd February 2002  John Allison  (opengl-V04-00-01)
 - Changes to encourage compilation on Windows in preparation for

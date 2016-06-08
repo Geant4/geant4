@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.6 2002/04/16 18:19:14 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4StateManager.cc,v 1.8 2002/12/05 02:32:21 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -38,8 +38,8 @@
 G4StateManager* G4StateManager::theStateManager = 0;
 
 G4StateManager::G4StateManager()
- : theCurrentState(PreInit),
-   thePreviousState(PreInit),
+ : theCurrentState(G4State_PreInit),
+   thePreviousState(G4State_PreInit),
    theBottomDependent(0),
    suppressAbortion(0),
    msgptr(0)
@@ -165,9 +165,9 @@ G4StateManager::SetNewState(G4ApplicationState requestedState)
 G4bool
 G4StateManager::SetNewState(G4ApplicationState requestedState, const char* msg)
 {
-   if(requestedState==Abort && suppressAbortion>0) {
+   if(requestedState==G4State_Abort && suppressAbortion>0) {
      if(suppressAbortion==2) return false;
-     if(theCurrentState==EventProc) return false;
+     if(theCurrentState==G4State_EventProc) return false;
    }
    msgptr = msg;
    size_t i=0;
@@ -216,19 +216,19 @@ G4StateManager::GetStateString(G4ApplicationState aState) const
   G4String stateName;
   switch(aState)
   {
-    case PreInit:
+    case G4State_PreInit:
      stateName = "PreInit"; break;
-    case Init:
+    case G4State_Init:
      stateName = "Init"; break;
-    case Idle:
+    case G4State_Idle:
      stateName = "Idle"; break;
-    case GeomClosed:
+    case G4State_GeomClosed:
      stateName = "GeomClosed"; break;
-    case EventProc:
+    case G4State_EventProc:
      stateName = "EventProc"; break;
-    case Quit:
+    case G4State_Quit:
      stateName = "Quit"; break;
-    case Abort:
+    case G4State_Abort:
      stateName = "Abort"; break;
     default:
      stateName = "Unknown";

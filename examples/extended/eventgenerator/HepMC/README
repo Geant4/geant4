@@ -3,21 +3,34 @@
 
   This directory contains examples for using HepMC as an interface with 
 various Monte Carlo event generators, such as PYTHIA. 
-Note that HepMC can be currently compiled only with gcc, so examples in 
-this directory were tested only with gcc.
+
+  In the version 1.80 of CLHEP, HepMC is merged into a part of CLHEP.
+Toghether with this migration, the generic interfaces with HepMC is 
+provied in the G4 main tree from the release of Geant4.5.0.
+But there are differences between the original HepMC and the CLHEP version
+in terms of the I/O scheme. So, in this directory, a pair of codes for 
+each example, one for original HepMC and the other for the CLHEP version 
+which is tagged with "-clhep", is prepared.
+
 
 Requirements for external software packages
 -------------------------------------------
-HepMC
+HepMC (now, migrated into CLHEP(1.80))
   tested version : 1.21 (latest at 28/May/02)
   URL: http://mdobbs.home.cern.ch/mdobbs/HepMC/
+
+  Note that the original HepMC can be currently compiled only with gcc, 
+  so examples were tested only with gcc.
 
 PYTHIA
   tested version 6.205
   URL: http://www.thep.lu.se/~torbjorn/Pythia.html
 
+
 What is provided
 ----------------
+a) For the original HepMC
+
 class HepMCG4Interface
   This class is derived from G4VPrimaryGenerator, and is a base class 
   for primary generation via HepMC object.
@@ -52,15 +65,25 @@ class HepMCG4PythiaInterface / HepMCG4AsciiReaderMessenger
   Users can set parameters, initialize, generate, and terminate
   by command line operation.
 
+
+b) For the CLHEP version of HepMC
+
+  G4HepMCInterface, G4HepMCAsciiReader and G4HepMCAsciiReaderMessenger,
+which have the same functionality as the above respective ones, are located
+in the Geant4 "event/" source tree. As an example of interface with PYTHIA, 
+the classes of HxxPythiaInterface/HxxPythiaMessenger are provided in each 
+example.
+
 Examples
 --------
-HepMCEx01
+HepMCEx01/HepMCEx01-clhep
   This example is based on ExampleN04. Only part of the primary generator 
   action is replaced with new one.
 
-HepMCEx02
+HepMCEx02/HepMCEx02-clhep
   This is another example having the same generator action as HepMCEx01, 
   but much simpler user control.
+
 
 Macros in examples
 -----------------
@@ -77,10 +100,11 @@ library have to be given in GNUmakefile.  Please modify the next two lines
 in GNUmakefile;
 
   HEPMC_DIR   := xxxxx    # HepMC installed directory
+                            (required only for using the original version)
   CERNLIB_DIR := xxxxx    # directory including PYTHIA library
 
 Notes
 -----
 We attached a sample HepMC Ascii data file, "data/example_MyPhyia.dat",
-which contains ten PYTHIA events created by "data/example_MyPythia.cxx".
+which contains ten PYTHIA events created by "data/example_MyPythia.cxx(cc)".
 

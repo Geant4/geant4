@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.6 2002/05/15 10:23:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParameterisedNavigation.cc,v 1.7 2002/08/06 10:35:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // class G4ParameterisedNavigation Implementation
+//
+// Author: P.Kent, 1996
 //
 // ********************************************************************
 

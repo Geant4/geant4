@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.5 2002/05/31 08:07:06 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelNavigator.cc,v 1.14 2002/11/04 10:43:07 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,59 +31,63 @@
 //
 // ----------------------------------------------------------------------
 
-#include "g4std/strstream"
-
 #include "G4ParallelNavigator.hh"
 
-#include "G4VTouchable.hh"
-#include "G4Navigator.hh"
-#include "G4PTouchableKey.hh"
+#include "g4std/strstream"
 #include "G4VParallelStepper.hh"
 
+
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
-  : fNavigator(*(new G4Navigator)), fNlocated(0)
-{
-  fNavigator.SetWorldVolume(&aWorldVolume);
-  fCurrentTouchable = fNavigator.CreateTouchableHistory();
-}
+  : 
+  fNlocated(0),
+  fMaxShiftedTrys(10),
+  fCurrentTouchableH((fNavigator.SetWorldVolume(&aWorldVolume),
+		      fNavigator.CreateTouchableHistory())),
+  fVerbose(1)
+{}
 
 G4ParallelNavigator::~G4ParallelNavigator()
 {
-  delete fCurrentTouchable;
-  delete &fNavigator;
 }
 
 // public functions
 
-G4PTouchableKey G4ParallelNavigator::
+G4GeometryCell G4ParallelNavigator::
 LocateOnBoundary(const G4ThreeVector &aPosition, 
 		 const G4ThreeVector &aDirection)
-{
-  Locate(aPosition, aDirection, true);
-  // since the track crosses a boundary ipdate stepper 
-  return GetCurrentTouchableKey();
+{/*
+  fNavigator->SetGeometricallyLimitedStep();
+  fNavigator->
+    LocateGlobalPointAndUpdateTouchableHandle( aPosition,
+					       aDirection,
+					       fCurrentTouchableH,
+					       true);
+  fNlocated++;
+ */
+  if (fVerbose>=2) {
+    G4cout.precision(12);
+    G4cout << "LOB: " << aPosition << ", " << aDirection << G4endl;
+  }
+  fNavigator.SetGeometricallyLimitedStep();
+  Locate(aPosition, aDirection, true, false);
+  //  since the track crosses a boundary ipdate stepper 
+  G4GeometryCell g= GetCurrentGeometryCell();
+  return g;
 }
 
 G4double G4ParallelNavigator::
 ComputeStepLengthInit(const G4ThreeVector &aPosition, 
 		      const G4ThreeVector &aDirection)
 {
-  G4double newSafety;
-  G4double stepLength;
-
   // initialization
   fNlocated = 0;
-  
-  // first try
-  Locate(aPosition, aDirection, false);
-  stepLength  = fNavigator.ComputeStep( aPosition, aDirection,
-					kInfinity, newSafety);
-  if (stepLength<=0.0) {
-    // second try with schifted position
-    stepLength  = ComputeStepLengthShifted("ComputeStepLengthInit",
-					   aPosition, aDirection);
-  } 
-  return stepLength;
+  if (fVerbose>=2) {
+    G4cout.precision(12);
+    G4cout << "CSInit: " << aPosition << ", " << aDirection << G4endl;
+  }
+  Locate(aPosition, aDirection, false, false);
+  return GetStepLength("ComputeStepLengthInit",
+			 aPosition, aDirection);
 }
 
 G4double G4ParallelNavigator::
@@ -94,25 +98,19 @@ ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition,
     Error("ComputeStepLengthCrossBoundary: no location done before call",
 	  aPosition, aDirection);
   }
-
-  // if the track is on boundary the location was done
-  // in the DOIT of the ImportanceSplitExaminer
-
-  G4double newSafety;    
-  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-				       kInfinity, newSafety);
-  if (stepLength<=0.) {
-    // second try with schifted position
-    G4cout << "Warning: G4ParallelNavigator::ComputeStepLengthCrossBoundary: "
-	   << G4endl;
-    G4cout << "stepLength<=0." << ", pos = " << aPosition 
-	   << ", dir = " << aDirection << G4endl;
-    G4cout << "try ComputeStepLengthShifted" << G4endl;
-    stepLength  = ComputeStepLengthShifted("ComputeStepLengthCrossBoundary",
-					   aPosition, aDirection);
+  if (fVerbose>=2) {
+    G4cout.precision(12);
+    G4cout << "CSCB: " << aPosition << ", " << aDirection << G4endl;
   }
-  return stepLength;
+  // if the track is on boundary the LocateOnBoundary was called
+  // in the DOIT of the ParalleTransport
+
+  // but location in volume overcomes a problem with spheres
+  //  fNavigator->LocateGlobalPointWithinVolume(aPosition);
+  return  GetStepLength("ComputeStepLengthCrossBoundary",
+			 aPosition, aDirection);
 }
+
 
 G4double G4ParallelNavigator::
 ComputeStepLengthInVolume(const G4ThreeVector &aPosition, 
@@ -122,68 +120,140 @@ ComputeStepLengthInVolume(const G4ThreeVector &aPosition,
     Error("ComputeStepLengthInVolume, no location done before call", 
 	  aPosition, aDirection);
   }
-
+  if (fVerbose>=2) {
+    G4cout.precision(12);
+    G4cout << "CSinV: " << aPosition << ", " << aDirection << G4endl;
+  }
   // if the track is not on the boundary and it's
   // not the first step, the location must be inside the 
   // volume 
+
   fNavigator.LocateGlobalPointWithinVolume(aPosition);
-  G4double newSafety;
-  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-				       kInfinity, newSafety);
-  if (stepLength<=0.) {
-    // second try with schifted position
-    G4cout << "Warning: G4ParallelNavigator::ComputeStepLengthInVolume: "
-	   << G4endl;
-    G4cout << "stepLength<=0." << ", pos = " << aPosition 
-	   << ", dir = " << aDirection << G4endl;
-    G4cout << "try ComputeStepLengthShifted" << G4endl;
-    stepLength  = ComputeStepLengthShifted("ComputeStepLengthInVolume",
-					   aPosition, aDirection);
-  }
-  return stepLength;
+  //  Locate(aPosition, aDirection, true); // reduces stepLength<=0. calls
+  return  GetStepLengthUseLocate("ComputeStepLengthInVolume",
+				 aPosition, aDirection);
 }
 
 // private functions
 
 void G4ParallelNavigator::Locate(const G4ThreeVector &aPosition, 
                                  const G4ThreeVector &aDirection,
-                                       G4bool histsearch)
+				 G4bool historysearch,
+				 G4bool useDirection)
 {
-  fNavigator.SetGeometricallyLimitedStep();
-  fNavigator.
-    LocateGlobalPointAndUpdateTouchable( aPosition, aDirection,
-                                         fCurrentTouchable, histsearch);
+  if (fVerbose>=2) {
+    G4cout.precision(12);
+    G4cout << "Locate: " << aPosition << ", " << aDirection << G4endl;
+  }
+  fNavigator.LocateGlobalPointAndSetup( aPosition, 
+					&aDirection, 
+					historysearch, 
+					!useDirection);
+  fCurrentTouchableH = fNavigator.CreateTouchableHistory();
+
   fNlocated++;
   
   return;
 }
 
+
+G4double G4ParallelNavigator::
+GetStepLength(const G4String &methodname,
+	      const G4ThreeVector &aPosition, 
+	      const G4ThreeVector &aDirection) {
+  if (fVerbose>=2) {
+    G4cout.precision(12);
+    G4cout << "GetSL: " << aPosition << ", " << aDirection << G4endl;
+  }
+  G4double newSafety = 0.;    
+  G4double stepLength = fNavigator.ComputeStep( aPosition, 
+						aDirection,
+						kInfinity, 
+						newSafety);
+  // if stepLength = 0 try shifting
+  if (stepLength<=2*kCarTolerance) {
+    stepLength  = 
+      ComputeStepLengthShifted(methodname,
+			       aPosition, aDirection);
+  }
+  return stepLength;
+}
+
+G4double G4ParallelNavigator::
+GetStepLengthUseLocate(const G4String &methodname,
+	      const G4ThreeVector &aPosition, 
+	      const G4ThreeVector &aDirection) {
+  if (fVerbose>=2) {
+    G4cout.precision(12);
+    G4cout << "GetSLuseLocate: " << aPosition << ", " << aDirection << G4endl;
+  }
+  G4double newSafety = 0;    
+  G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
+						kInfinity, newSafety);
+  // if stepLength = 0 try locate
+  if (stepLength<=2*kCarTolerance) {
+    Locate(aPosition, aDirection, true, true);    
+    stepLength  = GetStepLength(methodname + 
+				"form GetStepLengthUseLocate",
+				aPosition, 
+				aDirection);
+  }
+  return stepLength;
+}
+
+
 G4double
-G4ParallelNavigator::ComputeStepLengthShifted(const G4String &m,
-                                              const G4ThreeVector &aPosition, 
-                                              const G4ThreeVector &aDirection)
+G4ParallelNavigator::
+ComputeStepLengthShifted(const G4String &m,
+			 const G4ThreeVector &aPosition, 
+			 const G4ThreeVector &aDirection)
 {
+  if (fVerbose>=1) {
+    G4cout.precision(12);
+    G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: invoked by: "
+	   << m << G4endl;
+  }
   G4ThreeVector shift_pos(aPosition);
   shift_pos+=G4ThreeVector(Shift(aDirection.x()), 
 			   Shift(aDirection.y()), 
 			   Shift(aDirection.z()));
-  Locate(shift_pos, aDirection, false);
-  G4double newSafety;
-  G4double stepLength = fNavigator.ComputeStep( shift_pos, aDirection,
-                                                kInfinity, newSafety);
-  if (stepLength<=0.0) {
-    G4std::ostrstream os;
-    os << "ComputeStepLengthShifted: called by " << m << "\n";
-    os << "shifted positio in second try: " << shift_pos << '\0' << G4endl;
-    Error(os.str() , aPosition, aDirection);
+  G4double stepLength = 0.;
+  G4int trys = 0;
+  while (stepLength<=2*kCarTolerance && trys < fMaxShiftedTrys) {
+    if (fVerbose>=1) {
+      G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: trys = "
+	     << ++trys << G4endl;
+      G4cout << "shifted position: " << shift_pos 
+	     << ", direction: " << aDirection << G4endl;
+    }
+    Locate(shift_pos, aDirection, true, true); // to get into the correct volume
+    G4double newSafety = 0;
+    fNavigator.LocateGlobalPointWithinVolume(aPosition);    // to place at the correct position
+    stepLength = fNavigator.ComputeStep( aPosition, aDirection,
+					 kInfinity, newSafety);
+  }
+  if (stepLength<=kCarTolerance) {
+    char st[200];
+    G4std::ostrstream os(st,200);
+    os << "still got stepLength<=kCarTolerance: "
+       << shift_pos
+       << "\n"
+       << '\0';
+    G4String m(st);
+    Error(m, aPosition, aDirection);
   } 
   return stepLength;
 }
 
-G4PTouchableKey G4ParallelNavigator::GetCurrentTouchableKey() const
+G4GeometryCell G4ParallelNavigator::GetCurrentGeometryCell() const
 {
-  return G4PTouchableKey(*fCurrentTouchable->GetVolume(),
-			 fCurrentTouchable->GetReplicaNumber());
+  return G4GeometryCell(*fCurrentTouchableH->GetVolume(),
+			 fCurrentTouchableH->GetReplicaNumber());
+}
+
+
+void  G4ParallelNavigator::SetVerboseity(G4int v) {
+  fVerbose = v;
 }
 
 void G4ParallelNavigator::Error(const G4String &m,
@@ -198,7 +268,12 @@ void G4ParallelNavigator::Error(const G4String &m,
 
 G4double G4ParallelNavigator::Shift(G4double d)
 {
-  if (d>0) return 2 * kCarTolerance;
-  if (d<0) return -2 * kCarTolerance;
-  return 0.;
+  G4double s=0;
+  if (d>0){
+    s = 2 * kCarTolerance;
+  }
+  else if (d<0) {
+    s = -2 * kCarTolerance;
+  }
+  return s;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B03PrimaryGeneratorAction.hh,v 1.2 2002/04/19 10:54:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: B03PrimaryGeneratorAction.hh,v 1.3 2002/11/08 17:35:18 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef B03PrimaryGeneratorAction_hh

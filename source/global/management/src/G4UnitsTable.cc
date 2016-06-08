@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.16 2002/05/06 12:06:48 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4UnitsTable.cc,v 1.17 2002/11/20 11:25:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
@@ -106,6 +106,13 @@ G4int G4UnitDefinition::operator!=(const G4UnitDefinition &right) const
   return (this != (G4UnitDefinition *) &right);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ 
+G4UnitsTable& G4UnitDefinition::GetUnitsTable()
+{
+  return theUnitsTable;
+}
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4double G4UnitDefinition::GetValueOf(G4String string)

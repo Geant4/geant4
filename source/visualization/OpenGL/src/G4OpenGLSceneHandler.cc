@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.15 2002/02/24 01:48:09 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.17 2002/12/11 15:57:58 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -93,6 +93,9 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
 //Method for handling G4Polyline objects (from tracking or wireframe).
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
+  G4int nPoints = line.size ();
+  if (nPoints <= 0) return;
+
   const G4Colour& c = GetColour (line);
   glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 
@@ -103,7 +106,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   glDisable (GL_LIGHTING);
   glBegin (GL_LINE_STRIP);
 
-  G4int nPoints = line.size ();
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
     x = line[iPoint].x(); 
@@ -588,6 +590,14 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   delete [] ctrl_pnt_array;
 
   gluDeleteNurbsRenderer (gl_nurb);
+}
+
+void G4OpenGLSceneHandler::AddThis(const G4VTrajectory& traj) {
+  G4VSceneHandler::AddThis(traj);  // For now.
+}
+
+void G4OpenGLSceneHandler::AddThis(const G4VHit& hit) {
+  G4VSceneHandler::AddThis(hit);  // For now.
 }
 
 #endif

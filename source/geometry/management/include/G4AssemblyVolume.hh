@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.7 2002/06/22 00:39:23 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4AssemblyVolume.hh,v 1.8 2002/09/10 16:59:44 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Class G4AssemblyVolume
@@ -173,16 +173,24 @@ class G4AssemblyVolume
  public:
     
   unsigned int GetInstanceCount() const;
+    // Return the number of existing instance of G4AssemblyVolume class
+  unsigned int GetAssemblyID()    const;
+    // Return instance number of this concrete object
   
  protected:
      
   void         SetInstanceCount( unsigned int value );
+  void         SetAssemblyID( unsigned int value );
+ 
   void         InstanceCountPlus();
   void         InstanceCountMinus();
 
  private:
 
   static unsigned int fsInstanceCounter;
+  // Class instance counter
+         unsigned int fAssemblyID;
+  // Assembly object ID derived from instance counter at construction time
 
 };
 

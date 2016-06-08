@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: F03VisManager.cc,v 1.3 2001/12/12 15:22:31 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: F03VisManager.cc,v 1.4 2002/11/26 08:28:06 duns Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
-// 
+//
 // John Allison 24th January 1998.
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,6 +41,7 @@
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
+#include "G4HepRep.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -97,6 +98,7 @@ void F03VisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
   RegisterGraphicsSystem (new G4HepRepFile);
+  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);

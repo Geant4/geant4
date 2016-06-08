@@ -48,7 +48,8 @@ class DMXPhysicsList: public G4VUserPhysicsList
 {
 public:
   DMXPhysicsList();
-  virtual ~DMXPhysicsList();
+  ~DMXPhysicsList();
+  //  virtual ~DMXPhysicsList();
 
 
 public:
@@ -89,7 +90,6 @@ private:
   G4double cutForProton;
   G4double cutForAlpha;
   G4double cutForGenericIon;
-  G4double cutForOpticalPhoton;
 
   // these methods Construct particles 
   void ConstructMyBosons();

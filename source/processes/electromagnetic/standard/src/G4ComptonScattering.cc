@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ComptonScattering.cc,v 1.16 2002/04/18 10:12:01 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------

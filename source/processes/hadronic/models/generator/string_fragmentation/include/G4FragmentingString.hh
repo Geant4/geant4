@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FragmentingString.hh,v 1.1 2001/10/09 10:38:32 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4FragmentingString_h

@@ -1,0 +1,37 @@
+-------------------------------------------------------------------
+$Id: History,v 1.8 2002/12/11 14:32:29 ribon Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - Composite calorimeter example
+     =========================================================
+
+                      Example History file
+                      ---------------------
+
+11.12.2002 - A.Ribon (ccal-V04-01-04)
+- Some clean up and fixes, but unfortunately not yet fixed
+  the problem of reading the material in the Sun platform
+  (it looks like a problem with file stream).
+
+06.12.2002 - G.Cosmo (ccal-V04-01-03)
+- Migrated messenger to new G4ApplicationState.
+
+15.11.2002 - A.Ribon (ccal-V04-01-02)
+- Fixed problem of Anaphe with c-shell, and tested with
+  geant4-04-01-ref-04
+
+24.10.2002 - A.Ribon (ccal-V04-01-01)
+- Changed default physics list to QGSC, with the possibility
+  of easily switching to either LHEP or QGSP.
+
+24.10.2002 - A.Ribon (ccal-V04-01-00)
+- Replaced physics list with ufficial LHEP one;
+  added visualization and GUI; written README file.
+
+9.10.2002 - S.Banerjee
+- Put the various classes in place, and rename them.
+
+30.09.2002 - M.G.Pia
+- Created directory
+             

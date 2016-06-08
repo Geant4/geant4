@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.3 2002/04/09 17:40:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4MScoreProcess.cc,v 1.9 2002/11/04 10:47:56 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -32,16 +32,21 @@
 // ----------------------------------------------------------------------
 
 #include "G4MScoreProcess.hh"
-#include "G4VPScorer.hh"
-#include "G4PStep.hh"
+#include "G4VScorer.hh"
+#include "G4GeometryCellStep.hh"
 #include "G4VParallelStepper.hh"
 
-G4MScoreProcess::G4MScoreProcess(G4VPScorer &aScorer,
+G4MScoreProcess::G4MScoreProcess(G4VScorer &aScorer,
 				 const G4String &aName)
- : G4VProcess(aName), 
-   fScorer(aScorer)
+ : 
+  G4VProcess(aName), 
+  fScorer(aScorer),
+  fKillTrack(false)
 {
   G4VProcess::pParticleChange = new G4ParticleChange;
+  if (!G4VProcess::pParticleChange) {
+    G4Exception("ERROR:G4MScoreProcess::G4MScoreProcess new failed to create G4ParticleChange!");
+  }
 }
 
 G4MScoreProcess::~G4MScoreProcess()
@@ -68,17 +73,58 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
     G4StepPoint *postpoint = aStep.GetPostStepPoint();
   
 
-    G4PTouchableKey prekey(*(prepoint->GetPhysicalVolume()), 
+    G4GeometryCell prekey(*(prepoint->GetPhysicalVolume()), 
 			   prepoint->GetTouchable()->GetReplicaNumber());
-    G4PTouchableKey postkey(*(postpoint->GetPhysicalVolume()), 
+    G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
 			    postpoint->GetTouchable()->GetReplicaNumber());
 
-    G4PStep pstep(prekey, postkey);
-    pstep.fCrossBoundary = false;
+    G4GeometryCellStep pstep(prekey, postkey);
+    pstep.SetCrossBoundary(false);
     
-    if (prekey != postkey) pstep.fCrossBoundary = true;
-  
+    if (prekey != postkey) {
+      pstep.SetCrossBoundary(true);
+    } 
     fScorer.Score(aStep, pstep); 
   }
+
+  if (fKillTrack) {
+    fKillTrack = false;
+    pParticleChange->SetStatusChange(fStopAndKill);
+  }
+
   return G4VProcess::pParticleChange;
+}
+
+const G4String &G4MScoreProcess::GetName() const {
+  return theProcessName;
+}
+
+
+G4double G4MScoreProcess::
+AlongStepGetPhysicalInteractionLength(const G4Track&,
+				      G4double  ,
+				      G4double  ,
+				      G4double& ,
+				      G4GPILSelection*) {
+  return -1.0;
+}
+
+G4double G4MScoreProcess::
+AtRestGetPhysicalInteractionLength(const G4Track&,
+				   G4ForceCondition*) {
+  return -1.0;
+}
+
+G4VParticleChange* G4MScoreProcess::AtRestDoIt(const G4Track&,
+					       const G4Step&) {
+  return 0;
+}
+
+G4VParticleChange* G4MScoreProcess::AlongStepDoIt(const G4Track&,
+						  const G4Step&) {
+  return 0;
+}
+
+void G4MScoreProcess::KillTrack() const{
+  fKillTrack = true;
 }

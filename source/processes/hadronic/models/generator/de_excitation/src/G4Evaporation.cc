@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.9 2002/06/18 16:37:57 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Evaporation.cc,v 1.10.4.1 2002/12/12 19:17:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -178,7 +178,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 		  for (G4FragmentVector::iterator i = theEvaporationResult->begin();
 		       i != theEvaporationResult->end()-1; ++i) 
 		    {
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
 		      if ((*i)->GetA() == 0) (*i)->SetCreatorModel(G4String("G4PhotonEvaporation"));
 #endif
 		      theResult->push_back(*(i));
@@ -186,7 +186,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 		  theResidualNucleus = *(theEvaporationResult->back());
 		  delete theEvaporationResult->back();
 		  delete theEvaporationResult;
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
 		  theResidualNucleus.SetCreatorModel(G4String("ResidualNucleus"));
 #endif
 		}

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -358,7 +358,8 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 	      
 	    }
 	  
-          G4double l=0; // needs to be generalized
+          G4double l=0;
+	  //if(nDaughters<3) theChannel->GetAngularMomentum(); 
 	  G4double theMassRatio = thePoleMass / theActualMass;
           G4double theMomRatio = theActualMom / thePoleMom;
           theActualWidth[index] = thePoleWidth * theMassRatio *

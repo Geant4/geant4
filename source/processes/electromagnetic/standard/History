@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2002/06/10 16:10:32 maire Exp $
+$Id: History,v 1.70 2002/12/04 14:58:27 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,41 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10 june 02: mma (stand-V04-00-13)
+04 dec 02: V.Ivant (stand-V04-01-07)
+- fix d-electron spectra for STD
+     
+20 nov 02: G.Cosmo (stand-V04-01-06)
+- G4PAIonisation[.hh.icc.cc]: patched access to public static data.
+  Added static accessor to be used in the kernel for inline functions
+  to allow porting on Windows DLLs.
+
+12 nov 02: V.Ivant (stand-V04-01-05)
+- eBremsstrahlung::BuiltLossTable: fix of division by 0 (G4int nn)
+ 
+28 oct 02: V.Ivant (stand-V04-01-04)
+- fix compilation warnings for STD classes
+
+17 oct 02: V.Ivant (stand-V04-01-03)
+- few changes in all xSTD processes in connection with LossTableBuilder
+    
+15 oct 02: V.Ivant (stand-V04-01-02)
+- redesign for a Model approach: files processNameSTD and processNameModel
+     
+14 oct 02: mma (stand-V04-01-01)
+- G4PAIxSection and G4PAIonisation : put back on the HEAD the versions as they
+  are in Geant4-04-01-ref-03, namely:
+  G4PAIxSection  hh:1.7             cc:1.10
+  G4PAIonisation hh:1.12  icc:1.10  cc:1.23
+  
+  G4PAIxSectionTest.cc:1.7   G4PAIdNdxTest.cc:1.1   GNUmakefile:1.1
+      
+07 aug 02: mma (stand-V04-01-00)
+- GammaConversionToMuons::DoIt : missprint in OR conditions | instead of || 
+
+10 jun 02: mma (stand-V04-00-13)
 - bug fixed for stopping hadrons, V.Ivanchenko
      
-04 june 02: mma (stand-V04-00-12) 
+04 jun 02: mma (stand-V04-00-12) 
 - suppress the G4PAIonisation stuff which crash in TestEm8
   (back to stand-V04-00-10)
      
@@ -73,7 +104,6 @@ committal in the CVS repository !
 - gammaConversion::ComputeCrossSection(): correction of extrapolation below 
   EnergyLimit
         
->>>>>>> 1.49
 10 jan 02: mma 
 - photoEffect: rearrangement in the inlined functions
      

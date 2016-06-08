@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.cc,v 1.2 2002/05/31 09:56:09 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4WeightWindowAlgorithm.cc,v 1.5 2002/10/16 14:29:07 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,6 +39,10 @@ G4WeightWindowAlgorithm::G4WeightWindowAlgorithm() :
   fLower(1)
 {}
 
+G4WeightWindowAlgorithm::~G4WeightWindowAlgorithm()
+{}
+
+
 void G4WeightWindowAlgorithm::SetUpperLimit(G4double Upper){
   fUpper = Upper;
 }
@@ -53,7 +57,7 @@ G4WeightWindowAlgorithm::Calculate(G4double init_w,
 				   G4double importance) const {
 
 
-  G4Nsplit_Weight nw(1, init_w);
+  G4Nsplit_Weight nw = {1, init_w};
   G4double iw =  importance * init_w;
   if (iw>fUpper) {
     // f is the factor by which the weight is greater 
@@ -64,9 +68,9 @@ G4WeightWindowAlgorithm::Calculate(G4double init_w,
     nw.fW/=f; 
 
     // calculate the number of coppies
-    nw.fN = int(f);
+    nw.fN = static_cast<G4int>(f);
     // correct the number of coppies in case f is not an integer
-    if (G4double(nw.fN) != f) {
+    if (static_cast<G4double>(nw.fN) != f) {
       // probabillity p for splitting into nw.fN+1 particles
       G4double p = f - nw.fN;
       // get a random number out of [0,1)

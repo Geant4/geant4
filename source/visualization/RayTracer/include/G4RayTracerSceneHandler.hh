@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh,v 1.5 2001/08/24 21:19:43 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4RayTracerSceneHandler.hh,v 1.6 2002/12/11 15:59:34 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 
 // John Allison  17th March 2000
 
@@ -59,6 +59,8 @@ public:
   void AddThis(const G4Polycone&){}
   void AddThis(const G4Polyhedra&){}
   void AddThis(const G4VSolid&){}
+  void AddThis(const G4VTrajectory&){}
+  void AddThis(const G4VHit&){}
 
   static G4int GetSceneCount();
 

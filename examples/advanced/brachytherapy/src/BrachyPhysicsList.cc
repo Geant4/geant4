@@ -20,12 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// Code developed by:
+// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+//
 //    **********************************
 //    *                                *
 //    *     BrachyPhysicsList.cc       *
 //    *                                *
 //    **********************************
-
+//
+// $Id: BrachyPhysicsList.cc,v 1.6 2002/11/18 15:18:38 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-00 $
+//
 #include "BrachyPhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -41,7 +48,7 @@
 
 BrachyPhysicsList::BrachyPhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 1*mm;
+  defaultCutValue = 0.1*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
@@ -121,12 +128,10 @@ void BrachyPhysicsList::ConstructEM()
     G4String particleName = particle->GetParticleName();
     
     //processes
-    lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
-    loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
-    loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
     
     if (particleName == "gamma") {
-      //gamma      
+      //gamma  
+      lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
       pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
       pmanager->AddDiscreteProcess(lowePhot);
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
@@ -134,6 +139,9 @@ void BrachyPhysicsList::ConstructEM()
       
     } else if (particleName == "e-") {
       //electron
+     loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
+     loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
+    
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(loweIon,     -1, 2,2);
       pmanager->AddProcess(loweBrem,    -1,-1,3);      

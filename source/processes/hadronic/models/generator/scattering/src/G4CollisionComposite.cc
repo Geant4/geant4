@@ -1,0 +1,197 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4CollisionComposite.cc,v 1.10 2002/12/12 19:17:47 gunter Exp $ //
+
+#include "globals.hh"
+#include "G4CollisionComposite.hh"
+#include "G4VCollision.hh"
+#include "G4CollisionVector.hh"
+#include "G4KineticTrack.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4VCrossSectionSource.hh"
+
+const G4int G4CollisionComposite::nPoints = 32;
+
+G4double G4CollisionComposite::theT[nPoints] = 
+{.01, .03, .05, .1, .15, .2, .3, .4, .5, .6, .7, .8, .9, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.5, 3.0, 3.5, 4.0, 5.0, 6.0, 8.0, 10., 15, 20, 50, 100};
+
+G4CollisionComposite::G4CollisionComposite()
+{ 
+}
+
+
+G4CollisionComposite::~G4CollisionComposite()
+{ 
+  for (size_t i=0; i<components.size(); i++)
+    delete components[i]();
+}
+
+
+G4double G4CollisionComposite::CrossSection(const G4KineticTrack& trk1, 
+					    const G4KineticTrack& trk2) const
+{
+  G4double crossSect = 0.;
+  const G4VCrossSectionSource* xSource = GetCrossSectionSource();
+  if (xSource != 0)
+  // There is a total cross section for this Collision
+  {
+    crossSect = xSource->CrossSection(trk1,trk2);
+  }
+  else
+  {
+    // waiting for mutable to enable buffering.
+    const_cast<G4CollisionComposite *>(this)->BufferCrossSection(trk1.GetDefinition(), trk2.GetDefinition());
+//    G4cerr << "Buffer filled, reying with sqrts = "<< (trk1.Get4Momentum()+trk2.Get4Momentum()).mag() <<G4endl;
+    crossSect = BufferedCrossSection(trk1,trk2);
+  }
+  return crossSect;
+}
+
+
+G4KineticTrackVector* G4CollisionComposite::FinalState(const G4KineticTrack& trk1, 
+							  const G4KineticTrack& trk2) const
+{
+  G4std::vector<G4double> cxCache;
+  G4double partialCxSum = 0.0;
+
+  size_t i;
+  for (i=0; i<components.size(); i++) 
+  {
+    G4double partialCx;
+//    cout << "comp" << i << " " << components[i]()->GetName();
+    if (components[i]()->IsInCharge(trk1,trk2)) 
+    {
+      partialCx = components[i]()->CrossSection(trk1,trk2);
+    } 
+    else 
+    {
+      partialCx = 0.0;
+    }
+//    cout << "   cx=" << partialCx << endl;
+    partialCxSum += partialCx;
+    cxCache.push_back(partialCx);
+  }
+
+  G4double random = G4UniformRand()*partialCxSum;
+  G4double running = 0;
+  for (i=0; i<cxCache.size(); i++) 
+  {
+    running += cxCache[i];
+    if (running > random) 
+    {
+      return components[i]()->FinalState(trk1, trk2);
+    }
+  }
+//  G4cerr <<"in charge = "<<IsInCharge(trk1, trk2)<<G4endl;
+//  G4cerr <<"Cross-section = "<<CrossSection(trk1, trk2)/millibarn<<" "<<running<<" "<<cxCache.size()<<G4endl;
+//  G4cerr <<"Names = "<<trk1.GetDefinition()->GetParticleName()<<", "<<trk2.GetDefinition()->GetParticleName()<<G4endl;
+//  G4Exception("G4CollisionComposite: no final state found!");
+  return NULL;
+}
+
+
+G4bool G4CollisionComposite::IsInCharge(const G4KineticTrack& trk1, 
+					const G4KineticTrack& trk2) const
+{
+  G4bool isInCharge = false;
+
+  // The composite is in charge if any of its components is in charge
+
+  const G4CollisionVector* components = GetComponents();
+  if (components)
+    {
+      G4CollisionVector::const_iterator iter;
+      for (iter = components->begin(); iter != components->end(); ++iter)
+	{
+	 if ( ((*iter)())->IsInCharge(trk1,trk2) ) isInCharge = true;
+	}
+    }
+
+  return isInCharge;
+}
+
+void G4CollisionComposite::
+BufferCrossSection(const G4ParticleDefinition * aP, const G4ParticleDefinition * bP)
+{
+   // check if already buffered
+   size_t i;
+   for(i=0; i<theBuffer.size(); i++)
+   {
+     if(theBuffer[i].InCharge(aP, bP)) return;
+   }
+//   G4cerr << "Buffering for "<<aP->GetParticleName()<<" "<<bP->GetParticleName()<<G4endl;
+   
+   // buffer the new one.
+   G4CrossSectionBuffer aNewBuff(aP, bP);
+   size_t maxE=nPoints;
+   for(size_t tt=0; tt<maxE; tt++)
+   {
+     G4double aT = theT[tt]*GeV;
+     G4double crossSect = 0;
+     // The total cross-section is summed over all the component channels
+     
+     G4double atime = 0;
+     G4ThreeVector aPosition(0,0,0);
+     G4double aM = aP->GetPDGMass();
+     G4double aE = aM+aT;
+     G4ThreeVector aMom(0,0,sqrt(aE*aE-aM*aM));
+     G4LorentzVector a4Momentum(aE, aMom);
+     G4KineticTrack a(const_cast<G4ParticleDefinition *>(aP), atime, aPosition, a4Momentum);
+
+     G4double btime = 0;
+     G4ThreeVector bPosition(0,0,0);
+     G4ThreeVector bMom(0,0,0*MeV);
+     G4double bE = bP->GetPDGMass();
+     G4LorentzVector b4Momentum(bE, bMom);
+     G4KineticTrack b(const_cast<G4ParticleDefinition *>(bP), btime, bPosition, b4Momentum);
+     
+     for (i=0; i<components.size(); i++)
+     {
+       if(components[i]()->IsInCharge(a,b))
+       {
+	 crossSect += components[i]()->CrossSection(a,b);
+       }
+     }
+     G4double sqrts = (a4Momentum+b4Momentum).mag();
+     aNewBuff.push_back(sqrts, crossSect);
+   }
+   theBuffer.push_back(aNewBuff);
+//   theBuffer.back().Print();
+}
+
+
+G4double G4CollisionComposite::
+BufferedCrossSection(const G4KineticTrack& trk1, const G4KineticTrack& trk2) const
+{
+   for(size_t i=0; i<theBuffer.size(); i++)
+   {
+     if(theBuffer[i].InCharge(trk1.GetDefinition(), trk2.GetDefinition())) 
+     {
+       return theBuffer[i].CrossSection(trk1, trk2);
+     }
+   }
+   G4Exception("G4CollisionComposite::BufferedCrossSection - Blitz !!");
+   return 0;
+}
+

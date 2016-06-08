@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.5 2002/02/24 01:47:56 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.6 2002/10/16 10:44:15 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -36,8 +36,7 @@
 
 G4OpenGLImmediateViewer::G4OpenGLImmediateViewer (G4OpenGLImmediateSceneHandler& scene):
 G4VViewer (scene, -1),
-G4OpenGLViewer (scene),
-fSceneHandler (scene)
+G4OpenGLViewer (scene)
 {}
 
 #endif

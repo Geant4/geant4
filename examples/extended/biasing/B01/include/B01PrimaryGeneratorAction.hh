@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: B01PrimaryGeneratorAction.hh,v 1.2 2002/04/19 10:54:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
-//
 
 #ifndef B01PrimaryGeneratorAction_hh
 #define B01PrimaryGeneratorAction_hh B01PrimaryGeneratorAction_hh 
@@ -47,3 +44,5 @@ class B01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 };
 
 #endif
+
+

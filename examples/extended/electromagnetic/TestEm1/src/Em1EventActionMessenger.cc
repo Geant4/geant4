@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventActionMessenger.cc,v 1.4 2001/10/26 12:51:25 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em1EventActionMessenger.cc,v 1.6 2002/12/11 14:19:23 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -41,19 +41,19 @@
 Em1EventActionMessenger::Em1EventActionMessenger(Em1EventAction* EvAct)
 :eventAction(EvAct)
 { 
-  DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
+  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none,charged, all");
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
   
-  PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
+  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(Idle);      
+  PrintCmd->AvailableForStates(G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

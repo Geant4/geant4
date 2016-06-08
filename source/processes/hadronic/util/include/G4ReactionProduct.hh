@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProduct.hh,v 1.4 2001/08/01 17:12:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ReactionProduct.hh,v 1.7 2002/12/12 19:18:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996
@@ -139,6 +139,12 @@
     inline G4bool GetNewlyAdded() const
     { return NewlyAdded; }
     
+    inline void SetMayBeKilled( const G4bool f )
+    { MayBeKilled = f; }
+    
+    inline G4bool GetMayBeKilled() const
+    { return MayBeKilled; }
+
     void SetZero();
     
     void Lorentz( const G4ReactionProduct &p1, const G4ReactionProduct &p2 );
@@ -169,7 +175,12 @@
     inline void HasInitialStateParton(G4bool aFlag) { hasInitialStateParton = aFlag; }
     
     inline G4bool HasInitialStateParton() const { return hasInitialStateParton; }
-    
+ 
+#ifdef PRECOMPOUND_TEST
+     void SetCreatorModel(const G4String& aModel) { theCreatorModel = aModel; }
+     G4String GetCreatorModel() const { return theCreatorModel; }
+#endif
+ 
  private:
     
     G4ParticleDefinition *theParticleDefinition;
@@ -197,7 +208,12 @@
     // NewlyAdded refers to particles added by "nuclear excitation", or as
     //  "black track" particles, or as deuterons, tritons, and alphas
     G4bool NewlyAdded;
- };
+    G4bool MayBeKilled;
+
+#ifdef PRECOMPOUND_TEST
+    G4String theCreatorModel;
+#endif
+};
  
 #endif
  

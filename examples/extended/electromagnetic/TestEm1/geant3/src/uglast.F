@@ -39,7 +39,7 @@
      +        /,1X,'nb steps/event  neutral: ',F9.2,'  charged: ',F9.2)
      
   760 FORMAT(//,1X,'nb of process calls per event: ',
-     +        /,3X,12A9)
-  761 FORMAT(   3X,12F9.4,//)
+     +        /,3X,12A12)
+  761 FORMAT(   3X,12F12.4,//)
 *
       END

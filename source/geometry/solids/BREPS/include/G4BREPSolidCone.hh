@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidCone.hh,v 1.5 2001/07/11 09:59:30 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolidCone.hh,v 1.8 2002/12/03 14:24:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidCone
@@ -94,11 +94,26 @@ class G4BREPSolidCone : public G4BREPSolid
     // Calculates the distance to the nearest surface of a shape from an
     // inside point. The distance can be an underestimate.
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
  private:
 
   G4BREPSolidCone(const G4BREPSolidCone&);
   G4BREPSolidCone& operator=(const G4BREPSolidCone&);
     // Private copy constructor and assignment operator.
+  
+ private:
+     
+  struct G4BREPConeParams
+  {
+    G4ThreeVector origin;
+    G4ThreeVector axis;
+    G4ThreeVector direction;
+    G4double      length;
+    G4double      radius;
+    G4double      large_radius;
+  } constructorParams;
 
 };
 

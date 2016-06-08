@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em5RunMessenger.cc,v 1.6 2001/11/28 16:08:19 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 

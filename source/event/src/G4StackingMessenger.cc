@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackingMessenger.cc,v 1.3 2001/07/11 09:58:54 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4StackingMessenger.cc,v 1.4 2002/12/04 18:43:15 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // --------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ G4StackingMessenger::G4StackingMessenger(G4StackManager * fCont)
   clearCmd->SetParameterName("level",true);
   clearCmd->SetDefaultValue(0);
   clearCmd->SetRange("level>=-2&&level<=2");
-  clearCmd->AvailableForStates(GeomClosed,EventProc);
+  clearCmd->AvailableForStates(G4State_GeomClosed,G4State_EventProc);
 }
 
 G4StackingMessenger::~G4StackingMessenger()

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIparameter.cc,v 1.11 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4UIparameter.hh"

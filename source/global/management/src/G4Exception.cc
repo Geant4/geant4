@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.13 2002/04/16 18:19:14 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Exception.cc,v 1.15 2002/12/05 02:32:21 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -45,13 +45,33 @@ void G4Exception(const char* s)
 	{
 	    G4cerr << s << G4endl;
 	}
-   if(G4StateManager::GetStateManager()->SetNewState(Abort,s)) {
+   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort,s)) {
      G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
      abort();
    } else {
      G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
             << G4endl << "*** No guarantee for further execution ***" << G4endl;
    }
+}
+
+void G4Exception(const char* originOfException,
+                        const char* exceptionCode,
+                        G4ExceptionSeverity severity,
+                        const char* description)
+{
+  G4bool toBeAborted = 
+    G4StateManager::GetStateManager()->GetExceptionHandler()
+     ->Notify(originOfException,exceptionCode,severity,description);
+  if(toBeAborted)
+  {
+   if(G4StateManager::GetStateManager()->SetNewState(G4State_Abort)) {
+     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
+     abort();
+   } else {
+     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
+            << G4endl << "*** No guarantee for further execution ***" << G4endl;
+   }
+  }
 }
 
 void G4Exception(G4std::string s)

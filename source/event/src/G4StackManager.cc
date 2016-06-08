@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.7 2002/05/29 22:51:45 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4StackManager.cc,v 1.8 2002/12/03 17:04:22 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -98,8 +98,6 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
         break;
       case fPostpone:
         postponeStack->PushToStack( newStackedTrack );
-        break;
-      case fKill:
         break;
       default:
         G4int i = classification - 10;
@@ -245,6 +243,7 @@ G4int G4StackManager::PrepareNewEvent()
       if(classification==fKill)
       {
         delete aTrack;
+        delete aStackedTrack->GetTrajectory();
         delete aStackedTrack;
       }
       else
@@ -260,8 +259,6 @@ G4int G4StackManager::PrepareNewEvent()
             break;
           case fPostpone:
             postponeStack->PushToStack( aStackedTrack );
-            break;
-          case fKill:
             break;
           default:
             G4int i = classification - 10;
@@ -329,6 +326,7 @@ void G4StackManager::TransferStackedTracks(G4ClassificationOfNewTrack origin, G4
     while( (aStackedTrack=originStack->PopFromStack()) != 0 )
     {
       delete aStackedTrack->GetTrack();
+      delete aStackedTrack->GetTrajectory();
       delete aStackedTrack;
     }
   } 
@@ -387,6 +385,7 @@ void G4StackManager::TransferOneStackedTrack(G4ClassificationOfNewTrack origin, 
     if( (aStackedTrack=originStack->PopFromStack()) != 0 )
     {
       delete aStackedTrack->GetTrack();
+      delete aStackedTrack->GetTrajectory();
       delete aStackedTrack;
     }
   } 

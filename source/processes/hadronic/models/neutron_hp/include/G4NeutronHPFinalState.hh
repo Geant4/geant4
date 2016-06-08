@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.6 2001/07/26 09:27:59 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4NeutronHPFinalState.hh,v 1.7 2002/12/12 19:18:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h

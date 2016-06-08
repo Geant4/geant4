@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-04-01 $
-                                (28-Feb-2002)
+ Geant4 version $Name: geant4-05-00 $
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,6 +13,7 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -133,7 +134,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 6.5 s
+total time for build X-ray TR tables = 6.62 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
@@ -161,7 +162,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=5.76 s 
+total time(SetCuts)=5.92 s 
 #
 #control/saveHistory
 #
@@ -247,42 +248,42 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.54            0k World
-       0.00         0.00         0.54           11k Radiator
+       0.00         0.00         0.00            0k World
+       0.00         0.00         0.00           11k Radiator
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      96.00         11k         1      305        376     42709.36    Radiator
-       4.00          0k         3        7         20     42709.36    World
+      96.00         11k         1      305        376         0.00    Radiator
+       4.00          0k         3        7         20         0.00    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=126.19s Real=133.52s Sys=2.13s
+  User=125.92s Real=140.46s Sys=1.99s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=155.499 +- 3.90364  mm  
+    mean charged track length   in absorber=158.505 +- 3.9418  mm  
 
-            mean energy deposit in absorber=0.101305 +- 0.00101646  MeV 
+            mean energy deposit in absorber=0.101921 +- 0.00108118  MeV 
 
- mean number of steps in absorber (charged) =430.761 +- 1.31017      
- mean number of steps in absorber (neutral) =5.127 +- 0.072006      
+ mean number of steps in absorber (charged) =432.655 +- 2.13903      
+ mean number of steps in absorber (neutral) =5.037 +- 0.0718306      
 
-   mean number of charged secondaries = 1.481 +- 0.0379426
+   mean number of charged secondaries = 1.485 +- 0.0382593
 
-   mean number of neutral secondaries = 0.033 +- 0.00564898
+   mean number of neutral secondaries = 0.031 +- 0.00548078
 
-   mean number of e-s =1.481  and e+s =0
+   mean number of e-s =1.485  and e+s =0
 
-(number) transmission coeff=0.682  reflection coeff=0.048
+(number) transmission coeff=0.668  reflection coeff=0.038
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1389024498, 296616067
+ Current couple of seeds = 809983670, 863331332
 ----------------------------------------
 #
 #

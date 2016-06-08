@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.hh,v 1.10 2002/04/24 13:10:50 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Fancy3DNucleus.hh,v 1.14 2002/12/12 19:17:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1
@@ -75,6 +75,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       G4double GetNuclearRadius();
       G4double GetNuclearRadius(const G4double maxRelativeDensity);
       G4double GetOuterRadius();
+      G4double CoulombBarrier();
       void DoLorentzBoost(const G4LorentzVector & theBoost);
       void DoLorentzBoost(const G4ThreeVector & theBeta);
       void DoLorentzContraction(const G4LorentzVector & theBoost);
@@ -94,7 +95,6 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  
   const G4double nucleondistance;
-  
 };
 
 inline G4int G4Fancy3DNucleus::GetCharge()
@@ -106,7 +106,6 @@ inline G4int G4Fancy3DNucleus::GetMassNumber()
 {
 	return myA;
 }
-
 #endif
 
 

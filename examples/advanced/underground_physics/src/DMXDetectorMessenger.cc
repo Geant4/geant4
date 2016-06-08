@@ -55,7 +55,7 @@ DMXDetectorMessenger::DMXDetectorMessenger
   RoomEKineCutCmd->SetRange("ECut>=250.0*eV");
   RoomEKineCutCmd->SetDefaultUnit("eV");
   RoomEKineCutCmd->SetUnitCategory("Energy");
-  RoomEKineCutCmd->AvailableForStates(PreInit,Idle);
+  RoomEKineCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   EKineCutCmd = new G4UIcmdWithADoubleAndUnit("/dmx/MinEnergyCut",this);
   EKineCutCmd->SetGuidance("Minimum Charged particle cut inside detector");
@@ -63,7 +63,7 @@ DMXDetectorMessenger::DMXDetectorMessenger
   EKineCutCmd->SetRange("ECut>=250.0*eV");
   EKineCutCmd->SetDefaultUnit("eV");
   EKineCutCmd->SetUnitCategory("Energy");
-  EKineCutCmd->AvailableForStates(PreInit,Idle);
+  EKineCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   RoomTimeCutCmd = new G4UIcmdWithADoubleAndUnit("/dmx/RoomTimeCut",this);
   RoomTimeCutCmd->SetGuidance("Set Time Cut (for neutrons) inside ROOM");
@@ -71,7 +71,7 @@ DMXDetectorMessenger::DMXDetectorMessenger
   RoomTimeCutCmd->SetRange("RTCut>0.");
   RoomTimeCutCmd->SetDefaultUnit("ns");
   RoomTimeCutCmd->SetUnitCategory("Time");
-  RoomTimeCutCmd->AvailableForStates(PreInit,Idle);
+  RoomTimeCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   TimeCutCmd = new G4UIcmdWithADoubleAndUnit("/dmx/TimeCut",this);
   TimeCutCmd->SetGuidance("Set Time Cut (for neutrons) inside detector");
@@ -79,13 +79,13 @@ DMXDetectorMessenger::DMXDetectorMessenger
   TimeCutCmd->SetRange("TCut>0.");
   TimeCutCmd->SetDefaultUnit("ns");
   TimeCutCmd->SetUnitCategory("Time");
-  TimeCutCmd->AvailableForStates(PreInit,Idle);
+  TimeCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //UpdateCmd = new G4UIcmdWithoutParameter("/dmx/update",this);
   //UpdateCmd->SetGuidance("Update calorimeter geometry.");
   //UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   //UpdateCmd->SetGuidance("if you changed timecut value(s).");
-  //UpdateCmd->AvailableForStates(Idle);
+  //UpdateCmd->AvailableForStates(G4State_Idle);
 
 }
 

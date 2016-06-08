@@ -21,17 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: B02PhysicsList.hh,v 1.2 2002/04/19 10:54:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
-//
-
 #ifndef B02PhysicsList_h
 #define B02PhysicsList_h 1
 
-#include "globals.hh"
 #include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
-class B02PhysicsList : public G4VUserPhysicsList
+
+// taken from Tst12PhysicsList
+
+class B02PhysicsList: public G4VUserPhysicsList
 {
   public:
     B02PhysicsList();
@@ -42,6 +41,7 @@ class B02PhysicsList : public G4VUserPhysicsList
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
+    // 
     virtual void SetCuts();
     
   protected:
@@ -61,3 +61,6 @@ class B02PhysicsList : public G4VUserPhysicsList
 };
 
 #endif
+
+
+

@@ -22,13 +22,14 @@
 //
 //
 // $Id: XrayFluoDetectorMessenger.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 //  28 Nov 2001  Elena Guardincerri   Created
+// 29 Nov 2002 change of sample material added (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
@@ -59,6 +60,8 @@ class XrayFluoDetectorMessenger: public G4UImessenger
     G4UIdirectory*             detDir;
 
     G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAString* sampleCmd;
+
 };
 
 #endif

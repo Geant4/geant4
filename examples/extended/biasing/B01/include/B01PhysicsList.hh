@@ -21,10 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.hh,v 1.2 2002/04/19 10:54:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
-//
-
 #ifndef B01PhysicsList_h
 #define B01PhysicsList_h 1
 
@@ -65,3 +61,6 @@ class B01PhysicsList: public G4VUserPhysicsList
 };
 
 #endif
+
+
+

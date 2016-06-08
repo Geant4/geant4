@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.7 2001/08/16 08:17:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4StepPoint.cc,v 1.8 2002/12/04 22:46:00 tsasaki Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 //---------------------------------------------------------------
@@ -46,7 +46,7 @@
 //////////////////////////
 G4StepPoint::G4StepPoint():
 //////////////////////////
-  fpTouchable(0),fpMaterial(0),fpProcessDefinedStep(0)  
+  fpTouchable(0),fpMaterial(0),fpProcessDefinedStep(0),fCharge(0.)
 {
 
 }

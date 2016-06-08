@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.hh,v 1.7 2001/11/21 16:47:32 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4XXXSceneHandler.hh,v 1.9 2002/11/11 18:22:47 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -34,20 +34,6 @@
 #define G4XXXDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VSceneHandler.hh"
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
-#include "G4Para.hh"
-#include "G4Torus.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
-
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4ModelingParameters;
 
 class G4XXXSceneHandler: public G4VSceneHandler {
 
@@ -69,6 +55,8 @@ public:
   void AddThis(const G4Polycone&);
   void AddThis(const G4Polyhedra&);
   void AddThis(const G4VSolid&);
+  void AddThis(const G4VTrajectory&);
+  void AddThis(const G4VHit&);
   // void PreAddThis(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddThis();

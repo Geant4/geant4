@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -22,18 +22,38 @@
 //
 //
 // -------------------------------------------------------------------
-//      GEANT 4 class file 
+//      GEANT 4 class file
 //
 //      CERN, Geneva, Switzerland
 //
 //      File name:     G4PhotonEvaporation
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)
-// 
+//
 //      Creation date: 23 October 1998
 //
-//      Modifications: 
-//      
+//      Modifications:
+//
+//        18 October 2002, Fan Lei (flei@space.qinetiq.com)
+//   
+//        Implementation of Internal Convertion process in discrete deexcitation
+//        The following public methods have been added. 
+//
+//            void SetICM (G4bool);
+//            void RDMForced(G4bool);
+//            void SetMaxHalfLife(G4double) ;
+//            void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
+//            G4ElectronOccupancy GetEOccupancy () ;
+//            void SetARM (G4bool val) {_applyARM = val;} ;
+//            G4int GetVacantShellNumber () { return _vShellNumber;};
+//
+//        and the following priivate menbers
+//
+//            G4ElectronOccupancy _eOccupancy;
+//            G4int _vShellNumber;
+//
+//            G4bool _applyARM;
+//
 // -------------------------------------------------------------------
 
 #ifndef G4PHOTONEVAPORATION_HH
@@ -44,58 +64,78 @@
 #include "G4VEvaporationChannel.hh"
 #include "G4VEmissionProbability.hh"
 #include "G4VGammaDeexcitation.hh"
+#include "G4ElectronOccupancy.hh"
 
 //#define debug
 
 class G4Fragment;
 
-class G4PhotonEvaporation : public G4VPhotonEvaporation, public G4VEvaporationChannel
-{
+class G4PhotonEvaporation : public G4VPhotonEvaporation, public G4VEvaporationChannel {
 
 public:
 
-  G4PhotonEvaporation();
+    G4PhotonEvaporation();
 
-  virtual ~G4PhotonEvaporation();
+    virtual ~G4PhotonEvaporation();
+
+    virtual G4FragmentVector * BreakItUp(const G4Fragment & nucleus);
+
+    virtual void Initialize(const G4Fragment & fragment);
+
+    virtual G4FragmentVector * BreakUp(const G4Fragment & nucleus);
+
+    virtual G4double GetEmissionProbability() const;
+
+    virtual void SetEmissionStrategy(G4VEmissionProbability * probAlgorithm);
+
+    void SetVerboseLevel(G4int verbose);
+
+    void SetICM (G4bool);
+
+    void RDMForced (G4bool);
   
-  virtual G4FragmentVector* BreakItUp(const G4Fragment& nucleus);
+    void SetMaxHalfLife(G4double) ;
+ 
+    void SetEOccupancy( G4ElectronOccupancy  eOccupancy) ;
 
-  virtual void Initialize(const G4Fragment& fragment);
+    void SetARM (G4bool val) {_applyARM = val;} ;
 
-  virtual G4FragmentVector* BreakUp(const G4Fragment& nucleus);
+    G4ElectronOccupancy GetEOccupancy () { return _eOccupancy;} ;
+   
+    G4int GetVacantShellNumber () { return _vShellNumber;};
 
-  virtual G4double GetEmissionProbability() const;
+private:
 
-  virtual void SetEmissionStrategy(G4VEmissionProbability* probAlgorithm);
+    G4int _verbose;
+    G4bool _myOwnProbAlgorithm;
+    G4VEmissionProbability * _probAlgorithm;
+    G4VGammaDeexcitation * _discrDeexcitation;
+    G4VGammaDeexcitation * _contDeexcitation;
+  //    G4VGammaDeexcitation * _cdDeexcitation;
 
-  void SetVerboseLevel(G4int verbose);
+    G4ElectronOccupancy _eOccupancy;
+    G4int _vShellNumber;
 
-private:  
+    G4Fragment _nucleus;
+    G4double _gammaE;
+    G4bool _applyARM;
 
-  G4int _verbose;
-  G4bool _myOwnProbAlgorithm;
-  G4VEmissionProbability* _probAlgorithm;
-  G4VGammaDeexcitation* _discrDeexcitation;
-  G4VGammaDeexcitation* _contDeexcitation;
-  G4VGammaDeexcitation* _cdDeexcitation;
-  G4Fragment _nucleus;
-  G4double _gammaE;
+    G4PhotonEvaporation(const G4PhotonEvaporation & right);
 
-  G4PhotonEvaporation(const G4PhotonEvaporation &right);
-  
-  const G4PhotonEvaporation& operator=(const G4PhotonEvaporation &right);
+    const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
 
-  // MGP - Check == and != multiple inheritance... must be a mess!
-  G4bool operator==(const G4PhotonEvaporation &right) const;
-  G4bool operator!=(const G4PhotonEvaporation &right) const;
-
+    // MGP - Check == and != multiple inheritance... must be a mess!
+    G4bool operator == (const G4PhotonEvaporation & right) const;
+    G4bool operator != (const G4PhotonEvaporation & right) const;
 
 #ifdef debug
-  void CheckConservation(const G4Fragment & theInitialState,
-			 G4FragmentVector * Result) const;
+    void CheckConservation(const G4Fragment & theInitialState, G4FragmentVector * Result) const;
 #endif
-  
+
 
 };
 
 #endif
+
+
+

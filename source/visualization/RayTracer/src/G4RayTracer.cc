@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.8 2001/07/11 10:09:04 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4RayTracer.cc,v 1.11 2002/12/11 16:00:00 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 //
@@ -84,13 +84,14 @@ G4RayTracer::~G4RayTracer()
   delete theRayTracerTrackingAction;
   delete theRayTracerSteppingAction;
   delete theMessenger;
+  delete theFigMaker;
 }
 
 void G4RayTracer::Trace(G4String fileName)
 {
   G4StateManager* theStateMan = G4StateManager::GetStateManager();
   G4ApplicationState currentState = theStateMan->GetCurrentState();
-  if(currentState!=Idle)
+  if(currentState!=G4State_Idle)
   {
     G4cerr << "Illegal application state - Trace() ignored." << G4endl;
     return;
@@ -348,7 +349,10 @@ G4Colour G4RayTracer::Attenuate(G4RayTrajectoryPoint* point, G4Colour sourceCol)
   G4double stepAlpha = objCol.GetAlpha();
   G4double stepLength = point->GetStepLength();
 
-  G4double attenuationFuctor = -stepAlpha/(1.0-stepAlpha)*stepLength/attenuationLength;
+  G4double attenuationFuctor;
+  if(stepAlpha > 0.9999999){ stepAlpha = 0.9999999; } // patch to the next line
+    attenuationFuctor = -stepAlpha/(1.0-stepAlpha)*stepLength/attenuationLength;
+ 
   G4double KtRed = exp((1.0-stepRed)*attenuationFuctor);
   G4double KtGreen = exp((1.0-stepGreen)*attenuationFuctor);
   G4double KtBlue = exp((1.0-stepBlue)*attenuationFuctor);

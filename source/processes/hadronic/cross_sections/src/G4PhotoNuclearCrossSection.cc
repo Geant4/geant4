@@ -14,16 +14,16 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.7 2002/05/29 07:16:39 mkossov Exp $
+// $Id: G4PhotoNuclearCrossSection.cc,v 1.9 2002/12/12 19:16:52 gunter Exp $
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections
@@ -131,6 +131,8 @@ G4double G4PhotoNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aP
 #endif
         colN.push_back(targN);
         colZ.push_back(targZ);
+        GDR.push_back(lastGDR);                // added GDR, found by AH 10/7/02
+        HEN.push_back(lastHEN);                // added HEN, found by AH 10/7/02
         eTH.push_back(lastTH);                // Threshold Energy
         spA.push_back(lastSP);                // Pomeron Shadowing
 	  } // End of creation of the new set of parameters

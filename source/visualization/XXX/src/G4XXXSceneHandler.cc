@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.6 2001/11/16 10:50:08 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4XXXSceneHandler.cc,v 1.10 2002/11/11 18:26:35 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -31,7 +31,16 @@
 
 #include "G4XXXSceneHandler.hh"
 
-#include "G4VSolid.hh"
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Tubs.hh"
+#include "G4Trd.hh"
+#include "G4Trap.hh"
+#include "G4Sphere.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -42,6 +51,9 @@
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
+#include "G4VTrajectory.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
 
 G4int G4XXXSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
@@ -200,6 +212,27 @@ void G4XXXSceneHandler::AddThis(const G4VSolid& solid) {
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
 }
 
+void G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) {
+#ifdef G4XXXDEBUG
+  G4cout <<
+    "G4XXXSceneHandler::AddThis(const G4VTrajectory& traj) called."
+	 << G4endl;
+#endif
+
+  G4VSceneHandler::AddThis(traj);  // Draw trajectory in good old way for now.
+
+  traj.ShowTrajectory();
+  G4cout << G4endl;
+}
+
+void G4XXXSceneHandler::AddThis(const G4VHit& hit) {
+#ifdef G4XXXDEBUG
+  G4cout <<
+    "G4XXXSceneHandler::AddThis(const G4VHit& hit) called."
+	 << G4endl;
+#endif
+  G4VSceneHandler::AddThis(hit);  // Invoke default action.
+}
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 #ifdef G4XXXDEBUG
@@ -224,9 +257,21 @@ void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
 void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called:"
-    "\n  radius: " << circle.GetWorldRadius()
-	 << G4endl;
+    "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called:\n  ";
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize (circle, sizeType);
+  switch (sizeType) {
+  default:
+  case screen:
+    // Draw in screen coordinates.
+    G4cout << "screen";
+    break;
+  case world:
+    // Draw in world coordinates.
+    G4cout << "world";
+    break;
+  }
+  G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
 }
@@ -234,9 +279,21 @@ void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
 void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called:"
-    "\n  side: " << square.GetWorldRadius()
-	 << G4endl;
+    "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called:\n  ";
+  MarkerSizeType sizeType;
+  G4double size = GetMarkerSize (square, sizeType);
+  switch (sizeType) {
+  default:
+  case screen:
+    // Draw in screen coordinates.
+    G4cout << "screen";
+    break;
+  case world:
+    // Draw in world coordinates.
+    G4cout << "world";
+    break;
+  }
+  G4cout << " size: " << size << G4endl;
   PrintThings();
 #endif
 }

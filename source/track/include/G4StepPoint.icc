@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StepPoint.icc,v 1.5 2001/10/22 04:19:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
    inline const G4ThreeVector& G4StepPoint::GetPosition() const

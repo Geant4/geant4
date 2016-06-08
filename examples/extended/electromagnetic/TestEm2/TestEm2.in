@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.4 2001/12/06 18:19:25 gcosmo Exp $
+# $Id: TestEm2.in,v 1.7 2002/10/31 13:58:29 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -9,17 +9,22 @@
 #                        J&H Crannel - Phys. Rev. 184-2 - August69
 #
 /control/verbose 2
+/run/verbose 1
 #
-/run/particle/setCut 5.0 mm
+#  select EM PhysicsList 
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts 5.0 mm
 /run/initialize
 #
-/calor/setMat Water
-/calor/setLbin 9 1.11
-/calor/setRbin 6 0.111
-/calor/update
+/testem/det/setMat Water
+/testem/det/setLbin 9 1.11
+/testem/det/setRbin 6 0.111
+/testem/det/update
 #
-/run/verbose 1
-/event/printModulo 20
+/testem/event/printModulo 20
 #
 /gun/particle e-
 /gun/energy 1 GeV

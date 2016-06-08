@@ -114,7 +114,7 @@ void G4hParametrisedLossModel::InitializeMe()
  << modelName << ">" << "for electronic stopping, <ICRU_R49p> is applied" 
  << G4endl; 
     eStopingPowerTable = new G4hICRU49p();
-    highEnergyLimit = 2.0*MeV;
+    highEnergyLimit = 1.0*MeV;
     lowEnergyLimit  = 1.0*keV;
   }  
   //G4cout << "G4hParametrisedLossModel: the model <" << modelName 

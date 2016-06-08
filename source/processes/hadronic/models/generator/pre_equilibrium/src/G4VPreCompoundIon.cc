@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.cc,v 1.13 2002/06/06 17:20:45 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VPreCompoundIon.cc,v 1.15 2002/12/12 19:17:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by V. Lara
 
@@ -65,7 +65,7 @@ ProbabilityDistributionFunction(const G4double eKin,
       G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 //      theLDP.LevelDensityParameter(GetA(),GetZ(),U);
 
-  G4double pA = (3.0/4.0) * sqrt(2.0/(GetReducedMass()*(eKin+GetBindingEnergy())))*
+  G4double pA = (3.0/4.0) * sqrt(G4std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
       GetAlpha()*(eKin+GetBeta())/(r0*pow(GetRestA(),1.0/3.0)) *
       CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P);
 

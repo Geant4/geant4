@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIStore.hh,v 1.3 2002/04/10 13:13:07 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VIStore.hh,v 1.8 2002/10/14 12:36:01 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VIStore
@@ -43,7 +43,7 @@
 
 #include "globals.hh"
 
-class G4PTouchableKey;
+class G4GeometryCell;
 class G4VPhysicalVolume;
 
 class  G4VIStore
@@ -51,28 +51,17 @@ class  G4VIStore
 
 public:  // with description
 
-  G4VIStore(G4VPhysicalVolume &worldVolume){}
-  virtual  ~G4VIStore(){}
+  G4VIStore();
+  virtual  ~G4VIStore();
 
-  virtual void AddImportanceRegion(G4double importance,
-				   const G4VPhysicalVolume &,
-				   G4int aRepNum = 0) = 0;
-    // Add a "cell" together with a importance value to the store.
-
-  virtual void ChangeImportance(G4double importance,
-				const G4VPhysicalVolume &,
-				G4int aRepNum = 0) = 0;
-    // Change a importance value of a "cell".
-
-  virtual G4double GetImportance(const G4VPhysicalVolume &,
-				 G4int aRepNum = 0) const = 0;
-    // derive the importance value of a "cell" from the store.
-
-  virtual G4double GetImportance(const G4PTouchableKey &ptk) const = 0;
-    // derive a importance value of a "cell" addresed by a G4PTouchableKey
+  virtual G4double GetImportance(const G4GeometryCell &gCell) const = 0;
+    // derive a importance value of a "cell" addresed by a G4GeometryCell
     // from the store.
 
-  virtual G4VPhysicalVolume &GetWorldVolume() = 0;
+  virtual G4bool IsKnown(const G4GeometryCell &gCell) const = 0;
+    // returns true if the gCell is in the store, else false 
+
+  virtual const G4VPhysicalVolume &GetWorldVolume() const = 0;
 };
 
 #endif

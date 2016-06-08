@@ -1,6 +1,6 @@
 #
-# ------ GNU/LINUX ------ egcs-1.1.2 (gcc-2.91.66)
-#
+# ------ GNU/LINUX ------    !!! not supported !!!
+#                    Red-Hat 6.1, egcs-1.1.2 (gcc-2.91.66)
 ifeq ($(G4SYSTEM),Linux-egcs)
   CXX       := g++
   GNU_GCC = 1
@@ -44,14 +44,6 @@ ifeq ($(G4SYSTEM),Linux-egcs)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
-  ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT
-    CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
-  endif
-  ifdef G4ODBMS
-    G4DDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd="" -DG4std=""
-  endif
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \

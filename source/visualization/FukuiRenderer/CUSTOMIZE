@@ -1,0 +1,261 @@
+###########################################
+## Environmental variables to CUSTOMIZE  ##
+## Geant4 DAWNFILE visualization driver  ##  
+###########################################
+
+                 Sept. 1, 2002
+                 Satoshi Tanaka
+                 stanaka@cs.ritsumei.ac.jp           
+
+#----- << G4DAWNFILE_DEST_DIR >> -----
+#      Set a directory where g4_XX.prim and g4_XX.eps files 
+#      are generated.  
+#      Do not forget to add the file separator 
+#      "/" (Unix/Linux) or "\" (Windows) at the end. 
+#      The default directory is the current directory.
+#
+#  Example:
+#
+#   setenv  G4DAWNFILE_DEST_DIR  "/home/username/tmp/"
+
+
+#----- << G4DAWNFILE_MAX_FILE_NUM >> -----
+#      Set a maximal number of generated g4_XX.prim files.
+#      Upto this number "XX" is automatically incremented,
+#      starting from "00".
+#      The default number is 100.
+#      
+#  Example:
+#
+#   setenv G4DAWNFILE_MAX_FILE_NUM  100
+
+
+#----- << G4DAWNFILE_MULTI_WINDOW >> -----
+#      Boolean flag to set on/off multi-window mode.
+#      If this variable is set and its value is non-zero,
+#      Geant4 invokes Renderer DAWN with the multi-X-window mode.  
+#      Otherwise DAWN is invoked with the EPS mode, in which
+#      EPS files are generated and viewed with a PS viewer.
+#      The default value is "0".
+#      
+#  Example:
+#
+#   setenv  G4DAWNFILE_MULTI_WINDOW      "0"
+#   setenv  G4DAWNFILE_MULTI_WINDOW      "1"
+
+
+#----- << G4DAWNFILE_PRECISION >> -----
+#      Set precision of double numbers in g4_XX.prim files.
+#      The number is used as 
+#        sprintf( string, "%*.*g", (precision+8), precision, value).
+#      See G4DAWNFILESceneHandler::G4DAWNFILESceneHandler() 
+#      for more details.
+#      The default precision is "9".
+#      
+#  Example:
+#
+#   setenv  G4DAWNFILE_PRECISION   9
+
+
+#----- << G4DAWNFILE_PS_VIEWER >> -----
+#      Set a name of the PostScript viewer to visualize 
+#      generated g4_XX.eps files.
+#      The default viewer name is "gv".
+#      
+#  Example:
+#
+#   setenv  G4DAWNFILE_PS_VIEWER  gv
+
+
+#----- << G4DAWNFILE_VIEWER >> -----
+#      Set a name of the renderer to visualize 
+#      generated g4_XX.prim files. 
+#      The default renderer name is "dawn".
+#      Set this variable to "david" to execute 
+#      volume-overlapping detection.
+#      
+#  Example:
+#
+#   setenv  G4DAWNFILE_VIEWER dawn
+#   setenv  G4DAWNFILE_VIEWER david
+
+###########################################
+## Environmental variables to CUSTOMIZE  ##
+## Renderer DAWN                         ##  
+###########################################
+
+#----- << DAWN_BATCH >> -----
+#      Set on/off the batch mode.
+#
+#      If this variable is set to "1", 
+#      the DAWN GUI panel does not invoked.
+#      Visualization is not performed, either.
+#      But an EPS file is generated.
+#
+#      If this variable is set to "a", 
+#      the effects are the same as "1" except that 
+#      every generated EPS data is appended to one file.
+#      In the on-line use of Renderer DAWN connected 
+#      with the Geant4 DAWNFILE driver, 
+#      you should also set as
+#
+#        setenv G4DAWNFILE_MAX_FILENUM  1
+#
+#      The dafault value is "0", i.e., the batch mode is off.
+#
+#  Example:
+#
+#   setenv  DAWN_BATCH                "0"
+#   setenv  DAWN_BATCH                "1"
+#   setenv  DAWN_BATCH                "a"
+
+
+#----- << DAWN_BFC_MODE >> -----
+#      Set on/off the back-face-culling mode.
+#      If this mode is set on, analytical hidden-surface removal 
+#      is skipped, and only back-face culling is performed.
+#      This mode is fast, but inaccurate.
+#        "1": on
+#        "0": off 
+#      The default value of "0".
+#
+#  Example:
+#
+#   setenv  DAWN_BFC_MODE   "0"
+#   setenv  DAWN_BFC_MODE   "1"
+
+
+#----- << DAWN_DEVICE >> -----
+#      Set the default viewing device
+#        1: PS: 2: XWIN, 3: PS2, 4: XWIN2, 5: OPEN_GL
+#
+#  Note: This variable is effective only in the 
+#        off-line use of Renderer DAWN.
+#
+#  Example:
+#
+#   setenv  DAWN_DEVICE  "1"
+#   setenv  DAWN_DEVICE  "2"
+#   setenv  DAWN_DEVICE  "3"
+#   setenv  DAWN_DEVICE  "4"
+#   setenv  DAWN_DEVICE  "5"
+
+
+#----- << DAWN_HIDLINE_REMOVAL >> -----
+#      Set on/off the hidden-line-removal mode
+#      If this mode is on, hidden-line removal is performed.
+#        "1": on
+#        "0": off 
+#      The default value is "1".
+#
+#  Example:
+#
+#   setenv  DAWN_HIDLINE_REMOVAL "0"
+#   setenv  DAWN_HIDLINE_REMOVAL "1"
+
+
+#----- << DAWN_PS_PREVIEWER >> -----
+#      Set a name of the PostScript viewer. 
+#      The default value is "gv".
+#      "NONE" to skip viewing.
+#
+#  Example:
+#
+#   setenv  DAWN_PS_PREVIEWER          "gv"
+
+
+#----- << DAWN_UP_DIRECTION >> -----
+#      Set viewing-upward direction. 
+#      Select "Y" or "Z".
+#      The default is "Y", i.e., (0,1,0)-direction
+#
+#  Example:
+#
+#   setenv  DAWN_UP_DIRECTION "Y"
+#   setenv  DAWN_UP_DIRECTION "Z" 
+
+
+#----- << DAWN_USE_STENCIL >> -----
+#      Set on/off use of the stencil buffer in the OpenGL mode.
+#      If this mode is on, edges are drawn.
+#        "1": on
+#        "0": off 
+#      The default value of "0".
+#
+#  Example:
+#
+#   setenv  DAWN_USE_STENCIL "0"
+#   setenv  DAWN_USE_STENCIL "1"
+
+
+###############################################
+## Environmental variables to CUSTOMIZE      ##
+## Geant4 DAWN-Network visualization driver  ##  
+##                                           ##
+##  Note: This driver should be used only    ##
+##        for remote visualizaton.)          ##
+###############################################
+
+#----- << G4DAWN_GUI_ALWAYS >>
+#      Boolean flag to control GUI invokation.
+#      If this variable is set and the value is non-zero,
+#      DAWN connected with GEANT4 always pops up GUI menu.
+#      The default is "0", i.e., no GUI.
+#
+#  Example:
+#
+#   setenv  G4DAWN_GUI_ALWAYS                  "0" 
+#   setenv  G4DAWN_GUI_ALWAYS                  "1" 
+
+
+#----- << G4DAWN_HOST_NAME >>
+#      Set a host where Renderer DAWN is running with 
+#      the INET mode, i.e., invoked as "dawn -G".
+#      If the environmental variable G4DAWN_NAMED_PIPE 
+#      is set to "1", this host setting is ignored.
+#
+#  Example:
+#
+# setenv  G4DAWN_HOST_NAME  cernsp.cern.ch
+
+
+#----- << G4DAWN_MULTI_WINDOW >>
+#      Boolean flag to set on/off multi-window mode.
+#      If this variable is set and its value is non-zero,
+#      Geant4 invokes Renderer DAWN with the multi-X-window mode.  
+#      Otherwise DAWN is invoked with the EPS mode, in which
+#      EPS files are generated and viewed with a PS viewer.
+#      The default value is "0".
+#
+#  Example:
+#
+#   setenv  G4DAWN_MULTI_WINDOW      "0"
+#   setenv  G4DAWN_MULTI_WINDOW      "1"
+
+
+#----- << G4DAWN_NAMED_PIPE >> -----
+#      Boolean flag to set on/off BSD-type Unix-domain connection.
+#      If this variable is set and the value is non-zero,
+#      Renderer DAWN connected with GEANT4 in the BSD-type Unix domain,
+#      i.e. through named pipe.
+#      The default is "0", i.e., do no use this type of connection.
+#
+#  Example:
+#
+#   setenv  G4DAWN_NAMED_PIPE             "0"
+#   setenv  G4DAWN_NAMED_PIPE             "1"
+
+
+#----- << G4DAWN_PRECISION >> -----
+#      Set precision of double numbers in g4_XX.prim files.
+#      The number is used as 
+#        sprintf( string, "%*.*g", (precision+8), precision, value).
+#      See G4DAWNFILESceneHandler::G4DAWNFILESceneHandler() 
+#      for more details.
+#      The default precision is "9".
+#      
+#  Example:
+#
+#   setenv  G4DAWN_PRECISION   9
+
+

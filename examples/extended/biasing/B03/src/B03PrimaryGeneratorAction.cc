@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B03PrimaryGeneratorAction.cc,v 1.4 2002/05/15 02:48:43 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: B03PrimaryGeneratorAction.cc,v 1.5 2002/11/08 17:35:19 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "globals.hh"
@@ -40,7 +40,7 @@ B03PrimaryGeneratorAction::B03PrimaryGeneratorAction()
   particleGun = new G4ParticleGun(n_particle);
   particleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
   particleGun->SetParticleEnergy(10.0*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -15.0005*cm));
+  particleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
 }
 

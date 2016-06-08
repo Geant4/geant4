@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01PrimaryGeneratorMessenger.cc,v 1.3 2001/11/16 14:31:13 barrand Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: AnaEx01PrimaryGeneratorMessenger.cc,v 1.4 2002/12/05 00:24:22 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -45,7 +45,7 @@ AnaEx01PrimaryGeneratorMessenger::AnaEx01PrimaryGeneratorMessenger(AnaEx01Primar
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(PreInit,Idle);
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

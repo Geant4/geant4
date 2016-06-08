@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.6 2001/08/01 17:12:20 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.8 2002/12/12 19:18:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998
@@ -188,13 +188,13 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
      G4int    chargeResidNucl;
 
      G4double  massGamma;
-     G4double  massNeutrinoE;
+     G4double  massNeutrinoMu;
      G4double  massProton;
      G4double  massNeutron;
      G4double  massFragm[6];
 
      G4ParticleDefinition* pdefGamma;
-     G4ParticleDefinition* pdefNeutrinoE;
+     G4ParticleDefinition* pdefNeutrinoMu;
      G4ParticleDefinition* pdefMuonMinus;
      G4ParticleDefinition* pdefNeutron;
      G4ParticleDefinition* pdefFragm[6];

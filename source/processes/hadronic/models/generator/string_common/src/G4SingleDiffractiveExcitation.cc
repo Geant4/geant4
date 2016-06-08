@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.9 2002/06/13 18:03:04 jwellisc Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.10 2002/12/12 19:17:55 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //

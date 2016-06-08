@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Polyline.hh,v 1.9 2001/08/20 23:28:43 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  July 1995

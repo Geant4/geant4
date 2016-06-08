@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -24,6 +24,8 @@
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
 //      CERN, Geneva, Switzerland
 //
 //      File name:     G4NuclearLevelManager
@@ -33,7 +35,14 @@
 //      Creation date: 24 October 1998
 //
 //      Modifications: 
-//      
+//        09 Sep. 2002, Fan Lei  (flei@space.qinetiq.com)
+//              Added moved the totalCC infront of the others in 
+//              read().
+//
+//        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
+//              Added K->N+ internal  conversion coefficiencies and their access
+//              functions      
+//
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added half-life, angular momentum, parity, emissioni type
 //              reading from experimental data. 
@@ -66,14 +75,13 @@ G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A): _nucleusA(A), _n
   MakeLevels();
 }
 
+
 G4NuclearLevelManager::~G4NuclearLevelManager()
 { 
   if ( _levels ) {
     if (_levels->size()>0) 
     {
-      G4std::vector<G4NuclearLevel*>::iterator pos;
-      for(pos=_levels->begin(); pos!=_levels->end(); pos++)
-        if (*pos) delete *pos;
+      G4std::for_each(_levels->begin(), _levels->end(), DeleteLevel());
       _levels->clear();
     }
     delete _levels;
@@ -107,12 +115,9 @@ G4bool G4NuclearLevelManager::IsValid(G4int Z, G4int A) const
   ost << dirName << "/" << "z" << Z << ".a" << A;
   G4String file(name); 
 
-#ifdef G4USE_STD_NAMESPACE  
   G4std::ifstream inFile(file, G4std::ios::in);
-#else
-  ifstream inFile(file, ios::in|ios::nocreate);
-#endif
-  if (! inFile) valid = false;  
+
+  if (!inFile) valid = false;  
 
   return valid;
 }
@@ -142,7 +147,7 @@ const G4NuclearLevel* G4NuclearLevelManager::NearestLevel(G4double energy, G4dou
       unsigned int i = 0;
       for (i=0; i<_levels->size(); i++)
 	{
-	  G4double e = (*_levels)[i]->Energy();
+	  G4double e = _levels->operator[](i)->Energy();
 	  G4double eDiff = abs(e - energy);
 	  if (eDiff < diff && eDiff <= eDiffMax)
 	    { 
@@ -152,7 +157,7 @@ const G4NuclearLevel* G4NuclearLevelManager::NearestLevel(G4double energy, G4dou
 	}
     }
   if (_levels != 0 && iNear >= 0 && iNear < static_cast<G4int>(_levels->size()) )
-    { return (*_levels)[iNear]; }
+    { return _levels->operator[](iNear); }
   else
     { return 0; }
 }
@@ -203,7 +208,9 @@ G4bool G4NuclearLevelManager::Read(G4std::ifstream& dataFile)
   if (dataFile >> _levelEnergy)
     {
       dataFile >> _gammaEnergy >> _probability >> _polarity >> _halfLife
-	       >> _angularMomentum;
+	       >> _angularMomentum  >> _totalCC >> _kCC >> _l1CC >> _l2CC 
+	       >> _l3CC >> _m1CC >> _m2CC >> _m3CC >> _m4CC >> _m5CC
+	       >> _nPlusCC;
       _levelEnergy *= keV;
       _gammaEnergy *= keV;
       _halfLife *= second;
@@ -212,7 +219,27 @@ G4bool G4NuclearLevelManager::Read(G4std::ifstream& dataFile)
       // data files, where some transitions show up with relative probability
       // zero
       if (_probability < minProbability) _probability = minProbability;
-
+      // the folowwing is to convert icc probability to accumulative ones
+      _l1CC += _kCC;
+      _l2CC += _l1CC;
+      _l3CC += _l2CC;
+      _m1CC += _l3CC;
+      _m2CC += _m1CC;
+      _m3CC += _m2CC;
+      _m4CC += _m3CC;
+      _m5CC += _m4CC;
+      _nPlusCC += _m5CC;
+      _kCC /= _nPlusCC;
+      _l1CC /= _nPlusCC;
+      _l2CC /= _nPlusCC;
+      _l3CC /= _nPlusCC;
+      _m1CC /= _nPlusCC;
+      _m2CC /= _nPlusCC;
+      _m3CC /= _nPlusCC;
+      _m4CC /= _nPlusCC;
+      _m5CC /= _nPlusCC;
+      _nPlusCC /= _nPlusCC;  
+      
       // G4cout << "Read " << _levelEnergy << " " << _gammaEnergy << " " << _probability << G4endl;
     }
   else
@@ -248,12 +275,9 @@ void G4NuclearLevelManager::MakeLevels()
 
   if (_levels != 0)
     {
-      if (_levels->size()>0) 
+      if (_levels->size()>0)
       {
-        G4std::vector<G4NuclearLevel*>::iterator pos;
-        for(pos=_levels->begin(); pos!=_levels->end(); pos++)
-          if (*pos) delete *pos;
-        _levels->clear();
+        for(unsigned int i=0; i<_levels->size(); i++) delete _levels->operator[](i);
       }
       delete _levels;
     }
@@ -266,6 +290,18 @@ void G4NuclearLevelManager::MakeLevels()
   G4DataVector pGamma; // polarity
   G4DataVector hLevel; // half life
   G4DataVector aLevel; // angular momentum
+  G4DataVector kConve; //  internal convertion coefficiencies
+  G4DataVector l1Conve;
+  G4DataVector l2Conve;
+  G4DataVector l3Conve;
+  G4DataVector m1Conve;
+  G4DataVector m2Conve;
+  G4DataVector m3Conve;
+  G4DataVector m4Conve;
+  G4DataVector m5Conve;
+  G4DataVector npConve;
+  G4DataVector toConve;
+ 
 
   while (Read(inFile))
     {
@@ -275,6 +311,17 @@ void G4NuclearLevelManager::MakeLevels()
       pGamma.push_back(_polarity);
       hLevel.push_back(_halfLife);
       aLevel.push_back(_angularMomentum);
+      kConve.push_back(_kCC);
+      l1Conve.push_back(_l1CC);
+      l2Conve.push_back(_l2CC);
+      l3Conve.push_back(_l3CC);
+      m1Conve.push_back(_m1CC);
+      m2Conve.push_back(_m2CC);
+      m3Conve.push_back(_m3CC);
+      m4Conve.push_back(_m4CC);
+      m5Conve.push_back(_m5CC);
+      npConve.push_back(_nPlusCC);
+      toConve.push_back(_totalCC);
     }
 
   // ---- MGP ---- Don't forget to close the file 
@@ -290,6 +337,17 @@ void G4NuclearLevelManager::MakeLevels()
   G4DataVector thisLevelEnergies;
   G4DataVector thisLevelWeights;
   G4DataVector thisLevelPolarities;
+  G4DataVector thisLevelkCC;
+  G4DataVector thisLevell1CC;
+  G4DataVector thisLevell2CC;
+  G4DataVector thisLevell3CC;
+  G4DataVector thisLevelm1CC;
+  G4DataVector thisLevelm2CC;
+  G4DataVector thisLevelm3CC;
+  G4DataVector thisLevelm4CC;
+  G4DataVector thisLevelm5CC;
+  G4DataVector thisLevelnpCC;
+  G4DataVector thisLeveltoCC;
 
   G4double e = -1.;
   G4int i;
@@ -299,26 +357,60 @@ void G4NuclearLevelManager::MakeLevels()
       if (e != thisLevelEnergy)
       {
 	//	  G4cout << "Making a new level... " << e << " " 
-	//		 << thisLevelEnergies.entries() << " " 
-	//		 << thisLevelWeights.entries() << G4endl;
+	//		 << thisLevelEnergies.size() << " " 
+	//		 << thisLevelWeights.size() << G4endl;
 	
 	G4NuclearLevel* newLevel = new G4NuclearLevel(thisLevelEnergy,
 						      thisLevelHalfLife,
 						      thisLevelAngMom,
 						      thisLevelEnergies,
 						      thisLevelWeights,
-						      thisLevelPolarities);
+						      thisLevelPolarities,
+						      thisLevelkCC,
+						      thisLevell1CC,
+						      thisLevell2CC,
+						      thisLevell3CC,
+						      thisLevelm1CC,
+						      thisLevelm2CC,
+						      thisLevelm3CC,
+						      thisLevelm4CC,
+						      thisLevelm5CC,
+						      thisLevelnpCC,
+						      thisLeveltoCC );
 	  _levels->push_back(newLevel);
 	  // Reset data vectors
 	  thisLevelEnergies.clear();
 	  thisLevelWeights.clear();
 	  thisLevelPolarities.clear();
+	  thisLevelkCC.clear();
+	  thisLevell1CC.clear();
+	  thisLevell2CC.clear();
+	  thisLevell3CC.clear();
+	  thisLevelm1CC.clear();
+	  thisLevelm2CC.clear();
+	  thisLevelm3CC.clear();
+	  thisLevelm4CC.clear();
+	  thisLevelm5CC.clear();
+	  thisLevelnpCC.clear();
+	  thisLeveltoCC.clear();
 	  thisLevelEnergy = e;
-      }
+	}
       // Append current data
       thisLevelEnergies.push_back(eGamma[i]);
       thisLevelWeights.push_back(wGamma[i]);
       thisLevelPolarities.push_back(pGamma[i]);
+      thisLevelkCC.push_back(kConve[i]);
+      thisLevell1CC.push_back(l1Conve[i]);
+      thisLevell2CC.push_back(l2Conve[i]);
+      thisLevell3CC.push_back(l3Conve[i]);
+      thisLevelm1CC.push_back(m1Conve[i]);
+      thisLevelm2CC.push_back(m2Conve[i]);
+      thisLevelm3CC.push_back(m3Conve[i]);
+      thisLevelm4CC.push_back(m4Conve[i]);
+      thisLevelm5CC.push_back(m5Conve[i]);
+      thisLevelnpCC.push_back(npConve[i]);
+      thisLeveltoCC.push_back(toConve[i]);
+
       thisLevelHalfLife = hLevel[i];
       thisLevelAngMom = aLevel[i];
     }
@@ -329,14 +421,21 @@ void G4NuclearLevelManager::MakeLevels()
 						    thisLevelAngMom,
 						    thisLevelEnergies,
 						    thisLevelWeights,
-						    thisLevelPolarities);
+						    thisLevelPolarities,
+						    thisLevelkCC,
+						    thisLevell1CC,
+						    thisLevell2CC,
+						    thisLevell3CC,
+						    thisLevelm1CC,
+						    thisLevelm2CC,
+						    thisLevelm3CC,
+						    thisLevelm4CC,
+						    thisLevelm5CC,
+						    thisLevelnpCC,
+						    thisLeveltoCC );
       _levels->push_back(newLevel);
     }
-#ifdef G4USE_OSPACE
-  G4std::sort(_levels->begin(), _levels->end());
-#else
-  G4std::stable_sort(_levels->begin(), _levels->end());
-#endif
+  //  G4std::sort(_levels->begin(), _levels->end());
   return;
 }
 
@@ -354,7 +453,7 @@ void G4NuclearLevelManager::PrintAll()
 
   G4int i = 0;
   for (i=0; i<nLevels; i++)
-    { (*_levels)[i]->PrintAll(); }
+    { _levels->operator[](i)->PrintAll(); }
 }
 
 
@@ -366,6 +465,17 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
   _polarity = right._polarity;
   _halfLife = right._halfLife;
   _angularMomentum = right._angularMomentum;
+  _kCC = right._kCC;
+  _l1CC = right._l1CC;
+  _l2CC = right._l2CC;
+  _l3CC = right._l3CC;
+  _m1CC = right._m1CC;
+  _m2CC = right._m2CC;
+  _m3CC = right._m3CC;
+  _m4CC = right._m4CC;
+  _m5CC = right._m5CC;
+  _nPlusCC = right._nPlusCC;
+  _totalCC = right._totalCC;
   _nucleusA = right._nucleusA;
   _nucleusZ = right._nucleusZ;
   if (right._levels != 0)   
@@ -377,17 +487,17 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 	{
 	  _levels->push_back(new G4NuclearLevel(*(right._levels->operator[](i))));
 	}
-#ifdef G4USE_OSPACE
       G4std::sort(_levels->begin(), _levels->end());
-#else
-      G4std::stable_sort(_levels->begin(), _levels->end());
-#endif
     }
   else 
     {
       _levels = 0;
     }
 }
+
+
+
+
 
 
 

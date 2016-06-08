@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.4 2001/10/16 08:14:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4UItokenNum.hh,v 1.5 2002/11/27 19:08:09 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // G4UItokenNum.hh
 
@@ -56,7 +56,7 @@ typedef struct yystype {
     char     C;
     G4String S;
     G4int operator==(const yystype &right) const
-    { return (this == &right); }
+    { return (this == &right)?1:0; }
 } yystype;
  
 #endif

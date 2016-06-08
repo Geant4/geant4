@@ -1,6 +1,0 @@
-#
-#  prerunPEx02.mac
-#
-/control/verbose 2
-/db/verbose 2
-/run/initialize

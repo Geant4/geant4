@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.9 2002/05/29 22:51:45 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4StackManager.hh,v 1.10 2002/08/24 17:36:23 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 
@@ -51,9 +51,6 @@ class G4VTrajectory;
 //  This G4StackingManager has three stacks, the urgent stack, the
 // waiting stack, and the postpone to next event stack. The meanings
 // of each stack is descrived in the Geant4 user's manual.
-//
-//  The only method the user can invoke is ReClassify(), which can
-// be used from the user's concrete class of G4UserStackingAction.
 //
 
 

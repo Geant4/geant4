@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.6 2001/07/26 09:28:13 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.8 2002/12/12 19:18:14 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
 #define G4NeutronHPNBodyPhaseSpace_h 1
@@ -68,7 +68,7 @@ class G4NeutronHPNBodyPhaseSpace : public G4VNeutronHPEnergyAngular
   
   inline G4double C(G4double anEnergy, G4double mass)
   {
-    G4double result;
+    G4double result(0);
     if(theTotalCount==3) result = 4./pi/pow(GetEmax(anEnergy, mass),2);
     if(theTotalCount==4) result = 105./32./pow(GetEmax(anEnergy, mass), 3.5);
     if(theTotalCount==5) result = 256./14./pi/pow(GetEmax(anEnergy, mass), 5.);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.18 2001/08/14 18:36:07 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VSceneHandler.hh,v 1.19 2002/10/24 15:10:43 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  19th July 1996.
@@ -86,6 +86,8 @@ public: // With description
   virtual void AddThis (const G4Polycone&);
   virtual void AddThis (const G4Polyhedra&);
   virtual void AddThis (const G4VSolid&);  // For solids not above.
+  virtual void AddThis (const G4VTrajectory&);
+  virtual void AddThis (const G4VHit&);
 
   ///////////////////////////////////////////////////////////////
   // Other inherited functions.

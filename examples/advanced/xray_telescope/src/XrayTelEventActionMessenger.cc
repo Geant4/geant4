@@ -63,7 +63,7 @@ XrayTelEventActionMessenger::XrayTelEventActionMessenger(XrayTelEventAction* EvA
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("charged");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

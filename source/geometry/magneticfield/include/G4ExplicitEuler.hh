@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExplicitEuler.hh,v 1.5 2001/07/11 09:59:07 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ExplicitEuler.hh,v 1.6 2002/11/29 13:47:49 japost Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // class G4ExplicitEuler
@@ -58,9 +58,6 @@ class G4ExplicitEuler : public G4MagErrorStepper
 
     G4int IntegratorOrder() const { return 1; }
 
-  private:
-
-    G4int fNumberOfVariables ;
 };
 
 #endif /* G4EXPLICITEULER_HH */

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalVolumeModel.cc,v 1.8 2001/07/11 10:09:22 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  26th July 1999.

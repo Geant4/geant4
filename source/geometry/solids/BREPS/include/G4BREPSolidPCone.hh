@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPCone.hh,v 1.9 2002/01/22 22:43:01 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolidPCone.hh,v 1.11 2002/12/03 14:32:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPCone
@@ -118,6 +118,9 @@ public:
   G4Polyhedron* CreatePolyhedron () const;
     // Creates a G4Polyhedron
 
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
+
 private:
   
   G4Surface* ComputePlanarSurface( G4double r1, G4double r2,
@@ -133,16 +136,18 @@ private:
 
   // The following is only utilised in storing the shape parameters for
   // use in visualising this shape.  J.A. Feb  24, 1997
-  //
-  struct PConeParameters {
-     G4double Start_angle;
-     G4double Opening_angle;		   
-     G4int    Num_z_planes; 
-     // G4double z_start;		   
-     G4double *Z_values;
-     G4double *Rmin;
-     G4double *Rmax;
-  }  original_parameters;
+  // R. Chytracek, Nov 2002, Update to new IO dumping mechanism
+  
+  struct G4BREPPConeParams
+  {
+    G4double  start_angle;
+    G4double  opening_angle;
+    G4int     num_z_planes;
+    G4double  z_start;               
+    G4double* z_values;
+    G4double* RMIN;
+    G4double* RMAX;
+  } constructorParams;
 };
 
 #endif

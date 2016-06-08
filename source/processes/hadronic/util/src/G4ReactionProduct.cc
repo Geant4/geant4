@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProduct.cc,v 1.4 2001/08/01 17:12:48 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ReactionProduct.cc,v 1.6 2002/12/12 19:18:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996
@@ -39,7 +39,8 @@
     kineticEnergy(0.0),
     timeOfFlight(0.0),
     side(0),
-    NewlyAdded(false)
+    NewlyAdded(false),
+    MayBeKilled(true)
   {
     SetMomentum( 0.0, 0.0, 0.0 );
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
@@ -59,6 +60,7 @@
     (aParticleDefinition->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
     NewlyAdded = false;
+    MayBeKilled = true;
   }
  
  G4ReactionProduct::G4ReactionProduct(
@@ -75,6 +77,7 @@
     timeOfFlight = right.timeOfFlight;
     side = right.side;
     NewlyAdded = right.NewlyAdded;
+    MayBeKilled = right.MayBeKilled;
   }
  
  G4ReactionProduct &G4ReactionProduct::operator=(
@@ -92,6 +95,7 @@
       timeOfFlight = right.timeOfFlight;
       side = right.side;
       NewlyAdded = right.NewlyAdded;
+      MayBeKilled = right.MayBeKilled;
     }
     return *this;
   }
@@ -110,6 +114,7 @@
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
     NewlyAdded = false;
+    MayBeKilled = true;
     return *this;
   }
  

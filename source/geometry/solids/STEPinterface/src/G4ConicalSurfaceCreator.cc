@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConicalSurfaceCreator.cc,v 1.4 2001/07/11 10:00:09 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ConicalSurfaceCreator.cc,v 1.5 2002/11/21 16:49:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ConicalSurfaceCreator
@@ -47,6 +47,11 @@ G4ConicalSurfaceCreator::G4ConicalSurfaceCreator()
 }
 
 G4ConicalSurfaceCreator::~G4ConicalSurfaceCreator() {}
+
+G4ConicalSurfaceCreator G4ConicalSurfaceCreator::GetInstance()
+{
+  return csc;
+}
 
 void G4ConicalSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {

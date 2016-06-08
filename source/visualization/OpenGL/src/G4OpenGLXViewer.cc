@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.14 2002/02/24 01:48:27 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLXViewer.cc,v 1.18 2002/11/11 18:12:03 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
 // G4OpenGLXViewer : Class to provide XWindows specific
 //                 functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLXViewer.hh"
 
@@ -97,9 +97,8 @@ static const char* gouraudtriangleEPS[] =
 XVisualInfo*  G4OpenGLXViewer::vi_single_buffer = 0;
 XVisualInfo*  G4OpenGLXViewer::vi_double_buffer = 0;
 
-extern "C"
-{
-  static Bool WaitForNotify (Display*, XEvent* e, char* arg) {
+extern "C" {
+  Bool G4OpenGLXViewerWaitForNotify (Display*, XEvent* e, char* arg) {
     return (e->type == MapNotify) && (e->xmap.window == (Window) arg);
   }
 }
@@ -268,7 +267,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   XMapWindow (dpy, win);
 
 // Wait for window to appear (wait for an "expose" event).
-  XIfEvent (dpy, &event, WaitForNotify, (char*) win);
+  XIfEvent (dpy, &event, G4OpenGLXViewerWaitForNotify, (char*) win);
 
 // connect the context to a window
   glXMakeCurrent (dpy, win, cx);
@@ -736,15 +735,13 @@ typedef struct _DepthIndex {
   GLfloat depth;
 } DepthIndex;
 
-extern "C"
-{
-  static int
-  compare(const void *a, const void *b)
+extern "C" {
+  int G4OpenGLXViewercompare(const void *a, const void *b)
   {
     const DepthIndex *p1 = (DepthIndex *) a;
     const DepthIndex *p2 = (DepthIndex *) b;
     GLfloat diff = p2->depth - p1->depth;
-
+    
     if (diff > 0.0) {
       return 1;
     } else if (diff < 0.0) {
@@ -843,7 +840,7 @@ void G4OpenGLXViewer::spewSortedFeedback(FILE * file, GLint size, GLfloat * buff
   assert(item == nprimitives);
 
   /* Sort the primitives back to front. */
-  qsort(prims, nprimitives, sizeof(DepthIndex), compare);
+  qsort(prims, nprimitives, sizeof(DepthIndex), G4OpenGLXViewercompare);
 
   /* Understand that sorting by a primitives average depth
      doesn't allow us to disambiguate some cases like self

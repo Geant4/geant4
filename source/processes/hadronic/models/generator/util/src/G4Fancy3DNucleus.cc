@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.19 2002/06/10 13:27:54 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Fancy3DNucleus.cc,v 1.25 2002/12/12 19:17:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -274,29 +274,44 @@ void G4Fancy3DNucleus::ChoosePositions()
 	G4int i=0;
 	G4ThreeVector	aPos,center;
 	G4bool		freeplace;
-	G4double maxR=GetNuclearRadius(0.01);   //  there are no nucleons at a 
+	G4double maxR=GetNuclearRadius(0.01);   //  there are no nucleons at a
 	                                        //  relative Density of 0.01
-	
+
 	while ( i < myA )
 	{
-	   do 
+	   do
 	   {   aPos=G4ThreeVector( (2*G4UniformRand()-1.),
 	   				   (2*G4UniformRand()-1.),
 					   (2*G4UniformRand()-1.));
 	   } while (aPos.mag2() > 1. );
 	   aPos *=maxR;
-	   if (theDensity->GetRelativeDensity(aPos) >  G4UniformRand() )
+	   G4double density=theDensity->GetRelativeDensity(aPos);
+	   if (G4UniformRand() < density)
 	   {
 	      freeplace= true;
-	      for( int j=0; j<i && freeplace; j++) 
+	      G4double pFermi=theFermi.GetFermiMomentum(theDensity->GetDensity(aPos));
+		// protons must at least have binding energy of CoulombBarrier, so
+		//  assuming the Fermi energy corresponds to a potential, we must place these such
+		//  that the Fermi Energy > CoulombBarrier
+	      if (theNucleons[i].GetDefinition() == G4Proton::Proton())
 	      {
-	        freeplace= freeplace && 
+	         G4double eFermi= sqrt( sqr(pFermi) + sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
+		                  - theNucleons[i].GetDefinition()->GetPDGMass();
+	         if (eFermi <= CoulombBarrier() ) freeplace=false;
+	      }
+	      for( int j=0; j<i && freeplace; j++)
+	      {
+	        freeplace= freeplace &&
 	              (theNucleons[j].GetPosition()-aPos).mag() > nucleondistance;
 	      }
-	      if ( freeplace ) theNucleons[i++].SetPosition(aPos);
+	      if ( freeplace )
+	      {
+		  theNucleons[i].SetPosition(aPos);
+		  ++i;
+	      }
 	   }
 	}
-	 
+
 }
 
 void G4Fancy3DNucleus::ChooseFermiMomenta()
@@ -304,19 +319,39 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     G4int i;
     G4double density;
     G4ThreeVector * momentum=new G4ThreeVector[myA];
-    
+
     G4double * fermiM=new G4double[myA];
-	
+
     for (G4int ntry=0; ntry<1 ; ntry ++ )
-    {	
-	for (i=0; i < myA; i++ )    // momenta for all, including last, in case we swa
+    {
+	for (i=0; i < myA; i++ )    // momenta for all, including last, in case we swap nucleons
 	{
 	   density = theDensity->GetDensity(theNucleons[i].GetPosition());
 	   fermiM[i] = theFermi.GetFermiMomentum(density);
-	   momentum[i]= theFermi.GetMomentum(density);
+	   G4ThreeVector mom=theFermi.GetMomentum(density);
+	   if (theNucleons[i].GetDefinition() == G4Proton::Proton())
+	   {
+	      G4double eMax = sqrt(sqr(fermiM[i]) +sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
+	                      - CoulombBarrier();
+	      if ( eMax > theNucleons[i].GetDefinition()->GetPDGMass() )
+	      {
+	          G4double pmax2= sqr(eMax) - sqr(theNucleons[i].GetDefinition()->GetPDGMass());
+		  fermiM[i] = sqrt(pmax2);
+		  while ( mom.mag2() > pmax2 )
+		  {
+		      mom=theFermi.GetMomentum(density);
+		  }
+	      }  else
+	      {
+	          G4cerr << "G4Fancy3DNucleus: difficulty finding proton momentum" << G4endl;
+		  mom=0;
+	      }
+
+	   }
+	   momentum[i]= mom;
 	}
-	
-	if (ReduceSum(momentum,fermiM) ) 
+
+	if (ReduceSum(momentum,fermiM) )
 	  break;
 //       G4cout <<" G4FancyNucleus: iterating to find momenta: "<< ntry<< G4endl;
     }
@@ -325,13 +360,13 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 //     for (G4int index=0; index<myA;sum+=momentum[index++])
 //     ;
 //     G4cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
-    
-    
+
+
     G4double energy;
     for ( i=0; i< myA ; i++ )
     {
-       energy=theNucleons[i].GetParticleType()->GetPDGMass() 
-	      - BindingEnergy()/myA;
+       energy = theNucleons[i].GetParticleType()->GetPDGMass()
+	        - BindingEnergy()/myA;
        G4LorentzVector tempV(momentum[i],energy);
        theNucleons[i].SetMomentum(tempV);
     }
@@ -340,7 +375,7 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     delete [] fermiM;
 }
 
-  class G4Fancy3DNucleusHelper // Helper class 
+  class G4Fancy3DNucleusHelper // Helper class
   {
     public:
     	G4Fancy3DNucleusHelper(const G4ThreeVector &vec,const G4double size,const G4int index)
@@ -365,14 +400,14 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     	{
     		return anInt;
     	}
-    	G4Fancy3DNucleusHelper operator =(const G4Fancy3DNucleusHelper &right)  
+    	G4Fancy3DNucleusHelper operator =(const G4Fancy3DNucleusHelper &right)
     	{
 	  Vector = right.Vector;
 	  Size = right.Size;
 	  anInt = right.anInt;
 	  return *this;
     	}
-	
+
     private:
     	G4Fancy3DNucleusHelper(): Vector(0), Size(0), anInt(0) {G4cout << "def ctor for MixMasch" << G4endl;}
 	G4ThreeVector Vector;
@@ -383,32 +418,31 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 {
 	G4ThreeVector sum;
-	G4double density = theDensity->GetDensity(theNucleons[myA-1].GetPosition());
-	G4double PFermi=theFermi.GetFermiMomentum(density);
-	
+	G4double PFermi=pFermiM[myA-1];
+
 	for (G4int i=0; i < myA-1 ; i++ )
 	     { sum+=momentum[i]; }
 
 // check if have to do anything at all..
-	if ( sum.mag() <= PFermi ) 
+	if ( sum.mag() <= PFermi )
 	{
  		momentum[myA-1]=-sum;
 		return true;
 	}
-	
+
 // find all possible changes in momentum, changing only the component parallel to sum
 	G4ThreeVector testDir=sum.unit();
 	G4std::vector<G4Fancy3DNucleusHelper> testSums;		// Sorted on delta.mag()
 
 	for ( G4int aNucleon=0; aNucleon < myA-1; aNucleon++){
 		G4ThreeVector delta=2*((momentum[aNucleon]*testDir)* testDir);
-		testSums.push_back(G4Fancy3DNucleusHelper(delta,delta.mag(),aNucleon));		
+		testSums.push_back(G4Fancy3DNucleusHelper(delta,delta.mag(),aNucleon));
 	}
 	G4std::sort(testSums.begin(), testSums.end());
-	
+
 //    reduce Momentum Sum until the next would be allowed.
 	G4int index=testSums.size();
-	while ( (sum-testSums[--index].vector()).mag()>PFermi && index>0) 
+	while ( (sum-testSums[--index].vector()).mag()>PFermi && index>0)
 	{
 		// Only take one which improve, ie. don't change sign and overshoot...
 		if ( sum.mag() > (sum-testSums[index].vector()).mag() ) {
@@ -417,7 +451,7 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 		}
 	}
 
-	if ( (sum-testSums[index].vector()).mag() <= PFermi ) 
+	if ( (sum-testSums[index].vector()).mag() <= PFermi )
 	{
 		G4int best=-1;
 		G4double pBest=2*PFermi; // anything larger than PFermi
@@ -425,33 +459,32 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 		{
 			// find the momentum closest to choosen momentum for last Nucleon.
 			G4double pTry=(testSums[aNucleon].vector()-sum).mag();
-			if ( pTry < PFermi 
+			if ( pTry < PFermi
 			 &&  abs(momentum[myA-1].mag() - pTry ) < pBest )
 		        {
-			   pBest=abs(momentum[myA-1].mag() - pTry );	 
+			   pBest=abs(momentum[myA-1].mag() - pTry );
 			   best=aNucleon;
 			}
 		}
-		if ( best < 0 )  G4Exception( " Logic error in Fancy3DNucleus");
+		if ( best < 0 )  G4Exception( "G4Fancy3DNucleus.cc: Logic error in ReduceSum()");
 		momentum[testSums[best].index()]-=testSums[best].vector();
 		momentum[myA-1]=testSums[best].vector()-sum;
 
 		testSums.clear();
 		return true;
-		
-	} 
+
+	}
 	testSums.clear();
 
 	// try to compensate momentum using another Nucleon....
-	
+
 	G4int swapit=-1;
-	while (swapit<myA-1) 
-	{ 
-	  density = theDensity->GetDensity(theNucleons[++swapit].GetPosition()); 
-	  if ( theFermi.GetFermiMomentum(density) > PFermi ) break;
+	while (swapit<myA-1)
+	{
+	  if ( pFermiM[++swapit] > PFermi ) break;
 	}
 	if (swapit == myA-1 ) return false;
-	
+
 	// Now we have a nucleon with a bigger Fermi Momentum.
 	// Exchange with last nucleon.. and iterate.
 // 	G4cout << " Nucleon to swap with : " << swapit << G4endl;
@@ -470,5 +503,11 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 	pFermiM[myA-1]=pf;
 //	cout << "after swap" <<G4endl<< theNucleons[swapit] << G4endl << theNucleons[myA-1] << G4endl;
 //	cout << momentum[swapit] << G4endl << momentum[myA-1] << G4endl;
-	return ReduceSum(momentum,pFermiM);	
+	return ReduceSum(momentum,pFermiM);
+}
+
+G4double G4Fancy3DNucleus::CoulombBarrier()
+{
+  G4double coulombBarrier = (1.44/1.14) * MeV * myZ / (1.0 + pow(myA,1./3.));
+  return coulombBarrier;
 }

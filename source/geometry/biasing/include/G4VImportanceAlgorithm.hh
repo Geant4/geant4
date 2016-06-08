@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VImportanceAlgorithm.hh,v 1.3 2002/04/10 13:13:07 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VImportanceAlgorithm.hh,v 1.7 2002/10/14 12:36:01 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VImportanceAlgorithm
@@ -51,11 +51,13 @@ class G4VImportanceAlgorithm
 
 public:  // with description
 
-  virtual ~G4VImportanceAlgorithm(){}
-  virtual G4Nsplit_Weight Calculate(G4double ipre_over_ipost,
+  G4VImportanceAlgorithm();
+  virtual ~G4VImportanceAlgorithm();
+  virtual G4Nsplit_Weight Calculate(G4double ipre,
+				    G4double ipost,
                                     G4double init_w) const = 0;
     // calculate the number of tracks and their weight according 
-    // to the ratio of pre over post importance and the weight of
+    // to the  pre and post importance value and the weight of
     // the mother track.
 };
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventActionMessenger.cc,v 1.4 2001/10/17 14:04:15 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em4EventActionMessenger.cc,v 1.6 2002/12/10 17:20:30 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -32,6 +32,7 @@
 #include "Em4EventActionMessenger.hh"
 
 #include "Em4EventAction.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
@@ -40,20 +41,23 @@
 
 Em4EventActionMessenger::Em4EventActionMessenger(Em4EventAction* EvAct)
 :eventAction(EvAct)
-{ 
-  DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
+{
+  testemDir = new G4UIdirectory("/testem/");
+  testemDir->SetGuidance("commands specific to this example");
+   
+  DrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none,charged, all");
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
   
-  PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
+  PrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(Idle);    
+  PrintCmd->AvailableForStates(G4State_Idle);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,7 +65,8 @@ Em4EventActionMessenger::Em4EventActionMessenger(Em4EventAction* EvAct)
 Em4EventActionMessenger::~Em4EventActionMessenger()
 {
   delete DrawCmd;
-  delete PrintCmd;  
+  delete PrintCmd;
+  delete testemDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

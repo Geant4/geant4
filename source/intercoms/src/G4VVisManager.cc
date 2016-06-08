@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.cc,v 1.4 2001/07/11 10:01:17 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VVisManager.cc,v 1.5 2002/11/20 14:46:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Abstract interface for GEANT4 Visualization Manager.
@@ -33,3 +33,13 @@
 G4VVisManager::~G4VVisManager () {}
 
 G4VVisManager* G4VVisManager::fpConcreteInstance = 0;
+
+G4VVisManager* G4VVisManager::GetConcreteInstance ()
+{
+  return fpConcreteInstance;
+}
+
+void G4VVisManager::SetConcreteInstance (G4VVisManager* m)
+{
+  fpConcreteInstance = m;
+}

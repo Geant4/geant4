@@ -35,6 +35,8 @@
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/06/2001  V.Ivanchenko Continuation for eff.charge (small change of y)
+// 08/10/2002  V.Ivanchenko The charge of the nucleus is used not charge of 
+//                          DynamicParticle
 //
 // Class Description: 
 //
@@ -73,7 +75,7 @@ G4double G4hIonEffChargeSquare::TheValue(const G4DynamicParticle* particle,
 {
   G4double energy = particle->GetKineticEnergy() ;
   G4double particleMass = particle->GetMass() ;
-  G4double charge = (particle->GetCharge())/eplus ;
+  G4double charge = (particle->GetDefinition()->GetPDGCharge())/eplus ;
 
   G4double q = IonEffChargeSquare(material,energy,particleMass,charge) ;
 

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.10 2002/06/06 17:17:45 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PreCompoundEmission.cc,v 1.11.4.1 2002/12/12 19:17:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -146,7 +146,7 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
 	
     // Create a G4ReactionProduct 
     G4ReactionProduct * MyRP = theFragment->GetReactionProduct();
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
     MyRP->SetCreatorModel("G4PreCompoundModel");
 #endif
 #ifdef debug

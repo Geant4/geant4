@@ -138,17 +138,6 @@ export G4ANALYSIS_USE
 echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
 fi 
 
-#+
-#
-# g4persistency
-#
-if [ X$g4use_hepodbms = Xy ] ; then
-G4USE_HEPODBMS=1
-export G4USE_HEPODBMS
-.  \$G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
-echo "On this machine the G4USE_HEPODBMS=\$G4USE_HEPODBMS"
-fi 
-
 #
 # g4ui
 #
@@ -330,6 +319,22 @@ export OGLHOME
 echo "On this machine the OGLHOME=\$OGLHOME"
 fi 
 
+#
+# Use G3TOG4 module
+#
+#+
+if [ X$g4wlib_build_g3tog4 = Xy ] ; then
+G4LIB_BUILD_G3TOG4=1
+export G4LIB_BUILD_G3TOG4
+echo "On this machine the G4LIB_BUILD_G3TOG4=\$G4LIB_BUILD_G3TOG4"
+fi 
+
+if [ X$g4w_use_g3tog4 = Xy ] ; then
+G4USE_G3TOG4=1
+export G4USE_G3TOG4
+echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
+fi 
+
 #+
 #
 # g4shared
@@ -370,13 +375,21 @@ fi
 
 #####################################################################
 
+# Create GNUmakefile.db to keep ALL GNUmakefile DB :)
+
+if test -f \$G4INSTALL/config/scripts/GNUmakefile.db ; then
+mv \$G4INSTALL/config/scripts/GNUmakefile.db \$G4LIB/\$G4SYSTEM/GNUmakefile.db.bac
+fi
+
+$g4make -n -p -f \$G4INSTALL/config/scripts/GNUmakefile > \$G4LIB/\$G4SYSTEM/GNUmakefile.db
+
 echo ""
 echo "Starting installation..."
 echo ""
 cd $g4install/source
 echo `pwd`
 
-# THere is no env!
+# There is no env!
 if [ X$g4global = Xy ] ; then
 $g4make global
 fi

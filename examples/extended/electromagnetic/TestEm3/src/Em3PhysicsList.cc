@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsList.cc,v 1.8 2002/02/14 14:20:46 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em3PhysicsList.cc,v 1.9 2002/12/12 11:19:38 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -216,7 +216,6 @@ void Em3PhysicsList::ConstructEM()
     }
   }
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

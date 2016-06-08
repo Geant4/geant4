@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.4 2001/09/10 10:28:56 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Scale.cc,v 1.6 2002/11/27 12:24:01 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  21st July 2001
@@ -66,7 +66,7 @@ G4Scale & G4Scale::operator = (const G4Scale &from) {
   return *this;
 }
 
-G4String G4Scale::GuidanceString
+const G4String G4Scale::GuidanceString
 (
  "An annotated line in the specified direction with tick marks at the"
  "\nend.  If autoPlacing is true it is required to be centred at the"
@@ -83,3 +83,8 @@ G4String G4Scale::GuidanceString
  "\n  if direction == y then (x,y,z) to (x,y + length,z)"
  "\n  if direction == z then (x,y,z - length) to (x,y,z)"
 );
+
+const G4String& G4Scale::GetGuidanceString()
+{
+  return GuidanceString;
+}

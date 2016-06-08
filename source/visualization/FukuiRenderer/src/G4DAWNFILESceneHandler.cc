@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.11 2001/12/01 20:52:06 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.12 2002/09/02 04:39:21 stanaka Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
@@ -86,7 +86,8 @@ fSystem   (system)                        ,
 fPrimDest ()                              ,
 FRflag_in_modeling     (false)            ,
 flag_saving_g4_prim    (false)            ,
-COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX)
+COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX),
+fPrec (9), fPrec2 (16)
 {
 	// count instantiated scenes
 	fSceneCount++;
@@ -110,6 +111,15 @@ COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX)
 		fMaxFileNum = FR_MAX_FILE_NUM ;
 	}
 	if( fMaxFileNum < 1 ) { fMaxFileNum = 1 ; }
+
+
+		//----- precision control
+	if( getenv( "G4DAWNFILE_PRECISION" ) != NULL ) {
+		sscanf( getenv("G4DAWNFILE_PRECISION"), "%d", &fPrec ) ;
+	} else {
+                fPrec = 9 ;
+	}
+	fPrec2 = fPrec + 7 ;
 
 } 
 

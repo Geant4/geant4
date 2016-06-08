@@ -1,0 +1,3 @@
+#!/bin/sh
+rm -f G4defaultOutput G4run0001.root
+../rootio/bin/Linux-g++/G4PersEx01 run.mac

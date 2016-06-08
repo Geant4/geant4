@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.11 2001/07/25 21:08:14 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BoundingSphereScene.hh,v 1.12 2002/10/24 14:53:27 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  7th June 1997
@@ -62,6 +62,8 @@ public:
   void AddThis (const G4Polycone& s) {Accrue (s);}
   void AddThis (const G4Polyhedra& s) {Accrue (s);}
   void AddThis (const G4VSolid& s) {Accrue (s);}
+  void AddThis (const G4VTrajectory&) {}
+  void AddThis (const G4VHit&) {}
   void PreAddThis (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);
   void PostAddThis () {}

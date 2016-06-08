@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.5 2002/02/24 01:48:00 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.6 2002/10/16 10:44:15 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -36,11 +36,13 @@
 
 #include "G4ios.hh"
 
-G4OpenGLImmediateWin32Viewer::G4OpenGLImmediateWin32Viewer (G4OpenGLImmediateSceneHandler& scene):
+G4OpenGLImmediateWin32Viewer::G4OpenGLImmediateWin32Viewer
+(G4OpenGLImmediateSceneHandler& scene,
+ const G4String&  name):
 G4OpenGLViewer (scene),
 G4OpenGLWin32Viewer (scene),
 G4OpenGLImmediateViewer (scene),
-G4VViewer (scene, scene.IncrementViewCount ()) {
+G4VViewer (scene, scene.IncrementViewCount (), name) {
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }

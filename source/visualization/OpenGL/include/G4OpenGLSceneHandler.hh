@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.11 2002/02/24 01:47:49 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.12 2002/11/11 18:08:21 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -71,6 +71,8 @@ public:
   void AddThis (const G4Polycone&);
   void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid&);
+  void AddThis (const G4VTrajectory&);
+  void AddThis (const G4VHit&);
 
 protected:
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,

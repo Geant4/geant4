@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12th November 2002 Peter Gumplinger (op-V04-01-01)
+                Fix calculation of polarization on dielectric dielectric
+                interfaces; bug report #427
 28th March 2002 Peter Gumplinger (op-V04-00-01)
                 Add public inline method GetStatus and make enum 
                 G4OpBoundaryProcessStatus public in G4OpBoundaryProcess.hh

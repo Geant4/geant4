@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.7 2002/06/17 11:34:49 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4LEAntiProtonInelastic.cc,v 1.8 2002/12/12 19:18:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
  // Hadronic Process: AntiProton Inelastic Process
  // J.L. Chuma, TRIUMF, 13-Feb-1997

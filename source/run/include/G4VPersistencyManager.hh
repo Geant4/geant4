@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPersistencyManager.hh,v 1.4 2001/07/11 10:08:32 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4VPersistencyManager_h

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorMessenger.hh,v 1.4 2001/10/26 12:51:23 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em1DetectorMessenger.hh,v 1.5 2002/12/11 14:19:22 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -56,7 +56,7 @@ class Em1DetectorMessenger: public G4UImessenger
   
     Em1DetectorConstruction*   Em1Detector;
     
-    G4UIdirectory*             Em1detDir;
+    G4UIdirectory*             testemDir;
     G4UIcmdWithAString*        MaterCmd;
     G4UIcmdWithADoubleAndUnit* SizeCmd;
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;

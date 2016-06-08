@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.cc,v 1.1 2002/05/15 05:47:49 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4TrajectoryContainer.cc,v 1.2 2002/10/06 11:46:48 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4TrajectoryContainer.hh"
@@ -32,7 +32,8 @@ G4TrajectoryContainer::G4TrajectoryContainer()
 { vect = new TrajectoryVector; }
 
 G4TrajectoryContainer::~G4TrajectoryContainer()
-{ delete vect; }
+{ clearAndDestroy();
+  delete vect; }
 
 G4int G4TrajectoryContainer::operator==(const G4TrajectoryContainer& right) const
 { return (this==&right); }

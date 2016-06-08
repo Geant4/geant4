@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.21 2002/06/18 16:17:20 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PreCompoundModel.cc,v 1.23 2002/12/12 19:17:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by V. Lara
 
@@ -30,7 +30,7 @@
 
 #include "G4EvaporationLevelDensityParameter.hh"
 
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
 G4Fragment G4PreCompoundModel::theInitialFragmentForTest;
 G4std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
 #endif
@@ -96,7 +96,7 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   G4LorentzVector momentum(p, anEnergy);
   anInitialState.SetMomentum(momentum);
   
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
   G4PreCompoundModel::theInitialFragmentForTest = anInitialState;
 #endif
   
@@ -104,7 +104,7 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   const G4Fragment aFragment(anInitialState);
   G4ReactionProductVector * result = DeExcite(aFragment);
 
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
   for (G4std::vector<G4String*>::iterator icm = theCreatorModels.begin(); 
        icm != theCreatorModels.end(); ++icm )
     {
@@ -121,7 +121,7 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
 	new G4DynamicParticle((*i)->GetDefinition(),
 			      (*i)->GetTotalEnergy(),
 			      (*i)->GetMomentum());
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
       theCreatorModels.push_back(new G4String((*i)->GetCreatorModel()));
 #endif
       delete (*i);

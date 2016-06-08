@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4oState.hh,v 1.4.4.1 2001/06/28 19:06:33 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4oState.hh,v 1.5 2001/07/11 09:56:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifndef G4oState_h
 #define G4oState_h 

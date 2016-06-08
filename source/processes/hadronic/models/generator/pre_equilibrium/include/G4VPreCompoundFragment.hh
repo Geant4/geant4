@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.hh,v 1.11 2002/06/06 17:12:28 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VPreCompoundFragment.hh,v 1.13 2002/12/12 19:17:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by V. Lara
 
@@ -35,9 +35,6 @@
 #include "G4IonTable.hh"
 #include "G4Fragment.hh"
 #include "G4VCoulombBarrier.hh"
-
-//#define pctest
-
 
 class G4ReactionProduct;
 

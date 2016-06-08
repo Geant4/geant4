@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIterminal.cc,v 1.17 2001/11/26 19:15:08 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "g4std/strstream"

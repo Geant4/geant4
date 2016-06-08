@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -54,8 +54,12 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
   G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
   G4int totalCuts = 0;
-  G4double eK = thePrimary.GetKineticEnergy()/GeV;
-  G4int nucleonCount = theTargetNuc.size(); // debug
+
+   #ifdef debug_G4GammaParticipants
+   G4double eK = thePrimary.GetKineticEnergy()/GeV;
+   G4int nucleonCount = theTargetNuc.size(); // debug
+   #endif
+
   G4int theCurrent = static_cast<G4int> (theTargetNuc.size()*G4UniformRand());
   G4Nucleon * pNucleon = theTargetNuc[theCurrent];
   G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);

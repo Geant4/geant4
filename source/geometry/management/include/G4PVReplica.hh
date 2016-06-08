@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.5 2001/07/11 09:59:17 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PVReplica.hh,v 1.6 2002/10/14 07:42:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // class G4PVReplica
@@ -107,7 +107,9 @@ class G4PVReplica : public G4VPhysicalVolume
     virtual G4int GetCopyNo() const;
     virtual void  SetCopyNo(G4int CopyNo);
     virtual G4bool IsReplicated() const;
+    virtual G4bool IsParameterised() const;
     virtual G4VPVParameterisation* GetParameterisation() const;
+    virtual G4int GetMultiplicity() const;
     virtual void GetReplicationData(EAxis& axis,
                                    G4int& nReplicas,
 				   G4double& width,
@@ -136,7 +138,3 @@ class G4PVReplica : public G4VPhysicalVolume
 };
 
 #endif
-
-
-
-

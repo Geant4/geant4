@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiDMesonZero.hh,v 1.7 2001/10/28 05:01:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // ------------------------------------------------------------

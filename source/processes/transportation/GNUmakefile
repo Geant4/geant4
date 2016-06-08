@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002/05/17 07:08:58 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2002/10/16 16:26:57 dressel Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -11,7 +11,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4BASE)/global/management/include \
+CPPFLAGS += \
+	    -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/global/HEPRandom/include \
 	    -I$(G4BASE)/global/HEPGeometry/include \
 	    -I$(G4BASE)/geometry/management/include \
@@ -22,7 +23,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
 	    -I$(G4BASE)/particles/management/include \
-	    -I$(G4BASE)/materials/include
+	    -I$(G4BASE)/materials/include \
+	    -I$(G4BASE)/intercoms/include
 
 ifdef G4DEBUG_TRANSPORT
   CPPFLAGS += -DG4DEBUG_TRANSPORT

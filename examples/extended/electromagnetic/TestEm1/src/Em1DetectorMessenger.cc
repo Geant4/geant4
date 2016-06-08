@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorMessenger.cc,v 1.4 2001/10/26 12:51:25 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em1DetectorMessenger.cc,v 1.6 2002/12/11 14:19:23 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 
@@ -42,33 +42,33 @@
 Em1DetectorMessenger::Em1DetectorMessenger(Em1DetectorConstruction * Em1Det)
 :Em1Detector(Em1Det)
 { 
-  Em1detDir = new G4UIdirectory("/calor/");
-  Em1detDir->SetGuidance("Em1 detector control.");
+  testemDir = new G4UIdirectory("/testem/");
+  testemDir->SetGuidance("commands specific to this example");
       
-  MaterCmd = new G4UIcmdWithAString("/calor/setMat",this);
+  MaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
   MaterCmd->SetGuidance("Select material of the box.");
   MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(PreInit,Idle);
+  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  SizeCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSize",this);
+  SizeCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSize",this);
   SizeCmd->SetGuidance("Set size of the box");
   SizeCmd->SetParameterName("Size",false);
   SizeCmd->SetRange("Size>0.");
   SizeCmd->SetUnitCategory("Length");
-  SizeCmd->AvailableForStates(PreInit,Idle);
+  SizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
+  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(PreInit,Idle);
+  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
-  UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
+  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +79,7 @@ Em1DetectorMessenger::~Em1DetectorMessenger()
   delete SizeCmd; 
   delete MagFieldCmd;
   delete UpdateCmd;
-  delete Em1detDir;
+  delete testemDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

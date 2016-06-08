@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.15 2002/06/03 14:07:13 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: Em2RunAction.cc,v 1.18 2002/12/11 17:12:23 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,15 +49,7 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "AIDA/IAnalysisFactory.h"
- #include "AIDA/ITreeFactory.h"
- #include "AIDA/ITree.h"
- #include "AIDA/IHistogramFactory.h"
- #include "AIDA/IHistogram1D.h"
- #include "AIDA/IAxis.h"
- #include "AIDA/IAnnotation.h"
- #include "AIDA/ITupleFactory.h"
- #include "AIDA/ITuple.h"
+ #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,56 +90,58 @@ void Em2RunAction::bookHisto()
 {
 #ifndef G4NOHIST
  // Creating the analysis factory
- IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
  // Creating the tree factory
- ITreeFactory* tf = af->createTreeFactory();
+ AIDA::ITreeFactory* tf = af->createTreeFactory();
  
  // Creating a tree mapped to an hbook file.
- tree = tf->create("testem2.paw", false, false, "hbook");
+ G4bool readOnly  = false;
+ G4bool createNew = true;
+ tree = tf->create("testem2.paw", "hbook", readOnly, createNew);
 
  // Creating a histogram factory, whose histograms will be handled by the tree
- IHistogramFactory* hf = af->createHistogramFactory(*tree);  
+ AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);  
   G4double Ekin = Em2Kin->GetParticleGun()->GetParticleEnergy();
   G4double dLradl = Em2Det->GetdLradl();
   G4double dRradl = Em2Det->GetdRradl();
   
-  histo[0] = hf->create1D( "1","total energy deposit (percent of E inc)",
+  histo[0] = hf->createHistogram1D( "1","total energy deposit(percent of Einc)",
                                     100,0.,100.);
                                     
-  histo[1] = hf->create1D( "2","total charged tracklength (radl)",
+  histo[1] = hf->createHistogram1D( "2","total charged tracklength (radl)",
                                     100,0.,100.*Ekin/GeV);
                                     
-  histo[2] = hf->create1D( "3","total neutral tracklength (radl)",
+  histo[2] = hf->createHistogram1D( "3","total neutral tracklength (radl)",
                                     100,0.,1000.*Ekin/GeV);
                                     
-  histo[3] = hf->create1D( "4","longit energy profile (% of E inc)",
+  histo[3] = hf->createHistogram1D( "4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
                                     
   G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
-  histo[4] = hf->create1D( "5","cumul longit energy dep (% of E inc)",
+  histo[4] = hf->createHistogram1D( "5","cumul longit energy dep (% of E inc)",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[5] = hf->create1D( "6","rms on cumul longit Edep (% of E inc)",
+  histo[5] = hf->createHistogram1D( "6","rms on cumul longit Edep (% of E inc)",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[6] = hf->create1D( "7","nb of gamma per plane",
+  histo[6] = hf->createHistogram1D( "7","nb of gamma per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[7] = hf->create1D( "8","nb of positron per plane",
+  histo[7] = hf->createHistogram1D( "8","nb of positron per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[8] = hf->create1D( "9","nb of electron per plane",
+  histo[8] = hf->createHistogram1D( "9","nb of electron per plane",
                                     nLbin,Zmin,Zmax);
                                     
-  histo[9] = hf->create1D("10","radial energy profile (% of E inc)",
+  histo[9] = hf->createHistogram1D("10","radial energy profile (% of E inc)",
                                     nRbin,0.,nRbin*dRradl);
                                     
   G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
-  histo[10]= hf->create1D("11","cumul radial energy dep (% of E inc)",
+  histo[10]= hf->createHistogram1D("11","cumul radial energy dep (% of E inc)",
                                     nRbin,Rmin,Rmax);
                                     
-  histo[11]= hf->create1D("12","rms on cumul radial Edep (% of E inc)",
+  histo[11]= hf->createHistogram1D("12","rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
 				    
   delete hf;
@@ -293,7 +287,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   MyVector MeanELongit(nLbin),      rmsELongit(nLbin);
   MyVector MeanELongitCumul(nLbin), rmsELongitCumul(nLbin);
    
-  G4int i; G4double bin;  
+  G4int i;   
   for (i=0; i<nLbin; i++)
    {
     MeanELongit[i] = norme*sumELongit[i];
@@ -309,7 +303,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
     positronFlux[i] /= NbOfEvents;                                    
 
 #ifndef G4NOHIST                                    
-    bin = i*dLradl;                                
+    G4double bin = i*dLradl;                                
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
     histo[4]->fill(bin,MeanELongitCumul[i]);
@@ -339,7 +333,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
                                  
 #ifndef G4NOHIST                                     
-    bin = i*dRradl;                                
+    G4double bin = i*dRradl;                                
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
     histo[10]->fill(bin,MeanERadialCumul[i]);
@@ -361,8 +355,13 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   //print
   // 
 
-  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-  G4int  oldprec = G4cout.precision(2);
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else 
+  G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
+  G4int  prec = G4cout.precision(2);
   
   G4cout << "                 LATERAL PROFILE                   "
          << "      CUMULATIVE LATERAL PROFILE" << G4endl << G4endl;  
@@ -417,9 +416,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
          << G4std::setw(7)  << MeanNeutrTrLength << " radl +- "
          << G4std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
                  
-                
-  G4cout.setf(oldform,G4std::ios::floatfield);
-  G4cout.precision(oldprec);
+  G4cout.setf(mode,G4std::ios::floatfield);
+  G4cout.precision(prec);
 
   // show Rndm status
   HepRandom::showEngineStatus();

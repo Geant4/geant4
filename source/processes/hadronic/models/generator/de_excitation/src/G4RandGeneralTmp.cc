@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -51,14 +51,14 @@ G4RandGeneralTmp::G4RandGeneralTmp(HepDouble* aProbFunc, HepInt theProbSize )
   register HepInt ptn;
   theIntegralPdf = new HepDouble[theProbSize];
   theIntegralPdf[0] = 0;
-  for ( ptn = 1; ptn<theProbSize; ++ptn ) {
-    theIntegralPdf[ptn] = 0;
+  for ( ptn = 1; ptn<theProbSize; ++ptn ) 
+  {
     theIntegralPdf[ptn] = theIntegralPdf[ptn-1] + aProbFunc[ptn];
   } 
   for ( ptn = 0; ptn < theProbSize; ++ptn )
-    { 
-    if (theIntegralPdf[ptn-1] != 0.) theIntegralPdf[ptn] /= theIntegralPdf[nBins-1];
-    }
+  { 
+    if (theIntegralPdf[nBins-1] != 0.) theIntegralPdf[ptn] /= theIntegralPdf[nBins-1];
+  }
 }
 
 G4RandGeneralTmp::G4RandGeneralTmp(HepRandomEngine& anEngine,
@@ -68,12 +68,14 @@ G4RandGeneralTmp::G4RandGeneralTmp(HepRandomEngine& anEngine,
   register HepInt ptn;
   theIntegralPdf = new HepDouble[theProbSize];
   theIntegralPdf[0] = 0;
-  for ( ptn = 1; ptn<theProbSize; ++ptn ) {
-    theIntegralPdf[ptn] = 0;
+  for ( ptn = 1; ptn<theProbSize; ++ptn ) 
+  {
     theIntegralPdf[ptn] = theIntegralPdf[ptn-1] + aProbFunc[ptn];
   } 
   for ( ptn = 0; ptn < theProbSize; ++ptn )
+  {
     theIntegralPdf[ptn] /= theIntegralPdf[nBins-1];
+  }
 }
 
 G4RandGeneralTmp::G4RandGeneralTmp(HepRandomEngine* anEngine,
@@ -99,7 +101,7 @@ G4RandGeneralTmp::G4RandGeneralTmp(HepRandomEngine* anEngine,
 
 G4RandGeneralTmp::~G4RandGeneralTmp() {
   if ( deleteEngine ) delete localEngine;
-  delete theIntegralPdf;
+  delete [] theIntegralPdf;
 }
 
 HepDouble G4RandGeneralTmp::operator()() {

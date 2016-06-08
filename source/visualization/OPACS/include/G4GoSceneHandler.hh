@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GoSceneHandler.hh,v 1.8 2001/08/24 21:49:59 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GoSceneHandler.hh,v 1.9 2002/12/11 15:58:00 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -72,6 +72,8 @@ public:
   void AddThis         (const G4Polycone&);
   void AddThis         (const G4Polyhedra&);
   void AddThis         (const G4VSolid&);
+  void AddThis         (const G4VTrajectory&);
+  void AddThis         (const G4VHit&);
  
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives   ();

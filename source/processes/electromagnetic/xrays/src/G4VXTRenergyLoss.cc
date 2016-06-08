@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VXTRenergyLoss.cc,v 1.5 2002/03/28 07:58:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4Timer.hh"

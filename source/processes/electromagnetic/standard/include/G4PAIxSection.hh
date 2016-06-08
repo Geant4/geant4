@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.7 2002/04/09 17:34:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PAIxSection.hh,v 1.9 2002/10/14 17:30:10 maire Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // G4PAIxSection.hh -- header file

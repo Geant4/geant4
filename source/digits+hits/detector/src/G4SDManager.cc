@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.cc,v 1.4 2001/07/13 15:00:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4SDManager.cc,v 1.5 2002/11/27 19:03:42 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4SDManager.hh"
@@ -58,6 +58,8 @@ G4SDManager::G4SDManager():verboseLevel(0)
 G4SDManager::~G4SDManager()
 {
   delete theMessenger;
+  delete HCtable;
+  delete treeTop;
 }
 
 void G4SDManager::AddNewDetector(G4VSensitiveDetector*aSD)

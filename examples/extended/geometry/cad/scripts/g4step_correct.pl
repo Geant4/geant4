@@ -15,18 +15,16 @@ foreach  (@filebuf)
 {
 if(/.*VERTEX\_POINT.*/)
 {
-    s/VERTEX\_POINT\s*\(\s*\'\s*\'\s*\,/VERTEX\_POINT\(\'\'\,\'\'\,/g ;
-    s/VERTEX\_POINT\s*\(\s*\'NONE\'\s*\,/VERTEX\_POINT\(\'NONE\'\,\'\'\,/g ;
+    ($a,$b) = split (",",$&);
+    s//$a\,\'\'\,$b\n/;
 }
 elsif(/.*EDGE\_LOOP.*/)
 {
-    s/EDGE\_LOOP\s*\(\s*\'\s*\'\s*\,/EDGE\_LOOP\(\'\'\,\'\'\,/g;
-    s/EDGE\_LOOP\s*\(\s*\'NONE\'\s*\,/EDGE\_LOOP\(\'NONE\'\,\'\'\,/g;
+    s/EDGE\_LOOP\(\'(\w+)\'\,/EDGE\_LOOP\(\'$1\'\,\'\'\,/;
 }
 elsif(/.*POLY\_LOOP.*/)
 {
-    s/POLY\_LOOP\s*\(\s*\'\s*\'\s*\,/POLY\_LOOP\(\'\'\,\'\'\,/g;
-    s/POLY\_LOOP\s*\(\s*\'NONE\'\s*\,/POLY\_LOOP\(\'NONE\'\,\'\'\,/g;
+    s/POLY\_LOOP\(\'(\w+)\'\,/POLY\_LOOP\(\'$1\'\,\'\'\,/;
 }
 elsif(/.*ADVANCED\_FACE.*/)
 {

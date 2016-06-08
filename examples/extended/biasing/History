@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2002/06/04 12:04:20 dressel Exp $
+$Id: History,v 1.21 2002/11/25 10:41:12 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,39 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 25th M. Dressel -  exbiasing-V04-01-01
+  change README
+
+Nov 22th M. Dressel 
+  changed geometry for scoring. Cells must not coinside with
+  wolrd boundary since tracks would be killed before
+  scoring is called in the case a track exits a cell into
+  "out of world".
+
+Nov   8th, 2002 M.Dressel - exbiasing-V04-01-00
+  reduce and change examples. Only B01 B02 B03 will
+  remain but with different content. 
+
+July 11th, 2002 M.Dressel - internal-3-exbiasing-V04-01-01
+- resolved B09 into geometry/biasing and run.
+- coworks with: internal-1-run-V04-01-01
+                internal-2-transport-V04-01-01
+                internal-2-geombias-V04-01-01
+
+July 10th, 2002 M.Dressel 
+- using G4StandardScorer and G4StandardScoreTable instead of
+  B06Scorer and B06ScorePRinter in B06
+
+July 10th, 2002 M.Dressel - internal-2-exbiasing-V04-01-01
+- adopt to the new G4Sigma version in internal-1-geombias-V04-01-01
+
+
+July 10th, 2002 M.Dressel - internal-1-exbiasing-V04-01-01
+- temporarily created directory B09. Messangers and classes using them
+  are put into B09 because the G4UImessanger is not known in 
+  geometry and processes.
+  
 
 Jun  4th, 2002 M.Dressel - exbiasing-V04-00-07
 - update of exampleBXX.out files.

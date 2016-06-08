@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.23 2002/04/09 17:34:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PAIonisation.cc,v 1.31 2002/11/20 15:41:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // **************************************************************
@@ -112,8 +112,6 @@ G4PAIonisation::~G4PAIonisation()
      delete[] fSandiaPhotoAbsCof[i] ;
    }
    delete[] fSandiaPhotoAbsCof ;
- 
-   //  if(fProtonEnergyVector) delete fProtonEnergyVector ; 
 }
  
 /////////////////////////////////////////////////////////////////////////
@@ -816,17 +814,15 @@ G4PAIonisation::GetEnergyTransfer( G4int iPlace, G4double position, G4int iTrans
   return result ;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Returns the proton energy vector
+
+G4PhysicsLogVector* G4PAIonisation::GetProtonEnergyVector()
+{
+  return fProtonEnergyVector;
+}
+
 //
 //
 /////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-

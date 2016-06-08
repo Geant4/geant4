@@ -82,8 +82,6 @@ void XrayTelSteppingAction::UserSteppingAction(const G4Step* step)
   G4bool entering = false;
   G4Track* track = step->GetTrack();
 
-  G4int stepNo = track->GetCurrentStepNumber();
-
   G4String volName; 
   if (track->GetVolume()) volName =  track->GetVolume()->GetName(); 
   G4String nextVolName;

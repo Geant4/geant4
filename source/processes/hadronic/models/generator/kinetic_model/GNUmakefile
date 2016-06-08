@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000/10/19 15:49:15 brunengo Exp $
+# $Id: GNUmakefile,v 1.4 2002/07/11 13:02:55 jwellisc Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -32,6 +32,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/generator/util/include \
 	    -I$(G4BASE)/processes/hadronic/models/generator/pre_equilibrium/include \
 	    -I$(G4BASE)/processes/hadronic/models/generator/diffractive_string/include \
+	    -I$(G4BASE)/processes/hadronic/models/generator/scattering/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEPEvtInterface.hh,v 1.6 2001/07/11 09:58:48 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef G4HEPEvtInterface_h

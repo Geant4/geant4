@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.7 2001/08/01 17:12:31 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.10 2002/12/12 19:18:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -39,6 +39,9 @@
 // **************************************************************
 //      V.Ivanchenko   7 Apr 2000 Advance model for electromagnetic
 //                                capture and cascade
+//      V.Ivanchenko  10 Aug 2002 Add control on G4ParticleDefinition 
+//                                of secondaries
+//      V.Ivanchenko  27 Oct 2002 NeutrinoE->NeutrinoMu
 //-----------------------------------------------------------------------------
 
 #include "G4MuonMinusCaptureAtRest.hh"
@@ -111,11 +114,11 @@
 G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   : G4VRestProcess (processName),       // initialization
     massGamma(G4Gamma::Gamma()->GetPDGMass()/GeV),
-    massNeutrinoE(G4NeutrinoE::NeutrinoE()->GetPDGMass()/GeV),
+    massNeutrinoMu(G4NeutrinoMu::NeutrinoMu()->GetPDGMass()/GeV),
     massProton(G4Proton::Proton()->GetPDGMass()/GeV),
     massNeutron(G4Neutron::Neutron()->GetPDGMass()/GeV),
     pdefGamma(G4Gamma::Gamma()),
-    pdefNeutrinoE(G4NeutrinoE::NeutrinoE()),
+    pdefNeutrinoMu(G4NeutrinoMu::NeutrinoMu()),
     pdefMuonMinus(G4MuonMinus::MuonMinus()),
     pdefNeutron(G4Neutron::Neutron())
 {
@@ -284,14 +287,16 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
   // Store nuclear cascade
   if(nGkine > 0) {
     for ( G4int isec = 0; isec < nGkine; isec++ ) {
-      G4DynamicParticle* aNewParticle = new G4DynamicParticle;
-      aNewParticle->SetDefinition( Gkin[isec].GetParticleDef() );
-      aNewParticle->SetMomentum( Gkin[isec].GetMomentum() * GeV );
+      G4ParticleDefinition* pd = Gkin[isec].GetParticleDef();
+      if(pd) {
+        G4DynamicParticle* aNewParticle = new G4DynamicParticle();
+        aNewParticle->SetDefinition( pd );
+        aNewParticle->SetMomentum( Gkin[isec].GetMomentum() * GeV );
 
-      localtime = globalTime + Gkin[isec].GetTOF();
-
-      G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position );
-      aParticleChange.AddSecondary( aNewTrack );
+        localtime = globalTime + Gkin[isec].GetTOF();
+        G4Track* aNewTrack = new G4Track( aNewParticle, localtime*s, position);
+        aParticleChange.AddSecondary( aNewTrack );
+      }
     }
   }
 
@@ -301,12 +306,15 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
     localtime = globalTime*s + tDelay;
 
     for ( G4int isec = 0; isec < nCascade; isec++ ) {
-      G4DynamicParticle* aNewParticle = new G4DynamicParticle;
-      aNewParticle->SetDefinition( Cascade[isec].GetParticleDef() );
-      aNewParticle->SetMomentum( Cascade[isec].GetMomentum() );
+      G4ParticleDefinition* pd = Gkin[isec].GetParticleDef();
+      if(pd) {
+        G4DynamicParticle* aNewParticle = new G4DynamicParticle;
+        aNewParticle->SetDefinition( pd );
+        aNewParticle->SetMomentum( Cascade[isec].GetMomentum() );
 
-      G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position );
-      aParticleChange.AddSecondary( aNewTrack );
+        G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position );
+        aParticleChange.AddSecondary( aNewTrack );
+      }
     }
   }
 
@@ -3540,9 +3548,9 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
   // ==     Put neutrino on the stack IF DESIRED.
   ++nGkine;
   Gkin[nGkine-1].SetZero();
-  Gkin[nGkine-1].SetMass( massNeutrinoE  );
+  Gkin[nGkine-1].SetMass( massNeutrinoMu  );
   Gkin[nGkine-1].SetMomentumAndUpdate( -txi * enu, -tyi * enu, -tzi * enu  );
-  Gkin[nGkine-1].SetParticleDef( pdefNeutrinoE );
+  Gkin[nGkine-1].SetParticleDef( pdefNeutrinoMu );
   Gkin[nGkine-1].SetTOF( tDelay );
   // ==
   i__1 = nstak1;

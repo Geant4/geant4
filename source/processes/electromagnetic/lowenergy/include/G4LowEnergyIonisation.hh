@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.36 2002/06/01 03:14:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4LowEnergyIonisation.hh,v 1.38 2002/07/19 17:44:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Author: A. Forti
 //
@@ -92,6 +92,8 @@ protected:
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
+
+protected:
 
   virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
 							  G4double incidentEnergy,

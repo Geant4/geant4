@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.3 2002/04/10 13:13:07 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelStepper.cc,v 1.8 2002/11/04 10:43:07 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -40,42 +40,61 @@ G4ParallelStepper::G4ParallelStepper()
 
 G4ParallelStepper::~G4ParallelStepper()
 {
-  if (fPStep) delete fPStep;
+  if (fPStep) {
+    delete fPStep;
+  }
 }
 
 G4ParallelStepper::G4ParallelStepper(const G4ParallelStepper &rhs)
+  :
+  fPStep(new G4GeometryCellStep(rhs.GetPStep()))
 {
-  fPStep = new G4PStep(rhs.GetPStep());
+  if (!fPStep) {
+    Error("G4ParallelStepper:: new failed to create a G4GeometryCellStep!");
+  }
 }
 
 G4ParallelStepper &G4ParallelStepper::operator=(const G4ParallelStepper &rhs)
 {
   if (this != &rhs) {
-    fPStep = new G4PStep(rhs.GetPStep());
+    fPStep = new G4GeometryCellStep(rhs.GetPStep());
+    if (!fPStep) {
+      Error("operator=: new failed to create a G4GeometryCellStep!");
+    }
   }
   return *this;
 }
 
-void G4ParallelStepper::Init(const G4PTouchableKey &aptk)
-{
-  if (!fPStep) {
-    fPStep = new G4PStep(aptk, aptk);
-  }
-  else {
-    fPStep->fPreTouchableKey = aptk;
-    fPStep->fPostTouchableKey = aptk;
-  }
-  UnSetCrossBoundary();
+G4GeometryCellStep G4ParallelStepper::GetPStep() const {
+  G4GeometryCellStep p = *fPStep;
+  return p;
 }
 
-void G4ParallelStepper::Update(const G4PTouchableKey &aptk)
+
+void G4ParallelStepper::Init(const G4GeometryCell &agCell)
+{
+  if (!fPStep) {
+    fPStep = new G4GeometryCellStep(agCell, agCell);
+      if (!fPStep) {
+	Error("Init new failed to create a G4GeometryCellStep!");
+      }
+
+  }
+  else {
+    fPStep->SetPreGeometryCell(agCell);
+    fPStep->SetPostGeometryCell(agCell);
+    fPStep->SetCrossBoundary(false);
+  }
+}
+
+void G4ParallelStepper::Update(const G4GeometryCell &agCell)
 {
   if (!fPStep) {
     Error("fPStep == 0, Init not called?");
   }
-  fPStep->fPreTouchableKey = fPStep->fPostTouchableKey;
-  fPStep->fPostTouchableKey = aptk;
-  fPStep->fCrossBoundary = true;
+  fPStep->SetPreGeometryCell(fPStep->GetPostGeometryCell());
+  fPStep->SetPostGeometryCell(agCell);
+  fPStep->SetCrossBoundary(true);
 }
 
 void G4ParallelStepper::UnSetCrossBoundary()
@@ -83,7 +102,7 @@ void G4ParallelStepper::UnSetCrossBoundary()
   if (!fPStep) {
     Error("fPStep == 0, Init not called?");
   }
-  fPStep->fCrossBoundary = false;
+  fPStep->SetCrossBoundary(false);
 }
 
 void G4ParallelStepper::Error(const G4String &m)

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.12 2002/06/13 08:59:03 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4StatMF.cc,v 1.14 2002/12/12 19:17:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -200,7 +200,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
     G4LorentzVector FourMom = (*i)->GetMomentum();
     FourMom.boost(theFragment.GetMomentum().boostVector());
     (*i)->SetMomentum(FourMom);
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
     (*i)->SetCreatorModel(G4String("G4StatMF"));
 #endif
   }

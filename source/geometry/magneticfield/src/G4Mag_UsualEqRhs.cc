@@ -21,17 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.cc,v 1.4 2001/07/11 09:59:13 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4Mag_UsualEqRhs.cc,v 1.8 2002/11/09 02:58:14 japost Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
-//  This is the standard right-hand side for equation of motion.
+//  This is the 'standard' right-hand side for the equation of motion
+//    of a charged particle in a magnetic field.
 //
-//    The only case another is required is when using a moving reference
-//     frame ... or extending the class to include additional Forces,
-//     eg an electric field
-//
-//            J. Apostolakis, January 13th, 1997
+//  Initial version: J. Apostolakis, January 13th, 1997
+//  Modified:        J. Apostolakis, November 9th, 2002
 //
 #include "G4Mag_UsualEqRhs.hh"
 
@@ -56,5 +54,13 @@ G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
    return ;
 }
 
+void
+G4Mag_UsualEqRhs::
+ SetChargeMomentumMass( G4double particleCharge, // in e+ units
+			                 G4double MomentumXc,
+			                 G4double mass)
 
-
+{
+   fInvCurrentMomentumXc= 1.0 / MomentumXc;
+   G4Mag_EqRhs::SetChargeMomentumMass( particleCharge, MomentumXc, mass);
+}

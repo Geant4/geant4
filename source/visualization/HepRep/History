@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2002/02/10 07:12:52 perl Exp $
+$Id: History,v 1.24 2002/12/11 16:05:16 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,40 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+11th December 2002  John Allison  (vis-V04-01-10)
+- Fixed default view parameters (global culling false).
+
+9th December 2002 Mark Donszelmann
+- Fixed bug that files were left open. Will close now, apart from stdin/stderr
+- Fixed color call not to use array creation.
+- Fixed HepRep standard (reader related), G4 is a writer.
+- Fixed include file now to only include HepRep.h (which includes all others)
+
+3rd December 2002 Mark Donszelmann
+- Fixed bug that XML Output can be routed to stdout or stderr.
+
+27th November 2002 Mark Donszelmann
+- Fixed core dump (Solaris) if open HepRepXML and closed it w/o writing anything
+
+27th November 2002  John Allison  (vis-V04-01-08)
+- Changed mickname of HepRep to HepRepXML.
+- Fixed description of HepRepFile.
+
+26th November 2002 Mark Donszelmann
+- Fixed FillStyle, LineStyle, LineWidth, HasFrame and Symbol Names
+- Fixed parent-child relationship  for calorimeter hits
+- Fixed material state number, now a string
+- Fixed fillColor to be equal to color
+
+25th November 2002 Mark Donszelmann
+- Fixed HepRep1 warnings in HepRepFileSceneHandler
+- Fixed HepRep2 radius of markers to be non-zero
+- Fixed HepRep2 attributes some of which had wrong names, especially the markers
+- Fixed HepRep2 filename to have sequence number
+
+13th November 2002 Mark Donszelmann
+- Added HepRep2 Driver
 
 4th February 2002  Joseph Perl  (vis-V04-00-01)
 - Check for missing hierarchy layers in HepRepXMLWriter.

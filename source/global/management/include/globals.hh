@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.19 2001/10/12 12:18:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: globals.hh,v 1.20 2002/08/19 18:20:11 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // Global Constants and typedefs
@@ -99,6 +99,8 @@
 #include "PhysicalConstants.h"
 
 // Global error function
+#include "G4ExceptionSeverity.hh"
+void G4Exception(const char* issure,const char* errorCode,G4ExceptionSeverity severity,const char* comments);
 void G4Exception(const char* s=0);
 void G4Exception(G4std::string s);
 void G4Exception(G4String s);

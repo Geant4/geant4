@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Normal3D.hh,v 1.3 2001/07/11 10:00:38 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifndef G4NORMAL3D_HH
 #define G4NORMAL3D_HH

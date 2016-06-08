@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.6 2001/07/11 10:01:09 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VisAttributes.cc,v 1.8 2002/11/20 14:18:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  23rd October 1996
@@ -35,7 +35,9 @@ fDaughtersInvisible (false),
 fColour             (G4Colour ()),
 fLineStyle          (unbroken),
 fLineWidth          (1.),
-fForceDrawingStyle  (false)
+fForceDrawingStyle  (false),
+fAttValues          (0),
+fAttDefs            (0)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility):
@@ -44,7 +46,9 @@ fDaughtersInvisible (false),
 fColour             (G4Colour ()),
 fLineStyle          (unbroken),
 fLineWidth          (1.),
-fForceDrawingStyle  (false)
+fForceDrawingStyle  (false),
+fAttValues          (0),
+fAttDefs            (0)
 {}
 
 G4VisAttributes::G4VisAttributes (const G4Colour& colour):
@@ -53,7 +57,9 @@ fDaughtersInvisible (false),
 fColour             (colour),
 fLineStyle          (unbroken),
 fLineWidth          (1.),
-fForceDrawingStyle ( false)
+fForceDrawingStyle  (false),
+fAttValues          (0),
+fAttDefs            (0)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility,
@@ -63,10 +69,16 @@ fDaughtersInvisible (false),
 fColour             (colour),
 fLineStyle          (unbroken),
 fLineWidth          (1.),
-fForceDrawingStyle  (false)
+fForceDrawingStyle  (false),
+fAttValues          (0),
+fAttDefs            (0)
 {}
 
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
+
+const G4VisAttributes& G4VisAttributes::GetInvisible() {
+  return Invisible;
+}
 
 G4std::ostream& operator << (G4std::ostream& os, const G4VisAttributes& a) {
   
@@ -100,10 +112,19 @@ G4std::ostream& operator << (G4std::ostream& os, const G4VisAttributes& a) {
     else {
       os << "unforced";
     }
+    os << "\n  vector<G4AttValue> pointer is ";
+    if (a.fAttValues) {
+      os << "non-";
+    }
+    os << "zero";      
+    os << "\n  vector<G4AttDef> pointer is ";
+    if (a.fAttDefs) {
+      os << "non-";
+    }
+    os << "zero";      
   } 
-  else os << " The pointer is zero ";
+  else os << " zero G4VisAttributes pointer";
   return os;
-
 }
 
 G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
@@ -114,7 +135,9 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
       (fColour             != a.fColour)             ||
       (fLineStyle          != a.fLineStyle)          ||
       (fLineWidth          != a.fLineWidth)          ||
-      (fForceDrawingStyle  != a.fForceDrawingStyle)
+      (fForceDrawingStyle  != a.fForceDrawingStyle)  ||
+      (fAttValues          != a.fAttValues)          ||
+      (fAttDefs            != a.fAttDefs)
       )
     return true;
 

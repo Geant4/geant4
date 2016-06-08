@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.11 2002/04/25 20:21:14 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4TrackingManager.cc,v 1.13 2002/08/21 22:50:52 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 //---------------------------------------------------------------
@@ -44,7 +44,7 @@
 G4TrackingManager::G4TrackingManager()
 //////////////////////////////////////
   : fpUserTrackingAction(NULL), fpTrajectory(NULL),
-    StoreTrajectory(false), verboseLevel(0)  
+    StoreTrajectory(false), verboseLevel(0), EventIsAborted(false)
 {
   fpSteppingManager = new G4SteppingManager();
   messenger = new G4TrackingMessenger(this);
@@ -67,6 +67,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   // Receiving a G4Track from the EventManager, this funciton has the
   // responsibility to trace the track till it stops.
   fpTrack = apValueG4Track;
+  EventIsAborted = false;
 
   // Clear 2ndary particle vector
   //  GimmeSecondaries()->clearAndDestroy();    
@@ -79,7 +80,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
   GimmeSecondaries()->clear();  
   
   // Pre tracking user intervention process.
-  fpTrajectory = NULL;
+  fpTrajectory = 0;
   if( fpUserTrackingAction != NULL ) {
      fpUserTrackingAction->PreUserTrackingAction(fpTrack);
   }
@@ -119,6 +120,9 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
     if(StoreTrajectory) fpTrajectory->
                         AppendStep(fpSteppingManager->GetStep()); 
 #endif
+    if(EventIsAborted) {
+      fpTrack->SetTrackStatus( fKillTrackAndSecondaries );
+    }
   }
   // Inform end of tracking to physics processes 
   fpTrack->GetDefinition()->GetProcessManager()->EndTracking();
@@ -134,6 +138,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 #endif
   if( (!StoreTrajectory)&&fpTrajectory ) {
       delete fpTrajectory;
+      fpTrajectory = 0;
   }
 }
 
@@ -150,6 +155,7 @@ void G4TrackingManager::EventAborted()
 //////////////////////////////////////
 {
   fpTrack->SetTrackStatus( fKillTrackAndSecondaries );
+  EventIsAborted = true;
 }
 
 //************************************************************************

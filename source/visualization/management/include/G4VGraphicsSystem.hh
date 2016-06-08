@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VGraphicsSystem.hh,v 1.9 2001/07/11 10:09:14 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  27th March 1996

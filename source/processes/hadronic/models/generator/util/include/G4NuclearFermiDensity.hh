@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NuclearFermiDensity.hh,v 1.6 2002/04/24 13:10:50 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4NuclearFermiDensity.hh,v 1.8 2002/12/12 19:17:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #ifndef G4NuclearFermiDensity_h
 #define G4NuclearFermiDensity_h 1
@@ -41,9 +41,21 @@ class G4NuclearFermiDensity : public G4VNuclearDensity
     G4NuclearFermiDensity(G4double anA, G4double aZ);
     ~G4NuclearFermiDensity();
     
-    G4double GetRelativeDensity(const G4ThreeVector & aPosition) const;
-    G4double GetRadius(const G4double maxRelativeDenisty) const;
-    G4double GetDeriv(const G4ThreeVector & aPosition) const;    
+    G4double GetRelativeDensity(const G4ThreeVector & aPosition) const
+    {
+      return 1./(1.+exp((aPosition.mag()-theR)/a));
+    }
+    
+    G4double GetRadius(const G4double maxRelativeDenisty) const
+    {
+      return (maxRelativeDenisty>0 && maxRelativeDenisty <= 1 ) ?
+             (theR + a*log((1-maxRelativeDenisty+exp(-1*theR/a))/maxRelativeDenisty))  : DBL_MAX;
+    }
+    
+    G4double GetDeriv(const G4ThreeVector & aPosition) const
+    {
+      return -exp((aPosition.mag()-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
+    }   
    
   private:
   

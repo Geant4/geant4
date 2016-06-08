@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -23,8 +23,8 @@
 #ifndef G4PomeronCrossSection_h
 #define G4PomeronCrossSection_h 1
 //
-// $Id: G4PomeronCrossSection.hh,v 1.6 2001/11/13 14:56:53 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PomeronCrossSection.hh,v 1.7 2002/12/12 19:17:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"

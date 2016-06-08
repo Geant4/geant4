@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.hh,v 1.4 2002/05/02 08:43:23 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelTransport.hh,v 1.6 2002/10/16 16:26:58 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelTransport
@@ -79,24 +79,28 @@ public:  // with description
   virtual void EndTracking();
 
 
-  G4VParallelStepper &GetPStepper(){return fPStepper;}
+  const G4VParallelStepper &GetPStepper() const;
     // get the fPStepper
 
 public:  // without description
   
   //  no operation in  AtRestDoIt and  AlongStepDoIt
 
-  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
-                                        G4double  ,
-                                        G4double  ,
-                                        G4double& ,
-                                        G4GPILSelection*) {return -1.0;}
-  G4double AtRestGetPhysicalInteractionLength(const G4Track& ,
-                                        G4ForceCondition*) {return -1.0;}
-  
-  G4VParticleChange*  AtRestDoIt(const G4Track&, const G4Step&) {return 0;}
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) {return 0;}
+   virtual G4double 
+   AlongStepGetPhysicalInteractionLength(const G4Track&,
+                                       G4double  ,
+                                       G4double  ,
+                                       G4double& ,
+                                       G4GPILSelection*);
+   virtual G4double 
+   AtRestGetPhysicalInteractionLength(const G4Track& ,
+				      G4ForceCondition*);
 
+   virtual G4VParticleChange*  AtRestDoIt(const G4Track&, 
+					  const G4Step&);
+   virtual G4VParticleChange* AlongStepDoIt(const G4Track&, 
+					    const G4Step&);
+  
 protected:
 
   virtual void Error(const G4String &m);
@@ -118,5 +122,12 @@ private:
   G4bool fInitStep;
 
 };
+
+
+inline const G4VParallelStepper &G4ParallelTransport::
+GetPStepper() const {
+  return fPStepper;
+}
+
 
 #endif

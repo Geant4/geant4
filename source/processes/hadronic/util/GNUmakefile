@@ -1,7 +1,8 @@
-# $Id: GNUmakefile,v 1.6 2002/02/20 18:06:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2002/11/12 02:05:59 larazb Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
+
 
 name := G4hadronic_util
 
@@ -12,6 +13,12 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
+
+ifdef PRECOMPOUND_TEST
+  CPPFLAGS += -DPRECOMPOUND_TEST
+endif
+  
+
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \

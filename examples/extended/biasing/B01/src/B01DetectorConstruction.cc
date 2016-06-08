@@ -21,9 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.4 2002/04/19 10:54:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: B01DetectorConstruction.cc,v 1.7 2002/11/22 17:47:57 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
+
+#include "g4std/strstream"
+#include "globals.hh"
 
 #include "B01DetectorConstruction.hh"
 
@@ -35,22 +38,26 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "g4std/strstream"
 #include "PhysicalConstants.h"
 
-#include "globals.hh"
+// for importance biasing
+#include "G4IStore.hh"
 
 B01DetectorConstruction::B01DetectorConstruction()
- : fWorldVolume(0)
+ : fIStore(0)
 {;}
 
 B01DetectorConstruction::~B01DetectorConstruction()
 {;}
 
+G4IStore* B01DetectorConstruction::GetIStore()
+{
+  if (!fIStore) G4Exception("B01DetectorConstruction::fIStore empty!");
+  return fIStore;
+}
+
 G4VPhysicalVolume* B01DetectorConstruction::Construct()
 {
-  char line[255];
-  
   G4double pos_x;
   G4double pos_y;
   G4double pos_z; 
@@ -84,7 +91,6 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   A = 28.09*g/mole;
   G4Element* elSi  = new G4Element(name="Silicon", symbol="Si", Z=14, A);
 
-
   A = 39.1*g/mole; 
   G4Element* elK  = new G4Element(name="K"  ,symbol="K" , Z=19 , A);
 
@@ -113,21 +119,20 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   Concrete->AddElement(elCa , fractionmass= 0.044);
   Concrete->AddElement(elFe , fractionmass= 0.014);
   Concrete->AddElement(elC , fractionmass= 0.001);
-
-  density = 0.0203*g/cm3;
-  G4Material* LightConcrete = new G4Material("LightConcrete", density, 10);
-  LightConcrete->AddElement(elH , fractionmass= 0.01);
-  LightConcrete->AddElement(elO , fractionmass= 0.529);
-  LightConcrete->AddElement(elNa , fractionmass= 0.016);
-  LightConcrete->AddElement(elHg , fractionmass= 0.002);
-  LightConcrete->AddElement(elAl , fractionmass= 0.034);
-  LightConcrete->AddElement(elSi , fractionmass= 0.337);
-  LightConcrete->AddElement(elK , fractionmass= 0.013);
-  LightConcrete->AddElement(elCa , fractionmass= 0.044);
-  LightConcrete->AddElement(elFe , fractionmass= 0.014);
-  LightConcrete->AddElement(elC , fractionmass= 0.001);
    
-  G4Material *WorldMaterial = Galactic; 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   /////////////////////////////
   // world cylinder volume
@@ -136,40 +141,36 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   // world solid
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 100*cm;
-  G4double hightCylinder       = 15.001*cm;
+  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
+                   // cells coinside eith world volume boundary
+  G4double hightCylinder       = 105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
-				     innerRadiusCylinder,
-				     outerRadiusCylinder,
-				     hightCylinder,
-				     startAngleCylinder,
-				     spanningAngleCylinder);
+                                     innerRadiusCylinder,
+                                     outerRadiusCylinder,
+                                     hightCylinder,
+                                     startAngleCylinder,
+                                     spanningAngleCylinder);
 
   // logical world
 
   G4LogicalVolume *worldCylinder_log = 
-    new G4LogicalVolume(worldCylinder, WorldMaterial, "worldCylinder_log");
+    new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
+
+  name = "shieldWorld";
+  G4VPhysicalVolume *pWorldVolume = new 
+    G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
+		  name, 0, false, 0);
 
 
-  G4VisAttributes * WorldVisAtt
-    = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
-  WorldVisAtt->SetVisibility(true);
-  worldCylinder_log->SetVisAttributes(WorldVisAtt);
-  
+  G4std::vector< G4VPhysicalVolume * > physvolumes;
+  physvolumes.push_back(pWorldVolume);
 
-  // physical world
 
-  name = "worldCylinder_phys";
-  G4VPhysicalVolume* worldCylinder_phys =
-    new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-		      name, 0, false, 0);
 
-  ///////////////////////////////////////////////
-  // shield cylinder for (cells 2-4)
-  ////////////////////////////////////////////////
+  // creating 18 slobs of 10 cm thick concrete
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
@@ -178,40 +179,117 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
-			       innerRadiusShield,
-			       outerRadiusShield,
-			       hightShield,
-			       startAngleShield,
-			       spanningAngleShield);
+                               innerRadiusShield,
+                               outerRadiusShield,
+                               hightShield,
+                               startAngleShield,
+                               spanningAngleShield);
   
   // logical shield
 
   G4LogicalVolume *aShield_log = 
     new G4LogicalVolume(aShield, Concrete, "aShield_log");
 
-
-  G4VisAttributes * shieldVisAtt
-    = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
-  shieldVisAtt->SetVisibility(true);
-  shieldVisAtt->SetForceSolid(false);
-  aShield_log->SetVisAttributes(shieldVisAtt);
+  G4VisAttributes* pShieldVis = new 
+    G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  pShieldVis->SetForceSolid(true);
+  aShield_log->SetVisAttributes(pShieldVis);
 
   // physical shields
 
-  //        physical shields for cell 2 to 4
-  for(G4int i=0; i<3; i++)
-  {
-    if (i+2<10)    sprintf(line,"cell: 0%d, shield",i+2);
-    else sprintf(line,"cell: %d, shield",i+2);
-    G4String name(line);
-    pos_x = 0*cm;
-    pos_y = 0*cm;
-    pos_z = -10*cm+(10*cm)*i;
-    new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
-		      aShield_log, name, worldCylinder_log, false, 0);
+  G4int i;
+  G4double startz = -85*cm; 
+  for (i=1; i<=18; i++) {
+    name = GetCellName(i);
+
+    G4double pos_x = 0*cm;
+    G4double pos_y = 0*cm;
+    G4double pos_z = startz + (i-1) * (2*hightShield);
+    G4VPhysicalVolume *pvol = 
+      new G4PVPlacement(0, 
+			G4ThreeVector(pos_x, pos_y, pos_z),
+			aShield_log, 
+			name, 
+			worldCylinder_log, 
+			false, 
+			0);
+    physvolumes.push_back(pvol);
   }
 
+  // filling the rest of the world volumr behind the concrete with
+  // another slob which should get the same importance value as the 
+  // last slob
+  innerRadiusShield = 0*cm;
+  outerRadiusShield = 100*cm;
+  hightShield       = 7.5*cm;
+  startAngleShield  = 0*deg;
+  spanningAngleShield    = 360*deg;
 
-  fWorldVolume = worldCylinder_phys;
-  return worldCylinder_phys;
+  G4Tubs *aRest = new G4Tubs("Rest",
+			     innerRadiusShield,
+			     outerRadiusShield,
+			     hightShield,
+			     startAngleShield,
+			     spanningAngleShield);
+  
+  G4LogicalVolume *aRest_log = 
+    new G4LogicalVolume(aRest, Galactic, "aRest_log");
+  name = "rest";
+    
+  pos_x = 0*cm;
+  pos_y = 0*cm;
+  pos_z = 97.5*cm;
+  G4VPhysicalVolume *pvol_rest = 
+    new G4PVPlacement(0, 
+		      G4ThreeVector(pos_x, pos_y, pos_z),
+		      aRest_log, 
+		      name, 
+		      worldCylinder_log, 
+		      false, 
+		      0);
+
+
+  // creating and filling the importance store
+
+  fIStore = new G4IStore(*pWorldVolume);
+
+  // for the world volume repnum is -1 !
+  G4int n = 0;
+  G4double imp =1;
+  for (G4std::vector<G4VPhysicalVolume *>::iterator it =
+	 physvolumes.begin();
+       it != physvolumes.end(); it++)
+  {
+    imp = pow(2., n++);
+    G4cout << "Going to assign importance: " << imp << ", to volume: " 
+	   << (*it)->GetName() << G4endl;
+    if (*it == pWorldVolume)
+    {
+      // repnum -1 
+      fIStore->AddImportanceGeometryCell(imp, **it, -1); 
+    }
+    fIStore->AddImportanceGeometryCell(imp, **it);
+  }
+
+  // the remaining part pf the geometry (rest) gets the same
+  // importance as the last conrete cell
+  fIStore->AddImportanceGeometryCell(imp, *pvol_rest);
+
+
+  return pWorldVolume;
+}
+
+
+
+G4String B01DetectorConstruction::GetCellName(G4int i) {
+  char st[200];
+  G4std::ostrstream os(st,200);
+  os << "cell_";
+  if (i<10) {
+    os << "0";
+  }
+  os << i 
+     << '\0';
+  G4String name(st);
+  return name;
 }

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.9 2002/05/28 13:37:03 mkossov Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.15 2002/12/12 19:16:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
@@ -41,9 +41,9 @@
 #include "G4ElectroNuclearCrossSection.hh"
 
 // Initialization of the
-G4double  G4ElectroNuclearCrossSection::lastE=0;   // Last used in the cross section TheEnergy
+G4double  G4ElectroNuclearCrossSection::lastE=0.;  // Last used in the cross section TheEnergy
 G4int     G4ElectroNuclearCrossSection::lastF=0;   // Last used in the cross section TheFirstBin
-G4double  G4ElectroNuclearCrossSection::lastG=0;   // Last used in the cross section TheGamma
+G4double  G4ElectroNuclearCrossSection::lastG=0.;  // Last used in the cross section TheGamma
 G4double  G4ElectroNuclearCrossSection::lastH=0.;  // Last value of the High Energy A-dependence
 G4double* G4ElectroNuclearCrossSection::lastJ1=0;  // Pointer to the last array of the J1 function
 G4double* G4ElectroNuclearCrossSection::lastJ2=0;  // Pointer to the last array of the J2 function
@@ -118,7 +118,7 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
 #endif
         colN.push_back(targN);
         colZ.push_back(targZ);
-        colF.push_back(targN);
+        colF.push_back(lastF);
         J1.push_back(lastJ1);
         J2.push_back(lastJ2);
         J3.push_back(lastJ3);
@@ -2321,8 +2321,12 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
   for(G4int i=lastF;i<=lastL;i++) Y[i]=dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
-  if(lastSig>Y[lastL]&&lastL<mL)
-    G4cerr<<"***G4EleNucCrS::GetEquPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<"<"<<mL<<G4endl;
+  // @@ Tempory IF of H.P.: delete it if the *HP* err message does not show up M.K.@@
+  if(lastSig>0.99*Y[lastL] && lastL<mL && Y[lastL]<1.E-30)
+  {
+    G4cerr<<"*HP*G4ElNucCS::GetEqPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<">"<<mL<<G4endl;
+    return 3.0*MeV; // quick and dirty workaround @@@ HP. (now can be not necessary M.K.)
+  }
   G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it is in the func. region
 #ifdef debug
   G4cout<<"G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy: "<<ris<<",Y="<<Y[lastL]<<G4endl;
@@ -2376,7 +2380,7 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
   static const G4double eps=0.001; // Accuracy which satisfies the search
   G4double x=z+f/p/(lastG+lmel-z); // First guess
 #ifdef pdebug
-  G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastE="<<lastLE<<",x="<<x<<G4endl;
+  G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastG="<<lastG<<",x="<<x<<G4endl;
 #endif
   for(G4int i=0; i<imax; i++)
   {

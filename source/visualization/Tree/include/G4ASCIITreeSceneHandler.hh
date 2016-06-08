@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ASCIITreeSceneHandler.hh,v 1.10 2001/08/24 20:41:26 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison  5th April 2001

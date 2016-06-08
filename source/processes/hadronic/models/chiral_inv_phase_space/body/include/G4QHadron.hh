@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.hh,v 1.15 2001/11/26 14:11:45 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4QHadron.hh,v 1.17 2002/12/12 19:14:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -54,7 +54,7 @@ public:
   G4QHadron(G4QParticle* pPart, G4double maxM);     // Constructor for a resonance with RANDOM m
   G4QHadron(const G4QHadron& right);                // Copy constructor by object
   G4QHadron(G4QHadron* right);                      // Copy constructor by pointer
-  ~G4QHadron();                                     // Destructor
+  virtual ~G4QHadron();                                     // Destructor
   // Operators
   const G4QHadron& operator=(const G4QHadron& right);
   G4int           operator==(const G4QHadron& right) const;

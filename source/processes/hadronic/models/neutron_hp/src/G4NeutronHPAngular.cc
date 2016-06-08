@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -88,6 +88,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
   if(theIsoFlag)
   {
 //  G4cout << "Angular result "<<aHadron.GetTotalMomentum()<<" ";
+// @@@ add code for isotropic emission in CMS.
       G4double costheta = 2.*G4UniformRand()-1;
       G4double theta = acos(costheta);
       G4double phi = twopi*G4UniformRand();

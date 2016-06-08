@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -76,6 +76,7 @@
     G4double p = vec[0]->GetMomentum().mag();
     theParticleChange.SetMomentumChange( vec[0]->GetMomentum() * (1.0/p)  );
     theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
+    delete vec[0];
     //
     theParticleChange.SetNumberOfSecondaries( vecLen-1 );
     G4DynamicParticle *pd;

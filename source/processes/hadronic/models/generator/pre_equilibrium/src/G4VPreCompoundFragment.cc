@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.15 2002/06/06 17:20:18 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4VPreCompoundFragment.cc,v 1.16 2002/12/12 19:17:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by V. Lara
  

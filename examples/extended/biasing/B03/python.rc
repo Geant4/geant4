@@ -1,0 +1,8 @@
+# for command-line completion :
+import sys
+import rlcompleter
+rlcompleter.readline.parse_and_bind("tab: complete")
+
+
+
+

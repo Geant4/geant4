@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3EleTable.cc,v 1.11 2001/07/16 15:38:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4strstreambuf.hh"

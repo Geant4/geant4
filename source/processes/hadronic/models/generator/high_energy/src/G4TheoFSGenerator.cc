@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.7 2002/06/10 13:27:07 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4TheoFSGenerator.cc,v 1.9 2002/12/12 19:17:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // G4TheoFSGenerator
 #include "G4DynamicParticle.hh"
@@ -78,7 +78,7 @@ G4VParticleChange * G4TheoFSGenerator::ApplyYourself(const G4Track & thePrimary,
                theHighEnergyGenerator->Scatter(theNucleus, *aPart);
   
   G4double predecayEnergy = 0;
-  for(int hpw=0; hpw<theInitialResult->size(); hpw++)
+  for(size_t hpw=0; hpw<theInitialResult->size(); hpw++)
   {
     predecayEnergy += (*theInitialResult)[hpw]->Get4Momentum().t();
   }

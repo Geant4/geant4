@@ -3,6 +3,13 @@ by the WIRED Event Display client.  It requires no external packages.
 
 The HepRep graphics format is further described at
 http://heprep.freehep.org
+
+
+Two different drivers area available for either HepRep1 or HepRep2.
+
+
+Driver: HepRepFile
+------------------
 The version of HepRep produced by this driver is HepRep Version 1.
 
 Each call to /vis/viewer/update
@@ -18,3 +25,36 @@ This will reduce the file to about five percent of its original size.
 Joseph Perl
 9 November 2001
 
+
+Driver: HepRepXML
+-----------------
+The version of HepRep produced by this driver is HepRep Version 2.
+
+To set the base part of the filename (filename = basefilename-seqno.heprep):
+/vis/scene/create basefilename
+
+To route the HepRep XML output to stdout (or stderr) use:
+/vis/scene/create stdout
+
+To select the driver
+/vis/open HepRepXML
+
+Any call to draw part of an event will open the file and start writing.
+
+Each file, apart from stdin/stderr, is closed by:
+/vis/viewer/flush
+(WARNING: files will not contain geometry if not flushed. G4 exit will only
+close file)
+
+Multiple events can be written by:
+/vis/scene/endOfSceneAction accumulate
+
+View the file using the WIRED Event Display, available from:
+http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
+
+or in future
+
+http://wired.freehep.org
+
+9 Dec 2002
+Mark Donszelmann

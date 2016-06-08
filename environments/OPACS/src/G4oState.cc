@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4oState.cc,v 1.6.4.1 2001/06/28 19:06:34 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4oState.cc,v 1.8 2002/12/06 16:19:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //#define DEBUG
 
@@ -65,22 +65,22 @@ G4bool G4oState::Notify (
   G4StateManager* statM = G4StateManager::GetStateManager();
   G4ApplicationState previousState = statM->GetPreviousState();
 
-  if(previousState==Idle && requestedState==GeomClosed) {             
+  if(previousState==G4State_Idle && requestedState==G4State_GeomClosed) {             
     //beginOfRun
     G4String string   = name; 
     string += "RunBegin.osh"; 
     OShellExecuteFile (G4oGetShell(),(char*)string.data());
-  } else if(previousState==GeomClosed && requestedState==Idle) {      
+  } else if(previousState==G4State_GeomClosed && requestedState==G4State_Idle) {      
     //endOfRun
     G4String string = name; 
     string += "RunEnd.osh"; 
     OShellExecuteFile (G4oGetShell(),(char*)string.data());
-  } else if(previousState==GeomClosed && requestedState==EventProc) { 
+  } else if(previousState==G4State_GeomClosed && requestedState==G4State_EventProc) { 
     //beginOfEvent
     G4String string = name; 
     string += "EventBegin.osh"; 
     OShellExecuteFile (G4oGetShell(),(char*)string.data());
-  } else if(previousState==EventProc && requestedState==GeomClosed) { 
+  } else if(previousState==G4State_EventProc && requestedState==G4State_GeomClosed) { 
     // EndOfEvent
     G4String string = name; 
     string += "EventEnd.osh"; 

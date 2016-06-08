@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidCylinder.cc,v 1.7 2001/07/11 09:59:41 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4BREPSolidCylinder.cc,v 1.8 2002/11/06 23:29:35 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -86,9 +86,32 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(const G4String& name,
 
   nb_of_surfaces = 3;
   active=1;
+  
+  // Save constructor parameters
+  constructorParams.origin       = origin;
+  constructorParams.axis         = axis;
+  constructorParams.direction    = direction;
+  constructorParams.length       = length;
+  constructorParams.radius       = radius;
+  
   Initialize();
 }
 
 G4BREPSolidCylinder::~G4BREPSolidCylinder()
 {
 }
+
+// Streams solid contents to output stream.
+G4std::ostream& G4BREPSolidCylinder::StreamInfo(G4std::ostream& os) const
+{
+  G4BREPSolid::StreamInfo( os )
+  << "\n origin:       " << constructorParams.origin
+  << "\n axis:         " << constructorParams.axis
+  << "\n direction:    " << constructorParams.direction
+  << "\n length:       " << constructorParams.length
+  << "\n radius:       " << constructorParams.radius
+  << "\n-----------------------------------------------------------\n";
+
+  return os;
+}
+

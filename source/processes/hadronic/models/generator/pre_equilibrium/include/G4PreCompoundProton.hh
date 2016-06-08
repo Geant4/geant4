@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.hh,v 1.11 2002/06/06 17:10:38 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PreCompoundProton.hh,v 1.13 2002/12/12 19:17:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // by V. Lara
 
@@ -70,7 +70,7 @@ public:
 		new G4ReactionProduct(G4Proton::ProtonDefinition());
 	    theReactionProduct->SetMomentum(GetMomentum().vect());
 	    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-#ifdef pctest
+#ifdef PRECOMPOUND_TEST
 	    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
 	    return theReactionProduct;

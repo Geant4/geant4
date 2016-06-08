@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VUIshell.cc,v 1.7 2002/04/26 21:28:26 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4UImanager.hh"

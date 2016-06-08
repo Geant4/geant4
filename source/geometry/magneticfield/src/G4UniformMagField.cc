@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UniformMagField.cc,v 1.5 2001/11/08 17:32:21 grichine Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 //

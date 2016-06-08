@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.16 2001/11/15 14:39:27 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: MyVisManager.cc,v 1.17 2002/11/27 12:34:36 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // John Allison 24th January 1998.
@@ -35,6 +35,7 @@
 #include "G4ASCIITree.hh"
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
+#include "G4HepRep.hh"
 #include "G4HepRepFile.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
@@ -88,6 +89,7 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4ASCIITree);
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
+  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4HepRepFile);
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);

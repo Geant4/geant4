@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SurfaceBoundary.cc,v 1.10 2001/07/11 09:59:47 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

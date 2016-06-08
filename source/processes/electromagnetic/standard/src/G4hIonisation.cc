@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.30 2002/06/10 15:50:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4hIonisation.cc,v 1.31 2002/10/11 16:39:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //---------------- G4hIonisation physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997 
@@ -127,11 +127,6 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
            << G4endl;
 
     if(verboseLevel > 1) {
-      G4ProcessVector* pv = aParticleType.GetProcessManager()->GetProcessList();
-      G4cout << " 0: " << (*pv)[0]->GetProcessName() << " " << (*pv)[0] 
-             << " 1: " << (*pv)[1]->GetProcessName() << " " << (*pv)[1] 
-	//             << " 2: " << (*pv)[2]->GetProcessName() << " " << (*pv)[2]
-             << G4endl;
       G4cout << " MFPtable= " << theMeanFreePathTable
              << " DEDXtable= " << theDEDXpTable
              << " iniMass= " << initialMass

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DynamicParticle.cc,v 1.11 2001/07/11 10:01:59 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.hh,v 1.4 2001/07/14 21:47:45 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4OpenGLStoredWin32Viewer.hh,v 1.5 2002/10/16 10:44:14 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from
@@ -43,7 +43,8 @@ class G4OpenGLStoredWin32Viewer:
 public G4OpenGLWin32Viewer, public G4OpenGLStoredViewer{
   
 public:
-  G4OpenGLStoredWin32Viewer (G4OpenGLStoredSceneHandler& scene);
+  G4OpenGLStoredWin32Viewer (G4OpenGLStoredSceneHandler& scene,
+			     const G4String& name = "");
   void Initialise ();
   void DrawView ();
 };

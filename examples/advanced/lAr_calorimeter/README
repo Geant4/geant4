@@ -1,0 +1,133 @@
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                             lArCal 
+                            --------
+
+
+This example is intended to simulate the Liquid Argon Calorimeter
+of the ATLAS Detector at LHC. 
+
+1. GEOMETRY DEFINITION
+------------------------
+
+The liquid Argon calorimeter consists of two modules; an electromagnetic 
+and a hadronic one whose geometry parameters are defined in 
+FCALEMModuleParameters.input and FCALHadModuleParameters.input files.
+It contains a FCALTestbemSetup class whose geometry is given by 
+FCALTestbeamSetupParameters.input. See these files for details concerning to
+radius, lenght and angles of the different components. 
+
+
+2.  AN EVENT : THE PRIMARY GENERATOR
+------------------------------------ 
+    
+ The primary kinematic consists of a single particle which hits the
+ geometry perpendicular to the input face. The FCALPrimaryGeneratorAction 
+ class  gives the particle and its energy (by default it is an electron of
+ 80 GeV). Theses parameters can be changed in commands of ParticleGun class
+ inside the macros given in this example. 
+ 
+ The subdirectory data-tracks contains the kinematic files 
+ of the particles for different energies (20 GeV, 40 GeV, 60 GeV, 80 GeV, 
+ 120 GeV and 200 GeV). 
+ The information given inside these files are the X, Y, Z and cosX, 
+ cosY, cosZ variables for each event. 
+
+  A RUN is a set of events.
+ 	
+
+3. VISUALIZATION
+------------------
+
+ The Visualization Manager is set in the main().
+ The initialisation of the drawing is done via the command
+ > /control/execute vis.mac
+ 	
+ The detector has a default view which is a transversal view of the geometry.
+
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionally the way of drawing the particles can be changed in the
+ TBEVentActionMessenger class.  
+
+
+ 4. PHYSICS DEMO
+ -----------------
+
+ The particle's type and the physic processes which will be available
+ in this example are set in FCALPhysicsList class.
+
+ In addition a build-in interactive command (/process/inactivate proname)
+ allows to activate/inactivate the processes one by one.
+
+ The threshold for producing secondaries can be changed.
+ eg: /run/particle/setCut 100 micrometer
+     /run/initialize
+
+
+ 5. HOW TO START ?
+ ----------------- 
+
+ - compile and link to generate an executable
+      % cd geant4/examples/advanced/lAr_calorimeter/lArcal 
+      % gmake
+ 		
+ - execute the program  in 'batch' mode from macro files
+      % lArcal    prerunlAr.mac
+ 		
+ - execute Test  in 'interactive mode' with visualization
+      %  lArcal 
+         ....
+  
+ Idle> type your commands
+         ....
+ 	
+  Idle> exit
+
+6. HISTOGRAMS
+--------------
+ 
+ lArcal produces 4 histograms (saved as fcal.paw) which illustrate
+ the final state of the most important variables of the example:
+
+ Histo1 --> Number of tracks out of World
+ Histo2 --> Number of secondary particles
+ Histo3 --> Electromagnetic Energy deposit in the EMModule
+ Histo4 --> Hadronic Energy deposit in the HadModule
+
+ The example generates 3 ntuples too which contains the same information 
+ than the histograms. 
+
+ See their definitions in FCALRunAction.cc
+
+ Note that histograms are disabled via the flag G4ANALYSIS_USE in GNUmakefile.
+
+
+ 7. Using the Anaphe implementation of the AIDA 3.0 histograms:
+ ---------------------------------------------------------------
+
+ In order to use the new Anaphe implementation of the AIDA 3.0 interfaces, 
+ prepare some environment variables by source-ing one of the following 
+ startup scripts.
+
+ # This example has been developed and tested with the gcc-2.95.2 compiler:
+                                                       ----------
+
+ o Set up the environment variable: G4ANALYSIS_USE 
+ o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/5.0.2/bin
+                                                         |
+                                                         |
+                                             (Hier your system must be specified;
+                                              if it is redhat61 or redhat73... this
+                                              link has to be changed to the 
+                                              corresponding system.)
+
+  o source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/install/sharedstart.csh or .sh
+  o ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/* ~/bin/. 
+    (This has to be made only one)
+     
+ After this, you will have access to the 'aida-config' command which
+ is used in the GNUmakefile.
+

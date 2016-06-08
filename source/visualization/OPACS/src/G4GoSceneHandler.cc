@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GoSceneHandler.cc,v 1.13 2001/11/12 18:22:09 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GoSceneHandler.cc,v 1.14 2002/12/11 15:58:01 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -442,6 +442,30 @@ void G4GoSceneHandler::AddThis (
   G4cout << "G4GoSceneHandler::AddThis(G4VSolid&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (solid);
+}
+/***************************************************************************/
+void G4GoSceneHandler::AddThis (
+ const G4VTrajectory& traj
+) 
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
+#endif
+  G4VSceneHandler::AddThis (traj);
+}
+/***************************************************************************/
+void G4GoSceneHandler::AddThis (
+ const G4VHit& hit
+) 
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4VHit&) " << G4endl;
+#endif
+  G4VSceneHandler::AddThis (hit);
 }
 /***************************************************************************/
 void G4GoSceneHandler::PreAddThis (

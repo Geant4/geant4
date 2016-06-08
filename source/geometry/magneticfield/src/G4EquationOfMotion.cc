@@ -21,33 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.cc,v 1.5 2001/11/09 20:39:07 japost Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4EquationOfMotion.cc,v 1.7 2002/06/11 08:34:27 japost Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 #include "G4EquationOfMotion.hh"
 
-static const int G4maximum_number_of_field_components = 16;
-
 G4EquationOfMotion::~G4EquationOfMotion()
 {}
-
-void 
-G4EquationOfMotion::RightHandSide( const  G4double y[],
-				   G4double dydx[]   ) const
-{
-     G4double Field[G4maximum_number_of_field_components];   
-     G4double  PositionAndTime[4];
-
-     // Position
-     PositionAndTime[0] = y[0];
-     PositionAndTime[1] = y[1];
-     PositionAndTime[2] = y[2];
-     // Global Time
-     PositionAndTime[3] = y[7];  // See G4FieldTrack::LoadFromArray
-
-     GetFieldValue(PositionAndTime, Field) ;
-     EvaluateRhsGivenB( y, Field, dydx );
-}
 
 void 
 G4EquationOfMotion::EvaluateRhsReturnB( const G4double y[],

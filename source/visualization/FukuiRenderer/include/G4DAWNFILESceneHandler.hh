@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.10 2001/09/17 07:40:32 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.12 2002/12/11 15:58:02 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // Satoshi TANAKA
 
@@ -86,6 +86,12 @@ public:
     G4VSceneHandler::AddThis (polyhedra);
   }
   void AddThis ( const G4VSolid& solid  );
+  void AddThis ( const G4VTrajectory& traj) {
+    G4VSceneHandler::AddThis(traj);
+  }
+  void AddThis ( const G4VHit& hit) {
+    G4VSceneHandler::AddThis(hit);
+  }
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.
 
@@ -229,6 +235,8 @@ private:
   char		fG4PrimDestDir [256] ; 
   char          fG4PrimFileName[256] ;
   G4int		fMaxFileNum           ;
+
+  G4int         fPrec, fPrec2 ;
 	
 };
 

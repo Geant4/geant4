@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.11 2002/05/17 17:59:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GeometryManager.cc,v 1.12 2002/11/19 17:15:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // class G4GeometryManager
 //
@@ -125,6 +125,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
  
    for (n=0; n<nVolumes; n++)
    {
+     if (verbose) timer.Start();
      volume=(*Store)[n];
      // For safety, check if there are any existing voxels and
      // delete before replacement

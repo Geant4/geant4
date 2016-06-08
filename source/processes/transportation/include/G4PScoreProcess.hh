@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.hh,v 1.3 2002/04/10 13:14:16 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4PScoreProcess.hh,v 1.7 2002/10/22 13:25:56 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4PIScoreProcess
@@ -30,8 +30,8 @@
 // Class description:
 //
 // Used internally by scoring in a "parallel" geometry.
-// This forced process messages a "scorer" derived from G4VPScorer.
-// The scorer is  messaged with the current G4Step and G4PStep.
+// This forced process messages a "scorer" derived from G4VScorer.
+// The scorer is  messaged with the current G4Step and G4GeometryCellStep.
 // This post step process is supposed to be placed as the 
 // process following directly after transportation and the 
 // importance sampling process if applied and before all physical
@@ -43,17 +43,19 @@
 #define G4PScoreProcess_hh G4PScoreProcess_hh
 
 #include "G4VProcess.hh"
+#include "G4VTrackTerminator.hh"
 
 class G4VParallelStepper;
-class G4VPScorer;
+class G4VScorer;
 
-class G4PScoreProcess : public G4VProcess
+class G4PScoreProcess : public G4VProcess, 
+			public G4VTrackTerminator
 {
 
 public:  // with description
 
   G4PScoreProcess(G4VParallelStepper  &astepper,
-		  G4VPScorer &aScorer,
+		  G4VScorer &aScorer,
 		  const G4String &aName = "PScoreProcess");
     // create a G4ParticleChange
 
@@ -67,24 +69,32 @@ public:  // with description
     // make the process beeing forced
 
   virtual G4VParticleChange * PostStepDoIt(const G4Track&, 
-					   const G4Step&);
-    // get G4PStep and G4Step and message "scorer"
-  
+				   const G4Step&);
+    // get G4GeometryCellStep and G4Step and message "scorer"
+
+  virtual void KillTrack() const;
+
+  virtual const G4String &GetName() const;
+
+    // to be called by the importance process if the track should
+    // be killed after scoring
+ 
 public:  // without description
 
   //  no operation in  AtRestDoIt and  AlongStepDoIt
-
-  G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
-                                             G4double  ,
-                                             G4double  ,
-                                             G4double& ,
-                                             G4GPILSelection*) {return -1.0;}
   
-  G4double AtRestGetPhysicalInteractionLength(const G4Track& ,
-                                              G4ForceCondition*) {return -1.0;}
+  virtual G4double 
+  AlongStepGetPhysicalInteractionLength(const G4Track&,
+					G4double  ,
+					G4double  ,
+					G4double& ,
+					G4GPILSelection*);
   
-  G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&) {return 0;}
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&) {return 0;}
+  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track& ,
+						      G4ForceCondition*);
+  
+  virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
   
 private:
 
@@ -92,7 +102,9 @@ private:
   G4PScoreProcess &operator=(const G4PScoreProcess &);
 
   G4VParallelStepper &fPstepper;
-  G4VPScorer &fScorer;  
+  G4VScorer &fScorer;  
+
+  mutable G4bool fKillTrack;
 };
 
 #endif

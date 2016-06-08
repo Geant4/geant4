@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.10 2001/11/23 16:20:30 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4RunMessenger.cc,v 1.12 2002/12/04 21:52:40 asaim Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #include "G4RunMessenger.hh"
@@ -46,7 +46,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
 
   initCmd = new G4UIcmdWithoutParameter("/run/initialize",this);
   initCmd->SetGuidance("Initialize G4 kernel.");
-  initCmd->AvailableForStates(PreInit,Idle),
+  initCmd->AvailableForStates(G4State_PreInit,G4State_Idle),
 
   beamOnCmd = new G4UIcommand("/run/beamOn",this);
   beamOnCmd->SetGuidance("Start a Run.");
@@ -61,7 +61,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   beamOnCmd->SetGuidance("If the third argument (nSelect) is given, the");
   beamOnCmd->SetGuidance("macro file will be executed only for the first");
   beamOnCmd->SetGuidance("nSelect events.");
-  beamOnCmd->AvailableForStates(PreInit,Idle);
+  beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
   p1->SetDefaultValue(1);
   p1->SetParameterRange("numberOfEvent > 0");
@@ -90,7 +90,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   optCmd->SetGuidance("GEANT4 is initialized with this flag as TRUE.");
   optCmd->SetParameterName("optimizeFlag",true);
   optCmd->SetDefaultValue(true);
-  optCmd->AvailableForStates(PreInit,Idle);
+  optCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   brkBoECmd = new G4UIcmdWithABool("/run/breakAtBeginOfEvent",this);
   brkBoECmd->SetGuidance("Set a break point at the begining of every event.");
@@ -102,23 +102,31 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   brkEoECmd->SetParameterName("flag",true);
   brkEoECmd->SetDefaultValue(true);
   
-  abortCmd = new G4UIcmdWithoutParameter("/run/abort",this);
+  abortCmd = new G4UIcmdWithABool("/run/abort",this);
   abortCmd->SetGuidance("Abort current run processing.");
-  abortCmd->AvailableForStates(GeomClosed,EventProc);
+  abortCmd->SetGuidance("If softAbort is false (default), currently processing event will be immediately aborted,");
+  abortCmd->SetGuidance("while softAbort is true, abortion occurs after processing the current event.");
+  abortCmd->AvailableForStates(G4State_GeomClosed,G4State_EventProc);
+  abortCmd->SetParameterName("softAbort",true);
+  abortCmd->SetDefaultValue(false);
+
+  abortEventCmd = new G4UIcmdWithoutParameter("/run/abortCurrentEvent",this);
+  abortEventCmd->SetGuidance("Abort currently processing event.");
+  abortEventCmd->AvailableForStates(G4State_EventProc);
 
   geomCmd = new G4UIcmdWithoutParameter("/run/geometryModified",this);
   geomCmd->SetGuidance("Force geometry to be closed again.");
   geomCmd->SetGuidance("This command must be applied");
   geomCmd->SetGuidance(" if geometry has been modified after the");
   geomCmd->SetGuidance(" first initialization (or BeamOn).");
-  geomCmd->AvailableForStates(PreInit,Idle),
+  geomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
   cutCmd->SetGuidance("Force closssection tables to be calculated again.");
   cutCmd->SetGuidance("This command must be applied");
   cutCmd->SetGuidance(" if cutoff value(s) have been modified after the");
   cutCmd->SetGuidance(" first initialization (or BeamOn).");
-  cutCmd->AvailableForStates(PreInit,Idle);
+  cutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   randomDirectory = new G4UIdirectory("/random/");
   randomDirectory->SetGuidance("Random number status control commands.");
@@ -128,7 +136,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randDirCmd->SetGuidance("Directory must be creates before storing the files.");
   randDirCmd->SetParameterName("fileName",true);
   randDirCmd->SetDefaultValue("./");
-  randDirCmd->AvailableForStates(PreInit,Idle,GeomClosed);
+  randDirCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   
   savingFlagCmd = new G4UIcmdWithABool("/random/setSavingFlag",this);
   savingFlagCmd->SetGuidance("The randomNumberStatus will be saved at :");
@@ -139,11 +147,11 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   
   saveThisRunCmd = new G4UIcmdWithoutParameter("/random/saveThisRun",this);
   saveThisRunCmd->SetGuidance("copy currentRun.rndm to runXXX.rndm");
-  saveThisRunCmd->AvailableForStates(Idle,GeomClosed,EventProc);
+  saveThisRunCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
   
   saveThisEventCmd = new G4UIcmdWithoutParameter("/random/saveThisEvent",this);
   saveThisEventCmd->SetGuidance("copy currentEvent.rndm to runXXXevtYYY.rndm");
-  saveThisEventCmd->AvailableForStates(EventProc);
+  saveThisEventCmd->AvailableForStates(G4State_EventProc);
           
   restoreRandCmd = new G4UIcmdWithAString("/random/resetEngineFrom",this);
   restoreRandCmd->SetGuidance("Reset the status of the rndm engine from a file.");
@@ -153,7 +161,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
                               " /random/setDirectoryName.");
   restoreRandCmd->SetParameterName("fileName",true);
   restoreRandCmd->SetDefaultValue("currentRun.rndm");
-  restoreRandCmd->AvailableForStates(PreInit,Idle,GeomClosed);
+  restoreRandCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   
   //old commands for the rndm engine status handling
   //
@@ -162,7 +170,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randDirOld->SetGuidance("Directory must be creates before storing the files.");
   randDirOld->SetParameterName("fileName",true);
   randDirOld->SetDefaultValue("./");
-  randDirOld->AvailableForStates(PreInit,Idle,GeomClosed);
+  randDirOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
   
   storeRandOld = new G4UIcmdWithAnInteger("/run/storeRandomNumberStatus",this);
   storeRandOld->SetGuidance("The randomNumberStatus will be saved at :");
@@ -179,7 +187,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
                               " /random/setDirectoryName.");
   restoreRandOld->SetParameterName("fileName",true);
   restoreRandOld->SetDefaultValue("currentRun.rndm");
-  restoreRandOld->AvailableForStates(PreInit,Idle,GeomClosed);  
+  restoreRandOld->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);  
 
 }
 
@@ -191,6 +199,7 @@ G4RunMessenger::~G4RunMessenger()
   delete brkBoECmd;
   delete brkEoECmd;
   delete abortCmd;
+  delete abortEventCmd;
   delete initCmd;
   delete geomCmd;
   delete cutCmd;
@@ -228,7 +237,9 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==brkEoECmd )
   { G4UImanager::GetUIpointer()->SetPauseAtEndOfEvent(brkEoECmd->GetNewBoolValue(newValue)); }
   else if( command==abortCmd )
-  { runManager->AbortRun(); }
+  { runManager->AbortRun(abortCmd->GetNewBoolValue(newValue)); }
+  else if( command==abortEventCmd )
+  { runManager->AbortEvent(); }
   else if( command==initCmd )
   { runManager->Initialize(); }
   else if( command==geomCmd )

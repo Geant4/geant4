@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -24,15 +24,20 @@
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
 //      CERN, Geneva, Switzerland
 //
-//      File name:     G4NuclearLevelManager
+//      File name:     G4NuclearLevel
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)
 // 
 //      Creation date: 25 October 1998
 //
 //      Modifications: 
+//        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
+//              Added K->N+ internal  conversion coefficiencies and their access
+//              functions      
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added half-life, angular momentum, parity, emissioni type
@@ -101,6 +106,17 @@ private:
   G4double _polarity;
   G4double _halfLife;
   G4double _angularMomentum;
+  G4double _kCC;
+  G4double _l1CC;
+  G4double _l2CC;
+  G4double _l3CC;
+  G4double _m1CC;  
+  G4double _m2CC;
+  G4double _m3CC;
+  G4double _m4CC;
+  G4double _m5CC;
+  G4double _nPlusCC;
+  G4double _totalCC;
 };
 
 #endif

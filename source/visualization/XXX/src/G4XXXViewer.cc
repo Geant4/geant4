@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4XXXViewer.cc,v 1.4 2001/11/16 10:50:27 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 
 #include "G4XXXViewer.hh"
 

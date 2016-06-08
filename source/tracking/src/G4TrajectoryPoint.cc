@@ -21,50 +21,67 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.cc,v 1.6 2001/07/11 10:08:43 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4TrajectoryPoint.cc,v 1.10 2002/11/08 18:28:29 johna Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //
 // ---------------------------------------------------------------
 //
 // G4TrajectoryPoint.cc
 //
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
 // ---------------------------------------------------------------
 
 #include "G4TrajectoryPoint.hh"
 
+#include "G4AttDefStore.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
+#include "G4UnitsTable.hh"
+#include "g4std/strstream"
+
 G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
 
-//////////////////////////////////////
 G4TrajectoryPoint::G4TrajectoryPoint()
-//////////////////////////////////////
 {
   fPosition = G4ThreeVector(0.,0.,0.);
 }
 
-///////////////////////////////////////////////////////
 G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos)
-///////////////////////////////////////////////////////
 {
   fPosition = pos;
 }
 
-////////////////////////////////////////////////////////////////////
 G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint &right)
-////////////////////////////////////////////////////////////////////
  : fPosition(right.fPosition)
 {
 }
 
-///////////////////////////////////////
 G4TrajectoryPoint::~G4TrajectoryPoint()
-///////////////////////////////////////
 {
 }
 
+const G4std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
+{
+  G4bool isNew;
+  G4std::map<G4String,G4AttDef>* store
+    = G4AttDefStore::GetInstance("G4TrajectoryPoint",isNew);
+  if (isNew) {
+    G4String Pos("Pos");
+    (*store)[Pos] = G4AttDef(Pos, "Position", "Physics","","G4ThreeVector");
+  }
+  return store;
+}
 
+G4std::vector<G4AttValue>* G4TrajectoryPoint::CreateAttValues() const
+{
+  char c[100];
+  G4std::ostrstream s(c,100);
+
+  G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
+
+  s.seekp(G4std::ios::beg);
+  s << G4BestUnit(fPosition,"Length") << G4std::ends;
+  values->push_back(G4AttValue("Pos",c,""));
+
+  return values;
+}

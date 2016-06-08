@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -33,7 +33,7 @@
 //      Creation date: 23 October 1998
 //
 //      Modifications: 
-//      
+//
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
 //      
@@ -56,10 +56,6 @@ public:
   virtual G4double GetGammaEnergy() = 0;
   virtual G4double GetGammaCreationTime() = 0;
 
-//--  virtual G4double GammaEnergy() = 0;
-
-//--  virtual G4double GetEnergyTo() const = 0;
-
   virtual void SetEnergyFrom(const G4double energy) = 0;
 
 private:  
@@ -78,3 +74,8 @@ protected:
 
 
 #endif
+
+
+
+
+

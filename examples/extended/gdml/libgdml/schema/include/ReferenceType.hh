@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ReferenceType.hh,v 1.2 2002/06/03 12:09:34 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: ReferenceType.hh,v 1.3 2002/07/25 10:41:23 radoone Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,10 +41,10 @@ public:
   }
   ~ReferenceType() {
   }
-  void set_ref( std::string& s ) {
+  void set_ref( const std::string& s ) {
     m_ref = s;
   }
-  void set_ref( char* s ) {
+  void set_ref( const char* s ) {
     m_ref = s;
   }
   const std::string& get_ref() const {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.7 2001/11/26 19:15:08 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4UItcsh.cc,v 1.8 2002/10/17 02:41:22 murakami Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 
 #ifndef WIN32
@@ -554,7 +554,7 @@ G4String G4UItcsh::ReadLine()
     // treatment for ESC. character
     if( cc == AsciiESC) { // ESC
       G4cin.get(cc);
-      if (cc == '[') {
+      if (cc == '[' || 'O') { // care for another termcap, such as konsole
 	G4cin.get(cc);
 	switch(cc) {
 	case 'A': // [UP]

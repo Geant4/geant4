@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.17 2001/11/26 14:11:47 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4QParticle.cc,v 1.17.10.1 2002/12/12 19:14:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.

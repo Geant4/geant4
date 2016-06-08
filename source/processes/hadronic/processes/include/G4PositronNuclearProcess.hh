@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -30,7 +30,7 @@
 #define G4PositronNuclearProcess_h 1
  
 // Class Description
-// Process for Ion Inelastic scattering; 
+// Process for positron nuclear inelastic scattering; 
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 

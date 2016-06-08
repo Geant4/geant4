@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -227,12 +227,14 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
     }
     if (!found && aE )
       {
-	G4cout <<"G4RIsotopeTable::GetMeanLife() : ";
-	G4cout <<"cannot find ion of required excitation E = " << aE << G4endl;
-	G4cout <<"state in radioactive data file " <<G4endl;
-	G4cout <<"The nucleus is assumed to be decayed with life = 1E-20 s" <<G4endl;
-	G4cout <<" -----------* THIS MAY CAUSE PROBLEM IN ITS DECAY-----------" <<G4endl; 
-	lifetime = 1.0E-20*s;
+	if (GetVerboseLevel()>0) {
+	  G4cout <<"G4RIsotopeTable::GetMeanLife() : ";
+	  G4cout <<"cannot find ion of required excitation E = " << aE << G4endl;
+	  G4cout <<"state in radioactive data file " <<G4endl;
+	  G4cout <<"The nucleus is assumed to be IT decayed with life = 1E-20 s" <<G4endl;
+	  G4cout <<" -----------* THIS MAY CAUSE PROBLEM IN ITS DECAY-----------" <<G4endl; 
+	  lifetime = 1.0E-20*s;
+	}
       }
     if (!found && !aE )
       {

@@ -1,0 +1,9 @@
+/run/verbose 2
+/run/particle/dumpCutValues
+/tracking/storeTrajectory 1
+/gun/random aperture
+/gun/particle proton
+/gun/energy 0.5 MeV
+#/run/beamOn 1000
+/run/beamOn 1000000
+

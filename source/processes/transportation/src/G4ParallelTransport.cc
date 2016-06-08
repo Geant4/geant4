@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.4 2002/05/31 13:49:47 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4ParallelTransport.cc,v 1.8 2002/11/04 10:47:56 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,18 +34,24 @@
 #include "G4ParallelTransport.hh"
 #include "G4VPGeoDriver.hh"
 #include "G4VParallelStepper.hh"
-#include "G4Pstring.hh"
+#include "g4std/strstream"
+
 
 G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
 					 G4VParallelStepper &aStepper,
 					 const G4String &aName)
- : G4VProcess(aName), 
-   fPgeodriver(pgeodriver),
-   fPStepper(aStepper),
+ : 
+  G4VProcess(aName), 
+  fParticleChange(new G4ParticleChange),
+  fPgeodriver(pgeodriver),
+  fPStepper(aStepper),
   fCrossBoundary(false),
   fInitStep(false)
 {
-  fParticleChange = new G4ParticleChange;
+  if (!fParticleChange) {
+    G4Exception("ERROR:G4ParallelTransport::G4ParallelTransport: new failed to create G4ParticleChange!");
+  }
+
   G4VProcess::pParticleChange = fParticleChange;
 }
 
@@ -66,7 +72,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4double   previousStepSize,
 				     G4ForceCondition* condition)
 {
-  G4double stepLength;
+  G4double stepLength = 0;
 
   // if this function is called on a new track let the navigator 
   // know about it
@@ -77,7 +83,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
     stepLength = fPgeodriver.
       ComputeStepLengthInit(aTrack.GetPosition(),
 			    aTrack.GetMomentumDirection());
-    fPStepper.Init(fPgeodriver.GetCurrentTouchableKey());
+    fPStepper.Init(fPgeodriver.GetCurrentGeometryCell());
     fCrossBoundary = false;
   }
   else if (fCrossBoundary) {
@@ -101,10 +107,15 @@ G4VParticleChange *
 G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
 				  const G4Step& aStep)
 {
-  if (aStep.GetStepLength() == 0.) {
-    G4String m = "G4PArallelTransport::PostStepDoIt: StepLength() == 0.\n";
-    m += "pos: " + str(aTrack.GetPosition()) + ", " 
-      + "dir: " +  str(aTrack.GetMomentumDirection()) + "\n";
+  if (!(aStep.GetStepLength() > 0.)) {
+    char st[1000];
+    G4std::ostrstream os(st,1000);
+    os << "G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n"
+       << "pos: " << aTrack.GetPosition() << ", " 
+       << "dir: " << aTrack.GetMomentumDirection() << "\n"
+       << '\0';
+    G4String m(st);
+
     Warning(m);
   }
 
@@ -113,7 +124,7 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
   fCrossBoundary = true;
   fPgeodriver.LocateOnBoundary(aTrack.GetPosition(), 
 			       aTrack.GetMomentumDirection());
-  fPStepper.Update(fPgeodriver.GetCurrentTouchableKey());
+  fPStepper.Update(fPgeodriver.GetCurrentGeometryCell());
 
   return fParticleChange;
 }
@@ -129,3 +140,30 @@ void G4ParallelTransport::Warning(const G4String &m)
   G4cout << "WARNING - G4ParallelTransport: " << G4endl;
   G4cout << m << G4endl;
 }
+
+G4double G4ParallelTransport::
+AlongStepGetPhysicalInteractionLength(const G4Track&,
+				      G4double  ,
+				      G4double  ,
+				      G4double& ,
+				      G4GPILSelection*) {
+  return -1.0;
+}
+
+G4double G4ParallelTransport::
+AtRestGetPhysicalInteractionLength(const G4Track& ,
+				   G4ForceCondition*) {
+  return -1.0;
+}
+  
+G4VParticleChange*  G4ParallelTransport::
+AtRestDoIt(const G4Track&, const G4Step&) {
+  return 0;
+}
+  
+G4VParticleChange* G4ParallelTransport::
+AlongStepDoIt(const G4Track&, const G4Step&) {
+  return 0;
+}
+  
+ 

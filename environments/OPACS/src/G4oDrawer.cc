@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4oDrawer.cc,v 1.6.4.1 2001/06/28 19:06:34 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4oDrawer.cc,v 1.7 2001/07/11 09:56:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 /*
   From geant4/visualization/management/src/G4VisManager.cc.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB03.cc,v 1.6 2002/05/31 11:46:23 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: exampleB03.cc,v 1.10 2002/11/18 13:22:48 dressel Exp $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -30,53 +30,21 @@
 //
 // --------------------------------------------------------------
 // Comments
+// This main may not be used at all. Instead you may use python or 
+// lizard an execute the script B03RunApplication in them.
 //
+// This main function may used to test B03AppBase::GetB03AppBase().
 // 
 // --------------------------------------------------------------
 
-#include "G4VPhysicalVolume.hh"
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
-#include "B03DetectorConstruction.hh"
-#include "B03PhysicsList.hh"
-#include "B03PrimaryGeneratorAction.hh"
-
-// Files specific for biasing
-#include "G4MassImportanceSampler.hh"
+#include "B03App.hh"
+#include "globals.hh"
 
 int main(int argc, char **argv)
 {  
 
-  G4int numberOfEvent = 1000;
-
-  G4String random_status_out_file, random_status_in_file;
-  G4long myseed = 345354;
-
-  HepRandom::setTheSeed(myseed);
-
-  G4RunManager *runManager = new G4RunManager;
-  
-  // create the detector      ---------------------------
-  B03DetectorConstruction *detector = new B03DetectorConstruction();
-  runManager->SetUserInitialization(detector);
-  //  ---------------------------------------------------
-  runManager->SetUserInitialization(new B03PhysicsList);
-  runManager->SetUserAction(new B03PrimaryGeneratorAction);
-  runManager->Initialize();
-
-  // the IStore is filled during detector construction
-  G4VIStore &aIstore = *detector->GetIStore();
-  // create the importance sampler for biasing in the tracking world
-  G4MassImportanceSampler mim(aIstore, "neutron");
-  mim.Initialize();
-
-  G4UImanager* UI;
-
-  UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/control/execute init.mac");   
-
-  runManager->BeamOn(numberOfEvent);
+  B03AppBase &base = B03AppBase::GetB03AppBase();
 
   return 0;
 }
+

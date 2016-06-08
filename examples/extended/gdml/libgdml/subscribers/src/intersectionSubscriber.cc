@@ -22,7 +22,7 @@
 //
 //
 // $Id: intersectionSubscriber.cc,v 1.3 2002/06/05 11:54:33 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-05-00 $
 //
 // 
 // --------------------------------------------------------------
