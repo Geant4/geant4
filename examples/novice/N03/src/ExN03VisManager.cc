@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03VisManager.cc,v 1.8 2001/11/15 13:09:56 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN03VisManager.cc,v 1.9 2002/01/09 17:24:13 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 // 
 // John Allison 24th January 1998.

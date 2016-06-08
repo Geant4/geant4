@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.hh,v 1.8 2001/10/10 14:58:11 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN03PhysicsList.hh,v 1.9 2002/01/09 17:24:11 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 // 
 

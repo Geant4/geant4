@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05CalorimeterHit.hh,v 1.4 2001/07/11 09:58:31 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN05CalorimeterHit.hh,v 1.5 2002/01/09 17:24:17 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 
 #ifndef ExN05CalorimeterHit_h

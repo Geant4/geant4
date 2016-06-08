@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.5 2001/07/11 09:59:52 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4BooleanSolid.cc,v 1.6 2002/01/10 15:34:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -106,7 +106,7 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
   else if( no == 1 ) 
     subSolid = fPtrSolidB;
   else
-    G4Exception("G4BooleanSolid::GetConstituentSolid()const invalid subsolid index");
+    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid subsolid index");
 
   return subSolid;
 }
@@ -119,7 +119,7 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
   else if( no == 1 ) 
     subSolid = fPtrSolidB;
   else
-    G4Exception("G4BooleanSolid::GetConstituentSolid invalid subsolid index");
+    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid subsolid index");
 
   return subSolid;
 }

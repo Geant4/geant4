@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.cc,v 1.9 2001/07/11 10:00:59 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Timer.cc,v 1.10 2002/01/17 10:49:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,7 +68,7 @@ void G4Exception(const char* s=0);
 
            GetSystemTime( &realtime );
            SystemTimeToFileTime( &realtime, &rt ); // get real time in 10^-9 sec
-           if( t != NULL ){
+           if( t != 0 ){
                    GetProcessTimes( GetCurrentProcess(), &ct, &et, &st, &ut);// get process time in 10^-9 sec
                    t->tms_utime = t->tms_cutime = filetime2msec(&ut);
                    t->tms_stime = t->tms_cstime = filetime2msec(&st);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.23 2001/12/04 17:15:50 radoone Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4SteppingManager.cc,v 1.27 2002/01/23 15:21:40 tsasaki Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 //
 //---------------------------------------------------------------
@@ -258,9 +258,24 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
 // If the primary track has 'zero' kinetic energy, set the track
 // state to 'StopButAlive'.
-   if(fTrack->GetKineticEnergy() <= 0.0){
-     fTrack->SetTrackStatus( fStopButAlive );
+   //   if(fTrack->GetKineticEnergy() <= 0.0){
+   //     fTrack->SetTrackStatus( fStopButAlive );
+   //   }
+   if(fTrack->GetKineticEnergy() <= DBL_MIN){
+     if( !(fTrack->IsGoodForTracking()) ){
+       size_t nAtRestProc = fTrack->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->entries();
+       if( nAtRestProc == 0 ){
+	 fTrack->SetTrackStatus( fStopAndKill );
+       }
+       else{
+	 fTrack->SetTrackStatus( fStopButAlive );
+       }
+     }
+     else {
+       fTrack->SetTrackStatus( fStopButAlive );
+     }
    }
+
 
 // Set Touchable to track and a private attribute of G4SteppingManager
  
@@ -296,6 +311,15 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
 // If track is already outside the world boundary, kill it
    if( fCurrentVolume==0 ){
+       // If the track is a primary, stop processing
+       if(fTrack->GetParentID()==0)
+       {
+        G4cerr << "Primary particle starting at "
+               << fTrack->GetPosition()
+               << " is outside of the world volume." << G4endl;
+        G4Exception("G4SteppingManager::Primary vertex outside of the world");
+       }
+
        fTrack->SetTrackStatus( fStopAndKill );
        G4cerr << "G4SteppingManager::SetInitialStep(): warning: "
               << "initial track position is outside world! "

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01DetectorConstruction.cc,v 1.4 2001/11/05 08:24:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN01DetectorConstruction.cc,v 1.5 2002/01/09 17:23:48 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 
 #include "ExN01DetectorConstruction.hh"

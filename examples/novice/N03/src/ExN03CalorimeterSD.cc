@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorimeterSD.cc,v 1.5 2001/10/10 14:58:12 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN03CalorimeterSD.cc,v 1.6 2002/01/09 17:24:12 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 // 
 

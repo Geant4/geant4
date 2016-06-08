@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03SteppingAction.hh,v 1.6 2001/10/10 14:58:11 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN03SteppingAction.hh,v 1.7 2002/01/09 17:24:12 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 // 
 

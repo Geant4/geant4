@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SteppingActionMessenger.cc,v 1.3 2001/07/11 09:58:36 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN05SteppingActionMessenger.cc,v 1.4 2002/01/09 17:24:20 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 
 #include "ExN05SteppingActionMessenger.hh"

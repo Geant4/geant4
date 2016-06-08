@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.11 2001/08/27 08:04:08 grichine Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Sphere.cc,v 1.14 2002/01/12 20:00:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-01 $
 //
 // class G4Sphere
 //
@@ -1878,15 +1878,20 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 //
 // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
 //
+  const G4double  fractionTolerance = 1.0e-14;
+  const G4double  flexRadMaxTolerance = G4std::max(kRadTolerance, 
+					           fractionTolerance * fRmax);
+  const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
 
-  G4double  Rmax_plus=  fRmax+kRadTolerance*0.5;
-  G4double  Rmin_minus= (fRmin>0) ? fRmin-kRadTolerance*0.5 : 0 ;
+  const G4double  flexRadMinTolerance = G4std::max(kRadTolerance, 
+					           fractionTolerance * fRmin);
+  const G4double  Rmin_minus= (fRmin>0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
 
   if(rad2 <= Rmax_plus*Rmax_plus && rad2 >= Rmin_minus*Rmin_minus)
   {
     c=rad2-fRmax*fRmax ;
 
-    if (c < kRadTolerance*fRmax) 
+    if (c < flexRadMaxTolerance*fRmax) 
     {
         // Within tolerant Outer radius 
         // 
@@ -1899,7 +1904,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 
       d2=pDotV3d*pDotV3d-c ;
 
-      if( (c >- kRadTolerance*fRmax) &&       // on tolerant surface
+      if( (c >- flexRadMaxTolerance*fRmax) &&       // on tolerant surface
 	  ( ( pDotV3d >=0 )  ||  (d2 < 0)) )  // leaving outside from Rmax 
 			                      // not re-entering
       {
@@ -1924,9 +1929,9 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
     {
       c=rad2-fRmin*fRmin ;
 
-      if (c >- kRadTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
+      if (c >- flexRadMinTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
       {
-	if( c < kRadTolerance*fRmin && pDotV3d < 0 )  // leaving from Rmin
+	if( c < flexRadMinTolerance*fRmin && pDotV3d < 0 )  // leaving from Rmin
 	{
 	  if(calcNorm)
 	  {
@@ -2091,7 +2096,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 	  {
 	    s = -b + d ;    // Second root
 	  }
-	  if (s > kRadTolerance*0.5 )   // && s<sr)
+	  if (s > flexRadMaxTolerance*0.5 )   // && s<sr)
 	  {
 	    stheta = s ;
 	    sidetheta = kSTheta ;
@@ -2117,7 +2122,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 	  {
 	    s=-b+d;    // Second root
 	  }
-	  if (s > kRadTolerance*0.5 && s < stheta )
+	  if (s > flexRadMaxTolerance*0.5 && s < stheta )
 	  {
 	    stheta = s ;
 	    sidetheta = kETheta ;
@@ -2517,6 +2522,27 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p) const
     rad=sqrt(rho2+p.z()*p.z());
     rho=sqrt(rho2);
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Sphere parameters:" << G4endl << G4endl ;
+     G4cout << "fRmin = "   << fRmin/mm << " mm" << G4endl ;
+     G4cout << "fRmax = "   << fRmax/mm << " mm" << G4endl ;
+     G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+     G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl;
+     G4cout << "fSTheta = " << fSTheta/degree << " degree" << G4endl;
+     G4cout << "fDTheta = " << fDTheta/degree << " degree" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Sphere::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Sphere::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
 //
 // Distance to r shells
 //    
@@ -2708,7 +2734,7 @@ G4Sphere::CreateRotatedVertices(const G4AffineTransform& pTransform,
 	}
     else
 	{
-	    G4Exception("G4Sphere::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Sphere::CreateRotatedVertices - Out of memory !");
 	}
 
     delete[] cosCrossTheta;
