@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPVParameterisation.hh,v 1.3 2000/04/20 16:49:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // class G4VPVParamterisation
 //

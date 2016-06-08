@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VVisManager.hh,v 1.4 1999/12/15 14:50:40 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:

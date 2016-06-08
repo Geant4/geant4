@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Exception.cc,v 1.8 1999/11/29 10:17:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Exception.cc,v 1.9 2000/07/22 10:45:35 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -21,15 +21,16 @@
 #include "G4ios.hh"
 #include <stdlib.h>
 #include "g4rw/cstring.h"
+#include "G4StateManager.hh"
 
 void G4Exception(const char* s)
 {
-    if (s)
+   if(s)
 	{
 	    G4cerr << s << G4endl;
 	}
-
    G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
+   G4StateManager::GetStateManager()->SetNewState(Abort);
    abort();
 }
 

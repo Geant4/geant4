@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Track.cc,v 1.4 2000/06/02 05:36:53 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //---------------------------------------------------------------

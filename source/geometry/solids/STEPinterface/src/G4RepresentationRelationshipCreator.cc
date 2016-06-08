@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RepresentationRelationshipCreator.cc,v 1.4 2000/02/25 16:36:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RepresentationRelationshipCreator.cc,v 1.5 2000/11/20 18:17:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -38,7 +38,6 @@ void G4RepresentationRelationshipCreator::CreateG4Geometry(STEPentity& Ent)
 {
 
   STEPcomplex* complexEnt = (STEPcomplex*)&Ent;
-  void* tmp=0;
   STEPentity* subEnt=0;
   STEPentity* subEnt1=0;
   STEPentity* subEnt2=0;  

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SimpleIntegration.cc,v 1.2 1999/11/16 17:31:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Implementation file for simple integration methods
 //

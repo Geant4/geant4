@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VUserTrackInformation.hh,v 1.2 2000/06/02 09:09:47 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //---------------------------------------------------------------

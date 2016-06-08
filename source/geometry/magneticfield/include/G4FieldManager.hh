@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldManager.hh,v 1.3 2000/04/27 09:14:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4FieldManager.hh,v 1.5 2000/11/01 15:15:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //  
 // class G4FieldManager
@@ -35,6 +35,9 @@
 // A default FieldManager is created by the singleton class
 // G4NavigatorForTracking and exists before main is called.
 // However a new one can be created and given to G4NavigatorForTracking.
+//
+// Our current design envisions that one Field manager is 
+// valid for each region detector.
 
 // History:
 // - 10.03.97 John Apostolakis, design and implementation.
@@ -54,13 +57,34 @@ class G4FieldManager
      G4FieldManager(G4MagneticField *detectorField);
     ~G4FieldManager();
 
-     G4bool          SetDetectorField(G4Field *detectorField);
-     G4Field*        GetDetectorField();
-     G4bool          DoesFieldExist();
+     inline G4bool          SetDetectorField(G4Field *detectorField);
+     inline const G4Field*  GetDetectorField() const;
+     inline G4bool          DoesFieldExist() const;
 
      void            CreateChordFinder(G4MagneticField *detectorMagField);
-     void            SetChordFinder(G4ChordFinder *aChordFinder);
-     G4ChordFinder*  GetChordFinder();
+     inline void     SetChordFinder(G4ChordFinder *aChordFinder);
+     inline G4ChordFinder*  GetChordFinder();
+
+  public:  // without description
+
+     inline G4double GetDeltaIntersection() const;
+       // Accuracy for boundary intersection.
+
+     inline G4double GetDeltaOneStep() const;
+       // Accuracy for one tracking/physics step.
+
+     inline void     SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep); 
+       // Sets both accuracies, maintaining a fixed ratio for accuracties 
+       // of volume Intersection and Integration (in One Step) 
+
+     inline void     SetDeltaOneStep(G4double valueD1step); 
+     inline void     SetDeltaIntersection(G4double valueDintersection); 
+
+  private:
+
+     G4FieldManager(const G4FieldManager&);
+     G4FieldManager& operator=(const G4FieldManager&);
+       // Private copy constructor and assignment operator.
 
   private:
 
@@ -69,10 +93,19 @@ class G4FieldManager
 
      G4bool          fAllocatedChordFinder; // Did we used "new" to
 					    // create fChordFinder ?
+
+     //  Values for the required accuracies
+     //
+     G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
+     G4double  fDelta_Intersection_Val;    //  for boundary intersection
+
+     //  Their default values ...  (set in G4PropagatemagField.cc)
+     //
+     static const G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
+     static const G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
 };
 
-// Our current design envisions that one Field manager is 
-// valid for a detector.
+// Our current design envisions that one Field manager is valid for a region of the detector.
 // (eg a detector with electric E and magnetic B field will now treat
 // them as one field - and could treat any other field of importance 
 // as additional components of a single field.)

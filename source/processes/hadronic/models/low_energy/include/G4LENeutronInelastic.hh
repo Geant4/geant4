@@ -4,6 +4,13 @@
 #ifndef G4LENeutronInelastic_h
 #define G4LENeutronInelastic_h 1
  
+// Class Description
+// Final state production model for Neutron inelastic scattering below 20 GeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
+
 #include "G4InelasticInteraction.hh"
  
  class G4LENeutronInelastic : public G4InelasticInteraction

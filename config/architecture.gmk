@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.66 2000/05/19 07:29:06 gcosmo Exp $
+# $Id: architecture.gmk,v 1.70 2000/12/08 09:41:26 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -85,6 +85,28 @@ ifndef G4LIB
 endif
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB) ] && mkdir -p $(G4LIB) )
 G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4LIB)/$(G4SYSTEM) ] && mkdir -p $(G4LIB)/$(G4SYSTEM) )
+
+# If not specified, the default path to install G4 include files is G4INCLUDE 
+# set to $G4INSTALL/include ...
+#
+ifndef G4INCLUDE
+  G4INCLUDE := $(G4INSTALL)/include
+endif
+G4DUMMY_VARIABLE:=$(shell [ ! -d $(G4INCLUDE) ] && mkdir -p $(G4INCLUDE) )
+
+# backwards compatiblity
+ifneq ($(G4MAKESHLIB),)
+  G4LIB_BUILD_SHARED = 1
+endif
+
+# defaults for library BUILD. No default for USE, ie. take what is found.
+ifeq ($(G4LIB_BUILD_SHARED),)
+  ifeq ($(G4LIB_BUILD_STATIC),)
+#    default is building static libs
+    G4LIB_BUILD_STATIC = 1
+  endif  
+endif
+
 
 # If not specified, the default path for G4 binaries G4BIN is
 # set to $G4WORKDIR/bin/$G4SYSTEM ...
@@ -280,10 +302,10 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR)
   LOADLIBS  := $(CLHEP_LIB)
 else
-##  LDFLAGS   := -L$(CLHEP_LIB_DIR)
-  LDFLAGS   := 
-##  LOADLIBS  := -l$(CLHEP_LIB)
-  LOADLIBS  := $(CLHEP_LIB_DIR)/lib$(CLHEP_LIB).a
+  LDFLAGS   := -L$(CLHEP_LIB_DIR)
+#  LDFLAGS   := 
+  LOADLIBS  := -l$(CLHEP_LIB)
+#  LOADLIBS  := $(CLHEP_LIB_DIR)/lib$(CLHEP_LIB).a
   LOADLIBS  += -lm
 endif
 

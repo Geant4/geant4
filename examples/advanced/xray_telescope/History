@@ -1,0 +1,68 @@
+$Id: History,v 1.9 2000/12/06 18:34:34 nartallo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+06.12.2000 - RN, tag xraytel-V02-00-10
+             Removed old XrayTelPrimaryGeneratorMessenger.cc and .hh
+             files from cvs
+
+30.11.2000 - RN, tag xraytel-V02-00-09
+             Removed longsection.macro file from cvs
+
+30.11.2000 - RN, tag xraytel-V02-00-08
+             Implemented AnalysisManager class and related histograming 
+             code.  Analysis is limited to the Lizard package for now.
+
+16.11.2000 - RN, tag xraytel-V02-00-07
+             Removed analysis directory
+
+16.11.2000 - RN, tag xraytel-V02-00-06 
+             Replace standard gun with General Particle Source
+             Remove all code related to old Histogram implementation
+             Modified all macros to work with GPS
+             Cleaned GNUmakefile
+             Started drafting README file
+
+08.11.2000 - RN, tag xraytel-V02-00-05 
+             Tydied up macros
+             Small bug fixes to compile on Linux, SUN and DEC platforms
+
+06.11.2000 - RN, tag xraytel-V02-00-04 
+             Tydied up code added headers
+
+18.10.2000 - RN, tag xraytel-V02-00-03
+	     Modified geometry and PrimaryGenerator to speed up events
+	     Modified SteppingAction.cc to call histoManager analyser
+	     Modified Histogram.cc to do all the histo work
+
+17.10.2000 - RN, tag xraytel-V02-00-02
+             Added histograming capability
+	     Added XrayTelHistogram.hh, XrayTelHistogram.cc
+	     Modified: GNUmakefile
+		       XrayTel.cc
+		       XrayTelSteppingAction.hh
+		       XrayTelSteppingAction.cc
+
+17.10.2000 - RN, tag xraytel-V02-00-01
+             Tydied up geometry
+             Add all physics processes to XrayTelPhysicsList.cc
+             Modified *.hh accordingly
+
+06.10.2000 - RN, tag xraytel-V02-00-00
+             First submission of XrayTel advanced example.
+

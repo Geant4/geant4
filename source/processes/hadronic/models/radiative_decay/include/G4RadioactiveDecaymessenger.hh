@@ -73,6 +73,7 @@ public: //with description
   G4UIcmdWithAString             *sourcetimeprofileCmd;
   G4UIcmdWithAString             *decaybiasprofileCmd;
   G4UIcmdWithABool               *analoguemcCmd;
+  G4UIcmdWithABool               *fbetaCmd;
   G4UIcmdWithABool               *brbiasCmd;
   G4UIcmdWithAnInteger           *splitnucleiCmd;
   G4UIcmdWithAnInteger           *verboseCmd;

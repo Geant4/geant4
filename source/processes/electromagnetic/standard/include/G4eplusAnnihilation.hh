@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4eplusAnnihilation.hh,v 1.3 1999/12/17 18:26:12 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //      ------------ G4eplusAnnihilation process ------
 //                   by Michel Maire, 7 july 1996

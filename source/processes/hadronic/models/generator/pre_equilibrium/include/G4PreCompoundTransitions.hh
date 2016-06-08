@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -47,10 +47,10 @@ private:
 
 
 public:
-  G4double GetTotalProbability()
+  G4double GetTotalProbability(void)
   { return TransitionProb1+TransitionProb2+TransitionProb3; }
   
-  G4int GetDeltaNExciton();
+  G4Fragment PerformTransition(const G4Fragment & aFragment);
   
 private:
 	

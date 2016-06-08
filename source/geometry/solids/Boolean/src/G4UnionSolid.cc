@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.9 2000/06/24 14:27:42 japost Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4UnionSolid.cc,v 1.11 2000/11/20 17:56:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -173,7 +173,6 @@ G4double
 G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
                                    const G4ThreeVector& v  ) const 
 {
-  G4double dist ;
   if( Inside(p) == kInside )
   {
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v),  point p is inside") ;
@@ -230,7 +229,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
   else
   {
     EInside positionA = fPtrSolidA->Inside(p) ;
-    EInside positionB = fPtrSolidB->Inside(p) ;
+    // EInside positionB = fPtrSolidB->Inside(p) ;
 
     if( positionA != kOutside )
     { 
@@ -286,7 +285,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
 G4double 
 G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const 
 {
-  G4double distout;
+  G4double distout = kInfinity;
   if( Inside(p) == kOutside )
   {
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p),  point p is outside") ;
@@ -304,7 +303,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
        (positionA == kSurface && positionB == kInside  )     )
     {     
       distout= G4std::max(fPtrSolidA->DistanceToOut(p),
-		   fPtrSolidB->DistanceToOut(p) ) ;
+		          fPtrSolidB->DistanceToOut(p) ) ;
     }
     else
     {
@@ -319,6 +318,15 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
     }
   }
   return distout;
+}
+
+//////////////////////////////////////////////////////////////
+//
+//
+
+G4GeometryType G4UnionSolid::GetEntityType() const 
+{
+  return G4String("G4UnionSolid");
 }
 
 //////////////////////////////////////////////////////////////

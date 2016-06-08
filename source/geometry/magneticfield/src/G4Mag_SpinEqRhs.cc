@@ -12,9 +12,9 @@
 #include "globals.hh"
 
 void
-G4Mag_SpinEqRhs::SetChargeMomentumMass(const G4double particleCharge, // in e+ units
-                                       const G4double MomentumXc,
-                                       const G4double mass)
+G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
+                                       G4double MomentumXc,
+                                       G4double mass)
 {
    //  To set fCof_val 
    G4Mag_EqRhs::SetChargeMomentumMass(particleCharge, MomentumXc, mass);

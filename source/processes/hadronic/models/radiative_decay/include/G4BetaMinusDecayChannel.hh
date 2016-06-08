@@ -41,9 +41,14 @@ class G4BetaMinusDecayChannel : public G4NuclearDecayChannel
                              G4double theBR,
                              G4double theEndPointEnergy=0.0,
                              G4double theDaughterExcitation=0.0,
-                             G4double theFFN=1.0):
+                             G4double theFFN=1.0,
+			     G4bool   theBetaSimple = false,
+			     RandGeneral* theRandEnergy = NULL):
       G4NuclearDecayChannel (BetaMinus, Verbose, theParentNucleus, theBR,
-                             theFFN, theEndPointEnergy,
+                             theFFN, 
+			     theBetaSimple,
+			     theRandEnergy,
+			     theEndPointEnergy,
                              theParentNucleus->GetBaryonNumber(),
                              int(theParentNucleus->GetPDGCharge()/eplus)+1,
                              theDaughterExcitation, "e-", "anti_nu_e")

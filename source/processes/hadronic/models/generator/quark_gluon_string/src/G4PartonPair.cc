@@ -15,7 +15,5 @@ G4PartonPair::G4PartonPair(const G4PartonPair &right)
 
 G4PartonPair::~G4PartonPair()
     {
-    delete Parton1;
-    delete Parton2;
     }
  

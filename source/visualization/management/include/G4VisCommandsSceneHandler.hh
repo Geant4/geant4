@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisCommandsSceneHandler.hh,v 1.5 1999/12/16 17:19:16 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 

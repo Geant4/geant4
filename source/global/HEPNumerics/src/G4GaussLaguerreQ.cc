@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussLaguerreQ.cc,v 1.2 1999/11/16 17:31:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4GaussLaguerreQ.cc,v 1.3 2000/11/20 17:26:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #include "G4GaussLaguerreQ.hh"
 
@@ -28,7 +28,8 @@ G4GaussLaguerreQ::G4GaussLaguerreQ( function pFunction,
    const G4double tolerance = 1.0e-10 ;
    const G4int maxNumber = 12 ;
    G4int i, j, k ;
-   G4double newton, newton1, temp1, temp2, temp3, temp, cofi ;
+   G4double newton=0.;
+   G4double newton1, temp1, temp2, temp3, temp, cofi ;
 
    fNumber = nLaguerre ;
    fAbscissa = new G4double[fNumber] ;

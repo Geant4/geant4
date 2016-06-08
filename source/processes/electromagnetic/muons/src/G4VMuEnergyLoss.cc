@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.5 2000/06/13 16:36:25 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VMuEnergyLoss.cc,v 1.7 2000/10/30 07:17:30 urban Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
@@ -24,6 +24,7 @@
 // corrections by L.Urban on 27/05/98 (other corrs come soon!)
 // cleanup  L.Urban on 23/10/98
 // corrections due to new e.m. structure L.Urban 10/02/00
+// signature in GetLossWithFluct changed L.Urban 30/10/00
 // --------------------------------------------------------------
  
 
@@ -432,7 +433,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
 
   {
-    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+    finalT = E-GetLossWithFluct(aParticle,aMaterial,1.,MeanLoss,Step);
     if (finalT < 0.) finalT = 0. ;
   }
 

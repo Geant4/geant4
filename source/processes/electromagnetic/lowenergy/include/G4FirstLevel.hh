@@ -19,7 +19,11 @@
 //      Creation date: 1 Giugno 1999
 //
 //      Modifications: 
-//      
+// 
+// Class description:
+// Utility for Low Energy e.m. e/photon processes
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // -------------------------------------------------------------------
 
 #ifndef G4FIRSTLEVEL_HH

@@ -5,21 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.5 2000/06/13 16:49:57 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VeEnergyLoss.cc,v 1.8 2000/10/30 07:01:09 urban Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //  
-// -----------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4VeEnergyLoss physics process -----------
-//                by Laszlo Urban, 20 March 1997 
-// **************************************************************
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
-// It calculates the energy loss of e+/e-.
+
 // --------------------------------------------------------------
 // 18/11/98  , L. Urban
 //  It is a modified version of G4VeEnergyLoss:
@@ -28,13 +17,12 @@
 // 28/04/99  bug fixed (unit independece now),L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
+
  
 #include "G4VeEnergyLoss.hh"
-#include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -49,10 +37,6 @@ G4PhysicsTable** G4VeEnergyLoss::RecorderOfElectronProcess =
 G4PhysicsTable** G4VeEnergyLoss::RecorderOfPositronProcess =
                                            new G4PhysicsTable*[10];
                                            
-G4double         G4VeEnergyLoss::MinDeltaCutInRange = 0.100*mm ;
-G4double*        G4VeEnergyLoss::MinDeltaEnergy     = NULL   ;
-G4bool		 G4VeEnergyLoss::setMinDeltaCutInRange = false ;
-
 G4PhysicsTable*  G4VeEnergyLoss::theDEDXElectronTable         = NULL;
 G4PhysicsTable*  G4VeEnergyLoss::theDEDXPositronTable         = NULL;
 G4PhysicsTable*  G4VeEnergyLoss::theRangeElectronTable        = NULL;
@@ -76,8 +60,6 @@ G4double G4VeEnergyLoss::UpperBoundEloss = 100.*TeV ;
 G4int    G4VeEnergyLoss::NbinEloss = 150 ;
 G4double G4VeEnergyLoss::RTable,G4VeEnergyLoss::LOGRTable;
 
-G4EnergyLossMessenger* G4VeEnergyLoss::eLossMessenger         = NULL;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 // constructor and destructor
@@ -92,11 +74,7 @@ G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
      c1N(2.86e-23*MeV*mm*mm),
      c2N(c1N*MeV/10.),
      Ndeltamax(100)
-{
- //create (only once) EnergyLoss messenger 
- if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
-
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -106,7 +84,6 @@ G4VeEnergyLoss::~G4VeEnergyLoss()
        {
          theLossTable->clearAndDestroy();
          delete theLossTable; theLossTable = NULL;
-///         if(MinDeltaEnergy) delete MinDeltaEnergy;
        }
 }
 
@@ -301,7 +278,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
      if(!setMinDeltaCutInRange )
      MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10. ;
 
-     if(&aParticleType==G4Electron::Electron())
+     if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
      {
        G4cout << G4endl;
        G4cout.precision(5) ;
@@ -314,8 +291,12 @@ void G4VeEnergyLoss::BuildDEDXTable(
 
        if(MinDeltaEnergy) delete MinDeltaEnergy ;
        MinDeltaEnergy = new G4double [numOfMaterials] ; 
+       if(LowerLimitForced) delete LowerLimitForced ;
+       LowerLimitForced = new G4bool [numOfMaterials] ;
        for(G4int mat=0; mat<numOfMaterials; mat++)
        {
+         LowerLimitForced[mat] = false ;
+         
          MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                G4Electron::Electron(),MinDeltaCutInRange,
                                           (*theMaterialTable)(mat)) ;
@@ -326,10 +307,14 @@ void G4VeEnergyLoss::BuildDEDXTable(
 	 if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
 	     MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
 
-	 if(&aParticleType==G4Electron::Electron())
+	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
          {
 	   G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
-	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV << G4endl;
+	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+           if(LowerLimitForced[mat])
+              G4cout << "  lower limit forced." << G4endl;
+           else
+              G4cout << G4endl ; 
          }
 
        }
@@ -436,7 +421,9 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
                      G4Electron::Electron(),safety,aMaterial) ;   
 
         // absolute lower limit for T0 
-        if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
+     //   if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
+        if((T0<MinDeltaEnergyNow)||(LowerLimitForced[aMaterial->GetIndex()]))
+                              T0=MinDeltaEnergyNow ;
  // ..................................................................
 
         x1=stepData.GetPreStepPoint()->GetPosition().x();
@@ -597,7 +584,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   //now the loss with fluctuation
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
-    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+    finalT = E-GetLossWithFluct(aParticle,aMaterial,1.,MeanLoss,Step);
     if (finalT < 0.) finalT = 0. ;
   }
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PersistencyManager.cc,v 1.16 1999/12/15 14:51:27 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // class G4PersistencyManager 
 //

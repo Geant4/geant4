@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPVReplica.ddl,v 1.4 1999/12/15 14:51:23 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PPVReplica.ddl,v 1.5 2000/11/02 12:42:11 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4PPVReplica
@@ -19,10 +19,12 @@
 #ifndef G4PPVREPLICA_DDL
 #define G4PPVREPLICA_DDL
 
+#include "G4Pglobals.hh"
+
 #include "G4PersistentTypes.hh"
 #include "G4PersistentSchema.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4RotationMatrix.hh"
+// #include "G4RotationMatrix.hh"
 
 #include "G4PVPhysicalVolume.hh"
 

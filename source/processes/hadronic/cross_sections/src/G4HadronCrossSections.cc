@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronCrossSections.cc,v 1.2 1999/12/15 14:52:06 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections

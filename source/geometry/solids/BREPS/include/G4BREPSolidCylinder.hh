@@ -5,22 +5,54 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.2 1999/12/15 14:49:55 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4BREPSolidCylinder.hh,v 1.4 2000/11/08 14:21:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// Class G4BREPSolidCylinder
+//
+// Class description:
+//
+//  Definition of a generic BREP cylinder:
+//
+//  G4BREPSolidCylinder(const G4String& name,
+//                      const G4ThreeVector& origin,
+//                      const G4ThreeVector& axis,
+//                      const G4ThreeVector& direction,		      
+//                            G4double radius,
+//                            G4double length)
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __G4BREPSolidCylinder
 #define __G4BREPSolidCylinder
+
 #include "G4BREPSolid.hh"
 
 class G4BREPSolidCylinder : public G4BREPSolid
 {
-public:
-  G4BREPSolidCylinder(G4String name,
-		      const G4ThreeVector&,
-		      const G4ThreeVector&,
-		      const G4ThreeVector&,		      
-		      const G4double&,
-		      const G4double&);
+
+ public: // with description
+
+  G4BREPSolidCylinder(const G4String& name,
+		      const G4ThreeVector& origin,
+		      const G4ThreeVector& axis,
+		      const G4ThreeVector& direction,		      
+		      G4double radius,
+		      G4double length);
+    // Constructor defining the cylinder through planes
+    // and circular surfaces.
+
+  ~G4BREPSolidCylinder();
+    // Empty destructor.
+
+ private:
+
+    G4BREPSolidCylinder(const G4BREPSolidCylinder&);
+    G4BREPSolidCylinder& operator=(const G4BREPSolidCylinder&);
+      // Private copy constructor and assignment operator.
+
 };
 
 #endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryCreator.hh,v 1.3 2000/01/21 13:45:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4GeometryCreator.hh,v 1.5 2000/11/10 17:44:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryCreator
@@ -41,23 +41,25 @@ class G4GeometryCreator
 
   // Constructor & destructor
   
-    G4GeometryCreator() {;}
-    virtual ~G4GeometryCreator() {;}
+    G4GeometryCreator();
+    virtual ~G4GeometryCreator();
 
   // Member functions
   
+    virtual G4bool operator==(const G4GeometryCreator&);
+
     virtual void CreateG4Geometry(STEPentity&)=0;
     virtual void CreateSTEPGeometry(void* =0)=0;
 
-    virtual void* GetCreatedObject() { return createdObject; }
+    virtual void* GetCreatedObject();
   
-    virtual G4String Name()=0;
-    virtual G4bool operator==(const G4GeometryCreator&) { return 0; }
-    virtual STEPattribute* GetNamedAttribute(G4String&,STEPentity&);
-    virtual STEPentity* GetNamedEntity(G4String&,STEPentity&);  
+    virtual const char* Name() const=0;
+    virtual STEPattribute* GetNamedAttribute(const G4String&, STEPentity&);
+    virtual STEPentity* GetNamedEntity(const G4String&, STEPentity&);  
+    InstMgr* GetInstanceManager() const;
     G4int GetNextId() { objectId+=10; return objectId; }
 
-  // Members
+  protected:
     
     static G4int objectId;
     static InstMgr instanceManager;

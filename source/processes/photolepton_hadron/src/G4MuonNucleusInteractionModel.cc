@@ -1,3 +1,14 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4MuonNucleusInteractionModel.cc,v 1.3 2000/08/03 09:06:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// --------------------------------------------------------------
 // G4MuonNucleusInteractionModel.cc
 //
 //     M.Takahata (Makoto.Takahata@cern.ch)
@@ -200,7 +211,7 @@
     // virtual photon is exchanged with a pion of same Q2
     // select pi+/pi- randomly and generate pion track
     G4ParticleDefinition* pdPion;
-    if(RandFlat::shootBit())
+    if(RandBit::shootBit())
       pdPion = G4PionMinus::PionMinusDefinition();
     else
       pdPion = G4PionPlus::PionPlusDefinition();

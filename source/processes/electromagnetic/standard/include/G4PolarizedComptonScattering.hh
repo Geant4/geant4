@@ -5,21 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolarizedComptonScattering.hh,v 1.2 1999/12/15 14:51:48 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PolarizedComptonScattering.hh,v 1.4 2000/11/17 15:03:16 maire Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1995
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
-//
-// --------- G4PolarizedComptonScattering physics process ------
+// --------- G4PolarizedComptonScattering physics process -----
 //                   by Vicente Lara, March 1998
-// ************************************************************
 //
 // ------------------------------------------------------------
+
+// class description
+//
+// inherit from G4ComptonScattering
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4PolarizedComptonScattering_h
 #define G4PolarizedComptonScattering_h 1
@@ -27,19 +27,24 @@
 #include "G4ComptonScattering.hh"
 #include "G4EnergyLossTables.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4PolarizedComptonScattering : public G4ComptonScattering
 {  
-public:
+ public:  // with description
   
   G4PolarizedComptonScattering(const G4String& processName = "polarCompt");
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
 
-private:
+ private:
   
   G4ThreeVector SetNewPolarization(G4double, G4double,
   				   G4double, G4double,
   				   G4ThreeVector& );
+
+  G4double SetPhi(G4double, G4double, G4double, G4double);
+
 
   void SystemOfRefChange(G4ThreeVector&, G4ThreeVector&, G4ThreeVector&, 
                          G4ThreeVector&);
@@ -49,7 +54,6 @@ private:
   G4PolarizedComptonScattering(const G4PolarizedComptonScattering& );
 
 };
-
   
 #endif
  

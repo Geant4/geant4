@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fragment.cc,v 1.6 1999/12/15 17:51:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Fragment.cc,v 1.8.2.1 2000/11/23 08:31:22 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -198,12 +198,18 @@ G4std::ostream& operator << (G4std::ostream &out, const G4Fragment &theFragment)
 
 G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) const
 {
-	G4double U = value.m() - GetGroundStateMass();
+	G4double theMaxGroundStateMass = theZ*G4Proton::Proton()->GetPDGMass()+
+	                       (theA-theZ)*G4Neutron::Neutron()->GetPDGMass();
+	G4double U = value.m() - G4std::min(theMaxGroundStateMass, GetGroundStateMass());
 	if( U < 0.0 )
 		if( U > -10.0 * eV )
 			U = 0.0;
 		else 
-			G4Exception( "G4Fragment::G4Fragment Excitation Energy < 0!" );
+		{
+			G4cerr << "G4Fragment::G4Fragment Excitation Energy ="
+			       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl;
+			U=0.0;
+		}
 	return U;
 }
 

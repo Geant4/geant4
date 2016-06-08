@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RayTrajectory.cc,v 1.4 2000/03/09 15:36:38 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //

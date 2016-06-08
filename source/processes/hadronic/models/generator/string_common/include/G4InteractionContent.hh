@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InteractionContent.hh,v 1.2 1999/12/15 14:52:45 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4InteractionContent.hh,v 1.3 2000/09/18 07:40:44 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #ifndef G4InteractionContent_h
@@ -52,8 +52,8 @@ class G4InteractionContent
 
       void SplitHadrons();
 
-private:
-      G4InteractionContent();
+public:
+      G4InteractionContent(){}
       G4InteractionContent(const G4InteractionContent &right);
       const G4InteractionContent & operator=(const G4InteractionContent &right);
 

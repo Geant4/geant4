@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.38 2000/06/22 02:38:12 pia Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4LowEnergyIonisation.cc,v 1.40 2000/09/20 16:49:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // -------------------------------------------------------------
@@ -14,7 +14,7 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      ---------- G4LowEnergyIonisation low energy modifications -----------
+//      --- G4LowEnergyIonisation physics process for electrons
 //                by Alessandra Forti May 1999  
 // **************************************************************
 // - 11.04.2000 VL
@@ -47,6 +47,7 @@
 // Modified PostStepDoIt to insert sampling with EEDL data A. Forti
 // Added SelectRandomAtom A. Forti
 // Added map of the elements A. Forti
+// 20/09/00 update fluctuations V.Ivanchenko
 //                                                                 
 // --------------------------------------------------------------
  
@@ -1761,6 +1762,8 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
            comments += "with implementation of the continuous dE/dx part.";  
            comments += "\n At present it can be used for electrons ";
            comments += " in the energy range [250eV,100GeV]";
+           comments += 
+  "\n the process must work with G4LowEnergyBremsstrahlung";
   G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 
 }

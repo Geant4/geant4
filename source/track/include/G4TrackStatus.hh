@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TrackStatus.hh,v 1.2 1999/11/07 16:32:04 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //---------------------------------------------------------------

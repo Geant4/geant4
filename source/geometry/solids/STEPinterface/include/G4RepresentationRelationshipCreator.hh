@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RepresentationRelationshipCreator.hh,v 1.3 2000/02/25 16:36:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RepresentationRelationshipCreator.hh,v 1.4 2000/11/09 16:35:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4RepresentationRelationshipCreator
@@ -39,7 +39,7 @@ class G4RepresentationRelationshipCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
-    G4String Name() { return "Representation_Relationship"; }
+    const char* Name() const { return "Representation_Relationship"; }
     static G4RepresentationRelationshipCreator GetInstance() { return csc; }
 
   // Members

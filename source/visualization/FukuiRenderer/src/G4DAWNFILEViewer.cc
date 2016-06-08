@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DAWNFILEViewer.cc,v 1.9 2000/05/15 07:48:27 stanaka Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.

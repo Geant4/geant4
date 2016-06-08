@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CircularCurve.cc,v 1.2 1999/12/15 14:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4CircularCurve.cc,v 1.5 2000/11/08 14:22:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4CircularCurve.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4CircularCurve.hh"
 #include "G4Ellipse.hh"
@@ -15,6 +21,41 @@
 // G4CircularCurve
 G4CircularCurve::G4CircularCurve() {}
 G4CircularCurve::~G4CircularCurve() {}
+
+G4CircularCurve::G4CircularCurve(const G4CircularCurve& right)
+  : radius(right.radius)
+{
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4CircularCurve&
+G4CircularCurve::operator=(const G4CircularCurve& right)
+{
+  if (&right == this) return *this;
+
+  radius    = right.radius;
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+
+  return *this;
+}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -65,3 +106,39 @@ G4bool G4CircularCurve::Tangent(G4CurvePoint& cp, G4Vector3D& v)
   return true;
 }
 
+G4double G4CircularCurve::GetPMax() const
+{
+  return twopi;
+}
+
+G4Point3D G4CircularCurve::GetPoint(G4double param) const
+{
+  return G4Point3D( position.GetLocation()+radius*
+    ( cos(param)*position.GetPX() + sin(param)*position.GetPY() ) );
+}
+
+G4double G4CircularCurve::GetPPoint(const G4Point3D& pt) const
+{
+  G4Point3D ptLocal= position.GetToPlacementCoordinates()*pt;
+  G4double angle= atan2(ptLocal.y(), ptLocal.x());
+  return (angle<0)? angle+twopi: angle;
+}
+
+////////////////////////////////////////////////////////////////////////////
+
+/*
+#include "G4CurveRayIntersection.hh"
+
+void G4CircularCurve::IntersectRay2D(const G4Ray& ray,
+				     G4CurveRayIntersection& is)
+{
+  G4Exception("G4CircularCurve is always 3D!");
+  exit(1);
+}
+*/
+
+G4int G4CircularCurve::IntersectRay2D(const G4Ray& ray)
+{
+  G4Exception("G4CircularCurve is always 3D!");
+  return 0;
+}

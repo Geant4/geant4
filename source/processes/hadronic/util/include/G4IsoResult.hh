@@ -3,6 +3,11 @@
 
 #include "globals.hh"
 #include "G4Nucleus.hh"
+// Class Description
+// Communication class for isotope production; 
+// Only interesting, if you want to implement your own isotope production model.
+// Class Description - End
+
 
 class G4IsoResult
 {

@@ -35,6 +35,14 @@ G4RadioactiveDecaymessenger::G4RadioactiveDecaymessenger
   analoguemcCmd->SetGuidance("false: variance reduction method; true: analogue method");
   analoguemcCmd->SetParameterName("AnalogueMC",true);
   analoguemcCmd->SetDefaultValue(true);
+  //
+  // The next command contols whether beta decay will be treated faithfully or 
+  // in fast mode
+  //
+  fbetaCmd = new G4UIcmdWithABool ("/grdm/fBeta",this);
+  fbetaCmd->SetGuidance("false: use 3-body decay, true: use histogram method");
+  fbetaCmd->SetParameterName("fBeta",true);
+  fbetaCmd->SetDefaultValue(false);
 
   //
   //
@@ -131,6 +139,7 @@ G4RadioactiveDecaymessenger::~G4RadioactiveDecaymessenger ()
   delete sourcetimeprofileCmd;
   delete decaybiasprofileCmd;
   delete analoguemcCmd;
+  delete fbetaCmd;
   delete brbiasCmd;
   delete splitnucleiCmd;
   delete verboseCmd;
@@ -151,6 +160,12 @@ void G4RadioactiveDecaymessenger::SetNewValue (G4UIcommand *command, G4String ne
     G4std::istrstream is((char*)t);
     is >> vl;
     theRadioactiveDecayContainer->SetAnalogueMonteCarlo(vl!=0);}
+  else if  (command==fbetaCmd) {
+    G4int vl;
+    const char* t = newValues;
+    G4std::istrstream is((char*)t);
+    is >> vl;
+    theRadioactiveDecayContainer->SetFBeta(vl!=0);}
   else if  (command==avolumeCmd) {theRadioactiveDecayContainer->
 				   SelectAVolume(newValues);}
   else if  (command==deavolumeCmd) {theRadioactiveDecayContainer->

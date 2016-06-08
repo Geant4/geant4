@@ -1,13 +1,30 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4CompositeCurve.cc,v 1.8 2000/11/20 17:54:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4CircularCurve.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4CompositeCurve.hh"
 #include "G4Line.hh"
 
 
 G4CompositeCurve::G4CompositeCurve(){}
+
 G4CompositeCurve::G4CompositeCurve(const G4Point3DVector& vertices)
 {
   G4CurveVector cv;
-  G4Line* l;
-  for (G4int i=0; i<vertices.length(); i++) 
+  for (size_t i=0; i<vertices.length(); i++) 
   {
     G4Point3D p1= vertices[i];
     G4Point3D p2= vertices[(i+1) % vertices.length()];
@@ -21,14 +38,21 @@ G4CompositeCurve::G4CompositeCurve(const G4Point3DVector& vertices)
   Init(cv);
 }
 
-G4CompositeCurve::~G4CompositeCurve(){}
+G4CompositeCurve::~G4CompositeCurve()
+{
+  segments.clearAndDestroy();
+}
 
+G4String G4CompositeCurve::GetEntityType() const 
+{
+  return G4String("G4CompositeCurve");
+}
 
 G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
 {
   G4CurveVector newSegments;
   
-  for (G4int i=0; i<segments.entries(); i++) 
+  for (size_t i=0; i<segments.entries(); i++) 
   {
     G4Curve* c= segments[i]->Project(tr);
     if (c==0) 
@@ -44,6 +68,29 @@ G4Curve* G4CompositeCurve::Project(const G4Transform3D& tr)
   r->Init(newSegments);
   return r;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+
+G4double G4CompositeCurve::GetPMax() const
+{
+  G4Exception("G4CompositeCurve::GetPMax");
+  return 0;
+}
+
+G4Point3D G4CompositeCurve::GetPoint(G4double param) const
+{
+  G4Exception("G4CompositeCurve::GetPoint");
+  // Fake return value
+  return G4Point3D();
+}
+
+G4double G4CompositeCurve::GetPPoint(const G4Point3D& pt) const
+{
+  G4Exception("G4CompositeCurve::GetPPoint");
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////
 
 /*
 void G4CompositeCurve::IntersectRay2D(const G4Ray& ray,
@@ -66,18 +113,19 @@ void G4CompositeCurve::IntersectRay2D(const G4Ray& ray,
 
 G4int G4CompositeCurve::IntersectRay2D(const G4Ray& ray)
 {
-  G4int nbinter = 0, temp = 0;
+  G4int nbinter = 0;
+  G4int temp = 0;
  
-  for (G4int i=0; i<segments.entries(); i++) 
+  for (size_t i=0; i<segments.entries(); i++) 
   {
     G4Curve& c= *(segments(i));
     temp = c.IntersectRay2D(ray);
 
     // test if the point is on the composite curve
-    if( temp==999 )
-      return 999;
-    else
-      nbinter+= temp; 
+    if( temp == 999 )
+       return 999;
+     else
+       nbinter+= temp; 
   }
  
   return nbinter;
@@ -99,7 +147,7 @@ void G4CompositeCurve::InitBounded()
   const G4BoundingBox3D* b= segments[0]->BBox();
   bBox.Init(b->GetBoxMin(), b->GetBoxMax());
   
-  for (G4int i=1; i<segments.entries(); i++) 
+  for (size_t i=1; i<segments.entries(); i++) 
   {
     b= segments[i]->BBox();
     bBox.Extend(b->GetBoxMin());
@@ -108,19 +156,3 @@ void G4CompositeCurve::InitBounded()
   
   // init for efficient parameter <-> 3D point conversions
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

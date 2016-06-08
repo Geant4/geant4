@@ -5,9 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.6 2000/02/25 15:58:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4BSplineSurface.hh,v 1.9 2000/11/08 14:22:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// Class G4BSplineSurface
+//
+// Class description:
+// 
+// Definition of a generic BSpline surface.
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __BSPLINESURFACE_H
 #define __BSPLINESURFACE_H
 
@@ -19,65 +29,52 @@
 
 class G4BSplineSurface : public G4Surface
 {
-public:
+
+ public:  // with description
 
   G4BSplineSurface();
-  G4BSplineSurface(const char*, G4Ray&);
-  G4BSplineSurface(const  G4BSplineSurface &tmp);
-  G4BSplineSurface(G4int, G4int, G4KnotVector&,  G4KnotVector&, 
-		   G4ControlPoints&);    
-  ~G4BSplineSurface();
+  G4BSplineSurface(const char* nurbfilename, G4Ray& rayref);
+  G4BSplineSurface(G4int u, G4int v, G4KnotVector& u_kv, G4KnotVector& v_kv, 
+		   G4ControlPoints& cp);    
+  virtual ~G4BSplineSurface();
+    // Constructors & destructor.
 
-  int Intersect(const G4Ray&);
+  G4int Intersect(const G4Ray&);
   void CalcBBox();
+    // Finds the bounds of the b-spline surface.
+    // The bounding box is used for a preliminary check of intersection.
   
-  G4double GetUHit()  { return Hit->u; }  
-  G4double GetVHit()  { return Hit->v; } 
+  inline G4double GetUHit() const;
+  inline G4double GetVHit() const;
     	 
-  inline int MyType()const {return 2;}
-  
   G4double ClosestDistanceToPoint(const G4Point3D&);
 
-  inline void Reset()
-  {
-    active=1;
-    bezier_list.EmptyList();
-    projected_list.EmptyList();
-    Intersected=0;
-    distance = kInfinity;
-  }
+  inline void Reset();
 
-  // get for controlpoints
-  G4int     GetRows()                         { return ctl_points->GetRows(); }
-  G4int     GetCols()                         { return ctl_points->GetCols(); }
-  G4Point3D GetControlPoint(G4int a, G4int b) { return ctl_points->Get3D(a,b);}
-    
-    
+  inline G4int GetRows() const;
+  inline G4int GetCols() const;
+  inline G4Point3D GetControlPoint(G4int a, G4int b) const;
+    // Accessors for control points.
+
+public:
+ 
+  inline G4int MyType() const;
+
 private:
-  
-  G4SurfaceList bezier_list;
-  G4SurfaceList projected_list;
-  short dir;
-  int order[2];
-  G4KnotVector *u_knots;
-  G4KnotVector *v_knots;
-  G4KnotVector *tmp_knots;
-  G4ControlPoints *ctl_points;
-  G4UVHit* Hit;
-  G4UVHit* first_hit;
-  int ord;
-  int k_index;
-  G4double param;
-  int Rational;
-  
+
+  G4BSplineSurface(const G4BSplineSurface&);
+  G4BSplineSurface& operator=(const G4BSplineSurface&);
+    // Private copy constructor and assignment operator.
+
   void FindIntersections(const G4Ray&);
 
-  inline int GetOrder(int direction)             { return order[direction]; }
-  inline void PutOrder(int direction, int value) { order[direction]=value;  }
+  inline G4int GetOrder(G4int direction) const;
+  inline void PutOrder(G4int direction, G4int value);
 
   void AddHit(G4double u, G4double v);
   void ProjectNURBSurfaceTo2D( const G4Plane& ,const G4Plane&,
-			       G4ProjectedSurface*);
+			       register G4ProjectedSurface*);
+    // Projects the nurb surface so that the z-axis = ray. 
 
   G4ProjectedSurface* CopyToProjectedSurface(const G4Ray&);
   G4Point3D  FinalIntersection();
@@ -88,15 +85,30 @@ private:
   // G4Point3D  Evaluate();  
   G4Point3D  BSEvaluate();
 
-  G4PointRat& InternalEvalCrv(int i, G4ControlPoints *crv);
+  G4PointRat& InternalEvalCrv(G4int i, G4ControlPoints *crv);
   
   G4Point3D   Evaluation(const G4Ray&);
 
-  G4Vector3D  SurfaceNormal(const G4Point3D& Pt)const
-  {
-    return G4Vector3D(0,0,0);
-  }
+  inline G4Vector3D  SurfaceNormal(const G4Point3D& Pt) const;
   
+private:
+  
+  G4SurfaceList bezier_list;
+  G4SurfaceList projected_list;
+  short dir;
+  G4int order[2];
+  G4KnotVector *u_knots;
+  G4KnotVector *v_knots;
+  G4KnotVector *tmp_knots;
+  G4ControlPoints *ctl_points;
+  G4UVHit* Hit;
+  G4UVHit* first_hit;
+  G4int ord;
+  G4int k_index;
+  G4double param;
+  G4int Rational;
 }; 
+
+#include "G4BSplineSurface.icc"
 
 #endif

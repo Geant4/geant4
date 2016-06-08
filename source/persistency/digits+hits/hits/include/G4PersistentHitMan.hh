@@ -5,10 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentHitMan.hh,v 1.5 1999/11/28 21:54:15 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PersistentHitMan.hh,v 1.6 2000/12/15 08:04:14 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// class G4PersistentHitMan 
+
+// Class Description:
 //
 // A Class responsible for registring HitsCollection
 // during event tracking.
@@ -18,6 +19,7 @@
 //
 // This class itself is not persistent-capable. 
 //
+
 // Member functions:
 // =================
 //  static G4PersistentHitMan* GetPersistentHitMan();
@@ -48,10 +50,13 @@
 class G4PersistentHitMan 
  : public G4VPersistentSubMan, public G4VPersistentSubDbMan
 {
-  public:
+  public: // with description
       static G4PersistentHitMan* GetPersistentHitMan();
+      // returns a pointer to singleton instance of this class.
       static G4PersistentHitMan* get_PersistentHitManIfExist();
+      // returns a pointer to singleton instance of this class.
 
+  public:
       G4PersistentHitMan();
       ~G4PersistentHitMan();
 
@@ -59,11 +64,16 @@ class G4PersistentHitMan
       static G4PersistentHitMan * f_PersistentHitMan;
       HepRef(G4PHCofThisEvent) f_CurrentPHCofThisEvent;
 
-  public:
+  public: // with description
       inline void SetCurrentPHCofThisEvent( HepRef(G4PHCofThisEvent) aPHC)
       { f_CurrentPHCofThisEvent = aPHC; };
+      // sets a smart pointer of the collection of hits collections
+      // of this event.  This method should be invoked by user
+      // sensitive detector only once per event.
       inline HepRef(G4PHCofThisEvent) GetCurrentPHCofThisEvent()
       { return f_CurrentPHCofThisEvent; };
+      // returns a smart pointer of the collection of hits collections
+      // of this event.
 
 };
 

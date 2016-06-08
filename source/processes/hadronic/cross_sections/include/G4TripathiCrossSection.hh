@@ -2,6 +2,11 @@
 
 #ifndef G4TripathiCrossSection_h
 #define G4TripathiCrossSection_h
+// Class Description
+// Implementation of formulas in analogy to NASA technical paper 3621 by 
+// Tripathi, et al.; Cross-sections for ion ion scattering.
+
+// Class Description - End
 
 #include "globals.hh"
 #include "G4Proton.hh"

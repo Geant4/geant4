@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ExcitedMesonConstructor.hh,v 1.5 2000/02/27 07:48:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------

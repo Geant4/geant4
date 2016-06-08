@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polycone.hh,v 1.3 2000/06/27 16:20:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Polycone.hh,v 1.5 2000/11/02 16:54:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -18,8 +18,25 @@
 // Class description:
 //
 //   Class implementing a CSG type "PCON" Geant 3.21 volume,
-//   inherited from  class G4VCSGSolid.
+//   inherited from  class G4VCSGSolid:
+//
+//   G4Polycone( const G4String& name, 
+//               G4double phiStart,	   // initial phi starting angle
+//               G4double phiTotal,	   // total phi angle
+//               G4int numZPlanes,	   // number of z planes
+//               const G4double zPlane[],  // position of z planes
+//               const G4double rInner[],  // tangent distance to inner surface
+//               const G4double rOuter[])  // tangent distance to outer surface
+//
+//   G4Polycone( const G4String& name, 
+//               G4double phiStart,   // initial phi starting angle
+//               G4double phiTotal,   // total phi angle
+//               G4int    numRZ,      // number corners in r,z space
+//               const G4double r[],  // r coordinate of these corners
+//               const G4double z[])  // z coordinate of these corners
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4Polycone_hh
@@ -35,21 +52,22 @@ class G4VCSGface;
 
 class G4Polycone : public G4VCSGfaceted 
 {
-	public:
-	G4Polycone( G4String name, 
-                    const G4double phiStart,		// initial phi starting angle
-                    const G4double phiTotal,		// total phi angle
-                    const G4int numZPlanes,		// number of z planes
-                    const G4double zPlane[],		// position of z planes
-                    const G4double rInner[],		// tangent distance to inner surface
-                    const G4double rOuter[]  );		// tangent distance to outer surface
+  public:
 
-	G4Polycone( G4String name, 
-		    const G4double phiStart,		// initial phi starting angle
-                    const G4double phiTotal,		// total phi angle
-		    const G4int    numRZ,		// number corners in r,z space
-		    const G4double r[], 		// r coordinate of these corners
-		    const G4double z[]       ); 	// z coordinate of these corners
+	G4Polycone( const G4String& name, 
+                    G4double phiStart,		// initial phi starting angle
+                    G4double phiTotal,		// total phi angle
+                    G4int numZPlanes,		// number of z planes
+                    const G4double zPlane[],	// position of z planes
+                    const G4double rInner[],	// tangent distance to inner surface
+                    const G4double rOuter[]  );	// tangent distance to outer surface
+
+	G4Polycone( const G4String& name, 
+		    G4double phiStart,		// initial phi starting angle
+                    G4double phiTotal,		// total phi angle
+		    G4int    numRZ,		// number corners in r,z space
+		    const G4double r[], 	// r coordinate of these corners
+		    const G4double z[]       ); // z coordinate of these corners
 
 	virtual ~G4Polycone();
 	
@@ -70,7 +88,7 @@ class G4Polycone : public G4VCSGfaceted
 				const G4int n,
 				const G4VPhysicalVolume* pRep);
 
-	virtual G4GeometryType  GetEntityType() const { return G4String("G4Polycone"); }
+	G4GeometryType  GetEntityType() const { return G4String("G4Polycone"); }
 
         G4Polyhedron* CreatePolyhedron() const;
 	G4NURBS*      CreateNURBS() const;
@@ -82,9 +100,10 @@ class G4Polycone : public G4VCSGfaceted
 	inline G4double GetEndPhi()		const { return endPhi; }
 	inline G4bool	IsOpen()		const { return phiIsOpen; }
 	inline G4int	GetNumRZCorner()	const { return numCorner;}
-	inline G4PolyconeSideRZ GetCorner( const G4int index ) const { return corners[index]; }	
+	inline G4PolyconeSideRZ GetCorner(G4int index) const { return corners[index]; }	
 	
-	protected:
+  protected:
+
 	//
 	// Here are our parameters
 	//
@@ -121,9 +140,9 @@ class G4Polycone : public G4VCSGfaceted
 	//
 	// Generic initializer, called by all constructors
 	//
-	void Create( const G4double phiStart,	    // initial phi starting angle
-            	     const G4double phiTotal,	    // total phi angle
-		     G4ReduciblePolygon *rz    );   // r/z coordinate of these corners
+	void Create( G4double phiStart,	      // initial phi starting angle
+            	     G4double phiTotal,	      // total phi angle
+		     G4ReduciblePolygon *rz); // r/z coordinate of these corners
 
 	void CopyStuff( const G4Polycone &source );
 };

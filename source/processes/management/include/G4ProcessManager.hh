@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ProcessManager.hh,v 1.7 2000/03/02 01:16:05 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

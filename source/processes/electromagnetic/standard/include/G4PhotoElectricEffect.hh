@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PhotoElectricEffect.hh,v 1.5 1999/12/17 18:26:12 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //      ------------ G4PhotoElectricEffect physics process ------
 //                   by Michel Maire, April 1996

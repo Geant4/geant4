@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HCofThisEvent.hh,v 1.2.2.1.2.1 1999/12/07 20:47:47 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #ifndef G4HCofThisEvent_h

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonMinusAbsorptionAtRest.hh,v 1.3 1999/12/15 14:53:35 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4KaonMinusAbsorptionAtRest.hh,v 1.4 2000/12/14 08:53:15 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997
@@ -26,6 +26,11 @@
 
 #ifndef G4KaonMinusAbsorptionAtRest_h
 #define G4KaonMinusAbsorptionAtRest_h 1
+// Class Description
+// Process for nuclear absorption of K- at rest; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
 
 #include "g4rw/tpordvec.h"
 

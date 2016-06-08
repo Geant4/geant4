@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiProtonAnnihilationAtRest.hh,v 1.2 1999/12/15 14:53:35 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4AntiProtonAnnihilationAtRest.hh,v 1.3 2000/12/14 08:53:15 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998
@@ -25,6 +25,11 @@
 #ifndef G4AntiProtonAnnihilationAtRest_h
 #define G4AntiProtonAnnihilationAtRest_h 1
  
+// Class Description
+// Process for annihilation of p-bar at rest; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
 #include "globals.hh"
 #include "Randomize.hh" 
 #include "G4VRestProcess.hh"

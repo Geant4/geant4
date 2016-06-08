@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisCommandsCompound.hh,v 1.2 2000/05/15 11:49:02 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 

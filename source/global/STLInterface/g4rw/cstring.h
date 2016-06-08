@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: cstring.h,v 1.8 2000/06/26 16:25:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: cstring.h,v 1.9 2000/11/20 17:26:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -53,7 +53,7 @@ public:
   inline char& operator[](size_t);
   inline char  operator[](size_t) const;
 
-  inline int operator!() const;
+  inline G4int operator!() const;
 
   inline G4bool operator==(G4String) const;
   inline G4bool operator==(const char*) const;
@@ -118,8 +118,8 @@ public:
   inline operator const char*() const;
   inline G4SubString operator()(size_t, size_t);
 
-  inline int compareTo(const char*, caseCompare mode=exact);
-  inline int compareTo(const G4String&, caseCompare mode=exact);
+  inline G4int compareTo(const char*, caseCompare mode=exact);
+  inline G4int compareTo(const G4String&, caseCompare mode=exact);
 
   inline G4String& prepend (const char*);
   inline G4String& append (const G4String&);
@@ -133,8 +133,8 @@ public:
   inline G4String& remove(size_t);
   inline G4String& remove(size_t, size_t);
 
-  inline int first(char) const;
-  inline int last(char) const;
+  inline G4int first(char) const;
+  inline G4int last(char) const;
 
   inline G4bool contains(std_string) const;
   inline G4bool contains(char) const;
@@ -143,20 +143,20 @@ public:
   // stripType = 1 end
   // stripType = 2 both
   //
-  inline G4String strip (int stripType=trailing, char c=' ');
+  inline G4String strip (G4int stripType=trailing, char c=' ');
 
   inline void toLower ( void );
   inline void toUpper ( void );
 
   inline G4bool isNull() const;
 
-  inline size_t index (const char*, int pos=0) const; 
-  inline size_t index (char, int pos=0) const; 
+  inline size_t index (const char*, G4int pos=0) const; 
+  inline size_t index (char, G4int pos=0) const; 
   inline size_t index (const G4String&, size_t, size_t, caseCompare) const;
 
   inline const char* data() const;
 
-  inline int strcasecompare(const char*, const char*) const;
+  inline G4int strcasecompare(const char*, const char*) const;
 
   inline unsigned int hash( caseCompare cmp = exact ) const;
   inline unsigned int stlhash() const;

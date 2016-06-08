@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExplicitEuler.cc,v 1.2 1999/12/15 14:49:49 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4ExplicitEuler.cc,v 1.3 2000/11/01 15:15:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //  Explicit Euler: x_1 = x_0 + h * dx_0
@@ -24,9 +24,9 @@
 // Constructor
 
 G4ExplicitEuler::G4ExplicitEuler(G4Mag_EqRhs *EqRhs, 
-                                 G4int numberOfVariables) : 
-                 G4MagErrorStepper(EqRhs, numberOfVariables),
-  fNumberOfVariables(numberOfVariables)
+                                 G4int numberOfVariables)
+ : G4MagErrorStepper(EqRhs, numberOfVariables),
+   fNumberOfVariables(numberOfVariables)
 {
 }
 
@@ -37,7 +37,6 @@ G4ExplicitEuler::G4ExplicitEuler(G4Mag_EqRhs *EqRhs,
 
 G4ExplicitEuler::~G4ExplicitEuler()
 {
-   ;
 }
 
 
@@ -48,7 +47,7 @@ G4ExplicitEuler::~G4ExplicitEuler()
 void
 G4ExplicitEuler::DumbStepper( const G4double  yIn[],
 			      const G4double  dydx[],
-			      const G4double  h,
+			            G4double  h,
 			 	    G4double  yOut[]        )
 {
   //  const G4int nvar = 6 ; 

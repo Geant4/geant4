@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RTOutBitStream.hh,v 1.5 2000/03/09 17:38:32 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 

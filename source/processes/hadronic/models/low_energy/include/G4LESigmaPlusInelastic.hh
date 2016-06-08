@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LESigmaPlusInelastic.hh,v 1.2 1999/12/15 14:53:06 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4LESigmaPlusInelastic.hh,v 1.3 2000/12/14 09:12:43 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
  // Hadronic Process: Low Energy SigmaPlus Inelastic Process
  // original by J.L. Chuma, TRIUMF, 03-Feb-1997
@@ -15,6 +15,13 @@
 #ifndef G4LESigmaPlusInelastic_h
 #define G4LESigmaPlusInelastic_h 1
  
+// Class Description
+// Final state production model for SigmaPlus inelastic scattering below 20 GeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
+
 #include "G4InelasticInteraction.hh"
  
  class G4LESigmaPlusInelastic : public G4InelasticInteraction

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Mag_UsualEqRhs.cc,v 1.2 1999/12/15 14:49:49 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //  This is the standard right-hand side for equation of motion.

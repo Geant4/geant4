@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CSGSolid.hh,v 1.3 2000/04/07 12:55:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4CSGSolid.hh,v 1.4 2000/11/02 17:06:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //  
 // --------------------------------------------------------------------
@@ -34,7 +34,8 @@
 
 class G4CSGSolid : public G4VSolid
 {
-public:
+  public:
+
     G4CSGSolid(const G4String& pName);
 
     virtual ~G4CSGSolid();

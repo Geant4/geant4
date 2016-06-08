@@ -5,13 +5,72 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hyperbola.cc,v 1.2 1999/12/15 14:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Hyperbola.cc,v 1.5 2000/11/08 14:22:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Hyperbola.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4Hyperbola.hh"
+#include "G4CurvePoint.hh"
 
-G4Hyperbola::G4Hyperbola(){}
+G4Hyperbola::G4Hyperbola()
+{
+}
+
+G4Hyperbola::~G4Hyperbola()
+{
+}
+
+G4Hyperbola::G4Hyperbola(const G4Hyperbola& right)
+  : Focus1(right.Focus1), Focus2(right.Focus2),
+    ProjFocus1(right.ProjFocus1), ProjFocus2(right.ProjFocus2),
+    semiAxis(right.semiAxis), semiImagAxis(right.semiImagAxis),
+    ratioAxisImagAxis(right.ratioAxisImagAxis),
+    toUnitHyperbola(right.toUnitHyperbola), forTangent(right.forTangent)
+{
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4Hyperbola& G4Hyperbola::operator=(const G4Hyperbola& right)
+{
+  if (&right == this) return *this;
+
+  Focus1 = right.Focus1;
+  Focus2 = right.Focus2;
+  ProjFocus1   = right.ProjFocus1;
+  ProjFocus2   = right.ProjFocus2;
+  semiAxis     = right.semiAxis;
+  semiImagAxis = right.semiImagAxis;
+  ratioAxisImagAxis = right.ratioAxisImagAxis;
+  toUnitHyperbola   = right.toUnitHyperbola;
+  forTangent        = right.forTangent;
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+
+  return *this;
+}
 
 G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
 {
@@ -36,8 +95,8 @@ G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
   G4Vector3D yPrime = tr*position.GetPY();
   yPrime.setZ(0);
   
-  G4Vector3D a = semiAxis*xPrime;
-  G4Vector3D b = semiImagAxis*yPrime;
+  G4Vector3D a = G4Vector3D( semiAxis*xPrime );
+  G4Vector3D b = G4Vector3D( semiImagAxis*yPrime );
 
   G4double xval = -2*a*b/(a.mag2()+b.mag2());
   
@@ -48,10 +107,10 @@ G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
 #endif
 
   // get the coordinate axis directions and the semiaxis lengths
-  G4Vector3D sAxis= a*cosh(u)+b*sinh(u);
+  G4Vector3D sAxis= G4Vector3D( a*cosh(u)+b*sinh(u) );
   
   //!!!!!!!!!!!!
-  G4Vector3D sImagAxis= a*cosh(u+pi/2)+b*sinh(u+pi/2);
+  G4Vector3D sImagAxis= G4Vector3D( a*cosh(u+pi/2)+b*sinh(u+pi/2) );
   
   //!!!!!!!!!!!!
   G4double   newSemiAxis     = sAxis.mag();
@@ -107,10 +166,6 @@ void G4Hyperbola::InitBounded()
   }
 }
 
-
-G4Hyperbola::~G4Hyperbola(){}
-
-
 G4bool G4Hyperbola::Tangent(G4CurvePoint& cp, G4Vector3D& v)
 {
   // The tangent is computed from the 3D point representation
@@ -125,4 +180,3 @@ G4bool G4Hyperbola::Tangent(G4CurvePoint& cp, G4Vector3D& v)
   
   return true;
 }
-

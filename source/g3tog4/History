@@ -1,7 +1,45 @@
-$Id: History,v 1.32 2000/04/07 13:28:46 gcosmo Exp $
+$Id: History,v 1.38 2000/11/28 12:07:54 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V02-00-05 28-Nov-2000 G.Cosmo
+- Fixed bug in G3toG4BuildTree::ClearG3PosCopy(G4int). Entry in vector was
+  not properly destroyed.
+
+g3tog4-V02-00-04 24-Nov-2000 G.Cosmo
+- Added protection against multiple positiong of the same physical volume
+  and added methods ClearG3PosCopy(G4int) and ClearDivision()in
+  G3VolTableEntry (I.Hrivnacova).
+- Removed useless G3toG4Debug global method and file.
+  Replaced verbosity by G3G4DEBUG flag.
+- Moved global function G3CalcParamsFn(...) from G3CalcParams.cc to
+  G3NegVolPars.cc and removed obsolete class/files G3CalcParams[.hh.cc].
+- Added class description comments for the Software Reference
+  Manual (I.Hrivnacova).
+
+g3tog4-V02-00-03 01-Aug-2000 G.Cosmo
+- Fixed initialisation of pDPhi for CONS in G3toG4MakeSolid.cc (I.Hrivnacova).
+- Updated README file and removed src/README.
+
+g3tog4-V02-00-02 26-Jul-2000 G.Cosmo
+- Fixed definition of G4TMPDIR in GNUmakefile.
+  (The GNUmakefile needs to be completely rewritten to conform to the
+  standard format in G4...)
+
+g3tog4-V02-00-01 24-Jul-2000 G.Cosmo
+- Moved tests clGeometry and cltog4 from source/g3tog4/test to
+  examples/extended/g3tog4. Default build mechanism is now used.
+- Fixed bug to g3tog4/GNUmakefile for allowing building of shared
+  libraries. Removed targets for building tests now moved to different
+  area. Adapted to work with granular libraries mechanism.
+- Fix in destructor for G3RotTable (I.Hrivnacova).
+- Added handling of ELTU solid, affected files: G3toG4MakeSolid.cc
+  and G3CalcParams.cc (I.Hrivnacova).
+
+g3tog4-V02-00-00 21-Jul-2000 G.Cosmo
+- Fixed G3toG4PhysicsList::ConstructMesons() for test/clGeometry,
+  by removing obsolete call to G4RhoZero.
 
 g3tog4-V01-01-00 05-Apr-2000 G.Cosmo
 - Added include path to directory geometry/solids/specific.

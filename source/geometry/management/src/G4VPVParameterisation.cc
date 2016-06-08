@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPVParameterisation.cc,v 1.2 1999/12/15 14:49:54 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Default implementations for Parameterisations that do not
 //    parameterise solid and/or material

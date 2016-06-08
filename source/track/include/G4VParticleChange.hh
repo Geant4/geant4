@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VParticleChange.hh,v 1.4 1999/11/07 16:32:05 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

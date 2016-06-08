@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.7.2.1 1999/12/07 20:52:58 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RunManager.hh,v 1.13 2000/11/13 01:24:20 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 
@@ -184,9 +184,6 @@ class G4RunManager
     G4bool initializedAtLeastOnce;
     G4bool geometryToBeOptimized;
 
-    G4bool pauseAtBeginOfEvent;
-    G4bool pauseAtEndOfEvent;
-
     G4int runIDCounter;
     G4int verboseLevel;
     G4Timer * timer;
@@ -198,6 +195,7 @@ class G4RunManager
     G4int n_perviousEventsToBeStored;
 
     G4int storeRandomNumberStatus;
+    G4String randomNumberStatusDir;
 
   public:
     virtual void StoreRandomNumberStatus(G4int eventID=-1);
@@ -256,6 +254,14 @@ class G4RunManager
     { storeRandomNumberStatus = i; }
     inline G4int GetRandomNumberStore() const
     { return storeRandomNumberStatus; }
+    inline void SetRandomNumberStoreDir(G4String dir)
+    { 
+      G4String dirStr = dir;
+      if( dirStr(dirStr.length()-1) != '/' ) dirStr += "/";
+      randomNumberStatusDir = dirStr;
+    }
+    inline G4String GetRandomNumberStoreDir() const
+    { return randomNumberStatusDir; }
 
   public: // with description
     inline void GeometryHasBeenModified()
@@ -266,13 +272,6 @@ class G4RunManager
     // in case the user changes his/her detector geometry or cut off value(s) after
     // Initialize() metho has been invoked. Then, at the begining of the next BeamOn(),
     // all necessary re-initialization will be done.
-    inline void SetPauseAtBeginOfEvent(G4bool vl)
-    { pauseAtBeginOfEvent = vl; }
-    inline void SetPauseAtEndOfEvent(G4bool vl)
-    { pauseAtEndOfEvent = vl; }
-    //  If the boolean flags are true, Pause() method of G4StateManager is invoked
-    // at the very begining (before generating a G4Event object) or at the end of
-    // each event. So that, in case a (G)UI session is defined, the user can interact.
 
   public:
     inline void SetVerboseLevel(G4int vl)

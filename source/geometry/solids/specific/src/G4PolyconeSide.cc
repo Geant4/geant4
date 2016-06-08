@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolyconeSide.cc,v 1.1 2000/04/07 11:02:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PolyconeSide.cc,v 1.3 2000/11/20 18:18:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -36,10 +36,10 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                         	const G4PolyconeSideRZ *tail,
                         	const G4PolyconeSideRZ *head,
                         	const G4PolyconeSideRZ *nextRZ,
-				const G4double thePhiStart, 
-				const G4double theDeltaPhi, 
-				const G4bool thePhiIsOpen, 
-				const G4bool isAllBehind )
+				      G4double thePhiStart, 
+				      G4double theDeltaPhi, 
+				      G4bool thePhiIsOpen, 
+				      G4bool isAllBehind )
 {
 	//
 	// Record values
@@ -140,16 +140,16 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
 //
 // Assignment operator
 //
-G4PolyconeSide *G4PolyconeSide::operator=( const G4PolyconeSide &source )
+G4PolyconeSide& G4PolyconeSide::operator=( const G4PolyconeSide &source )
 {
-	if (this == &source) return this;
+	if (this == &source) return *this;
 
 	delete cone;
 	if (phiIsOpen) delete [] corners;
 	
 	CopyStuff( source );
 	
-	return this;
+	return *this;
 }
 
 
@@ -200,7 +200,7 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
 // Intersect
 //
 G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
-				  const G4bool outgoing, const G4double surfTolerance,
+				  G4bool outgoing, G4double surfTolerance,
 				  G4double &distance, G4double &distFromSurface,
 				  G4ThreeVector &normal, G4bool &isAllBehind )
 {
@@ -312,7 +312,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 }
 
 
-G4double G4PolyconeSide::Distance( const G4ThreeVector &p, const G4bool outgoing )
+G4double G4PolyconeSide::Distance( const G4ThreeVector &p, G4bool outgoing )
 {
 	G4double normSign = outgoing ? -1 : +1;
 	G4double distFrom, distOut2;
@@ -350,7 +350,7 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, const G4bool outgoing
 //
 // Inside
 //
-EInside G4PolyconeSide::Inside( const G4ThreeVector &p, const G4double tolerance, 
+EInside G4PolyconeSide::Inside( const G4ThreeVector &p, G4double tolerance, 
 				G4double *bestDistance )
 {
 	//
@@ -629,7 +629,6 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	}
 
 	do {
-		G4double min, max;
 	
 		phi += sigPhi;
 		if (numPhi == 1) phi = startPhi+deltaPhi;	// Try to avoid roundoff
@@ -703,7 +702,6 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	// Add two additional faces if necessary
 	//
 	if (phiIsOpen && rNorm > DBL_MIN) {
-		G4double min, max;
 		
 		G4double cosPhi = cos(startPhi),
 			 sinPhi = sin(startPhi);
@@ -784,7 +782,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 // Notes:
 //	* There are two answers, depending on which hemisphere is considered.
 //
-G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p, const G4bool opposite,
+G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p, G4bool opposite,
 				       G4double &distOutside2, G4double *edgeRZnorm  )
 {
 	//
@@ -859,7 +857,7 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p, const G4bool oppo
 //
 // Decide if a point is on a cone and return normal if it is
 //
-G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit, const G4double normSign,
+G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit, G4double normSign,
 				    const G4ThreeVector &p, const G4ThreeVector &v,
 			 	    G4ThreeVector &normal )
 {
@@ -923,11 +921,11 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit, const G4double nor
 //
 // It is assumed that the lines are *not* parallel
 //
-void G4PolyconeSide::FindLineIntersect( const G4double x1, const G4double y1,
-					const G4double tx1, const G4double ty1,
-				        const G4double x2, const G4double y2,
-					const G4double tx2, const G4double ty2,
-					G4double &x, G4double &y )
+void G4PolyconeSide::FindLineIntersect( G4double x1,  G4double y1,
+					G4double tx1, G4double ty1,
+				        G4double x2,  G4double y2,
+					G4double tx2, G4double ty2,
+					G4double &x,  G4double &y )
 {
 	//
 	// The solution is a simple linear equation

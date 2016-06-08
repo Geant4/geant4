@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.8 1999/12/15 14:53:14 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4NeutronHPVector.hh,v 1.14 2000/11/20 10:07:41 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
@@ -21,16 +21,20 @@
 #include "g4std/fstream"
 #include "G4InterpolationManager.hh"
 #include "G4NeutronHPInterpolator.hh"
+#include "G4NeutronHPHash.hh"
 #include <math.h>
+#include "g4std/vector"
 
 class G4NeutronHPVector
 {
-  friend G4NeutronHPVector & operator + (const G4NeutronHPVector & left, 
-                                         const G4NeutronHPVector & right);
+  friend G4NeutronHPVector & operator + (G4NeutronHPVector & left, 
+                                         G4NeutronHPVector & right);
   
   public:
   
   G4NeutronHPVector();
+
+  G4NeutronHPVector(G4int n);
   
   ~G4NeutronHPVector();
   
@@ -65,6 +69,7 @@ class G4NeutronHPVector
   { 
 //    G4cout <<"G4NeutronHPVector::SetData called"<<nPoints<<" "<<nEntries<<G4endl;
     Check(i);
+    if(y>maxValue) maxValue=y;
     theData[i].SetData(x, y);
   }
   inline void SetX(G4int i, G4double e)
@@ -80,34 +85,64 @@ class G4NeutronHPVector
   inline void SetY(G4int i, G4double x)
   {
     Check(i);
+    if(x>maxValue) maxValue=x;
     theData[i].SetY(x);
   }
   inline void SetXsec(G4int i, G4double x)
   {
     Check(i);
+    if(x>maxValue) maxValue=x;
     theData[i].SetY(x);
   }
   inline G4double GetEnergy(G4int i) const { return theData[i].GetX(); }
-  inline G4double GetXsec(G4int i) const { return theData[i].GetY(); }
+  inline G4double GetXsec(G4int i) { return theData[i].GetY(); }
   inline G4double GetX(G4int i) const 
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
     return theData[i].GetX();
   }
-  inline G4double GetY(G4int i)  const
+  inline const G4NeutronHPDataPoint & GetPoint(G4int i) const { return theData[i]; }
+  
+  void Hash() 
+  {
+    G4int i;
+    G4double x, y;
+    for(i=0 ; i<nEntries; i++)
+    {
+      if(0 == (i+1)%10)
+      {
+        x = GetX(i);
+	y = GetY(i);
+	theHash.SetData(i, x, y);
+      }
+    }
+  }
+  
+  void ReHash()
+  {
+    theHash.Clear();
+    Hash();
+  }
+  
+  G4double GetXsec(G4double e);
+
+  inline G4double GetY(G4double x)  {return GetXsec(x);}
+  inline G4int GetVectorLength() const {return nEntries;}
+
+  inline G4double GetY(G4int i)
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
     return theData[i].GetY(); 
   }
-  inline const G4NeutronHPDataPoint & GetPoint(G4int i) const { return theData[i]; }
-  
-  G4double GetXsec(G4double e) const;
 
-  inline G4double GetY(G4double x)  const {return GetXsec(x);}
-  inline G4int GetVectorLength() const {return nEntries;}
-
+  inline G4double GetY(G4int i) const
+  {
+    if (i<0) i=0;
+    if(i>=GetVectorLength()) i=GetVectorLength()-1;
+    return theData[i].GetY(); 
+  }
   void Dump();
   
   inline void InitInterpolation(G4std::ifstream & aDataFile)
@@ -124,17 +159,21 @@ class G4NeutronHPVector
       x*=ux;
       y*=uy;
       SetData(i,x,y);
+      if(0 == nEntries%10)
+      {
+        theHash.SetData(nEntries-1, x, y);
+      }
     }
   }
   
   void Init(G4std::ifstream & aDataFile,G4double ux=1., G4double uy=1.)
   {
-    if(theData!=NULL) delete [] theData;
-    theData = new G4NeutronHPDataPoint[100]; 
-    nPoints=100;
-    nEntries=0;    
     G4int total;
     aDataFile >> total;
+    if(theData!=NULL) delete [] theData;
+    theData = new G4NeutronHPDataPoint[total]; 
+    nPoints=total;
+    nEntries=0;    
     theManager.Init(aDataFile);
     Init(aDataFile, total, ux, uy);
   }
@@ -155,6 +194,7 @@ class G4NeutronHPVector
   {
     nEntries=0;   
     theManager.CleanUp();
+    maxValue = -DBL_MAX;
   }
 
   // merges the vectors active and passive into *this
@@ -218,10 +258,21 @@ class G4NeutronHPVector
     {
       G4int i;
       G4double rand = G4UniformRand();
-      for(i=1;i<GetVectorLength();i++)
+      
+      // this was replaced 
+//      for(i=1;i<GetVectorLength();i++)
+//      {
+//	if(rand<theIntegral[i]/theIntegral[GetVectorLength()-1]) break;
+//      }
+
+// by this (begin)
+      for(i=GetVectorLength()-1; i>=0 ;i--)
       {
-	if(rand<theIntegral[i]/theIntegral[GetVectorLength()-1]) break;
+	if(rand>theIntegral[i]/theIntegral[GetVectorLength()-1]) break;
       }
+      if(i!=GetVectorLength()-1) i++;
+// until this (end)
+      
       G4double x1, x2, y1, y2;
       y1 = theData[i-1].GetX();
       x1 = theIntegral[i-1];
@@ -237,36 +288,8 @@ class G4NeutronHPVector
     return result;
   }
   
-  G4double Sample() // Samples X according to distribution Y
-  {
-    G4double result;
-    if(GetVectorLength()==1)
-    {
-      result = theData[0].GetX();
-    }
-    else
-    {
-      G4int i;
-      G4double max = -DBL_MAX;
-      for(i=0;i<GetVectorLength();i++)
-      {
-        if(theData[i].GetY()>max) max = theData[i].GetY(); // can be improved with nonlinear interpolation @
-      }
-      G4double value, test, baseline;
-      baseline = theData[GetVectorLength()-1].GetX()-theData[0].GetX();
-      G4double rand;
-      do
-      {
-        value = baseline*G4UniformRand();
-        value += theData[0].GetX();
-        test = GetY(value)/max;
-        rand = G4UniformRand();
-      }
-      while(test<rand);
-      result = value;
-    }
-    return result;
-  }
+  G4double Sample(); // Samples X according to distribution Y
+  
   G4double * Debug()
   {
     return theIntegral;
@@ -403,10 +426,30 @@ class G4NeutronHPVector
     return result;
   }
   
+  void Block(G4double aX)
+  {
+    theBlocked.push_back(aX);
+  }
+  
+  void Buffer(G4double aX)
+  {
+    theBuffered.push_back(aX);
+  }
+  
+  G4std::vector<G4double> GetBlocked() {return theBlocked;}
+  G4std::vector<G4double> GetBuffered() {return theBuffered;}
+  
+  void SetBlocked(const G4std::vector<G4double> &aBlocked) {theBlocked = aBlocked;}
+  void SetBuffered(const G4std::vector<G4double> &aBuffer) {theBuffered = aBuffer;}
+
+  G4double Get15percentBorder();
+  G4double Get50percentBorder();
+  
   private:
   
   void Check(G4int i);
   
+  G4bool IsBlocked(G4double aX);
   
   private:
   
@@ -427,6 +470,15 @@ class G4NeutronHPVector
   G4int Verbose;
   // debug only
   G4int isFreed;
+  
+  G4NeutronHPHash theHash;
+  G4double maxValue;
+  
+  G4std::vector<G4double> theBlocked;
+  G4std::vector<G4double> theBuffered;
+  G4double the15percentBorderCash;
+  G4double the50percentBorderCash;
+
 };
 
 #endif

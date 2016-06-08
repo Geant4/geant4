@@ -1,9 +1,32 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SurfaceBoundary.cc,v 1.8 2000/11/20 17:54:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4SurfaceBoundary.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4SurfaceBoundary.hh"
 #include "geomdefs.hh"
 #include "G4CompositeCurve.hh"
 
 
-G4SurfaceBoundary::G4SurfaceBoundary(){}
+G4SurfaceBoundary::G4SurfaceBoundary()
+{
+}
+
+G4SurfaceBoundary::~G4SurfaceBoundary()
+{
+}
 
 void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
 {
@@ -13,7 +36,7 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
   const G4BoundingBox3D* b= bounds[0]->BBox();
   bBox.Init(b->GetBoxMin(), b->GetBoxMax());
   
-  G4int i;
+  size_t i;
   for ( i=1; i<bounds.entries(); i++) 
   {
     b= bounds[i]->BBox();
@@ -24,7 +47,7 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
   // the points array is probably unused, so the following code is useless
   G4int cnt= 0;
 
-  G4int entr = bounds.entries();
+  size_t entr = bounds.entries();
 
   for (i=0; i < entr; i++) 
   {
@@ -52,7 +75,7 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
       G4CompositeCurve* cc = (G4CompositeCurve*)c;
       const G4CurveVector& segments = cc->GetSegments();
      
-      for (G4int i=0; i<segments.entries(); i++) 
+      for (size_t i=0; i<segments.entries(); i++) 
       {
 	G4Curve* ccc = segments(i);
 	G4Point3D p  = ccc->GetEnd();
@@ -71,14 +94,11 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
 }
 
 
-G4SurfaceBoundary::~G4SurfaceBoundary() {}
-
-
 G4SurfaceBoundary* G4SurfaceBoundary::Project(const G4Transform3D& tr)
 {
   G4CurveVector newBounds;
   
-  for (G4int i=0; i<bounds.entries(); i++)
+  for (size_t i=0; i<bounds.entries(); i++)
   {
     G4Curve* c= bounds[i]->Project(tr);
     
@@ -120,18 +140,19 @@ void G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray,
 
 G4int G4SurfaceBoundary::IntersectRay2D(const G4Ray& ray)
 {
-  G4int nbinter = 0, temp = 0;
+  G4int nbinter = 0;
+  G4int temp = 0;
 
-  for (G4int i=0; i < bounds.entries(); i++) 
+  for (size_t i=0; i < bounds.entries(); i++) 
   {   
     G4Curve& c = *bounds.at(i);
     temp = c.IntersectRay2D(ray);
 
-    // test if the point is on the surface boundary
-    if( temp==999 )
-      return 1;
+    // test if the point is on the boundary
+    if ( temp == 999 )
+      nbinter = 1;
     else
-      nbinter +=temp; 
+      nbinter += temp; 
   }
 
   return nbinter;
@@ -150,12 +171,17 @@ G4bool G4SurfaceBoundary::Tangent(G4CurvePoint& cp, G4Vector3D& v)
 }
 
 
-void G4SurfaceBoundary::SplitWithPlane(const G4Point3D& p0,
-				       const G4Vector3D& n,
-				       G4SurfaceBoundary*& new1,
-				       G4SurfaceBoundary*& new2)
+void G4SurfaceBoundary::SplitWithPlane(const G4Point3D&,
+				       const G4Vector3D&,
+				       G4SurfaceBoundary*&,
+				       G4SurfaceBoundary*&)
 {
   G4Exception("To be implemented");
 }
 
-
+void G4SurfaceBoundary::SplitWithCylinder(const G4CylindricalSurface&,
+                                          G4SurfaceBoundary*&, 
+                                          G4SurfaceBoundary*&)
+{
+  G4Exception("To be implemented");
+}

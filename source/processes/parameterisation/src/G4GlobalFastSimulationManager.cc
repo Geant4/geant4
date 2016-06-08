@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GlobalFastSimulationManager.cc,v 1.6 2000/05/30 08:30:38 mora Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //  
 //---------------------------------------------------------------

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis1PlacementCreator.hh,v 1.2 2000/01/21 13:45:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Axis1PlacementCreator.hh,v 1.3 2000/11/09 16:35:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4Axis1PlacementCreator
@@ -39,7 +39,7 @@ class G4Axis1PlacementCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
-    G4String Name() { return "Axis1_Placement"; }
+    const char* Name() const { return "Axis1_Placement"; }
     static G4Axis1PlacementCreator GetInstance() { return csc; }
 
   // Members

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gstmed.cc,v 1.4 1999/12/05 17:50:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // The last G4int argument of G4gstmed(..) is used for sending
 // info whether the Geant3 tracking medium parameters should

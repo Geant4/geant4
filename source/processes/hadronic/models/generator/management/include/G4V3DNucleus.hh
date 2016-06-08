@@ -5,14 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4V3DNucleus.hh,v 1.3 1999/12/15 14:52:37 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4V3DNucleus.hh,v 1.4 2000/08/19 16:24:03 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1
 
 class G4Nucleon;
 #include "G4DynamicParticle.hh"
+#include "G4Pair.hh"
+#include "Randomize.hh"
 
 class G4V3DNucleus 
 {
@@ -42,10 +44,35 @@ class G4V3DNucleus
       virtual void DoLorentzContraction(const G4LorentzVector & theBoost) = 0;
       virtual void DoLorentzContraction(const G4ThreeVector & theBeta) = 0;
       virtual void DoTranslation(const G4ThreeVector & theShift) = 0;
+      
+  public:
+      G4Pair<G4double, G4double> ChooseImpactXandY(G4double maxImpact);
+      G4Pair<G4double, G4double> RefetchImpactXandY(){return theImpactParameter;}
 
   private:
+  
+    G4Pair<G4double, G4double> theImpactParameter;
 
 };
+
+inline
+G4Pair<G4double, G4double> G4V3DNucleus::
+ChooseImpactXandY(G4double maxImpact)
+{
+  G4double x,y;
+  do
+  {
+    x = 2*G4UniformRand() - 1;
+    y = 2*G4UniformRand() - 1;
+  }
+  while(x*x + y*y > 1);
+  G4double impactX = x*(maxImpact); 
+  G4double impactY = y*(maxImpact);
+  theImpactParameter.first = impactX;
+  theImpactParameter.second = impactY;
+  return theImpactParameter;
+}
+
 
 #endif
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.4 1999/12/15 14:52:37 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VIntraNuclearTransportModel.hh,v 1.6 2000/12/14 09:36:03 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -22,6 +22,13 @@
 
 #ifndef G4VIntraNuclearTransportModel_h
 #define G4VIntraNuclearTransportModel_h 1
+
+// Class Description
+// Base class for intra-nuclear transport models in geant4. By merit of inheriting
+// from this class a intra-nuclear transport model can be used in conjunction with
+// any precompound, string parton model or other high energy generator in the
+// generation of final states for inelastic scattering.
+// Class Description - End
 
 #include "G4V3DNucleus.hh"
 #include "G4VPreCompoundModel.hh"

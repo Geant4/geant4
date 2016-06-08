@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.cc,v 1.5 2000/03/01 02:06:11 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Decay.cc,v 1.7 2000/10/25 00:01:04 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -227,20 +227,29 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   fParticleChangeForDecay.Initialize(aTrack);
 
   // get particle 
-  G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
+  G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+
+  // check if  the particle is stable
+  if (aParticleDef->GetPDGStable()) return &fParticleChangeForDecay ;
+ 
 
   //check if thePreAssignedDecayProducts exists
-  G4DecayProducts* products = aParticle->GetPreAssignedDecayProducts();
-  G4bool isPreAssigned = (products != NULL);   
+  const G4DecayProducts* o_products = (aParticle->GetPreAssignedDecayProducts());
+  G4bool isPreAssigned = (o_products != NULL);   
+  G4DecayProducts* products = NULL;
 
-  if (!isPreAssigned) {
+  if (isPreAssigned) {
+    // copy decay products 
+    products = new G4DecayProducts(*o_products); 
+  } else {
     // decay acoording to decay table
-    G4DecayTable   *decaytable = aParticle->GetDefinition()->GetDecayTable();
+    G4DecayTable   *decaytable = aParticleDef->GetDecayTable();
  
     if (decaytable == NULL){
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0) {
-	G4cerr <<  "G4Decay::DoIt  : decay table not defined  for";
+	G4cerr <<  "G4Decay::DoIt  : decay table not defined  for ";
         G4cerr << aParticle->GetDefinition()->GetParticleName()<< G4endl;
       }
 #endif

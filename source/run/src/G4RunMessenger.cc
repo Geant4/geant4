@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.4.8.1.2.5 1999/12/14 09:16:50 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RunMessenger.cc,v 1.7 2000/11/13 01:24:21 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #include "G4RunMessenger.hh"
@@ -18,6 +18,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
+#include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
 
@@ -128,10 +129,17 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandCmd->SetGuidance("Restore the status of the random number engine from a file.");
   restoreRandCmd->SetGuidance("See CLHEP manual for detail.");
   restoreRandCmd->SetGuidance("The engine status must be stored beforehand.");
+  restoreRandCmd->SetGuidance("Directory of the status file should be set by /run/randomNumberStatusDirectory command.");
   restoreRandCmd->SetParameterName("fileName",true);
   restoreRandCmd->SetDefaultValue("RandEngine.stat");
   restoreRandCmd->AvailableForStates(PreInit,Idle,GeomClosed);
 
+  randDirCmd = new G4UIcmdWithAString("/run/randomNumberStatusDirectory",this);
+  randDirCmd->SetGuidance("Define the directory name of the random number status files.");
+  randDirCmd->SetGuidance("Directory must be creates before storing the file.");
+  randDirCmd->SetParameterName("fileName",true);
+  randDirCmd->SetDefaultValue("./");
+  randDirCmd->AvailableForStates(PreInit,Idle,GeomClosed);
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -147,6 +155,7 @@ G4RunMessenger::~G4RunMessenger()
   delete cutCmd;
   delete storeRandCmd;
   delete restoreRandCmd;
+  delete randDirCmd;
   delete runDirectory;
 }
 
@@ -169,9 +178,9 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==optCmd )
   { runManager->SetGeometryToBeOptimized(optCmd->GetNewBoolValue(newValue)); }
   else if( command==brkBoECmd )
-  { runManager->SetPauseAtBeginOfEvent(brkBoECmd->GetNewBoolValue(newValue)); }
+  { G4UImanager::GetUIpointer()->SetPauseAtBeginOfEvent(brkBoECmd->GetNewBoolValue(newValue)); }
   else if( command==brkEoECmd )
-  { runManager->SetPauseAtEndOfEvent(brkEoECmd->GetNewBoolValue(newValue)); }
+  { G4UImanager::GetUIpointer()->SetPauseAtEndOfEvent(brkEoECmd->GetNewBoolValue(newValue)); }
   else if( command==abortCmd )
   { runManager->AbortRun(); }
   else if( command==initCmd )
@@ -184,6 +193,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->SetRandomNumberStore(storeRandCmd->GetNewIntValue(newValue)); }
   else if( command==restoreRandCmd )
   { runManager->RestoreRandomNumberStatus(newValue); }
+  else if( command==randDirCmd )
+  { runManager->SetRandomNumberStoreDir(newValue); }
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
@@ -194,6 +205,8 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   { cv = verboseCmd->ConvertToString(runManager->GetVerboseLevel()); }
   else if( command==storeRandCmd )
   { cv = storeRandCmd->ConvertToString(runManager->GetRandomNumberStore()); }
+  else if( command==randDirCmd )
+  { cv = runManager->GetRandomNumberStoreDir(); }
   
   return cv;
 }

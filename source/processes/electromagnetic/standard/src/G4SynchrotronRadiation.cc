@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.2 1999/12/15 14:51:52 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4SynchrotronRadiation.cc,v 1.3 2000/11/01 15:30:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -87,7 +87,7 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 
   G4bool FieldExists = globalFieldMgr->DoesFieldExist() ;
   G4ThreeVector  FieldValue;
-  G4Field*   pField = 0 ;
+  const G4Field*   pField = 0 ;
   if (FieldExists)
   {  
     pField = globalFieldMgr->GetDetectorField() ;
@@ -218,7 +218,7 @@ G4SynchrotronRadiation::GetPhotonEnergy( const G4Track& trackData,
 
   G4bool FieldExists = globalFieldMgr->DoesFieldExist() ;
   G4ThreeVector  FieldValue;
-  G4Field*   pField = 0 ;
+  const G4Field*   pField = 0 ;
   if (FieldExists)
   {  
     pField = globalFieldMgr->GetDetectorField() ;

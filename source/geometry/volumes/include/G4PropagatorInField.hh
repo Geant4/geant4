@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.8 2000/05/16 17:39:00 japost Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PropagatorInField.hh,v 1.10 2000/11/01 16:51:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4PropagatorInField 
@@ -68,47 +68,48 @@ class G4PropagatorInField
                        	      G4VPhysicalVolume *pPhysVol=0 );
      // Compute the next geometric Step
 
-   G4ThreeVector  EndPosition();       
-   G4ThreeVector  EndMomentumDir();
-   G4bool         IsParticleLooping();
+   inline G4ThreeVector  EndPosition() const;       
+   inline G4ThreeVector  EndMomentumDir() const;
+   inline G4bool         IsParticleLooping() const;
      // Return the state after the Step
 
-   G4double  DeltaIntersection(); 
+   inline G4double  DeltaIntersection() const; 
      // The accuracy of finding an intersection
 
    G4double  DeltaOneStep();
      // The accuracy of a single Step
 
-   G4double  GetEpsilonStep();  // Relative accuracy for current Step (Calc.)
-   void      SetEpsilonStep(G4double newEps);
+   inline G4double  GetEpsilonStep() const;
+     // Relative accuracy for current Step (Calc.)
+   inline void      SetEpsilonStep(G4double newEps);
      // The ratio DeltaOneStep()/h_current_step
 
-   void SetChargeMomentumMass( G4double Charge,         // in e+ units
-			       G4double Momentum,       // in Geant4 units
-			       G4double pMass);  
+   inline void SetChargeMomentumMass(G4double Charge,         // in e+ units
+			             G4double Momentum,       // in Geant4 units
+			             G4double pMass);  
 
-   G4ChordFinder* GetChordFinder();
+   inline G4ChordFinder* GetChordFinder();
    // void        SetChordFinder(G4ChordFinder* newCF);  // Not yet relevant
 
-   G4int  SetVerboseLevel( G4int Verbose );
-   G4int  Verbose();
+   inline G4int  SetVerboseLevel( G4int Verbose );
+   inline G4int  Verbose() const;
 
-   G4double  GetDeltaIntersection();
+   inline G4double  GetDeltaIntersection() const;
      // Accuracy for boundary intersection.
-   G4double  GetDeltaOneStep();
+   inline G4double  GetDeltaOneStep() const;
      // Accuracy for one tracking/physics step.
                                     
-   void    SetAccuraciesWithDeltaOneStep(G4double deltaOneStep);  
+   inline void    SetAccuraciesWithDeltaOneStep(G4double deltaOneStep);  
      // Sets both accuracies, maintaining a particular ratio
-     //  for accuracties of volume Intersection and Integration (in One Step)
+     // for accuracties of volume Intersection and Integration (in One Step)
 
-   void    SetDeltaOneStep(G4double deltaOneStep);  
+   inline void    SetDeltaOneStep(G4double deltaOneStep);  
      // Set accuracy for integration of one step.   (only)
-   void    SetDeltaIntersection(G4double deltaIntersection);
+   inline void    SetDeltaIntersection(G4double deltaIntersection);
      // Set accuracy of  intersection of a volume.  (only)
 
-   G4int   GetMaxLoopCount();
-   void    SetMaxLoopCount(G4int new_max);
+   inline G4int   GetMaxLoopCount() const;
+   inline void    SetMaxLoopCount(G4int new_max);
      // A maximum for the number of steps that a (looping) particle can take.
 
    void printStatus( 
@@ -120,7 +121,7 @@ class G4PropagatorInField
                   G4VPhysicalVolume*   startVolume);
      // Print Method - useful mostly for debugging.
 
-   G4FieldTrack GetEndState();
+   inline G4FieldTrack GetEndState() const;
 
  public:  // without description
 

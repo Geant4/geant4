@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryVertex.hh,v 1.3 1999/12/15 14:49:39 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PrimaryVertex.hh,v 1.5 2000/10/19 15:19:36 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 
@@ -52,10 +52,13 @@ class G4PrimaryVertex
       G4PrimaryParticle * theTail;
       G4PrimaryVertex* nextVertex;
       G4int numberOfParticle;
+      G4double Weight0;
 
   public:
       inline G4ThreeVector GetPosition() const
       { return G4ThreeVector(X0,Y0,Z0); }
+      inline void SetPosition(G4double x0,G4double y0,G4double z0)
+      { X0 = x0; Y0 = y0; Z0 = z0; }
       inline G4double GetX0() const
       { return X0; }
       inline G4double GetY0() const
@@ -64,6 +67,8 @@ class G4PrimaryVertex
       { return Z0; }
       inline G4double GetT0() const
       { return T0; }
+      inline void SetT0(G4double t0)
+      { T0 = t0; }
       inline G4int GetNumberOfParticle() const
       { return numberOfParticle; }
       inline void SetPrimary(G4PrimaryParticle * pp)
@@ -106,6 +111,10 @@ class G4PrimaryVertex
       }
       inline G4PrimaryVertex* GetNext() const
       { return nextVertex; }
+      inline G4double GetWeight() const
+      { return Weight0; }
+      inline void SetWeight(G4double w)
+      { Weight0 = w; }
 };
 
 extern G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;

@@ -12,6 +12,12 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 
+// Class Description
+// Trivial implementation of an intra-nuclear transport. It pworvides coupling
+// of high energy generators with pre equilibrium decay models. 
+// To be used in your physics list in case you need this physics.
+// Class Description - End
+
 class G4GeneratorPrecompoundInterface : public G4VIntraNuclearTransportModel 
 {
 public:

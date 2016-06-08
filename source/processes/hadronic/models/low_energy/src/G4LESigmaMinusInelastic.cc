@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LESigmaMinusInelastic.cc,v 1.2 1999/12/15 14:53:08 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
  // Hadronic Process: SigmaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

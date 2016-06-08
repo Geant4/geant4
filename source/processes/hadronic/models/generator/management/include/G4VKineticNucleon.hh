@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VKineticNucleon.hh,v 1.2 1999/12/15 14:52:37 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4VKineticNucleon_h
 #define G4VKineticNucleon_h 1

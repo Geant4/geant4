@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVPhysicalVolume.ddl,v 1.4 1999/12/15 14:51:23 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PVPhysicalVolume.ddl,v 1.5 2000/11/02 12:42:11 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4PVPhysicalVolume
@@ -14,7 +14,7 @@
 #ifndef G4PVPHYSICALVOLUME_DDL
 #define G4PVPHYSICALVOLUME_DDL 1
 
-#include "globals.hh"
+#include "G4Pglobals.hh"
 #include "geomdefs.hh"
 #include "G4PersistentTypes.hh"
 #include "G4PersistentSchema.hh"

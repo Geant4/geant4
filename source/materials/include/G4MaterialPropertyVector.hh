@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4MaterialPropertyVector.hh,v 1.4 1999/11/11 15:36:09 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

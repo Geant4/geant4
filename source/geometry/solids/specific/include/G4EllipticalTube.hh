@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.hh,v 1.6 2000/04/19 19:08:58 davidw Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4EllipticalTube.hh,v 1.8 2000/11/02 16:54:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -16,10 +16,17 @@
 // Class description:
 //
 //   Declaration of a CSG volume representing a tube with elliptical
-//   cross section (geant3 solid 'ELTU')
+//   cross section (geant3 solid 'ELTU'):
+//   
+//   G4EllipticalTube( const G4String& name, 
+//                           G4double  Dx,
+//                           G4double  Dy,
+//                           G4double  Dz )
 //
 //   The equation of the surface in x/y is 1.0 = (x/dx)**2 + (y/dy)**2
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4EllipticalTube_hh
@@ -27,14 +34,16 @@
 
 #include "G4VSolid.hh"
 
-class G4EllipticalTube : public G4VSolid {
-	public:
+class G4EllipticalTube : public G4VSolid
+{
+  public:
+
 	G4EllipticalTube( const G4String &name, 
-			  const G4double theDx, const G4double theDy, const G4double theDz );
+			  G4double theDx, G4double theDy, G4double theDz );
 	virtual ~G4EllipticalTube();
 			
 	//
-	// Standard CSG inherited methods
+	// Standard CSG methods
 	//
 	virtual G4bool CalculateExtent(	const EAxis pAxis,
 					const G4VoxelLimits& pVoxelLimit,
@@ -52,12 +61,13 @@ class G4EllipticalTube : public G4VSolid {
 					G4bool *validNorm=0,G4ThreeVector *n=0 ) const;
 	virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
 
-	virtual G4GeometryType  GetEntityType() const { return G4String("G4EllipticalTube"); }
+	G4GeometryType GetEntityType() const { return G4String("G4EllipticalTube"); }
 
+	//
+	// Visualisation methods
+	//
         virtual G4Polyhedron* CreatePolyhedron() const;
-
 	virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
-	
 	virtual G4VisExtent GetExtent() const;
 
 
@@ -72,7 +82,8 @@ class G4EllipticalTube : public G4VSolid {
 	void SetDy( const G4double newDy ) { dy = newDy; }
 	void SetDz( const G4double newDz ) { dz = newDz; }
 	
-	protected:
+  protected:
+
 	G4double dx, dy, dz;
 	
 	//

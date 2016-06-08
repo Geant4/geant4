@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldManager.cc,v 1.2 1999/12/15 14:49:49 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4FieldManager.cc,v 1.3 2000/11/09 18:06:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #include "G4FieldManager.hh"
 
@@ -34,6 +34,8 @@ G4FieldManager::~G4FieldManager()
 void
 G4FieldManager::CreateChordFinder(G4MagneticField *detectorMagField)
 {
+   if ( fAllocatedChordFinder )
+      delete fChordFinder;
    fChordFinder= new G4ChordFinder( detectorMagField );
    fAllocatedChordFinder= true;
 }

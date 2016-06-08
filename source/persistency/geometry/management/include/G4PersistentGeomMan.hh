@@ -5,15 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentGeomMan.hh,v 1.9 2000/06/09 12:56:01 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PersistentGeomMan.hh,v 1.10 2000/12/15 07:56:35 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// class G4PersistentGeomMan 
+
+// Class Description:
+//   A Utility class to be used by G4PersistencyManager.
+// Average users do not need to use this class.
 //
-// A Utility class for storing and retrieving the geometry objects.
+// This class is not persistent-capable.
 //
-// This class is not persistent-capable. 
-//
+
 // History:
 // 98.10.30 Y.Morita  Splited from G4PersistencyManager
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedra.hh,v 1.2 2000/06/26 09:54:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Polyhedra.hh,v 1.4 2000/11/02 16:54:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -18,8 +18,27 @@
 // Class description:
 //
 //   Class implementing a CSG type "PGON" Geant 3.21 volume,
-//   inherited from class G4CSGSolid.
+//   inherited from class G4CSGSolid:
+//
+//   G4Polyhedra( const G4String& name, 
+//                G4double phiStart,         - initial phi starting angle
+//                G4double phiTotal,         - total phi angle
+//                G4int numSide,             - number sides
+//                G4int numZPlanes,          - number of z planes
+//                const G4double zPlane[],   - position of z planes
+//                const G4double rInner[],   - tangent distance to inner surface
+//                const G4double rOuter[]  ) - tangent distance to outer surface
+//
+//   G4Polyhedra( const G4String& name, 
+//                G4double phiStart,    - initial phi starting angle
+//                G4double phiTotal,    - total phi angle
+//                G4int    numSide,     - number sides
+//                G4int    numRZ,       - number corners in r,z space
+//                const G4double r[],   - r coordinate of these corners
+//                const G4double z[] )  - z coordinate of these corners
 
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4Polyhedra_hh
@@ -31,24 +50,26 @@
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 
-class G4Polyhedra : public G4VCSGfaceted {
-	public:
-	G4Polyhedra( G4String name, 
-                     const G4double phiStart,		// initial phi starting angle
-                     const G4double phiTotal,		// total phi angle
-		     const G4int numSide,		// number sides
-                     const G4int numZPlanes,		// number of z planes
-                     const G4double zPlane[],		// position of z planes
-                     const G4double rInner[],		// tangent distance to inner surface
-                     const G4double rOuter[]  );	// tangent distance to outer surface
+class G4Polyhedra : public G4VCSGfaceted
+{
+  public:
 
-	G4Polyhedra( G4String name, 
-		     const G4double phiStart,		// initial phi starting angle
-                     const G4double phiTotal,		// total phi angle
-		     const G4int    numSide,		// number sides
-		     const G4int    numRZ,		// number corners in r,z space
-		     const G4double r[], 		// r coordinate of these corners
-		     const G4double z[]       ); 	// z coordinate of these corners
+	G4Polyhedra( const G4String& name, 
+                     G4double phiStart,		 // initial phi starting angle
+                     G4double phiTotal,		 // total phi angle
+		     G4int numSide,		 // number sides
+                     G4int numZPlanes,		 // number of z planes
+                     const G4double zPlane[],	 // position of z planes
+                     const G4double rInner[],	 // tangent distance to inner surface
+                     const G4double rOuter[]  ); // tangent distance to outer surface
+
+	G4Polyhedra( const G4String& name, 
+		     G4double phiStart,		 // initial phi starting angle
+                     G4double phiTotal,		 // total phi angle
+		     G4int    numSide,		 // number sides
+		     G4int    numRZ,		 // number corners in r,z space
+		     const G4double r[], 	 // r coordinate of these corners
+		     const G4double z[]       ); // z coordinate of these corners
 
 	virtual ~G4Polyhedra();
 	
@@ -116,9 +137,9 @@ class G4Polyhedra : public G4VCSGfaceted {
 	//
 	// Generic initializer, call by all constructors
 	//
-	void Create( const G4double phiStart,	    // initial phi starting angle
-            	     const G4double phiTotal,	    // total phi angle
-		     const G4int    numSide,	    // number sides
+	void Create( G4double phiStart,	    // initial phi starting angle
+            	     G4double phiTotal,	    // total phi angle
+		     G4int    numSide,	    // number sides
 		     G4ReduciblePolygon *rz   );    // rz coordinates
 
 	void CopyStuff( const G4Polyhedra &source );

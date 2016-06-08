@@ -5,9 +5,36 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.hh,v 1.6 2000/02/16 12:02:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4FConicalSurface.hh,v 1.10 2000/11/20 17:54:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// Class G4FConicalSurface
+//
+// Class description:
+// 
+// Definition of a generic conical surface.
+/*
+       Position.axis|
+                    |
+      --         ---|---   small_radius  
+    l  |        /   |   \
+    e  |       /    |    \
+    n  |      /     |     \
+    g  |     /      |      \
+    t  |    /       |       \
+    h  |   /        |        \
+      --   ---------|---------  large_radius
+                 Position
+*/
+
+// The code for G4FConicalSurface has been derived from the original
+// implementation in the "Gismo" package.
+//
+// Author:  Alan Breakstone
+// Adaptation: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __FCONIC_H
 #define __FCONIC_H
 
@@ -15,153 +42,108 @@
 #include "G4Axis2Placement3D.hh"
 #include "G4Surface.hh"
 
-
-//     Position.axis|
-//                  |
-//    --         ---|---   small_radius  
-//  l  |        /   |   \
-//  e  |       /    |    \
-//  n  |      /     |     \
-//  g  |     /      |      \
-//  t  |    /       |       \
-//  h  |   /        |        \
-//    --   ---------|---------  large_radius
-//               Position
-
-
-class G4FConicalSurface: public G4Surface //: public G4ConicalSurface
+class G4FConicalSurface : public G4Surface
 {
-protected:
 
-  G4double length;    	// length of G4FConicalSurface
-  G4double small_radius;// small radius of G4FConicalSurface, can be zero
-  G4double large_radius;// large radius of G4FConicalSurface, must be 
-                        // greater than the small radius
-                        // Note that the angle of the G4ConicalSurface is
-                        // calculated from these three quantities.
-	
-  G4Axis2Placement3D Position;
-
-  // Add by L. Broglia
-  G4double tan_angle;
-
-public:
+ public:  // with description
   
-  G4FConicalSurface() //: G4ConicalSurface() 
-  {
-    length       = 1.0;
-    small_radius = 0.0;
-    large_radius = 1.0;
-    
-    // Add by L. Broglia
-    tan_angle = (large_radius-small_radius)/length;
-  }
-	
-// constructor utilized into G4BREPSolidPCone
-//  default constructor
-//----->G4FConicalSurface() : G4ConicalSurface() { length = 1.0;
-//----->		     small_radius = 0.0;
-//----->		     large_radius = 1.0; }
-//
-//  Normal constructor:  first  argument is the origin of the G4FConicalSurface
-//			 second argument is the axis of the G4FConicalSurface
-//		         third  argument is the length of the G4FConicalSurface
-//		         fourth argument is the small radius of the 
-//                                          G4FConicalSurface
-//			 fifth argument is the large radius of the 
-//                                          G4FConicalSurface
+  G4FConicalSurface();
+  virtual ~G4FConicalSurface();
+    // Default constructor and destructor.
 
   G4FConicalSurface( const G4Point3D& o, const G4Vector3D& a,
 		     G4double l, G4double sr, G4double lr );
-
-  G4FConicalSurface( const G4FConicalSurface& c );
-  
-  ~G4FConicalSurface() {}
+    // o : origin of the G4FConicalSurface.
+    // a : axis of the G4FConicalSurface.
+    // l : length of the G4FConicalSurface.
+    // sl: small radius of the G4FConicalSurface.
+    // lr: large radius of the G4FConicalSurface.
 
   virtual G4Vector3D SurfaceNormal( const G4Point3D& p ) const;	
+    // Returns the normal to the surface on point p.
 
-// Return 0 if point x is outside G4ConicalSurface, 1 if Inside.
-  virtual int Inside( const G4Vector3D& x ) const;
+  G4int Inside( const G4Vector3D& x ) const;
+    // Returns 0 if point x is outside G4ConicalSurface, 1 if Inside.
 
-  G4String GetEntityType(){return G4String("FConical_Surface");}
+  inline G4String GetEntityType() const;
+    // Returns the type identifier.
 
-  // STEP additions
-//
-//  function to return class name
-  virtual const char* Name() const { return "G4FConicalSurface"; }
-//  printing function
+  virtual const char* Name() const;
+    // Returns the class type name.
+
   virtual void PrintOn( G4std::ostream& os = G4cout ) const;
+    // Printing function.
 
-//  equality operator
-  int operator==( const G4FConicalSurface& c );
+  G4int operator==( const G4FConicalSurface& c ) const;
+    // Equality operator.
 
-// This function count the number of intersections of a 
-// bounded conical surface by a ray.
-// At first, calculates the intersections with the semi-infinite 
-// conical surfsace. After, count the intersections within the
-// finite conical surface boundaries, and set "distance" to the 
-// closest distance from the start point to the nearest intersection
-// If the point is on the surface it returns or the intersection with
-// the opposite surface or kInfinity
-// If no intersection is founded, set distance = kInfinity and
-// return 0
+  G4int Intersect( const G4Ray& ry );
+    // Counts the number of intersections of a bounded conical surface by a ray.
+    // At first, calculates the intersections with the semi-infinite 
+    // conical surface; then, it counts the intersections within the
+    // finite conical surface boundaries, and sets the "distance" to the 
+    // closest distance from the start point to the nearest intersection.
+    // If the point is on the surface it returns or the intersection with
+    // the opposite surface or kInfinity.
+    // If no intersection is found, it sets distance = kInfinity and returns 0.
 
-  int  Intersect( const G4Ray& ry ) ;
   void CalcBBox();
+    // Computes the bounding-box.
 
-  // Add by L. Broglia
+  virtual G4double HowNear( const G4Vector3D& x ) const;
+    // Computes the shortest distance from the point x to the G4FConicalSurface.
+    // The distance will always be positive.
+    // This function works only with Cone axis equal (0,0,1) or (0,0,-1),
+    // it projects the surface and the point on the x,z plane and computes
+    // the distance in analytical way.
 
-// Shortest distance from the point x to the G4FConicalSurface.
-// The distance will be positive always positive
-
- virtual G4double HowNear( const G4Vector3D& x ) const;
-  
-//  function which returns true (1) if the point x is within the boundary
-//		returns false (0) otherwise
-
-  virtual int WithinBoundary( const G4Vector3D& x ) const;
-
-//  function to return the size of a G4FConicalSurface.
-//		Used for Scale-invariant tests of surface thickness.
-//		If the small radius is zero, returns the large radius.
+  virtual G4int WithinBoundary( const G4Vector3D& x ) const;
+    // Returns 1 if the point x is within the boundary, returns 0 otherwise.
 
   virtual G4double Scale() const;
+    // Returns the size of a G4FConicalSurface.
+    // Used for Scale-invariant tests of surface thickness.
+    // If the small radius is zero, returns the large radius.
 
-//  function to calculate the Area of a G4FConicalSurface
   virtual G4double Area() const;
-
-//  function to change the radii and length of the G4FConicalSurface
-//		the first (input) argument is the new length
-//		the second (input) argument is the new small radius
-//		the third (input) argument is the new large radius
+    // Calculates the area of a G4FConicalSurface.
 
   virtual void resize( G4double l, G4double sr, G4double lr );
-  
-//  functions to return the dimensions of the G4FConicalSurface
+    // Changes the radii and length of the G4FConicalSurface.
+    //	- l  (input) argument: the new length
+    //	- sr (input) argument: the new small radius
+    //	- lr (input) argument: the new large radius
 
-  G4double GetLength()      const { return length;       }
 
-//  functions to return the dimensions of the G4FConicalSurface
+  inline G4double GetLength()      const;
+  inline G4double GetSmallRadius() const;
+  inline G4double GetLargeRadius() const;
+  inline G4double GetTan_Angle()   const;
+    // Accessors to dimensions of the G4FConicalSurface.
 
-  G4double GetSmallRadius() const { return small_radius; }
+protected:
 
-//  functions to return the dimensions of the G4FConicalSurface
+  G4double length;
+    // length of G4FConicalSurface
 
-  G4double GetLargeRadius() const { return large_radius; }
+  G4double small_radius;
+    // small radius of G4FConicalSurface, can be zero
+  G4double large_radius;
+    // large radius of G4FConicalSurface, must be greater than the small
+    // radius. Note that the angle of the G4ConicalSurface is calculated
+    // from these three quantities.
+	
+  G4Axis2Placement3D Position;
+  G4double tan_angle;
 
-//  functions to return the dimensions of the G4FConicalSurface
+private:
 
-  G4double GetTan_Angle()   const { return tan_angle; }
+  G4FConicalSurface(const G4FConicalSurface&);
+  G4FConicalSurface& operator=(const G4FConicalSurface&);
+    // Private copy constructor and assignment operator.
 
 };
 
+#include "G4FConicalSurface.icc"
+
 #endif
-
-
-
-
-
-
-
-
-

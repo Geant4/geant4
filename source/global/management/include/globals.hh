@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: globals.hh,v 1.15 2000/01/19 11:12:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // Global Constants and typedefs

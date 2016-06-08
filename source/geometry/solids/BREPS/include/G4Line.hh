@@ -5,9 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.hh,v 1.3 1999/12/15 14:49:57 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Line.hh,v 1.6 2000/11/08 14:22:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// Class G4Line
+//
+// Class description:
+// 
+// Definition of a generic line.
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __LINE_H
 #define __LINE_H 
 
@@ -15,36 +25,44 @@
 
 class G4Line : public G4Curve
 {
-public:
 
-  G4Line ();
-  virtual ~G4Line ();
+public:  // with description
 
-  virtual G4Curve* Project(const G4Transform3D& tr = G4Transform3D::Identity);
+  G4Line();
+  virtual ~G4Line();
+    // Constructor & destructor.
 
-  virtual G4bool Tangent(G4CurvePoint& cp, G4Vector3D& vec);
+  G4Line(const G4Line& orig);
+  G4Line& operator=(const G4Line& right);
+    // Copy constructor and assignment operator.
 
-  // virtual void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
-  virtual G4int IntersectRay2D(const G4Ray& ray);
+  G4Curve* Project(const G4Transform3D& tr=G4Transform3D::Identity);
+    // Transforms and projects the line.
 
-  virtual G4double  GetPMax();
-  virtual G4Point3D GetPoint(G4double param);
-  virtual G4double  GetPPoint(const G4Point3D& pt);
+  G4bool Tangent(G4CurvePoint& cp, G4Vector3D& vec);
+    // Returns tangent to line at a given point, if existing.
+    // The tangent is computed from the 3D point representation.
 
-  // Get/Set for the geometric data
-  void Init(const G4Point3D& pnt0, const G4Vector3D& dir0);
-  G4Point3D  GetPnt() const;
-  G4Vector3D GetDir() const;
+  inline G4double  GetPMax() const;
+  inline G4Point3D GetPoint(G4double param) const;
+  inline G4double  GetPPoint(const G4Point3D& pt) const;
+    // Accessors methods.
 
+  inline G4Point3D  GetPnt() const;
+  inline G4Vector3D GetDir() const;
+  inline void Init(const G4Point3D& pnt0, const G4Vector3D& dir0);
+    // Get/Set for the geometric data.
+
+public:  // without description
+
+  inline G4int IntersectRay2D(const G4Ray& ray);
+  // void IntersectRay2D(const G4Ray& ray, G4CurveRayIntersection& is);
 
 protected:
 
-  virtual void InitBounded();
+  inline void InitBounded();
 
- 
 private:
-  // For the Inside function
-  //inline int Sign(G4double a, G4double b){return((a>=0&&b>=0)||(a<0&&b<0));}
   
   // geometric data
   G4Point3D  pnt;

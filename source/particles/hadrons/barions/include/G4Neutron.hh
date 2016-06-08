@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Neutron.hh,v 1.5 2000/02/25 07:37:10 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

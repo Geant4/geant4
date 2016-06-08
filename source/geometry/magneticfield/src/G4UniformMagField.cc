@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UniformMagField.cc,v 1.2 1999/12/15 14:49:50 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4UniformMagField.cc,v 1.3 2000/11/01 15:15:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //
@@ -64,6 +64,7 @@ G4UniformMagField::G4UniformMagField (const G4UniformMagField &p)
 
 G4UniformMagField& G4UniformMagField::operator = (const G4UniformMagField &p)
 {
+   if (&p == this) return *this;
    for (G4int i=0; i<3; i++)
       fFieldComponents[i] = p.fFieldComponents[i];
    return *this;

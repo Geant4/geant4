@@ -7,6 +7,7 @@
 class G4SPBaryonTable
 {
   public:
+  ~G4SPBaryonTable() {theBaryons.clearAndDestroy();}
   void insert(G4SPBaryon * aBaryon) { theBaryons.insert(aBaryon);}
   G4double length() {return theBaryons.length();}
   

@@ -10,22 +10,20 @@
 #include "G4EqMagElectricField.hh"
 
 void  
-G4EqMagElectricField::
-SetChargeMomentumMass( const G4double particleCharge, // e+ units
-			            const G4double MomentumXc,
-                                    const G4double particleMass)
+G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units
+		                            G4double MomentumXc,
+                                            G4double particleMass)
 {
    fElectroMagCof =  eplus*c_squared ;
    fElectroMagCof *= particleCharge/particleMass; 
-  
 }
 
 
 
 void
-G4EqMagElectricField::EvaluateRhsGivenB( const G4double y[],
-			                 const G4double Field[],
-				               G4double dydx[] ) const
+G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
+			                const G4double Field[],
+				              G4double dydx[] ) const
 {
 
    // Components of y:

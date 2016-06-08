@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN05RunAction.hh,v 1.6 2000/01/06 15:06:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #ifndef ExN05RunAction_h

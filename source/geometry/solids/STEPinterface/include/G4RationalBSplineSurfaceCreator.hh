@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RationalBSplineSurfaceCreator.hh,v 1.2 2000/01/21 13:45:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RationalBSplineSurfaceCreator.hh,v 1.3 2000/11/09 16:35:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4RationalBSplineSurfaceCreator
@@ -40,7 +40,7 @@ class G4RationalBSplineSurfaceCreator: public G4BSplineSurfaceCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void*);
-    G4String Name() { return "Rational_B_Spline_Surface"; }
+    const char* Name() const { return "Rational_B_Spline_Surface"; }
     static G4RationalBSplineSurfaceCreator GetInstance() { return csc; }
     
   // Members

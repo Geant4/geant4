@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.cc,v 1.4 1999/12/15 14:50:27 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VoxelNavigation.cc,v 1.6 2000/11/20 19:06:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -80,8 +80,8 @@ G4double G4VoxelNavigation::ComputeStep(const G4ThreeVector &localPoint,
 	initialNode=true;
 	noStep=true;
 
-	do {
-
+	while (noStep)
+	{
 	curVoxelNode=fVoxelNode;
 	curNoVolumes=curVoxelNode->GetNoContained();
 
@@ -193,7 +193,7 @@ G4double G4VoxelNavigation::ComputeStep(const G4ThreeVector &localPoint,
 				       ourStep);
 		}
 
-	} while (noStep);
+	}  // end -while (noStep)- loop
 
 	return ourStep;
 }
@@ -296,14 +296,14 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 					   const G4ThreeVector& localDirection,
 					   const G4double currentStep)
 {
-	G4SmartVoxelHeader *workHeader,*newHeader;
-	G4SmartVoxelProxy *newProxy;
-	G4SmartVoxelNode *newVoxelNode;
+	G4SmartVoxelHeader *workHeader=0,*newHeader=0;
+	G4SmartVoxelProxy *newProxy=0;
+	G4SmartVoxelNode *newVoxelNode=0;
 	G4ThreeVector targetPoint,voxelPoint;
 	G4double workNodeWidth,workMinExtent,workCoord;
-	G4double minVal,maxVal,newDistance;
+	G4double minVal,maxVal,newDistance=0.;
 	G4double newHeaderMin,newHeaderNodeWidth;
-	G4int depth, newDepth,workNodeNo,newNodeNo,newHeaderNoSlices;
+	G4int depth=0,newDepth=0,workNodeNo=0,newNodeNo=0,newHeaderNoSlices=0;
 	EAxis workHeaderAxis,newHeaderAxis;
 	G4bool isNewVoxel=false;
 	

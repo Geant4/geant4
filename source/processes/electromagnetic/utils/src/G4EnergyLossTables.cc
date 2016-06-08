@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.12 2000/05/23 14:25:26 urban Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4EnergyLossTables.cc,v 1.13 2000/11/04 16:47:29 maire Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------------- 
 // first version created by P.Urban , 06/04/1998
@@ -61,7 +61,7 @@ void G4EnergyLossTables::Register(
  G4double G4EnergyLossTables::GetPreciseDEDX(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if( aParticle != lastParticle)
   {
@@ -104,7 +104,7 @@ void G4EnergyLossTables::Register(
  G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
-    G4Material *aMaterial)
+    const G4Material *aMaterial)
 {
   if( aParticle != lastParticle)
   {

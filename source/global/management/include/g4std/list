@@ -1,0 +1,23 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: list,v 1.1 2000/08/22 07:54:26 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+//      ---------------- list ----------------
+//
+#ifndef G4_LIST_H
+#define G4_LIST_H
+
+#ifdef G4USE_OLDSTL
+  #include <list.h>
+#else
+  #include <list>
+#endif 
+
+#endif 
+

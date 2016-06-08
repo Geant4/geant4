@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LineCreator.hh,v 1.2 2000/01/21 13:45:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4LineCreator.hh,v 1.3 2000/11/09 16:35:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4LineCreator
@@ -39,7 +39,7 @@ class G4LineCreator: private G4GeometryCreator
 
     void CreateG4Geometry(STEPentity&);
     void CreateSTEPGeometry(void* G4obj);
-    G4String Name() { return "Line"; }
+    const char* Name() const { return "Line"; }
     static G4LineCreator GetInstance() { return csc; }
 
   // Members

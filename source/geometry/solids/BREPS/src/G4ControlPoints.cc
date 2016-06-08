@@ -5,17 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ControlPoints.cc,v 1.3 2000/01/21 13:47:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4ControlPoints.cc,v 1.5 2000/11/08 14:22:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
 //
-// Modif 8 oct 98 : A.Floquet
-//      G4PointRat datas are made of
-// 	 . a point 3D
-//	 . a additional value : the scale factor which is set to 1 by default
-//      G4ControlPoints includes only G4PointRat which in turn are made 
-//      of G4Point3D
+// G4ControlPoints.cc
 //
+// ----------------------------------------------------------------------
 
 #include "G4ControlPoints.hh"
 
@@ -27,18 +25,18 @@ G4ControlPoints::G4ControlPoints()
 }
 
 
-G4ControlPoints::G4ControlPoints( int rows, int columns)
+G4ControlPoints::G4ControlPoints( G4int rows, G4int columns)
 {
   nr=rows; 
   nc=columns; 
   data = (G4PointRat**) new G4PointRat *[nr*nc];
   
-  for(int a =0; a<nr*nc;a++) 
+  for(G4int a =0; a<nr*nc;a++) 
     data[a]=new G4PointRat;
 }
 
 
-G4ControlPoints::G4ControlPoints( int point_type, int rows, int columns)
+G4ControlPoints::G4ControlPoints( G4int point_type, G4int rows, G4int columns)
 {
 
 //     point_type is maintained only for compatibility 
@@ -48,7 +46,7 @@ G4ControlPoints::G4ControlPoints( int point_type, int rows, int columns)
       nc=columns;
       data = (G4PointRat**)new G4PointRat *[nr*nc];
 
-      for(int a = 0; a < nr*nc ; a++ )
+      for(G4int a = 0; a < nr*nc ; a++ )
 	data[a]=new G4PointRat;
 }
 
@@ -57,7 +55,12 @@ G4ControlPoints::G4ControlPoints(const G4ControlPoints& old_points)
 { 
    // copy constructor
   
-  nr   = old_points.GetRows(); nc=old_points.GetCols();
+  for( G4int i = 0; i < nr*nc; i++)
+    delete data[i];
+  delete[] data;
+
+  nr   = old_points.nr;
+  nc   = old_points.nc;
   data = (G4PointRat**)new G4PointRat *[nr*nc];
   
   G4int a, b;
@@ -73,16 +76,43 @@ G4ControlPoints::G4ControlPoints(const G4ControlPoints& old_points)
 
 G4ControlPoints::~G4ControlPoints()
 {
-  for( int a = 0; a < nr*nc; a++)
+  for( G4int a = 0; a < nr*nc; a++)
     delete data[a];
   
   delete[] data;
 }
 
 
+G4ControlPoints& G4ControlPoints::operator=(const G4ControlPoints& c)
+{ 
+   // assignment operator
+
+  if (&c == this) return *this;
+
+  for( G4int i = 0; i < nr*nc; i++)
+    delete data[i];
+  delete[] data;
+
+  nr   = c.nr;
+  nc   = c.nc;
+  data = (G4PointRat**)new G4PointRat *[nr*nc];
+  
+  G4int a, b;
+  
+  for (a = 0; a < nr*nc ; a++ )
+    data[a] = new G4PointRat;
+      
+  for ( a = 0; a < nr ; a++ )
+    for ( b = 0; b < nc ; b++ )
+      put( a, b, c.GetRat(a,b));
+
+  return *this;
+}
+
+
 void G4ControlPoints::SetWeights(G4double* weights)
 {
-  for ( int a = 0; a < nr*nc; a++ )
+  for ( G4int a = 0; a < nr*nc; a++ )
     (data[a])->setW(weights[a]);
 }
 
@@ -115,8 +145,8 @@ G4double G4ControlPoints::ClosestDistanceToPoint( const G4Point3D& Pt)
   G4double  TmpDist;
   G4Point3D Pt2;
   
-  for(int a=0;a<nr;a++)
-    for(int b=0;b<nc;b++)
+  for(G4int a=0;a<nr;a++)
+    for(G4int b=0;b<nc;b++)
     {
       Pt2       = Get3D(a,b);
       TmpDist   = Pt.distance2(Pt2);

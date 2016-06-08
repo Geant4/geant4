@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PiMinusStopCo.cc,v 1.4 2000/04/18 17:18:36 pia Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UniformMagField.hh,v 1.3 2000/04/27 09:14:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4UniformMagField.hh,v 1.4 2000/11/01 15:15:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4UniformMagField
@@ -47,15 +47,16 @@ class G4UniformMagField : public G4MagneticField
       // Copy constructor and assignment operator.
 
     void GetFieldValue(const G4double yTrack[3] ,
-	                     G4double *MagField ) const ;
+	                     G4double *MagField) const ;
 
-    void SetFieldValue( const G4ThreeVector& newFieldValue );
+    void SetFieldValue(const G4ThreeVector& newFieldValue);
 
     G4ThreeVector GetConstantFieldValue() const;
-      //  Return the field value  
+      // Return the field value  
 
   private:
-         G4double fFieldComponents[3] ;
+
+    G4double fFieldComponents[3] ;
 };
 
 #endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HESigmaMinusInelastic.hh,v 1.3 1999/12/15 14:52:54 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4HESigmaMinusInelastic.hh,v 1.4 2000/12/14 09:02:42 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -17,6 +17,13 @@
 
 #ifndef G4HESigmaMinusInelastic_h
 #define G4HESigmaMinusInelastic_h 1
+
+// Class Description
+// Final state production model for SigmaMinus inelastic scattering above 20 GeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
 
 #include "G4HEInelastic.hh"
 

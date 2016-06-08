@@ -5,15 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentEventMan.hh,v 1.9 1999/11/28 21:54:17 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PersistentEventMan.hh,v 1.11 2000/12/15 07:54:49 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// class G4PersistentEventMan 
-//
-// A Utility class for storing and retrieving the event objects.
+
+// Class Description:
+//   A Utility class to be used by G4PersistencyManager.
+// Average users do not need to use this class.
 //
 // This class is not persistent-capable. 
 //
+
 // Member functions:
 // =================
 //  G4bool Store(HepDbApplication* dbApp,

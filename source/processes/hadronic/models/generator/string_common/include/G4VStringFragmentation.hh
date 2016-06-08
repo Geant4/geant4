@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VStringFragmentation.hh,v 1.2 1999/12/15 14:52:46 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VStringFragmentation.hh,v 1.3 2000/08/02 08:13:05 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4VStringFragmentation_h
 #define G4VStringFragmentation_h 1
 
-#include "G4ExcitedString.hh"
-//GF#include "G4ReactionProductVector.hh"
+#include "G4ExcitedStringVector.hh"
+
 class G4KineticTrackVector;
 
 class G4VStringFragmentation 
@@ -28,8 +28,7 @@ class G4VStringFragmentation
       int operator!=(const G4VStringFragmentation &right) const;
 
   public:
-//      virtual G4ReactionProductVector * FragmentString(const G4ExcitedString &theString)=0;
-      virtual G4KineticTrackVector * FragmentString(const G4ExcitedString &theString)=0;
+      virtual G4KineticTrackVector * FragmentStrings(const G4ExcitedStringVector * theStrings)=0;
 
   private:
 

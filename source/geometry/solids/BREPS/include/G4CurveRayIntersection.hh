@@ -1,62 +1,87 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4CurveRayIntersection.hh,v 1.3 2000/11/08 14:22:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// ----------------------------------------------------------------------
+// Class G4CurveRayIntersection
+//
+// Class Description:
+//
+// Class capable of storing both the parametric and the non-parametric
+// representation of a intersection point on a curve. It's subclassed
+// from G4CurvePoint.
+
+// Author: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef included_G4CurveRayIntersection
 #define included_G4CurveRayIntersection
 
 #include "G4CurvePoint.hh"
 #include "G4Ray.hh"
 
-class G4CurveRayIntersection: public G4CurvePoint {
+class G4CurveRayIntersection : public G4CurvePoint
+{
 
-// at first, the interface similar to that of G4CurvePoint:
-
-public:
+public:  // with description
 
   G4CurveRayIntersection();
-  // must be followed by Init!
-  // only the distance is set (to infinity)
+    // Default constructor. Sets only distance to infinity.
+    // Must be followed by Init!
 
   G4CurveRayIntersection(G4Curve& c0, const G4Ray& r0);
+    // Constructor taking a curve and a ray.
  
-  void Init(G4Curve& c0, const G4Ray& r0);
+  ~G4CurveRayIntersection();
+    // Empty destructor.
 
-  const G4Ray& GetRay() const;
+  G4CurveRayIntersection(const G4CurveRayIntersection& cr);
+  G4CurveRayIntersection& operator=(const G4CurveRayIntersection& cr);
+    // Copy constructor and assignment operator.
 
-  void Reset();
+  inline void Init(G4Curve& c0, const G4Ray& r0);
+    // Initialises a G4CurveRayIntersection. Called by the constructor above.
 
-  void ResetPPoint(G4double u0);
+  inline const G4Ray& GetRay() const;
+    // Returns the ray of intersection.
 
-  void Reset(const G4Point3D& p0);
+  inline void Reset();
+  inline void ResetPPoint(G4double u0);
+  inline void Reset(const G4Point3D& p0);
+  inline void Reset(G4double u0, const G4Point3D& p0);
+  inline void ResetDistance(G4double d0);
+  inline void Reset(G4double u0, G4double d0);
+  inline void Reset(const G4Point3D& p0, G4double d0);
+  inline void Reset(G4double u0, const G4Point3D& p0, G4double d0);
+    // Resets point's attributes.
 
-  void Reset(G4double u0, const G4Point3D& p0);
+  inline G4double GetPPoint();
+  inline const G4Point3D& GetPoint();
+    // Returns point as parameter or as point in space.
 
-  void ResetDistance(G4double d0);
+  inline G4double GetDistance();
+    // Returns intersection's distance.
 
-  void Reset(G4double u0, G4double d0);
+public:  // without description
 
-  void Reset(const G4Point3D& p0, G4double d0);
+  // additional functionalities
 
-  void Reset(G4double u0, const G4Point3D& p0, G4double d0);
-
-  G4double GetPPoint();
-
-  const G4Point3D& GetPoint();
-
-  G4double GetDistance();
+  inline void Update(G4CurveRayIntersection& is);
+  inline void UpdateWithPointOnCurve(G4CurveRayIntersection& is);
 
 protected:
 
+  // data
+
   const G4Ray* r;
-
   G4double d;
-
   static const G4int dFlag;
-
-// now the additional functionality
-
-public:
-
-  void Update(G4CurveRayIntersection& is);
-
-  void UpdateWithPointOnCurve(G4CurveRayIntersection& is);
 
 };
 

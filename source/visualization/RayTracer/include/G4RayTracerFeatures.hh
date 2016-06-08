@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RayTracerFeatures.hh,v 1.2 2000/03/09 15:36:35 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 

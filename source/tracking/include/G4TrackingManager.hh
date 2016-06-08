@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TrackingManager.hh,v 1.9 2000/06/02 09:13:31 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //---------------------------------------------------------------

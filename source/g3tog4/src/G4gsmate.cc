@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gsmate.cc,v 1.6 1999/12/15 14:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

@@ -5,17 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTableEntry.cc,v 1.4 2000/03/02 17:54:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G3VolTableEntry.cc,v 1.6 2000/11/28 12:07:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // modified by I.Hrivnacova, 13.10.99
 
+#include "globals.hh"
 #include "G3VolTableEntry.hh"
 #include "G3VolTable.hh"
 #include "G4LogicalVolume.hh"
 #include "G3Pos.hh"
 #include "G3toG4.hh"
-#include "globals.hh"
 
 G3VolTableEntry::G3VolTableEntry(G4String& vname, G4String& shape, 
 			     G4double* rpar, G4int npar, G4int nmed, 
@@ -167,6 +167,16 @@ void G3VolTableEntry::SetNRpar(G4int npar, G4double* Rpar) {
 
 void G3VolTableEntry::SetHasNegPars(G4bool hasNegPars) {
   fHasNegPars = hasNegPars;
+}
+
+void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
+  if (fG3Pos.entries()>0 && copy>=0 && copy<fG3Pos.entries()) 
+    fG3Pos.removeAt(copy);
+}
+
+void G3VolTableEntry::ClearDivision() {
+  delete fDivision;
+  fDivision = 0;
 }
 
 G4String

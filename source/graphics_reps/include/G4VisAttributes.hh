@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisAttributes.hh,v 1.6 2000/05/13 09:33:37 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // John Allison  23rd October 1996

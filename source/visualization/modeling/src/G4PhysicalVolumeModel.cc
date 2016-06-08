@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.11 2000/05/29 09:59:15 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.12 2000/10/18 13:57:45 allison Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -345,7 +345,8 @@ void G4PhysicalVolumeModel::DescribeSolid
 G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,
 					    const G4Material* pMaterial) {
   // If true, cull, i.e., do not Draw.
-  G4double density = pMaterial -> GetDensity ();
+  G4double density = 0.;
+  if (pMaterial) density = pMaterial -> GetDensity ();
   const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
   if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
   if (fpMP) {

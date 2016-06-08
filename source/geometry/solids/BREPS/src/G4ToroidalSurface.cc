@@ -5,31 +5,42 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurface.cc,v 1.2 1999/12/15 14:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4ToroidalSurface.cc,v 1.5 2000/11/20 17:54:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4ToroidalSurface.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4ToroidalSurface.hh"
 
 
-
-
-G4ToroidalSurface::G4ToroidalSurface(): EQN_EPS(1e-9){}
+G4ToroidalSurface::G4ToroidalSurface()
+ : EQN_EPS(1e-9)
+{
+}
 
 G4ToroidalSurface::G4ToroidalSurface(const G4Vector3D& Location,
 				     const G4Vector3D& Ax,
 				     const G4Vector3D& Dir,
-				     const G4double MinRad,
-				     const G4double MaxRad): EQN_EPS(1e-9)
+				     G4double MinRad,
+				     G4double MaxRad)
+  : EQN_EPS(1e-9)
 {   
   Placement.Init(Dir, Ax, Location);
 
   MinRadius = MinRad;
   MaxRadius = MaxRad;
-  TransMatrix= new Matrix(4,4);
+  TransMatrix= new G4PointMatrix(4,4);
 }
 
 
-G4ToroidalSurface::~G4ToroidalSurface(){}
+G4ToroidalSurface::~G4ToroidalSurface()
+{
+}
 
 
 void G4ToroidalSurface::CalcBBox()
@@ -49,6 +60,12 @@ void G4ToroidalSurface::CalcBBox()
 }
 
 
+G4Vector3D G4ToroidalSurface::SurfaceNormal(const G4Point3D& Pt) const 
+{
+  return G4Vector3D(0,0,0);
+}
+
+
 G4double G4ToroidalSurface::ClosestDistanceToPoint(const G4Point3D &Pt)
 {
   // L. Broglia
@@ -61,7 +78,7 @@ G4double G4ToroidalSurface::ClosestDistanceToPoint(const G4Point3D &Pt)
 }
 
 
-int G4ToroidalSurface::Intersect(const G4Ray& Ray)
+G4int G4ToroidalSurface::Intersect(const G4Ray& Ray)
 {
   // ----	inttor - Intersect a ray with a torus. ------------------------
   //	from GraphicsGems II by 
@@ -94,7 +111,7 @@ int G4ToroidalSurface::Intersect(const G4Ray& Ray)
   // Variables. Should be optimized later...
   G4Point3D  Base = Ray.GetStart();  // Base of the intersection ray
   G4Vector3D DCos = Ray.GetDir();    // Direction cosines of the ray
-  int 	     nhits=0;		     // Number of intersections
+  G4int	     nhits=0;		     // Number of intersections
   G4double   rhits[4];		     // Intersection distances
   G4double   hits[4];		     // Ordered intersection distances
   G4double   rho, a0, b0;	     // Related constants		
@@ -144,7 +161,7 @@ int G4ToroidalSurface::Intersect(const G4Ray& Ray)
     // Convert Hit distances to intersection points
     /*
       G4Point3D** IntersectionPoints = new G4Point3D*[nhits];
-      for(int a=0;a<nhits;a++)
+      for(G4int a=0;a<nhits;a++)
       {
       G4double Dist = rhits[a];
       IntersectionPoints[a] = new G4Point3D((Base - Dist * DCos)); 
@@ -153,18 +170,18 @@ int G4ToroidalSurface::Intersect(const G4Ray& Ray)
       // Start with checking for the intersections that are Inside the bbox
       
       G4Point3D* Hit;
-      int InsideBox[2]; // Max 2 intersections on the surface
-      int Counter=0;
+      G4int InsideBox[2]; // Max 2 intersections on the surface
+      G4int Counter=0;
     */
 
     G4Point3D BoxMin = bbox->GetBoxMin();
     G4Point3D BoxMax = bbox->GetBoxMax();
     G4Point3D Hit;
-    int       c1     = 0;
-    int       c2;
+    G4int       c1     = 0;
+    G4int       c2;
     G4double  tempVec[4];
     
-    for(int a=0;a<nhits;a++) 
+    for(G4int a=0;a<nhits;a++) 
     {
       while ( (c1 < 4) && (hits[c1] <= rhits[a]) )
       {
@@ -184,7 +201,7 @@ int G4ToroidalSurface::Intersect(const G4Ray& Ray)
       }
     }
     
-    for(int b=0;b<nhits;b++)
+    for(G4int b=0;b<nhits;b++)
     {
       //		Hit = IntersectionPoints[b]; 
       if(hits[b] >=kCarTolerance*0.5)
@@ -208,7 +225,7 @@ int G4ToroidalSurface::Intersect(const G4Ray& Ray)
     }
     
     // If two Inside bbox, find closest 
-    int Closest=0;
+    // G4int Closest=0;
     
     //	    if(Counter>1)
     //		if(rhits[InsideBox[0]] > rhits[InsideBox[1]])
@@ -217,8 +234,8 @@ int G4ToroidalSurface::Intersect(const G4Ray& Ray)
     // Project polygon and do point in polygon
     // Projection also for curves etc.
     // Should probably be implemented in the curve class. 
-    G4Plane Plane1 = Ray.GetPlane(1);
-    G4Plane Plane2 = Ray.GetPlane(2);
+    // G4Plane Plane1 = Ray.GetPlane(1);
+    // G4Plane Plane2 = Ray.GetPlane(2);
     
     // Point in polygon
     return 1;
@@ -227,7 +244,7 @@ int G4ToroidalSurface::Intersect(const G4Ray& Ray)
 }
 
 
-int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
+G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
 {
   // From Graphics Gems I by Jochen Schwartz
   
@@ -235,7 +252,7 @@ int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
   G4double  z, u, v, sub;
   G4double  A, B, C, D;
   G4double  sq_A, p, q, r;
-  int       i, num;
+  G4int     i, num;
   
     // Normal form: x^4 + Ax^3 + Bx^2 + Cx + D = 0 
 
@@ -320,10 +337,10 @@ int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
 }
 
 
-int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
+G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
 {
   // From Graphics Gems I bu Jochen Schwartz
-  int       i, num;
+  G4int     i, num;
   G4double  sub;
   G4double  A, B, C;
   G4double  sq_A, p, q;
@@ -353,7 +370,7 @@ int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
     }
     else // one single and one G4double solution 
     {
-      G4double u = cbrt(-q);
+      G4double u = pow(-q,1./3.);
       s[ 0 ] = 2 * u;
       s[ 1 ] = - u;
       num = 2;
@@ -372,8 +389,8 @@ int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
   else // one real solution 
   {
     G4double sqrt_D = sqrt(D);
-    G4double u = cbrt(sqrt_D - q);
-    G4double v = - cbrt(sqrt_D + q);
+    G4double u = pow(sqrt_D - q,1./3.);
+    G4double v = - pow(sqrt_D + q,1./3.);
     
     s[ 0 ] = u + v;
     num = 1;
@@ -389,7 +406,7 @@ int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
 }
 
 
-int G4ToroidalSurface::SolveQuadric(G4double c[], G4double s[] )
+G4int G4ToroidalSurface::SolveQuadric(G4double c[], G4double s[] )
 {
   // From Graphics Gems I by Jochen Schwartz
   G4double p, q, D;
@@ -420,26 +437,3 @@ int G4ToroidalSurface::SolveQuadric(G4double c[], G4double s[] )
 
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

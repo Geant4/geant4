@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPEnAngCorrelation.hh,v 1.4 1999/12/15 14:53:11 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4NeutronHPEnAngCorrelation_h
 #define G4NeutronHPEnAngCorrelation_h 1

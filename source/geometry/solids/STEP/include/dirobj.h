@@ -13,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.h,v 1.4 2000/06/08 17:18:10 gcosmo Exp $  */ 
+/* $Id: dirobj.h,v 1.6 2000/11/21 07:54:49 gcosmo Exp $  */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>

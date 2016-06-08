@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVParameterised.hh,v 1.3 2000/04/20 16:49:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PVParameterised.hh,v 1.4 2000/11/01 15:39:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4PVParameterised
@@ -48,6 +48,9 @@ class G4PVParameterised : public G4PVReplica
 		G4VPVParameterisation *pParam);
       // Almost exactly similar to first constructor, changing only mother 
       // pointer's type to LogicalVolume.
+
+    virtual ~G4PVParameterised();
+      // Virtual empty destructor.
 
     virtual G4VPVParameterisation* GetParameterisation() const;
       // Returns the current pointer to the parameterisation.

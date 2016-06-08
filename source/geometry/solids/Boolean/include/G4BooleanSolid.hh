@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BooleanSolid.hh,v 1.3 2000/04/27 09:59:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4BooleanSolid.hh,v 1.4 2000/11/02 12:25:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // class G4BooleanSolid
@@ -63,6 +63,12 @@ class G4BooleanSolid : public G4VSolid
   
     G4VSolid* fPtrSolidA ;
     G4VSolid* fPtrSolidB ;
+
+  private:
+
+    G4BooleanSolid(const G4BooleanSolid&);
+    G4BooleanSolid& operator=(const G4BooleanSolid&);
+      // Private copy constructor and assignment operator.
 
   private:
 

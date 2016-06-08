@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VSteppingVerbose.hh,v 1.5 2000/06/01 03:17:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //  
 //---------------------------------------------------------------

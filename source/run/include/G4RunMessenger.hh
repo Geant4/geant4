@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.hh,v 1.4.4.1 1999/12/07 20:52:58 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RunMessenger.hh,v 1.6 2000/11/13 01:24:20 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //	GEANT 4 class header file 
@@ -72,6 +72,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   cutCmd;
     G4UIcmdWithAnInteger *      storeRandCmd;
     G4UIcmdWithAString *        restoreRandCmd;   
+    G4UIcmdWithAString *        randDirCmd;
 };
 
 #endif

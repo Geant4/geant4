@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Polyhedron.hh,v 1.8 2000/03/30 16:01:41 stesting Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 #ifndef G4POLYHEDRON_HH
 #define G4POLYHEDRON_HH

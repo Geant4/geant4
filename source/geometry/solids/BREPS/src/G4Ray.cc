@@ -5,37 +5,34 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ray.cc,v 1.2 1999/12/15 14:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Ray.cc,v 1.5 2000/11/20 17:54:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Ray.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4Ray.hh"
 #include "G4PointRat.hh"
 
-
-/*
-define in .icc
-void G4Ray::SetStart(const G4Point3D& p) 
-{ 
-  SetStart(G4Point3D(p.x(),p.y(),p.z())); 
-}
-
-
-G4Ray::G4Ray(const G4Point3D& s, const G4Vector3D& d) 
+G4Ray::G4Ray()
 {
-  SetStart(s); 
-  SetDir(G4Vector3D(d.x(),d.y(),d.z()));
 }
 
-
-void G4Ray::Init(const G4Point3D& s, const G4Vector3D& d) 
+G4Ray::G4Ray(const G4Point3D& start0, const G4Vector3D& dir0)
 {
-  SetStart(s); SetDir(G4Vector3D(d.x(),d.y(),d.z()));
+  Init(start0, dir0);
 }
 
-*/
+G4Ray::~G4Ray()
+{
+}
 
 
-const G4Plane& G4Ray::GetPlane(const int number_of_plane)const
+const G4Plane& G4Ray::GetPlane(G4int number_of_plane) const
 {
   if(number_of_plane==1)
     return plane2;
@@ -55,7 +52,7 @@ void G4Ray::CreatePlanes()
 
   G4Point3D  p1, p2, p3, p4;
   G4Vector3D dir1, dir2;
-  G4Vector3D invdir = PINFINITY ;
+  G4Vector3D invdir = G4Vector3D( PINFINITY );
   
   if(!NearZero(RayDir.x(), SQRT_SMALL_FASTF)) 
     invdir.setX(1.0 / RayDir.x());
@@ -79,10 +76,11 @@ void G4Ray::CreatePlanes()
 }
 
 
-void G4Ray::MatVecOrtho(register G4Vector3D &out,register const G4Vector3D in )
+void G4Ray::MatVecOrtho(register G4Vector3D &out,
+                        register const G4Vector3D in )
 {
   register G4double f;
-  int               i_Which;
+  G4int             i_Which;
 
   if(NearZero(in.x(), 0.0001) && NearZero(in.y(), 0.0001) &&
      NearZero(in.z(), 0.0001) )  
@@ -151,23 +149,23 @@ void G4Ray::MatVecOrtho(register G4Vector3D &out,register const G4Vector3D in )
 //  This follows the outward-pointing Normal convention, and the
 //  right-hand rule for cross products.
 //
-//
-//                      C
-//                      *
-//                      |\
-//                      | \
-//         ^     N      |  \
-//         |      \     |   \
-//         |       \    |    \
-//         |C-A     \   |     \
-//         |         \  |      \
-//         |          \ |       \
-//                     \|        \
-//                      *---------*
-//                      A         B
-//                         ----->
-//                          B-A
-//
+/*
+                        C
+                        *
+                        |\
+                        | \
+           ^     N      |  \
+           |      \     |   \
+           |       \    |    \
+           |C-A     \   |     \
+           |         \  |      \
+           |          \ |       \
+                       \|        \
+                        *---------*
+                        A         B
+                           ----->
+                            B-A
+*/
 //  If the points are given in the order A B C (eg, *counter*-clockwise),
 //  then the outward pointing surface Normal N = (B-A) x (C-A).
 //
@@ -180,10 +178,10 @@ void G4Ray::MatVecOrtho(register G4Vector3D &out,register const G4Vector3D in )
 //      G4Plane   The G4Plane equation is stored here.
 
 
-int G4Ray::CalcPlane3Pts(G4Plane &plane1,
-			 const G4Point3D& a,
-			 const G4Point3D& b,
-			 const G4Point3D& c )
+G4int G4Ray::CalcPlane3Pts(G4Plane &plane1,
+			   const G4Point3D& a,
+			   const G4Point3D& b,
+			   const G4Point3D& c )
 {
   // Creates the two orthogonal planes which are needed in projecting the
   // surface into 2D.
@@ -201,7 +199,8 @@ int G4Ray::CalcPlane3Pts(G4Plane &plane1,
   Vcross( plane1, B_A, C_A );
 
   //	Ensure unit length Normal 
-  if( (mag = Magnitude(plane1)) <= SQRT_SMALL_FASTF )
+  mag = Magnitude(plane1);
+  if( mag  <= SQRT_SMALL_FASTF )
     return(-1);//	 FAIL 
   
   mag = 1/mag;
@@ -230,24 +229,3 @@ void G4Ray::RayCheck()
   r_min = 0;
   r_max = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

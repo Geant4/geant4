@@ -5,52 +5,29 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PGeometryObjectMap.ddl,v 1.4 1999/12/15 14:51:23 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PGeometryObjectMap.ddl,v 1.7 2000/11/22 15:29:39 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// class G4PGeometryObjectMap 
+
+// class description:
 //
-// A Class responsible for keeping track of the geometry object map.
+//	This is a class which is responsible for keeping track of the 
+//	persistent geometry object in storing and retrieving geometry.
+//	This class inherits HepPersObj and is persistent-capable. 
 //
-// This class is persistent-capable. 
-//
-// Member functions:
-// =================
-//      G4PGeometryObjectMap( G4PString theGeometryName );
-//      ~G4PGeometryObjectMap();
-//
-//  protected:
-//      G4PVPhysicalVolume* LookUp( G4VPhysicalVolume* aPhysVol );
-//      void Add( const G4VPhysicalVolume*  aPhysVol,
-//                const G4PVPhysicalVolume* persPhysVol );
-//      G4PLogicalVolume* LookUp(G4LogicalVolume* aLogVol);
-//      void Add( const G4LogicalVolume*  aLogVol,
-//                const G4PLogicalVolume* persLogVol );
-//      G4PVSolid* LookUp(G4VSolid* aSolid);
-//      void Add( const G4VSolid*  aSolid,
-//                const G4PVSolid* persSolid );
-//      G4int GetNoSolids();
-//      G4VSolid* GetSolid(G4int n);
-//      G4PVSolid* GetPSolid(G4int n);
-//
+
 // Note:
 // =====
-//      This class contains G4RWTPtrVector of the transient classes.
-//      As a result, ooddlx compiler will issue warnings as follows, but it's okay.
-//      The value of G4RWTPtrVector is used only in transient case
+//      This class contains pointers of some transient classes.
+//      As a result, ooddlx compiler will issue warnings as follows.
+//      The value of the pointers are used only in transient case
 //      in this class, and you can safely ignore these warnings.
 // ----
-// "include/G4PGeometryObjectMap.ddl", line xxx: warning: persistent-capable
-//           class member type is a problem
-//             The type of base class RWPtrVector is a problem
-//             The type of member RWPtrVector::array_ is pointer
-//             The type of base class G4RWTPtrVector<G4VPhysicalVolume > is a
-//                       problem
-//             The type of base class RWPtrVector is a problem
-//         G4PhysVolRefVArray  transPhysVolPtrs;
-//                             ^
+// "include/G4PGeometryObjectMap.ddl", line 136: warning: persistent-capable
+//           class member type is pointer
+//         G4VPhysVolRefArray*  transPhysVolPtrs;
+//                              ^
 // ----
-//
 //
 // History:
 // 98.06.20 Y.Morita  Initial version
@@ -58,9 +35,8 @@
 #ifndef G4PGeometryObjectMap_h
 #define G4PGeometryObjectMap_h 1
 
-#include "g4rw/tpvector.h"
+#include "G4Pglobals.hh"
 
-#include "globals.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -75,9 +51,9 @@ class G4PLogicalVolume;
 class G4PVSolid;
 #pragma ooclassref G4PVSolid "G4PVSolid_ref.hh"
 
-typedef G4RWTPtrVector<G4VPhysicalVolume> G4VPhysVolRefVArray;
-typedef G4RWTPtrVector<G4LogicalVolume>   G4LogVolRefVArray;
-typedef G4RWTPtrVector<G4VSolid>          G4VSolidRefVArray;
+class G4VPhysVolRefArray;
+class G4LogVolRefArray;
+class G4VSolidRefArray;
 
 typedef d_Varray< d_Ref<G4PVPhysicalVolume> > G4PVPhysVolRefVArray;
 typedef d_Varray< d_Ref<G4PLogicalVolume> >   G4PLogVolRefVArray;
@@ -88,19 +64,23 @@ class G4PGeometryObjectMap
 {
   public:
       G4PGeometryObjectMap();
+  public: // with description
       G4PGeometryObjectMap( const G4String theGeometryName );
       ~G4PGeometryObjectMap();
+      //  The constructor and the destructor.
 
-//    template cannot be used in class scope!!
-//      template<class T_IN, class T_OUT> T_OUT LookUp( const T_IN aGeomObj );
-
+  public: // with description
       HepRef(G4PVPhysicalVolume) LookUp(         G4VPhysicalVolume* aPhysVol );
       G4VPhysicalVolume*         LookUp( HepRef(G4PVPhysicalVolume) aPhysVol );
       HepRef(G4PLogicalVolume)   LookUp(         G4LogicalVolume*   aLogVol);
       G4LogicalVolume*           LookUp( HepRef(G4PLogicalVolume)   aLogVol);
       HepRef(G4PVSolid)          LookUp(         G4VSolid*          aSolid);
       G4VSolid*                  LookUp( HepRef(G4PVSolid)          persSolid);
+      // Method LookUp() will check if the pair of transient/persistent
+      // geometry objects is already registered in the geometry map.
+      // It returns the pointer of the pairing object if the pair exists.
 
+  public: // with description
       void Add( G4VPhysicalVolume*         aPhysVol,
                 HepRef(G4PVPhysicalVolume) persPhysVol );
       void Add( HepRef(G4PVPhysicalVolume) persPhysVol,
@@ -113,19 +93,30 @@ class G4PGeometryObjectMap
                 HepRef(G4PVSolid)          persSolid );
       void Add( HepRef(G4PVSolid)          persSolid,
                 G4VSolid*                  aSolid );
+      // Method Add() will register the transient and persistent geometry
+      // objects into the geometry map.
 
+  public: // with description
       inline void SetWorldVolume( const HepRef(G4PVPhysicalVolume) aWorld )
             { thePersistentWorldVolume = aWorld; }
       inline HepRef(G4PVPhysicalVolume) GetWorldVolume()
             { return thePersistentWorldVolume; }
+      // Set and Get methods for setting and getting a smart pointer
+      // for the persistent world volume of the geometry.
 
+  public: // with description
       inline G4int GetNoPhysVol() const { return noPhysVol; }
       inline G4int GetNoLogVol()  const { return noLogVol; }
       inline G4int GetNoSolids()  const { return noSolids; }
+      // returns the number of the registered transient/persistent pairs
+      // in the geometry map.
 
+  public: // with description
       G4VSolid*         GetSolid(G4int n);
       HepRef(G4PVSolid) GetPSolid(G4int n);
+      // returns the pointer of n-th transient/persistent solid.
 
+  public:
       void InitTransientMap();
 
   private:
@@ -134,17 +125,17 @@ class G4PGeometryObjectMap
 
       // Physics Volume Pointer Array
       G4Pint noPhysVol;
-      G4VPhysVolRefVArray  transPhysVolPtrs;
+      G4VPhysVolRefArray*  transPhysVolPtrs;
       G4PVPhysVolRefVArray persPhysVolPtrs;
 
       // Logical Volume Pointer Array
       G4Pint noLogVol;
-      G4LogVolRefVArray  transLogVolPtrs;
+      G4LogVolRefArray*  transLogVolPtrs;
       G4PLogVolRefVArray persLogVolPtrs;
 
       // Solid Pointer Array
       G4Pint noSolids;
-      G4VSolidRefVArray  transSolidPtrs;
+      G4VSolidRefArray*  transSolidPtrs;
       G4PVSolidRefVArray persSolidPtrs;
 
 };

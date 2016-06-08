@@ -1,3 +1,20 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BoundingBox3D.cc,v 1.5 2000/11/08 14:22:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BoundingBox3D.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4BoundingBox3D.hh"
 #include "geomdefs.hh"
 
@@ -21,6 +38,25 @@ G4BoundingBox3D::G4BoundingBox3D(const G4Point3D& p)
 
 G4BoundingBox3D::~G4BoundingBox3D() {}
 
+G4BoundingBox3D::G4BoundingBox3D(const G4BoundingBox3D& right)
+  : box_min(right.box_min), box_max(right.box_max),
+    distance(right.distance), test_result(right.test_result),
+    MiddlePoint(right.MiddlePoint), GeantBox(right.GeantBox)
+{
+}
+
+G4BoundingBox3D& G4BoundingBox3D::operator=(const G4BoundingBox3D& right)
+{
+  if (&right == this) return *this;
+  box_min  = right.box_min;
+  box_max  = right.box_max;
+  distance = right.distance;
+  test_result = right.test_result;
+  MiddlePoint = right.MiddlePoint;
+  GeantBox = right.GeantBox;
+  
+  return *this;
+}
 
 void G4BoundingBox3D::Init(const G4Point3D& p1, const G4Point3D& p2) 
 {
@@ -84,7 +120,7 @@ void G4BoundingBox3D::Extend(const G4Point3D& p)
 ////////////////////////////////////////////////////////////////////////////
 
 
-int G4BoundingBox3D::Test(const G4Ray& rayref)
+G4int G4BoundingBox3D::Test(const G4Ray& rayref)
 {
   const G4Point3D&  tmp_ray_start = rayref.GetStart();
   const G4Vector3D& tmp_ray_dir   = rayref.GetDir();
@@ -106,7 +142,7 @@ int G4BoundingBox3D::Test(const G4Ray& rayref)
     
     // Adapt ray_starting point to box
 
-    const G4Point3D ray_start2 = ray_start - MiddlePoint;
+    const G4Point3D ray_start2 = G4Point3D( ray_start - MiddlePoint );
     distance = DistanceToIn(ray_start2, ray_dir);
 
     if(!distance)
@@ -136,9 +172,9 @@ int G4BoundingBox3D::Test(const G4Ray& rayref)
 // the box (ie. there is a possiblity of an intersection)
 
 
-int G4BoundingBox3D::BoxIntersect(const G4Point3D&  gbox, 
-				  const G4Point3D&  p   , 
-				  const G4Vector3D& v    ) const
+G4int G4BoundingBox3D::BoxIntersect(const G4Point3D&  gbox, 
+				    const G4Point3D&  p   , 
+				    const G4Vector3D& v    ) const
 {
   G4double safx, safy, safz;
   G4double  fdx,  fdy,  fdz;
@@ -313,7 +349,7 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-G4int G4BoundingBox3D::Inside(const G4Point3D& Pt)
+G4int G4BoundingBox3D::Inside(const G4Point3D& Pt) const
 {
   if( ( Pt.x() >= box_min.x() && Pt.x() <= box_max.x() ) &&
       ( Pt.y() >= box_min.y() && Pt.y() <= box_max.y() ) &&
@@ -322,16 +358,3 @@ G4int G4BoundingBox3D::Inside(const G4Point3D& Pt)
   else
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

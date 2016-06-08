@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2PhysicsList.cc,v 1.4 2000/04/17 11:26:49 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: Em2PhysicsList.cc,v 1.5 2000/12/06 14:12:16 maire Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 
@@ -165,8 +165,8 @@ void Em2PhysicsList::ConstructEM()
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);      
-
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);

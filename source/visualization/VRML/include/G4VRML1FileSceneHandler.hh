@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VRML1FileSceneHandler.hh,v 1.6 1999/12/16 17:25:11 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // G4VRML1FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada

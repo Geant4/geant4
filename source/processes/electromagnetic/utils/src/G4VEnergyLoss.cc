@@ -1,43 +1,47 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.11 2000/05/26 07:40:09 urban Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VEnergyLoss.cc,v 1.15 2000/10/30 06:50:49 urban Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// 
-// --------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//	For information related to this code contact:
-//	CERN, CN Division, ASD Group
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
+
 // --------------------------------------------------------------
 //  bug fixed in fluct., L.Urban 26/05/00
-// ------------------------------------------------------------
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VEnergyLoss.hh"
+#include "G4EnergyLossMessenger.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double     G4VEnergyLoss::ParticleMass ;                
 G4double     G4VEnergyLoss::taulow       ;                
 G4double     G4VEnergyLoss::tauhigh      ;                
-G4double     G4VEnergyLoss::ltaulow       ;                
-G4double     G4VEnergyLoss::ltauhigh      ;                
-
+G4double     G4VEnergyLoss::ltaulow      ;                
+G4double     G4VEnergyLoss::ltauhigh     ;                
 
 G4bool       G4VEnergyLoss::rndmStepFlag   = false;
 G4bool       G4VEnergyLoss::EnlossFlucFlag = true;
+
 G4bool       G4VEnergyLoss::subSecFlag     = true;
+G4double     G4VEnergyLoss::MinDeltaCutInRange = 0.100*mm ;
+G4double*    G4VEnergyLoss::MinDeltaEnergy	    = NULL   ;
+G4bool*      G4VEnergyLoss::LowerLimitForced        = NULL ;
+G4bool	     G4VEnergyLoss::setMinDeltaCutInRange = false ;
+
 G4double     G4VEnergyLoss::dRoverRange    = 20*perCent;
 G4double     G4VEnergyLoss::finalRange     = 200*micrometer;
 G4double     G4VEnergyLoss::c1lim = dRoverRange ;
 G4double     G4VEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4VEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
+G4EnergyLossMessenger* G4VEnergyLoss::ELossMessenger  = NULL;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,13 +62,14 @@ G4VEnergyLoss::G4VEnergyLoss(const G4String& aName , G4ProcessType aType)
      nmaxCont1(4),
      nmaxCont2(16)
 {
+ //create (only once) EnergyLoss messenger
+ if(!ELossMessenger) ELossMessenger = new G4EnergyLossMessenger();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEnergyLoss::~G4VEnergyLoss()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,8 +78,7 @@ G4VEnergyLoss::G4VEnergyLoss(G4VEnergyLoss& right)
      lastMaterial(NULL),
      nmaxCont1(4),
      nmaxCont2(16)
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -315,7 +319,6 @@ G4double G4VEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
   Value *= ParticleMass*dltau;
   return Value;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -867,7 +870,9 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRangeTab
 
 G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
-                                             G4double    MeanLoss)
+                                               G4double ChargeSquare,
+                                               G4double    MeanLoss,
+                                               G4double step )
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
 {
@@ -876,6 +881,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
    static const G4double sumaLim = -log(probLim) ;
    static const G4double alim=10.;
    static const G4double kappa = 10. ;
+   static const G4double factor = twopi_mc2_rcl2 ;
 
 
   // check if the material has changed ( cache mechanism)
@@ -895,7 +901,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       ipotLogFluct = aMaterial->GetIonisation()->GetLogMeanExcEnergy();
     }
   G4double threshold,w1,w2,C,
-           beta2,suma,e0,loss,lossc ,w;
+           beta2,suma,e0,loss,lossc ,w,electronDensity;
   G4double a1,a2,a3;
   G4int p1,p2,p3;
   G4int nb;
@@ -923,8 +929,10 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   // Gaussian fluctuation ?
   if(MeanLoss >= kappa*Tm)
   {
-    siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
-    loss = RandGauss::shoot(MeanLoss,siga) ;
+    electronDensity = aMaterial->GetElectronDensity() ;
+    siga = sqrt(Tm*(0.5-0.25*beta2)*step*
+                factor*electronDensity*ChargeSquare/beta2) ;
+    loss = G4RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
     return loss ;
   }
@@ -960,7 +968,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -979,7 +987,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1008,7 +1016,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -1017,7 +1025,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1036,7 +1044,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -1052,14 +1060,14 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           rfac       = dp3/(G4float(nmaxCont2)+dp3);
           namean     = G4float(p3)*rfac;
           sa         = G4float(nmaxCont1)*rfac;
-          na         = RandGauss::shoot(namean,sa);
+          na         = G4RandGauss::shoot(namean,sa);
           if (na > 0.)
           {
             alfa   = w1*G4float(nmaxCont2+p3)/(w1*G4float(nmaxCont2)+G4float(p3));
             alfa1  = alfa*log(alfa)/(alfa-1.);
             ea     = na*ipotFluct*alfa1;
             sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-            lossc += RandGauss::shoot(ea,sea);
+            lossc += G4RandGauss::shoot(ea,sea);
           }
         }
 

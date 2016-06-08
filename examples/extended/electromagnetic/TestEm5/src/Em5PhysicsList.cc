@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Em5PhysicsList.cc,v 1.6 2000/05/24 16:13:21 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

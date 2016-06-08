@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000/06/15 17:38:13 gcosmo Exp $
+$Id: History,v 1.11 2000/11/14 16:14:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 14, 2000 G. Cosmo - param-V02-00-01
+- Moved specific parameterisation models to the new top category
+  "parameterisations". Moved files:
+  G4FoamXrayTRmodel[.hh.cc], G4GamDistrXrayTRmodel[.hh.cc],
+  G4IrregularXrayTRmodel[.hh.cc], G4PAIclusterModel[.hh.cc],
+  G4PhotoClusterModel[.hh.cc], G4PlateIrrGasXrayTRmodel[.hh.cc],
+  G4RegularXrayTRmodel[.hh.cc], G4VClusterModel[.hh.cc],
+  G4VXrayTRmodel[.hh.cc].
+- Cleaned-up GNUmakefile of non necessary dependencies.
+
+Aug 03, 2000 G. Cosmo - param-V02-00-00r
+- Changed RandGauss to G4RandGauss in G4IrregularXrayTRmodel.cc and
+  G4VXrayTRmodel.cc to fix events' reproducibility problem.
+- G4VXrayTRmodel.cc: fix to class destructor (V.Grichine)
 
 Jun 15, 2000 G. Cosmo - param-V01-01-04
 - The tag coworks with global-V01-01-04 and materials-V01-01-00:

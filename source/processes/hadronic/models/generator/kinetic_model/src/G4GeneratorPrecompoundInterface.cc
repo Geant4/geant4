@@ -53,6 +53,7 @@
      delete result1;
      
      
+     
      // prepare the fragment
      G4Fragment anInitialState;
      G4int anA=theNucleus->GetMassNumber();
@@ -133,15 +134,25 @@
 
      // call pre-compound
      const G4Fragment aFragment(anInitialState);
-     G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
-   
-     // fill pre-compound part into the result, and return
-     for(G4int ll=0; ll<aPreResult->entries(); ll++)
+     if(theDeExcitation)
      {
-       theTotalResult->insert(aPreResult->at(ll));
-     }
-     delete aPreResult;
+       G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
      
+       // fill pre-compound part into the result, and return
+       for(G4int ll=0; ll<aPreResult->entries(); ll++)
+       {
+         theTotalResult->insert(aPreResult->at(ll));
+       }
+       delete aPreResult;
+     }
+     else
+     {
+       // G4Exception("Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
+     }
      // now return
+     
+     
+     result->clearAndDestroy();
+     delete result;
      return theTotalResult;
    }

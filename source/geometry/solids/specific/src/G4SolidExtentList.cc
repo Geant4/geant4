@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SolidExtentList.cc,v 1.1 2000/04/07 11:03:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------

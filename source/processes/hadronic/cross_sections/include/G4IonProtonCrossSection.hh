@@ -3,6 +3,12 @@
 
 #include "globals.hh"
 #include "G4Proton.hh"
+// Class Description
+// Cross-sections for ion proton scattering up to 20 GeV, getting the low
+// energy threshold behaviour right.
+// H.P. Wellisch (TRIUMF), D. Axen (British Columbia U.). 1996. 
+// Published in Phys.Rev.C54:1329-1332,1996 
+// Class Description - End
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4ProtonInelasticCrossSection.hh"

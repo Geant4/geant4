@@ -20,7 +20,8 @@
 #
 /calor/update
 #
-/calor/setField 5 tesla
+/calor/setField 3 tesla
 #
+/vis/camera/zoom 1.3
 /vis/drawVolume
-/vis/scene/add/trajectories
+

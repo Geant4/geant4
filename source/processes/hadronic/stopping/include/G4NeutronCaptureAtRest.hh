@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronCaptureAtRest.hh,v 1.2 1999/12/15 14:53:36 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4NeutronCaptureAtRest.hh,v 1.3 2000/12/14 08:53:15 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998
@@ -24,6 +24,11 @@
 
 #ifndef G4NeutronCaptureAtRest_h
 #define G4NeutronCaptureAtRest_h 1
+// Class Description
+// Process for capture of neutrons at rest; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
  
 #include "globals.hh"
 #include "Randomize.hh" 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussHermiteQ.cc,v 1.2 1999/11/16 17:31:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4GaussHermiteQ.cc,v 1.3 2000/11/20 17:26:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #include "G4GaussHermiteQ.hh"
 
@@ -23,7 +23,8 @@ G4GaussHermiteQ::G4GaussHermiteQ(      function pFunction,
    const G4int maxNumber = 12 ;
    
    G4int i, j, k ;
-   G4double newton, newton1, temp1, temp2, temp3, temp ;
+   G4double newton=0.;
+   G4double newton1, temp1, temp2, temp3, temp ;
    G4double piInMinusQ = pow(pi,-0.25) ;                // 1.0/sqrt(sqrt(pi)) ??
 
    fNumber = (nHermite +1)/2 ;

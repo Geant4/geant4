@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gsposp.cc,v 1.13 2000/03/07 10:51:40 stesting Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // by I.Hrivnacova, 13.10.99
 

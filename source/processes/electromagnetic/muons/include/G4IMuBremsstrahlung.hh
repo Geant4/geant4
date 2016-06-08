@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IMuBremsstrahlung.hh,v 1.3 2000/04/25 14:18:57 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 

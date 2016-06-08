@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ForwardXrayTR.cc,v 1.4 2000/02/09 10:41:18 grichine Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // G4ForwardXrayTR class -- implementation file
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisCommandsViewerSet.cc,v 1.3 2000/05/19 09:18:09 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 

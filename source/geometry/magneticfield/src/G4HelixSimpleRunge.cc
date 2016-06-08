@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixSimpleRunge.cc,v 1.3 2000/04/12 18:29:26 japost Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4HelixSimpleRunge.cc,v 1.4 2000/11/20 17:29:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #include "G4HelixSimpleRunge.hh"
 #include "G4ThreeVector.hh"
@@ -31,7 +31,6 @@ G4HelixSimpleRunge::DumbStepper( const G4double  yIn[],
 				 G4double        yOut[])
 {
   const G4int nvar = 6 ;
-  G4double dydxTemp[nvar];
   G4double yTemp[nvar];   // , yAdd[nvar];
   G4ThreeVector Bfld_midpoint;
 

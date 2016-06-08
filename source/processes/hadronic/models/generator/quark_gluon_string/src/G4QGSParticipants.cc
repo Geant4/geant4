@@ -1,6 +1,7 @@
 #include "globals.hh"
 #include "G4QGSParticipants.hh"
 #include "G4LorentzVector.hh"
+#include "G4Pair.hh"
 
 // Class G4QGSParticipants 
 
@@ -53,15 +54,11 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
   while(theInteractions.entries() == 0)
   {
     // choose random impact parameter HPW
-    G4double x,y;
-    do
-    {
-      x = 2*G4UniformRand() - 1;
-      y = 2*G4UniformRand() - 1;
-    }
-    while(x*x + y*y > 1);
-    G4double impactX = x*(outerRadius+theNucleonRadius); // add nucleon radius, otherwise too small HPW
-    G4double impactY = y*(outerRadius+theNucleonRadius);
+    G4Pair<G4double, G4double> theImpactParameter;
+    theImpactParameter = theNucleus->ChooseImpactXandY(outerRadius+theNucleonRadius);
+    G4double impactX = theImpactParameter.first; 
+    G4double impactY = theImpactParameter.second;
+    
     // loop over nuclei to find collissions HPW
     theNucleus->StartLoop();
     G4int nucleonCount = 0; // debug
@@ -146,6 +143,7 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
   // clean-up, if necessary
   theInteractions.clearAndDestroy();
   theTargets.clearAndDestroy();
+  delete aProjectile;
 }
 
 void G4QGSParticipants::PerformDiffractiveCollisions()

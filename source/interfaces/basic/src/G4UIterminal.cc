@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.13 2000/06/23 08:46:50 stesting Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4UIterminal.cc,v 1.14 2000/07/22 10:52:29 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #include "g4std/strstream"
@@ -74,10 +74,10 @@ void G4UIterminal::PauseSessionStart(G4String msg)
 {
   iCont= TRUE;
 
-  G4String newCommand= GetCommand();
+  G4String newCommand= GetCommand(msg);
   while(iCont){
     ExecuteCommand(newCommand);
-    newCommand= GetCommand();
+    newCommand= GetCommand(msg);
   }
 }
 
@@ -132,13 +132,13 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
 }
 
 ///////////////////////////////////
-G4String G4UIterminal::GetCommand()
+G4String G4UIterminal::GetCommand(const char* msg)
 ///////////////////////////////////
 {
   G4String newCommand;
   G4String nullString;
 
-  newCommand= shell-> GetCommandLine();
+  newCommand= shell-> GetCommandLine(msg);
 
   G4String nC= newCommand.strip(G4String::leading);
   if( nC.length() == 0 ) {

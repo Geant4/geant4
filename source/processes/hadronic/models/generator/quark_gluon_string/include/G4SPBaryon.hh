@@ -53,6 +53,11 @@ class G4SPBaryon
     
     G4SPBaryon(G4ParticleDefinition * aDefinition);
     
+    ~G4SPBaryon()
+    {
+      for(G4int i=0;i<thePartonInfo.size(); i++) delete thePartonInfo[i];
+    }
+    
     G4bool operator == ( const G4SPBaryon & aBaryon) const
     {return this == &aBaryon; }
     

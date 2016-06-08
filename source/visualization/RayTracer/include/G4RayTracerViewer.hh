@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RayTracerViewer.hh,v 1.2 2000/02/28 15:19:49 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 // John Allison  17th March 2000
 

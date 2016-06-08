@@ -143,6 +143,8 @@ public: // with description
   inline void SetAnalogueMonteCarlo (G4bool r ) { AnalogueMC  = r; }
   //   Controls whether G4RadioactiveDecay runs in analogue mode or
   //   variance reduction mode.
+  inline void SetFBeta (G4bool r ) { FBeta  = r; }
+  //   Controls whether G4RadioactiveDecay uses fast beta simulation mode
   //
   inline G4bool IsAnalogueMonteCarlo () {return AnalogueMC;}
   //   Returns true if the simulation is an analogue Monte Carlo, and false if
@@ -205,6 +207,7 @@ private:
 
   G4bool                        AnalogueMC;
   G4bool                        BRBias;
+  G4bool                        FBeta;
   G4int                         NSplit;
 
   G4int                         NSourceBin;
@@ -215,7 +218,6 @@ private:
   G4double                      DBin[99];
   G4double                      DProfile[99];
 
-  //  vector<G4String>              ValidNuclei;
   G4std::vector<G4String>              LoadedNuclei;
   G4std::vector<G4String>              ValidVolumes;
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gsrotm.cc,v 1.8 1999/12/15 14:49:44 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #include "G3toG4.hh"
 #include "G3RotTable.hh"

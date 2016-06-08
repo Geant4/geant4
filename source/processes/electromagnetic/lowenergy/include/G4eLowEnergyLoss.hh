@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4eLowEnergyLoss.hh,v 1.1 2000/04/04 13:47:35 lefebure Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 

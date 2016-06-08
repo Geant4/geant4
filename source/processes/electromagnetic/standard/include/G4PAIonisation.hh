@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.hh,v 1.4 2000/04/25 14:33:02 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PAIonisation.hh,v 1.7 2000/09/22 14:44:07 grichine Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -25,8 +25,8 @@
 // ************************************************************
 //
 // corrected by V. Grichine on 24/11/97
-//
-//
+// 12.07.00 V.Grichine GetFreePath and GetdEdx were added
+// 22.09.00 V.Grichine and K.Assamagan new function GetEnergyTransfer(G4d,G4i)
 
  
 #ifndef G4PAIonisation_h
@@ -77,13 +77,13 @@ class G4PAIonisation : public G4VPAIenergyLoss
                                       const G4Step& Step      ) ;                 
 
 
-     void BuildLossTable(const G4ParticleDefinition& aParticleType);
+     //  void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
      void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
 
      void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-  //   void  BuildPAIonisationTable() ;
+     void  BuildPAIonisationTable() ;
 
 
      virtual G4double ComputeMicroscopicCrossSection(
@@ -99,16 +99,24 @@ class G4PAIonisation : public G4VPAIenergyLoss
                                     G4double currentMinimumStep,
                                     G4double& currentSafety) ; 
 
-     G4double GetMeanFreePath( const G4Track& track,
+    G4double GetMeanFreePath( const G4Track& track,
                                G4double previousStepSize,
-                               G4ForceCondition* condition ) ;
+                               G4ForceCondition* condition   ) ;
+
+    G4double GetFreePath( G4double scaledTkin, G4double charge2 ) ;
+
+    G4double GetdEdx( G4double scaledTkin, G4double charge2 ) ;
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step) ;
 
-  //    static                                   
     G4double GetLossWithFluct(G4double Step,
                               const G4DynamicParticle *aParticle,
                               G4Material *aMaterial) ;
+
+    G4double GetRandomEnergyTransfer( G4double scaledTkin ) ;
+    G4double GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer  ) ;
+
+  //    static                                   
 
     static G4double GetMaxKineticEnergy() { return HighestKineticEnergy ; } ;
     static G4double GetMinKineticEnergy() { return  LowestKineticEnergy ; } ;

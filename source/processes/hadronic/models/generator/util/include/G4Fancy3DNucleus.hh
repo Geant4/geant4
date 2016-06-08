@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Fancy3DNucleus.hh,v 1.6 1999/12/15 14:52:50 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1

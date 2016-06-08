@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.7.6.1.2.4 1999/12/14 07:07:52 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Navigator.cc,v 1.11 2000/11/20 19:05:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -372,7 +372,7 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 				  const G4double pCurrentProposedStepLength,
 				  G4double	&pNewSafety)
 {
-  G4double Step;
+  G4double Step = DBL_MAX;
   G4ThreeVector localDirection=ComputeLocalAxis(pDirection);
   G4VPhysicalVolume  *motherPhysical=fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical=motherPhysical->GetLogicalVolume();

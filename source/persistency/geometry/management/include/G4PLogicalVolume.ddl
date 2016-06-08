@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PLogicalVolume.ddl,v 1.8 2000/06/09 12:56:01 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PLogicalVolume.ddl,v 1.9 2000/11/02 12:42:11 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4PLogicalVolume
@@ -15,7 +15,7 @@
 #ifndef G4PLOGICALVOLUME_DDL
 #define G4PLOGICALVOLUME_DDL 1
 
-#include "globals.hh"
+#include "G4Pglobals.hh"
 #include "G4PersistentTypes.hh" 
 #include "G4PersistentSchema.hh"
 #include "G4VMaterialMap.hh"

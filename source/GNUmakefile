@@ -1,18 +1,22 @@
-# $Id: GNUmakefile,v 1.20 2000/06/21 11:02:54 johna Exp $
+# $Id: GNUmakefile,v 1.25 2000/12/13 08:25:34 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
-# "gmake glob" makes global libraries for each subdomain.
-#         Composite libraries are built.
-# "gmake vis" makes global libraries and default (separate) visualization.
-# "gmake total" makes everything, including the BREPS and the STEP code.
+# "gmake global" makes global libraries for each subdomain.
+#                Composite libraries are built.
+# "gmake includes" places header files .h/.hh in $G4INCLUDE
+# "gmake libmap" forces rebuilding of map-file for granular libraries.
+# "gmake clean_libs" removes just archive (.a) and shared (.so) libraries
+#                    of current platform installation.
+# "gmake clean" removes installation of current platform.
+# "gmake clean_all" removes all platforms installations.
 #
 # (The .o files(s) are made by implicit rules.)
 
 MAKEFLAGS= --no-print-directory
 
 SUBDIR1 = global particles processes geometry digits+hits
-SUBDIR2 = event tracking track materials run graphics_reps intercoms readout
-SUBDIR3 = g3tog4 interfaces visualization
+SUBDIR2 = event tracking track materials run graphics_reps intercoms parameterisations readout
+SUBDIR3 = analysis g3tog4 interfaces visualization
 SUBDIR4 = persistency
 
 ifndef G4INSTALL
@@ -25,7 +29,7 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global libmap clean_libs clean clean_all
+.PHONY: all glob global libmap includes clean_libs clean clean_all
 
 all:
 ifdef G4USE_HEPODBMS
@@ -101,6 +105,12 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "Compiling liblist.c..."
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
+
+includes:
+	@echo Installing includes files in $(G4INCLUDE) ...
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
 
 clean_libs:
 	@echo Removing all libraries ...

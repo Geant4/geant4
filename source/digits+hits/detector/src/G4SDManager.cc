@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SDManager.cc,v 1.1.10.1.2.1 1999/12/08 17:33:16 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #include "G4SDManager.hh"

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IMultipleScattering.cc,v 1.1 2000/03/20 14:44:04 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // $Id: 
 // --------------------------------------------------------------

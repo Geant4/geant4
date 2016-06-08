@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: HepPolyhedron.h,v 1.4 2000/04/18 10:03:06 evc Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // Class Description:

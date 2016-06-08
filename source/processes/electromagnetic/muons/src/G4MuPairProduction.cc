@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4MuPairProduction.cc,v 1.15 2000/05/23 09:58:49 urban Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 

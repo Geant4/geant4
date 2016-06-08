@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisCommandsCopy.hh,v 1.4 1999/12/15 14:54:21 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // /vis~/copy/ commands

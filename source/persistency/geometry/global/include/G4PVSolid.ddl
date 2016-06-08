@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVSolid.ddl,v 1.3 1999/12/15 14:51:22 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PVSolid.ddl,v 1.4 2000/11/02 12:42:06 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4PVSolid
@@ -18,7 +18,7 @@
 #ifndef G4PVSOLID_DDL
 #define G4PVSOLID_DDL
 
-#include "globals.hh"
+#include "G4Pglobals.hh"
 #include "geomdefs.hh"
 #include "G4PersistentTypes.hh"
 #include "G4PersistentSchema.hh"

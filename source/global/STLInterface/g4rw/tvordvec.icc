@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tvordvec.icc,v 1.5 2000/06/26 16:25:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: tvordvec.icc,v 1.6 2000/11/20 17:26:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -204,8 +204,7 @@ T G4RWTValOrderedVector<T>::removeAt( size_t i )
     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector removeAt",rwsize,i));
   T tmp = std_vector::operator[](i);
   iterator it=std_vector::begin();
-  int j;
-  for(j=0;j<rwsize && j<i;j++) it++;
+  for(size_t j=0;j<rwsize && j<i;j++) it++;
   if(it!=std_vector::end())
     {
       std_vector::erase(it);
@@ -219,14 +218,14 @@ void G4RWTValOrderedVector<T>::resize(size_t N)
 {
   if(N>std_vector::size())
     {
-      int e=N-std_vector::size();
-      for(int i=0;i<e;i++)
+      size_t e=N-std_vector::size();
+      for(size_t i=0;i<e;i++)
 	std_vector::push_back(T());
     }
   else if(N>rwsize )
     {
       iterator it=std_vector::begin();
-      for(int i=0;i<N;i++,it++);
+      for(size_t i=0;i<N;i++,it++);
       std_vector::erase(it,std_vector::end());
     }
 }
@@ -269,7 +268,7 @@ void G4RWTValOrderedVector<T>::insertAt ( size_t i, const T& a )
     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector insertAt",rwsize,i));
   if(rwsize<std_vector::size())
     {
-      for(int j=rwsize;j>i;j--)
+      for(size_t j=rwsize;j>i;j--)
 	std_vector::operator[](j)=this->std_vector::operator[](j-1);
       std_vector::operator[](i)=a;
       rwsize++;
@@ -277,7 +276,7 @@ void G4RWTValOrderedVector<T>::insertAt ( size_t i, const T& a )
   else
     {
       iterator it=std_vector::begin();
-      for(int j=0;j<i;j++,it++);
+      for(size_t j=0;j<i;j++,it++);
       std_vector::insert(it,a);
       rwsize++;
     }

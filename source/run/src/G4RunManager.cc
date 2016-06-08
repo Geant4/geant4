@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.15 2000/06/28 10:25:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RunManager.cc,v 1.18 2000/12/14 10:38:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 
@@ -52,7 +52,7 @@ G4RunManager::G4RunManager()
  currentRun(NULL),currentEvent(NULL),n_perviousEventsToBeStored(0),
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
  geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
- runAborted(false),pauseAtBeginOfEvent(false),pauseAtEndOfEvent(false),
+ runAborted(false),
  geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0),
  storeRandomNumberStatus(0)
 {
@@ -66,10 +66,11 @@ G4RunManager::G4RunManager()
   previousEvents = new G4RWTPtrOrderedVector<G4Event>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
+  randomNumberStatusDir = "./";
   G4cout 
   << "**********************************************" << G4endl
-  << " Geant4 version $Name: geant4-02-00 $" << G4endl
-  << "                                (30-Jun-2000)" << G4endl
+  << " Geant4 version $Name: geant4-03-00 $" << G4endl
+  << "                                (15-Dec-2000)" << G4endl
   << "             Copyright : Geant4 Collaboration" << G4endl
   << "**********************************************" << G4endl;
 }
@@ -228,8 +229,6 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   {
     stateManager->SetNewState(EventProc);
 
-    if(pauseAtBeginOfEvent) stateManager->Pause("BeginOfEvent");
-
     currentEvent = GenerateEvent(i_event);
 
     eventManager->ProcessOneEvent(currentEvent);
@@ -237,7 +236,6 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     AnalyzeEvent(currentEvent);
 
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    if(pauseAtEndOfEvent) stateManager->Pause("EndOfEvent");
     stateManager->SetNewState(GeomClosed);
     StackPreviousEvent(currentEvent);
     currentEvent = NULL;
@@ -398,7 +396,7 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
 
 void G4RunManager::StoreRandomNumberStatus(G4int eventID)
 {
-  G4String fileN = "RandEngine";
+  G4String fileN = randomNumberStatusDir+"RandEngine";
   if(storeRandomNumberStatus>0 && currentRun != NULL)
   {
     char st[20];
@@ -421,7 +419,12 @@ void G4RunManager::StoreRandomNumberStatus(G4int eventID)
   
 void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
 {
-  HepRandom::restoreEngineStatus(fileN);
+  G4String fileNameWithDirectory;
+  if(fileN.index("/")==G4std::string::npos)
+  { fileNameWithDirectory = randomNumberStatusDir+fileN; }
+  else
+  { fileNameWithDirectory = fileN; }
+  HepRandom::restoreEngineStatus(fileNameWithDirectory);
 }
 
 

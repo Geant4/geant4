@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.4 1999/12/15 14:54:08 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4OpenGLStoredWin32.cc,v 1.5 2000/08/19 18:34:33 johna Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // OpenGLStoredWin32 graphics system factory.
@@ -34,7 +34,7 @@ G4OpenGLStoredWin32::G4OpenGLStoredWin32 ():
 G4VSceneHandler* G4OpenGLStoredWin32::CreateSceneHandler () {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this);
   G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << G4endl;
+       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

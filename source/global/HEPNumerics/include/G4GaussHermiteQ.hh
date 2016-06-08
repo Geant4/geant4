@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussHermiteQ.hh,v 1.2 1999/11/16 17:30:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4GaussHermiteQ.hh,v 1.3 2000/11/20 17:26:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Class description:
 //
@@ -51,11 +51,11 @@ public:
         G4double Integral() const ;
 
 
-protected:
-
 private:
 
-} ;
+	G4GaussHermiteQ(const G4GaussHermiteQ&);
+	G4GaussHermiteQ& operator=(const G4GaussHermiteQ&);
 
+};
 
 #endif

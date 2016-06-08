@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.6 1999/12/15 17:51:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.7 2000/08/02 08:14:13 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 
 //**********************************************************************************************
 
-class G4VLongitudinalStringDecay: public G4VStringFragmentation 
+class G4VLongitudinalStringDecay 
    {
 public:
    G4VLongitudinalStringDecay();     

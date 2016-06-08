@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PCons.cc,v 1.2 1999/11/17 10:49:02 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // class G4PCons
 //

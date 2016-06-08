@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.cc,v 1.4 2000/06/08 17:18:12 gcosmo Exp $  */ 
+/* $Id: dirobj.cc,v 1.6 2000/11/21 07:54:50 gcosmo Exp $  */ 
 
 /*
  * DirObj implementation
@@ -41,6 +41,18 @@
 
 #include <dirobj.h>
 
+
+#ifndef MAXNAMLEN
+#  define MAXNAMLEN 255
+#endif
+
+#ifndef S_IFMT
+#  define S_IFMT __S_IFMT
+#endif
+
+#ifndef S_IFDIR
+#  define S_IFDIR __S_IFDIR
+#endif
 
 // to help ObjectCenter
 #ifndef HAVE_MEMMOVE
@@ -112,7 +124,7 @@ const char* DirObj::RealPath (const char* path) {
 
 boolean DirObj::LoadDirectory (const char* name) {
     char buf[MAXPATHLEN+2];
-    const char* path = buf;
+//    const char* path = buf;
 
     strcpy(buf, ValidDirectories(RealPath(name)));
     return Reset(buf);

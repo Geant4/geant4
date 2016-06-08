@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFissionBaseFS.hh,v 1.3 1999/07/02 09:59:02 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4NeutronHPFissionBaseFS.hh,v 1.4 2000/11/09 16:13:38 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4NeutronHPFissionBaseFS_h
 #define G4NeutronHPFissionBaseFS_h 1
@@ -42,7 +42,7 @@ class G4NeutronHPFissionBaseFS : public G4NeutronHPFinalState
 
   virtual G4double GetXsec(G4double anEnergy)
   {
-    return theXsection->GetY(anEnergy);
+    return G4std::max(0., theXsection->GetY(anEnergy));
   }
   virtual G4NeutronHPVector * GetXsec() { return theXsection; }
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Em1VisManager.cc,v 1.2 1999/12/15 14:48:57 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // John Allison 24th January 1998.

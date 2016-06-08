@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Transportation.cc,v 1.11 2000/06/19 16:13:48 japost Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 //
 // 

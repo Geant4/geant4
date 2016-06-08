@@ -98,7 +98,7 @@ int ComplexCollect::supports( EntNode *ents ) const
     // Changed 'and' to 'andl'. 'and' is reserved word in the standard - GC
     
     EntNode *node = ents, *nextnode;
-    AndList *andl;
+    AndList *andl=0;
     ComplexList *clist = clists, *cl = NULL, *current;
     int retval;
     EntList *elist, *next;

@@ -5,14 +5,22 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineCurve.cc,v 1.2 1999/12/15 14:50:00 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4BSplineCurve.cc,v 1.5 2000/11/08 14:22:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BSplineCurve.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4BSplineCurve.hh"
 #include "G4ControlPoints.hh"
 #include "G4KnotVector.hh"
 
 G4BSplineCurve::G4BSplineCurve()
+  : degree(0), controlPointsList(0), knots(0), weightsData(0)
 {
 }
 
@@ -52,11 +60,81 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
 
 G4BSplineCurve::~G4BSplineCurve()
 {
-  delete controlPointsList;
-  delete knots;
-  if (weightsData) delete weightsData;
+  delete [] controlPointsList;
+  delete [] knots;
+  delete [] weightsData;
 }
 
+
+G4BSplineCurve::G4BSplineCurve(const G4BSplineCurve& right)
+{
+  delete [] controlPointsList;
+  delete [] knots;
+  delete [] weightsData;
+  Init(right.degree, right.controlPointsList,
+       right.knots, right.weightsData);
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4BSplineCurve& G4BSplineCurve::operator=(const G4BSplineCurve& right)
+{
+  if (&right == this) return *this;
+  delete [] controlPointsList;
+  delete [] knots;
+  delete [] weightsData;
+  Init(right.degree, right.controlPointsList,
+       right.knots, right.weightsData);
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+
+  return *this;
+}
+
+// add by L. Broglia to pass linkage
+
+G4double G4BSplineCurve::GetPMax() const
+{
+  return 0.0;
+}
+
+G4Point3D G4BSplineCurve::GetPoint(G4double param) const
+{
+  return G4Point3D(0, 0, 0);
+}
+
+G4double  G4BSplineCurve::GetPPoint(const G4Point3D& p) const
+{
+  return 0.0;
+}
+
+/*
+#include "G4CurveRayIntersection.hh"
+
+void G4BSplineCurve::IntersectRay2D(const G4Ray& ray,
+                                    G4CurveRayIntersection& is)
+{
+}
+*/
+
+G4int G4BSplineCurve::IntersectRay2D(const G4Ray& ray)
+{
+  // L. Broglia
+  G4cout<<"\nWarning ! G4BSplineCurve::IntersectRay2D is empty.";
+  return 0;
+}
 
 /*
 void G4BSplineCurve::CalcCurvePlaneNormal()
@@ -122,9 +200,8 @@ void G4BSplineCurve::ProjectCurve(const G4Plane& Pl1, const G4Plane& Pl2)
 	Project((*ProjectedControlPoints[a]), ControlPointList->get(0,a), Pl1, Pl2); 
     }
 }
-*/
 
-/*
+
 int G4BSplineCurve::Inside( const G4Point3d& Hit, const G4Ray& rayref)
 {
   const G4Plane& Pl1 = rayref.GetPlane(0);

@@ -5,22 +5,53 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidTorus.hh,v 1.2 1999/12/15 14:49:55 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4BREPSolidTorus.hh,v 1.4 2000/11/08 14:21:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// Class G4BREPSolidTorus
+//
+// Class description:
+// 
+//  Definition of a generic BREP torus:
+//
+//  G4BREPSolidTorus(const G4String& name,
+//                   const G4ThreeVector& origin,
+//                   const G4ThreeVector& axis,
+//                   const G4ThreeVector& direction,
+//                         G4double MinRadius,
+//                         G4double MaxRadius)
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 #ifndef __G4BREPSolidTorus
 #define __G4BREPSolidTorus
+
 #include "G4BREPSolid.hh"
 
-class G4BREPSolidTorus: public G4BREPSolid
+class G4BREPSolidTorus : public G4BREPSolid
 {
- public:
-  G4BREPSolidTorus(const G4String ,
-		   const G4ThreeVector&,
-		   const G4ThreeVector&,
-		   const G4ThreeVector&,
-		   G4double,
-		   G4double);
+
+ public:  // with description
+
+  G4BREPSolidTorus(const G4String& name,
+		   const G4ThreeVector& origin,
+		   const G4ThreeVector& axis,
+		   const G4ThreeVector& direction,
+		   G4double MinRadius,
+		   G4double MaxRadius);
+    // Constructor defining the torus through its surfaces.
+
+  ~G4BREPSolidTorus();
+    // Empty destructor.
+
+ private:
+
+  G4BREPSolidTorus(const G4BREPSolidTorus&);
+  G4BREPSolidTorus& operator=(const G4BREPSolidTorus&);
+    // Private copy constructor and assignment operator.
+
 };
 
 #endif

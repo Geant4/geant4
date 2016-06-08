@@ -5,42 +5,58 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02TrackerHit.cc,v 1.2 1999/12/15 14:49:22 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: ExN02TrackerHit.cc,v 1.4 2000/12/06 07:54:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include "ExN02TrackerHit.hh"
+#include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-
 G4Allocator<ExN02TrackerHit> ExN02TrackerHitAllocator;
 
-ExN02TrackerHit::ExN02TrackerHit()
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-ExN02TrackerHit::~ExN02TrackerHit()
-{;}
+ExN02TrackerHit::ExN02TrackerHit() {}
 
-ExN02TrackerHit::ExN02TrackerHit(const ExN02TrackerHit &right)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+ExN02TrackerHit::~ExN02TrackerHit() {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+ExN02TrackerHit::ExN02TrackerHit(const ExN02TrackerHit& right)
 {
-  edep = right.edep;
-  pos = right.pos;
+  trackID   = right.trackID;
+  chamberNb = right.chamberNb;
+  edep      = right.edep;
+  pos       = right.pos;
 }
 
-const ExN02TrackerHit& ExN02TrackerHit::operator=(const ExN02TrackerHit &right)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+const ExN02TrackerHit& ExN02TrackerHit::operator=(const ExN02TrackerHit& right)
 {
-  edep = right.edep;
-  pos = right.pos;
+  trackID   = right.trackID;
+  chamberNb = right.chamberNb;
+  edep      = right.edep;
+  pos       = right.pos;
   return *this;
 }
 
-int ExN02TrackerHit::operator==(const ExN02TrackerHit &right) const
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+int ExN02TrackerHit::operator==(const ExN02TrackerHit& right) const
 {
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void ExN02TrackerHit::Draw()
 {
@@ -57,17 +73,14 @@ void ExN02TrackerHit::Draw()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void ExN02TrackerHit::Print()
 {
+  G4cout << "  trackID: " << trackID << "  chamberNb: " << chamberNb
+         << "  energy deposit: " << G4BestUnit(edep,"Energy")
+	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-// This is a forward declarations of an instantiated G4Allocator<Type> object.
-// It has been added in order to make code portable for the GNU g++ 
-// (release 2.7.2) compiler. 
-// Whenever a new Type is instantiated via G4Allocator, it has to be forward
-// declared to make object code (compiled with GNU g++) link successfully. 
-// 
-#ifdef GNU_GCC
-  template class G4Allocator<ExN02TrackerHit>;
-#endif

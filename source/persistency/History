@@ -15,6 +15,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 December, 00   Y.Morita (persistency-V02-00-03)
+- added more SRM comments
+
+5 December, 00   Y.Morita (persistency-V02-00-02)
+- added SRM comments to some classes
+
+17 November, 00  Y.Morita (persistency-V02-00-01)
+- more workaround on G4PGeometryObjectMap for ooddlx
+
+2 November, 00  Y.Morita (persistency-V02-00-00)
+- created global/include/G4Pglobals.hh
+- workaround to protect old ooddlx from new STL syntax.
+
 9 June, 00   Y.Morita (persistency-V01-00-02)
 - added material in G4PersistentGeomMan::Retrieve()
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Plane3D.hh,v 1.2 1999/11/16 17:29:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef G4PLANE3D_HH
 #define G4PLANE3D_HH

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.hh,v 1.3 1999/12/15 14:49:39 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PrimaryParticle.hh,v 1.6 2000/10/19 15:19:36 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 
@@ -83,10 +83,11 @@ class G4PrimaryParticle
       G4double mass;  // This is just for book keeping.
                       // This will not be used but the mass in
                       // G4ParticleDefinition will be used.
-
+      G4double charge;
       G4double polX;
       G4double polY;
       G4double polZ;
+      G4double Weight0;
 
   public: // with description
       // followings are get methods available.
@@ -114,13 +115,18 @@ class G4PrimaryParticle
       { return trackID; }
       inline G4double GetMass() const
       { return mass; }
+      inline G4double GetCharge() const
+      { return charge; }
       inline G4ThreeVector GetPolarization() const
       { return G4ThreeVector(polX,polY,polZ); }
       inline G4double GetPolX() const { return polX; }
       inline G4double GetPolY() const { return polY; }
       inline G4double GetPolZ() const { return polZ; }
+      inline G4double GetWeight() const { return Weight0; }
+      inline void SetWeight(G4double w) { Weight0 = w; }
 
-  public:
+  public: // with description
+      // Followings are available Set methods.
       void SetPDGcode(G4int Pcode);
       void SetG4code(G4ParticleDefinition * Gcode);
       inline void SetMomentum(G4double px, G4double py, G4double pz)
@@ -147,7 +153,9 @@ class G4PrimaryParticle
       { trackID = id; }
       inline void SetMass(G4double mas)
       { mass = mas; }
-      inline void SetPolarization(G4double px,G4double py,G4double pz)
+      inline void SetCharge(G4double chg)
+      { charge = chg; }
+     inline void SetPolarization(G4double px,G4double py,G4double pz)
       {
         polX = px;
         polY = py;

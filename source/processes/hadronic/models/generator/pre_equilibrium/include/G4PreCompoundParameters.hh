@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -24,8 +24,7 @@ private:
 
 
   // default constructor
-  G4PreCompoundParameters() : theLevelDensity(0.125) {}
-  //  G4PreCompoundParameters(G4int Dummy) {G4int i = Dummy;}
+  G4PreCompoundParameters() : theLevelDensity(0.125/MeV) {}
 
 public:
 

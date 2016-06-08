@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLXmVWidgetObject.cc,v 1.3 1999/12/15 14:54:10 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //Virtual base class for all Motif widgets.
 

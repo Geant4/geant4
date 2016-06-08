@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.hh,v 1.3 2000/06/07 17:00:49 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VhEnergyLoss.hh,v 1.7 2000/10/30 06:56:19 urban Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -57,8 +57,6 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
  
-class G4EnergyLossMessenger;
- 
 class G4VhEnergyLoss : public G4VEnergyLoss
  
 {
@@ -100,8 +98,13 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
-                                       
 
+    G4double EnergyLossFluctuation(const G4DynamicParticle *aParticle,
+                                         G4Material *aMaterial,
+                                         G4double ChargeSquare,
+                                         G4double MeanLoss,
+                                         G4double Step);
+                                       
 // =====================================================================
 
   public:
@@ -139,10 +142,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 1)
  
-
-    static void SetMinDeltaCutInRange(G4double value)
-                                    {MinDeltaCutInRange = value;
-                                     setMinDeltaCutInRange = true ;}
 
     static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
     static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
@@ -197,13 +196,7 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4double ptableElectronCutInRange;
     static G4double pbartableElectronCutInRange;
 
-    static G4double MinDeltaCutInRange; // minimum cut for delta rays
-    static G4double* MinDeltaEnergy ;
-    static G4bool setMinDeltaCutInRange ;
-
     static G4double Charge ;
-
-    static G4EnergyLossMessenger* hLossMessenger;
 
   private:
 
@@ -229,7 +222,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4double c0N,c1N,c2N,c3N ;    // coeffs to compute nb of deltas
     static G4int Ndeltamax ;             // upper limit for nb of subcutoff
                                          // delta rays in one step
-
 
 };
  

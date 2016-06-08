@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: eventgendefs.hh,v 1.2 1999/12/15 14:49:40 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #ifndef EventGenerator_DEBUG
 #define EventGenerator_DEBUG

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLXmRotationCallbacks.cc,v 1.7 2000/05/13 10:48:03 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Andrew Walkden  16th April 1997

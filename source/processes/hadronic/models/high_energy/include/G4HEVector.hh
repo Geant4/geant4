@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HEVector.hh,v 1.4 1999/12/15 16:42:00 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file

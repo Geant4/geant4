@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tpsrtvec.icc,v 1.6 2000/06/26 16:25:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: tpsrtvec.icc,v 1.7 2000/11/20 17:26:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -92,8 +92,8 @@ T* G4RWTPtrSortedVector<T>::find (const T* a) const
 {
   if(!a || std_pvector::empty() || (rwsize==0)) return 0;
   //We are sorted, so try a n log n search
-  int t,d;
-  int u=rwsize,l=0;
+  size_t t,d;
+  size_t u=rwsize,l=0;
   do
     {
       d=(u-l)/2;
@@ -125,7 +125,7 @@ void G4RWTPtrSortedVector<T>::insert ( T* a )
     {
       //We have empty entries
       iterator it=std_pvector::begin();
-      for(int i=0;i<rwsize;i++,it++);
+      for(size_t i=0;i<rwsize;i++,it++);
       *it=a;
       it++;
       G4std::sort(std_pvector::begin(),it,sorter);
@@ -210,7 +210,7 @@ size_t G4RWTPtrSortedVector<T>::removeAll ( const T* a)
   iterator e=std_pvector::end();
   iterator r;
   size_t sz=0;
-  int i=0;
+  G4int i=0;
   for(r=std_pvector::begin();sz<rwsize;r++,sz++)
     {
       if(i==0)

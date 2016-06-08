@@ -19,53 +19,66 @@
 // charged hadrons.
 // ************************************************************
 // 28 July 1999 V.Ivanchenko cleen up
+// 09 Aug  2000 V.Ivanchenko add GetContinuousStepLimit
+// 23 Oct  2000 V.Ivanchenko add control on particle mass
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4hLowEnergyIonisation::GetMeanFreePath(
-                                               const G4Track& trackData,
-                                               G4double previousStepSize,
-                                               G4ForceCondition* condition) 
+                                  const G4Track& trackData,
+                                        G4double previousStepSize,
+                                  enum  G4ForceCondition* condition) 
 {
-   const G4DynamicParticle* aParticle ;
-   G4Material* aMaterial ;
-   G4double MeanFreePath;
+   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
+   G4Material* aMaterial = trackData.GetMaterial() ;
+   G4double meanFreePath;
    G4bool isOutRange ;
  
    *condition = NotForced ;
 
-   aParticle = trackData.GetDynamicParticle() ;
-   aMaterial = trackData.GetMaterial() ;
+   G4double kineticEnergy = aParticle->GetKineticEnergy() ;
 
-   G4double KineticEnergy = aParticle->GetKineticEnergy() ;
+   if(kineticEnergy < LowestKineticEnergy) meanFreePath = DBL_MAX;
 
-   if(KineticEnergy < LowestKineticEnergy)
-     MeanFreePath = DBL_MAX;
    else {
-     if(KineticEnergy > HighestKineticEnergy)
-                                   KineticEnergy = HighestKineticEnergy;
-     MeanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                    GetValue(KineticEnergy,isOutRange) ;
+     if(kineticEnergy > HighestKineticEnergy)
+                    kineticEnergy = HighestKineticEnergy ;
+     meanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
+                    GetValue(kineticEnergy,isOutRange) ;
      }
 
-   return MeanFreePath ;
+   return meanFreePath ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+         
+inline G4double G4hLowEnergyIonisation::GetContinuousStepLimit(
+                                        const G4Track& track,
+                                              G4double,
+                                              G4double currentMinimumStep,
+                                              G4double&)
+{ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
+
+  if((Step>0.0)&&(Step<currentMinimumStep))
+     currentMinimumStep = Step ;
+
+  return Step ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4hLowEnergyIonisation::IsApplicable(
-                            const G4ParticleDefinition& particle)
+                                const G4ParticleDefinition& particle) 
 {
-   return(particle.GetPDGCharge() != 0.);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4hLowEnergyIonisation::GetFreeElectronGasLoss(G4double paramA, G4double tau)
-{
-     G4double ionl = paramA * sqrt(tau) ;
-     return ionl ;
+   return(particle.GetPDGCharge() != 0.0 
+       && particle.GetPDGMass() > proton_mass_c2*0.1);
 }
          
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
 

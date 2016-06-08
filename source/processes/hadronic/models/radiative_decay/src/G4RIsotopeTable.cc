@@ -30,6 +30,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IsotopeProperty.hh"
 #include "G4RIsotopeTable.hh"
+/*
 #include "G4RadioactiveDecayMode.hh"
 #include "G4ITDecayChannel.hh"
 #include "G4BetaMinusDecayChannel.hh"
@@ -37,7 +38,7 @@
 #include "G4KshellECDecayChannel.hh"
 #include "G4LshellECDecayChannel.hh"
 #include "G4AlphaDecayChannel.hh"
-
+*/
 #include "G4ios.hh"
 #include "globals.hh"
 #include "g4std/iomanip"

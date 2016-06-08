@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLStoredXmViewer.cc,v 1.3 2000/05/22 08:16:42 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Andrew Walkden  10th February 1997

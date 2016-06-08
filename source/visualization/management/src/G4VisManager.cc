@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisManager.cc,v 1.17 2000/05/04 08:52:10 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.

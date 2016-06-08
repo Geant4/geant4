@@ -85,7 +85,7 @@
          PAXIS =   0.
          SAXIS =   0.2*Z1
          CALL GDRAWC ('ECAL',IX,0.,10.,10.,SCALE,SCALE)
-         CALL GDAXIS (PAXIS,PAXIS,PAXIS,SAXIS)
+CCC         CALL GDAXIS (PAXIS,PAXIS,PAXIS,SAXIS)
          CALL GDSCAL ( 10., 0.3)
          CALL GDCLOS
       END DO

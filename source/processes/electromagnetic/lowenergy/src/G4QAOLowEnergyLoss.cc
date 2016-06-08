@@ -15,10 +15,15 @@
 //      ---------- G4QAOLowEnergyLoss physics process -------
 //                  by Stephane Chauvie, 5 May 2000 
 // Modified:
+//
+// 16/09/2000 S. Chauvie  Oscillator for all materials
 // 24/05/2000 MGP  Modified to remove compilation warnings on Linux and DEC
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
-//  
+// 02/08/2000 V.Ivanchenko Clean up according new design
+// 03/10/2000 V.Ivanchenko CodeWizard clean up
+// 05/11/2000 V.Ivanchenko "Aluminum" - correct name, end of cycle
+//            over shells, and two bugs from previous edition
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -38,7 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4QAOLowEnergyLoss::G4QAOLowEnergyLoss()
+G4QAOLowEnergyLoss::G4QAOLowEnergyLoss(const G4String& name)
+  : G4VLowEnergyModel(name)
 {
   numberOfMaterials = 6;
   sizeL0 = 67;
@@ -49,13 +55,46 @@ G4QAOLowEnergyLoss::G4QAOLowEnergyLoss()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4QAOLowEnergyLoss::~G4QAOLowEnergyLoss()
-{ 
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::HighEnergyLimit(
+                             const G4ParticleDefinition* aParticle,
+                             const G4Material* material) const
+{
+  return 2.0*MeV ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4QAOLowEnergyLoss::IsInCharge(G4double energy, 
-			    const G4ParticleDefinition* particleDefinition,
+G4double G4QAOLowEnergyLoss::LowEnergyLimit(
+                             const G4ParticleDefinition* aParticle,
+                             const G4Material* material) const
+{
+  return 50.0*keV ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::HighEnergyLimit(
+                             const G4ParticleDefinition* aParticle) const
+{
+  return 2.0*MeV ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::LowEnergyLimit(
+                             const G4ParticleDefinition* aParticle) const
+{
+  return 50.0*keV ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4QAOLowEnergyLoss::IsInCharge(
+			    const G4DynamicParticle* particle,
 			    const G4Material* material) const
 {
   G4bool isInCharge = false;
@@ -70,11 +109,33 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(G4double energy,
 	break;}
     }
   
-  if (particleDefinition == G4AntiProton::AntiProtonDefinition()
-      &&
-      hasMaterial)
-      //&& energy >= LowEnergyLimit() && energy <= HighEnergyLimit() )
-    isInCharge = true;
+  if ((particle->GetDefinition()) == (G4AntiProton::AntiProtonDefinition())
+               && hasMaterial) isInCharge = true;
+  
+  return isInCharge;
+      
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4QAOLowEnergyLoss::IsInCharge(
+			    const G4ParticleDefinition* aParticle,
+			    const G4Material* material) const
+{
+  G4bool isInCharge = false;
+
+  G4bool hasMaterial = false;
+
+  for (G4int m = 0; m < numberOfMaterials; m++)
+    {
+      G4String matName = material->GetName();
+      if (matName == materialAvailable[m] && 
+          material->GetNumberOfElements() == 1){ 
+	hasMaterial = true;
+	break;}
+    }
+  
+  if (aParticle == (G4AntiProton::AntiProtonDefinition())
+                && hasMaterial) isInCharge = true;
   
   return isInCharge;
       
@@ -82,29 +143,57 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(G4double energy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::EnergyLoss(const G4DynamicParticle* particle,
-					const G4Material* material) const
+G4double G4QAOLowEnergyLoss::TheValue(const G4DynamicParticle* particle,
+	       	                      const G4Material* material) 
+{
+  G4double zParticle = (G4int)(particle->GetCharge())/eplus;
+
+  G4double energy = particle->GetKineticEnergy() ;
+  G4double eloss  = EnergyLoss(material,energy,zParticle) ;
+
+  return eloss ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::TheValue(const G4ParticleDefinition* aParticle,
+       		                      const G4Material* material,
+                                            G4double kineticEnergy) 
+{
+  G4double zParticle = (aParticle->GetPDGCharge())/eplus;
+
+  G4double eloss  = EnergyLoss(material,kineticEnergy,zParticle) ;
+
+  return eloss ;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
+                                              G4double kineticEnergy,
+                                              G4double zParticle) const 
 {
   G4int nbOfShell = GetNumberOfShell(material);
-  G4double ionisationEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
-  G4double kineticEnergy = particle->GetKineticEnergy();
-  G4int zParticle = (G4int) particle->GetCharge();
+  G4double ionisationEnergy = material->GetIonisation()
+                            ->GetMeanExcitationEnergy();
   G4double dedx=0;
-  G4double v=0;
-  v= c_light * sqrt( 2 * kineticEnergy / proton_mass_c2 );
-  G4double coeff=0;
-  coeff= (twopi * proton_mass_c2 * material-> GetTotNbOfElectPerVolume()) / ( electron_mass_c2);
-  coeff*= ( fine_structure_const * fine_structure_const * hbarc_squared ) / ( kineticEnergy );
-  G4double fractionOfBetheVelocity = 0;
-  fractionOfBetheVelocity = ( fine_structure_const * c_light) / v;
+  G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
+  G4double coeff = twopi * proton_mass_c2 * 
+                  (material-> GetTotNbOfElectPerVolume()) / 
+                   electron_mass_c2 ;
+  coeff *= fine_structure_const * fine_structure_const * hbarc_squared / 
+           kineticEnergy ;
+
+  G4double fBetheVelocity = fine_structure_const * c_light / v;
   
-  G4double stoppingNumber = 0, l0Term = 0, l1Term = 0, l2Term = 0;
+  G4double l0Term = 0, l1Term = 0, l2Term = 0;
   
   for (G4int nos = 0 ; nos < nbOfShell ; nos++){
     
     G4double l0 = 0, l1 = 0, l2 = 0;
-    G4double NormalizedEnergy = 0;
-    NormalizedEnergy = ( 2 * electron_mass_c2 * v * v  ) / ( c_squared * GetShellEnergy(material,nos) );
+    G4double NormalizedEnergy = ( 2.0 * electron_mass_c2 * v * v  ) / 
+                                ( c_squared * GetShellEnergy(material,nos) );
     l0 = GetL0(NormalizedEnergy);
     l0Term += GetShellStrength(material,nos)  * l0; 
     
@@ -115,10 +204,10 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4DynamicParticle* particle,
     l2Term += GetShellStrength(material,nos) * l2; 
     
   }
-
        
-  stoppingNumber = zParticle * zParticle * ( l0Term + zParticle * fractionOfBetheVelocity * l1Term + zParticle * zParticle * fractionOfBetheVelocity * fractionOfBetheVelocity * l2Term);
-  dedx = ( coeff * stoppingNumber);
+  dedx = coeff * zParticle * zParticle * (l0Term
+       + zParticle * fBetheVelocity * l1Term 
+       + zParticle * zParticle * fBetheVelocity * fBetheVelocity * l2Term);
               
   return dedx ; 
                             
@@ -131,77 +220,122 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
   // Set default return value
   G4int nShell = nbofShellForMaterial[0];
 
-  if(material->GetName() == "Aluminium")  nShell =  nbofShellForMaterial[0];
-  else if  (material->GetName() == "Silicon"  ) nShell = nbofShellForMaterial[1] ;
-  else if  (material->GetName()== "Copper") nShell = nbofShellForMaterial[2];  
-  else if  (material->GetName() == "Tantalum") nShell = nbofShellForMaterial[3];
-  else if  (material->GetName() == "Gold" )  nShell = nbofShellForMaterial[4];  
-  else if  (material->GetName() == "Platinum") nShell = nbofShellForMaterial[5];
-  else G4cout << "WARNING - G4QAOLowEnergyLoss::GetNumberOfShell - "
-	      << "The model is not available for "
-	      << material->GetName() 
-	      << G4endl;
-  
+  for(G4int i=0; i<numberOfMaterials; i++) {
+
+    if(materialAvailable[i] == material->GetName()) {
+      nShell =  nbofShellForMaterial[i];
+      return nShell;
+    }
+  }
+
+  G4cout << "WARNING - G4QAOLowEnergyLoss::GetNumberOfShell - "
+         << "The model is not available for "
+         << material->GetName() << G4endl;
+
   return nShell;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,G4int nbOfTheShell) const
+G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,
+                                            G4int nbOfTheShell) const
 {
-  // 
-  G4double shellEnergy = alShellEnergy[0];
+    // 
+    G4double shellEnergy = alShellEnergy[0];
 
-  if(material->GetName() == "Aluminium") shellEnergy =  alShellEnergy[nbOfTheShell];
-  else if  (material->GetName() == "Silicon"  ) shellEnergy =  siShellEnergy[nbOfTheShell];
-  else if  (material->GetName() == "Copper") shellEnergy =  cuShellEnergy[nbOfTheShell];  
-  else if  (material->GetName() == "Tantalum") shellEnergy =  taShellEnergy[nbOfTheShell];
-  else if  (material->GetName() == "Gold" )  shellEnergy =  auShellEnergy[nbOfTheShell];   
-  else if  (material->GetName() == "Platinum") shellEnergy =  ptShellEnergy[nbOfTheShell];
-  else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
-	      << "The model is not available for "
-	      << material->GetName() 
-	      << G4endl;
+    if(material->GetName() == "Aluminum") shellEnergy =  alShellEnergy[nbOfTheShell];
+    else if  (material->GetName() == "Silicon"  ) shellEnergy =  siShellEnergy[nbOfTheShell];
+    else if  (material->GetName() == "Copper") shellEnergy =  cuShellEnergy[nbOfTheShell];  
+    else if  (material->GetName() == "Tantalum") shellEnergy =  taShellEnergy[nbOfTheShell];
+    else if  (material->GetName() == "Gold" )  shellEnergy =  auShellEnergy[nbOfTheShell];   
+    else if  (material->GetName() == "Platinum") shellEnergy =  ptShellEnergy[nbOfTheShell];
+    else if  (material->GetNumberOfElements() == 1)
+      shellEnergy = GetOscillatorEnergy(material, nbOfTheShell);
+    else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
+		<< "The model is not available for "
+		<< material->GetName() 
+		<< G4endl;
 
   return  shellEnergy;
-  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,G4int nbOfTheShell) const
+G4double G4QAOLowEnergyLoss::GetOscillatorEnergy(const G4Material* material,
+                                                 G4int nbOfTheShell) const
+{ 
+  
+  const G4Element* element = material->GetElement(0);
+  
+  G4int Z = (G4int)(element->GetZ());
+    
+  G4double squaredPlasmonEnergy = 28.16 * 28.16 * 1e-6  
+                                * (material->GetDensity()) * (cm3/g)
+			        *  Z / (element->GetN()) ;
+  
+  G4double plasmonTerm = 0.66667 * GetOccupationNumber(Z,nbOfTheShell)  
+                       * squaredPlasmonEnergy / (Z*Z) ; 
+
+  G4double ionTerm = exp(0.5) * (element->GetAtomicShell(nbOfTheShell)) ;
+
+  ionTerm = ionTerm*ionTerm ;
+   
+  G4double oscShellEnergy = sqrt( ionTerm + plasmonTerm );
+ 
+  return  oscShellEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,
+                                              G4int nbOfTheShell) const
 {
   G4double shellStrength = alShellStrength[0];
   
-  if(material->GetName() == "Aluminium") shellStrength = alShellStrength[nbOfTheShell];
+  if(material->GetName() == "Aluminum") shellStrength = alShellStrength[nbOfTheShell];
   else if  (material->GetName() == "Silicon"  ) shellStrength = siShellStrength[nbOfTheShell];
   else if  (material->GetName() == "Copper") shellStrength = cuShellStrength[nbOfTheShell];  
   else if  (material->GetName() == "Tantalum") shellStrength = taShellStrength[nbOfTheShell];
   else if  (material->GetName() == "Gold" )  shellStrength = auShellStrength[nbOfTheShell];   
   else if  (material->GetName() == "Platinum") shellStrength = ptShellStrength[nbOfTheShell];
+  else if  (material->GetNumberOfElements() == 1){
+    G4int Z = (G4int)(material->GetZ());
+    shellStrength = GetOccupationNumber(Z,nbOfTheShell) / Z ;}
   else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
-	      << "The model is not available for "
-	      << material->GetName() 
-	      << G4endl;
+              << "The model is not available for "
+              << material->GetName() 
+              << G4endl;
 
   return shellStrength;
-
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4QAOLowEnergyLoss::GetOccupationNumber(G4int Z, G4int ShellNb) const
+{
+
+  G4int indice = ShellNb ;
+  for (G4int z = 1 ; z < Z ; z++) {indice += fNumberOfShells[z];}
+
+  return nbOfElectronPerSubShell[indice];
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const 
 {
-  G4double l0 = 0, l0p = 0;
-  G4double bethe = 0;
-  G4int n = 0;
-  do{
-    n++;
-    if ( n >= sizeL0 ) break;
-    l0 = L0[n][1];
-    l0p = L0[n-1][1];
-    bethe = (l0 - l0p) * ( normEnergy - L0[n-1][0]) / (L0[n][0] - L0[n-1][0]);
-    bethe+= l0p;
-  } while( normEnergy >= L0[n][0] );
+  G4int n;
   
+  for(n = 0; n < sizeL0; n++) {
+    if( normEnergy < L0[n][0] ) break;
+  }
+  if(0 == n) n = 1 ;
+  if(n >= sizeL0) n = sizeL0 - 1 ;
+
+  G4double l0    = L0[n][1];
+  G4double l0p   = L0[n-1][1];
+  G4double bethe = l0p + (l0 - l0p) * ( normEnergy - L0[n-1][0]) / 
+                  (L0[n][0] - L0[n-1][0]);
   return bethe ;
   
 }
@@ -209,17 +343,18 @@ G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const
 
 G4double G4QAOLowEnergyLoss::GetL1(G4double normEnergy) const
 {
-  G4double l1 = 0, l1p = 0 ;
-  G4double barkas = 0;
-  G4int n = 0;
-  do{
-    n++;
-    if ( n >= sizeL1 ) break;
-    l1 = L1[n][1];
-    l1p = L1[n-1][1];
-    barkas = (l1 - l1p) * ( normEnergy - L1[n-1][0]) / (L1[n][0] - L1[n-1][0]);
-    barkas+= l1p;
-  } while( normEnergy >= L1[n][0]);
+  G4int n;
+
+  for(n = 0; n < sizeL1; n++) {
+    if( normEnergy < L1[n][0] ) break;
+  }
+  if(0 == n) n = 1 ;
+  if(n >= sizeL1) n = sizeL1 - 1 ;
+
+  G4double l1    = L1[n][1];
+  G4double l1p   = L1[n-1][1];
+  G4double barkas= l1p + (l1 - l1p) * ( normEnergy - L1[n-1][0]) / 
+                  (L1[n][0] - L1[n-1][0]);
   
   return barkas;
   
@@ -229,17 +364,17 @@ G4double G4QAOLowEnergyLoss::GetL1(G4double normEnergy) const
 
 G4double G4QAOLowEnergyLoss::GetL2(G4double normEnergy) const
 {
-  G4double l2 = 0, l2p = 0;
-  G4double bloch = 0;
-  G4int n = 0;
-  do{
-    n++;
-    if ( n >= sizeL2 ) break;
-    l2 = L2[n][1];
-    l2p = L2[n-1][1];
-    bloch = (l2 - l2p) * ( normEnergy - L2[n-1][0]) / (L2[n][0] - L2[n-1][0]);
-    bloch+= l2p;
-  } while( normEnergy >= L2[n][0] );
+  G4int n;
+  for(n = 0; n < sizeL2; n++) {
+    if( normEnergy < L2[n][0] ) break;
+  }
+  if(0 == n) n = 1 ;
+  if(n >= sizeL2) n = sizeL2 - 1 ;
+
+  G4double l2    = L2[n][1];
+  G4double l2p   = L2[n-1][1];
+  G4double bloch = l2p + (l2 - l2p) * ( normEnergy - L2[n-1][0]) / 
+                  (L2[n][0] - L2[n-1][0]);
   
   return bloch;
 }
@@ -247,7 +382,7 @@ G4double G4QAOLowEnergyLoss::GetL2(G4double normEnergy) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4String G4QAOLowEnergyLoss::materialAvailable[6] = {
-  "Aluminium",
+  "Aluminum",
   "Silicon",
   "Copper",
   "Tantalum",
@@ -389,10 +524,141 @@ const G4double G4QAOLowEnergyLoss::L2[14][2] =
   40.00,  -1.13902
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-G4double G4QAOLowEnergyLoss::HighEnergyLimit() const
+const G4int G4QAOLowEnergyLoss::nbOfElectronPerSubShell[1540] = 
 {
-  G4double eMax = 2. * MeV;
-  return eMax;
-}
+  0, // consistency with G4AtomicShells
+  1,//------ H
+  2,//------ He
+  2,  1,//------ Li
+  2,  2,//------ Be
+  2,  2,  1,//------ B
+  2,  2,  2,//------ C
+  2,  2,  2,  1,//------ N
+  2,  2,  2,  2,//------ O
+  2,  2,  5,//------ F
+  2,  2,  2,  4,//------ Ne
+  2,  2,  2,  4,  1,//------ Na
+  2,  2,  2,  4,  2,//------ Mg
+  2,  2,  2,  4,  2,  1,//------ Al
+  2,  2,  2,  4,  2,  2,//------ Si
+  2,  2,  2,  4,  2,  3,//------ P
+  2,  2,  2,  4,  2,  4,//------
+  2,  2,  2,  4,  2,  5,//------
+  2,  2,  2,  4,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  3,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  7,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  5,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  3,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  7,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  5,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  2,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  3,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  4,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  5,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  7,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  7,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  9,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 10,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 11,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 12,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6, 13,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  3,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  5,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  7,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  9,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  3,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  1,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  4,  2,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  2,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  3,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  4,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  6,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  7,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  7,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6,  8,  2,  2,  4,  1,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6, 10,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6, 11,  2,  2,  4,  2,//------
+  2,  2,  2,  4,  2,  2,  4,  4,  6,  2,  2,  4,  4,  6,  6,  8,  2,  2,  4,  4,  6, 12,  2,  2,  4,  2 //-----
+};
+
+const G4int G4QAOLowEnergyLoss::fNumberOfShells[101] =
+{
+ 0 ,  // nonexisting zero element
+
+ 1 ,  1 ,  2 ,  2 ,  3 ,    3 ,  4 ,  4 ,  3 ,  4 ,  //  1 - 10
+
+ 5 ,  5 ,  6 ,  6 ,  6 ,    6 ,  6 ,  7 ,  8 ,  8 ,  // 11 - 20
+
+ 9 ,  9 ,  9 ,  9 ,  9 ,    9 ,  9 , 10 , 10 , 10 ,  // 21 - 30
+
+11 , 11 , 11 , 11 , 11 ,   12 , 13 , 13 , 14 , 14 ,  // 31 - 40
+
+14 , 14 , 14 , 14 , 14 ,   15 , 15 , 15 , 16 , 16 ,  // 41 - 50
+
+// ----------------------------------------------------------
+
+16 , 16 , 16 , 17 , 18 ,   18 , 19 , 19 , 19 , 19 ,  // 51 - 60
+
+19 , 19 , 19 , 20 , 19 ,   19 , 19 , 19 , 19 , 20 ,  // 61 - 70
+
+21 , 21 , 21 , 21 , 21 ,   21 , 21 , 21 , 22 , 22 ,  // 71 - 80
+
+23 , 23 , 23 , 23 , 24 ,   24 , 25 , 25 , 26 , 26 ,  // 81 - 90
+
+27 , 27 , 27 , 26 , 26 ,   27 , 27 , 26 , 26 , 26    // 91 - 100
+
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+

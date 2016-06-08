@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPrimaryParticle.ddl,v 1.1 1999/12/05 22:32:25 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PPrimaryParticle.ddl,v 1.2 2000/11/02 12:41:59 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #ifndef G4PPrimaryParticle_h
 #define G4PPrimaryParticle_h 1
 
-#include "globals.hh"
+#include "G4Pglobals.hh"
 #include "G4ThreeVector.hh"
 #include "G4PersistentTypes.hh"
 #include "G4PersistentSchema.hh"

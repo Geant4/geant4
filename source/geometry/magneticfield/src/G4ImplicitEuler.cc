@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ImplicitEuler.cc,v 1.2 1999/12/15 14:49:49 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4ImplicitEuler.cc,v 1.3 2000/11/01 15:15:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //  Implicit Euler:
@@ -43,7 +43,6 @@ G4MagErrorStepper(EqRhs, numberOfVariables),
 
 G4ImplicitEuler::~G4ImplicitEuler()
 {
-  ;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -53,7 +52,7 @@ G4ImplicitEuler::~G4ImplicitEuler()
 void
 G4ImplicitEuler::DumbStepper( const G4double  yIn[],
 			      const G4double  dydx[],
-			      const G4double  h,
+			            G4double  h,
 			 	    G4double  yOut[])
 {
   //  const G4int nvar = 6 ;

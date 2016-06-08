@@ -5,9 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ToroidalSurface.hh,v 1.2 1999/12/15 14:49:58 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4ToroidalSurface.hh,v 1.5 2000/11/08 14:22:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// Class G4ToroidalSurface
+//
+// Class Description:
+//   
+// Definition of a toroidal surface.
+
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+// ----------------------------------------------------------------------
 
 #ifndef __G4TOROIDALSURAFCE
 #define __G4TOROIDALSURAFCE
@@ -15,118 +25,71 @@
 #include "G4FPlane.hh"
 #include "G4OsloMatrix.hh"
 
-class G4ToroidalSurface:public G4Surface
+class G4ToroidalSurface : public G4Surface
 {
- public:
+
+ public:  // with description
 
   G4ToroidalSurface();
-
   G4ToroidalSurface(const G4Vector3D&, 
 		    const G4Vector3D&,  
 		    const G4Vector3D&,  
-		    const G4double, 
-		    const G4double);    
+		    G4double, 
+		    G4double);
+  virtual ~G4ToroidalSurface();
+    // Constructors & destructor.
 
-  ~G4ToroidalSurface();
+  inline G4String GetEntityType() const;
+    // Returns type identifier of the shape.
 
-  G4String GetEntityType(){return G4String("Toroidal_Surface");}
+  G4int Intersect(const G4Ray&);
+    // Determines the intersection of a ray with a torus.	 
+    // Returns 1 if the ray intersects the torus.
 
-  int Intersect(const G4Ray&);
-  
   void CalcBBox();
-  
-  inline G4Vector3D  	GetDirection(){return Placement.GetRefDirection();}
-  
-  inline G4Vector3D 	GetAxis()     {return Placement.GetAxis();}
-  
-  inline G4Point3D	GetLocation() {return Placement.GetLocation();}
-  
-  inline G4double   	GetMinRadius(){return MinRadius;} 
-  
-  inline G4double   	GetMaxRadius(){return MaxRadius;} 
-  
-  G4double ClosestDistanceToPoint(const G4Point3D&);
-  
-  G4Vector3D SurfaceNormal(const G4Point3D& Pt)const 
-                                         {return G4Vector3D(0,0,0);}
+    // Computes the bounding-box.
 
+  inline G4Vector3D  	GetDirection() const;
+  inline G4Vector3D 	GetAxis()      const;
+  inline G4Point3D	GetLocation()  const;
+  inline G4double   	GetMinRadius() const;
+  inline G4double   	GetMaxRadius() const;
+    // Accessors to geometrical data.
 
-  inline void 	MultiplyPointByMatrix(G4Point3D& Base)
-  {
-    Base.setX((Base.x() * TransMatrix->get(0,0)) + 
-	      (Base.y() * TransMatrix->get(1,0)) + 
-	      (Base.z() * TransMatrix->get(2,0)));
-    Base.setY((Base.x() * TransMatrix->get(0,1)) + 
-	      (Base.y() * TransMatrix->get(1,1)) + 
-	      (Base.z() * TransMatrix->get(2,1)));
-    Base.setZ((Base.x() * TransMatrix->get(0,2)) + 
-	      (Base.y() * TransMatrix->get(1,2)) + 
-	      (Base.z() * TransMatrix->get(2,2)));
-  }
+  G4double ClosestDistanceToPoint(const G4Point3D& x);
+    // Returns the closest distance to the torus surface from a point x.
 
-  inline void	MultiplyVectorByMatrix(G4Vector3D& DCos)
-  {
-    G4double w;
-    DCos.setX((DCos.x() * TransMatrix->get(0,0)) + 
-	      (DCos.y() * TransMatrix->get(1,0)) + 
-	      (DCos.z() * TransMatrix->get(2,0)) + TransMatrix->get(3,0));
+  virtual G4Vector3D SurfaceNormal(const G4Point3D& Pt) const;
+    // Returns the Normal unit vector to the G4ToroidalSurface at a point Pt
+    // on (or nearly on) the G4ToroidalSurface.
 
-    DCos.setY((DCos.x() * TransMatrix->get(0,1)) + 
-	      (DCos.y() * TransMatrix->get(1,1)) + 
-	      (DCos.z() * TransMatrix->get(2,1)) + TransMatrix->get(3,1));
+  inline void MultiplyPointByMatrix(G4Point3D& Base);
+  inline void MultiplyVectorByMatrix(G4Vector3D& DCos);
+    // Utility methods.
 
-    DCos.setY((DCos.x() * TransMatrix->get(0,2)) + 
-	      (DCos.y() * TransMatrix->get(1,2)) + 
-	      (DCos.z() * TransMatrix->get(2,2)) + TransMatrix->get(3,2));
-  
-    w      = ((DCos.x() * TransMatrix->get(0,3)) + 
-	      (DCos.y() * TransMatrix->get(1,3)) + 
-	      (DCos.z() * TransMatrix->get(2,3)) + TransMatrix->get(3,3));
-    
-    if (w != 0.0) 
-    {
-      DCos.setX(DCos.x() / w);  
-      DCos.setY(DCos.y() / w); 
-      DCos.setZ(DCos.z() / w);
-    }
-  }
-  
+private:
+
+  G4ToroidalSurface(const G4ToroidalSurface&);
+  G4ToroidalSurface& operator=(const G4ToroidalSurface&);
+    // Private copy constructor and assignment operator.
+
+  inline G4int IsZero(G4double x) const;
+  G4int SolveQuartic(G4double c[], G4double s[]);	
+  G4int SolveCubic  (G4double c[], G4double s[]);
+  G4int SolveQuadric(G4double c[], G4double s[]);
+    // Algorithms for solving quadratic, cubic and quartic equations.
 
 private:
 
   G4Axis2Placement3D Placement;
   G4double           MinRadius;
   G4double	     MaxRadius;
-  Matrix*            TransMatrix;   // transformation matrix  
+  G4PointMatrix*     TransMatrix;   // transformation matrix  
   G4Point3D          hitpoint;
   const G4double     EQN_EPS;
 
-  int SolveQuartic(G4double c[], G4double s[]);	
-
-  inline int IsZero(G4double x)
-  {
-    if((x) > -EQN_EPS && (x) < EQN_EPS) 
-      return 1;
-    else return 0;
-  }
-
-  int SolveCubic(G4double c[], G4double s[]);
-  
-  int SolveQuadric(G4double c[], G4double s[]);
-
 };
 
+#include "G4ToroidalSurface.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

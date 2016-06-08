@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: clparse.cc,v 1.11 2000/03/07 10:51:41 stesting Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // modified by I.Hrivnacova
 // added G3SensVol

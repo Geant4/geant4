@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ParameterisedNavigation.hh,v 1.3 2000/04/25 16:15:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4ParameterisedNavigation

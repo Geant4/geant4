@@ -5,9 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.3 2000/04/19 17:56:44 davidw Exp $
+// $Id: G4Hype.cc,v 1.5 2000/11/20 18:18:58 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -54,11 +54,11 @@
 
 // Constructor - check parameters, and fills protected data members
 G4Hype::G4Hype(const G4String& pName,
-	   const G4double newInnerRadius,
-	   const G4double newOuterRadius,
-	   const G4double newInnerStereo,
-	   const G4double newOuterStereo,
-	   const G4double newHalfLenZ) : G4VSolid(pName)
+	             G4double newInnerRadius,
+	             G4double newOuterRadius,
+	             G4double newInnerStereo,
+	             G4double newOuterStereo,
+	             G4double newHalfLenZ) : G4VSolid(pName)
 {
 // Check z-len
     if (newHalfLenZ>0)
@@ -156,7 +156,7 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
 	//
 	
 	G4bool splitOuter = (outerRadius/endOuterRadius < 0.95);
-	G4bool splitInner;
+	G4bool splitInner = 0;
 	if (InnerSurfaceExists()) {
 		splitInner = (innerRadius/endInnerRadius < 0.95);
 	}
@@ -186,7 +186,7 @@ G4bool G4Hype::CalculateExtent( const EAxis axis,
 	transform.ApplyPointTransform( v0 );
 	transform.ApplyPointTransform( v1 );
 	
-	G4double zInnerSplit;
+	G4double zInnerSplit=0.;
 	if (InnerSurfaceExists()) {
 		if (splitInner) {
 			v2 = transform.TransformPoint( 
@@ -1046,7 +1046,7 @@ G4NURBS* G4Hype::CreateNURBS () const
 //
 // 
 G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v, 
-                             const G4double r2, const G4double tan2Phi, G4double s[2] )
+                             G4double r2, G4double tan2Phi, G4double s[2] )
 {
 	G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
 	G4double tx = v.x(), ty = v.y(), tz = v.z();
@@ -1110,8 +1110,8 @@ G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
 // the z position on the asymptotic limit line that
 // contains the normal on the line through the point p.
 //
-G4double G4Hype::ApproxDistOutside( const G4double pr, const G4double pz,
-				    const G4double r0, const G4double tanPhi )
+G4double G4Hype::ApproxDistOutside( G4double pr, G4double pz,
+				    G4double r0, G4double tanPhi )
 {
 	if (tanPhi < DBL_MIN) return pr-r0;
 
@@ -1167,8 +1167,8 @@ G4double G4Hype::ApproxDistOutside( const G4double pr, const G4double pz,
 //
 // Assumes pr and pz are positive
 //
-G4double G4Hype::ApproxDistInside( const G4double pr, const G4double pz,
-		        	   const G4double r0, const G4double tan2Phi )
+G4double G4Hype::ApproxDistInside( G4double pr, G4double pz,
+		        	   G4double r0, G4double tan2Phi )
 {
 	if (tan2Phi < DBL_MIN) return r0 - pr;
 

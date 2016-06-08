@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.4 1999/12/15 14:53:17 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4NeutronHPInelastic.cc,v 1.7 2000/11/09 16:14:22 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #include "G4NeutronHPInelastic.hh"
 
@@ -73,6 +73,7 @@
       while(!theInelastic[i].HasDataInAnyFinalState());
     }
   }
+
   G4NeutronHPInelastic::~G4NeutronHPInelastic()
   {
     delete [] theInelastic;
@@ -85,10 +86,14 @@
     xSec = new G4double[n];
     G4double sum=0;
     G4int i, it, index;
+    const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
+    G4double rWeight;    
     for (i=0; i<n; i++)
     {
       index = theMaterial->GetElement(i)->GetIndex();
+      rWeight = NumAtomsPerVolume[i];
       xSec[i] = theInelastic[index].GetXsec(aTrack.GetKineticEnergy());
+      xSec[i] *= rWeight;
       sum+=xSec[i];
     }
     G4double random = G4UniformRand();

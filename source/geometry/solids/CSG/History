@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2000/06/22 15:24:25 gcosmo Exp $
+$Id: History,v 1.34 2000/12/01 11:49:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,90 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec 01,   00   G. Cosmo                  geom-solids-csg-V02-00-13
+- Increased basic number of iterations from 8 to 12 for Newton algorithm
+  in G4Torus.cc to assure root retrivial.
+
+Nov 28,   00   V. Grichine               geom-solids-csg-V02-00-12
+- Bug fixed in G4Tubs::Inside(p) for analysis of phi positioning when
+  on +-fDz surface.
+
+Nov 20,   00   G. Cosmo                  geom-solids-csg-V02-00-11
+- Fixes to remove warnings from "-Wall -ansi -pedantic" g++ compiler options:
+  o commented out variables declared and not used.
+  o fixed declaration of variables used before being initialised.
+  o fixed order of initialisation of member data in constructors.
+  o fixed usage of unsigned-int (size_t) for array indeces.
+- NB: based on tag geom-solids-csg-V02-00-09.
+
+Nov 16,   00   V. Grichine               geom-solids-csg-V02-00-10
+- G4Box.cc: introduced fixes to algorithm for computation of rotated vertices
+  in CalculateExtent(). (D.Williams)
+
+Nov 10,   00   G. Cosmo                  geom-solids-csg-V02-00-09
+- G4Torus.cc: removed debug print-out which was still included by mistake
+  in constructor.
+
+Nov 02,   00   G. Cosmo                  geom-solids-csg-V02-00-08
+- QA code revision and cleanup (+fixes from CodeWizard filtering):
+  o Removed virtual keyword from GetEntityType() concrete function.
+  o General cosmetics.
+
+Oct 31,   00   V. Grichine               geom-solids-csg-V02-00-07
+- G4Tubs::DistanceToOut(p,v,...):
+  o Initialised sr and sphi to kInfinity and re-introduced additional
+    condition on check for Rmin intersection (t2 >= 0).
+
+Oct 26,   00   G. Cosmo                  geom-solids-csg-V02-00-06
+- G4Cons::DistanceToOut(p,v): leave out warning if point is outside.
+
+Oct 23,   00   G. Cosmo                  geom-solids-csg-V02-00-05
+- G4Tubs::DistanceToOut(p,v,...):
+  o Still correction to thickness of conical surfaces. (V.Grichine)
+  o Commented-out additional condition on check for Rmin intersection
+    (t2 >= 0), recently introduced (roi2).
+    Requires further investigation !!
+- G4Torus:
+  o Introduced more stable numerical method (Newton-based) for computing
+    roots of equations in DistanceToIn() and DistanceToOut(). (E.Medernach)
+
+Oct 18,   00   V. Grichine               geom-solids-csg-V02-00-04
+- G4Cons.cc, G4Tubs.cc:
+  added check against negative distance returned by DistanceToIn/DistanceToOut.
+- G4Cons.cc:
+  added correction for thickness of conical surfaces, remarkable for big
+  opening angles, in DistanceToIn/DistanceToOut functions.
+
+Oct 05,   00   V. Grichine               geom-solids-csg-V02-00-03
+- G4Cons.cc:
+  o fix in DistanceToIn(p,v): corrected condition on conical surface to
+    consider a real projection of the conical surface thickness on XY
+    plane (0.5*kCarTolerance*secRMin instead of 0.5*kCarTolerance), when
+    dealing with cons with large opening angle.
+  o Updated unit test testG4Cons2.cc.
+
+Aug 16,   00   V. Grichine		 geom-solids-csg-V02-00-02
+- G4Cons.cc:
+  o fix in constructor to check if one of the Rmin is equal to 0,
+    if so, it will be set to 1e3*kRadTolerance.
+  o Deactivated call to G4Exception in DistanceToOut(p) if p is outside,
+    replaced by simple warning.
+- G4Tubes.cc, G4Box.cc:
+  o Deactivated call to G4Exception in DistanceToOut(p) if p is outside,
+    replaced by simple warning.
+
+Aug 08,   00   V. Grichine               geom-solids-csg-V02-00-01
+- G4Cons.cc, G4Tubs.cc:
+  o fixes to DistanceToOut(p,v,...) to make roots of quadratic equations
+    more stable.
+  o added check if point is outside in G4Tubes::DistanceToOut(p),
+    some code formatting.
+
+Jul 27,   00   V. Grichine               geom-solids-csg-V02-00-00
+- G4Cons.cc:
+  o added more diagnostics in DistanceToOut(p)
+  o cosmetics changes
+- Updated unit test for G4Cons.
 
 Jun 22,   00   V. Grichine               geom-solids-csg-V01-01-04
 - G4Box.cc:

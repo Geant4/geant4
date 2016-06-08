@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateX.cc,v 1.5 1999/12/15 14:54:07 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4OpenGLImmediateX.cc,v 1.6 2000/08/19 18:34:28 johna Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -36,7 +36,7 @@ G4OpenGLImmediateX::~G4OpenGLImmediateX () {}
 G4VSceneHandler* G4OpenGLImmediateX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
   G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << G4endl;
+       << ' ' << fName << " scene handlers extanct." << G4endl;
   return    pScene;
 }
 

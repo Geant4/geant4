@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VGraphicsSystem.hh,v 1.6 1999/12/15 14:54:18 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // John Allison  27th March 1996

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectingCone.hh,v 1.1 2000/04/07 10:56:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4IntersectingCone.hh,v 1.3 2000/11/02 16:54:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -19,7 +19,9 @@
 //
 //   Utility class which calculates the intersection
 //   of an arbitrary line with a fixed cone
-//
+
+// Author: 
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4IntersectingCone_hh
@@ -29,8 +31,10 @@
 #include "geomdefs.hh"
 #include "G4ThreeVector.hh"
 
-class G4IntersectingCone {
-	public:
+class G4IntersectingCone
+{
+  public:
+
 	G4IntersectingCone( const G4double r[2], const G4double z[2] );
 	virtual ~G4IntersectingCone();
 	
@@ -45,7 +49,8 @@ class G4IntersectingCone {
 	inline G4double ZHi() const { return zHi; }
 	
 	
-	protected:
+  protected:
+
 	G4double zLo, zHi,	// Z bounds of side
 		 rLo, rHi;	// R bounds of side
 

@@ -5,13 +5,57 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parabola.cc,v 1.2 1999/12/15 14:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Parabola.cc,v 1.4 2000/11/08 14:22:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Parabola.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4Parabola.hh"
+#include "G4CurvePoint.hh"
 
 G4Parabola::G4Parabola(){}
 G4Parabola::~G4Parabola(){}
+
+G4Parabola::G4Parabola(const G4Parabola& right)
+  : focalDist(right.focalDist), F(right.F), L0(right.L0)
+{
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4Parabola& G4Parabola::operator=(const G4Parabola& right)
+{
+  if (&right == this) return *this;
+
+  F  = right.F;
+  L0 = right.L0;
+  focalDist = right.focalDist;
+  pShift    = right.pShift;
+  position  = right.position;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+
+  return *this;
+}
 
 G4Curve* G4Parabola::Project(const G4Transform3D& tr)
 {
@@ -29,9 +73,8 @@ G4Curve* G4Parabola::Project(const G4Transform3D& tr)
   yPrime.setZ(0);
   G4double u= -(xPrime*yPrime)/xPrime.mag2();
 
-  G4Point3D newLocation= tr*position.GetLocation()+
-    focalDist*(u*u*xPrime+2*u*yPrime);
-  
+  G4Point3D newLocation= G4Point3D( tr*position.GetLocation()+
+                                    focalDist*(u*u*xPrime+2*u*yPrime) );
   newLocation.setZ(0);
   G4Vector3D newRefDirection= xPrime;
   G4double newFocalDist= (focalDist*((2*u+1)*xPrime+2*yPrime)).mag()/sqrt(5.);
@@ -89,4 +132,3 @@ G4bool G4Parabola::Tangent(G4CurvePoint& cp, G4Vector3D& v)
   v= p.y()*pos.GetPX() + (2*focalDist)*pos.GetPY();
   return true;
 }
-

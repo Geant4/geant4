@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 1.4 1999/12/15 14:49:48 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4CashKarpRKF45.cc,v 1.6 2000/11/20 17:29:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 //  order method (giving fifth-order accuracy) for the solution
@@ -24,8 +24,8 @@
 //
 // Constructor
 
-G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables): 
-G4MagIntegratorStepper(EqRhs, numberOfVariables)
+G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
+  : G4MagIntegratorStepper(EqRhs, numberOfVariables)
 {
   fNumberOfVariables = numberOfVariables ;
 
@@ -67,16 +67,15 @@ G4CashKarpRKF45::~G4CashKarpRKF45()
 void
 G4CashKarpRKF45::Stepper(const G4double yInput[],
 			 const G4double dydx[],
-			 const G4double Step,
+			       G4double Step,
 			       G4double yOut[],
 			       G4double yErr[])
 {
   // const G4int nvar = 6 ;
+  // const G4double a2 = 0.2 , a3 = 0.3 , a4 = 0.6 , a5 = 1.0 , a6 = 0.875;
  G4int i;
 
- const G4double a2 = 0.2 , a3 = 0.3 , a4 = 0.6 , a5 = 1.0 , a6 = 0.875 ,
-
-                 b21 = 0.2 ,
+ const G4double  b21 = 0.2 ,
                  b31 = 3.0/40.0 , b32 = 9.0/40.0 ,
                  b41 = 0.3 , b42 = -0.9 , b43 = 1.2 ,
 
@@ -156,7 +155,7 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
 void
 G4CashKarpRKF45::StepWithEst(const G4double yInput[],
 			     const G4double dydx[],
-			     const G4double Step,
+			           G4double Step,
 			           G4double yOut[],
                                    G4double& alpha2,
 			           G4double& beta2,

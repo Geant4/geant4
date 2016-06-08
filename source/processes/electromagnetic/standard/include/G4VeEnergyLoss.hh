@@ -5,24 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.hh,v 1.3 2000/06/07 17:00:49 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VeEnergyLoss.hh,v 1.5 2000/10/30 06:56:19 urban Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4VeEnergyLoss physics process -----------
-//                by Laszlo Urban, 20 March 1997 
-// 18/11/98  , L. Urban
-//  It is a modified version of G4VeEnergyLoss:
-//  continuous energy loss with generation of subcutoff delta rays
-// 02/02/99  new data members ,  L.Urban 
-// 10/02/00  modifications , new e.m. structure, L.Urban
+
 // ---------------------------------------------------------------
+// 18/11/98 It is a modified version of G4VeEnergyLoss: continuous energy loss
+//          with generation of subcutoff delta rays, L. Urban
+// 02/02/99 new data members ,  L.Urban 
+// 10/02/00 modifications , new e.m. structure, L.Urban
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 #ifndef G4VeEnergyLoss_h
 #define G4VeEnergyLoss_h 1
@@ -43,9 +37,10 @@
 #include "G4PhysicsLinearVector.hh"
 #include "G4EnergyLossTables.hh"
 
-class G4EnergyLossMessenger;
- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
 // Class description:
+//
 // This class is the implementation of the unified Energy Loss process
 // with generation of subcutoff secondaries , see description of 
 // *****************************************
@@ -60,9 +55,11 @@ class G4EnergyLossMessenger;
 // which tables can be used by other processes , too.
 // G4VeEnergyLoss is the base class for the processes giving contribution
 // to the (continuous) energy loss of e+/e- .
+//
 // Class description - end
 
- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
 class G4VeEnergyLoss : public G4VEnergyLoss
  
 {
@@ -204,11 +201,6 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable** RecorderOfElectronProcess;
     static G4PhysicsTable** RecorderOfPositronProcess;
     
-    static G4double MinDeltaCutInRange; // minimum cut for delta rays
-    static G4double* MinDeltaEnergy ;  
-
-    static G4bool setMinDeltaCutInRange ;
-
   private:
      
     static G4int NbinEloss;               // number of bins in table,
@@ -228,16 +220,8 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     static G4PhysicsTable* thepRangeCoeffCTable;
     
 
-    static G4EnergyLossMessenger* eLossMessenger;
-
   public: // With description
      
-    static void SetMinDeltaCutInRange(G4double value)
-                                    {MinDeltaCutInRange = value;
-                                     setMinDeltaCutInRange = true ;}
-    // sets minimal cut value for the subcutoff secondaries
-    // (i.e. the kinetic energy of these secondaries can not be
-    //  smaller than the energy corresponds to MinDeltaCutInRange).
 };
  
 #include "G4VeEnergyLoss.icc"

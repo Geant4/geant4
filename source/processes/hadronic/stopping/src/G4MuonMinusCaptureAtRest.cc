@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonMinusCaptureAtRest.cc,v 1.3 2000/04/07 16:06:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4MuonMinusCaptureAtRest.cc,v 1.5 2000/07/12 09:19:53 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -119,6 +119,8 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName)
   pdefFragm[4] = G4He3::He3();
   pdefFragm[5] = G4Alpha::Alpha();
 
+  nGkine = 0;
+
   if (verboseLevel>=0) {
     G4cout << GetProcessName() << " is created "<< G4endl;
   }
@@ -228,6 +230,7 @@ G4VParticleChange* G4MuonMinusCaptureAtRest::AtRestDoIt(
 //     corresponding member in G4Track
 
   aParticleChange.Initialize(track);
+  nGkine = 0;
 
 //   Store some global quantities that depend on current material and particle
 

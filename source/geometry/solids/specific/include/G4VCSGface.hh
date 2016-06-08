@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGface.hh,v 1.1 2000/04/07 10:59:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VCSGface.hh,v 1.3 2000/11/02 16:54:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -27,8 +27,8 @@
 //   Virtual members:
 //
 //	-------------------------------------------------------------------
-//      Intersect( const G4ThreeVector &p, const G4ThreeVector &v,			      const G4bool outGoing, const G4double surfTolerance,
-//	           const G4bool outgoing, const G4double surfTolerance,
+//      Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
+//		         G4bool outGoing, G4double surfTolerance,
 //		   G4double &distance, G4double &distFromSurface,
 //		   G4ThreeVector &normal, G4bool &allBehind );
 //
@@ -237,6 +237,8 @@
 //   and save the answer that is smallest. If there is more than one answer,
 //   or if allBehind is false for the one answer, return validNorm as false.
 
+// Author:
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4VCSGface_hh
@@ -252,19 +254,21 @@ class G4VoxelLimits;
 class G4AffineTransform;
 class G4SolidExtentList;
 
-class G4VCSGface {
-	public: 
+class G4VCSGface
+{
+  public: 
+
 	G4VCSGface() {;}
 	virtual ~G4VCSGface() {;}
 	
 	virtual G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
-				  const G4bool outgoing, const G4double surfTolerance,
+				  G4bool outgoing, G4double surfTolerance,
 				  G4double &distance, G4double &distFromSurface,
 				  G4ThreeVector &normal, G4bool &allBehind ) = 0;
 
-        virtual G4double Distance( const G4ThreeVector &p, const G4bool outgoing ) = 0;
+        virtual G4double Distance( const G4ThreeVector &p, G4bool outgoing ) = 0;
 	
-	virtual EInside Inside( const G4ThreeVector &p, const G4double tolerance, 
+	virtual EInside Inside( const G4ThreeVector &p, G4double tolerance, 
 				G4double *bestDistance ) = 0;
 		
 	virtual G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance ) = 0;

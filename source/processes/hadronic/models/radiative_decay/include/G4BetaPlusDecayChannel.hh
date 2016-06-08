@@ -25,6 +25,8 @@
 #include "globals.hh"
 #include "G4NuclearDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //
 class G4BetaPlusDecayChannel : public G4NuclearDecayChannel
@@ -35,14 +37,24 @@ class G4BetaPlusDecayChannel : public G4NuclearDecayChannel
   //   Beta+ decay proceess. 
   //
   // class  description - end
+  //
+  //
   public:
     G4BetaPlusDecayChannel (G4int Verbose,
                             const G4ParticleDefinition *theParentNucleus,
                             G4double theBR,
                             G4double theEndPointEnergy=0.0,
                             G4double theDaughterExcitation=0.0,
-                            G4double theFFN=0.0) :
-      G4NuclearDecayChannel (BetaPlus, Verbose, theParentNucleus, theBR, theFFN,
+                            G4double theFFN=0.0,
+			    G4bool   theBetaSimple = false,
+			    RandGeneral* theRandEnergy = NULL) :
+      G4NuclearDecayChannel (BetaPlus, 
+			     Verbose, 
+			     theParentNucleus, 
+			     theBR,
+			     theFFN, 
+			     theBetaSimple,
+			     theRandEnergy,
                              theEndPointEnergy,
                              theParentNucleus->GetBaryonNumber(),
                              int(theParentNucleus->GetPDGCharge()/eplus)-1,
@@ -53,7 +65,7 @@ class G4BetaPlusDecayChannel : public G4NuclearDecayChannel
         G4cout <<"G4BetaPlusDecayChannel constructor" <<G4endl;
 #endif
     }
-    ~G4BetaPlusDecayChannel () {;}
+  ~G4BetaPlusDecayChannel () {;}
 };
 #endif
 

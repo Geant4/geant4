@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.hh,v 1.3 2000/04/19 17:56:29 davidw Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VCSGfaceted.hh,v 1.5 2000/11/02 16:54:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -20,6 +20,8 @@
 //   Virtual class defining CSG type shape that is built entire
 //   of G4CSGface faces.
 
+// Author:
+//   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
 #ifndef G4VCSGfaceted_hh
@@ -32,7 +34,8 @@ class G4VisExtent;
 
 class G4VCSGfaceted : public G4VSolid 
 {
-	public:
+  public:
+
 	G4VCSGfaceted( G4String name) : G4VSolid(name) {;}
 	virtual ~G4VCSGfaceted();
 	
@@ -55,7 +58,7 @@ class G4VCSGfaceted : public G4VSolid
 					G4bool *validNorm=0,G4ThreeVector *n=0 ) const;
 	virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
 
-	virtual G4GeometryType  GetEntityType() const { return G4String("G4CSGfaceted"); }
+	G4GeometryType  GetEntityType() const { return G4String("G4CSGfaceted"); }
 
         virtual G4Polyhedron* CreatePolyhedron() const = 0;
 

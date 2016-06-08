@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpAbsorption.cc,v 1.1.10.1.2.1 1999/12/08 17:35:13 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4OpAbsorption.cc,v 1.3 2000/09/19 03:19:17 gum Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation
@@ -17,7 +17,9 @@
 // Version:     1.0
 // Created:     1996-05-21
 // Author:      Juliet Armstrong
-// Updated:     1997-04-09 by Peter Gumplinger
+// Updated:     2000-09-18 by Peter Gumplinger
+//              > comment out warning - "No Absorption length specified" 
+//              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
 //              1998-08-25 by Stefano Magni
 //              > Change process to use G4MaterialPropertiesTables
@@ -80,7 +82,7 @@ G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         aParticleChange.SetStatusChange(fStopAndKill);
 
         if (verboseLevel>0) {
-	   G4cout << "\n** Photon Absorbed! **" << G4endl;
+	   G4cout << "\n** Photon absorbed! **" << G4endl;
         }
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
@@ -113,12 +115,12 @@ G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
                                          GetProperty (thePhotonMomentum);
            }
            else {
-             G4cout << "No Absorbtion length specified" << G4endl;
+//             G4cout << "No Absorption length specified" << G4endl;
            }
         } 
         else {
-           G4cout << "No Absorbtion length specified" << G4endl;
-        }	
+//           G4cout << "No Absorption length specified" << G4endl;
+        }
 
         return AttenuationLength;
 }

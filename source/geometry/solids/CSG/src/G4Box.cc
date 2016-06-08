@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.6 2000/06/09 14:37:30 grichine Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Box.cc,v 1.10 2000/11/20 18:05:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //
@@ -167,6 +167,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 	pMin=zMin;
 	pMax=zMax;
 	break;
+      default:
+        break;
     }
     pMin -= kCarTolerance ;
     pMax += kCarTolerance ;
@@ -634,11 +636,18 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
 
   if( Inside(p) == kOutside )
   {
-     G4cout << "Position:"  << G4endl << G4endl;
-     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
-     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
-     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
-    G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Box parameters:" << G4endl << G4endl ;
+     G4cout << "fDx = "   << fDx/mm << " mm" << G4endl ;
+     G4cout << "fDy = "   << fDy/mm << " mm" << G4endl ;
+     G4cout << "fDz = "   << fDz/mm << " mm" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+ // G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
+     G4cout<<"G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
   }
   safx1 = fDx - p.x() ;
   safx2 = fDx + p.x() ;

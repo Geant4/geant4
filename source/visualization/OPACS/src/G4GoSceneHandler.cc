@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GoSceneHandler.cc,v 1.9 2000/06/07 22:36:02 barrand Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Guy Barrand 04 November 1996

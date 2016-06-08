@@ -5,13 +5,53 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.cc,v 1.4 1999/12/15 14:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Line.cc,v 1.6 2000/11/08 14:22:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4Line.cc
+//
+// ----------------------------------------------------------------------
+
 #include "G4Line.hh"
 
 G4Line::G4Line (){}
 G4Line::~G4Line (){}
+
+G4Line::G4Line(const G4Line& right)
+  : pnt(right.pnt), dir(right.dir), invDir(right.invDir), v(right.v)
+{
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+}
+
+G4Line& G4Line::operator=(const G4Line& right)
+{
+  if (&right == this) return *this;
+  
+  pnt       = right.pnt;
+  dir       = right.dir;
+  invDir    = right.invDir;
+  v         = right.v;
+  bBox      = right.bBox;
+  start     = right.start;
+  end       = right.end;
+  pStart    = right.pStart;
+  pEnd      = right.pEnd;
+  pRange    = right.pRange;
+  bounded   = right.bounded;
+  sameSense = right.sameSense;
+  
+  return *this;
+}
 
 G4Curve* G4Line::Project(const G4Transform3D& tr)
 {
@@ -49,4 +89,3 @@ G4bool G4Line::Tangent(G4CurvePoint& cp, G4Vector3D& vec)
 
   return true;
 }
-

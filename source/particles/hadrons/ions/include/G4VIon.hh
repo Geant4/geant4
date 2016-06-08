@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VIon.hh,v 1.3 2000/02/25 07:37:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

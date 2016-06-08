@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EdgeCurveCreator.cc,v 1.3 2000/02/25 16:36:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4EdgeCurveCreator.cc,v 1.4 2000/11/20 18:17:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4EdgeCurveCreator
@@ -34,7 +34,6 @@ void G4EdgeCurveCreator::CreateG4Geometry(STEPentity& Ent)
 {
   G4Point3D *pt1,*pt2;
   G4Curve* crv=0;
-  G4bool sameSense;
 
   // Get start point
   G4String attrName("edge_start");

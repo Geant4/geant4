@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisExtent.hh,v 1.4 1999/12/15 14:50:35 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // A.Walkden 28/11/95

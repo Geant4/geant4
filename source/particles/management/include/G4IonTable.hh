@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.15 2000/02/25 07:36:14 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4IonTable.hh,v 1.17 2000/10/20 11:34:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,12 +55,16 @@ class G4IonTable
  protected:
    // hide copy construictor as protected 
    G4IonTable(const  G4IonTable &right);
+   G4IonTable & operator = (const G4IonTable &) {return *this;}
 
  public:
   // destructor
    virtual ~G4IonTable();
 
  public: // With Description
+   G4int GetNumberOfElements() const;
+   // Get number of elements defined in the IonTable
+
    // Register Isotope table
    void RegisterIsotopeTable(G4VIsotopeTable* table);
    G4VIsotopeTable* GetIsotopeTable() const;
@@ -158,6 +162,10 @@ class G4IonTable
 
 };
 
+inline G4int  G4IonTable::GetNumberOfElements() const
+{
+  return numberOfElements;
+}
 inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 {
   G4IonList::iterator i;

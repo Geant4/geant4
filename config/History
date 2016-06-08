@@ -1,5 +1,5 @@
-$Id: History,v 1.105 2000/05/23 06:48:25 gcosmo Exp $
-$Name: geant4-02-00 $
+$Id: History,v 1.129 2000/12/13 09:19:56 gcosmo Exp $
+$Name: geant4-03-00 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,103 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th December 2000 Gunter Folger (config-V02-00-14)
+- common.gmk: fix to rule for building dependencies, parsing is skip
+  if $(dependencies) is empty.
+- globlib.gmk: added "includes" to PHONY target list and fixed typo.
+- Added comments to "includes" rules.
+
+8th December 2000 Gabriele Cosmo (config-V02-00-13)
+- Changed G4LIB_BUILD_ARCHIVE to G4LIB_BUILD_STATIC in architecture.gmk,
+  common.gmk and globlib.gmk.
+
+7th December 2000 Gabriele Cosmo (config-V02-00-12)
+- Added options to SUN-CC5.gmk to handle multithreading and persistency.
+
+5th December 2000 Youhei Morita (config-V02-00-11)
+- Introduced GPPFLAGS to set -M or -MM according to G4ODBMS.
+
+5th December 2000 Gabriele Cosmo (config-V02-00-10)
+- Restored -MM option to g++ for making dependencies. -M was introduced in
+  tag config-V02-00-02 to allow dependency search on system headers as well
+  (#include<...> statements). This however introduces serious clashes with
+  Objectivity schema generation for the persistency module.
+
+4th December 2000 Gunter Folger (config-V02-00-09)
+- Disable G4RUNPATHOPTION (internal variable) for all but SUN. This is/will 
+  be used when linking with G4 shared libraries to store the path to these 
+  libraries in the executable. 
+
+1st December 2000  Gabriele Cosmo (config-V02-00-08)
+- Added G4UI_USE_TCSH and related settings to G4UI_USE.gmk (M.Maire).
+- Merged SUN-CC6.gmk to SUN-CC5.gmk and removed SUN-CC6.gmk.
+
+1st December 2000  Gunter Folger (config-V02-00-07)
+- Change -M to -M -MG in common.gmk, binmake.gmk. This will output a "correct"
+  dependency file even when missing  header files are missing. Correct in the
+  sense that liblist will work, and that the missing header is supposed to be
+  (made) in the source directory.
+
+17th November 2000  Gunter Folger (config-V02-00-06)
+- Link with CLHEP using -L/-l instead of absolute filename; this allows 
+  to link with shared lib of Anaphe, or static lib of Geant4.
+- Added shared-lib settings to sys configurations.
+
+14th November 2000  Gabriele Cosmo (config-V02-00-05)
+- Added reference to new "parameterisations" top category.
+  Modified files: binmake.gmk.
+- Removed makeshlib.sh script, now obsolete.
+
+7th November 2000  Guy Barrand
+- analysis.gmk : renamed OpenScientist things to "Lab" ; 
+  Lab is the concrete package where analysis is done.
+
+3rd November 2000  Gunter Folger (config-V02-00-04)
+- common.gmk: fix for shared-library build.
+- common.gmk, globlib.gmk: added rules for "includes" gmake target.
+- architecture.gmk: introduced new user settable variable G4INCLUDE
+  to specify path where headers (files or symbolic-links) should be installed.
+
+1st November 2000  Guy Barrand
+- analysis.gmk: declared Lizard.
+
+24th October 2000  Gunter Folger (config-V02-00-03)
+- architecture.gmk, common.gmk, globlib.gmk, sys/*:
+  o merged building shared libraries into makefiles.
+    The MAKESHLIB script is no longer used.
+- Introduced new variables steering the building of archive/shared libs:
+   G4LIB_BUILD_SHARED
+   G4LIB_BUILD_ARCHIVE  (still default)
+     note that G4MAKESHLIB set will internally set G4LIB_BUILD_SHARED for
+     backwards compatiblity.
+- Introduced new variable (G4LIB_USE_GRANULAR) to force using of granular 
+  libraries, even when libG4global.a/.so exists.
+
+14th September 2000  Guy Barrand 
+- Introduced changes to handle analysis module.
+  o added analysis.gmk.
+  o sys/Linux-g++.gmk: added macro DLDLIBS for library dynamic loading.
+  o binmake.gmk: added inclusion of analysis.gmk.
+  o binmake.gmk: place LDLIBS3 += $(ANALYSISLIBS) after LDLIBS3 += $(INTYLIBS).
+
+22nd August 2000  John Allison (config-V02-00-02)
+- Changed -MM to -M in dependency file making in binmake.gmk and common.gmk.
+  This causes dependencies of both #include "..." and #include <...> to be
+  followed.  This is the safer option, since some users might/should use,
+  e.g., #include <g4std/...>, but even these files change sometime.
+
+22nd August 2000  Gunter Folger
+- globlib.gmk: fix for protection from infinite loops when a dir does
+  not exist (G.Folger).
+
+1st August 2000  Gabriele Cosmo (config-V02-00-01)
+- Added setup WIN32-g++ for Windows/NT/9X with Cygwin and g++ compiler.
+  Configuration non officially supported (courtesy of S.Agostinelli and
+  IST group, Genova).
+
+24th July 2000  Gabriele Cosmo (config-V02-00-00)
+- Added path to g3tog4 for global libs.
 
 23rd May 2000  John Allison (config-V01-01-04)
 - Added -I$(G4BASE)/processes/hadronic/models/radiative_decay/include to

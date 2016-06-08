@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VIsotopeTable.hh,v 1.3 2000/01/26 10:52:04 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

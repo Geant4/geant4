@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.cc,v 1.7 2000/02/25 15:58:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4BSplineSurface.cc,v 1.10 2000/11/20 17:54:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BSplineSurface.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4BSplineSurface.hh"
 #include "G4BezierSurface.hh"
@@ -30,24 +36,6 @@ G4BSplineSurface::G4BSplineSurface(const char* nurbfilename, G4Ray& rayref)
   first_hit = Hit = (G4UVHit*)0;
   ctl_points = (G4ControlPoints*)0;
   u_knots = v_knots = tmp_knots = (G4KnotVector*)0;
-}
-
-
-G4BSplineSurface::G4BSplineSurface(const  G4BSplineSurface &tmp) 
-{
-  distance = tmp.distance;
-  first_hit = Hit = (G4UVHit*)0;
-
-  //    next=this;
-  order[0] = tmp.order[0];
-  order[1] = tmp.order[1];
-  dir = tmp.dir;
-
-  u_knots    = new G4KnotVector(*tmp.u_knots);
-  v_knots    = new G4KnotVector(*tmp.v_knots);
-  tmp_knots  = (G4KnotVector*)0;
-
-  ctl_points = new G4ControlPoints(*tmp.ctl_points);
 }
 
 
@@ -76,7 +64,7 @@ G4BSplineSurface::~G4BSplineSurface()
   Hit = first_hit;
   while(Hit!=(G4UVHit*)0)
   {
-    Hit=Hit->next;
+    Hit=Hit->GetNext();
     delete temphit;
     temphit=Hit;
   }
@@ -85,7 +73,7 @@ G4BSplineSurface::~G4BSplineSurface()
 }
 
 
-int G4BSplineSurface::Intersect(const G4Ray& rayref)
+G4int G4BSplineSurface::Intersect(const G4Ray& rayref)
 {
   Intersected = 1;
   FindIntersections(rayref);
@@ -93,21 +81,21 @@ int G4BSplineSurface::Intersect(const G4Ray& rayref)
   bezier_list.MoveToFirst();
   distance = kInfinity;
   
-  while( bezier_list.index != (G4Surface*)0)
+  while( bezier_list.GetSurface() != (G4Surface*)0)
   {
     bez_ptr = (G4BezierSurface*)bezier_list.GetSurface();
     
-    if(bez_ptr->Active())
-      if(distance > bez_ptr->Distance())
+    if(bez_ptr->IsActive())
+      if(distance > bez_ptr->GetDistance())
       {
 	// Put data from closest bezier to b-spline data struct
 	closest_hit = bez_ptr->AveragePoint();
-	distance = bez_ptr->Distance();
+	distance = bez_ptr->GetDistance();
       }
       else
       {
 	// Set other beziers as inactive
-	bez_ptr->Active(0);
+	bez_ptr->SetActive(0);
 	    
 	// Remove beziers that are not closest
 	//  bezier_list.RemoveSurface(bez_ptr);
@@ -118,7 +106,7 @@ int G4BSplineSurface::Intersect(const G4Ray& rayref)
   
   bezier_list.MoveToFirst();
     
-  if(bezier_list.number_of_elements)
+  if(bezier_list.GetSize())
     return 1;
   else
   {
@@ -132,8 +120,8 @@ G4Point3D G4BSplineSurface::FinalIntersection()
 {
   // Compute the real intersection point.
   G4BezierSurface* bez_ptr;
-  while ( bezier_list.number_of_elements > 0 && 
-	  bezier_list.index != (G4Surface*)0)
+  while ( bezier_list.GetSize() > 0 && 
+	  bezier_list.GetSurface() != (G4Surface*)0)
   {
     bez_ptr = (G4BezierSurface*)bezier_list.GetSurface();
     int tmp = 0;
@@ -146,8 +134,8 @@ G4Point3D G4BSplineSurface::FinalIntersection()
     if(!tmp)
     {
       bezier_list.RemoveSurface(bez_ptr);
-      if(bezier_list.index != (G4Surface*)0)
-	bezier_list.index->Active(1);
+      if(bezier_list.GetSurface() != (G4Surface*)0)
+	bezier_list.GetSurface()->SetActive(1);
     }
     else
       if(tmp==1)
@@ -178,8 +166,8 @@ G4Point3D G4BSplineSurface::FinalIntersection()
 //
 // Try the following instead (if that's the wished behavior)...
 //
-	  if(bezier_list.index != bezier_list.last)
-	    while (bezier_list.next != bezier_list.last)
+	  if(bezier_list.GetSurface() != bezier_list.GetLastSurface())
+	    while (bezier_list.GetNext() != bezier_list.GetLastSurface())
 	      bezier_list.Step();
 	  
 	  G4BezierSurface* tmp = (G4BezierSurface*) bezier_list.GetSurface();
@@ -235,7 +223,7 @@ G4Point3D G4BSplineSurface::FinalIntersection()
       // result = Evaluate();
       result = BSEvaluate();
 
-      Hit = Hit->next;
+      Hit = Hit->GetNext();
     }
 
     Hit = first_hit;
@@ -253,8 +241,8 @@ void G4BSplineSurface::CalcBBox()
   // to the surface. The bounding box is used
   // for a preliminary check of intersection.
   
-  register G4Point3D box_min = PINFINITY;
-  register G4Point3D box_max =-PINFINITY;        
+  register G4Point3D box_min = G4Point3D( PINFINITY);
+  register G4Point3D box_max = G4Point3D(-PINFINITY);        
   
   // Loop to search the whole control point mesh
   // for the minimum and maximum values for x, y and z.
@@ -304,7 +292,7 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
   projected_list.AddSurface(proj_srf);
   
   // Loop through List of projected surfaces
-  while(projected_list.number_of_elements > 0)
+  while(projected_list.GetSize() > 0)
   {
     // Get first in List
     proj_srf = (G4ProjectedSurface*)projected_list.GetSurface();
@@ -327,7 +315,7 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
   G4BezierSurface* bez_ptr;
   distance = kInfinity;
 
-  while(bezier_list.index != (G4Surface*)0)
+  while(bezier_list.GetSurface() != (G4Surface*)0)
   {
     bez_ptr = (G4BezierSurface*)bezier_list.GetSurface();
 
@@ -345,7 +333,7 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
     bez_ptr->CalcDistance(rayref.GetStart());
 
     // Put closest to b_splines distance value
-    if(bez_ptr->Distance() < distance) distance = bez_ptr->Distance();  
+    if(bez_ptr->GetDistance() < distance) distance = bez_ptr->GetDistance();  
     
     // Remove the temporary Hit
     if (first_hit == Hit) first_hit = (G4UVHit*)0;
@@ -357,7 +345,7 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
   }
   
   bezier_list.MoveToFirst();
-  if(bezier_list.number_of_elements == 0)
+  if(bezier_list.GetSize() == 0)
   {
     active=0; 
     return;
@@ -366,7 +354,7 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
   // Check that approx Hit is in direction of ray
   const G4Point3D&   Pt         = rayref.GetStart();
   const G4Vector3D&  Dir        = rayref.GetDir();
-  G4Point3D          TestPoint  = (0.00001*Dir) + Pt;
+  G4Point3D          TestPoint  = G4Point3D( (0.00001*Dir) + Pt );
   G4BezierSurface*   Bsrf       = (G4BezierSurface*)bezier_list.GetSurface(0);
 
   G4Point3D          AveragePoint = Bsrf->AveragePoint(); 
@@ -383,14 +371,14 @@ void G4BSplineSurface::AddHit(G4double u, G4double v)
   if(Hit == (G4UVHit*)0)
   {
     first_hit = new G4UVHit(u,v);
-    first_hit->next = (G4UVHit*)0;
+    first_hit->SetNext(0);
     Hit = first_hit;
   }
   else
   {
-    Hit->next = new G4UVHit(u,v);
-    Hit = Hit->next;
-    Hit->next=(G4UVHit*)0;
+    Hit->SetNext(new G4UVHit(u,v));
+    Hit = Hit->GetNext();
+    Hit->SetNext(0);
   }
 }
 
@@ -486,9 +474,9 @@ G4PointRat& G4BSplineSurface::InternalEvalCrv(int i, G4ControlPoints* crv)
 	crv->CalcValues(k1, param, *(G4PointRat*)pts1, k2, *(G4PointRat*)pts2);
 	crv->put(0, j, *(G4PointRat*)pts2);	      
       }
-      */
       register G4PointRat* pts1 = &crv->GetRat(i,j-1);
       register G4PointRat* pts2 = &crv->GetRat(i,j  );
+      */
     } 		
 
     j--;
@@ -515,7 +503,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
 
   register int point_type = tmp->GetType();
   diff_curve = new G4ControlPoints(point_type, row_size, 1);
-  k_index = u_knots->GetKnotIndex(Hit->u, GetOrder(ROW) );
+  k_index = u_knots->GetKnotIndex(Hit->GetU(), GetOrder(ROW) );
   
   ord = GetOrder(ROW);
   if(k_index==-1)
@@ -527,18 +515,18 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
 
   curves=new G4ControlPoints(*ctl_points);
   tmp_knots = u_knots;
-  param = Hit->u;
+  param = Hit->GetU();
   
   if(point_type == 4)
   {
     for ( i = 0; i < row_size; i++)
     {
       ord = GetOrder(ROW);
-      register G4PointRat rtr_pt = (G4PointRat&) InternalEvalCrv(i, curves);
+      register G4PointRat rtr_pt = InternalEvalCrv(i, curves);
       diff_curve->put(0,i,rtr_pt);
     }
 
-    k_index = v_knots->GetKnotIndex( Hit->v, GetOrder(COL) );
+    k_index = v_knots->GetKnotIndex( Hit->GetV(), GetOrder(COL) );
     if(k_index==-1)
     {
       delete diff_curve;
@@ -549,7 +537,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
 	
     ord = GetOrder(COL);
     tmp_knots = v_knots;
-    param = Hit->v;
+    param = Hit->GetV();
 	
     // Evaluate the diff_curve...
     // G4PointRat rat_result = (G4PointRat&) InternalEvalCrv(0, diff_curve);
@@ -573,7 +561,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
 	diff_curve->put(0,i,rtr_pt);
       }
 	
-      k_index = v_knots->GetKnotIndex( Hit->v, GetOrder(COL) );
+      k_index = v_knots->GetKnotIndex( Hit->GetV(), GetOrder(COL) );
       if(k_index==-1)
       {
 	delete diff_curve;
@@ -584,7 +572,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
       
       ord = GetOrder(COL);
       tmp_knots = v_knots;
-      param = Hit->v;
+      param = Hit->GetV();
 
       // Evaluate the diff_curve...
       result = (InternalEvalCrv(0, diff_curve)).pt();
@@ -603,7 +591,7 @@ G4Point3D G4BSplineSurface::Evaluation(const G4Ray& rayref)
   G4UVHit* temphit=Hit;
   while(Hit!=(G4UVHit*)0)
   {
-    Hit=Hit->next;
+    Hit=Hit->GetNext();
     delete temphit;
     temphit=Hit;
   }
@@ -632,11 +620,3 @@ G4double G4BSplineSurface::ClosestDistanceToPoint(const G4Point3D& Pt)
   PointDistance = ctl_points->ClosestDistanceToPoint(Pt);
   return PointDistance;
 }
-
-
-
-
-
-
-
-

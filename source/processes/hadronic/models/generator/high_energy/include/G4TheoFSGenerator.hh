@@ -5,9 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TheoFSGenerator.hh,v 1.2 1999/04/12 15:45:28 hpw Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4TheoFSGenerator.hh,v 1.3 2000/12/14 09:28:53 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+
+// Class Description
+// Final state production model for theoretical models of hadron inelastic
+// scattering in geant4;
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Note: This class is part of an implementation framework. You need to
+// register corresponding high energy generators and transport codes to 
+// fill it with life. 
+// Class Description - End
+
 #ifndef G4TheoFSGenerator_h
 #define G4TheoFSGenerator_h 1
 

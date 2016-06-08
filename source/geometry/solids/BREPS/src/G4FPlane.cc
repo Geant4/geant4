@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.7 1999/12/15 14:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4FPlane.cc,v 1.11 2000/11/20 17:54:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4FPlane.cc
+//
+// ----------------------------------------------------------------------
 // Corrections by S.Giani:
 // - The constructor using iVec now properly stores both the internal and
 //   external boundaries in the bounds vector.
@@ -15,6 +21,7 @@
 // - Addition of third argument (sense) in the second constructor to ensure
 //   consistent setting of the normal in all the client code.
 // - Proper use of the tolerance in the Intersect function.
+// ----------------------------------------------------------------------
 
 #include "G4FPlane.hh"
 #include "G4CompositeCurve.hh"
@@ -22,13 +29,14 @@
 
 G4FPlane::G4FPlane( const G4Vector3D& direction,
 		    const G4Vector3D& axis     , 
-		    const G4Point3D&  Pt0        ):pplace(direction, axis, Pt0)
+		    const G4Point3D&  Pt0        )
+  : pplace(direction, axis, Pt0)
 {
-  G4Point3D Pt1 = Pt0 + direction;
+  G4Point3D Pt1 = G4Point3D( Pt0 + direction );
 
   // The plane include direction and axis is the normal,
   // so axis^direction is included in the plane
-  G4Point3D Pt2 = Pt0 + axis.cross(direction);
+  G4Point3D Pt2 = G4Point3D( Pt0 + axis.cross(direction) );
 
   G4Ray::CalcPlane3Pts( Pl, Pt0, Pt1, Pt2 );
 
@@ -40,8 +48,9 @@ G4FPlane::G4FPlane( const G4Vector3D& direction,
 }
 
 
-G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec, int
-sense)
+G4FPlane::G4FPlane(const G4Point3DVector* pVec,
+                   const G4Point3DVector* iVec,
+		   G4int sense)
   : pplace( (*pVec)[0]-(*pVec)[1],                    // direction
 	    ((*pVec)[pVec->length()-1]-(*pVec)[0])
 	    .cross((*pVec)[0]-(*pVec)[1]),            // axis
@@ -61,7 +70,7 @@ sense)
 
   polygon= new G4CompositeCurve(*pVec);
  
-  for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+  for (size_t i=0; i< polygon->GetSegments().length(); i++) 
     polygon->GetSegments()[i]->SetSameSense(sameSense);
 
   bounds.insert(polygon);
@@ -72,7 +81,7 @@ sense)
   {
     polygon= new G4CompositeCurve(*iVec);
 
-    for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+    for (size_t i=0; i< polygon->GetSegments().length(); i++) 
     polygon->GetSegments()[i]->SetSameSense(sameSense);
 
     bounds.insert(polygon);
@@ -80,7 +89,7 @@ sense)
   
   // Set sense for boundaries  
   
-  for (G4int j=0; j< bounds.length(); j++) 
+  for (size_t j=0; j< bounds.length(); j++) 
     bounds[j]->SetSameSense(sameSense);
   
 
@@ -90,6 +99,12 @@ sense)
   IsConvex();
   distance = kInfinity;
   Type=1;
+}
+
+
+G4FPlane::~G4FPlane()
+{
+  delete NormalX;
 }
 
 
@@ -158,8 +173,8 @@ void G4FPlane::CalcNormal()
 void G4FPlane::Project()
 {
     // Project
-    const G4Plane& Plane1 = NormalX->GetPlane(1);
-    const G4Plane& Plane2 = NormalX->GetPlane(2);
+    // const G4Plane& Plane1 = NormalX->GetPlane(1);
+    // const G4Plane& Plane2 = NormalX->GetPlane(2);
 
     // probably not necessary
     // projections of the boundary should be handled by the intersection
@@ -167,13 +182,13 @@ void G4FPlane::Project()
 }
 
 
-int G4FPlane::IsConvex()
+G4int G4FPlane::IsConvex() const
 {
   return -1;  
 }
 
 
-int G4FPlane::Intersect(const G4Ray& rayref)
+G4int G4FPlane::Intersect(const G4Ray& rayref)
 {
   // This function count the number of intersections of a 
   // bounded surface by a ray.
@@ -246,7 +261,7 @@ int G4FPlane::Intersect(const G4Ray& rayref)
   {
     // no hit
     active=0;
-    Distance(kInfinity);
+    SetDistance(kInfinity);
     return 0;
   }
   else
@@ -254,7 +269,7 @@ int G4FPlane::Intersect(const G4Ray& rayref)
     // calculate the squared distance from the point to the intersection
     // and set it in the distance data member (all clients know they have
     // to take the sqrt)
-    Distance( RayStart.distance2(closest_hit) );   
+    SetDistance( RayStart.distance2(closest_hit) );   
 
     // now, we have to verify that the hit point founded
     // is included into the G4FPlane boundaries
@@ -280,7 +295,7 @@ int G4FPlane::Intersect(const G4Ray& rayref)
       if(distance <= kCarTolerance*0.5*kCarTolerance*0.5)
       {
 	// the point is on the surface, set the distance to 0            
-	Distance(0);         
+	SetDistance(0);         
       }
       else
       {
@@ -294,7 +309,7 @@ int G4FPlane::Intersect(const G4Ray& rayref)
       // the intersection point is out the boundaries
       // it is not a real intersection
       active=0;
-      Distance(kInfinity);
+      SetDistance(kInfinity);
       return 0;
     }
   }
@@ -326,5 +341,3 @@ G4double G4FPlane::HowNear( const G4Vector3D& Pt ) const
 
   return hownear;
 }
-
-

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tvvector.icc,v 1.3 2000/03/10 15:53:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: tvvector.icc,v 1.4 2000/11/20 17:26:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -99,14 +99,14 @@ void G4RWTValVector<T>::resize(size_t N)
 {
   if(N>std_vector::size())
     {
-      int e=N-std_vector::size();
-      for(int i=0;i<e;i++)
+      size_t e=N-std_vector::size();
+      for(size_t i=0;i<e;i++)
         std_vector::push_back(T());
     }
   else
     {
       iterator it=std_vector::begin();
-      for(int i=1;i<=N;i++,it++);
+      for(size_t i=1;i<=N;i++,it++);
       std_vector::erase(it,std_vector::end());
     }
   rwsize=N;

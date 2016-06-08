@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parton.hh,v 1.7 1999/12/15 14:52:50 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Parton.hh,v 1.9 2000/08/02 08:15:31 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #ifndef G4Parton_h
@@ -31,7 +31,14 @@
 class G4Parton
 {
    public:
-      G4Parton(){PDGencoding=0;}
+      G4Parton()
+      {
+        PDGencoding=0; 
+	theColour = 1;
+	theIsoSpinZ = 0.5;
+	theSpinZ = 0.5;
+      }
+      
       G4Parton(G4int PDGencoding);
       G4Parton(const G4Parton &right);
 
@@ -56,7 +63,16 @@ class G4Parton
       void Set4Momentum(const G4LorentzVector & aMomentum);
       
       void SetX(G4double anX) { theX = anX; }
+      
+      void SetColour(G4int aColour) {theColour = aColour;}
+      G4int GetColour() {return theColour;}
+      
+      void SetIsoSpinZ(G4int anIsoSpinZ) {theIsoSpinZ = anIsoSpinZ;}
+      G4double GetIsoSpinZ() {return theIsoSpinZ;}
 
+      void SetSpinZ(G4int anIsoSpinZ) {theIsoSpinZ = anIsoSpinZ;}
+      G4double GetSpinZ() {return theSpinZ;}
+      
    private:
       G4double GetMass();
       
@@ -65,6 +81,10 @@ class G4Parton
       G4ParticleDefinition * theDefinition;
       G4LorentzVector theMomentum;
       G4ThreeVector   thePosition;
+      
+      G4int theColour;
+      G4double theIsoSpinZ;
+      G4double theSpinZ;
       
       G4double theX;
       

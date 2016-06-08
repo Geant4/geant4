@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.cc,v 1.7 2000/04/25 14:33:09 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4IhIonisation.cc,v 1.9 2000/08/01 08:12:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -35,7 +35,12 @@
  
 G4IhIonisation::G4IhIonisation(const G4String& processName)
    : G4VIhEnergyLoss(processName),
-     theMeanFreePathTable(NULL),
+     theMeanFreePathTable(0),
+     theNlambdaTable(0),
+     theInverseNlambdaTable(0),
+     theCoeffATable(0),
+     theCoeffBTable(0),
+     theCoeffCTable(0),
      NumberOfBuildPhysicsTableCalls(0),
      theProton (G4Proton::Proton()),
      theAntiProton (G4AntiProton::AntiProton()),

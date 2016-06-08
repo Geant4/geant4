@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4.hh,v 1.6 2000/03/07 10:51:40 stesting Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 

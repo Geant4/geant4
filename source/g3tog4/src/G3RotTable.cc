@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.11 1999/12/05 17:50:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G3RotTable.cc,v 1.12 2000/07/24 11:32:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -19,7 +19,8 @@ G3RotTable::G3RotTable()
 
 G3RotTable::~G3RotTable()
 {
-  fRotVector->clearAndDestroy();
+  fRotVector->clear();
+  //fRotVector->clearAndDestroy();
   delete fRotVector;
 }
 

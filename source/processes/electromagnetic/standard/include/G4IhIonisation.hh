@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IhIonisation.hh,v 1.4 2000/04/25 14:33:01 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

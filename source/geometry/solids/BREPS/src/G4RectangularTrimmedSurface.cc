@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RectangularTrimmedSurface.cc,v 1.3 2000/01/21 13:47:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4RectangularTrimmedSurface.cc,v 1.5 2000/11/08 14:22:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4RectangularTrimmedSurface.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4RectangularTrimmedSurface.hh"
 #include "G4FPlane.hh"
@@ -15,21 +21,30 @@
 #include "G4ToroidalSurface.hh"
 #include "G4SphericalSurface.hh"
 
-G4RectangularTrimmedSurface::G4RectangularTrimmedSurface(){}
+G4RectangularTrimmedSurface::G4RectangularTrimmedSurface()
+  : BasisSurface(0)
+{
+}
+
 G4RectangularTrimmedSurface::~G4RectangularTrimmedSurface()
 {
-  delete BasisSurface;
+  if (BasisSurface) delete BasisSurface;
 }  
 
+
+const char* G4RectangularTrimmedSurface::Name() const
+{
+  return "G4RectangularTrimmedSurface";
+}
 
 void G4RectangularTrimmedSurface::CalcBBox()
 {
   BasisSurface->CalcBBox();
-  bbox = BasisSurface->bbox;
+  bbox = BasisSurface->GetBBox();
 }
 
 
-int G4RectangularTrimmedSurface::Intersect(const G4Ray& Rayref)
+G4int G4RectangularTrimmedSurface::Intersect(const G4Ray& Rayref)
 {
   if(BasisSurface->Intersect(Rayref))
   {
@@ -38,7 +53,7 @@ int G4RectangularTrimmedSurface::Intersect(const G4Ray& Rayref)
     
     if((TrimU1<=UHit)&&(TrimU2>=UHit)&&(TrimV1<=VHit)&&(TrimV2>=VHit))
     {
-      closest_hit = BasisSurface->closest_hit;
+      closest_hit = BasisSurface->GetClosestHit();
       return 1;
     }
   }

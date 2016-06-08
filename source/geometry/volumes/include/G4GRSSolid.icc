@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GRSSolid.icc,v 1.2 1999/12/15 14:50:21 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4GRSSolid.icc,v 1.4 2000/11/20 18:59:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // class G4GRSSolid inline implementation
@@ -14,7 +14,8 @@
 inline G4GRSSolid::G4GRSSolid(G4VSolid *pSolid,
 		       const G4RotationMatrix *pRot,
 		       const G4ThreeVector &tlate)
-  : fsolid(pSolid),ftlate(tlate), G4VTouchable()
+  : G4VTouchable(),
+    fsolid(pSolid), ftlate(tlate)
 {
   if (pRot)
     {
@@ -30,7 +31,8 @@ inline G4GRSSolid::G4GRSSolid(G4VSolid *pSolid,
 inline G4GRSSolid::G4GRSSolid(G4VSolid *pSolid,
 		       const G4RotationMatrix &rot,
 		       const G4ThreeVector &tlate)
-  : fsolid(pSolid),ftlate(tlate), G4VTouchable()
+  : G4VTouchable(),
+    fsolid(pSolid), ftlate(tlate)
 {
   frot=new G4RotationMatrix(rot);
   if (!frot) G4Exception ("G4GRSSolid::G4GRSSolid cannot alloc G4RotationMatrix");

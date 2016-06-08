@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VDecayChannel.cc,v 1.8 2000/05/29 01:30:52 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

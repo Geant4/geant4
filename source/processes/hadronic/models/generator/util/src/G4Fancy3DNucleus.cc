@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.7 2000/01/27 12:42:13 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Fancy3DNucleus.cc,v 1.8 2000/08/11 08:22:15 hweber Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -191,7 +191,8 @@ void G4Fancy3DNucleus::DoLorentzContraction(const G4ThreeVector & theBeta)
 	{
 	     G4ThreeVector rprime=theNucleons[i].GetPosition() - 
 	         factor * (theBeta*theNucleons[i].GetPosition()) * 
-	         theNucleons[i].GetPosition();
+	       // theNucleons[i].GetPosition();
+	       theBeta;  
 	     theNucleons[i].SetPosition(rprime);
 	}    
 }
@@ -199,7 +200,8 @@ void G4Fancy3DNucleus::DoLorentzContraction(const G4ThreeVector & theBeta)
 void G4Fancy3DNucleus::DoLorentzContraction(const G4LorentzVector & theBoost)
 {
 	G4ThreeVector beta= 1/theBoost.e() * theBoost.vect();
-	DoLorentzBoost(beta);
+	// DoLorentzBoost(beta); 
+	DoLorentzContraction(beta);
 }
 
 

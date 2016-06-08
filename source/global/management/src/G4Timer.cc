@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Timer.cc,v 1.8 2000/06/26 16:27:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ----------------------------------------------------------------------

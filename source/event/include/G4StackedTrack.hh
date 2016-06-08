@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4StackedTrack.hh,v 1.4 2000/01/26 06:42:15 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai

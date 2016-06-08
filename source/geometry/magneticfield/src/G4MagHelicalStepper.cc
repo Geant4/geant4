@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.cc,v 1.4 2000/04/12 18:29:26 japost Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4MagHelicalStepper.cc,v 1.6 2000/11/20 17:29:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 #include "G4MagHelicalStepper.hh"
 #include "G4ThreeVector.hh"
@@ -23,6 +23,10 @@ G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
                                        // position & velocity
 {
   fPtrMagEqOfMot = EqRhs;
+}
+
+G4MagHelicalStepper::~G4MagHelicalStepper()
+{
 }
 
 void
@@ -125,16 +129,16 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
 void
 G4MagHelicalStepper::Stepper( const G4double yInput[],
-		     const G4double dydx[],
-		     const G4double hstep,
-		     G4double yOut[],
-		     G4double yErr[]      )
+		              const G4double dydx[],
+		                    G4double hstep,
+		                    G4double yOut[],
+		                    G4double yErr[]      )
 {  
    const G4int nvar = 6 ;
 
    G4int i;
    // correction for Richardson Extrapolation.
-   G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
+   // G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
    
    G4double      yTemp[7], yIn[7] ;
    G4ThreeVector Bfld_initial, Bfld_midpoint;
@@ -182,7 +186,7 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
 
 
 G4double
-G4MagHelicalStepper::DistChord()   const 
+G4MagHelicalStepper::DistChord() const 
 {
   // Soon: must check whether h/R > 2 pi  !!
   //  Method below is good only for < 2 pi

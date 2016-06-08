@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Integrator.hh,v 1.4 2000/06/15 17:31:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Class description:
 //

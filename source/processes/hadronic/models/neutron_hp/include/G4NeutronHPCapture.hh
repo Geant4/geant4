@@ -7,13 +7,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPCapture.hh,v 1.2 1999/07/02 09:58:27 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4NeutronHPCapture.hh,v 1.4 2000/12/14 09:20:35 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one material.
  
+// Class Description
+// Final state production model for a high precision (based on evaluated data
+// libraries) description of neutron capture below 20 MeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
+
 #ifndef G4NeutronHPCapture_h
 #define G4NeutronHPCapture_h 1
 
@@ -38,6 +46,8 @@ class G4NeutronHPCapture : public G4HadronicInteraction
   G4String dirName;
   G4int numEle;
   G4int it;
+  
+  G4ParticleChange theResult;
 };
 
 #endif

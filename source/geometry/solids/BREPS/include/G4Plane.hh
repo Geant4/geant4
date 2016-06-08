@@ -5,16 +5,32 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Plane.hh,v 1.2 1999/12/15 14:49:57 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Plane.hh,v 1.4 2000/11/08 14:22:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+// ----------------------------------------------------------------------
+// Class G4Plane
+//
+// Class description:
+//
+// Utility class, placeholder for plane's equation coefficients.
+
+// Authors: J.Sulkimo, P.Urban.
+// ----------------------------------------------------------------------
 #ifndef __G4Plane
 #define __G4Plane
+
 #include "globals.hh"
+
 class G4Plane 
 {
+
+public:  // without description
+
+    G4Plane() : a(0), b(0), c(0), d(0) {}
+
 public:
-    G4Plane(){a=b=c=d=0;}
+
     G4double a,b,c,d;
 };
 

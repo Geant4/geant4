@@ -17,272 +17,241 @@
 //                was made on the base of G4hIonisation class
 //                developed by Laszlo Urban
 // ************************************************************
-// Class Description:
-// G4hLowEnergyIonisation class is the extention of the ionisation 
-// process for the slow charged hadrons. The physics model is
-// described in CERN-OPEN-99-121. User have a possibility to define
-// a parametrisation table via its name. 
-// Class Description - End
-//
+
 // ************************************************************
-// 23 May 2000    MG Pia  Clean up for QAO model 
-// 28 July 1999 V.Ivanchenko cleen up
+// 28 July   1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli implemented ICRU parametrization (protons)  
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
 // 31 August 1999 V.Ivanchenko update and cleen up 
+// 23 May    2000    MG Pia  Clean up for QAO model 
+// 25 July   2000 V.Ivanchenko New design iteration
+// 09 August 2000 V.Ivanchenko Add GetContinuousStepLimit
+// 17 August 2000 V.Ivanchenko Add IonFluctuationModel
+// 23 Oct    2000 V.Ivanchenko Renew comments
 // ------------------------------------------------------------
  
+// Class Description:
+// Ionisation process of charged hadrons and ions, including low energy
+// extensions
+// The physics model is described in CERN-OPEN-99-121 and CERN-OPEN-99-300. 
+// The user may select parametrisation tables for electronic
+// stopping powers and nuclear stopping powers
+// The list of available tables:
+// Electronic stopping powers: "ICRU_49p" (default), "ICRU_49He",
+//                             "Ziegler1977p", "Ziegler1985p",
+//                             "Ziegler1977He" 
+// Nuclear stopping powers:    "ICRU_49" (default), "Ziegler1977",
+//                             "Ziegler1985"
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// ------------------------------------------------------------
+
 #ifndef G4hLowEnergyIonisation_h
 #define G4hLowEnergyIonisation_h 1
  
-#include "G4ios.hh"
-#include "Randomize.hh"
 #include "G4hLowEnergyLoss.hh"
-#include "G4VhEnergyLossModel.hh"
-#include "G4QAOLowEnergyLoss.hh"
-#include "globals.hh"
+#include "G4VLowEnergyModel.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4Electron.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4hNuclearStoppingModel.hh"
+#include "G4hBetheBlochModel.hh"
+#include "G4hParametrisedLossModel.hh"
+#include "G4QAOLowEnergyLoss.hh"
+#include "G4hIonEffChargeSquare.hh"
+#include "G4IonChuFluctuationModel.hh"
+#include "G4IonYangFluctuationModel.hh"
 
 class G4hLowEnergyIonisation : public G4hLowEnergyLoss
 {
-public: // Without description
-  
-  G4hLowEnergyIonisation(const G4String& processName = "hLowEIoni"); 
-  
-  ~G4hLowEnergyIonisation();
-  
-  G4bool IsApplicable(const G4ParticleDefinition&);
-  
-  void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
-  
-  void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-
-  void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
-  
-  G4double GetMeanFreePath(const G4Track& track,
-			   G4double previousStepSize,
-			   G4ForceCondition* condition ) ;
-  
-  G4VParticleChange *PostStepDoIt(const G4Track& track,
-				  const G4Step& Step  ) ;                 
-
-  void BuildLossTable(const G4ParticleDefinition& aParticleType);
-
-  void PrintInfoDefinition();
-  
-protected:
-  
-  virtual G4double ComputeMicroscopicCrossSection(const G4ParticleDefinition& aParticleType,
-						  G4double KineticEnergy,
-						  G4double AtomicNumber,
-                                                  G4double ExcEnergy);
-  
 public: // With description
   
-  void SetStoppingPowerTableName(const G4String& dedxTable);
-  // This method defines the ionisation parametrisation method via its name 
+  G4hLowEnergyIonisation(const G4String& processName = "hLowEIoni"); 
+  // The ionisation process for hadrons/ions to be include in the
+  // UserPhysicsList
 
-  void SetNuclearStoppingOn();
+  ~G4hLowEnergyIonisation();
+  // Destructor
+  
+  G4bool IsApplicable(const G4ParticleDefinition&);
+  // True for all charged hadrons/ions
+    
+  void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) ;
+  // Build physics table during inicialisation
+
+  G4double GetMeanFreePath(const G4Track& track,
+			         G4double previousStepSize,
+			    enum G4ForceCondition* condition );
+  // Return MeanFreePath until delta-electron production
+  
+  void PrintInfoDefinition() const;
+  // Print out of the class parameters
+
+  void SetHighEnergyForProtonParametrisation(G4double energy) 
+                             {protonHighEnergy = energy;} ;
+  // Definition of the boundary proton energy. For higher energies
+  // Bethe-Bloch formula is used, for lower energies parametrisation
+  // of the energy losses is performed. 
+
+  void SetLowEnergyForProtonParametrisation(G4double energy) 
+                             {protonLowEnergy = energy;} ;
+  // Definition of the boundary proton energy. For lower energies
+  // Free Electron Gas model is used for the energy losses
+
+  void SetHighEnergyForAntiProtonParametrisation(G4double energy) 
+                             {antiProtonHighEnergy = energy;} ;
+  // Definition of the boundary antiproton energy. For higher energies
+  // Bethe-Bloch formula is used, for lower energies parametrisation
+  // of the energy losses is performed. Default is 2 MeV.
+
+  void SetLowEnergyForAntiProtonParametrisation(G4double energy) 
+                              {antiProtonLowEnergy = energy;} ;
+  // Definition of the boundary antiproton energy. For lower energies
+  // Free Electron Gas model is used for the energy losses. Default
+  // is 1 keV.
+
+  G4double GetContinuousStepLimit(const G4Track& track,
+                                        G4double previousStepSize,
+                                        G4double currentMinimumStep,
+                                        G4double& currentSafety); 
+  // Calculation of the step limit due to ionisation losses
+
+  void SetElectronicStoppingPowerModel(const G4ParticleDefinition* aParticle,
+                                       const G4String& dedxTable);
+  // This method defines the electron ionisation parametrisation method 
+  // via the name of the table. Default is "ICRU_49p".
+
+  void SetNuclearStoppingPowerModel(const G4String& dedxTable)
+                 {theNuclearTable = dedxTable; SetNuclearStoppingOn();};
+  // This method defines the nuclear ionisation parametrisation method 
+  // via the name of the table. Default is "ICRU_49".
+
+  void SetNuclearStoppingOn() {nStopping = true;};
   // This method switch on calculation of the nuclear stopping power.
   
-  void SetNuclearStoppingOff();
+  void SetNuclearStoppingOff() {nStopping = false;};
   // This method switch off calculation of the nuclear stopping power.
   
-  void SetAntiProtonStoppingOn();
-  // This method switch on calculation of the Barkas Effect for antiproton
+  void SetBarkasOn() {theBarkas = true;};
+  // This method switch on calculation of the Barkas and Bloch effects 
   
-  void SetAntiProtonStoppingOff();
-  // This method switch on calculation of the Barkas Effect for antiproton
-  
-  virtual G4double GetParametrisedLoss(G4Material* aMaterial,
-  		        	       const G4double KinEnergy,
-			               const G4double DeltaRayCutNow);
-  // This method returns parametrised energy loss.
-  
-  G4double GetPreciseDEDX(G4Material* aMaterial,
-  			  const G4double KinEnergy,
-		          const G4ParticleDefinition* aParticleType);
-  // This method returns electron ionisation energy loss for any energy.
-  
-  G4double GetNuclearDEDX(G4Material* aMaterial,
-  			  const G4double KinEnergy,
-		          const G4ParticleDefinition* aParticleType);
-  // This method returns nuclear energy loss.
-  
-  G4double GetBetheBlochLoss(const G4Material* material, 
-                             const G4double KinEnergy,
-			     const G4double DeltaRayCutNow);
-  // This method returns energy loss calculated via Bethe-Bloch formula.
-  
-  G4double GetFreeElectronGasLoss(G4double paramA, G4double KinEnergy);
-  // This method returns energy loss parametrised in the free electron gas model.
-  
-  G4double GetUrbanModel(const G4Element* element, G4double KinEnergy);
-  // This method returns energy loss parametrised as in the hIonisation class.
-  
-  G4double GetDeltaRaysEnergy(const G4Material* material, const G4double KinEnergy,
-			      const G4double DeltaRayCutNow);
-  // This method returns average energy loss due to delta-rays emission with 
-  // energy higher than the cut energy for given material.
-  
-  G4int MolecIsInICRU_R49p(const G4Material*  material);
-  // This method returns index of the material in the table of protons energy
-  // loss in ICRU Report N49. If material is not in the table the method returns -1.
-
-  G4int MolecIsInICRU_R49PowersHe(const G4Material*  material);
-  // This method returns index of the material in the table of He energy loss
-  // in ICRU Report N49. If material is not in the table the method returns -1.
-
-  G4double MolecIsInZiegler1988(const G4Material*  material);
-  // This method returns index of the material in the table of energy loss from
-  // NIM B35 (1988) 215-228. If material is not in the table the method returns -1.
-
-  G4double GetMolecICRU_R49Loss(const G4Material* material, const G4double KinEnergy, 
-			        const G4double DeltaRayCutNow, const G4int molecIndex);
-  // This method returns energy loss of protons in material from the table of ICRU 
-  // Report N49.
-
-  G4double GetChemicalFactor(const G4double ExpStopPower125, const G4double KinEnergy,
-			     const G4double BraggStopPower125);
-  // This method returns the value of "chemical factor" which allows to correct
-  // energy losses calculated according to the Bragg's rule (NIM B35 (1988) 215-228).
-  
-  G4double GetStoppingPower1977H(G4int iz, G4double E);
-  // This method returns protons electronic stopping power parametrised according to
-  // H.H.Andersen & J.F.Ziegler, Hydrogen Stopping Powers and
-  // Ranges in All Elements, Vol.3, Pergamon Press, 1977
-  
-  G4double GetStoppingPowerICRU_R49p(G4int iz, G4double E, G4String type);
-  // This method returns protons electronic stopping power parametrised according to
-  // ICRU Report N49, 1993.
-  
-  G4double GetStoppingPower1977He(G4int iz, G4double E);
-  // This method returns He electronic stopping power parametrised according to
-  // J.F.Ziegler, Helium Stopping Powers and
-  // Ranges in All Elemental Matter, Vol.4, Pergamon Press, 1977
-  
-  G4double GetStoppingPowerICRU_R49He(G4int iz, G4double E);
-  // This method returns He electronic stopping power parametrised according to
-  // ICRU Report N49, 1993. J.F. Ziegler model.
-  
-  G4double GetStoppingPowerICRU_R49PowersHe(G4int iz, G4double E);
-  // This method returns He electronic stopping power parametrised according to
-  // J.F.Ziegler, Helium Stopping Powers and
-  // Ranges in All Elemental Matter, Vol.4, Pergamon Press, 1977
-  
-  G4double GetStoppingPower1977n(G4double Z1, G4double Z2, 
-				 G4double M1, G4double M2, G4double E);
-  // This method returns nuclear stopping power parametrised according to
-  // J.F.Ziegler, Helium Stopping Powers and
-  // Ranges in All Elemental Matter, Vol.4, Pergamon Press, 1977
-  
-  G4double GetStoppingPower1985n(G4double Z1, G4double Z2, 
-				 G4double M1, G4double M2, G4double E);
-  // This method returns nuclear stopping power parametrised according to
-  // J.F.Ziegler, J.P. Biersack, U. Littmark
-  // The Stopping and Range of Ions in Matter,
-  // Vol.1, Pergamon Press, 1985
-  
-  G4double GetStoppingPowerMoliere(G4double Z1, G4double Z2, 
-                                   G4double M1, G4double M2, G4double E);
-  // This method returns nuclear stopping power parametrised according to
-  // ICRU Report N49, 1993. Moliere model.
-  
-  G4double GetHeEffChargeSquare(const G4int iz, const G4double HeKinEnergy);
-  // This method returns He effective charge square parametrised according to
-  // J.F.Ziegler, J.P. Biersack, U. Littmark
-  // The Stopping and Range of Ions in Matter,
-  // Vol.1, Pergamon Press, 1985
-
-  G4double GetIonEffChargeSquare(const G4Material* material, const G4double KinEnergy,
-                                 const G4double IonCharge);
-  // This method returns ion effective charge square parametrised according to
-  // J.F.Ziegler, J.P. Biersack, U. Littmark
-  // The Stopping and Range of Ions in Matter,
-  // Vol.1, Pergamon Press, 1985
-
-  G4double ComputeBarkasTerm(const G4Material* material, const G4double KinEnergy);
-  // Function to compute the Barkas term						  
-
-  G4double GetConstraints(const G4DynamicParticle *aParticle,
-                          G4Material *aMaterial);
-  // Function to determine StepLimit
+  void SetBarkasOff() {theBarkas = false;};
+  // This method switch off calculation of the Barkas and Bloch effects
                                        
   G4VParticleChange* AlongStepDoIt(const G4Track& trackData , 
-                                   const G4Step& stepData );
+                                   const G4Step& stepData ) ;
   // Function to determine total energy deposition on the step
 
+  G4VParticleChange* PostStepDoIt(const G4Track& track,
+				  const G4Step& Step  ) ;                 
+  // Simulation of delta rays production
+    
+  G4double ComputeDEDX(const G4ParticleDefinition* aParticle,
+                       const G4Material* material,
+                             G4double kineticEnergy);
+  // This method returns electronic dE/dx for protons or antiproton.
+
+protected:
+
 private:
+
+  void InitializeMe();
+
+  void InitializeParametrisation();
+
+  void BuildLossTable(const G4ParticleDefinition& aParticleType) ;
+
+  void BuildLambdaTable(const G4ParticleDefinition& aParticleType) ;
   
+  void SetProtonElectronicStoppingPowerModel(const G4String& dedxTable) 
+                              {theProtonTable = dedxTable ;};
+  // This method defines the ionisation parametrisation method via its name 
+
+  void SetAntiProtonElectronicStoppingPowerModel(const G4String& dedxTable) 
+                              {theAntiProtonTable = dedxTable ;};
+  
+  G4double ComputeMicroscopicCrossSection(
+                  const G4ParticleDefinition& aParticleType,
+	  	        G4double kineticEnergy,
+			G4double atomicNumber,
+                        G4double deltaCutInEnergy) const;
+
+  G4double GetConstraints(const G4DynamicParticle* particle,
+                          const G4Material* material);
+  // Function to determine StepLimit
+
+  G4double ProtonParametrisedDEDX(const G4Material* material, 
+                                        G4double kineticEnergy) const;
+
+  G4double AntiProtonParametrisedDEDX(const G4Material* material, 
+                                            G4double kineticEnergy) const;
+    
+  G4double DeltaRaysEnergy(const G4Material* material, 
+                                 G4double kineticEnergy,
+	        	         G4double particleMass) const;
+  // This method returns average energy loss due to delta-rays emission with 
+  // energy higher than the cut energy for given material.
+
+  G4double BarkasTerm(const G4Material* material, 
+                            G4double kineticEnergy) const;
+  // Function to compute the Barkas term for protons  
+ 
+  G4double BlochTerm(const G4Material* material,
+                           G4double kineticEnergy,
+                           G4double cSquare) const; 
+  // Function to compute the Bloch term	for protons
+
+  G4double ElectronicLossFluctuation(const G4DynamicParticle* particle,
+                                     const G4Material* material,
+                                           G4double meanLoss,
+                                           G4double step) const;
+  // Function to sample electronic losses
+		    
   // hide assignment operator 
   G4hLowEnergyIonisation & operator=(const G4hLowEnergyIonisation &right);
   G4hLowEnergyIonisation(const G4hLowEnergyIonisation&);
   
 private:
   //  private data members ...............................
-  G4VhEnergyLossModel* qaoLoss;
+  G4VLowEnergyModel* theBetheBlochModel;
+  G4VLowEnergyModel* theProtonModel;
+  G4VLowEnergyModel* theAntiProtonModel;
+  G4VLowEnergyModel* theIonEffChargeModel;
+  G4VLowEnergyModel* theNuclearStoppingModel;
+  G4VLowEnergyModel* theIonChuFluctuationModel;
+  G4VLowEnergyModel* theIonYangFluctuationModel;
 
-protected:
-  //  protected data members ...............................
-  
-
-  G4PhysicsTable* theMeanFreePathTable;
-  
-  // interval of parametrisation of electron stopping power 
-  G4double ParamLowEnergy;
-  G4double ParamHighEnergy;
   // name of parametrisation table of electron stopping power
-  G4String DEDXtable;
+  G4String theProtonTable;
+  G4String theAntiProtonTable;
+  G4String theNuclearTable;
+
+  // interval of parametrisation of electron stopping power 
+  G4double protonLowEnergy;
+  G4double protonHighEnergy;
+  G4double antiProtonLowEnergy;
+  G4double antiProtonHighEnergy;
+
   // flag of parametrisation of nucleus stopping power
   G4bool nStopping;
-  G4bool pbarStop;
-  
-  // constants needed for the energy loss calculation
-  
-  const G4double twoln10;
-  const G4double Factor;
-  const G4double bg2lim;
-  const G4double taulim;          // energy to start to switch off shell corrections
-  G4double RateMass;              // m_e/M
-  G4double MassRatio;             // m_p/M
-  G4ParticleDefinition* theParticle;
-  
-  // particles , cuts in kinetic energy ........
-  const G4Electron* theElectron;
-  const G4Proton* theProton;
-  const G4AntiProton* theAntiProton;
-  
-  const G4double* DeltaCutInKineticEnergy ; 
-  
-  G4double DeltaCutInKineticEnergyNow ;
-  
-  G4double ProtonMassAMU;
-  G4double HeMassAMU;
-  G4double ZieglerFactor; // Factor to convert the Stopping Power 
-  // unit [ev/(10^15 atoms/cm^2]
-  // into the Geant4 dE/dx unit
-    
-  /*
-   static G4double LowerBoundLambda ; // bining for lambda table
-   static G4double UpperBoundLambda ;
-   static G4int    NbinLambda ;
+  G4bool theBarkas;
 
-   G4double LowestKineticEnergy,HighestKineticEnergy ;
-   G4int    TotBin ;
+  G4double* deltaCutInKineticEnergy;
+  G4PhysicsTable* theMeanFreePathTable;
+  
+  const G4double paramStepLimit; // parameter limits the step at low energy
+  
+  G4double fdEdx;        // computed in GetContraints
+  G4double fRangeNow ;   //         
+  G4double charge;       //
+  G4double chargeSquare; //
+ 
+protected:
 
-  public:
+private:
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n) {NbinLambda = n;};
-    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
-    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
-    static G4int GetNbinLambda() {return NbinLambda;};
-    */
 };
 
 #include "G4hLowEnergyIonisation.icc"

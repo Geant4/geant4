@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InteractionContent.cc,v 1.2 1999/12/15 14:52:46 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4InteractionContent.cc,v 1.3 2000/09/18 07:40:45 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -21,7 +21,7 @@
 #include "G4InteractionContent.hh"
 
 G4InteractionContent::G4InteractionContent(G4VSplitableHadron *aPrimaryParticipant)
-      : theNumberOfHard(NULL), theNumberOfSoft(NULL)
+      : theNumberOfHard(0), theNumberOfSoft(0)
 {
 	theProjectile=aPrimaryParticipant;
 }

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN03SteppingVerbose.hh,v 1.3 2000/02/28 18:09:58 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //  
 //---------------------------------------------------------------

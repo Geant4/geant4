@@ -5,16 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPrimaryVertex.ddl,v 1.7 1999/12/05 22:32:26 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PPrimaryVertex.ddl,v 1.9 2000/12/05 14:40:02 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
+
+// Class Description:
+//      This is a class which represent a persistent primary vertex
+//    in Geant4.  It is constructed by a G4PEvent object with a pointer
+//    of transient G4PrimaryVertex object.
 //
 
 
 #ifndef G4PPrimaryVertex_h
 #define G4PPrimaryVertex_h 1
 
-#include "globals.hh"
+#include "G4Pglobals.hh"
 #include "G4ThreeVector.hh"
 #include "G4PersistentTypes.hh"
 #include "G4PersistentSchema.hh"
@@ -28,12 +33,14 @@ class G4PPrimaryParticle;
 class G4PPrimaryVertex 
 : public HepPersObj
 {
-  public:
+  public: // with description
       G4PPrimaryVertex();
       G4PPrimaryVertex(const G4PrimaryVertex* vertex);
       ~G4PPrimaryVertex();
+      // Constructors and destructor.
 
       G4PrimaryVertex* MakeTransientObject();
+      // Creates a transient primary vertex object and returns the pointer.
 
   private:
       G4Pdouble X0;
@@ -45,7 +52,7 @@ class G4PPrimaryVertex
       d_Ref<G4PPrimaryVertex> nextVertex;
       G4Pint numberOfParticle;
 
-  public:
+  public:  // with description
       inline G4ThreeVector GetPosition() const
       { return G4ThreeVector(X0,Y0,Z0); }
       inline G4double GetX0() const
@@ -58,9 +65,9 @@ class G4PPrimaryVertex
       { return T0; }
       inline G4int GetNumberOfParticle() const
       { return numberOfParticle; }
+      // Get methods to read the vertex values.
 
       HepRef(G4PPrimaryParticle) GetPrimary(G4int i) const;
-
       inline void SetNext(HepRef(G4PPrimaryVertex) nv)
       {
         if(nextVertex == NULL)
@@ -68,9 +75,9 @@ class G4PPrimaryVertex
         else
         { nextVertex->SetNext(nv); }
       }
-
       inline HepRef(G4PPrimaryVertex) GetNext() const
       { return nextVertex; }
+      // Set and Get methods to navigate thru the vertex chain.
 
 };
 

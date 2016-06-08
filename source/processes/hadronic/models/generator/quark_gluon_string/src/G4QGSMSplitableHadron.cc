@@ -22,16 +22,19 @@
 
 void G4QGSMSplitableHadron::InitParameters()
 {
+  // changing rapidity distribution for all
   alpha = -0.5; // Note that this number is still assumed in the algorithm
                 // needs to be generalized.
+  // changing rapidity distribution for projectile like
   beta = 2.5;// Note that this number is still assumed in the algorithm
                 // needs to be generalized.
-//  theMinPz = 0.5*G4PionMinus::PionMinus()->GetPDGMass(); 
-  theMinPz = 0.1*G4PionMinus::PionMinus()->GetPDGMass(); 
+  theMinPz = 0.8*G4PionMinus::PionMinus()->GetPDGMass(); 
+//  theMinPz = 0.1*G4PionMinus::PionMinus()->GetPDGMass(); 
+//  theMinPz = G4PionMinus::PionMinus()->GetPDGMass(); 
   // as low as possible, otherwise, we have unphysical boundary conditions in the sampling.
   StrangeSuppress = 0.48;
   sigmaPt = 0.*GeV; // widens eta slightly, if increased to 1.7, 
-                    // but Maxim's original algorithm breaks energy conservation
+                    // but Maxim's algorithm breaks energy conservation
 		    // to be revised.
   widthOfPtSquare = 0.01*GeV*GeV;
   Direction = FALSE;
@@ -268,7 +271,7 @@ G4ThreeVector G4QGSMSplitableHadron::GaussianPt(G4double widthSquare, G4double m
 G4Parton * G4QGSMSplitableHadron::
 BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode, G4int nSeaPair)
 {
-  if (isAntiQuark) aPDGCode*=-1.;
+  if (isAntiQuark) aPDGCode*=-1;
   G4Parton* result = new G4Parton(aPDGCode);   
   result->SetPosition(GetPosition());
   G4ThreeVector aPtVector = GaussianPt(sigmaPt, DBL_MAX);

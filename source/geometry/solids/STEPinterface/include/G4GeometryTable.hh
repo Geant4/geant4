@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeometryTable.hh,v 1.3 2000/01/21 13:45:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4GeometryTable.hh,v 1.4 2000/11/09 16:35:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryTable
@@ -45,7 +45,7 @@ class G4GeometryTable
     static void* CreateObject(STEPentity&);
     static void* CreateSTEPObject(void*, G4String&);  
     static void PrintObjectNames();
-    static G4GeometryTable& GetInstance() { return gt; }
+    static const G4GeometryTable& GetInstance() { return gt; }
 
   public:
 

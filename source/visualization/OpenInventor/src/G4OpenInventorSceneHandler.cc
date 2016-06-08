@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenInventorSceneHandler.cc,v 1.8 2000/05/28 13:42:34 barrand Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

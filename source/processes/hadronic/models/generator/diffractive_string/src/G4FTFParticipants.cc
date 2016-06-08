@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FTFParticipants.cc,v 1.2 1999/12/15 14:52:24 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4FTFParticipants.cc,v 1.3 2000/08/19 16:23:48 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -23,6 +23,7 @@
 #include "G4VSplitableHadron.hh"
 #include "G4PomeronCrossSection.hh"
 #include "Randomize.hh"
+#include "G4Pair.hh"
 
 
 // Class G4FTFParticipants 
@@ -88,15 +89,10 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
     
     while ( theInteractions.entries() == 0 )
     {
-	G4double x,y;
-	do 
-	{
-	   x=2*G4UniformRand()-1;
-	   y=2*G4UniformRand()-1;
-	} while ( (sqr(x) + sqr(y)) > 1 );
-
-	G4double impactX=x*xyradius;
-	G4double impactY=y*xyradius;
+	G4Pair<G4double, G4double> theImpactParameter;
+	theImpactParameter = theNucleus->ChooseImpactXandY(xyradius);
+	G4double impactX = theImpactParameter.first; 
+	G4double impactY = theImpactParameter.second;
 
 //	G4cout << " impctX, impctY " << impactX/fermi << "    "<<impactY/fermi << " fm" << G4endl;
 

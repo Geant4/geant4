@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.14 2000/04/07 13:43:13 lefebure Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4LowEnergyIonisation.hh,v 1.16 2000/11/03 10:29:51 pia Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -14,13 +14,19 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      ---------- G4LowEnergyIonisation physics process -----------
+//      --- G4LowEnergyIonisation physics process for electrons
 //                by Alessandra Forti July 1999
 // ************************************************************
 //
 //   07.04.2000 Veronique Lefebure + Laszlo Urban
 // - First implemention of continuous energy loss
 // 14/07/99: corrections , L.Urban
+// 20/09/00 update fluctuations V.Ivanchenko
+//
+// Class description:
+// Low Energy Electromagnetic process, electron Ionisation
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ------------------------------------------------------------
  
 #ifndef G4LowEnergyIonisation_h

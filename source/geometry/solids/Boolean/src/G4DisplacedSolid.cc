@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DisplacedSolid.cc,v 1.11 2000/04/27 09:59:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4DisplacedSolid.cc,v 1.13 2000/11/22 15:19:20 grichine Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -15,6 +15,7 @@
 //
 // 28.10.98 V.Grichine, creation according J. Apostolakis's recommendations
 // 14.11.99 V.Grichine, modifications in CalculateExtent(...) method
+// 22.11.00 V.Grichine, new set methods for matrix/vectors
 
 #include "G4DisplacedSolid.hh"
 
@@ -90,6 +91,11 @@ G4DisplacedSolid::~G4DisplacedSolid()
   }
 }
 
+G4GeometryType G4DisplacedSolid::GetEntityType() const 
+{
+   return G4String("G4DisplacedSolid");
+}
+
 const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const   
 { return this; }
 
@@ -97,13 +103,24 @@ const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const
 { return this; }
 
 G4VSolid* G4DisplacedSolid::GetConstituentMovedSolid() const
-{ return fPtrSolid; } 
+{ 
+  return fPtrSolid; 
+} 
+
+/////////////////////////////////////////////////////////////////////////////
 
 G4AffineTransform  G4DisplacedSolid::GetTransform() const
 {
-   G4AffineTransform aTransform= *fPtrTransform;
+   G4AffineTransform aTransform = *fPtrTransform;
    return aTransform;
 }
+
+void G4DisplacedSolid::SetTransform(G4AffineTransform& transform) 
+{
+   fPtrTransform = &transform ;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
 {
@@ -111,28 +128,61 @@ G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
    return aTransform;
 }
 
+void G4DisplacedSolid::SetDirectTransform(G4AffineTransform& transform) 
+{
+   fDirectTransform = &transform ;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
 G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
 {
    G4RotationMatrix InvRotation= fDirectTransform->NetRotation();
    return InvRotation;
 }
 
+void G4DisplacedSolid::SetFrameRotation(const G4RotationMatrix& matrix)
+{
+   fDirectTransform->SetNetRotation(matrix);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
 G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
 {
    return fPtrTransform->NetTranslation();
 }
 
+void G4DisplacedSolid::SetFrameTranslation(const G4ThreeVector& vector)
+{
+  fPtrTransform->SetNetTranslation(vector);
+}
+
 ///////////////////////////////////////////////////////////////
+
 G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
 {
    G4RotationMatrix Rotation= fPtrTransform->NetRotation();
    return Rotation;
 }
 
+void G4DisplacedSolid::SetObjectRotation(const G4RotationMatrix& matrix)
+{
+   fPtrTransform->SetNetRotation(matrix);
+}
+
+///////////////////////////////////////////////////////////////////////
+
 G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
 {
    return fDirectTransform->NetTranslation();
 }
+
+void G4DisplacedSolid::SetObjectTranslation(const G4ThreeVector& vector)
+{
+  fDirectTransform->SetNetTranslation(vector);
+}
+
 ///////////////////////////////////////////////////////////////
 //
 //

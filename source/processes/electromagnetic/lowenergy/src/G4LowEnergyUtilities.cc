@@ -5,19 +5,23 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.4 2000/01/26 09:50:01 lefebure Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4LowEnergyUtilities.cc,v 1.7 2000/12/14 09:43:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
+// GEANT 4 class implementation file
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      ------------ G4LowEnergyUtilities physics process --------
-//                   by A.Forti  1999/03/02
-// **************************************************************
+// File name:     G4LowEnergyUtilitie
+//
+// Author:        A.Forti 
+// 
+// Creation date: 2 March 1999
+//
+// Modifications: 16/11/2000 MG Pia    Replaced HepString with G4String
+//      
+// --------------------------------------------------------------
+
 // This Class Header
 #include "G4LowEnergyUtilities.hh"
 
@@ -25,8 +29,9 @@
 #include "G4Element.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"
-#include "CLHEP/String/Strings.h"
 #include "g4std/fstream"
+#include "g4std/fstream"
+#include "g4std/strstream"
 
 G4LowEnergyUtilities::G4LowEnergyUtilities()
 {}
@@ -38,32 +43,37 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
 						 const G4int ParNum, 
 						 const char* prename){
 
-  
-  HepString name, prenameStr(prename);
-  if(TableInd != 0){
+  G4String prenameStr(prename);
+  //  HepString name, prenameStr(prename);
 
-    HepString Znum(TableInd);
-    name = prenameStr + Znum + ".dat";
+  char nameChar[100] = {""};
+  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+
+  if(TableInd != 0){
+    ost << prenameStr << TableInd << ".dat";
+    //    HepString Znum(TableInd);
+    //    name = prenameStr + Znum + ".dat";
   }
   else{
-
-    name = prenameStr+ ".dat";
+    ost << prenameStr << ".dat";
+    //   name = prenameStr+ ".dat";
   }
+  G4String name(nameChar);
 
   char* path = getenv("G4LEDATA");
   if(!path){ 
-    HepString excep = "Error!!! G4LEDATA (Low Energy Electromagnetic processes data directory) environment variable not set";
+    G4String excep = "Error!!! G4LEDATA (Low Energy Electromagnetic processes data directory) environment variable not set";
     G4Exception(excep);
   }
-  
-  HepString path_string(path);
-  HepString dir_file = path_string + "/" + name;
+
+  G4String path_string(path);
+  G4String dir_file = path_string + "/" + name;
   G4std::ifstream file(dir_file);
   G4std::filebuf* lsdp = file.rdbuf();
 
   if(!lsdp->is_open()){
     
-      HepString excep = "Error!!!! data file: " + dir_file + " NOT found";
+      G4String excep = "Error!!!! data file: " + dir_file + " NOT found";
       G4Exception(excep);
   }
   
@@ -133,32 +143,37 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
 						const G4int ParNum, 
 						const char* prename){
 
-  
-  HepString name, prenameStr(prename);
-  if(TableInd != 0){
+  G4String prenameStr(prename);
+  //  HepString name, prenameStr(prename);
 
-    HepString Znum(TableInd);
-    name = prenameStr + Znum + ".dat";
+  char nameChar[100] = {""};
+  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+
+  if(TableInd != 0){
+    ost << prenameStr << TableInd << ".dat";
+    //    HepString Znum(TableInd);
+    //    name = prenameStr + Znum + ".dat";
   }
   else{
-
-    name = prenameStr+ ".dat";
+    ost << prenameStr << ".dat";
+    //   name = prenameStr+ ".dat";
   }
+  G4String name(nameChar);
 
   char* path = getenv("G4LEDATA");
   if(!path){ 
-    HepString excep = "Error!!! G4LEDATA (Low Energy Electromagnetic processes data directory) environment variable not set";
+    G4String excep = "Error!!! G4LEDATA (Low Energy Electromagnetic processes data directory) environment variable not set";
     G4Exception(excep);
   }
   
-  HepString path_string(path);
-  HepString dir_file = path_string + "/" + name;
+  G4String path_string(path);
+  G4String dir_file = path_string + "/" + name;
   G4std::ifstream file(dir_file);
   G4std::filebuf* lsdp = file.rdbuf();
 
   if(!lsdp->is_open()){
     
-      HepString excep = "Error!!!! data file: " + dir_file + " NOT found";
+      G4String excep = "Error!!!! data file: " + dir_file + " NOT found";
       G4Exception(excep);
   }
   

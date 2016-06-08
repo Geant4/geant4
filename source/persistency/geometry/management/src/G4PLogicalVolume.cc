@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PLogicalVolume.cc,v 1.5 2000/06/09 12:56:44 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //                                      Takashi.Sasaki@kek.jp

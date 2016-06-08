@@ -1,3 +1,15 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4StatMFMicroPartition.cc,v 1.8 2000/08/03 08:47:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// --------------------------------------------------------------------
+
 #include "G4StatMFMicroPartition.hh"
 
 
@@ -281,7 +293,7 @@ G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(const G4double A0, const G4dou
 			G4double ZDispersion = sqrt(Af * MeanT/CC);
 			G4int Zf;
 			do {
-				Zf = G4int(RandGauss::shoot(ZMean,ZDispersion));
+				Zf = G4int(G4RandGauss::shoot(ZMean,ZDispersion));
 			} while (Zf < 0 || Zf > Af);
 			FragmentsZ.insert(Zf);
 			SumZ += Zf;

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KineticTrack.cc,v 1.8 2000/06/09 13:59:56 jwellisc Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4KineticTrack.cc,v 1.10 2000/12/07 14:38:21 gunter Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // $Id: G4KineticTrack.cc,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------
@@ -44,16 +44,16 @@ static G4double  G4KineticTrack_Gmass, G4KineticTrack_Gmass1, G4KineticTrack_Gma
 //
 
 G4KineticTrack::G4KineticTrack() :
-                theDefinition(NULL),
+                theDefinition(0),
                 theFormationTime(0.0),
                 thePosition(0.0, 0.0, 0.0),
                 the4Momentum(0.0,0.0,0.0,0.0),
                 theInitialCoordinates(0.0,0.0,0.0,0.0),
                 nChannels(0),
                 theActualMass(0.0),            
-                theActualWidth(NULL),            
-                theDaughterMass(NULL),
-                theDaughterWidth(NULL)
+                theActualWidth(0),            
+                theDaughterMass(0),
+                theDaughterWidth(0)
 {
 ////////////////
 //    DEBUG   //
@@ -87,8 +87,8 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right)
   {
     theActualWidth[i] = right.theActualWidth[i];
   }
-  theDaughterMass = NULL;
-  theDaughterWidth = NULL;
+  theDaughterMass = 0;
+  theDaughterWidth = 0;
  
 ////////////////
 //    DEBUG   //
@@ -127,7 +127,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 //
 
  G4DecayTable* theDecayTable = theDefinition->GetDecayTable();
- if (theDecayTable != NULL)
+ if (theDecayTable != 0)
     {
      nChannels = theDecayTable->entries();
 
@@ -148,9 +148,9 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 //   of the decay channels
 //
 
-  theDaughterMass = NULL;
-  theDaughterWidth = NULL;
-  theActualWidth = NULL;
+  theDaughterMass = 0;
+  theDaughterWidth = 0;
+  theActualWidth = 0;
   G4bool * theDaughterIsShortLived = 0;
   
   if(nChannels!=0) theActualWidth = new G4double[nChannels];
@@ -316,9 +316,11 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 	  //	  	  cout << " LB The Actual Width = " << theActualWidth[index] << "index: " << index << G4endl;
 
           delete [] theDaughterMass;
-	  theDaughterMass = NULL;
+	  theDaughterMass = 0;
           delete [] theDaughterWidth;
-	  theDaughterWidth = NULL;
+	  theDaughterWidth = 0;
+	  delete [] theDaughterIsShortLived;
+          theDaughterIsShortLived = 0;
          }
       else
          {
@@ -349,9 +351,9 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 
 G4KineticTrack::~G4KineticTrack()
 {
- if (theActualWidth != NULL) delete [] theActualWidth;
- if (theDaughterMass != NULL) delete [] theDaughterMass;
- if (theDaughterWidth != NULL) delete [] theDaughterWidth;
+ if (theActualWidth != 0) delete [] theActualWidth;
+ if (theDaughterMass != 0) delete [] theDaughterMass;
+ if (theDaughterWidth != 0) delete [] theDaughterWidth;
 }
 
 
@@ -365,7 +367,7 @@ const G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
      theFormationTime = right.GetFormationTime();
      thePosition = right.GetPosition();
      the4Momentum = right.Get4Momentum();  
-     if (theActualWidth != NULL) delete [] theActualWidth;
+     if (theActualWidth != 0) delete [] theActualWidth;
      nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
      for (i = 0; i < nChannels; i++) 
@@ -501,7 +503,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
     }
  else
     {
-     return NULL;
+     return 0;
     }
 }
 

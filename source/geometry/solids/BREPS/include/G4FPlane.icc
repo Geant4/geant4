@@ -1,0 +1,98 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4FPlane.icc,v 1.3 2000/11/08 14:22:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// G4FPlane.icc
+//
+// Implementation of inline methods of G4FPlane
+// --------------------------------------------------------------------
+
+inline
+G4int G4FPlane::GetConvex() const
+{
+  return Convex;
+}
+
+inline
+void G4FPlane::Deactivate()
+{
+  active=0;
+}
+
+inline
+G4int G4FPlane::GetNumberOfPoints() const
+{
+  return (surfaceBoundary.GetNumberOfPoints());
+}
+
+inline
+G4Point3D G4FPlane::GetSrfPoint() const
+{
+  return pplace.GetLocation();
+}
+
+inline
+const G4Point3D& G4FPlane::GetPoint(G4int Count) const
+{
+  return surfaceBoundary.GetPoint(Count);
+}  
+
+inline
+const G4Point3D& G4FPlane::GetHitPoint() const
+{
+  return hitpoint;
+}
+
+inline
+G4Ray* G4FPlane::Norm()
+{
+  return NormalX;
+}
+
+inline
+G4Vector3D G4FPlane::SurfaceNormal(const G4Point3D& Pt) const 
+{
+  return NormalX->GetDir();
+}
+
+inline
+const char* G4FPlane::Name() const
+{
+  return "G4FPlane";
+}
+
+inline
+G4Axis2Placement3D G4FPlane::GetPplace() const
+{
+  return  pplace;
+}
+
+inline
+G4Plane G4FPlane::GetPplane() const
+{
+  return  Pl;
+}
+
+inline
+G4int G4FPlane::MyType() const
+{
+  return 1;
+}
+
+inline 
+G4int G4FPlane::Sign(G4double a) const
+{
+  register G4int i=1; 
+  if(a<0) 
+    i= -1;
+  return i;
+} 

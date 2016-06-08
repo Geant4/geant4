@@ -1,0 +1,142 @@
+#######################################################################
+#                                                                     #
+#  This code implementation is the intellectual property of           #
+#  the GEANT4 collaboration.                                          #
+#                                                                     #
+#  By copying, distributing or modifying the Program (or any work     #
+#  based on the Program) you indicate your acceptance of this         #
+#  statement, and all its terms.                                      #
+#                                                                     #
+# ******************************************************************* #
+# *                                                                 * #
+# *                    GEANT 4 xray_telescope advanced example      * #
+# *                                                                 * #
+# * MACRO:             vrml.mac                                     * #
+# * ------             demostrates the VRML DRIVER                  * #
+# *                                                                 * #
+# * Version:           0.6                                          * #
+# * Date:              15/11/00                                     * #
+# * Author:            R Nartallo                                   * #
+# * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands        * #
+# *                                                                 * #
+# ******************************************************************* #
+#                                                                     #
+#  NOTES                                                              #
+#  -----                                                              #
+#  USAGE:  Idle> /control/execute vrml.mac                            #
+#          prompt> XrayTel vrml.mac                                   #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARE: VRML viewer, e.g. VRMLview          #
+#                                                                     #
+#  ENVIRONMENT VARIABLES (C-MACROS) FOR INSTALLATION:                 #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_VRML               1                          #
+#    % setenv G4VIS_USE_VRMLFILE           1                          #
+#    % setenv G4VIS_BUILD_VRMLFILE_DRIVER  1                          #
+#                                                                     #
+#  RECOMMENDED ENVIRONMENT VARIABLES FOR THE VRML VIEWER:             #
+#                                                                     #
+#    % setenv G4VRMLFILE_VIEWER    vrmlview //default value is "NONE" #
+#    % setenv G4VRMLFILE_MAX_FILE_NUM  100  //default value is "1"    #
+#                                                                     #
+#  Addional Notes:                                                    #
+#    You may have to set the command path to the directory where      #
+#    a VRML viewer is installed, e.g., to                             #
+#    "/afs/cern.ch/sw/contrib/VRML/bin/Linux/"    at CERN             #
+#                                                                     #
+#######################################################################
+#                                                                     #
+#   CHANGE HISTORY                                                    #
+#   --------------                                                    #
+#                                                                     #
+#   15.11.2000 R. Nartallo                                            #
+#   - Replaced standard particle gun by GPS set options               #
+#                                                                     #
+#   08.11.2000 R. Nartallo                                            #
+#   - Modified version                                                #
+#                                                                     #
+#   17.10.2000 S. Tanaka                                              #
+#   - First implementation                                            #
+#                                                                     #
+#######################################################################
+
+# Set verbose level
+/run/verbose 2
+
+#################################################
+# Visualization of detector geometry with 
+# the VRML2FILE driver.
+#################################################
+
+# Invoke the VRML2FILE driver
+#/vis/open VRML2FILE
+
+# Visualize of the whole detector geometry
+#/vis/viewer/set/style surface
+#/vis/drawVolume
+#/vis/viewer/update
+
+#################################################
+# Visualization of detector geometry and events 
+# with the VRML2FILE driver.
+#################################################
+
+# Invoke the VRML2FILE driver
+/vis/open VRML2FILE
+
+# Create a new scene 
+/vis/scene/create
+
+# Add the world volume to the current scene
+/vis/scene/add/volume
+
+# Attach the current scene handler to the current scene
+/vis/sceneHandler/attach 
+
+# Visualize one event added to the current scene
+# * Command "/vis/scene/notifyHandlers" is written in 
+#   XrayTelRunAction::BeginOfRunAction()
+# * Command "/vis/viewer/update" is written in 
+#   XrayTelRunAction::EndOfRunAction()
+
+# Set viewer rendering style
+# "wireframe" means  "half-transparent" in VRML2FILE driver 
+#/vis/viewer/set/style surface
+/vis/viewer/set/style wireframe
+
+# Store particle trajactories for visualization
+/tracking/storeTrajectory 1
+
+# Set to draw tracks of positively charged particles
+/event/drawTracks charged
+
+# Set General Particle Source options
+/gps/particle proton
+/gps/type Plane
+/gps/shape Annulus
+/gps/posrot1 0. 0. 1.
+/gps/posrot2 0. 1. 0.
+/gps/radius 35.5 cm
+/gps/radius0 30.5 cm
+/gps/centre 780.1 0. 0. cm
+/gps/angtype cos
+/gps/angrot1 0. 0. 1.
+/gps/angrot2 0. 1. 0.
+/gps/maxtheta 1. deg
+/gps/energytype Mono
+/gps/monoenergy 0.5 MeV
+
+# Set number of particles and start
+/run/beamOn 10000
+
+
+
+
+
+
+
+
+
+
+

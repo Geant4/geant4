@@ -5,20 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransactionManager.hh,v 1.6 1999/12/15 14:51:27 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4TransactionManager.hh,v 1.7 2000/12/05 14:40:03 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 // class description:
 //
 //      This is a class for handling database transaction
 //      for G4PersistencyManager.
+//      To be used by G4PersistencyManager only.
 //
-// Member functions:
-// =================
-//  G4TransactionManager();
-//  ~G4TransactionManager();
-//
+
 // History:
 // 99.11.25 Y.Morita  Initial version
 
@@ -44,13 +41,14 @@ class G4TransactionManager
 {
   friend class G4PersistencyManager;
 
-  protected:
+  protected: // with description
       G4TransactionManager(G4PersistentRunMan*   runMan,
                            G4PersistentEventMan* eventMan,
                            G4PersistentHitMan*   hitMan,
                            G4PersistentDigitMan* digitMan,
                            G4PersistentGeomMan*  geomMan);
       ~G4TransactionManager();
+      // Contructor and Destructor.
 
   private:
       HepDbApplication* f_dbApp;

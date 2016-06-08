@@ -5,35 +5,35 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.9 1999/12/15 14:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4FCylindricalSurface.cc,v 1.11 2000/11/08 14:22:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-/*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
-//  File:  FG4Cylinder.cc
-//  Author:  Alan Breakstone
-
-//  Contents ----------------------------------------------------------
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
 //
-//      FG4Cylinder::FG4Cylinder( const G4Point3D& o, const G4ThreeVec& a,
-//	                          G4double r, G4double l )
-//	FG4Cylinder::FG4Cylinder( const FG4Cylinder& c )
-//	FG4Cylinder::PrintOn( G4std::ostream& os ) const
-//	FG4Cylinder::operator==( const FG4Cylinder& c )
-//	FG4Cylinder::WithinBoundary( const G4ThreeVec& x ) const
-//	FG4Cylinder::Scale() const
-//	FG4Cylinder::resize( G4double r, G4double l )
+// G4FCylindricalSurface.cc
 //
-//  End ---------------------------------------------------------------
+// ----------------------------------------------------------------------
 
 #include "G4FCylindricalSurface.hh"
 #include "G4Sort.hh"
 
 
+G4FCylindricalSurface::G4FCylindricalSurface()
+  : length(1.)
+{
+}
+
+
+G4FCylindricalSurface::~G4FCylindricalSurface()
+{
+}
+
 
 G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o, 
 					      const G4Vector3D& a,
-					      const G4double r, 
-					      const G4double l 
+					      G4double r, 
+					      G4double l 
 					    ) 
 { 
   //  make a G4FCylindricalSurface with origin o, axis a, 
@@ -70,13 +70,12 @@ G4FCylindricalSurface::G4FCylindricalSurface( const G4Point3D& o,
 }
 
 
-//  copy constructor
-G4FCylindricalSurface::G4FCylindricalSurface( const G4FCylindricalSurface& c )
-{ 
-  length = c.length;
+const char* G4FCylindricalSurface::NameOf() const 
+{
+  return "G4FCylindricalSurface"; 
 }
 
-//  printing function using C++ G4std::ostream class
+
 void G4FCylindricalSurface::PrintOn( G4std::ostream& os ) const
 { 
   os << "G4FCylindricalSurface with origin: " << origin << "\t"
@@ -86,13 +85,9 @@ void G4FCylindricalSurface::PrintOn( G4std::ostream& os ) const
 }
 
 
-int G4FCylindricalSurface::operator==( const G4FCylindricalSurface& c )
+G4double G4FCylindricalSurface::Area() const 
 {
-/*  return (   origin == c.origin && 
-	     axis   == c.axis   && 
-	     radius == c.radius && 
-	     length == c.length    );*/
-  return 1;
+  return ( 2.0 * M_PI * radius * length );
 }
 
 
@@ -104,12 +99,12 @@ void G4FCylindricalSurface::CalcBBox()
   // calculates the bounds for a bounding box
   // to the surface. The bounding box is used
   // for a preliminary check of intersection.
-  G4Point3D Max = -PINFINITY;
-  G4Point3D Min =  PINFINITY;
+  G4Point3D Max = G4Point3D(-PINFINITY);
+  G4Point3D Min = G4Point3D( PINFINITY);
 
   G4Point3D Tmp; 
   G4Point3D Origin    = Position.GetLocation();
-  G4Point3D EndOrigin = Origin + (length*Position.GetAxis());
+  G4Point3D EndOrigin = G4Point3D( Origin + (length*Position.GetAxis()) );
   G4Point3D Radius(radius, radius, 0);
  
   // Default BBox
@@ -135,7 +130,7 @@ void G4FCylindricalSurface::CalcBBox()
 }
 
 
-int G4FCylindricalSurface::Intersect( const G4Ray& ry )  
+G4int G4FCylindricalSurface::Intersect( const G4Ray& ry )  
 {
   // This function count the number of intersections of a 
   // bounded cylindrical surface by a ray.
@@ -165,7 +160,7 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   s[1]=-1.0;
 
   // calculate the two intersections (quadratic equation)   
-  G4Vector3D gamma =  x - Position.GetLocation();
+  G4Vector3D gamma =  G4Vector3D( x - Position.GetLocation() );
   
   G4double ga = gamma * ahat;
   G4double da = dhat * ahat;
@@ -188,8 +183,8 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   
   // validity of the solutions
   // the hit point must be into the bounding box of the cylindrical surface
-  G4Point3D p0 = x + s[0]*dhat;
-  G4Point3D p1 = x + s[1]*dhat;
+  G4Point3D p0 = G4Point3D( x + s[0]*dhat );
+  G4Point3D p1 = G4Point3D( x + s[1]*dhat );
 
   if( !GetBBox()->Inside(p0) )
     s[0] = kInfinity;
@@ -245,11 +240,12 @@ G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
   return hownear;
 }
 
-int G4FCylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
+G4int G4FCylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
 {
   //  return 1 if point x is within the boundaries of the G4FCylindricalSurface
   //  return 0 otherwise (assume it is on the cylinder)
-  if ( fabs( ( x - Position.GetLocation()) * Position.GetAxis() ) <= 0.5 * length )
+  if ( fabs( ( x - Position.GetLocation()) * Position.GetAxis() )
+       <= 0.5 * length )
     return 1;
   else
     return 0;
@@ -258,8 +254,8 @@ int G4FCylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
 
 G4double G4FCylindricalSurface::Scale() const
 {
-  //  Returns the radius of a G4FCylindricalSurface unless it is zero, in which
-  //  case returns the length.
+  //  Returns the radius of a G4FCylindricalSurface unless it is zero,
+  //  in which case returns the length.
   //  Used for Scale-invariant tests of surface thickness.
   if ( radius == 0.0 )
     return length;
@@ -273,8 +269,9 @@ G4Vector3D G4FCylindricalSurface::SurfaceNormal( const G4Point3D& p ) const
   //  return the Normal unit vector to the G4CylindricalSurface at a point 
   //  p on (or nearly on) the G4CylindricalSurface
   
-  G4Vector3D n = ( p - Position.GetLocation() ) - 
-    ( ( p - Position.GetLocation()) * Position.GetAxis() ) *Position.GetAxis();
+  G4Vector3D n = G4Vector3D( ( p - Position.GetLocation() ) - 
+                           ( ( p - Position.GetLocation()) *
+			       Position.GetAxis() ) * Position.GetAxis() );
   G4double nmag = n.mag();
   
   if ( nmag != 0.0 )
@@ -286,7 +283,7 @@ G4Vector3D G4FCylindricalSurface::SurfaceNormal( const G4Point3D& p ) const
   return n;
 }
 
-int G4FCylindricalSurface::Inside ( const G4Vector3D& x ) const
+G4int G4FCylindricalSurface::Inside ( const G4Vector3D& x ) const
 { 
   //  Return 0 if point x is outside G4CylindricalSurface, 1 if Inside.
   //  Outside means that the distance to the G4CylindricalSurface would 
@@ -322,5 +319,3 @@ void G4FCylindricalSurface::resize( G4double r, G4double l )
 	   << "\tOriginal value of " << length << " is retained.\n";
   }
 }
-
-

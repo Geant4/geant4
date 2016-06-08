@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IMuBremsstrahlung.cc,v 1.4 2000/04/25 14:19:00 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //    
 // --------------------------------------------------------------

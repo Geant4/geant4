@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4oDrawer.cc,v 1.6 2000/03/17 08:57:46 barrand Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 /*
   From geant4/visualization/management/src/G4VisManager.cc.

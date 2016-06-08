@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.hh,v 1.5 2000/05/23 14:24:48 urban Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VEnergyLoss.hh,v 1.9 2000/10/30 06:49:46 urban Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
 
+class G4EnergyLossMessenger;
 
 class G4VEnergyLoss : public G4VContinuousDiscreteProcess 
 {
@@ -77,7 +78,9 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
     G4double GetLossWithFluct(const G4DynamicParticle* aParticle,
                               G4Material* aMaterial,
-                              G4double	 threshold);
+                              G4double ChargeSquare,
+                              G4double	 MeanLoss,
+                              G4double step);
 
 
    private:
@@ -111,6 +114,14 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     static void SetSubSec       (G4bool  value) {subSecFlag = value ; }
     // switch on/off the generation of the subcutoff secondaries
     // ( default = subcutoff secondary generation )
+
+    static void SetMinDeltaCutInRange(G4double value)
+                                    {MinDeltaCutInRange = value;
+                                     setMinDeltaCutInRange = true ;}
+    // sets minimal cut value for the subcutoff secondaries
+    // (i.e. the kinetic energy of these secondaries can not be
+    //	smaller than the energy corresponds to MinDeltaCutInRange).
+
 
     static void SetStepFunction (G4double c1, G4double c2)
                                {dRoverRange = c1; finalRange = c2;
@@ -215,7 +226,13 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
    static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
    static G4bool       subSecFlag;  // control the generation of subcutoff secondaries
 
+   static G4double MinDeltaCutInRange; // minimum cut for delta rays
+   static G4double* MinDeltaEnergy ;
+   static G4bool* LowerLimitForced ;
 
+   static G4bool setMinDeltaCutInRange ;
+
+   static G4EnergyLossMessenger* ELossMessenger;
 };
 
 #endif

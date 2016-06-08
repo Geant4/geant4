@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: voxeldefs.hh,v 1.4 2000/04/20 16:49:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //

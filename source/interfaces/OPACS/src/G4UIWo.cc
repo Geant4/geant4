@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWo.cc,v 1.3 1999/12/15 14:50:46 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4UIWo.cc,v 1.4 2000/08/11 09:56:50 barrand Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //G4UIWo.cc   -- copied from G4UIterminal.cc
 
@@ -86,7 +86,7 @@ G4UIWo::G4UIWo (
 // end Want_c
 
   //Declare G4 interpreter to Wo.
-  OInterpreterCreate  ("G4",ExecuteScript,NULL,NULL,NULL);
+  OInterpreterCreate  ("G4",(OInterpreterDoFunction)ExecuteScript,NULL,NULL,NULL);
   OShellAddNewCommand (WoGetShellInterpreter(),"G4/G4",Execute_G4);
   SetTypes            ();
 
@@ -95,10 +95,10 @@ G4UIWo::G4UIWo (
 
   //Declare G4/vis~/views to Wo.
 #ifdef HAS_XO
-  OClassDeclareCompoundWidget ("G4/G4XoView" ,CreateG4XoView ,xoCameraWidgetClass);
+  OClassDeclareCompoundWidget ("G4/G4XoView" ,(OClassCreateWidgetFunction)CreateG4XoView ,xoCameraWidgetClass);
 #endif
 #ifdef HAS_XM
-  OClassDeclareCompoundWidget ("G4/G4OIXView",CreateG4OIXView,xmMainWindowWidgetClass);
+  OClassDeclareCompoundWidget ("G4/G4OIXView",(OClassCreateWidgetFunction)CreateG4OIXView,xmMainWindowWidgetClass);
   OClassDeclareWidgetClass    ("G4/ThumbWheel"       ,NULL);
   OClassDeclareWidgetClass    ("G4/SoGLwMDrawingArea",NULL);
   OClassDeclareWidgetClass    ("G4/XoSoArea"         ,NULL);

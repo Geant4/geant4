@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FastVector.hh,v 1.3 1999/11/23 15:00:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------

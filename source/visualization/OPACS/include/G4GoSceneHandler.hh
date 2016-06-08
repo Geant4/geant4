@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GoSceneHandler.hh,v 1.5 1999/12/16 17:25:02 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4GoSceneHandler.hh,v 1.6 2000/08/19 18:34:16 johna Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -68,7 +68,7 @@ private:
   ONode              fStaticRootGoNode;      // For detector.
   ONode              fTransientRootGoNode;   // For event.
   static G4int       fSceneIdCount;    // static counter for Wo scenes.
-  static G4int       fSceneCount;      // No. of extanct scenes.
+  static G4int       fSceneCount;      // No. of extanct scene handlers.
   static ONode       fGoNode;          // Current ONode.
   static OColormap   fOColormap;
   void               SetColour         (const G4Colour&);

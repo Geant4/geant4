@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PGeometryObjectMap.cc,v 1.5 1999/12/15 14:51:24 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PGeometryObjectMap.cc,v 1.6 2000/11/17 05:10:03 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // class G4PGeometryObjectMap 
 //
@@ -24,19 +24,31 @@
 #include "G4PLogicalVolume.hh"
 #include "G4PVSolid.hh"
 
+#include "G4VPhysVolRefArray.hh"
+#include "G4LogVolRefArray.hh"
+#include "G4VSolidRefArray.hh"
+
 G4PGeometryObjectMap::G4PGeometryObjectMap()
+ : noPhysVol(0),noLogVol(0),noSolids(0)
 {
+  transPhysVolPtrs = new G4VPhysVolRefArray;
+  transLogVolPtrs  = new G4LogVolRefArray;
+  transSolidPtrs   = new G4VSolidRefArray;
 }
 
 G4PGeometryObjectMap::G4PGeometryObjectMap( const G4String theGeometryName )
+ : noPhysVol(0),noLogVol(0),noSolids(0)
 {
-  noPhysVol = 0;
-  noLogVol  = 0;
-  noSolids  = 0;
+  transPhysVolPtrs = new G4VPhysVolRefArray;
+  transLogVolPtrs  = new G4LogVolRefArray;
+  transSolidPtrs   = new G4VSolidRefArray;
 }
 
 G4PGeometryObjectMap::~G4PGeometryObjectMap()
 {
+  delete transPhysVolPtrs;
+  delete transLogVolPtrs;
+  delete transSolidPtrs;
 }
 
 // -------- LookUp() and Add() functions for each class -------- //
@@ -46,8 +58,12 @@ HepRef(G4PVPhysicalVolume) G4PGeometryObjectMap::LookUp(
 {
   assert(inGeomObj != NULL);
   for(G4int i=0;i<noPhysVol;i++)
-    if( transPhysVolPtrs[i] == inGeomObj )
+  {
+    if( transPhysVolPtrs->Get(i) == inGeomObj )
+    {
       return persPhysVolPtrs[i];
+    }
+  }
 
   return NULL;
 }
@@ -61,9 +77,9 @@ void G4PGeometryObjectMap::Add(         G4VPhysicalVolume*  inGeomObj,
   {
 //    assert( inGeomObj == aGeomObj );
     noPhysVol++;
-    transPhysVolPtrs.resize(noPhysVol);
-    transPhysVolPtrs[noPhysVol-1] = inGeomObj;
-     persPhysVolPtrs.insert_element(outGeomObj);
+    transPhysVolPtrs->Resize(noPhysVol);
+    transPhysVolPtrs->Insert(noPhysVol-1, inGeomObj);
+    persPhysVolPtrs.insert_element(outGeomObj);
   }
 }
 
@@ -74,8 +90,12 @@ G4VPhysicalVolume* G4PGeometryObjectMap::LookUp(
 {
   assert(inGeomObj != NULL);
   for(G4int i=0;i<noPhysVol;i++)
+  {
     if( persPhysVolPtrs[i] == inGeomObj )
-      return transPhysVolPtrs[i];
+    {
+      return transPhysVolPtrs->Get(i);
+    }
+  }
 
   return NULL;
 }
@@ -88,7 +108,7 @@ void G4PGeometryObjectMap::Add( HepRef(G4PVPhysicalVolume)  inGeomObj,
   {
     if( persPhysVolPtrs[i] == inGeomObj )
     {
-      transPhysVolPtrs[i] = outGeomObj;
+      transPhysVolPtrs->Insert(i, outGeomObj);
       break;
     }
     G4cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << G4endl;
@@ -102,8 +122,12 @@ HepRef(G4PLogicalVolume) G4PGeometryObjectMap::LookUp(
 {
   assert(inGeomObj != NULL);
   for(G4int i=0;i<noLogVol;i++)
-    if( transLogVolPtrs[i] == inGeomObj )
+  {
+    if( transLogVolPtrs->Get(i) == inGeomObj )
+    {
       return persLogVolPtrs[i];
+    }
+  }
 
   return NULL;
 }
@@ -117,9 +141,9 @@ void G4PGeometryObjectMap::Add(         G4LogicalVolume*  inGeomObj,
   {
 //    assert( inGeomObj == aGeomObj );
     noLogVol++;
-    transLogVolPtrs.resize(noLogVol);
-    transLogVolPtrs[noLogVol-1] = inGeomObj;
-     persLogVolPtrs.insert_element(outGeomObj);
+    transLogVolPtrs->Resize(noLogVol);
+    transLogVolPtrs->Insert(noLogVol-1, inGeomObj);
+    persLogVolPtrs.insert_element(outGeomObj);
   }
 }
 
@@ -130,8 +154,12 @@ G4LogicalVolume* G4PGeometryObjectMap::LookUp(
 {
   assert(inGeomObj != NULL);
   for(G4int i=0;i<noLogVol;i++)
+  {
     if( persLogVolPtrs[i] == inGeomObj )
-      return transLogVolPtrs[i];
+    {
+      return transLogVolPtrs->Get(i);
+    }
+  }
 
   return NULL;
 }
@@ -144,7 +172,7 @@ void G4PGeometryObjectMap::Add( HepRef(G4PLogicalVolume)  inGeomObj,
   {
     if( persLogVolPtrs[i] == inGeomObj )
     {
-      transLogVolPtrs[i] = outGeomObj;
+      transLogVolPtrs->Insert(i, outGeomObj);
       break;
     }
     G4cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << G4endl;
@@ -165,15 +193,17 @@ HepRef(G4PVSolid) G4PGeometryObjectMap::LookUp( G4VSolid* inGeomObj )
   for(G4int i=0;i<noSolids;i++)
   {
 #ifdef G4PERSISTENCY_DEBUG
-    G4VSolid* tmpSolid = transSolidPtrs[i];
+    G4VSolid* tmpSolid = transSolidPtrs->Get(i);
     cout << "[" << i << "] transSolidPtrs[i]=" << tmpSolid <<G4endl;
     cout             << "   persSolidPtrs[i]=";
     HepRef(G4PVSolid) tmpPSolid = persSolidPtrs[i];
     tmpPSolid.print();
 #endif
 
-    if( transSolidPtrs[i] == inGeomObj )
+    if( transSolidPtrs->Get(i) == inGeomObj )
+    {
       return persSolidPtrs[i];
+    }
   }
 
   return NULL;
@@ -188,9 +218,9 @@ void G4PGeometryObjectMap::Add(         G4VSolid*  inGeomObj,
   {
 //    assert( inGeomObj == aGeomObj );
     noSolids++;
-    transSolidPtrs.resize(noSolids);
-    transSolidPtrs[noSolids-1] = inGeomObj;
-     persSolidPtrs.insert_element(outGeomObj);
+    transSolidPtrs->Resize(noSolids);
+    transSolidPtrs->Insert(noSolids-1, inGeomObj);
+    persSolidPtrs.insert_element(outGeomObj);
   }
 }
 
@@ -214,11 +244,13 @@ G4VSolid* G4PGeometryObjectMap::LookUp(
     cout << "[" << i << "]  persSolidPtrs[i]=";
     HepRef(G4PVSolid) tmpPSolid = persSolidPtrs[i];
     tmpPSolid.print();
-    G4VSolid* tmpSolid = transSolidPtrs[i];
+    G4VSolid* tmpSolid = transSolidPtrs->Get(i);
     cout              << " transSolidPtrs[i]=" << tmpSolid <<G4endl;
 #endif
     if( persSolidPtrs[i] == inGeomObj )
-      return transSolidPtrs[i];
+    {
+      return transSolidPtrs->Get(i);
+    }
   }
 
   return NULL;
@@ -232,7 +264,7 @@ void G4PGeometryObjectMap::Add( HepRef(G4PVSolid)  inGeomObj,
   {
     if( persSolidPtrs[i] == inGeomObj )
     {
-      transSolidPtrs[i] = outGeomObj;
+      transSolidPtrs->Insert(i, outGeomObj);
       break;
     }
     G4cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << G4endl;
@@ -244,38 +276,53 @@ void G4PGeometryObjectMap::Add( HepRef(G4PVSolid)  inGeomObj,
 G4VSolid* G4PGeometryObjectMap::GetSolid(G4int i)
 {
   if( i >= 0 && i < noSolids)
-    return transSolidPtrs[i];
+  {
+    return transSolidPtrs->Get(i);
+  }
   else
+  {
     return NULL;
+  }
 }
 
 HepRef(G4PVSolid) G4PGeometryObjectMap::GetPSolid(G4int i)
 {
   if( i >= 0 && i < noSolids)
+  {
     return persSolidPtrs[i];
+  }
   else
+  {
     return NULL;
+  }
 }
 
 void G4PGeometryObjectMap::InitTransientMap()
 {
-  transPhysVolPtrs.resize(noPhysVol);
-  transLogVolPtrs.resize(noLogVol);
-  transSolidPtrs.resize(noSolids);
+  transPhysVolPtrs->Resize(noPhysVol);
+  transLogVolPtrs->Resize(noLogVol);
+  transSolidPtrs->Resize(noSolids);
 
 #ifdef G4PERSISTENCY_DEBUG
   cout << "G4PGeometryObjectMap::InitTransientMap()" << G4endl;
   cout << " -- noPhysVol: " << noPhysVol << G4endl;
-  cout << " -- transPhysVolPtrs.length: " << transPhysVolPtrs.length() << G4endl;
-  cout << " -- transLogVolPtrs.length: "  << transLogVolPtrs.length()  << G4endl;
-  cout << " -- transSolidPtrs.length: "   << transSolidPtrs.length()   << G4endl;
+  cout << " -- transPhysVolPtrs.length: " << transPhysVolPtrs->length() << G4endl;
+  cout << " -- transLogVolPtrs.length: "  << transLogVolPtrs->length()  << G4endl;
+  cout << " -- transSolidPtrs.length: "   << transSolidPtrs->length()   << G4endl;
 #endif
 
   G4int i;
   for(i=0;i<noPhysVol;i++)
-    transPhysVolPtrs[i] = NULL;
+  {
+    transPhysVolPtrs->Insert(i, NULL);
+  }
   for(i=0;i<noLogVol;i++)
-    transLogVolPtrs[i] = NULL;
+  {
+    transLogVolPtrs->Insert(i, NULL);
+  }
   for(i=0;i<noSolids;i++)
-    transSolidPtrs[i] = NULL;
+  {
+    transSolidPtrs->Insert(i, NULL);
+  }
+
 }

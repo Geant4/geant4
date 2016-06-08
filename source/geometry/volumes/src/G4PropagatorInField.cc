@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.10 2000/05/05 18:20:09 japost Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PropagatorInField.cc,v 1.12 2000/11/20 19:05:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // 
@@ -70,7 +70,7 @@ G4PropagatorInField::
   // Parameters for adaptive Runge-Kutta integration
   //
   G4double      h_TrialStepSize;        // 1st Step Size 
-  G4double      TruePathLength;
+  G4double      TruePathLength= CurrentProposedStepLength;
   G4double      StepTaken= 0.0; 
   G4double      s_length_taken; 
   G4bool        intersects;
@@ -349,7 +349,6 @@ G4PropagatorInField::LocateIntersectionPoint(
   G4double    NewSafety;   
   G4bool      first_step= true;
   G4int       substep_no= 0;
-  G4VPhysicalVolume *pPhysVol; 
 
   do{					      // REPEAT
 

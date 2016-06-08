@@ -5,8 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.12 2000/04/11 16:15:17 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4BREPSolid.cc,v 1.17 2000/11/20 17:54:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4BREPSolid.cc
+//
+// ----------------------------------------------------------------------
 
 #include "G4BREPSolid.hh"
 #include "G4VoxelLimits.hh"
@@ -22,40 +29,26 @@
 
 G4Ray G4BREPSolid::Track;
 G4double G4BREPSolid::ShortestDistance= kInfinity;
-int G4BREPSolid::NumberOfSolids=0;
+G4int G4BREPSolid::NumberOfSolids=0;
 
-G4BREPSolid::G4BREPSolid(const G4String name) : G4VSolid(name)
+G4BREPSolid::G4BREPSolid(const G4String& name)
+ : G4VSolid(name),
+   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0),
+   intersectionDistance(kInfinity), active(1), startInside(0),
+   solidname(name)
 {
-  place=0;
-  Box=0;
-  Convex=0;
-  AxisBox=0;
-  PlaneSolid=0;
-  active=1;
-  intersectionDistance=kInfinity;
-  startInside=0;
-  solidname = name;
 }
 
-G4BREPSolid::G4BREPSolid( const G4String name        , 
-			  G4Surface**    srfVec      , 
-			  G4int          numberOfSrfs  ) : G4VSolid(name)
+G4BREPSolid::G4BREPSolid( const G4String& name        , 
+			  G4Surface**     srfVec      , 
+			  G4int           numberOfSrfs  )
+ : G4VSolid(name),
+   Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0),
+   intersectionDistance(kInfinity), active(1), startInside(0),
+   nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec)
 {
-  place                = 0;
-  Box                  = 0;
-  Convex               = 0;
-  AxisBox              = 0;
-  PlaneSolid           = 0;
-  active               = 1;
-  intersectionDistance = kInfinity;
-  startInside          = 0;
-  nb_of_surfaces       = numberOfSrfs;
-  SurfaceVec           = srfVec;
-
   Initialize();
 }
-
-
 
 G4BREPSolid::~G4BREPSolid()
 {
@@ -69,7 +62,6 @@ G4BREPSolid::~G4BREPSolid()
   
   delete [] SurfaceVec;
 }
-
 
 void G4BREPSolid::Initialize()
 {
@@ -88,6 +80,22 @@ void G4BREPSolid::Initialize()
   }
 }
 
+G4String G4BREPSolid::GetEntityType() const
+{
+  return "Closed_Shell";
+}
+
+void G4BREPSolid::Reset() const
+{
+  ((G4BREPSolid*)this)->active=1;
+  ((G4BREPSolid*)this)->intersectionDistance=kInfinity;
+  ((G4BREPSolid*)this)->startInside=0; 
+     
+  for(register G4int a=0;a<nb_of_surfaces;a++)
+    SurfaceVec[a]->Reset();
+
+  ShortestDistance = kInfinity;
+}
 
 void G4BREPSolid::CheckSurfaceNormals()
 {
@@ -101,7 +109,6 @@ void G4BREPSolid::CheckSurfaceNormals()
   
   // Loop through each face and check the G4Vector3D of the Normal
   G4Surface* srf;
-  G4Vector3D *Normal1, Normal2;
   G4Point3D V;
   
   G4int PointNum=0;
@@ -109,8 +116,8 @@ void G4BREPSolid::CheckSurfaceNormals()
   G4double YValue=0;
   G4Point3D Pt;
   
-  //    const int Faces = all_surfaces.number_of_elements;
-  //    const int Faces = surfaces.entries();
+  //    G4int Faces = all_surfaces.number_of_elements;
+  //    G4int Faces = surfaces.entries();
   G4int a, b;
   for(a=0; a<nb_of_surfaces; a++)
   {
@@ -118,7 +125,7 @@ void G4BREPSolid::CheckSurfaceNormals()
     //	srf = all_surfaces.GetSurface(a);
     //	srf = surfaces(a);
     srf = SurfaceVec[a];		
-    int Points = srf->GetNumberOfPoints();	
+    G4int Points = srf->GetNumberOfPoints();	
     
     for(b =0; b<Points; b++)
     {
@@ -147,19 +154,15 @@ void G4BREPSolid::CheckSurfaceNormals()
   G4Point3D Pt3;
   G4Point3D Pt4;
   
-  int ConnectingPoints=0;
-  
   G4Vector3D N1;
   G4Vector3D N2;    
   G4Vector3D N3;    
   G4Vector3D N4;    
 
-  int* ConnectedList = new int[nb_of_surfaces];    
+  G4int* ConnectedList = new G4int[nb_of_surfaces];    
 
   for(a=0; a<nb_of_surfaces; a++)
     ConnectedList[a]=0;
-  
-  int Connections=0;
   
   G4Surface* ConnectedSrf;
 
@@ -172,7 +175,7 @@ void G4BREPSolid::CheckSurfaceNormals()
       ConnectedList[a]=1;
     
     srf = SurfaceVec[a];
-    int SrfPoints = srf->GetNumberOfPoints();
+    G4int SrfPoints = srf->GetNumberOfPoints();
     N1 = (srf->Norm())->GetDir();
 
     for(b=a+1; b<nb_of_surfaces; b++)
@@ -189,7 +192,7 @@ void G4BREPSolid::CheckSurfaceNormals()
 	
       // Check if it is connected to srf by looping through the
       // points.
-      int ConnSrfPoints = ConnectedSrf->GetNumberOfPoints();
+      G4int ConnSrfPoints = ConnectedSrf->GetNumberOfPoints();
 
       for(G4int c=0;c<SrfPoints;c++)
       {
@@ -208,7 +211,7 @@ void G4BREPSolid::CheckSurfaceNormals()
 	    N2 = ((ConnectedSrf)->Norm())->GetDir();
 	    
 	    // Check cross product.
-	    G4Vector3D CP1 = N1.cross(N2);
+	    G4Vector3D CP1 = G4Vector3D( N1.cross(N2) );
 	    G4double CrossProd1 = CP1.x()+CP1.y()+CP1.z();
 	    
 	    // Create the other normals
@@ -226,7 +229,7 @@ void G4BREPSolid::CheckSurfaceNormals()
 	    
 	    N4 = (Pt1-Pt4);
 		      
-	    G4Vector3D CP2 = N3.cross(N4);
+	    G4Vector3D CP2 = G4Vector3D( N3.cross(N4) );
 	    G4double CrossProd2 = CP2.x()+CP2.y()+CP2.z();
 	    
 	    G4cout << "\nCroosProd2: " << CrossProd2;
@@ -255,7 +258,7 @@ void G4BREPSolid::CheckSurfaceNormals()
 }
 
 
-int G4BREPSolid::IsBox()
+G4int G4BREPSolid::IsBox()
 {
   // This is Done by checking that the solid consist of 6 planes.
   // Then the type is checked to be planar face for each face.
@@ -320,10 +323,10 @@ int G4BREPSolid::IsBox()
       return 0;
     else
     {
-      if(!(int)Result) 
+      if(!(G4int)Result) 
 	Sides++;
       else
-	if(((int)Result) == 1)
+	if(((G4int)Result) == 1)
 	  Opposite++;
     }
   }
@@ -361,7 +364,7 @@ G4bool G4BREPSolid::IsConvex()
   
   G4Surface* Srf;
   G4Surface* ConnectedSrf;
-  int Result;
+  G4int Result;
   Convex = 1;
   
   G4int a, b, c, d;
@@ -385,7 +388,7 @@ G4bool G4BREPSolid::IsConvex()
   G4Point3D Pt1;
   G4Point3D Pt2;
   
-  int ConnectingPoints=0;
+  G4int ConnectingPoints=0;
   
   G4Vector3D N1;
   G4Vector3D N2;    
@@ -471,7 +474,7 @@ G4bool G4BREPSolid::IsConvex()
     N1 = Srf->Norm()->GetDir();	    
     N2 = ConnectedSrf->Norm()->GetDir();
     // Check cross product.
-    G4Vector3D CP = N1.cross(N2); 
+    G4Vector3D CP = G4Vector3D( N1.cross(N2) ); 
     G4double CrossProd = CP.x()+CP.y()+CP.z();
     
     if( CrossProd > 0 )	
@@ -601,6 +604,8 @@ G4bool G4BREPSolid::CalculateExtent(const EAxis pAxis,
 	  pMin=zMin;
 	  pMax=zMax;
 	  break;
+	default:
+	  break;
 	}
 
       pMin-=kCarTolerance;
@@ -640,9 +645,9 @@ G4bool G4BREPSolid::CalculateExtent(const EAxis pAxis,
 	  // envelopes the clipping volume. Hence set min/max extents according
 	  // to clipping volume extents along the specified axis.
 	  G4ThreeVector clipCentre(
-				   (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-				   (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-				   (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+		(pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+		(pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+		(pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
 		    
 	  if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
 	    {
@@ -698,9 +703,6 @@ EInside G4BREPSolid::Inside(register const G4ThreeVector& Pt)const
   // This function find if the point Pt is inside, 
   // outside or on the surface of the solid
 
-
-  G4double halfTolerance = kCarTolerance*0.5;
-
   G4Vector3D v(1, 0, 0.01);
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
@@ -721,7 +723,7 @@ EInside G4BREPSolid::Inside(register const G4ThreeVector& Pt)const
 
   for(G4int a=0; a < nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->Active())
+    if(SurfaceVec[a]->IsActive())
     {
       // count the number of intersections.
       // if this number is odd, the start of the ray is 
@@ -732,12 +734,12 @@ EInside G4BREPSolid::Inside(register const G4ThreeVector& Pt)const
       if( (SurfaceVec[a]->Intersect(r)) & 1 )
       {
 	// test if the point is on the surface
-	if(SurfaceVec[a]->Distance() < kCarTolerance)
+	if(SurfaceVec[a]->GetDistance() < kCarTolerance)
 	  return kSurface;
 	
 	// test if this intersection was founded before
 	for(G4int i=0; i<a; i++)
-	  if(SurfaceVec[a]->Distance() == SurfaceVec[i]->Distance())
+	  if(SurfaceVec[a]->GetDistance() == SurfaceVec[i]->GetDistance())
 	  {
 	    samehit++;
 	    break;
@@ -759,7 +761,7 @@ EInside G4BREPSolid::Inside(register const G4ThreeVector& Pt)const
 }
 
 
-G4ThreeVector G4BREPSolid::SurfaceNormal(const G4ThreeVector& Pt)const
+G4ThreeVector G4BREPSolid::SurfaceNormal(const G4ThreeVector& Pt) const
 {  
   // This function calculates the normal of the surface
   // at a point on the surface
@@ -789,7 +791,7 @@ G4ThreeVector G4BREPSolid::SurfaceNormal(const G4ThreeVector& Pt)const
 }
 
 
-G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt)const
+G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt) const
 {
   // Calculates the shortest distance ("safety") from a point
   // outside the solid to any boundary of this solid.
@@ -797,7 +799,6 @@ G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt)const
 
 
   G4double *dists = new G4double[nb_of_surfaces];
-  G4double halfTolerance = kCarTolerance*0.5;  
   G4int a;
 
   // Set the surfaces to active again
@@ -834,7 +835,7 @@ G4double G4BREPSolid::DistanceToIn(const G4ThreeVector& Pt)const
 
 
 G4double G4BREPSolid::DistanceToIn(register const G4ThreeVector& Pt, 
-				   register const G4ThreeVector& V  )const
+				   register const G4ThreeVector& V  ) const
 {
   // Calculates the distance from a point outside the solid
   // to the solid`s boundary along a specified direction vector.
@@ -861,17 +862,17 @@ G4double G4BREPSolid::DistanceToIn(register const G4ThreeVector& Pt,
   
   for(a=0; a< nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->Active())
+    if(SurfaceVec[a]->IsActive())
     {
       // test if the ray intersect the surface
       if( (SurfaceVec[a]->Intersect(r)) )
       {
 	// if more than 1 surface is intersected,
 	// take the nearest one
-	if( SurfaceVec[a]->Distance() < ShortestDistance )
-	  if( SurfaceVec[a]->Distance() > halfTolerance )
+	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
+	  if( SurfaceVec[a]->GetDistance() > halfTolerance )
 	  {
-	    ShortestDistance = SurfaceVec[a]->Distance();
+	    ShortestDistance = SurfaceVec[a]->GetDistance();
 	  }
 	  else
 	  {
@@ -880,7 +881,7 @@ G4double G4BREPSolid::DistanceToIn(register const G4ThreeVector& Pt,
 	    G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
 
 	    if( (Norm * Vtmp) < 0 )
-	      ShortestDistance = SurfaceVec[a]->Distance();
+	      ShortestDistance = SurfaceVec[a]->GetDistance();
 	  }
       }
     }
@@ -935,17 +936,17 @@ G4double G4BREPSolid::DistanceToOut(register const G4ThreeVector& P,
  
   for(a=0; a< nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->Active())
+    if(SurfaceVec[a]->IsActive())
     {
       // test if the ray intersect the surface
       if( (SurfaceVec[a]->Intersect(r)) )
       {
 	// if more than 1 surface is intersected,
 	// take the nearest one
-	if( SurfaceVec[a]->Distance() < ShortestDistance )
-	  if( SurfaceVec[a]->Distance() > halfTolerance )
+	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
+	  if( SurfaceVec[a]->GetDistance() > halfTolerance )
 	  {
-	    ShortestDistance = SurfaceVec[a]->Distance();
+	    ShortestDistance = SurfaceVec[a]->GetDistance();
 	  }
 	  else
 	  {
@@ -973,7 +974,6 @@ G4double G4BREPSolid::DistanceToOut(const G4ThreeVector& Pt)const
   // Return 0 if the point is already outside.	
 
   G4double *dists = new G4double[nb_of_surfaces];
-  G4double halfTolerance = kCarTolerance*0.5;  
   G4int a;
 
   // Set the surfaces to active again
@@ -1066,8 +1066,8 @@ void G4BREPSolid::CalcBBoxes()
       //	    if(convex && Concavepoint==-1)
       {
 	srf->CalcBBox();
-	G4Point3D box_min = srf->bbox->GetBoxMin();
-	G4Point3D box_max = srf->bbox->GetBoxMax();
+	G4Point3D box_min = srf->GetBBox()->GetBoxMin();
+	G4Point3D box_max = srf->GetBBox()->GetBoxMax();
 	// Find max and min of face bboxes to make 
 	// solids bbox.
 	
@@ -1095,7 +1095,7 @@ void G4BREPSolid::CalcBBoxes()
 }
 
 
-void G4BREPSolid::RemoveHiddenFaces(register const G4Ray& rayref, int In) const
+void G4BREPSolid::RemoveHiddenFaces(register const G4Ray& rayref, G4int In) const
 {
   // Deactivates the planar faces that are
   // on the "back" side of a solid.
@@ -1161,13 +1161,13 @@ void G4BREPSolid::TestSurfaceBBoxes(register const G4Ray& rayref) const
     // Get first in List
     srf = SurfaceVec[a];
     
-    if(srf->Active())
+    if(srf->IsActive())
     {
       // Get type
       if(srf->MyType() != 1) // 1 == planar face
       {
-	if(srf->bbox->Test(rayref))
-	  srf->Distance(bbox->GetDistance());	
+	if(srf->GetBBox()->Test(rayref))
+	  srf->SetDistance(bbox->GetDistance());	
 	else
 	{
 	  // Test failed. Flag as inactive.
@@ -1192,7 +1192,7 @@ void G4BREPSolid::TestSurfaceBBoxes(register const G4Ray& rayref) const
 }
 
 
-int G4BREPSolid::Intersect(register const G4Ray& rayref) const
+G4int G4BREPSolid::Intersect(register const G4Ray& rayref) const
 {
   // Gets the roughly calculated closest
   // intersection point for a b_spline & accurate point for others
@@ -1212,28 +1212,24 @@ int G4BREPSolid::Intersect(register const G4Ray& rayref) const
   for(register G4int a=0;a<nb_of_surfaces;a++)
   {
     srf = SurfaceVec[a];	
-    int included = 0;
+    G4int included = 0;
     
-    if(srf->Active())
+    if(srf->IsActive())
     {
       result = srf->Intersect(rayref);
       if(result)
       {
-	register G4Surface* tmp;
-	   
-	
-
 	// Get the evaluated point on the surface
-	G4Point3D& closest_point = srf->closest_hit;
+	const G4Point3D& closest_point = srf->GetClosestHit();
 
 	// Test for DistanceToIn(pt, vec)
 	// if d = 0 and vec.norm > 0, do not see the surface
-	if( !( (srf->Distance() < kCarTolerance/2)  || 
+	if( !( (srf->GetDistance() < kCarTolerance/2)  || 
 	     (RayDir.dot(srf->SurfaceNormal(closest_point)) > 0) ) )
 	{
   
 	  if(srf->MyType()==1)
-	    HitDistance = srf->Distance();
+	    HitDistance = srf->GetDistance();
 	  else
 	  {
 	    // Check if the evaluated point is in front of the 
@@ -1275,7 +1271,7 @@ int G4BREPSolid::Intersect(register const G4Ray& rayref) const
 	    else 
 	    {
 	    // Mark rest surfaces as inactive
-	    for(register int c=a+1;c<nb_of_surfaces;c++)
+	    for(register G4int c=a+1;c<nb_of_surfaces;c++)
 	    {
 	    tmp = SurfaceVec[c];
 	    
@@ -1302,10 +1298,10 @@ int G4BREPSolid::Intersect(register const G4Ray& rayref) const
   
   QuickSort(SurfaceVec, 0, nb_of_surfaces-1);
   
-  if(!(SurfaceVec[0]->Active()))
+  if(!(SurfaceVec[0]->IsActive()))
     return 0;     
   
-  ((G4BREPSolid*)this)->intersection_point = SurfaceVec[0]->closest_hit;
+  ((G4BREPSolid*)this)->intersection_point = SurfaceVec[0]->GetClosestHit();
 
   
   bbox->SetDistance(HitDistance);
@@ -1314,20 +1310,19 @@ int G4BREPSolid::Intersect(register const G4Ray& rayref) const
 }
 
 
-int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref, 
-				 const int ToIn               ) const
+G4int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref, 
+				   G4int ToIn               ) const
 {
   register G4Surface* srf;
   G4double halfTolerance = 0.5*kCarTolerance;
   G4double Dist=0;
-  G4int count=0;
   ((G4BREPSolid*)this)->intersectionDistance = kInfinity;
   
   for(register G4int a=0;a<nb_of_surfaces;a++)
   {
     srf = SurfaceVec[a];
     
-    if(srf->Active())
+    if(srf->IsActive())
     {
       const G4Point3D& srf_intersection = srf->Evaluation(rayref);
       
@@ -1341,7 +1336,7 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	Dist = srf_intersection.distance2(start);  
       }
       else 
-	Dist = srf->Distance(); 
+	Dist = srf->GetDistance(); 
 	
       // Skip point wichare on the surface i.e. within
       // tolerance of the surface
@@ -1351,7 +1346,7 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	if(ToIn) 
 	{
 	  const G4Vector3D& Dir = rayref.GetDir();
-	  const G4Point3D& Hit = srf->closest_hit;
+	  const G4Point3D& Hit = srf->GetClosestHit();
 	  const G4Vector3D& Norm = srf->SurfaceNormal(Hit);
 	   
 	  if(( Dir * Norm ) >= 0)
@@ -1396,12 +1391,12 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 	  
 	// Check that the intersection is closer than the
 	// next surfaces approx point.
-	if(srf->Active())
+	if(srf->IsActive())
 	{
 	  if(a+1<nb_of_surfaces)
 	  {
 	    const G4Vector3D& Dir = rayref.GetDir();
-	    const G4Point3D& Hit = srf->closest_hit;
+	    const G4Point3D& Hit = srf->GetClosestHit();
 	    const G4Vector3D& Norm = srf->SurfaceNormal(Hit);
 	      
 	    // L. Broglia
@@ -1444,7 +1439,7 @@ int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
 }
  
 
-G4Point3D G4BREPSolid::Scope()
+G4Point3D G4BREPSolid::Scope() const
 {
   G4Point3D scope;
   G4Point3D Max = bbox->GetBoxMax();

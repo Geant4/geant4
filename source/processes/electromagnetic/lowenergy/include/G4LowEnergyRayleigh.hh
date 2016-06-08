@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.6 2000/06/22 02:19:01 pia Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4LowEnergyRayleigh.hh,v 1.7 2000/11/03 10:29:51 pia Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -17,6 +17,11 @@
 //      CERN, CN Division, ASD group
 //      ------------ G4LowEnergyRayleigh physics process ------
 //                   by A.Forti 1999/03/02
+//
+// Class description:
+// Low Energy Electromagnetic process, Rayleigh effect
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
 // ************************************************************
 
 #ifndef G4LowEnergyRayleigh_h

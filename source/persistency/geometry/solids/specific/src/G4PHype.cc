@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PHype.cc,v 1.1 2000/05/11 10:10:16 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // class G4PHype
 //

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.14 2000/05/11 17:34:32 japost Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4ChordFinder.cc,v 1.16 2000/11/20 17:29:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 
@@ -70,9 +70,9 @@ G4ChordFinder::~G4ChordFinder()
 // ......................................................................
 
 G4double 
-G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
-				   const  G4double     stepMax,
-				   const  G4double     epsStep )
+G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
+				    G4double      stepMax,
+				    G4double      epsStep )
 {
   G4double stepPossible;
   G4double dyErr;
@@ -122,7 +122,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
 
 G4double
 G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
-	                      const  G4double     stepMax,
+	                      G4double     stepMax,
 	                      G4FieldTrack&   yEnd,      //  Endpoint
 	                      G4double&      dyErr,      //  Error of endpoint 
 			      G4double     epsStep )
@@ -138,7 +138,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   //  2.)  Evaluate if resulting chord gives d_chord that is good enough.
   //     2a.)  If d_chord is not good enough, find one that is.
   
-  G4bool    validEndPoint= false,  dbg= false;
+  G4bool    validEndPoint= false;
   G4double  dChordStep, oldStepTrial, stepOfLastGoodChord;
 
   fIntgrDriver-> GetDerivatives( yCurrent, dydx )  ;
@@ -225,10 +225,9 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
 // ...........................................................................
 
-G4double G4ChordFinder::NewStep( 
-		      const G4double  stepTrialOld, 
-		      const G4double  dChordStep,                   // Current dchord achieved.
-                            G4double& stepEstimate_Unconstrained )  
+G4double G4ChordFinder::NewStep(G4double  stepTrialOld, 
+		                G4double  dChordStep, // Current dchord achieved.
+                                G4double& stepEstimate_Unconstrained )  
 		   
 {
   G4double stepTrial;
@@ -283,7 +282,7 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
 			      const G4FieldTrack& CurveA_PointVelocity, 
 			      const G4FieldTrack& CurveB_PointVelocity, 
 			      const G4ThreeVector& CurrentE_Point,
-			      const G4double eps_step)
+			            G4double eps_step)
 {
   // 1st implementation:
   //    if r=|AE|/|AB|, and s=true path lenght (AB)

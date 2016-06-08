@@ -6,8 +6,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1DetectorConstruction.cc,v 1.2 1999/12/15 14:48:56 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: Em1DetectorConstruction.cc,v 1.4 2000/12/13 11:11:59 maire Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 
@@ -108,6 +108,10 @@ G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
 density = 2.700*g/cm3;
 a = 26.98*g/mole;
 G4Material* Al  = new G4Material(name="Aluminium"  , z=13., a, density);
+
+density = 2.330*g/cm3;
+a = 28.09*g/mole;
+G4Material* Si  = new G4Material(name="Silicon"    , z=14., a, density);
 
 density = 7.870*g/cm3;
 a = 55.85*g/mole;

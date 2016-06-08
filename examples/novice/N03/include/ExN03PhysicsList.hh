@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN03PhysicsList.hh,v 1.6 2000/06/05 09:54:37 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicInteraction.hh,v 1.3 1999/12/15 14:52:07 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4HadronicInteraction.hh,v 1.4 2000/12/14 08:40:43 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
  // Hadronic Interaction  abstract base class
  // This class is the base class for the model classes.
@@ -19,6 +19,12 @@
  // Modified by J.L.Chuma, 05-May-97  to Initialize theBlockedCounter
  // Modified by J.L.Chuma, 08-Jul-97 to implement the Nucleus changes
  // Adding a registry for memory management of hadronic models, HPW 22-Mar-99
+
+// Class Description
+// This is the base class for all hadronic interaction models in geant4.
+// If you want to implement a new way of producing a final state, please inherit
+// from here.
+// Class Description - End
  
 #ifndef G4HadronicInteraction_h
 #define G4HadronicInteraction_h 1
@@ -109,8 +115,12 @@
     inline void SetVerboseLevel( G4int value )
     { verboseLevel = value; }
 
+public: // With description
+    // This is the interface to implement for final state production code.
+    
     virtual G4VParticleChange *ApplyYourself(
      const G4Track &aTrack, G4Nucleus & targetNucleus ) = 0;
+public: // Without description
 
     void DeActivateFor( G4Material *aMaterial );
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.cc,v 1.2 1999/12/15 14:49:41 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PrimaryTransformer.cc,v 1.5 2000/10/19 15:19:37 asaim Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -44,6 +44,7 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
   G4double Y0 = primaryVertex->GetY0();
   G4double Z0 = primaryVertex->GetZ0();
   G4double T0 = primaryVertex->GetT0();
+  G4double WV = primaryVertex->GetWeight();
 
 #ifdef G4VERBOSE
   if(verboseLevel>1)
@@ -59,14 +60,14 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
   G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
   while( primaryParticle != NULL )
   {
-    GenerateSingleTrack( primaryParticle, X0, Y0, Z0, T0 );
+    GenerateSingleTrack( primaryParticle, X0, Y0, Z0, T0, WV );
     primaryParticle = primaryParticle->GetNext();
   }
 }
 
 void G4PrimaryTransformer::GenerateSingleTrack
      (G4PrimaryParticle* primaryParticle,
-      G4double x0,G4double y0,G4double z0,G4double t0)
+      G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
   if((!partDef)||partDef->IsShortLived())
@@ -82,7 +83,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     G4PrimaryParticle* daughter = primaryParticle->GetDaughter();
     while(daughter)
     {
-      GenerateSingleTrack(daughter,x0,y0,z0,t0);
+      GenerateSingleTrack(daughter,x0,y0,z0,t0,wv);
       daughter = daughter->GetNext();
     }
   }
@@ -104,12 +105,18 @@ void G4PrimaryTransformer::GenerateSingleTrack
     DP->SetPolarization(primaryParticle->GetPolX(),
                         primaryParticle->GetPolY(),
                         primaryParticle->GetPolZ());
+    // Set Charge
+    if (abs(primaryParticle->GetCharge()-DP->GetCharge())>eplus) {
+      DP->SetCharge(primaryParticle->GetCharge());
+    } 
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
     // Create G4Track object
     G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
     // Set parentID to 0 as a primary particle
     track->SetParentID(0);
+    // Set weight ( vertex weight * particle weight )
+    track->SetWeight(wv*(primaryParticle->GetWeight()));
     // Store it to G4TrackVector
     TV.insert( track );
   }
@@ -120,7 +127,7 @@ void G4PrimaryTransformer::SetDecayProducts
 {
   G4PrimaryParticle* daughter = mother->GetDaughter();
   if(!daughter) return;
-  G4DecayProducts* decayProducts = motherDP->GetPreAssignedDecayProducts();
+  G4DecayProducts* decayProducts = (G4DecayProducts*)(motherDP->GetPreAssignedDecayProducts() );
   if(!decayProducts)
   {
     decayProducts = new G4DecayProducts(*motherDP);

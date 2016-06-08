@@ -5,28 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.cc,v 1.8 2000/05/02 15:12:45 grichine Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PAIonisation.cc,v 1.13 2000/09/22 14:46:38 grichine Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
-// -------------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4PAIonisation physics process -----------
-//                 modified by V.Grichine 27.11.97 
-// **************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.
-// It calculates the ionisation of charged hadrons.
 // **************************************************************
 //
+// 12.07.00, V.Grichine - modifications in BuildPAIonisationTable 
+// 11.07.00, V.Grichine - GetRandomEnergyTransfer, and PostStepDoIt
+//                        modifications
+// 03.07.00, V.Grichine - modifications in AlongStepDoIt
 // 08-04-98: remove 'traking cut' of the ionizing particle, MMa
 // 30-11-97: V. Grichine
-// 
- 
+//
+// **************************************************************
 
 #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
@@ -73,10 +65,10 @@ G4PAIonisation::G4PAIonisation( const G4String& materialName,
     G4Exception("Invalid material name in G4PAIonisation constructor") ;
   }
   ComputeSandiaPhotoAbsCof() ;
+  BuildPAIonisationTable() ;
 
 
   // G4cout<<"G4PAIonisation constructor is called"<<G4endl ;
-  // BuildPAIonisationTable() ;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -95,7 +87,13 @@ G4PAIonisation::~G4PAIonisation()
      fPAItransferBank->clearAndDestroy() ;
      delete fPAItransferBank ;
    }
+   for(G4int i=0;i<fSandiaIntervalNumber;i++)
+   {
+     delete[] fSandiaPhotoAbsCof[i] ;
+   }
+   delete[] fSandiaPhotoAbsCof ;
  
+   //  if(fProtonEnergyVector) delete fProtonEnergyVector ; 
 }
  
 /////////////////////////////////////////////////////////////////////////
@@ -167,7 +165,7 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     G4double Chargesquare = Charge*Charge ;     
     CutInRange = aParticleType.GetLengthCuts(); 
 
-       BuildLossTable(aParticleType) ;
+    //  BuildLossTable(aParticleType) ;
  
     if(Charge>0.)
     {
@@ -193,47 +191,18 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  the tables are built for MATERIALS
 //                           *********
 
-void 
-G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
-//G4PAIonisation::BuildPAIonisationTable()
+void
+G4PAIonisation::BuildPAIonisationTable()
 {
-   G4double  Charge = aParticleType.GetPDGCharge() ;
-
    G4double LowEdgeEnergy , ionloss ;
-   G4double  RateMass ;
-   G4bool isOutRange ;
-   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-   const G4double SmallIonLoss = DBL_MIN ;
-   const G4double twoln10 = 2.*log(10.) ;
-   const G4double Factor = twopi_mc2_rcl2 ;
-   const G4double bg2lim = 0.0169 , taulim = 8.4146e-3 ;
-
-   // cuts for p/pbar and electron 
-
-   //   /* *********************************************
-   if(Charge>0.)
-   {
-      ParticleCutInKineticEnergy = theProton->GetCutsInEnergy() ;
-   }
-   else
-   {
-      ParticleCutInKineticEnergy = theAntiProton->GetCutsInEnergy() ;
-   }
-   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
-//   **************************************************  */
-
-   ParticleMass = proton_mass_c2;
-   RateMass = electron_mass_c2/ParticleMass ;
-   G4int numOfMaterials = theMaterialTable->length();  //  create table
+   G4double massRatio, tau, Tmax, gamma, bg2 ;
 
    if ( theLossTable)
    {
       theLossTable->clearAndDestroy();
       delete theLossTable;
    }
-      theLossTable = new G4PhysicsTable(numOfMaterials);
-
-   //   theLossTable = new G4PhysicsTable(1);
+   theLossTable = new G4PhysicsTable();
    
    if( fPAItransferBank )    
    {
@@ -241,118 +210,72 @@ G4PAIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
      delete fPAItransferBank ;
    }
    fPAItransferBank = new G4PhysicsTable(TotBin) ;
-
-
-   for (G4int J=0; J<numOfMaterials; J++)   //  loop for materials
-   {
-     if( J != fMatIndex ) continue ;   // skip another material 
      
-       //create physics vector then fill it ....
+   //create physics vector then fill it ....
 
-     G4PhysicsLogVector* aVector = new G4PhysicsLogVector( LowestKineticEnergy, 
+   G4PhysicsLogVector* aVector = new G4PhysicsLogVector( LowestKineticEnergy, 
 							   HighestKineticEnergy,
 							   TotBin               ) ;
 
-      // get material parameters needed for the energy loss calculation
+   // From gas detector experience
 
-      G4double ElectronDensity, Eexc, Eexc2, Cden, Mden, Aden, X0den, X1den, taul ;
-      G4double* ShellCorrectionVector ;
-   
-      const G4Material* material= (*theMaterialTable)[J];
+   DeltaCutInKineticEnergyNow = 100*keV ;
 
-      ElectronDensity = material->GetElectronDensity();
-      Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
-      Eexc2 = Eexc*Eexc ;
-      Cden = material->GetIonisation()->GetCdensity();
-      Mden = material->GetIonisation()->GetMdensity();
-      Aden = material->GetIonisation()->GetAdensity();
-      X0den = material->GetIonisation()->GetX0density();
-      X1den = material->GetIonisation()->GetX1density();
-      taul = material->GetIonisation()->GetTaul() ;
-      ShellCorrectionVector = material->GetIonisation()
-                                      ->GetShellCorrectionVector();
+   for (G4int i = 0 ; i < TotBin ; i++)  //The loop for the kinetic energy 
+   {
+      LowEdgeEnergy = fProtonEnergyVector->GetLowEdgeEnergy(i) ;
+      
+      tau = LowEdgeEnergy/proton_mass_c2 ;
 
-      // get elements in the actual material,
-      // they are needed for the low energy part ....
-
-      const G4ElementVector* theElementVector = material->GetElementVector() ;
-      const G4double* theAtomicNumDensityVector =
-                      material->GetAtomicNumDensityVector() ;
-      const G4int NumberOfElements = material->GetNumberOfElements() ;
- 
-      // get electron cut in kin. energy for the material
-
-      //      DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
-
-      // From gas detector experience
-
-      DeltaCutInKineticEnergyNow = 100*keV ;
-
-      // some local variables 
-
-      G4double tau,tau0,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
-
-      // G4cout<<"Material no. = "<<J<<"\t"<<"TotBin = "<<TotBin<<G4endl ;
-
-      for (G4int i = 0 ; i < TotBin ; i++)  //The loop for the kinetic energy 
+      if(tau < 0.01)  // was 0.11, 0.05
       {
-  	 G4PhysicsFreeVector* transferVector ; 
-         LowEdgeEnergy = fProtonEnergyVector->GetLowEdgeEnergy(i) ;
-         tau = LowEdgeEnergy/ParticleMass ;
-
-
-
-          // high energy part , <dE/dx> according PAI cross section
-         {
-	    if(tau < 0.01)  // was 0.11, 0.05
-	    {
 	       tau = 0.01 ;
-	    }
-	    gamma = tau +1. ;
+      }
+      gamma = tau +1. ;
 
-	    //   G4cout<<"gamma = "<<gamma<<endl ;
+      //   G4cout<<"gamma = "<<gamma<<endl ;
 
-            bg2 = tau*(tau+2.) ;
-            beta2 = bg2/(gamma*gamma) ;
-            Tmax = 2.*electron_mass_c2*bg2
-                   /(1.+2.*gamma*RateMass+RateMass*RateMass) ;
+      bg2 = tau*(tau + 2. ) ;
+      massRatio = electron_mass_c2/proton_mass_c2 ;
 
-	    if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
-	    {
-               DeltaCutInKineticEnergyNow = Tmax ;
-	    }
-            G4PAIxSection protonPAI(J,DeltaCutInKineticEnergyNow,bg2,
-                                   fSandiaPhotoAbsCof,fSandiaIntervalNumber) ;
+      Tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*massRatio+massRatio*massRatio) ;
+
+      if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
+      {
+         DeltaCutInKineticEnergyNow = Tmax ;
+      }
+      G4PAIxSection protonPAI( fMatIndex,
+                               DeltaCutInKineticEnergyNow,
+                               bg2,
+                               fSandiaPhotoAbsCof,
+                               fSandiaIntervalNumber  ) ;
 	    
-	    ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
+      ionloss = protonPAI.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
    // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
    // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
 	    // G4cout<<"protonPAI.GetSplineSize() = "<<
             // protonPAI.GetSplineSize()<<G4endl ;
 
-            transferVector = new 
+      G4PhysicsFreeVector* transferVector = new 
                              G4PhysicsFreeVector(protonPAI.GetSplineSize()) ;
 
-            for(G4int k=0;k<protonPAI.GetSplineSize();k++)
-	    {
-              transferVector->PutValue( k ,
+      for(G4int k=0;k<protonPAI.GetSplineSize();k++)
+      {
+         transferVector->PutValue( k ,
                                         protonPAI.GetSplineEnergy(k+1),
                                         protonPAI.GetIntegralPAIxSection(k+1) ) ;
-	    }
-         }
-         if ( ionloss <= 0.)
-	 {
-            ionloss = SmallIonLoss ;
-	 }
-         aVector->PutValue(i,ionloss) ;
+      }  
+      if ( ionloss <= 0.)  ionloss = DBL_MIN ;
 
-         fPAItransferBank->insertAt(i,transferVector) ;
+      aVector->PutValue(i,ionloss) ;
+
+      fPAItransferBank->insertAt(i,transferVector) ;
 
             // delete[] transferVector ;
-      }                                        // end of Tkin loop
-      theLossTable->insert(aVector);
-   }                                           // end of material loop
+    }                                        // end of Tkin loop
+    theLossTable->insert(aVector);
+                                              // end of material loop
    // G4cout<<"G4PAIonisation::BuildPAIonisationTable() have been called"<<G4endl ;
    // G4cout<<"G4PAIonisation::BuildLossTable() have been called"<<G4endl ;
 }
@@ -492,144 +415,38 @@ G4VParticleChange*
 G4PAIonisation::PostStepDoIt( const G4Track& trackData,   
                               const G4Step& stepData          )         
 {
-   const G4DynamicParticle* aParticle ;
-   G4Material* aMaterial;
-   G4double KineticEnergy, TotalEnergy, TotalMomentum,
-           betasquare, MaxKineticEnergyTransfer, DeltaKineticEnergy, 
-	   DeltaTotalMomentum, costheta, sintheta, phi, dirx, diry, 
-	   dirz, finalKineticEnergy, finalPx, finalPy, finalPz, x, xc, 
-	   te2, grej, Psquare, Esquare, summass, rate,grejc,finalMomentum ;
-  
-    G4double Charge;
-    
+    G4double kinE,  massRatio, scaledTkin, energyTransfer, finalTkin ;
+
     aParticleChange.Initialize(trackData) ;
-    aMaterial = trackData.GetMaterial() ;
-    aParticle = trackData.GetDynamicParticle() ;
+    const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
 
-    Charge=aParticle->GetDefinition()->GetPDGCharge();
-    KineticEnergy=aParticle->GetKineticEnergy();
-    ParticleMass=aParticle->GetDefinition()->GetPDGMass();
-    TotalEnergy=KineticEnergy + ParticleMass ;
-    Psquare=KineticEnergy*(TotalEnergy+ParticleMass) ;
-    Esquare=TotalEnergy*TotalEnergy ;
-    summass = ParticleMass + electron_mass_c2 ;    
-    G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection() ;
-
-    //  get kinetic energy cut for the electron....
-
-    DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
- 
-    betasquare=Psquare/Esquare ;  //  kinematics
-
-    MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
-                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);
-
-    // sampling kinetic energy of the delta ray 
-
-    if( MaxKineticEnergyTransfer <= DeltaCutInKineticEnergyNow ) // no change at all
+    if( trackData.GetMaterial()->GetIndex() != fMatIndex )
     {
-       //return &aParticleChange;
-       return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-    }
-    else // normal case 
+      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+    }    
+    kinE = aParticle->GetKineticEnergy() ;
+    massRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
+    scaledTkin = kinE*massRatio ;
+    energyTransfer = GetRandomEnergyTransfer(scaledTkin) ;
+    finalTkin = kinE - energyTransfer ;
+
+    //  kill the particle if the kinetic energy <= 0  
+
+    if (finalTkin <= 0. )
     {
-       xc=DeltaCutInKineticEnergyNow/MaxKineticEnergyTransfer ;
-       rate=MaxKineticEnergyTransfer/TotalEnergy ;
-
-       if(aParticle->GetDefinition()->GetPDGSpin() == 1) 
-       {
-          te2 = 0.5*rate*rate ;
-       }
-       else
-       {
-          te2 = 0.0 ;
-       }
-       grejc=1.-betasquare*xc+te2*xc*xc ;   // sampling follows ...
-
-       do 
-       {
-          x=xc/(1.-(1.-xc)*G4UniformRand());
-          grej=(1.-x*(betasquare-x*te2))/grejc ;
-       }
-       while( G4UniformRand()>grej );
-    }
-    DeltaKineticEnergy = x * MaxKineticEnergyTransfer ;
-    if(DeltaKineticEnergy <= 0.)
-    {
-       return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-    }
-    DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
-                                               2. * electron_mass_c2 )) ;
-    TotalMomentum = sqrt(Psquare) ;
-    costheta = DeltaKineticEnergy * (TotalEnergy + electron_mass_c2)
-            /(DeltaTotalMomentum * TotalMomentum) ;
-
-   
-
-    if ( costheta < -1. )  //  protection against costheta > 1 or < -1 
-    {
-        costheta = -1. ;
-    }
-    if ( costheta > +1. ) 
-    {
-        costheta = +1. ; 
-    }                    //  direction of the delta electron  ........
-
-    phi = twopi * G4UniformRand() ; 
-    sintheta = sqrt((1.+costheta)*(1.-costheta));
-
-    dirx = sintheta * cos(phi) ;
-    diry = sintheta * sin(phi) ;
-    dirz = costheta ;
-
-    G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
-    
-    DeltaDirection.rotateUz(ParticleDirection) ;
-
-    // create G4DynamicParticle object for delta ray
-
-    G4DynamicParticle *theDeltaRay = new G4DynamicParticle;
-    theDeltaRay->SetKineticEnergy( DeltaKineticEnergy );
-    theDeltaRay->SetMomentumDirection(
-                   DeltaDirection.x(),DeltaDirection.y(),DeltaDirection.z()); 
-    theDeltaRay->SetDefinition(G4Electron::Electron());
-
-    // fill aParticleChange
- 
-    finalKineticEnergy = KineticEnergy - DeltaKineticEnergy ; 
-
-    if (finalKineticEnergy > 0.)
-    {
-        // changed energy and momentum of the actual particle
-       finalMomentum=sqrt(finalKineticEnergy*
-                         (finalKineticEnergy+2.*ParticleMass)) ;
-
-       finalPx = (TotalMomentum*ParticleDirection.x()
-                -DeltaTotalMomentum*DeltaDirection.x())/finalMomentum ; 
-       finalPy = (TotalMomentum*ParticleDirection.y()
-                -DeltaTotalMomentum*DeltaDirection.y())/finalMomentum ; 
-       finalPz = (TotalMomentum*ParticleDirection.z()
-                -DeltaTotalMomentum*DeltaDirection.z())/finalMomentum ; 
-
-       aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
-    }
-    else
-    {
-       finalKineticEnergy = 0. ;
-       if (aParticle->GetDefinition()->GetParticleName() == "proton")
-       {
-                aParticleChange.SetStatusChange(fStopAndKill);
-       }
-       else     aParticleChange.SetStatusChange(fStopButAlive);
-    }
-    aParticleChange.SetEnergyChange( finalKineticEnergy );
-    aParticleChange.SetNumberOfSecondaries(1);
-    aParticleChange.AddSecondary( theDeltaRay );
-    aParticleChange.SetLocalEnergyDeposit (0.);
+      finalTkin = 0.;
+      if (aParticle->GetDefinition()->GetParticleName() == "proton")
+      {
+               aParticleChange.SetStatusChange( fStopAndKill ) ;
+      }
+      else     aParticleChange.SetStatusChange( fStopButAlive ) ; 
+    } 
+    aParticleChange.SetNumberOfSecondaries(0) ;
+    aParticleChange.SetEnergyChange( finalTkin ) ;
+    aParticleChange.SetLocalEnergyDeposit (energyTransfer) ;
       
-   // ResetNumberOfInteractionLengthLeft;
-
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+    //  return &aParticleChange ;
 }
 
 
@@ -695,7 +512,7 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 
           //  now the loss with fluctuation
 
-          finalT = E-GetLossWithFluct(Step,aParticle,aMaterial)*Chargesquare ;
+          finalT = E-GetLossWithFluct(Step,aParticle,aMaterial) ;
 
           if (finalT<0.) finalT = 0. ;
 
@@ -722,7 +539,7 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 
 ///////////////////////////////////////////////////////////////////////
 //
-//
+// Returns random energy loss from step
 
 G4double  
 G4PAIonisation::GetLossWithFluct( G4double Step,
@@ -736,19 +553,17 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
   // G4cout<<"G4VPAIenergyLoss::GetLossWithFluct"<<G4endl ;
 
-  G4double loss = 0.0 ;
+  G4double loss = 0.0, charge2 ;
   G4double transfer, position, E1, E2, W1, W2, W, firstMu, secondMu ;
   G4double      Tkin = aParticle->GetKineticEnergy() ;
   G4double MassRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
+  G4double charge = aParticle->GetDefinition()->GetPDGCharge() ;
+  charge2         = charge*charge ;
   G4double TkinScaled = Tkin*MassRatio ;
-  G4PhysicsLogVector* 
-  aLogVector = new G4PhysicsLogVector( G4PAIonisation::GetMinKineticEnergy(),
-                                       G4PAIonisation::GetMaxKineticEnergy(),
-                                       G4PAIonisation::GetBinNumber()        ) ;
 
   for(iTkin=0;iTkin<G4PAIonisation::GetBinNumber();iTkin++)
   {
-    if(TkinScaled < aLogVector->GetLowEdgeEnergy(iTkin)) // <= ?
+    if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) // <= ?
     {
       break ;
     } 
@@ -757,13 +572,11 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
   //  G4cout<<"iPlace = "<<iPlace<<endl ;
 
-  G4PhysicsVector*  firstVector = (*fPAItransferBank)(iPlace)     ;
-  G4PhysicsVector* secondVector = (*fPAItransferBank)(iPlace + 1) ;
-
   if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
   {
-    numOfCollisions = RandPoisson::shoot((*(*fPAItransferBank)(iPlace))(0)*Step) ;
-
+    numOfCollisions = RandPoisson::
+    shoot((*(*fPAItransferBank)(iPlace))(0)*Step*charge2) ;
+    
     //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
     while(numOfCollisions)
@@ -774,7 +587,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       {
         if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
       }
-      loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+      //  loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+      loss += GetEnergyTransfer(iPlace,position,iTransfer);
       numOfCollisions-- ;
     }
   }
@@ -783,7 +597,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
     if(iTkin == 0) // Tkin is too small, trying from right only
     {
       numOfCollisions = RandPoisson::
-                        shoot((*(*fPAItransferBank)(iPlace+1))(0)*Step) ;
+                        shoot((*(*fPAItransferBank)(iPlace+1))(0)*Step*charge2) ;
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -795,14 +609,15 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
         {
           if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
         }
-        loss += (*fPAItransferBank)(iPlace+1)->GetLowEdgeEnergy(iTransfer) ;
+	//  loss += (*fPAItransferBank)(iPlace+1)->GetLowEdgeEnergy(iTransfer) ;
+        loss += GetEnergyTransfer(iPlace+1,position,iTransfer);
         numOfCollisions-- ;
       }
     } 
     else // general case: Tkin between two vectors of the material
     {
-      E1 = aLogVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = aLogVector->GetLowEdgeEnergy(iTkin)     ;
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
        W = 1.0/(E2 - E1) ;
       W1 = (E2 - TkinScaled)*W ;
       W2 = (TkinScaled - E1)*W ;
@@ -814,8 +629,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
       numOfCollisions = RandPoisson::shoot(
                      ( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
-                     (*(*fPAItransferBank)(iPlace+1))(0)*W2 )*Step) ;
-
+                     (*(*fPAItransferBank)(iPlace+1))(0)*W2 )*Step*charge2) ;
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;
 
@@ -835,7 +649,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 	      break ;
 	  }
         }
-        loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+	// loss += (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+        loss += GetEnergyTransfer(iPlace,position,iTransfer);
         numOfCollisions-- ;    
       }
     }
@@ -845,7 +660,125 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   return loss ;
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Returns random PAI energy transfer according to passed scaled kinetic
+// energy of particle
+
+G4double  
+G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
+{  
+  // G4cout<<"G4VPAIenergyLoss::GetRandomEnergyTransfer"<<G4endl ;
+
+  G4int iTkin, iTransfer, iPlace  ;
+  G4double transfer = 0.0, position, E1, E2, W1, W2, W ;
+
+  for(iTkin=0;iTkin<G4PAIonisation::GetBinNumber();iTkin++)
+  {
+    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;
+  }
+  iPlace = iTkin - 1 ;
+
+  //  G4cout<<"iPlace = "<<iPlace<<endl ;
+
+  if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
+  {
+      position = (*(*fPAItransferBank)(iPlace))(0)*G4UniformRand() ;
+
+      for(iTransfer=0;;iTransfer++)
+      {
+        if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
+      }
+      //  transfer = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+      transfer = GetEnergyTransfer(iPlace,position,iTransfer);
+  }
+  else
+  {
+    if(iTkin == 0) // Tkin is too small, trying from right only
+    {
+      position = (*(*fPAItransferBank)(iPlace+1))(0)*G4UniformRand() ;
+
+      for(iTransfer=0;;iTransfer++)
+      {
+        if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
+      }
+      // transfer = (*fPAItransferBank)(iPlace+1)->GetLowEdgeEnergy(iTransfer) ;
+      transfer = GetEnergyTransfer(iPlace+1,position,iTransfer);
+    } 
+    else // general case: Tkin between two vectors of the material
+    {
+      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+      W  = 1.0/(E2 - E1) ;
+      W1 = (E2 - scaledTkin)*W ;
+      W2 = (scaledTkin - E1)*W ;
+
+      position =( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
+                    (*(*fPAItransferBank)(iPlace+1))(0)*W2 )*G4UniformRand() ;
+
+        // G4cout<<position<<"\t" ;
+
+      for(iTransfer=0;;iTransfer++)
+      {
+          if( position >=
+          ( (*(*fPAItransferBank)(iPlace))(iTransfer)*W1 + 
+            (*(*fPAItransferBank)(iPlace+1))(iTransfer)*W2) ) break ;
+      }
+      //  transfer = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ; 
+      transfer = GetEnergyTransfer(iPlace,position,iTransfer);
+    }
+  } 
+  //  G4cout<<"PAI transfer = "<<transfer/keV<<" keV"<<endl ; 
+  if(transfer < 0.0 ) transfer = 0.0 ;
+  return transfer ;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Returns random PAI energy transfer according to passed scaled kinetic
+// energy of particle
+
+G4double  
+G4PAIonisation::GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer )
+{ 
+  G4double x1, x2, y1, y2, result ;
+
+  if(iTransfer == 0)
+  {
+    result = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+  }  
+  else
+  {
+    y1 = (*(*fPAItransferBank)(iPlace))(iTransfer-1) ;
+    y2 = (*(*fPAItransferBank)(iPlace))(iTransfer) ;
+
+    x1 = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer-1) ;
+    x2 = (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer) ;
+
+    if ( x1 == x2 )    result = x2 ;
+    else
+    {
+      if ( y1 == y2  ) result = x1 + (x2 - x1)*G4UniformRand() ;
+      else
+      {
+        result = x1 + (position - y1)*(x2 - x1)/(y2 - y1) ;
+      }
+    }
+  }
+  return result ;
+}
 
 //
 //
 /////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+

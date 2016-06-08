@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VMuEnergyLoss.hh,v 1.2 2000/06/07 16:50:21 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
 //

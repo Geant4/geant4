@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tpordvec.icc,v 1.4 2000/03/22 08:05:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: tpordvec.icc,v 1.5 2000/11/20 17:26:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -85,9 +85,8 @@ void G4RWTPtrOrderedVector<T>::clear()
 template<class T >
 void G4RWTPtrOrderedVector<T>::clearAndDestroy() 
 {
-  int sz;
   G4std::set<T*,G4std::greater<T*> > tmp;
-  for (sz=0;sz<rwsize;sz++)
+  for (size_t sz=0;sz<rwsize;sz++)
     {
       T* current;
       current=std_pvector::operator[](sz);
@@ -201,8 +200,7 @@ T* G4RWTPtrOrderedVector<T>::removeAt( size_t i )
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector removeAt",rwsize,i));
   iterator it=std_pvector::begin();
-  int j;
-  for(j=0;j<rwsize && j<i;j++) it++;
+  for(size_t j=0;j<rwsize && j<i;j++) it++;
   if(it!=std_pvector::end())
     {
       T* tmp = std_pvector::operator[](i);
@@ -234,14 +232,14 @@ void G4RWTPtrOrderedVector<T>::resize(size_t N)
 {
   if(N>std_pvector::size())
     {
-      int e=N-std_pvector::size();
-      for(int i=0;i<e;i++)
+      size_t e=N-std_pvector::size();
+      for(size_t i=0;i<e;i++)
 	std_pvector::push_back(0);
     }
   else if(N>rwsize)
     {
       iterator it=std_pvector::begin();
-      for(int i=0;i<N;i++,it++);
+      for(size_t i=0;i<N;i++,it++);
       std_pvector::erase(it,std_pvector::end());
     }
 }
@@ -256,7 +254,7 @@ void G4RWTPtrOrderedVector<T>::insertAt ( size_t i, T* a )
     G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector insertAt",rwsize,i));
   if(rwsize<std_pvector::size())
     {
-      for(int j=rwsize;j>i;j--)
+      for(size_t j=rwsize;j>i;j--)
 	std_pvector::operator[](j)=std_pvector::operator[](j-1);
       std_pvector::operator[](i)=a;
       rwsize++;
@@ -264,7 +262,7 @@ void G4RWTPtrOrderedVector<T>::insertAt ( size_t i, T* a )
   else
     {
       iterator it=std_pvector::begin();
-      for(int j=0;j<i;j++,it++);
+      for(size_t j=0;j<i;j++,it++);
       std_pvector::insert(it,a);
       rwsize++;
     }

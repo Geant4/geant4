@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4eIonisation.cc,v 1.10 2000/05/23 14:42:21 urban Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // -------------------------------------------------------------

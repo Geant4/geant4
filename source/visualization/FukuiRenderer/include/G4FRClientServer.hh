@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FRClientServer.hh,v 1.4 2000/02/29 09:54:38 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // Satoshi TANAKA, Wed Jul  3 14:13:52 JST 1996
 ////////////////////////////////

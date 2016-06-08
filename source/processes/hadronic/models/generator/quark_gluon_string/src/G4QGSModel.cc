@@ -51,18 +51,21 @@ G4ExcitedStringVector * G4QGSModel::GetStrings()
     if (aPair->GetCollisionType() == G4PartonPair::DIFFRACTIVE)
     {
       aString = theDiffractiveStringBuilder.BuildString(aPair);
+//      G4cout << "diffractive "<<aString->Get4Momentum()<<endl;
     }
     else
     {
       aString = theSoftStringBuilder.BuildString(aPair);
+//      G4cout << "soft "<<aString->Get4Momentum()<<endl;
     }
     aString->Boost(theCurrentVelocity);  
     theStrings->insert(aString);
+    delete aPair;
   }
 //--DEBUG--  cout << G4endl;
   for(G4int i=0; i<theStrings->length(); i++)
   {
-//--DEBUG--    cout << "String = "<<theStrings->at(i)->Get4Momentum()<<G4endl;
+//   cout << "String = "<<theStrings->at(i)->Get4Momentum()<<G4endl;
   }
   return theStrings;
 }

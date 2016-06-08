@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: rw2stl_algo.h,v 1.4 1999/11/25 10:14:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //---------------------------------------------------------------

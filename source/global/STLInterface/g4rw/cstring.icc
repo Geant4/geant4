@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: cstring.icc,v 1.5 2000/06/26 16:25:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: cstring.icc,v 1.9 2000/11/20 20:03:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -71,7 +71,7 @@ char  G4SubString::operator[](size_t i) const
   return mystring->operator[](mystart+i);
 }
 
-int G4SubString::operator!() const
+G4int G4SubString::operator!() const
 {
   return extent==0 ? 1 : 0;
 }
@@ -228,7 +228,7 @@ G4String::operator const char*() const
   return c_str();
 }
 
-int G4String::strcasecompare(const char* s1, const char* s2) const
+G4int G4String::strcasecompare(const char* s1, const char* s2) const
 {
 #ifndef G4USE_STD_NAMESPACE
     return strcasecmp(s1,s2);
@@ -241,14 +241,14 @@ int G4String::strcasecompare(const char* s1, const char* s2) const
   for (size_t j=0; j<=strlen(s2); j++)
     buf2[j] = tolower(s2[j]);
 
-  int res = strcmp(buf1, buf2);
+  G4int res = strcmp(buf1, buf2);
   delete [] buf1;
   delete [] buf2;
   return res;
 #endif
 }
 
-int G4String::compareTo(const char* s, caseCompare mode)
+G4int G4String::compareTo(const char* s, caseCompare mode)
 {
   if(mode==exact)
     return strcmp(c_str(),s);
@@ -256,7 +256,7 @@ int G4String::compareTo(const char* s, caseCompare mode)
     return strcasecompare(c_str(),s);
 }
 
-int G4String::compareTo(const G4String& s, caseCompare mode)
+G4int G4String::compareTo(const G4String& s, caseCompare mode)
 {
   if(mode==exact)
     return strcmp(c_str(),s.c_str());
@@ -279,14 +279,14 @@ G4String& G4String::append(const G4String& s)
 G4std::istream&
 G4String::readLine (G4std::istream& s, G4bool skipWhite)
 {
-  char tmp[256];
+  char tmp[1024];
   if ( skipWhite ) {
     s >> G4std::ws;
-    s.getline(tmp,256);
+    s.getline(tmp,1024);
     *this=tmp;
   }
   else {
-    s.getline(tmp,256);    
+    s.getline(tmp,1024);    
     *this=tmp;
   } 
   return s;
@@ -318,20 +318,20 @@ G4String& G4String::remove(size_t pos, size_t N)
   return *this;
 }
 
-int G4String::first(char c) const
+G4int G4String::first(char c) const
 {
   return find(c);
 }
 
-int G4String::last(char c) const
+G4int G4String::last(char c) const
 {
   return rfind(c);
 }
 
 G4bool G4String::contains(std_string s) const
 {
-  int i=find(s);
-  if(i != std_string::npos)
+  G4int i=std_string::find(s);
+  if(i != G4int(std_string::npos))
     return true;
   else
     return false;
@@ -339,18 +339,18 @@ G4bool G4String::contains(std_string s) const
 
 G4bool G4String::contains(char c) const
 {
-  int i=find(c);
-  if(i != std_string::npos)
+  G4int i=std_string::find(c);
+  if(i != G4int(std_string::npos))
     return true;
   else
     return false;
 }
 
-G4String G4String::strip (int stripType, char c)
+G4String G4String::strip (G4int stripType, char c)
 {
   G4String retVal = *this;
   if(length()==0) return retVal;
-  int i;
+  size_t i;
   switch ( stripType ) {
   case leading: 
     {
@@ -360,10 +360,11 @@ G4String G4String::strip (int stripType, char c)
     }
     break;
   case trailing:
-    { 
-      for(i=length()-1;i>=0;i--)
-	if (std_string::operator[](i) != c) break; 
-      retVal = substr(0,i+1);
+    {
+      G4int j;
+      for(j=length()-1;j>=0;j--)
+	if (std_string::operator[](j) != c) break; 
+      retVal = substr(0,j+1);
     }
     break;
   case both:
@@ -371,9 +372,10 @@ G4String G4String::strip (int stripType, char c)
       for(i=0;i<length();i++)
 	if (std_string::operator[](i) != c) break;
       G4String tmp(substr(i,length()-i));
-      for(i=tmp.length()-1;i>=0;i--)
-	if (tmp.std_string::operator[](i) != c) break; 
-      retVal = tmp.substr(0,i+1);
+      G4int k;
+      for(k=tmp.length()-1;k>=0;k--)
+	if (tmp.std_string::operator[](k) != c) break; 
+      retVal = tmp.substr(0,k+1);
     }
   }
   return retVal;
@@ -381,7 +383,7 @@ G4String G4String::strip (int stripType, char c)
 
 void G4String::toLower ( void )
 {
-  for (int i=0; i<size();i++)
+  for (size_t i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
     std_string::operator[](i) = tolower(std_string::operator[](i));
@@ -391,7 +393,7 @@ void G4String::toLower ( void )
 
 void G4String::toUpper ( void )
 {
-  for (int i=0; i<size();i++)
+  for (size_t i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
     std_string::operator[](i) = toupper(std_string::operator[](i));
@@ -412,12 +414,12 @@ size_t G4String::index( const G4String& s, size_t ln,
   return std_string::find( s.c_str(), st, ln );
 }
 
-size_t G4String::index (const char* str, int pos) const
+size_t G4String::index (const char* str, G4int pos) const
 {
   return std_string::find(str,pos);
 }
 
-size_t G4String::index (char c, int pos) const
+size_t G4String::index (char c, G4int pos) const
 {
   return std_string::find(c,pos);
 }

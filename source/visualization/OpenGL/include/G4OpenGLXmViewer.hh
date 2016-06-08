@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLXmViewer.hh,v 1.3 1999/12/15 14:54:06 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Andrew Walkden  10th February 1997

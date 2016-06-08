@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmaMinusInelasticProcess.hh,v 1.2 1999/12/15 14:53:33 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4AntiSigmaMinusInelasticProcess.hh,v 1.3 2000/12/14 08:47:20 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
  // Hadronic Process: AntiSigmaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997
@@ -17,6 +17,11 @@
 #ifndef G4AntiSigmaMinusInelasticProcess_h
 #define G4AntiSigmaMinusInelasticProcess_h 1
  
+// Class Description
+// Process for AntiSigmaMinus Inelastic scattering; 
+// to be used in your physics list in case you need this physics.
+// Class Description - End
+
 //#include "G4HadronicInelasticProcess.hh"
 #include "G4HadronInelasticProcess.hh"
  

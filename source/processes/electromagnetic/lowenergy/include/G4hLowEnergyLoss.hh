@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.2 2000/03/31 15:17:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4hLowEnergyLoss.hh,v 1.9 2000/11/03 10:29:51 pia Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -37,8 +37,14 @@
 // 7/10/98 some bugs fixed + some cleanup , L.Urban 
 // 22/10/98 cleanup , L.Urban
 // 02/02/99 several bugs fixed, L.Urban
-// 31/03/00 : rename to lowenergy subdirectory as G4hLowEnergyLoss.hh V.Ivanchenko
+// 31/03/00 V.Ivanchenko rename to lowenergy as G4hLowEnergyLoss.hh 
+// 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
 //
+// Class description:
+// Class for Low Energy electromagnetic energy loss of hadrons 
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// ****************************************************************************
 
 #ifndef G4hLowEnergyLoss_h
 #define G4hLowEnergyLoss_h 1
@@ -69,34 +75,17 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
 
     ~G4hLowEnergyLoss();
 
-    G4bool IsApplicable(const G4ParticleDefinition&);
-
-    G4double GetContinuousStepLimit(
-                                    const G4Track& track,
-                                    G4double previousStepSize,
-                                    G4double currentMinimumStep,
-                                    G4double& currentSafety) ; 
-
-    G4VParticleChange* AlongStepDoIt(const G4Track& track ,const G4Step& Step) ;
-
     virtual G4double GetMeanFreePath(
-                                      const G4Track& track,
+                                const G4Track& track,
                                       G4double previousStepSize,
-                                      G4ForceCondition* condition
+                                enum  G4ForceCondition* condition
                                                          ) = 0 ;
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
-                                               const G4Step& Step) = 0 ;
+                                            const G4Step& Step) = 0 ;
 
 
   protected:
-
-    virtual G4double GetConstraints(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
-                                       
-    virtual G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
-                              G4Material *aMaterial,
-                              G4double MeanLoss) ;
 
   private:
 
@@ -116,14 +105,10 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
      static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
 
   protected:
-    // data members to speed up the fluctuation calculation
-    G4Material *lastMaterial ;
-    G4int imat ;
-    G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
-    G4double e1LogFluct,e2LogFluct,ipotLogFluct;
-    const G4double MaxExcitationNumber ;
-    const G4double probLimFluct ;
-    const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
+  G4Material *lastMaterial ;
+  const G4double MaxExcitationNumber ;
+  const G4double probLimFluct ;
+  const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
 
 // ====================================================================
 //  static part of the class
@@ -199,9 +184,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static void BuildRangeCoeffCTable(
                           const G4ParticleDefinition& aParticleType);
 
-    static const G4Proton* theProton ;
-    static const G4AntiProton* theAntiProton ;
-
 // ====================================================================
 
   public:
@@ -262,7 +244,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4PhysicsTable** RecorderOfProcess;
     static G4int CounterOfProcess;
 
-
     static G4PhysicsTable* thepRangeCoeffATable;
     static G4PhysicsTable* thepRangeCoeffBTable;
     static G4PhysicsTable* thepRangeCoeffCTable;
@@ -285,9 +266,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
    
     G4double MinKineticEnergy ;
 
-    G4double fdEdx;      // computed in GetContraints
-    G4double fRangeNow ; // computed in GetContraints
-
     static G4double finalRange ;  // last step before stop
     static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
 
@@ -295,8 +273,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4bool EnlossFlucFlag ;
 
 };
- 
-#include "G4hLowEnergyLoss.icc"
 
 #endif
  

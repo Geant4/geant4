@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4MuNuclearInteraction.hh,v 1.3 2000/06/11 10:35:12 jwellisc Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // $Id: 
 // ------------------------------------------------------------

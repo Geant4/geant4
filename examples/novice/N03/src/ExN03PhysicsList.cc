@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.cc,v 1.8 2000/05/24 09:53:05 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: ExN03PhysicsList.cc,v 1.9 2000/11/10 19:41:01 maire Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 
@@ -339,7 +339,7 @@ G4double ExN03PhysicsList::GetCutForElectron() const
 
 G4double ExN03PhysicsList::GetCutForProton() const
 {
-  return cutForGamma;
+  return cutForProton;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

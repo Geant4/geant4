@@ -6,7 +6,7 @@
 *     and all its terms.
 *    
 *     $Id: tog4.F,v 1.3 1999/12/05 17:50:17 gcosmo Exp $
-*     GEANT4 tag $Name: geant4-02-00 $
+*     GEANT4 tag $Name: geant4-03-00 $
 *    
       subroutine tog4
 ************************************************************************

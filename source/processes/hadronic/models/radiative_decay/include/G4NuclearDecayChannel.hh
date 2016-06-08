@@ -9,7 +9,8 @@
 #include "G4ParticleTable.hh"
 #include "G4GeneralPhaseSpaceDecay.hh"
 #include "G4RadioactiveDecayMode.hh"
-  
+
+#include "CLHEP/Random/RandGeneral.h"
 ////////////////////////////////////////////////////////////////////////////////
 //
 class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
@@ -45,6 +46,7 @@ public: // with description
   G4NuclearDecayChannel (const G4RadioactiveDecayMode &theMode, G4int Verbose,
                          const G4ParticleDefinition *theParentNucleus,
                          G4double theBR, G4double theFFN,
+			 G4bool betaS, RandGeneral* randBeta,
                          G4double theQtransition, G4int A, G4int Z,
                          G4double theDaughterExcitation,
                          const G4String theDaughterName1,
@@ -105,7 +107,8 @@ protected:
   G4DynamicParticle     *dynamicDaughter;
   G4double               Qtransition;
   G4double               FermiFN;
-  static const G4bool    FermiOn;
+  G4bool                 BetaSimple;
+  RandGeneral*           RandomEnergy;    
 };
 #endif
 

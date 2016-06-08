@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Polyhedron.cc,v 1.9 2000/02/23 16:57:36 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 #include "G4Polyhedron.hh"
 

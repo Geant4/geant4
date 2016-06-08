@@ -2,26 +2,45 @@
 //
 // MODULE:              G4RadioactiveDecay.cc
 //
-// Version:             0.b.4
-// Date:                14/04/00
 // Author:              F Lei & P R Truscott
 // Organisation:        DERA UK
 // Customer:            ESA/ESTEC, NOORDWIJK
 // Contract:            12115/96/JG/NL Work Order No. 3
 //
+// Documentation avaialable at http://www.space.dera.gov.uk/space_env/rdm.html
+//   These include:
+//       User Requirement Document (URD)
+//       Software Specification Documents (SSD)
+//       Software User Manual (SUM)
+//       Technical Note (TN) on the physics and algorithms
+//
+//    The test and example programs are not included in the public release of 
+//    G4 but they can be downloaded from
+//      http://www.space.dera.gov.uk/space_env/rdm.html
+// 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
 //
-// 29 February 2000, P R Truscott, DERA UK
-// 0.b.3 release.
+// 01 November 2000, F.Lei
+//            added " ee = e0 +1. ;" as line 763
+//            tagged as "radiative_decay-V02-00-02"              
+// 28 October 2000, F Lei 
+//            added fast beta decay mode. Many files have been changed.
+//            tagged as "radiative_decay-V02-00-01"
 //
+// 25 October 2000, F Lei, DERA UK
+//            1) line 1185 added 'const' to work with tag "Track-V02-00-00"
+//            tagged as "radiative_decay-V02-00-00"
 // 14 April 2000, F Lei, DERA UK
 // 0.b.4 release. Changes are:
 //            1) Use PhotonEvaporation instead of DiscreteGammaDeexcitation
 //            2) VR: Significant efficiency inprovement
-//         
+// 
+// 29 February 2000, P R Truscott, DERA UK
+// 0.b.3 release.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -64,7 +83,7 @@ const G4double   G4RadioactiveDecay::levelTolerance =2.0*keV;
 G4RadioactiveDecay::G4RadioactiveDecay
   (const G4String& processName)
   :G4VRestDiscreteProcess(processName, fDecay), HighestBinValue(10.0),
-  LowestBinValue(1.0e-3), TotBin(200), verboseLevel(1)
+   LowestBinValue(1.0e-3), TotBin(200), verboseLevel(1)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -106,6 +125,7 @@ G4RadioactiveDecay::G4RadioactiveDecay
   DProfile[1] = 0.;
   NSplit      = 1;
   AnalogueMC  = true ;
+  FBeta       = false ;
   BRBias      = true ;
   //
   // RDM applies to xall logical volumes as default
@@ -698,11 +718,28 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 		  e0 = c*MeV/0.511;
 		  n = aBetaFermiFunction->GetFFN(e0);
 		  
+		  // now to work out the histogram and initialise the random generator
+		  G4int npti = 100;				
+		  G4double* pdf = new G4double[npti];
+		  G4int ptn;
+		  G4double g,e,ee,f;
+		  ee = e0+1.;
+		  for (ptn=0; ptn<npti; ptn++) {
+		    e =e0*(ptn+1.)/102.;
+		    g = e+1.;
+		    f = sqrt(g*g-1)*(ee-g)*(ee-g)*g;
+		    pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
+		  }		  
+		  RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
+
 		  G4BetaMinusDecayChannel *aBetaMinusChannel = new
 		    G4BetaMinusDecayChannel (GetVerboseLevel(), &theParentNucleus,
-					     b, c*MeV, a*MeV, n);
+					     b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
 		  theDecayTable->Insert(aBetaMinusChannel);
 		  modeSumBR[1] += b;
+
+
+		  delete[] pdf;
 		  delete aBetaFermiFunction;
 		}
 	      break;
@@ -718,11 +755,27 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 		  G4BetaFermiFunction* aBetaFermiFunction = new G4BetaFermiFunction (A, -(Z-1));
 		  e0 = c*MeV/0.511;
 		  n = aBetaFermiFunction->GetFFN(e0);
+
+		  // now to work out the histogram and initialise the random generator
+		  G4int npti = 100;				
+		  G4double* pdf = new G4double[npti];
+		  G4int ptn;
+		  G4double g,e,ee,f;
+		  ee = e0+1.;
+		  for (ptn=0; ptn<npti; ptn++) {
+		    e =e0*(ptn+1.)/102.;
+		    g = e+1.;
+		    f = sqrt(g*g-1)*(ee-g)*(ee-g)*g;
+		    pdf[ptn] = f*aBetaFermiFunction->GetFF(e);
+		  }		  
+		  RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
 		  G4BetaPlusDecayChannel *aBetaPlusChannel = new 
 		    G4BetaPlusDecayChannel (GetVerboseLevel(), &theParentNucleus,
-					    b, c*MeV, a*MeV, n);
+					    b, c*MeV, a*MeV, n, FBeta, aRandomEnergy);
 		  theDecayTable->Insert(aBetaPlusChannel);
 		  modeSumBR[2] += b;
+
+		  delete[] pdf;
 		  delete aBetaFermiFunction;	      
 		}
 	      break;
@@ -1004,7 +1057,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	    // Decay mode is beta-.
 	    //
 	    theBetaMinusChannel = new G4BetaMinusDecayChannel (0, aParentNucleus,
-							       brs[1], 0.*MeV, 0.*MeV, 1);
+							       brs[1], 0.*MeV, 0.*MeV, 1, false, NULL);
 	    theDecayTable->Insert(theBetaMinusChannel);
 	    
 	    break;
@@ -1015,7 +1068,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	    // Decay mode is beta+ + EC.
 	    //
 	    theBetaPlusChannel = new G4BetaPlusDecayChannel (GetVerboseLevel(), aParentNucleus,
-							     brs[2], 0.*MeV, 0.*MeV, 1);
+							     brs[2], 0.*MeV, 0.*MeV, 1, false, NULL);
 	    theDecayTable->Insert(theBetaPlusChannel);
 	    break;		      
 	    
@@ -1182,7 +1235,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
   // decay table.
   //
   fParticleChangeForRadDecay.Initialize(theTrack);
-  G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
+  const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
   G4ParticleDefinition *theParticleDef = theParticle->GetDefinition();
 
   // First check whether RDM applies to the current logical volume

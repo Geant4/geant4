@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLViewer.cc,v 1.8 2000/05/22 08:09:15 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Andrew Walkden  27th March 1996

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PAIxSection.hh,v 1.4 1999/12/15 14:51:47 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // G4PAIxSection.hh -- header file

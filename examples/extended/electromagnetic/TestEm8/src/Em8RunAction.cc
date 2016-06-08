@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Em8RunAction.cc,v 1.5 2000/06/28 09:55:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 

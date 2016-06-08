@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4CrossSectionDataStore.cc,v 1.2 1999/12/15 14:52:06 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 // GEANT4 physics class: G4CrossSectionDataStore

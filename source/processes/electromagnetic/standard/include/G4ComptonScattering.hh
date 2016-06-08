@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ComptonScattering.hh,v 1.4 1999/12/17 16:20:49 maire Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //      ------------ G4ComptonScattering physics process ------
 //                   by Michel Maire, April 1996

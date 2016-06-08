@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BoundingSphereScene.cc,v 1.4 2000/05/15 11:09:32 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // John Allison  7th June 1997

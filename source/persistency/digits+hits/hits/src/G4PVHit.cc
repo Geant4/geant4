@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PVHit.cc,v 1.4 1999/11/24 20:27:24 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #include "G4PVHit.hh"

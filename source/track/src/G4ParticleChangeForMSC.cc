@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ParticleChangeForMSC.cc,v 1.6 2000/02/13 15:08:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // --------------------------------------------------------------

@@ -5,15 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentRunMan.hh,v 1.8 1999/11/28 21:54:21 morita Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4PersistentRunMan.hh,v 1.9 2000/12/15 07:55:32 morita Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
-// class G4PersistentRunMan 
+
+// Class Description:
+//   A Utility class to be used by G4PersistencyManager.
+// Average users do not need to use this class.
 //
-// A Utility class for storing and retrieving the run objects.
+// This class is not persistent-capable.
 //
-// This class is not persistent-capable. 
-//
+
 // Member functions:
 // =================
 //  G4bool Store(HepDbApplication* dbApp, const G4Run* aRun);

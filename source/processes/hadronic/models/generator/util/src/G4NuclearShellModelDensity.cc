@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4NuclearShellModelDensity.cc,v 1.4 2000/05/23 13:41:42 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #include "G4NuclearShellModelDensity.hh"

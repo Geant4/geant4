@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SteppingManager.cc,v 1.10 2000/06/02 09:53:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 //
 //---------------------------------------------------------------

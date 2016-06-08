@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Colour.hh,v 1.5 1999/12/15 16:46:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // John Allison 20th October 1996

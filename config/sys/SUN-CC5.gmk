@@ -12,10 +12,14 @@ ifeq ($(G4SYSTEM),SUN-CC5)
       CCFLAGS := -g
     endif
   endif
+  CXXFLAGS += -features=no%anachronisms -mt -lpthread
 #  CXXFLAGS += -fnonstd
-  ifdef G4MAKESHLIB
+  ifdef G4LIB_BUILD_SHARED
     CXXFLAGS += -KPIC
+    FCFLAGS  += -KPIC
+    CCFLAGS  += -KPIC
   endif
+  G4RUNPATHOPTION := -R
   G4_HAVE_BOOL := yes
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77
@@ -43,6 +47,9 @@ ifeq ($(G4SYSTEM),SUN-CC5)
   LOADLIBS += -L/usr/lib -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES
   CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS += -noline
+  endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
@@ -56,4 +63,16 @@ ifeq ($(G4SYSTEM),SUN-CC5)
       CXXFLAGS += -compat
     endif
   endif
+
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+    cd $(G4TMPDIR); \
+     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+    cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) \
+               $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
 endif

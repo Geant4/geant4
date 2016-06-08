@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AssemblyCreator.cc,v 1.5 2000/02/25 16:36:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4AssemblyCreator.cc,v 1.7 2000/11/20 18:17:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4AssemblyCreator
@@ -35,16 +35,34 @@ G4AssemblyCreator::G4AssemblyCreator()
   G4GeometryTable::RegisterObject(this);
 }
 
-G4AssemblyCreator::G4AssemblyCreator(G4String fileName, G4String readerName)
+G4AssemblyCreator::G4AssemblyCreator(const G4AssemblyCreator& c)
 {
-  // Name of STEP file to read in, existance of file should be checked
-  //here also...
+  index = c.index;
+  StepReader = c.StepReader;
+  STEPfileName = c.STEPfileName;
+}
+
+G4AssemblyCreator& G4AssemblyCreator::operator=(const G4AssemblyCreator& c)
+{
+  if (&c == this) return *this;
+  
+  index = c.index;
+  StepReader = c.StepReader;
+  STEPfileName = c.STEPfileName;
+  
+  return *this;
+}
+
+G4AssemblyCreator::G4AssemblyCreator(const G4String& fileName,
+                                     const G4String& readerName)
+{
+  // Name of STEP file to read in, existance of file should be checked...
+  //
   STEPfileName = fileName;
 
-  // define type of STEP file reader to use
-  if(readerName == "NIST")
-    StepReader = new G4NISTStepReader();
-  //else...
+  // define type of STEP file reader to use (use else...)
+  //
+  if (readerName == "NIST")  StepReader = new G4NISTStepReader();
   
 }
 
@@ -68,8 +86,8 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
   // Advanced_Brep_Shape_Representation are created into
   // Context_Dependent_Shape_Representation and
   // Shape_Definition_Representation
-  G4int AdvancedBrepShapes = instanceManager.EntityKeywordCount
-    ("Advanced_Brep_Shape_Representation");
+  // G4int AdvancedBrepShapes = instanceManager.EntityKeywordCount
+  //  ("Advanced_Brep_Shape_Representation");
   
   
   G4int ConDepShapes = instanceManager.EntityKeywordCount
@@ -78,7 +96,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
   G4int ShapeDefReps = instanceManager.EntityKeywordCount
     ("Shape_Definition_Representation"); 
   
-  G4int instanceCount = instanceManager.InstanceCount();
+  // G4int instanceCount = instanceManager.InstanceCount();
   
   STEPentity* ent=0;
   index = 0;
@@ -144,7 +162,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
     }
 
   }
-  else
+  else if (ShapeDefReps>0)
   {       
 
     const char* key = "Shape_Definition_Representation";
@@ -207,13 +225,13 @@ void G4AssemblyCreator::CreateSTEPGeometry(void* G4obj)
   Registry reg(&::HeaderSchemaInit);
   SdaiCONFIG_CONTROL_DESIGNInit (reg);
 
-  //G4Placement* plc = (G4Placement*)G4obj;
-  //G4String name("Axis2Placement3d");
+  //  G4Placement* plc = (G4Placement*)G4obj;
+  //  G4String name("Axis2Placement3d");
   //  G4FCylindricalSurface *fCyl = (G4FCylindricalSurface *)G4obj;
   //  G4String name("Cylindrical_Surface");
-  G4ToroidalSurface *tor = (G4ToroidalSurface *)G4obj;
+  //  G4ToroidalSurface *tor = (G4ToroidalSurface *)G4obj;
   G4String name("Toroidal_Surface");
-  {
-    void *tmp =G4GeometryTable::CreateSTEPObject(G4obj, name);
-  }
+
+  G4GeometryTable::CreateSTEPObject(G4obj, name);
+
 }

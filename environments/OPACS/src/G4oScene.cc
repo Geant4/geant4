@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4oScene.cc,v 1.7 2000/06/09 10:00:58 barrand Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */

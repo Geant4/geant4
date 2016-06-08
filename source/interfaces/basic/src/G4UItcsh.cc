@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UItcsh.cc,v 1.3 2000/06/23 08:46:49 stesting Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4UItcsh.cc,v 1.5 2000/08/01 08:02:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #ifndef WIN32
@@ -57,7 +57,7 @@ G4UItcsh::~G4UItcsh()
 }
   
 ///////////////////////////
-void G4UItcsh::MakePrompt()
+void G4UItcsh::MakePrompt(const char* msg)
 ///////////////////////////
 {
   if(promptSetting.length()<=1) {
@@ -66,16 +66,22 @@ void G4UItcsh::MakePrompt()
   }
 
   promptString="";
-  G4int i;
+  size_t i;
   for(i=0; i<promptSetting.length()-1; i++){
     if(promptSetting[i]=='%'){
       switch (promptSetting[i+1]) {
       case 's':  // current application status
 	{
-	G4StateManager* statM= G4StateManager::GetStateManager();
-	G4String stateStr= statM-> GetStateString(statM->GetCurrentState());
-	promptString.append(stateStr);
-	i++;
+          G4String stateStr;
+          if(msg)
+          { stateStr = msg; }
+          else
+          {
+	    G4StateManager* statM= G4StateManager::GetStateManager();
+	    stateStr= statM-> GetStateString(statM->GetCurrentState());
+          }
+	  promptString.append(stateStr);
+	  i++;
 	}
         break;
       case '/':  // current working directory
@@ -123,7 +129,7 @@ void G4UItcsh::InsertCharacter(char cc)
 
   // display...
   G4cout << cc;
-  G4int i;
+  size_t i;
   for(i=cursorPosition-1; i<commandLine.length() ;i++) 
     G4cout << commandLine[i];
   for(i=cursorPosition-1; i<commandLine.length() ;i++)
@@ -150,7 +156,7 @@ void G4UItcsh::BackspaceCharacter()
     G4cout << AsciiBS << ' ' << AsciiBS << G4std::flush;
   } else { 
     G4cout << AsciiBS;
-    G4int i;
+    size_t i;
     for(i=cursorPosition-2; i< commandLine.length()-1 ;i++){
       G4cout << commandLine[i+1];
     }
@@ -174,7 +180,7 @@ void G4UItcsh::DeleteCharacter()
   if(IsCursorLast()) return;
 
   // display...
-  G4int i;
+  size_t i;
   for(i=cursorPosition-1; i< commandLine.length()-1 ;i++){
     G4cout << commandLine[i+1];
   }
@@ -241,7 +247,7 @@ void G4UItcsh::ForwardCursor()
 {
   if(IsCursorLast()) return;
 
-  G4cout << commandLine[cursorPosition-1] << G4std::flush;
+  G4cout << commandLine[(size_t)(cursorPosition-1)] << G4std::flush;
   cursorPosition++;
 }
 
@@ -270,7 +276,7 @@ void G4UItcsh::MoveCursorTop()
 void G4UItcsh::MoveCursorEnd()
 //////////////////////////////
 {
-  for(G4int i=cursorPosition-1; i<commandLine.length(); i++){
+  for(size_t i=cursorPosition-1; i<commandLine.length(); i++){
     G4cout << commandLine[i];
   }
   G4cout << G4std::flush;
@@ -340,7 +346,7 @@ void G4UItcsh::ListMatchedCommand()
     G4int len= input.length();
     G4int indx=-1;
     for(G4int i=len-1; i>=0; i--) {
-      if(input[i]=='/') {
+      if(input[(size_t)i]=='/') {
         indx= i;
         break;
       }   
@@ -567,12 +573,12 @@ G4String G4UItcsh::ReadLine()
 }
 
 ///////////////////////////////////
-G4String G4UItcsh::GetCommandLine()
+G4String G4UItcsh::GetCommandLine(const char* msg)
 ///////////////////////////////////
 {
   SetTermToInputMode();
 
-  MakePrompt(); // update
+  MakePrompt(msg); // update
   relativeHistoryIndex= 0;
 
   G4cout << promptString << G4std::flush;
@@ -591,7 +597,7 @@ G4String G4UItcsh::GetCommandLine()
 
   // update history...
   G4bool isMeaningfull= FALSE; // check NULL command
-  for (int i=0; i<newCommand.length(); i++) {
+  for (size_t i=0; i<newCommand.length(); i++) {
     if(newCommand[i] != ' ') {
       isMeaningfull= TRUE;
       break;
@@ -617,7 +623,7 @@ G4String G4UItcsh::GetFirstMatchedString(const G4String& str1,
   int nmin = nlen1<nlen2 ? nlen1 : nlen2;
 
   G4String strMatched;
-  for(int i=0; i<nmin; i++){
+  for(size_t i=0; i<nmin; i++){
     if(str1[i]==str2[i]) {
       strMatched+= str1[i];
     } else {

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VReadOutGeometry.cc,v 1.2.6.1 1999/12/07 20:47:45 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 
 #include "G4VReadOutGeometry.hh"

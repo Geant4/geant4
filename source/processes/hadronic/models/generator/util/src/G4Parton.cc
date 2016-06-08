@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parton.cc,v 1.5 1999/12/15 17:51:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4Parton.cc,v 1.7 2000/08/02 08:15:47 hpw Exp $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -30,6 +30,9 @@ G4Parton::G4Parton(G4int PDGcode)
 	  G4cout << "Encoding = "<<PDGencoding<<G4endl;
 	  G4Exception("G4Parton::GetDefinition(): Encoding not in particle table");
 	}
+	theColour = 1;
+	theIsoSpinZ = 0.5;
+	theSpinZ = 0.5;
 }
 
 G4Parton::G4Parton(const G4Parton &right)
@@ -39,6 +42,9 @@ G4Parton::G4Parton(const G4Parton &right)
 	thePosition = right.thePosition;
 	theX = right.theX;
 	theDefinition = right.theDefinition;
+	theColour = right.theColour;
+	theIsoSpinZ = right.theIsoSpinZ;
+	theSpinZ = right.theSpinZ;
 }
 
 const G4Parton & G4Parton::operator=(const G4Parton &right)
@@ -48,6 +54,9 @@ const G4Parton & G4Parton::operator=(const G4Parton &right)
 	thePosition=right.GetPosition();
 	theX = right.theX;
 	theDefinition = right.theDefinition;
+	theColour = right.theColour;
+	theIsoSpinZ = right.theIsoSpinZ;
+	theSpinZ = right.theSpinZ;
 		
 	return *this;
 }

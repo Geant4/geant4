@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SandiaTable.hh,v 1.6 2000/06/15 17:35:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 
 // class description
 //

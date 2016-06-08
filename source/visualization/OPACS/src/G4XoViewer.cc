@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4XoViewer.cc,v 1.7 2000/05/13 10:57:31 johna Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// GEANT4 tag $Name: geant4-03-00 $
 //
 // 
 // Guy Barrand 04 November 1996
