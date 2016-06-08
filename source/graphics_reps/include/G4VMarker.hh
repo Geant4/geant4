@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VMarker.hh,v 1.7 2001/07/11 10:01:03 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.

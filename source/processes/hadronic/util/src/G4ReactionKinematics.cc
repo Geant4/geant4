@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReactionKinematics.cc,v 1.5 2002/02/12 18:56:58 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //      CERN Geneva Switzerland
 //

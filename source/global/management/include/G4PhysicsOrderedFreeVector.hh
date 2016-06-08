@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicsOrderedFreeVector.hh,v 1.8 2001/07/11 10:00:50 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Definition

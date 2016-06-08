@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FukuiRendererSceneHandler.cc,v 1.8 2001/12/01 20:52:06 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:34:24 JST 1996

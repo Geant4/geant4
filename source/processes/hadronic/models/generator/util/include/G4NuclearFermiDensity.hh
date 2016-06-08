@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NuclearFermiDensity.hh,v 1.6 2002/04/24 13:10:50 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4NuclearFermiDensity_h
 #define G4NuclearFermiDensity_h 1

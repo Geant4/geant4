@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PTrap.ddl,v 1.7 2001/07/11 10:02:23 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 
 // Class Description:
 //   Persistent version of G4PTrap solid.

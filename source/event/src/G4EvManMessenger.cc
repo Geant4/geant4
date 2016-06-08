@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EvManMessenger.cc,v 1.3 2001/07/11 09:58:52 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // --------------------------------------------------------------------
 

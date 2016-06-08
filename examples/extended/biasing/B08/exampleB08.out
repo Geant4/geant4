@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-04-01 $
-                                (28-Feb-2002)
+ Geant4 version $Name: geant4-04-01-patch-01 $
+                                (28-Jun-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -240,8 +240,6 @@ DoIt Vector:
    phot
 ================================================
 WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 512
-
-
 +++ G4ProcessPlacer::G4ProcessPlacer: for: gamma
   ProcessName: PScoreProcess, will be removed!
 The initial Vectors: 
@@ -389,3 +387,6 @@ DoIt Vector:
 
 WARNING - G4ImportanceAlgorithm::~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
 
+WARNING - Attempt to delete the physical volume store while geometry closed !
+WARNING - Attempt to delete the logical volume store while geometry closed !
+WARNING - Attempt to delete the solid store while geometry closed !

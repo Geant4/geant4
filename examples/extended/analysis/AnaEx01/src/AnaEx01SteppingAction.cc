@@ -22,7 +22,7 @@
 //
 //
 // $Id: AnaEx01SteppingAction.cc,v 1.5 2001/11/16 14:31:13 barrand Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

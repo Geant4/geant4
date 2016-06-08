@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MassImportanceScoreSampler.hh,v 1.1 2002/05/31 10:16:01 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4MassImportanceScoreSampler

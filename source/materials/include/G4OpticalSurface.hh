@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpticalSurface.hh,v 1.5 2001/07/11 10:01:26 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

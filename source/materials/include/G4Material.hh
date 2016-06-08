@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Material.hh,v 1.20 2002/02/26 17:34:34 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 // class description

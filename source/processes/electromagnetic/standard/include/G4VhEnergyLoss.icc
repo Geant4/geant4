@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VhEnergyLoss.icc,v 1.5 2002/02/26 18:11:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // ---------------- G4VhEnergyLoss physics process -----------------------------

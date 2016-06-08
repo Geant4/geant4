@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Tubs.cc,v 1.33 2002/04/16 08:24:18 grichine Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // class G4Tubs

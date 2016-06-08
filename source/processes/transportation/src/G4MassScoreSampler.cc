@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MassScoreSampler.cc,v 1.1 2002/05/31 10:16:02 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

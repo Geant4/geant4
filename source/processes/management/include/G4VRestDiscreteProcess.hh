@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VRestDiscreteProcess.hh,v 1.6 2002/04/15 04:29:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

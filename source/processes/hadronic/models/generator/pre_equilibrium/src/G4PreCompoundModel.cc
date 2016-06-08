@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PreCompoundModel.cc,v 1.21 2002/06/18 16:17:20 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // by V. Lara
 

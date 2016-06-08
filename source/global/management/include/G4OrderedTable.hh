@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OrderedTable.hh,v 1.10 2002/04/19 07:10:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DynamicParticleVector.hh,v 1.8 2001/10/06 06:53:06 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 //	History: first implementation, alternative to G4FastVector

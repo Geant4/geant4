@@ -22,7 +22,7 @@
 //
 //
 // $Id: B08DetectorConstruction.cc,v 1.1 2002/06/04 11:14:52 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #include "g4std/strstream"

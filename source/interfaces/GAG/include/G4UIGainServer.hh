@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIGainServer.hh,v 1.3 2002/06/14 02:17:58 yhajime Exp $
-// $Name: geant4-04-01 $
+// $Name: geant4-04-01-patch-01 $
 //
 
 

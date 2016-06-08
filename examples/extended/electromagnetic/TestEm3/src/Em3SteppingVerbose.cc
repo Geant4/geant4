@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3SteppingVerbose.cc,v 1.8 2001/10/22 10:58:59 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

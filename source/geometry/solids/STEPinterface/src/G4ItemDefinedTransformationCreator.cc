@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ItemDefinedTransformationCreator.cc,v 1.5 2001/07/11 10:00:10 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ----------------------------------------------------------------------

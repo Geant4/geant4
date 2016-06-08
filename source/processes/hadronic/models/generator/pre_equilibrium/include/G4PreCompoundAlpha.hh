@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PreCompoundAlpha.hh,v 1.10 2002/06/06 16:59:32 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // by V. Lara
 

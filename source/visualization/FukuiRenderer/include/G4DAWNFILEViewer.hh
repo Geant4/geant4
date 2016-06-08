@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DAWNFILEViewer.hh,v 1.8 2001/07/27 22:32:57 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Satoshi TANAKA
 // DAWNFILE viewer - opens window, hard copy, etc.

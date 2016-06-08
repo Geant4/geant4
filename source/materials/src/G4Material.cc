@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Material.cc,v 1.21 2002/05/06 15:37:55 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReflectedSolid.hh,v 1.5 2002/02/15 15:55:25 grichine Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // class G4ReflectedSolid

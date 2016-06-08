@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrajectoryContainer.hh,v 1.10 2002/06/08 20:36:18 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // G4TrajectoryContainer

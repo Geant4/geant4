@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PScorer.hh,v 1.5 2002/04/10 13:14:16 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4PScorer

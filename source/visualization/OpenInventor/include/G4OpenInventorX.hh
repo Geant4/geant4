@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorX.hh,v 1.5 2001/07/11 10:09:00 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // Andrew Walkden  27th March 1996

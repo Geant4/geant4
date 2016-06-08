@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DsMesonMinus.cc,v 1.6 2001/10/15 10:08:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ----------------------------------------------------------------------

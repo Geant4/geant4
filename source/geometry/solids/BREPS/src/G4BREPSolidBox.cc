@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolidBox.cc,v 1.6 2001/07/20 12:47:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

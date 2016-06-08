@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Parton.hh,v 1.13 2001/08/01 17:09:21 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #ifndef G4Parton_h

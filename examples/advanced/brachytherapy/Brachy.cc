@@ -41,7 +41,7 @@
 
 
 // $Id: Brachy.cc,v 1.11 2002/06/18 22:20:37 guatelli Exp $
-// GEANT4 tag $Name: brachy-V04-00-05 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"

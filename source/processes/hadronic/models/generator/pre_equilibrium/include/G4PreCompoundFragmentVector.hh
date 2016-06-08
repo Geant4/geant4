@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PreCompoundFragmentVector.hh,v 1.5 2002/06/06 17:03:57 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 

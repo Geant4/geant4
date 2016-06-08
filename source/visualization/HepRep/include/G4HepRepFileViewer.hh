@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HepRepFileViewer.hh,v 1.5 2002/02/02 04:00:16 perl Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // John Allison  5th April 2001

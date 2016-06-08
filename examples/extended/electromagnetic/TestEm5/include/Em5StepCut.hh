@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em5StepCut.hh,v 1.5 2001/10/16 11:56:28 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

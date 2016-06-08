@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VParticipants.cc,v 1.4 2001/08/01 17:09:04 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HadronCrossSections.hh,v 1.7 2001/10/04 20:00:18 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // GEANT4 Hadron physics class -- header file

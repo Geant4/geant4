@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FTFParticipants.hh,v 1.7 2001/10/05 16:13:58 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #ifndef G4FTFParticipants_h

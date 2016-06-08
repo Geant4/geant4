@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicsLnVector.cc,v 1.11 2001/07/11 10:00:57 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------

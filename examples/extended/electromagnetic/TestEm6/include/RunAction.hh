@@ -22,7 +22,7 @@
 //
 //
 // $Id: RunAction.hh,v 1.3 2002/06/05 14:49:54 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

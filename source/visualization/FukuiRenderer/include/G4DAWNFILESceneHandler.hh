@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DAWNFILESceneHandler.hh,v 1.10 2001/09/17 07:40:32 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Satoshi TANAKA
 

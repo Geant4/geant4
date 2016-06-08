@@ -23,7 +23,7 @@
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
 // $Id: G4UIGainServer.cc,v 1.3 2002/06/14 02:18:00 yhajime Exp $
-// $Name: geant4-04-01 $
+// $Name: geant4-04-01-patch-01 $
 //
 #ifndef WIN32
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Axis1PlacementCreator.cc,v 1.3 2001/07/11 10:00:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Axis1PlacementCreator

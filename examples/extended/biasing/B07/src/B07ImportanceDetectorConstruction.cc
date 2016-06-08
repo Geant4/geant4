@@ -22,7 +22,7 @@
 //
 //
 // $Id: B07ImportanceDetectorConstruction.cc,v 1.5 2002/04/19 12:18:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #include "globals.hh"

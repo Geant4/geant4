@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Torus.cc,v 1.26 2002/01/10 15:42:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // class G4Torus

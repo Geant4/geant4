@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PEvent.ddl,v 1.12 2001/07/11 10:02:15 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 // Class Description:

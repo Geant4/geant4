@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VVisManager.hh,v 1.6 2001/08/17 22:49:26 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:

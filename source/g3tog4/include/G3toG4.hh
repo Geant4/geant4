@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4.hh,v 1.7 2001/07/11 09:58:58 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 

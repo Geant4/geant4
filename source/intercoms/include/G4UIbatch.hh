@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIbatch.hh,v 1.6 2002/06/07 17:37:44 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // $id$
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiSigmacZero.cc,v 1.10 2001/10/28 05:08:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ----------------------------------------------------------------------

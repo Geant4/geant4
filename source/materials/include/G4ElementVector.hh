@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ElementVector.hh,v 1.4 2001/10/17 07:59:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

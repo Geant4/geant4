@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeomTestStreamLogger.cc,v 1.5 2002/04/19 08:23:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file

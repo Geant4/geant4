@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ImportanceSplitExaminer.cc,v 1.1 2002/05/31 08:07:47 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

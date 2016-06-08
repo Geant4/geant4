@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VSteppingVerbose.cc,v 1.7 2001/11/07 13:15:18 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //  
 //---------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ImplicitEuler.hh,v 1.4 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // W. Wander <wwc@mit.edu> 12/09/97

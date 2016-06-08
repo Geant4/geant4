@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VEnergyLoss.hh,v 1.13 2001/11/08 08:09:57 urban Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

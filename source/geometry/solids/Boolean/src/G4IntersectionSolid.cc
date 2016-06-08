@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IntersectionSolid.cc,v 1.17 2002/01/10 15:34:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //

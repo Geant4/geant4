@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagHelicalStepper.hh,v 1.7 2001/07/11 09:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // class G4MagHelicalStepper

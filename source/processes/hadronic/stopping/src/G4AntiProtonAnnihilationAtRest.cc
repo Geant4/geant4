@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiProtonAnnihilationAtRest.cc,v 1.5 2001/10/19 11:55:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

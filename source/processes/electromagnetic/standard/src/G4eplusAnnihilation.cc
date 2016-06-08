@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4eplusAnnihilation.cc,v 1.14 2002/04/09 17:34:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

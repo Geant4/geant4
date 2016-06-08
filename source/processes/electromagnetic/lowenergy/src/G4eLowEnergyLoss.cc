@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4eLowEnergyLoss.cc,v 1.28 2002/06/03 00:07:18 pia Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 

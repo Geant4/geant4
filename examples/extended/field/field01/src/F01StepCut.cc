@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01StepCut.cc,v 1.2 2001/07/11 09:58:00 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #include "F01StepCut.hh"

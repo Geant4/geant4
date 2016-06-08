@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3RunAction.cc,v 1.17 2002/06/05 16:42:24 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

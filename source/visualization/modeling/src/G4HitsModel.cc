@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HitsModel.cc,v 1.8 2002/02/24 01:35:50 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // John Allison  26th August 1998.

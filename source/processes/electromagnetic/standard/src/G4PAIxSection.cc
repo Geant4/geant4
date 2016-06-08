@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PAIxSection.cc,v 1.10 2002/04/09 17:34:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // G4PAIxSection.cc -- class implementation file

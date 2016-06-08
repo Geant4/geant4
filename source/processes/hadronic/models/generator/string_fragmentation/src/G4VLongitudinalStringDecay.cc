@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VLongitudinalStringDecay.cc,v 1.24 2002/06/18 06:44:25 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

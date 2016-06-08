@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PGeometryObjectMap.cc,v 1.9 2001/07/11 10:02:19 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // class G4PGeometryObjectMap 
 //

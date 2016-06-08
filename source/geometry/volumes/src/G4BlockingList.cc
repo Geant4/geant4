@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BlockingList.cc,v 1.5 2002/04/19 08:22:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // class G4BlockingList Implementation

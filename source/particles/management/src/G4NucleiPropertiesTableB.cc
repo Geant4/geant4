@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NucleiPropertiesTableB.cc,v 1.7 2001/10/15 09:58:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class implementation file 

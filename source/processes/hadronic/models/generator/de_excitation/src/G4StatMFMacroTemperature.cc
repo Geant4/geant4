@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StatMFMacroTemperature.cc,v 1.9 2002/06/06 17:57:43 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

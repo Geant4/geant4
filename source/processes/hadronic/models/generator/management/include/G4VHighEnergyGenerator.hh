@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VHighEnergyGenerator.hh,v 1.6 2001/08/01 17:08:12 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1

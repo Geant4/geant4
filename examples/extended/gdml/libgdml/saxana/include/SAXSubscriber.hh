@@ -22,7 +22,7 @@
 //
 //
 // $Id: SAXSubscriber.hh,v 1.2 2002/06/03 12:09:33 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TheoFSGenerator.hh,v 1.6 2002/06/10 13:27:06 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 // Class Description

@@ -22,7 +22,7 @@
 //
 // -------------------------------------------------------------------
 // $Id: G4LowEnergyIonisation.hh,v 1.36 2002/06/01 03:14:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Author: A. Forti
 //

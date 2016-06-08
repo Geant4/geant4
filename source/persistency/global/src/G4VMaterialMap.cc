@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VMaterialMap.cc,v 1.3 2001/07/11 10:02:25 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #include "G4VMaterialMap.hh"

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIxvt.hh,v 1.4 2001/07/11 10:01:19 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 //                     XVT driver class header                        //

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Evaporation.hh,v 1.10 2002/06/18 16:39:23 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

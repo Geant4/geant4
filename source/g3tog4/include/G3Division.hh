@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3Division.hh,v 1.7 2001/11/21 14:25:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------
 // Class description:

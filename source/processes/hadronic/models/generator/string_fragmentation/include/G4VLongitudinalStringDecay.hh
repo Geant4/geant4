@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VLongitudinalStringDecay.hh,v 1.12 2001/10/10 08:23:57 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------

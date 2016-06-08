@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04MuonPhysics.cc,v 1.4 2002/01/09 17:24:15 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

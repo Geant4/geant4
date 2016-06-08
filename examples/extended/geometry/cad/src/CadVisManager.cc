@@ -22,7 +22,7 @@
 //
 //
 // $Id: CadVisManager.cc,v 1.1 2002/06/20 10:00:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 // --------------------------------------------------------------------
 
 #ifdef G4VIS_USE

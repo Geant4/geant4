@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisCommandsScene.cc,v 1.30 2001/11/12 18:22:11 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 

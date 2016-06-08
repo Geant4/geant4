@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PVHit.ddl,v 1.9 2001/12/07 03:48:59 morita Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 // Class Description:

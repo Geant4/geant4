@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GaussLaguerreQ.cc,v 1.4 2001/07/11 10:00:41 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #include "G4GaussLaguerreQ.hh"
 

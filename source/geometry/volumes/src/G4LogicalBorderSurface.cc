@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalBorderSurface.cc,v 1.7 2001/07/11 10:00:32 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // G4LogicalBorderSurface Implementation

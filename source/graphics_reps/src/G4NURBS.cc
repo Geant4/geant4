@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NURBS.cc,v 1.5 2001/08/14 18:24:29 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PreCompoundNeutron.hh,v 1.10 2002/06/06 17:09:33 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // by V. Lara
 

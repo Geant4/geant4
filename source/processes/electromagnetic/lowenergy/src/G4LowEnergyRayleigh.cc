@@ -23,7 +23,7 @@
 // --------------------------------------------------------------------
 //
 // $Id: G4LowEnergyRayleigh.cc,v 1.29 2002/06/07 10:25:02 flongo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

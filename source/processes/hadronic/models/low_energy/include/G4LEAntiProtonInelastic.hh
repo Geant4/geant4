@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LEAntiProtonInelastic.hh,v 1.5 2001/08/01 17:10:44 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
  // Hadronic Process: Low Energy AntiProton Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QPDGCode.cc,v 1.27 2002/06/13 09:12:22 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.

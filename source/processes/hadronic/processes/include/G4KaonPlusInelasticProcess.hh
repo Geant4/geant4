@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4KaonPlusInelasticProcess.hh,v 1.5 2001/08/01 17:12:12 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
  // Hadronic Process: KaonPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Feb-1997

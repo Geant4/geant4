@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Track.icc,v 1.9 2001/12/13 15:31:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions

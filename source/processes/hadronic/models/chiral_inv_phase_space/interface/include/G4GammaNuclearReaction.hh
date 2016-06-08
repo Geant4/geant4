@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GammaNuclearReaction.hh,v 1.8 2002/06/06 10:44:13 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // GEANT4 physics class: G4GammaNuclearReaction -- header file

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FissionParameters.cc,v 1.8 2002/06/06 17:56:44 larazb Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

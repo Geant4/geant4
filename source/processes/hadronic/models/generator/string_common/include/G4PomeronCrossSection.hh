@@ -24,7 +24,7 @@
 #define G4PomeronCrossSection_h 1
 //
 // $Id: G4PomeronCrossSection.hh,v 1.6 2001/11/13 14:56:53 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"

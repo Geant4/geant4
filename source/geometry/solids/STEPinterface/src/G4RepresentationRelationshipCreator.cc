@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RepresentationRelationshipCreator.cc,v 1.8 2002/02/07 10:12:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ----------------------------------------------------------------------

@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em2EventActionMessenger.cc,v 1.5 2001/11/28 18:57:24 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

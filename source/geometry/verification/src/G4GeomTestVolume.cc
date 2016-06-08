@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.cc,v 1.4 2001/10/24 22:09:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4GeomTestVolume.cc,v 1.5 2002/07/30 07:26:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -163,7 +163,7 @@ void G4GeomTestVolume::TestRecursiveCartGrid( G4int nx, G4int ny, G4int nz )
     //
     // Recurse
     //
-    G4GeomTestVolume vTest( daughter, logger );
+    G4GeomTestVolume vTest( daughter, logger, tolerance );
     vTest.TestRecursiveCartGrid(nx,ny,nz);
   }
 }

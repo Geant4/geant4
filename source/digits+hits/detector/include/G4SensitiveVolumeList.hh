@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SensitiveVolumeList.hh,v 1.6 2001/07/11 09:58:43 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1996

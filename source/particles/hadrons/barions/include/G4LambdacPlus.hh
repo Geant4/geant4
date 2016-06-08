@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LambdacPlus.hh,v 1.6 2001/10/15 10:09:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

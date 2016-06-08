@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelWorld.hh,v 1.3 2002/04/10 13:13:06 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelWorld

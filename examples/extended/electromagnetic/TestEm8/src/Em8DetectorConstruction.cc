@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em8DetectorConstruction.cc,v 1.7 2001/10/24 21:30:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

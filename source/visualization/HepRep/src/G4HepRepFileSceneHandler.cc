@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HepRepFileSceneHandler.cc,v 1.7 2002/02/03 22:22:58 perl Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // Joseph Perl  27th January 2002

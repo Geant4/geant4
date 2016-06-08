@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PersistencyMessenger.cc,v 1.8 2001/07/11 10:02:26 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #include "G4PersistencyMessenger.hh"

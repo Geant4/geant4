@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhotoElectricEffect.hh,v 1.15 2002/05/02 11:37:22 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

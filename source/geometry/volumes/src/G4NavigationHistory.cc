@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NavigationHistory.cc,v 1.5 2002/04/19 08:22:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // G4NavigationHistory Implementation P.Kent August 96

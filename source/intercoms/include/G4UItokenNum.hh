@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UItokenNum.hh,v 1.4 2001/10/16 08:14:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // G4UItokenNum.hh
 

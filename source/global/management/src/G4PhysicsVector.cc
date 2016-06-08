@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PhysicsVector.cc,v 1.14 2001/11/29 18:59:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------

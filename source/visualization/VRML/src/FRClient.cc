@@ -22,7 +22,7 @@
 //
 //
 // $Id: FRClient.cc,v 1.6 2002/06/23 03:31:50 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // FRClient.cc
 // FukuiRenderer Client

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QGSMFragmentation.cc,v 1.7 2002/06/13 09:04:12 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file

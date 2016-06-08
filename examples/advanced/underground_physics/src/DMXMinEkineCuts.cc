@@ -22,7 +22,7 @@
 //
 //
 // $Id: DMXMinEkineCuts.cc,v 1.2 2002/06/18 10:17:30 ahoward Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------

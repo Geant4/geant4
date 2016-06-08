@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelScoreSampler.cc,v 1.2 2002/05/31 13:49:46 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

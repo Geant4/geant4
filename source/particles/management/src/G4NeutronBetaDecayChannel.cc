@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronBetaDecayChannel.cc,v 1.4 2002/04/03 09:05:33 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

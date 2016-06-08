@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ElectroNuclearCrossSection.hh,v 1.7 2002/05/22 11:48:44 mkossov Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file

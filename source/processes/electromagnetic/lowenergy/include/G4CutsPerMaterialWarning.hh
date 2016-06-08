@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CutsPerMaterialWarning.hh,v 1.1 2001/11/07 22:38:47 pia Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

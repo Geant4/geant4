@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VStringFragmentation.hh,v 1.6 2001/10/02 14:09:30 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4VStringFragmentation_h
 #define G4VStringFragmentation_h 1

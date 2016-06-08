@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagErrorStepper.cc,v 1.9 2001/07/11 09:59:12 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #include "G4MagErrorStepper.hh"
 #include "G4ThreeVector.hh"

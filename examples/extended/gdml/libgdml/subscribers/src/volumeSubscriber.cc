@@ -22,7 +22,7 @@
 //
 //
 // $Id: volumeSubscriber.cc,v 1.3 2002/06/03 12:09:36 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------

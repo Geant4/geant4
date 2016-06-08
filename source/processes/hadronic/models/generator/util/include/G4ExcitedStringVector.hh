@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExcitedStringVector.hh,v 1.6 2001/10/04 20:00:32 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4ExcitedStringVector_h
 #define G4ExcitedStringVector_h 1

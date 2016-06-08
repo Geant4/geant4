@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3NegVolPars.cc,v 1.9 2001/07/11 09:58:59 gunter Exp $ 
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // modified by I. Hrivnacova, 13.10.99 
 

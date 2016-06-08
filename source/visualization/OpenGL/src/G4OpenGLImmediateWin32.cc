@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLImmediateWin32.cc,v 1.7 2002/02/24 01:47:58 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // OpenGLImmediateWin32 graphics system factory.

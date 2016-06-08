@@ -631,7 +631,8 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    G4int pionMinusCode    = PionMinus.getCode(); 
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
-   
+   G4String antiBaryonType= AntiProton.getType(); 
+
    G4double targetMass   = targetParticle.getMass();
 
    G4int    incidentCode          = incidentParticle.getCode();
@@ -654,9 +655,9 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                               // define annihilation channels.
                                  
    G4bool annihilation = false;
-   if (incidentCode < 0 && incidentType == baryonType && 
-       pv[0].getType() != baryonType &&
-       pv[1].getType() != baryonType   )
+   if (incidentCode < 0 && incidentType == antiBaryonType && 
+       pv[0].getType() != antiBaryonType &&
+       pv[1].getType() != antiBaryonType   )
          { 
            annihilation = true;
          }   
@@ -1103,7 +1104,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
         if ( pv[i].getMass() < 0.4 ) j = 0;
         if ( i <= 1 ) j += 3;
         if (pv[i].getSide() <= -2) j = 6;
-        if (j == 6 && pv[i].getType() == baryonType) j = 7;
+        if (j == 6 && (pv[i].getType() == baryonType || pv[i].getType() == antiBaryonType)) j = 7;
         pt    = sqrt(pow(-log(1.-G4UniformRand())/bp[j],ptex[j]));
         if(pt<0.05) pt = Amax(0.001, 0.3*G4UniformRand());
         aspar = maspar[j]; 
@@ -1355,6 +1356,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
    for( i=0; i < vecLen; i++ ) 
       {
         if( pv[i].getType() == baryonType )targ++;
+        if( pv[i].getType() == antiBaryonType )targ--;
         if(verboseLevel > 1) pv[i].Print(i); 
         pv[i].Lor( pv[i], pvmx[1] );
         if(verboseLevel > 1) pv[i].Print(i);
@@ -1376,8 +1378,10 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
          {
            i = 0;          
  
-           if(   (    (leadParticle.getType() == baryonType)
-                   && (pv[1].getType() == baryonType))
+           if(   (    (leadParticle.getType() == baryonType ||
+	               leadParticle.getType() == antiBaryonType)
+                   && (pv[1].getType() == baryonType ||
+		       pv[1].getType() == antiBaryonType))
               || (    (leadParticle.getType() == mesonType)
                    && (pv[1].getType() == mesonType)))
              {
@@ -2056,7 +2060,7 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
        pvmx[8].Add3(pvmx[8], pv[i] );
      } 
 
-  if (ledpar >= 0)
+  if(false) if (ledpar >= 0)
      { 
        if(verboseLevel > 1)
        {
@@ -2130,7 +2134,8 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    G4int pionMinusCode    = PionMinus.getCode(); 
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
-   
+   G4String antiBaryonType= AntiProton.getType(); 
+  
    G4double targetMass   = targetParticle.getMass();
 
    G4int    incidentCode          = incidentParticle.getCode();
@@ -2580,6 +2585,7 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
    for( i=0; i < vecLen; i++ ) 
       {
         if( pv[i].getType() == baryonType )targ++;
+        if( pv[i].getType() == antiBaryonType )targ--;
         pv[i].Lor( pv[i], pvmx[2] );
       }
    if (targ<1) targ = 1;
@@ -2607,8 +2613,10 @@ G4HEInelastic::HighEnergyClusterProduction(G4bool &successful,
          {
            i = 0;          
  
-           if(   (    (leadParticle.getType() == baryonType)
-                   && (pv[1].getType() == baryonType))
+           if(   (    (leadParticle.getType() == baryonType ||
+	               leadParticle.getType() == antiBaryonType)
+                   && (pv[1].getType() == baryonType ||
+		       pv[1].getType() == antiBaryonType))
               || (    (leadParticle.getType() == mesonType)
                    && (pv[1].getType() == mesonType)))
              {
@@ -3016,7 +3024,8 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    G4int pionMinusCode    = PionMinus.getCode(); 
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
-   
+   G4String antiBaryonType= AntiProton.getType(); 
+
    G4double targetMass   = targetParticle.getMass();
 
    G4int    incidentCode          = incidentParticle.getCode();
@@ -3037,9 +3046,9 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                               // define annihilation channels.
                                  
    G4bool annihilation = false;
-   if (incidentCode < 0 && incidentType == baryonType && 
-       pv[0].getType() != baryonType &&
-       pv[1].getType() != baryonType   )
+   if (incidentCode < 0 && incidentType == antiBaryonType && 
+       pv[0].getType() != antiBaryonType &&
+       pv[1].getType() != antiBaryonType   )
          { 
            annihilation = true;
          }   
@@ -3364,7 +3373,8 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
       {                                       // leave the loop.
         if( (pv[i].getSide() == -2) || (i == 1) ) 
           { 
-            if ( pv[i].getType() == baryonType)
+            if ( pv[i].getType() == baryonType ||
+	         pv[i].getType() == antiBaryonType)
                {                                 
                  if( ++npg < 19 ) 
                    {
@@ -3390,7 +3400,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
         if ( pv[i].getMass() < 0.4 ) j = 0;
         if ( i <= 1 ) j += 3;
         if (pv[i].getSide() <= -2) j = 6;
-        if (j == 6 && pv[i].getType() == baryonType) j = 7;
+        if (j == 6 && (pv[i].getType() == baryonType || pv[i].getType()==antiBaryonType) ) j = 7;
         pt    = Amax(0.001, sqrt(pow(-log(1.-G4UniformRand())/bp[j],ptex[j])));
         aspar = maspar[j]; 
         phi = G4UniformRand()*M_2PI;
@@ -3675,6 +3685,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
    for( i=0; i < vecLen; i++ ) 
       {
         if( pv[i].getType() == baryonType )targ++;
+        if( pv[i].getType() == antiBaryonType )targ++;
         pv[i].Lor( pv[i], pvmx[1] );
       }
    targ = Imax( 1, targ );
@@ -3694,8 +3705,10 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
          {
            i = 0;          
  
-           if(   (    (leadParticle.getType() == baryonType)
-                   && (pv[1].getType() == baryonType))
+           if(   (    (leadParticle.getType() == baryonType ||
+	               leadParticle.getType() == antiBaryonType)
+                   && (pv[1].getType() == baryonType ||
+		       pv[1].getType() == antiBaryonType))
               || (    (leadParticle.getType() == mesonType)
                    && (pv[1].getType() == mesonType)))
              {
@@ -4086,6 +4099,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    G4int pionMinusCode    = PionMinus.getCode(); 
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
+   G4String antiBaryonType= AntiProton.getType(); 
    
    G4double targetMass   = targetParticle.getMass();
 
@@ -4515,6 +4529,7 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
    for( i=0; i < vecLen; i++ ) 
       {
         if( pv[i].getType() == baryonType )targ++;
+        if( pv[i].getType() == antiBaryonType )targ++;
         pv[i].Lor( pv[i], pvmx[2] );
       }
    if (targ <1) targ =1;
@@ -4542,8 +4557,10 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool &successful,
          {
            i = 0;          
  
-           if(   (    (leadParticle.getType() == baryonType)
-                   && (pv[1].getType() == baryonType))
+           if(   (    (leadParticle.getType() == baryonType ||
+	               leadParticle.getType() == antiBaryonType)
+                   && (pv[1].getType() == baryonType ||
+		       pv[1].getType() == antiBaryonType))
               || (    (leadParticle.getType() == mesonType)
                    && (pv[1].getType() == mesonType)))
              {
@@ -4925,6 +4942,7 @@ G4HEInelastic::QuasiElasticScattering(G4bool &successful,
    G4int protonCode       = Proton.getCode();
    G4String mesonType     = PionPlus.getType();
    G4String baryonType    = Proton.getType(); 
+   G4String antiBaryonType= AntiProton.getType(); 
    
    G4double targetMass   = targetParticle.getMass();
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LElastic.cc,v 1.6 2001/10/05 16:11:32 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Physics model class G4LElastic
 //

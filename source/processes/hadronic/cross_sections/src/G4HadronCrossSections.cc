@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HadronCrossSections.cc,v 1.9 2002/06/18 10:07:16 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections

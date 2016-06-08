@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.7 2001/11/29 12:14:02 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // Andrew Walkden  16th April 1997

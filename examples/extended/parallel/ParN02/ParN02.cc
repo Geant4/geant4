@@ -22,7 +22,7 @@
 //
 //
 // $Id: ParN02.cc,v 1.2 2002/03/09 06:21:18 cooperma Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

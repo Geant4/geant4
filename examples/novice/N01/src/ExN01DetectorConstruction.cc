@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN01DetectorConstruction.cc,v 1.6 2002/04/26 13:49:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #include "ExN01DetectorConstruction.hh"

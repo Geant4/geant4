@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ShortLivedTable.cc,v 1.10 2001/07/11 10:02:04 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------

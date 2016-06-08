@@ -22,7 +22,7 @@
 *    
 *    
 *     $Id: rztog4.F,v 1.3 2001/07/11 09:59:03 gunter Exp $
-*     GEANT4 tag $Name: geant4-04-01 $
+*     GEANT4 tag $Name: geant4-04-01-patch-01 $
 *    
       program rztog4
 ************************************************************************

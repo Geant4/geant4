@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsdeth.cc,v 1.6 2001/07/11 09:59:00 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 
 #include "G3toG4.hh"
 #include "G3DetTable.hh"

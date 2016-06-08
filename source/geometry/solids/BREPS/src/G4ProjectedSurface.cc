@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ProjectedSurface.cc,v 1.8 2001/07/11 09:59:46 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

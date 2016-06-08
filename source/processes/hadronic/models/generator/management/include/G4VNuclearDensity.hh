@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VNuclearDensity.hh,v 1.6 2002/04/24 13:09:16 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4VNuclearDensity_h
 #define G4VNuclearDensity_h 1

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PiMinusStopC.cc,v 1.7 2001/10/04 20:00:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

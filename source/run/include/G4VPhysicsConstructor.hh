@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPhysicsConstructor.hh,v 1.3 2001/11/06 06:08:04 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

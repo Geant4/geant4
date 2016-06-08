@@ -23,7 +23,7 @@
 
 //
 // $Id: Em1DetectorConstruction.cc,v 1.9 2002/05/31 17:10:35 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

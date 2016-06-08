@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10SteppingVerbose.cc,v 1.4 2002/02/05 11:06:38 grichine Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

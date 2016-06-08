@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em5PhysicsListMessenger.hh,v 1.6 2002/06/05 15:43:42 urban Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

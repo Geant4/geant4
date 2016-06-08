@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.7 2001/10/24 15:33:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// $Id: G4TransportationManager.hh,v 1.8 2002/07/23 08:50:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // class G4TransportationManager
 //
@@ -58,9 +58,9 @@ class G4TransportationManager
      inline G4PropagatorInField*  GetPropagatorInField() const;
      inline G4FieldManager*       GetFieldManager() const;
 
-     inline void  SetNavigatorForTracking( G4Navigator*        newNavigator);
-     inline void  SetPropagatorInField(  G4PropagatorInField*  newFieldPropagator);
-     inline void  SetFieldManager(       G4FieldManager*       newFieldManager);
+     inline void SetNavigatorForTracking( G4Navigator* newNavigator );
+     inline void SetPropagatorInField( G4PropagatorInField* newFieldPropagator );
+     inline void SetFieldManager( G4FieldManager* newFieldManager );
 
      ~G4TransportationManager(); 
 

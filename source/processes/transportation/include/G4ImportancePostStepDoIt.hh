@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ImportancePostStepDoIt.hh,v 1.4 2002/05/31 08:06:34 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportancePostStepDoIt

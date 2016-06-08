@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Scale.hh,v 1.3 2001/09/10 10:28:24 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // John Allison  21st July 2001.

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HepRepFileViewer.cc,v 1.6 2002/02/02 04:00:27 perl Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 
 #include "G4HepRepFileViewer.hh"
 

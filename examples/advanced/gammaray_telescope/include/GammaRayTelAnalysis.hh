@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelAnalysis.hh,v 1.11 2002/06/18 18:47:14 griccard Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

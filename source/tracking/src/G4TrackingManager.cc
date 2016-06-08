@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrackingManager.cc,v 1.11 2002/04/25 20:21:14 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 //---------------------------------------------------------------

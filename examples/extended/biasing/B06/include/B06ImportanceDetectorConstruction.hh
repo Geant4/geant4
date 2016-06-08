@@ -22,7 +22,7 @@
 //
 //
 // $Id: B06ImportanceDetectorConstruction.hh,v 1.3 2002/04/19 10:54:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #ifndef B06ImportanceDetectorConstruction_hh 

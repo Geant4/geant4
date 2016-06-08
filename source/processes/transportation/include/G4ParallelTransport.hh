@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelTransport.hh,v 1.4 2002/05/02 08:43:23 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelTransport

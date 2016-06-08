@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GeneralPhaseSpaceDecay.cc,v 1.5 2001/10/05 16:17:55 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // $Id: G4GeneralSpaceDecay.cc,v 1.0 1998/05/21
 // ----------------------------------------------------------------

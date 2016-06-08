@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VRML1Viewer.cc,v 1.7 2002/06/23 03:31:50 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // G4VRMLView.cc
 // Yasuhide Sawada & Satoshi Tanaka

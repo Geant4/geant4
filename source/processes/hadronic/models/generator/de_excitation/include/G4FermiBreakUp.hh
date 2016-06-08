@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FermiBreakUp.hh,v 1.6 2002/01/15 12:21:53 vlara Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)

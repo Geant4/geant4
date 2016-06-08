@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Sphere.cc,v 1.16 2002/06/19 10:00:23 grichine Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // class G4Sphere
 //

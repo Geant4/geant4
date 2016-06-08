@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisCommandsCompound.cc,v 1.22 2002/05/08 13:25:26 johna Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 

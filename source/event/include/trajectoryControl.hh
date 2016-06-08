@@ -22,7 +22,7 @@
 //
 //
 // $Id: trajectoryControl.hh,v 1.3 2001/07/11 09:58:51 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 ////#define G4_STORE_TRAJECTORY 1
 

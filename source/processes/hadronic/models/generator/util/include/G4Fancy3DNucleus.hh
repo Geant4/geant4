@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Fancy3DNucleus.hh,v 1.10 2002/04/24 13:10:50 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1

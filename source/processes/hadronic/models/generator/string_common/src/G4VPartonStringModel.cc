@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPartonStringModel.cc,v 1.11 2002/06/13 09:02:21 jwellisc Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file

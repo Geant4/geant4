@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuIonisation.cc,v 1.24 2001/11/09 13:52:32 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // --------------- G4MuIonisation physics process ------------------------------
 //                 by Laszlo Urban, September 1997 

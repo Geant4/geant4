@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPNTInelasticFS.hh,v 1.5 2001/07/26 09:28:16 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4NeutronHPNTInelasticFS_h
 #define G4NeutronHPNTInelasticFS_h 1

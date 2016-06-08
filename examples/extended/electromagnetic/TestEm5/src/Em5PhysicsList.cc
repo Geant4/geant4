@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em5PhysicsList.cc,v 1.11 2002/06/05 15:43:43 urban Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VPersistentSubMan.hh,v 1.5 2001/07/11 10:02:25 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 
 // Class Description:
 //   Abstract submanager class to be used by G4PersistencyManager

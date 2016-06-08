@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelWeightWindowProcess.cc,v 1.3 2002/05/31 14:50:38 dressel Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em2TrackingAction.cc,v 1.4 2001/10/25 15:12:07 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 

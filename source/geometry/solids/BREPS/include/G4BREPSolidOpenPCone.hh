@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolidOpenPCone.hh,v 1.5 2001/07/11 09:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidOpenPCone

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VoxelNavigation.cc,v 1.10 2002/05/15 10:22:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // class G4VoxelNavigation Implementation

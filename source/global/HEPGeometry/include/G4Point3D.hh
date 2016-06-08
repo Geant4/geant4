@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Point3D.hh,v 1.3 2001/07/11 10:00:38 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4POINT3D_HH
 #define G4POINT3D_HH

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VSolid.cc,v 1.13 2002/05/11 14:16:10 grichine Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // class G4VSolid
 //

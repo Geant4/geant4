@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PolarizedComptonScattering.cc,v 1.9 2002/04/09 17:34:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 //---------- G4PolarizedComptonScattering physics process ----------------------

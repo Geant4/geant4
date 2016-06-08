@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserPhysicsListMessenger.cc,v 1.10 2001/10/11 13:44:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 //---------------------------------------------------------------

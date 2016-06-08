@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DiffractiveSplitableHadron.hh,v 1.5 2001/08/01 17:05:44 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #ifndef G4DiffractiveSplitableHadron_h

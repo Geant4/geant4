@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolidPolyhedra.hh,v 1.9 2002/02/13 17:39:48 radoone Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPolyhedra

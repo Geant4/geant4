@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPCaptureFS.hh,v 1.7 2001/07/26 09:27:54 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 #ifndef G4NeutronHPCaptureFS_h
 #define G4NeutronHPCaptureFS_h 1

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ViewParameters.hh,v 1.13 2001/07/11 10:09:15 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // John Allison  19th July 1996

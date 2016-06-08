@@ -23,7 +23,7 @@
 //
 // $Id: G4ReflectedSolid.cc,v 1.8 2002/05/11 14:10:38 grichine Exp $
 //
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Mag_SpinEqRhs.hh,v 1.8 2002/06/07 18:25:09 japost Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // class G4Mag_SpinEqRhs

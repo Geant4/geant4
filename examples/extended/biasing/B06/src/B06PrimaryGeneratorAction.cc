@@ -22,7 +22,7 @@
 //
 //
 // $Id: B06PrimaryGeneratorAction.cc,v 1.4 2002/05/15 02:48:44 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 
 #include "globals.hh"

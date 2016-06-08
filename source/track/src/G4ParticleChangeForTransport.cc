@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleChangeForTransport.cc,v 1.11 2001/10/22 04:19:41 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // --------------------------------------------------------------

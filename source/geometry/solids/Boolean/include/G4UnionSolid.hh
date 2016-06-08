@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UnionSolid.hh,v 1.6 2001/07/11 09:59:51 gunter Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //
 // class G4UnionSolid

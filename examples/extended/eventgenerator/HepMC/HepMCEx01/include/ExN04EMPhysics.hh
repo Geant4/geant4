@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04EMPhysics.hh,v 1.1 2002/04/29 20:43:37 asaim Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // 
 // ------------------------------------------------------------

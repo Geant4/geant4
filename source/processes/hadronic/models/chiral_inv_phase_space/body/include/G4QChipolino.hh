@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4QChipolino.hh,v 1.9 2001/11/26 14:11:45 hpw Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //      ---------------- G4QChipolino ----------------
 //             by Mikhail Kossov, Sept 1999.

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AssemblyCreator.cc,v 1.10 2001/09/21 16:12:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4AssemblyCreator

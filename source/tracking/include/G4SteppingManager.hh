@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SteppingManager.hh,v 1.20 2002/02/04 07:58:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 // 
 //---------------------------------------------------------------
 //

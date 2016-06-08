@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Isotope.cc,v 1.12 2002/02/26 17:34:34 maire Exp $
-// GEANT4 tag $Name: geant4-04-01 $
+// GEANT4 tag $Name: geant4-04-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
