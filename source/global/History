@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2001/11/29 16:39:30 gcosmo Exp $
+$Id: History,v 1.101 2002/05/30 11:58:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,52 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 30, 2002 G.Cosmo (global-V04-00-08)
+- G4DataVector.cc: initialise to zero values in collection for contructor
+  taking capacity.
+
+May 24, 2002 G.Cosmo (global-V04-00-07)
+- Introduced temporary modifications for porting on gcc-3.1 compiler:
+  o g4std/strstream: deactivate gcc-3.1 specific __DEPRECATED flag.
+  o G4strstreambuf.icc: correct patch for overflow() to be specific only to
+    gcc-3.0.X versions of the compiler. Behavior now fixed in gcc-3.1.
+  o G4llocator.hh: use pointer to member data to compute offset in FreeSingle().
+    for gcc-3.1 compiler. gcc-3.1 complains and does not correctly handle offsets
+    computed from non-POD types. Pointers to member data should be used instead.
+    This advanced C++ feature seems not to work on earlier versions of the same
+    compiler or on other system configurations.
+- Cosmetics for Software Reference Manual on G4Allocator related headers.
+
+May 15, 2002 G.Cosmo (global-V04-00-06)
+- G4UnitsTable.cc: fixed bug in operator<< to use the argument 'flux'
+  instead of G4cout.
+- geomdefs.hh: added 'kUndefined' key to specify undefined EAxis.
+
+April 19, 2002 G.Cosmo (global-V04-00-05)
+- Moved inline constructors/destructors to no-inline.
+  Files: G4DataVector[.hh.cc], G4OrderedTable[.hh.cc].
+
+April 16, 2002 M.Asai (global-V04-00-04)
+- Give a bit more information to the user when G4Exception occurs.
+  Affected files : G4Exception.cc G4StateManager.hh G4StateManager.cc
+
+March 25, 2002 G.Cosmo (global-V04-00-03)
+- G4String[.hh.icc]: use G4std::string instead of internal type 'std_string'
+  in signatures of public methods.
+
+January 28, 2002 G.Cosmo (global-V04-00-02)
+- G4strstream.icc: temporary fix to G4strstream::overflow(int) for GNU gcc-3.0.X
+  compilers, which require returning of character c in case of <CR>.
+
+January 25, 2002 G.Cosmo (global-V04-00-01)
+- Removed unnecessary std wrappers for HP-aCC (coworks with config-V04-00-00).
+- Removed obsolete inline definitions in g4std/wrappers/DEC-cxx/cmath.
+
+January 17, 2002 G.Cosmo (global-V04-00-00)
+- Replaced 'NULL' with '0' in G4Allocator.hh, G4strstreambuf.icc and G4Timer.cc.
+- G4strstreambuf.icc: plugged memory leak in destructor for buffer deletion
+  and some cosmetics.
 
 November 29, 2001 G.Cosmo (global-V03-02-07)
 - Fixed warnings on gcc-3.0.2 for G4DataVector.cc and G4PhysicsVector.cc.

@@ -40,8 +40,12 @@
 /dmx/gun/shape Cylinder
 /dmx/gun/radius 250 mum
 /dmx/gun/halfz 10.0 nm
-/dmx/gun/centre 0 0 82.750 mm
+/dmx/gun/centre 0 0 -311.75 mm
 /dmx/gun/confine americium_phys
 # 
+/dmx/hitsfile gamma_low.out
+/dmx/pmtfile gamma_low_pmt.out
+/dmx/histogramfile gamma_low.his
+#
 /run/beamOn 1
 

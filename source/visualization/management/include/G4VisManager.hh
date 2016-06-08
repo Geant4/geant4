@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisManager.hh,v 1.27 2001/09/10 11:00:36 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

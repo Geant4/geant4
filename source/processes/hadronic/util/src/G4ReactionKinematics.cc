@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReactionKinematics.cc,v 1.4 2001/08/01 17:12:47 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4ReactionKinematics.cc,v 1.5 2002/02/12 18:56:58 hpw Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //      CERN Geneva Switzerland
 //
@@ -60,7 +60,7 @@ void G4ReactionKinematics::TwoBodyScattering(
    G4double breakupMomentum=BreakupMomentum(invariantMass, massOut1, massOut2);
 
 // - random decay angle
-   G4double theta=RandFlat::shoot(HepDouble(0.),HepDouble(pi));  // isotropic decay angle theta
+   G4double theta=pi*G4UniformRand();  // isotropic decay angle theta
    G4double phi  =RandFlat::shoot(HepDouble(0.),HepDouble(twopi));  // isotropic decay angle phi
 
 // - setup LorentzVectors

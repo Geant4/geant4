@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFile.cc,v 1.1 2001/11/06 11:48:07 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4HepRepFile.cc,v 1.4 2002/02/02 04:00:22 perl Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // Joseph Perl  1 October 2001

@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02DetectorConstruction.cc,v 1.5 2001/10/26 13:42:45 grichine Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

@@ -22,8 +22,6 @@
 
 //
 //
-// $Id: G4FluoData.hh,v 1.1 ?????
-// GEANT4 tag $Name: geant4-04-00 $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -48,7 +46,7 @@
 #include "g4std/vector"
 #include "g4std/map"
 
-
+class G4FluoTransition;
 class G4DataVector;
 
 class G4FluoData
@@ -72,28 +70,37 @@ public:
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the identity of the starting one
-  G4int StartShellId(G4int initIndex,G4int vacancyIndex);
+  G4int StartShellId(G4int initIndex, G4int vacancyIndex) const;
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the transition energy
-  G4double StartShellEnergy(G4int initIndex,G4int vacancyIndex);
+  G4double StartShellEnergy(G4int initIndex, G4int vacancyIndex) const;
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the probability of this transition
-  G4double StartShellProb(G4int initIndex,G4int vacancyIndex);
+  G4double StartShellProb(G4int initIndex, G4int vacancyIndex) const;
 
-  void LoadData( G4int Z);
+  void LoadData(G4int Z);
 
   void PrintData();
 
+  //void BuildFluoTransitionTable();
+
+  //G4std::vector<G4FluoTransition*> GetFluoTransitions(G4int Z);
+  //G4FluoTransition GetFluoTransition(G4int Z, G4int shellId);
+
 private:
+
+  // Hide copy constructor and assignment operator 
+  G4FluoData& operator=(const G4FluoData& right);
+  G4FluoData(const G4FluoData&);
 
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> > energyMap;
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> > probabilityMap;
   G4std::vector<G4int> nInitShells;
   G4int numberOfVacancies;
-  
+  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> > fluoTransitionTable;  
 };
 
 #endif

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LowEIonFragmentation.hh,v 1.6 2001/10/06 08:17:01 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by H.P. Wellisch
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: F03DetectorMessenger.cc,v 1.3 2001/10/25 10:03:54 grichine Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

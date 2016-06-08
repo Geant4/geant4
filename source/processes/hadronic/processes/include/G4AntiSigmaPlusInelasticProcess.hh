@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiSigmaPlusInelasticProcess.hh,v 1.5 2001/08/01 17:12:09 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
  // Hadronic Process: AntiSigmaPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

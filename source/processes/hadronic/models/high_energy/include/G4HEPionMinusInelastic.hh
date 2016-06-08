@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPionMinusInelastic.hh,v 1.8 2001/08/01 17:09:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4HEPionMinusInelastic.hh,v 1.9 2002/06/13 07:14:40 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -41,7 +41,7 @@ class G4HEPionMinusInelastic : public G4HEInelastic
  public: 
         G4HEPionMinusInelastic() : G4HEInelastic()
            {
-              theMinEnergy =  20*GeV;
+              theMinEnergy =  45*GeV;
               theMaxEnergy = 10*TeV;
               MAXPART      = 2048;
               verboseLevel = 0; 

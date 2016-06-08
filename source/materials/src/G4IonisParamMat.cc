@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IonisParamMat.cc,v 1.9 2001/09/13 08:57:46 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

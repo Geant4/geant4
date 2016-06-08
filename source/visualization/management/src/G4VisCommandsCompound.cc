@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.20 2001/11/07 17:09:59 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VisCommandsCompound.cc,v 1.22 2002/05/08 13:25:26 johna Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -71,8 +71,8 @@ void G4VisCommandDrawTree::SetNewValue
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand("/vis/open " + system);
-  UImanager->ApplyCommand("/vis/drawVolume " + pvname);
+  UImanager->ApplyCommand(G4String("/vis/open " + system));
+  UImanager->ApplyCommand(G4String("/vis/drawVolume " + pvname));
   UImanager->ApplyCommand("/vis/viewer/flush");
   UImanager->SetVerboseLevel(keepVerbose);
 }
@@ -156,17 +156,17 @@ void G4VisCommandDrawView::SetNewValue
   G4bool keepAutoRefresh = vp.IsAutoRefresh();
   vp.SetAutoRefresh(false);
   currentViewer->SetViewParameters(vp);
-  UImanager->ApplyCommand
-    ("/vis/viewer/viewpointThetaPhi " + thetaDeg + " " + phiDeg + " deg");
-  UImanager->ApplyCommand
-    ("/vis/viewer/panTo " + panRight + " " + panUp + " " + panUnit);
-  UImanager->ApplyCommand
-    ("/vis/viewer/zoomTo " + zoomFactor);
+  UImanager->ApplyCommand(
+    G4String("/vis/viewer/viewpointThetaPhi " + thetaDeg + " " + phiDeg + " deg"));
+  UImanager->ApplyCommand(
+    G4String("/vis/viewer/panTo " + panRight + " " + panUp + " " + panUnit));
+  UImanager->ApplyCommand(
+    G4String("/vis/viewer/zoomTo " + zoomFactor));
   vp = currentViewer->GetViewParameters();
   vp.SetAutoRefresh(keepAutoRefresh);
   currentViewer->SetViewParameters(vp);
-  UImanager->ApplyCommand
-    ("/vis/viewer/dollyTo " + dolly + " " + dollyUnit);
+  UImanager->ApplyCommand(
+    G4String("/vis/viewer/dollyTo " + dolly + " " + dollyUnit));
   UImanager->SetVerboseLevel(keepVerbose);
 }
 
@@ -199,13 +199,13 @@ void G4VisCommandDrawVolume::SetNewValue
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/scene/create");
-  UImanager->ApplyCommand("/vis/scene/add/volume " + newValue);
+  UImanager->ApplyCommand(G4String("/vis/scene/add/volume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
   if (verbosity >= G4VisManager::warnings) {
     G4cout <<
       "WARNING: For systems which are not \"auto-refresh\" you will need to"
-      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
+      "\n  issue \"/vis/viewer/update\" or \"/vis/viewer/flush\"."
 	   << G4endl;
   }
 }
@@ -261,8 +261,8 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand("/vis/sceneHandler/create " + systemName);
-  UImanager->ApplyCommand("/vis/viewer/create ! ! " + windowSizeHint);
+  UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
+  UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
   UImanager->SetVerboseLevel(keepVerbose);
 }
 
@@ -293,15 +293,15 @@ void G4VisCommandSpecify::SetNewValue
   if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand("/geometry/print " + newValue);
+  UImanager->ApplyCommand(G4String("/geometry/print " + newValue));
   UImanager->ApplyCommand("/vis/scene/create");
-  UImanager->ApplyCommand("/vis/scene/add/logicalVolume " + newValue);
+  UImanager->ApplyCommand(G4String("/vis/scene/add/logicalVolume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
   if (verbosity >= G4VisManager::warnings) {
     G4cout <<
       "WARNING: For systems which are not \"auto-refresh\" you will need to"
-      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
+      "\n  issue \"/vis/viewer/update\" or \"/vis/viewer/flush\"."
 	   << G4endl;
   }
 }

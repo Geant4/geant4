@@ -58,7 +58,7 @@ public:
     G4Nucleus aNuc;
     G4double eps = 0.0001;
     G4double eleMass; 
-    eleMass = ( G4NucleiPropertiesTable::GetAtomicMass(theZ+eps, theA+eps)-
+    eleMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))-
                 theZ*G4Electron::ElectronDefinition()->GetPDGMass() 
   	       ) / G4Neutron::Neutron()->GetPDGMass();
   

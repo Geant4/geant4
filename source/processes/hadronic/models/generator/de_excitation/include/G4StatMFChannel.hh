@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.hh,v 1.7 2001/10/22 11:52:24 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFChannel.hh,v 1.8 2002/06/06 17:28:15 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -48,9 +48,9 @@ public:
 
     // Destructor
     ~G4StatMFChannel() { 
-	while (!_theFragments.empty()) {
-	    delete _theFragments.back();
-	    _theFragments.pop_back(); 
+	if (!_theFragments.empty()) {
+	  G4std::for_each(_theFragments.begin(),_theFragments.end(),
+			  DeleteFragment());
 	}
     }
 
@@ -69,9 +69,6 @@ public:
 public:
 
     void CreateFragment(const G4double A, const G4double Z);
-// 	{
-// 		_theFragments.insert(new G4StatMFFragment(A,Z));
-// 	}
 	
     G4int GetMultiplicity(void) { return _theFragments.size();}
 	
@@ -121,6 +118,15 @@ private:
     G4int _NumOfNeutralFragments;
 	
     G4int _NumOfChargedFragments;
+
+  struct DeleteFragment 
+  {
+    template<typename T>
+    void operator()(const T* ptr) const
+    {
+      delete ptr;
+    }
+  };
 
 };
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.18 2001/11/21 14:05:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4ParticleChange.cc,v 1.21 2001/12/24 05:14:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -128,10 +128,10 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   // set IsGoodGorTrackingFlag
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
 
-  //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchableHandle((G4VTouchable*)0);
-
-  //  add a secondary
+  //   Touchable handle is copied to keep the pointer
+  aTrack->SetTouchableHandle(theCurrentTrack->GetTouchableHandle());
+ 
+ //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
 }
 
@@ -163,7 +163,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
  
   //   Touchable handle is copied to keep the pointer
-    aTrack->SetTouchableHandle(theCurrentTrack->GetTouchableHandle());
+  aTrack->SetTouchableHandle(theCurrentTrack->GetTouchableHandle());
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -268,7 +268,8 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
 				 - pPreStepPoint->GetProperTime());
 
   // update weight
-  pPostStepPoint->SetWeight( theWeightChange );
+  G4double newWeight= theWeightChange/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
+  pPostStepPoint->SetWeight( newWeight );
 
 #ifdef G4VERBOSE
   if (debugFlag) CheckIt(*aTrack);

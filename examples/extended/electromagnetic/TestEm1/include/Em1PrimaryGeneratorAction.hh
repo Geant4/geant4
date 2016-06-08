@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PrimaryGeneratorAction.hh,v 1.4 2001/10/26 12:51:24 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em1PrimaryGeneratorAction.hh,v 1.5 2001/12/07 11:49:09 maire Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -37,20 +37,27 @@
 
 class G4ParticleGun;
 class G4Event;
+class Em1DetectorConstruction;
+class Em1PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Em1PrimaryGeneratorAction();    
+    Em1PrimaryGeneratorAction(Em1DetectorConstruction*);    
    ~Em1PrimaryGeneratorAction();
 
   public:
+    void SetDefaultKinematic(G4int);
+    void SetRndmBeam(G4double val)  {rndmBeam = val;}   
     void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*  particleGun;	//pointer a to G4 service class
+    G4ParticleGun*                particleGun;
+    Em1DetectorConstruction*      Em1Detector;
+    G4double                      rndmBeam;       
+    Em1PrimaryGeneratorMessenger* gunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

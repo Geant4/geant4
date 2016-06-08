@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EnergyLossTables.hh,v 1.12 2001/10/29 09:40:51 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // $Id:
 //

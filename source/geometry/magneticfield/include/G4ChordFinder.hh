@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ChordFinder.hh,v 1.8 2001/08/16 23:54:15 japost Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // class G4ChordFinder

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.18 2001/11/29 15:19:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Material.cc,v 1.21 2002/05/06 15:37:55 maire Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -52,6 +52,9 @@
 // 03-05-01, flux.precision(prec) at begin/end of operator<<
 // 17-07-01, migration to STL. M. Verderi.
 // 14-09-01, Suppression of the data member fIndexInTable
+// 26-02-02, fIndexInTable renewed
+// 16-04-02, G4Exception put in constructor with chemical formula
+// 06-05-02, remove the check of the ideal gas state equation
 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -110,6 +113,7 @@ G4Material::G4Material(const G4String& name, G4double z,
   
   // Store in the table of Materials
   theMaterialTable.push_back(this);
+  fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -159,49 +163,11 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
                        G4double z, G4double a, G4double density, 
                        G4State state, G4double temp, G4double pressure)
 :fName(name),fChemicalFormula(chFormula)
-{
-  G4cout 
-   << "---> warning from G4Material constructor with chemical formula."
-      " This constructor is going to be depreciated.\n" 
-      " Use material->SetChemicalFormula(const G4String&)" << G4endl;
-      
-  InitializePointers();
-    
-  if (density < universe_mean_density)
-     { G4cerr << "--- Warning from G4Material::G4Material()"
-              << " define a material with density=0 is not allowed. \n"
-              << " The material " << name << " will be constructed with the"
-              << " default minimal density: " << universe_mean_density/(g/cm3) 
-              << "g/cm3" << G4endl;
-       density = universe_mean_density;
-     } 
-
-  fDensity  = density;
-  fState    = state;
-  fTemp     = temp;
-  fPressure = pressure;
-
-  // Initialize theElementVector allocating one
-  // element corresponding to this material
-  maxNbComponents        = fNumberOfComponents = fNumberOfElements = 1;
-  fImplicitElement       = true;
-  theElementVector       = new G4ElementVector(1,(G4Element*)0);
-  (*theElementVector)[0] = new G4Element(name, " ", z, a);
-  fMassFractionVector    = new G4double[1];
-  fMassFractionVector[0] = 1. ;
-  
-  (*theElementVector)[0] -> increaseCountUse();
-  
-  if (fState == kStateUndefined)
-    {
-     if (fDensity > kGasThreshold) fState = kStateSolid;
-     else                          fState = kStateGas;
-    }
-
-  ComputeDerivedQuantities();
-
-  // Store in the table of Materials
-  theMaterialTable.push_back(this);
+{  
+  G4Exception 
+     ("---> from G4Material constructor with chemical formula."
+      " This constructor is depreciated.\n" 
+      " Use material->SetChemicalFormula(const G4String&)");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -215,37 +181,10 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
                        G4State state, G4double temp, G4double pressure)
 :fName(name),fChemicalFormula(chFormula)
 {
-  G4cout 
-   << "---> warning from G4Material constructor with chemical formula."
-      " This constructor is going to be depreciated.\n" 
-      " Use material->SetChemicalFormula(const G4String&)" << G4endl;
-       
-  InitializePointers();
-    
-  if (density < universe_mean_density)
-    {G4cerr << "--- Warning from G4Material::G4Material()"
-            << " define a material with density=0 is not allowed. \n"
-            << " The material " << name << " will be constructed with the"
-            << " default minimal density: " << universe_mean_density/(g/cm3) 
-            << "g/cm3" << G4endl;
-     density = universe_mean_density;
-    }
-        
-  fDensity  = density;
-  fState    = state;
-  fTemp     = temp;
-  fPressure = pressure;
-    
-  maxNbComponents     = nComponents;
-  fNumberOfComponents = fNumberOfElements = 0;
-  fImplicitElement    = false;
-  theElementVector    = new G4ElementVector(maxNbComponents,(G4Element*)0);
-    
-  if (fState == kStateUndefined) 
-    {
-     if (fDensity > kGasThreshold) fState = kStateSolid;
-     else                          fState = kStateGas;
-    }
+  G4Exception 
+     ("---> from G4Material constructor with chemical formula."
+      " This constructor is depreciated.\n" 
+      " Use material->SetChemicalFormula(const G4String&)");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -289,6 +228,7 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
+     fIndexInTable = theMaterialTable.size() - 1;     
   }
 }
 
@@ -344,6 +284,7 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
+     fIndexInTable = theMaterialTable.size() - 1;
   }
 }
 
@@ -406,6 +347,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
 
      // Store in the static Table of Materials
      theMaterialTable.push_back(this);
+     fIndexInTable = theMaterialTable.size() - 1;
   }
 }
 
@@ -430,22 +372,30 @@ void G4Material::ComputeDerivedQuantities()
      TotNbOfElectPerVolume += VecNbOfAtomsPerVolume[i]*Zi;
   }
 
-  //for gas, check coherence of the state conditions
-  if (fState == kStateGas) {
-     G4double ratio = TotNbOfAtomsPerVolume*k_Boltzmann*fTemp/fPressure;
-     if ((ratio<0.1)||(ratio>10.)) {
-       G4cerr << "--warning from G4Material-- The state conditions of the gas: "
-              << fName << " are not consistent."
-              << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
-              << "\t pressure = "    << fPressure/atmosphere  << " atmosphere"
-              << "\t temperature = " << fTemp/kelvin          << " kelvin"
-              << "\n rho*(T/P) would be of the order of: " 
-              << (fDensity/(TotNbOfAtomsPerVolume*k_Boltzmann))
-	         /((mg/cm3)*(kelvin/atmosphere))
-              << " (mg/cm3)*(kelvin/atmosphere)."
-	         " The energy loss calculation maybe be affected \n";
-       }
-    }
+///  //for gas, check coherence of the state conditions
+///  if (fState == kStateGas) {
+///     G4int nbAtomsPerMolecule = 1;
+///     if (fAtomsVector) {
+///       nbAtomsPerMolecule = 0;
+///       for (size_t j=0;j<fNumberOfElements;j++) 
+///             nbAtomsPerMolecule += fAtomsVector[j];
+///     }
+///    G4double NbOfMoleculesPerVolume = TotNbOfAtomsPerVolume/nbAtomsPerMolecule;	
+///	     
+///     G4double ratio = NbOfMoleculesPerVolume*k_Boltzmann*fTemp/fPressure;
+///     if ((ratio<0.1)||(ratio>10.)) {
+///       G4cerr << "--warning from G4Material-- The state conditions of the gas: "
+///              << fName << " are not consistent."
+///              << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
+///              << "\t pressure = "    << fPressure/atmosphere  << " atmosphere"
+///              << "\t temperature = " << fTemp/kelvin          << " kelvin"
+///              << "\n rho*(T/P) would be of the order of: "
+///              << (fDensity/(NbOfMoleculesPerVolume*k_Boltzmann))
+///	         /((mg/cm3)*(kelvin/atmosphere))
+///              << " (mg/cm3)*(kelvin/atmosphere)."
+///	         " The energy loss calculation maybe be affected \n";
+///       }
+///    }
         
   ComputeRadiationLength();
   ComputeNuclearInterLength();
@@ -533,6 +483,7 @@ G4Material::G4Material(const G4Material& right)
         
     // Store this new material in the table of Materials
     theMaterialTable.push_back(this);
+    fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -551,9 +502,7 @@ G4Material::~G4Material()
   if (fSandiaTable)           delete    fSandiaTable;
   
   //remove this material from theMaterialTable
-  G4MaterialTable::iterator iter  = theMaterialTable.begin();
-  while ((iter != theMaterialTable.end())&&(*iter != this)) iter++;
-  if (iter != theMaterialTable.end()) theMaterialTable.erase(iter);    
+  theMaterialTable[fIndexInTable] = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

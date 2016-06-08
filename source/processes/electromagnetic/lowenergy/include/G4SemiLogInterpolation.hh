@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SemiLogInterpolation.hh,v 1.2 2001/10/08 07:45:35 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4SemiLogInterpolation.hh,v 1.3 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -57,7 +57,7 @@ public:
 		     const G4DataVector& energies, 
 		     const G4DataVector& data) const;
 
-  virtual G4VDataSetAlgorithm* Clone() const { return new G4SemiLogInterpolation; }
+  virtual G4VDataSetAlgorithm* Clone() const;
 
 private:
 

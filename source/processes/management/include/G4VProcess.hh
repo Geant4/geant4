@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.11 2001/09/01 02:22:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VProcess.hh,v 1.13 2001/12/13 12:59:15 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -85,7 +85,7 @@ class G4VProcess
 
   //  copy constructor copys the name but does not copy the 
   //  physics table (0 pointer is assigned)
-      G4VProcess(G4VProcess &right);
+      G4VProcess(const G4VProcess &right);
 
   public: 
   //  destructor 
@@ -168,6 +168,9 @@ class G4VProcess
       //      G4double& currentMinimumStep:
       //        this value is used for transformation of
       //        true path length to geometrical path length
+
+      G4double GetCurrentInteractionLength() const;
+      // Returns currentInteractionLength
 
       ////////// PIL factor ////////
       void SetPILfactor(G4double value);
@@ -295,7 +298,7 @@ class G4VProcess
      // !!! This method should be at the end of PostStepDoIt()
      // !!! and AtRestDoIt
 
- private: 
+ protected: 
       G4String theProcessName;
       //  The name of the process
 
@@ -368,6 +371,11 @@ inline void G4VProcess::ResetNumberOfInteractionLengthLeft()
 inline void G4VProcess::ClearNumberOfInteractionLengthLeft()
 {
   theNumberOfInteractionLengthLeft =  -1.0;
+}
+
+inline G4double G4VProcess::GetCurrentInteractionLength() const
+{
+  return currentInteractionLength;
 }
 
 inline void G4VProcess::SetPILfactor(G4double value)

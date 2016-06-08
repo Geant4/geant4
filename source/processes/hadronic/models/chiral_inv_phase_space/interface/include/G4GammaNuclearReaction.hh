@@ -20,6 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+// $Id: G4GammaNuclearReaction.hh,v 1.8 2002/06/06 10:44:13 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
+//
+//
+// GEANT4 physics class: G4GammaNuclearReaction -- header file
+// Created: J.P. Wellisch, 2000/08/18 
+// The last update: J.P. Wellisch, Thu Jun  6 2002.
+//
 #ifndef G4GammaNuclearReaction_h
 #define G4GammaNuclearReaction_h
 

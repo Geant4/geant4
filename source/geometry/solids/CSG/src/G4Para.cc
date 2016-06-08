@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.8 2001/07/11 09:59:56 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Para.cc,v 1.11 2002/05/15 09:37:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // class G4Para
 //
@@ -31,7 +31,8 @@
 // History:
 // 21.03.95 P.Kent Modified for `tolerant' geom
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
-// 18.11.99 V. Grichine , kIndefined was added to ESide
+// 18.11.99 V. Grichine , kUndef was added to ESide
+// 14.02.02 V. Grichine , bug fixed in Inside according to proposal of D. Wright
 
 #include "G4Para.hh"
 #include "G4VoxelLimits.hh"
@@ -46,7 +47,7 @@
 
 // Private enum: Not for external use 
   	
-enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
+enum ESide {kUndef,kPX,kMX,kPY,kMY,kPZ,kMZ};
 
 // used internally for normal routine
 
@@ -365,46 +366,37 @@ G4bool G4Para::CalculateExtent(const EAxis pAxis,
 
 EInside G4Para::Inside(const G4ThreeVector& p) const
 {
-    EInside in=kOutside;
-    G4double xt,yt;
-// Check
-    if (fabs(p.z())<=fDz-kCarTolerance/2)
-	{
-	    yt=fabs(p.y()-fTthetaSphi*p.z());
-	    if (yt<=fDy-kCarTolerance/2)
-		{
-		    xt=fabs(p.x()-fTthetaCphi*p.z()-fTalpha*yt);
-		    if (xt<=fDx-kCarTolerance/2)
-			{
-			    in=kInside;
-			}
-		    else if (xt<=fDx+kCarTolerance/2)
-			{
-			    in=kSurface;
-			}
-		}
-	    else if (yt<=fDy+kCarTolerance/2)
-		{
-		    xt=fabs(p.x()-fTthetaCphi*p.z()-fTalpha*yt);
-		    if (xt<=fDx+kCarTolerance/2)
-			{
-			    in=kSurface;
-			}
-		}
-	}
-    else  if (fabs(p.z())<=fDz+kCarTolerance/2)
-	{
-	    yt=fabs(p.y()-fTthetaSphi*p.z());
-	    if (yt<=fDy+kCarTolerance/2)
-		{
-		    xt=fabs(p.x()-fTthetaCphi*p.z()-fTalpha*yt);
-		    if (xt<=fDx+kCarTolerance/2)
-			{
-			    in=kSurface;
-			}
-		}
-	}
-    return in;
+  G4double xt, yt, yt1;
+  EInside  in = kOutside;
+
+  yt1 = p.y() - fTthetaSphi*p.z();
+  yt  = fabs(yt1) ;
+
+  // xt = fabs( p.x() - fTthetaCphi*p.z() - fTalpha*yt );
+
+  xt = fabs( p.x() - fTthetaCphi*p.z() - fTalpha*yt1 );
+
+  if ( fabs( p.z() ) <= fDz - kCarTolerance*0.5)
+  {
+    if (yt <= fDy - kCarTolerance*0.5)
+    {
+      if      ( xt <= fDx - kCarTolerance*0.5 ) in = kInside;
+      else if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;
+    }
+    else if ( yt <= fDy + kCarTolerance*0.5)
+    {
+      if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;	
+    }
+  }
+  else  if ( fabs(p.z()) <= fDz + kCarTolerance*0.5 )
+  {
+
+    if ( yt <= fDy + kCarTolerance*0.5)
+    {
+      if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;	
+    }
+  }
+  return in;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -520,7 +512,7 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
     if (v.z()>0)
 	{
 	    max=fDz-p.z();
-	    if (max>kCarTolerance/2)
+	    if (max>kCarTolerance*0.5)
 		{
 		    smax=max/v.z();
 		    smin=(-fDz-p.z())/v.z();
@@ -533,7 +525,7 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
     else if (v.z()<0)
 	{
 	    max=-fDz-p.z();
-	    if (max<-kCarTolerance/2)
+	    if (max<-kCarTolerance*0.5)
 		{
 		    smax=max/v.z();
 		    smin=(fDz-p.z())/v.z();
@@ -565,7 +557,7 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
     if (vy>0)
 	{
 	    max=fDy-yt;
-	    if (max>kCarTolerance/2)
+	    if (max>kCarTolerance*0.5)
 		{
 		    tmax=max/vy;
 		    tmin=(-fDy-yt)/vy;
@@ -578,7 +570,7 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
     else if (vy<0)
 	{
 	    max=-fDy-yt;
-	    if (max<-kCarTolerance/2)
+	    if (max<-kCarTolerance*0.5)
 		{
 		    tmax=max/vy;
 		    tmin=(fDy-yt)/vy;
@@ -618,7 +610,7 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
 	    if (vx>0)
 		{
 		    max=fDx-xt;
-		    if (max>kCarTolerance/2)
+		    if (max>kCarTolerance*0.5)
 			{
 			    tmax=max/vx;
 			    tmin=(-fDx-xt)/vx;
@@ -631,7 +623,7 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
 	    else if (vx<0)
 		{
 		    max=-fDx-xt;
-		    if (max<-kCarTolerance/2)
+		    if (max<-kCarTolerance*0.5)
 			{
 			    tmax=max/vx;
 			    tmin=(fDx-xt)/vx;
@@ -728,7 +720,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 			       const G4bool calcNorm,
 			       G4bool *validNorm,G4ThreeVector *n) const
 {
-    ESide side = kUndefined ;
+    ESide side = kUndef;
     G4double snxt;		// snxt = return value
     G4double max,tmax;
     G4double yt,vy,xt,vx;
@@ -740,7 +732,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     if (v.z()>0)
 	{
 	    max=fDz-p.z();
-	    if (max>kCarTolerance/2)
+	    if (max>kCarTolerance*0.5)
 		{
 		    snxt=max/v.z();
 		    side=kPZ;
@@ -758,7 +750,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     else if (v.z()<0)
 	{
 	    max=-fDz-p.z();
-	    if (max<-kCarTolerance/2)
+	    if (max<-kCarTolerance*0.5)
 		{
 		    snxt=max/v.z();
 		    side=kMZ;
@@ -788,7 +780,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     if (vy>0)
 	{
 	    max=fDy-yt;
-	    if (max>kCarTolerance/2)
+	    if (max>kCarTolerance*0.5)
 		{
 		    tmax=max/vy;
 		    if (tmax<snxt)
@@ -811,7 +803,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     else if (vy<0)
 	{
 	    max=-fDy-yt;
-	    if (max<-kCarTolerance/2)
+	    if (max<-kCarTolerance*0.5)
 		{
 		    tmax=max/vy;
 		    if (tmax<snxt)
@@ -840,7 +832,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     if (vx>0)
 	{
 	    max=fDx-xt;
-	    if (max>kCarTolerance/2)
+	    if (max>kCarTolerance*0.5)
 		{
 		    tmax=max/vx;
 		    if (tmax<snxt)
@@ -873,7 +865,7 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
     else if (vx<0)
 	{
 	    max=-fDx-xt;
-	    if (max<-kCarTolerance/2)
+	    if (max<-kCarTolerance*0.5)
 		{
 		    tmax=max/vx;
 		    if (tmax<snxt)
@@ -971,6 +963,27 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p) const
     G4double distz1,distz2,disty1,disty2,distx1,distx2;
     G4double trany,cosy,tranx,cosx;
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Parallelpiped parameters:" << G4endl << G4endl ;
+     G4cout << "fDx = "     << fDx/mm << " mm" << G4endl ;
+     G4cout << "fDy = "     << fDy/mm << " mm" << G4endl ;
+     G4cout << "fDz = "     << fDz/mm << " mm" << G4endl ;
+     G4cout << "fTalpha =     " << fTalpha/degree << " degree" << G4endl;
+     G4cout << "fTthetaCphi = " << fTthetaCphi/degree << " degree" << G4endl;
+     G4cout << "fTthetaSphi = " << fTthetaSphi/degree << " degree" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Para::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Para::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
 // Z planes
     distz1=fDz-p.z();
     distz2=fDz+p.z();
@@ -1041,7 +1054,7 @@ G4ThreeVectorList*
 	}
     else
 	{
-	    G4Exception("G4Para::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Para::CreateRotatedVertices - Out of memory !");
 	}
     return vertices;
 }
@@ -1074,5 +1087,3 @@ G4NURBS* G4Para::CreateNURBS () const
 //
 //
 ///////////////////////////  End of G4Para.cc ///////////////////////////
-
-

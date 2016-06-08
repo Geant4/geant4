@@ -57,20 +57,19 @@ G4Mag_SpinEqRhs::EvaluateRhsGivenB( const G4double y[],
 			            const G4double B[3],
 				    G4double dydx[] ) const
 {
-   G4double velocity_mag_square = sqr(y[3]) + sqr(y[4]) + sqr(y[5]);
-   G4double inv_velocity_magnitude = 1.0 / sqrt( velocity_mag_square );
+   G4double momentum_mag_square = sqr(y[3]) + sqr(y[4]) + sqr(y[5]);
+   G4double inv_momentum_magnitude = 1.0 / sqrt( momentum_mag_square );
+   G4double cof = FCof()*inv_momentum_magnitude;
 
-   dydx[0] = y[3] * inv_velocity_magnitude;       //  (d/ds)x = Vx/V
-   dydx[1] = y[4] * inv_velocity_magnitude;       //  (d/ds)y = Vy/V
-   dydx[2] = y[5] * inv_velocity_magnitude;       //  (d/ds)z = Vz/V
-   dydx[3] = FCof()*(y[4]*B[2] - y[5]*B[1]) ;   // Ax = a*(Vy*Bz - Vz*By)
-   dydx[4] = FCof()*(y[5]*B[0] - y[3]*B[2]) ;   // Ay = a*(Vz*Bx - Vx*Bz)
-   dydx[5] = FCof()*(y[3]*B[1] - y[4]*B[0]) ;   // Az = a*(Vx*By - Vy*Bx)
+   dydx[0] = y[3] * inv_momentum_magnitude;       //  (d/ds)x = Vx/V
+   dydx[1] = y[4] * inv_momentum_magnitude;       //  (d/ds)y = Vy/V
+   dydx[2] = y[5] * inv_momentum_magnitude;       //  (d/ds)z = Vz/V
+   dydx[3] = cof*(y[4]*B[2] - y[5]*B[1]) ;   // Ax = a*(Vy*Bz - Vz*By)
+   dydx[4] = cof*(y[5]*B[0] - y[3]*B[2]) ;   // Ay = a*(Vz*Bx - Vx*Bz)
+   dydx[5] = cof*(y[3]*B[1] - y[4]*B[0]) ;   // Az = a*(Vx*By - Vy*Bx)
 
-   G4ThreeVector u;
-   u.setX(inv_velocity_magnitude*y[3]);
-   u.setY(inv_velocity_magnitude*y[4]);
-   u.setZ(inv_velocity_magnitude*y[5]);
+   G4ThreeVector u(y[3], y[4], y[5]);
+   u *= inv_momentum_magnitude; 
 
    G4ThreeVector BField(B[0],B[1],B[2]);
 

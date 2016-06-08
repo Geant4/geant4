@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.12 2001/07/11 10:08:51 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4OpenGLXViewer.hh,v 1.13 2002/02/24 01:47:52 johna Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -62,6 +62,9 @@ protected:
   void GetXConnection ();
   void CreateGLXContext (XVisualInfo* vi);
   virtual void CreateMainWindow ();
+
+  static int snglBuf_RGBA[10];
+  static int dblBuf_RGBA[11];
 
   char                              print_string[50];
   G4bool                            print_colour,

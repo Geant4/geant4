@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VSceneHandler.hh,v 1.18 2001/08/14 18:36:07 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison  19th July 1996.

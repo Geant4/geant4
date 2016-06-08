@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalSkinSurface.hh,v 1.7 2001/07/11 10:00:28 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // class G4LogicalSkinSurface

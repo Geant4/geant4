@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RangeTest.cc,v 1.4 2001/11/07 20:47:30 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4RangeTest.cc,v 1.5 2002/05/28 09:20:21 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -36,6 +36,9 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
+
+G4RangeTest::~G4RangeTest()
+{ }
 
 G4bool G4RangeTest::Escape(const G4ParticleDefinition* particle, 
 			   const G4Material* material,

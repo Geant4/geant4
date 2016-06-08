@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.17 2001/11/09 13:56:28 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4hIonisation.hh,v 1.20 2002/03/27 21:43:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // --------------- G4hIonisation physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997 
@@ -35,7 +35,7 @@
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
 // 19-09-01 come back to previous process name "hIoni"
-// 29-10-01 all static functions no more inlined 
+// 29-10-01 all static functions no more inlined  
 //
 // -----------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@
 #ifndef G4hIonisation_h
 #define G4hIonisation_h 1
  
-#include "G4VhEnergyLoss.hh"
+#include "G4VhEnergyLoss.hh" 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -150,6 +150,7 @@ class G4hIonisation : public G4VhEnergyLoss
     G4int    TotBin;
     
     G4double Tmincut;                      // min energy of d-rays
+    G4double initialMass;                  // mass for Lambda table
 
   public:  // with description
 

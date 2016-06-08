@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10EventAction.cc,v 1.3 2001/11/21 11:57:14 mverderi Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

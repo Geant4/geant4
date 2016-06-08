@@ -39,7 +39,7 @@
   {
     G4String tString = "/FS/";
     G4bool dbool;
-    G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, tString, dbool);
+    G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), dirName, tString, dbool);
     G4String filename = aFile.GetName();
     if(!dbool)
     {

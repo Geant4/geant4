@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiNeutronInelastic.cc,v 1.6 2001/10/05 16:11:31 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4LEAntiNeutronInelastic.cc,v 1.7 2002/06/17 11:34:49 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
  // Hadronic Process: AntiNeutron Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997
@@ -529,6 +529,7 @@
       currentParticle.SetMass( 0.0 );
       targetParticle.SetMass( 0.0 );
     }
+    while(np+nm+nz<3) nz++;
     SetUpPions( np, nm, nz, vec, vecLen );
     return;
   }

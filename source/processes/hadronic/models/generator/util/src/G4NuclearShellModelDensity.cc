@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclearShellModelDensity.cc,v 1.6 2001/08/01 17:09:31 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4NuclearShellModelDensity.cc,v 1.7 2002/04/24 13:10:50 gunter Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "G4NuclearShellModelDensity.hh"
@@ -38,19 +38,19 @@ G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4double anA, G4double aZ
 
 G4NuclearShellModelDensity::~G4NuclearShellModelDensity() {}
     
-G4double G4NuclearShellModelDensity::GetRelativeDensity(G4ThreeVector aPosition)
+G4double G4NuclearShellModelDensity::GetRelativeDensity(const G4ThreeVector & aPosition) const
 {
 	return exp(-1*aPosition.mag2()/theRsquare);
 }
     
-G4double G4NuclearShellModelDensity::GetRadius(const G4double maxRelativeDensity)
+G4double G4NuclearShellModelDensity::GetRadius(const G4double maxRelativeDensity) const
 {
 
      return (maxRelativeDensity>0 && maxRelativeDensity <= 1 ) ?
              sqrt(theRsquare * log(1/maxRelativeDensity) ) : DBL_MAX;
 }
    
-G4double   G4NuclearShellModelDensity::GetDeriv(const G4ThreeVector & aPosition)
+G4double   G4NuclearShellModelDensity::GetDeriv(const G4ThreeVector & aPosition) const
 {
      return -2* aPosition.mag() / theRsquare * GetDensity(aPosition);
 }

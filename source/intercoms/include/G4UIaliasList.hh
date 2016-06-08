@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.hh,v 1.3 2001/10/16 08:14:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4UIaliasList.hh,v 1.4 2002/04/26 22:03:34 asaim Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef G4UIaliasList_h
@@ -49,14 +49,14 @@ class G4UIaliasList
       G4int operator!=(const G4UIaliasList &right) const;
 
   public:
-      void RemoveAlias(G4String aliasName);
-      void ChangeAlias(G4String aliasName, G4String aliasValue);
-      G4String* FindAlias(G4String aliasName);
+      void RemoveAlias(const char* aliasName);
+      void ChangeAlias(const char* aliasName, const char* aliasValue);
+      G4String* FindAlias(const char* aliasName);
       void List();
 
   private:
-      void AddNewAlias(G4String aliasName, G4String aliasValue);
-      G4int FindAliasID(G4String aliasName);
+      void AddNewAlias(const char* aliasName, const char* aliasValue);
+      G4int FindAliasID(const char* aliasName);
 
   private:
       G4std::vector<G4String*> alias;

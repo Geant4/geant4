@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.8 2001/10/05 16:13:41 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Evaporation.hh,v 1.10 2002/06/18 16:39:23 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,22 +32,21 @@
 
 #include "globals.hh"
 
-#include "G4ios.hh"
 #include "G4VEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4Fragment.hh"
-#include "G4NucleiProperties.hh"
-#include "Randomize.hh"
+
+class G4VEvaporationFactory;
 
 //#define debug
+//#define pctest
 
 class G4Evaporation : public G4VEvaporation
 {
 public:
   G4Evaporation();
   G4Evaporation(G4std::vector<G4VEvaporationChannel*> * aChannelsVector) :
-    myOwnChannelsVector(false),
-    theChannels(aChannelsVector)
+    theChannels(aChannelsVector), theChannelFactory(0)
   {};
 	 
   ~G4Evaporation();
@@ -61,7 +60,10 @@ private:
 
 public:
   G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
-		
+
+  void SetDefaultChannel();
+  void SetGEMChannel();
+  
 private:
 
 #ifdef debug
@@ -69,9 +71,27 @@ private:
 			 G4FragmentVector * Result) const;
 #endif
 
-  G4bool myOwnChannelsVector;
 
   G4std::vector<G4VEvaporationChannel*> * theChannels;
+  G4VEvaporationFactory * theChannelFactory;
+  
+  
+  class SumProbabilities : public G4std::binary_function<G4double,G4double,G4double>
+  {
+  public:
+    SumProbabilities() : total(0.0) {}
+    G4double operator() (G4double& probSoFar, G4VEvaporationChannel*& frag)
+    { 
+      total += frag->GetEmissionProbability();
+      return total;
+    }
+    
+    G4double GetTotal() { return total; }
+  public:
+    G4double total;
+    
+  };
+
 };
 
 #endif

@@ -1,0 +1,7 @@
+h/file 1 g4.p11
+h/pl 1
+fort/file 66 el.ps
+meta 66 -111
+h/pl 1
+close 66
+q

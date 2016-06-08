@@ -44,7 +44,6 @@
 #define G4NUCLEARLEVEL_HH
 
 #include "globals.hh"
-#include "G4NuclearLevel.hh"
 #include "G4DataVector.hh"
 
 class G4NuclearLevel 

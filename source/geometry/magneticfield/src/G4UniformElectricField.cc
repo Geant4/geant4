@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UniformElectricField.cc,v 1.6 2001/12/04 17:35:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 //

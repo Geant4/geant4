@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.5 2001/07/11 09:59:16 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4AssemblyVolume.hh,v 1.7 2002/06/22 00:39:23 radoone Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // Class G4AssemblyVolume
@@ -66,6 +66,16 @@ class G4AssemblyVolume
     // Constructors & destructor.
     // At destruction all the generated physical volumes and associated
     // rotation matrices of the imprints will be destroyed.
+    //
+    // The rotation matrix passed in can be 0 = identity or an address even of an object
+    // on the upper stack frame. During assembly imprint, it creates anyway a new matrix
+    // and keeps track of it so it can delete it later at destruction time.
+    // This new policy has been adopted since user has no control on the way the rotations
+    // are combined it's safer doing it this way.
+    //
+    // WARNING! This interface will likely change in the next major release of Geant4 from
+    //          a pointer to a reference due to the reason above
+    //
 
   void AddPlacedVolume( G4LogicalVolume* pPlacedVolume,
                         G4ThreeVector& translation,
@@ -91,6 +101,16 @@ class G4AssemblyVolume
     //   the coordinate system of the first one.
     //   Every next volume being added into the assembly will be placed
     //   w.r.t to the previous one.
+    //
+    // The rotation matrix passed in can be 0 = identity or an address even of an object
+    // on the upper stack frame. During assembly imprint, it creates anyway a new matrix
+    // and keeps track of it so it can delete it later at destruction time.
+    // This new policy has been adopted since user has no control on the way the rotations
+    // are combined it's safer doing it this way.
+    //
+    // WARNING! This interface will likely change in the next major release of Geant4 from
+    //          a pointer to a reference due to the reason above
+    //
 
   void AddPlacedVolume( G4LogicalVolume* pPlacedVolume,
                         G4Transform3D&   transformation);
@@ -100,17 +120,19 @@ class G4AssemblyVolume
 
   void MakeImprint( G4LogicalVolume* pMotherLV,
                     G4ThreeVector& translationInMother,
-                    G4RotationMatrix* pRotationInMother);
+                    G4RotationMatrix* pRotationInMother,
+                    G4int copyNumBase = 0 );
     //
     // Creates instance of an assembly volume inside the given mother volume.
 
   void MakeImprint( G4LogicalVolume* pMotherLV,
-                    G4Transform3D&   transformation);
+                    G4Transform3D&   transformation,
+                    G4int copyNumBase = 0 );
     //
     // The same as previous but takes complete 3D transformation in space
     // as its argument.
 
-private:    
+ private:    
 
   G4std::vector<G4AssemblyTriplet> fTriplets;
     //
@@ -129,9 +151,12 @@ private:
     // generated physical volumes and rotation matrices as well !
     // This may affect validity of detector contruction !
 
- protected:
+ public:
 
   unsigned int GetImprintsCount() const;
+  
+ protected:
+    
   void         SetImprintsCount( unsigned int value );
   void         ImprintsCountPlus();
   void         ImprintsCountMinus();
@@ -145,9 +170,12 @@ private:
     //
     // Number of imprints of the given assembly volume.
 
- protected:
-
+ public:
+    
   unsigned int GetInstanceCount() const;
+  
+ protected:
+     
   void         SetInstanceCount( unsigned int value );
   void         InstanceCountPlus();
   void         InstanceCountMinus();

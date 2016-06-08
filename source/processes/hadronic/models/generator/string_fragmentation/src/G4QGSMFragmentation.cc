@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.6 2001/08/01 17:09:09 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4QGSMFragmentation.cc,v 1.7 2002/06/13 09:04:12 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -73,7 +73,7 @@ int G4QGSMFragmentation::operator!=(const G4QGSMFragmentation &right) const
 G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py)
 {    
   G4double z;    
-  G4double theA, d1, d2, yf;
+  G4double theA(0), d1, d2, yf;
   G4int absCode = abs( PartonEncoding );
   if (absCode < 10)
   { 

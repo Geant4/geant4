@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuNuclearInteraction.cc,v 1.11 2001/10/24 17:46:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // $Id: 
 // --------------------------------------------------------------

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.hh,v 1.7 2001/08/01 17:04:49 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMicroCanonical.hh,v 1.9 2002/06/18 14:13:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,7 +30,7 @@
 #ifndef G4StatMFMicroCanonical_h
 #define G4StatMFMicroCanonical_h 1
 
-#include <vector>
+#include "g4std/vector"
 
 #include "G4VStatMFEnsemble.hh"
 #include "G4StatMFMicroPartition.hh"
@@ -101,6 +101,33 @@ private:
 
     // Statistical weight of compound nucleus
     G4double _WCompoundNucleus;
+
+
+  struct DeleteFragment 
+  {
+    template<typename T>
+    void operator()(const T* ptr) const
+    {
+      delete ptr;
+    }
+  };
+
+  class SumProbabilities : public G4std::binary_function<G4double,G4double,G4double>
+  {
+  public:
+    SumProbabilities() : total(0.0) {}
+    G4double operator() (G4double& probSoFar, G4StatMFMicroManager*& manager)
+    { 
+      total += manager->GetProbability();
+      return total;
+    }
+    
+    G4double GetTotal() { return total; }
+  public:
+    G4double total;
+    
+  };
+
 
 };
 

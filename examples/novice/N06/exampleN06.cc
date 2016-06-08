@@ -29,7 +29,9 @@
 //
 // File:        exampleExN06.cc
 // Description: Test of Continuous Process G4Cerenkov
+//              and RestDiscrete Process G4Scintillation
 //              -- Generation Cerenkov Photons --
+//              -- Generation Scintillation Photons --
 //              -- Transport of optical Photons --
 // Version:     5.0
 // Created:     1996-04-30

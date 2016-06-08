@@ -44,6 +44,7 @@
 // 23 Oct    2000 V.Ivanchenko Renew comments
 // 30 Oct    2001 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
 // 07 Dec    2001 V.Ivanchenko Add SetFluorescence method
+// 26 Feb    2002 V.Ivanchenko Add initialMass for GenericIons
 // ------------------------------------------------------------
  
 // Class Description:
@@ -186,6 +187,9 @@ public: // With description
   void SetCutForAugerElectrons(G4double cut);
   // Set threshold energy for Auger electron production
 
+  void ActivateAugerElectronProduction(G4bool val);
+  // Set Auger electron production flag on/off
+
 
 protected:
 
@@ -294,6 +298,7 @@ private:
   G4double fRangeNow ;   //         
   G4double charge;       //
   G4double chargeSquare; //
+  G4double initialMass;  // mass to calculate Lambda tables
  
   G4AtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;

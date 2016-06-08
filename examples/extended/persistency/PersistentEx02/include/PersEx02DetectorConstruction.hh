@@ -22,7 +22,7 @@
 //
 //
 // $Id: PersEx02DetectorConstruction.hh,v 1.4 2001/07/11 09:58:14 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef PersEx02DetectorConstruction_h

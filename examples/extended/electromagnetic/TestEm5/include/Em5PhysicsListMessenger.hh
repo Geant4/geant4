@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.hh,v 1.4 2001/10/16 11:56:27 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em5PhysicsListMessenger.hh,v 1.6 2002/06/05 15:43:42 urban Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -57,7 +57,6 @@ class Em5PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* cutECmd;
     G4UIcmdWithADoubleAndUnit* cutPCmd;
     G4UIcmdWithADoubleAndUnit* rCmd;
-    G4UIcmdWithADoubleAndUnit* eCmd;
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;     
 };
 

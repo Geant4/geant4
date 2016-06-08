@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDataSetAlgorithm.hh,v 1.5 2001/10/09 12:13:48 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VDataSetAlgorithm.hh,v 1.6 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -62,7 +62,7 @@ private:
   
   // Hide copy constructor and assignment operator
   G4VDataSetAlgorithm(const G4VDataSetAlgorithm&);
-  G4VDataSetAlgorithm & operator=(const G4VDataSetAlgorithm &right);
+  G4VDataSetAlgorithm& operator=(const G4VDataSetAlgorithm& right);
 
 };
  

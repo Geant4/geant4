@@ -21,16 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.hh,v 1.6 2001/08/01 17:08:09 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4V3DNucleus.hh,v 1.8 2002/06/06 10:07:14 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1
 
 class G4Nucleon;
+class G4VNuclearDensity;
 #include "G4DynamicParticle.hh"
 #include "G4Pair.hh"
 #include "Randomize.hh"
+#include "g4std/vector"
 
 class G4V3DNucleus 
 {
@@ -49,6 +51,7 @@ class G4V3DNucleus
       virtual void Init(G4double theA, G4double theZ) = 0;
       virtual G4bool StartLoop() = 0;
       virtual G4Nucleon * GetNextNucleon() = 0;
+      virtual const G4std::vector<G4Nucleon *> & GetNucleons() = 0;
       virtual G4int GetMassNumber() = 0;
       virtual G4double GetMass() = 0;
       virtual G4int GetCharge() = 0;
@@ -60,7 +63,7 @@ class G4V3DNucleus
       virtual void DoLorentzContraction(const G4LorentzVector & theBoost) = 0;
       virtual void DoLorentzContraction(const G4ThreeVector & theBeta) = 0;
       virtual void DoTranslation(const G4ThreeVector & theShift) = 0;
-      
+      virtual const G4VNuclearDensity * GetNuclearDensity() const = 0;
   public:
       G4Pair<G4double, G4double> ChooseImpactXandY(G4double maxImpact);
       G4Pair<G4double, G4double> RefetchImpactXandY(){return theImpactParameter;}

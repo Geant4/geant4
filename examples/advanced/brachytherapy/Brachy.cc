@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -26,124 +27,158 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli and M. Tropeano
+// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano,S.Guatelli
 //
 // Brachytherapy simulates the dose deposition in a cubic (30*cm)
-// water phantom for a Ir-192 MicroSelectron High Dose Rate
+// water phantom for a IsoSeed I-125 Bebig
 // brachytherapy source.
 //
 // Simplified gamma generation is used.
 // Source axis is oriented along Z axis. 
 // Voxel data on the X-Z plan
-//e is output to ASCII file
-// "Brachy.out".
- 
-// 
-// $Id: Brachy.cc,v 1.8 2001/12/13 13:44:53 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+//e is output to 
+// "Brachy3.hbk".
+
+
+// $Id: Brachy.cc,v 1.11 2002/06/18 22:20:37 guatelli Exp $
+// GEANT4 tag $Name: brachy-V04-00-05 $
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+
+#ifdef G4UI_USE_XM
+#include "G4UIXm.hh"
+#endif
+
+#ifdef G4VIS_USE
+#include "BrachyVisManager.hh"
+#endif
 
 #include "BrachyEventAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
-#include "BrachyWaterBoxSD.hh"
+#include "BrachyPhantomSD.hh"
 
+#include "G4SDManager.hh"
+
+#include"BrachyRunAction.hh"
 
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 
-int main()
-{
- // Number of generated photons
- G4int NumberOfEvents = 1000;
 
- // Define number of voxels in X-Z plane
- G4int NumVoxelX = 101;
- G4int NumVoxelZ = 101;
 
- // Construct the default run manager
- G4RunManager* pRunManager = new G4RunManager;
+//Interactive mode//
 
- // Set mandatory initialization classes
- G4String SDName = "WaterBox";
- BrachyDetectorConstruction *pDetectorConstruction;
- pRunManager->SetUserInitialization(pDetectorConstruction = new BrachyDetectorConstruction(SDName,NumVoxelX,NumVoxelZ));
- pRunManager->SetUserInitialization(new BrachyPhysicsList);
+int main(int argc ,char ** argv)
 
- // Set mandatory user action class
- pRunManager->SetUserAction(new BrachyPrimaryGeneratorAction);
+{ 
+  // semi diversi li ha usati per l'errore
+  
 
- // Initialize G4 kernel
- pRunManager->Initialize();
+  //HepRandom::setTheSeed(16520);
 
- // Alloc and initialize voxel matrix
- G4float* pVoxel = new G4float[NumVoxelX*NumVoxelZ];
- for(G4int j=0;j<NumVoxelX*NumVoxelZ;j++)
-	pVoxel[j] = 0.0F;
+  HepRandom::setTheEngine(new RanecuEngine);
  
- BrachyEventAction *pEventAction;
- pRunManager->SetUserAction(pEventAction = new BrachyEventAction(pVoxel,NumVoxelX,NumVoxelZ));
+  
+  // Construct the default run manager
+  G4RunManager* pRunManager = new G4RunManager;
 
- // Get the pointer to the UI manager and set verbosities
- G4UImanager* UI = G4UImanager::GetUIpointer();
- UI->ApplyCommand("/run/verbose 0");
- UI->ApplyCommand("/event/verbose 0");
- UI->ApplyCommand("/tracking/verbose 0");
 
- pRunManager->BeamOn(NumberOfEvents);
+  // Set mandatory initialization classes
+  G4String SDName = "Phantom";
+ 
+  BrachyDetectorConstruction *pDetectorConstruction=new BrachyDetectorConstruction(SDName);
+  pRunManager->SetUserInitialization(pDetectorConstruction) ;
+ 
+  pRunManager->SetUserInitialization(new BrachyPhysicsList);
 
- if(pVoxel)
-	{
-	G4std::ofstream ofs;
+  
+#ifdef G4VIS_USE
+  // visualization manager
+  G4VisManager* visManager = new BrachyVisManager;
+  visManager->Initialize();
+#endif
 
-	// Output voxel data to text file
-	// Format = x coord [mm] <tab> z coord [mm] <tab> edep [MeV] <eol>
-	ofs.open("Brachy.out");
-		{
+  G4UIsession* session=0;
+  
+   
+  if (argc==1)   // Define UI session for interactive mode.
+    {
+      // G4UIterminal is a (dumb) terminal.
+#ifdef G4UI_USE_XM
+      session = new G4UIXm(argc,argv);
+#else           
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif
+#endif
+    }
+ 
 
-		  ofs<<" x(mm)"<<'\t'<<"z(mm)"<<'\t'<<"released energy(Mev)"
-		     <<G4endl;
-                                
-		
 
-		G4double VoxelWidth_X = pDetectorConstruction->GetBoxDim_X()/NumVoxelX;
-		G4double VoxelWidth_Z = pDetectorConstruction->GetBoxDim_Z()/NumVoxelZ;
+  BrachyEventAction *pEventAction=new BrachyEventAction(SDName);
+ 
+  pRunManager->SetUserAction(pEventAction );
+  pRunManager->SetUserAction(new BrachyPrimaryGeneratorAction);
+ 
+  BrachyRunAction *pRunAction=new BrachyRunAction();
+  pRunManager->SetUserAction(pRunAction);
+ 
+ 
+  
+//Initialize G4 kernel
+  pRunManager->Initialize();
 
-		G4double x,z;
+  // get the pointer to the User Interface manager 
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
+  UI->ApplyCommand("/run/verbose 0");
+  UI->ApplyCommand("/event/verbose 0");
+  UI->ApplyCommand("/tracking/verbose 0");
 
-		for(G4int k=0;k<NumVoxelZ;k++)
-			{
-			z = (-NumVoxelZ+1+2*k)*VoxelWidth_Z/2;
+  if (session)   // Define UI session for interactive mode.
+    {
+      // G4UIterminal is a (dumb) terminal.
+      UI->ApplyCommand("/control/execute initInter.mac");    
+#ifdef G4UI_USE_XM
+      // Customize the G4UIXm menubar with a macro file :
+      UI->ApplyCommand("/control/execute gui.mac");
+#endif
+      session->SessionStart();
+      delete session;
+    }
+  else           // Batch mode
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
+    }  
+  
+  //int numberOfEvent = 10000;
+  //pRunManager->BeamOn(numberOfEvent);
+  				
+ 	   
+	 
+  // Job termination
 
-			for(G4int i=0;i<NumVoxelX;i++)
-				{
-				G4int j = i+k*NumVoxelX;
-				x = (-NumVoxelX+1+2*i)*VoxelWidth_X/2;
-				
-				// Do not consider near voxels
-				if(fabs(x) > 3*mm || fabs(z) > 6*mm)	
-				{	ofs << x << '\t' << z << '\t' << pVoxel[j] << G4endl;
-				//check released energy	
-				// if(pVoxel[j]!=0)
-				//  G4cout<<x<<'\t'<<z<< '\t'<<pVoxel[j]<<G4endl;
-				}      
-		}
-			}
-		ofs.close();
-		}
-	}
 
- delete[] pVoxel; 
+  
+#ifdef G4VIS_USE
+  delete visManager;
+#endif
+  
+   
 
- // Job termination
- delete pRunManager;
+  delete pRunManager;
 
- return 0;
+  return 0;
 }
-
-
 
 
 

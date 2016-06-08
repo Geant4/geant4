@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ModelingParameters.cc,v 1.5 2001/07/11 10:09:23 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison  31st December 1997.

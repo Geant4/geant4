@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fragment.cc,v 1.12 2001/11/29 15:41:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Fragment.cc,v 1.14 2002/06/10 13:27:54 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -42,6 +42,9 @@ G4Fragment::G4Fragment() :
   numberOfCharged(0),
   theParticleDefinition(0),
   theCreationTime(0.0)
+#ifdef pctest
+  ,theCreatorModel("No name")
+#endif
 {
   theAngularMomentum = IsotropicRandom3Vector();
 }
@@ -59,6 +62,9 @@ G4Fragment::G4Fragment(const G4Fragment &right)
    numberOfCharged = right.numberOfCharged;
    theParticleDefinition = right.theParticleDefinition;
    theCreationTime = right.theCreationTime;
+#ifdef pctest
+   theCreatorModel = right.theCreatorModel;
+#endif
 }
 
 
@@ -76,8 +82,13 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
   numberOfCharged(0),
   theParticleDefinition(0),
   theCreationTime(0.0)
+#ifdef pctest
+  ,theCreatorModel("No name")
+#endif
 {
-  theExcitationEnergy = theMomentum.mag() - G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( theZ, theA );
+  theExcitationEnergy = theMomentum.mag() - 
+                        G4ParticleTable::GetParticleTable()->GetIonTable()
+			->GetIonMass( static_cast<G4int>(theZ), static_cast<G4int>(theA) );
   if( theExcitationEnergy < 0.0 )
     if( theExcitationEnergy > -10.0 * eV )
       theExcitationEnergy = 0.0;
@@ -100,7 +111,9 @@ G4Fragment::G4Fragment(const G4LorentzVector aMomentum, G4ParticleDefinition * a
   numberOfCharged(0),
   theParticleDefinition(aParticleDefinition),
   theCreationTime(0.0)
-
+#ifdef pctest
+  ,theCreatorModel("No name")
+#endif
 {
   theExcitationEnergy = CalculateExcitationEnergy(aMomentum);
   theAngularMomentum = IsotropicRandom3Vector();
@@ -121,6 +134,9 @@ const G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     numberOfCharged = right.numberOfCharged;
     theParticleDefinition = right.theParticleDefinition;
     theCreationTime = right.theCreationTime;
+#ifdef pctest
+    theCreatorModel = right.theCreatorModel;
+#endif
   }
   return *this;
 }
@@ -151,7 +167,7 @@ G4std::ostream& operator << (G4std::ostream &out, const G4Fragment *theFragment)
     << ", Z = " << G4std::setprecision(3) << theFragment->theZ ;
   out.setf(G4std::ios::scientific,G4std::ios::floatfield);
   out
-    << ", U = " << theFragment->theExcitationEnergy/MeV 
+    << ", U = " << theFragment->GetExcitationEnergy()/MeV 
     << " MeV" << G4endl
     << "          P = (" 
     << theFragment->theMomentum.x()/MeV << ","

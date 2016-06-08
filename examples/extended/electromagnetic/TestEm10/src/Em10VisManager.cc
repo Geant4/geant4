@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10VisManager.cc,v 1.3 2001/12/12 15:22:30 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison 24th January 1998.

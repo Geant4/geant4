@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.hh,v 1.6 2001/08/01 17:04:46 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMacroMultiplicity.hh,v 1.7 2002/06/18 14:13:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,7 +30,7 @@
 #ifndef G4StatMFMacroMultiplicity_h
 #define G4StatMFMacroMultiplicity_h 1
 
-#include <vector>
+#include "g4std/vector"
 
 #include "G4StatMFParameters.hh"
 #include "G4VStatMFMacroCluster.hh"

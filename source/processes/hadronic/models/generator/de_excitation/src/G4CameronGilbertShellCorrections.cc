@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronGilbertShellCorrections.cc,v 1.5 2001/10/05 16:13:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CameronGilbertShellCorrections.cc,v 1.6 2001/11/08 10:10:25 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -35,8 +35,7 @@
 
 // S(Z)
 const G4double G4CameronGilbertShellCorrections::ShellZTable
-[G4CameronGilbertShellCorrections::ZTableSize] = { 
-     0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,
+[G4CameronGilbertShellCorrections::ZTableSize] = {  // 88 values from Z = 11 to Z = 98
     -2.91, -4.17, -5.72, -7.80, -8.97, -9.70,-10.10,-10.70,-11.38,-12.07,
     -12.55,-13.24,-13.93,-14.71,-15.53,-16.37,-17.36,-18.52,-18.44,-18.19,
     -17.68,-17.09,-16.65,-16.66,-16.59,-16.35,-16.18,-16.41,-16.60,-16.54,
@@ -49,8 +48,7 @@ const G4double G4CameronGilbertShellCorrections::ShellZTable
 };
 // S(N)
 const G4double G4CameronGilbertShellCorrections::ShellNTable
-[G4CameronGilbertShellCorrections::NTableSize] = { // 155
-    0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,
+[G4CameronGilbertShellCorrections::NTableSize] = { // 140 values N = 11 to N = 150
     6.80,  7.53,  7.55,  7.21,  7.44,  8.07,  8.94,  9.81, 10.60, 11.39,
     12.54, 13.68, 14.34, 14.19, 13.83, 13.50, 13.00, 12.13, 12.60, 13.26,
     14.13, 14.92, 15.60, 16.38, 17.08, 17.55, 17.98, 18.33, 18.56, 18.71,
@@ -67,10 +65,13 @@ const G4double G4CameronGilbertShellCorrections::ShellNTable
     5.05,  5.04,  5.03,  4.99,  4.98,  5.11,  5.27,  5.39,  5.37,  5.30
 };
 
-G4CameronGilbertShellCorrections G4CameronGilbertShellCorrections::theInstance(10.0);
+G4CameronGilbertShellCorrections* G4CameronGilbertShellCorrections::theInstance = 0;
 
-G4CameronGilbertShellCorrections::G4CameronGilbertShellCorrections(G4double dummy)
-{ 
-    G4double even_more_dumy = dummy;
-    even_more_dumy/=2.;
+G4CameronGilbertShellCorrections::G4CameronGilbertShellCorrections()
+{;}
+
+G4CameronGilbertShellCorrections* G4CameronGilbertShellCorrections::GetInstance()
+{
+  if (!theInstance) theInstance = new G4CameronGilbertShellCorrections();
+  return theInstance;
 }

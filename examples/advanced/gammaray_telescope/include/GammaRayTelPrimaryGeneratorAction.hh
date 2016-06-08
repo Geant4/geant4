@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.6 2001/11/29 11:19:17 griccard Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

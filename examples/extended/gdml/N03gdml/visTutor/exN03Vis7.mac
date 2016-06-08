@@ -1,0 +1,68 @@
+#######################################################################
+#  MACRO FILE NAME: exN03Vis7.mac                                     #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE:                                                              #
+#        Nov      07, 2001                                            #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
+#        June     20, 2001                                            #
+#        November 26, 2000                                            #
+#        October  17, 2000                                            #  
+#                                                                     #
+#  CONTENTS: A macro to demonstrate the VRMLFILE driver               #
+#                                                                     #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute visTutor/exN03Vis7.mac              #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
+#                                  VRML viewer (e.g. VRMLview)        #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#    * Unnecessary                                                    #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#    * Unnecessary                                                    #
+#                                                                     #
+#  RECOMMENDED ENVIRONMENTAL VARIABLES FOR VISUALIZATION:             #
+#                                                                     #
+#    % setenv G4VRMLFILE_VIEWER        vrmlview                       #
+#     ( The default value is "NONE".)                                 #
+#                                                                     #
+#  ADDITIONAL NOTES:                                                  #
+#   The VRML-file viewer "vrmlview" is obtainable from the following  #
+#   Web site:                                                         #
+#      http://www.sim.no/downloads.html                               #
+#                                                                     #
+#######################################################################
+
+###################################################
+# Visualization of detector geometry and events  
+# with the VRML2FILE driver.
+###################################################
+
+# Store particle trajactories for visualization
+/tracking/storeTrajectory 1
+
+# Invoke the VRML2FILE driver
+#  Note: The VRML1FILE driver generates VRML 1.0 format files.
+#        The VRML2FILE driver generates VRML 2.0 format files.
+/vis/open VRML2FILE
+
+# Create an empty scene and add the detector geometry to it
+/vis/drawVolume
+
+# Visualize 3 events in the wireframe mode 
+#  Note: The command /vis/scene/add/trajectories
+#        is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is  
+#        described in the event action.
+#  Note: "/vis/viewer/set/style wireframe" means  
+#       "half-transparent" in the VRML2FILE driver.  
+#       It is a convention only for this driver.
+#/vis/scene/add/trajectories
+/vis/viewer/set/style wireframe
+/run/beamOn 3

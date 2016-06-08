@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LowEnergyGammaConversion.hh,v 1.14 2001/10/08 07:45:33 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

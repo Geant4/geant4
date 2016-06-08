@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.9 1999/11/19 18:01:40 morita Exp $ */
+/* $Id: liblist.c,v 1.14 2002/05/03 12:59:08 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -115,13 +115,13 @@ char** parsedir(char *directory,int *argc)
  
 int main (int argc, char** argv) {
 
-  char buffer[BUFSIZE],*bufferPtr,workbuf[256];
+  char static buffer[BUFSIZE],*bufferPtr,workbuf[256];
   char *ptr,*p,**pp,**pp1,**pp2,*directory=0;
   char **rargv;
   int i,optl=0,swapping,c,rargc;
   FILE *fp;
 
-#ifdef _WIN32
+#if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
   char *ntg4tmp=0,*ntg4tmp1=0;
   int nti; 
 #endif
@@ -263,7 +263,7 @@ int main (int argc, char** argv) {
 
   if(optl)fprintf(stderr,"  Reading dependency files...\n");
 
-#ifdef _WIN32
+#if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
       ntg4tmp=getenv("G4TMP");
       if ( ! ntg4tmp ) 
         {
@@ -278,7 +278,7 @@ int main (int argc, char** argv) {
       fp=fopen(rargv[i],"r");
       fgets(buffer,BUFSIZE,fp);
 
-#ifdef _WIN32
+#if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
       ptr=strchr(ntg4tmp1,':');
       if ( ptr ) *(ptr+1)='\0';
 
@@ -362,7 +362,7 @@ int main (int argc, char** argv) {
 	    fgets(buffer,BUFSIZE,fp);
 	    bufferPtr=buffer;
 
-#ifdef _WIN32
+#if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
 	    while ( ptr=strchr(buffer,'\\') ) *ptr='/';
 
 	    while (ntg4tmp1 &&  (ptr=strstr(buffer,ntg4tmp1)) )
@@ -376,7 +376,7 @@ int main (int argc, char** argv) {
       }
     }
 
-#ifdef _WIN32
+#if defined ( _WIN32 ) || defined ( __CYGWIN__ ) || defined ( __CYGWIN32__ )
       free(ntg4tmp1);
 #endif
 

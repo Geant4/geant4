@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FluoDataData.cc,v 1.2 
-// GEANT4 tag $Name: geant4-04-00 $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -34,6 +32,7 @@
 
 #include "G4FluoData.hh"
 #include "G4DataVector.hh"
+#include "G4FluoTransition.hh"
 #include "g4std/fstream"
 #include "g4std/strstream"
 
@@ -46,17 +45,17 @@ G4FluoData::~G4FluoData()
 { 
  G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
 
-  for (pos = idMap.begin(); pos != idMap.end(); pos++)
+  for (pos = idMap.begin(); pos != idMap.end(); ++pos)
     {
       G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
-  for (pos = energyMap.begin(); pos != energyMap.end(); pos++)
+  for (pos = energyMap.begin(); pos != energyMap.end(); ++pos)
     {
       G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
- for (pos = probabilityMap.begin(); pos != probabilityMap.end(); pos++)
+ for (pos = probabilityMap.begin(); pos != probabilityMap.end(); ++pos)
     {
       G4DataVector* dataSet = (*pos).second;
       delete dataSet;
@@ -100,7 +99,7 @@ size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
   }
  return n;
 }
-G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex) 
+G4int G4FluoData::StartShellId(G4int initIndex, G4int vacancyIndex) const
 {
  G4int n = -1;
 
@@ -124,7 +123,7 @@ G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex)
  return n;
 }
  
-G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex) 
+G4double G4FluoData::StartShellEnergy(G4int initIndex, G4int vacancyIndex) const
 {
   G4double n = -1;
   
@@ -148,7 +147,7 @@ G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex)
   return n;
 }
 
-G4double G4FluoData::StartShellProb(G4int initIndex,G4int vacancyIndex) 
+G4double G4FluoData::StartShellProb(G4int initIndex, G4int vacancyIndex) const
 {
   G4double n = -1;
 
@@ -189,12 +188,13 @@ void G4FluoData::LoadData(G4int Z)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
+      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
     }
   
   G4String pathString(path);
-  G4String dirFile = pathString + "/fluor/" + name;
+  G4String fluor("/fluor/");
+  G4String dirFile = pathString + fluor + name;
   G4std::ifstream file(dirFile);
   G4std::filebuf* lsdp = file.rdbuf();
   
@@ -255,7 +255,7 @@ void G4FluoData::LoadData(G4int Z)
 	if(k%nColumns == 2)
 	  {	 
 	    // 2nd column is transition  probabilities
-	   
+
 	    transProbabilities->push_back(a);
 	    
 	    k++;
@@ -271,10 +271,10 @@ void G4FluoData::LoadData(G4int Z)
 	else if (k%nColumns == 0)
 
 	  {//third column is transition energies
-	   
+
 	    G4double e = a * MeV;
 	    transEnergies->push_back(e);
-	    
+	   
 	    k=1;
 	  }
       }
@@ -307,6 +307,35 @@ void G4FluoData::PrintData()
 	     << G4endl;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

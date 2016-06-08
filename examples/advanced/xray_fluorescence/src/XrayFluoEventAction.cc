@@ -37,9 +37,8 @@
 #include "XrayFluoEventActionMessenger.hh"
 #include "XrayFluoRunAction.hh"
 #include "XrayFluoDataSet.hh"
-#ifdef G4ANALYSIS_USE
+
 #include "XrayFluoAnalysisManager.hh"
-#endif
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -113,10 +112,9 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
 	  totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
 	  
 	  energyD = ResponseFunction(totEnergy);
-#ifdef G4ANALYSIS_USE
 	    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
 	    analysis->analyseEnergyDep(energyD);
-#endif
+
 	    totEnergyDetect += energyD;
 	    
 	    
@@ -242,3 +240,9 @@ G4double XrayFluoEventAction::ResponseFunction(G4double energy)
   return value;
 
 }
+
+
+
+
+
+

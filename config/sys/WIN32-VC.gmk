@@ -1,5 +1,5 @@
 #
-# ------ WIN32/VC ------
+# ------ WIN32/VC ------    Visual-C++ 6.0 SP5
 #
 ifeq ($(G4SYSTEM),WIN32-VC)
   CXX       := CL
@@ -19,6 +19,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   #
   ifdef G4USE_OSPACE
     CXXFLAGS += $(OSPACEINC)
+    CPPFLAGS += -DG4USE_OSPACE
   else 
     ifdef G4USE_STLPORT
       CXXFLAGS += $(OSPACEINC)
@@ -40,7 +41,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
       
   AR := LIB
   ECHO := echo -e
-  FC := f77
+  FC := g77
 #  FCLIBS := -lf2c
   ifndef OGLFLAGS
     OGLFLAGS  :=

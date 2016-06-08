@@ -21,20 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.hh,v 1.8 2001/08/01 17:08:30 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VPreCompoundIon.hh,v 1.10 2002/06/06 17:14:05 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by V. Lara
 
-
-#ifndef G4PreCompoundIon_h
-#define G4PreCompoundIon_h 1
-
+#ifndef G4VPreCompoundIon_h
+#define G4VPreCompoundIon_h 1
 
 #include "G4VPreCompoundFragment.hh"
-#include "G4PreCompoundParameters.hh"
-#include "Randomize.hh"
-//#include "G4VCoulombBarrier.hh"
+#include "G4VCoulombBarrier.hh"
+
 
 class G4VPreCompoundIon : public G4VPreCompoundFragment
 {
@@ -44,45 +41,56 @@ protected:
 
 public:
 
-  // copy constructor
-  G4VPreCompoundIon(const G4VPreCompoundIon &right): G4VPreCompoundFragment(right) {}
-
-  // constructor  
-  G4VPreCompoundIon(const G4double anA, const G4double aZ, G4VCoulombBarrier* aCoulombBarrier):
-    G4VPreCompoundFragment(anA,aZ,aCoulombBarrier) {}
-
-  G4VPreCompoundIon(const G4double anA, const G4double aZ, G4VCoulombBarrier* aCoulombBarrier, 
-		    const G4String & aName):
-    G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
-  
-  // destructor  
-  virtual ~G4VPreCompoundIon() {}
-
-  // operators  
-  const G4VPreCompoundIon & operator=(const G4VPreCompoundIon &right) {
-    if (&right != this) this->G4VPreCompoundFragment::operator=(right);
-    return *this;
-  }
-
-
-  G4bool operator==(const G4VPreCompoundIon &right) const
-  { return G4VPreCompoundFragment::operator==(right);}
-
-  G4bool operator!=(const G4VPreCompoundIon &right) const
-  { return G4VPreCompoundFragment::operator!=(right);}
-
-
-
-public:
-  G4double ProbabilityDistributionFunction(const G4double & eKin, const G4Fragment & aFragment);
-
-  // Gives the kinetic energy for fragments in pre-equilibrium decay
-  G4double GetKineticEnergy(const G4Fragment & aFragment);
-
+    // copy constructor
+    G4VPreCompoundIon(const G4VPreCompoundIon &right): 
+	G4VPreCompoundFragment(right) {}
+    
+    // constructor  
+    G4VPreCompoundIon(const G4double anA, 
+		      const G4double aZ, 
+		      G4VCoulombBarrier* aCoulombBarrier,
+		      const G4String & aName): 
+	G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
+    
+    virtual ~G4VPreCompoundIon() {}
+    
+    // operators  
+    const G4VPreCompoundIon & 
+    operator=(const G4VPreCompoundIon &right) {
+	if (&right != this) this->G4VPreCompoundFragment::operator=(right);
+	return *this;
+    }
+    
+    G4bool operator==(const G4VPreCompoundIon &right) const 
+	{ return G4VPreCompoundFragment::operator==(right);}
+    
+    G4bool operator!=(const G4VPreCompoundIon &right) const 
+	{ return G4VPreCompoundFragment::operator!=(right);}
+    
+    virtual G4double ProbabilityDistributionFunction(const G4double eKin,
+						     const G4Fragment& aFragment);
+    
 protected:
+    G4bool IsItPossible(const G4Fragment& aFragment) 
+	{
+	    G4int pplus = aFragment.GetNumberOfCharged();   
+	    G4int pneut = aFragment.GetNumberOfParticles()-pplus;
+	    return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
+	}
 
-  virtual G4double GetCCoef(const G4double aZ) const {return 1.0;}
+  virtual G4double GetAlpha() = 0;
+  virtual G4double GetBeta() = 0;
+  virtual G4double FactorialFactor(const G4double N, const G4double P) = 0;
+  virtual G4double CoalescenceFactor(const G4double A) = 0; 
+    
 };
 
 #endif
- 
+
+
+
+
+
+
+
+

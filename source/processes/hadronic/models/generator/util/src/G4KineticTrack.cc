@@ -471,7 +471,7 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4double r = theTotalActualWidth * G4UniformRand();
      G4ParticleDefinition* theDefinition = this->GetDefinition();
      G4DecayTable* theDecayTable = theDefinition->GetDecayTable();
-     G4VDecayChannel* theDecayChannel;
+     G4VDecayChannel* theDecayChannel=NULL;
      for (index = nChannels - 1; index >= 0; index--)
         {
          if (r < theCumActualWidth[index])

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PrimaryGeneratorAction.cc,v 1.3 2001/11/21 11:57:14 mverderi Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em10PrimaryGeneratorAction.cc,v 1.4 2002/02/05 11:06:38 grichine Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -115,7 +115,8 @@ void Em10PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       y0 = r0*sin(phi0);
   } 
   ********************************************* */
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  //  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundParameters.hh,v 1.7 2001/08/01 17:08:29 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundParameters.hh,v 1.8 2002/06/06 17:10:07 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by V. Lara
 
@@ -35,44 +35,45 @@
 class G4PreCompoundParameters
 {
 private:
-  static G4PreCompoundParameters  thePreCompoundParameters;
+    static G4PreCompoundParameters thePreCompoundParameters;
 
-  // default constructor
-  G4PreCompoundParameters() : theLevelDensity(0.125/MeV),
-			      r0(1.5*fermi),Transitionsr0(0.6*fermi),FermiEnergy(35.0*MeV) {}
+    // default constructor
+    G4PreCompoundParameters() : theLevelDensity(0.125/MeV),
+      r0(1.5*fermi),Transitions_r0(0.6*fermi),FermiEnergy(35.0*MeV) 
+	{}
 
 public:
 
-  ~G4PreCompoundParameters() {};
+    ~G4PreCompoundParameters() {};
+ 
+    static G4PreCompoundParameters * GetAddress();
 
-  static G4PreCompoundParameters * GetAddress();
+    G4double GetLevelDensity()
+	{ return theLevelDensity; }
+ 
 
-  G4double GetLevelDensity()
-  { return theLevelDensity; }
-  
-  G4double Getr0()
-  { return r0; }
+    G4double Getr0()
+	{ return r0; }
 
-  G4double GetTransitionsr0()
-  { return Transitionsr0; }
+    G4double GetTransitionsr0()
+	{ return Transitions_r0; }
 
 
-  G4double GetFermiEnergy()
-  { return FermiEnergy; }
+    G4double GetFermiEnergy()
+	{ return FermiEnergy; }
 
 private:
-  // Level density parameter
-  const G4double theLevelDensity;
+    // Level density parameter
+    const G4double theLevelDensity;
 
-
-  // Nuclear radius r0
-  const G4double r0;
+    // Nuclear radius r0
+    const G4double r0;
 	
-  // Nuclear radius r0 for transitions
-  const G4double Transitionsr0;
+    // Nuclear radius r0 for transitions
+    const G4double Transitions_r0;
 
-  // Fermi energy level
-  const G4double FermiEnergy;
+    // Fermi energy level
+    const G4double FermiEnergy;
   
 };
 

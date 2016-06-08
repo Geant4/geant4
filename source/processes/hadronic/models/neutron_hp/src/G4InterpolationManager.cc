@@ -28,7 +28,7 @@
 
    G4InterpolationScheme G4InterpolationManager::MakeScheme(G4int it)
    {
-     G4InterpolationScheme result;
+     G4InterpolationScheme result(LINLIN);
      switch(it)
      {
       case 1:

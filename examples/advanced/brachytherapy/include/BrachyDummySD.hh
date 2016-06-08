@@ -36,16 +36,16 @@ class G4Step;
 
 class BrachyDummySD : public G4VSensitiveDetector
 {
- public:
- 	BrachyDummySD();
-  	~BrachyDummySD() {};
+public:
+  BrachyDummySD();
+  ~BrachyDummySD() {};
   
-	void Initialize(G4HCofThisEvent*HCE) {};
-	G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {return false;}
-	void EndOfEvent(G4HCofThisEvent*HCE) {};
-	void clear() {};
-	void DrawAll() {};
-	void PrintAll() {};
+  void Initialize(G4HCofThisEvent*HCE) {};
+  G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist) {return false;}
+  void EndOfEvent(G4HCofThisEvent*HCE) {};
+  void clear() {};
+  void DrawAll() {};
+  void PrintAll() {};
 };
 
 BrachyDummySD::BrachyDummySD() : G4VSensitiveDetector("dummySD")

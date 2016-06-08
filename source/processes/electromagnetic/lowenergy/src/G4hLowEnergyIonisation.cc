@@ -69,6 +69,18 @@
 // 18 Oct.  2001 V.Ivanchenko Add fluorescence
 // 30 Oct.  2001 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
 // 07 Dec   2001 V.Ivanchenko Add SetFluorescence method
+// 15 Feb   2002 V.Ivanchenko Fix problem of Generic Ions
+// 25 Mar   2002 V.Ivanchenko Fix problem of fluorescence below threshold  
+// 28 Mar   2002 V.Ivanchenko Set fluorescence off by default
+// 09 Apr   2002 V.Ivanchenko Fix table problem of GenericIons
+// 28 May   2002 V.Ivanchenko Remove flag fStopAndKill
+// 31 May   2002 V.Ivanchenko Add path of Fluo + Auger cuts to 
+//                            AtomicDeexcitation
+// 03 Jun   2002 MGP          Restore fStopAndKill
+// 10 Jun   2002 V.Ivanchenko Restore fStopButAlive
+// 12 Jun   2002 V.Ivanchenko Fix in fluctuations - if tmax<2*Ipot Gaussian
+//                            fluctuations enables
+
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,6 +97,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4AtomicDeexcitation.hh"
+#include "G4AtomicTransitionManager.hh"
 #include "G4ShellVacancy.hh"
 #include "G4hShellCrossSection.hh"
 #include "G4VEMDataSet.hh"
@@ -93,6 +106,7 @@
 #include "G4Gamma.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4SemiLogInterpolation.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -114,7 +128,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     paramStepLimit (0.005),
     shellVacancy(0),
     shellCS(0),
-    theFluo(true)
+    theFluo(false)
 { 
   InitializeMe();
 }
@@ -221,21 +235,54 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
 {
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisation::BuildPhysicsTable for "
-           << aParticleType.GetParticleName() << G4endl;
+           << aParticleType.GetParticleName()
+           << " mass(MeV)= " << aParticleType.GetPDGMass()/MeV
+           << " charge= " << aParticleType.GetPDGCharge()/eplus
+           << " type= " << aParticleType.GetParticleType()
+           << G4endl;
+
+    if(verboseLevel > 1) {
+      G4ProcessVector* pv = aParticleType.GetProcessManager()->GetProcessList();
+     
+      G4cout << " 0: " << (*pv)[0]->GetProcessName() << " " << (*pv)[0] 
+             << " 1: " << (*pv)[1]->GetProcessName() << " " << (*pv)[1] 
+	//        << " 2: " << (*pv)[2]->GetProcessName() << " " << (*pv)[2]
+             << G4endl;
+      G4cout << "ionModel= " << theIonEffChargeModel
+             << " MFPtable= " << theMeanFreePathTable
+             << " iniMass= " << initialMass
+             << G4endl;
+    }
+  }
+
+  if(aParticleType.GetParticleType() == "nucleus" && 
+     aParticleType.GetParticleName() != "GenericIon" &&
+     theMeanFreePathTable) {
+
+     G4EnergyLossTables::Register(&aParticleType,  
+              theDEDXpTable,
+              theRangepTable,
+              theInverseRangepTable,
+              theLabTimepTable,
+              theProperTimepTable,
+              LowestKineticEnergy, HighestKineticEnergy,
+              proton_mass_c2/aParticleType.GetPDGMass(),
+              TotBin);
+
+     return;
   }
   
-
   InitializeParametrisation() ;
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
-  charge = aParticleType.GetPDGCharge()/eplus ;
+  charge = aParticleType.GetPDGCharge()/eplus;
   chargeSquare = charge*charge ;
 
   // ---- MGP ---- workaround for the deprecated "cuts per material"
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   const G4Material* material = (*theMaterialTable)[0];  
-  G4double electronCutInRange = G4Electron::Electron()->GetEnergyThreshold(material);
+  G4double electronCutInRange = G4Electron::Electron()->GetRangeThreshold(material);
   //                    was   = G4Electron::Electron()->GetCuts(); 
   // ---- MGP ----
 
@@ -324,7 +371,7 @@ void G4hLowEnergyIonisation::BuildLossTable(
                              const G4ParticleDefinition& aParticleType) 
 {
   
-  // Inicialisation
+  // Initialisation
   G4double lowEdgeEnergy , ionloss, ionlossBB, paramB ;
   G4double lowEnergy, highEnergy;
   G4Proton* theProton = G4Proton::Proton();
@@ -376,10 +423,13 @@ void G4hLowEnergyIonisation::BuildLossTable(
     ionlossBB = theBetheBlochModel->TheValue(&aParticleType,material,highE) ;
     ionlossBB -= DeltaRaysEnergy(material,highE,proton_mass_c2) ;
 
+    /*
     if(theBarkas) {
       ionlossBB += BarkasTerm(material,highE)*charge ;
       ionlossBB += BlochTerm(material,highE,1.0) ;
     }
+    */
+    
     paramB =  ionloss/ionlossBB - 1.0 ; 
 
     // now comes the loop for the kinetic energy values      
@@ -403,10 +453,12 @@ void G4hLowEnergyIonisation::BuildLossTable(
 
         ionloss -= DeltaRaysEnergy(material,lowEdgeEnergy,proton_mass_c2) ;
 
+	/*
         if(theBarkas) {
           ionloss += BarkasTerm(material,lowEdgeEnergy)*charge ;
           ionloss += BlochTerm(material,lowEdgeEnergy,1.0) ;
         }
+	*/
 	ionloss *= (1.0 + paramB*highEnergy/lowEdgeEnergy) ;
       }      
 	  
@@ -461,7 +513,7 @@ void G4hLowEnergyIonisation::BuildDataForFluorescence(
   G4PhysicsLogVector* bVector = new G4PhysicsLogVector(LowestKineticEnergy,
 		                		       HighestKineticEnergy,
 						       binForFluo);
-  G4AtomicTransitionManager* transitionManager = 
+  const G4AtomicTransitionManager* transitionManager = 
                              G4AtomicTransitionManager::Instance();
 
   G4double bindingEnergy;
@@ -489,34 +541,41 @@ void G4hLowEnergyIonisation::BuildDataForFluorescence(
     for (size_t iel=0; iel<NumberOfElements; iel++ ) {
 
       G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
+      G4int nShells = transitionManager->NumberOfShells(Z);
       energy = new G4DataVector();
       ksi    = new G4DataVector();
       energy1= new G4DataVector();
       ksi1   = new G4DataVector();
       //if(NumberOfElements > 1) 
-      elDensity = theAtomicNumDensityVector[iel];
+      elDensity = theAtomicNumDensityVector[iel]/((G4double)nShells);
 
       for (size_t j = 0; j<binForFluo; j++) {
 
         G4double tkin  = bVector->GetLowEdgeEnergy(j);
         G4double gamma = tkin/mass + 1.;
+        G4double beta2 = 1.0 - 1.0/(gamma*gamma);
         G4double r     = electron_mass_c2/mass;
-        G4double tmax  = 2.*mass*r*(gamma*gamma - 1.)/(1. + 2.*gamma*r + r*r);
+        G4double tmax  = 2.*electron_mass_c2*(gamma*gamma - 1.)/(1. + 2.*gamma*r + r*r);
         G4double cross   = 0.;
         G4double cross1  = 0.;
         G4double eAverage= 0.;
-	G4int nShells = transitionManager->NumberOfShells(Z);
         G4double tmin = G4std::min(tCut,tmax);
+        G4double rel;
 
         for (G4int n=0; n<nShells; n++) {
 
           bindingEnergy = transitionManager->Shell(Z, n)->BindingEnergy();
-          eAverage   += elDensity*log(tmin/bindingEnergy + 1.);
-          cross      += elDensity*tmin/((bindingEnergy + tmin)*bindingEnergy);
-          cross1     += elDensity*(tmax - tmin)/
-	                ((tmax + bindingEnergy)*(tmin + bindingEnergy));
+          if (tmin > bindingEnergy) {
+            rel = log(tmin/bindingEnergy);
+            eAverage   += rel - beta2*(tmin - bindingEnergy)/tmax;
+            cross      += 1.0/bindingEnergy - 1.0/tmin - beta2*rel/tmax;
+	  }
+          if (tmax > tmin) {
+	    cross1     += 1.0/tmin - 1.0/tmax - beta2*log(tmax/tmin)/tmax;
+	  }
 	}
 
+        cross1 *= elDensity;
         energy1->push_back(tkin);
         ksi1->push_back(cross1);
 
@@ -566,6 +625,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   charge = aParticleType.GetPDGCharge()/eplus ;
   chargeSquare = charge*charge ;
+  initialMass = aParticleType.GetPDGMass();
     
   //create table
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
@@ -604,13 +664,9 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
       
     for ( G4int i = 0 ; i < TotBin ; i++ ) {
       lowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
-      chargeSquare = theIonEffChargeModel->
-                     TheValue(&aParticleType,material,lowEdgeEnergy) ;
-	  
       G4double sigma = 0.0 ;  
       for (G4int iel=0; iel<NumberOfElements; iel++ ) {
 	sigma += theAtomicNumDensityVector[iel]*
-                 chargeSquare*
 		 ComputeMicroscopicCrossSection(
                         aParticleType,
 			lowEdgeEnergy,
@@ -646,10 +702,10 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
   // calculates the microscopic cross section in GEANT4 internal units
   //    ( it is called for elements , AtomicNumber = z )
   
-  G4double energy, beta2, tmax, var ;
+  G4double energy, gamma, beta2, tmax, var;
   G4double totalCrossSection = 0.0 ;
   
-  G4double particleMass = aParticleType.GetPDGMass() ;
+  G4double particleMass = initialMass;
   
   // get particle data ...................................
   
@@ -657,10 +713,10 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
   
   // some kinematics......................
   
-  beta2  = kineticEnergy*(energy+particleMass) / (energy*energy);
-  var    = particleMass+electron_mass_c2;
-  tmax   = 2.0*electron_mass_c2*kineticEnergy * (energy+particleMass)
-         / (var*var + 2.0*electron_mass_c2*kineticEnergy) ;
+  gamma  = energy/particleMass;
+  beta2  = 1.0 - 1.0/(gamma*gamma);
+  var    = electron_mass_c2/particleMass;
+  tmax   = 2.*electron_mass_c2*(gamma*gamma - 1.)/(1. + 2.*gamma*var + var*var);
   
   // now you can calculate the total cross section 
   
@@ -699,15 +755,17 @@ G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
  
    *condition = NotForced ;
 
-   G4double kineticEnergy = aParticle->GetKineticEnergy() ;
+   G4double kineticEnergy = (aParticle->GetKineticEnergy())*initialMass/(aParticle->GetMass());
+   charge = aParticle->GetCharge();
+   chargeSquare = theIonEffChargeModel->TheValue(aParticle, aMaterial);
 
    if(kineticEnergy < LowestKineticEnergy) meanFreePath = DBL_MAX;
 
    else {
      if(kineticEnergy > HighestKineticEnergy)
-                    kineticEnergy = HighestKineticEnergy ;
-     meanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                    GetValue(kineticEnergy,isOutRange) ;
+                    kineticEnergy = HighestKineticEnergy;
+     meanFreePath = (((*theMeanFreePathTable)(aMaterial->GetIndex()))->
+                    GetValue(kineticEnergy,isOutRange))/chargeSquare;
      }
 
    return meanFreePath ;
@@ -731,48 +789,25 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   
   G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
-
-
-  charge = (particle->GetCharge())/eplus ;
   
   // Scale the kinetic energy
   
   G4double tscaled = kineticEnergy*massRatio ; 
-  chargeSquare = theIonEffChargeModel->TheValue(particle,material) ;
   
   if(charge > 0.0) {
     
     highEnergy = protonHighEnergy ;
 
-    //Very low energy dE/dx assumed to be according to Free Electron Gas Model
-    if(tscaled < MinKineticEnergy) {
-      fdEdx     = 0.5 * ProtonParametrisedDEDX(material, MinKineticEnergy) 
-                * sqrt(tscaled/MinKineticEnergy) ;
-      fRangeNow = tscaled/fdEdx ;
-      fdEdx    *= chargeSquare ;
-      dx        = fRangeNow/paramStepLimit ;
+    fRangeNow = G4EnergyLossTables::GetRange(theProton, tscaled, material);
+    dx = G4EnergyLossTables::GetRange(theProton, highEnergy, material);
+    fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
+          * chargeSquare ;
 
-      // Normal energy
-    } else {
-
-      fRangeNow = G4EnergyLossTables::GetRange(theProton, tscaled, material) ;
-      dx = G4EnergyLossTables::GetRange(theProton, highEnergy, material) ;
-
-      if(tscaled > highEnergy) {
-        fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
-              * chargeSquare ;
+    if(tscaled > highEnergy) {
         // Correction for positive ions
-        if(theBarkas && 1.0 < charge) {
-          G4double loss = BarkasTerm(material,tscaled)*(charge -1.0) 
-                        * chargeSquare ;
-          loss  += BlochTerm(material,tscaled,chargeSquare) ; 
-          loss  -= BlochTerm(material,tscaled,1.0) ; 
-          fdEdx += loss ;
-	}
-
-	// Parametrisation - recalculate dE/dx
-      } else {    
-        fdEdx = ProtonParametrisedDEDX(material, tscaled) * chargeSquare ;
+      if(theBarkas) {
+        fdEdx += BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
+        fdEdx += BlochTerm(material,tscaled,chargeSquare); 
       }
     }
     
@@ -780,29 +815,17 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   } else {
 
     highEnergy = antiProtonHighEnergy ;
+    fRangeNow = G4EnergyLossTables::GetRange(theAntiProton, tscaled, material);
+    dx = G4EnergyLossTables::GetRange(theAntiProton, highEnergy, material);
+    fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, material) 
+          * chargeSquare ;
 
-    //Very low energy dE/dx assumed to be constant
-    if(tscaled < MinKineticEnergy) {
-      fdEdx     = AntiProtonParametrisedDEDX(material, MinKineticEnergy)
-                * sqrt(tscaled/MinKineticEnergy) ;
-      fRangeNow = tscaled/fdEdx ;
-      fdEdx    *= chargeSquare ;
-      dx        = fRangeNow/paramStepLimit ;
+    if(tscaled > highEnergy) {
 
-      // Normal energy
-    } else {
-
-      fRangeNow = G4EnergyLossTables::GetRange(theAntiProton, tscaled, 
-                                               material);
-      dx = G4EnergyLossTables::GetRange(theAntiProton, highEnergy, material);
-
-      if(tscaled > highEnergy) {
-        fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, material) 
-              * chargeSquare ;
-    
-      // For Bragg's peak dE/dx is recalculated
-      } else {
-        fdEdx = AntiProtonParametrisedDEDX(material, tscaled) * chargeSquare;
+      // Correction for positive ions
+      if(theBarkas) {
+        fdEdx -= BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
+        fdEdx += BlochTerm(material,tscaled,chargeSquare); 
       }
     }
   }
@@ -868,46 +891,6 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   } else if( kineticEnergy > HighestKineticEnergy) { 
     eloss = step*fdEdx ; 
  
-    // proton parametrisation model  
-  } else if(tscaled < protonHighEnergy && charge > 0.0) {
-    
-    if(nStopping) nloss = 
-      (theNuclearStoppingModel->TheValue(particle, material))*step ;
-    
-    G4double eFinal = kineticEnergy - step*fdEdx - nloss ;
-    
-    if(0.0 < eFinal) {
-
-      G4double ts = eFinal*massRatio;
-      G4double fdEdx1 = ProtonParametrisedDEDX(material,ts)*chargeSquare;
-
-      // Correction for positive ions
-      //if(theBarkas && 1.0 < charge) {
-      //  fdEdx1 += BarkasTerm(material,ts)*(charge -1.0) * chargeSquare ;
-      //  fdEdx1 += BlochTerm(material,ts,chargeSquare) ; 
-      //  fdEdx1 -= BlochTerm(material,ts,1.0) ; 
-      // }
-      eloss = (fdEdx + fdEdx1) * step * 0.5 ;
-    } else {
-      eloss = kineticEnergy - nloss ;
-    }
-
-    // antiproton parametrisation model
-  } else if(tscaled < antiProtonHighEnergy && charge < 0.0) {
-    
-    if(nStopping) nloss = 
-      (theNuclearStoppingModel->TheValue(particle, material))*step ;
-    
-    G4double eFinal = kineticEnergy - step*fdEdx - nloss ;
-    
-    if(0.0 < eFinal) {
-      eloss = (fdEdx + 
-            AntiProtonParametrisedDEDX(material,eFinal*massRatio)*chargeSquare)
-            *  step * 0.5 ;
-    } else {
-      eloss = kineticEnergy - nloss ;
-    }
-
     // big step
   } else if(step >= fRangeNow ) {
     eloss = kineticEnergy ;
@@ -939,13 +922,23 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     } else {
       eloss = step*fdEdx ;
     }
+    // Correction for positive ions
+    if(theBarkas && 1.0 < charge) {
+      G4double ts = tscaled - eloss*0.5*massRatio;
+      if(ts < protonHighEnergy) ts = protonHighEnergy;
+      eloss += BarkasTerm(material,ts)*charge*chargeSquare*step;
+      eloss += BlochTerm(material,ts,chargeSquare)*step; 
+    }
+    if(nStopping && tscaled < protonHighEnergy) {
+      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step;
+    }
   }
 
   if(eloss < 0.0) eloss = 0.0;
   
   finalT = kineticEnergy - eloss - nloss;
 
-  if( EnlossFlucFlag && 0.0 < eloss ) {
+  if( EnlossFlucFlag && 0.0 < eloss && finalT > MinKineticEnergy) {
     
     //  now the electron loss with fluctuation
     eloss = ElectronicLossFluctuation(particle, material, eloss, step) ;
@@ -957,10 +950,11 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   if (finalT <= MinKineticEnergy ) {
      
      finalT = 0.0;
-     if( "proton" == (particle->GetDefinition()->GetParticleName()) )
-	aParticleChange.SetStatusChange(fStopAndKill);
-     else  
-	aParticleChange.SetStatusChange(fStopButAlive); 
+      if(!particle->GetDefinition()->GetProcessManager()->
+                     GetAtRestProcessVector()->size())
+        aParticleChange.SetStatusChange(fStopAndKill);
+      else 
+        aParticleChange.SetStatusChange(fStopButAlive);
   } 
 
   aParticleChange.SetEnergyChange( finalT );
@@ -1171,7 +1165,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   
   G4double gamma= KineticEnergy/ParticleMass + 1.;
   G4double r    = electron_mass_c2/ParticleMass;
-  G4double tmax = 2.*ParticleMass*r*(gamma*gamma - 1.)/(1. + 2.*gamma*r + r*r);
+  G4double tmax = 2.*electron_mass_c2*(gamma*gamma - 1.)/(1. + 2.*gamma*r + r*r);
   
   // Validity range for delta electron cross section
   G4double DeltaCut = cutForDelta[aMaterial->GetIndex()];
@@ -1248,49 +1242,52 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
   // Select atom and shell
   G4int Z = SelectRandomAtom(aMaterial, KineticEnergy);
-  G4int shell = shellCS->SelectRandomShell(Z, KineticEnergy,
-                                           ParticleMass,DeltaKineticEnergy);
-  const G4AtomicShell* atomicShell = 
+
+  if(theFluo && Z > 5) {
+    G4int shell = shellCS->SelectRandomShell(Z, KineticEnergy,
+                                             ParticleMass,DeltaKineticEnergy);
+    const G4AtomicShell* atomicShell = 
                 (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
-  G4double bindingEnergy = atomicShell->BindingEnergy();
+    G4double bindingEnergy = atomicShell->BindingEnergy();
 
-  if(verboseLevel > 1) {
-    G4cout << "PostStep Z= " << Z << " shell= " << shell
-           << " bindingE(keV)= " << bindingEnergy/keV
-           << " finalE(keV)= " << finalKineticEnergy/keV
-           << G4endl;
-  } 
+    if(verboseLevel > 1) {
+      G4cout << "PostStep Z= " << Z << " shell= " << shell
+             << " bindingE(keV)= " << bindingEnergy/keV
+             << " finalE(keV)= " << finalKineticEnergy/keV
+             << G4endl;
+    } 
 
-  // Fluorescence data start from element 6
+    // Fluorescence data start from element 6
   
-  if (theFluo && Z > 5 && finalKineticEnergy >= bindingEnergy
-              && (bindingEnergy >= minGammaEnergy 
-              ||  bindingEnergy >= minElectronEnergy) ) {
+    if (finalKineticEnergy >= bindingEnergy 
+         && (bindingEnergy >= minGammaEnergy 
+         ||  bindingEnergy >= minElectronEnergy) ) {
 
-    G4int shellId = atomicShell->ShellId();
-    secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
+      G4int shellId = atomicShell->ShellId();
+      secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
 
-    if (secondaryVector != 0) {
+      if (secondaryVector != 0) {
 
-      nSecondaries = secondaryVector->size();
-      for (size_t i = 0; i<nSecondaries; i++) {
+        nSecondaries = secondaryVector->size();
+        for (size_t i = 0; i<nSecondaries; i++) {
 
-        aSecondary = (*secondaryVector)[i];
-        if (aSecondary) {
+          aSecondary = (*secondaryVector)[i];
+          if (aSecondary) {
 	  
-          G4double e = aSecondary->GetKineticEnergy();
-          type = aSecondary->GetDefinition();
-          if (e < finalKineticEnergy && 
-                ((type == G4Gamma::Gamma() && e > minGammaEnergy ) || 
-                 (type == G4Electron::Electron() && e > minElectronEnergy ))) {
+            G4double e = aSecondary->GetKineticEnergy();
+            type = aSecondary->GetDefinition();
+            if (e < finalKineticEnergy && 
+                 ((type == G4Gamma::Gamma() && e > minGammaEnergy ) || 
+                  (type == G4Electron::Electron() && e > minElectronEnergy ))) {
 
-             finalKineticEnergy -= e;
-             totalNumber++;
+              finalKineticEnergy -= e;
+              totalNumber++;
 
-	  } else {
+	    } else {
 
-             delete aSecondary;
-             (*secondaryVector)[i] = 0;
+              delete aSecondary;
+              (*secondaryVector)[i] = 0;
+	    }
 	  }
 	}
       }
@@ -1323,9 +1320,11 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       finalKineticEnergy = 0.;
       aParticleChange.SetMomentumChange(ParticleDirection.x(),
                       ParticleDirection.y(),ParticleDirection.z());
-      if (aParticle->GetDefinition()->GetParticleName() == "proton")
-	aParticleChange.SetStatusChange(fStopAndKill);
-      else  aParticleChange.SetStatusChange(fStopButAlive);
+      if(!aParticle->GetDefinition()->GetProcessManager()->
+                     GetAtRestProcessVector()->size())
+        aParticleChange.SetStatusChange(fStopAndKill);
+      else 
+        aParticleChange.SetStatusChange(fStopButAlive);
     }
   
   aParticleChange.SetEnergyChange( finalKineticEnergy );
@@ -1340,7 +1339,9 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
     for (size_t l = 0; l < nSecondaries; l++) {
 
       aSecondary = (*secondaryVector)[l];
-      if(aSecondary) aParticleChange.AddSecondary(aSecondary); 
+      if(aSecondary) {
+        aParticleChange.AddSecondary(aSecondary);
+      } 
     }
     delete secondaryVector;
   }
@@ -1352,9 +1353,9 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
 G4std::vector<G4DynamicParticle*>* 
 G4hLowEnergyIonisation::DeexciteAtom(const G4Material* material,
-				       G4double incidentEnergy,
-				       G4double hMass,
-				       G4double eLoss)
+				           G4double incidentEnergy,
+				           G4double hMass,
+				           G4double eLoss)
 {
 
   if (verboseLevel > 1) {
@@ -1366,11 +1367,14 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4Material* material,
 
   if(eLoss < minGammaEnergy && eLoss < minElectronEnergy) return 0;
 
-  G4int index = material->GetIndex();
-  G4double eexc = material->GetIonisation()->GetMeanExcitationEnergy();
-  G4double x = cutForDelta[index]/eexc;
-  G4double deltaEnergy = eexc*(x + 1)*log(x + 1)/x;
-  G4AtomicTransitionManager* transitionManager = 
+  G4int index    = material->GetIndex();
+  //  G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
+  G4double gamma = incidentEnergy/hMass + 1;
+  G4double beta2 = 1.0 - 1.0/(gamma*gamma);
+  G4double r     = electron_mass_c2/hMass;
+  G4double tmax  = 2.*electron_mass_c2*(gamma*gamma - 1.)/(1. + 2.*gamma*r + r*r);
+  G4double tcut  = G4std::min(tmax,cutForDelta[index]);
+  const G4AtomicTransitionManager* transitionManager = 
                              G4AtomicTransitionManager::Instance();
 
   size_t nElements = material->GetNumberOfElements();
@@ -1382,7 +1386,7 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4Material* material,
     G4int Z = (G4int)((*theElementVector)[j]->GetZ());
     G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 
-    if (Z>5 && (maxE>minGammaEnergy || maxE>minElectronEnergy) ) {
+    if (Z > 5 && maxE < tcut && (maxE > minGammaEnergy || maxE > minElectronEnergy) ) {
       stop = false;
       break;
     }
@@ -1397,7 +1401,7 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4Material* material,
   G4std::vector<G4DynamicParticle*>* secVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
-  G4double e;
+  G4double e, tkin, grej;
   G4ThreeVector position;
   G4int shell, shellId;
 
@@ -1413,10 +1417,18 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4Material* material,
     G4int Z = (G4int)((*theElementVector)[i]->GetZ());
     G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 
-    if (nVacancies && Z>5 && (maxE>minGammaEnergy || maxE>minElectronEnergy)) {
+    if (nVacancies && Z  > 5 && maxE < tcut && (maxE > minGammaEnergy || maxE > minElectronEnergy)) {
       for(size_t j=0; j<nVacancies; j++) {
      
-        shell = shellCS->SelectRandomShell(Z,incidentEnergy,hMass,deltaEnergy);
+        // sampling follows       
+        do {
+	  tkin = tcut/(1.0 + (tcut/maxE - 1.0)*G4UniformRand());
+          grej = 1.0 - beta2 * tkin/tmax;
+  
+        } while( G4UniformRand() > grej );
+
+        shell = shellCS->SelectRandomShell(Z,incidentEnergy,hMass,tkin);
+
         shellId = transitionManager->Shell(Z, shell)->ShellId();
         G4double maxE = transitionManager->Shell(Z, shell)->BindingEnergy();
  
@@ -1464,7 +1476,7 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4hLowEnergyIonisation::SelectRandomAtom(const G4Material* material, 
-                                                 G4double kineticEnergy) const
+                                                     G4double kineticEnergy) const
 {
   G4int nElements = material->GetNumberOfElements();
   G4int Z = 0;
@@ -1487,6 +1499,8 @@ G4int G4hLowEnergyIonisation::SelectRandomAtom(const G4Material* material,
     p.push_back(cross);
     norm += cross;
   }
+
+  if(norm == 0.0) return 0;
 
   G4double q = norm*G4UniformRand();
 
@@ -1727,13 +1741,12 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   G4double tau2 = tau*(tau+2.);
   G4double tmax    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
-  if (tmax <= ipotFluct) tmax = ipotFluct ;
   
   if(tmax > threshold) tmax = threshold;
   G4double beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation 
-  if(meanLoss > kappa*tmax)
+  if(meanLoss > kappa*tmax || tmax < kappa*ipotFluct )
   {
     siga = tmax * (1.0-0.5*beta2) * step * twopi_mc2_rcl2 
          * electronDensity / beta2 ;
@@ -1749,14 +1762,14 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
       siga = sqrt( siga * (chargeSquare * chu + yang)) ;
     }
-
-    loss = G4RandGauss::shoot(meanLoss,siga) ;
-    if(loss < 0.) loss = 0. ;
-    return loss ;
+    
+    do {
+        loss = G4RandGauss::shoot(meanLoss,siga);
+    } while (loss < 0. || loss > 2.0*meanLoss);
+    return loss;
   }
 
   // Non Gaussian fluctuation 
-  G4double mLoss = meanLoss/chargeSquare;
   static const G4double probLim = 0.01 ;
   static const G4double sumaLim = -log(probLim) ;
   static const G4double alim = 10.;
@@ -1780,22 +1793,19 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   w1 = tmax/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
 
-  C = mLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
+  C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  if(tmax > ipotFluct)
-    a3 = rateFluct*mLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
-  else
-  {
-     a1 /= 1.-rateFluct ;
-     a2 /= 1.-rateFluct ;
-     a3  = 0. ;
-  } 
+  a3 = rateFluct*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
+  if(a1 < 0.0) a1 = 0.0;
+  if(a2 < 0.0) a2 = 0.0;
+  if(a3 < 0.0) a3 = 0.0;
 
   suma = a1+a2+a3;
 
-  loss = 0. ;
+  loss = 0.;
+
 
   if(suma < sumaLim)             // very small Step
     {
@@ -1803,12 +1813,12 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
       if(tmax == ipotFluct)
       {
-        a3 = mLoss/e0;
+        a3 = meanLoss/e0;
 
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1822,7 +1832,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       else
       {
         tmax = tmax-ipotFluct+e0 ;
-        a3 = mLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+        a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
 
         if(a3>alim)
         {
@@ -1856,7 +1866,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,G4int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -1865,7 +1875,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,G4int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1884,7 +1894,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -1923,7 +1933,6 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       loss += lossc;  
      }
     } 
-  loss *= chargeSquare;
 
   return loss ;
 }
@@ -1933,6 +1942,8 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 {
   minGammaEnergy = cut;
+  deexcitationManager.SetCutForSecondaryPhotons(cut);
+  theFluo = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1940,6 +1951,15 @@ void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 {
   minElectronEnergy = cut;
+  deexcitationManager.SetCutForAugerElectrons(cut);
+  theFluo = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyIonisation::ActivateAugerElectronProduction(G4bool val)
+{
+  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

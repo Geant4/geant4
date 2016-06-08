@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gspart.cc,v 1.5 2001/07/16 15:38:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #include "G4ProcessManager.hh"
 #include "G3toG4.hh"

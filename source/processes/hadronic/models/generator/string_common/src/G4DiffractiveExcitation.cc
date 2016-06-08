@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.10 2001/08/01 17:09:02 hpw Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.11 2002/06/13 10:43:02 jwellisc Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -132,7 +132,7 @@ G4bool G4DiffractiveExcitation::
 //	       G4cout << " X-plus  " << Xplus << G4endl;
 //	       G4cout << " X-minus " << Xminus << G4endl;
 	       
-	       G4double pt2=G4ThreeVector(Qmomentum).mag2();
+	       G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
 	       G4double Qplus =-1 * pt2 / Xminus/Ptarget.minus();
 	       G4double Qminus=     pt2 / Xplus /Pprojectile.plus();
 

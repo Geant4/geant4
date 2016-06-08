@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroBiNucleon.cc,v 1.8 2001/08/01 17:05:33 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMacroBiNucleon.cc,v 1.9 2002/06/06 17:57:35 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -59,19 +59,24 @@ G4double G4StatMFMacroBiNucleon::CalcMeanMultiplicity(const G4double FreeVol, co
     const G4double ThermalWaveLenght = 16.15*fermi/sqrt(T);
 	
     const G4double lambda3 = ThermalWaveLenght*ThermalWaveLenght*ThermalWaveLenght;
-	
+    
     const G4double degeneracy = 3.0;
-	
+    
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
-
+    
     const G4double BindingE = G4NucleiPropertiesTable::GetBindingEnergy(1,theA); //old value was 2.796*MeV
-	
+    G4double exponent = (BindingE + theA*(mu+nu*theZARatio) - 
+			 Coulomb*theZARatio*theZARatio*pow(theA,5./3.))/T;
+
+    // To avoid numerical problems
+    if (exponent < -700.0) exponent = -700.0;
+    else if (exponent > 700.0) exponent = 700.0;
+
     _MeanMultiplicity = (degeneracy*FreeVol*G4double(theA)*sqrt(G4double(theA))/lambda3)*
-	exp((BindingE+ theA*(mu+nu*theZARatio) - 
-	     Coulomb*theZARatio*theZARatio*pow(theA,5./3.))/T);
+	exp(exponent);
 			 
-    return 	_MeanMultiplicity;
+    return _MeanMultiplicity;
 }
 
 

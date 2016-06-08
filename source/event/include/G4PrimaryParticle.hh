@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PrimaryParticle.hh,v 1.10 2001/07/13 15:01:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 

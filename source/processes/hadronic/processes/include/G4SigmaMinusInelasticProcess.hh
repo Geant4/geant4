@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SigmaMinusInelasticProcess.hh,v 1.5 2001/08/01 17:12:14 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
  // G4 Process: SigmaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Nov-1996

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.24 2001/11/30 17:36:18 japost Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4ChordFinder.cc,v 1.27 2002/06/01 02:37:14 japost Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 
@@ -184,7 +184,10 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
      stepForChord = NewStep(stepTrial, dChordStep, fLastStepEstimate_Unconstrained );
 
      if( ! validEndPoint ) {
-	 stepTrial = stepForChord;
+        if( stepForChord <= oldStepTrial )
+	   stepTrial = stepForChord;
+        else
+ 	   stepTrial *= 0.1;
 #if 0
          // Possible complementary approach:
 	 //  Get the driver to calculate the new step size, if it is needed
@@ -250,14 +253,27 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   static G4double lastStepTrial = 1.,  lastDchordStep= 1.;
 
 #if 1 
-  const G4double  threshold = 1.21, multiplier = 0.9;   //  0.9 < 1 / sqrt(1.21)
-
+  // const G4double  threshold = 1.21, multiplier = 0.9;   //  0.9 < 1 / sqrt(1.21)
 
   stepEstimate_Unconstrained = stepTrialOld * sqrt( fDeltaChord / dChordStep );
   stepTrial =  0.98 * stepEstimate_Unconstrained;
 
-  if ( dChordStep < threshold * fDeltaChord ){
-     stepTrial= stepTrialOld *  multiplier;    
+  // if ( dChordStep < threshold * fDeltaChord ){
+  //    stepTrial= stepTrialOld *  multiplier;    
+  // }
+  if( (stepTrial < 0.001 * stepTrialOld)
+    || (stepTrial > 1000.0 * stepTrialOld)
+    ){
+     if ( dChordStep > 1000.0 * fDeltaChord ){
+        stepTrial= stepTrialOld * 0.03;   
+     }else{
+        if ( dChordStep > 100. * fDeltaChord ){
+	   stepTrial= stepTrialOld * 0.1;   
+	}else{
+	  // Try halving the length until dChordStep OK
+	  stepTrial= stepTrialOld * 0.5;   
+	}
+     }
   }
 
   lastStepTrial = stepTrialOld; 

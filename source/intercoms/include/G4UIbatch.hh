@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.hh,v 1.4 2001/07/11 10:01:11 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4UIbatch.hh,v 1.6 2002/06/07 17:37:44 asaim Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // $id$
 
@@ -48,7 +48,7 @@ class G4UImanager;
 class G4UIbatch : public G4UIsession 
 {
   public: // with description
-      G4UIbatch(G4String fileName,G4UIsession* prevSession=NULL);
+      G4UIbatch(const char* fileName,G4UIsession* prevSession=NULL);
       //  Constructor. 
       //  "prevSession" must be NULL if this class is constructed
       // from main().

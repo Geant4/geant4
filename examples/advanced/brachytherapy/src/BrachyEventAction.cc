@@ -27,9 +27,9 @@
 //    *******************************
 
 #include "BrachyEventAction.hh"
-#include "BrachyWaterBoxHit.hh"
-#include "BrachyWaterBoxSD.hh"
-
+#include "BrachyPhantomHit.hh"
+#include "BrachyPhantomSD.hh"
+#include "BrachyDetectorConstruction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -40,57 +40,118 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-
+#include "G4VVisManager.hh"
+#include"BrachyAnalysisManager.hh"
 //....
 
-BrachyEventAction::BrachyEventAction(G4float *pVoxel,G4int NumVoxelX,G4int NumVoxelZ) :
-	m_NumVoxelX(NumVoxelX),m_NumVoxelZ(NumVoxelZ)
+BrachyEventAction::BrachyEventAction(G4String &SDName) :
+  drawFlag("all" ),printModulo(1)      
 {
- m_HitsCollectionID = -1;
- m_pVoxel = pVoxel;
+  m_HitsCollectionID = -1;
+
+  SDname=SDName;
+  pDetector=new BrachyDetectorConstruction(SDname);
+ 
+  m_NumVoxelX=pDetector-> GetNumVoxelX();
+  m_NumVoxelZ=pDetector->GetNumVoxelZ();
+  VoxelWidth_Z= pDetector -> VoxelWidth_Z()   ;
+  VoxelWidth_X=pDetector->VoxelWidth_X();
+
+ 
 }
 
 //....
 
 BrachyEventAction::~BrachyEventAction()
 {
+  delete pDetector;
+ 
 }
 
 //....
 
-void BrachyEventAction::BeginOfEventAction(const G4Event*)
+void BrachyEventAction::BeginOfEventAction(const G4Event* aEvent)
 {
- G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
- if(m_HitsCollectionID == -1)
- 	m_HitsCollectionID = pSDManager->GetCollectionID("WaterBoxHitsCollection");
+
+  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
+  if(m_HitsCollectionID == -1)
+    m_HitsCollectionID = pSDManager->GetCollectionID("PhantomHitsCollection");
+ 
 }
 
 //....
 
 void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 {
- if(m_HitsCollectionID < 0)
-	return;
 
- G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
- BrachyWaterBoxHitsCollection* CHC = NULL; 
+
+  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID() ;
  
- if(HCE)
-	CHC = (BrachyWaterBoxHitsCollection*)(HCE->GetHC(m_HitsCollectionID));
+  if((evno==100)||(evno==500)||(evno==1000)||(evno==2500)
+     ||(evno==5000)||(evno==7000)||(evno==9000)||
+     (evno==9500)||(evno==29000000)||(evno==29500000))
+    G4cout << evno << G4endl;
+ 
+  if(m_HitsCollectionID < 0)
+    return;
 
- if(CHC)
+  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  BrachyPhantomHitsCollection* CHC = NULL; 
+ 
+  if(HCE)
+    CHC = (BrachyPhantomHitsCollection*)(HCE->GetHC(m_HitsCollectionID));
+
+  if(CHC)
+    {
+
+	
+      G4int HitCount = CHC->entries();
+		
+      for (G4int h=0; h<HitCount; h++)
 	{
-	if(m_pVoxel)
-		{
-		// Fill voxel matrix with energy deposit data
-		G4int HitCount = CHC->entries();
-		for (G4int h=0; h<HitCount; h++)
-			m_pVoxel[((*CHC)[h])->GetZID() + ((*CHC)[h])->GetXID()*m_NumVoxelX] += (*CHC)[h]->GetEdep();
-		}
-	}	
+	      
+			  
+	  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();	
+             
+	  i=((*CHC)[h])->GetZID();
+	  k=((*CHC)[h])->GetXID();
+                        
+	  j=i+k*m_NumVoxelX;
+
+	  EnergyDep=(*CHC)[h]->GetEdep();
+                      
+	  x = (-m_NumVoxelZ+1+2*k)*VoxelWidth_X/2; 
+	  z = (- m_NumVoxelZ+1+2*i)*VoxelWidth_Z/2;
+                       
+	  if(EnergyDep!=0){
+	    { if( abs(x)>0.56*mm && abs(z)>3.8*mm)
+	      analysis->hist(x,z,EnergyDep); analysis->analyse(x,z,EnergyDep);}}}
+
+    }
+
+  // extract the trajectories and draw them
+
+  if (G4VVisManager::GetConcreteInstance())
+    {
+      G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+      G4int n_trajectories = 0;
+      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+
+      for (G4int i=0; i<n_trajectories; i++) 
+        { G4Trajectory* trj = (G4Trajectory*)((*(evt->
+						 GetTrajectoryContainer()))[i]);
+
+ 
+	if (drawFlag == "all") trj->DrawTrajectory(50);
+	else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+	  trj->DrawTrajectory(50);
+	else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
+	  trj->DrawTrajectory(50);	     	     
+	}
+    }
+ 
+
 }
-
-
 
 
 

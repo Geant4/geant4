@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Transportation.hh,v 1.6 2001/11/28 18:27:50 japost Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------

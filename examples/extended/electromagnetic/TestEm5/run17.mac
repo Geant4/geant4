@@ -6,8 +6,8 @@
 /control/verbose 2
 /run/verbose 2
 #
-/calor/cutG 100. mm    
-/calor/cutE 100. mm
+/run/particle/setGCut 100. mm    
+/run/particle/setECut 100. mm
 /run/initialize
 #
 /calor/setAbsMat NewArgonCO2   

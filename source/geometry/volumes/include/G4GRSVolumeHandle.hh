@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GRSVolumeHandle.hh,v 1.3 2001/11/06 17:08:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 // 
 // Class G4TouchableHandle
 //

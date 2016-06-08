@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.6 2001/08/01 17:05:29 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4EvaporationProbability.cc,v 1.7 2001/11/08 10:18:25 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -96,7 +96,7 @@ G4double G4EvaporationProbability::CalcProbability(const G4Fragment & fragment,
     G4double NuclearMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(theZ,theA);
 
 
-    G4double delta0 = G4PairingCorrection::GetPairingCorrection(fragment.GetA(),fragment.GetZ());
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(fragment.GetA(),fragment.GetZ());
 
     G4double SystemEntropy = 2.0*sqrt(theEvapLDPptr->LevelDensityParameter(fragment.GetA(),
 									   fragment.GetZ(),U)*

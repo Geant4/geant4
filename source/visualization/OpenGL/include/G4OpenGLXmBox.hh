@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLXmBox.hh,v 1.6 2001/07/11 10:08:51 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 //Box container class

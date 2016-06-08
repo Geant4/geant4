@@ -33,6 +33,7 @@
 //               by A. Howard and H. Araujo 
 //                    (27th November 2001)
 //
+//
 // ParticleSource program
 // --------------------------------------------------------------
 //////////////////////////////////////////////////////////////////////////////
@@ -389,7 +390,7 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
   // create a new vertex
   G4PrimaryVertex* vertex = 
     new G4PrimaryVertex(particle_position,particle_time);
-  
+
   if(verbosityLevel >= 2)
     G4cout << "Creating primaries and assigning to vertex" << G4endl;
   // create new primaries and set them to the vertex
@@ -409,6 +410,8 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
     G4cout << " NumberOfParticlesToBeGenerated: "
 	   << NumberOfParticlesToBeGenerated << G4endl;
   }
+
+
   for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ ) {
     G4PrimaryParticle* particle =
       new G4PrimaryParticle(particle_definition,px,py,pz);
@@ -423,4 +426,7 @@ void DMXParticleSource::GeneratePrimaryVertex(G4Event *evt)
   if(verbosityLevel > 1)
     G4cout << " Primary Vetex generated "<< G4endl;   
 }
+
+
+
 

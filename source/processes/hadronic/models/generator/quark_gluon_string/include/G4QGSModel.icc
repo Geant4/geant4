@@ -72,7 +72,7 @@ void G4QGSModel<ParticipantType>::Init(const G4Nucleus & aNucleus, const G4Dynam
     G4ReactionProduct theProjectile;   
     theProjectile.SetDefinition(aProjectile.GetDefinition());
     theProjectile.SetTotalEnergy(Mom.e());
-    theProjectile.SetMomentum(Mom);
+    theProjectile.SetMomentum(Mom.vect());
 //--DEBUG--    cout << "PreInteractionMomentum "<<Mom<<G4endl;
     theParticipants.BuildInteractions(theProjectile);
     theParticipants.GetWoundedNucleus()->DoLorentzBoost(theCurrentVelocity);

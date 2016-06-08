@@ -181,7 +181,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
 {
   G4LorentzVector p4Gamma = gamma->GetMomentum();
-  G4ThreeVector pGamma(p4Gamma);
+  G4ThreeVector pGamma(p4Gamma.vect());
   G4double eGamma = gamma->GetMomentum().e();
   
   G4LorentzVector p4Nucleus(_nucleus.GetMomentum() );
@@ -201,7 +201,7 @@ void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
   if(newExcitation < 0)
     newExcitation = 0;
 
-  G4ThreeVector p3Residual(G4ThreeVector(p4Nucleus) - pGamma);
+  G4ThreeVector p3Residual(G4ThreeVector(p4Nucleus.vect()) - pGamma);
   G4double newEnergy = sqrt(p3Residual * p3Residual +
 			    (Mass + newExcitation) * (Mass + newExcitation));
   G4LorentzVector p4Residual(p3Residual, newEnergy);

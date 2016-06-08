@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.cc,v 1.3 2001/10/29 14:27:56 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FragmentingString.cc,v 1.4 2002/06/13 09:04:12 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 

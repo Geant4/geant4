@@ -30,11 +30,11 @@ C
      +  ,NHI6,HIS6(1),HIS6(2),0.)
       ENDIF
       IF(NHI7.GT.0) THEN
-        CALL HBOOK1(7,'kinetic energy of backscattered primaries(deg)'
+        CALL HBOOK1(7,'kinetic energy of backscattered primaries(MeV)'
      +  ,NHI7,HIS7(1),HIS7(2),0.)
       ENDIF
       IF(NHI8.GT.0) THEN
-        CALL HBOOK1(8,'kinetic energy of the charged secondaries(deg)'
+        CALL HBOOK1(8,'kinetic energy of the charged secondaries(MeV)'
      +  ,NHI8,HIS8(1),HIS8(2),0.)
       ENDIF
       IF(NHI9.GT.0) THEN

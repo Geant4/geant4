@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.12 2001/10/05 16:13:44 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMicroPartition.cc,v 1.13 2002/06/06 17:57:48 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -274,7 +274,9 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
     _Entropy = PartitionEntropy;
 	
     // And finally compute probability of fragment configuration
-    return _Probability = exp(PartitionEntropy-SCompound);
+    G4double exponent = PartitionEntropy-SCompound;
+    if (exponent > 700.0) exponent = 700.0;
+    return _Probability = exp(exponent);
 }
 
 

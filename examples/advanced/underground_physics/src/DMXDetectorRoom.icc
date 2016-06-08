@@ -1,0 +1,598 @@
+  // Window - AIR + glass ************************************************
+
+  G4double glassThick = 3.0*mm;
+  G4double sidepanelWidth = 43.*cm;
+  G4double windowWidth = labWidth - 2.*sidepanelWidth;
+  G4double windowHeight = labHeight - 112.0*cm;
+  G4double glassPosY = 0.5*(worldLength - glassThick);
+  G4double glassPosZ = 0.5*(labHeight - windowHeight);
+
+  G4Box* glass_box = new G4Box
+  ("glass_box",0.5*windowWidth, 0.5*glassThick, 0.5*windowHeight );
+  glass_log = new G4LogicalVolume(glass_box, glass_mat, "glass_log");
+  glass_phys = new G4PVPlacement
+    (0, G4ThreeVector(0., glassPosY, glassPosZ), "glass_phys", glass_log, 
+     world_phys, false, 0);
+
+  G4VisAttributes* glass_vat= new G4VisAttributes(blue);
+  glass_vat->SetVisibility(true);
+  glass_vat->SetForceSolid(true);
+  glass_log->SetVisAttributes(glass_vat);
+
+  // hole in wall between glass and "lab": ************************************
+
+  G4double holeThick = wallThick - glassThick;
+  G4double windowPosY = 0.5*(worldLength - holeThick) - glassThick;
+  G4double windowPosZ = glassPosZ;
+
+  G4Box* window_box = new G4Box
+  ("window_box",0.5*windowWidth, 0.5*holeThick, 0.5*windowHeight );
+  window_log = new G4LogicalVolume(window_box, lab_mat, "window_log");
+  window_phys = new G4PVPlacement
+    (0, G4ThreeVector(0., windowPosY, windowPosZ), "window_phys",
+     window_log, world_phys, false, 0);
+
+  G4VisAttributes* window_vat= new G4VisAttributes(yellow);
+  //  window_log->SetVisAttributes(G4VisAttributes::Invisible);
+  window_vat->SetVisibility(true);
+  window_log->SetVisAttributes(window_vat);
+
+
+  // Side panels of Window - AIR + Al ****************************************
+
+  G4double panelThick = 5.0*mm;
+//  G4double sidepanelWidth = 43.*cm; // defined earlier
+  G4double sidepanelPosX = 0.5*(labWidth - sidepanelWidth);
+  G4double sidepanelPosY = 0.5*(worldLength - panelThick);
+  G4double sidepanelPosZ = glassPosZ;
+
+  G4Box* sidepanel_box = new G4Box
+  ("sidepanel_box",0.5*sidepanelWidth, 0.5*panelThick, 0.5*windowHeight );
+  sidepanel_log = new G4LogicalVolume
+                      (sidepanel_box, panel_mat, "sidepanel_log");
+  sidepanel_phys = new G4PVPlacement
+    (0, G4ThreeVector(sidepanelPosX, sidepanelPosY, sidepanelPosZ), 
+        "sidepanel_phys", sidepanel_log, world_phys, false, 0);
+
+  sidepanel_phys = new G4PVPlacement
+    (0, G4ThreeVector(-sidepanelPosX, sidepanelPosY, sidepanelPosZ), 
+        "sidepanel_phys", sidepanel_log, world_phys, false, 1);
+
+  G4VisAttributes* panel_vat= new G4VisAttributes(grey);
+  panel_vat->SetVisibility(true);
+  panel_vat->SetForceSolid(true);
+  sidepanel_log->SetVisAttributes(panel_vat);
+
+  // panel hole in wall between Al and "lab": ******************************
+
+  G4double panelholePosX = sidepanelPosX;
+  G4double panelholePosY = 0.5*(worldLength - holeThick) - panelThick;
+  G4double panelholePosZ = sidepanelPosZ;
+
+  G4Box* panelhole_box = new G4Box
+  ("panelhole_box",0.5*sidepanelWidth, 0.5*holeThick, 0.5*windowHeight );
+  panelhole_log = new G4LogicalVolume
+                       (panelhole_box, lab_mat, "panelhole_log");
+
+  panelhole_phys = new G4PVPlacement
+    (0, G4ThreeVector(panelholePosX, panelholePosY, panelholePosZ), 
+    "panelhole_phys", panelhole_log, world_phys, false, 0);
+  panelhole_phys = new G4PVPlacement
+    (0, G4ThreeVector(-panelholePosX, panelholePosY, panelholePosZ), 
+    "panelhole_phys", panelhole_log, world_phys, false, 1);
+
+  panelhole_log->SetVisAttributes(window_vat);
+
+
+  // DOOR Window - AIR + glass ************************************************
+
+  G4double doorwindowWidth = 62.*cm;
+  G4double doorwindowHeight = 84.0*cm;
+  G4double doorglassPosX = 0.5*(labWidth - doorwindowWidth) - sidepanelWidth;
+  G4double doorglassPosY = 0.5*(worldLength - panelThick);
+  G4double doorglassPosZ = glassPosZ - 0.5*(windowHeight+doorwindowHeight);
+
+  G4Box* doorglass_box = new G4Box
+  ("doorglass_box",0.5*doorwindowWidth, 0.5*panelThick, 0.5*doorwindowHeight );
+  doorglass_log = new G4LogicalVolume
+                      (doorglass_box, panel_mat, "doorglass_log");
+  doorglass_phys = new G4PVPlacement
+    (0, G4ThreeVector(doorglassPosX, doorglassPosY, doorglassPosZ), 
+        "doorglass_phys", doorglass_log, world_phys, false, 0);
+
+  doorglass_log->SetVisAttributes(panel_vat);
+
+  // door hole in wall between glass and "lab": ******************************
+
+  G4double doorwindowPosX = doorglassPosX;
+  G4double doorwindowPosY = 0.5*(worldLength - holeThick) - panelThick;
+  G4double doorwindowPosZ = doorglassPosZ;
+
+  G4Box* doorwindow_box = new G4Box
+  ("doorwindow_box",0.5*doorwindowWidth, 0.5*holeThick, 0.5*doorwindowHeight );
+  doorwindow_log = new G4LogicalVolume
+                       (doorwindow_box, lab_mat, "doorwindow_log");
+  doorwindow_phys = new G4PVPlacement
+    (0, G4ThreeVector(doorwindowPosX, doorwindowPosY, doorwindowPosZ), 
+    "doorwindow_phys", doorwindow_log, world_phys, false, 0);
+
+  doorwindow_log->SetVisAttributes(window_vat);
+
+
+  // cupboards: ***************************************************************
+
+  // cupboard 1:
+  G4double cupboardDepth  = 38.0*cm; //X
+  G4double cupboard1Width  = 91.0*cm; //Y
+  G4double cupboard2Width  = 153.0*cm; //Y
+  G4double cupboardHeight = 91.0*cm; //Z
+  G4double woodThick      = 2.0*cm;
+  G4double insideDepth  = cupboardDepth - 2.*woodThick;
+  G4double inside1Width  = cupboard1Width - 2.*woodThick;
+  G4double inside2Width  = cupboard2Width - 2.*woodThick;
+  G4double insideHeight = cupboardHeight - 2.*woodThick;
+
+  //nb: cupboard orientation is sideways because they are lined along the wall
+  G4Box* cupboard_box = new G4Box
+   ("cupboard_box", 0.5*cupboardDepth, 0.5*cupboard1Width, 0.5*cupboardHeight);
+  G4Box* inside_box = new G4Box
+    ("inside_box", 0.5*insideDepth, 0.5*inside1Width, 0.5*insideHeight);
+  G4Box* shelf_box  = new G4Box
+    ("shelf_box", 0.5*insideDepth, 0.5*inside1Width, 0.5*woodThick);
+  G4Box* cupdoor_box = new G4Box
+    ("cupdoor_box", 0.5*woodThick+1.0*nanometer, 0.25*inside1Width, 0.5*insideHeight);
+//    ("cupdoor_box", 0.5*woodThick, 0.25*inside1Width, 0.5*insideHeight);
+
+  G4RotationMatrix rotMatrixCupboard;
+  rotMatrixCupboard.rotateY(0.0*deg);
+  
+  G4SubtractionSolid* cupboard_frame = new G4SubtractionSolid
+    ("cupboard_frame", cupboard_box, inside_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.)));
+  G4UnionSolid* cupboard_shelf1 = new G4UnionSolid
+    ("cupboard_shelf1", cupboard_frame, shelf_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.30*(insideHeight))));
+  G4UnionSolid* cupboard_shelf2 = new G4UnionSolid
+    ("cupboard_shelf2", cupboard_shelf1, shelf_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,-0.05*(insideHeight))));
+  G4SubtractionSolid* cupboard_sol = new G4SubtractionSolid
+    ("cupboard_sol", cupboard_shelf2, cupdoor_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector
+      (-0.5*(insideDepth+woodThick),0.25*inside1Width,0.)));
+
+  cupboard_log = new G4LogicalVolume
+    (cupboard_sol, cupboard_mat, "cupboard_log");
+
+  G4double cupb_X = 0.5*(labWidth - cupboardDepth);
+  //  G4double cupb_Y = 0.5*(labLength - cupboard1Width) - 2.0*cm;
+  G4double cupb_Y = 0.5*labLength;
+  G4double cupb_Z = 0.5*(labHeight - cupboardHeight) - 25.4*cm;
+
+  for (G4int i=0; i<5; i++)
+    {
+      cupb_Y -= cupboard1Width+2.0*cm;
+      cupboard_phys = new G4PVPlacement
+	(0, G4ThreeVector(cupb_X, cupb_Y, cupb_Z), "cupboard_phys", 
+	 cupboard_log, lab_phys, false, i);
+    }
+
+  cupb_X  = -(0.5*(labWidth - cupboard1Width) - cupboardDepth - 2.0*cm);
+  G4double cupb_Y2 = -0.5*(labLength - cupboardDepth);
+
+  G4RotationMatrix rotMatrixWallcupboard;
+  rotMatrixWallcupboard.rotateZ(-90.0*deg);
+
+  cupboard_phys = new G4PVPlacement
+    (G4Transform3D
+     (rotMatrixWallcupboard,G4ThreeVector(cupb_X, cupb_Y2, cupb_Z)), 
+      "cupboard_phys", cupboard_log, lab_phys, false, 5);
+
+
+  G4VisAttributes* cupboard_vat= new G4VisAttributes(yellow);
+  cupboard_vat->SetVisibility(true);
+  cupboard_vat->SetForceSolid(true);
+  cupboard_log->SetVisAttributes(cupboard_vat);
+
+  // cupboard 2 (bigger/wider) ***********************************************
+
+  G4Box* cupboard2_box = new G4Box
+  ("cupboard2_box", 0.5*cupboardDepth, 0.5*cupboard2Width, 0.5*cupboardHeight);
+  G4Box* inside2_box = new G4Box
+    ("inside2_box", 0.5*insideDepth, 0.5*inside2Width, 0.5*insideHeight);
+  G4Box* shelf2_box  = new G4Box
+    ("shelf2_box", 0.5*insideDepth, 0.5*inside2Width, 0.5*woodThick);
+  G4Box* cupdoor_box2 = new G4Box
+    ("cupdoor_box2", 0.5*woodThick+1.0*nanometer, 0.25*inside2Width, 0.5*insideHeight);
+//    ("cupdoor_box2", 0.5*woodThick, 0.25*inside2Width, 0.5*insideHeight);
+
+  G4SubtractionSolid* cupboard2_frame = new G4SubtractionSolid
+    ("cupboard2_frame", cupboard2_box, inside2_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.)));
+  G4UnionSolid* cupboard2_shelf1 = new G4UnionSolid
+    ("cupboard2_shelf1", cupboard2_frame, shelf2_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.30*(insideHeight))));
+  G4UnionSolid* cupboard2_shelf2 = new G4UnionSolid
+    ("cupboard2_shelf2", cupboard2_shelf1, shelf2_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.10*(insideHeight))));
+  G4SubtractionSolid* cupboard2_sol = new G4SubtractionSolid
+    ("cupboard2_sol", cupboard2_shelf2, cupdoor_box2, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector
+      (-0.5*(insideDepth+woodThick),0.25*inside2Width,0.)));
+
+  cupboard2_log = new G4LogicalVolume
+    (cupboard2_sol, cupboard_mat, "cupboard2_log");
+
+  cupb_X = 0.5*(labWidth - cupboardDepth);
+  //  cupb_Y = -(0.5*(labLength - cupboard2Width) - 2.0*cm);
+  cupb_Y -= 0.5*cupboard1Width + 0.5*cupboard2Width 
+                               + 2.0*cm; //using last cupboard posn on right...
+  //  cupb_Z = 0.5*(labHeight - cupboardHeight) - 25.4*cm;
+
+  cupboard2_phys = new G4PVPlacement
+    (0,G4ThreeVector(cupb_X, cupb_Y, cupb_Z), 
+      "cupboard2_phys", cupboard2_log, lab_phys, false, 0);
+
+  cupb_X = -0.5*(labWidth - cupboardDepth);
+  cupb_Y = -(0.5*(labLength - cupboard2Width) - cupboardDepth - 2.0*cm);
+
+  G4RotationMatrix rotMatrixWallcupboard2;
+  rotMatrixWallcupboard2.rotateZ(-180.0*deg);
+
+  cupboard2_phys = new G4PVPlacement
+    (G4Transform3D
+     (rotMatrixWallcupboard2,G4ThreeVector(cupb_X, cupb_Y, cupb_Z)), 
+      "cupboard2_phys", cupboard2_log, lab_phys, false, 1);
+
+
+  cupboard2_log->SetVisAttributes(cupboard_vat);
+
+
+  // NOW add the (wooden) DOOR:
+
+  G4double doorWidth = 1.67*m;  //X
+  G4double doorThick = 4.0*cm; //Y
+  G4double doorHeight = 2.09*m; //Z
+  G4double doorPosY = -0.5*(worldLength - doorThick);
+  G4double doorPosZ = -0.5*(worldHeight - doorHeight);
+
+  G4Box* door_box = new G4Box
+  ("door_box",0.5*doorWidth, 0.5*doorThick, 0.5*doorHeight );
+  door_log = new G4LogicalVolume(door_box, door_mat, "door_log");
+  door_phys = new G4PVPlacement
+    (0, G4ThreeVector(0., doorPosY, doorPosZ), "door_phys", door_log, 
+     world_phys, false, 0);
+
+  G4VisAttributes* door_vat= new G4VisAttributes(brown);
+  door_vat->SetVisibility(true);
+  door_vat->SetForceSolid(true);
+  door_log->SetVisAttributes(door_vat);
+
+
+  // hole in wall between door and "lab": ************************************
+
+  G4double doorholeThick = wallThick - doorThick;
+  G4double doorholePosY = -(0.5*(worldLength - doorholeThick) - doorThick);
+  G4double doorholePosZ = doorPosZ;
+
+  G4Box* doorhole_box = new G4Box
+  ("doorhole_box",0.5*doorWidth, 0.5*doorholeThick, 0.5*doorHeight );
+  doorhole_log = new G4LogicalVolume(doorhole_box, lab_mat, "doorhole_log");
+  doorhole_phys = new G4PVPlacement
+    (0, G4ThreeVector(0., doorholePosY, doorholePosZ), "doorhole_phys",
+     doorhole_log, world_phys, false, 0);
+
+  G4VisAttributes* doorhole_vat= new G4VisAttributes(cyan);
+  //  window_log->SetVisAttributes(G4VisAttributes::Invisible);
+  doorhole_vat->SetVisibility(true);
+  doorhole_log->SetVisAttributes(doorhole_vat);
+
+
+  // desks: *****************************************************************
+  //now add Desks - wood, but have the opportunity for three different woods -
+  // Cupboard, Door and then desks
+
+  // desk1 - no cupboard underneath - should be bigger subtraction?:
+
+  G4double desk1Depth  = 57.0*cm; //X
+  G4double desk1Width  = 160.0*cm; //Y
+  G4double desk1Height = 90.5*cm; //Z
+  G4double deskThick      = 3.0*cm;
+  G4double desk1_insideDepth  = desk1Depth - 2.*deskThick;
+  G4double desk1_insideWidth  = desk1Width - 2.*deskThick;
+  G4double desk1_insideHeight = desk1Height - 2.*deskThick;
+
+  //nb: desk orientation is sideways because they are lined along the wall
+  G4Box* desk1_box = new G4Box
+   ("desk1_box", 0.5*desk1Depth, 0.5*desk1Width, 0.5*desk1Height);
+  G4Box* desk1_inside_box = new G4Box
+    ("desk1_inside_box", 0.5*desk1_insideDepth, 0.5*desk1_insideWidth, 
+     0.5*desk1_insideHeight);
+  G4Box* desk1_door_box = new G4Box
+    ("desk1_door_box", 0.5*deskThick+1.0*nanometer, 0.25*desk1_insideWidth, 
+     0.5*desk1_insideHeight);
+//    ("desk1_door_box", 0.5*deskThick, 0.25*desk1_insideWidth, 
+//     0.5*desk1_insideHeight);
+
+  G4RotationMatrix rotMatrixDesk;
+  rotMatrixDesk.rotateY(0.0*deg);
+  
+  G4SubtractionSolid* desk1_frame = new G4SubtractionSolid
+    ("desk1_frame", desk1_box, desk1_inside_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.)));
+  G4SubtractionSolid* desk1_sol = new G4SubtractionSolid
+    ("desk1_sol", desk1_frame, desk1_door_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector
+      (-0.5*(desk1_insideDepth+deskThick),-0.25*desk1_insideWidth,0.)));
+
+  desk1_log = new G4LogicalVolume(desk1_sol, desk_mat, "desk1_log");
+
+  G4double desk_X = 0.5*(labWidth - desk1Depth);
+  G4double desk_Y = -(0.5*(labLength - desk1Width) - 30.0*cm);
+  G4double desk_Z = 0.5*(desk1Height - labHeight);
+
+  desk1_phys = new G4PVPlacement
+	(0, G4ThreeVector(desk_X, desk_Y, desk_Z), "desk1_phys", 
+	 desk1_log, lab_phys, false, 0);
+
+  G4VisAttributes* desk_vat= new G4VisAttributes(brown);
+  desk_vat->SetVisibility(true);
+  desk_vat->SetForceSolid(true);
+  desk1_log->SetVisAttributes(desk_vat);
+
+  // *****************
+  // desk2 (drawers):
+
+  G4double desk2Depth  = 57.0*cm; //X
+  G4double desk2Width = 156.0*cm; //Y
+  G4double desk2Height = desk1Height; //Z
+
+  G4double desk2_insideDepth  = desk2Depth - 2.*deskThick;
+  G4double desk2_insideWidth  = desk2Width - 2.*deskThick;
+  G4double desk2_insideHeight = desk2Height - 2.*deskThick;
+
+  //nb: desk orientation is sideways because they are lined along the wall
+  G4Box* desk2_box = new G4Box
+   ("desk2_box", 0.5*desk2Depth, 0.5*desk2Width, 0.5*desk2Height);
+  G4Box* desk2_inside_box = new G4Box
+    ("desk2_inside_box", 0.5*desk2_insideDepth, 0.5*desk2_insideWidth, 
+     0.5*desk2_insideHeight);
+  G4Box* desk2_door_box = new G4Box
+    ("desk2_door_box", 0.5*deskThick+1.0*nanometer, 0.2*desk2_insideWidth, 
+     0.5*desk2_insideHeight);
+//    ("desk2_door_box", 0.5*deskThick, 0.2*desk2_insideWidth, 
+//     0.5*desk2_insideHeight);
+
+  G4SubtractionSolid* desk2_frame = new G4SubtractionSolid
+    ("desk2_frame", desk2_box, desk2_inside_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.)));
+  G4SubtractionSolid* desk2_sol = new G4SubtractionSolid
+    ("desk2_sol", desk2_frame, desk2_door_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector
+      (-0.5*(desk2_insideDepth+deskThick),-0.25*desk2_insideWidth,0.)));
+
+  desk2_log = new G4LogicalVolume(desk2_sol, desk_mat, "desk2_log");
+
+  desk_X = 0.5*(labWidth - desk2Depth);
+  desk_Y += 0.5*(desk2Width + desk1Width) + 2.0*cm;
+  desk_Z = 0.5*(desk2Height - labHeight);
+
+  desk2_phys = new G4PVPlacement
+	(0, G4ThreeVector(desk_X, desk_Y, desk_Z), "desk2_phys", 
+	 desk2_log, lab_phys, false, 0);
+
+  desk2_log->SetVisAttributes(desk_vat);
+
+  // *****************
+  // desk3 (cupboard underneath):
+
+  G4double desk3Depth  = 79.0*cm; //X
+  G4double desk3Width = 160.0*cm; //Y
+  G4double desk3Height = desk1Height; //Z
+
+  G4double desk3_insideDepth  = desk3Depth - 2.*deskThick;
+  G4double desk3_insideWidth  = desk3Width - 2.*deskThick;
+  G4double desk3_insideHeight = desk3Height - 2.*deskThick;
+
+  //nb: desk orientation is sideways because they are lined along the wall
+  G4Box* desk3_box = new G4Box
+   ("desk3_box", 0.5*desk3Depth, 0.5*desk3Width, 0.5*desk3Height);
+  G4Box* desk3_inside_box = new G4Box
+    ("desk3_inside_box", 0.5*desk3_insideDepth, 0.5*desk3_insideWidth, 
+     0.5*desk3_insideHeight);
+  G4Box* desk3_door_box = new G4Box
+    ("desk3_door_box", 0.5*deskThick+1.0*nanometer, 0.15*desk3_insideWidth, 0.5*desk1_insideHeight);
+//    ("desk3_door_box", 0.5*deskThick, 0.15*desk3_insideWidth, 
+//     0.5*desk1_insideHeight);
+
+  G4SubtractionSolid* desk3_frame = new G4SubtractionSolid
+    ("desk3_frame", desk3_box, desk3_inside_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.)));
+  G4SubtractionSolid* desk3_sol = new G4SubtractionSolid
+    ("desk3_sol", desk3_frame, desk3_door_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector
+      (-0.5*(desk3_insideDepth+deskThick),-0.35*desk3_insideWidth,0.)));
+
+  desk3_log = new G4LogicalVolume(desk3_sol, desk_mat, "desk3_log");
+
+  desk_X = 0.5*(labWidth - desk3Depth);
+  desk_Y += 0.5*(desk3Width + desk3Width) + 2.0*cm;
+  desk_Z = 0.5*(desk3Height - labHeight);
+
+  desk3_phys = new G4PVPlacement
+	(0, G4ThreeVector(desk_X, desk_Y, desk_Z), "desk3_phys", 
+	 desk3_log, lab_phys, false, 0);
+
+  desk3_log->SetVisAttributes(desk_vat);
+
+
+  // *****************
+  // wooden radiator trunking - along LHS wall
+
+  G4double trunkDepth  = 20.0*cm; //X
+  G4double trunkWidth  = labLength; //Y
+  G4double trunkHeight = desk1Height; //Z
+  G4double trunkThick  = 3.0*cm;
+
+  // not 2.*trunkThick since only 2 sides of box - top and front
+  G4double trunk_insideDepth  = trunkDepth - trunkThick;
+  G4double trunk_insideWidth  = trunkWidth;
+  G4double trunk_insideHeight = trunkHeight - trunkThick;
+
+  G4Box* trunk_box = new G4Box
+   ("trunk_box", 0.5*trunkDepth, 0.5*trunkWidth, 0.5*trunkHeight);
+  G4Box* trunk_inside_box = new G4Box
+    ("trunk_inside_box", 0.5*trunk_insideDepth, 0.5*trunk_insideWidth, 
+     0.5*trunk_insideHeight);
+
+  trunk_log = new G4LogicalVolume(trunk_box, desk_mat, "trunk_log");
+  trunk_inside_log = new G4LogicalVolume
+                    (trunk_inside_box, lab_mat, "trunk_inside_log");
+
+  G4double trunk_X = -0.5*(labWidth - trunkDepth);
+  G4double trunk_Y = 0.0*m;
+  G4double trunk_Z = -0.5*(labHeight - trunkHeight);
+  
+  trunk_phys = new G4PVPlacement
+	(0, G4ThreeVector(trunk_X, trunk_Y, trunk_Z), "trunk_phys", 
+	 trunk_log, lab_phys, false, 0);
+
+  G4double trunkinside_X = -0.5*(trunkDepth - trunk_insideDepth);
+  G4double trunkinside_Y = 0.0*m;
+  G4double trunkinside_Z = -0.5*(trunkHeight - trunk_insideHeight);
+  
+  trunk_inside_phys = new G4PVPlacement
+	(0, G4ThreeVector(trunkinside_X, trunkinside_Y, trunkinside_Z), 
+	    "trunk_inside_phys",trunk_inside_log, trunk_phys, false, 0);
+
+  trunk_log->SetVisAttributes(desk_vat);
+  trunk_inside_log->SetVisAttributes(window_vat);
+
+  // *****************
+  // desk4,5,6 (actually 4 with multi-place idx) LHS with cupboards underneath:
+
+  G4double desk4Depth  = 79.0*cm; //X
+  G4double desk4Width  = 79.0*cm; //Y
+  G4double desk4Height = desk1Height; //Z
+
+  G4double desk4_insideDepth  = desk4Depth - 2.*deskThick;
+  G4double desk4_insideWidth  = desk4Width - 2.*deskThick;
+  G4double desk4_insideHeight = desk4Height - 2.*deskThick;
+
+  //nb: desk orientation is sideways because they are lined along the wall
+  G4Box* desk4_box = new G4Box
+   ("desk4_box", 0.5*desk4Depth, 0.5*desk4Width, 0.5*desk4Height);
+  G4Box* desk4_inside_box = new G4Box
+    ("desk4_inside_box", 0.5*desk4_insideDepth, 0.5*desk4_insideWidth, 
+     0.5*desk4_insideHeight);
+  G4Box* desk4_door_box = new G4Box
+    ("desk4_door_box", 0.5*deskThick+1.0*nanometer, 0.45*desk4_insideWidth, 
+     0.5*desk4_insideHeight);
+//    ("desk4_door_box", 0.5*deskThick, 0.45*desk4_insideWidth, 
+//     0.5*desk4_insideHeight);
+
+  G4SubtractionSolid* desk4_frame = new G4SubtractionSolid
+    ("desk4_frame", desk4_box, desk4_inside_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.)));
+  G4SubtractionSolid* desk4_sol = new G4SubtractionSolid
+    ("desk4_sol", desk4_frame, desk4_door_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector
+      (0.5*(desk4_insideDepth+deskThick),0.,0.)));
+
+  desk4_log = new G4LogicalVolume(desk4_sol, desk_mat, "desk4_log");
+
+  desk_X = -0.5*(labWidth - desk4Depth) + trunkDepth;
+  desk_Y = -(0.5*(labLength - desk4Width) - 5.0*cm);
+  desk_Z = 0.5*(desk4Height - labHeight);
+  
+  G4double crateWidth  = 60.0*cm; //Y
+  G4double crate_Y;
+
+  G4RotationMatrix rotMatrixDesk4;
+  rotMatrixDesk4.rotateZ(0.0*deg);
+
+  for (i=0; i<3; i++)
+    {
+      if( i == 2) 
+        {
+	  desk_Y += crateWidth;
+	  crate_Y = desk_Y - 0.5*(desk4Width + crateWidth);
+	}
+      desk4_phys = new G4PVPlacement
+	(G4Transform3D(rotMatrixDesk4, G4ThreeVector(desk_X, desk_Y, desk_Z)),
+	 "desk4_phys", desk4_log, lab_phys, false, i);
+      desk_Y += desk4Width+2.0*cm;
+    }
+
+  desk4_log->SetVisAttributes(desk_vat);
+
+  // *****************
+  // aluminium crate rack:
+
+  G4double crateDepth  = 64.0*cm; //X
+  //  G4double crateWidth  = 60.0*cm; //Y - moved above...........
+  G4double crateHeight = 128.0*cm; //Z
+  G4double crateThick  = 3.0*cm;
+
+  G4double crate_insideDepth  = crateDepth - 2.*crateThick;
+  G4double crate_insideWidth  = crateWidth - 2.*crateThick;
+  G4double crate_insideHeight = crateHeight - 2.*crateThick;
+
+  //nb: crate orientation is sideways because they are lined along the wall
+  G4Box* crate_box = new G4Box
+   ("crate_box", 0.5*crateDepth, 0.5*crateWidth, 0.5*crateHeight);
+  G4Box* crate_inside_box = new G4Box
+    ("crate_inside_box", 0.5*crate_insideDepth, 0.5*crate_insideWidth, 
+     0.5*crate_insideHeight);
+  G4Box* crate_front_box = new G4Box
+    ("crate_front_box", 0.5*crateThick+1.0*nanometer, 0.5*crate_insideWidth, 
+     0.5*crate_insideHeight);
+
+  G4SubtractionSolid* crate_frame = new G4SubtractionSolid
+    ("crate_frame", crate_box, crate_inside_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector(0.,0.,0.)));
+  G4SubtractionSolid* crate_sol = new G4SubtractionSolid
+    ("crate_sol", crate_frame, crate_front_box, G4Transform3D
+     (rotMatrixCupboard, G4ThreeVector
+      (0.5*(crate_insideDepth+crateThick),0.,0.)));
+
+  crate_log = new G4LogicalVolume(crate_sol, crate_mat, "crate_log");
+
+  G4double crate_X = -0.5*(labWidth - crateDepth) + trunkDepth;
+  // crate_Y defined previously (by desk spacing.......)
+  G4double crate_Z = 0.5*(crateHeight - labHeight);
+  
+  crate_phys = new G4PVPlacement
+	(0, G4ThreeVector(crate_X, crate_Y, crate_Z), "crate_phys", 
+	 crate_log, lab_phys, false, 0);
+
+  G4VisAttributes* crate_vat= new G4VisAttributes(grey);
+  crate_vat->SetVisibility(true);
+  crate_vat->SetForceSolid(true);
+  crate_log->SetVisAttributes(crate_vat);
+
+// clean room desks: ****************************************************
+
+// first oblong desk (type "3"):
+  desk_X = -0.5*(labWidth - desk3Width) + 50.0*cm;
+  desk_Y = 0.5*(labLength - desk3Width - 30.0*cm);
+  desk_Z = 0.5*(desk4Height - labHeight);
+  
+  G4RotationMatrix rotMatrixCleanDesk;
+  rotMatrixCleanDesk.rotateZ(90.0*deg);
+
+  desk3_phys = new G4PVPlacement
+    (G4Transform3D
+     (rotMatrixCleanDesk,G4ThreeVector(desk_X, desk_Y, desk_Z)), 
+      "desk3_phys", desk3_log, lab_phys, false, 1);
+
+// square desk (type "4"):
+
+  desk_X += 0.5*desk3Width + 0.5*desk4Width; // rotated hence Width
+
+  rotMatrixCleanDesk.rotateZ(-180.0*deg);
+  desk4_phys = new G4PVPlacement
+    (G4Transform3D
+	(rotMatrixCleanDesk, G4ThreeVector(desk_X, desk_Y, desk_Z)), 
+	 "desk4_phys", desk4_log, lab_phys, false, 3);
+
+

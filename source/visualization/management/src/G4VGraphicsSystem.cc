@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VGraphicsSystem.cc,v 1.9 2001/08/05 02:29:09 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison  27th March 1996

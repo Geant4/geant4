@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.2 2001/10/18 10:07:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4ReflectedSolid.hh,v 1.5 2002/02/15 15:55:25 grichine Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 // class G4ReflectedSolid
@@ -35,6 +35,7 @@
 // History:
 //
 // 23.07.01 V.Grichine, creation according John/Gabriele recommendations
+// 15.02.02 V.Grichine, get/set methods for fPtr(Direct)Transform3D
 
 #ifndef G4ReflectedSolid_HH
 #define G4ReflectedSolid_HH
@@ -98,12 +99,27 @@ class G4ReflectedSolid : public G4VSolid
       // return a self pointer else return 0.
 
     G4VSolid*                GetConstituentMovedSolid() const;
+
+    G4Transform3D        GetTransform3D() const; 
+    void       SetTransform3D(G4Transform3D&);
+    G4Transform3D        GetDirectTransform3D() const; 
+    void       SetDirectTransform3D(G4Transform3D&);
+      // Accessors methods.
+
+
+  public:  // without description
+
+    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
+    G4Polyhedron* CreatePolyhedron () const ;
+    G4NURBS*      CreateNURBS      () const ;
+      // For creating graphical representations (ie for visualisation).
+
+  protected:
+
     G4AffineTransform        GetTransform() const; 
     void       SetTransform(G4AffineTransform&);
     G4AffineTransform        GetDirectTransform() const; 
     void       SetDirectTransform(G4AffineTransform&);
-      // Accessors methods.
-
     G4RotationMatrix         GetFrameRotation() const;
     void  SetFrameRotation(const G4RotationMatrix&);
     G4ThreeVector            GetFrameTranslation() const; 
@@ -116,15 +132,6 @@ class G4ReflectedSolid : public G4VSolid
     G4ThreeVector            GetObjectTranslation() const; 
     void  SetObjectTranslation(const G4ThreeVector&); 
       // Get/Set the rotation/translation, as applied to the object.
-
-  public:  // without description
-
-    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
-    G4Polyhedron* CreatePolyhedron () const ;
-    G4NURBS*      CreateNURBS      () const ;
-      // For creating graphical representations (ie for visualisation).
-
-  protected:
 
     G4VSolid*          fPtrSolid        ;
     G4AffineTransform* fPtrTransform    ;
@@ -141,3 +148,11 @@ class G4ReflectedSolid : public G4VSolid
 } ;
 
 #endif
+
+
+
+
+
+
+
+

@@ -22,7 +22,7 @@
 //
 //
 // $Id: F01ElectroMagneticField.hh,v 1.4 2001/07/11 09:57:58 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 //    A class for control of the Magnetic Field of the detector.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.hh,v 1.6 2001/08/01 17:04:25 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4EvaporationLevelDensityParameter.hh,v 1.7 2001/11/08 10:14:54 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -59,8 +59,10 @@ public:
 private:
 
   G4double ShellCorrection(const G4int Z, const G4int N) const
-  { return G4CameronTruranHilfShellCorrections::GetShellZ(Z) + 
-      G4CameronTruranHilfShellCorrections::GetShellN(N);}
+  { 
+    G4CameronTruranHilfShellCorrections* SPtr = G4CameronTruranHilfShellCorrections::GetInstance();
+    return SPtr->GetShellZ(Z) + SPtr->GetShellN(N);
+  }
 		  		
 private:
 

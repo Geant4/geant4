@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.76 2001/11/29 19:01:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4LowEnergyIonisation.cc,v 1.85 2002/06/03 00:07:17 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 // 
 // --------------------------------------------------------------
 //
@@ -83,6 +83,12 @@
 // 26.10.01 V.Ivanchenko    clean up deexcitation
 // 28.10.01 V.Ivanchenko    update printout
 // 29.11.01 V.Ivanchenko    New parametrisation introduced
+// 25.03.02 V.Ivanchneko    Fix in fluorescence
+// 28.03.02 V.Ivanchenko    Add flag of fluorescence
+// 28.05.02 V.Ivanchenko    Remove flag fStopAndKill
+// 31.05.02 V.Ivanchenko    Add path of Fluo + Auger cuts to 
+//                          AtomicDeexcitation
+// 03.06.02 MGP             Restore fStopAndKill
 //
 // --------------------------------------------------------------
 
@@ -244,8 +250,7 @@ void G4LowEnergyIonisation::BuildLossTable(
   G4PhysicsLogVector* bVector = new G4PhysicsLogVector(lowKineticEnergy,
 		                		       highKineticEnergy,
 						       binForFluo);
-  G4AtomicTransitionManager* transitionManager = 
-                             G4AtomicTransitionManager::Instance();
+  const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   
   // Clean up the vector of cuts
 
@@ -300,8 +305,6 @@ void G4LowEnergyIonisation::BuildLossTable(
                                                              lowEdgeEnergy, n);
           G4double cs= crossSectionHandler->FindValue(Z, lowEdgeEnergy, n);
           ionloss   += e * cs * pro * theAtomicNumDensityVector[iel];
-          G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
-          //ionloss   += esp * theAtomicNumDensityVector[iel];
           if(verboseLevel > 1) {
             G4cout << "Z= " << Z
                    << " shell= " << n
@@ -309,11 +312,12 @@ void G4LowEnergyIonisation::BuildLossTable(
                    << " Eav(keV)= " << e/keV
                    << " pro= " << pro
                    << " cs= " << cs
-                   << " esp= " << esp
 	           << " loss= " << ionloss
                    << G4endl;
           }
         }
+        G4double esp = energySpectrum->Excitation(Z, lowEdgeEnergy);
+        ionloss   += esp * theAtomicNumDensityVector[iel];
       }	
       aVector->PutValue(i,ionloss);
     }
@@ -385,7 +389,7 @@ void G4LowEnergyIonisation::BuildLossTable(
 
 
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
-					                 const G4Step&  step)
+					               const G4Step&  step)
 {
   // Delta electron production mechanism on base of the model
   // J. Stepanek " A program to determine the radiation spectra due 
@@ -481,6 +485,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   if(finalKinEnergy < 0.0) {
     theEnergyDeposit += finalKinEnergy;
     finalKinEnergy    = 0.0;
+    aParticleChange.SetStatusChange(fStopAndKill); 
 
   } else {
 
@@ -490,7 +495,6 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
     finalPz *= norm;
     aParticleChange.SetMomentumChange(finalPx, finalPy, finalPz);
   }
-
 
   aParticleChange.SetEnergyChange(finalKinEnergy);
 
@@ -503,7 +507,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
  
   // Fluorescence data start from element 6
   
-  if (Z > 5 && (bindingEnergy >= cutForPhotons 
+  if (Fluorescence() && Z > 5 && (bindingEnergy >= cutForPhotons 
             ||  bindingEnergy >= cutForElectrons)) {
 
     secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
@@ -586,8 +590,8 @@ G4bool G4LowEnergyIonisation::IsApplicable(const G4ParticleDefinition& particle)
 
 G4std::vector<G4DynamicParticle*>* 
 G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
-				            G4double incidentEnergy,
-				            G4double eLoss)
+			                  G4double incidentEnergy,
+			                  G4double eLoss)
 { 
   // create vector of secondary particles
   
@@ -596,7 +600,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
  
   if(eLoss > cutForPhotons && eLoss > cutForElectrons) {
 
-    G4AtomicTransitionManager* transitionManager = 
+    const G4AtomicTransitionManager* transitionManager = 
                                G4AtomicTransitionManager::Instance();
       
     size_t nElements = material->GetNumberOfElements();
@@ -622,8 +626,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
 	 
       G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 	    
-      if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) 
-              && nVacancies > 0 ) {
+      if (nVacancies && Z > 5 && (maxE>cutForPhotons || maxE>cutForElectrons)) {
 
 	for (size_t j=0; j<nVacancies; j++) {
 		  
@@ -683,10 +686,19 @@ G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
 void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForPhotons = cut;
+  deexcitationManager.SetCutForSecondaryPhotons(cut);
+  ActivateFluorescence(true);
 }   
 
 void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
 {
   cutForElectrons = cut;
+  deexcitationManager.SetCutForAugerElectrons(cut);
+  ActivateFluorescence(true);
+}
+
+void G4LowEnergyIonisation::ActivateAuger(G4bool val)
+{
+  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 

@@ -39,8 +39,12 @@
 /dmx/gun/shape Cylinder
 /dmx/gun/radius 250 mum
 /dmx/gun/halfz 10.0 nm
-/dmx/gun/centre 0 0 82.750 mm
+/dmx/gun/centre 0 0 -311.75 mm
 /dmx/gun/confine americium_phys
+#
+/dmx/hitsfile alpha.out
+/dmx/pmtfile alpha_pmt.out
+/dmx/histogramfile alpha.his
 #
 # set to 0 if too many tracks to store
 /tracking/storeTrajectory 1

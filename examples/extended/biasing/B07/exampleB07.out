@@ -1,0 +1,721 @@
+**********************************************
+ Geant4 version $Name: geant4-04-01 $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+
+phot:  Total cross sections from Sandia parametrisation. 
+B07PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
+  ProcessName: PScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
+  ProcessName: ParallelImportanceProcess
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+================================================
++++ G4ProcessPlacer::G4ProcessPlacer: for: gamma
+=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
+  ProcessName: PScoreProcess
+The initial Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   Transportation
+DoIt Vector: 
+   Transportation
+   conv
+   compt
+   phot
+The final Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   conv
+   compt
+   phot
+================================================
++++ G4ProcessPlacer::G4ProcessPlacer: for: gamma
+=== G4ProcessPlacer::AddProcessAsSecondDoIt ===
+  ProcessName: ParallelImportanceProcess
+The initial Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   PScoreProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   PScoreProcess
+   conv
+   compt
+   phot
+The final Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   PScoreProcess
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   PScoreProcess
+   conv
+   compt
+   phot
+================================================
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 8
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 8
+output nScorer, importance geometry, neutron
+Volume name = imp_worldCylinder_phys, Replica number = -1
+WeighteOfHistorysEntering
+entries                             : 3493
+Sum(w)                              : 3493
+Sum(w*x)                            : 3493
+Sum(w*x*x)                          : 3493
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 3493
+Sum(x^2)                            : 3493
+HistorysEnteringWeighted
+entries                             : 3493
+Sum(w)                              : 3493
+Sum(w*x)                            : 3493
+Sum(w*x*x)                          : 3493
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 3493
+Sum(x^2)                            : 3493
+EnergyEnteringHistoryWeighted
+entries                             : 3493
+Sum(w)                              : 3493
+Sum(w*x)                            : 29996.1
+Sum(w*x*x)                          : 273437
+mean=Sum(w*x) / Sum(w)              : 8.58748
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 2.12993
+Sum(x)                              : 29996.1
+Sum(x^2)                            : 273437
+Volume name = impcell: M1, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 26823
+Sum(w)                              : 26823
+Sum(w*x)                            : 13411.5
+Sum(w*x*x)                          : 6705.75
+mean=Sum(w*x) / Sum(w)              : 0.5
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 13411.5
+Sum(x^2)                            : 6705.75
+HistorysEnteringWeighted
+entries                             : 26823
+Sum(w)                              : 13411.5
+Sum(w*x)                            : 13411.5
+Sum(w*x*x)                          : 13411.5
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 26823
+Sum(x^2)                            : 26823
+EnergyEnteringHistoryWeighted
+entries                             : 26823
+Sum(w)                              : 13411.5
+Sum(w*x)                            : 127619
+Sum(w*x*x)                          : 1.24148e+06
+mean=Sum(w*x) / Sum(w)              : 9.51567
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.42145
+Sum(x)                              : 255239
+Sum(x^2)                            : 2.48296e+06
+WeighteOfCollisions
+entries                             : 26690
+Sum(w)                              : 26690
+Sum(w*x)                            : 13345
+Sum(w*x*x)                          : 6672.5
+mean=Sum(w*x) / Sum(w)              : 0.5
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 13345
+Sum(x^2)                            : 6672.5
+CollisionsWeighted
+entries                             : 26690
+Sum(w)                              : 13345
+Sum(w*x)                            : 13345
+Sum(w*x*x)                          : 13345
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 26690
+Sum(x^2)                            : 26690
+Volume name = impcell: D1, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 17927
+Sum(w)                              : 17927
+Sum(w*x)                            : 4481.75
+Sum(w*x*x)                          : 1120.44
+mean=Sum(w*x) / Sum(w)              : 0.25
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 4481.75
+Sum(x^2)                            : 1120.44
+HistorysEnteringWeighted
+entries                             : 17927
+Sum(w)                              : 4481.75
+Sum(w*x)                            : 4481.75
+Sum(w*x*x)                          : 4481.75
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 17927
+Sum(x^2)                            : 17927
+EnergyEnteringHistoryWeighted
+entries                             : 17927
+Sum(w)                              : 4481.75
+Sum(w*x)                            : 42897
+Sum(w*x*x)                          : 418808
+mean=Sum(w*x) / Sum(w)              : 9.57148
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.35431
+Sum(x)                              : 171588
+Sum(x^2)                            : 1.67523e+06
+WeighteOfCollisions
+entries                             : 19976
+Sum(w)                              : 19976
+Sum(w*x)                            : 4994
+Sum(w*x*x)                          : 1248.5
+mean=Sum(w*x) / Sum(w)              : 0.25
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 4994
+Sum(x^2)                            : 1248.5
+CollisionsWeighted
+entries                             : 19976
+Sum(w)                              : 4994
+Sum(w*x)                            : 4994
+Sum(w*x*x)                          : 4994
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 19976
+Sum(x^2)                            : 19976
+Volume name = impcell: M2, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 38500
+Sum(w)                              : 38500
+Sum(w*x)                            : 4812.5
+Sum(w*x*x)                          : 601.562
+mean=Sum(w*x) / Sum(w)              : 0.125
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 4812.5
+Sum(x^2)                            : 601.562
+HistorysEnteringWeighted
+entries                             : 38500
+Sum(w)                              : 4812.5
+Sum(w*x)                            : 4812.5
+Sum(w*x*x)                          : 4812.5
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 38500
+Sum(x^2)                            : 38500
+EnergyEnteringHistoryWeighted
+entries                             : 38500
+Sum(w)                              : 4812.5
+Sum(w*x)                            : 44401.7
+Sum(w*x*x)                          : 425395
+mean=Sum(w*x) / Sum(w)              : 9.22632
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.80795
+Sum(x)                              : 355213
+Sum(x^2)                            : 3.40316e+06
+WeighteOfCollisions
+entries                             : 56461
+Sum(w)                              : 56461
+Sum(w*x)                            : 7057.62
+Sum(w*x*x)                          : 882.203
+mean=Sum(w*x) / Sum(w)              : 0.125
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 7057.62
+Sum(x^2)                            : 882.203
+CollisionsWeighted
+entries                             : 56461
+Sum(w)                              : 7057.62
+Sum(w*x)                            : 7057.62
+Sum(w*x*x)                          : 7057.62
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 56461
+Sum(x^2)                            : 56461
+Volume name = impcell: D2, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 32907
+Sum(w)                              : 32907
+Sum(w*x)                            : 2056.69
+Sum(w*x*x)                          : 128.543
+mean=Sum(w*x) / Sum(w)              : 0.0625
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 2056.69
+Sum(x^2)                            : 128.543
+HistorysEnteringWeighted
+entries                             : 32907
+Sum(w)                              : 2056.69
+Sum(w*x)                            : 2056.69
+Sum(w*x*x)                          : 2056.69
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 32907
+Sum(x^2)                            : 32907
+EnergyEnteringHistoryWeighted
+entries                             : 32907
+Sum(w)                              : 2056.69
+Sum(w*x)                            : 19139.6
+Sum(w*x*x)                          : 184265
+mean=Sum(w*x) / Sum(w)              : 9.30602
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 1.7295
+Sum(x)                              : 306233
+Sum(x^2)                            : 2.94825e+06
+WeighteOfCollisions
+entries                             : 41009
+Sum(w)                              : 41009
+Sum(w*x)                            : 2563.06
+Sum(w*x*x)                          : 160.191
+mean=Sum(w*x) / Sum(w)              : 0.0625
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 2563.06
+Sum(x^2)                            : 160.191
+CollisionsWeighted
+entries                             : 41009
+Sum(w)                              : 2563.06
+Sum(w*x)                            : 2563.06
+Sum(w*x*x)                          : 2563.06
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 41009
+Sum(x^2)                            : 41009
+
+----------------------------------------------
+output gScorer, importance geometry, gamma
+Volume name = imp_worldCylinder_phys, Replica number = -1
+WeighteOfHistorysEntering
+entries                             : 497
+Sum(w)                              : 497
+Sum(w*x)                            : 497
+Sum(w*x*x)                          : 497
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 497
+Sum(x^2)                            : 497
+HistorysEnteringWeighted
+entries                             : 497
+Sum(w)                              : 497
+Sum(w*x)                            : 497
+Sum(w*x*x)                          : 497
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 497
+Sum(x^2)                            : 497
+EnergyEnteringHistoryWeighted
+entries                             : 497
+Sum(w)                              : 497
+Sum(w*x)                            : 1595.98
+Sum(w*x*x)                          : 9801.21
+mean=Sum(w*x) / Sum(w)              : 3.21124
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 3.06736
+Sum(x)                              : 1595.98
+Sum(x^2)                            : 9801.21
+Volume name = impcell: M1, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 1476
+Sum(w)                              : 1476
+Sum(w*x)                            : 738
+Sum(w*x*x)                          : 369
+mean=Sum(w*x) / Sum(w)              : 0.5
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 738
+Sum(x^2)                            : 369
+HistorysEnteringWeighted
+entries                             : 1476
+Sum(w)                              : 738
+Sum(w*x)                            : 738
+Sum(w*x*x)                          : 738
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 1476
+Sum(x^2)                            : 1476
+EnergyEnteringHistoryWeighted
+entries                             : 1476
+Sum(w)                              : 738
+Sum(w*x)                            : 2039.2
+Sum(w*x*x)                          : 12544.7
+mean=Sum(w*x) / Sum(w)              : 2.76314
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 3.05995
+Sum(x)                              : 4078.39
+Sum(x^2)                            : 25089.4
+WeighteOfCollisions
+entries                             : 3343
+Sum(w)                              : 3343
+Sum(w*x)                            : 1671.5
+Sum(w*x*x)                          : 835.75
+mean=Sum(w*x) / Sum(w)              : 0.5
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 1671.5
+Sum(x^2)                            : 835.75
+CollisionsWeighted
+entries                             : 3343
+Sum(w)                              : 1671.5
+Sum(w*x)                            : 1671.5
+Sum(w*x*x)                          : 1671.5
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 3343
+Sum(x^2)                            : 3343
+Volume name = impcell: D1, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 908
+Sum(w)                              : 908
+Sum(w*x)                            : 227
+Sum(w*x*x)                          : 56.75
+mean=Sum(w*x) / Sum(w)              : 0.25
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 227
+Sum(x^2)                            : 56.75
+HistorysEnteringWeighted
+entries                             : 908
+Sum(w)                              : 227
+Sum(w*x)                            : 227
+Sum(w*x*x)                          : 227
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 908
+Sum(x^2)                            : 908
+EnergyEnteringHistoryWeighted
+entries                             : 908
+Sum(w)                              : 227
+Sum(w*x)                            : 635.043
+Sum(w*x*x)                          : 3915.2
+mean=Sum(w*x) / Sum(w)              : 2.79755
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 3.06942
+Sum(x)                              : 2540.17
+Sum(x^2)                            : 15660.8
+WeighteOfCollisions
+entries                             : 2791
+Sum(w)                              : 2791
+Sum(w*x)                            : 697.75
+Sum(w*x*x)                          : 174.438
+mean=Sum(w*x) / Sum(w)              : 0.25
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 697.75
+Sum(x^2)                            : 174.438
+CollisionsWeighted
+entries                             : 2791
+Sum(w)                              : 697.75
+Sum(w*x)                            : 697.75
+Sum(w*x*x)                          : 697.75
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 2791
+Sum(x^2)                            : 2791
+Volume name = impcell: M2, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 3864
+Sum(w)                              : 3864
+Sum(w*x)                            : 483
+Sum(w*x*x)                          : 60.375
+mean=Sum(w*x) / Sum(w)              : 0.125
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 483
+Sum(x^2)                            : 60.375
+HistorysEnteringWeighted
+entries                             : 3864
+Sum(w)                              : 483
+Sum(w*x)                            : 483
+Sum(w*x*x)                          : 483
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 3864
+Sum(x^2)                            : 3864
+EnergyEnteringHistoryWeighted
+entries                             : 3864
+Sum(w)                              : 483
+Sum(w*x)                            : 1389
+Sum(w*x*x)                          : 8564.56
+mean=Sum(w*x) / Sum(w)              : 2.87578
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 3.07602
+Sum(x)                              : 11112
+Sum(x^2)                            : 68516.5
+WeighteOfCollisions
+entries                             : 10651
+Sum(w)                              : 10651
+Sum(w*x)                            : 1331.38
+Sum(w*x*x)                          : 166.422
+mean=Sum(w*x) / Sum(w)              : 0.125
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 1331.38
+Sum(x^2)                            : 166.422
+CollisionsWeighted
+entries                             : 10651
+Sum(w)                              : 1331.38
+Sum(w*x)                            : 1331.38
+Sum(w*x*x)                          : 1331.38
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 10651
+Sum(x^2)                            : 10651
+Volume name = impcell: D2, Replica number = 0
+WeighteOfHistorysEntering
+entries                             : 3084
+Sum(w)                              : 3084
+Sum(w*x)                            : 192.75
+Sum(w*x*x)                          : 12.0469
+mean=Sum(w*x) / Sum(w)              : 0.0625
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 192.75
+Sum(x^2)                            : 12.0469
+HistorysEnteringWeighted
+entries                             : 3084
+Sum(w)                              : 192.75
+Sum(w*x)                            : 192.75
+Sum(w*x*x)                          : 192.75
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 3084
+Sum(x^2)                            : 3084
+EnergyEnteringHistoryWeighted
+entries                             : 3084
+Sum(w)                              : 192.75
+Sum(w*x)                            : 551.27
+Sum(w*x*x)                          : 3418.47
+mean=Sum(w*x) / Sum(w)              : 2.86002
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 3.0912
+Sum(x)                              : 8820.31
+Sum(x^2)                            : 54695.5
+WeighteOfCollisions
+entries                             : 8250
+Sum(w)                              : 8250
+Sum(w*x)                            : 515.625
+Sum(w*x*x)                          : 32.2266
+mean=Sum(w*x) / Sum(w)              : 0.0625
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 515.625
+Sum(x^2)                            : 32.2266
+CollisionsWeighted
+entries                             : 8250
+Sum(w)                              : 515.625
+Sum(w*x)                            : 515.625
+Sum(w*x*x)                          : 515.625
+mean=Sum(w*x) / Sum(w)              : 1
+sigma=sqrt(Sum(w*x*x)/Sum(w)-mean^2): 0
+Sum(x)                              : 8250
+Sum(x^2)                            : 8250
+
+----------------------------------------------
++++ G4ProcessPlacer::G4ProcessPlacer: for: gamma
+  ProcessName: PScoreProcess, will be removed!
+The initial Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   PScoreProcess
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   PScoreProcess
+   conv
+   compt
+   phot
+The final Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   conv
+   compt
+   phot
++++ G4ProcessPlacer::G4ProcessPlacer: for: gamma
+  ProcessName: ParallelImportanceProcess, will be removed!
+The initial Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   conv
+   compt
+   phot
+The final Vectors: 
+GPIL Vector: 
+   phot
+   compt
+   conv
+   Transportation
+DoIt Vector: 
+   Transportation
+   conv
+   compt
+   phot
+
+WARNING - G4ImportanceAlgorithm::~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
+
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+  ProcessName: PScoreProcess, will be removed!
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+  ProcessName: ParallelImportanceProcess, will be removed!
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   ParallelImportanceProcess
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelImportanceProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   Transportation
+DoIt Vector: 
+   Transportation
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+
+WARNING - G4ImportanceAlgorithm::~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen
+
+WARNING - Attempt to delete the physical volume store while geometry closed !
+WARNING - Attempt to delete the logical volume store while geometry closed !
+WARNING - Attempt to delete the solid store while geometry closed !

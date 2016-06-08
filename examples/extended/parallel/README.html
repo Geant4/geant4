@@ -1,0 +1,118 @@
+<HTML lang="en">
+<HEAD> <!-- -*-text-*- -->
+<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<TITLE>ParGeant4 README</TITLE>
+<link rev="made" href="mailto:gene@ccs.neu.edu">
+<META NAME="Description" CONTENT="ParGeant4 is a parallelization
+ofGeant4 using TOP-C/C++ (Task Oriented Parallel C/C++).
+It is free, open source software.">
+<META NAME="Keywords" CONTENT="ParGeant4, Geant4, TOP-C, parallel computing,
+	 unix open source, free, NoW, Beowulf, SMP, DSM">
+<META NAME="Language" CONTENT="English">
+<meta name="Author"    content="Gene Cooperman">
+<meta name="Modified"  content="2002-02-25">
+</HEAD>
+<BODY bgcolor="#FFFFFF">
+
+<H1>ParGeant4 README</H1>
+<center>
+by <a href="http://www.ccs.neu.edu/home/gene/">Gene Cooperman</a>
+    (<a href="mailto:gene@ccs.neu.edu">gene@ccs.neu.edu</a>)
+</center>
+There is also a <a href="http://www.ccs.neu.edu/home/gene/pargeant4.html">
+ParGeant4 Home Page</a>, which will be updated more frequently than
+this page.
+
+<P>
+This distribution implements event-level parallelism for
+ <a href="http://cern.ch/geant4">Geant4</a>
+  using the free TOP-C distribution.
+  (<a href="http://www.ccs.neu.edu/home/gene/topc.html">TOP-C
+      = Task Oriented Parallel C/C++</a>)
+
+<P>
+These are example parallelizations that parallelize examples/novice/N02
+and examples/novice/N04 of the Geant4 distribution.
+The files also contain information on how to write new parallel
+Geant4 applications or parallelize existing sequential Geant4
+applications.
+
+<P>
+<PRE>
+The design goals are:
+1.  No modification of the Geant4 kernel libraries.
+2.  Application sessions should be efficient and reproducible
+     (independently of the number of slave processes and the
+      order in which they are called by TOP-C)
+3.  Setting deterministic random seeds on each slave
+    [ This code assumes that each slave will initialize its random state
+      based on either the event number or a random seed selected
+      on the master.]
+
+This assumes that you have already installed CLHEP, Geant4, and TOP-C
+  TOP-C can be downloaded via its home page:
+                          http://www.ccs.neu.edu/home/gene/topc.html
+
+Other qualifications are:
+1.  `topc-config' is already in your path.
+2.  It has only been tested under Linux, although it should be
+       portable to any other UNIX supported by Geant4.
+3.  Currently, this distribution does not support:
+      histograms, trajectory stores, n-tuples, track parallelism,
+      interactive input commands (no macrofile)
+    I plan to add those features according to demand.
+       Probably:  a. histograms (I believe histograms work now, but I don't
+                        have a ready test application.  If someone does, could
+                        you either check yourself if the parallelization works
+                        for histograms, or tell me, and I'll parallelize it.)
+                  b. track-level parallelism
+                  c. allowing interactive input
+                  d. other
+</PRE>
+<!--
+Some design assumptions of Geant4 used here:
+1.  A collectionName for a G4HitsCollection uniquely identifies the
+      G4HitsCollection within a G4HCofThisEvent.
+-->
+
+<P>
+<IMG SRC="http://www.ccs.neu.edu/home/gene/new.gif" ALT="NEW!">
+ParGeant4 has now been demonstrated to run over the Computational Grid
+using a new TOP-C communication layer, with support for the Grid,
+based on Ampic.  There is a paper
+reporting on this in
+<a href="ftp://ftp.ccs.neu.edu/pub/people/gene/pargeant4/geant4-and-grid.ps">
+postscript</a>.
+<br>
+        G. Cooperman, H. Casanova, J. Hayes and T. Witzel,
+``Using TOP-C and AMPIC to Port Large Parallel Applications
+                 to the Computational Grid'',
+        <em>Proc. of 2nd IEEC/ACM Interantional Symposium
+                on Cluster Computing and the Grid (CCGrid)</em>, 2002,
+        to appear
+
+
+<P>
+(This material is based in part upon work supported by the National Science
+Foundation under Grants No. 9732330 and 9872114.  Any opinions, findings, and
+conclusions or recommendations expressed in this material are those of
+the author(s) and do not necessarily reflect the views of the National
+Science Foundation.)
+<P>
+<ADDRESS>
+Gene Cooperman<br>
+College of Computer Science, 215CN<br>
+Northeastern University<br>
+Boston, MA 02115     <br>
+e-mail: gene@ccs.neu.edu<br>
+Phone: (617) 373-8686<br>
+Fax:   (617) 373-5121
+</ADDRESS>
+
+            <script language="JavaScript">
+            <!---//hide script from old browsers
+            document.write( "<br>Last updated "+ document.lastModified );
+            //end hiding contents --->
+            </script> 
+</BODY>
+</HTML>

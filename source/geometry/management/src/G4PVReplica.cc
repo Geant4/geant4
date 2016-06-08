@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.3 2001/07/11 09:59:21 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PVReplica.cc,v 1.4 2002/05/15 10:07:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // class G4PVReplica Implementation
@@ -89,6 +89,7 @@ void G4PVReplica::CheckAndSetParameters (const EAxis pAxis,
 	case kXAxis:
 	case kYAxis:
 	case kZAxis:
+	case kUndefined:
 	  break;
 	default:
 	  G4Exception("G4PVReplica::G4PVReplica Unknown axis");

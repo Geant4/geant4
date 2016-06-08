@@ -77,8 +77,8 @@ G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4doub
    }
    
 // get cosine(theta)
-   G4int i, it;
-   G4double cosTh;
+   G4int i(0), it(0);
+   G4double cosTh(0);
    for(i=0; i<nEnergy; i++)
    {
      it = i;

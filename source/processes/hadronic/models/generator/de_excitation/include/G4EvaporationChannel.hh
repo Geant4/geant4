@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.hh,v 1.7 2001/08/01 17:04:25 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4EvaporationChannel.hh,v 1.8 2002/01/15 12:23:36 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -43,6 +43,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
+//#define pctest
 
 class G4EvaporationChannel : public G4VEvaporationChannel
 {

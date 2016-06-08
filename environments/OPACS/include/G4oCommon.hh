@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4oCommon.hh,v 1.3.4.1 2001/06/28 19:06:32 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 /*
    Included by G4o.h.

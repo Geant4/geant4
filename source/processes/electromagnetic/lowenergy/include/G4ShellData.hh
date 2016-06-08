@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.hh,v 1.1 2001/08/20 16:36:01 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4ShellData.hh,v 1.2 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -69,7 +69,11 @@ public:
 
 private:
 
-  G4int zMin;
+  // Hide copy constructor and assignment operator 
+  G4ShellData& operator=(const G4ShellData& right);
+  G4ShellData(const G4ShellData&);
+
+   G4int zMin;
   G4int zMax; 
 
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;

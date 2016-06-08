@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnstableFermiFragment.cc,v 1.6 2001/08/01 17:05:36 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4UnstableFermiFragment.cc,v 1.7 2002/06/06 17:58:33 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -122,13 +122,11 @@ G4UnstableFermiFragment::FragmentsMomentum(G4double KinE, const G4int K, const G
     PRestLab.boost(BoostV);
 
 
-    //    MomentumList->prepend(new G4LorentzVector(PFragLab));
     MomentumList->push_front(new G4LorentzVector(PFragLab));
 
     Mass = RestMass;
   }
 
-  //  MomentumList->prepend(new G4LorentzVector(PRestLab));
   MomentumList->push_front(new G4LorentzVector(PRestLab));
   return MomentumList;
 }

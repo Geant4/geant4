@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.5 2001/10/16 11:56:29 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em5SteppingAction.cc,v 1.9 2002/06/06 17:23:22 maire Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -43,6 +43,10 @@
 #include "G4ios.hh"
 #include "g4std/iomanip"
 #include "G4UImanager.hh"
+
+#ifndef G4NOHIST
+ #include "AIDA/IHistogram1D.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,6 +71,11 @@ Em5SteppingAction::~Em5SteppingAction()
 void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
 
+#ifndef G4NOHIST
+  const G4double cn = pi/(64800.*runaction->GetdTh()) ;
+  const G4double cnback = pi/(64800.*runaction->GetdThback()) ;
+  G4double wg ;
+#endif
   G4double Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,yend,zend,rend;
   G4int evno = eventaction->GetEventno(); 
 
@@ -86,7 +95,11 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
        ((aStep->GetTrack()->GetTrackID() != 1) ||
        (aStep->GetTrack()->GetParentID() != 0)) )
      )
-        runaction->Fillvertexz(aStep->GetTrack()->GetVertexPosition().x());
+#ifndef G4NOHIST
+        if(runaction->GetHisto(8) != 0)
+           runaction->GetHisto(8)->fill(
+                               aStep->GetTrack()->GetVertexPosition().x());
+#endif
 
    if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
    {
@@ -99,7 +112,11 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
         eventaction->AddE() ;
         Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
         Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
+#ifndef G4NOHIST
+        if(runaction->GetHisto(7) != 0)
+           runaction->GetHisto(7)->fill(Tsec/MeV) ;
+#endif
+
     }
     else
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
@@ -111,7 +128,10 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
         eventaction->AddP() ;
         Tsec = aStep->GetTrack()->GetKineticEnergy() ;  // !!!!!!!!!!!!
         Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
-        runaction->FillTsec(Tsec) ;
+#ifndef G4NOHIST
+        if(runaction->GetHisto(7) != 0)
+           runaction->GetHisto(7)->fill(Tsec) ;
+#endif
     }
     else
     if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
@@ -140,10 +160,7 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   if (
       (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-        (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-        GetParticleName() ==
-        Em5PrimaryGeneratorAction::GetPrimaryName())) 
+        (aStep->GetTrack()->GetParentID()== 0))) 
         &&
         (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber")
         &&
@@ -155,21 +172,31 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
      {
        eventaction->SetTr();
        Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
-       runaction->FillTh(Theta) ;
+#ifndef G4NOHIST
+        if((runaction->GetHisto(2) != 0) && (Theta > 0.))
+        {
+           wg = cn/sin(Theta) ;
+           runaction->GetHisto(2)->fill(Theta/deg,wg) ;
+        }
+#endif
+
        Ttrans = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTt(Ttrans) ;
+#ifndef G4NOHIST
+        if(runaction->GetHisto(4) != 0)
+           runaction->GetHisto(4)->fill(Ttrans/MeV) ;
+#endif
        yend= aStep->GetTrack()->GetPosition().y() ;
        zend= aStep->GetTrack()->GetPosition().z() ;
        rend = sqrt(yend*yend+zend*zend) ;
-       runaction->FillR(rend);
+#ifndef G4NOHIST
+        if(runaction->GetHisto(3) != 0)
+           runaction->GetHisto(3)->fill(rend) ;
+#endif
      }
        
   if (
       (((aStep->GetTrack()->GetTrackID() == 1) &&
-        (aStep->GetTrack()->GetParentID()== 0)) ||
-      (aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-       GetParticleName() ==
-       Em5PrimaryGeneratorAction::GetPrimaryName())) 
+        (aStep->GetTrack()->GetParentID()== 0))) 
        &&
       (aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") &&
       (aStep->GetTrack()->GetNextVolume()->GetName()=="World") &&
@@ -181,9 +208,18 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
        eventaction->SetRef();
        Thetaback = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
        Thetaback -= 0.5*pi ;
-       runaction->FillThBack(Thetaback) ;
+#ifndef G4NOHIST
+        if((runaction->GetHisto(5) != 0) && (Thetaback > 0.))
+        {
+           wg = cnback/sin(Thetaback) ;
+           runaction->GetHisto(5)->fill(Thetaback/deg,wg) ;
+        }
+#endif
        Tback  = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillTb(Tback) ;
+#ifndef G4NOHIST
+        if(runaction->GetHisto(6) != 0)
+           runaction->GetHisto(6)->fill(Tback/MeV) ;
+#endif
      }
  
 
@@ -198,7 +234,10 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
      )
      {
        Egamma = aStep->GetTrack()->GetKineticEnergy() ;
-       runaction->FillGammaSpectrum(Egamma) ;
+#ifndef G4NOHIST
+        if(runaction->GetHisto(9) != 0)
+           runaction->GetHisto(9)->fill(log10(Egamma/MeV)) ;
+#endif
      }
       
 }

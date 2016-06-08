@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.cc,v 1.9 2001/10/05 16:13:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4EvaporationChannel.cc,v 1.12 2002/06/18 16:38:24 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -119,7 +119,8 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
     ZResidual = aZ - Z;
 
     // Effective excitation energy
-    G4double ExEnergy = fragment.GetExcitationEnergy() - G4PairingCorrection::GetPairingCorrection(anA,aZ);
+    G4double ExEnergy = fragment.GetExcitationEnergy() - 
+      G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
 
     // We only take into account channels which are physically allowed
     if (AResidual <= 0 || ZResidual <= 0 || AResidual < ZResidual ||
@@ -166,11 +167,15 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
     G4ThreeVector momentum(IsotropicVector(sqrt(EvaporatedKineticEnergy*
 						(EvaporatedKineticEnergy+2.0*EvaporatedMass))));
   
+    momentum.rotateUz(theNucleus.GetMomentum().vect().unit());
+
     G4LorentzVector EvaporatedMomentum(momentum,EvaporatedEnergy);
     EvaporatedMomentum.boost(theNucleus.GetMomentum().boostVector());
 
     G4Fragment * EvaporatedFragment = new G4Fragment(A,Z,EvaporatedMomentum);
-
+#ifdef pctest
+    EvaporatedFragment->SetCreatorModel(G4String("G4Evaporation"));
+#endif
     // ** And now the residual nucleus ** 
     G4double theExEnergy = theNucleus.GetExcitationEnergy();
     G4double theMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
@@ -181,8 +186,9 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
     ResidualMomentum.boost(theNucleus.GetMomentum().boostVector());
 	
     G4Fragment * ResidualFragment = new G4Fragment( AResidual, ZResidual, ResidualMomentum );
-
-
+#ifdef pctest
+    ResidualFragment->SetCreatorModel(G4String("ResidualNucleus"));
+#endif
     G4FragmentVector * theResult = new G4FragmentVector;
 
 #ifdef debug

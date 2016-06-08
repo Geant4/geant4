@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicTransition.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -39,12 +39,11 @@ G4AtomicTransition::G4AtomicTransition(G4int finalShell,
 				       const G4std::vector<G4int>& ids,
 				       const G4DataVector& energies,
 				       const G4DataVector& prob)
-{
-  finalShellId = finalShell;
-  originatingShellIds = ids;
-  transitionEnergies = energies;
-  transitionProbabilities = prob;
-}
+  :finalShellId(finalShell),
+   originatingShellIds(ids),
+   transitionEnergies(energies),
+   transitionProbabilities(prob)
+{ }
 
 G4AtomicTransition::~G4AtomicTransition()
 { }

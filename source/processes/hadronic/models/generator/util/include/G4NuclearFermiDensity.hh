@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclearFermiDensity.hh,v 1.5 2001/08/01 17:09:19 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4NuclearFermiDensity.hh,v 1.6 2002/04/24 13:10:50 gunter Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #ifndef G4NuclearFermiDensity_h
 #define G4NuclearFermiDensity_h 1
@@ -41,9 +41,9 @@ class G4NuclearFermiDensity : public G4VNuclearDensity
     G4NuclearFermiDensity(G4double anA, G4double aZ);
     ~G4NuclearFermiDensity();
     
-    G4double GetRelativeDensity(G4ThreeVector aPosition);
-    G4double GetRadius(const G4double maxRelativeDenisty);
-    G4double GetDeriv(const G4ThreeVector & aPosition);    
+    G4double GetRelativeDensity(const G4ThreeVector & aPosition) const;
+    G4double GetRadius(const G4double maxRelativeDenisty) const;
+    G4double GetDeriv(const G4ThreeVector & aPosition) const;    
    
   private:
   

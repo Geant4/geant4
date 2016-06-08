@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Colour.cc,v 1.4 2001/07/11 10:01:07 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison 20th October 1996

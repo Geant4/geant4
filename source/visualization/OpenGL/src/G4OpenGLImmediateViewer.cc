@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.4 2001/07/11 10:08:53 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.5 2002/02/24 01:47:56 johna Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -33,14 +33,6 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLImmediateViewer.hh"
-
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
-
-#include "G4ios.hh"
-#include <assert.h>
-#include <unistd.h>
 
 G4OpenGLImmediateViewer::G4OpenGLImmediateViewer (G4OpenGLImmediateSceneHandler& scene):
 G4VViewer (scene, -1),

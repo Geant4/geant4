@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.6 2001/10/04 20:00:28 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4TheoFSGenerator.cc,v 1.7 2002/06/10 13:27:07 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // G4TheoFSGenerator
 #include "G4DynamicParticle.hh"
@@ -77,10 +77,29 @@ G4VParticleChange * G4TheoFSGenerator::ApplyYourself(const G4Track & thePrimary,
   G4KineticTrackVector * theInitialResult =
                theHighEnergyGenerator->Scatter(theNucleus, *aPart);
   
-  // Hand over to transport for intra-nuclear transport
-  G4ReactionProductVector * theTransportResult = 
-               theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
+  G4double predecayEnergy = 0;
+  for(int hpw=0; hpw<theInitialResult->size(); hpw++)
+  {
+    predecayEnergy += (*theInitialResult)[hpw]->Get4Momentum().t();
+  }
   
+  G4ReactionProductVector * theTransportResult = NULL;
+  G4int hitCount = 0;
+  const G4std::vector<G4Nucleon *> & they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
+  for(size_t them=0; them<they.size(); them++)
+  {
+    if(they[them]->AreYouHit()) hitCount ++;
+  }
+  if(hitCount != theHighEnergyGenerator->GetWoundedNucleus()->GetMassNumber() )
+  {
+    theTransportResult = 
+               theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
+  }
+  else
+  {
+     theTransportResult = theDecay.Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
+  }
+
   // Fill particle change
   unsigned int i;
   theParticleChange->SetNumberOfSecondaries(theTransportResult->size());

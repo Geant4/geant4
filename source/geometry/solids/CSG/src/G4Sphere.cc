@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.11 2001/08/27 08:04:08 grichine Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Sphere.cc,v 1.16 2002/06/19 10:00:23 grichine Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // class G4Sphere
 //
@@ -36,7 +36,8 @@
 // 25.11.98 V.Grichine bug fixed in DistanceToIn(p,v), phi intersections
 // 18.11.99 V.Grichine, side = kNull in Distance ToOut(p,v,...)
 // 06.03.00 V.Grichine, modifications in Distance ToOut(p,v,...)
-//
+// 30.01.02 V.Grichine, bug fixed in Inside(p), && -> || at l.451
+// 19.06.02 V.Grichine, bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
 //
 
 #include <assert.h>
@@ -395,142 +396,106 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
 
 EInside G4Sphere::Inside(const G4ThreeVector& p) const
 {
-    G4double rho,rho2,rad2,tolRMin,tolRMax;
-    G4double pPhi,pTheta;
-    EInside in;
+ G4double rho,rho2,rad2,tolRMin,tolRMax;
+ G4double pPhi,pTheta;
+ EInside in;
 
-    rho2=p.x()*p.x()+p.y()*p.y();
-    rad2=rho2+p.z()*p.z();
+ rho2 = p.x()*p.x() + p.y()*p.y() ;
+ rad2 = rho2 + p.z()*p.z() ;
 
-//
+// G4double rad = sqrt(rad2);
 // Check radial surfaces
 //  sets `in'
-//
-    if (fRmin)
-	{
-	    tolRMin=fRmin+kRadTolerance/2;
-	}
-    else
-	{
-	    tolRMin=0;
-	}
-    tolRMax=fRmax-kRadTolerance/2;
-    
-    if (rad2<=tolRMax*tolRMax&&rad2>=tolRMin*tolRMin)
-	{
-	    in=kInside;
-	}
-    else
-	{
-	    tolRMax=fRmax+kRadTolerance/2;
-	    tolRMin=fRmin-kRadTolerance/2;
-	    if (tolRMin<0)
-		{
-		    tolRMin=0;
-		}
-	    
-	    if (rad2<=tolRMax*tolRMax&&rad2>=tolRMin*tolRMin)
-		{
-		    in=kSurface;
-		}
-	    else
-		{
-		    return in=kOutside;
-		}
-	}
 
-//
+  if ( fRmin ) tolRMin = fRmin + kRadTolerance*0.5;
+  else         tolRMin = 0 ;
+	
+  tolRMax = fRmax - kRadTolerance*0.5 ;
+    
+  if ( rad2 <= tolRMax*tolRMax && rad2 >= tolRMin*tolRMin )  in = kInside ;
+  else
+  {
+    tolRMax = fRmax + kRadTolerance*0.5 ;
+    tolRMin = fRmin - kRadTolerance*0.5 ;
+
+    if ( tolRMin < 0.0 ) tolRMin = 0.0 ;
+		
+    if ( rad2 <= tolRMax*tolRMax && rad2 >= tolRMin*tolRMin )  in = kSurface ;
+    else                                                return in = kOutside ;
+  }
+
 // Phi boundaries   : Do not check if it has no phi boundary!
-// (in!=kOutside)
-//
-    if ( (fDPhi<2*M_PI-kAngTolerance) && ((p.x()!=0.)||(p.y()!=0.)) )
-	{
-	    pPhi=atan2(p.y(),p.x());
-	    if (pPhi<0) pPhi+=2*M_PI; // 0<=pPhi<2pi
+// (in != kOutside)
+
+  if ( ( fDPhi < 2*M_PI - kAngTolerance ) && ( (p.x() != 0.0 ) || (p.y() != 0.0) ) )
+  {
+    pPhi = atan2(p.y(),p.x()) ;
+
+    if ( pPhi < 0.0)  pPhi += 2*M_PI ; // 0<=pPhi<2pi
 	    
-	    if (fSPhi>=0)
-		{
-		    if (in==kInside)
-			{
-			    if (pPhi<fSPhi+kAngTolerance/2 ||
-				pPhi>fSPhi+fDPhi-kAngTolerance/2)
-				{
-// Not `inside' tolerant bounds
-				    if (pPhi>=fSPhi-kAngTolerance/2 &&
-					pPhi<=fSPhi+fDPhi+kAngTolerance/2)
-					{
-					    in=kSurface;
-					}
-				    else
-					{
-					    return in=kOutside;
-					}
-				}
-			}
-		    else
-			{
-// in==kSurface
-			    if (pPhi<fSPhi-kAngTolerance/2 &&
-				pPhi>fSPhi+fDPhi+kAngTolerance/2)
-				{
-				    return in=kOutside;
-				}
-			}
-		}
-	    else
-		{
-		    if (pPhi<fSPhi+2*M_PI) pPhi+=2*M_PI;
-		    if (pPhi<fSPhi+2*M_PI+kAngTolerance/2 ||
-			pPhi>fSPhi+fDPhi+2*M_PI-kAngTolerance/2)
-			{
-// Not `inside' tolerant bounds
-			    if (pPhi>=fSPhi+2*M_PI-kAngTolerance/2 &&
-				pPhi<=fSPhi+fDPhi+2*M_PI+kAngTolerance/2)
-				{
-				    in=kSurface;
-				}
-			    else
-				{
-				    return in=kOutside;
-				}
-			}
-		    
-		}
-	}
-//
-// Theta bondaries
-// (in!=kOutside)
-//
-    if (rho2||p.z())
+    if ( fSPhi >= 0.0 )
+    {
+      if (in == kInside)
+      {
+        if ( pPhi < fSPhi + kAngTolerance*0.5 ||
+	     pPhi > fSPhi + fDPhi - kAngTolerance*0.5 )
 	{
-	    rho=sqrt(rho2);
-	    pTheta=atan2(rho,p.z());
-	    if (in==kInside)
-		{
-		    if (pTheta<fSTheta+kAngTolerance/2
-			|| pTheta>fSTheta+fDTheta-kAngTolerance/2)
-			{
-			    if (pTheta>=fSTheta-kAngTolerance/2
-				&& pTheta<=fSTheta+fDTheta+kAngTolerance/2)
-				{
-				    in=kSurface;
-				}
-			    else
-				{
-				    in=kOutside;
-				}
-			}
-		}
-	    else
-		{
-		    if (pTheta<fSTheta-kAngTolerance/2
-			|| pTheta>fSTheta+fDTheta+kAngTolerance/2)
-			{
-			    in=kOutside;
-			}
-		}
+         // Not `inside' tolerant bounds
+
+	  if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
+	       pPhi <= fSPhi + fDPhi + kAngTolerance*0.5 ) in = kSurface ;
+	  else                                      return in = kOutside ;
 	}
-    return in;
+      }
+      else  // in==kSurface
+      {
+        if ( pPhi < fSPhi - kAngTolerance*0.5 || // && bug216
+	     pPhi > fSPhi + fDPhi + kAngTolerance*0.5 )
+	{
+	  return in = kOutside ;
+	}
+      }
+    }
+    else
+    {
+      if ( pPhi < fSPhi + 2*M_PI ) pPhi += 2*M_PI ;
+
+      if ( pPhi < fSPhi + 2*M_PI + kAngTolerance*0.5 ||
+	   pPhi > fSPhi + fDPhi + 2*M_PI - kAngTolerance*0.5 )
+      {
+      // Not `inside' tolerant bounds
+
+        if ( pPhi >= fSPhi + 2*M_PI - kAngTolerance*0.5 &&
+	     pPhi <= fSPhi + fDPhi + 2*M_PI + kAngTolerance*0.5 ) in = kSurface ;
+	else                                               return in = kOutside ;
+      }
+    }
+  }
+  // Theta bondaries
+  // (in!=kOutside)
+  
+  if ( (rho2 || p.z()) && fDTheta < M_PI - kAngTolerance*0.5)
+  {
+    rho    = sqrt(rho2);
+    pTheta = atan2(rho,p.z());
+
+    if ( in == kInside )
+    {
+      if ( pTheta < fSTheta + kAngTolerance*0.5 || 
+           pTheta > fSTheta + fDTheta - kAngTolerance*0.5 )
+      {
+        if ( pTheta >= fSTheta - kAngTolerance*0.5 && 
+             pTheta <= fSTheta + fDTheta + kAngTolerance*0.5 ) in = kSurface ;
+        else                                                   in = kOutside ; 
+      }
+    }
+    else
+    {
+      if ( pTheta < fSTheta - kAngTolerance*0.5 || 
+           pTheta > fSTheta + fDTheta + kAngTolerance*0.5 ) in = kOutside ;
+    }
+  }
+  return in;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -753,15 +718,15 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
     if (fRmin > kRadTolerance*0.5)
     {
-       tolORMin2=(fRmin-kRadTolerance/2)*(fRmin-kRadTolerance/2);
+       tolORMin2=(fRmin-kRadTolerance*0.5)*(fRmin-kRadTolerance*0.5);
     }
     else
     {
        tolORMin2 = 0 ;
     }
-    tolIRMin2 = (fRmin+kRadTolerance/2)*(fRmin+kRadTolerance/2) ;
-    tolORMax2 = (fRmax+kRadTolerance/2)*(fRmax+kRadTolerance/2) ;
-    tolIRMax2 = (fRmax-kRadTolerance/2)*(fRmax-kRadTolerance/2) ;
+    tolIRMin2 = (fRmin+kRadTolerance*0.5)*(fRmin+kRadTolerance*0.5) ;
+    tolORMax2 = (fRmax+kRadTolerance*0.5)*(fRmax+kRadTolerance*0.5) ;
+    tolIRMax2 = (fRmax-kRadTolerance*0.5)*(fRmax-kRadTolerance*0.5) ;
 
 // Set phi divided flag and precalcs
 
@@ -818,7 +783,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
     {
 
 // If outside toleranct boundary of outer G4Sphere
-// [should be sqrt(rad2)-fRmax > kRadTolerance/2]
+// [should be sqrt(rad2)-fRmax > kRadTolerance*0.5]
 
 	d2 = pDotV3d*pDotV3d - c ;
 
@@ -1059,7 +1024,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
 // Phi segment intersection
 //
-// o Tolerant of points inside phi planes by up to kCarTolerance/2
+// o Tolerant of points inside phi planes by up to kCarTolerance*0.5
 //
 // o NOTE: Large duplication of code between sphi & ephi checks
 //         -> only diffs: sphi -> ephi, Comp -> -Comp and half-plane
@@ -1251,7 +1216,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 	{
 	   dist2ETheta=kInfinity;
 	}	    
-	if ( pTheta < tolSTheta)  // dist2STheta<-kRadTolerance/2 && dist2ETheta>0)
+	if ( pTheta < tolSTheta)  // dist2STheta<-kRadTolerance*0.5 && dist2ETheta>0)
 	{
 
 // Inside (theta<stheta-tol) s theta cone
@@ -1349,7 +1314,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 	}  
 	else if (pTheta > tolETheta) 
 
-// dist2ETheta<-kRadTolerance/2 && dist2STheta>0)
+// dist2ETheta<-kRadTolerance*0.5 && dist2STheta>0)
 
 	{
 // Inside (theta>etheta+tol) e theta cone
@@ -1854,8 +1819,8 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
   if (fDTheta < M_PI)
   {
     segTheta=true;
-    tolSTheta=fSTheta-kAngTolerance/2;
-    tolETheta=fSTheta+fDTheta+kAngTolerance/2;
+    tolSTheta=fSTheta-kAngTolerance*0.5;
+    tolETheta=fSTheta+fDTheta+kAngTolerance*0.5;
   }
   else
   {
@@ -1878,15 +1843,20 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 //
 // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
 //
+  const G4double  fractionTolerance = 1.0e-14;
+  const G4double  flexRadMaxTolerance = G4std::max(kRadTolerance, 
+					           fractionTolerance * fRmax);
+  const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
 
-  G4double  Rmax_plus=  fRmax+kRadTolerance*0.5;
-  G4double  Rmin_minus= (fRmin>0) ? fRmin-kRadTolerance*0.5 : 0 ;
+  const G4double  flexRadMinTolerance = G4std::max(kRadTolerance, 
+					           fractionTolerance * fRmin);
+  const G4double  Rmin_minus= (fRmin>0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
 
   if(rad2 <= Rmax_plus*Rmax_plus && rad2 >= Rmin_minus*Rmin_minus)
   {
     c=rad2-fRmax*fRmax ;
 
-    if (c < kRadTolerance*fRmax) 
+    if (c < flexRadMaxTolerance*fRmax) 
     {
         // Within tolerant Outer radius 
         // 
@@ -1899,7 +1869,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 
       d2=pDotV3d*pDotV3d-c ;
 
-      if( (c >- kRadTolerance*fRmax) &&       // on tolerant surface
+      if( (c >- flexRadMaxTolerance*fRmax) &&       // on tolerant surface
 	  ( ( pDotV3d >=0 )  ||  (d2 < 0)) )  // leaving outside from Rmax 
 			                      // not re-entering
       {
@@ -1924,9 +1894,9 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
     {
       c=rad2-fRmin*fRmin ;
 
-      if (c >- kRadTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
+      if (c >- flexRadMinTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
       {
-	if( c < kRadTolerance*fRmin && pDotV3d < 0 )  // leaving from Rmin
+	if( c < flexRadMinTolerance*fRmin && pDotV3d < 0 )  // leaving from Rmin
 	{
 	  if(calcNorm)
 	  {
@@ -2091,7 +2061,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 	  {
 	    s = -b + d ;    // Second root
 	  }
-	  if (s > kRadTolerance*0.5 )   // && s<sr)
+	  if (s > flexRadMaxTolerance*0.5 )   // && s<sr)
 	  {
 	    stheta = s ;
 	    sidetheta = kSTheta ;
@@ -2117,7 +2087,7 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 	  {
 	    s=-b+d;    // Second root
 	  }
-	  if (s > kRadTolerance*0.5 && s < stheta )
+	  if (s > flexRadMaxTolerance*0.5 && s < stheta )
 	  {
 	    stheta = s ;
 	    sidetheta = kETheta ;
@@ -2517,6 +2487,27 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p) const
     rad=sqrt(rho2+p.z()*p.z());
     rho=sqrt(rho2);
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Sphere parameters:" << G4endl << G4endl ;
+     G4cout << "fRmin = "   << fRmin/mm << " mm" << G4endl ;
+     G4cout << "fRmax = "   << fRmax/mm << " mm" << G4endl ;
+     G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+     G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl;
+     G4cout << "fSTheta = " << fSTheta/degree << " degree" << G4endl;
+     G4cout << "fDTheta = " << fDTheta/degree << " degree" << G4endl << G4endl ;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Sphere::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Sphere::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
 //
 // Distance to r shells
 //    
@@ -2708,7 +2699,7 @@ G4Sphere::CreateRotatedVertices(const G4AffineTransform& pTransform,
 	}
     else
 	{
-	    G4Exception("G4Sphere::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Sphere::CreateRotatedVertices - Out of memory !");
 	}
 
     delete[] cosCrossTheta;

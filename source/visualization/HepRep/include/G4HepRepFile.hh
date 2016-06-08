@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFile.hh,v 1.1 2001/11/06 11:48:04 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4HepRepFile.hh,v 1.4 2002/02/02 04:00:12 perl Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison  5th April 2001

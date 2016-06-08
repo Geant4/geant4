@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiProtonInelastic.hh,v 1.8 2001/08/01 17:09:35 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4HEAntiProtonInelastic.hh,v 1.9 2002/06/13 07:14:40 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 // G4 Gheisha High Energy model class -- header file

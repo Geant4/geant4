@@ -1,0 +1,25 @@
+ /**********************************************************************
+  *                Parallel Library for Geant4
+  * Copyright (c) 2001 Gene Cooperman <gene@ccs.neu.edu>               *
+  *                                                                    *
+  * This library is free software; you can redistribute it and/or      *
+  * modify it under the terms of the GNU Lesser General Public         *
+  * License as published by the Free Software Foundation; either       *
+  * version 2.1 of the License, or (at your option) any later version. *
+  *                                                                    *
+  * This library is distributed in the hope that it will be useful,    *
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of     *
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU   *
+  * Lesser General Public License for more details.                    *
+  *                                                                    *
+  * You should have received a copy of the GNU Lesser General Public   *
+  * License along with this library (see file COPYING); if not, write  *
+  * to the Free Software Foundation, Inc., 59 Temple Place, Suite      *
+  * 330, Boston, MA 02111-1307 USA, or contact Gene Cooperman          *
+  * <gene@ccs.neu.edu>.                                                *
+  **********************************************************************/
+
+My intention is to make this software freely available as part of
+the Geant4 collaboration.  I believe that the liberal GNU Lesser General
+Public License should not be a barrier to reasonable usage.  If you find
+that it is, please write to me.

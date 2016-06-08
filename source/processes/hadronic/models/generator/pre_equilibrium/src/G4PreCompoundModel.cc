@@ -21,13 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.16 2001/10/04 20:00:30 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundModel.cc,v 1.21 2002/06/18 16:17:20 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by V. Lara
 
 #include "G4PreCompoundModel.hh"
 
+#include "G4EvaporationLevelDensityParameter.hh"
+
+#ifdef pctest
+G4Fragment G4PreCompoundModel::theInitialFragmentForTest;
+G4std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
+#endif
 
 const G4PreCompoundModel & G4PreCompoundModel::operator=(const G4PreCompoundModel &right)
 {
@@ -65,15 +71,17 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   aZ += G4int(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
   anInitialState.SetZ(aZ);
   
+  // Assume the projectile is a nucleon
   
   // Number of Excited Particles
-  anInitialState.SetNumberOfParticles(thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
+  anInitialState.SetNumberOfParticles(1+thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
   
   // Number of Charged Excited Particles
-  anInitialState.SetNumberOfCharged(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
+  anInitialState.SetNumberOfCharged(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge() + 
+				    G4int(0.5+G4UniformRand()));
   
   // Number of Holes 
-  anInitialState.SetNumberOfHoles(0);
+  anInitialState.SetNumberOfHoles(1);
   
   // pre-compound nucleus energy.
   G4double anEnergy = 0;
@@ -88,22 +96,35 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   G4LorentzVector momentum(p, anEnergy);
   anInitialState.SetMomentum(momentum);
   
-  
+#ifdef pctest
+  G4PreCompoundModel::theInitialFragmentForTest = anInitialState;
+#endif
   
   // call excitation handler
   const G4Fragment aFragment(anInitialState);
   G4ReactionProductVector * result = DeExcite(aFragment);
-  
+
+#ifdef pctest
+  for (G4std::vector<G4String*>::iterator icm = theCreatorModels.begin(); 
+       icm != theCreatorModels.end(); ++icm )
+    {
+      delete (*icm);
+    }
+  theCreatorModels.clear();
+#endif
   // fill particle change
   theResult.SetStatusChange(fStopAndKill);
   theResult.SetNumberOfSecondaries(result->size());
-  for(unsigned int i=0; i<result->size(); i++)
+  for(G4ReactionProductVector::iterator i= result->begin(); i != result->end(); ++i)
     {
       G4DynamicParticle * aNew = 
-	new G4DynamicParticle(result->operator[](i)->GetDefinition(),
-			      result->operator[](i)->GetTotalEnergy(),
-			      result->operator[](i)->GetMomentum());
-      delete result->operator[](i);
+	new G4DynamicParticle((*i)->GetDefinition(),
+			      (*i)->GetTotalEnergy(),
+			      (*i)->GetMomentum());
+#ifdef pctest
+      theCreatorModels.push_back(new G4String((*i)->GetCreatorModel()));
+#endif
+      delete (*i);
       theResult.AddSecondary(aNew);
     }
   delete result;
@@ -142,63 +163,80 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
     aEmission.Initialize(aFragment);
 
     // Equilibrium exciton number
-    G4double EquilibriumExcitonNumber = 
-      sqrt(1.19*G4PreCompoundParameters::GetAddress()->GetLevelDensity()*aFragment.GetA()*
-	   aFragment.GetExcitationEnergy()+0.5);
-															
+    //      G4EvaporationLevelDensityParameter theLDP;
+    //      G4double EquilibriumExcitonNumber = 
+    //        sqrt(1.19*theLDP.LevelDensityParameter(aFragment.GetA(),aFragment.GetZ(),
+    //  					     aFragment.GetExcitationEnergy())*
+    //  	   aFragment.GetA()*
+    //  	   aFragment.GetExcitationEnergy()+0.5);
+    G4double g = 0.595*aFragment.GetA()*
+      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+
+    G4int EquilibriumExcitonNumber = G4int(sqrt(2.0*g*aFragment.GetExcitationEnergy()) 
+					   + 0.5);
+    
     // Loop for transitions, it is performed while there are preequilibrium transitions.
     G4bool ThereIsTransition = false;
-    do {
-      if (aFragment.GetNumberOfExcitons() < EquilibriumExcitonNumber) {
-//  	if (aFragment.GetNumberOfParticles() < 1) {
-//  	  aFragment.SetNumberOfHoles(aFragment.GetNumberOfHoles()+1);
-//  	  aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()+1);       
-//  	}
+    do 
+      {
+	if (aFragment.GetNumberOfExcitons() < EquilibriumExcitonNumber && 
+	    aFragment.GetA() > 4) 
+	  {
+	    //  	if (aFragment.GetNumberOfParticles() < 1) {
+	    //  	  aFragment.SetNumberOfHoles(aFragment.GetNumberOfHoles()+1);
+	    //  	  aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()+1);       
+	    //  	}
 				
-	G4double TotalEmissionProbability = aEmission.GetTotalProbability(aFragment);
+	    G4double TotalEmissionProbability = aEmission.GetTotalProbability(aFragment);
       	
-	// Check if number of excitons is greater than 0
-        // else perform equilibrium emission
-	if (aFragment.GetNumberOfExcitons() <= 0) {
-	  // Perform Equilibrium Emission
-#ifdef debug
-	  CheckConservation(theInitialState,aFragment,Result);
-#endif
-	  PerformEquilibriumEmission(aFragment,Result);
-	  return Result;
-	}
+	    // Check if number of excitons is greater than 0
+	    // else perform equilibrium emission
+	    if (aFragment.GetNumberOfExcitons() <= 0) 
+	      {
+		// Perform Equilibrium Emission
+#ifdef debug // ------------- debug -----------------------------------------
+		CheckConservation(theInitialState,aFragment,Result);
+#endif // ------------------- debug -----------------------------------------
+		PerformEquilibriumEmission(aFragment,Result);
+		return Result;
+	      }
+	    
+	    G4PreCompoundTransitions aTransition(aFragment);
 	
-	G4PreCompoundTransitions aTransition(aFragment);
+	    // Sum of transition probabilities
+	    G4double TotalTransitionProbability = aTransition.GetTotalProbability();
 	
-       	// Sum of transition probabilities
-	G4double TotalTransitionProbability = aTransition.GetTotalProbability();
+	    // Sum of all probabilities
+	    G4double TotalProbability = TotalEmissionProbability + TotalTransitionProbability;
 	
-	// Sum of all probabilities
-	G4double TotalProbability = TotalEmissionProbability + TotalTransitionProbability;
-	
-	// Select subprocess
-	if (G4UniformRand() > TotalEmissionProbability/TotalProbability) {
-	  // It will be transition to state with a new number of excitons
-	  ThereIsTransition = true;
-					
-	  // Perform the transition
-	  aFragment = aTransition.PerformTransition(aFragment);
-	} else {
-	  // It will be fragment emission
-	  ThereIsTransition = false;
+	    // Select subprocess
+	    if (G4UniformRand() > TotalEmissionProbability/TotalProbability) 
+	      {
+		// It will be transition to state with a new number of excitons
+		ThereIsTransition = true;
+		
+		// Perform the transition
+		aFragment = aTransition.PerformTransition(aFragment);
+	      } 
+	    else 
+	      {
+		// It will be fragment emission
+		ThereIsTransition = false;
 
-	  // Perform the emission and Add emitted fragment to Result
-	  Result->push_back(aEmission.PerformEmission(aFragment));
-	}
-      } else {
-	// Perform Equilibrium Emission
+		// Perform the emission and Add emitted fragment to Result
+		Result->push_back(aEmission.PerformEmission(aFragment));
+	      }
+	  } 
+	else 
+	  {
+	    // Perform Equilibrium Emission
 #ifdef debug
-	CheckConservation(theInitialState,aFragment,Result);
+	    CheckConservation(theInitialState,aFragment,Result);
 #endif
-	PerformEquilibriumEmission(aFragment,Result);
-	return Result;
-      }
-    } while (ThereIsTransition);   // end of do loop
+	    PerformEquilibriumEmission(aFragment,Result);
+	    return Result;
+	  }
+      } while (ThereIsTransition);   // end of do loop
   } // end of for (;;) loop
 }
 
@@ -211,11 +249,8 @@ void G4PreCompoundModel::PerformEquilibriumEmission(const G4Fragment & aFragment
   G4ReactionProductVector * theEquilibriumResult;
   theEquilibriumResult = GetExcitationHandler()->BreakItUp(aFragment);
   
-  while (theEquilibriumResult->size() > 0) 
-  {
-    Result->push_back(*theEquilibriumResult->begin());
-    theEquilibriumResult->erase(theEquilibriumResult->begin());
-  }
+  Result->insert(Result->end(),theEquilibriumResult->begin(), theEquilibriumResult->end());
+
   delete theEquilibriumResult;
   return;
 }
@@ -230,47 +265,49 @@ void G4PreCompoundModel::CheckConservation(const G4Fragment & theInitialState,
   G4ThreeVector ProductsMomentum = aFragment.GetMomentum();
   G4int ProductsA = G4int(aFragment.GetA());
   G4int ProductsZ = G4int(aFragment.GetZ());
-  for (G4int h = 0; h < Result->entries(); h++) {
-    ProductsEnergy += Result->at(h)->GetTotalEnergy();
-    ProductsMomentum += Result->at(h)->GetMomentum();
-    ProductsA += G4int(Result->at(h)->GetDefinition()->GetBaryonNumber());
-    ProductsZ += G4int(Result->at(h)->GetDefinition()->GetPDGCharge());
-  }
+  for (G4ReactionProductVector::iterator h = Result->begin(); 
+       h != Result->end(); ++h) 
+    {
+      ProductsEnergy += (*h)->GetTotalEnergy();
+      ProductsMomentum += (*h)->GetMomentum();
+      ProductsA += G4int((*h)->GetDefinition()->GetBaryonNumber());
+      ProductsZ += G4int((*h)->GetDefinition()->GetPDGCharge());
+    }
 
-  if (ProductsA != theInitialState.GetA()) {
-    G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
-    G4cout << "G4PreCompoundModel.cc: Barionic Number Conservation test for just preequilibrium fragments" 
-	   << G4endl; 
-    G4cout << "Initial A = " << theInitialState.GetA() 
-	   << "   Fragments A = " << ProductsA << "   Diference --> " 
-	   << theInitialState.GetA() - ProductsA << G4endl;
-  }
-  if (ProductsZ != theInitialState.GetZ()) {
-    G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!" << G4endl;
-    G4cout << "G4PreCompoundModel.cc: Charge Conservation test for just preequilibrium fragments" 
-	   << G4endl; 
-    G4cout << "Initial Z = " << theInitialState.GetZ() 
-	   << "   Fragments Z = " << ProductsZ << "   Diference --> " 
-	   << theInitialState.GetZ() - ProductsZ << G4endl;
-  }
-  if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) {
-    G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
-    G4cout << "G4PreCompoundModel.cc: Energy Conservation test for just preequilibrium fragments" 
-	   << G4endl; 
-    G4cout << "Initial E = " << theInitialState.GetMomentum().e()/MeV << " MeV"
-	   << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
-	   << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
-  } 
+  if (ProductsA != theInitialState.GetA()) 
+    {
+      G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!\n"
+	     << "G4PreCompoundModel.cc: Barionic Number Conservation test for just preequilibrium fragments\n" 
+	     << "Initial A = " << theInitialState.GetA() 
+	     << "   Fragments A = " << ProductsA << "   Diference --> " 
+	     << theInitialState.GetA() - ProductsA << '\n';
+    }
+  if (ProductsZ != theInitialState.GetZ()) 
+    {
+      G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!\n"
+	     << "G4PreCompoundModel.cc: Charge Conservation test for just preequilibrium fragments\n" 
+	     << "Initial Z = " << theInitialState.GetZ() 
+	     << "   Fragments Z = " << ProductsZ << "   Diference --> " 
+	     << theInitialState.GetZ() - ProductsZ << '\n';
+    }
+  if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 1.0*keV) 
+    {
+      G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!\n" 
+	     << "G4PreCompoundModel.cc: Energy Conservation test for just preequilibrium fragments\n"  
+	     << "Initial E = " << theInitialState.GetMomentum().e()/MeV << " MeV"
+	     << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
+	     << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV\n";
+    } 
   if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 1.0*keV || 
       abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 1.0*keV ||
-      abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) {
-    G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
-    G4cout << "G4PreCompoundModel.cc: Momentum Conservation test for just preequilibrium fragments" 
-	   << G4endl; 
-    G4cout << "Initial P = " << theInitialState.GetMomentum().vect() << " MeV"
-	   << "   Fragments P = " << ProductsMomentum  << " MeV   Diference --> " 
-	   << theInitialState.GetMomentum().vect() - ProductsMomentum << " MeV" << G4endl;
-  }
+      abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 1.0*keV) 
+    {
+      G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!\n"
+	     << "G4PreCompoundModel.cc: Momentum Conservation test for just preequilibrium fragments\n" 
+	     << "Initial P = " << theInitialState.GetMomentum().vect() << " MeV"
+	     << "   Fragments P = " << ProductsMomentum  << " MeV   Diference --> " 
+	     << theInitialState.GetMomentum().vect() - ProductsMomentum << " MeV\n";
+    }
   return;
 }
 

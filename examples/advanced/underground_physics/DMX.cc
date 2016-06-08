@@ -95,11 +95,34 @@ int main(int argc,char** argv) {
   G4VisManager* visManager = new DMXVisManager;
   visManager->Initialize();
 #endif
+
+  // output environment variables:
+#ifdef G4ANALYSIS_USE
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " Using AIDA 2.2 analysis " << G4endl;
+#else
+  G4cout << G4endl << G4endl << G4endl 
+	 << " User Environment " << G4endl
+	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
+	 << G4endl;
+#endif
+
+#ifdef DMXENV_GPS_USE
+  G4cout << " Using GPS and not DMX gun " << G4endl;
+#else
+  G4cout << " Using the DMX gun " << G4endl;
+#endif
     
   // set user action classes
-  runManager->SetUserAction(new DMXPrimaryGeneratorAction);
-  runManager->SetUserAction(new DMXRunAction);
-  DMXEventAction* eventAction = new DMXEventAction;
+  DMXPrimaryGeneratorAction* DMXGenerator = new DMXPrimaryGeneratorAction;
+  runManager->SetUserAction(DMXGenerator);
+  //  runManager->SetUserAction(new DMXPrimaryGeneratorAction);
+  // RunAction is inherited by EventAction for output filenames - will all
+  // change when implement proper analysis manager?
+  DMXRunAction* DMXRun = new DMXRunAction;
+  runManager->SetUserAction(DMXRun);
+  DMXEventAction* eventAction = new DMXEventAction(DMXRun,DMXGenerator);
   runManager->SetUserAction(eventAction);
   // eventAction is inherited by SteppingAction in order to switch colour
   // flag:

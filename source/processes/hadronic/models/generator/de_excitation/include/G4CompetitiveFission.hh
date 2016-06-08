@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh,v 1.6 2001/08/01 17:04:11 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CompetitiveFission.hh,v 1.7 2002/01/15 12:22:37 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -44,6 +44,7 @@
 #include "Randomize.hh"
 
 //#define debug
+//#define pctest
 
 class G4CompetitiveFission : public G4VEvaporationChannel
 {

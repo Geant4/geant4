@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Hyperbola.hh,v 1.8 2001/07/11 09:59:35 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Hyperbola

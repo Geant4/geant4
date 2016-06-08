@@ -1,0 +1,136 @@
+$Id: README,v 1.4 2002/06/05 14:20:59 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm6 
+                            -------
+     This example is intended to test the process of
+     gamma conversion to a pair of muons.
+     To make this process more visible, the usually much more frequent
+     gamma conversion to a pair of electrons is not selected in the
+     physics list.
+	
+ 1- GEOMETRY DEFINITION
+ 
+     The geometry consists of a single block of a homogenous material.
+     	
+     Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+     The default is 500 m of iron.
+     	 	
+     In addition a transverse uniform magnetic field can be applied.
+ 	
+     The default geometry is constructed in DetectorConstruction class,
+     but all of the above parameters can be changed interactively via
+     the commands defined in the DetectorMessenger class.
+ 	
+ 2- PHYSICS LIST
+ 
+     The particle list is the one of novice/exampleN03.
+     The physics list contains the 'standard' electromagnetic processes,
+     and decay.
+     
+     For Gamma, only the GammaConversionToMuons has been registered.
+     Futhermore, a high production cut (1 km, which gives infinity in energy)
+     prevent any production of delta-electrons from ionization or gamma
+     from bremsstrahlung.
+ 		
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+     The primary kinematic consists of a single particle which hits the
+     block perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     changed via the G4 build-in commands of ParticleGun class (see
+     the macros provided with this example).
+     The default is a Gamma of 100 TeV.
+     	
+     In addition one can choose randomly the impact point of the incident
+     particle. The corresponding interactive command is built in
+     PrimaryGeneratorMessenger class.
+	 	
+     A RUN is a set of events.
+ 	
+ 				
+ 4- VISUALIZATION
+ 
+     The Visualization Manager is set in the main().
+     The initialisation of the drawing is done via the command
+     > /control/execute vis.mac
+ 	
+     The detector has a default view which is a longitudinal view of the box.
+ 	
+     The tracks are drawn at the end of event, and erased at the end of run.
+     Optionaly one can choose to draw all particles, only the charged one,
+     or none. This command is defined in EventActionMessenger class.
+
+ 5- PHYSICS DEMO
+
+     The particle's type and the physic processes which will be available
+     in this example are set in PhysicsList class.
+
+     In addition a build-in interactive command (/process/inactivate proname)
+     allows to activate/inactivate the processes one by one.
+
+     The threshold for producing secondaries can be changed.
+     eg: /run/particle/setCut 100 micrometer
+         /run/initialize
+	  	
+ 6- HOW TO START ?
+ 
+     - compile and link to generate an executable
+	% cd geant4/examples/extended/electromagnetic/TestEm6 
+ 	% gmake
+ 		
+     - execute Test  in 'batch' mode from macro files
+ 	% TestEm6    run01.mac
+ 		
+     - execute Test  in 'interactive mode' with visualization
+ 	% TestEm6 
+ 		....
+ 	Idle> type your commands
+ 		....
+ 	Idle> exit
+ 	
+ 7- HISTOGRAMS
+ 
+     Testem6 produces 6 histograms (saved as testem6.paw) which illustrate
+     the final state of the GammaConversionToMuons process.
+     See their definitions in RunAction.cc
+     
+     Note that histograms are disabled via the flag G4NOHIST in GNUmakefile.
+
+ 8- Using the Anaphe implementation of the AIDA 2.2 histograms:
+    -----------------------------------------------------------
+
+     In order to use the Anaphe implementation of the AIDA 2.2 interfaces, 
+     prepare some environment variables by source-ing one of the following 
+     startup scripts (depending on your compiler version):
+
+     # gcc-2.95.2
+     source $LHCXXTOP/share/LHCXX/4.0.1/install/sharedstart.sh or .csh
+
+     # egcs_1.1.2 (aka gcc 2.91.66)
+     source $LHCXXTOP/share/LHCXX/4.0.1-sec/install/sharedstart.sh or .csh
+
+     At CERN, $LHCXXTOP is /afs/cern.ch/sw/lhcxx, you may want to use a
+     more recent release, check http:/cern.ch/anaphe for more information.
+
+     After this, you will have access to the 'aida-config' command which
+     is used in the GNUmakefile.
+
+ 9- HOW TO INCREASE STATISTICS ON gamma -> mu+mu- ?
+ 
+     The process of gamma -> mu+mu- has a low cross section but can be important
+     for leakage through thick absorbers and calorimeters.
+     Straight forward simulation will be quite time consuming.
+     To make the process more visible, the cross section can be artificially
+     increased by some factor (here 1000) using the command
+     (only effective after  /run/initialize)
+
+     /run/process/setGammaToMuPairFac 1000
+ 

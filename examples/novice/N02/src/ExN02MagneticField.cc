@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02MagneticField.cc,v 1.6 2001/10/11 12:32:37 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN02MagneticField.cc,v 1.7 2002/01/09 17:24:10 ranjard Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //  
 //   User Field class implementation.
 //

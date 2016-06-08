@@ -21,11 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.6 2001/09/18 07:53:16 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VRML2SceneHandler.cc,v 1.8 2002/06/23 03:31:51 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
+
+#ifndef WIN32
+
 
 //=================//
 #ifdef G4VIS_BUILD_VRML_DRIVER
@@ -64,8 +67,8 @@
 G4VRML2SceneHandler::G4VRML2SceneHandler(G4VRML2& system, const G4String& name) :
 	G4VSceneHandler(system, fSceneIdCount++, name),
 	fSystem(system),
-	fDest(), 
-	fPVPickable ( false ) 
+	fPVPickable ( false ), 
+        fDest()
 {
 	fSceneCount++;
 
@@ -142,3 +145,4 @@ G4int G4VRML2SceneHandler::fSceneIdCount = 0;
 G4int G4VRML2SceneHandler::fSceneCount = 0;
 
 #endif
+#endif //WIN32

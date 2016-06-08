@@ -21,38 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.14 2001/10/01 15:00:29 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4GammaConversion.cc,v 1.17 2002/04/09 17:34:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
 // 
-// 11-06-96, Added SelectRandomAtom() method, M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 24-06-96, simplification in ComputeCrossSectionPerAtom, M.Maire
-// 24-06-96, in DoIt : change the particleType stuff, M.Maire
-// 25-06-96, modification in the generation of the teta angle, M.Maire
-// 16-09-96, minors optimisations in DoIt. Thanks to P.Urban
-//           dynamical array PartialSumSigma
-// 13-12-96, fast sampling of epsil below 2 MeV, L.Urban
-// 14-01-97, crossection table + meanfreepath table.
-//           PartialSumSigma removed, M.Maire
-// 14-01-97, in DoIt the positron is always created, even with Ekine=0,
-//           for further annihilation, M.Maire
-// 14-03-97, new Physics scheme for geant4alpha, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 19-06-97, correction in ComputeCrossSectionPerAtom, L.Urban
-// 04-06-98, in DoIt, secondary production condition:
-//             range>G4std::min(threshold,safety)
-// 13-08-98, new methods SetBining() PrintInfo()
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 11-07-01, PostStepDoIt - sampling epsil: power(rndm,0.333333)
-// 13-07-01, DoIt: suppression of production cut for the (e-,e+) (mma)
-// 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)
-// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)         
+// 11-06-96 Added SelectRandomAtom() method, M.Maire
+// 21-06-96 SetCuts implementation, M.Maire
+// 24-06-96 simplification in ComputeCrossSectionPerAtom, M.Maire
+// 24-06-96 in DoIt : change the particleType stuff, M.Maire
+// 25-06-96 modification in the generation of the teta angle, M.Maire
+// 16-09-96 minors optimisations in DoIt. Thanks to P.Urban
+//          dynamical array PartialSumSigma
+// 13-12-96 fast sampling of epsil below 2 MeV, L.Urban
+// 14-01-97 crossection table + meanfreepath table.
+//          PartialSumSigma removed, M.Maire
+// 14-01-97 in DoIt the positron is always created, even with Ekine=0,
+//          for further annihilation, M.Maire
+// 14-03-97 new Physics scheme for geant4alpha, M.Maire
+// 28-03-97 protection in BuildPhysicsTable, M.Maire
+// 19-06-97 correction in ComputeCrossSectionPerAtom, L.Urban
+// 04-06-98 in DoIt, secondary production condition:
+//            range>G4std::min(threshold,safety)
+// 13-08-98 new methods SetBining() PrintInfo()
+// 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 11-07-01 PostStepDoIt - sampling epsil: power(rndm,0.333333)
+// 13-07-01 DoIt: suppression of production cut for the (e-,e+) (mma)
+// 06-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01 BuildThePhysicsTable() called from constructor (mma)
+// 17-09-01 migration of Materials to pure STL (mma)
+// 20-09-01 DoIt: fminimalEnergy = 1*eV (mma)
+// 01-10-01 come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 11-01-02 ComputeCrossSection: correction of extrapolation below EnergyLimit
+// 21-03-02 DoIt: correction of the e+e- angular distribution (bug 363) mma        
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -208,7 +210,8 @@ G4double G4GammaConversion::ComputeCrossSectionPerAtom
 
  if (GammaEnergySave < GammaEnergyLimit)
    {
-     X=GammaEnergySave-2.*electron_mass_c2;
+     X = (GammaEnergySave - 2.*electron_mass_c2)
+        /(GammaEnergyLimit- 2.*electron_mass_c2);
      CrossSection *= X*X;
    }
 
@@ -325,24 +328,26 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    if (9./(9.+d) >G4UniformRand()) u= - log(G4UniformRand()*G4UniformRand())/a1;
    else                            u= - log(G4UniformRand()*G4UniformRand())/a2;
 
-   G4double Teta = u*electron_mass_c2/GammaEnergy;
+   G4double TetEl = u*electron_mass_c2/ElectTotEnergy;
+   G4double TetPo = u*electron_mass_c2/PositTotEnergy;
    G4double Phi  = twopi * G4UniformRand();
-   G4double dirx=sin(Teta)*cos(Phi), diry=sin(Teta)*sin(Phi), dirz=cos(Teta);
- 
+   G4double dxEl= sin(TetEl)*cos(Phi),dyEl= sin(TetEl)*sin(Phi),dzEl=cos(TetEl);
+   G4double dxPo=-sin(TetPo)*cos(Phi),dyPo=-sin(TetPo)*sin(Phi),dzPo=cos(TetPo);
+   
    //
    // kinematic of the created pair
    //
    // the electron and positron are assumed to have a symetric
    // angular distribution with respect to the Z axis along the parent photon.
 
-   aParticleChange.SetNumberOfSecondaries(2) ; 
+   aParticleChange.SetNumberOfSecondaries(2); 
 
    G4double ElectKineEnergy = G4std::max(0.,ElectTotEnergy - electron_mass_c2);
    G4double localEnergyDeposit = 0.;
 
    if (ElectKineEnergy > fminimalEnergy)
      {
-       G4ThreeVector ElectDirection (dirx, diry, dirz);
+       G4ThreeVector ElectDirection (dxEl, dyEl, dzEl);
        ElectDirection.rotateUz(GammaDirection);   
  
        // create G4DynamicParticle object for the particle1  
@@ -359,7 +364,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    if (PositKineEnergy < fminimalEnergy)
      { localEnergyDeposit += PositKineEnergy; PositKineEnergy = 0.;}
 
-   G4ThreeVector PositDirection (-dirx, -diry, dirz);
+   G4ThreeVector PositDirection (dxPo, dyPo, dzPo);
    PositDirection.rotateUz(GammaDirection);   
  
    // create G4DynamicParticle object for the particle2 

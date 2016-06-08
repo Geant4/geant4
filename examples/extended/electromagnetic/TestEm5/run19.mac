@@ -6,8 +6,8 @@
 /control/verbose 2
 /run/verbose 2
 #
-/calor/cutG 2.13 mm    
-/calor/cutE 7.0  mum
+/run/particle/setGCut 2.13 mm    
+/run/particle/setECut 7.0  mum
 /run/initialize
 #
 /calor/setAbsMat Silicon   

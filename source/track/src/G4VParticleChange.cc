@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.9 2001/11/13 05:13:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VParticleChange.cc,v 1.10 2001/12/14 09:59:36 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,7 +37,6 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
-#include "G4Mars5GeVMechanism.hh"
 
 const G4double G4VParticleChange::accuracyForWarning = 1.0e-9;
 const G4double G4VParticleChange::accuracyForException = 0.001;

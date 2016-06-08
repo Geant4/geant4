@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsList.hh,v 1.4 2001/10/26 12:51:23 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em1PhysicsList.hh,v 1.5 2002/03/08 13:43:29 maire Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -59,7 +59,6 @@ class Em1PhysicsList: public G4VUserPhysicsList
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
     void SetProtonCut(G4double);           
-    void SetCutsByEnergy(G4double);
     void GetRange(G4double);  
         
   protected:
@@ -75,6 +74,7 @@ class Em1PhysicsList: public G4VUserPhysicsList
     G4double cutForGamma;
     G4double cutForElectron;
     G4double cutForProton;
+    G4double currentDefaultCut;
 
 };
 

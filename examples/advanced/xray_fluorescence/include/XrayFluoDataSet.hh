@@ -63,7 +63,14 @@ public:
   //find the value corresponding to the energy e in the set
   //identified by id
   G4double FindValue(G4double e, G4int id = 0) const;
-  
+
+  virtual const G4VEMDataSet* GetComponent(G4int i) const { return 0;} 
+
+  virtual void AddComponent(G4VEMDataSet* dataSet) { }
+
+  virtual size_t NumberOfComponents() const { return 0; }
+
+
   void PrintData() const;
 
   const G4DataVector& GetEnergies(G4int i) const { return *energies; }

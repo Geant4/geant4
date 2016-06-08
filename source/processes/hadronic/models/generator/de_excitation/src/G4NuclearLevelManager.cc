@@ -71,7 +71,9 @@ G4NuclearLevelManager::~G4NuclearLevelManager()
   if ( _levels ) {
     if (_levels->size()>0) 
     {
-      G4std::for_each(_levels->begin(), _levels->end(), DeleteLevel());
+      G4std::vector<G4NuclearLevel*>::iterator pos;
+      for(pos=_levels->begin(); pos!=_levels->end(); pos++)
+        if (*pos) delete *pos;
       _levels->clear();
     }
     delete _levels;
@@ -140,7 +142,7 @@ const G4NuclearLevel* G4NuclearLevelManager::NearestLevel(G4double energy, G4dou
       unsigned int i = 0;
       for (i=0; i<_levels->size(); i++)
 	{
-	  G4double e = _levels->operator[](i)->Energy();
+	  G4double e = (*_levels)[i]->Energy();
 	  G4double eDiff = abs(e - energy);
 	  if (eDiff < diff && eDiff <= eDiffMax)
 	    { 
@@ -150,7 +152,7 @@ const G4NuclearLevel* G4NuclearLevelManager::NearestLevel(G4double energy, G4dou
 	}
     }
   if (_levels != 0 && iNear >= 0 && iNear < static_cast<G4int>(_levels->size()) )
-    { return _levels->operator[](iNear); }
+    { return (*_levels)[iNear]; }
   else
     { return 0; }
 }
@@ -246,9 +248,12 @@ void G4NuclearLevelManager::MakeLevels()
 
   if (_levels != 0)
     {
-      if (_levels->size()>0)
+      if (_levels->size()>0) 
       {
-        for(unsigned int i=0; i<_levels->size(); i++) delete _levels->operator[](i);
+        G4std::vector<G4NuclearLevel*>::iterator pos;
+        for(pos=_levels->begin(); pos!=_levels->end(); pos++)
+          if (*pos) delete *pos;
+        _levels->clear();
       }
       delete _levels;
     }
@@ -327,7 +332,11 @@ void G4NuclearLevelManager::MakeLevels()
 						    thisLevelPolarities);
       _levels->push_back(newLevel);
     }
+#ifdef G4USE_OSPACE
   G4std::sort(_levels->begin(), _levels->end());
+#else
+  G4std::stable_sort(_levels->begin(), _levels->end());
+#endif
   return;
 }
 
@@ -345,7 +354,7 @@ void G4NuclearLevelManager::PrintAll()
 
   G4int i = 0;
   for (i=0; i<nLevels; i++)
-    { _levels->operator[](i)->PrintAll(); }
+    { (*_levels)[i]->PrintAll(); }
 }
 
 
@@ -368,7 +377,11 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 	{
 	  _levels->push_back(new G4NuclearLevel(*(right._levels->operator[](i))));
 	}
+#ifdef G4USE_OSPACE
       G4std::sort(_levels->begin(), _levels->end());
+#else
+      G4std::stable_sort(_levels->begin(), _levels->end());
+#endif
     }
   else 
     {

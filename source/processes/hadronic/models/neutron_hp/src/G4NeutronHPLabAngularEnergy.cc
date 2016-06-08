@@ -102,7 +102,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
    
    // get theta, E
    G4double cosTh, secEnergy;
-   G4int i, it;
+   G4int i, it(0);
    // find the energy bin
    for(i=0; i<nEnergies; i++)
    {
@@ -120,7 +120,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
        running[i]+=theData[it][i].GetIntegral(); // Does interpolated integral.
      }
      G4double random = running[nCosTh[it]-1]*G4UniformRand();
-     G4int ith;
+     G4int ith(0);
      for(i=0;i<nCosTh[it]; i++)
      {
        ith = i;
@@ -221,7 +221,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
      theThVec.Merge(&thBuff1 ,&thBuff2); // takes care of interpolation
      G4double random = (theThVec.GetY(theThVec.GetVectorLength()-1)
                         -theThVec.GetY(0))   *G4UniformRand();
-     G4int ith;
+     G4int ith(0);
      for(i=1;i<theThVec.GetVectorLength(); i++)
      {
        ith = i;
@@ -238,7 +238,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
        cosTh = theInt.Interpolate(theSecondManager[it].GetScheme(ith), 
                                   x, x1,x2,y1,y2);
      }
-     G4int i1, i2;
+     G4int i1(0), i2(0);
      // get the indixes of the vectors close to theta for low energy
      // first it-1 !!!! i.e. low in energy
      for(i=0; i<nCosTh[it-1]; i++)

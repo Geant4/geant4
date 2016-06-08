@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh,v 1.5 2001/08/01 17:08:58 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4InteractionContent.hh,v 1.6 2002/06/09 16:22:37 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef G4InteractionContent_h
@@ -38,7 +38,7 @@
 
 #include "globals.hh"
 
-#include"G4VSplitableHadron.hh"
+#include "G4VSplitableHadron.hh"
 
 class G4InteractionContent 
 {

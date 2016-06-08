@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.6 2001/08/01 17:05:31 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FissionProbability.cc,v 1.7 2001/11/08 10:19:31 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -68,8 +68,8 @@ G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
     G4double Z = fragment.GetZ();
     G4double U = fragment.GetExcitationEnergy();
   
-    G4double Ucompound = U - G4PairingCorrection::GetPairingCorrection(G4int(A),G4int(Z));
-    G4double Ufission = U - G4PairingCorrection::GetFissionPairingCorrection(G4int(A),G4int(Z));
+    G4double Ucompound = U - G4PairingCorrection::GetInstance()->GetPairingCorrection(G4int(A),G4int(Z));
+    G4double Ufission = U - G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(G4int(A),G4int(Z));
   
     G4double SystemEntropy = 2.0*sqrt(theEvapLDP.LevelDensityParameter(A,Z,Ucompound)*Ucompound);
 	

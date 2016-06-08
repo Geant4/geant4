@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OsloMatrix.cc,v 1.5 2001/07/11 09:59:45 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFParameters.cc,v 1.5 2001/08/01 17:05:36 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFParameters.cc,v 1.6 2002/06/06 17:57:49 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -52,29 +52,37 @@ const G4double G4StatMFParameters::_r0 = 1.17*fermi;
 
 G4double G4StatMFParameters::Beta(const G4double T)
 {
-    if (T > _CriticalTemp) return 0.0;
-    else {
-	G4double CriticalTempSqr = _CriticalTemp*_CriticalTemp;
-	G4double TempSqr = T*T;
-	G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
+  if (T > _CriticalTemp) return 0.0;
+  else {
+    G4double CriticalTempSqr = _CriticalTemp*_CriticalTemp;
+    G4double TempSqr = T*T;
+    G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
 		
-	return _Beta0*tmp*pow(tmp,1.0/4.0);
-    }
+    return _Beta0*tmp*pow(tmp,1.0/4.0);
+  }
 }
 
 G4double G4StatMFParameters::DBetaDT(const G4double T) 
 {
-    if (T > _CriticalTemp) return 0.0;
-    else {
-	G4double CriticalTempSqr = _CriticalTemp*_CriticalTemp;
-	G4double TempSqr = T*T;
-	G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
+  if (T > _CriticalTemp) return 0.0;
+  else {
+    G4double CriticalTempSqr = _CriticalTemp*_CriticalTemp;
+    G4double TempSqr = T*T;
+    G4double tmp = (CriticalTempSqr-TempSqr)/(CriticalTempSqr+TempSqr);
 		
-	return -5.0*_Beta0*pow(tmp,1.0/4.0)*(CriticalTempSqr*T)/
-	    ((CriticalTempSqr+TempSqr)*(CriticalTempSqr+TempSqr));
-    }
+    return -5.0*_Beta0*pow(tmp,1.0/4.0)*(CriticalTempSqr*T)/
+      ((CriticalTempSqr+TempSqr)*(CriticalTempSqr+TempSqr));
+  }
 }
 
+G4double G4StatMFParameters::GetMaxAverageMultiplicity(const G4int A)
+{
+  // Maximun average multiplicity: M_0 = 2.6 for A ~ 200 
+  // and M_0 = 3.3 for A <= 110
+  G4double MaxAverageMultiplicity = 2.6;
+  if (A <= 110) MaxAverageMultiplicity = 3.3;
+  return MaxAverageMultiplicity;
+}
 
 G4StatMFParameters G4StatMFParameters::theStatMFParameters;
 

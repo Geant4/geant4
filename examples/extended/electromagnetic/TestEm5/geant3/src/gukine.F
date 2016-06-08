@@ -1,17 +1,30 @@
 
       SUBROUTINE GUKINE
-C
+*  
+*    Generates Kinematics for primary track
+*
+*    Data card Kine : Itype  Ekine theta phi rbeam
+*
+*    rbeam : size of the random beam extension in fraction of 0.5*calorYZ      
+*
 #include "geant321/gcbank.inc"
 #include "geant321/gcflag.inc"
 #include "geant321/gconst.inc"
 #include "geant321/gckine.inc"
 #include "edepo.inc"
-C
+*
       DIMENSION VERTEX(3),PLAB(3)
-C
+      dimension rndm(2)
+*
+*     random in YZ ?
+      if ((pkine(4).lt.0.).or.(pkine(4).gt.1.)) pkine(4) = 0.
+      rbeam = pkine(4)*0.5*YZABSO
+      call GRNDM (rndm,2)            
+*
       VERTEX(1)=XVERT     
-      VERTEX(2)=YVERT     
-      VERTEX(3)=ZVERT
+      VERTEX(2)=YVERT + (2*rndm(1)-1.)*rbeam     
+      VERTEX(3)=ZVERT + (2*rndm(2)-1.)*rbeam
+*      
       CALL GSVERT(VERTEX,0,0,0,0,NVERT)           
 *
       JPA     = LQ(JPART-IKINE)

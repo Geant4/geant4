@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionBarrier.hh,v 1.5 2001/08/01 17:04:27 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FissionBarrier.hh,v 1.6 2001/11/08 10:15:16 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -56,9 +56,10 @@ private:
   G4double BarashenkovFissionBarrier(const G4int A, const G4int Z);
   
   G4double SellPlusPairingCorrection(const G4int Z, const G4int N)
-  { return G4CameronShellPlusPairingCorrections::GetShellPlusPairingZ(Z) +
-  			  G4CameronShellPlusPairingCorrections::GetShellPlusPairingN(N); 
-	}
+  { 
+    G4CameronShellPlusPairingCorrections* SPtr = G4CameronShellPlusPairingCorrections::GetInstance();
+    return SPtr->GetShellPlusPairingZ(Z) + SPtr->GetShellPlusPairingN(N); 
+  }
 
 };
 

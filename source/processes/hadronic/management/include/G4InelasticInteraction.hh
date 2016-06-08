@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4InelasticInteraction.hh,v 1.6 2001/12/07 11:18:38 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
  // Hadronic Process: Inelastic Interaction 
  // This class is an abstract base class, since the pure virtual

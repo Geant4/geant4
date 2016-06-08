@@ -1,0 +1,23 @@
+  G4double EField = 0.0*kilovolt/cm;
+
+  // create electric field
+  G4UniformElectricField* elecField = 
+     new G4UniformElectricField(G4ThreeVector(0,EField,0));
+
+  // equation of motion
+  G4EqMagElectricField* EquationOfMotion = 
+    new G4EqMagElectricField(elecField);
+
+  // stepper for equation of motion
+  G4MagIntegratorStepper* DMXStepper = 
+    new G4ClassicalRK4(EquationOfMotion); 
+
+  // chordfinder
+  G4ChordFinder* DMXChordFinder =
+    new G4ChordFinder(elecField, 1.0e-3*mm, DMXStepper);
+
+  // field manager
+  G4FieldManager* DMXFieldManager = new G4FieldManager();
+  DMXFieldManager->SetChordFinder(DMXChordFinder);  
+  G4TransportationManager::GetTransportationManager()
+    -> SetFieldManager(DMXFieldManager);

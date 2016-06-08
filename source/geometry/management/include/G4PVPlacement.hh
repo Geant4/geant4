@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PVPlacement.hh,v 1.6 2001/07/11 09:59:17 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // class G4PVPlacement

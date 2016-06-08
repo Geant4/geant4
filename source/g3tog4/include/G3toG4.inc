@@ -22,7 +22,7 @@
 *    
 *    
 *     $Id: G3toG4.inc,v 1.3 2001/07/11 09:58:58 gunter Exp $
-*     GEANT4 tag $Name: geant4-04-00 $
+*     GEANT4 tag $Name: geant4-04-01 $
 *    
       integer maxlines
       parameter (maxlines = 750) ! max no. of cmd lines per C++ source file

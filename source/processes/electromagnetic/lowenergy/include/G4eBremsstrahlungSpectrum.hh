@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: G4eBremsstrahlungSpectrum.hh,v 1.2 2001/11/29 19:01:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4eBremsstrahlungSpectrum.hh,v 1.3 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -88,8 +88,9 @@ public:
 
   G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
                                   G4int Z = 0,
-				  const G4ParticleDefinition* pd=0) const
-  { return kineticEnergy; }
+				  const G4ParticleDefinition* pd=0) const;
+
+  G4double Excitation(G4int Z, G4double kineticEnergy) const; 
 
   void PrintData() const;
 

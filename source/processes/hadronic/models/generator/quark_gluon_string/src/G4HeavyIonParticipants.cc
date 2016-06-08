@@ -93,7 +93,7 @@ void G4HeavyIonParticipants::BuildInteractions(const G4ReactionProduct  &thePrim
         G4double s = (iNucleon->Get4Momentum() + pNucleon->Get4Momentum()).mag2();
         G4double Distance2 = sqr(impactX - pNucleon->GetPosition().x() - iNucleon->GetPosition().x()) +
                              sqr(impactY - pNucleon->GetPosition().y() - iNucleon->GetPosition().y());
-        G4PomeronCrossSection * theProbability;
+        G4PomeronCrossSection * theProbability=NULL;
         G4double Probability;
         if(iNucleon->GetDefinition() == G4Proton::Proton()) theProbability = &theProtonProbability;
         if(iNucleon->GetDefinition() == G4Neutron::Neutron()) theProbability = &theNeutronProbability;  

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Solver.hh,v 1.5 2001/08/01 17:04:39 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Solver.hh,v 1.6 2002/06/06 17:27:04 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -69,20 +69,22 @@ public:
     G4double GetIntervalUpperLimit(void) const {return b;}
 	
     void SetIntervalLimits(const G4double Limit1, const G4double Limit2);
-
+    
     G4double GetRoot(void) const {return root;}
-	
+    
     // Calculates the root by the Bisection method
-// 	template <class Function> G4bool Bisection(const Function & theFunction);
     G4bool Bisection(Function & theFunction);	
 	
     // Calculates the root by the Regula-Falsi method
-// 	template <class Function> G4bool RegulaFalsi(const Function & theFunction);
     G4bool RegulaFalsi(Function & theFunction);
 	
 	
     // Calculates the root by the Brent's method
     G4bool Brent(Function & theFunction);
+
+    // Calculates the root by the Inverse Parabolic Interpolation method 
+    // due to Jack Crenshaw
+    G4bool Crenshaw(Function & theFunction);
 	
 private:
 

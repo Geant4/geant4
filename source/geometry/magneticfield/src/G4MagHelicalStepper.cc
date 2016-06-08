@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.cc,v 1.8 2001/07/11 09:59:12 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4MagHelicalStepper.cc,v 1.11 2002/01/17 08:12:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #include "G4MagHelicalStepper.hh"
 #include "G4ThreeVector.hh"
@@ -67,13 +67,13 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
   G4double Bmag = Bfld.mag();
   const G4double *pIn = yIn+3;
-  G4ThreeVector initMomentum= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
-  G4double      momentumVal = initMomentum.mag();
-  G4ThreeVector initTangent = (1.0/momentumVal) * initMomentum;  // .unit();  
+  G4ThreeVector initVelocity= G4ThreeVector( pIn[0], pIn[1], pIn[2]);
+  G4double      velocityVal = initVelocity.mag();
+  G4ThreeVector initTangent = (1.0/velocityVal) * initVelocity;  // .unit();  
 
   // fCof = fUnitConstant*particleCharge/MomentumXc;
   G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
-  G4double fCoefficient = (fUnitConstant / momentumVal) * particleCharge;
+  G4double fCoefficient = (fUnitConstant / velocityVal) * particleCharge;
 
   // for too small magnetic fields there is no curvature
   // (include momentum here) FIXME
@@ -140,9 +140,9 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
       yHelix[1]   = yIn[1] + positionMove.y(); 
       yHelix[2]   = yIn[2] + positionMove.z(); 
 				
-      yHelix[3] = momentumVal * endTangent.x();
-      yHelix[4] = momentumVal * endTangent.y();
-      yHelix[5] = momentumVal * endTangent.z();
+      yHelix[3] = velocityVal * endTangent.x();
+      yHelix[4] = velocityVal * endTangent.y();
+      yHelix[5] = velocityVal * endTangent.z();
 
       // Store and/or calculate parameters for chord distance.
     }

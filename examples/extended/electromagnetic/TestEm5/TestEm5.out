@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-04-00 $
-                                (14-Dec-2001)
+ Geant4 version $Name: geant4-04-01 $
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -18,8 +18,8 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 /run/verbose 2
 #
-/calor/cutG 2.13 mm    
-/calor/cutE 7.0  mum
+/run/particle/setGCut 2.13 mm    
+/run/particle/setECut 7.0  mum
 /run/initialize
 userDetector->Construct() start.
 
@@ -96,16 +96,14 @@ userDetector->Construct() start.
  The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
  X position of the middle of the absorber 0 fm 
 physicsList->Construct() start.
+
+phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 Em5PhysicsList::SetCuts:CutLength : 1 mm 
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -265,99 +263,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=69s Real=3.4e+03s Sys=5e+02s
+  User=58s Real=1.1e+03s Sys=1.2e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209662 +- 1.5147e-05  mm  
+    mean charged track length   in absorber=0.0209457 +- 1.48628e-05  mm  
 
-            mean energy deposit in absorber=0.00668476 +- 2.09e-05  MeV 
+            mean energy deposit in absorber=0.006678 +- 2.04253e-05  MeV 
 
- mean number of steps in absorber (charged) =0.10345 +- 0.00245985      
+ mean number of steps in absorber (charged) =0.05875 +- 0.00124032      
  mean number of steps in absorber (neutral) =3e-05 +- 1.73202e-05      
 
-   mean number of charged secondaries = 0.01866 +- 0.000447569
+   mean number of charged secondaries = 0.03788 +- 0.000638476
 
-   mean number of neutral secondaries = 3e-05 +- 1.73202e-05
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.01866  and e+s =0
+   mean number of e-s =0.03788  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
-
- energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5729
- bin nb      Elow      entries     normalized 
-    0         0           0           0
-    1    0.0002           0           0
-    2    0.0004           0           0
-    3    0.0006           0           0
-    4    0.0008           0           0
-    5     0.001           2         0.1
-    6    0.0012           2         0.1
-    7    0.0014          11        0.55
-    8    0.0016          33        1.65
-    9    0.0018          93        4.65
-   10     0.002         217       10.85
-   11    0.0022         440          22
-   12    0.0024         772        38.6
-   13    0.0026        1255       62.75
-   14    0.0028        1830        91.5
-   15     0.003        2621      131.05
-   16    0.0032        3371      168.55
-   17    0.0034        4058       202.9
-   18    0.0036        4589      229.45
-   19    0.0038        4737      236.85
-   20     0.004        4838       241.9
-   21    0.0042        4969      248.45
-   22    0.0044        4696       234.8
-   23    0.0046        4452       222.6
-   24    0.0048        4103      205.15
-   25     0.005        3751      187.55
-   26    0.0052        3468       173.4
-   27    0.0054        3172       158.6
-   28    0.0056        2838       141.9
-   29    0.0058        2723      136.15
-   30     0.006        2422       121.1
-   31    0.0062        2208       110.4
-   32    0.0064        2011      100.55
-   33    0.0066        1965       98.25
-   34    0.0068        1891       94.55
-   35     0.007        1722        86.1
-   36    0.0072        1607       80.35
-   37    0.0074        1518        75.9
-   38    0.0076        1334        66.7
-   39    0.0078        1245       62.25
-   40     0.008        1227       61.35
-   41    0.0082        1100          55
-   42    0.0084         967       48.35
-   43    0.0086         910        45.5
-   44    0.0088         826        41.3
-   45     0.009         798        39.9
-   46    0.0092         716        35.8
-   47    0.0094         660          33
-   48    0.0096         619       30.95
-   49    0.0098         558        27.9
-   50      0.01         518        25.9
-   51    0.0102         474        23.7
-   52    0.0104         450        22.5
-   53    0.0106         395       19.75
-   54    0.0108         395       19.75
-   55     0.011         347       17.35
-   56    0.0112         321       16.05
-   57    0.0114         288        14.4
-   58    0.0116         280          14
-   59    0.0118         267       13.35
-   60     0.012         253       12.65
-   61    0.0122         276        13.8
-   62    0.0124         260          13
-   63    0.0126         184         9.2
-   64    0.0128         218        10.9
-
- Emp =          0.0042   width=         0.0028  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 115961453, 1292148745
+ Current couple of seeds = 2114771135, 1541635325
 ----------------------------------------
 #
 Graphics systems deleted.

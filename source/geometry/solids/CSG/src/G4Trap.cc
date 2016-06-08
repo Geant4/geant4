@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.12 2001/07/11 09:59:57 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Trap.cc,v 1.14 2002/05/15 09:37:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // class G4Trap
 //
@@ -34,7 +34,7 @@
 //  1.11.96 V.Grichine Costructor for Right Angular Wedge from STEP & G4Trd/Para
 //  8.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
 //  4.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
-// 19.11.99 V.Grichine, kUndefined was added to Eside enum
+// 19.11.99 V.Grichine, kUndef was added to Eside enum
 // 13.12.99 V.Grichine, bug fixed in DistanceToIn(p,v)
 
 #include "G4Trap.hh"
@@ -58,7 +58,7 @@ const G4double kCoplanar_Tolerance = 1E-4 ;
 //
 // Private enum: Not for external use 
   	
-enum Eside {kUndefined,ks0,ks1,ks2,ks3,kPZ,kMZ};
+enum Eside {kUndef,ks0,ks1,ks2,ks3,kPZ,kMZ};
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1091,7 +1091,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 			       const G4bool calcNorm,
 			       G4bool *validNorm,G4ThreeVector *n) const
 {
-    Eside side = kUndefined ;
+    Eside side = kUndef;
     G4double snxt;		// snxt = return value
     G4double pdist,Comp,vdist,max;
 //
@@ -1367,8 +1367,34 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p) const
 {
   G4double safe,Dist;
   G4int i;
-  safe=fDz-fabs(p.z());
 
+#ifdef G4CSGDEBUG
+  if( Inside(p) == kOutside )
+  {
+     G4cout.precision(16) ;
+     G4cout << G4endl ;
+     G4cout << "Trapezoid parameters:" << G4endl << G4endl ;
+     G4cout << "fDz         = " << fDz/mm << " mm" << G4endl ;
+     G4cout << "fTthetaCphi = " << fTthetaCphi/degree << " degree" << G4endl ;
+     G4cout << "fTthetaSphi = " << fTthetaSphi/degree << " degree" << G4endl ;
+     G4cout << "fDy1     = " << fDy1/mm << " mm" << G4endl ;
+     G4cout << "fDx1     = " << fDx1/mm << " mm" << G4endl ;
+     G4cout << "fDx2     = " << fDx2/mm << " mm" << G4endl ;
+     G4cout << "fTalpha1 = " << fTalpha1/degree << " degree" << G4endl;
+     G4cout << "fDy2     = " << fDy2/mm << " mm" << G4endl ;
+     G4cout << "fDx3     = " << fDx3/mm << " mm" << G4endl ;
+     G4cout << "fDx4     = " << fDx4/mm << " mm" << G4endl ;
+     G4cout << "fTalpha2 = " << fTalpha2/degree << " degree" << G4endl << G4endl;
+     G4cout << "Position:"  << G4endl << G4endl ;
+     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+     G4cout << "G4Trap::DistanceToOut(p) - point p is outside ?!" << G4endl ;
+     // G4Exception("Invalid call in G4Trap::DistanceToOut(p), point p is outside") ;
+  }
+#endif
+
+  safe=fDz-fabs(p.z());
   if (safe<0) safe=0;
   else
   {
@@ -1420,7 +1446,7 @@ G4Trap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 	}
     else
 	{
-	    G4Exception("G4Trap::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+	    G4Exception("G4Trap::CreateRotatedVertices - Out of memory !");
 	}
     return vertices;
 }

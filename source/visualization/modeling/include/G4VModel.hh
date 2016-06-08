@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VModel.hh,v 1.13 2001/08/24 20:36:26 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison  31st December 1997.

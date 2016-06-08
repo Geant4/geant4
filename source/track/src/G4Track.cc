@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.15 2001/12/10 08:36:54 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Track.cc,v 1.18 2002/02/12 01:48:53 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 //---------------------------------------------------------------
@@ -49,8 +49,9 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fpDynamicParticle(apValueDynamicParticle),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
-    fWeight(1.0),
+    fStepLength(0.0),         fWeight(1.0),
     fpStep(0),
+    fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
     fpUserInformation(0)
 {    
@@ -66,8 +67,9 @@ G4Track::G4Track()
     fpDynamicParticle(0),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
-    fWeight(1.0),
+    fStepLength(0.0),         fWeight(1.0),
     fpStep(0),
+    fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
     fpUserInformation(0)
 {
@@ -97,6 +99,7 @@ G4Track & G4Track::operator=(const G4Track &right)
    fLocalTime = right.fLocalTime;
    fTrackLength = right.fTrackLength;
    fWeight = right.fWeight;
+   fStepLength = right.fStepLength;
 
    // Track ID (and Parent ID) is not copied and set to zero for new track
    fTrackID = 0;
@@ -132,9 +135,26 @@ G4Track & G4Track::operator=(const G4Track &right)
 }
 
 ///////////////////
+void G4Track::CopyTrackInfo(const G4Track& right)
+//////////////////
+{
+  *this = right;
+}
+
+#include "G4ParticleTable.hh"
+///////////////////
 G4double G4Track::GetVelocity() const
 ///////////////////
 { 
+  static G4bool isFirstTime = true;
+  static G4ParticleDefinition* fOpticalPhoton =0;
+
+  if ( isFirstTime ) {
+    isFirstTime = false;
+    // set  fOpticalPhoton
+    fOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+  }
+
   G4double velocity ;
   
   G4double mass = fpDynamicParticle->GetMass();
@@ -144,8 +164,9 @@ G4double G4Track::GetVelocity() const
     velocity = c_light ; 
 
     // special case for photons
-    if(fpDynamicParticle->GetDefinition()->GetParticleName()=="opticalphoton"){
-      G4Material*
+    if ( (fOpticalPhoton !=0)  &&
+	 (fpDynamicParticle->GetDefinition()==fOpticalPhoton) ){
+     G4Material*
 	mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
  
       if(mat->GetMaterialPropertiesTable() != 0){

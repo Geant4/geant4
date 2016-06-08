@@ -1,0 +1,34 @@
+$Id: History,v 1.3 2002/06/05 16:01:49 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 5th, 2002  M.Liendl - olapex-V04-00-01
+- Updated README.
+
+June 4th, 2002  G.Cosmo - olapex-V04-00-00
+- Some general code cleanup.
+- Added disclaimer of liability.
+- Fixed usage of G4 types (G4int, G4double, G4bool).
+- Fixed usage of namespace (G4std::, G4endl, #include "g4std/...")
+- Fixed warnings and porting on supported platforms.
+
+June 3rd, 2002  M.Liendl
+- First implementation of the CMS tool for debugging overlapping geometries.
+
+June 3rd, 2002  G.Cosmo
+- Created.

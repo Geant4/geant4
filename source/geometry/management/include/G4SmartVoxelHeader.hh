@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.hh,v 1.6 2001/07/11 09:59:18 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4SmartVoxelHeader.hh,v 1.7 2002/05/15 10:06:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // class G4SmartVoxelHeader
 //
@@ -97,7 +97,9 @@ class G4SmartVoxelHeader
 
     EAxis GetAxis() const;
       // Return the current division axis.
-    
+    EAxis GetParamAxis() const;
+      // Return suggested division axis for parameterised volume.
+
     G4double GetMaxExtent() const;
       // Return the maximum coordinate limit along the current axis.
     G4double GetMinExtent() const;
@@ -187,7 +189,7 @@ class G4SmartVoxelHeader
     G4int fmaxEquivalent;
       // Min and max equivalent slice nos for previous level.
 
-    EAxis faxis;
+    EAxis faxis, fparamAxis;
       // Axis for slices.
 
     G4double fmaxExtent;

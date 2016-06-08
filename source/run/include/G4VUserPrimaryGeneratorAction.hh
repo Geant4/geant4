@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VUserPrimaryGeneratorAction.hh,v 1.4 2001/07/11 10:08:33 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef G4VUserPrimaryGeneratorAction_h

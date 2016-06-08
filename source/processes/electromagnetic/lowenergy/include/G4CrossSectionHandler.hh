@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.hh,v 1.6 2001/10/05 18:25:19 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CrossSectionHandler.hh,v 1.7 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

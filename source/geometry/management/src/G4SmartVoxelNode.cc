@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.cc,v 1.3 2001/07/11 09:59:21 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4SmartVoxelNode.cc,v 1.4 2002/04/19 08:20:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Class G4SmartVoxelNode
 //
@@ -30,6 +30,12 @@
 //
 
 #include "G4SmartVoxelNode.hh"
+
+// Empty destructor
+//
+G4SmartVoxelNode::~G4SmartVoxelNode()
+{
+}
 
 // Return true if contents equal
 //
@@ -52,14 +58,3 @@ G4bool G4SmartVoxelNode::operator == (const G4SmartVoxelNode& v) const
 	}
     return false;
 }
-
-
-
-
-
-
-
-
-
-
-

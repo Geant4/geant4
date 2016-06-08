@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.cc,v 1.8 2001/08/01 17:05:33 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFFragment.cc,v 1.9 2002/06/06 17:57:34 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -62,7 +62,7 @@ G4bool G4StatMFFragment::operator!=(const G4StatMFFragment & right) const
 
 
 
-G4double G4StatMFFragment::GetCoulombEnergy(void)
+G4double G4StatMFFragment::GetCoulombEnergy(void) const
 {
     if (theZ <= 0.1) return 0.0;
     G4double Coulomb = (3./5.)*(elm_coupling*theZ*theZ)*
@@ -73,7 +73,7 @@ G4double G4StatMFFragment::GetCoulombEnergy(void)
 }
 
 
-G4double G4StatMFFragment::GetEnergy(const G4double T)
+G4double G4StatMFFragment::GetEnergy(const G4double T) const
 {
     if (theA < 1 || theZ < 0 || theZ > theA) {
 	G4cerr << "G4StatMFFragment::GetEnergy: A = " << theA 
@@ -101,13 +101,13 @@ G4double G4StatMFFragment::GetEnergy(const G4double T)
 }
 
 
-G4double G4StatMFFragment::GetInvLevelDensity(void)
+G4double G4StatMFFragment::GetInvLevelDensity(void) const
 {
     // Calculate Inverse Density Level
     // Epsilon0*(1 + 3 /(Af - 1))
     if (theA == 1) return 0.0;
     else return
-	     G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(theA - 1.0));
+	   G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(theA - 1.0));
 }
 
 

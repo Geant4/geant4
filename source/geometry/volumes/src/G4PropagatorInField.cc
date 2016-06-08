@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.28 2001/12/08 01:17:04 japost Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PropagatorInField.cc,v 1.30 2002/04/19 08:22:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -51,6 +51,40 @@
 
 const G4double  G4PropagatorInField::fEpsilonMinDefault = 5.0e-7;  
 const G4double  G4PropagatorInField::fEpsilonMaxDefault = 0.05;
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Constructors and destructor
+
+
+G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator, 
+		                         G4FieldManager *detectorFieldMgr)
+  : fDetectorFieldMgr(detectorFieldMgr), 
+    fCurrentFieldMgr(detectorFieldMgr), 
+    fNavigator(theNavigator),
+    End_PointAndTangent(G4ThreeVector(0.,0.,0.),
+			G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
+    fVerboseLevel(0),
+    fEpsilonMin(fEpsilonMinDefault),
+    fEpsilonMax(fEpsilonMaxDefault),  
+    fmax_loop_count(10000),
+    fNoZeroStep(0)
+{
+     // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
+
+     fActionThreshold_NoZeroSteps= 2; 
+     fSevereActionThreshold_NoZeroSteps= 10; 
+     fAbandonThreshold_NoZeroSteps= 50; 
+     // fMidPoint_CurveLen_of_LastAttempt= -1;
+     fFull_CurveLen_of_LastAttempt= -1; 
+     fLast_ProposedStepLength= -1; 
+
+     fLargestAcceptableStep= 1000.0 * meter;
+}
+
+G4PropagatorInField::~G4PropagatorInField()
+{
+}
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -288,20 +322,18 @@ G4double G4PropagatorInField::
   while( (!intersects ) && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
                         && ( do_loop_count < GetMaxLoopCount() ) );
 
-
-				       
-#ifdef G4VERBOSE
   if( do_loop_count >= GetMaxLoopCount() ){
-
-     G4cerr << "G4PropagateInField: Warning: Particle is looping - " 
+     G4cout << "G4PropagateInField: Warning: Particle is looping - " 
 	    << " tracking in field will be stopped. " << G4endl;
-     G4cerr << " It has performed " << do_loop_count << " steps in Field " 
+#ifdef G4VERBOSE
+     G4cout << " It has performed " << do_loop_count << " steps in Field " 
 	    << " while a maximum of " << GetMaxLoopCount() << " are allowed. "
 	    << G4endl;
+#endif
+     G4cerr << "G4PropagateInField: Warning: Looping particle. " << G4endl; 
      //G4cerr << " In future this will be treated better/quicker. " << G4endl;
      fParticleIsLooping= true;
   }
-#endif
 
   if( ! intersects )
   {
@@ -354,10 +386,14 @@ G4double G4PropagatorInField::
     fNoZeroStep= 0;
 
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+#ifdef G4VERBOSE
      G4cout << " G4PropagatorInField::ComputeStep : Warning :" 
             << " no progress after "  << fNoZeroStep << " trial steps. "   
             << G4endl;
-     G4cout << "   Particle will be abandoned." ; 
+     G4cout << "   Particle will be killed." << G4endl ; 
+#else
+     G4cout << " G4PropagatorInField: Particle that is stuck will be killed." << G4endl;
+#endif
      fParticleIsLooping= true;
   } 
 

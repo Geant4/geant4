@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BSplineCurve.cc,v 1.9 2001/07/17 07:17:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

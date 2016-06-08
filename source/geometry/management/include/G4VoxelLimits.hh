@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.hh,v 1.5 2001/07/11 09:59:19 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VoxelLimits.hh,v 1.6 2002/04/19 08:20:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // class G4VoxelLimits
 //
@@ -62,12 +62,10 @@ class G4VoxelLimits
 {
   public: // with description
   
-    G4VoxelLimits() : fxAxisMin(-kInfinity),fxAxisMax(kInfinity),
-                      fyAxisMin(-kInfinity),fyAxisMax(kInfinity),
-                      fzAxisMin(-kInfinity),fzAxisMax(kInfinity)  {;}
+    G4VoxelLimits();
       // Constructor - initialise to be unlimited. Volume unrestricted.
 
-    ~G4VoxelLimits() {;}
+    ~G4VoxelLimits();
       // Destructor. No actions.
 
     void AddLimit(const EAxis pAxis, const G4double pMin,const G4double pMax);

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SteppingVerbose.cc,v 1.10 2001/12/06 10:04:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 //---------------------------------------------------------------

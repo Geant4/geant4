@@ -33,6 +33,9 @@
 //               by A. Howard and H. Araujo 
 //                    (27th November 2001)
 //
+// History:
+// 21 Feb 2002 AH: Added Analysis
+//
 // SteppingAction program
 // --------------------------------------------------------------
 
@@ -40,6 +43,10 @@
 #include "DMXSteppingActionMessenger.hh"
 
 #include "DMXEventAction.hh"
+
+#ifdef G4ANALYSIS_USE
+#include "DMXAnalysisManager.hh"
+#endif
 
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -85,12 +92,24 @@ DMXSteppingAction::~DMXSteppingAction()
 void DMXSteppingAction::UserSteppingAction(const G4Step* fStep)
 {
 
-  // removed 28/11/01 - unnecessary unless program "hangs"
+  // removed 28/11/01 - unnecessary unless program "freezes"
   // kill track if too many steps
   // NB: This is set to DBL_MAX - therefore may cause program to "hang"
   //  G4int MaxNoSteps = DBL_MAX;
   //  G4int StepNo = fStep->GetTrack()->GetCurrentStepNumber();
   //  if(StepNo >= MaxNoSteps) fStep->GetTrack()->SetTrackStatus(fStopAndKill);
+
+#ifdef G4ANALYSIS_USE 
+  G4int StepNo = fStep->GetTrack()->GetCurrentStepNumber();
+  if(StepNo == 1) 
+    { 
+      G4double partEnergy = fStep->GetPreStepPoint()->GetKineticEnergy();
+      G4ParticleDefinition* particleType = fStep->GetTrack()->GetDefinition();
+      G4String particleName = particleType->GetParticleName();
+      DMXAnalysisManager* analysis =  DMXAnalysisManager::getInstance();
+      analysis->analyseParticleSource(partEnergy, particleName);
+    }
+#endif
 
   // check what is to be drawn from EventAction/EventActionMessenger
   G4String drawColsFlag = evtAction->GetDrawColsFlag();

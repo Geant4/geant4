@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.22 2001/11/21 16:46:30 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.24 2002/06/18 06:44:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -178,11 +178,11 @@ void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitial
    {
    // `yo-yo` formation time
    const G4double kappa = 1.0 * GeV/fermi;
-   for(G4int c1 = 0; c1 < Hadrons->size(); c1++)
+   for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
       {
       G4double SumPz = 0; 
       G4double SumE  = 0;
-      for(G4int c2 = 0; c2 < c1; c2++)
+      for(size_t c2 = 0; c2 < c1; c2++)
          {
          SumPz += Hadrons->operator[](c2)->Get4Momentum().pz();
          SumE  += Hadrons->operator[](c2)->Get4Momentum().e();   
@@ -313,9 +313,6 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
 	   G4ThreeVector   Pos;
 	   Hadron = new G4KineticTrack(HadronDefinition, 0,Pos, *HadronMomentum);
  
-	   G4double HadronPz=HadronMomentum->pz();
-	   G4double HadronE=HadronMomentum->e();
-	   
 	   newString=new G4FragmentingString(*string,newStringEnd,
 	   				HadronMomentum);
 	   
@@ -377,18 +374,16 @@ G4bool G4VLongitudinalStringDecay::SplitLast(G4FragmentingString * string,
     //... perform last cluster decay
     G4ThreeVector ClusterVel =string->Get4Momentum().boostVector();
     G4double ResidualMass    =string->Mass(); 
-    G4ParticleDefinition* pLastHadron;
     G4double ClusterMassCut = ClusterMass;
     G4int cClusterInterrupt = 0;
     G4ParticleDefinition * LeftHadron, * RightHadron;
     do
-       {
-       if (cClusterInterrupt++ >= ClusterLoopInterrupt)
-       {
+    {
+        if (cClusterInterrupt++ >= ClusterLoopInterrupt)
+        {
           return false;
-       }
-	G4int QuarkEncoding;
-	G4ParticleDefinition * quark;
+        }
+	G4ParticleDefinition * quark = NULL;
 	string->SetLeftPartonStable(); // to query quark contents..
 	if (string->DecayIsQuark() && string->StableIsQuark() ) 
 	{
@@ -406,13 +401,13 @@ G4bool G4VLongitudinalStringDecay::SplitLast(G4FragmentingString * string,
       		quark = QuarkPair.second;
       		LeftHadron=hadronizer->Build(QuarkPair.first, string->GetLeftParton());
 	}
-       RightHadron = hadronizer->Build(string->GetRightParton(), quark);
+        RightHadron = hadronizer->Build(string->GetRightParton(), quark);
 
        //... repeat procedure, if mass of cluster is too low to produce hadrons
        //... ClusterMassCut = 0.15*GeV model parameter
 	if ( quark->GetParticleSubType()== "quark" ) {ClusterMassCut = 0.;}
 	else {ClusterMassCut = ClusterMass;}
-       } 
+    } 
     while (ResidualMass <= LeftHadron->GetPDGMass() + RightHadron->GetPDGMass()  + ClusterMassCut);
 
     //... compute hadron momenta and energies   
@@ -510,7 +505,7 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::FragmentString(const G4Excited
 
 	G4LorentzRotation toObserverFrame(toCms.inverse());
 
-	for(int C1 = 0; C1 < LeftVector->size(); C1++)
+	for(size_t C1 = 0; C1 < LeftVector->size(); C1++)
 	{
 	   G4KineticTrack* Hadron = LeftVector->operator[](C1);
 	   G4LorentzVector Momentum = Hadron->Get4Momentum();
@@ -581,7 +576,7 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
 
 //----------------------------------------------------------------------------------------------------------
 
-G4bool G4VLongitudinalStringDecay::IsFragmentable(const G4FragmentingString * string)
+G4bool G4VLongitudinalStringDecay::IsFragmentable(const G4FragmentingString * const string)
 {
 	return sqr(FragmentationMass(string)+MassCut) <
 			string->Mass2();

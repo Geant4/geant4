@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: strstream,v 1.3 1999/11/16 17:43:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: strstream,v 1.4 2002/05/24 15:01:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //      ---------------- strstream ----------------
 //
@@ -20,6 +20,9 @@
     #include <strstream.h>
   #endif /* WIN32 */
 #else
+  #if (__GNUC__==3) && (__GNUC_MINOR__>0)
+    #undef __DEPRECATED
+  #endif
   #include <strstream>
 #endif /* G4USE_STD_NAMESPACE */
 

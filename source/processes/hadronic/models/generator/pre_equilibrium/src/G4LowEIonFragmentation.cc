@@ -122,7 +122,7 @@ ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus)
   
   G4double compoundEnergy = thePrimary.GetTotalEnergy()*particlesFromProjectile/aProjectileA;  
   G4double targetMass = G4ParticleTable::GetParticleTable()
-                        ->GetIonTable()->GetIonMass(aTargetZ ,aTargetA);
+                        ->GetIonTable()->GetIonMass(static_cast<G4int>(aTargetZ) ,static_cast<G4int>(aTargetA));
   compoundEnergy += targetMass;
   G4LorentzVector fragment4Momentum(exciton3Momentum, compoundEnergy);
  
@@ -152,9 +152,9 @@ ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus)
     G4Fragment initialState2;
     initialState2.SetA(aProjectileA-particlesFromProjectile);
     initialState2.SetZ(aProjectileZ-chargedFromProjectile);
-    initialState2.SetNumberOfHoles((aProjectileA-particlesFromProjectile)/2.);
-    initialState2.SetNumberOfParticles((aProjectileZ-chargedFromProjectile)/2.);
-    initialState2.SetNumberOfCharged((aProjectileZ-chargedFromProjectile)/2.);
+    initialState2.SetNumberOfHoles((aProjectileA-particlesFromProjectile)/2);
+    initialState2.SetNumberOfParticles((aProjectileZ-chargedFromProjectile)/2);
+    initialState2.SetNumberOfCharged((aProjectileZ-chargedFromProjectile)/2);
 
 
     initialState2.SetMomentum(residual4Momentum);

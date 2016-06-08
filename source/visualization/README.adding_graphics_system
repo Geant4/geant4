@@ -43,3 +43,84 @@ To add a graphics system:
      config/G4VIS_USE.gmk
 
    In any case, augment the informational printing in G4VisManager.cc.
+
+=========================================================================
+
+Frequently Asked Questions
+--------------------------
+
+Q: How do I implement the drawing of markers?
+
+A: See graphics_reps/include/G4VMarker.hh.
+
+
+Q: What functions can a user call?
+
+A: The interface for the user (application developer) is G4VVisManager
+   defined in intercoms/include/G4VVisManager.hh.  (The interface
+   G4VGraphicsScene in intercoms/include/G4VGraphicsScene.hh is for
+   visualization developers only.  It is that part of the scene
+   handler's interface available to other categories, but must be used
+   with care.)
+
+
+Q: How do I implement the drawing of trajectories?
+
+A: (January 2002, referring to Geant4 4.0.  There are plans to improve
+   the handling of trajectories, so this advice might change.
+   Hopefully we'll keep it up to date, but who knows.  Be warned.)
+
+   The trajectories themselves have a method,
+   G4Trajectory::DrawTrajectory, invoked by the user or by the vis
+   manager, if requested, at the end of an event, which calls Draw
+   methods of G4VisManager, which call AddPrimitive.  So AddPrimitive
+   is where you need to look at the vis attributes.
+
+void G4VisManager::Draw (const G4Polyline& line,
+                         const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    G4ModelingParameters* pMP = fpSceneHandler -> CreateModelingParameters ();
+    G4VModel* pModel = new G4NullModel (pMP);
+    fpSceneHandler -> SetModel (pModel);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddPrimitive (line);
+    fpSceneHandler -> EndPrimitives ();
+    fpSceneHandler -> SetModel (0);
+    delete pModel;
+    delete pMP;
+  }
+}
+
+   It needs to go through the vis manager so that "transients" are
+   handled properly.  The geometry model and things like axes are
+   "run-duration" (sometimes misleadingly called persistent) and
+   trajectories, etc., are "end-of-event" (sometimes misleadingly
+   called transient) - see G4Scene:
+
+class G4Scene {
+  ...
+private:
+  G4String fName;
+  G4std::vector<G4VModel*> fRunDurationModelList;
+  G4std::vector<G4VModel*> fEndOfEventModelList;
+  G4VisExtent fExtent;
+  G4Point3D   fStandardTargetPoint;
+  G4bool      fRefreshAtEndOfEvent;
+};
+
+   The user can choose to have the view refreshed at the end of event,
+   which means previous end-of-event objects get erased.  In OpenGL,
+   this is done by (a) in Immediate mode, erasing everything and
+   redrawing run-duration and the new end-of-event objects or (b) in
+   Stored mode, just deleting the display lists of the end-of-event
+   objects and recreating them.
+
+   Now, you will see that G4Trajectory::DrawTrajectory is very
+   primitive.  It has not been changed for years!!  It draws lots of
+   circles.  This is a huge demand on graphical databases and we have
+   had on our to-do list for years to introduce AddPrimitive(const
+   G4VTrajectory&).  Certainly, OpenInventor sags under the weight of
+   lots of circles, which it implements as spheres(!), and there are
+   great savings of efficiency to be made if graphics systems can
+   handle trajectories directly.

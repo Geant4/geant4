@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3DetectorMessenger.cc,v 1.6 2001/11/05 15:28:40 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FRClientServer.hh,v 1.6 2001/07/11 10:08:44 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Satoshi TANAKA, Wed Jul  3 14:13:52 JST 1996
 ////////////////////////////////

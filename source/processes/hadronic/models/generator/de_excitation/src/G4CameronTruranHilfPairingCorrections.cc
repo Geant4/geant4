@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronTruranHilfPairingCorrections.cc,v 1.5 2001/10/05 16:13:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CameronTruranHilfPairingCorrections.cc,v 1.6 2001/11/08 10:10:27 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -37,8 +37,7 @@
 // Leysin, Switzerland, August 31 - September 4, 1970, Vol.1, p. 275
 // S(Z)
 const G4double G4CameronTruranHilfPairingCorrections::PairingZTable
-[G4CameronTruranHilfPairingCorrections::ZTableSize] = { // 102
- 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 
+[G4CameronTruranHilfPairingCorrections::ZTableSize] = { // 93 from Z = 10 to Z = 42
 -2.200, 0.   ,-2.120, 0.   ,-1.981, 0.   ,-1.491, 0.   ,-1.450, 0.,
 -1.701, 0.   ,-1.344, 0.   ,-1.349, 0.   ,-1.397, 0.   ,-1.311, 0.,
 -1.161, 0.   ,-1.201, 0.   ,-1.449, 0.   ,-1.331, 0.   ,-1.272, 0.,
@@ -52,8 +51,7 @@ const G4double G4CameronTruranHilfPairingCorrections::PairingZTable
 };
 // S(N)
 const G4double G4CameronTruranHilfPairingCorrections::PairingNTable
-[G4CameronTruranHilfPairingCorrections::NTableSize] = { 
- 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
+[G4CameronTruranHilfPairingCorrections::NTableSize] = { // 145 from N = 10 to N = 154
 -2.400, 0.   ,-2.358, 0.   ,-2.057, 0.   ,-1.462, 0.   ,-1.592, 0.,
 -1.528, 0.   ,-1.470, 0.   ,-1.310, 0.   ,-1.316, 0.   ,-1.265, 0.,
 -1.279, 0.   ,-1.256, 0.   ,-1.285, 0.   ,-1.440, 0.   ,-1.517, 0.,
@@ -68,14 +66,16 @@ const G4double G4CameronTruranHilfPairingCorrections::PairingNTable
 -0.751, 0.   ,-0.835, 0.   ,-0.658, 0.   ,-0.607, 0.   ,-0.657, 0.,
 -0.695, 0.   ,-0.457, 0.   ,-0.345, 0.   ,-0.452, 0.   ,-0.648, 0.,
 -0.681, 0.   ,-0.416, 0.   ,-0.545, 0.   ,-0.482, 0.   ,-0.481, 0.,
--0.611, 0.   ,-0.654, 0.   ,-0.557, 0.
+-0.611, 0.   ,-0.654, 0.   ,-0.557
 };
 
 
-G4CameronTruranHilfPairingCorrections  G4CameronTruranHilfPairingCorrections::theInstance(10.0);
+G4CameronTruranHilfPairingCorrections* G4CameronTruranHilfPairingCorrections::theInstance = 0;
 
-G4CameronTruranHilfPairingCorrections::G4CameronTruranHilfPairingCorrections(G4double dummy)
-{
-    G4double even_more_dummy = dummy;
-    even_more_dummy/=2.;
+G4CameronTruranHilfPairingCorrections::G4CameronTruranHilfPairingCorrections()
+{;}
+
+G4CameronTruranHilfPairingCorrections* G4CameronTruranHilfPairingCorrections::GetInstance() {
+  if (!theInstance) theInstance = new G4CameronTruranHilfPairingCorrections();
+  return theInstance;
 }

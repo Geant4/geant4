@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.10 2001/10/04 20:00:31 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VPartonStringModel.cc,v 1.11 2002/06/13 09:02:21 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file

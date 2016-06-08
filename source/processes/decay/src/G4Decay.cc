@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.11 2001/08/22 08:12:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Decay.cc,v 1.15 2002/02/12 08:57:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -42,6 +42,7 @@
 //   remove G4ParticleMomentum  6 Feb. 99 H.Kurashige
 //   modified  IsApplicable to activate G4Decay for resonances  1 Mar. 00 H.Kurashige 
 //   Add External Decayer         23 Feb. 2001  H.Kurashige
+//   change LowestBinValue,HighestBinValue and TotBin(200) 9 Feb. 2002
 //
 
 #include "G4Decay.hh"
@@ -56,10 +57,7 @@
 G4Decay::G4Decay(const G4String& processName)
                                :G4VRestDiscreteProcess(processName, fDecay),
 				verboseLevel(1),
-				LowestBinValue(1.0e-3),
-                                HighestBinValue(10.0),
-                                TotBin(200),
-                                aPhysicsTable(0),
+                                HighestValue(20.0),
                                 pExtDecayer(0)
 {
 #ifdef G4VERBOSE
@@ -72,10 +70,6 @@ G4Decay::G4Decay(const G4String& processName)
 
 G4Decay::~G4Decay()
 {
-  if (aPhysicsTable != 0) {
-    aPhysicsTable->clearAndDestroy();
-    delete aPhysicsTable;
-  }
   if (pExtDecayer) {
     delete pExtDecayer;
   }
@@ -104,15 +98,6 @@ G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
    G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
    G4double aLife = aParticleDef->GetPDGLifeTime();
 
-#ifdef G4VERBOSE
-   if (GetVerboseLevel()>1) {
-     G4cerr << "G4Decay::GetMeanLifeTime() "<< G4endl;
-     G4cerr << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
-     G4cerr << "Mass:" << aParticle->GetMass()/GeV <<"[GeV]"; 
-     G4cerr << "Life time: "<< aLife/ns << "[ns]" << G4endl;
-   }
-#endif
-
    // check if the particle is stable?
    if (aParticleDef->GetPDGStable()) {
      meanlife = DBL_MAX;
@@ -126,7 +111,7 @@ G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
 
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>1) {
-     G4cerr << "mean life time: "<< meanlife/ns << "[ns]" << G4endl;
+     G4cout << "mean life time: "<< meanlife/ns << "[ns]" << G4endl;
    }
 #endif
 
@@ -135,9 +120,6 @@ G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
 
 G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceCondition*)
 {
-   // constants 
-   G4bool isOutRange ;
-   
    // get particle 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
@@ -146,15 +128,6 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
    G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
    G4double aCtau = c_light * aParticleDef->GetPDGLifeTime();
    G4double aMass = aParticle->GetMass();
-
-#ifdef G4VERBOSE
-   if (GetVerboseLevel()>1) {
-     G4cerr << "G4Decay::GetMeanFreePath() "<< G4endl;
-     G4cerr << "KineticEnergy:" << aParticle->GetKineticEnergy()/GeV <<"[GeV]";
-     G4cerr << "Mass:" << aMass/GeV <<"[GeV]"; 
-     G4cerr << "c*Tau:" << aCtau/m <<"[m]" <<G4endl; 
-   }
-#endif
 
    // check if the particle is stable?
    if (aParticleDef->GetPDGStable()) {
@@ -170,24 +143,14 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
    //check if zero mass
    } else if (aMass <  DBL_MIN)  {
      pathlength =  DBL_MAX;
-#ifdef G4VERBOSE
-     if (GetVerboseLevel()>1) {
-       G4cerr << " Zero Mass particle " << G4endl;
-     }
-#endif
+
    } else {
     //calculate the mean free path 
     // by using normalized kinetic energy (= Ekin/mass)
      G4double   rKineticEnergy = aParticle->GetKineticEnergy()/aMass; 
-     if ( rKineticEnergy > HighestBinValue) {
-       // beta >> 1
+     if ( rKineticEnergy > HighestValue) {
+       // gamma >>  1
        pathlength = ( rKineticEnergy + 1.0)* aCtau;
-     } else if ( rKineticEnergy > LowestBinValue) {
-       // check if aPhysicsTable exists
-       if (aPhysicsTable == NULL) BuildPhysicsTable(*aParticleDef);
-       // beta is in the range valid for PhysicsTable 
-       pathlength = aCtau * 
-	 ((*aPhysicsTable)(0))-> GetValue(rKineticEnergy,isOutRange);
      } else if ( rKineticEnergy < DBL_MIN ) {
        // too slow particle
 #ifdef G4VERBOSE
@@ -199,42 +162,16 @@ G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceConditi
 #endif
        pathlength = DBL_MIN;
      } else {
-       // beta << 1
+       // beta <1 
        pathlength = (aParticle->GetTotalMomentum())/aMass*aCtau ;
      }
    }
-#ifdef G4VERBOSE
-   if (GetVerboseLevel()>1) {
-     G4cerr << "mean free path: "<< pathlength/m << "[m]" << G4endl;
-   }
-#endif
-   return  pathlength;
+  return  pathlength;
 }
 
 void G4Decay::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  // if aPhysicsTableis has already been created, do nothing
-  if (aPhysicsTable != NULL) return;
-
-  // create  aPhysicsTable
-  if (GetVerboseLevel()>1) G4cerr <<" G4Decay::BuildPhysicsTable() "<< G4endl;
-  aPhysicsTable = new G4PhysicsTable(1);
- 
-  //create physics vector 
-  G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-						       LowestBinValue,
-						       HighestBinValue,
-						       TotBin);
-
-  G4double beta, gammainv;
-  // fill physics Vector
-  G4int i;
-  for ( i = 0 ; i < TotBin ; i++ ) {
-      gammainv = 1.0/(aVector->GetLowEdgeEnergy(i) + 1.0);
-      beta  = sqrt((1.0 - gammainv)*(1.0 +gammainv)); 
-      aVector->PutValue(i, beta/gammainv);
-  }
-  aPhysicsTable->insert(aVector);
+  return;
 }
 
 G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
@@ -376,6 +313,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   return &fParticleChangeForDecay ;
 } 
+
 
 
 

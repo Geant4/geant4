@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ReactionProduct.cc,v 1.4 2001/08/01 17:12:48 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996

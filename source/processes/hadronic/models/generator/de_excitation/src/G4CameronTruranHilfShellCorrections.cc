@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronTruranHilfShellCorrections.cc,v 1.5 2001/10/05 16:13:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CameronTruranHilfShellCorrections.cc,v 1.6 2001/11/08 10:10:28 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -35,9 +35,8 @@
 // Proc. Int. Conf. on the Properties of Nuclei Far From the Beta-Stability,
 // Leysin, Switzerland, August 31 - September 4, 1970, Vol.1, p. 275
 // S(Z)
-G4double G4CameronTruranHilfShellCorrections::ShellZTable
-[G4CameronTruranHilfShellCorrections::ZTableSize] = { // 102
- 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
+const G4double G4CameronTruranHilfShellCorrections::ShellZTable
+[G4CameronTruranHilfShellCorrections::ZTableSize] = { // 93 from Z = 10 to Z = 102
  2.349, 1.936, 1.596, 1.061, 0.341,-0.040, 0.565, 1.065, 1.536,
  1.972, 1.855, 2.043, 1.931, 1.652, 1.347, 0.973, 0.579, 0.159,
 -0.487,-0.192, 0.443, 0.932, 1.387, 1.810, 1.969, 2.067, 2.064,
@@ -51,9 +50,8 @@ G4double G4CameronTruranHilfShellCorrections::ShellZTable
 -2.846,-3.499,-3.042  
 };
 // S(N)
-G4double G4CameronTruranHilfShellCorrections::ShellNTable
-[G4CameronTruranHilfShellCorrections::NTableSize] = { // 155
- 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   , 0.   ,
+const G4double G4CameronTruranHilfShellCorrections::ShellNTable
+[G4CameronTruranHilfShellCorrections::NTableSize] = { // 146 from N = 10 to N = 155
  2.439, 1.829, 1.419, 0.746,-0.082,-0.832,-0.960,-1.006,-1.045,
 -1.114,-0.900,-0.081, 0.334, 0.064,-0.639,-1.363,-2.138,-2.987,
 -4.042,-4.001,-3.582,-3.120,-2.677,-2.259,-1.778,-1.315,-0.944,
@@ -73,11 +71,13 @@ G4double G4CameronTruranHilfShellCorrections::ShellNTable
  2.621, 3.096
 };
 
-G4CameronTruranHilfShellCorrections G4CameronTruranHilfShellCorrections::theInstance(10.0);
+G4CameronTruranHilfShellCorrections* G4CameronTruranHilfShellCorrections::theInstance = 0;
 
 
-G4CameronTruranHilfShellCorrections::G4CameronTruranHilfShellCorrections(G4double dummy)
-{
-    G4double even_more_dummy = dummy;
-    even_more_dummy/=2.;
+G4CameronTruranHilfShellCorrections::G4CameronTruranHilfShellCorrections()
+{;}
+
+G4CameronTruranHilfShellCorrections* G4CameronTruranHilfShellCorrections::GetInstance() {
+  if (!theInstance) theInstance = new G4CameronTruranHilfShellCorrections();
+  return theInstance;
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPLegendreStore.hh,v 1.6 2001/07/26 09:28:09 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #ifndef G4NeutronHPLegendreStore_h
 #define G4NeutronHPLegendreStore_h 1

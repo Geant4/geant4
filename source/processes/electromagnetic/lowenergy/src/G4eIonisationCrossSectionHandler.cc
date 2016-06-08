@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.6 2001/11/29 19:01:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.7 2002/05/30 17:53:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,6 +44,7 @@
 #include "G4DataVector.hh"
 #include "G4CompositeEMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
+#include "G4LinLogLogInterpolation.hh"
 #include "G4SemiLogInterpolation.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
@@ -58,7 +59,7 @@ G4eIonisationCrossSectionHandler::G4eIonisationCrossSectionHandler(
     theParam(spec)
 {
   G4VCrossSectionHandler::Initialise(alg, emin, emax, nbin);
-  interp = new G4SemiLogInterpolation();
+  interp = new G4LinLogLogInterpolation();
 }
 
 

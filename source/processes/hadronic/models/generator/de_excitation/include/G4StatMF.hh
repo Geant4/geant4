@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.hh,v 1.6 2001/08/01 17:04:41 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMF.hh,v 1.7 2002/01/15 12:18:42 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -43,6 +43,7 @@
 #include "Randomize.hh"
 
 
+//#define pctest
 
 class G4StatMF : public G4VMultiFragmentation
 {

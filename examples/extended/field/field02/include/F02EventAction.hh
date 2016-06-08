@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02EventAction.hh,v 1.3 2001/11/07 16:36:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

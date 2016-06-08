@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.18 2001/11/07 13:02:07 radoone Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4SteppingManager.hh,v 1.20 2002/02/04 07:58:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 // 
 //---------------------------------------------------------------
 //
@@ -51,19 +51,18 @@ class G4SteppingManager;
 #ifndef G4SteppingManager_h
 #define G4SteppingManager_h 1
 
-#include "G4ios.hh"                 // Include from 'system'
-#include "g4std/iomanip"                  // Include from 'system'
-#include "g4std/vector"                  // Include from 'system'
+class G4VSensitiveDetector;
+
+#include "G4ios.hh"                   // Include from 'system'
+#include "g4std/iomanip"              // Include from 'system'
+#include "g4std/vector"               // Include from 'system'
 #include "globals.hh"                 // Include from 'global'
 #include "Randomize.hh"               // Include from 'global'
+
 #include "G4Navigator.hh"             // Include from 'geometry'
 #include "G4LogicalVolume.hh"         // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"       // Include from 'geometry'
-//#include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
-class G4VSensitiveDetector;
 #include "G4ProcessManager.hh"        // Include from 'piim'
-//#include "G4DynamicParticleVector.hh" // Include from 'piim'
-//#include "G4Hit.hh"                   // Include from 'Hit/dig'
 
 #include "G4Track.hh"                 // Include from 'tracking'
 #include "G4TrackVector.hh"           // Include from 'tracking'
@@ -72,13 +71,11 @@ class G4VSensitiveDetector;
 #include "G4UserSteppingAction.hh"    // Include from 'tracking'
 #include "G4Step.hh"                  // Include from 'tracking'
 #include "G4StepPoint.hh"             // Include from 'tracking'
-#include "G4VSteppingVerbose.hh"       // Include from 'tracking'
-#include "G4TouchableHandle.hh"            // Include from 'geometry'
+#include "G4VSteppingVerbose.hh"      // Include from 'tracking'
+#include "G4TouchableHandle.hh"             // Include from 'geometry'
 #include "G4TouchableHistoryHandle.hh"      // Include from 'geometry'
 
-//  must be changed in elegant way
-static const size_t SizeOfSelectedDoItVector=100;
-// RogueWave Tools.h++
+// 
    typedef G4std::vector<G4int> 
              G4SelectedAtRestDoItVector;
    typedef G4std::vector<G4int> 
@@ -86,10 +83,14 @@ static const size_t SizeOfSelectedDoItVector=100;
    typedef G4std::vector<G4int>
              G4SelectedPostStepDoItVector;
 
+   static const size_t SizeOfSelectedDoItVector=100;
+     // In global scope for porting on WIN-VC compiler...
+
 ///////////////////////
 class G4SteppingManager 
 ///////////////////////
 {
+
 //--------
 public: //without description
 //--------
@@ -499,8 +500,3 @@ public: //without description
 
 
 #endif
-
-
-
-
-

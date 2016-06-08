@@ -52,7 +52,7 @@
 XrayFluoRunAction::XrayFluoRunAction()
   :dataSet(0),dataGammaSet(0),dataAlphaSet(0),efficiencySet(0)
 {
-  XrayFluoNormalization* normalization = new XrayFluoNormalization();
+  XrayFluoNormalization normalization;
   
   energies = new G4DataVector;
   data = new G4DataVector;
@@ -65,13 +65,13 @@ XrayFluoRunAction::XrayFluoRunAction()
   G4double maxGamma = 10. *keV;
   G4int nBinsGamma = 100;
   
-  dataGammaSet = normalization->Normalize(minGamma, maxGamma, nBinsGamma,
+  dataGammaSet = normalization.Normalize(minGamma, maxGamma, nBinsGamma,
 					  "/examples/advanced/xray_fluorescence/B_flare");
   
   G4String fileName = "/examples/advanced/xray_fluorescence/efficienza";
   G4VDataSetAlgorithm* interpolation4 = new G4LogLogInterpolation();
   efficiencySet = new XrayFluoDataSet(1,fileName,interpolation4,keV,1);
-  
+  delete interpolation4;  
   
 }
 #else
@@ -100,7 +100,10 @@ XrayFluoRunAction::~XrayFluoRunAction()
       dataSet = 0;
     }
   
+
+
 }
+
 #else
 XrayFluoRunAction::~XrayFluoRunAction()
 {
@@ -132,15 +135,16 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void XrayFluoRunAction::EndOfRunAction(const G4Run* aRun )
 {
-#ifdef G4ANALYSIS_USE
+
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-  analysis->finish();
-#endif
+
+
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
-  
+   analysis->finish();
+ 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

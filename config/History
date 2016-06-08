@@ -1,5 +1,5 @@
-$Id: History,v 1.177 2001/12/14 08:37:39 gcosmo Exp $
-$Name: geant4-04-00 $
+$Id: History,v 1.193 2002/06/26 17:27:18 gcosmo Exp $
+$Name: geant4-04-01 $
 
 -------------------------------------------------------------------
 
@@ -17,6 +17,54 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th June 2002  Gabriele Cosmo (config-V04-00-10)
+- Moved STEP PERL scripts to examples/extended/geometry/cad/scripts.
+- Updated scripts for Configure.
+
+18th June 2002  Gabriele Cosmo (config-V04-00-09)
+- Added -DG4USE_OSPACE for obsolete systems using ObjectSpace STL.
+
+17th June 2002  Gabriele Cosmo (config-V04-00-08)
+- Added flag G4NO_ISO_VECDIST for compilers (SUN-CC, HP-aCC) with non ISO
+  call to vector::distance() method.
+
+14th June 2002  Gabriele Cosmo (config-V04-00-07)
+- binmake.gmk: added include path to "leading_particle" hadronic module.
+  Retagged with correct numbering...
+
+3rd May 2002  Gabriele Cosmo (config-V04-00-06)
+- liblist.c: added patch to port code on MacOS-X.
+  Defined buffer[BUFSIZE] as "char static".
+- Added Darwin-g++.gmk configuration file for MacOS-X systems running
+  with GNU g++ compiler.
+- Removed SUN-CC4.gmk configuration file, no longer supported.
+- Updated description header to system configuration files.
+
+27th March 2002  Gabriele Cosmo (config-V04-00-05)
+- binmake.gmk: added include path to new module geometry/biasing.
+  Co-works with "geometry-V04-00-01" and "transport-V04-00-00".
+
+26th March 2002  Gabriele Cosmo (config-V04-00-04)
+- liblist.c: cancelled changes made in previous tag.
+  Restored usage of function 'gets(buffer)', correctly adopted in this case.
+
+14th March 2002  Gabriele Cosmo (config-V04-00-03)
+- liblist.c: replaced usage of function 'gets(buffer)' with the safer
+  'fgets(buffer,BUFSIZE,stdin)'.
+
+9th March 2002  John Allison (config-V04-00-02)
+- Fixed bug in G4VIS_USE.gmk for G4VIS_USE_OPENGLWIN32.
+- Corrected perl script g4sort_step_file.pl to specify correct path for perl.
+
+07th February 2002 Gabriele Cosmo (config-V04-00-01)
+- liblist.c: added flags __CYGWIN__ and __CYGWIN32__ for triggering proper
+  parsing algorithm on Windows systems, also on most recent versions of Cygwin.
+- WIN32-VC.gmk: use g77 instead of f77 as default fortran compiler.
+
+25th January 2002 Gabriele Cosmo (config-V04-00-00)
+- sys/HP-aCC.gmk: removed include path to global/management/include/std/wrappers,
+  which was unused and not neccessary.
 
 10th December 2001 Gabriele Cosmo (config-V03-02-15)
 - architecture.gmk:

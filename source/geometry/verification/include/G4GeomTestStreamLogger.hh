@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestStreamLogger.hh,v 1.2 2001/10/22 13:04:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4GeomTestStreamLogger.hh,v 1.3 2002/04/19 08:23:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -49,7 +49,7 @@ class G4GeomTestStreamLogger : public G4GeomTestLogger
 
     G4GeomTestStreamLogger( G4std::ostream &o,
                             G4int theMaxPointsPerError=20 );
-    virtual ~G4GeomTestStreamLogger() {;}
+    virtual ~G4GeomTestStreamLogger();
       // Constructors and virtual destructor
 
     virtual void SolidProblem( const G4VSolid *solid, 

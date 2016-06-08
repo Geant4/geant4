@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VShortLivedParticle.hh,v 1.5 2001/10/15 10:00:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------

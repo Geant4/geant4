@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.cc,v 1.11 2001/11/28 15:07:22 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em4RunAction.cc,v 1.14 2002/06/05 17:31:20 maire Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -40,7 +40,15 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
- #include "CLHEP/Hist/HBookFile.h"
+ #include "AIDA/IAnalysisFactory.h"
+ #include "AIDA/ITreeFactory.h"
+ #include "AIDA/ITree.h"
+ #include "AIDA/IHistogramFactory.h"
+ #include "AIDA/IHistogram1D.h"
+ #include "AIDA/IAxis.h"
+ #include "AIDA/IAnnotation.h"
+ #include "AIDA/ITupleFactory.h"
+ #include "AIDA/ITuple.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,11 +63,10 @@ Em4RunAction::Em4RunAction()
 Em4RunAction::~Em4RunAction()
 {
 #ifndef G4NOHIST
- // Write histogram file 
-  hbookManager->write();
- // Delete HBOOK stuff
-  delete [] histo;
-  delete hbookManager;
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
+  
+  delete tree;
 #endif  
   
 }
@@ -69,12 +76,24 @@ Em4RunAction::~Em4RunAction()
 void Em4RunAction::bookHisto()
 {
 #ifndef G4NOHIST 
-  // init hbook
-  hbookManager = new HBookFile("TestEm4.paw", 68);
+ // Creating the analysis factory
+ IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ 
+ // Creating the tree factory
+ ITreeFactory* tf = af->createTreeFactory();
+ 
+ // Creating a tree mapped to an hbook file.
+ tree = tf->create("testem4.paw", false, false, "hbook");
 
-  // book histograms
-  histo[0] = hbookManager->histogram("total energy deposit in C6F6 (MeV)"
-                                   , 100,0.,10.);
+ // Creating a histogram factory, whose histograms will be handled by the tree
+ IHistogramFactory* hf = af->createHistogramFactory(*tree);
+ 
+ // Creating the histogram
+ histo[0]=hf->create1D("1","total energy deposit in C6F6 (MeV)",100,0.,10.);
+ 
+ delete hf;
+ delete tf;
+ delete af;
 #endif      
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.43 2001/12/03 11:46:38 stesting Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VisManager.cc,v 1.45 2002/04/26 21:23:31 asaim Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -689,7 +689,7 @@ void G4VisManager::GeometryHasChanged () {
       else {
 	pScene->CalculateExtent();
 	G4UImanager::GetUIpointer () ->
-	  ApplyCommand ("/vis/scene/notifyHandlers " + pScene->GetName());
+	  ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
       }
     }
   }
@@ -1141,7 +1141,7 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
 	     << verbosityString << "\"\n"
 	     << VerbosityGuidanceString
-	     << "\n  Returning \"warnings\" == " << warnings
+	     << "\n  Returning \"warnings\" == " << (G4int)warnings
 	     << G4endl;
       verbosity = warnings;
     }

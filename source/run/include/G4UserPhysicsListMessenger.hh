@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserPhysicsListMessenger.hh,v 1.10 2001/08/03 06:02:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 //---------------------------------------------------------------

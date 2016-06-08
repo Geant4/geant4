@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RunMessenger.hh,v 1.8 2001/11/23 16:20:30 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 //	GEANT 4 class header file 

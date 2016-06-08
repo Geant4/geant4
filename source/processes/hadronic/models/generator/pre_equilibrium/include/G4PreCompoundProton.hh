@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.hh,v 1.8 2001/08/01 17:08:29 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundProton.hh,v 1.11 2002/06/06 17:10:38 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by V. Lara
 
@@ -64,22 +64,44 @@ public:
   { return G4VPreCompoundNucleon::operator!=(right);}
 
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = new G4ReactionProduct(G4Proton::ProtonDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-    return theReactionProduct;
-  }
-
-
-  G4double ProbabilityDistributionFunction(const G4double & eKin, const G4Fragment & aFragment);
-
-  // Gives the kinetic energy for fragments in pre-equilibrium decay
-  G4double GetKineticEnergy(const G4Fragment & aFragment);
+    G4ReactionProduct * GetReactionProduct() const
+	{
+	    G4ReactionProduct * theReactionProduct = 
+		new G4ReactionProduct(G4Proton::ProtonDefinition());
+	    theReactionProduct->SetMomentum(GetMomentum().vect());
+	    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+#ifdef pctest
+	    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+#endif
+	    return theReactionProduct;
+	}
 
 private:
-		
+    virtual G4double GetAlpha()
+	{
+	    G4double aZ = G4double(GetRestZ());
+	    G4double C = 0.0;
+	    if (aZ >= 70) {
+		C = 0.10;
+	    } else {
+		C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
+	    }
+	    return 1.0 + C;
+	}
+
+    virtual G4double GetBeta()
+	{
+	    return -GetCoulombBarrier();
+	}
+
+    virtual G4bool IsItPossible(const G4Fragment& aFragment)
+	{
+	    return (aFragment.GetNumberOfCharged() >= 1);
+	}
+
+
+private:
+
   G4ProtonCoulombBarrier theProtonCoulombBarrier;
 
 };

@@ -1,0 +1,62 @@
+# NOTE:  '#' in column 0 is a comment.
+
+local 0
+localhost 1 - >slave1.out
+localhost 1 - >slave2.out
+
+# lxplus015.cern.ch 1 - >slave1.out
+# lxplus016.cern.ch 1 - >slave2.out
+# xplus017.cern.ch 1 - >slave2.out
+
+# The general format is that "local 0" (required) implies creation of a master.
+# Otherwise there is one line per slave.
+# The first field is the hostname or localhost (in a form valid for "rsh")
+#   If you prefer ssh over rsh, then (e.g. in csh):  setenv RSH ssh
+# The second field, 1, is obligatory.
+# The third field is an absolute or relative pathname (e.g.:  ./XXX or ../XXX)
+#    of the binary.  A relative pathname is appended to path of the binary 
+#    on master.  The slave process will execute in the same directory
+#    as the current working directory of the master, if possible.
+#    Otherwise, the slave will execute in the home directory.
+# If the third field is `-', then the command line (including arguments)
+#    for that slave will be the same as on the master.
+# Any additional fields (fourth and beyond) are appended to the
+#    command line for that slave only.
+# Note that '>slave1.out' works, redirecting standard output.  However, 
+#    the output file, slave1.out, will be placed in the home directory.
+#    Currently, `localhost' implies the Bourne shell, and any other
+#    name implies the default user shell for that machine.
+#    By default, standard output and error are sent to user tty (a la rsh).
+#
+# The format is inherited from MPICH, which grew from P4.
+
+#=========================================================================
+#EXAMPLE:
+# # Master process
+# local 0
+# # One slave process on local computer, using same binary and same arguments
+# localhost 1 -
+# # One remote slave process, with absolute path to binary and no arguments
+# regulus.ccs.neu.edu 1 /ccs/tmp/gene/a.out
+# # One slave using alpha architecture,
+# #      with path of alpha binary relative to binary of this master process.
+# #      Output placed in slave-alpha-1.out in user's home directory.
+# alpha.ccs.neu.edu 1 ../alpha/a.out > slave-alpha-1.out
+
+#=========================================================================
+#IF YOU HAVE PROBLEMS:
+# MPINU uses "rsh" to start a slave process.  Diagnose it via:
+#   rsh REMOTE_SLAVE_HOST hostname
+# If it doesn't work or if it asks you for a password, try:
+#   1.  Add a .rhosts file on the remote host and specify your local host.
+#   2.  Sometimes adding  .localhost  to your .rhosts helps.
+#   3.  Specify an alternative to "rsh" in your shell.  For example:
+#       RSH=ssh; export RSH  # in Bourne shell, bash, etc.
+#       setenv RSH ssh       # in csh, tcsh, etc.
+#   4.  If you use "ssh", you may also need to copy keys to allow
+#       login to the remote host without a password.
+# It's also possible that mpinu guessed badly the hostname of your local host.
+# If you suspect this, on the master try (in csh, tcsh):
+#   setenv CALLBACK_HOST LOCAL_MASTER_HOST
+#   where LOCAL_MASTER_HOST is the correct hostname of the local master.
+

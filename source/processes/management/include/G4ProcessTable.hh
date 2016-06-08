@@ -23,7 +23,7 @@
 
 //
 // $Id: G4ProcessTable.hh,v 1.7 2001/07/11 10:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------

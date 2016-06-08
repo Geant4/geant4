@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NeutronHPFissionSpectrum.hh,v 1.6 2001/07/26 09:28:02 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #ifndef G4NeutronHPFissionSpectrum_h
 #define G4NeutronHPFissionSpectrum_h 1

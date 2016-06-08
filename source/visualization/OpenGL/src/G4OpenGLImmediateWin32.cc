@@ -21,17 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.6 2001/07/11 10:08:53 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.7 2002/02/24 01:47:58 johna Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // OpenGLImmediateWin32 graphics system factory.
 
 #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
-
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"

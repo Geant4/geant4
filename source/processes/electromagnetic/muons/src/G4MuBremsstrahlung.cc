@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuBremsstrahlung.cc,v 1.22 2001/11/09 13:52:31 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //    
 //--------------- G4MuBremsstrahlung physics process ---------------------------

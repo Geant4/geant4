@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEAntiNeutronInelastic.cc,v 1.7 2001/10/05 16:10:39 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 

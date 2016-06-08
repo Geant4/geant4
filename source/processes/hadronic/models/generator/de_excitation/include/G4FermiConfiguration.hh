@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.hh,v 1.8 2001/10/22 11:52:24 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FermiConfiguration.hh,v 1.9 2002/06/06 17:26:31 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -209,6 +209,17 @@ private:
 
   //  G4int Index[MaxConfigSize];
   G4std::vector<G4int> Index;
+
+
+    struct DeleteFragment 
+    {
+	template<typename T>
+	void operator()(const T* ptr) const
+	    {
+		delete ptr;
+	    }
+    };
+
 
 };
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroNucleon.cc,v 1.7 2001/08/01 17:05:34 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMacroNucleon.cc,v 1.8 2002/06/06 17:57:41 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -64,6 +64,12 @@ G4double G4StatMFMacroNucleon::CalcMeanMultiplicity(const G4double FreeVol, cons
 	
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+
+    G4double exponent_proton = (mu+nu-Coulomb)/T;
+    G4double exponent_neutron = mu/T;
+
+    if (exponent_neutron > 700.0) exponent_proton = 700.0;
+    if (exponent_proton > 700.0) exponent_proton = 700.0;
 
     _NeutronMeanMultiplicity = (degeneracy*FreeVol/lambda3)*exp(mu/T);
 	

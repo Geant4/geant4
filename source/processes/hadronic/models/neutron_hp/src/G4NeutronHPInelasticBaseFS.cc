@@ -48,8 +48,8 @@ void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
     
    G4double eps = 0.001;
    theNuclearMassDifference = 
-       G4NucleiPropertiesTable::GetBindingEnergy(ZR+eps,AR+eps) -
-       G4NucleiPropertiesTable::GetBindingEnergy(theBaseZ+eps, theBaseA+eps);
+       G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(ZR+eps),static_cast<G4int>(AR+eps)) -
+       G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps));
    theGammas.Init(theGammaData);
    delete aName;
 }
@@ -63,7 +63,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4String & dirNam
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
   G4bool dbool;
-  G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, tString, bit, dbool);
+  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), tString, bit, dbool);
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
@@ -167,7 +167,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4Track & theTrack,
 // prepare target
   G4double targetMass;
   G4double eps = 0.0001;
-  targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(theBaseZ+eps, theBaseA+eps)-
+  targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))-
                             theBaseZ*G4Electron::ElectronDefinition()->GetPDGMass() ) /
                G4Neutron::Neutron()->GetPDGMass();
   if(theEnergyAngData!=NULL)

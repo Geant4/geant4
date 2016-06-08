@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PPrimaryParticle.ddl,v 1.3 2001/07/11 10:02:15 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef G4PPrimaryParticle_h

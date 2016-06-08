@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNuclearDensity.hh,v 1.5 2001/08/01 17:08:14 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VNuclearDensity.hh,v 1.6 2002/04/24 13:09:16 gunter Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #ifndef G4VNuclearDensity_h
 #define G4VNuclearDensity_h 1
@@ -38,18 +38,18 @@ class G4VNuclearDensity
     G4VNuclearDensity();
     virtual ~G4VNuclearDensity();
     
-    inline G4double GetDensity(G4ThreeVector aPosition)
+    inline G4double GetDensity(const G4ThreeVector & aPosition) const
     {
 	return rho0*GetRelativeDensity(aPosition);
     };
     
-    virtual G4double GetRelativeDensity(G4ThreeVector aPosition) = 0;
-    virtual G4double GetRadius(const G4double maxRelativeDenisty) = 0;
-    virtual G4double GetDeriv(const G4ThreeVector & point) = 0;    
+    virtual G4double GetRelativeDensity(const G4ThreeVector & aPosition) const = 0;
+    virtual G4double GetRadius(const G4double maxRelativeDenisty) const = 0;
+    virtual G4double GetDeriv(const G4ThreeVector & point) const = 0;    
 
   protected:    
     inline void Setrho0(G4double arho0) { rho0=arho0; };
-    inline G4double Getrho0() { return rho0; };
+    inline G4double Getrho0() const { return rho0; };
    
   private:
   

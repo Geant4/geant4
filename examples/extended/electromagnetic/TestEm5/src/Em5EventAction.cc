@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.cc,v 1.7 2001/11/28 16:08:18 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em5EventAction.cc,v 1.9 2002/06/06 17:23:22 maire Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -46,6 +46,10 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
+
+#ifndef G4NOHIST
+ #include "AIDA/IHistogram1D.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -122,18 +126,24 @@ void Em5EventAction::EndOfEventAction(const G4Event* evt)
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
     runaction->AddTrackLength(totLAbs) ;
-    runaction->AddnStepsCharged(nstepCharged) ;
-    runaction->AddnStepsNeutral(nstepNeutral) ;
+    runaction->AddnStepsCharged(nstepCharged);
+    runaction->AddnStepsNeutral(nstepNeutral);
     if(verboselevel==2)
       G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
-    runaction->AddTrRef(Transmitted,Reflected) ;
-    runaction->AddEdeps(totEAbs) ;
-    runaction->FillEn(totEAbs) ;
+    runaction->AddTrRef(Transmitted,Reflected);
+    runaction->AddEdeps(totEAbs);
+#ifndef G4NOHIST
+    if(runaction->GetHisto(1) != 0)
+       runaction->GetHisto(1)->fill(totEAbs);
+#endif
 
     nstep=nstepCharged+nstepNeutral ;
-    runaction->FillNbOfSteps(nstep);
+#ifndef G4NOHIST
+    if(runaction->GetHisto(0) != 0)
+       runaction->GetHisto(0)->fill(nstep);
+#endif
   }
   
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();

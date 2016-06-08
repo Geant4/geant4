@@ -66,7 +66,7 @@
     G4NeutronHPThermalBoost aThermalE;
     G4int i, ii;
     // decide on the isotope
-    G4int numberOfIsos;
+    G4int numberOfIsos(0);
     for(ii=0; ii<nChannels; ii++)
     {
       numberOfIsos = theChannels[ii]->GetNiso();

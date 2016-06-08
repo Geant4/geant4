@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc,v 1.7 2001/09/18 07:53:16 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VRML2FileSceneHandler.cc,v 1.8 2002/06/17 10:13:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // G4VRML2FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -70,9 +70,9 @@ const int   DEFAULT_MAX_WRL_FILE_NUM = 100 ;
 G4VRML2FileSceneHandler::G4VRML2FileSceneHandler(G4VRML2File& system, const G4String& name) :
 	G4VSceneHandler(system, fSceneIdCount++, name),
 	fSystem(system),
-	fDest()   ,
 	fFlagDestOpen( false ),
-	fPVPickable  ( false )  
+	fPVPickable  ( false ),
+        fDest()
 {
 	fSceneCount++;
 

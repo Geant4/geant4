@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.cc,v 1.5 2001/08/01 17:05:34 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMacroMultiplicity.cc,v 1.6 2002/06/06 17:57:40 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -85,24 +85,32 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
     
     // bracketing the solution
     G4int iterations = 0;
-    while (fChemPa*fChemPb > 0.0 && iterations < 10) {
-	if (abs(fChemPa) <= abs(fChemPb)) {
+    while (fChemPa*fChemPb > 0.0 && iterations < 10) 
+    {
+	if (abs(fChemPa) <= abs(fChemPb)) 
+	{
 	    ChemPa += 0.6*(ChemPa-ChemPb);
 	    fChemPa = this->operator()(ChemPa);
-	} else {
+	} 
+	else 
+	{
 	    ChemPb += 0.6*(ChemPb-ChemPa);
 	    fChemPb = this->operator()(ChemPb);
 	}
     }
-    if (fChemPa*fChemPb > 0.0) {
+    if (fChemPa*fChemPb > 0.0) 
+    {
 	G4Exception("G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't bracket the root.");
     }
 	
 	
     G4Solver<G4StatMFMacroMultiplicity> * theSolver = new G4Solver<G4StatMFMacroMultiplicity>(100,1.e-4);
     theSolver->SetIntervalLimits(ChemPa,ChemPb);
+    //    if (!theSolver->Crenshaw(*this)) 
     if (!theSolver->Brent(*this)) 
+    {
 	G4Exception("G4StatMFMacroMultiplicity::CalcChemicalPotentialMu: I couldn't find the root.");
+    }
     _ChemPotentialMu = theSolver->GetRoot();
     delete theSolver;
     return _ChemPotentialMu;
@@ -112,20 +120,22 @@ G4double G4StatMFMacroMultiplicity::CalcChemicalPotentialMu(void)
 
 G4double G4StatMFMacroMultiplicity::CalcMeanA(const G4double mu)
 {
-    G4double r03 = G4StatMFParameters::Getr0(); r03 *= r03*r03;
-    G4double V0 = (4.0/3.0)*pi*theA*r03;
+  G4double r03 = G4StatMFParameters::Getr0(); r03 *= r03*r03;
+  G4double V0 = (4.0/3.0)*pi*theA*r03;
 
-    G4double MeanA = 0.0;
+  G4double MeanA = 0.0;
 	
-    _MeanMultiplicity = 0.0;
+  _MeanMultiplicity = 0.0;
 	
-    for (G4int i = 0; i < theA; i++) {
-	G4double multip = _theClusters->operator[](i)->CalcMeanMultiplicity(V0*_Kappa,
-									    mu,_ChemPotentialNu,
-									    _MeanTemperature);
-	MeanA += multip*G4double(i+1);
-	_MeanMultiplicity += multip;
-    }
+ 
+  G4int n = 1;
+ for (G4std::vector<G4VStatMFMacroCluster*>::iterator i = _theClusters->begin(); 
+      i != _theClusters->end(); ++i) 
+   {
+     G4double multip = (*i)->CalcMeanMultiplicity(V0*_Kappa,mu,_ChemPotentialNu,_MeanTemperature);
+     MeanA += multip*G4double(n++);
+     _MeanMultiplicity += multip;
+   }
 
-    return MeanA;
+  return MeanA;
 }

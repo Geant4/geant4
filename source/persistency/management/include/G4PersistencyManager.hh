@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PersistencyManager.hh,v 1.16 2001/07/11 10:02:26 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // History:
 // 98.01.08 Y.Morita  Initial version

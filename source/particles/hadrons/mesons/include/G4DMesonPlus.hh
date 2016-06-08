@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DMesonPlus.hh,v 1.5 2001/10/15 10:06:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------

@@ -324,6 +324,13 @@ echo "On this machine the G4VIS_USE_VRML=\$G4VIS_USE_VRML"
 fi 
 
 #+
+if [ X$g4vis_oglhome != X ] ; then
+OGLHOME="$g4vis_oglhome"
+export OGLHOME
+echo "On this machine the OGLHOME=\$OGLHOME"
+fi 
+
+#+
 #
 # g4shared
 #
@@ -371,19 +378,19 @@ echo `pwd`
 
 # THere is no env!
 if [ X$g4global = Xy ] ; then
-gmake global
+$g4make global
 fi
 
 # There is env for binaries - for User: should be set in env.[c]sh!
 if [ X$g4granular = Xy ] ; then
 G4LIB_USE_GRANULAR=1
 export G4LIB_USE_GRANULAR
-gmake
+$g4make
 fi
 
 # There is no env!
 if [ X$g4includes_flag = Xy ] ; then
-gmake includes
+$g4make includes
 fi
 
 !GROK!THIS!

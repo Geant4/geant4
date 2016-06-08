@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.hh,v 1.5 2001/10/16 11:56:27 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em5PhysicsList.hh,v 1.7 2002/06/05 15:43:42 urban Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -70,7 +70,6 @@ class Em5PhysicsList: public G4VUserPhysicsList
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
     void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
     void GetRange(G4double);
 
     void SetMaxStep(G4double);

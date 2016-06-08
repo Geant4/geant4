@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HEKaonZeroLongInelastic.cc,v 1.6 2001/08/01 17:10:04 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 

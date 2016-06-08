@@ -24,6 +24,7 @@
 #include "G4ParticleTable.hh" 
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
+#include "G4Gamma.hh"
 #include "G4PionZero.hh"
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"
@@ -264,6 +265,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
    G4double ColorX, AntiColorX;
    G4double HPWtest = 0;
    if (GetDefinition() == G4PionMinus::PionMinusDefinition()) aBeta = 1.;        
+   if (GetDefinition() == G4Gamma::GammaDefinition()) aBeta = 1.;        
    if (GetDefinition() == G4PionPlus::PionPlusDefinition()) aBeta = 1.;     
    if (GetDefinition() == G4PionZero::PionZeroDefinition()) aBeta = 1.;       
    if (GetDefinition() == G4KaonPlus::KaonPlusDefinition()) aBeta = 0.;       

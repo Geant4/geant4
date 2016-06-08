@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronGilbertPairingCorrections.cc,v 1.5 2001/10/05 16:13:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CameronGilbertPairingCorrections.cc,v 1.6 2001/11/08 10:10:23 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -34,9 +34,8 @@
 // A. Gilbert and A.G.W. Cameron, Can. J. Phys., 43, 1446(1965)
 
 // P(Z)
-G4double G4CameronGilbertPairingCorrections::PairingZTable
-[G4CameronGilbertPairingCorrections::ZTableSize] = { 
-    0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,
+const G4double G4CameronGilbertPairingCorrections::PairingZTable
+[G4CameronGilbertPairingCorrections::ZTableSize] = { // 88 values from Z = 11 to Z = 98
     0.00,  2.46,  0.00,  2.09,  0.00,  1.62,  0.00,  1.62,  0.00,  1.83,
     0.00,  1.73,  0.00,  1.35,  0.00,  1.54,  0.00,  1.20,  0.00,  1.06,
     0.00,  1.36,  0.00,  1.43,  0.00,  1.17,  0.00,  1.24,  0.00,  1.20,  
@@ -48,9 +47,8 @@ G4double G4CameronGilbertPairingCorrections::PairingZTable
     0.00,  0.69,  0.00,  0.61,  0.00,  0.72,  0.00,  0.77
 };
 // P(N)
-G4double G4CameronGilbertPairingCorrections::PairingNTable
-[G4CameronGilbertPairingCorrections::NTableSize] = { 
-    0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,  0.00,
+const G4double G4CameronGilbertPairingCorrections::PairingNTable
+[G4CameronGilbertPairingCorrections::NTableSize] = { // 140 values from Z = 11 to Z = 150
     0.00,  2.67,  0.00,  1.80,  0.00,  1.67,  0.00,  1.86,  0.00,  2.04,
     0.00,  1.64,  0.00,  1.44,  0.00,  1.54,  0.00,  1.30,  0.00,  1.27,
     0.00,  1.29,  0.00,  1.41,  0.00,  1.50,  0.00,  1.50,  0.00,  1.43,
@@ -67,10 +65,14 @@ G4double G4CameronGilbertPairingCorrections::PairingNTable
     0.00,  0.57,  0.00,  0.49,  0.00,  0.43,  0.00,  0.50,  0.00,  0.39
 };
 
-G4CameronGilbertPairingCorrections G4CameronGilbertPairingCorrections::theInstance(10.0);
+G4CameronGilbertPairingCorrections* G4CameronGilbertPairingCorrections::theInstance = 0;
 
-G4CameronGilbertPairingCorrections::G4CameronGilbertPairingCorrections(G4double dummy)
+G4CameronGilbertPairingCorrections::G4CameronGilbertPairingCorrections()
+{;}
+
+
+G4CameronGilbertPairingCorrections* G4CameronGilbertPairingCorrections::GetInstance()
 {
-    G4double even_more_dummy = dummy;
-    even_more_dummy/=2.;
+  if (!theInstance) theInstance = new G4CameronGilbertPairingCorrections();
+  return theInstance;
 }

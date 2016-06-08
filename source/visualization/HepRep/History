@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001/11/19 15:08:37 johna Exp $
+$Id: History,v 1.16 2002/02/10 07:12:52 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,32 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+4th February 2002  Joseph Perl  (vis-V04-00-01)
+- Check for missing hierarchy layers in HepRepXMLWriter.
+  (Not strictly needed since have a culled layer check in SceneHandler,
+  but may be useful in other applications of HepRepXMLWriter).
+
+3rd February 2002  Joseph Perl
+- Detect transient data by testing for
+  !fpCurrentPV || fReadyForTransients
+  rather than just fReadyForTransients
+
+1st February 2002  Joseph Perl
+- Defer file opening until first real HepRepType is to be written.
+- Moved HepRep code from AddThis to AddPrimitive.
+- Add additional levels to hierarchy if any appear to have been
+  removed by culling.
+- Add visibility attribute.
+
+29th January 2002  Joseph Perl
+- Relocate file-opening logic to constructor and ShowView
+  (had been in SetView).
+
+28th January 2002  Joseph Perl
+- Produce hierarchical output rather than flat HepRepType structure.
+- Handle trajectories as well as detector geometry.
+- Output files now named G4Data<n>.heprep where n increments with each open.
 
 19th November 2001  John Allison  (vis-V03-02-19)
 - Added G4HEPREPFILEDEBUG to control debug code.

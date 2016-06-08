@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4XXXSceneHandler.cc,v 1.6 2001/11/16 10:50:08 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison  5th April 2001

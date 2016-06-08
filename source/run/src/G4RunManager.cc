@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.40 2001/12/06 16:54:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4RunManager.cc,v 1.44 2002/06/25 12:49:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -82,7 +82,7 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  versionString = " Geant4 version $Name: geant4-04-00 $\n                                (14-Dec-2001)";
+  versionString = " Geant4 version $Name: geant4-04-01 $\n                                (28-Jun-2002)";
   G4cout 
   << "**********************************************" << G4endl
   << versionString << G4endl
@@ -99,6 +99,7 @@ G4RunManager::~G4RunManager()
   if(verboseLevel>1) G4cout << "Deletion of G4 kernel class start." << G4endl;
   delete timer;
   delete runMessenger;
+  G4GeometryManager::GetInstance()->OpenGeometry();
   physicsList->RemoveProcessManager();
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();

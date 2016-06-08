@@ -27,6 +27,8 @@
 #include "g4std/strstream"
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
+#include "G4EffectiveCharge.hh"
+
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
  G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
@@ -88,9 +90,22 @@
     G4double kineticEnergy = aParticle->GetKineticEnergy();
     G4Element * anElement = ChooseAandZ( aParticle, aMaterial );
     theInteraction = ChooseHadronicInteraction( kineticEnergy,
-                                                          aMaterial, anElement );
+                                                aMaterial, anElement );
     G4VParticleChange *result =
       theInteraction->ApplyYourself( aTrack, targetNucleus);
+    for(G4int i=0; i<result->GetNumberOfSecondaries(); i++)
+    {
+      G4Track* aSecTrack = result->GetSecondary(i);
+      if(aSecTrack->GetDefinition()->GetPDGCharge()>1.5)
+      {
+         G4EffectiveCharge aCalculator;
+	 G4double charge = aCalculator.GetCharge(aMaterial, kineticEnergy,
+	                                        aSecTrack->GetDefinition()->GetPDGMass(),
+						aSecTrack->GetDefinition()->GetPDGCharge());
+	 (const_cast<G4DynamicParticle *>(aSecTrack->GetDynamicParticle()))->SetCharge(charge);
+      }
+    }
+
     if(getenv("HadronicDoitLogging") )
     {
       G4cout << "HadronicDoitLogging "

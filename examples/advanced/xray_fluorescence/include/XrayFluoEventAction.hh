@@ -78,9 +78,13 @@ private:
   //this method distributes the energy deposit (which must be given as
   //argument) according to the response function stored in the file 
   //response.dat
-  G4double ResponseFunction(G4double);
+  
   
   XrayFluoRunAction* runManager;
+
+public: G4double ResponseFunction(G4double);
+  
+
 };
 
 #endif

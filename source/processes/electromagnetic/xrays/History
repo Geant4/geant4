@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001/11/12 10:59:26 maire Exp $
+$Id: History,v 1.15 2002/05/16 21:22:10 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 may 02: P. Gumplinger (xrays-V04-00-04)
+- G4Scintillation now inherits from G4VRestDiscreteProcess changes made accordingly
+  G4Scintillation/G4Cerenkov now only suspend the track when it is still 'fAlive'
+
+09 may 02: P. Gumplinger (xrays-V04-00-03)
+- changed method 'DoIt' in G4Scintillation so that origin of optical photons is
+  the PostStepPoint location in case energy is lost to the medium by a neutral
+  particle.
+
+09 may 02: P. Gumplinger (xrays-V04-00-02)
+- changed method 'IsApplicable' for G4Scintillation to return .false. when it 
+  is called for an optical photon.
+
+28 mar 02: G. Cosmo (xrays-V04-00-01)
+- fixed endl/G4endl compilation problem in G4VXTRenergyLoss.cc ...
+
+22 mar 02: V. Grichine (xrays-V04-00-00)
+- new classes (G4VXTRenergyLoss,G4GammaXTRadiator and G4RegularXTRadiator) were
+  added for the description of X-ray transition radiation as continuous process.
      
 12 nov 01: mma (xrays-V03-02-02)
 - merge of 00a and 01

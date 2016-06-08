@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fragment.hh,v 1.11 2001/10/04 20:00:32 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Fragment.hh,v 1.13 2002/06/07 15:30:55 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -50,6 +50,8 @@ class G4ParticleDefinition;
 
 class G4Fragment;     // Forward deckaration
 typedef G4std::vector<G4Fragment*> G4FragmentVector;
+
+//#define pctest
 
 
 class G4Fragment 
@@ -126,6 +128,12 @@ public:
   
   inline G4double GetBindingEnergy(void) const;
 
+#ifdef pctest
+  G4String GetCreatorModel() const { return theCreatorModel; }
+  void SetCreatorModel(const G4String & aModel) 
+  { theCreatorModel = aModel; }
+#endif
+
 private:
 
   G4double CalculateExcitationEnergy(const G4LorentzVector value) const;
@@ -157,6 +165,10 @@ private:
   G4ParticleDefinition * theParticleDefinition;
   
   G4double theCreationTime;
+
+#ifdef pctest
+  G4String theCreatorModel;
+#endif 
 };
 
 // Class G4Fragment 
@@ -280,7 +292,7 @@ inline G4double G4Fragment::GetGroundStateMass(void) const
 {
 	if (theA == 0) return 0.0; // photon
 	else return G4ParticleTable::GetParticleTable()->
-					GetIonTable()->GetIonMass(theZ,theA);
+		    GetIonTable()->GetIonMass(static_cast<G4int>(theZ),static_cast<G4int>(theA));
 }
 	
 inline G4double G4Fragment::GetBindingEnergy(void) const

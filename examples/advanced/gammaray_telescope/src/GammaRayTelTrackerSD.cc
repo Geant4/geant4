@@ -22,7 +22,7 @@
 //
 //
 // $Id: GammaRayTelTrackerSD.cc,v 1.6 2001/12/04 11:40:28 flongo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

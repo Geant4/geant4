@@ -412,7 +412,6 @@
       G4int i;
       G4double x = 0.5;
       result = theData[GetVectorLength()-1].GetX();
-      G4NeutronHPInterpolator theLin;
       for(i=0;i<GetVectorLength();i++)
       {
 	if(theIntegral[i]/theIntegral[GetVectorLength()-1]>x) 

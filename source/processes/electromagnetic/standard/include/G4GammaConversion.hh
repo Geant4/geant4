@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.9 2001/10/01 15:00:28 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4GammaConversion.hh,v 1.10 2002/04/09 17:34:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996

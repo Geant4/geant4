@@ -21,15 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01PrimaryGeneratorAction.cc,v 1.3 2001/07/11 09:58:16 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN01PrimaryGeneratorAction.cc,v 1.5 2002/05/14 01:50:31 asaim Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "ExN01PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4UImanager.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
 ExN01PrimaryGeneratorAction::ExN01PrimaryGeneratorAction()
@@ -37,10 +38,11 @@ ExN01PrimaryGeneratorAction::ExN01PrimaryGeneratorAction()
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/gun/particle geantino");
-  UI->ApplyCommand("/gun/energy 1.0 GeV");
-  UI->ApplyCommand("/gun/position -2.0 0.0 0.0 m");
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName;
+  particleGun->SetParticleDefinition(particleTable->FindParticle(particleName="geantino"));
+  particleGun->SetParticleEnergy(1.0*GeV);
+  particleGun->SetParticlePosition(G4ThreeVector(-2.0*m, 0.0, 0.0));
 }
 
 ExN01PrimaryGeneratorAction::~ExN01PrimaryGeneratorAction()
@@ -50,21 +52,20 @@ ExN01PrimaryGeneratorAction::~ExN01PrimaryGeneratorAction()
 
 void ExN01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4UImanager* UI = G4UImanager::GetUIpointer();
   G4int i = anEvent->GetEventID() % 3;
+  G4ThreeVector v(1.0,0.0,0.0);
   switch(i)
   {
     case 0:
-      UI->ApplyCommand("/gun/direction 1.0 0.0 0.0");
       break;
     case 1:
-      UI->ApplyCommand("/gun/direction 1.0 0.1 0.0");
+      v.setY(0.1);
       break;
     case 2:
-      UI->ApplyCommand("/gun/direction 1.0 0.0 0.1");
+      v.setZ(0.1);
       break;
   }
-
+  particleGun->SetParticleMomentumDirection(v);
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

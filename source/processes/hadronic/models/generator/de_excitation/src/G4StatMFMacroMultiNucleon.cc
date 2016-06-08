@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.9 2001/08/01 17:05:33 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMacroMultiNucleon.cc,v 1.10 2002/06/06 17:57:39 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -83,7 +83,8 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 	
     G4double exponent = (mu + nu*theZARatio+ G4StatMFParameters::GetE0() + T*T/_InvLevelDensity 
-			 - G4StatMFParameters::GetGamma0()*(1.0 - 2.0*theZARatio)*(1.0 - 2.0*theZARatio))*theA
+			 - G4StatMFParameters::GetGamma0()*(1.0 - 2.0*theZARatio)*
+			 (1.0 - 2.0*theZARatio))*theA
 	- G4StatMFParameters::Beta(T)*A23 - Coulomb*theZARatio*theZARatio*A23*theA;
 	
     exponent /= T;

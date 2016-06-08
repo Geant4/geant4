@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsatt.cc,v 1.11 2001/07/16 15:38:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 
 #include "globals.hh"
 #include "G3toG4.hh"

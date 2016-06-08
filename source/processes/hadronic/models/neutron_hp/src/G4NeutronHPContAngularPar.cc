@@ -94,10 +94,10 @@
     {
       result->SetDefinition(G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z));
     }
-    G4int i;
-    G4int it;
-    G4double fsEnergy;
-    G4double cosTh;
+    G4int i(0);
+    G4int it(0);
+    G4double fsEnergy(0);
+    G4double cosTh(0);
     if(angularRep==1)
     {
       G4double random = G4UniformRand();
@@ -205,7 +205,7 @@
        // cash the mean energy in this distribution
       currentMeanEnergy = weighted/running[nEnergies-1];
       
-      G4int it;
+      G4int it(0);
       G4double randkal = G4UniformRand();
       for(i=0; i<nEnergies; i++)
       {

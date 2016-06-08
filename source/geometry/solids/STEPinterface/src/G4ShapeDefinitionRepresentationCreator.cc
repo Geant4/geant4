@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ShapeDefinitionRepresentationCreator.cc,v 1.6 2001/07/11 10:00:12 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ----------------------------------------------------------------------

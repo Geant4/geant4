@@ -1,5 +1,5 @@
 
-$Id: History,v 1.24 2001/11/08 15:46:31 gcosmo Exp $
+$Id: History,v 1.32 2002/05/13 06:56:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 11  2002  Vladimir Grichine    geom-bool-V04-00-05
+  - G4ReflectedSolid.cc: bounding-box like algorithm for CalculateExtent().
+
+ Apr 16  2002  Vladimir Grichine    geom-bool-V04-00-04
+  - G4ReflectedSolid.cc: enhanced algorithm for CalculateExtent(), now
+    passing all basic unit tests.
+  - Updated unit test for G4ReflectedSolid, testG4ReflectedSolid.cc
+
+ Mar 26  2002  Vladimir Grichine    geom-bool-V04-00-03
+  - G4ReflectedSolid.cc: modified implementation of CalculateExtent() to
+    properly consider transformation of reflected extent.
+
+ Feb 15  2002  Vladimir Grichine    geom-bool-V04-00-02
+  - G4ReflectedSolid[.hh.cc]:
+    o Defined new methods Set/GetTransform3D() and Set/GetDirectTransform3D()
+      for defining/accessing the real reflected transformation
+    o Moved methods for G4AffineTransform to protected.
+
+ Feb 07  2002  Gabriele Cosmo       geom-bool-V04-00-01
+  - G4ReflectionFactory.cc: fixed bug causing repetition of daughter volumes.
+
+ Jan 10  2002  Gabriele Cosmo       geom-solid-bool-V04-00-00
+  - Moved all verbosity mode warnings to G4BOOLDEBUG and commented exceptions.
+  - Activated G4BOOLDEBUG mechanism in GNUmakefile.
+  - Fixed unit tests.
 
  Nov 08  2001  Gabriele Cosmo       geom-solid-bool-V03-02-02
   - Fix for verbosity in G4ReflectionFactory.cc. Reduced of one level.

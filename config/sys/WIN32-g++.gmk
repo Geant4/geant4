@@ -3,8 +3,7 @@
 #                                  cygnus b20 with cygwin1.dll 1.1.5 patch
 #                                  Windows 95 4.00.1111
 #
-# Sys file by Stefano Agostinelli, July 2000
-# IST Group: Franca Foppiano, Stefania Garelli, Stefano Agostinelli
+# Stefano Agostinelli - IST Group, Genova
 #
 ifeq ($(G4SYSTEM),WIN32-g++)
   CXX       := g++
@@ -43,7 +42,7 @@ ifeq ($(G4SYSTEM),WIN32-g++)
   OIVFLAGS  += -I$(OIHOME)/include 
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT
-    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
+    CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
   endif
   ifdef G4ODBMS

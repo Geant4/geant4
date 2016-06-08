@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.9 2001/10/10 09:49:29 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VCrossSectionHandler.hh,v 1.11 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -30,6 +30,7 @@
 // -----------
 // 16 Sep 2001   MGP           Created
 // 26 Sep 2001   V.Ivanchenko  Hide copy constructor and assignement operator
+// 18 Apr 2002   V.Ivanchenko  Move member function ValueForMaterial to public
 //
 // -------------------------------------------------------------------
 
@@ -86,6 +87,8 @@ public:
 
   G4double FindValue(G4int Z, G4double e, G4int shellIndex) const;
 
+  G4double ValueForMaterial(const G4Material* material, G4double e) const;
+
   void LoadData(const G4String& dataFile);
 
   void LoadShellData(const G4String& dataFile);
@@ -98,19 +101,16 @@ protected:
    
   G4int NumberOfComponents(G4int Z) const;
 
-  G4double ValueForMaterial(const G4Material* material, G4double e) const;
-
   void ActiveElements();
 
   // Factory method
-  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
-                                  const G4DataVector& energyVector, 
-				  const G4DataVector* energyCuts = 0) = 0;
+  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+								       const G4DataVector* energyCuts = 0) = 0;
 
   // Factory method
   virtual G4VDataSetAlgorithm* CreateInterpolation(); 
 
-  G4VDataSetAlgorithm* GetInterpolation() const { return interpolation; }
+  const G4VDataSetAlgorithm* GetInterpolation() const { return interpolation; }
 
 
 private:

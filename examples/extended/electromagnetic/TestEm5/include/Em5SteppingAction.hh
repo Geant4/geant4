@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.hh,v 1.4 2001/10/16 11:56:28 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em5SteppingAction.hh,v 1.5 2002/06/05 15:43:43 urban Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -44,6 +44,11 @@ class Em5EventAction;
 class Em5SteppingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef G4NOHIST
+ class HepTupleManager;
+ class HepHistogram;
+#endif
 
 class Em5SteppingAction : public G4UserSteppingAction
 {

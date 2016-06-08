@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.13 2001/11/29 12:14:01 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4OpenGLXViewer.cc,v 1.14 2002/02/24 01:48:27 johna Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -38,9 +38,6 @@
 #include <GL/glu.h>
 
 #include "G4ios.hh"
-#include <assert.h>
-#include <unistd.h>
-#include <string.h>
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -51,8 +48,15 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
-#include <stdlib.h>
-#include <string.h>
+#include <assert.h>
+
+int G4OpenGLXViewer::snglBuf_RGBA[10] =
+{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, 
+  GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
+
+int G4OpenGLXViewer::dblBuf_RGBA[11] =
+{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
+  GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
 
 #define NewString(str) \
  ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : (char*)NULL)

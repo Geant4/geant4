@@ -1,0 +1,46 @@
+$Id: History,v 1.9 2002/05/31 09:56:09 dressel Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+May, 31th, 2002  M.Dressel - geombias-V04-00-04
+- change name ImportanceSampler to ImportanceSplitExaminer
+
+May, 30th, 2002  M.Dressel
+- change comments in WeightWindowAlgorithm
+
+May, 24th, 2002  M.Dressel - internal-1-geombias-V04-00-02
+- Added classes for weight window biasing. 
+
+
+April 10th, 2002  M.Dressel - geombias-V04-00-03
+- Added comments to header files for Software Reference Manual.
+
+April 9th, 2002  G.Cosmo
+- Added liability disclaimer to all files and minor cosmetics.
+
+April 8th, 2002  M.Dressel - geombias-V04-00-02
+- Resolved compilation problems on HP-aCC.
+
+April 4th, 2002  M.Dressel - geombias-V04-00-01
+- Resolved compilation problems on SUN-CC and Linux-egcs.
+
+March 28th, 2002  M.Dressel - geombias-V04-00-00
+- First implementation of importance biasing and scoring.
+
+March 25th, 2002  G.Cosmo
+- Created.

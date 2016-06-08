@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.hh,v 1.7 2001/11/08 08:13:24 urban Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VPAIenergyLoss.hh,v 1.8 2002/04/09 17:34:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 

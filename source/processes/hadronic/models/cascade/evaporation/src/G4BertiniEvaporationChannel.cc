@@ -127,8 +127,8 @@ G4double G4BertiniEvaporationChannel::getQ()
   // secondary particle and the initial and residual nuclei
   G4int residualZ = nucleusZ  - particleZ;
   G4int residualA = nucleusA  - particleA;
-  G4int residualN = residualA - residualZ;
-  G4int  nucleusN = nucleusA  - nucleusZ;
+//  G4int residualN = residualA - residualZ;
+//  G4int  nucleusN = nucleusA  - nucleusZ;
 
   // All the following are by default in MeV
   const G4double e1 = G4NucleiProperties::GetMassExcess( residualA, residualZ );

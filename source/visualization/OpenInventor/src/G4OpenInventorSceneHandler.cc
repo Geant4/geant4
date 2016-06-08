@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorSceneHandler.cc,v 1.12 2001/07/11 10:09:00 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

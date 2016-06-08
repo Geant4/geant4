@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.hh,v 1.7 2001/08/01 17:08:30 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VPreCompoundNucleon.hh,v 1.8 2002/06/06 17:15:00 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by V. Lara
 
@@ -37,56 +37,45 @@ class G4VPreCompoundNucleon : public G4VPreCompoundFragment
 {
 protected:
   // default constructor
-  G4VPreCompoundNucleon() {};
+  G4VPreCompoundNucleon() {}
 
 public:
 
   // copy constructor
-  G4VPreCompoundNucleon(const G4VPreCompoundNucleon &right): G4VPreCompoundFragment(right) {}
+  G4VPreCompoundNucleon(const G4VPreCompoundNucleon &right): 
+    G4VPreCompoundFragment(right) {}
 
   // constructor  
-  G4VPreCompoundNucleon(const G4double anA, const G4double aZ, G4VCoulombBarrier* aCoulombBarrier): 
-    G4VPreCompoundFragment(anA,aZ,aCoulombBarrier) {}
+    G4VPreCompoundNucleon(const G4double anA, 
+			  const G4double aZ, 
+			  G4VCoulombBarrier* aCoulombBarrier,
+			  const G4String & aName): 
+	G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
 
-  G4VPreCompoundNucleon(const G4double anA, const G4double aZ, G4VCoulombBarrier* aCoulombBarrier,
-			const G4String & aName): 
-    G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
+    virtual ~G4VPreCompoundNucleon() {}
 
-  virtual ~G4VPreCompoundNucleon() {}
+    // operators  
+    const G4VPreCompoundNucleon & 
+    operator=(const G4VPreCompoundNucleon &right) {
+	if (&right != this) this->G4VPreCompoundFragment::operator=(right);
+	return *this;
+    }
 
-  // operators  
-  const G4VPreCompoundNucleon & operator=(const G4VPreCompoundNucleon &right) {
-    if (&right != this) this->G4VPreCompoundFragment::operator=(right);
-    return *this;
-  }
-
-  G4bool operator==(const G4VPreCompoundNucleon &right) const 
-  { return G4VPreCompoundFragment::operator==(right);}
-  
-  G4bool operator!=(const G4VPreCompoundNucleon &right) const 
-  { return G4VPreCompoundFragment::operator!=(right);}
-
-
-  void CalcExcitonLevelDensityRatios(const G4double Excitons,const G4double Particles)
-  {
-    // Level density ratios are calculated according to the formula
-    // (P!*(N-1)!)/((P-Af)!*(N-1-Af)!*Af!)
-    // where  P is number of particles
-    //        N is number of excitons
-    //        Af atomic number of emitting fragment
-    // the next is a simplification for nucleons (Af = 1)
-
-    SetExcitonLevelDensityRatio(Particles*(Excitons-1.0));
-  }
-   
-  void CalcCondensationProbability(const G4double A)
-    // This method computes condensation probability to create a cluster
-    // consisting of N nucleons inside a nucleus with A nucleons.
-    // For Nucleons this probability is, of course, equal to 1
-  {
-    SetCondensationProbability(1.0);
-  }
+    G4bool operator==(const G4VPreCompoundNucleon &right) const 
+	{ return G4VPreCompoundFragment::operator==(right);}
+    
+    G4bool operator!=(const G4VPreCompoundNucleon &right) const 
+	{ return G4VPreCompoundFragment::operator!=(right);}
+    
+    virtual G4double ProbabilityDistributionFunction(const G4double eKin,
+						     const G4Fragment& aFragment);
+    
+protected:
+  virtual G4double GetAlpha() = 0;
+  virtual G4double GetBeta() = 0;
+  virtual G4bool IsItPossible(const G4Fragment&) = 0; 
+    
+    
 };
 
 #endif
- 

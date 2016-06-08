@@ -335,7 +335,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   //
     dynamicDaughter = products->PopProducts();
     G4LorentzVector daughterMomentum = dynamicDaughter->Get4Momentum();
-    G4ThreeVector const daughterMomentum1 = G4ThreeVector(daughterMomentum);
+    G4ThreeVector const daughterMomentum1(static_cast<const G4LorentzVector> (daughterMomentum));
   //
   //
   // Now define a G4Fragment with the correct A, Z and excitation, and declare and

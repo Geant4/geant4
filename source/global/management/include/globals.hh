@@ -22,7 +22,7 @@
 //
 //
 // $Id: globals.hh,v 1.19 2001/10/12 12:18:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 // Global Constants and typedefs

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.22 2001/11/12 11:20:51 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VeEnergyLoss.cc,v 1.25 2002/04/09 17:34:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //  
 
 // -----------------------------------------------------------------------------
@@ -40,6 +40,8 @@
 // 17-09-01, migration of Materials to pure STL (mma)
 // 29-10-01 all static functions no more inlined (mma) 
 // 08-11-01 Charge,lastCharge not data members, L.Urban
+// 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
+// 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // -----------------------------------------------------------------------------
 
  
@@ -380,7 +382,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
 	 // set default MinDeltaCutInRange to rcut/10.
 	 if(!setMinDeltaCutInRange )
 	   MinDeltaCutInRange = (G4Electron::Electron()
-	                                       ->GetEnergyCuts())[mat]/10.;
+	                                       ->GetLengthCuts())[mat]/10.;
          LowerLimitForced[mat] = false ;
          
          MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
@@ -395,7 +397,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
 
 //	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
 //         {
-//	   G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+//	   G4cout << G4std::setw(20) << (*theMaterialTable)[mat]->GetName()
 //	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
 //           if(LowerLimitForced[mat])
 //              G4cout << "  lower limit forced." << G4endl;
@@ -646,7 +648,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
                G4Track* deltaTrack =
                          new G4Track(theDelta,DeltaTime,DeltaPosition);
-               deltaTrack->SetTouchableHandle(stepData.GetPostStepPoint()
+               deltaTrack->SetTouchableHandle(stepData.GetPreStepPoint()
 	                                               ->GetTouchableHandle());    
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
 

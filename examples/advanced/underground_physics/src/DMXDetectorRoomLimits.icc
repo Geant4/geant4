@@ -1,0 +1,17 @@
+         glass_log->SetUserLimits(theUserLimitsForRoom);
+        window_log->SetUserLimits(theUserLimitsForRoom);
+     sidepanel_log->SetUserLimits(theUserLimitsForRoom);
+     panelhole_log->SetUserLimits(theUserLimitsForRoom);
+     doorglass_log->SetUserLimits(theUserLimitsForRoom);
+    doorwindow_log->SetUserLimits(theUserLimitsForRoom);
+          door_log->SetUserLimits(theUserLimitsForRoom);
+      doorhole_log->SetUserLimits(theUserLimitsForRoom);
+      cupboard_log->SetUserLimits(theUserLimitsForRoom);
+     cupboard2_log->SetUserLimits(theUserLimitsForRoom);
+         desk1_log->SetUserLimits(theUserLimitsForRoom);
+         desk2_log->SetUserLimits(theUserLimitsForRoom);
+         desk3_log->SetUserLimits(theUserLimitsForRoom);
+         desk4_log->SetUserLimits(theUserLimitsForRoom);
+         crate_log->SetUserLimits(theUserLimitsForRoom);
+         trunk_log->SetUserLimits(theUserLimitsForRoom);
+  trunk_inside_log->SetUserLimits(theUserLimitsForRoom);

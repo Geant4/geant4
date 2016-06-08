@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.cc,v 1.5 2001/10/05 16:13:44 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMicroManager.cc,v 1.6 2002/06/06 17:57:47 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -74,9 +74,10 @@ G4StatMFMicroManager::G4StatMFMicroManager(const G4Fragment & theFragment, const
 // destructor
 G4StatMFMicroManager::~G4StatMFMicroManager() 
 {
-    while (!_Partition.empty()) {
-	delete _Partition.back();
-	_Partition.pop_back();
+  if (!_Partition.empty()) 
+    {
+      G4std::for_each(_Partition.begin(),_Partition.end(),
+		      DeleteFragment());
     }
 }
 
@@ -175,8 +176,6 @@ void G4StatMFMicroManager::Normalize(const G4double Norm)
     _MeanTemperature /= Norm;
     _MeanEntropy /= Norm; 
 	
-// 	for (G4int i = 0; i < _Partition.entries(); i++) _Partition(i)->Normalize(Norm);
-	
     return;
 }
 
@@ -186,10 +185,12 @@ G4StatMFChannel * G4StatMFMicroManager::ChooseChannel(const G4double A0, const G
     G4double RandNumber = _Normalization * _WW * G4UniformRand();
     G4double AccumWeight = 0.0;
 	
-    for (unsigned int i = 0; i < _Partition.size(); i++) {
-	AccumWeight += _Partition[i]->GetProbability();
-	if (RandNumber < AccumWeight) 
-	    return _Partition[i]->ChooseZ(A0,Z0,MeanT);
+    for (G4std::vector<G4StatMFMicroPartition*>::iterator i = _Partition.begin();
+	 i != _Partition.end(); ++i)
+    {
+	AccumWeight += (*i)->GetProbability();
+	if (RandNumber < AccumWeight)
+	    return (*i)->ChooseZ(A0,Z0,MeanT);
     }
 
     G4Exception

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DigiManager.cc,v 1.6 2001/10/18 20:28:19 asaim Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "G4DigiManager.hh"

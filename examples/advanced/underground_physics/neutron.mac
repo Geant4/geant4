@@ -5,8 +5,6 @@
 #                                                                             #
 ###############################################################################
 #
-# output log-file name
-/run/filename n_phantom_100000.log
 #
 # verbosities
 /control/verbose 1
@@ -51,6 +49,10 @@
 /dmx/gun/shape Sphere
 /dmx/gun/centre 0 2 0.090 m
 /dmx/gun/radius 3 cm
+#
+/dmx/hitsfile neutron.out
+/dmx/pmtfile neutron_pmt.out
+/dmx/histogramfile neutron.his
 #
 /run/beamOn 1
 

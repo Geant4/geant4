@@ -40,8 +40,14 @@
 #define DMXPrimaryGeneratorMessenger_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
 
+#ifdef DMXENV_GPS_USE
+class G4GeneralParticleSource;
+#else
 class DMXParticleSource;
+#endif
+class DMXAnalysisManager;
 
 class G4Event;
 
@@ -55,7 +61,21 @@ class DMXPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
       void GeneratePrimaries(G4Event* anEvent);
 
    private:
-      DMXParticleSource* particleGun;
+#ifdef DMXENV_GPS_USE
+  G4GeneralParticleSource* particleGun;
+#else
+  DMXParticleSource* particleGun;
+#endif
+
+   private:
+  //      const long* seeds;
+  long seeds[2];
+  G4double energy_pri;
+
+   public:
+  const long* GetEventSeeds()        {return seeds;};
+  G4double GetEnergyPrimary()   {return energy_pri;};
+
 
 };
 

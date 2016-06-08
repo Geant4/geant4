@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:gdml="http://cern.ch/2001/Schemas/GDML"
+           elementFormDefault="unqualified"
+           attributeFormDefault="unqualified"
+           version="1.0">
+<xs:include schemaLocation="gdml_simple_core.xsd"/>
+<xs:include schemaLocation="gdml_simple_define.xsd"/>
+<xs:include schemaLocation="gdml_simple_materials.xsd"/>
+<xs:include schemaLocation="gdml_simple_solids.xsd"/>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<xs:complexType name="IdentifiableVolumeType" abstract="true">
+ <xs:attribute name="name" type="xs:ID" use="required"/>
+</xs:complexType>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<xs:complexType name="VolumeType">
+ <xs:annotation>
+  <xs:documentation>
+        Represents a top of a geometrical sub-hierarchy not placed in space
+        None of its children can coincide with its boundary defined by an associated solid
+        Two different placements of the same logical volume represent two different geometrical
+        hierarchies in space
+  </xs:documentation>
+ </xs:annotation>
+ <xs:complexContent>
+  <xs:extension base="IdentifiableVolumeType">
+   <xs:sequence>
+    <xs:element name="materialref" type="ReferenceType"/>
+    <xs:element name="solidref" type="ReferenceType"/>
+    <xs:sequence minOccurs="0">
+     <xs:element name="child" type="SinglePlacementType" maxOccurs="unbounded"/>
+    </xs:sequence>
+   </xs:sequence>
+  </xs:extension>
+ </xs:complexContent>
+</xs:complexType>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<xs:complexType name="AssemblyVolumeType">
+ <xs:annotation>
+  <xs:documentation>
+        Allows to create a group of volumes bound together without a boundary
+        All the volumes exits inside the same virtual reference system of the assmebly volume
+        they belong to
+        When assembly volume is placed all its children follow the global transformation applied
+        to their assembly volume
+        After the assembly volume is placed its children exist as standalone placements in space
+        independent of each other
+  </xs:documentation>
+ </xs:annotation>
+ <xs:complexContent>
+  <xs:extension base="IdentifiableVolumeType">
+   <xs:sequence>
+    <xs:element name="child" type="SinglePlacementType" maxOccurs="unbounded"/>
+   </xs:sequence>
+  </xs:extension>
+ </xs:complexContent>
+</xs:complexType>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<xs:complexType name="SinglePlacementType">
+ <xs:annotation>
+  <xs:documentation>
+        Represents a single unique copy a of an associated logical volume
+        in geometrical hierarchy
+  </xs:documentation>
+ </xs:annotation>
+ <xs:sequence>
+  <xs:element name="volumeref" type="ReferenceType"/>
+  <xs:element name="positionref" type="ReferenceType"/>
+  <xs:element name="rotationref" type="ReferenceType"/>
+ </xs:sequence>
+</xs:complexType>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<xs:element name="structure">
+ <xs:annotation>
+  <xs:documentation>
+        Definitions of a geometrical hierarchy of a set of volumes
+  </xs:documentation>
+ </xs:annotation>
+ <xs:complexType>
+  <xs:sequence>
+   <xs:choice maxOccurs="unbounded">
+    <xs:element name="volume" type="VolumeType"/>
+    <xs:element name="assembly" type="AssemblyVolumeType"/>
+   </xs:choice>
+  </xs:sequence>
+ </xs:complexType>
+</xs:element>
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<xs:element name="gdml">
+ <xs:complexType>
+  <xs:sequence>
+   <xs:element ref="define"/>
+   <xs:element ref="materials"/>
+   <xs:element ref="solids"/>
+   <xs:element ref="structure"/>
+   <xs:element name="setup" maxOccurs="unbounded">
+    <xs:annotation>
+     <xs:documentation>
+              Geometry setup representing the particular geometry hierarchy by refferring to
+              a given volume which becomes the top level volume
+     </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+     <xs:sequence>
+      <xs:element name="world" type="ReferenceType">
+       <xs:annotation>
+        <xs:documentation>
+                    A reference to the previously defined volume
+                    in the structure block chosen by this setup
+                    World volumme can't be an assembly volume
+        </xs:documentation>
+       </xs:annotation>
+      </xs:element>
+     </xs:sequence>
+     <xs:attribute name="name" type="xs:ID" use="required"/>
+     <xs:attribute name="version" type="xs:string" use="required"/>
+    </xs:complexType>
+   </xs:element>
+  </xs:sequence>
+  <xs:attribute name="version" type="xs:string" fixed="1.0"/>
+ </xs:complexType>
+</xs:element>
+</xs:schema>

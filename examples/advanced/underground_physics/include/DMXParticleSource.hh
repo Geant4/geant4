@@ -81,6 +81,7 @@ class DMXParticleSource : public G4VPrimaryGenerator {
      void SetEnergyDisType(G4String);
      void SetMonoEnergy(G4double);
      void GenerateMonoEnergetic();
+  inline G4double GetParticleEnergy() {return particle_energy;}
 
      // verbosity
      void SetVerbosity(G4int);

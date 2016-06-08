@@ -21,15 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundParameters.cc,v 1.6 2001/08/01 17:08:32 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundParameters.cc,v 1.7 2002/06/06 17:19:24 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // by V. Lara
 
 #include "G4PreCompoundParameters.hh"
 
-
-const G4double theLevelDensity = 0.125/MeV;
 
 G4PreCompoundParameters G4PreCompoundParameters::thePreCompoundParameters;
 

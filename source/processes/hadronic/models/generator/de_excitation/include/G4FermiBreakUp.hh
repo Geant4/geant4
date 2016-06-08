@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiBreakUp.hh,v 1.5 2001/08/01 17:04:25 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FermiBreakUp.hh,v 1.6 2002/01/15 12:21:53 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -35,6 +35,9 @@
 #include "G4FermiConfigurationList.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+
+//#define pctest
+
 
 class G4FermiBreakUp : public G4VFermiBreakUp 
 {

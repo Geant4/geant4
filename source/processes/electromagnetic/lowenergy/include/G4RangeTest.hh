@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RangeTest.hh,v 1.1 2001/10/08 07:51:42 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4RangeTest.hh,v 1.2 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -53,7 +53,7 @@ public:
 
   G4RangeTest() { }
 
-  virtual ~G4RangeTest() { }
+  virtual ~G4RangeTest();
  
   virtual G4bool Escape(const G4ParticleDefinition* particle, 
 			const G4Material* material,

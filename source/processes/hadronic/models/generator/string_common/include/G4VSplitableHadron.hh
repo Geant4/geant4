@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VSplitableHadron.hh,v 1.8 2001/11/29 14:22:49 stesting Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef G4VSplitableHadron_h

@@ -1,0 +1,13 @@
+# $Id: run01.mac,v 1.2 2002/05/23 13:30:14 maire Exp $
+#
+# Macro file for "TestEm6.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+#
+/run/initialize
+#
+/run/verbose 2
+#
+/run/beamOn 100000

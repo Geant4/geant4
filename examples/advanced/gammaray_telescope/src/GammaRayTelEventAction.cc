@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.13 2001/12/04 13:23:52 flongo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: GammaRayTelEventAction.cc,v 1.14 2002/06/18 18:45:42 griccard Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -186,7 +186,6 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	    }
 	  
 #ifdef G4ANALYSIS_USE_NTUPLE
-	  
 	  analysis->setNtuple( ESil/keV, NPlane, (*THC)[i]->GetPos().x()/mm,
 			       (*THC)[i]->GetPos().y()/mm,
 			       (*THC)[i]->GetPos().z()/mm);

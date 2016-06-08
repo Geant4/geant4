@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.14 2001/11/09 13:56:28 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VhEnergyLoss.hh,v 1.15 2002/04/09 17:34:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ------------- G4VhEnergyLoss physics process --------------------------------
 //                by Laszlo Urban, 30 May 1997 

@@ -1,0 +1,121 @@
+###############################################################################
+#                                                                             #
+# neutron.mac                                                                 #
+# 1 neutron fired in the room                                                 #
+#                                                                             #
+###############################################################################
+#
+# output log-file name
+#/run/filename n_phantom_100000.log
+#
+# verbosities
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+/hits/verbose 0
+#
+# draw flags
+/dmx/draw/drawColours custom
+/dmx/draw/gammaColour green
+##/dmx/draw/drawTracks noscint
+/dmx/draw/drawTracks all
+/dmx/draw/drawHits 0
+#
+# file output
+/dmx/savePmt  0
+/dmx/saveHits 1
+#
+# kill gammas in lab wall
+/dmx/KillGammasInConcrete 0
+#
+# radioactive decay module
+/grdm/analogueMC 1
+/grdm/verbose 0
+/grdm/allVolumes
+#
+#
+# using GPS for ambe_spectrum:
+/gps/type Surface
+/gps/shape Sphere
+/gps/radius 1.0 cm
+/gps/centre 0. 132.0 -311.75 mm
+/gps/angtype iso
+/gps/surfnorm 1
+/gps/mintheta 0.
+/gps/maxtheta 0.30
+/gps/minphi 0.
+/gps/maxphi 6.283185
+#
+#
+/gps/energytype Arb
+/gps/histname arb
+#
+/gps/particle neutron
+#
+# estimated neutron spectrum from Jaime's paper:
+# - first bin is in MeV:
+/gps/histpoint 0.0 10000
+/gps/histpoint 0.2 11000
+/gps/histpoint 0.4 12000
+/gps/histpoint 0.6 13000
+/gps/histpoint 0.8 12000
+/gps/histpoint 1.0 10000
+/gps/histpoint 1.2 9000
+/gps/histpoint 1.4 11000
+/gps/histpoint 1.6 10000
+/gps/histpoint 1.8 11000
+/gps/histpoint 2.0 9000
+/gps/histpoint 2.2 14000
+/gps/histpoint 2.4 11000
+/gps/histpoint 2.6 12000
+/gps/histpoint 2.8 15000
+/gps/histpoint 3.0 17000
+/gps/histpoint 3.2 16000
+/gps/histpoint 3.4 15000
+/gps/histpoint 3.6 16500
+/gps/histpoint 3.8 17000
+/gps/histpoint 4.0 17000
+/gps/histpoint 4.2 14000
+/gps/histpoint 4.4 13500
+/gps/histpoint 4.6 14500
+/gps/histpoint 4.8 14000
+/gps/histpoint 5.0 13500
+/gps/histpoint 5.2 13000
+/gps/histpoint 5.4 12500
+/gps/histpoint 5.6 11000
+/gps/histpoint 5.8 10000
+/gps/histpoint 6.0 9800
+/gps/histpoint 6.2 8000
+/gps/histpoint 6.4 7700
+/gps/histpoint 6.6 7000
+/gps/histpoint 6.8 6800
+/gps/histpoint 7.0 6000
+/gps/histpoint 7.2 5000
+/gps/histpoint 7.4 4000
+/gps/histpoint 7.6 3600
+/gps/histpoint 7.8 3000
+/gps/histpoint 8.0 2000
+/gps/histpoint 8.2 1900
+/gps/histpoint 8.4 1750
+/gps/histpoint 8.6 1800
+/gps/histpoint 8.8 1825
+/gps/histpoint 9.0 1600
+/gps/histpoint 9.2 1400
+/gps/histpoint 9.4 1200
+/gps/histpoint 9.6 1100
+/gps/histpoint 9.8 1000
+/gps/histpoint 10.0 800
+#
+#
+#
+#
+/gps/arbint Lin
+
+/random/setDirectoryName ./seeds
+/random/setSavingFlag
+
+/dmx/hitsfile ambe_spectrum.out
+/dmx/histogramfile ambe_spectrum.his
+
+/run/beamOn 1000000
+

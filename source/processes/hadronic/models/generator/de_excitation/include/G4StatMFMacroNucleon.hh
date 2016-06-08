@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StatMFMacroNucleon.hh,v 1.7 2001/10/05 16:13:41 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

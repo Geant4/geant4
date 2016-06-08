@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronShellPlusPairingCorrections.cc,v 1.5 2001/10/05 16:13:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CameronShellPlusPairingCorrections.cc,v 1.6 2001/11/08 10:10:26 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -31,8 +31,7 @@
 
 
 // S(Z)+P(Z) from Tab. 1 from A.G.W. Cameron, Canad. J. Phys., 35(1957)1021
-//                   or Delta M(Z) from Tab. 97 of book [1]
-G4double G4CameronShellPlusPairingCorrections::SPZTable
+const G4double G4CameronShellPlusPairingCorrections::SPZTable
 [G4CameronShellPlusPairingCorrections::TableSize] = {
   20.80, 15.80, 21.00, 16.80, 19.80, 16.50, 18.80, 16.50, 18.50, 17.20, //   1 - 10
   18.26, 15.05, 16.01, 12.04, 13.27, 11.09, 12.17, 10.26, 11.04,  8.41, //  11 - 20 
@@ -58,8 +57,7 @@ G4double G4CameronShellPlusPairingCorrections::SPZTable
 };
 
 // S(N)+P(N) from Tab. 1 from A.G.W. Cameron, Canad. J. Phys., 35(1957)1021
-//                   or Delta M(N) from Tab. 97 of book [1]
-G4double G4CameronShellPlusPairingCorrections::SPNTable
+const G4double G4CameronShellPlusPairingCorrections::SPNTable
 [G4CameronShellPlusPairingCorrections::TableSize] = {
   -8.40,-12.90, -8.00, 11.90, -9.20,-12.50,-10.80,-13.60,-11.20,-12.20, //   1 - 10
  -12.81,-15.40,-13.07,-15.80,-13.81,-14.98,-12.63,-13.76,-11.37,-12.38, //  11 - 20
@@ -85,10 +83,12 @@ G4double G4CameronShellPlusPairingCorrections::SPNTable
 
 
 
-G4CameronShellPlusPairingCorrections G4CameronShellPlusPairingCorrections::theInstance(10.0);
+G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::theInstance = 0;
 
-G4CameronShellPlusPairingCorrections::G4CameronShellPlusPairingCorrections(G4double dummy)
-{
-    G4double even_more_dummy = dummy;
-    even_more_dummy/=2.;
+G4CameronShellPlusPairingCorrections::G4CameronShellPlusPairingCorrections()
+{;}
+
+G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::GetInstance() {
+  if (!theInstance) theInstance = new G4CameronShellPlusPairingCorrections();
+  return theInstance;
 }

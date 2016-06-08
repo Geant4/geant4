@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.hh,v 1.5 2001/08/01 17:05:46 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4TheoFSGenerator.hh,v 1.6 2002/06/10 13:27:06 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 // Class Description
@@ -33,7 +33,8 @@
 // the corresponding process.
 // Note: This class is part of an implementation framework. You need to
 // register corresponding high energy generators and transport codes to 
-// fill it with life. 
+// fill it with life; decay of strong resonances is done directly,
+// in case there is no residual nucleus. 
 // Class Description - End
 
 #ifndef G4TheoFSGenerator_h
@@ -42,6 +43,7 @@
 #include "G4VIntraNuclearTransportModel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4VHighEnergyGenerator.hh"
+#include "G4DecayStrongResonances.hh"
 
 class G4TheoFSGenerator : public G4HadronicInteraction 
 
@@ -69,7 +71,7 @@ class G4TheoFSGenerator : public G4HadronicInteraction
   private: 
       G4VIntraNuclearTransportModel *theTransport;
       G4VHighEnergyGenerator *theHighEnergyGenerator;
-
+      G4DecayStrongResonances theDecay;
       G4ParticleChange *theParticleChange;
 };
 

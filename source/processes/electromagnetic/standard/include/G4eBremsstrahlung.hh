@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.hh,v 1.13 2001/10/29 16:23:41 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4eBremsstrahlung.hh,v 1.14 2002/04/09 17:34:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 //      ------------ G4eBremsstrahlung physics process ------

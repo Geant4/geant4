@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3CalorHit.cc,v 1.4 2001/10/22 10:58:54 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

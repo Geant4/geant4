@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.23 2001/11/09 13:59:47 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4hIonisation.cc,v 1.30 2002/06/10 15:50:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //---------------- G4hIonisation physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997 
@@ -46,6 +46,9 @@
 // 25-09-01 completion of RetrievePhysicsTable() (mma)
 // 29-10-01 all static functions no more inlined
 // 08-11-01 Charge renamed zparticle; added to the dedx
+// 27-03-02 Bug fix in scaling of lambda table (V.Ivanchenko)
+// 09-04-02 Update calculation of tables for GenericIons (V.Ivanchenko)
+// 10-06-02 bug fixed for stopping hadrons, V.Ivanchenko
 //
 //------------------------------------------------------------------------------
 
@@ -53,7 +56,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4hIonisation.hh"
+#include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4EnergyLossTables.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -112,10 +117,51 @@ G4int G4hIonisation::GetNbinLambda()
 void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 // just call BuildLossTable+BuildLambdaTable
 {
+
+  if(verboseLevel > 0) {
+    G4cout << "G4hIonisation::BuildPhysicsTable for "
+           << aParticleType.GetParticleName()
+           << " mass(MeV)= " << aParticleType.GetPDGMass()/MeV
+           << " charge= " << aParticleType.GetPDGCharge()/eplus
+           << " type= " << aParticleType.GetParticleType()
+           << G4endl;
+
+    if(verboseLevel > 1) {
+      G4ProcessVector* pv = aParticleType.GetProcessManager()->GetProcessList();
+      G4cout << " 0: " << (*pv)[0]->GetProcessName() << " " << (*pv)[0] 
+             << " 1: " << (*pv)[1]->GetProcessName() << " " << (*pv)[1] 
+	//             << " 2: " << (*pv)[2]->GetProcessName() << " " << (*pv)[2]
+             << G4endl;
+      G4cout << " MFPtable= " << theMeanFreePathTable
+             << " DEDXtable= " << theDEDXpTable
+             << " iniMass= " << initialMass
+             << G4endl;
+    }
+  }
+
+  if(aParticleType.GetParticleType() == "nucleus" && 
+     aParticleType.GetParticleName() != "GenericIon" &&
+     theMeanFreePathTable) {
+
+     G4EnergyLossTables::Register(&aParticleType,  
+              theDEDXpTable,
+              theRangepTable,
+              theInverseRangepTable,
+              theLabTimepTable,
+              theProperTimepTable,
+              LowestKineticEnergy, HighestKineticEnergy,
+              proton_mass_c2/aParticleType.GetPDGMass(),
+              TotBin);
+
+     return;
+  }
+
+
   // get bining from EnergyLoss
   LowestKineticEnergy  = GetLowerBoundEloss();
   HighestKineticEnergy = GetUpperBoundEloss();
   TotBin               = GetNbinEloss();
+  const G4ParticleDefinition* theProton = G4Proton::Proton();
 
   G4double* ElectronCutInRange = G4Electron::Electron()->GetLengthCuts(); 
 
@@ -124,7 +170,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     if( !EqualCutVectors(ptableElectronCutInRange,ElectronCutInRange)  
                        || (theDEDXpTable == NULL))
     {
-      BuildLossTable(aParticleType);
+      BuildLossTable(*theProton);
       RecorderOfpProcess[CounterOfpProcess] = theLossTable;
       CounterOfpProcess++;
     }
@@ -134,7 +180,7 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     if( !EqualCutVectors(pbartableElectronCutInRange,ElectronCutInRange)  
                         || (theDEDXpbarTable == NULL))
     {
-      BuildLossTable(aParticleType) ;
+      BuildLossTable(*(G4AntiProton::AntiProton())) ;
       RecorderOfpbarProcess[CounterOfpbarProcess] = theLossTable;
       CounterOfpbarProcess++;
     }
@@ -144,7 +190,15 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   BuildDEDXTable(aParticleType);
 
-  if (&aParticleType == G4Proton::Proton())  PrintInfoDefinition();
+  if(2 < verboseLevel) {
+    G4cout << "MeanFreePathTable is built for " 
+           << aParticleType.GetParticleName() << G4endl; 
+    G4cout << (*theMeanFreePathTable) << G4endl;
+  }
+
+
+  if (&aParticleType == theProton)  PrintInfoDefinition();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,6 +252,12 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
  // Build mean free path tables for the delta ray production process
  //     tables are built for MATERIALS 
+
+  if(0 < verboseLevel) {
+    G4cout << "G4hIonisation::BuildLambdaTable() for process " 
+           << GetProcessName() << " and particle " 
+           << aParticleType.GetParticleName() << G4endl;
+  }
  
  //create table
  //
@@ -211,7 +271,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
  theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
  // get electron cut in kinetic energy
- G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
+ G4double* DeltaCutInKinEnergy = (G4Electron::Electron())->GetEnergyCuts();
  
  // loop for materials 
 
@@ -232,6 +292,16 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      //  it will be used in ComputeCrossSectionPerAtom
      // ( --> it will be the same for all the elements in this material)
      G4double DeltaThreshold =G4std::max(DeltaCutInKinEnergy[J],Tmincut);
+     
+     if(1 < verboseLevel) {
+       G4cout << "### For material " << material->GetName()
+              << " Tcut(MeV)= " << DeltaThreshold/MeV
+              << " Tmin(MeV)= " << LowerBoundLambda/MeV
+              << " Tmax(MeV)= " << UpperBoundLambda/MeV
+              << " nbins= "  << NbinLambda
+              << G4endl;
+     }
+
 
      for ( G4int i = 0 ; i < NbinLambda ; i++ )
         {
@@ -265,9 +335,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
  // calculate the dE/dx due to the ionization process (Geant4 internal units)
  // Bethe-Bloch formula
  //
- G4double particleMass   = aParticleType.GetPDGMass();
- G4double particleZ      = aParticleType.GetPDGCharge()/eplus;
- G4double zsquare = particleZ*particleZ;    
+ G4double particleMass   = proton_mass_c2;
  
  G4double ElectronDensity = material->GetElectronDensity();
  G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
@@ -319,7 +387,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
 
      // now you can compute the total ionization loss
      dEdx -= (delta + sh);
-     dEdx *= twopi_mc2_rcl2*ElectronDensity*zsquare/beta2;
+     dEdx *= twopi_mc2_rcl2*ElectronDensity/beta2;
      if (dEdx < 0.) dEdx = 0.;
    }
  //   
@@ -353,7 +421,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
          if (aParticleType.GetPDGSpin() == 0.5)
             deltaloss += 0.25*(Tmax-DeltaThreshold)*(Tmax-DeltaThreshold)/
                  (KineticEnergy*KineticEnergy+proton_mass_c2*proton_mass_c2);
-         deltaloss *= twopi_mc2_rcl2*ElectronDensity*zsquare/beta2;
+         deltaloss *= twopi_mc2_rcl2*ElectronDensity/beta2;
        }
      dEdx -= deltaloss;
      if (dEdx < 0.) dEdx = 0.;
@@ -374,9 +442,8 @@ G4double G4hIonisation::ComputeCrossSectionPerAtom(
  //
  // nb: cross section formula is OK for spin=0 and 1/2 only ! 
      
- G4double particleMass = aParticleType.GetPDGMass();
- G4double particleZ    = aParticleType.GetPDGCharge()/eplus;
- G4double zparticle2 = particleZ*particleZ;
+ initialMass = aParticleType.GetPDGMass();
+ G4double particleMass = initialMass;
            
  G4double TotalEnergy = KineticEnergy + particleMass;
 
@@ -405,7 +472,7 @@ G4double G4hIonisation::ComputeCrossSectionPerAtom(
 	               betasquare / 
                        (MaxKineticEnergyTransfer * DeltaThreshold)) / 3.0;
 		       
-     TotalCrossSection *= twopi_mc2_rcl2*AtomicNumber*zparticle2/betasquare;
+     TotalCrossSection *= twopi_mc2_rcl2*AtomicNumber/betasquare;
    }
   return TotalCrossSection;
 }
@@ -420,7 +487,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,
  G4Material* aMaterial = trackData.GetMaterial();
  const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
 
- G4double particleMass = aParticle->GetDefinition()->GetPDGMass();
+ G4double particleMass = aParticle->GetMass();
  G4double KineticEnergy = aParticle->GetKineticEnergy();
  G4double TotalEnergy = KineticEnergy + particleMass;
  G4double Psquare = KineticEnergy*(TotalEnergy+particleMass);
@@ -511,7 +578,7 @@ G4VParticleChange* G4hIonisation::PostStepDoIt(const G4Track& trackData,
    {
      Edep = finalKineticEnergy;
      finalKineticEnergy = 0.;
-     if (aParticle->GetDefinition()->GetParticleName() == "proton")
+     if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->size())
            aParticleChange.SetStatusChange(fStopAndKill);
      else  aParticleChange.SetStatusChange(fStopButAlive);
    }

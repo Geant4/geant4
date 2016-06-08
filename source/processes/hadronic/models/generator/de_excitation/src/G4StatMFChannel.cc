@@ -21,13 +21,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.8 2001/10/05 16:13:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFChannel.cc,v 1.11 2002/06/17 17:27:15 stesting Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 
 #include "G4StatMFChannel.hh"
+#include <numeric>
+
+class SumCoulombEnergy : public G4std::binary_function<G4double,G4double,G4double>
+{
+public:
+  SumCoulombEnergy() : total(0.0) {}
+  G4double operator() (G4double& probSoFar, G4StatMFFragment*& frag)
+  { 
+      total += frag->GetCoulombEnergy();
+      return total;
+    }
+    
+  G4double GetTotal() { return total; }
+public:
+  G4double total;  
+};
+
+
+
 
 
 // Copy constructor
@@ -62,12 +81,15 @@ G4bool G4StatMFChannel::operator!=(const G4StatMFChannel & right) const
 
 G4bool G4StatMFChannel::CheckFragments(void)
 {
-    for (unsigned int i = 0; i < _theFragments.size(); i++) {
-	G4int A = G4int(_theFragments[i]->GetA());
-	G4int Z = G4int(_theFragments[i]->GetZ());
+    G4std::deque<G4StatMFFragment*>::iterator i;
+    for (i = _theFragments.begin(); 
+	 i != _theFragments.end(); ++i) 
+      {
+	G4int A = G4int((*i)->GetA());
+	G4int Z = G4int((*i)->GetZ());
 	if (A > 1 && (Z >= A || Z <= 0) || (A==1 && Z > A) || A <= 0) return false;
     }
-	
+    
     return true;
 }
 
@@ -93,9 +115,11 @@ void G4StatMFChannel::CreateFragment(const G4double A, const G4double Z)
 
 G4double G4StatMFChannel::GetFragmentsCoulombEnergy(void)
 {
-    G4double Coulomb = 0.0;
-    for (unsigned int i = 0;i < _theFragments.size(); i++)
-	Coulomb += _theFragments[i]->GetCoulombEnergy();
+    G4double Coulomb = G4std::accumulate(_theFragments.begin(),_theFragments.end(),
+					 0.0,SumCoulombEnergy());
+//      G4double Coulomb = 0.0;
+//      for (unsigned int i = 0;i < _theFragments.size(); i++)
+//  	Coulomb += _theFragments[i]->GetCoulombEnergy();
     return Coulomb;
 }
 
@@ -105,10 +129,13 @@ G4double G4StatMFChannel::GetFragmentsEnergy(const G4double T) const
 {
     G4double Energy = 0.0;
 	
-    G4double TranslationalEnergy = (3./2.)*T*_theFragments.size();
-	
-    for (unsigned int i = 0;i < _theFragments.size(); i++)
-	Energy += _theFragments[i]->GetEnergy(T);
+    G4double TranslationalEnergy = (3./2.)*T*G4double(_theFragments.size());
+
+    G4std::deque<G4StatMFFragment*>::const_iterator i;
+    for (i = _theFragments.begin(); i != _theFragments.end(); ++i)
+      {
+	Energy += (*i)->GetEnergy(T);
+      }
     return Energy + TranslationalEnergy;	
 }
 
@@ -117,7 +144,6 @@ G4FragmentVector * G4StatMFChannel::GetFragments(const G4double anA,
 						 const G4double T)
     //
 {
-
     // calculate momenta of charged fragments  
     CoulombImpulse(anA,anZ,T);
 	
@@ -126,8 +152,9 @@ G4FragmentVector * G4StatMFChannel::GetFragments(const G4double anA,
 
 
     G4FragmentVector * theResult = new G4FragmentVector;
-    for (unsigned int i = 0; i < _theFragments.size(); i++)
-	theResult->push_back(_theFragments[i]->GetFragment(T));
+    G4std::deque<G4StatMFFragment*>::iterator i;
+    for (i = _theFragments.begin(); i != _theFragments.end(); ++i)
+	theResult->push_back((*i)->GetFragment(T));
 
     return theResult;
 
@@ -164,43 +191,47 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
     const G4double Rsys = 2.0*R0*pow(anA,1./3.);
 
     G4bool TooMuchIterations;
-    do {
+    do 
+      {
 	TooMuchIterations = false;
-
+	
 	// Sample the position of the first fragment
 	G4double R = (Rsys - R0*pow(_theFragments[0]->GetA(),1./3.))*
-	    pow(G4UniformRand(),1./3.);
+	  pow(G4UniformRand(),1./3.);
 	_theFragments[0]->SetPosition(IsotropicVector(R));
-		
-
+	
+	
 	// Sample the position of the remaining fragments
 	G4bool ThereAreOverlaps = false;
-	for (unsigned int i = 1; i < _theFragments.size(); i++) {
+	G4std::deque<G4StatMFFragment*>::iterator i;
+	for (i = _theFragments.begin()+1; i != _theFragments.end(); ++i) 
+	  {
 	    G4int counter = 0;
-	    do {
-		R = (Rsys - R0*pow(_theFragments[i]->GetA(),1./3.))*
-		    pow(G4UniformRand(),1./3.);
-		_theFragments[i]->SetPosition(IsotropicVector(R));
-			
-				// Check that there are not overlapping fragments
-		for (unsigned int j = 0; j < i; j++) {
-		    G4ThreeVector FragToFragVector = 
-			_theFragments[i]->GetPosition() - _theFragments[j]->GetPosition();
-					
-		    G4double Rmin = R0*(pow(_theFragments[i]->GetA(),1./3.) +
-					pow(_theFragments[j]->GetA(),1./3));
+	    do 
+	      {
+		R = (Rsys - R0*pow((*i)->GetA(),1./3.))*pow(G4UniformRand(),1./3.);
+		(*i)->SetPosition(IsotropicVector(R));
+		
+		// Check that there are not overlapping fragments
+		G4std::deque<G4StatMFFragment*>::iterator j;
+		for (j = _theFragments.begin(); j != i; ++j) 
+		  {
+		    G4ThreeVector FragToFragVector = (*i)->GetPosition() - (*j)->GetPosition();
+		    G4double Rmin = R0*(pow((*i)->GetA(),1./3.) +
+					pow((*j)->GetA(),1./3));
 		    if (ThereAreOverlaps = (FragToFragVector.mag2() < Rmin*Rmin)) break;
-		}
+		  }
 		counter++;
-	    } while (ThereAreOverlaps && counter < 1000);
-			
-	    if (counter >= 1000) {
+	      } while (ThereAreOverlaps && counter < 1000);
+	    
+	    if (counter >= 1000) 
+	      {
 		TooMuchIterations = true;
 		break;
-	    } 
-	}
+	      } 
+	  }
     } while (TooMuchIterations);
-	
+    
     return;
 }
 
@@ -218,43 +249,52 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
     G4ThreeVector p;
 	
     if (NF <= 0) return;
-    else if (NF == 1) {
+    else if (NF == 1) 
+      {
 	// We have only one fragment to deal with
 	p = IsotropicVector(sqrt(2.0*_theFragments[idx]->GetNuclearMass()*KinE));
 	_theFragments[idx]->SetMomentum(p);
-    } else if (NF == 2) {
+      } 
+    else if (NF == 2) 
+      {
 	// We have only two fragment to deal with
 	G4double M1 = _theFragments[idx]->GetNuclearMass();
 	G4double M2 = _theFragments[idx+1]->GetNuclearMass();
 	p = IsotropicVector(sqrt(2.0*KinE*(M1*M2)/(M1+M2)));		
 	_theFragments[idx]->SetMomentum(p);
 	_theFragments[idx+1]->SetMomentum(-p);
-    } else {
+      } 
+    else 
+      {
 	// We have more than two fragments
 	G4double AvailableE;
 	G4int i1,i2;
 	G4double SummedE;
 	G4ThreeVector SummedP;
-	do {
+	do 
+	  {
 	    // Fisrt sample momenta of NF-2 fragments 
 	    // according to Boltzmann distribution
 	    AvailableE = 0.0;
 	    SummedE = 0.0;
 	    SummedP.setX(0.0);SummedP.setY(0.0);SummedP.setZ(0.0);
-	    for (G4int i = idx; i < idx+NF-2; i++) {
+	    for (G4int i = idx; i < idx+NF-2; i++) 
+	      {
 		G4double E;
 		G4double RandE;
 		G4double Boltzmann;
-		do {
+		do 
+		  {
 		    E = 9.0*T*G4UniformRand();
 		    Boltzmann = sqrt(E)*exp(-E/T);
 		    RandE = sqrt(T/2.)*exp(-0.5)*G4UniformRand();
-		} while (RandE > Boltzmann);
+		  } 
+		while (RandE > Boltzmann);
 		p = IsotropicVector(sqrt(2.0*E*_theFragments[i]->GetNuclearMass()));
 		_theFragments[i]->SetMomentum(p);
 		SummedE += E;
 		SummedP += p;
-	    }	
+	      }	
 	    // Calculate momenta of last two fragments in such a way
 	    // that constraints are satisfied
 	    i1 = idx+NF-2;  // before last fragment index
@@ -262,19 +302,23 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
 	    p = -SummedP;
 	    AvailableE = KinE - SummedE;
 	    // Available Kinetic Energy should be shared between two last fragments
-	} while (AvailableE <= p.mag2()/(2.0*(_theFragments[i1]->GetNuclearMass()+
-					      _theFragments[i2]->GetNuclearMass())));		
+	  } 
+	while (AvailableE <= p.mag2()/(2.0*(_theFragments[i1]->GetNuclearMass()+
+					    _theFragments[i2]->GetNuclearMass())));		
 		
-	//		G4double H = 1.0 + _theFragments(i2)->GetA()/_theFragments(i1)->GetA();
 	G4double H = 1.0 + _theFragments[i2]->GetNuclearMass()/_theFragments[i1]->GetNuclearMass();
 	G4double CTM12 = H*(1.0 - 2.0*_theFragments[i2]->GetNuclearMass()*AvailableE/p.mag2());
 	G4double CosTheta1;
 	G4double Sign;
-	do {
-	    do {
+	do 
+	  {
+	    do 
+	      {
 		CosTheta1 = 1.0 - 2.0*G4UniformRand();
-	    } while (CosTheta1*CosTheta1 < CTM12);
-	} while (CTM12 >= 0.0 && CosTheta1 < 0.0);
+	      } 
+	    while (CosTheta1*CosTheta1 < CTM12);
+	  }
+	while (CTM12 >= 0.0 && CosTheta1 < 0.0);
 
 	if (CTM12 < 0.0) Sign = 1.0;
 	else if (G4UniformRand() <= 0.5) Sign = -1.0;
@@ -296,7 +340,7 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
 	G4ThreeVector p1(P1*SinTheta1*CosPhi1,P1*SinTheta1*SinPhi1,P1*CosTheta1);
 	G4ThreeVector p2(P2*SinTheta2*CosPhi2,P2*SinTheta2*SinPhi2,P2*CosTheta2);
 	G4ThreeVector b(1.0,0.0,0.0);
-		
+	
 	p1 = RotateMomentum(p,b,p1);
 	p2 = RotateMomentum(p,b,p2);
 	
@@ -307,7 +351,7 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
 	_theFragments[i1]->SetMomentum(p1);
 	_theFragments[i2]->SetMomentum(p2);
 		
-    }
+      }
 
     return;
 }
@@ -317,83 +361,95 @@ void G4StatMFChannel::SolveEqOfMotion(const G4double anA, const G4double anZ, co
     // This method will find a solution of Newton's equation of motion
     // for fragments in the self-consistent time-dependent Coulomb field
 {
-    G4double CoulombEnergy = (3./5.)*(elm_coupling*anZ*anZ)*
-	pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
-	(G4StatMFParameters::Getr0()*pow(anA,1./3.))
-	- GetFragmentsCoulombEnergy();
-    if (CoulombEnergy <= 0.0) return;
-
-    G4int Iterations = 0;
-    G4double TimeN = 0.0;
-    G4double TimeS = 0.0;
-    G4double DeltaTime = 10.0;
-
-    G4ThreeVector * Pos = new G4ThreeVector[_NumOfChargedFragments];
-    G4ThreeVector * Vel = new G4ThreeVector[_NumOfChargedFragments];
-    G4ThreeVector * Accel = new G4ThreeVector[_NumOfChargedFragments];
-
-    G4int i;
-    for (i = 0; i < _NumOfChargedFragments; i++) {
-	Vel[i] = (1.0/(_theFragments[i]->GetNuclearMass()))*
-	    _theFragments[i]->GetMomentum();
-	Pos[i] = _theFragments[i]->GetPosition();
+  G4double CoulombEnergy = (3./5.)*(elm_coupling*anZ*anZ)*
+    pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
+    (G4StatMFParameters::Getr0()*pow(anA,1./3.))
+    - GetFragmentsCoulombEnergy();
+  if (CoulombEnergy <= 0.0) return;
+  
+  G4int Iterations = 0;
+  G4double TimeN = 0.0;
+  G4double TimeS = 0.0;
+  G4double DeltaTime = 10.0;
+  
+  G4ThreeVector * Pos = new G4ThreeVector[_NumOfChargedFragments];
+  G4ThreeVector * Vel = new G4ThreeVector[_NumOfChargedFragments];
+  G4ThreeVector * Accel = new G4ThreeVector[_NumOfChargedFragments];
+  
+  G4int i;
+  for (i = 0; i < _NumOfChargedFragments; i++) 
+    {
+      Vel[i] = (1.0/(_theFragments[i]->GetNuclearMass()))*
+	_theFragments[i]->GetMomentum();
+      Pos[i] = _theFragments[i]->GetPosition();
     }
   
-    do {
+  do 
+    {
 
-	G4ThreeVector distance;
-	G4ThreeVector force;
+      G4ThreeVector distance;
+      G4ThreeVector force;
 
-	for (i = 0; i < _NumOfChargedFragments; i++) {
-	    force.setX(0.0); force.setY(0.0); force.setZ(0.0);
-	    for (G4int j = 0; j < _NumOfChargedFragments; j++) {
-		if (i != j) {
-		    distance = Pos[i] - Pos[j];
-		    force += (elm_coupling*(_theFragments[i]->GetZ()*_theFragments[j]->GetZ())/
-			      (distance.mag2()*distance.mag()))*distance;
+      for (i = 0; i < _NumOfChargedFragments; i++) 
+	{
+	  force.setX(0.0); force.setY(0.0); force.setZ(0.0);
+	  for (G4int j = 0; j < _NumOfChargedFragments; j++) 
+	    {
+	      if (i != j) 
+		{
+		  distance = Pos[i] - Pos[j];
+		  force += (elm_coupling*(_theFragments[i]->GetZ()*_theFragments[j]->GetZ())/
+			    (distance.mag2()*distance.mag()))*distance;
 		}
 	    }
-	    Accel[i] = (1./(_theFragments[i]->GetNuclearMass()))*force;
+	  Accel[i] = (1./(_theFragments[i]->GetNuclearMass()))*force;
 	}
 
-	TimeN = TimeS + DeltaTime;
+      TimeN = TimeS + DeltaTime;
 	
-	G4ThreeVector SavedVel;
-	for ( i = 0; i < _NumOfChargedFragments; i++) {
-	    SavedVel = Vel[i];
-	    Vel[i] += Accel[i]*(TimeN-TimeS);
-	    Pos[i] += (SavedVel+Vel[i])*(TimeN-TimeS)*0.5;
+      G4ThreeVector SavedVel;
+      for ( i = 0; i < _NumOfChargedFragments; i++) 
+	{
+	  SavedVel = Vel[i];
+	  Vel[i] += Accel[i]*(TimeN-TimeS);
+	  Pos[i] += (SavedVel+Vel[i])*(TimeN-TimeS)*0.5;
 	}
+      
+      // 		if (Iterations >= 50 && Iterations < 75) DeltaTime = 4.;
+      // 		else if (Iterations >= 75) DeltaTime = 10.;
 
-	// 		if (Iterations >= 50 && Iterations < 75) DeltaTime = 4.;
-	// 		else if (Iterations >= 75) DeltaTime = 10.;
+      TimeS = TimeN;
 
-	TimeS = TimeN;
-
-    } while (Iterations++ < 100);
+    } 
+  while (Iterations++ < 100);
 	
-    // Summed fragment kinetic energy
-    G4double TotalKineticEnergy = 0.0;
-    for (i = 0; i < _NumOfChargedFragments; i++) TotalKineticEnergy += 
-						     _theFragments[i]->GetNuclearMass()*0.5*Vel[i].mag2();
-	
-    // Scaling of fragment velocities
-    G4double KineticEnergy = (3./2.)*G4double(_theFragments.size())*T;
-    G4double Eta = ( CoulombEnergy + KineticEnergy ) / TotalKineticEnergy;
-    for (i = 0; i < _NumOfChargedFragments; i++) Vel[i] *= Eta;
-	
-	
-    // Finally calculate fragments momenta
-    for (i = 0; i < _NumOfChargedFragments; i++) 
-	_theFragments[i]->SetMomentum(_theFragments[i]->GetNuclearMass()*Vel[i]);
-
-	
-    // garbage collection
-    delete [] Pos;
-    delete [] Vel;
-    delete [] Accel;
-
-    return;
+  // Summed fragment kinetic energy
+  G4double TotalKineticEnergy = 0.0;
+  for (i = 0; i < _NumOfChargedFragments; i++) 
+    {
+      TotalKineticEnergy += _theFragments[i]->GetNuclearMass()*
+	0.5*Vel[i].mag2();
+    }
+  // Scaling of fragment velocities
+  G4double KineticEnergy = (3./2.)*G4double(_theFragments.size())*T;
+  G4double Eta = ( CoulombEnergy + KineticEnergy ) / TotalKineticEnergy;
+  for (i = 0; i < _NumOfChargedFragments; i++) 
+    {
+      Vel[i] *= Eta;
+    }
+  
+  // Finally calculate fragments momenta
+  for (i = 0; i < _NumOfChargedFragments; i++) 
+    {
+      _theFragments[i]->SetMomentum(_theFragments[i]->GetNuclearMass()*Vel[i]);
+    }
+  
+  // garbage collection
+  delete [] Pos;
+  delete [] Vel;
+  delete [] Accel;
+  
+  return;
 }
 
 
@@ -402,20 +458,20 @@ G4ThreeVector G4StatMFChannel::RotateMomentum(G4ThreeVector Pa,
 					      G4ThreeVector V, G4ThreeVector P)
     // Rotates a 3-vector P to close momentum triangle Pa + V + P = 0
 {
-    G4ThreeVector U = Pa.unit();
+  G4ThreeVector U = Pa.unit();
   
-    G4double Alpha1 = U * V;
+  G4double Alpha1 = U * V;
   
-    G4double Alpha2 = sqrt(V.mag2() - Alpha1*Alpha1);
+  G4double Alpha2 = sqrt(V.mag2() - Alpha1*Alpha1);
 
-    G4ThreeVector N = (1./Alpha2)*U.cross(V);
-
-    G4ThreeVector RotatedMomentum(
-	( (V.x() - Alpha1*U.x())/Alpha2 ) * P.x() + N.x() * P.y() + U.x() * P.z(),
-	( (V.y() - Alpha1*U.y())/Alpha2 ) * P.x() + N.y() * P.y() + U.y() * P.z(),
-	( (V.z() - Alpha1*U.z())/Alpha2 ) * P.x() + N.z() * P.y() + U.z() * P.z()
-	);
-    return RotatedMomentum;
+  G4ThreeVector N = (1./Alpha2)*U.cross(V);
+  
+  G4ThreeVector RotatedMomentum(
+				( (V.x() - Alpha1*U.x())/Alpha2 ) * P.x() + N.x() * P.y() + U.x() * P.z(),
+				( (V.y() - Alpha1*U.y())/Alpha2 ) * P.x() + N.y() * P.y() + U.y() * P.z(),
+				( (V.z() - Alpha1*U.z())/Alpha2 ) * P.x() + N.z() * P.y() + U.z() * P.z()
+				);
+  return RotatedMomentum;
 }
 
 

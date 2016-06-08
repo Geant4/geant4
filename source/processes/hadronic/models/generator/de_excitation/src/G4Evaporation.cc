@@ -21,37 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.7 2001/08/01 17:05:28 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Evaporation.cc,v 1.9 2002/06/18 16:37:57 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 
 #include "G4Evaporation.hh"
+#include "G4EvaporationFactory.hh"
+#include "G4EvaporationGEMFactory.hh"
+#include <numeric>
 
-#include "G4NeutronEvaporationChannel.hh"
-#include "G4ProtonEvaporationChannel.hh"
-#include "G4DeuteronEvaporationChannel.hh"
-#include "G4TritonEvaporationChannel.hh"
-#include "G4He3EvaporationChannel.hh"
-#include "G4AlphaEvaporationChannel.hh"
-#include "G4CompetitiveFission.hh"
-#include "G4PhotonEvaporation.hh"
 
-G4Evaporation::G4Evaporation() : myOwnChannelsVector(true)
+G4Evaporation::G4Evaporation() 
 {
-    theChannels = new G4std::vector<G4VEvaporationChannel*>;
-    theChannels->reserve(8);
-
-    theChannels->push_back( new G4NeutronEvaporationChannel() );  // n
-    theChannels->push_back( new G4ProtonEvaporationChannel() );   // p
-    theChannels->push_back( new G4DeuteronEvaporationChannel() ); // Deuteron
-    theChannels->push_back( new G4TritonEvaporationChannel() );   // Triton
-    theChannels->push_back( new G4He3EvaporationChannel() );      // He3
-    theChannels->push_back( new G4AlphaEvaporationChannel() );    // Alpha
-
-    theChannels->push_back( new G4CompetitiveFission() ); // Fission Channel
-    theChannels->push_back( new G4PhotonEvaporation() );  // Photon Channel
+  theChannelFactory = new G4EvaporationFactory();
+  theChannels = theChannelFactory->GetChannel();
 }
 
 G4Evaporation::G4Evaporation(const G4Evaporation &right)
@@ -62,14 +47,8 @@ G4Evaporation::G4Evaporation(const G4Evaporation &right)
 
 G4Evaporation::~G4Evaporation()
 {
-    if (myOwnChannelsVector) {
-	//    theChannels->clearAndDestroy();
-	while (!theChannels->empty()) {
-	    delete (theChannels->back());
-	    theChannels->pop_back();
-	}
-	delete theChannels;
-    }
+  if (theChannels != 0) theChannels = 0;
+  if (theChannelFactory != 0) delete theChannelFactory;
 }
 
 const G4Evaporation & G4Evaporation::operator=(const G4Evaporation &right)
@@ -87,6 +66,21 @@ G4bool G4Evaporation::operator==(const G4Evaporation &right) const
 G4bool G4Evaporation::operator!=(const G4Evaporation &right) const
 {
     return true;
+}
+
+
+void G4Evaporation::SetDefaultChannel()
+{
+  if (theChannelFactory != 0) delete theChannelFactory;
+  theChannelFactory = new G4EvaporationFactory();
+  theChannels = theChannelFactory->GetChannel();
+}
+
+void G4Evaporation::SetGEMChannel()
+{
+  if (theChannelFactory != 0) delete theChannelFactory;
+  theChannelFactory = new G4EvaporationGEMFactory();
+  theChannels = theChannelFactory->GetChannel();
 }
 
 
@@ -114,11 +108,14 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 	for (i=theChannels->begin(); i != theChannels->end(); i++) {
 	    (*i)->Initialize(theResidualNucleus);
 	}
+// Can't use this form beacuse Initialize is a non const member function
+//  	for_each(theChannels->begin(),theChannels->end(),
+//  		 bind2nd(mem_fun(&G4VEvaporationChannel::Initialize),theResidualNucleus));
 	// Work out total decay probability by summing over channels 
-	G4double TotalProbability = 0;
-	for (i=theChannels->begin(); i != theChannels->end(); i++) {
-	    TotalProbability += (*i)->GetEmissionProbability();
-	}
+  	G4double TotalProbability =  G4std::accumulate(theChannels->begin(),
+						       theChannels->end(),
+						       0.0,SumProbabilities());
+
 	if (TotalProbability <= 0.0) {
 	    // Will be no evaporation more
 	    // write information about residual nucleus
@@ -156,14 +153,11 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 		G4FragmentVector * theEvaporationResult = (*theChannels)[j]->BreakUp(theResidualNucleus);
 
 #ifdef debug
-		G4cout <<           "---------------------------------------------" 
-		       << G4endl;
-		G4cout << G4endl << " After evaporate a particle test conservation " 
-		       << G4endl;
+		G4cout <<           "-----------------------------------------------------------\n"; 
+		G4cout << G4endl << " After the evaporation of a particle, testing conservation \n";
 		CheckConservation(theResidualNucleus,theEvaporationResult);
 		G4cout << G4endl 
-		       <<           "---------------------------------------------" 
-		       << G4endl;
+		       <<           "------------------------------------------------------------\n"; 
 #endif  
 
 		// Check if chosen channel is fission (there are only two EXCITED fragments)
@@ -171,35 +165,40 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 		if ( theEvaporationResult->size() == 1 || 
 		     ((*(theEvaporationResult->begin()))->GetExcitationEnergy() > 0.0 && 
 		      (*(theEvaporationResult->end()-1))->GetExcitationEnergy() > 0.0) ) {
-		    // FISSION 
-		    while (theEvaporationResult->size() > 0) {
-			theResult->push_back(*(theEvaporationResult->end()-1));
-			theEvaporationResult->pop_back();
+		  // FISSION 
+		  for (G4FragmentVector::iterator i = theEvaporationResult->begin();
+		       i != theEvaporationResult->end(); ++i) 
+		    {
+		      theResult->push_back(*(i));
 		    }
-		    if (theEvaporationResult->empty()) delete theEvaporationResult;
-		    else G4Exception("G4Evaporation.cc: deleting theEvaporationResult but is not empty after fission");
-		    break;
+		  delete theEvaporationResult;
+		  break;
 		} else {
-		    // EVAPORATION
-		    while (theEvaporationResult->size() > 1) {
-			theResult->push_back(*(theEvaporationResult->begin()));
-			theEvaporationResult->erase(theEvaporationResult->begin());
+		  // EVAPORATION
+		  for (G4FragmentVector::iterator i = theEvaporationResult->begin();
+		       i != theEvaporationResult->end()-1; ++i) 
+		    {
+#ifdef pctest
+		      if ((*i)->GetA() == 0) (*i)->SetCreatorModel(G4String("G4PhotonEvaporation"));
+#endif
+		      theResult->push_back(*(i));
 		    }
-		    theResidualNucleus = **(theEvaporationResult->begin());
-		    delete *(theEvaporationResult->begin());
-		    theEvaporationResult->pop_back();
-		    if (theEvaporationResult->empty()) delete theEvaporationResult;
-		    else G4Exception("G4Evaporation.cc: deleting theEvaporationResult but is not empty after evaporation");
+		  theResidualNucleus = *(theEvaporationResult->back());
+		  delete theEvaporationResult->back();
+		  delete theEvaporationResult;
+#ifdef pctest
+		  theResidualNucleus.SetCreatorModel(G4String("ResidualNucleus"));
+#endif
 		}
 	    }
 	}
     }
-
+    
 #ifdef debug
-    G4cout << "======== Evaporation Conservation Test ===========" << G4endl 
-	   << "==================================================" << G4endl;
+    G4cout << "======== Evaporation Conservation Test ===========\n"
+	   << "==================================================\n";
     CheckConservation(theNucleus,theResult);
-    G4cout << "==================================================" << G4endl;
+    G4cout << "==================================================\n";
 #endif
     return theResult;
 }

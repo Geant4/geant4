@@ -76,6 +76,8 @@ G4double DMXMaxTimeCuts::PostStepGetPhysicalInteractionLength(
 
    // can apply cuts for specific particles - use if(particleDef):
    //   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
+
+   //   G4cout << " Time: " << pUserLimits->GetUserMaxTime(aTrack) << G4endl;
   
    if (pUserLimits) {
      G4double temp = DBL_MAX;

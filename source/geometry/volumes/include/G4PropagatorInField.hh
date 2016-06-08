@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.20 2001/12/08 00:07:23 japost Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PropagatorInField.hh,v 1.22 2002/04/19 08:22:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // class G4PropagatorInField 
@@ -70,7 +70,7 @@ class G4PropagatorInField
 			G4FieldManager *detectorFieldMgr);
 
    G4PropagatorInField( G4Navigator   *theNavigator );
-  ~G4PropagatorInField(){};
+  ~G4PropagatorInField();
 
    G4double ComputeStep(G4FieldTrack  &pFieldTrack,
  			G4double pCurrentProposedStepLength,
@@ -137,6 +137,9 @@ class G4PropagatorInField
      // Minimum for Relative accuracy of any Step 
    inline G4double  GetMinimumEpsilonStep() const;
    inline void      SetMinimumEpsilonStep(G4double newEpsMin);
+
+   inline G4double  GetMaximumEpsilonStep() const;
+   inline void      SetMaximumEpsilonStep(G4double newEpsMax);
 
    inline void      SetLargestAcceptableStep(G4double newBigDist);
    inline G4double  GetLargestAcceptableStep();

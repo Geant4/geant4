@@ -1,4 +1,4 @@
-$Id: History,v 1.48 2001/12/04 17:42:29 gcosmo Exp $
+$Id: History,v 1.60 2002/06/07 18:30:29 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,77 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jun   7th, 2002   J. Apostolakis - field-V04-00-04
+--------------------------------
+ - G4Mag_SpinEqRhs.cc
+    o Fix to momentum component of Rhs.
+
+May  31st, 2002   J. Apostolakis - field-V04-00-03
+--------------------------------
+ - G4MagHelicalStepper.icc
+    o Fix to LinearStep (correcting previous fix/cosmetic)
+ - G4ChordFinder.cc
+    o Corrective behaviour for very small or large changes of 'new step'
+       [observed in complex 3-d fields (purging magnet),  or
+                    approximate equations of motion ]
+ - G4MagIntegratorDriver
+    o More information in debug printing (tangent cosine, norm)
+
+
+May   7th, 2002   J. Apostolakis - field-V04-00-02
+--------------------------------
+ Tag including only two changes below:
+  - Putting aside the other fixes/changes (as the one above) to 
+G4MagIntegratorDriver, tagging only the fix to update the field track 
+for steps smaller than the chord finder's minstep.
+
+May   7th, 2002   J. Apostolakis
+--------------------------------
+- G4MagIntegratorDriver  -  **  branch ** on 1.20 **
+  * Fix to update the field track for steps smaller than the chord finder's 
+minstep. 
+
+May   7th, 2002   J. Apostolakis
+--------------------------------
+- G4MagIntegratorStepper
+  * Changed RightHandSide from a virtual method to an inline (non-virtual) 
+      method -- it is not and should not be changed by derived classes.
+
+Mar 28th, 2002  J. Apostolakis - field-V04-00-01
+-----------------------
+- Fixed LinearStep in G4MagHelicalStepper (expected unit direction), 
+    that had not been updated for new integration variable (momentum).
+    --> found in testing helical steppers in BaBar setup, 
+         in region of negligible field.
+
+- Changed maximum number of steps in driver, 
+    halving from 500/order to 250/order.
+
+Mar 28th, 2002  J. Apostolakis
+-----------------------
+- Committed directory "OtherField" with examples of fields,
+    Delphi, Quadropole etc.
+
+- Updated outputs of testPropagateMagField for new version of source,
+    that has 3rd test case.
+
+- Added new runs and outputs for testProElectroMagField, with 
+    several steppers, and modified test script test.sh accordingly.
+
+
+Feb  2nd, 2002   V. Grichine
+------------------------
+Update of test/field02 to utilise new features 
+  - for Electric Field, to signal that a field modifies the energy;
+  - updating of time by integration, for time dependent fields.
+
+Jan 10th, 2002  G. Cosmo - field-V04-00-00
+------------------------
+- Activated G4DEBUG_FIELD in GNUmakefile.
+
+Jan 7th, 2002  J. Apostolakis
+-----------------------------
+- G4MagHelicalStepper.cc: renamed local variables "*Momentum*" to "*Velocity*".
 
 Dec 4th, 2001  G. Cosmo - field-V03-02-08
 -----------------------
@@ -239,6 +310,12 @@ Jun 2nd, 2000  J. Apostolakis
 - G4FieldManager[.hh.icc]
   o Added DeltaIntersection and DeltaOneStep to FieldManager: added
     Get/Set methods and SetAccuraciesWithDeltaOneStep().
+
+May 31st, 2000  J. Apostolakis - field-V01-01-03
+
+include/G4FieldManager.hh,icc
+  o Moved Delta Intersection and Delta One Step to FieldManager
+     (from Propagator in Field),  to allow them to differ over the detector.
 
 May 11th, 2000  J. Apostolakis - field-V01-01-02
 

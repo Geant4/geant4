@@ -42,7 +42,7 @@
     G4LENeutronInelastic() : G4InelasticInteraction()
     {
       SetMinEnergy( 0.0 );
-      SetMaxEnergy( 25.*GeV );
+      SetMaxEnergy( 55.*GeV );
     }
     
     ~G4LENeutronInelastic()

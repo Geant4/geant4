@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2Viewer.hh,v 1.6 2001/09/18 07:53:08 stanaka Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VRML2Viewer.hh,v 1.7 2002/06/23 03:31:43 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // G4VRML2Viewer.hh
 // Satoshi Tanaka & Yasuhide Sawada
+
+#ifndef WIN32
 
 #ifdef  G4VIS_BUILD_VRML_DRIVER
 
@@ -61,3 +63,4 @@ private:
 
 #endif //G4VRML2_VIEW_HH
 #endif //G4VIS_BUILD_VRML_DRIVER
+#endif //WIN32

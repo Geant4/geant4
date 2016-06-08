@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.23 2001/11/23 11:45:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4eLowEnergyLoss.cc,v 1.28 2002/06/03 00:07:18 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -54,6 +54,8 @@
 // 24/10/01  MGP - Protection against negative energy loss in AlongStepDoIt
 // 26/10/01  VI Clean up access to deexcitation 
 // 23/11/01  VI Move static member-functions from header to source
+// 28/05/02  VI Remove flag fStopAndKill
+// 03/06/02  MGP - Restore fStopAndKill
 //
 // --------------------------------------------------------------
  
@@ -125,7 +127,8 @@ G4eLowEnergyLoss::G4eLowEnergyLoss(const G4String& processName)
      RecorderOfProcess(0),
      fdEdx(0),
      fRangeNow(0),
-     linLossLimit(0.05)
+     linLossLimit(0.05),
+     theFluo(false)
 {
  
  //create (only once) EnergyLoss messenger 
@@ -438,8 +441,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if (finalT <= 0. )
   {
     finalT = 0.;
-    if (Charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
-    else             aParticleChange.SetStatusChange(fStopButAlive); 
+    aParticleChange.SetStatusChange(fStopAndKill); 
   } 
 
   G4double edep = E - finalT;
@@ -447,11 +449,11 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   aParticleChange.SetEnergyChange(finalT);  
   
   // Deexcitation of ionised atoms
-  G4std::vector<G4DynamicParticle*>* deexcitationProducts = 
-                                     DeexciteAtom(aMaterial,E,edep);
+  G4std::vector<G4DynamicParticle*>* deexcitationProducts = 0;
+  if (theFluo) deexcitationProducts = DeexciteAtom(aMaterial,E,edep);
 
-
-  size_t nSecondaries = deexcitationProducts->size();
+  size_t nSecondaries = 0;    
+  if (deexcitationProducts != 0) nSecondaries = deexcitationProducts->size();
   aParticleChange.SetNumberOfSecondaries(nSecondaries);
   
   if (nSecondaries > 0) {

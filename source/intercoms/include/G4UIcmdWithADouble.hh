@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADouble.hh,v 1.4 2001/07/11 10:01:12 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4UIcmdWithADouble.hh,v 1.5 2002/04/26 22:03:35 asaim Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 
@@ -43,7 +43,7 @@ class G4UIcmdWithADouble : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
-    G4double GetNewDoubleValue(G4String paramString);
+    G4double GetNewDoubleValue(const char* paramString);
     //  Convert string which represents a double value to a double.
     G4String ConvertToString(G4double dblValue);
     //  Convert a double value to a string. This method must be used by 

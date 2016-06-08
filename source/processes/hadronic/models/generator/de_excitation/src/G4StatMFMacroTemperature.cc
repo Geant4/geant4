@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc,v 1.8 2001/08/01 17:05:34 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMacroTemperature.cc,v 1.9 2002/06/06 17:57:43 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -91,6 +91,7 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
 
     G4Solver<G4StatMFMacroTemperature> * theSolver = new G4Solver<G4StatMFMacroTemperature>(100,1.e-4);
     theSolver->SetIntervalLimits(Ta,Tb);
+    //    if (!theSolver->Crenshaw(*this)) 
     if (!theSolver->Brent(*this)) 
 	G4Exception("G4StatMFMacroTemperature::CalcTemperature: I couldn't find the root.");
     _MeanTemperature = theSolver->GetRoot();
@@ -116,19 +117,21 @@ G4double G4StatMFMacroTemperature::FragsExcitEnergy(const G4double T)
 
     // Average total fragment energy
     G4double AverageEnergy = 0.0;
-    G4int i;
-    for (i = 0; i < theA; i++) AverageEnergy += 
-				   _theClusters->operator[](i)->GetMeanMultiplicity()*
-				   _theClusters->operator[](i)->CalcEnergy(T);
-
-
+    G4std::vector<G4VStatMFMacroCluster*>::iterator i;
+    for (i =  _theClusters->begin(); i != _theClusters->end(); ++i) 
+      {
+	AverageEnergy += (*i)->GetMeanMultiplicity() * (*i)->CalcEnergy(T);
+      }
+    
     // Add Coulomb energy			
     AverageEnergy += (3./5.)*elm_coupling*theZ*theZ/R;		
-
+    
     // Calculate mean entropy
     _MeanEntropy = 0.0;
-    for (i = 0; i < theA; i++) _MeanEntropy +=
-				   _theClusters->operator[](i)->CalcEntropy(T,FreeVol);	
+    for (i = _theClusters->begin(); i != _theClusters->end(); ++i) 
+      {
+	_MeanEntropy += (*i)->CalcEntropy(T,FreeVol);	
+      }
 
     // Excitation energy per nucleon
     G4double FragsExcitEnergy = AverageEnergy - _FreeInternalE0;

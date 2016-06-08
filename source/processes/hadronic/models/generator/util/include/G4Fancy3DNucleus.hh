@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.hh,v 1.9 2001/10/04 20:00:32 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Fancy3DNucleus.hh,v 1.10 2002/04/24 13:10:50 gunter Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1
@@ -81,6 +81,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void DoLorentzContraction(const G4ThreeVector & theBeta);
       void CenterNucleons();
       void DoTranslation(const G4ThreeVector & theShift);
+      const G4VNuclearDensity * GetNuclearDensity() const;
       
   private:
   

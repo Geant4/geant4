@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.34 2001/11/29 22:47:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4LowEnergyIonisation.hh,v 1.36 2002/06/01 03:14:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: A. Forti
 //
@@ -35,6 +35,7 @@
 // 18 Oct 2001  M.G. Pia        Revision to improve code quality and 
 //                              consistency with design
 // 29 Nov 2001  V.Ivanchenko    New parametrisation of EEDL data
+// 31 May 2002  V.Ivanchenko    Add Auger flag
 //
 // -------------------------------------------------------------------
 
@@ -46,7 +47,7 @@
 
 // --------------------------------------------------------------
 
-#ifndef G4lOWENERGYIONISATION_HH
+#ifndef G4LOWENERGYIONISATION_HH
 #define G4LOWENERGYIONISATION_HH 1
 
 #include "G4eLowEnergyLoss.hh"
@@ -83,6 +84,8 @@ public:
   void SetCutForLowEnSecPhotons(G4double cut);
 
   void SetCutForLowEnSecElectrons(G4double cut);
+
+  void ActivateAuger(G4bool val);
     
 protected:
  

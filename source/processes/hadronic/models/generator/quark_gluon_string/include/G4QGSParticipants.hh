@@ -35,12 +35,11 @@
 
 class G4QGSParticipants : public G4VParticipants
 {
-    enum  { SOFT, HARD, DIFFRACTIVE };
   public:
     G4QGSParticipants();
     G4QGSParticipants(const G4QGSParticipants &right);
     const G4QGSParticipants & operator=(const G4QGSParticipants &right);
-    ~G4QGSParticipants(); 
+    virtual ~G4QGSParticipants(); 
 
     int operator==(const G4QGSParticipants &right) const;
     int operator!=(const G4QGSParticipants &right) const;
@@ -55,12 +54,13 @@ class G4QGSParticipants : public G4VParticipants
     void BuildInteractions(const G4ReactionProduct  &thePrimary);
     void StartPartonPairLoop();
 
-      private:
-    void SplitHadrons(); 
+  protected:
+    virtual G4VSplitableHadron* SelectInteractions(const G4ReactionProduct  &thePrimary);
+	void SplitHadrons(); 
     void PerformSoftCollisions();
     void PerformDiffractiveCollisions();
       
-  private:
+  protected:
     struct DeleteInteractionContent {void operator()(G4InteractionContent*aC){delete aC;}};
     G4std::vector<G4InteractionContent*> theInteractions;
     struct DeleteSplitableHadron{void operator()(G4VSplitableHadron*aS){delete aS;}};
@@ -75,8 +75,9 @@ class G4QGSParticipants : public G4VParticipants
  
     G4ThreeVector theBoost;
 
-  private:
+  protected:
     // model parameters HPW
+    enum  { SOFT, DIFFRACTIVE };
     const G4int nCutMax; 
     const G4double ThersholdParameter; 
     const G4double QGSMThershold; 

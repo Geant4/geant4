@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIArrayString.cc,v 1.5 2001/11/26 19:15:08 asaim Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "g4std/iomanip"

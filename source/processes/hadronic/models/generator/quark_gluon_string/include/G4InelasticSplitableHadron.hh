@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticSplitableHadron.hh,v 1.4 2001/08/01 17:08:33 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4InelasticSplitableHadron.hh,v 1.5 2002/06/06 10:07:14 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef G4InelasticSplitableHadron_h

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ExcitedMesonConstructor.cc,v 1.10 2001/07/11 10:02:08 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // --------------------------------------------------------------

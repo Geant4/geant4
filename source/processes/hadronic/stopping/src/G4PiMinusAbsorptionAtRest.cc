@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.9 2001/10/19 11:55:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.10 2002/06/07 15:30:58 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -100,8 +100,8 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   // Get the current material
   const G4Material* material = track.GetMaterial();
 
-  G4double A;
-  G4double Z;
+  G4double A=-1;
+  G4double Z=-1;
   G4double random = G4UniformRand();
   const G4ElementVector* theElementVector = material->GetElementVector();
   unsigned int i;
@@ -124,7 +124,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
 
   // Do the interaction with the nucleon cluster
   
-  G4PiMinusStopMaterial* algorithm = LoadAlgorithm(Z);
+  G4PiMinusStopMaterial* algorithm = LoadAlgorithm(static_cast<G4int>(Z));
   G4PiMinusStopAbsorption stopAbsorption(algorithm,Z,A);
   stopAbsorption.SetVerboseLevel(verboseLevel);
 

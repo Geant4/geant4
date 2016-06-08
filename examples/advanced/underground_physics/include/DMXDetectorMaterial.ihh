@@ -1,0 +1,26 @@
+  G4Material*     world_mat;            // materials used
+  G4Material*       lab_mat;
+  G4Material*  cupboard_mat;
+  G4Material*      door_mat;
+  G4Material*      desk_mat;
+  G4Material*     crate_mat;
+  G4Material*     glass_mat;
+  G4Material*     panel_mat;
+  G4Material* LN2jacket_mat;
+  G4Material*       LN2_mat;
+  G4Material*    jacket_mat;
+  G4Material* jacketflange_mat;
+  G4Material*    vacuum_mat;
+  G4Material*    copper_mat;
+  G4Material*    vessel_mat;
+  G4Material*       GXe_mat;   
+  G4Material*       LXe_mat;
+  G4Material*  CuShield_mat;
+  G4Material*     alpha_mat;
+  G4Material* americium_mat;
+  G4Material*      ring_mat;
+  G4Material*    mirror_mat;
+  G4Material*      grid_mat;
+  G4Material*       pmt_mat;
+  G4Material*    window_mat;
+  G4Material*    phcath_mat;

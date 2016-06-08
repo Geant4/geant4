@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.8 2001/10/05 16:13:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FermiConfiguration.cc,v 1.9 2002/06/06 17:56:29 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -501,19 +501,20 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
     
 	G4FragmentVector * fragment = theListOfFragments[Index[i]-1]->GetFragment(FourMomentum);
     
-	do {
-	    theResult->push_back(*(fragment->end()-1));
-	    fragment->pop_back();
-	} while (!fragment->empty());
-    
+	for (G4FragmentVector::reverse_iterator ri = fragment->rbegin();
+	     ri != fragment->rend(); ++ri)
+	{
+	    theResult->push_back(*ri);
+	}
 	delete fragment;
     }
   
-    //  MomentumComponents->clearAndDestroy();
-    while (!MomentumComponents->empty()) {
-	delete MomentumComponents->back();
-	MomentumComponents->pop_back();
+    if (!MomentumComponents->empty())
+    {
+	G4std::for_each(MomentumComponents->begin(),MomentumComponents->end(),
+			DeleteFragment());
     }
+
     delete MomentumComponents;
   
     return theResult;

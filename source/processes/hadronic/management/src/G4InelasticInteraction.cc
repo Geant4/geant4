@@ -211,7 +211,7 @@
       const G4double tarmas = originalTarget->GetDefinition()->GetPDGMass()/GeV;
       if( ek > 1.0 )ekcor = 1./ek;
       const G4double atomicWeight = targetNucleus.GetN();
-      ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
+//      ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
       modifiedOriginal.SetKineticEnergy( ek*GeV );
       //
       // evaporation --  re-calculate black track energies

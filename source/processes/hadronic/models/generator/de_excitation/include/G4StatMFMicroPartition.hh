@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.hh,v 1.8 2001/08/01 17:04:49 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMicroPartition.hh,v 1.9 2002/06/18 14:13:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,7 +30,7 @@
 #ifndef G4StatMFMicroPartition_h
 #define G4StatMFMicroPartition_h 1
 
-#include  <vector>
+#include  "g4std/vector"
 
 #include "globals.hh"
 #include "G4StatMFParameters.hh"

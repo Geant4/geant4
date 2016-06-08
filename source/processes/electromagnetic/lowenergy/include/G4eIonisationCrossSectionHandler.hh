@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.hh,v 1.2 2001/10/10 17:37:27 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4eIonisationCrossSectionHandler.hh,v 1.4 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -47,7 +47,7 @@
 //
 
 #ifndef G4EIONISATIONCROSSSECTIONHANDLER_HH
-#define GG4EIONISATIONCROSSSECTIONHANDLER_HH 1
+#define G4EIONISATIONCROSSSECTIONHANDLER_HH 1
 
 #include "G4VCrossSectionHandler.hh"
 #include "globals.hh"
@@ -78,7 +78,11 @@ protected:
 
 private:
 
-  const G4VEnergySpectrum* theParam;
+  // Hide copy constructor and assignment operator 
+  G4eIonisationCrossSectionHandler& operator=(const G4eIonisationCrossSectionHandler& right);
+  G4eIonisationCrossSectionHandler(const G4eIonisationCrossSectionHandler&);
+
+ const G4VEnergySpectrum* theParam;
 
   G4VDataSetAlgorithm* interp;
 };

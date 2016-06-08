@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FoamXTRdEdx.cc,v 1.3 2001/09/18 09:02:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "g4std/complex"

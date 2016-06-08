@@ -20,16 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4MultipleScattering.icc,v 1.6 2001/09/13 11:00:19 urban Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4MultipleScattering.icc,v 1.7 2002/05/24 06:11:24 urban Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //------------ G4MultipleScattering physics process ---------------------------
 //              by Laszlo Urban, March 2001
 //
 // Modified:
 //
-// 18-05-01 V.Ivanchenko Clean up against Linux ANSI compilation 
+// 18-05-01 V.Ivanchenko Clean up against Linux ANSI compilation
 // 23-08-01 new angle and z distribution,energy dependence reduced,
 //          Store,Retrieve methods commented out temporarily, L.Urban
 // 27-08-01 bugfix in AlongStepDoIt, L.Urban

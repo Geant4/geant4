@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.hh,v 1.6 2001/08/01 17:04:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFFragment.hh,v 1.8 2002/06/07 15:30:55 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -64,11 +64,11 @@ public:
 	
 public:
 
-    G4double GetCoulombEnergy(void);
+    G4double GetCoulombEnergy(void) const;
 	
-    G4double GetEnergy(const G4double T);
+    G4double GetEnergy(const G4double T) const;
 	
-    G4double GetInvLevelDensity(void);
+    G4double GetInvLevelDensity(void) const;
 
     G4double GetA(void) const {return theA;}
 	
@@ -85,7 +85,8 @@ public:
     G4Fragment * GetFragment(const G4double T);
 	
     G4double GetNuclearMass(void)
-	{return G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theZ,theA);}
+	{return G4ParticleTable::GetParticleTable()->GetIonTable()
+	                       ->GetIonMass(static_cast<G4int>(theZ), static_cast<G4int>(theA));}
 	
 
 private:

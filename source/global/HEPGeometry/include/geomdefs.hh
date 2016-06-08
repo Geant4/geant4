@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: geomdefs.hh,v 1.4 2001/07/11 10:00:38 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: geomdefs.hh,v 1.5 2002/05/15 09:32:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -59,7 +59,8 @@ static const double kMinExitingNormalCosine = 1E-3;
 // Rho = Radial axis in cylindrical polar
 // Radial3D = Radial axis in spherical polar
 // Phi = Phi axis in cylindrical polar
-enum EAxis {kXAxis,kYAxis,kZAxis,kRho,kRadial3D,kPhi};
+// kUndefined = Not defined axis
+enum EAxis {kXAxis,kYAxis,kZAxis,kRho,kRadial3D,kPhi,kUndefined};
 
 // G4VSolid::Inside return codes
 // kSurface => within tolerance of exact surface

@@ -1,0 +1,23 @@
+$Id: History,v 1.2 2002/05/28 14:19:07 murakami Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example HepMCEx02 History file
+                    ----- ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+May. 28, 2002  K.Murakami
+- rename classes and filenames.
+
+April 15, 02 K.Murakami
+
+- Created.

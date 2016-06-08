@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em2PhysicsListMessenger.cc,v 1.3 2001/10/25 15:12:07 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 

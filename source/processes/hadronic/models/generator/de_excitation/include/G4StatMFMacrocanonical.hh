@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.hh,v 1.9 2001/10/06 08:32:27 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMacroCanonical.hh,v 1.10 2002/06/06 17:29:07 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -105,6 +105,16 @@ private:
 
     // Clusters
     G4std::vector<G4VStatMFMacroCluster*> _theClusters;
+
+  struct DeleteFragment 
+  {
+    template<typename T>
+    void operator()(const T* ptr) const
+    {
+      delete ptr;
+    }
+  };
+  
 
 };
 

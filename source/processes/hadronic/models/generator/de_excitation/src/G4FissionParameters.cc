@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc,v 1.7 2001/08/01 17:05:31 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FissionParameters.cc,v 1.8 2002/06/06 17:56:44 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -57,8 +57,7 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
     G4double FsymA1A2 = exp(-((As-(A1+A2)/2.0)*(As-(A1+A2)/2.0))/(2.0*SigmaS*SigmaS));
   
 
-    G4double wa;
-    G4double w1,w2;
+    G4double wa = 0.0;
     w = 0.0;
     if (Z >= 90) {         // Z >= 90
 	if (U <= 16.25) wa = exp(0.5385*U/MeV-9.9564);  // U <= 16.25 MeV
@@ -74,8 +73,8 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
     }
   
     if (w == 0.0) {
-	w1 = G4std::max(1.03*wa - FasymAsym, 0.0001);
-	w2 = G4std::max(1.0 - FsymA1A2*wa,   0.0001);
+	G4double w1 = G4std::max(1.03*wa - FasymAsym, 0.0001);
+	G4double w2 = G4std::max(1.0 - FsymA1A2*wa,   0.0001);
     
 	w = w1/w2;
 

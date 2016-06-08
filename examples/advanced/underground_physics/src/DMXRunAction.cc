@@ -33,6 +33,9 @@
 //               by A. Howard and H. Araujo 
 //                    (27th November 2001)
 //
+// History:
+// 17 Jan 2002 Alex Howard Added Analysis
+//
 // RunAction program
 // --------------------------------------------------------------
 
@@ -48,11 +51,19 @@
 #include "g4std/iomanip"
 #include "g4std/vector"
 
+#ifdef G4ANALYSIS_USE
+#include "DMXAnalysisManager.hh"
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXRunAction::DMXRunAction()
 {
   runMessenger = new DMXRunActionMessenger(this);
+  savehitsFile = "hits.out";
+  savepmtFile  = "pmt.out";
+  savehistFile = "dmx.his";
+  interactplot = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -60,6 +71,8 @@ DMXRunAction::DMXRunAction()
 DMXRunAction::~DMXRunAction()
 {
   delete runMessenger;
+  runMessenger = 0;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,14 +86,28 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
-  
-  
+
+#ifdef G4ANALYSIS_USE
+  // Book histograms and ntuples
+  DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
+  analysis->book(savehistFile);
+  //  analysis->PlotHistosInit();
+#endif
+    
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXRunAction::EndOfRunAction(const G4Run* aRun)
 {
+
+#ifdef G4ANALYSIS_USE
+  DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
+  analysis->PlotHistos(interactplot);
+  analysis->finish();
+#endif
+
   if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }

@@ -50,6 +50,29 @@ G4QGSParticipants::~G4QGSParticipants()
 
 void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary) 
 {
+  
+  // Find the collisions and collition conditions
+  G4VSplitableHadron* aProjectile = SelectInteractions(thePrimary);
+
+  // now build the parton pairs. HPW
+  SplitHadrons();
+  
+  // soft collisions first HPW, ordering is vital
+  PerformSoftCollisions();
+   
+  // the rest is diffractive HPW
+  PerformDiffractiveCollisions();
+  
+  // clean-up, if necessary
+  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  theInteractions.clear();
+  G4std::for_each(theTargets.begin(), theTargets.end(), DeleteSplitableHadron());
+  theTargets.clear();
+  delete aProjectile;
+}
+
+G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduct  &thePrimary)
+{
   G4VSplitableHadron* aProjectile = new G4QGSMSplitableHadron(thePrimary, TRUE); // @@@ check the TRUE
   G4PomeronCrossSection theProbability(thePrimary.GetDefinition()); // @@@ should be data member
   G4double outerRadius = theNucleus->GetOuterRadius();
@@ -160,21 +183,7 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
   }
 //--DEBUG--  cout << G4endl<<"CUTDEBUG "<< totalCuts <<G4endl;
 //--DEBUG--  cout << "Impact Parameter used = "<<impactUsed<<G4endl;
-  // now build the parton pairs. HPW
-  SplitHadrons();
-  
-  // soft collisions first HPW, ordering is vital
-  PerformSoftCollisions();
-   
-  // the rest is diffractive HPW
-  PerformDiffractiveCollisions();
-  
-  // clean-up, if necessary
-  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
-  theInteractions.clear();
-  G4std::for_each(theTargets.begin(), theTargets.end(), DeleteSplitableHadron());
-  theTargets.clear();
-  delete aProjectile;
+  return aProjectile;
 }
 
 void G4QGSParticipants::PerformDiffractiveCollisions()

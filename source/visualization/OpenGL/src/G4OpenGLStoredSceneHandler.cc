@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.13 2001/08/14 18:03:17 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.14 2002/02/24 01:48:11 johna Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -39,8 +39,6 @@
 // Also seems to be required for HP's CC and AIX xlC, at least.
 
 #include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4OpenGLStoredSceneHandler.hh"
 

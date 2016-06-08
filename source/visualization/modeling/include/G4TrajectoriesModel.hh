@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TrajectoriesModel.hh,v 1.7 2001/08/24 20:36:23 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // John Allison  26th August 1998.

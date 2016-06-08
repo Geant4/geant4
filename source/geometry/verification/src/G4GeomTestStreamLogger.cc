@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestStreamLogger.cc,v 1.4 2001/10/24 22:09:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4GeomTestStreamLogger.cc,v 1.5 2002/04/19 08:23:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -40,13 +40,15 @@
 #include "G4GeomTestOvershootList.hh"
 
 //
-// Constructor
+// Constructor and destructor
 //
 G4GeomTestStreamLogger::G4GeomTestStreamLogger( G4std::ostream &o,
                                                 G4int theMaxPointsPerError )
   : out(o), maxPointsPerError(theMaxPointsPerError)
 {;}
 
+G4GeomTestStreamLogger::~G4GeomTestStreamLogger()
+{;}
 
 //
 // ::PrintPos

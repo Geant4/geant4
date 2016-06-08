@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.42 2001/11/07 21:31:16 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.48 2002/06/14 17:39:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -45,12 +45,16 @@
 //   . no Fluorescence was simulated when the photo-electron energy
 //     was below production threshold.
 //
-// 07-09-99, if no e- emitted: edep=photon energy, mma
-// 24.04.01 V.Ivanchenko remove RogueWave 
+// 07-09-99,  if no e- emitted: edep=photon energy, mma
+// 24.04.01   V.Ivanchenko     remove RogueWave 
 // 12.08.2001 MGP              Revised according to a design iteration
 // 16.09.2001 E. Guardincerri  Added fluorescence generation
 // 06.10.2001 MGP              Added protection to avoid negative electron energies
 //                             when binding energy of selected shell > photon energy
+// 18.04.2001 V.Ivanchenko     Fix problem with low energy gammas from fluorescence
+//                             MeanFreePath is calculated by crosSectionHandler directly 
+// 31.05.2002 V.Ivanchenko     Add path of Fluo + Auger cuts to AtomicDeexcitation
+// 14.06.2002 V.Ivanchenko     By default do not cheak range of e-
 //                                  
 // --------------------------------------------------------------
 
@@ -72,7 +76,7 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
-#include "G4RangeTest.hh"
+#include "G4RangeNoTest.hh"
 #include "G4AtomicTransitionManager.hh"
 #include "G4AtomicShell.hh"
 
@@ -82,7 +86,8 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName), lowEnergyLimit(250*eV), highEnergyLimit(100*GeV),
     intrinsicLowEnergyLimit(10*eV),
     intrinsicHighEnergyLimit(100*GeV),
-    cutForLowEnergySecondaryPhotons(0.)
+    cutForLowEnergySecondaryPhotons(250.*eV),
+    cutForLowEnergySecondaryElectrons(250.*eV)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit || 
       highEnergyLimit > intrinsicHighEnergyLimit)
@@ -93,7 +98,7 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   crossSectionHandler = new G4CrossSectionHandler();
   shellCrossSectionHandler = new G4CrossSectionHandler();
   meanFreePathTable = 0;
-  rangeTest = new G4RangeTest;
+  rangeTest = new G4RangeNoTest;
 
   if (verboseLevel > 0) 
     {
@@ -161,7 +166,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   size_t shellIndex = shellCrossSectionHandler->SelectRandomShell(Z,photonEnergy);
 
   // Retrieve the corresponding identifier and binding energy of the selected shell
-  G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+  const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();
@@ -171,7 +176,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4std::vector<G4DynamicParticle*>* photonVector = 0;
   G4std::vector<G4DynamicParticle*> electronVector;
 
-  G4double energyDeposit = bindingEnergy;
+  G4double energyDeposit = 0.0;
 
   // Primary outcoming electron
   G4double eKineticEnergy = photonEnergy - bindingEnergy;
@@ -198,60 +203,71 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     }
   else
     {
-      energyDeposit = photonEnergy;
+      bindingEnergy = photonEnergy;
     }
-
 
   G4int nElectrons = electronVector.size();
   size_t nTotPhotons = 0;
   G4int nPhotons=0;
+  G4double cutg = G4std::min(cutForLowEnergySecondaryPhotons,
+                             G4Gamma::Gamma()->GetEnergyThreshold(material));
+  G4double cute = G4std::min(cutForLowEnergySecondaryElectrons,
+                             G4Electron::Electron()->GetEnergyThreshold(material));
+  G4DynamicParticle* aPhoton;  
 
   // Generation of fluorescence
   // Data in EADL are available only for Z > 5
   // Protection to avoid generating photons in the unphysical case of 
   // shell binding energy > photon energy
-  if (Z > 5  && eKineticEnergy > 0.)
+  if (Z > 5  && (bindingEnergy > cutg || bindingEnergy > cute))
     {
       photonVector = deexcitationManager.GenerateParticles(Z,shellId); 
       nTotPhotons = photonVector->size();
       for (size_t k=0; k<nTotPhotons; k++)
 	{
-	  G4DynamicParticle* aPhoton = (*photonVector)[k];
-	  if (aPhoton == 0)
+	  aPhoton = (*photonVector)[k];
+	  if (aPhoton)
 	    {
-	      delete aPhoton;
-	    }
-	  else
-	    {
-	      G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
-	      G4double eDepositTmp = energyDeposit - itsKineticEnergy;
-	      if (itsKineticEnergy >= cutForLowEnergySecondaryPhotons &&
-		 eDepositTmp > 0.)
+              G4double itsCut = cutg;
+              if(aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
+	      G4double itsEnergy = aPhoton->GetKineticEnergy();
+
+	      if (itsEnergy > itsCut && itsEnergy <= bindingEnergy)
 		{
 		  nPhotons++;
 		  // Local energy deposit is given as the sum of the 
 		  // energies of incident photons minus the energies
 		  // of the outcoming fluorescence photons
-		  energyDeposit -= itsKineticEnergy;
+		  bindingEnergy -= itsEnergy;
 		  
 		}
 	      else
-		{ delete aPhoton; }
+		{ 
+                  delete aPhoton; 
+                  (*photonVector)[k] = 0;
+                }
 	    }
 	}
     }
+
+  energyDeposit += bindingEnergy;
+
   G4int nSecondaries  = nElectrons + nPhotons;
-  
   aParticleChange.SetNumberOfSecondaries(nSecondaries);
-  
-  G4int l = 0;
-  for ( l = 0; l<nElectrons; l++ )
+
+  for (G4int l = 0; l<nElectrons; l++ )
     {
-      aParticleChange.AddSecondary(electronVector[l]);
+      aPhoton = electronVector[l];
+      if(aPhoton) {
+        aParticleChange.AddSecondary(aPhoton);
+      }
     }
-  for (l = 0; l < nPhotons; l++) 
+  for ( size_t ll = 0; ll < nTotPhotons; ll++) 
     {
-      aParticleChange.AddSecondary((*photonVector)[l]); 
+      aPhoton = (*photonVector)[ll];
+      if(aPhoton) {
+        aParticleChange.AddSecondary(aPhoton);
+      } 
     }
   
   delete photonVector;
@@ -287,19 +303,36 @@ G4double G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& track,
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
   G4Material* material = track.GetMaterial();
-  size_t materialIndex = material->GetIndex();
+  //  size_t materialIndex = material->GetIndex();
 
-  G4double meanFreePath;
-  if (energy > highEnergyLimit) 
-    meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
-  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
-  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
+  G4double meanFreePath = DBL_MAX;
+
+  //  if (energy > highEnergyLimit) 
+  //    meanFreePath = meanFreePathTable->FindValue(highEnergyLimit,materialIndex);
+  //  else if (energy < lowEnergyLimit) meanFreePath = DBL_MAX;
+  //  else meanFreePath = meanFreePathTable->FindValue(energy,materialIndex);
+
+  G4double cross = shellCrossSectionHandler->ValueForMaterial(material,energy);
+  if(cross > 0.0) meanFreePath = 1.0/cross;
+
   return meanFreePath;
 }
 
 void G4LowEnergyPhotoElectric::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForLowEnergySecondaryPhotons = cut;
+  deexcitationManager.SetCutForSecondaryPhotons(cut);
+}
+
+void G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(G4double cut)
+{
+  cutForLowEnergySecondaryElectrons = cut;
+  deexcitationManager.SetCutForAugerElectrons(cut);
+}
+
+void G4LowEnergyPhotoElectric::ActivateAuger(G4bool val)
+{
+  deexcitationManager.ActivateAugerElectronProduction(val);
 }
 
 

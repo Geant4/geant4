@@ -149,6 +149,9 @@ void XrayFluoPhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
      
       LePeprocess = new G4LowEnergyPhotoElectric();
+      //LePeprocess->ActivateAuger(false);
+      //LePeprocess->SetCutForLowEnSecPhotons(10000 * keV);
+      //LePeprocess->SetCutForLowEnSecElectrons(10000 * keV);
       pmanager->AddDiscreteProcess(LePeprocess);
 
       pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
@@ -158,6 +161,9 @@ void XrayFluoPhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
       LeIoprocess = new G4LowEnergyIonisation();
+      //LeIoprocess->ActivateAuger(false);
+      //LeIoprocess->SetCutForLowEnSecPhotons(10000 keV);
+      //LeIoprocess->SetCutForLowEnSecElectrons(10000 keV);
       pmanager->AddProcess(LeIoprocess, -1,  2, 2);
 
       LeBrprocess = new G4LowEnergyBremsstrahlung();

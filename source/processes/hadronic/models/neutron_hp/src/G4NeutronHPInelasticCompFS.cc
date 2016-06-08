@@ -60,7 +60,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
   gammaPath = tBase+gammaPath;
   G4String tString = dirName;
   G4bool dbool;
-  G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, tString, aFSType, dbool);
+  G4NeutronHPDataUsed aFile = theNames.GetName(static_cast<G4int>(A), static_cast<G4int>(Z), tString, aFSType, dbool);
   G4String filename = aFile.GetName();
   theBaseA = aFile.GetA();
   theBaseZ = aFile.GetZ();
@@ -192,7 +192,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     for(i=0; i<50; i++) if(theXsection[i] != NULL) break; 
     G4double targetMass=0;
     G4double eps = 0.0001;
-    targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(theBaseZ+eps, theBaseA+eps)) /
+    targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
                    G4Neutron::Neutron()->GetPDGMass();
 //    if(theEnergyAngData[i]!=NULL)
 //        targetMass = theEnergyAngData[i]->GetTargetMass();
@@ -209,7 +209,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     G4double residualMass=0;
     G4double residualZ = theBaseZ - aDefinition->GetPDGCharge();
     G4double residualA = theBaseA - aDefinition->GetBaryonNumber()+1;
-    residualMass = ( G4NucleiPropertiesTable::GetNuclearMass(residualZ+eps, residualA+eps) ) /
+    residualMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(residualZ+eps), static_cast<G4int>(residualA+eps)) ) /
                      G4Neutron::Neutron()->GetPDGMass();
 
 // prepare energy in target rest frame
@@ -451,7 +451,8 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
  
  	aHadron.Lorentz(aHadron, theTarget);
         G4ReactionProduct theResidual;   
-        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()->GetIon(residualZ, residualA, 0));  
+        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()
+	                          ->GetIon(static_cast<G4int>(residualZ), static_cast<G4int>(residualA), 0));  
         theResidual.SetKineticEnergy(aHadron.GetKineticEnergy()*aHadron.GetMass()/theResidual.GetMass());
         theResidual.SetMomentum(-1.*aHadron.GetMomentum());
 	theResidual.Lorentz(theResidual, -1.*theTarget);
@@ -482,7 +483,8 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       if(needsSeparateRecoil && residualZ!=0)
       {
         G4ReactionProduct theResidual;   
-        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()->GetIon(residualZ, residualA, 0));  
+        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()
+	                          ->GetIon(static_cast<G4int>(residualZ), static_cast<G4int>(residualA), 0));  
         G4double resiualKineticEnergy  = theResidual.GetMass()*theResidual.GetMass();
                  resiualKineticEnergy += totalMomentum*totalMomentum;
   	         resiualKineticEnergy  = sqrt(resiualKineticEnergy) - theResidual.GetMass();

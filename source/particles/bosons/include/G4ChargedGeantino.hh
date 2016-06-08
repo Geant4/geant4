@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ChargedGeantino.hh,v 1.8 2001/10/28 05:03:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------

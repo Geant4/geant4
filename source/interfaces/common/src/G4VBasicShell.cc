@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.8 2001/10/22 08:02:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VBasicShell.cc,v 1.9 2002/04/26 21:28:26 asaim Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "g4std/vector"
@@ -435,7 +435,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   {
     size_t ii = prefix.index("/",prefixIndex);
     floor[iFloor+1] = 
-      floor[iFloor]->GetTree(prefix(0,ii+1));
+      floor[iFloor]->GetTree(G4String(prefix(0,ii+1)));
     prefixIndex = ii+1;
     iFloor++;
   }

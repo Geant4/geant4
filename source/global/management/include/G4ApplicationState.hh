@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ApplicationState.hh,v 1.2 2001/07/11 10:00:49 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #ifndef G4APPLICATIONSTATE_H

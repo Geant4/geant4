@@ -1,0 +1,57 @@
+$Id: History,v 1.13 2002/06/04 12:04:20 dressel Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Jun  4th, 2002 M.Dressel - exbiasing-V04-00-07
+- update of exampleBXX.out files.
+- addition of example B08
+
+May 31th, 2002 M.Dressel - exbiasing-V04-00-06
+- change ...Manager to ...Sampler to be conform to transport-V04-00-06
+
+May 23th, 2002 M.Dressel - internal-1-exbiasing-V04-00-05
+- Update of README and ouput files after changes in G4ProcessPlacer in 
+  transportation
+
+May 15th, 2002 M.Asai - exbiasing-V04-00-05
+- Eliminated all UI commands from generator actions
+
+April 19th, 2002 G.Cosmo - exbiasing-V04-00-04
+- Added disclaimer of liability and minor cosmetics...
+
+April 12th, 2002 M.Dressel
+- Change class B06ImportanceDetectorConstruction.hh and exampleB06.cc.
+  B06ImportanceDetectorConstruction does not derive from 
+  G4UserDetectorConstruction, function Construct made private
+  and called in Constructor.
+
+April 8th, 2002  G.Cosmo - exbiasing-V04-00-03
+- Fixed usage of 'first'/'second' in iterators for porting
+  on DEC-cxx non-ISO.
+
+April 8th, 2002  M.Dressel - exbiasing-V04-00-02
+- Resolved compilation problems on HP-aCC.
+
+April 4th, 2002  M.Dressel - exbiasing-V04-00-01
+- Resolved compilation problems on SUN-CC and Linux-egcs.
+
+March 28th, 2002  M.Dressel - exbiasing-V04-00-00
+- First implementation of importance biasing and scoring user examples.
+
+March 25th, 2002  G.Cosmo
+- Created.

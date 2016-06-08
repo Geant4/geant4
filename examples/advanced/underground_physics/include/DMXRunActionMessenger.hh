@@ -44,6 +44,7 @@
 
 class DMXRunAction;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -56,8 +57,12 @@ class DMXRunActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DMXRunAction*   DMXRun;   
-    G4UIcmdWithAString* FileCmd;
+    DMXRunAction*   DMXRun;
+
+    G4UIcmdWithAString*   SaveHitsCmd;
+    G4UIcmdWithAString*   SavePmtCmd;
+    G4UIcmdWithAString*   SaveHistFileCmd;
+    G4UIcmdWithABool*     InteractPlotCmd;
 };
 
 #endif

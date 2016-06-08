@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.19 2001/11/08 15:31:06 radoone Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VMuEnergyLoss.cc,v 1.22 2002/05/29 12:26:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
@@ -46,6 +46,9 @@
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // 29-10-01 all static functions no more inlined (mma) 
 // 08-11-01 some small cosmetics , L.Urban
+// 06-02-02 bug fixed at subcutoff definition, L.Urban
+// 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
+// 29-05-02 bug fixed in N of subcutoff delta, V.Ivanchenko
 // --------------------------------------------------------------
  
 
@@ -344,15 +347,6 @@ void G4VMuEnergyLoss::BuildDEDXTable(
       LowerBoundEloss, UpperBoundEloss, 1.,NbinEloss);
 
 
-   // create array for the min. delta cuts in kinetic energy
-    if(!setMinDeltaCutInRange) {
-      MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[0];
-      for (size_t idxMate=1; idxMate<G4Material::GetNumberOfMaterials(); idxMate++){
-	if(MinDeltaCutInRange > (G4Electron::Electron()->GetLengthCuts())[idxMate])
-	  MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[idxMate];
-      }
-      MinDeltaCutInRange *= 0.01;
-    }
  // if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
  // {
  //   G4cout << G4endl;
@@ -372,6 +366,10 @@ void G4VMuEnergyLoss::BuildDEDXTable(
     for(G4int mat=0; mat<numOfMaterials; mat++)
     {
       LowerLimitForced[mat] = false ;
+
+     // create array for the min. delta cuts in kinetic energy
+     if(!setMinDeltaCutInRange)
+        MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[mat]/10.;
 
       MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                             G4Electron::Electron(),MinDeltaCutInRange,
@@ -628,7 +626,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
         G4double deldedx=cN*aMaterial->GetDensity()*
                          ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass))) ;
         G4double delToverTc=1.-T0/Tc ;
-        G4double N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5) ;
+        G4int N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5) ;
         if(N > Ndeltamax) N = Ndeltamax ;
  
         G4double Px,Py,Pz ;
@@ -715,7 +713,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
                G4Track* deltaTrack =
                         new G4Track(theDelta,DeltaTime,DeltaPosition);
                deltaTrack->
-                   SetTouchableHandle(stepData.GetPostStepPoint()->GetTouchableHandle()) ;
+                   SetTouchableHandle(stepData.GetPreStepPoint()->GetTouchableHandle()) ;
 
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
                aParticleChange.AddSecondary(deltaTrack) ;

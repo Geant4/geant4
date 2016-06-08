@@ -29,6 +29,7 @@
 // History:
 // -----------
 //  21 Sept 2001  Elena Guardincerri   Created
+//  25 Mar  2002  V.Ivanchenko         Change AverageNOfIonisations int->double 
 //
 // -------------------------------------------------------------------
 
@@ -43,7 +44,6 @@
 
 #include "globals.hh"
 #include "g4std/vector"
-//#include "g4std/map"
 
 class G4VEMDataSet;
 class G4Material;
@@ -64,13 +64,12 @@ public:
   
 private:
   
-  G4int AverageNOfIonisations(const G4Material* material,
-			      const G4Element* element, 
-			      G4double energy, 
-			      G4double eLoss) const;
+  G4double AverageNOfIonisations(const G4Material* material,
+			               G4int index, 
+			               G4double energy, 
+			               G4double eLoss) const;
   
   G4std::vector<G4VEMDataSet*> xsis;
-  
 };
 
 #endif

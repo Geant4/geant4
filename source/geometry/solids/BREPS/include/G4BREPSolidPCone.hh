@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPCone.hh,v 1.6 2001/07/11 09:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4BREPSolidPCone.hh,v 1.9 2002/01/22 22:43:01 radoone Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPCone
@@ -119,6 +119,13 @@ public:
     // Creates a G4Polyhedron
 
 private:
+  
+  G4Surface* ComputePlanarSurface( G4double r1, G4double r2,
+                                   G4ThreeVector& origin,
+                                   G4ThreeVector& planeAxis,
+                                   G4ThreeVector& planeDirection,
+                                   G4int surfSense );
+    // For a given radius values compute a planar surface
 
   G4BREPSolidPCone(const G4BREPSolidPCone&);
   G4BREPSolidPCone& operator=(const G4BREPSolidPCone&);

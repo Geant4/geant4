@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiBreakUp.cc,v 1.6 2001/08/01 17:05:30 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4FermiBreakUp.cc,v 1.7 2002/01/15 12:30:31 vlara Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -98,7 +98,12 @@ G4FragmentVector * G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
 
     // Get the fragments corresponding to chosen configuration.
     G4FragmentVector * theResult = theConfiguration.GetFragments(theNucleus);
-
+#ifdef pctest
+    for (G4FragmentVector::iterator i = theResult->begin(); i != theResult->end(); i++)
+    {
+	(*i)->SetCreatorModel("G4FermiBreakUp");
+    }
+#endif
     return theResult;
 	
 }

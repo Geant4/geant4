@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th March 2002 Peter Gumplinger (op-V04-00-01)
+                Add public inline method GetStatus and make enum 
+                G4OpBoundaryProcessStatus public in G4OpBoundaryProcess.hh
 18th October 2001 Peter Gumplinger (op-V03-02-01)
               Avoid warnings on Linux (gcc-2.95.2) compiler
 - G4OpRayleigh.cc: remove unused variable 'aMaterial' in PostStepDoIt and

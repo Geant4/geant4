@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PRun.cc,v 1.7 2001/07/11 10:02:27 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "G4Run.hh"

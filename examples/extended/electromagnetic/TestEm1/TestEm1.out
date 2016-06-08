@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-04-00 $
-                                (14-Dec-2001)
+ Geant4 version $Name: geant4-04-01 $
+                                (28-Feb-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -17,12 +17,12 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 #
-/calor/cutG 2.20 mm
-/calor/cutE 6.05 mum
+/run/particle/setGCut 2.20 mm
+/run/particle/setECut 6.05 mum
 # 
 /run/initialize
 
-***** Table : Nb of materials = 9 *****
+***** Table : Nb of materials = 11 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -44,27 +44,31 @@ Current available graphics systems are:
  Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
    --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
+ Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
+   --->  Element: Germanium      Z = 32.0   N =  72.6   A =  72.61 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten      Z = 74.0   N = 183.8   A = 183.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.861 mm 
-   --->  Element:  Uranium      Z = 82.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+ Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
+   --->  Element:  Uranium      Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 
  The Box is 20 m   of Aluminium
-Em1PhysicsList::SetCuts:CutLength : 1 (mm)
 
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from Sandia parametrisation. 
+Em1PhysicsList::SetCuts:CutLength : 1 mm 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -125,7 +129,9 @@ Cut in range
         liquidArgon         2.2 mm         6.05 mum
           Aluminium         2.2 mm         6.05 mum
             Silicon         2.2 mm         6.05 mum
+          Germanium         2.2 mm         6.05 mum
                Iron         2.2 mm         6.05 mum
+           Tungsten         2.2 mm         6.05 mum
                Lead         2.2 mm         6.05 mum
             Uranium         2.2 mm         6.05 mum
 Cut in energy
@@ -135,9 +141,11 @@ Cut in energy
         liquidArgon        9.08 keV        3.98 keV
           Aluminium        9.99 keV        9.97 keV
             Silicon          10 keV        8.45 keV
+          Germanium        31.6 keV        32.7 keV
                Iron        31.1 keV        43.3 keV
+           Tungsten         139 keV        59.7 keV
                Lead         124 keV        42.8 keV
-            Uranium         143 keV        53.4 keV
+            Uranium         188 keV        56.1 keV
 ===================================================
 #
 /process/eLoss/StepFunction 0.183 170 micrometer
@@ -164,18 +172,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=16s Real=19s Sys=2.6s
+  User=12s Real=23s Sys=2.8s
 
- nb tracks/event   neutral:   27.29   charged:  692.97
- nb  steps/event   neutral:  145.49   charged: 1331.63
+ nb tracks/event   neutral:    27.5700   charged:   695.0200
+ nb  steps/event   neutral:   148.5400   charged:  1331.6000
 
  nb of process calls per event: 
-       eIoni    eBrem    compt     phot     conv  annihil
-     1305.51    24.92   118.20    26.09     1.20     1.20
+          eIoni       eBrem        phot       compt        conv     annihil
+      1305.3700     24.8300     26.1700    120.9700      1.4000      1.4000
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 640041358, 1353064269
+ Current couple of seeds = 2126832091, 1419935556
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

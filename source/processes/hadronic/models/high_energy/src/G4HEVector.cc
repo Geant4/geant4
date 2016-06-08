@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.10 2001/10/04 20:00:34 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4HEVector.cc,v 1.11 2002/06/18 07:38:11 jwellisc Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //
 
@@ -652,9 +652,12 @@ G4HEVector::Sub3( const G4HEVector & p1, const G4HEVector & p2)
 void 
 G4HEVector::Cross( const G4HEVector & p1, const G4HEVector & p2)
    {
-     px = p1.py * p2.pz - p1.pz * p2.py;
-     py = p1.pz * p2.px - p1.px * p2.pz;
-     pz = p1.px * p2.py - p1.py * p2.px;
+     G4double tpx = p1.py * p2.pz - p1.pz * p2.py;
+     G4double tpy = p1.pz * p2.px - p1.px * p2.pz;
+     G4double tpz = p1.px * p2.py - p1.py * p2.px;
+     px=tpx;
+     py=tpy;
+     pz=tpz;
      return;
    }  
  

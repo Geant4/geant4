@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParticleWithCuts.cc,v 1.17 2001/10/28 05:08:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // --------------------------------------------------------------

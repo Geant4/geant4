@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.25 2001/12/08 00:07:24 japost Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PropagatorInField.icc,v 1.27 2002/04/19 08:22:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------------------
@@ -38,32 +38,6 @@
 //      the navigator to find (linear) intersections
 //     and ?? also must know the value of the maximum displacement allowed
 //
-
-inline
-G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator, 
-		                         G4FieldManager *detectorFieldMgr)
-  : fDetectorFieldMgr(detectorFieldMgr), 
-    fCurrentFieldMgr(detectorFieldMgr), 
-    fNavigator(theNavigator),
-    End_PointAndTangent(G4ThreeVector(0.,0.,0.),
-			G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
-    fVerboseLevel(0),
-    fEpsilonMin(fEpsilonMinDefault),
-    fEpsilonMax(fEpsilonMaxDefault),  
-    fmax_loop_count(10000),
-    fNoZeroStep(0)
-{
-     // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
-
-     fActionThreshold_NoZeroSteps= 2; 
-     fSevereActionThreshold_NoZeroSteps= 10; 
-     fAbandonThreshold_NoZeroSteps= 50; 
-     // fMidPoint_CurveLen_of_LastAttempt= -1;
-     fFull_CurveLen_of_LastAttempt= -1; 
-     fLast_ProposedStepLength= -1; 
-
-     fLargestAcceptableStep= 1000.0 * meter;
-}
 
 inline
 G4ChordFinder* G4PropagatorInField::GetChordFinder()
@@ -189,8 +163,25 @@ G4double  G4PropagatorInField::GetMinimumEpsilonStep() const
 inline 
 void      G4PropagatorInField::SetMinimumEpsilonStep(G4double newEpsMin)
 {
-  if( (newEpsMin > 0.0) && (fabs(1.0+newEpsMin)>1.0) )
+  if(    (newEpsMin > 0.0) 
+      && (fabs(1.0+newEpsMin)>1.0) )
     fEpsilonMin= newEpsMin;
+}
+
+// Maximum for Relative accuracy of any Step 
+inline 
+G4double  G4PropagatorInField::GetMaximumEpsilonStep() const
+{
+  return fEpsilonMax; 
+}
+
+inline 
+void      G4PropagatorInField::SetMaximumEpsilonStep(G4double newEpsMax)
+{
+  if(    (newEpsMax > 0.0) 
+      && (newEpsMax >= fEpsilonMin ) 
+      && (fabs(1.0+newEpsMax)>1.0) )
+    fEpsilonMax= newEpsMax;
 }
 
 inline void      G4PropagatorInField::SetLargestAcceptableStep(G4double newBigDist)

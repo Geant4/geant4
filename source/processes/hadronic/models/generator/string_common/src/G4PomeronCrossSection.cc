@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PomeronCrossSection.cc,v 1.7 2001/11/13 14:58:16 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 
 #include "G4PomeronCrossSection.hh"

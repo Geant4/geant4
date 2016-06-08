@@ -145,9 +145,17 @@ G4VPhysicalVolume* ExN06DetectorConstruction::Construct()
            3000.0*cm, 2850.0*cm, 2700.0*cm, 2450.0*cm, 2200.0*cm, 1950.0*cm,
            1750.0*cm, 1450.0*cm };
 
+  G4double SCINTILLATION[NUMENTRIES] =
+            { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
+              1.00, 1.00, 1.00, 1.00 };
+
   G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
   myMPT1->AddProperty("RINDEX", PPCKOV, RINDEX1, NUMENTRIES);
   myMPT1->AddProperty("ABSLENGTH",PPCKOV, ABSORPTION1, NUMENTRIES);
+  myMPT1->AddProperty("SCINTILLATION",PPCKOV, SCINTILLATION, NUMENTRIES);
   Water->SetMaterialPropertiesTable(myMPT1);
 
   G4MaterialPropertiesTable *myMPT2 = new G4MaterialPropertiesTable();

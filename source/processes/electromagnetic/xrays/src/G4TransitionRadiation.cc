@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TransitionRadiation.cc,v 1.3 2001/07/11 10:03:42 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // G4TransitionRadiation class -- implementation file
 

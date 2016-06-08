@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4KineticTrackVector.hh,v 1.6 2001/10/04 20:00:33 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 
 // Modified at 8-Oct-1998 by Maxim Komogorov. Methods BoostBeam,Boost,Shift
 // were added.

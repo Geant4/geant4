@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.hh,v 1.8 2001/10/10 14:58:11 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: ExN03PhysicsList.hh,v 1.10 2002/03/08 10:48:30 maire Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 
@@ -50,15 +50,7 @@ class ExN03PhysicsList: public G4VUserPhysicsList
  
     void SetCuts();
 
-  public:
-    // Set/Get cut values 
-    void      SetCutForGamma(G4double);
-    void      SetCutForElectron(G4double);
-    void      SetCutForProton(G4double);           
-    G4double  GetCutForGamma() const;
-    G4double  GetCutForElectron() const;
-    G4double  GetCutForProton() const;
-    
+   
   protected:
     // these methods Construct particles 
     void ConstructBosons();
@@ -67,15 +59,9 @@ class ExN03PhysicsList: public G4VUserPhysicsList
     void ConstructBaryons();
 
   protected:
-  // these methods Construct physics processes and register them
+    // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
-
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForProton;
-    G4double currentDefaultCut;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

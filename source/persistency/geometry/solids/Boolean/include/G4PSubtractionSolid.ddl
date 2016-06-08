@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PSubtractionSolid.ddl,v 1.5 2001/07/11 10:02:22 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 
 // Class Description:
 //   Persistent class for description of subtraction of two CSG solids: A - B

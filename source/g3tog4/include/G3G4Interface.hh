@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3G4Interface.hh,v 1.9 2001/11/08 16:07:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //   Interfaces for G3 equivalent routines
 //

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuonMinusCaptureAtRest.hh,v 1.6 2001/08/01 17:12:20 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998

@@ -1,6 +1,6 @@
 #
-# -------- HP ---------
-#
+# -------- HP ---------      !!! not supported !!!
+#                          HP-UX B.10.20 - aCC A.01.23
 ifeq ($(G4SYSTEM),HP-aCC)
   CXX       := aCC
   ifdef G4OPTIMISE
@@ -38,11 +38,10 @@ ifeq ($(G4SYSTEM),HP-aCC)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
     OGLLIBS   += -L/opt/graphics/common/lib -lXwindow -lhpgfx -lXhp11 -ldld
   endif
-  CPPFLAGS += -DG4NOT_ISO_DELETES
-  CPPFLAGS += -I$(G4BASE)/global/management/include/g4std/wrappers/$(G4SYSTEM)
+  CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT
-    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__HPACC_NOEH
+    CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__HPACC_NOEH
     CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
   endif
 

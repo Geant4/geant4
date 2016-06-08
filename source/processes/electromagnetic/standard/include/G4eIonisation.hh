@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.15 2001/10/29 16:23:41 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4eIonisation.hh,v 1.16 2002/04/09 17:34:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 //--------------- G4eIonisation physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997 

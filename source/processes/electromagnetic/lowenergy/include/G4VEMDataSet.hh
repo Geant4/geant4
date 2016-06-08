@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEMDataSet.hh,v 1.5 2001/10/04 14:03:57 pia Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VEMDataSet.hh,v 1.6 2002/05/28 09:15:26 pia Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -60,11 +60,11 @@ public:
 
   virtual void PrintData() const = 0;
 
-  virtual const G4VEMDataSet* GetComponent(G4int i) const { return 0; }
+  virtual const G4VEMDataSet* GetComponent(G4int i) const = 0;
 
-  virtual void AddComponent(G4VEMDataSet* dataSet) { }
+  virtual void AddComponent(G4VEMDataSet* dataSet) = 0;
 
-  virtual size_t NumberOfComponents() const { return 0; }
+  virtual size_t NumberOfComponents() const = 0;
 
   virtual const G4DataVector& GetEnergies(G4int i) const = 0;
   virtual const G4DataVector& GetData(G4int i) const = 0;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.5 2001/07/11 10:03:42 gunter Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Scintillation.hh,v 1.8 2002/05/16 21:19:39 gum Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -34,7 +34,9 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     1999-10-29 add method and class descriptors
+// Updated:     2002-05-16 changed to inherit from VRestDiscreteProcess
+//              2002-05-09 changed IsApplicable method
+//              1999-10-29 add method and class descriptors
 //
 // mail:        gum@triumf.ca
 //
@@ -53,7 +55,7 @@
 #include "G4ThreeVector.hh"
 #include "G4ParticleMomentum.hh"
 #include "G4Step.hh"
-#include "G4VDiscreteProcess.hh"
+#include "G4VRestDiscreteProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh" 
@@ -62,15 +64,15 @@
 #include "G4PhysicsOrderedFreeVector.hh"
 
 // Class Description:
-// Discrete Process - Generation of Scintillation Photons.
-// Class inherits publicly from G4VDiscreteProcess.
+// RestDiscrete Process - Generation of Scintillation Photons.
+// Class inherits publicly from G4VRestDiscreteProcess.
 // Class Description - End:
 
 /////////////////////
 // Class Definition
 /////////////////////
 
-class G4Scintillation : public G4VDiscreteProcess
+class G4Scintillation : public G4VRestDiscreteProcess
 {
 
 private:
@@ -99,8 +101,13 @@ public: // Without description
 
 public: // With description
 
+        // G4Scintillation Process has both PostStepDoIt (for energy 
+        // deposition of particles in flight) and AtRestDoIt (for energy
+        // given to the medium by particles at rest)
+
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-        // Returns true -> 'is applicable', for any particle type.
+        // Returns true -> 'is applicable', for any particle type except
+        // for an 'opticalphoton' 
 
 	G4double GetMeanFreePath(const G4Track& aTrack,
 				       G4double ,
@@ -109,9 +116,18 @@ public: // With description
         // but sets the 'Forced' condition for the DoIt to be invoked at 
         // every step.
 
+        G4double GetMeanLifeTime(const G4Track& aTrack,
+                                 G4ForceCondition* );
+        // Returns infinity; i. e. the process does not limit the time,
+        // but sets the 'Forced' condition for the DoIt to be invoked at
+        // every step.
+
 	G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 			                const G4Step&  aStep);
-        // This is the method implementing the scintillation process.
+        G4VParticleChange* AtRestDoIt (const G4Track& aTrack,
+                                       const G4Step& aStep);
+
+        // These are the methods implementing the scintillation process.
 
 	void SetTrackSecondariesFirst(const G4bool state);
         // If set, the primary particle tracking is interrupted and any
@@ -178,7 +194,11 @@ private:
 inline 
 G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-        return true;
+        if (aParticleType.GetParticleName() == "opticalphoton"){
+           return false;
+        } else {
+           return true;
+        }
 }
 
 inline 

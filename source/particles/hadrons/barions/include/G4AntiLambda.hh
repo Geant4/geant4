@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiLambda.hh,v 1.9 2001/10/28 05:06:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // 
 // ------------------------------------------------------------

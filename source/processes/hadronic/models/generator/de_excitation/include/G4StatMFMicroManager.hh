@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.hh,v 1.5 2001/08/01 17:04:49 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMFMicroManager.hh,v 1.6 2002/06/06 17:29:23 larazb Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -112,6 +112,16 @@ private:
     G4double _MeanTemperature;
 	
     G4double _MeanEntropy;
+
+  struct DeleteFragment 
+  {
+    template<typename T>
+    void operator()(const T* ptr) const
+    {
+      delete ptr;
+    }
+  };
+  
 };
 
 #endif

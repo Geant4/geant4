@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.6 2001/10/24 16:27:45 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4SynchrotronRadiation.cc,v 1.7 2002/04/09 17:34:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file

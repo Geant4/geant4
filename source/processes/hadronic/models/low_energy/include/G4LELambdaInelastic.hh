@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LELambdaInelastic.hh,v 1.5 2001/08/01 17:10:51 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// GEANT4 tag $Name: geant4-04-01 $
 //
  // Hadronic Process: Low Energy Lambda Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

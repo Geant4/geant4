@@ -36,7 +36,7 @@
 // StackingActionMessenger header
 // --------------------------------------------------------------
 
-#ifndef protpStackingActionMessenger_h
+#ifndef DMXStackingActionMessenger_h
 #define DMXStackingActionMessenger_h 1
 
 #include "G4UImessenger.hh"
