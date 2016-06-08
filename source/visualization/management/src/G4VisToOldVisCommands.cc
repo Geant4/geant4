@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisToOldVisCommands.cc,v 1.3.8.1 1999/12/07 20:54:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisToOldVisCommands.cc,v 1.4 1999/12/15 14:54:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Implements some /vis/ commands as /vis~/ temporarily.
@@ -29,16 +29,16 @@ G4VisToOldVisCommands::G4VisToOldVisCommands () {
     G4String subTreeName = subTree -> GetPathName ();
     G4String newDirectoryName = subTreeName.replace (0, 6, "/vis/");
     newDirectoryName = newDirectoryName (0, newDirectoryName.last ('/') + 1);
-    // G4cout << "NewDirectoryName: " << newDirectoryName << endl;
+    // G4cout << "NewDirectoryName: " << newDirectoryName << G4endl;
     new G4UIdirectory (newDirectoryName);
     G4int nCommands = subTree -> GetCommandEntry ();
     int j;
     for (j = 1; j <= nCommands; j++) {
       G4UIcommand* command = subTree -> GetCommand (j);
       G4String commandPath = command -> GetCommandPath ();
-      // G4cout << "SubCommandPath:   " << commandPath << endl;
+      // G4cout << "SubCommandPath:   " << commandPath << G4endl;
       G4String newCommandPath = commandPath.replace (0, 6, "/vis/");
-      // G4cout << "NewSubCommandPath: " << newCommandPath << endl;
+      // G4cout << "NewSubCommandPath: " << newCommandPath << G4endl;
       G4UIcommand* newCommand = new G4UIcommand (newCommandPath, this);
       newCommand -> SetRange (command -> GetRange ());
       G4int nGuidances = command -> GetGuidanceEntries ();
@@ -69,7 +69,7 @@ void G4VisToOldVisCommands::SetNewValue
       "\n  sub-detector components.  (The command is still available"
       "\n  as \"/vis~/create_view/new_graphics_system " << newValues <<
       "\".)"
-	   << endl;
+	   << G4endl;
   }
   else {
     G4String oldCommandPath = commandPath.replace (0, 5, "/vis~/");

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCaptureProcess.cc,v 1.1.10.1 1999/12/07 20:52:31 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4HadronCaptureProcess.cc,v 1.1.10.1.2.1 1999/12/08 17:35:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // G4 Process: Low-energy Neutron Capture
@@ -64,19 +64,19 @@ BuildThePhysicsTable(G4ParticleDefinition& aParticleType)
    //   theElementTable = G4Element::GetElementTable();
    //   G4int numOfElements = G4Element::GetNumberOfElements();
    //   if (verboseLevel > 1) {
-   //      G4cout << "BuildThePhysicsTable: numOfElements " << numOfElements << endl;
-   //      G4cout << "BuildThePhysicsTable: thePhysicsTable " << thePhysicsTable << endl;
+   //      G4cout << "BuildThePhysicsTable: numOfElements " << numOfElements << G4endl;
+   //      G4cout << "BuildThePhysicsTable: thePhysicsTable " << thePhysicsTable << G4endl;
    //      G4cout << "  for particle: " << aParticleType.GetParticleName() << " " <<
-   //              aParticleType.GetPDGEncoding() << endl;
+   //              aParticleType.GetPDGEncoding() << G4endl;
    //   }
    //   RWBoolean exists = thePhysicsDictionary.contains(&aParticleType);
    //   if (verboseLevel > 1) {
-   //      G4cout << "exists=" << exists << endl;
+   //      G4cout << "exists=" << exists << G4endl;
    //   }
    //   if (exists) {
    //      thePhysicsTable = thePhysicsDictionary.findValue(&aParticleType);
    //      if (verboseLevel > 1) {
-   //         G4cout << "  Retrieve tPT=" << thePhysicsTable << endl;
+   //         G4cout << "  Retrieve tPT=" << thePhysicsTable << G4endl;
    //      }
    //// Remove any previous items from table
    //      thePhysicsTable->clearAndDestroy();
@@ -85,8 +85,8 @@ BuildThePhysicsTable(G4ParticleDefinition& aParticleType)
    //   else {
    //      thePhysicsTable = new G4PhysicsTable(numOfElements);
    //      if (verboseLevel > 1) {
-   //         G4cout << "  make new tPT=" << thePhysicsTable << endl;
-   //         G4cout << "  entries() = " << thePhysicsTable->entries() << endl;
+   //         G4cout << "  make new tPT=" << thePhysicsTable << G4endl;
+   //         G4cout << "  entries() = " << thePhysicsTable->entries() << G4endl;
    //      }
    //      thePhysicsDictionary.insertKeyAndValue(&aParticleType, thePhysicsTable);
    //   }
@@ -127,7 +127,7 @@ GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,
    //   thePhysicsTable = 
    //      thePhysicsDictionary.findValue(aParticle->GetDefinition());
    //   if (verboseLevel > 1) {
-   //      G4cout << "  Retrieve tPT=" << thePhysicsTable << endl;
+   //      G4cout << "  Retrieve tPT=" << thePhysicsTable << G4endl;
    //   }
    //
    //   J = anElement->GetIndex();
@@ -161,7 +161,7 @@ GetMeanFreePathBasic(const G4DynamicParticle* aParticle,
    }
    if (verboseLevel > 1)
      G4cout << "G4HadronCaptureProcess::GetMeanFreePathBasic: sigma=" 
-          << sigma << endl;
+          << sigma << G4endl;
    if (sigma > 0.)
       return 1./sigma;
    else
@@ -188,11 +188,11 @@ DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 
    //   RWBoolean exists = thePhysicsDictionary.contains(&aParticleType);
    //   if (verboseLevel > 1) {
-   //      G4cout << "DumpPhysicsTable: exists=" << exists << endl;
+   //      G4cout << "DumpPhysicsTable: exists=" << exists << G4endl;
    //   }
    //   if (!exists) {
    //      G4cout << "DumpPhysicsTable: no phyics table for " << 
-   //              aParticleType.GetParticleName() << endl;
+   //              aParticleType.GetParticleName() << G4endl;
    //      return;
    //   }
    //   G4PhysicsTable* pt = thePhysicsDictionary.findValue(&aParticleType);
@@ -200,13 +200,13 @@ DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
    //   const G4ElementTable* et = G4Element::GetElementTable();
    //   G4int numOfElements = G4Element::GetNumberOfElements();
    //   if (verboseLevel > 1)
-   //      G4cout << "DumpPhysicsTable: numOfElements=" << numOfElements << endl;
+   //      G4cout << "DumpPhysicsTable: numOfElements=" << numOfElements << G4endl;
    //   G4LPhysicsFreeVector* pv;
    //   for (G4int J = 0; J < numOfElements; J++) { 
-   //      G4cout << endl << "Capture cross section data for " << 
+   //      G4cout << G4endl << "Capture cross section data for " << 
    //              aParticleType.GetParticleName() << " on " <<
-   //              ((*et)[J])->GetName() << endl << endl;
-   //      G4cout << endl << "Ek(GeV)    sigma(mb)" << endl << endl;
+   //              ((*et)[J])->GetName() << G4endl << G4endl;
+   //      G4cout << G4endl << "Ek(GeV)    sigma(mb)" << G4endl << G4endl;
    //      pv = (G4LPhysicsFreeVector*)(*thePhysicsTable)(J);
    //      pv->DumpValues();
    //   }

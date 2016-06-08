@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4PhysicsList.cc,v 1.2.4.1 1999/12/07 20:47:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em4PhysicsList.cc,v 1.3 1999/12/15 14:49:06 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -128,7 +128,7 @@ void Em4PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Em4PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }
   
   //special for low energy physics

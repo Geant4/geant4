@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LEProtonInelastic.hh,v 1.1.10.1 1999/12/07 20:52:18 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: Low Energy Proton Inelastic Process
  // original by H.P. Wellisch

@@ -454,11 +454,11 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     for (i=0; i < TotNumberOfChannels; i++)
       TotalProbability += theChannels[i]->GetEmissionProbability();
 
-//     G4cout << "---------------- " << theResidualNucleus.GetExcitationEnergy()/MeV << "-----------------------" << endl;
-//     G4cout << "Prob of neutron: " << theChannels[0]->GetEmissionProbability()/TotalProbability << endl;
-//     G4cout << "Prob of proton : " << theChannels[1]->GetEmissionProbability()/TotalProbability<< endl;
-//     G4cout << "Prob of alpha  : " << theChannels[5]->GetEmissionProbability()/TotalProbability<< endl;
-//     G4cout << "Prob of fission: " << theChannels[NumberOfFissionChannel]->GetEmissionProbability()/TotalProbability<< endl;
+//     G4cout << "---------------- " << theResidualNucleus.GetExcitationEnergy()/MeV << "-----------------------" << G4endl;
+//     G4cout << "Prob of neutron: " << theChannels[0]->GetEmissionProbability()/TotalProbability << G4endl;
+//     G4cout << "Prob of proton : " << theChannels[1]->GetEmissionProbability()/TotalProbability<< G4endl;
+//     G4cout << "Prob of alpha  : " << theChannels[5]->GetEmissionProbability()/TotalProbability<< G4endl;
+//     G4cout << "Prob of fission: " << theChannels[NumberOfFissionChannel]->GetEmissionProbability()/TotalProbability<< G4endl;
 
 
     if (TotalProbability <= 0.0) {

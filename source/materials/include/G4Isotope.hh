@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.hh,v 1.1.8.1.2.1 1999/12/07 20:49:16 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Isotope.hh,v 1.1.8.1.2.1.2.1 1999/12/08 17:34:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -75,13 +75,13 @@ class G4Isotope
     static size_t GetNumberOfIsotopes()     {return theIsotopeTable.length();};
     
     friend
-    ostream& operator<<(ostream&, G4Isotope*);
+    G4std::ostream& operator<<(G4std::ostream&, G4Isotope*);
     
     friend
-    ostream& operator<<(ostream&, G4Isotope&);
+    G4std::ostream& operator<<(G4std::ostream&, G4Isotope&);
     
     friend
-    ostream& operator<<(ostream&, G4IsotopeTable);
+    G4std::ostream& operator<<(G4std::ostream&, G4IsotopeTable);
      
     G4int operator==(const G4Isotope &right) const;
     G4int operator!=(const G4Isotope &right) const;

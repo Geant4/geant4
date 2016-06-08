@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.1.8.1 1999/12/07 20:53:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.2 1999/12/15 14:54:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -38,7 +38,7 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 // ensure a suitable window was found
   if (!vi_immediate) {
     G4cerr << "G4OpenGLImmediateXmViewer::G4OpenGLImmediateXmViewer -"
-      " G4OpenGLXmViewer couldn't get a visual." << endl;  
+      " G4OpenGLXmViewer couldn't get a visual." << G4endl;  
     fViewId = -1;  // This flags an error.
     return;
   }

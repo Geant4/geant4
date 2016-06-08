@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalPhoton.cc,v 1.1.10.1 1999/12/07 20:49:22 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpticalPhoton.cc,v 1.1.10.1.2.2 1999/12/14 07:08:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -21,8 +21,8 @@
 //  Changed name intto "opticalphoton" Hisaya Kurashige, 08 Jan 1998
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4OpticalPhoton.hh"
 

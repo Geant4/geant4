@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.6.6.1 1999/12/07 20:50:04 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.6.6.1.2.1 1999/12/08 17:34:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -54,7 +54,7 @@ void G4ExcitedMesonConstructor::Construct(G4int idx)
 #ifdef G4VERBOSE
     if (G4ParticleTable::GetParticleTable()->GetVerboseLevel()>1) {
       G4cerr << "G4ExcitedMesonConstructor::Construct()";
-      G4cerr << "   illegal index os state = " << idx << endl;
+      G4cerr << "   illegal index os state = " << idx << G4endl;
     }
 #endif
   }

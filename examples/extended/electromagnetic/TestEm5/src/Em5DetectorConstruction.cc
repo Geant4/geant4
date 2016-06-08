@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5DetectorConstruction.cc,v 1.1.4.1 1999/12/07 20:47:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em5DetectorConstruction.cc,v 1.4 2000/01/20 15:34:39 maire Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -88,11 +88,20 @@ G4double temperature, pressure;
 a = 1.01*g/mole;
 G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
+a = 12.01*g/mole;
+G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
+
 a = 14.01*g/mole;
 G4Element* elN  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
 
 a = 16.00*g/mole;
 G4Element* elO  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
+
+a = 39.95*g/mole;
+G4Element* elAr  = new G4Element(name="Argon"  ,symbol="Ar", z= 18., a);
+
+a = 131.29*g/mole;
+G4Element* elXe  = new G4Element(name="Xenon"  ,symbol="Xe", z= 54., a);
 
 //
 // define simple materials
@@ -110,8 +119,8 @@ a = 28.09*g/mole;
 G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
 
 density = 1.390*g/cm3;
-a = 39.95*g/mole;
-G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
+G4Material* lAr = new G4Material(name="liquidArgon", density, ncomponents=1);
+lAr->AddElement(elAr, natoms=1);
 
 density = 7.870*g/cm3;
 a = 55.85*g/mole;
@@ -148,6 +157,47 @@ Air->AddElement(elN, fractionmass=0.7);
 Air->AddElement(elO, fractionmass=0.3);
 
 //
+// examples of gas
+//
+
+density = 5.458*mg/cm3;
+G4Material* Xe = new G4Material(name="XenonGas" , density, ncomponents=1,
+                   kStateGas,temperature=293.15*kelvin, pressure=1*atmosphere);
+Xe->AddElement(elXe, natoms=1);
+
+density = 1.977*mg/cm3;
+G4Material* CO2 = new G4Material(name="CarbonicGas", density, ncomponents=2);
+CO2->AddElement(elC, natoms=1);
+CO2->AddElement(elO, natoms=2);
+
+density = 1.8223*mg/cm3;
+G4Material* ArCO2 = new G4Material(name="ArgonCO2", density, ncomponents=2);
+ArCO2->AddElement (elAr, fractionmass=0.7844);
+ArCO2->AddMaterial(CO2,  fractionmass=0.2156);
+
+//another way to define mixture of gas per volume
+density = 1.8223*mg/cm3;
+G4Material* NewArCO2 = new G4Material(name="NewArgonCO2", density, ncomponents=3);
+NewArCO2->AddElement (elAr, natoms=8);
+NewArCO2->AddElement (elC,  natoms=2);
+NewArCO2->AddElement (elO,  natoms=4);
+
+//Argon-CH4
+density = 1.709*mg/cm3;
+G4Material* ArCH4 = new G4Material(name="ArgonCH4", density, ncomponents=3);
+ArCH4->AddElement (elAr, natoms=93);
+ArCH4->AddElement (elC,  natoms=7);
+ArCH4->AddElement (elH,  natoms=28);
+
+//Xenon-methane-propane
+density = 4.9196*mg/cm3;
+G4Material* XeCH = new G4Material(name="XenonMethanePropane", density, ncomponents=3,
+                   kStateGas,temperature=293.15*kelvin, pressure=1*atmosphere);
+XeCH->AddElement (elXe, natoms=875);
+XeCH->AddElement (elC,  natoms=225);
+XeCH->AddElement (elH,  natoms=700);
+
+//
 // example of vacuum
 //
 
@@ -157,7 +207,7 @@ temperature = 2.73*kelvin;
 G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
                      kStateGas,temperature,pressure);
 		     
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorberMaterial = Si;
@@ -242,13 +292,13 @@ void Em5DetectorConstruction::PrintCalorParameters()
   G4cout << "\n The  WORLD   is made of " 
          << G4BestUnit(WorldSizeX,"Length") << " of " << WorldMaterial->GetName();
   G4cout << ". The transverse size (YZ) of the world is " 
-         << G4BestUnit(WorldSizeYZ,"Length") << endl;
+         << G4BestUnit(WorldSizeYZ,"Length") << G4endl;
   G4cout << " The ABSORBER is made of " 
          <<G4BestUnit(AbsorberThickness,"Length")<< " of " << AbsorberMaterial->GetName();
   G4cout << ". The transverse size (YZ) is " 
-         << G4BestUnit(AbsorberSizeYZ,"Length") << endl;
+         << G4BestUnit(AbsorberSizeYZ,"Length") << G4endl;
   G4cout << " X position of the middle of the absorber " << G4BestUnit(XposAbs,"Length");
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

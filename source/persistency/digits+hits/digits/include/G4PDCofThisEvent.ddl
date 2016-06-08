@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PDCofThisEvent.ddl,v 1.3 1999/12/02 16:10:19 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4PDCofThisEvent_h

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.2.2.1 1999/12/07 20:47:26 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN02DetectorConstruction.cc,v 1.3 1999/12/15 14:49:21 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -91,8 +91,8 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 
   // Print all the materials defined.
   //
-    G4cout << endl << "The materials defined are : " << endl << endl;
-    G4cout << *(G4Material::GetMaterialTable()) << endl;
+    G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
+    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
 //--------- Sizes of the principal geometrical components (solids)  ---------
   
@@ -140,7 +140,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 				  false,           // no boolean operations
 				  0);              // no particular field 
 
-  G4cout << "Target is " << 2*targetSize/cm << " cm of Al " << endl;
+  G4cout << "Target is " << 2*targetSize/cm << " cm of Al " << G4endl;
 
   //------------------------------ 
   // Tracker
@@ -231,7 +231,7 @@ void ExN02DetectorConstruction::setMaterial(G4String materialChoice)
          {myMaterial = pttoMaterial;
           logicTracker->SetMaterial(pttoMaterial); 
           G4cout << "Absorber is " << fDetectorLength/cm << " cm of " << materialChoice 
-               << endl;}             
+               << G4endl;}             
     }
 
 }
@@ -256,7 +256,7 @@ void ExN02DetectorConstruction::SetDetectorLength(G4double length)
   solidTracker -> SetZHalfLength(halfSize);
   
   G4cout << "Absorber is " << fDetectorLength/cm << " cm of " << myMaterial->GetName()
-       << endl;     
+       << G4endl;     
 }  
 
 void ExN02DetectorConstruction::SetMagField(G4double fieldValue)

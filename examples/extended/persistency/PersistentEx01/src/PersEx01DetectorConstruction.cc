@@ -22,7 +22,7 @@ PersEx01DetectorConstruction::~PersEx01DetectorConstruction()
 
 G4VPhysicalVolume* PersEx01DetectorConstruction::Construct()
 {
-    G4cout << "  -- Tracker type sensitive detector" << endl;
+    G4cout << "  -- Tracker type sensitive detector" << G4endl;
 
 //--------- Material definition ---------
 

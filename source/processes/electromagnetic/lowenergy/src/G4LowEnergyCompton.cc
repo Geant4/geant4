@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.15.6.1 1999/12/07 20:50:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyCompton.cc,v 1.17 2000/01/26 09:50:00 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -15,23 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4LowEnergyCompton physics process --------
-//                   by Michel Maire, April 1996
-
 //      ------------ G4LowEnergyCompton low energy modifications --------
 //                   by Alessandra Forti, October 1998
 // **************************************************************
-// 28-05-96, DoIt() small change in ElecDirection, by M.Maire
-// 10-06-96, simplification in ComputeMicroscopicCrossSection(), by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 13-09-96, small changes in DoIt for better efficiency. Thanks to P.Urban
-// 06-01-97, crossection table + meanfreepath table, M.Maire
-// 05-03-97, new Physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
@@ -59,9 +45,9 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << endl;
+     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << G4endl;
    }
 }
  
@@ -294,7 +280,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
   
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElecKineEnergy, aMaterial)
-      >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
+      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
 
     G4double ElecMomentum = sqrt(ElecKineEnergy*(ElecKineEnergy+2.*electron_mass_c2));
     G4ThreeVector ElecDirection((GammaEnergy0*GammaDirection0 - 
@@ -314,7 +300,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
    }
 #ifdef G4VERBOSE
   if(verboseLevel > 0){
-    G4cout<<"LE Compton Effect PostStepDoIt"<<endl;
+    G4cout<<"LE Compton Effect PostStepDoIt"<<G4endl;
   }
 #endif  
 

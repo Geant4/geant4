@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4AntiLambdaInelasticProcess.hh,v 1.1.10.1 1999/12/07 20:52:26 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: AntiLambda Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

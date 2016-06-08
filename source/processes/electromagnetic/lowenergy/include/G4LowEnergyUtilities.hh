@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.hh,v 1.1.8.1 1999/12/07 20:50:21 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyUtilities.hh,v 1.4 2000/01/26 09:43:17 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -15,19 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyPhotoElectric physics process ------
-//                   by Michel Maire, April 1996
+//                   by A.Forti 1999/06/28
 // ************************************************************
-// 12-06-96, Added SelectRandomAtom() method and new data member
-//           for cumulative total cross section, by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 17-09-96, Dynamic array PartialSumSigma
-//           split ComputeBindingEnergy(), M.Maire
-// 08-01-97, crossection table + meanfreepath table, M.Maire
-// 13-03-97, adapted for the new physics scheme, M.Maire
-// ------------------------------------------------------------
 
 #ifndef G4LowEnergyUtilities_h
 #define G4LowEnergyUtilities_h 1
@@ -92,7 +82,7 @@ inline G4int G4LowEnergyUtilities::FindBinLocation(const G4double arg, const G4D
   } while (lowerBound <= upperBound); 
 
   return upperBound;
-};
+}
 
 
 inline G4double G4LowEnergyUtilities::DataLogInterpolation(const G4double Argument, 
@@ -116,7 +106,7 @@ inline G4double G4LowEnergyUtilities::DataLogInterpolation(const G4double Argume
   theVal = pow(10,theVal);
 
   return theVal;
-};
+}
 
 inline G4int G4LowEnergyUtilities::FindBinLocation(const G4double arg, 
 						   const G4PhysicsVector* vec){

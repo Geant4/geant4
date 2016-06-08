@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.cc,v 1.5 1999/11/23 15:00:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Timer.cc,v 1.7 2000/01/06 14:27:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -18,13 +18,10 @@
 #include "G4Timer.hh"
 #include "G4ios.hh"
 
-#ifdef G4USE_STL
-  #undef times
-#endif
+#undef times
 
 // Global error function
 void G4Exception(const char* s=0);
-
 
 
 #ifdef WIN32
@@ -59,7 +56,7 @@ void G4Exception(const char* s=0);
    }
 #endif /* WIN32 */
 
-// Print timer status n ostream
+// Print timer status n G4std::ostream
 G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t)
 {
     if (t.IsValid())

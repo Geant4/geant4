@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5CalorimeterSD.cc,v 1.1.4.1 1999/12/07 20:47:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em5CalorimeterSD.cc,v 1.2 1999/12/15 14:49:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -77,14 +77,14 @@ G4bool Em5CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
       HitID[Em5Number] = CalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on Em5: " << Em5Number << endl;
+        G4cout << " New Calorimeter Hit on Em5: " << Em5Number << G4endl;
     }
   else
     { 
       if (physVol == Detector->GetAbsorber())
          (*CalCollection)[HitID[Em5Number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to Em5: " << Em5Number << endl; 
+        G4cout << " Energy added to Em5: " << Em5Number << G4endl; 
     }
     
   return true;

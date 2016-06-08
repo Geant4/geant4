@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.cc,v 1.3.8.1 1999/12/07 20:52:50 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VProcess.cc,v 1.3.8.1.2.1 1999/12/08 17:35:13 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -62,10 +62,10 @@ void G4VProcess::SubtractNumberOfInteractionLengthLeft(
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
-      G4cerr << " [" << theProcessName << "]" <<endl;
+      G4cerr << " [" << theProcessName << "]" <<G4endl;
       G4cerr << " currentInteractionLength = " << currentInteractionLength/cm << " [cm]";
       G4cerr << " previousStepSize = " << previousStepSize/cm << " [cm]";
-      G4cerr << endl;
+      G4cerr << G4endl;
     }
 #endif
     G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()  negative currentInteractionLength" );
@@ -78,7 +78,7 @@ void G4VProcess::StartTracking()
   theNumberOfInteractionLengthLeft = -1.0;
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4VProcess::StartTracking() [" << theProcessName << "]" <<endl;
+    G4cout << "G4VProcess::StartTracking() [" << theProcessName << "]" <<G4endl;
   }
 #endif
 }
@@ -87,7 +87,7 @@ void G4VProcess::EndTracking()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cout << "G4VProcess::EndTracking() [" << theProcessName << "]" <<endl;
+    G4cout << "G4VProcess::EndTracking() [" << theProcessName << "]" <<G4endl;
   }
 #endif
   theNumberOfInteractionLengthLeft = -1.0;
@@ -153,7 +153,7 @@ G4int G4VProcess::operator!=(const G4VProcess &right) const
 void G4VProcess::DumpInfo() const
 {
   G4cout << "Process Name " << theProcessName ;   
-  G4cout << " : Type[" << GetProcessTypeName(theProcessType) << "]"<< endl;
+  G4cout << " : Type[" << GetProcessTypeName(theProcessType) << "]"<< G4endl;
 }
 
 

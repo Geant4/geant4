@@ -68,7 +68,7 @@ G4FragmentVector* G4VGammaDeexcitation::DoTransition()
     }
 
   if (_verbose > 1)
-    G4cout << "G4VGammaDeexcitation::DoTransition - Transition deleted " << endl;
+    G4cout << "G4VGammaDeexcitation::DoTransition - Transition deleted " << G4endl;
 
   if (_transition != 0) delete _transition;
 
@@ -82,7 +82,7 @@ G4FragmentVector* G4VGammaDeexcitation::DoChain()
 
   while (CanDoTransition())
     {
-      if (_verbose > 5) G4cout << "G4VGammaDeexcitation::DoChain -  Looping" << endl;
+      if (_verbose > 5) G4cout << "G4VGammaDeexcitation::DoChain -  Looping" << G4endl;
 
       G4Fragment* gamma = GenerateGamma();
       if (gamma != 0) 
@@ -94,7 +94,7 @@ G4FragmentVector* G4VGammaDeexcitation::DoChain()
     } 
 
   if (_verbose > 1)
-      G4cout << "G4VGammaDeexcitation::DoChain - Transition deleted, end of chain " << endl;
+      G4cout << "G4VGammaDeexcitation::DoChain - Transition deleted, end of chain " << G4endl;
 
   if (_transition != 0) delete _transition;
   
@@ -128,7 +128,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   {
     G4cout << "G4VGammaDeexcitation::GenerateGamma - Gamma energy " << eGamma 
 	   << " ** New excitation " << _nucleus.GetExcitationEnergy() - eGamma
-	   << endl;
+	   << G4endl;
   }
 
   // Photon momentum isotropically generated 
@@ -153,7 +153,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     gammaFragment->SetCreationTime(gammaTime);
 
     if (_verbose > 1)
-      G4cout << "G4VGammaDeexcitation::GenerateGamma -  Gamma fragment generated " << endl;
+      G4cout << "G4VGammaDeexcitation::GenerateGamma -  Gamma fragment generated " << G4endl;
 
     return gammaFragment;
   }
@@ -218,7 +218,7 @@ void G4VGammaDeexcitation::Update()
       delete _transition;
       _transition = 0;
       if (_verbose > 1)
-	G4cout << "G4VGammaDeexcitation::Update - Transition deleted " << endl;
+	G4cout << "G4VGammaDeexcitation::Update - Transition deleted " << G4endl;
     }
 
   _transition = CreateTransition();

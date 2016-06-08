@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunActionMessenger.cc,v 1.1.4.1 1999/12/07 20:46:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em2RunActionMessenger.cc,v 1.3 2000/01/21 10:56:16 maire Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -27,15 +27,7 @@
 
 Em2RunActionMessenger::Em2RunActionMessenger(Em2RunAction* run)
 :Em2Run(run)
-{ 
-  SaveCmd = new G4UIcmdWithAString("/run/save",this);
-  SaveCmd->SetGuidance("Save run statistic (histo)");
-  SaveCmd->SetGuidance("  Choice : on,off(default)");
-  SaveCmd->SetParameterName("choice",true);
-  SaveCmd->SetDefaultValue("on");
-  SaveCmd->SetCandidates("on off");
-  SaveCmd->AvailableForStates(Idle);
-  
+{   
   RndmDir = new G4UIdirectory("/rndm/");
   RndmDir->SetGuidance("Rndm status control.");
   
@@ -60,21 +52,18 @@ Em2RunActionMessenger::Em2RunActionMessenger(Em2RunAction* run)
 
 Em2RunActionMessenger::~Em2RunActionMessenger()
 {
-  delete SaveCmd;
   delete RndmSaveCmd; delete RndmReadCmd; delete RndmDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em2RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if (command == SaveCmd) Em2Run->SetSaveFlag(newValue);
-    
+{     
   if (command == RndmSaveCmd)
       Em2Run->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValue));
 		 
   if (command == RndmReadCmd)
-    { G4cout << "\n---> rndm status restored from file: " << newValue << endl;
+    { G4cout << "\n---> rndm status restored from file: " << newValue << G4endl;
       HepRandom::restoreEngineStatus(newValue);
       HepRandom::showEngineStatus();
     }   

@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4.hh,v 1.4 1999/12/05 17:50:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4.hh,v 1.6 2000/03/07 10:51:40 stesting Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 
-#ifndef _G3TOG4_
-#define _G3TOG4_
+#ifndef G3TOG4_HH
+#define G3TOG4_HH 1
 
 #include "globals.hh"
 
@@ -23,7 +23,7 @@ extern G4String Spar[1000];
 
 //extern G4double min(G4double, G4double);
 
-void G3fillParams(G4String *tokens, char *ptypes);
+void G3fillParams(G4String *tokens, const char *ptypes);
 // G4bool G3NegVolPars(G4double pars[], G4int* np, G4String vol, G4String moth,
 //               char* routine);
 
@@ -56,5 +56,4 @@ void G3fillParams(G4String *tokens, char *ptypes);
 #define PTgsdeth "ssiSIRR"
 #define PTgsdetd "ssiSI"
 #define PTgsdetu "ssiR"
-
 #endif

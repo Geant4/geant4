@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VDigi.cc,v 1.3.4.1 1999/12/07 20:47:47 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 // G4VDigi

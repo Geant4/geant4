@@ -77,24 +77,24 @@ G4int G4VPreCompoundFragment::operator!=(const G4VPreCompoundFragment & right) c
 }
 
 
-ostream& operator << (ostream &out, const G4VPreCompoundFragment &theFragment)
+G4std::ostream& operator << (G4std::ostream &out, const G4VPreCompoundFragment &theFragment)
 {
   out << &theFragment;
   return out; 
 }
 
 
-ostream& operator << (ostream &out, const G4VPreCompoundFragment *theFragment)
+G4std::ostream& operator << (G4std::ostream &out, const G4VPreCompoundFragment *theFragment)
 {
-  long old_floatfield = out.setf(0,ios::floatfield);
+  long old_floatfield = out.setf(0,G4std::ios::floatfield);
 
   out 
-    << "PreCompound Model Emitted Fragment: A = " << setprecision(3) << theFragment->theA 
-    << ", Z = " << setprecision(3) << theFragment->theZ;
-  out.setf(ios::scientific,ios::floatfield);
+    << "PreCompound Model Emitted Fragment: A = " << G4std::setprecision(3) << theFragment->theA 
+    << ", Z = " << G4std::setprecision(3) << theFragment->theZ;
+  out.setf(G4std::ios::scientific,G4std::ios::floatfield);
 //   out
 //     << ", U = " << theFragment->theExcitationEnergy/MeV 
-//     << " MeV" << endl
+//     << " MeV" << G4endl
 //     << "          P = (" 
 //     << theFragment->theMomentum.x()/MeV << ","
 //     << theFragment->theMomentum.y()/MeV << ","
@@ -102,7 +102,7 @@ ostream& operator << (ostream &out, const G4VPreCompoundFragment *theFragment)
 //     << ") MeV   E = " 
 //     << theFragment->theMomentum.t()/MeV << " MeV";
 
-  out.setf(old_floatfield,ios::floatfield);
+  out.setf(old_floatfield,G4std::ios::floatfield);
 
   return out;
     

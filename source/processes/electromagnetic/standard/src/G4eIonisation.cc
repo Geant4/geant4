@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.3.8.1 1999/12/07 20:51:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4eIonisation.cc,v 1.3.8.1.2.2 1999/12/10 15:42:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // -------------------------------------------------------------
@@ -158,7 +158,7 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
           if (&aParticleType==G4Electron::Electron())
             {
               Tmax = LowEdgeEnergy/2.;  
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               ionloss = log(2.*(tau+2.)/Eexcm2)-1.-beta2
                        + log((tau-d)*d)+tau/(tau-d)
                        + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -166,7 +166,7 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
           else        //positron
             {
               Tmax = LowEdgeEnergy ;  
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               d2=d*d/2.; d3=d*d*d/3.; d4=d*d*d*d/4.;
               y=1./(1.+gamma);
               ionloss = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
@@ -449,7 +449,7 @@ void G4eIonisation::PrintInfoDefinition()
            comments += "Good description from 1 KeV to 100 GeV.\n";
            comments += "        delta ray energy sampled from  differential Xsection.";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
          << " in " << TotBin << " bins. \n";

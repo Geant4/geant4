@@ -52,7 +52,7 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName)
              : G4VDiscreteProcess(processName)
 {
         if ( verboseLevel > 0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
         }
 
 	theStatus = Undefined;
@@ -106,9 +106,9 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	OldPolarization   = aParticle->GetPolarization();
 
         if ( verboseLevel > 0 ) {
-		G4cout << " Photon at Boundary! " << endl;
-		G4cout << " Old Momentum Direction: " << OldMomentum     << endl;
-		G4cout << " Old Polarization:       " << OldPolarization << endl;
+		G4cout << " Photon at Boundary! " << G4endl;
+		G4cout << " Old Momentum Direction: " << OldMomentum     << G4endl;
+		G4cout << " Old Polarization:       " << OldPolarization << G4endl;
         }
 
 	G4MaterialPropertiesTable* aMaterialPropertiesTable;
@@ -232,7 +232,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	else {
 	  G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
 	       << " The Navigator reports that it returned an invalid normal" 
-	       << endl;
+	       << G4endl;
 	}
 
 	theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
@@ -264,7 +264,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	}
 	else {
 
-	  G4cout << " Error: G4BoundaryProcess: illegal boundary type " << endl;
+	  G4cout << " Error: G4BoundaryProcess: illegal boundary type " << G4endl;
 	  return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
 	}
@@ -273,28 +273,28 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         NewPolarization = NewPolarization.unit();
 
         if ( verboseLevel > 0) {
-		G4cout << " New Momentum Direction: " << NewMomentum     << endl;
-		G4cout << " New Polarization:       " << NewPolarization << endl;
+		G4cout << " New Momentum Direction: " << NewMomentum     << G4endl;
+		G4cout << " New Polarization:       " << NewPolarization << G4endl;
 		if ( theStatus == Undefined )
-			G4cout << " *** Undefined *** " << endl;
+			G4cout << " *** Undefined *** " << G4endl;
 		if ( theStatus == FresnelRefraction )
-			G4cout << " *** FresnelRefraction *** " << endl;
+			G4cout << " *** FresnelRefraction *** " << G4endl;
 		if ( theStatus == FresnelReflection )
-			G4cout << " *** FresnelReflection *** " << endl;
+			G4cout << " *** FresnelReflection *** " << G4endl;
 		if ( theStatus == TotalInternalReflection )
-			G4cout << " *** TotalInternalReflection *** " << endl;
+			G4cout << " *** TotalInternalReflection *** " << G4endl;
 		if ( theStatus == LambertianReflection )
-			G4cout << " *** LambertianReflection *** " << endl;
+			G4cout << " *** LambertianReflection *** " << G4endl;
 		if ( theStatus == LobeReflection ) 
-			G4cout << " *** LobeReflection *** " << endl;
+			G4cout << " *** LobeReflection *** " << G4endl;
 		if ( theStatus == SpikeReflection )
-			G4cout << " *** SpikeReflection *** " << endl;
+			G4cout << " *** SpikeReflection *** " << G4endl;
 		if ( theStatus == BackScattering )
-			G4cout << " *** BackScattering *** " << endl;
+			G4cout << " *** BackScattering *** " << G4endl;
 		if ( theStatus == Absorption )
-			G4cout << " *** Absorption *** " << endl;
+			G4cout << " *** Absorption *** " << G4endl;
 		if ( theStatus == Detection )
-			G4cout << " *** Detection *** " << endl;
+			G4cout << " *** Detection *** " << G4endl;
         }
 
 	aParticleChange.SetMomentumChange(NewMomentum);
@@ -322,7 +322,7 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 	   G4double sigma_alpha = 0.0;
 	   if (OpticalSurface) sigma_alpha = OpticalSurface->GetSigmaAlpha();
 
-	   G4double f_max = min(1.0,4.*sigma_alpha);
+	   G4double f_max = G4std::min(1.0,4.*sigma_alpha);
 
 	   do {
 	      do {

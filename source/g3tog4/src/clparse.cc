@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.8 1999/12/05 17:50:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: clparse.cc,v 1.11 2000/03/07 10:51:41 stesting Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // modified by I.Hrivnacova
 // added G3SensVol
@@ -25,13 +25,13 @@
 #include "G3DetTable.hh"
 #include "G3SensVolVector.hh"
 
-ofstream ofile;
+G4std::ofstream ofile;
 
 extern "C" {
 #include <stdlib.h>
 }
 
-extern ofstream ofile;
+extern G4std::ofstream ofile;
 
 G3VolTable G3Vol;
 G3MatTable G3Mat; // material G3 ID <-> G4 pointer table
@@ -94,13 +94,12 @@ void G3CLRead(G4String & fname, char *select = NULL){
 
   G4int count = 0;
   G4int ntokens = 0;
-  ifstream istr(fname);
-  G4bool _debug=false;
+  G4std::ifstream istr(fname);
     
   while (line.readLine(istr) && ! istr.eof()){
       count++;
       ntokens = G3CLTokens(&line,tokens);  // tokenize the line
-      for (G4int i=0; i < ntokens; i++) ofile << tokens[i] << endl;
+      for (G4int i=0; i < ntokens; i++) ofile << tokens[i] << G4endl;
       
           // interpret the line as a Geant call
       G3CLEval(tokens, select);
@@ -155,7 +154,7 @@ void G3CLEval(G4String tokens[], char *select)
     if (select != NULL && select != "*") if ( strcmp(select,context) ) return;
 
     // Branch on Geant3 routine name
-    ofile << "Do routine " << routine << " in context " << context << endl;
+    ofile << "Do routine " << routine << " in context " << context << G4endl;
     
     if ( !strcmp(routine,"GSVOLU") ) { 
 //      volcount++;
@@ -200,7 +199,7 @@ void G3CLEval(G4String tokens[], char *select)
     if ( !strcmp(routine,"GGCLOS") ) { PG4ggclos(); return;}
 }
 
-void G3fillParams(G4String *tokens, char *ptypes)
+void G3fillParams(G4String *tokens, const char *ptypes)
 //
 // G3fillParams
 //
@@ -259,7 +258,7 @@ void G3fillParams(G4String *tokens, char *ptypes)
                     }
                 break;
             default:
-                ofile << "unidentified ptype '" << ptypes[i] << endl;
+                ofile << "unidentified ptype '" << ptypes[i] << G4endl;
             };
             i++;
         }

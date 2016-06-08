@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.hh,v 1.5.6.1 1999/12/07 20:54:04 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4BoundingSphereScene.hh,v 1.6 1999/12/15 14:54:28 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  7th June 1997

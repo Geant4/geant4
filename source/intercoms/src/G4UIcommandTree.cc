@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.cc,v 1.2.2.1 1999/12/07 20:49:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIcommandTree.cc,v 1.4 2000/02/14 12:24:42 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4UIcommandTree.hh"
@@ -22,7 +22,7 @@ G4UIcommandTree::G4UIcommandTree(G4String thePathName)
   pathName = thePathName;
 }
 
-G4UIcommandTree::G4UIcommandTree(char * thePathName)
+G4UIcommandTree::G4UIcommandTree(const char * thePathName)
 :guidance(NULL)
 {
   pathName = thePathName;
@@ -174,45 +174,45 @@ G4UIcommand * G4UIcommandTree::FindPath(G4String commandPath)
 
 void G4UIcommandTree::ListCurrent()
 {
-  G4cout << "Command directory path : " << pathName << endl;
+  G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
   int i = 0;
-  G4cout << " Sub-directories : " << endl;
+  G4cout << " Sub-directories : " << G4endl;
   int n_treeEntry = tree.entries();
   for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )
   {
     G4cout << "   " << tree[i_thTree]->GetPathName() 
-	 << "   " << tree[i_thTree]->GetTitle() << endl;
+	 << "   " << tree[i_thTree]->GetTitle() << G4endl;
   }
-  G4cout << " Commands : " << endl;
+  G4cout << " Commands : " << G4endl;
   int n_commandEntry = command.entries();
   for( int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ )
   {
     G4cout << "   " << command[i_thCommand]->GetCommandName() 
-	 << " * " << command[i_thCommand]->GetTitle() << endl;
+	 << " * " << command[i_thCommand]->GetTitle() << G4endl;
   }
 }
 
 void G4UIcommandTree::ListCurrentWithNum()
 {
-  G4cout << "Command directory path : " << pathName << endl;
+  G4cout << "Command directory path : " << pathName << G4endl;
   if( guidance != NULL ) guidance->List();
   int i = 0;
-  G4cout << " Sub-directories : " << endl;
+  G4cout << " Sub-directories : " << G4endl;
   int n_treeEntry = tree.entries();
   for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )
   {
     i++;
     G4cout << " " << i << ") " << tree[i_thTree]->GetPathName() 
-	 << "   " << tree[i_thTree]->GetTitle() << endl;
+	 << "   " << tree[i_thTree]->GetTitle() << G4endl;
   }
-  G4cout << " Commands : " << endl;
+  G4cout << " Commands : " << G4endl;
   int n_commandEntry = command.entries();
   for( int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ )
   {
     i++;
     G4cout << " " << i << ") " << command[i_thCommand]->GetCommandName() 
-	 << " * " << command[i_thCommand]->GetTitle() << endl;
+	 << " * " << command[i_thCommand]->GetTitle() << G4endl;
   }
 }
 

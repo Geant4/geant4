@@ -854,7 +854,7 @@ G4int G4PolyhedraSide::PhiSegment( const G4double phi0 )
 	//
 	// Divide
 	//
-	G4int answer = phi/deltaPhi;
+	G4int answer = (G4int)(phi/deltaPhi);
 	
 	if (answer >= numSide) {
 		if (phiIsOpen) {

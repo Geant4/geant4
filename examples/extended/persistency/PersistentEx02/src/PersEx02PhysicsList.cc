@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PersEx02PhysicsList.cc,v 1.3 1999/11/29 18:33:28 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: PersEx02PhysicsList.cc,v 1.3.4.3 1999/12/14 07:07:43 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "globals.hh"
@@ -25,7 +25,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 PersEx02PhysicsList::PersEx02PhysicsList():  G4VUserPhysicsList()
@@ -186,7 +186,7 @@ void PersEx02PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "PersEx02PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
 
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 

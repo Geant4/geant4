@@ -85,7 +85,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
 		
 			G4double theMeanMult = theMicrocanonicalEnsemble->GetMeanMultiplicity();
 			if (theMeanMult <= MaxAverageMultiplicity) {
-//				G4cout << "MICROCANONICAL" << endl;
+//				G4cout << "MICROCANONICAL" << G4endl;
 				// choose fragments atomic numbers and charges from direct simulation
 				theChannel = theMicrocanonicalEnsemble->ChooseAandZ(theFragment);
 				_theEnsemble = theMicrocanonicalEnsemble;
@@ -99,7 +99,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
 					_theEnsemble = theMacrocanonicalEnsemble;
 					FirstTime = false;
 				}
-//				G4cout << "MACROCANONICAL" << endl;
+//				G4cout << "MACROCANONICAL" << G4endl;
 				// Select calculated fragment total multiplicity, 
 				// fragment atomic numbers and fragment charges.
 				theChannel = theMacrocanonicalEnsemble->ChooseAandZ(theFragment);
@@ -186,7 +186,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
 	G4double Z = theFragment.GetZ();
 	G4double U = theFragment.GetExcitationEnergy();
 
-	G4double T = max(Temperature,0.0012*MeV);
+	G4double T = G4std::max(Temperature,0.0012*MeV);
 
 	G4double Ta = T;
 	G4double Tb = T;

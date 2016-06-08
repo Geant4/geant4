@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4strstreambuf.hh,v 1.4 1999/11/23 15:00:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4strstreambuf.hh,v 1.6 1999/12/16 08:15:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ---------------------------------------------------------------

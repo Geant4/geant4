@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FTFModel.hh,v 1.2.4.1 1999/12/07 20:51:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4FTFModel_h
 #define G4FTFModel_h 1

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIxvtMessenger.cc,v 1.2.8.1 1999/12/07 20:49:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIxvtMessenger.cc,v 1.2.8.1.2.1 1999/12/08 17:34:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifdef G4UI_BUILD_XVT_SESSION
 
@@ -60,7 +60,7 @@ void G4UIxvtMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     if(newValue=="EndOfEvent") id=2;
     if(newValue=="endOfRun") id=3;
     if(id<0)
-    { G4cout << "Unknown break point <" << newValue << "> ignored." << endl; }
+    { G4cout << "Unknown break point <" << newValue << "> ignored." << G4endl; }
     else
     { xvtptr->set_breakPointAt(id,true); }
   }

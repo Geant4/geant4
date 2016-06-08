@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsScene.hh,v 1.3.4.1 1999/12/07 20:49:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VGraphicsScene.hh,v 1.4 1999/12/15 14:50:40 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 // John Allison  19th July 1996
 //
 // Class Description:

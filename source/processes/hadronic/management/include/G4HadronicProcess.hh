@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronicProcess.hh,v 1.4.2.1 1999/12/07 20:51:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // This is the top level Hadronic Process class
  // The inelastic, elastic, capture, and fission processes

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.cc,v 1.5.4.1 1999/12/07 20:49:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIXm.cc,v 1.5.4.1.2.4 1999/12/14 09:16:47 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G.Barrand
 
@@ -14,11 +14,7 @@
 
 #ifdef G4UI_BUILD_XM_SESSION
 
-#ifdef WIN32
-#include <Strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 #include <string.h>
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.2.8.1 1999/12/07 20:53:29 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.3 1999/12/15 14:54:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -250,7 +250,7 @@ void G4OpenGLXmViewer::projection_callback (Widget w,
     {
       if (pView->fov > 89.5 || pView->fov <= 0.0) {
 	G4cout << "Field half angle should be 0 < angle <= 89.5 degrees.";
-	G4cout << endl;
+	G4cout << G4endl;
       }
       else {
 	pView->fVP.SetFieldHalfAngle (pView->fov * deg);

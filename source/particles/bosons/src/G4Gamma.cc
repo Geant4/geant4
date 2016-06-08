@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Gamma.cc,v 1.1.10.1 1999/12/07 20:49:21 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Gamma.cc,v 1.1.10.1.2.3 1999/12/14 07:07:59 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -25,8 +25,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
  
 #include "G4Gamma.hh"
 
@@ -129,11 +129,11 @@ void G4Gamma::BuildAbsorptionLengthVector(
   }
   if ( theCutInMaxInteractionLength >= absorptionLengthMax ) {
       G4cout << "******** SetCuts for " << GetParticleName(); 
-      G4cout << " ********************" << endl;
+      G4cout << " ********************" << G4endl;
       G4cout << "The maximal meaningful cut is ";
-      G4cout << absorptionLengthMax/mm << " mm." << endl;
-      G4cout << "All the " << GetParticleName() << "will be killed !" << endl;
-      G4cout << "in the material " << aMaterial->GetName() << "." << endl;
+      G4cout << absorptionLengthMax/mm << " mm." << G4endl;
+      G4cout << "All the " << GetParticleName() << "will be killed !" << G4endl;
+      G4cout << "in the material " << aMaterial->GetName() << "." << G4endl;
   }
 }
 
@@ -228,8 +228,8 @@ G4double G4Gamma::ConvertCutToKineticEnergy(
      return T1;
   } else if ( theCutInMaxInteractionLength >= rmax ) {
       G4cout << "******** ConvertCutToKineticEnergy for " << GetParticleName(); 
-      G4cout << " ********************" << endl;
-      G4cout << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<endl; 
+      G4cout << " ********************" << G4endl;
+      G4cout << "The cut energy is set " << DBL_MAX/GeV << "GeV " <<G4endl; 
       return  DBL_MAX;
   } else {
     G4double T2 = Tmax;

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronInelasticProcess.hh,v 1.1.10.1 1999/12/07 20:52:29 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: Neutron Inelastic Process
  // original by H.P. Wellisch

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.hh,v 1.1.10.1 1999/12/07 20:48:40 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Navigator.hh,v 1.1.10.1.2.2 1999/12/09 13:51:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // class G4Navigator Paul Kent July 95/96
@@ -207,12 +207,12 @@
 #include "G4ParameterisedNavigation.hh"
 #include "G4ReplicaNavigation.hh"
 
-class ostream;
+#include "g4std/iostream"
 
 class G4Navigator
 {
 public:
-  friend ostream& operator << (ostream &os, const G4Navigator &n);
+  friend G4std::ostream& operator << (G4std::ostream &os, const G4Navigator &n);
 
 // Constructor - initialisers and setup
   G4Navigator();

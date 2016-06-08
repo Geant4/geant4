@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.hh,v 1.3.2.1 1999/12/07 20:49:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UImanager.hh,v 1.5 2000/02/14 08:41:24 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4UImanager_h
@@ -15,7 +15,7 @@
 #include "globals.hh"
 #include "g4rw/ctoken.h"
 #include "g4rw/tvordvec.h"
-#include <fstream.h>
+#include "g4std/fstream"
 class G4UIcommandTree;
 class G4UIcommand;
 class G4UIsession;
@@ -59,7 +59,7 @@ class G4UImanager
       // command, that particular command cannot be applied.
       void ExecuteMacroFile(G4String fileName);
       //  A macro file defined by the argument will be read by G4UIbatch object.
-      G4int ApplyCommand(char * aCommand);
+      G4int ApplyCommand(const char * aCommand);
       G4int ApplyCommand(G4String aCommand);
       //  These two methods are identical. A command (and parameter(s)) given
       // by the method's argument will be applied. Zero will be returned in 
@@ -88,7 +88,7 @@ class G4UImanager
   public:
   // following three methods will be removed quite soon.
       void Interact();
-      void Interact(char * promptCharacters);
+      void Interact(const char * promptCharacters);
       void Interact(G4String promptCharacters);
 
   private:
@@ -101,7 +101,7 @@ class G4UImanager
       G4String savedParameters;
       G4UIcommand * savedCommand;
       G4int verboseLevel;
-      ofstream historyFile;
+      G4std::ofstream historyFile;
       G4bool saveHistory;
       G4RWTValOrderedVector<G4String> histVec;
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xt.cc,v 1.4.6.1 1999/12/07 20:49:11 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Xt.cc,v 1.4.6.1.2.1 1999/12/08 17:34:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G.Barrand
 
@@ -91,7 +91,7 @@ G4Xt::G4Xt (
 				    &argc,a_args,NULL,
 				    xargs,1);
     if(topWidget==NULL) {
-      G4cout        << "G4Xt : Unable to init Xt." << endl;
+      G4cout        << "G4Xt : Unable to init Xt." << G4endl;
     }
     // Restore a_args. XtAppInitialize corrupts the given ones !!!
     if( (a_argn!=0) && (args!=NULL)) {

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.4.4.1 1999/12/07 20:53:41 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.6 1999/12/16 17:25:11 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4VRML1FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -16,7 +16,7 @@
 #ifndef G4VRML1FILE_SCENE_HANDLER_HH
 #define G4VRML1FILE_SCENE_HANDLER_HH
 
-#include <fstream.h>
+#include "g4std/fstream"
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
@@ -41,6 +41,12 @@ public:
 	void AddThis(const G4Sphere&);
         void AddThis(const G4Para&);
 	void AddThis(const G4Torus&);
+        void AddThis ( const G4Polycone& polycone ) {
+          G4VSceneHandler::AddThis (polycone);
+        }
+        void AddThis ( const G4Polyhedra& polyhedra) {
+          G4VSceneHandler::AddThis (polyhedra);
+        }
         void AddThis(const G4VSolid&);
 
 	void BeginPrimitives(const G4Transform3D& objectTransformation);
@@ -92,7 +98,7 @@ private:
 	G4String fCurrentDEF;
 
 	G4VRML1File& fSystem;	// Graphics system for this scene.
-	ofstream     fDest ;
+	G4std::ofstream     fDest ;
 	G4bool       fFlagDestOpen ;
 
 	G4int        fMaxFileNum   ;	

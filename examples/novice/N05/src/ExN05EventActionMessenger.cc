@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventActionMessenger.cc,v 1.1.10.1 1999/12/07 20:47:37 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN05EventActionMessenger.cc,v 1.2 1999/12/15 14:49:30 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "ExN05EventActionMessenger.hh"
@@ -32,7 +32,7 @@ void ExN05EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newVa
   {
     G4int vl;
     const char* t = newValues;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> vl;
     EventAction->SetDrawFlag(vl!=0);
   }

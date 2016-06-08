@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBStube.hh,v 1.4.2.1 1999/12/07 20:48:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NURBStube.hh,v 1.5 1999/12/15 14:50:32 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996

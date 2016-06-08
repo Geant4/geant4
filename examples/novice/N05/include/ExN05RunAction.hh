@@ -5,17 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05RunAction.hh,v 1.4.8.1 1999/12/07 20:47:34 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN05RunAction.hh,v 1.6 2000/01/06 15:06:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef ExN05RunAction_h
 #define ExN05RunAction_h 1
 
-#include "G4Timer.hh"
 #include "globals.hh"
 #include "G4UserRunAction.hh"
 
+class G4Timer;
 class G4Run;
 
 class ExN05RunAction : public G4UserRunAction

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4XiMinusInelasticProcess.hh,v 1.1.10.1 1999/12/07 20:52:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // G4 Process: XiMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Nov-1996

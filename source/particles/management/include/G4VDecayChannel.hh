@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.5.4.1 1999/12/07 20:49:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VDecayChannel.hh,v 1.5.4.1.2.1 1999/12/08 17:34:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // ------------------------------------------------------------
@@ -166,7 +166,7 @@ inline
     return daughters[anIndex];
   } else {
     if (verboseLevel>0)
-      G4cout << "G4VDecayChannel::GetDaughter  index out of range "<<anIndex<<endl;
+      G4cout << "G4VDecayChannel::GetDaughter  index out of range "<<anIndex<<G4endl;
     return 0;
   }
 }
@@ -179,7 +179,7 @@ inline
   } else {
     if (verboseLevel>0){
       G4cout << "G4VDecayChannel::GetDaughterName ";
-      G4cout << "index out of range " << anIndex << endl;
+      G4cout << "index out of range " << anIndex << G4endl;
     }
     return noName;
   }
@@ -193,7 +193,7 @@ inline
   } else {
     if (verboseLevel>0){
       G4cout << "G4VDecayChannel::GetDaughterMass ";
-      G4cout << "index out of range " << anIndex << endl;
+      G4cout << "index out of range " << anIndex << G4endl;
     }
     return 0.0;
   }

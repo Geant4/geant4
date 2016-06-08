@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.39 1999/12/01 14:40:43 morita Exp $
+# $Id: binmake.gmk,v 1.42 2000/02/14 11:24:45 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -124,8 +124,9 @@ ifndef USER_DEFINED_LDLIBS
 ifdef G4EXLIB
   LDLIBS1 := -l$(G4TARGET)
 endif
+LDLIBS1 += $(EXTRALIBS)
 
-# VISLIBS and UILIBS are now handles by the granular library script...
+# VISLIBS and UILIBS are now handled by the granular library script...
 #
 ifdef GLOBALLIBS
   LDLIBS1 += $(VISLIBS) $(UILIBS)
@@ -142,11 +143,11 @@ ifdef GLOBALLIBS
              -lG4event \
              -lG4tracking \
              -lG4processes \
-             -lG4particles \
              -lG4digits+hits \
              -lG4track \
-             -lG4materials \
+             -lG4particles \
              -lG4geometry \
+             -lG4materials \
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4global
@@ -188,7 +189,6 @@ ifdef G4USE_OSPACE
   LDLIBS4 += $(OSPACELIBS)
 endif
 
-LDLIBS4 += $(EXTRALIBS)
 LDLIBS4 += $(LOADLIBS)
 
 # Finally assemble libraries...
@@ -228,7 +228,7 @@ bin: $(G4BINDIR)/$(G4TARGET)
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
 ifndef USER_DEFINED_LDLIBS
   ifndef GLOBALLIBS
-	@echo "Using granular libraries."
+	@echo "Using granular libraries ..."
 	@if [ ! \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
 	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
 	  echo "ERROR: No liblist program or library map file."; \

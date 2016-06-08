@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FastSimulationMessenger.cc,v 1.2.8.1 1999/12/07 20:52:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4FastSimulationMessenger.hh"

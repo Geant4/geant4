@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LorentzVector.hh,v 1.2 1999/11/16 17:29:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4LorentzVector_hh
 #define G4LorentzVector_hh

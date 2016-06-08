@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRMLNetConfig.hh,v 1.2.8.1 1999/12/07 20:53:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VRMLNetConfig.hh,v 1.3 1999/12/15 14:54:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4VRMLNetConfig.hh
 // Satoshi Tanaka

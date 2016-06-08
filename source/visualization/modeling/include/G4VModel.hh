@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.hh,v 1.4.2.1 1999/12/07 20:54:09 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VModel.hh,v 1.5 1999/12/15 14:54:31 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -32,7 +32,7 @@ class G4VModel {
 
 public: // With description
 
-  friend ostream& operator << (ostream& os, const G4VModel&);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VModel&);
 
   G4VModel
   (const G4Transform3D& modelTransformation = G4Transform3D::Identity,

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1PhysicsList.cc,v 1.1.4.1 1999/12/07 20:46:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em1PhysicsList.cc,v 1.2 1999/12/15 14:48:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -227,7 +227,7 @@ void Em1PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Em1PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,
@@ -314,10 +314,10 @@ void Em1PhysicsList::GetRange(G4double val)
   G4double cut;
   part = theParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << endl;
-  G4cout << "particle : " << part->GetParticleName() << endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << endl;
+  G4cout << "material : " << currMat->GetName() << G4endl;
+  G4cout << "particle : " << part->GetParticleName() << G4endl;
+  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
+  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

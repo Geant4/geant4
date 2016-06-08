@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RandGlobalTest.cc,v 1.3 1999/11/23 15:00:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------

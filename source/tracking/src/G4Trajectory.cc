@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.5.4.1.2.1 1999/12/07 20:53:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Trajectory.cc,v 1.8 2000/01/26 04:20:34 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // ---------------------------------------------------------------
@@ -91,17 +91,17 @@ G4Trajectory::~G4Trajectory()
 void G4Trajectory::ShowTrajectory() const
 ///////////////////////////////////
 {
-   G4cout << endl << "TrackID =" << fTrackID 
-        << ":ParentID=" << fParentID << endl;
+   G4cout << G4endl << "TrackID =" << fTrackID 
+        << ":ParentID=" << fParentID << G4endl;
    G4cout << "Particle name : " << ParticleName 
-        << "  Charge : " << PDGCharge << endl;
+        << "  Charge : " << PDGCharge << G4endl;
    G4cout << "  Current trajectory has " << positionRecord->entries() 
-        << " points." << endl;
+        << " points." << G4endl;
 
    for( size_t i=0 ; i < positionRecord->entries() ; i++){
        G4TrajectoryPoint* aTrajectoryPoint = (G4TrajectoryPoint*)((*positionRecord)[i]);
        G4cout << "Point[" << i << "]" 
-            << " Position= " << aTrajectoryPoint->GetPosition() << endl;
+            << " Position= " << aTrajectoryPoint->GetPosition() << G4endl;
    }
 }
 
@@ -166,4 +166,19 @@ G4ParticleDefinition* G4Trajectory::GetParticleDefinition()
 {
    return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
 }
+
+/////////////////////////////////////////////
+void G4Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
+/////////////////////////////////////////////
+{
+  if(!secondTrajectory) return;
+
+  G4Trajectory* seco = (G4Trajectory*)secondTrajectory;
+  G4int ent = seco->GetPointEntries();
+  for(int i=1;i<ent;i++) // initial point of the second trajectory should not be merged
+  { 
+    positionRecord->append(seco->positionRecord->removeAt(1));
+  }
+}
+
 

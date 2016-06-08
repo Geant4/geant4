@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisExtent.cc,v 1.3.8.1 1999/12/07 20:48:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisExtent.cc,v 1.4 1999/12/15 14:50:37 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // A.Walkden 28/11/95
@@ -50,7 +50,7 @@ G4double G4VisExtent::GetExtentRadius () const {
 	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
 }
  
-ostream& operator << (ostream& os, const G4VisExtent& e) {
+G4std::ostream& operator << (G4std::ostream& os, const G4VisExtent& e) {
   os << "G4VisExtent (bounding box):";
   os << "\n  X limits: " << e.fXmin << ' ' << e.fXmax;
   os << "\n  Y limits: " << e.fYmin << ' ' << e.fYmax;

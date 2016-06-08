@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GeneralPhaseSpaceDecay.hh,v 1.2.4.1 1999/12/07 20:51:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //$Id: G4GeneralPhaseSpaceDecay.hh,v 1.1 1997/05/21
 // ----------------------------------------------------------------

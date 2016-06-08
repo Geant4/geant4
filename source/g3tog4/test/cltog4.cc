@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: cltog4.cc,v 1.6 1999/12/05 17:50:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: cltog4.cc,v 1.7 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 #include "G4ios.hh"
@@ -35,33 +35,33 @@ G4int main(int argc, char** argv)
   
   if (argc < 2) {
     G4cout << "Correct syntax:" << argv[0] << " <call_list_file> [ <macro_file> ]"
-	   << endl;
+	   << G4endl;
     G4cout << "If only one argument is specified, macro file " << macroFile
-	   << "will be used." << endl 
+	   << "will be used." << G4endl 
 	   << "The second argument is used to override the default macro file"
-	   << " name." << endl;
+	   << " name." << G4endl;
     
     return 1;
   }
   if (argc >= 2) {
     // Process the command line
     inFile = argv[1];
-    ifstream in(inFile);
+    G4std::ifstream in(inFile);
     if (!in) {
-      G4cout << "Cannot open input file """ << inFile << """" << endl;
+      G4cout << "Cannot open input file """ << inFile << """" << G4endl;
       return 1;
     }
   }
   if (argc >= 3) {
     macroFile = argv[2];
-    ifstream mac(macroFile);
+    G4std::ifstream mac(macroFile);
     if (!mac) {
-      G4cout << "Cannot open macro file """ << macroFile << """" << endl;
+      G4cout << "Cannot open macro file """ << macroFile << """" << G4endl;
       return 2;
     }
   }
   if (argc >= 4) {
-    G4cout << "Too many command line arguments (" << argc <<")" << endl;
+    G4cout << "Too many command line arguments (" << argc <<")" << G4endl;
     return 1;
   }
   // run manager
@@ -90,7 +90,7 @@ G4int main(int argc, char** argv)
     if (session != 0) {
       session->SessionStart();
       delete session;
-      //      G4cout << "deleted G4UITerminal..." << endl;
+      //      G4cout << "deleted G4UITerminal..." << G4endl;
     }
   }
   else {

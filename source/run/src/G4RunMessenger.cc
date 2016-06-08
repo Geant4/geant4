@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.4.8.1 1999/12/07 20:52:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4RunMessenger.cc,v 1.4.8.1.2.5 1999/12/14 09:16:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4RunMessenger.hh"
@@ -19,11 +19,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4ios.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
 :runManager(runMgr)
@@ -161,7 +157,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     G4int nev;
     G4int ns;
     const char* nv = (const char*)newValue;
-    istrstream is((char*)nv);
+    G4std::istrstream is((char*)nv);
     is >> nev >> macroFileName >> ns;
     if(macroFileName=="***NULL***")
     { runManager->BeamOn(nev); }

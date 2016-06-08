@@ -60,7 +60,7 @@ G4double G4NeutronHPKallbachMannSyst::A(G4double anEnergy)
     G4int ZA = theTargetZ;
     G4double ea = epsa+SeparationEnergy(Ac, Nc, AA, ZA);
     G4double Et1 = 130*MeV;
-    G4double R1 = min(ea, Et1);
+    G4double R1 = G4std::min(ea, Et1);
     // theProductEnergy is still in CMS!!!
     G4double epsb = theProductEnergy*(theProductMass+theResidualMass)/theResidualMass;
     G4int AB = theResidualA;
@@ -68,7 +68,7 @@ G4double G4NeutronHPKallbachMannSyst::A(G4double anEnergy)
     G4double eb = epsb+SeparationEnergy(Ac, Nc, AB, ZB );
   G4double X1 = R1*eb/ea; 
     G4double Et3 = 41*MeV;
-    G4double R3 = min(ea, Et3);
+    G4double R3 = G4std::min(ea, Et3);
   G4double X3 = R3*eb/ea;
   G4double Ma = 1;
   G4double mb;

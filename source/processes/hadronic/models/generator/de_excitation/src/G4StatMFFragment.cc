@@ -48,7 +48,7 @@ G4double G4StatMFFragment::GetEnergy(const G4double T)
 {
 	if (theA < 1 || theZ < 0 || theZ > theA) {
 		G4cerr << "G4StatMFFragment::GetEnergy: A = " << theA 
-				 << ", Z = " << theZ << endl;
+				 << ", Z = " << theZ << G4endl;
 		G4Exception(
 		"G4StatMFFragment::GetEnergy: Wrong values for A and Z!");
 	}

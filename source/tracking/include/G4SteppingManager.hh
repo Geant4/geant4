@@ -5,9 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.6.4.1.2.1 1999/12/07 20:53:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
-//
+// $Id: G4SteppingManager.hh,v 1.11 2000/01/26 04:20:30 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 // 
 //---------------------------------------------------------------
 //
@@ -33,7 +32,7 @@ class G4SteppingManager;
 #define G4SteppingManager_h 1
 
 #include "G4ios.hh"                 // Include from 'system'
-#include <iomanip.h>                  // Include from 'system'
+#include "g4std/iomanip"                  // Include from 'system'
 #include "globals.hh"                 // Include from 'global'
 #include "Randomize.hh"               // Include from 'global'
 #include "G4Navigator.hh"             // Include from 'geometry'
@@ -474,8 +473,7 @@ class G4SteppingManager
   }
 
   inline void G4SteppingManager::SetUserAction(G4UserSteppingAction* apAction){
-    if (fUserSteppingAction) delete fUserSteppingAction;
-    fUserSteppingAction = apAction;
+    if (apAction != NULL) fUserSteppingAction = apAction;
   }
   inline G4UserSteppingAction* G4SteppingManager::GetUserAction(){
     return fUserSteppingAction;
@@ -498,7 +496,7 @@ class G4SteppingManager
   }
 
   inline G4double G4SteppingManager::CalculateSafety(){
-    return max( endpointSafety -
+    return G4std::max( endpointSafety -
 		(endpointSafOrigin - fPostStepPoint->GetPosition()).mag(),
 	        0.);
   }

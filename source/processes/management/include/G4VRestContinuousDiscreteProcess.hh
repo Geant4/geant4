@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRestContinuousDiscreteProcess.hh,v 1.3 1999/11/07 17:11:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VRestContinuousDiscreteProcess.hh,v 1.3.6.1 1999/12/08 17:35:12 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -150,10 +150,10 @@ inline G4double G4VRestContinuousDiscreteProcess::AtRestGetPhysicalInteractionLe
 #ifdef G4VERBOSE
    if ((currentInteractionLength <0.0) || (verboseLevel>2)){
     G4cout << "G4VRestContinuousDiscreteProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
   }
 #endif
 
@@ -192,10 +192,10 @@ inline G4double G4VRestContinuousDiscreteProcess::AlongStepGetPhysicalInteractio
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << "G4VRestContinuousDiscreteProcess::AlongStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<endl;
-    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<endl;
+    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "IntractionLength= " << steplength/cm <<"[cm] " <<G4endl;
   }
 #endif
   return  steplength ;
@@ -234,10 +234,10 @@ inline G4double G4VRestContinuousDiscreteProcess::PostStepGetPhysicalInteraction
 #ifdef G4VERBOSE
    if ((currentInteractionLength <=0.0) || (verboseLevel>2)){
     G4cout << "G4VRestContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<endl;
-    G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" <<endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "MeanFreePath = " << currentInteractionLength/cm << "[cm]" <<G4endl;
   }
 #endif
 
@@ -245,10 +245,10 @@ inline G4double G4VRestContinuousDiscreteProcess::PostStepGetPhysicalInteraction
 #ifdef G4VERBOSE
    if (verboseLevel>1){
     G4cout << "G4VRestContinuousDiscreteProcess::PostStepGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<endl;
-    G4cout << "InteractionLength= " << value/cm <<"[cm] " <<endl;
+    G4cout << " in Material  " <<  track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "InteractionLength= " << value/cm <<"[cm] " <<G4endl;
   }
 #endif
   return value;

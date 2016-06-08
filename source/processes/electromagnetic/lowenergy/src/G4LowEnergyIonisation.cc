@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.25.2.1 1999/12/07 20:50:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyIonisation.cc,v 1.29 2000/02/18 12:39:18 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // -------------------------------------------------------------
@@ -14,13 +14,21 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4LowEnergyIonisation physics process --------
-//                   by Michel Maire, April 1996
 //      ---------- G4LowEnergyIonisation low energy modifications -----------
 //                by Alessandra Forti May 1999  
 // **************************************************************
+//   17.02.2000 Veronique Lefebure
+// - 5 bugs corrected: 
+//   *in Fluorescence, 2 bugs affecting 
+//   . localEnergyDeposition and
+//   . number of emitted photons that was then always 1 less
+//   *in EnergySampling method: 
+//   . expon = Parms[13]+1; (instead of uncorrect -1)
+//   . rejection /= Parms[6];(instead of uncorrect Parms[7])
+//   . Parms[6] is apparently corrupted in the data file (often = 0)  
+//     -->Compute normalisation into local variable rejectionMax
+//     and use rejectionMax  in stead of Parms[6]
+//
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Added EnergySampling method A. Forti
@@ -37,7 +45,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Gamma.hh"
 #include "G4UnitsTable.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 
@@ -210,7 +218,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
           if (&aParticleType==G4Electron::Electron())
             {
               Tmax = LowEdgeEnergy/2.;
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               ionloss = log(2.*(tau+2.)/Eexcm2)-1.-beta2
                        + log((tau-d)*d)+tau/(tau-d)
                        + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -218,7 +226,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
           else        //positron
             {
               Tmax = LowEdgeEnergy ;
-              d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
+              d = G4std::min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               d2=d*d/2.; d3=d*d*d/3.; d4=d*d*d*d/4.;
               y=1./(1.+gamma);
               ionloss = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
@@ -434,7 +442,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     aParticleChange.SetEnergyChange(0.);
     
  if(KineticEnergy < 0.)
-   G4cout << " 1. negative deposit:" << KineticEnergy/eV << endl; 
+   G4cout << " 1. negative deposit:" << KineticEnergy/eV << G4endl; 
     aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
 
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -459,7 +467,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   if(KineticEnergy <= BindingEn)
   {
     G4cout << " Tkin=" << KineticEnergy/eV << "  Ebind=" << BindingEn/eV
-           << "   selection of subshell ???????" << endl;
+           << "   selection of subshell ???????" << G4endl;
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   }
 
@@ -485,7 +493,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   if(finalKineticEnergy < 0.){
 
     G4cout << "Tkin=" << KineticEnergy/eV << "  Tdel=" << DeltaKineticEnergy/eV
-	   << "  BindingEn=" << BindingEn/eV << "  ***********" << endl;
+	   << "  BindingEn=" << BindingEn/eV << "  ***********" << G4endl;
   }
 
   // deposit energy if delta energy is below cut
@@ -497,7 +505,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
       if((DeltaKineticEnergy+BindingEn) < 0.){
 
-	G4cout << " 2. negative deposit:" << (DeltaKineticEnergy+BindingEn)/eV << endl; 
+	G4cout << " 2. negative deposit:" << (DeltaKineticEnergy+BindingEn)/eV << G4endl; 
       }
 
       aParticleChange.SetLocalEnergyDeposit(DeltaKineticEnergy+BindingEn);
@@ -509,7 +517,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
       if(KineticEnergy < 0.){
 
-	G4cout << " 3. negative deposit:" << KineticEnergy/eV << endl; 
+	G4cout << " 3. negative deposit:" << KineticEnergy/eV << G4endl; 
       }
 
       aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
@@ -636,10 +644,10 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	if(ThereAreShells != FALSE){
 	  
 	  thePrimaryShell = (G4int) fluorPar[0];
-	  theEnergyDeposit -= fluorPar[2]*MeV;
 	  
 	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
 	    
+	    theEnergyDeposit -= fluorPar[2]*MeV;
 	    newPart = new G4DynamicParticle (G4Gamma::Gamma(), 
 					     newPartDirection, 
 					     fluorPar[2]);
@@ -658,7 +666,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	  G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
 	  thePrimaryShell = (G4int) fluorPar[0];
 	  
-	  if(fluorPar[2] >= CutForLowEnergySecondaryPhotons){
+	  if(lastTransEnergy >= CutForLowEnergySecondaryPhotons){
 	    
 	    theEnergyDeposit -= lastTransEnergy*MeV;
 	    
@@ -703,7 +711,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
       aParticleChange.SetEnergyChange(finalKineticEnergy);
  if(theEnergyDeposit < 0.)
-   G4cout << " 4. negative deposit:" << theEnergyDeposit/eV << endl; 
+   G4cout << " 4. negative deposit:" << theEnergyDeposit/eV << G4endl; 
       aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
     }
     else
@@ -711,8 +719,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       theEnergyDeposit += finalKineticEnergy ;
  if(theEnergyDeposit < 0.)
  {
-   G4cout << " 5. negative deposit:" << theEnergyDeposit/eV << endl; 
-   G4cout << " finalKineticEnergy=" << finalKineticEnergy/eV << endl;
+   G4cout << " 5. negative deposit:" << theEnergyDeposit/eV << G4endl; 
+   G4cout << " finalKineticEnergy=" << finalKineticEnergy/eV << G4endl;
  }
 
       aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
@@ -982,8 +990,8 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   G4double aa=1./low ;
   G4double bb=1./high ;
   G4double saa = aa, sbb = bb;
-  G4double llow = low*low;
-  G4double s1 = 0. ;
+  G4double llow = low;
+  G4double rejectionMax = 0. ;
   
   for (G4int ii = 1; ii < 7; ii++){
 
@@ -997,7 +1005,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     //
     //function itself at the minimum value (0.1*eV)
     //
-    s1 += Parms[ii-1]/llow;
+    rejectionMax += Parms[ii-1]/llow;
     llow *= low ;
   }
   
@@ -1014,7 +1022,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 
     // Second Function: B1*energy**B2
     //
-    G4double expon = Parms[13]-1;
+    G4double expon = Parms[13]+1;
     
     // area2: integral of the normalized second function
     area2 = (Parms[12]/expon)*(pow(sndCut,expon)-pow(fstCut,expon));
@@ -1103,7 +1111,8 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
       rejection = Parms[0]/arg+Parms[1]/pow(arg,2)+Parms[2]/pow(arg,3)+
 	Parms[3]/pow(arg,4)+Parms[4]/pow(arg,5)+Parms[5]/pow(arg,6);
       
-      rejection /= Parms[7];
+      //rejection /= Parms[6];
+      rejection /= rejectionMax;
       
     }while(rejection < G4UniformRand()); 
   }
@@ -1111,7 +1120,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   else if(rand1 > area1 && rand1 <= areaDue){
     
     //Sampling from the second function only 9 subshells
-    G4double expon = Parms[13]-1;
+    G4double expon = Parms[13]+1;
     G4double norm = (pow(sndCut,expon)-pow(fstCut,expon));
     G4double sum = norm*G4UniformRand()+pow(fstCut,expon);
     G4double exponInv = 1/expon;
@@ -1152,8 +1161,9 @@ void G4LowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "First version of low energy ionisation code,";
            comments += "\n At present it can be used for electrons only ";
+	   comments += "\n To be used as a **PURE DISCRETE** process for now";
            comments += " in the energy range [250 eV,100 GeV]";
-  G4cout << endl << GetProcessName() << ":  " << comments << endl;
+  G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 
 }
 

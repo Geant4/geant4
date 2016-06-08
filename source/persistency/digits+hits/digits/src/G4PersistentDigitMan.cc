@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PersistentDigitMan.cc,v 1.4 1999/11/28 21:54:14 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4PersistentDigitMan 
 //

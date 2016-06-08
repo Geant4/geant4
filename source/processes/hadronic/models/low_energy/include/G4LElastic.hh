@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LElastic.hh,v 1.3.2.1 1999/12/07 20:52:19 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // G4 Model: Low energy elastic scattering -- header file

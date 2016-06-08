@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPElasticData.hh,v 1.2 1999/07/02 09:58:46 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4NeutronHPElasticData_h
 #define G4NeutronHPElasticData_h 1

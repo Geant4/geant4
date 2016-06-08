@@ -28,8 +28,8 @@
       hasXsec = false;
       return; // no data for exactly this isotope.
     }
-#ifndef WIN32
-    ifstream theData(filename, ios::in);
+#ifdef G4USE_STD_NAMESPACE
+    G4std::ifstream theData(filename, G4std::ios::in);
 #else
     ifstream theData(filename, ios::in|ios::nocreate);
 #endif

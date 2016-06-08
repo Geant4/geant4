@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: cstring.h,v 1.6 1999/11/29 10:17:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: cstring.h,v 1.7 1999/12/15 18:12:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -29,10 +29,7 @@
 #include <string>
 #include "G4Types.hh"
 #include "g4rw/defs.h"
-
-#ifdef __KCC
-  #include <istream>
-#endif
+#include "g4std/iostream"
 
 #ifdef WIN32
   #define strcasecmp _stricmp

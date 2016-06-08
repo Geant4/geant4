@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.3.8.1 1999/12/07 20:53:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLStoredWin32.cc,v 1.4 1999/12/15 14:54:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // OpenGLStoredWin32 graphics system factory.
@@ -34,7 +34,7 @@ G4OpenGLStoredWin32::G4OpenGLStoredWin32 ():
 G4VSceneHandler* G4OpenGLStoredWin32::CreateSceneHandler () {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this);
   G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << endl;
+       << ' ' << fName << " scenes extanct." << G4endl;
   return    pScene;
 }
 
@@ -47,12 +47,12 @@ G4VViewer* G4OpenGLStoredWin32::CreateViewer (G4VSceneHandler& scene) {
       pView = 0;
       G4cerr << "G4OpenGLStoredWin32::CreateViewer: error flagged by"
 	" negative view id in G4OpenGLStoredWin32Viewer creation."
-	"\n Destroying view and returning null pointer." << endl;
+	"\n Destroying view and returning null pointer." << G4endl;
     }
   }
   else {
     G4cerr << "G4OpenGLStoredWin32::CreateViewer: null pointer on"
-      " new G4OpenGLStoredWin32Viewer." << endl;
+      " new G4OpenGLStoredWin32Viewer." << G4endl;
   }
   return pView;
 }

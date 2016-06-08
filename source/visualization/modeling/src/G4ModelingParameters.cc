@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.cc,v 1.3.8.1 1999/12/07 20:54:11 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ModelingParameters.cc,v 1.4 1999/12/15 14:54:31 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -86,14 +86,14 @@ void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
   const G4double reasonableMaximum = 10.0 * g / cm3;
   if (visibleDensity < 0) {
     G4cout << "G4ModelingParameters::SetVisibleDensity: attempt to set negative "
-      "density - ignored." << endl;
+      "density - ignored." << G4endl;
   }
   else {
     if (fVisibleDensity > reasonableMaximum) {
       G4cout << "G4ModelingParameters::SetVisibleDensity: density > "
 	   << reasonableMaximum
 	   << " g / cm3 - did you mean this?"
-	   << endl;
+	   << G4endl;
     }
     fVisibleDensity = visibleDensity;
   }
@@ -105,7 +105,7 @@ void G4ModelingParameters::SetNoOfSides (G4int nSides) {
     nSides = nSidesMin;
     G4cout << "G4ModelingParameters::SetNoOfSides: attempt to set the"
       "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to" << nSides << endl;
+	 << "; forced to" << nSides << G4endl;
   }
   fNoOfSides = nSides;
 }
@@ -125,10 +125,10 @@ void G4ModelingParameters::PrintDifferences
       (fViewGeom              != that.fViewGeom)              ||
       (fViewHits              != that.fViewHits)              ||
       (fViewDigis             != that.fViewDigis))
-    G4cout << "Difference in 1st batch." << endl;
+    G4cout << "Difference in 1st batch." << G4endl;
 }
 
-ostream& operator << (ostream& os, const G4ModelingParameters& mp) {
+G4std::ostream& operator << (G4std::ostream& os, const G4ModelingParameters& mp) {
   os << "Modeling parameters and options:";
 
   os << "\n  Default vis. attributes: " << *mp.fpDefaultVisAttributes;

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisStateDependent.hh,v 1.2.2.1 1999/12/07 20:53:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisStateDependent.hh,v 1.3 1999/12/15 14:54:23 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // A "state dependent" service class for G4VisManager.
 // John Allison  29th November 1999

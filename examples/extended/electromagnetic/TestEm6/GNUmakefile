@@ -1,6 +1,7 @@
-# $Id: GNUmakefile,v 1.1 1999/10/28 02:15:11 vnivanch Exp $
+# $Id: GNUmakefile,v 1.3 2000/01/21 15:59:27 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# G4NOHIST variable is checked.  Vladimir Ivanchenko, 2000/01/18
 # --------------------------------------------------------------
 
 name := TestEm6
@@ -16,7 +17,11 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
-LDFLAGS  += -L/cern/pro/lib
-LOADLIBS += -lpacklib $(FCLIBS)
+ifdef G4NOHIST
+  CPPFLAGS += -DG4NOHIST
+else
+  LDFLAGS  += -L/cern/pro/lib
+  LOADLIBS += -lpacklib $(FCLIBS)
+endif
 
 include $(G4INSTALL)/config/binmake.gmk

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.3.8.1 1999/12/07 20:50:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyRayleigh.hh,v 1.5 2000/01/26 09:43:17 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -15,18 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyRayleigh physics process ------
-//                   by Michel Maire, April 1996
+//                   by A.Forti 1999/03/02
 // ************************************************************
-// 10-06-96, updated by M.Maire 
-// 21-06-96, SetCuts implementation, M.Maire
-// 06-01-97, crossection table + meanfreepath table, M.Maire
-// 17-02-97, New Physics scheme
-// 25-02-97, GetMeanFreePath() now is public function
-// 12-03-97, new physics scheme again
-// ------------------------------------------------------------
 
 #ifndef G4LowEnergyRayleigh_h
 #define G4LowEnergyRayleigh_h 

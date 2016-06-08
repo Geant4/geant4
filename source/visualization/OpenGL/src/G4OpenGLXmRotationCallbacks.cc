@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.4.8.1 1999/12/07 20:53:28 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.5 1999/12/15 14:54:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  16th April 1997

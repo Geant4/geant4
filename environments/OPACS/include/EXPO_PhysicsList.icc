@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: EXPO_PhysicsList.icc,v 1.3.6.1 1999/12/07 20:46:50 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: EXPO_PhysicsList.icc,v 1.3.6.1.2.3 1999/12/14 07:06:18 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -29,7 +29,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 EXPO_PhysicsList::EXPO_PhysicsList():  G4VUserPhysicsList()
@@ -262,7 +262,7 @@ void EXPO_PhysicsList::SetCuts()
 /*	
   if (verboseLevel >0){
     G4cout << "EXPO_PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << cut/mm << " (mm)" << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,

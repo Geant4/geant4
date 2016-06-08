@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.2.8.1 1999/12/07 20:47:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN03DetectorConstruction.cc,v 1.4 1999/12/15 14:49:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -211,7 +211,7 @@ G4Material* beam = new G4Material(name="Beam", density, ncomponents=1,
                                       kStateGas,temperature,pressure);
 beam->AddMaterial(Air, fractionmass=1.);
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorberMaterial = Pb;
@@ -371,11 +371,12 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
 
 void ExN03DetectorConstruction::PrintCalorParameters()
 {
-  G4cout << "\n The calorimeter is made of " << NbOfLayers << " layers of: [ "
-       << AbsorberThickness/mm << "mm of " << AbsorberMaterial->GetName() 
-       << " + "
-       << GapThickness/mm << "mm of " << GapMaterial->GetName() << " ] " 
-       << endl;
+  G4cout << "\n------------------------------------------------------------"
+         << "\n---> The calorimeter is " << NbOfLayers << " layers of: [ "
+         << AbsorberThickness/mm << "mm of " << AbsorberMaterial->GetName() 
+         << " + "
+         << GapThickness/mm << "mm of " << GapMaterial->GetName() << " ] " 
+         << "\n------------------------------------------------------------\n";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -79,7 +79,7 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 //      ModelMode = DIFFRACTIVE;
       if (Probability > rndNumber)
       {
-//--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<sqrt(Distance2)<<endl;
+//--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<sqrt(Distance2)<<G4endl;
         G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);
         theTargets.insert(aTarget);
  	pNucleon->Hit(aTarget);
@@ -130,10 +130,10 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
        }
       }
     }
-//--DEBUG--  cout << endl<<"NUCLEONCOUNT "<<nucleonCount<<endl;
+//--DEBUG--  cout << G4endl<<"NUCLEONCOUNT "<<nucleonCount<<G4endl;
   }
-//--DEBUG--  cout << endl<<"CUTDEBUG "<< totalCuts <<endl;
-//--DEBUG--  cout << "Impact Parameter used = "<<impactUsed<<endl;
+//--DEBUG--  cout << G4endl<<"CUTDEBUG "<< totalCuts <<G4endl;
+//--DEBUG--  cout << "Impact Parameter used = "<<impactUsed<<G4endl;
   // now build the parton pairs. HPW
   SplitHadrons();
   

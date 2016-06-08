@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PartonVector.hh,v 1.1.8.1.2.1 1999/12/07 20:51:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4PartonVector_h
 #define G4PartonVector_h 1

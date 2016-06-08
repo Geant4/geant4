@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.2.8.1 1999/12/07 20:53:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.3 1999/12/15 14:54:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  7th February 1997

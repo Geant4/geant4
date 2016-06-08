@@ -1,5 +1,5 @@
-$Id: History,v 1.92 1999/12/07 08:51:38 gcosmo Exp $
-$Name: geant4-01-00 $
+$Id: History,v 1.97 2000/02/14 11:27:42 gcosmo Exp $
+$Name: geant4-01-01 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th February 2000  Gabriele Cosmo (config-V01-00-02)
+- architecture.gmk: added option '+W823' to HP-aCC compilation setup to
+  discard warnings for macros parameter definition as used in the new
+  NIST STEP reader.
+- binmake.gmk: moved $EXTRALIBS to be included on top of the linking list,
+  just after the user application library.
+
+31st January 2000  Gabriele Cosmo (config-V01-00-01)
+- Added control for the Ray-tracer driver. Introduced G4VIS_USE_RAYTRACER
+  in G4VIS_USE.gmk and G4VIS_BUILD_RAYTRACER_DRIVER in G4VIS_BUILD.gmk (M.Asai).
+- binmake.gmk: fixed dependency order for compound libraries.
+  Moved -lG4particles and -lG4materials downstream in the list.
+- architecture.gmk: added G4NO_OPTIMISE for allowing compilation without
+  any level of optimisation or debug. G4DEBUG if defined takes precedence.
+  G4DEBUG and G4OPTIMISE are now defined also as CPPFLAGS.
+
+3rd January 2000  Gabriele Cosmo (config-V01-00-00)
+- Syncronized with HEAD.
+
+16th December 1999  John Allison
+- Cosmetic improvement to echo line in binmake.gmk.
 
 7th December 1999  Gabriele Cosmo (config-V00-01-19)
 - architecture.gmk: minor fix on OSPACELIBS path for Win/NT.

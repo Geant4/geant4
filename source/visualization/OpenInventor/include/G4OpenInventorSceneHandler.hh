@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.6.4.1 1999/12/07 20:53:34 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.8 1999/12/16 17:25:08 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -55,6 +55,8 @@ public:
   void AddThis (const G4Sphere&);
   void AddThis (const G4Para&);
   void AddThis (const G4Torus&);
+  void AddThis (const G4Polycone&);
+  void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid&);
 
   void BeginPrimitives (const G4Transform3D& objectTransformation);
@@ -77,7 +79,7 @@ private:
   // A proper implementation would use geometry hierarchy.
   //
   G4std::map <const G4VPhysicalVolume*, SoSeparator*,
-    less <const G4VPhysicalVolume*> > SeparatorMap;
+    G4std::less <const G4VPhysicalVolume*> > SeparatorMap;
   SoSeparator *root;
   SoSeparator *staticRoot;
   SoSeparator *transientRoot;

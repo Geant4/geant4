@@ -5,12 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5PhysicsList.cc,v 1.1.4.1 1999/12/07 20:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em5PhysicsList.cc,v 1.5 2000/01/20 15:34:40 maire Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-   
+
+// Always place it in front!
+//   
+////#include "G4Timer.hh"
+
 #include "Em5PhysicsList.hh"
 #include "Em5DetectorConstruction.hh"
 #include "Em5PhysicsListMessenger.hh"
@@ -23,9 +27,8 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
-#include "G4Timer.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -233,8 +236,8 @@ void Em5PhysicsList::ConstructGeneral()
 
 void Em5PhysicsList::SetCuts()
 {
-  G4Timer theTimer ;
-  theTimer.Start() ;
+  ////G4Timer theTimer ;
+  ////theTimer.Start() ;
   
   // reactualise cutValues
   if (currentDefaultCut != defaultCutValue)
@@ -246,7 +249,7 @@ void Em5PhysicsList::SetCuts()
       
   if (verboseLevel >0){
     G4cout << "Em5PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << endl;
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma 
@@ -268,10 +271,10 @@ void Em5PhysicsList::SetCuts()
               
   if (verboseLevel>0) DumpCutValuesTable();
 
-  theTimer.Stop();
-  G4cout.precision(6);
-  G4cout << endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
+  ////theTimer.Stop();
+  ////G4cout.precision(6);
+  ////G4cout << G4endl ;
+  ////G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
 
 }
 
@@ -343,10 +346,10 @@ void Em5PhysicsList::GetRange(G4double val)
   G4double cut;
   part = theParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << endl;
-  G4cout << "particle : " << part->GetParticleName() << endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << endl;
+  G4cout << "material : " << currMat->GetName() << G4endl;
+  G4cout << "particle : " << part->GetParticleName() << G4endl;
+  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
+  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -354,8 +357,8 @@ void Em5PhysicsList::GetRange(G4double val)
 void Em5PhysicsList::SetMaxStep(G4double step)
 {
   MaxChargedStep = step ;
-  G4cout << " MaxChargedStep=" << MaxChargedStep << endl;
-  G4cout << endl;
+  G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

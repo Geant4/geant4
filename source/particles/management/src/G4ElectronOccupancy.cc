@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ElectronOccupancy.cc,v 1.4.6.1 1999/12/07 20:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ElectronOccupancy.cc,v 1.4.6.1.2.1 1999/12/08 17:34:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -111,10 +111,10 @@ G4int G4ElectronOccupancy::operator!=(const G4ElectronOccupancy& right) const
 
 void G4ElectronOccupancy::DumpInfo() const
 {
-  G4cout << "  -- Electron Occupancy -- " << endl;
+  G4cout << "  -- Electron Occupancy -- " << G4endl;
   G4int index;
   for (index = 0; index < theSizeOfOrbit; index++) {
     G4cout << "   " << index << "-th orbit       " 
-           <<  theOccupancies[index] << endl;
+           <<  theOccupancies[index] << G4endl;
   }
 }

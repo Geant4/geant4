@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DistributionGenerator.cc,v 1.2.6.1.2.1 1999/12/07 20:52:37 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DistributionGenerator.cc,v 1.2.6.1.2.1.2.1 1999/12/08 17:35:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -40,7 +40,7 @@ G4DistributionGenerator::G4DistributionGenerator(G4RWTValOrderedVector<G4double>
   // Check boundaries: must be size(x) = size(values) + 1
   if (x.entries() != (values.entries() + 1))
     { G4cout << " Inconsistent parameters in G4DistributionGenerator "
-	   << endl;
+	   << G4endl;
     }
   assert (x.entries() == (values.entries() + 1));
 
@@ -61,11 +61,11 @@ G4DistributionGenerator::G4DistributionGenerator(G4RWTValOrderedVector<G4double>
   /*
   for (i=0; i<values.entries(); i++)
     { G4cout << values[i] << "  " ; }
-  G4cout << "  Integral = " << tot << endl;
+  G4cout << "  Integral = " << tot << G4endl;
   for (i=0; i<_cumProb.entries(); i++)
     { 
       G4cout << "Variable " << _x[i]  
-	   << " --- cumProb = " << _cumProb[i] << endl;
+	   << " --- cumProb = " << _cumProb[i] << G4endl;
     }
   */
   // End of debugging
@@ -101,7 +101,7 @@ G4double G4DistributionGenerator::Generate(G4double ranflat)
 
       // Deugging
       /*
-      G4cout << "Random = " << ranflat << " Generated " << xRandom << endl;
+      G4cout << "Random = " << ranflat << " Generated " << xRandom << G4endl;
       */
       // Endo of Debugging
 
@@ -113,7 +113,7 @@ G4double G4DistributionGenerator::Generate(G4double ranflat)
       G4cout << "Bin " << bin << " "
 	   << _cumProb.entries() << " " 
 	   << _x.entries()
-	   << endl;
+	   << G4endl;
       */
       // End of debugging
     }

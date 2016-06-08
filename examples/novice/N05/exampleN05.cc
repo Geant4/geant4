@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.4.2.1 1999/12/07 20:47:33 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: exampleN05.cc,v 1.5 1999/12/15 14:49:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
   //-------------------------------
   // Initialization of Run manager
   //-------------------------------
-  G4cout << "RunManager construction starting...." << endl;
+  G4cout << "RunManager construction starting...." << G4endl;
   G4RunManager * runManager = new G4RunManager;
 
   // Detector geometry
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
   // Visualization:
   //----------------
 #ifdef G4VIS_USE
-  G4cout << "Instantiating MyVisManager......." << endl;
+  G4cout << "Instantiating MyVisManager......." << G4endl;
   G4VisManager* visManager = new MyVisManager;
   visManager -> Initialize ();
 #endif

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gspart.cc,v 1.3 1999/12/05 17:50:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #include "G4ProcessManager.hh"
 #include "G3toG4.hh"

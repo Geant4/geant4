@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.1.10.1 1999/12/07 20:47:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ParticleGunMessenger.cc,v 1.2 1999/12/15 14:49:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4ParticleGunMessenger.hh"

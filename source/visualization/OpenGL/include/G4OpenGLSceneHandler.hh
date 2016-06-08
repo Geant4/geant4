@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.3.8.1 1999/12/07 20:53:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.5 1999/12/16 17:25:05 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -47,6 +47,8 @@ public:
   void AddThis (const G4Sphere&);
   void AddThis (const G4Para&);
   void AddThis (const G4Torus&);
+  void AddThis (const G4Polycone&);
+  void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid&);
 
 protected:

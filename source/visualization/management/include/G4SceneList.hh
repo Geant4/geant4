@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SceneList.hh,v 1.4.2.1 1999/12/07 20:53:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SceneList.hh,v 1.5 1999/12/15 14:54:18 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  9th August 1998

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PersEx02EventAction.cc,v 1.3 1999/11/29 18:33:28 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: PersEx02EventAction.cc,v 1.3.4.1 1999/12/08 17:33:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "PersEx02EventAction.hh"
@@ -46,7 +46,7 @@ void PersEx02EventAction::BeginOfEventAction(const G4Event* )
 
 void PersEx02EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 
   G4PHCofThisEvent* pHCE = G4PersistentHitMan::GetPersistentHitMan()
                                                 ->GetCurrentPHCofThisEvent();
@@ -55,21 +55,21 @@ void PersEx02EventAction::EndOfEventAction(const G4Event* evt)
   HepRef(PersEx02TrackerHitsCollection) pTHC2
    = (HepRef(PersEx02TrackerHitsCollection))(pHCE->GetHC(colID2));
 
-  G4cout << "Event : " << evt->GetEventID() << endl
+  G4cout << "Event : " << evt->GetEventID() << G4endl
          << pTHC1->GetSDname() << "/" << pTHC1->GetName() << "    "
-         << "Number of hits       " << pTHC1->size() << endl;
+         << "Number of hits       " << pTHC1->size() << G4endl;
   if( pTHC1->size() > 0 )
   {
     HepRef(PersEx02TrackerHit) aHit = pTHC1->element(0);
-    G4cout << "  Edep of the first Hit " << aHit->GetEdep() << endl;
+    G4cout << "  Edep of the first Hit " << aHit->GetEdep() << G4endl;
   }
   G4cout << pTHC2->GetSDname() << "/" << pTHC2->GetName() << "     "
-         << "Number of hits       " << pTHC2->size() << endl;
+         << "Number of hits       " << pTHC2->size() << G4endl;
   if( pTHC2->size() > 0 )
   {
     HepRef(PersEx02TrackerHit) aHit = pTHC2->element(0);
     assert(aHit!=NULL);
-    G4cout << "  Edep of the first Hit " << aHit->GetEdep() << endl;
+    G4cout << "  Edep of the first Hit " << aHit->GetEdep() << G4endl;
   }
 
   G4PersistencyManager* persM

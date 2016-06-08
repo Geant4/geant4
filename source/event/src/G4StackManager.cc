@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackManager.cc,v 1.1.10.1 1999/12/07 20:47:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4StackManager.cc,v 1.3 2000/01/26 06:42:16 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -14,6 +14,7 @@
 
 #include "G4StackManager.hh"
 #include "G4StackingMessenger.hh"
+#include "G4VTrajectory.hh"
 #include "evmandefs.hh"
 #include "G4ios.hh"
 
@@ -42,7 +43,7 @@ const{ return false; }
 int G4StackManager::operator!=(const G4StackManager &) 
 const{ return true; }
 
-G4int G4StackManager::PushOneTrack(G4Track *newTrack)
+G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajectory)
 {
   G4ClassificationOfNewTrack classification;
   if(userStackingAction) 
@@ -57,14 +58,15 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack)
     {
       G4cout << "   ---> G4Track " << newTrack << " (trackID "
 	 << newTrack->GetTrackID() << ", parentID "
-	 << newTrack->GetParentID() << ") is not to be stored." << endl;
+	 << newTrack->GetParentID() << ") is not to be stored." << G4endl;
     }
 #endif
     delete newTrack;
+    delete newTrajectory;
   }
   else
   {
-    G4StackedTrack * newStackedTrack = new G4StackedTrack( newTrack );
+    G4StackedTrack * newStackedTrack = new G4StackedTrack( newTrack, newTrajectory );
     switch (classification)
     {
       case fUrgent:
@@ -85,13 +87,13 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack)
 }
 
 
-G4Track * G4StackManager::PopNextTrack()
+G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
 {
 #ifdef G4VERBOSE
   if( verboseLevel > 0 )
   {
     G4cout << "### pop requested out of " 
-         << GetNUrgentTrack() << " stacked tracks." << endl;
+         << GetNUrgentTrack() << " stacked tracks." << G4endl;
   }
 #endif
 
@@ -99,20 +101,21 @@ G4Track * G4StackManager::PopNextTrack()
   {
 #ifdef G4VERBOSE
     if( verboseLevel > 0 ) G4cout << "### " << GetNWaitingTrack()
-                      << " waiting tracks are re-classified to" << endl;
+                      << " waiting tracks are re-classified to" << G4endl;
 #endif
     waitingStack->TransferTo(urgentStack);
     if(userStackingAction) userStackingAction->NewStage();
 #ifdef G4VERBOSE
     if( verboseLevel > 0 ) G4cout << "     " << GetNUrgentTrack()
                       << " urgent tracks and " << GetNWaitingTrack()
-                      << " waiting tracks." << endl;
+                      << " waiting tracks." << G4endl;
 #endif
     if( ( GetNUrgentTrack()==0 ) && ( GetNWaitingTrack()==0 ) ) return NULL;
   }
 
   G4StackedTrack * selectedStackedTrack = urgentStack->PopFromStack();
   G4Track * selectedTrack = selectedStackedTrack->GetTrack();
+  *newTrajectory = selectedStackedTrack->GetTrajectory();
 
 #ifdef G4VERBOSE
   if( verboseLevel > 1 )
@@ -121,7 +124,7 @@ G4Track * G4StackManager::PopNextTrack()
          << " with G4Track " << selectedStackedTrack->GetTrack()
 	 << " (trackID " << selectedStackedTrack->GetTrack()->GetTrackID()
 	 << ", parentID " << selectedStackedTrack->GetTrack()->GetParentID()
-	 << ")" << endl;
+	 << ")" << G4endl;
   }
 #endif
 
@@ -146,6 +149,7 @@ void G4StackManager::ReClassify()
     {
       case fKill:
         delete aStackedTrack->GetTrack();
+        delete aStackedTrack->GetTrajectory();
         delete aStackedTrack;
         break;
       case fUrgent:
@@ -173,7 +177,7 @@ G4int G4StackManager::PrepareNewEvent()
     if( verboseLevel > 0 )
     {
       G4cout << GetNPostponedTrack() 
-           << " postponed tracked are now shifted to the stack." << endl;
+           << " postponed tracked are now shifted to the stack." << G4endl;
     }
 #endif
 
@@ -185,6 +189,7 @@ G4int G4StackManager::PrepareNewEvent()
     while( (aStackedTrack=tmpStack.PopFromStack()) != NULL )
     {
       G4Track* aTrack = aStackedTrack->GetTrack();
+      G4VTrajectory* aTrajectory = aStackedTrack->GetTrajectory();
       aTrack->SetParentID(-1);
       G4ClassificationOfNewTrack classification;
       if(userStackingAction) 

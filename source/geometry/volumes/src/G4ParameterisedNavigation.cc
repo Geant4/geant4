@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.1.10.1 1999/12/07 20:48:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ParameterisedNavigation.cc,v 1.2 1999/12/15 14:50:26 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -17,7 +17,7 @@ G4ParameterisedNavigation::~G4ParameterisedNavigation()
 {
 #ifdef G4DEBUG_NAVIGATION
     cout << "G4ParameterisedNavigation::~G4ParameterisedNavigation() called."
-	 << endl;
+	 << G4endl;
 #endif
 }
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.hh,v 1.4.2.1 1999/12/07 20:48:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisAttributes.hh,v 1.5 1999/12/15 14:50:34 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  23rd October 1996
@@ -39,7 +39,7 @@
 
 class G4VisAttributes {
 
-  friend ostream& operator << (ostream& os, const G4VisAttributes& a);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VisAttributes& a);
 
 public: // With description
 

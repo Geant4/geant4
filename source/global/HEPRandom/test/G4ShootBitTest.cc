@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShootBitTest.cc,v 1.3 1999/11/23 15:00:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ShootBitTest.cc,v 1.4 1999/12/15 14:50:29 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -14,7 +14,7 @@
 // Peter Urban, 5th Sep 1996
 
 #include "G4ios.hh"
-#include "g4std/iomanip.h"
+#include "g4std/iomanip"
 #include "Randomize.hh"
 #include "G4Timer.hh"
 

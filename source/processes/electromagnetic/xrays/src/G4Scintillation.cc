@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scintillation.cc,v 1.2.8.1 1999/12/07 20:51:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Scintillation.cc,v 1.2.8.1.2.1 1999/12/08 17:34:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -54,7 +54,7 @@ G4Scintillation::G4Scintillation(const G4String& processName)
         thePhysicsTable = NULL;
 
 	if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
 	}
 
 	BuildThePhysicsTable();
@@ -163,8 +163,8 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                               ScintillationIntegral->GetEnergy(CIIvalue);
 
 		if (verboseLevel>1) {
-                   G4cout << "sampledMomentum = " << sampledMomentum << endl;
-		   G4cout << "CIIvalue =        " << CIIvalue << endl;
+                   G4cout << "sampledMomentum = " << sampledMomentum << G4endl;
+		   G4cout << "CIIvalue =        " << CIIvalue << G4endl;
 		}
 
 		// Generate random photon direction
@@ -241,7 +241,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	if (verboseLevel>0) {
 	G4cout << "\n Exiting from G4Scintillation::DoIt -- NumberOfSecondaries = " 
-	     << aParticleChange.GetNumberOfSecondaries() << endl;
+	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
 	return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);

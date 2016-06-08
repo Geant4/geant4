@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.hh,v 1.3.2.1 1999/12/07 20:49:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIcommandTree.hh,v 1.5 2000/02/14 12:24:41 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4UIcommandTree_h
@@ -28,7 +28,7 @@ class G4UIcommandTree
   public:
       G4UIcommandTree();
       G4UIcommandTree(G4String thePathName);
-      G4UIcommandTree(char * thePathName);
+      G4UIcommandTree(const char * thePathName);
       ~G4UIcommandTree();
       int operator==(const G4UIcommandTree &right) const;
       int operator!=(const G4UIcommandTree &right) const;

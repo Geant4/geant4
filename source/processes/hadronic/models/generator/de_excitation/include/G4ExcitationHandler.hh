@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ExcitationHandler.hh,v 1.3.4.1 1999/12/07 20:51:33 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)

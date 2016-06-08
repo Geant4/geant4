@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.6.8.1 1999/12/07 20:48:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FPlane.cc,v 1.7 1999/12/15 14:50:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Corrections by S.Giani:
 // - The constructor using iVec now properly stores both the internal and

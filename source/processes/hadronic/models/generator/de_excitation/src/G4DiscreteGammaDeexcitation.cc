@@ -47,7 +47,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
       if (_verbose > 1)
 	G4cout 
 	  << "G4DiscreteGammaDeexcitation::CreateTransition - (A,Z) is valid " 
-	  << endl;
+	  << G4endl;
       
       if (_nucleusA != A || _nucleusZ != Z) 
 	{
@@ -66,7 +66,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 	    G4cout 
 	      << "G4DiscreteGammaDeexcitation::CreateTransition - Created from level energy " 
 	      << level->Energy() << ", excitation is " 
-	      << excitation << endl;
+	      << excitation << G4endl;
 	  return new G4DiscreteGammaTransition(*level);
 	}
       else 
@@ -74,7 +74,7 @@ G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 	  if (_verbose > 0)
 	    G4cout 
 	      << "G4DiscreteGammaDeexcitation::CreateTransition - No transition created from "
-	      << excitation << " within tolerance " << _tolerance << endl;
+	      << excitation << " within tolerance " << _tolerance << G4endl;
 	  
 	  return 0; 
 	}
@@ -95,7 +95,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
       if (_verbose > 0)
 	G4cout 
 	  << "G4DiscreteGammaDeexcitation::CanDoTransition - Null transition " 
-	  << endl;
+	  << G4endl;
     }
 
   G4Fragment nucleus = GetNucleus();
@@ -109,7 +109,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
       if (_verbose > 0) 
 	G4cout 
 	  << "G4DiscreteGammaDeexcitation::CanDoTransition - n/p/H/>U"
-	  << endl;
+	  << G4endl;
     }
 
   G4double excitation = nucleus.GetExcitationEnergy();
@@ -119,7 +119,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
       if (_verbose > 0) 
 	G4cout 
 	  << "G4DiscreteGammaDeexcitation::CanDoTransition -  Excitation <= 0" 
-	  << endl;
+	  << G4endl;
     }
 
   if (excitation > _levelManager.MaxLevelEnergy() + _tolerance) canDo = false;
@@ -133,12 +133,12 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition() const
       G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition -  Excitation " 
 	     << excitation << ", Min-Max are " 
 	     << _levelManager.MinLevelEnergy() << " "
-	     << _levelManager.MaxLevelEnergy() << endl;
+	     << _levelManager.MaxLevelEnergy() << G4endl;
     }
   
   if (canDo)
     { if (_verbose > 0) 
-      G4cout <<"G4DiscreteGammaDeexcitation::CanDoTransition - CanDo" << endl; }
+      G4cout <<"G4DiscreteGammaDeexcitation::CanDoTransition - CanDo" << G4endl; }
   //  else
   //    { 
   //      delete _transition;

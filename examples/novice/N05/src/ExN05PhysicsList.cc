@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PhysicsList.cc,v 1.4.6.1 1999/12/07 20:47:37 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN05PhysicsList.cc,v 1.5 1999/12/15 14:49:31 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -22,7 +22,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>   
+#include "g4std/iomanip"   
 
 #include "G4FastSimulationManagerProcess.hh"
 

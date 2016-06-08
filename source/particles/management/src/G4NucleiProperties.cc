@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.cc,v 1.5.6.1 1999/12/07 20:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NucleiProperties.cc,v 1.5.6.1.2.1 1999/12/08 17:34:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -60,7 +60,7 @@ G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 {
 	if (A < 1 || Z < 0 || Z > A) {
 		G4cout << "G4NucleiProperties::GetNuclearMass: Wrong values for A = " << A 
-				 << " and Z = " << Z << endl;
+				 << " and Z = " << Z << G4endl;
 		return 0.0;
 	} else {
 	 	G4ParticleDefinition * nucleus = 0;

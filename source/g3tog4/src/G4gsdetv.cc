@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdetv.cc,v 1.5 1999/12/05 17:50:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4gsdetv.cc,v 1.6 1999/12/15 14:49:43 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 
 #include "G4ios.hh"
 #include "G3toG4.hh"
@@ -33,12 +33,12 @@ void PG4gsdetv(G4String tokens[])
 void G4gsdetv(G4String chset, G4String chdet, G4int idtyp, G4int,
               G4int){
   
-  G4cout << "G4gsdetv not currently implemented." << endl;
+  G4cout << "G4gsdetv not currently implemented." << G4endl;
   /*
     // get lvol for detector chdet
     G4LogicalVolume *lvol = G3Vol.GetLV(chdet);
     if (lvol == NULL) {
-    G4cout << "G4gsdetv: Logical volume " << chdet << " not available. Skip." << endl;
+    G4cout << "G4gsdetv: Logical volume " << chdet << " not available. Skip." << G4endl;
     return;
     }
     // Generate a sensitive detector structure

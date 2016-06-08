@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyline.hh,v 1.4.2.1 1999/12/07 20:48:50 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Polyline.hh,v 1.5 1999/12/15 14:50:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  July 1995
@@ -25,7 +25,7 @@
 #include "G4Point3DList.hh"
 
 class G4Polyline: public G4VVisPrim, public G4Point3DList {
-  friend ostream& operator << (ostream& os, const G4Polyline& line);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4Polyline& line);
 
 public: // With description
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.3.8.1 1999/12/07 20:51:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.3.8.1.2.2 1999/12/09 16:59:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -105,7 +105,7 @@ public:
 	void update();
 
 private:
-	SimpleString(){cout << " error calling bad ctor for class SimpleString"<< endl;};
+	SimpleString(){G4cout << " error calling bad ctor for class SimpleString"<< G4endl;}
 	
 	SideOfString * left, * right;
 	SideOfString * decay, * stable;

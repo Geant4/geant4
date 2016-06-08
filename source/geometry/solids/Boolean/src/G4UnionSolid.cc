@@ -89,8 +89,8 @@ G4UnionSolid::CalculateExtent(const EAxis pAxis,
   touchesA= fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, pTransform, minA, maxA);
   touchesB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, pTransform, minB, maxB);
 
-  pMin = min( minA, minB ); 
-  pMax = max( maxA, maxB ); 
+  pMin = G4std::min( minA, minB ); 
+  pMax = G4std::max( maxA, maxB ); 
 
   return touchesA || touchesB ;  // It exists in this slice if either one does.
 }
@@ -169,8 +169,8 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
   {
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v),  point p is inside") ;
   }
-  return min(fPtrSolidA->DistanceToIn(p,v),
-             fPtrSolidB->DistanceToIn(p,v) ) ;
+  return G4std::min(fPtrSolidA->DistanceToIn(p,v),
+                    fPtrSolidB->DistanceToIn(p,v) ) ;
 }
 
 ////////////////////////////////////////////////////////
@@ -188,7 +188,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p) const
   G4double distA = fPtrSolidA->DistanceToIn(p) ;
   G4double distB = fPtrSolidB->DistanceToIn(p) ;
 
-  return min(distA,distB) ;
+  return G4std::min(distA,distB) ;
 }
 
 //////////////////////////////////////////////////////////
@@ -284,7 +284,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
        (positionA == kInside  && positionB == kSurface ) ||
        (positionA == kSurface && positionB == kInside  )     )
     {     
-      distout= max(fPtrSolidA->DistanceToOut(p),
+      distout= G4std::max(fPtrSolidA->DistanceToOut(p),
 		   fPtrSolidB->DistanceToOut(p) ) ;
     }
     else

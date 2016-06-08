@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredXm.cc,v 1.3.8.1 1999/12/07 20:53:26 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLStoredXm.cc,v 1.4 1999/12/15 14:54:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -34,7 +34,7 @@ G4OpenGLStoredXm::G4OpenGLStoredXm ():
 G4VSceneHandler* G4OpenGLStoredXm::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
   G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
-       << ' ' << fName << " scenes extanct." << endl;
+       << ' ' << fName << " scenes extanct." << G4endl;
   return    pScene;
 }
 
@@ -47,12 +47,12 @@ G4VViewer* G4OpenGLStoredXm::CreateViewer (G4VSceneHandler& scene, const G4Strin
       pView = 0;
       G4cerr << "G4OpenGLStoredXm::CreateViewer: error flagged by"
 	" negative view id in G4OpenGLStoredXmViewer creation."
-	"\n Destroying view and returning null pointer." << endl;
+	"\n Destroying view and returning null pointer." << G4endl;
     }
   }
   else {
     G4cerr << "G4OpenGLStoredXm::CreateViewer: null pointer on"
-      " new G4OpenGLStoredXmViewer." << endl;
+      " new G4OpenGLStoredXmViewer." << G4endl;
   }
   return pView;
 }

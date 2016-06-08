@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4DetectorConstruction.cc,v 1.6 1999/12/05 17:50:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4DetectorConstruction.cc,v 1.7 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in
@@ -25,11 +25,11 @@
 G3toG4DetectorConstruction::G3toG4DetectorConstruction(G4String inFile){
     _inFile = inFile;
     G4cout << "Instantiated G3toG4DetectorConstruction using call list file \""
-           << _inFile << "\"" << endl;
+           << _inFile << "\"" << G4endl;
 }
 
 G3toG4DetectorConstruction::~G3toG4DetectorConstruction(){
-  //    G4cout << "Deleted G3toG4DetectorConstruction..." << endl;
+  //    G4cout << "Deleted G3toG4DetectorConstruction..." << G4endl;
 }
 
 G4VPhysicalVolume*
@@ -40,9 +40,9 @@ G3toG4DetectorConstruction::Construct(){
     _pv = new G4PVPlacement(0, G4ThreeVector(), _lv, _lv->GetName(), 0,
 			    false, 0);
     G4cout << "Top-level G3toG4 logical volume " << _lv->GetName() << " "
-	   << *(_lv -> GetVisAttributes()) << endl;
+	   << *(_lv -> GetVisAttributes()) << G4endl;
   } else 
-    G4cerr << "creation of logical mother failed !!!" << endl;
+    G4cerr << "creation of logical mother failed !!!" << G4endl;
   return _pv;
 }
 G4LogicalVolume*

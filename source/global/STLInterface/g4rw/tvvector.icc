@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tvvector.icc,v 1.1 1999/11/25 10:14:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: tvvector.icc,v 1.2 2000/02/01 16:55:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -17,7 +17,7 @@
 
 template<class T>
 G4RWTValVector<T>::G4RWTValVector ()
-  : rwsize(0){}
+  : std_vector(), rwsize(0){}
 
 template<class T>
 G4RWTValVector<T>::G4RWTValVector (size_t n)
@@ -52,9 +52,12 @@ size_t G4RWTValVector<T>::length() const
 template<class T>
 T& G4RWTValVector<T>::operator()(size_t i) 
 {
-  if(i>=rwsize)
-    G4RWTHROW(G4RWBoundsErr("G4RWTValVector operator()",rwsize,i));
-  if(i<std_vector::size() && rwsize<i)
+  // temporarly commented; to allow use as left-value rwsize is increased
+  // #ifdef G4DEBUG
+  //   if(i>=rwsize)
+  //     G4RWTHROW(G4RWBoundsErr("G4RWTValVector operator()",rwsize,i));
+  // #endif
+  if(rwsize<=i && i<std_vector::size())
     rwsize=i+1;
   return std_vector::operator[](i); 
 }
@@ -62,6 +65,10 @@ T& G4RWTValVector<T>::operator()(size_t i)
 template<class T>
 const T& G4RWTValVector<T>::operator()(size_t i) const
 {
+  #ifdef G4DEBUG
+    if(i>=rwsize)
+      G4RWTHROW(G4RWBoundsErr("G4RWTValVector operator()",rwsize,i));
+  #endif
   return std_vector::operator[](i);
 }
 
@@ -70,8 +77,6 @@ T& G4RWTValVector<T>::operator[](size_t i)
 {
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTValVector operator[]",rwsize,i));
-  if(i<std_vector::size() && rwsize<i)
-    rwsize=i+1;
   return std_vector::operator[](i); 
 }
 

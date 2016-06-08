@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.4.8.1 1999/12/07 20:52:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.4.8.1.2.1 1999/12/08 17:35:14 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //  
 //---------------------------------------------------------------
@@ -140,7 +140,7 @@ G4GlobalFastSimulationManager::ActivateFastSimulationModel(const G4String& aName
     G4cout << "Model " << aName << " activated.";
   else
     G4cout << "Model " << aName << " not found.";
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 void 
@@ -153,7 +153,7 @@ G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String& aNa
     G4cout << "Model " << aName << " inactivated.";
   else
     G4cout << "Model " << aName << " not found.";
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 void 
@@ -174,7 +174,7 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
 	  G4cout << "Current Envelopes for Fast Simulation:\n";
 	G4cout << "   "; 
 	ManagedManagers(ifsm)->ListTitle();
-	G4cout << endl;
+	G4cout << G4endl;
       }
       else ManagedManagers(ifsm)->ListModels();
     }

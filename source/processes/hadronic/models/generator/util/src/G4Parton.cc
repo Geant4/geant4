@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parton.cc,v 1.3.8.1 1999/12/07 20:52:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Parton.cc,v 1.3.8.1.2.2 1999/12/09 17:44:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -27,7 +27,7 @@ G4Parton::G4Parton(G4int PDGcode)
 	theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);;
 	if (theDefinition == NULL)
 	{
-	  cout << "Encoding = "<<PDGencoding<<endl;
+	  G4cout << "Encoding = "<<PDGencoding<<G4endl;
 	  G4Exception("G4Parton::GetDefinition(): Encoding not in particle table");
 	}
 }

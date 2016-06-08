@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4StaticSandiaData.hh,v 1.2.8.1 1999/12/07 20:49:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 // 
 // file G4StaticSandiaData.hh
 // File for static data of PhotoAbsorption cross section coefficients 

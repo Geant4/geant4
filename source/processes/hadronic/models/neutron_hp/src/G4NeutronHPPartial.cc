@@ -30,7 +30,7 @@ G4NeutronHPVector * G4NeutronHPPartial::GetY(G4double e1)
     G4double E2 = X[i];
     for(G4int ii=0; ii<data[i].GetVectorLength(); ii++)
     {
-      x1 = data[i-1].GetX(min(i1, data[i-1].GetVectorLength()-1));
+      x1 = data[i-1].GetX(G4std::min(i1, data[i-1].GetVectorLength()-1));
       x2 = data[i].GetX(ii);
       if(x1<x2&&i1<data[i-1].GetVectorLength())
       {

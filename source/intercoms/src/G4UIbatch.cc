@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIbatch.cc,v 1.1.10.1 1999/12/07 20:49:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIbatch.cc,v 1.2 1999/12/15 14:50:40 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4UIbatch.hh"
@@ -24,7 +24,7 @@ G4UIbatch::G4UIbatch(G4String fileName,G4UIsession* prevSession)
   if(macroFile.fail())
   {
     G4cerr << "macro file <" << fileName << "> could not open."
-         << endl;
+         << G4endl;
     openFailed = true;
   }
 }
@@ -46,7 +46,7 @@ G4UIsession * G4UIbatch::SessionStart()
       macroFile.getline( commandLine, lineLength );
       if( macroFile.bad() )
       {
-        G4cout << "Cannot read " << macroFileName << "." << endl;
+        G4cout << "Cannot read " << macroFileName << "." << G4endl;
         break;
       }
       if( macroFile.eof() ) break;
@@ -54,7 +54,7 @@ G4UIsession * G4UIbatch::SessionStart()
       if( commandLine[0] != '#' )
       { UImanager->ApplyCommand(commandLine); }
       else
-      { G4cout << commandLine << endl; }
+      { G4cout << commandLine << G4endl; }
     }
   }
   return previousSession;
@@ -62,9 +62,9 @@ G4UIsession * G4UIbatch::SessionStart()
 
 void G4UIbatch::PauseSessionStart(G4String Prompt) 
 {
-  G4cout << "Pause session <" << Prompt << "> start." << endl;
+  G4cout << "Pause session <" << Prompt << "> start." << G4endl;
   SessionStart();
-  G4cout << "Pause session <" << Prompt << "> Terminate." << endl;
+  G4cout << "Pause session <" << Prompt << "> Terminate." << G4endl;
 }
 
 

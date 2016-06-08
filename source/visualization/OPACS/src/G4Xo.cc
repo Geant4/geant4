@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xo.cc,v 1.4.4.1 1999/12/07 20:53:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Xo.cc,v 1.5 1999/12/15 14:54:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Guy Barrand 04 November 1996

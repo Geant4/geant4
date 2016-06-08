@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4WoViewer.cc,v 1.2.8.1 1999/12/07 20:53:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4WoViewer.cc,v 1.3 1999/12/15 14:54:02 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -47,7 +47,7 @@ G4WoViewer::G4WoViewer (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4WoViewer::G4WoViewer" << endl;
+  G4cout << "G4WoViewer::G4WoViewer" << G4endl;
 #endif
 
   if(WoIsInitialized()==0) {
@@ -149,13 +149,13 @@ void G4WoViewer::SetView (
     target + cameraDistance * fVP.GetViewpointDirection().unit();
 
 #ifdef DEBUG
-  G4cout << "G4WoViewer::SetView : target.x " << target.x() << " target.y " << target.y() << " target.z " << target.z() << endl;
+  G4cout << "G4WoViewer::SetView : target.x " << target.x() << " target.y " << target.y() << " target.z " << target.z() << G4endl;
   G4cout << "G4WoViewer::SetView :  dir.x " <<  fVP.GetViewpointDirection().unit().x() << 
                              "  dir.y " <<  fVP.GetViewpointDirection().unit().y() << 
-                             "  dir.z " <<  fVP.GetViewpointDirection().unit().z() << endl;
-  G4cout << "G4WoViewer::SetView : cameraDistance " << cameraDistance << endl;
-  G4cout << "G4WoViewer::SetView : pCamera.x " << pCamera.x() << " pCamera.y " << pCamera.y() << " pCamera.z " << pCamera.z() << endl;
-  G4cout << "G4WoViewer::SetView : pCamera.x " << pCamera.x() << " pCamera.y " << pCamera.y() << " pCamera.z " << pCamera.z() << endl;
+                             "  dir.z " <<  fVP.GetViewpointDirection().unit().z() << G4endl;
+  G4cout << "G4WoViewer::SetView : cameraDistance " << cameraDistance << G4endl;
+  G4cout << "G4WoViewer::SetView : pCamera.x " << pCamera.x() << " pCamera.y " << pCamera.y() << " pCamera.z " << pCamera.z() << G4endl;
+  G4cout << "G4WoViewer::SetView : pCamera.x " << pCamera.x() << " pCamera.y " << pCamera.y() << " pCamera.z " << pCamera.z() << G4endl;
 #endif
 
   OCameraSetCenter          (fGoCamera,target.x() ,target.y() ,target.z());

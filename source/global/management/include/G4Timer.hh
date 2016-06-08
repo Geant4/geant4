@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.8 1999/11/23 15:00:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Timer.hh,v 1.10 2000/01/06 14:27:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -17,6 +17,8 @@
 // Class for timer objects, able to measure elasped user/system process time.
 //
 // Note: Uses <sys/times.h> & <unistd.h> - POSIX.1 defined
+//       If used, this header must be included in the source (.cc) file and it
+//       must be the first header file to be included!
 //
 // Member functions:
 //
@@ -37,7 +39,7 @@
 //
 // Operators:
 //
-// ostream& operator << (ostream& os, const G4Timer& t);
+// G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t);
 //   Print the elapsed real,system and usertimes on os. Prints **s for times
 //   if !IsValid
 //
@@ -125,9 +127,7 @@ inline G4bool G4Timer::IsValid() const
     return fValidTimes;
 }
 
-#ifdef G4USE_STL
-  #define times ostimes
-#endif
+#define times ostimes
 
 #endif
 

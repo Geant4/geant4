@@ -98,7 +98,7 @@ void G4DiscreteGammaTransition::SelectGamma()
 
 //  if(_verbose > 10)
 //    G4cout << "*---*---* G4DiscreteTransition: _gammaCreationTime = "
-//	   << _gammaCreationTime/second << endl;
+//	   << _gammaCreationTime/second << G4endl;
   return;
 }
 

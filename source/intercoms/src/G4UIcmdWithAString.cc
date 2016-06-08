@@ -5,17 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcmdWithAString.cc,v 1.1.10.1 1999/12/07 20:49:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIcmdWithAString.cc,v 1.2 1999/12/15 14:50:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 
 #include "G4UIcmdWithAString.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4UIcmdWithAString::G4UIcmdWithAString
 (const char * theCommandPath,G4UImessenger * theMessenger)

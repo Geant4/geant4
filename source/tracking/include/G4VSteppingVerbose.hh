@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.hh,v 1.2.4.1.2.1 1999/12/07 20:53:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VSteppingVerbose.hh,v 1.4 1999/12/15 14:53:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //  
 //---------------------------------------------------------------

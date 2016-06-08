@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.cc,v 1.6.8.1 1999/12/07 20:51:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4hIonisation.cc,v 1.6.8.1.2.1 1999/12/08 17:34:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -566,7 +566,7 @@ void G4hIonisation::PrintInfoDefinition()
            comments += "\n         Good description above the mean excitation energy.\n";
            comments += "         delta ray energy sampled from  differential Xsection.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                   "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

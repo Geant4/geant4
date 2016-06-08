@@ -55,8 +55,8 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
   }
   
   if (w == 0.0) {
-    w1 = max(1.03*wa - FasymAsym, 0.0001);
-    w2 = max(1.0 - FsymA1A2*wa,   0.0001);
+    w1 = G4std::max(1.03*wa - FasymAsym, 0.0001);
+    w2 = G4std::max(1.0 - FsymA1A2*wa,   0.0001);
     
     w = w1/w2;
 

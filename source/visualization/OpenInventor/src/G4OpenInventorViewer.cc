@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewer.cc,v 1.2.8.1 1999/12/07 20:53:37 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenInventorViewer.cc,v 1.3 1999/12/15 14:54:12 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -127,7 +127,7 @@ G4OpenInventorViewer::G4OpenInventorViewer (G4OpenInventorSceneHandler& scene,
 //fInteractorManager->
 //AddSecondaryLoopPostAction ((G4SecondaryLoopAction)SecondaryLoopPostAction);
 
-  G4cout << "Window name: " << fName << endl;
+  G4cout << "Window name: " << fName << G4endl;
   // 
   // Selection
   //
@@ -201,7 +201,7 @@ void G4OpenInventorViewer::SetView () {
 }
 
 void G4OpenInventorViewer::DrawView () {
-  G4cout << "debug Iv::DrawViewer " <<endl;
+  G4cout << "debug Iv::DrawViewer " <<G4endl;
   KernelVisitDecision ();
   ProcessView         ();
   FinishView          ();

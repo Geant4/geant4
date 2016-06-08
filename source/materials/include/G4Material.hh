@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.4.6.1.2.1 1999/12/07 20:49:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Material.hh,v 1.4.6.1.2.1.2.1 1999/12/08 17:34:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //      ------------------- class G4Material ---------------------
@@ -198,13 +198,13 @@ public:
     G4double GetA() const;
     
     friend
-    ostream& operator<<(ostream&, G4Material*);
+    G4std::ostream& operator<<(G4std::ostream&, G4Material*);
     
     friend
-    ostream& operator<<(ostream&, G4Material&);
+    G4std::ostream& operator<<(G4std::ostream&, G4Material&);
     
     friend
-    ostream& operator<<(ostream&, G4MaterialTable);
+    G4std::ostream& operator<<(G4std::ostream&, G4MaterialTable);
         
     G4int operator==(const G4Material&) const;
     G4int operator!=(const G4Material&) const;
@@ -288,7 +288,7 @@ inline
 G4double G4Material::GetZ() const
 { 
   if (fNumberOfElements > 1) {
-     G4cerr << "WARNING in GetZ. The material: " << fName << " is a mixture." << endl;
+     G4cerr << "WARNING in GetZ. The material: " << fName << " is a mixture." << G4endl;
      G4Exception ( " the Atomic number is not well defined." );
   } 
   return (*theElementVector)(0)->GetZ();      
@@ -301,7 +301,7 @@ inline
 G4double G4Material::GetA() const
 { 
   if (fNumberOfElements > 1) { 
-     G4cerr << "WARNING in GetA. The material: " << fName << " is a mixture." << endl;
+     G4cerr << "WARNING in GetA. The material: " << fName << " is a mixture." << G4endl;
      G4Exception ( " the Atomic mass is not well defined." );
   } 
   return  (*theElementVector)(0)->GetA();      

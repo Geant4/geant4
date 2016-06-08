@@ -13,16 +13,16 @@
 void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 {
    char the[100] = {""};
-   ostrstream ost(the, 100, ios::out);
+   G4std::ostrstream ost(the, 100, G4std::ios::out);
    ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
    G4String * aName = new G4String(the);
-#ifndef WIN32
-   ifstream from(*aName, ios::in);
+#ifdef G4USE_STD_NAMESPACE
+   G4std::ifstream from(*aName, G4std::ios::in);
 #else
    ifstream from(*aName, ios::in|ios::nocreate);
 #endif
    if(!from) return; // no data found for this isotope
-   ifstream theGammaData(*aName, ios::in);
+   G4std::ifstream theGammaData(*aName, G4std::ios::in);
     
    theGammas.Init(theGammaData);
    delete aName;
@@ -48,8 +48,8 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     hasXsec = false;
     return;
   }
-#ifndef WIN32
-  ifstream theData(filename, ios::in);
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ifstream theData(filename, G4std::ios::in);
 #else
   ifstream theData(filename, ios::in|ios::nocreate);
 #endif

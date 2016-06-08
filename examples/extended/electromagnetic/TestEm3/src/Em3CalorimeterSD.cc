@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3CalorimeterSD.cc,v 1.1.4.1 1999/12/07 20:47:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em3CalorimeterSD.cc,v 1.2 1999/12/15 14:49:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -79,13 +79,13 @@ G4bool Em3CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       calHit->AddAbs(AbsorNo,edep,stepl);
       HitID[LayerNumber] = CalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on layer: " << LayerNumber << endl;
+        G4cout << " New Calorimeter Hit on layer: " << LayerNumber << G4endl;
     }
   else
     { 
       (*CalCollection)[HitID[LayerNumber]]->AddAbs(AbsorNo,edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to Layer: " << LayerNumber << endl; 
+        G4cout << " Energy added to Layer: " << LayerNumber << G4endl; 
     }
     
   return true;

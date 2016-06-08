@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.hh,v 1.3.4.1 1999/12/07 20:48:19 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PointRat.hh,v 1.4 1999/12/15 14:49:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // Modif 8 oct 98 : A.Floquet

@@ -28,8 +28,10 @@ Em6RunMessenger::Em6RunMessenger(Em6RunAction* RA)
   plotDir = new G4UIdirectory("/plots/");
   plotDir->SetGuidance("plot control");
 
+#ifndef G4NOHIST
   sethistNameCmd = new G4UIcmdWithAString("/plots/sethistName",this);
   sethistNameCmd->SetGuidance("set name for the histogram file"); 
+#endif
 
   setnbinStepCmd = new G4UIcmdWithAnInteger("/plots/setnbinStep",this);
   setnbinStepCmd->SetGuidance("set nb of bins in #step plot");
@@ -160,7 +162,9 @@ Em6RunMessenger::Em6RunMessenger(Em6RunAction* RA)
 
 Em6RunMessenger::~Em6RunMessenger()
 {
+#ifndef G4NOHIST
   delete sethistNameCmd;
+#endif
 
   delete setnbinStepCmd;
   delete setSteplowCmd;
@@ -211,10 +215,12 @@ Em6RunMessenger::~Em6RunMessenger()
 void Em6RunMessenger::
          SetNewValue(G4UIcommand* command,G4String newValues)
 {
+#ifndef G4NOHIST
   if( command == sethistNameCmd)
     runAction
     ->SethistName(newValues) ;
-    
+#endif    
+
   if( command == setnbinStepCmd)
     runAction
     ->SetnbinStep(setnbinStepCmd->GetNewIntValue(newValues));

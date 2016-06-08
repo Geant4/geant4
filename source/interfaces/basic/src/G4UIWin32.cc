@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.cc,v 1.5.4.1 1999/12/07 20:49:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIWin32.cc,v 1.5.4.1.2.2 1999/12/14 07:07:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G.Barrand
 
@@ -20,7 +20,7 @@
 #include <windowsx.h>
 #include <wingdi.h>
 
-#include <Strstrea.h>
+#include "g4std/strstream"
 
 #include "G4UImanager.hh"
 #include "G4StateManager.hh"

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mag_EqRhs.hh,v 1.2.8.1 1999/12/07 20:48:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Mag_EqRhs.hh,v 1.3 1999/12/15 14:49:47 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // The right hand size of the equation of motion of a particle 

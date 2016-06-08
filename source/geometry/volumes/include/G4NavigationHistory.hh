@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationHistory.hh,v 1.2.2.1 1999/12/07 20:48:39 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NavigationHistory.hh,v 1.4 1999/12/15 16:40:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4NavigationHistory
 //
@@ -31,16 +31,15 @@
 
 #include "g4rw/tvvector.h"
 #include "g4rw/tpvector.h"
+#include "g4std/iostream"
 
 const G4int kHistoryMax=15;	// Default max size of history
 const G4int kHistoryStride=16;   // History increase stride
 
-class ostream;
-
 class G4NavigationHistory
 {
 public:
-  friend ostream& operator << (ostream &os,const G4NavigationHistory &h);
+  friend G4std::ostream& operator << (G4std::ostream &os,const G4NavigationHistory &h);
 
   G4NavigationHistory();
   G4NavigationHistory(const G4NavigationHistory &h);

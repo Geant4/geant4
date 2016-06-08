@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiNeutrinoE.cc,v 1.1.10.1 1999/12/07 20:49:47 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4AntiNeutrinoE.cc,v 1.1.10.1.2.2 1999/12/14 07:08:12 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -18,8 +18,8 @@
 //      4th April 1996, G.Cosmo        by H.Kurashige,7  July 1996
 // **********************************************************************
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4AntiNeutrinoE.hh"
 

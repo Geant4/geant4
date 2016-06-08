@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.hh,v 1.3.4.1 1999/12/07 20:49:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIterminal.hh,v 1.3.4.1.2.2 1999/12/14 07:07:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4UIterminal_h
@@ -14,7 +14,7 @@
 
 #include "G4VBasicShell.hh"
 #include "G4UImanager.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 // class description:
 //

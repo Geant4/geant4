@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPCaptureFS.hh,v 1.4 1999/07/06 14:16:55 hpw Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4NeutronHPCaptureFS_h
 #define G4NeutronHPCaptureFS_h 1

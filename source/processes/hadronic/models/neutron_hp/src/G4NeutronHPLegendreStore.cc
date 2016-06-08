@@ -7,7 +7,7 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPFastLegendre.hh"
 #include "Randomize.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 
 G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
 {
@@ -21,7 +21,7 @@ G4double G4NeutronHPLegendreStore::SampleMax (G4double anEnergy)
     high = i0;
     if(theCoeff[i0].GetEnergy()>anEnergy) break;
   }
-  low = max(0, high-1);
+  low = G4std::max(0, high-1);
   G4NeutronHPInterpolator theInt;
   G4double lim=0.005;
   G4double x, x1, x2, y1, y2, y;
@@ -89,7 +89,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
     high = i0;
     if(theCoeff[i0].GetEnergy()>anEnergy) break;
   }
-  low = max(0, high-1);
+  low = G4std::max(0, high-1);
   G4NeutronHPInterpolator theInt;
   G4double lim=0.005;
   G4double x, x1, x2, y1, y2, y;
@@ -112,7 +112,7 @@ G4double G4NeutronHPLegendreStore::SampleElastic (G4double anEnergy)
   } 
   try1 = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, try01, try02);
   try2 = theInt.Interpolate(theManager.GetScheme(high), x, x1, x2, try11, try12);
-  theNorm = max(try1, try2);
+  theNorm = G4std::max(try1, try2);
   
   G4double value, random;
   G4double v1, v2;
@@ -143,22 +143,22 @@ G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpol
 {
   G4int i0, i1, i2, i3, i4;
   G4int low, high;
-//  G4cout << "G4NeutronHPLegendreStore::Sample "<<energy<<" "<<energy<<" "<<nEnergy<<endl;
+//  G4cout << "G4NeutronHPLegendreStore::Sample "<<energy<<" "<<energy<<" "<<nEnergy<<G4endl;
   for (i0=0; i0<nEnergy; i0++)
   {
-//     G4cout <<"theCoeff["<<i0<<"].GetEnergy() = "<<theCoeff[i0].GetEnergy()<<endl;
+//     G4cout <<"theCoeff["<<i0<<"].GetEnergy() = "<<theCoeff[i0].GetEnergy()<<G4endl;
     high = i0;
     if(theCoeff[i0].GetEnergy()>energy) break;
   }
-  low = max(0, high-1);
-//  G4cout << "G4NeutronHPLegendreStore::Sample high, low: "<<high<<", "<<low<<endl;
+  low = G4std::max(0, high-1);
+//  G4cout << "G4NeutronHPLegendreStore::Sample high, low: "<<high<<", "<<low<<G4endl;
   G4NeutronHPVector theBuffer;
   G4NeutronHPInterpolator theInt;
   G4double lim=0.005;
   G4double x1, x2, y1, y2, y;
   x1 = theCoeff[low].GetEnergy();
   x2 = theCoeff[high].GetEnergy();
-//  G4cout << "the xes "<<x1<<" "<<x2<<endl;
+//  G4cout << "the xes "<<x1<<" "<<x2<<G4endl;
   G4double costh=0;
   for(i0=0; i0<601; i0++)
   {
@@ -167,7 +167,7 @@ G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpol
     y2 = Integrate(high, costh);
     y = theInt.Interpolate(theManager.GetScheme(high), energy, x1, x2, y1, y2);
     theBuffer.SetData(i0, costh, y);
-//     G4cout << "Integration "<<low<<" "<<costh<<" "<<y1<<" "<<y2<<" "<<y<<endl;
+//     G4cout << "Integration "<<low<<" "<<costh<<" "<<y1<<" "<<y2<<" "<<y<<G4endl;
   }
   G4double rand = G4UniformRand();
   G4int it;
@@ -179,17 +179,17 @@ G4double G4NeutronHPLegendreStore::Sample (G4double energy) // still in interpol
 //         << theBuffer.GetY(i0)<<" "
 //         << theBuffer.GetY(600)<<" "
 //         << rand<<" "
-//         << theBuffer.GetY(i0)/theBuffer.GetY(600)<<endl;;
+//         << theBuffer.GetY(i0)/theBuffer.GetY(600)<<G4endl;;
   }
   if(it==601) it=600;
-//  G4cout << "G4NeutronHPLegendreStore::Sample it "<<rand<<" "<<it<<endl;
+//  G4cout << "G4NeutronHPLegendreStore::Sample it "<<rand<<" "<<it<<G4endl;
   G4double norm = theBuffer.GetY(600);
   if(norm==0) return -DBL_MAX; 
   x1 = theBuffer.GetY(it)/norm;
   x2 = theBuffer.GetY(it-1)/norm;
   y1 = theBuffer.GetX(it);
   y2 = theBuffer.GetX(it-1);
-//  G4cout << "G4NeutronHPLegendreStore::Sample x y "<<x1<<" "<<y1<<" "<<x2<<" "<<y2<<endl;
+//  G4cout << "G4NeutronHPLegendreStore::Sample x y "<<x1<<" "<<y1<<" "<<x2<<" "<<y2<<G4endl;
   return theInt.Interpolate(theManager.GetScheme(high), rand, x1, x2, y1, y2);
 }
 
@@ -204,6 +204,6 @@ G4double G4NeutronHPLegendreStore::Integrate(G4int k, G4double costh) // still i
     result += theCoeff[k].GetCoeff(l)*theLeg.Integrate(l, costh);
 //    G4cout << theCoeff[k].GetCoeff(l)<<" ";
   } 
-//  G4cout <<endl;
+//  G4cout <<G4endl;
   return result;
 }

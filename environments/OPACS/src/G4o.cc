@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4o.cc,v 1.4.2.1.2.1 1999/12/07 20:46:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 /*
 #define DEBUG

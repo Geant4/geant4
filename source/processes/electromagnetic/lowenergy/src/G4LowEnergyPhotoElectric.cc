@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.21.2.1 1999/12/07 20:50:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.24 2000/02/18 10:27:53 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -15,21 +15,15 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4LowEnergyPhotoElectric physics process --------
-//                   by Michel Maire, April 1996
 //      ------------ G4LowEnergyPhotoelctric: low energy modifications --------
 //                   by Alessandra Forti, October 1998
 // **************************************************************
-// 12-06-96, Added SelectRandomAtom() method, by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 17-09-96, PartialSumSigma(i)
-//           split of ComputeBindingEnergy, M.Maire
-// 08-01-97, crossection table + meanfreepath table, M.Maire
-// 13-03-97, adapted for the new physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 17.02.2000 Veronique Lefebure
+// - bugs corrected in fluorescence simulation: 
+//   . when final use of binding energy: no photon was ever created
+//   . no Fluorescence was simulated when the photo-electron energy
+//     was below production threshold.
+//
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Added EnergySampling method A. Forti
@@ -68,9 +62,9 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/MeV << "MeV " << endl;
+     G4cout << "HighestEnergy: " << HighestEnergyLimit/MeV << "MeV " << G4endl;
    }
 }
 
@@ -434,13 +428,18 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4double theEnergyDeposit = BindingEn;
 
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
-      >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
+      >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
 
     // the electron is created in the direction of the incident photon ...  
     
     G4DynamicParticle* aElectron = new G4DynamicParticle (G4Electron::Electron(), 
 							  PhotonDirection, ElecKineEnergy) ;
     elecvec.append(aElectron);
+  } // END OF CUTS
+  
+  else{
+    theEnergyDeposit += ElecKineEnergy;    
+  }
 
     // load the transition probability table for the element
     // theTable[i][j][k] 
@@ -503,7 +502,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	  G4double lastTransEnergy = ((*(*theBindEnVec)[1])[k])*MeV;
 	  thePrimaryShell = (G4int) fluorPar[0];
 
-	  if(fluorPar[2]*MeV >= CutForLowEnergySecondaryPhotons){
+	  if(lastTransEnergy >= CutForLowEnergySecondaryPhotons){
 
 	    theEnergyDeposit -= lastTransEnergy;
 	
@@ -542,12 +541,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       theEnergyDeposit = 0;
     }
     
-  } // END OF CUTS
-  
-  else{
-    theEnergyDeposit = PhotonEnergy;    
-    aParticleChange.SetNumberOfSecondaries(0) ;
-  }
 
   // Kill the incident photon 
   aParticleChange.SetMomentumChange( 0., 0., 0. );

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PhysicsList.cc,v 1.4.6.1 1999/12/07 20:47:31 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN03PhysicsList.cc,v 1.6 1999/12/15 14:49:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -28,7 +28,7 @@
 
 ExN03PhysicsList::ExN03PhysicsList():  G4VUserPhysicsList()
 {
-  currentDefaultCut = defaultCutValue = 2.0*mm;
+  currentDefaultCut = defaultCutValue = 1.0*mm;
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
   cutForProton      = defaultCutValue;
@@ -226,7 +226,7 @@ void ExN03PhysicsList::SetCuts()
     
   if (verboseLevel >0){
     G4cout << "ExN03PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << endl;    
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;    
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,

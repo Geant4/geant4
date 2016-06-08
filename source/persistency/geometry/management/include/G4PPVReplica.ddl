@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPVReplica.ddl,v 1.3.2.1 1999/12/07 20:50:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PPVReplica.ddl,v 1.4 1999/12/15 14:51:23 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // class G4PPVReplica

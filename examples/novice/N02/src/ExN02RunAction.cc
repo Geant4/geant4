@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02RunAction.cc,v 1.2.8.1 1999/12/07 20:47:27 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN02RunAction.cc,v 1.3 1999/12/15 14:49:22 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -30,7 +30,7 @@ void ExN02RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   ((G4Run *)(aRun))->SetRunID(runIDcounter++);
    
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/tracking/storeTrajectory 1"); 

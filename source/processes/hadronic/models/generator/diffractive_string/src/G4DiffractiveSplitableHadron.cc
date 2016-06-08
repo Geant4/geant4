@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.1.10.1 1999/12/07 20:51:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DiffractiveSplitableHadron.cc,v 1.1.10.1.2.1 1999/12/10 15:42:06 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 // ------------------------------------------------------------
@@ -106,8 +106,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, 
 	   G4int heavy=  absPDGcode/ 100;
 	   G4int light= (absPDGcode %100)/10;
 	   
-//	    G4int anti= pow(-1 , max( heavy, light));
-	    G4int anti= 1 -2 * ( max( heavy, light ) % 2 );
+//	    G4int anti= pow(-1 , G4std::max( heavy, light));
+	    G4int anti= 1 -2 * ( G4std::max( heavy, light ) % 2 );
 	    if (PDGcode < 0 ) anti *=-1;
 	    
 	    heavy *= anti;
@@ -177,8 +177,8 @@ G4int G4DiffractiveSplitableHadron::Diquark(G4int aquark,G4int bquark,G4int Spin
 {
 	G4int diquarkPDG;
 	
-	diquarkPDG = max( abs(aquark), abs(bquark) )*1000 +
-	             min( abs(aquark), abs(bquark) )*100  +
+	diquarkPDG = G4std::max( abs(aquark), abs(bquark) )*1000 +
+	             G4std::min( abs(aquark), abs(bquark) )*100  +
 	             2*Spin + 1;
 	return ( aquark > 0 && bquark > 0 ) ?  diquarkPDG : -1*diquarkPDG;
 }	      

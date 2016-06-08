@@ -1,5 +1,23 @@
+LD_LIBRARY_PATH = /usr/local/libexec/jdk/1.1.6/lib:/opt/SUNWspro/lib:/usr/openwin/lib:/usr/dt/lib:/usr/local/lib:/afs/cern.ch/sw/lhcxx/specific/sun/Objectivity/5.1/lib:/afs/cern.ch/sw/lhcxx/specific/@sys/HepODBMS/0.3.0.1/lib
+
+Copying G4EXAMPLE_BOOT into runtime federated database...
+Creating new runtime federated database /afs/cern.ch/sw/geant4/stt/dev/SUN-CC/debug/exampleSchema/SUN-CC/PersistentEx01 for FDID 207
+Run with active lockserver
+Schema import from PersistentEx01 to PersistentEx01
+
+Updating Name Service values...
+Now updating System Name Space (catalog) values...
+Now updating Database File locations...
+
+Federated Database Installation complete.
+OO_FD_BOOT is set to /afs/cern.ch/sw/geant4/stt/dev/SUN-CC/debug/exampleFD/SUN-CC/PersistentEx01
+
 Opening federated database OO_FD_BOOT.
-WARNING: g4example: Could not find naming root directory: Naming will be disabled.
+**********************************************
+ Geant4 version $Name: geant4-01-01 $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
 #
 #  PersistentEx01.in
 #
@@ -78,36 +96,36 @@ Transaction is committed on /Geometry/GeomContainer/
 >>> Event 0
 Event : 0
 mySD/EvenCollection    Number of hits       9
-  Edep of the first Hit 34.3698
+  Edep of the first Hit 34.3763
 mySD/OddCollection     Number of hits       39
-  Edep of the first Hit 18.4405
+  Edep of the first Hit 18.4413
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 0 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 1
 Event : 1
 mySD/EvenCollection    Number of hits       22
-  Edep of the first Hit 99.9396
+  Edep of the first Hit 99.9458
 mySD/OddCollection     Number of hits       20
-  Edep of the first Hit 25.443
+  Edep of the first Hit 25.4437
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 1 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 2
 Event : 2
 mySD/EvenCollection    Number of hits       22
-  Edep of the first Hit 6.23362
+  Edep of the first Hit 6.24018
 mySD/OddCollection     Number of hits       19
-  Edep of the first Hit 64.6385
+  Edep of the first Hit 64.64
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 2 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 3
 Event : 3
 mySD/EvenCollection    Number of hits       13
-  Edep of the first Hit 48.4612
+  Edep of the first Hit 48.4619
 mySD/OddCollection     Number of hits       39
-  Edep of the first Hit 14.5902
+  Edep of the first Hit 14.5986
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 3 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
@@ -116,16 +134,16 @@ Event : 4
 mySD/EvenCollection    Number of hits       32
   Edep of the first Hit 50.5145
 mySD/OddCollection     Number of hits       16
-  Edep of the first Hit 57.8215
+  Edep of the first Hit 57.8223
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 4 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 5
 Event : 5
 mySD/EvenCollection    Number of hits       6
-  Edep of the first Hit 139.802
+  Edep of the first Hit 139.808
 mySD/OddCollection     Number of hits       35
-  Edep of the first Hit 109.904
+  Edep of the first Hit 109.911
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 5 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
@@ -134,7 +152,7 @@ Event : 6
 mySD/EvenCollection    Number of hits       10
   Edep of the first Hit 21.8663
 mySD/OddCollection     Number of hits       28
-  Edep of the first Hit 14.2566
+  Edep of the first Hit 14.2581
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 6 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
@@ -143,25 +161,25 @@ Event : 7
 mySD/EvenCollection    Number of hits       12
   Edep of the first Hit 2.93176
 mySD/OddCollection     Number of hits       43
-  Edep of the first Hit 3.13845
+  Edep of the first Hit 3.1392
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 7 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 8
 Event : 8
 mySD/EvenCollection    Number of hits       18
-  Edep of the first Hit 13.787
-mySD/OddCollection     Number of hits       35
-  Edep of the first Hit 13.6233
+  Edep of the first Hit 13.794
+mySD/OddCollection     Number of hits       34
+  Edep of the first Hit 13.6248
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 8 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 9
 Event : 9
-mySD/EvenCollection    Number of hits       7
-  Edep of the first Hit 42.2712
-mySD/OddCollection     Number of hits       41
-  Edep of the first Hit 21.0987
+mySD/EvenCollection    Number of hits       14
+  Edep of the first Hit 4.16745
+mySD/OddCollection     Number of hits       35
+  Edep of the first Hit 43.0885
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 9 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/

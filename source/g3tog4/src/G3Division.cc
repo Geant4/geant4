@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.cc,v 1.2 1999/12/05 17:50:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3Division.cc,v 1.6 2000/03/02 17:54:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
@@ -14,7 +14,7 @@
 #include "G3VolTableEntry.hh"
 #include "G3toG4MakeSolid.hh"
 #include "G3Pos.hh"
-
+#include "G3toG4Debug.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -109,7 +109,13 @@ G4VPhysicalVolume* G3Division::CreatePVReplica()
   
   G4PVReplica* pvol 
     = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
-
+  if (G3toG4Debug() != 0) {
+    G4cout << "Create G4PVReplica name " << name << " logical volume name " 
+	   << lv->GetName() << " mother logical volme name "
+	   << mlv->GetName() << " axis " << fAxis << " ndivisions " 
+	   << fNofDivisions << " width " << fWidth << " Offset "
+	   << fOffset << G4endl;
+  }
   return pvol;
 }
 
@@ -141,7 +147,7 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "TRD1" ) {
       if (fIAxis == 1){
-        fHighRange = max(Rpar[0]*cm, Rpar[1]*cm);
+        fHighRange = G4std::max(Rpar[0]*cm, Rpar[1]*cm);
       }
       else if( fIAxis == 2) {
        fHighRange = Rpar[2]*cm;
@@ -153,10 +159,10 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "TRD2" ) {
       if (fIAxis == 1){
-        fHighRange = max(Rpar[0]*cm, Rpar[1]*cm);
+        fHighRange = G4std::max(Rpar[0]*cm, Rpar[1]*cm);
       }
       else if( fIAxis == 2) {
-        fHighRange = max(Rpar[2]*cm, Rpar[3]*cm);
+        fHighRange = G4std::max(Rpar[2]*cm, Rpar[3]*cm);
       }
       else if( fIAxis == 3) {
        fHighRange = Rpar[4]*cm;
@@ -204,8 +210,8 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "CONE" ) {
       if (fIAxis == 1){
-        fHighRange = max(Rpar[2]*cm,Rpar[4]*cm);
-        fLowRange = max(Rpar[1]*cm,Rpar[3]*cm);
+        fHighRange = G4std::max(Rpar[2]*cm,Rpar[4]*cm);
+        fLowRange = G4std::max(Rpar[1]*cm,Rpar[3]*cm);
         fAxis = kRho;
       }
       else if( fIAxis == 2) {
@@ -221,8 +227,8 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "CONS" ) {
       if (fIAxis == 1){
-        fHighRange = max(Rpar[2]*cm,Rpar[4]*cm);
-        fLowRange = max(Rpar[1]*cm,Rpar[3]*cm);
+        fHighRange = G4std::max(Rpar[2]*cm,Rpar[4]*cm);
+        fLowRange = G4std::max(Rpar[1]*cm,Rpar[3]*cm);
         fAxis = kRho;
       }
       else if( fIAxis == 2) {
@@ -245,13 +251,13 @@ void G3Division::SetRangeAndAxis()
         fAxis = kRho;
       }
       else if( fIAxis == 2) {
-       fLowRange = min(Rpar[2]*deg,Rpar[3]*deg);
-       fHighRange = max(Rpar[2]*deg,Rpar[3]*deg);
+       fLowRange = G4std::min(Rpar[2]*deg,Rpar[3]*deg);
+       fHighRange = G4std::max(Rpar[2]*deg,Rpar[3]*deg);
        fAxis = kPhi;
       }
       else if( fIAxis == 3) {
-       fLowRange = min(Rpar[4]*deg,Rpar[5]*deg);
-       fHighRange = max(Rpar[4]*deg,Rpar[5]*deg);
+       fLowRange = G4std::min(Rpar[4]*deg,Rpar[5]*deg);
+       fHighRange = G4std::max(Rpar[4]*deg,Rpar[5]*deg);
        fAxis = kPhi; // ?????? 
       }
     }
@@ -285,10 +291,10 @@ void G3Division::SetRangeAndAxis()
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;
             Rmax[i] = Rpar[i6]*cm;
-            rangelo[0] = min(rangelo[0], Rmin[i]);
-            rangehi[0] = max(rangehi[0], Rmax[i]);
-            rangelo[2] = min(rangelo[2], DzArray[i]);
-            rangehi[2] = max(rangehi[2], DzArray[i]);
+            rangelo[0] = G4std::min(rangelo[0], Rmin[i]);
+            rangehi[0] = G4std::max(rangehi[0], Rmax[i]);
+            rangelo[2] = G4std::min(rangelo[2], DzArray[i]);
+            rangehi[2] = G4std::max(rangehi[2], DzArray[i]);
         }
         for (i=0;i<nz;i++){
             assert(Rmin[i]>=0 && Rmax[i]>=Rmin[i]);
@@ -331,10 +337,10 @@ void G3Division::SetRangeAndAxis()
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;
             Rmax[i] = Rpar[i6]*cm;
-            rangelo[0] = min(rangelo[0], Rmin[i]);
-            rangehi[0] = max(rangehi[0], Rmax[i]);
-            rangelo[2] = min(rangelo[2], DzArray[i]);
-            rangehi[2] = max(rangehi[2], DzArray[i]);
+            rangelo[0] = G4std::min(rangelo[0], Rmin[i]);
+            rangehi[0] = G4std::max(rangehi[0], Rmax[i]);
+            rangelo[2] = G4std::min(rangelo[2], DzArray[i]);
+            rangehi[2] = G4std::max(rangehi[2], DzArray[i]);
         }
         for (i=0;i<nz;i++){
             assert(Rmin[i]>=0 && Rmax[i]>=Rmin[i]);
@@ -361,8 +367,10 @@ void G3Division::SetRangeAndAxis()
     }  
 
     // verbose
-    //G4cout << "SetRangeAndAxis: " 
-    //       << fLowRange << " " << fHighRange << " " << fAxis << endl;
+    if (G3toG4Debug() != 0) {
+      G4cout << "Shape " << shape << " SetRangeAndAxis: " 
+	     << fLowRange << " " << fHighRange << " " << fAxis << G4endl;
+    }
 }
 
 G3VolTableEntry* G3Division::CreateEnvelope(G4String shape, G4double hi, 
@@ -374,7 +382,7 @@ G3VolTableEntry* G3Division::CreateEnvelope(G4String shape, G4double hi,
     // G4cout << "  G3Division::CreateEnvelope " << "fIAaxis= " << fIAxis
     //        << " hi= " << hi
     //        << " lo= " << lo
-    //        << endl;
+    //        << G4endl;
 
     G4double *Rpar = new G4double[npar+2];
     for (G4int i=0; i<npar; ++i){ Rpar[i] = par[i];}
@@ -551,10 +559,10 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
 
     // verbose
     // G4cout << "G3Division::CreateSolid volume before: " 
-    //        << fVTE->GetName() << " " << shape << endl;    
+    //        << fVTE->GetName() << " " << shape << G4endl;    
     // G4cout << " npar,Rpar: " << npar;
     // for (G4int ii = 0; ii < npar; ++ii) G4cout << " " << Rpar[ii];
-    // G4cout << endl;
+    // G4cout << G4endl;
   
     if ( shape == "BOX" ) {
       if      ( fIAxis == 1 ) Rpar[0] = fWidth/2./cm;
@@ -603,6 +611,7 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
     else if ( shape == "TUBS" ) {
       if ( fIAxis == 1 ) {
         Rpar[1] = Rpar[0] + fWidth/cm;
+        fOffset = Rpar[0]*cm;
       }
       else if ( fIAxis == 2 ) {
          fOffset = Rpar[3]*deg; 
@@ -686,10 +695,10 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
 
     // verbose
     // G4cout << "G3Division::CreateSolid volume after: " 
-    //        << fVTE->GetName() << " " << shape << endl;    
+    //        << fVTE->GetName() << " " << shape << G4endl;    
     // G4cout << " npar,Rpar: " << npar;
     // for (G4int iii = 0; iii < npar; ++iii) G4cout << " " << Rpar[iii];
-    // G4cout << endl;
+    // G4cout << G4endl;
 }
 
 

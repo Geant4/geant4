@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5StepCut.cc,v 1.1.4.1 1999/12/07 20:47:12 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em5StepCut.cc,v 1.2 1999/12/15 14:49:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -24,7 +24,7 @@ Em5StepCut::Em5StepCut(const G4String& aName)
   : G4VDiscreteProcess(aName),MaxChargedStep(DBL_MAX)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
 

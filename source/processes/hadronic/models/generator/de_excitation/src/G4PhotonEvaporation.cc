@@ -102,7 +102,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
       if (_verbose > 0)
 	G4cout << " = BreakUp = " << nDiscr 
 	       << " gammas from DiscreteDeexcitation " 
-	       << endl;
+	       << G4endl;
       
       for (i=0; i<nDiscr; i++)
 	{
@@ -126,7 +126,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
 
 
   if (_verbose > 0)
-    G4cout << "*-*-*-* Photon evaporation: " << products->entries() << endl;
+    G4cout << "*-*-*-* Photon evaporation: " << products->entries() << G4endl;
 
   return products;
 }
@@ -151,7 +151,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 
   if (_verbose > 0)
     G4cout << " = BreakItUp = " << nCont 
-	   << " gammas from ContinuumDeexcitation " << endl;
+	   << " gammas from ContinuumDeexcitation " << G4endl;
 
   G4int i;
   if (nCont > 0)
@@ -172,7 +172,7 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 
   if (_verbose > 0)
     G4cout << " = BreakItUp = " << nDiscr 
-	   << " gammas from DiscreteDeexcitation " << endl;
+	   << " gammas from DiscreteDeexcitation " << G4endl;
 
   for (i=0; i<nDiscr; i++)
     {
@@ -184,13 +184,13 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   products->insert(finalNucleus);
 
   if (_verbose > 0)
-    G4cout << " = BreakItUp = Nucleus added to products" << endl;
+    G4cout << " = BreakItUp = Nucleus added to products" << G4endl;
 
   delete contProducts;  // delete vector, not fragments 
   delete discrProducts;
 
   if (_verbose > 0)
-    G4cout << "*-*-* Photon evaporation: " << products->entries() << endl;
+    G4cout << "*-*-* Photon evaporation: " << products->entries() << G4endl;
 
   return products;
 }

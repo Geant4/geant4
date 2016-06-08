@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Parton.hh,v 1.6.8.1 1999/12/07 20:51:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Parton.hh,v 1.6.8.1.2.2 1999/12/14 07:08:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4Parton_h
@@ -25,7 +25,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 #include "G4ParticleTable.hh"
 
 class G4Parton

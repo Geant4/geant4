@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999/11/30 12:21:49 gcosmo Exp $
+$Id: History,v 1.7 2000/01/19 19:07:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 19, 00       G. Cosmo              geommng-V01-00-00
+
+Syncronized file versioning with HEAD (several CVS headers changed
+due to the recent migration for ISO C++)
+
+January 19, 00       J. Allison
+
+G4DrawVoxels.cc:
+
+Assured GetSlice(slice_no) is called for slice_no < no_slices.
 
 November 30, 99      G. Cosmo              geommng-V00-01-01a
 

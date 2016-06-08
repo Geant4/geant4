@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.2.6.1 1999/12/07 20:50:26 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyUtilities.cc,v 1.4 2000/01/26 09:50:01 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -15,20 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyUtilities physics process --------
-//                   by Michel Maire, April 1996
+//                   by A.Forti  1999/03/02
 // **************************************************************
-// 12-06-96, Added SelectRandomAtom() method, by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 17-09-96, PartialSumSigma(i)
-//           split of ComputeBindingEnergy, M.Maire
-// 08-01-97, crossection table + meanfreepath table, M.Maire
-// 13-03-97, adapted for the new physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
-// --------------------------------------------------------------
 // This Class Header
 #include "G4LowEnergyUtilities.hh"
 
@@ -37,7 +26,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4Material.hh"
 #include "CLHEP/String/Strings.h"
-#include <fstream.h>
+#include "g4std/fstream"
 
 G4LowEnergyUtilities::G4LowEnergyUtilities()
 {}
@@ -69,8 +58,8 @@ G4SecondLevel* G4LowEnergyUtilities::BuildSecondLevelTables(const G4int TableInd
   
   HepString path_string(path);
   HepString dir_file = path_string + "/" + name;
-  ifstream file(dir_file);
-  filebuf* lsdp = file.rdbuf();
+  G4std::ifstream file(dir_file);
+  G4std::filebuf* lsdp = file.rdbuf();
 
   if(!lsdp->is_open()){
     
@@ -164,8 +153,8 @@ G4FirstLevel* G4LowEnergyUtilities::BuildFirstLevelTables(const G4int TableInd,
   
   HepString path_string(path);
   HepString dir_file = path_string + "/" + name;
-  ifstream file(dir_file);
-  filebuf* lsdp = file.rdbuf();
+  G4std::ifstream file(dir_file);
+  G4std::filebuf* lsdp = file.rdbuf();
 
   if(!lsdp->is_open()){
     

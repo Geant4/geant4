@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TritonInelasticProcess.hh,v 1.1.10.1 1999/12/07 20:52:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: Triton Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997

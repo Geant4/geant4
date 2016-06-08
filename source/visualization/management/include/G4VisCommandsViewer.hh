@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.hh,v 1.4.4.1 1999/12/07 20:53:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisCommandsViewer.hh,v 1.7 2000/01/11 17:22:29 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -26,8 +26,6 @@ public:
 protected:
   G4String ShortName (const G4String &);
   void UpdateCandidateLists ();
-  static G4String fViewerNameList;
-  // member so that it has long life - static because shared between objects.
 };
 
 class G4VisCommandViewerCreate: public G4VVisCommandViewer {
@@ -54,6 +52,17 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandViewerRefresh: public G4VVisCommandViewer {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandViewerRefresh ();
+  ~G4VisCommandViewerRefresh ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcmdWithAString* fpCommand;
+};
+
 class G4VisCommandViewerRemove: public G4VVisCommandViewer {
 public:
   // Uses compiler defaults for copy constructor and assignment.
@@ -76,15 +85,16 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-class G4VisCommandViewerUpdate: public G4VVisCommandViewer {
+class G4VisCommandViewerShow: public G4VVisCommandViewer {
 public:
   // Uses compiler defaults for copy constructor and assignment.
-  G4VisCommandViewerUpdate ();
-  ~G4VisCommandViewerUpdate ();
+  G4VisCommandViewerShow ();
+  ~G4VisCommandViewerShow ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
   G4UIcmdWithAString* fpCommand;
+  G4UIcmdWithAString* fpCommand1;
 };
 
 #endif

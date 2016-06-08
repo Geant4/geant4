@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eplusAnnihilation.cc,v 1.1.10.1 1999/12/07 20:51:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4eplusAnnihilation.cc,v 1.1.10.1.2.1 1999/12/08 17:34:26 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -318,7 +318,7 @@ void G4eplusAnnihilation::PrintInfoDefinition()
   G4String comments = "Total cross section from Heilter formula (annihilation into 2 photons).\n";
            comments += "        gamma energies sampled according Heitler";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";

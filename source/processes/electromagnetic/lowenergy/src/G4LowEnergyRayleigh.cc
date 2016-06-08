@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.13.6.1 1999/12/07 20:50:26 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyRayleigh.cc,v 1.15 2000/01/26 09:50:01 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -15,8 +15,6 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyRayleigh physics process --------
 //                   by Alessandra Forti, November 1998
 // **************************************************************
@@ -47,9 +45,9 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
     NumbBinTable(200)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
-     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << endl;
+     G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << G4endl;
    }
 }
  
@@ -257,7 +255,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 
   if(verboseLevel > 15){
 
-    G4cout<<"LE Rayleigh PostStepDoIt"<<endl;
+    G4cout<<"LE Rayleigh PostStepDoIt"<<G4endl;
   }
 #endif
 

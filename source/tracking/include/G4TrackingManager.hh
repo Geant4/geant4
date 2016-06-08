@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.4.6.1 1999/12/07 20:53:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4TrackingManager.hh,v 1.7 2000/01/26 04:20:30 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------
@@ -156,14 +156,17 @@ class G4TrackingManager
    }
 
    inline void G4TrackingManager::SetUserAction(G4UserTrackingAction* apAction){
-     if (fpUserTrackingAction) delete fpUserTrackingAction;
      fpUserTrackingAction = apAction;
-     apAction->SetTrackingManagerPointer(this);
+     if(apAction != NULL){
+       apAction->SetTrackingManagerPointer(this);
+     }	
    }
 
    inline void G4TrackingManager::SetUserAction(G4UserSteppingAction* apAction){
      fpSteppingManager->SetUserAction(apAction);
-     apAction->SetSteppingManagerPointer(fpSteppingManager);  
+     if(apAction != NULL){
+       apAction->SetSteppingManagerPointer(fpSteppingManager);  
+     }	
    }
 
    inline void G4TrackingManager::SetVerboseLevel(G4int vLevel){ 

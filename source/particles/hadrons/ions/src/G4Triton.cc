@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Triton.cc,v 1.2.8.1 1999/12/07 20:49:36 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Triton.cc,v 1.2.8.1.2.2 1999/12/14 07:08:06 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -21,8 +21,8 @@
 //  Add  G4Triton::TritonDefinition()  by H.Kurashige 27 June 1996
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Triton.hh"
 

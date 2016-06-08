@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1EventActionMessenger.hh,v 1.1.4.1 1999/12/07 20:46:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em1EventActionMessenger.hh,v 1.2 1999/12/15 14:48:55 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 

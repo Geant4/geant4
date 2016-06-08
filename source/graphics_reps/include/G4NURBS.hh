@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBS.hh,v 1.4.2.1 1999/12/07 20:48:48 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NURBS.hh,v 1.5 1999/12/15 14:50:32 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
@@ -324,7 +324,7 @@ protected:
   // external representation for t_KnotVectorGenFlag
   // as a << overload.
   // (used in errors report)
-  friend ostream & operator << (ostream & inout_OutStream,
+  friend G4std::ostream & operator << (G4std::ostream & inout_OutStream,
 				t_KnotVectorGenFlag in_KVGFlag);
 
   G4NURBS (t_order in_Uorder, t_order in_Vorder,
@@ -396,14 +396,14 @@ private:
 };
 
 // external representation for t_KnotVectorGenFlag
-ostream & operator << (ostream & inout_OutStream, G4NURBS::t_KnotVectorGenFlag in_KVGFlag);
+G4std::ostream & operator << (G4std::ostream & inout_OutStream, G4NURBS::t_KnotVectorGenFlag in_KVGFlag);
 
 
 // << overload to dump a nurbs
 // writted with public access functions
 // do not depends on protected part
 
-ostream & operator << (ostream & inout_outStream, const G4NURBS & in_kNurb);
+G4std::ostream & operator << (G4std::ostream & inout_outStream, const G4NURBS & in_kNurb);
 
 /***********************************************************************
  *                                                                     *

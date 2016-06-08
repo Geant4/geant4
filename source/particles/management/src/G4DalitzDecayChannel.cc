@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.3.8.1 1999/12/07 20:49:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DalitzDecayChannel.cc,v 1.3.8.1.2.1 1999/12/08 17:34:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -37,7 +37,7 @@ G4DalitzDecayChannel::G4DalitzDecayChannel(
   //#ifdef G4VERBOSE
   //if (GetVerboseLevel()>1) {
   //  G4cout << "G4DalitzDecayChannel:: constructor ";
-  //  G4cout << "addr[" << this << "]" << endl;
+  //  G4cout << "addr[" << this << "]" << G4endl;
   //}
   //#endif
   // set names for daughter particles
@@ -144,7 +144,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
      G4cout << "G4DalitzDecayChannel::DecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
+     G4cout << "  create decay products in rest frame " <<G4endl;
      products->DumpInfo();
   }
 #endif

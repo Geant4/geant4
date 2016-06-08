@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.8.4.1 1999/12/07 20:49:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NucleiProperties.hh,v 1.8.4.1.2.1 1999/12/08 17:34:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -75,7 +75,7 @@ inline
 {
   if (A < 1 || Z < 0 || Z > A) {
     G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-	   << " and Z = " << Z << endl;
+	   << " and Z = " << Z << G4endl;
     return 0.0;
 
   } else {
@@ -96,7 +96,7 @@ inline
 {
   if (Z < 0 || Z > A) {
     G4cout << "G4NucleiProperties::GetAtomicMass: Wrong values for A = " << A 
-	   << " and Z = " << Z << endl;	return 0.0;
+	   << " and Z = " << Z << G4endl;	return 0.0;
 
   } else if (abs(A - G4int(A)) > 1.e-10) {
     return AtomicMass(A,Z);
@@ -117,7 +117,7 @@ inline
 {
   if (A < 1 || Z < 0 || Z > A) {
     G4cout << "G4NucleiProperties::GetMassExccess: Wrong values for A = " << A 
-	   << " and Z = " << Z << endl;
+	   << " and Z = " << Z << G4endl;
     return 0.0;
 
   } else {

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleon.cc,v 1.2.8.1 1999/12/07 20:52:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Nucleon.cc,v 1.2.8.1.2.3 1999/12/14 07:08:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #include "G4Nucleon.hh"
 
@@ -41,13 +41,13 @@ void G4Nucleon::Boost(const G4LorentzVector & aMomentum)
 	theMomentum.setVect(factor*aMomentum.vect() + theMomentum.vect());
 }
 
-#include <iostream.h>
-ostream & operator << (ostream &s, const G4Nucleon& nucleon)
+#include "g4std/iostream"
+G4std::ostream & operator << (G4std::ostream &s, const G4Nucleon& nucleon)
 {
 //	s<< nucleon.GetDefinition()->GetParticleName() 
 //	 << "  is " << nucleon.AreYouHit() ? " " : "not" 
-//	 << " hit. Momentum/position:" << endl;
-	s<< "  momentum : " << nucleon.Get4Momentum() << endl;
+//	 << " hit. Momentum/position:" << G4endl;
+	s<< "  momentum : " << nucleon.Get4Momentum() << G4endl;
 	s<< "  position : " << nucleon.GetPosition() ;
 	return s;
 }	  

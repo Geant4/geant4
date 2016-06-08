@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPProduct.hh,v 1.3 1999/07/02 09:59:54 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NeutronHPProduct.hh,v 1.4 1999/12/15 14:53:13 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4NeutronHPProduct_h
 #define G4NeutronHPProduct_h 1
@@ -17,7 +17,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "globals.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4ReactionProductVector.hh"
@@ -40,7 +40,7 @@ class G4NeutronHPProduct
     if(theDist != NULL) delete theDist;
   }
   
-  inline void Init(ifstream & aDataFile)
+  inline void Init(G4std::ifstream & aDataFile)
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;

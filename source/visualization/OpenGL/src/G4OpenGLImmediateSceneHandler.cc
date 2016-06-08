@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.2.8.1 1999/12/07 20:53:22 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.3 1999/12/15 14:54:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -54,7 +54,7 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
   fSceneCount--;
 }
 
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -67,9 +67,9 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives
   G4cout << "G4OpenGLTransform3D matrix:";
   for (int i = 0; i < 16; i++) {
     if ((i % 4) == 0) G4cout << '\n';
-    G4cout << setw (15) << m[i];
+    G4cout << G4std::setw (15) << m[i];
   }
-  G4cout << endl;
+  G4cout << G4endl;
   *****************************************/
 
   glMultMatrixd (oglt.GetGLMatrix ());

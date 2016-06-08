@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VShortLivedParticle.cc,v 1.2.8.1 1999/12/07 20:50:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VShortLivedParticle.cc,v 1.2.8.1.2.1 1999/12/08 17:34:11 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -46,32 +46,32 @@ G4VShortLivedParticle::G4VShortLivedParticle(const G4String&  aName,
 
 void            G4VShortLivedParticle::ResetCuts()
 {
-  G4cout << "G4VShortLivedParticle::ResetCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::ResetCuts() causes no effect!!" << G4endl;
 }
 void            G4VShortLivedParticle::SetCuts(G4double )
 {
-  G4cout << "G4VShortLivedParticle::SetCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::SetCuts() causes no effect!!" << G4endl;
 }
 void            G4VShortLivedParticle::ReCalcCuts()
 {
-  G4cout << "G4VShortLivedParticle::ReCalcCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::ReCalcCuts() causes no effect!!" << G4endl;
 }
 
 G4double      	G4VShortLivedParticle::GetLengthCuts() const
 {
-  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << G4endl;
   return -1.0;
 }
 
 G4double*	G4VShortLivedParticle::GetEnergyCuts() const
 {
-  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << G4endl;
   return 0;
 }
 
 G4double      	G4VShortLivedParticle::GetEnergyThreshold(const G4Material* ) const
 {
-  G4cout << "G4VShortLivedParticle::GetEnergyThreshold() causes no effect!!" << endl;
+  G4cout << "G4VShortLivedParticle::GetEnergyThreshold() causes no effect!!" << G4endl;
   return -1.0;
 }
 

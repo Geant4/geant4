@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: BuildCalorimeter.hh,v 1.1.8.1 1999/12/07 20:47:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: BuildCalorimeter.hh,v 1.2 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef BUILDCALORIMETER_HH
 #define BUILDCALORIMETER_HH

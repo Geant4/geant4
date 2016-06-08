@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.cc,v 1.4.8.1 1999/12/07 20:48:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Polymarker.cc,v 1.5 1999/12/15 14:50:36 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  November 1996
@@ -36,7 +36,7 @@ G4Polymarker & G4Polymarker::operator = (const G4Polymarker &right) {
   return *this;
 }
 
-ostream& operator << (ostream& os, const G4Polymarker& marker) {
+G4std::ostream& operator << (G4std::ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";
   switch (marker.fMarkerType) {
   case G4Polymarker::line:

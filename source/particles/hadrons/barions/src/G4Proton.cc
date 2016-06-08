@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Proton.cc,v 1.2.6.1 1999/12/07 20:49:31 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Proton.cc,v 1.2.6.1.2.2 1999/12/14 07:08:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -22,8 +22,8 @@
 //  Add ProtonDefinition(), H.Kurashige 4 July 1996
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4Proton.hh"
 

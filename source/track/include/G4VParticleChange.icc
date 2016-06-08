@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticleChange.icc,v 1.2.8.1 1999/12/07 20:53:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VParticleChange.icc,v 1.4 2000/01/18 02:54:12 kurasige Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //----------------------------------------------------------------
 // Virtual methods for updating G4Step 
@@ -184,8 +184,8 @@ inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cerr << "G4VParticleChange::Initialize() Warning  ";
-      G4cerr << "theListOfSecondaries is not empty " << endl;
-      G4cerr << "All objects in theListOfSecondaries are destroyed!" << endl;
+      G4cerr << "theListOfSecondaries is not empty " << G4endl;
+      G4cerr << "All objects in theListOfSecondaries are destroyed!" << G4endl;
     }
 #endif
     for (G4int index= 0; index<theNumberOfSecondaries; index++){
@@ -203,8 +203,8 @@ inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
 
 inline void G4VParticleChange::AddSecondary(G4Track *aTrack)
 {
-  // pass the weight of parent track if this particle change use no EB
-  aTrack->SetWeight(theParentWeight);
+  // pass the weight of parent track if the weight is larger than parent weight
+  if (aTrack->GetWeight()>theParentWeight) aTrack->SetWeight(theParentWeight);
   
   // add a secondary after size check
   if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
@@ -214,8 +214,8 @@ inline void G4VParticleChange::AddSecondary(G4Track *aTrack)
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cerr << "G4VParticleChange::AddSecondary() Warning  ";
-      G4cerr << "theListOfSecondaries is full !! " << endl;
-      G4cerr << " The object will not be added in theListOfSecondaries" << endl;
+      G4cerr << "theListOfSecondaries is full !! " << G4endl;
+      G4cerr << " The object will not be added in theListOfSecondaries" << G4endl;
     }
 #endif
   }

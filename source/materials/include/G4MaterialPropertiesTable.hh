@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.7 1999/11/16 08:31:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4MaterialPropertiesTable.hh,v 1.7.4.1 1999/12/09 10:28:47 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -120,9 +120,9 @@ private:
 	// Private Data members
 	/////////////////////////
 
-	G4std::map<G4String, G4MaterialPropertyVector*, less<G4String> > MPT;
+	G4std::map<G4String, G4MaterialPropertyVector*, G4std::less<G4String> > MPT;
 	typedef G4std::map<G4String, G4MaterialPropertyVector*,
-	  less<G4String> >::iterator MPTiterator;
+	  G4std::less<G4String> >::iterator MPTiterator;
 };
 
 #endif /* G4MaterialPropertiesTable_h */

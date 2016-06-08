@@ -3,13 +3,13 @@ G4bool G4Solver<Function>::Bisection(Function & theFunction)
 {
 	// Check the interval before start
 	if (a > b || abs(a-b) <= tolerance) {
-		G4cerr << "G4Solver::Bisection: The interval must be properly set." << endl;
+		G4cerr << "G4Solver::Bisection: The interval must be properly set." << G4endl;
 		return false;
 	}
 	G4double fa = theFunction(a);
 	G4double fb = theFunction(b);
 	if (fa*fb > 0.0) {
-		G4cerr << "G4Solver::Bisection: The interval must include a root." << endl;
+		G4cerr << "G4Solver::Bisection: The interval must include a root." << G4endl;
 		return false;
 	}
 	
@@ -36,7 +36,7 @@ G4bool G4Solver<Function>::Bisection(Function & theFunction)
 			fb=fc;
 		}
 	}
-	G4cerr << "G4Solver::Bisection: Excedded maximum number of iterations whithout convegence." << endl;
+	G4cerr << "G4Solver::Bisection: Excedded maximum number of iterations whithout convegence." << G4endl;
 	return false;
 }
 	
@@ -46,13 +46,13 @@ G4bool G4Solver<Function>::RegulaFalsi(Function & theFunction)
 {
 	// Check the interval before start
 	if (a > b || abs(a-b) <= tolerance) {
-		G4cerr << "G4Solver::RegulaFalsi: The interval must be properly set." << endl;
+		G4cerr << "G4Solver::RegulaFalsi: The interval must be properly set." << G4endl;
 		return false;
 	}
 	G4double fa = theFunction(a);
 	G4double fb = theFunction(b);
 	if (fa*fb > 0.0) {
-		G4cerr << "G4Solver::RegulaFalsi: The interval must include a root." << endl;
+		G4cerr << "G4Solver::RegulaFalsi: The interval must include a root." << G4endl;
 		return false;
 	}
 	
@@ -62,7 +62,7 @@ G4bool G4Solver<Function>::RegulaFalsi(Function & theFunction)
 	// Finding the root
 	for (G4int i = 0; i < MaxIter; i++) {
 		G4double c = (a*fb-b*fa)/(fb-fa);
-		G4double delta = min(abs(c-a),abs(b-c));
+		G4double delta = G4std::min(abs(c-a),abs(b-c));
 		if (delta < eps) {
 			root = c;
 			return true;
@@ -80,7 +80,7 @@ G4bool G4Solver<Function>::RegulaFalsi(Function & theFunction)
 			fa=fc;
 		}
 	}
-	G4cerr << "G4Solver::Bisection: Excedded maximum number of iterations whithout convegence." << endl;
+	G4cerr << "G4Solver::Bisection: Excedded maximum number of iterations whithout convegence." << G4endl;
 	return false;
 
 }	
@@ -93,13 +93,13 @@ G4bool G4Solver<Function>::Brent(Function & theFunction)
 	
 	// Check the interval before start
 	if (a > b || abs(a-b) <= tolerance) {
-		G4cerr << "G4Solver::Brent: The interval must be properly set." << endl;
+		G4cerr << "G4Solver::Brent: The interval must be properly set." << G4endl;
 		return false;
 	}
 	G4double fa = theFunction(a);
 	G4double fb = theFunction(b);
 	if (fa*fb > 0.0) {
-		G4cerr << "G4Solver::Brent: The interval must include a root." << endl;
+		G4cerr << "G4Solver::Brent: The interval must include a root." << G4endl;
 		return false;
 	}
 	
@@ -153,7 +153,7 @@ G4bool G4Solver<Function>::Brent(Function & theFunction)
 			p = abs(p);
 			G4double min1 = 3.0*xm*q-abs(Tol1*q);
 			G4double min2 = abs(e*q);
-			if (2.0*p < min(min1,min2)) {
+			if (2.0*p < G4std::min(min1,min2)) {
 				// Interpolation
 				e = d;
 				d = p/q;
@@ -177,7 +177,7 @@ G4bool G4Solver<Function>::Brent(Function & theFunction)
 		}
 		fb = theFunction(b);
 	}
-	G4cerr << "G4Solver::Brent: Number of iterations exceeded." << endl;
+	G4cerr << "G4Solver::Brent: Number of iterations exceeded." << G4endl;
 	return false;
 }
 
@@ -185,7 +185,7 @@ template <class Function>
 void G4Solver<Function>::SetIntervalLimits(const G4double Limit1, const G4double Limit2)
 {
 	if (abs(Limit1-Limit2) <= tolerance) {
-		G4cerr << "G4Solver::SetIntervalLimits: Interval must be wider than tolerance." << endl;
+		G4cerr << "G4Solver::SetIntervalLimits: Interval must be wider than tolerance." << G4endl;
 		return;
 	}
 	if (Limit1 < Limit2) {

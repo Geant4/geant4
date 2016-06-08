@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PTrd.cc,v 1.2 1999/11/17 10:49:03 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PTrd.cc,v 1.3 1999/12/15 14:51:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // Implementation for G4Trd class
@@ -54,11 +54,11 @@ G4PTrd::CheckAndSetAllParameters (G4double pdx1,  G4double pdx2,
           // G4double  Minimum_length= (1+per_thousand) * kCarTolerance/2.;
           //  FIX-ME : temporary solution for ZERO or very-small parameters.
           G4double  Minimum_length= kCarTolerance/2.;
-          fDx1=max(pdx1,Minimum_length); 
-          fDx2=max(pdx2,Minimum_length); 
-          fDy1=max(pdy1,Minimum_length); 
-          fDy2=max(pdy2,Minimum_length); 
-          fDz=max(pdz,Minimum_length);
+          fDx1=G4std::max(pdx1,Minimum_length); 
+          fDx2=G4std::max(pdx2,Minimum_length); 
+          fDy1=G4std::max(pdy1,Minimum_length); 
+          fDy2=G4std::max(pdy2,Minimum_length); 
+          fDz=G4std::max(pdz,Minimum_length);
         }
       else
         G4Exception("Error in G4PTrd::G4PTrd - One or more parameters are < 0");

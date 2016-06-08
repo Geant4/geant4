@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ForceCondition.hh,v 1.2 1999/11/07 16:31:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------

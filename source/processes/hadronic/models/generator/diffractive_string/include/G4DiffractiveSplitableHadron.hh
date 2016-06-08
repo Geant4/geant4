@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DiffractiveSplitableHadron.hh,v 1.2.8.1 1999/12/07 20:51:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4DiffractiveSplitableHadron_h

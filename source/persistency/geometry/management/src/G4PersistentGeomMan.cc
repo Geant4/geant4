@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentGeomMan.cc,v 1.9.2.1 1999/12/07 20:50:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PersistentGeomMan.cc,v 1.11 2000/02/23 13:10:36 morita Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4PersistentGeomMan 
 //
@@ -87,7 +87,7 @@ G4bool G4PersistentGeomMan::Store( HepDbApplication* dbApp,
     {
       G4cerr << "G4PersistentGeomMan::Store"
              << " -- error in naming the geometry object map: "
-             << f_GeomMapScopeName << endl;
+             << f_GeomMapScopeName << G4endl;
       return false;
     }
 
@@ -95,8 +95,8 @@ G4bool G4PersistentGeomMan::Store( HepDbApplication* dbApp,
   else
   {
     G4cerr << "G4PersistentGeomMan: Geometry alreday stored in the"
-           << "geometry database." << endl
-           << "  Geometry not stored." << endl;
+           << "geometry database." << G4endl
+           << "  Geometry not stored." << G4endl;
     return false;
   }
   // ----------------------- Objectivity Feature ----------------------- //
@@ -113,7 +113,7 @@ G4bool G4PersistentGeomMan::Store( HepDbApplication* dbApp,
   }
   else
   {
-    G4cerr << "G4PersistentGeomMan: Error in storing geometry." << endl;
+    G4cerr << "G4PersistentGeomMan: Error in storing geometry." << G4endl;
     return false;
   }
 
@@ -130,7 +130,7 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   {
     G4cerr << "G4PersistentGeomMan::Retrieve"
            << " -- error in looking up the geometry object map: "
-           << f_GeomMapScopeName << endl;
+           << f_GeomMapScopeName << G4endl;
     return false;
   }
   // ----------------------- Objectivity Feature ----------------------- //
@@ -139,20 +139,20 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   {
     G4cerr << "G4PersistentGeomMan::Retrieve()"
            << " -- error in searching the geometry object map: "
-           << f_GeomMapScopeName << endl;
+           << f_GeomMapScopeName << G4endl;
     return false;
   }
 
   if(f_verboseLevel>2)
     G4cout << "G4PersistentGeomMan::Retrieve()"
-           << " -- f_GeomMap is loaded." << endl;
+           << " -- f_GeomMap is loaded." << G4endl;
 
   // initialize the transient part of the geometry object map
   f_GeomMap->InitTransientMap();
 
   if(f_verboseLevel>2)
     G4cout << "G4PersistentGeomMan::Retrieve(G4VPhysicalVolume*)"
-           << " -- f_GeomMap is initialized." << endl;
+           << " -- f_GeomMap is initialized." << G4endl;
 
   // loop through the number of solids in the database
   G4int nSolids = f_GeomMap->GetNoSolids();
@@ -168,7 +168,7 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   if(f_verboseLevel>2)
     G4cout << "G4PersistentGeomMan::Retrieve(G4VPhysicalVolume*)"
            << " -- Transient Solid is created for nSolids:" 
-           << nSolids << endl;
+           << nSolids << G4endl;
 
   // Locate the persistent world physics volume
   HepRef(G4PVPhysicalVolume) persWorld = f_GeomMap->GetWorldVolume();
@@ -177,7 +177,7 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   {
     G4cerr << "G4PersistentGeomMan::Retrieve"
            << " -- geometry object map does not have world volume."
-           << endl;
+           << G4endl;
     return false;
   }
 
@@ -191,7 +191,7 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
   {
     G4cerr << "G4PersistentGeomMan::Retrieve"
            << " -- transient world volume is empty."
-           << endl;
+           << G4endl;
     return false;
   }
 
@@ -207,14 +207,14 @@ HepRef(G4PVPhysicalVolume) G4PersistentGeomMan::MakePersistentObject (
   {
      G4cerr << "G4PersistentGeomMan::MakePersistentObject" <<
       " -- Physical Volume recursive depth reached to G4_PHYS_VOLUME_DEPTH_MAX."
-       << endl;
+       << G4endl;
     return NULL;
   }
 
   if( f_verboseLevel>2 && f_nRecursive % 1000 == 0 )
     G4cout << "G4PersistentGeomMan: "
            << "Physical Volume recursive depth is "
-           << f_nRecursive << endl;
+           << f_nRecursive << G4endl;
 
   // check if the persistent version of thePhysVol exists
   HepRef(G4PVPhysicalVolume) persPhysVol = f_GeomMap->LookUp(thePhysVol);
@@ -315,7 +315,7 @@ HepRef(G4PVSolid) G4PersistentGeomMan::MakePersistentObject (
 
     if(f_verboseLevel>3)
       G4cout << "G4PersistentGeomMan::MakePersistentObject (G4VSolid) "
-             << "-- theSolidType is " << theSolidType << endl;
+             << "-- theSolidType is " << theSolidType << G4endl;
 
     // Construct persistent and concrete solid object
     // according to the entity type of theSolid
@@ -393,7 +393,7 @@ HepRef(G4PVSolid) G4PersistentGeomMan::MakePersistentObject (
     else
     {
       G4cerr << " Warning (G4PersistentGeomMan): The solid type ("
-             << theSolidType << ") is not supported yet." << endl
+             << theSolidType << ") is not supported yet." << G4endl;
     }
 #endif
 
@@ -417,14 +417,14 @@ G4VPhysicalVolume* G4PersistentGeomMan::MakeTransientObject (
   {
      G4cerr << "G4PersistentGeomMan::MakeTransientObject" <<
       " -- Physical Volume recursive depth reached to G4_PHYS_VOLUME_DEPTH_MAX."
-       << endl;
+       << G4endl;
     return NULL;
   }
 
   if( f_verboseLevel>2 && f_tRecursive % 1000 == 0 )
     G4cout << "G4PersistentGeomMan: "
            << "Physical Volume recursive depth is "
-           << f_tRecursive << endl;
+           << f_tRecursive << G4endl;
 
   // check if the transient version of persPhysVol exists
   G4VPhysicalVolume* thePhysVol = f_GeomMap->LookUp(persPhysVol);
@@ -476,7 +476,7 @@ G4LogicalVolume* G4PersistentGeomMan::MakeTransientObject (
     if ( theSolid == NULL )
     {
       G4cerr << "G4PersistentGeomMan::MakeTransientObject" <<
-       " -- transient Solid not found for the persistent Solid" << endl;
+       " -- transient Solid not found for the persistent Solid" << G4endl;
     }
 
     // Construct the persistent version of theLogVol with theSolid

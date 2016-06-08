@@ -6,7 +6,7 @@
 *     and all its terms.
 *    
 *     $Id: G3toG4.inc,v 1.2 1999/12/05 17:50:04 gcosmo Exp $
-*     GEANT4 tag $Name: geant4-01-00 $
+*     GEANT4 tag $Name: geant4-01-01 $
 *    
       integer maxlines
       parameter (maxlines = 750) ! max no. of cmd lines per C++ source file

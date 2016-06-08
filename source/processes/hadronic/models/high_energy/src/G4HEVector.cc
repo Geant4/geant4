@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.cc,v 1.2.8.1 1999/12/07 20:52:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4HEVector.cc,v 1.2.8.1.2.3 1999/12/13 16:33:53 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 
@@ -79,14 +79,14 @@ G4String G4HEVector::getParticleName(G4int aCode, G4int aBaryon)
         else if(aCode == 22) name = "Gamma";
         else
           {
-               G4cout << "particle " << aCode << "  "  <<aBaryon<< " not known in this generator!!" << endl;
+               G4cout << "particle " << aCode << "  "  <<aBaryon<< " not known in this generator!!" << G4endl;
           }
         return name;
    } 
 
 
 void 
-G4HEVector::setMomentum( G4ParticleMomentum mom ) 
+G4HEVector::setMomentum(const G4ParticleMomentum mom ) 
    {
       px  = mom.x();
       py  = mom.y();
@@ -95,13 +95,33 @@ G4HEVector::setMomentum( G4ParticleMomentum mom )
    }
 
 void 
-G4HEVector::setMomentumAndUpdate( G4ParticleMomentum mom )
+G4HEVector::setMomentum(const G4ParticleMomentum * mom ) 
+   {
+      px  = mom->x();
+      py  = mom->y();
+      pz  = mom->z(); 
+      return; 
+   }
+
+void 
+G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum mom )
    {
      px = mom.x();
      py = mom.y();
      pz = mom.z();
      energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = max(0.,energy - mass);
+     kineticEnergy = G4std::max(0.,energy - mass);
+     return;
+   }
+
+void 
+G4HEVector::setMomentumAndUpdate( const G4ParticleMomentum * mom )
+   {
+     px = mom->x();
+     py = mom->y();
+     pz = mom->z();
+     energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
+     kineticEnergy = G4std::max(0.,energy - mass);
      return;
    }
 
@@ -137,7 +157,7 @@ G4HEVector::setMomentumAndUpdate( G4double x, G4double y, G4double z )
      py = y;
      pz = z;
      energy        = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = max(0.,energy-mass);
+     kineticEnergy = G4std::max(0.,energy-mass);
      return;
    }
 
@@ -155,7 +175,7 @@ G4HEVector::setMomentumAndUpdate( G4double x, G4double y )
      px = x;
      py = y;
      energy = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = max(0.,energy-mass);
+     kineticEnergy = G4std::max(0.,energy-mass);
      return;
    }
 
@@ -171,7 +191,7 @@ G4HEVector::setMomentumAndUpdate( G4double z )
    {
      pz = z;
      energy = sqrt(mass*mass + px*px + py*py + pz*pz);
-     kineticEnergy = max(0.,energy-mass);
+     kineticEnergy = G4std::max(0.,energy-mass);
      return;
    }
 
@@ -285,10 +305,10 @@ G4HEVector::setMass( G4double m )
 void 
 G4HEVector::setMassAndUpdate( G4double m )
    {
-     kineticEnergy = max(0., energy - mass);
+     kineticEnergy = G4std::max(0., energy - mass);
      mass = m;
      energy = kineticEnergy + mass;
-     G4double momnew = sqrt(max(0., energy*energy - mass*mass));
+     G4double momnew = sqrt(G4std::max(0., energy*energy - mass*mass));
      if ( momnew == 0.0) 
         {
          px = 0.;
@@ -483,7 +503,7 @@ G4HEVector::Add( const G4HEVector & p1, const G4HEVector & p2 )
        mass = -1. * sqrt( -b );
      else
        mass = sqrt( b );
-     kineticEnergy = max(0.,energy - mass);
+     kineticEnergy = G4std::max(0.,energy - mass);
      charge        = p1.charge + p2.charge;
      code          = 0;
      particleName  = "";
@@ -503,7 +523,7 @@ G4HEVector::Sub( const G4HEVector & p1, const G4HEVector & p2 )
        mass = -1. * sqrt( -b );
      else
        mass = sqrt( b );
-     kineticEnergy = max(0.,energy - mass);
+     kineticEnergy = G4std::max(0.,energy - mass);
      charge        = p1.charge - p2.charge;
      code          = 0;
      particleName  = "";
@@ -521,7 +541,7 @@ G4HEVector::Lor( const G4HEVector & p1, const G4HEVector & p2 )
      pz = p1.pz + a*p2.pz; 
      energy = sqrt( sqr(p1.mass) + px*px + py*py + pz*pz);
      mass = p1.mass;
-     kineticEnergy = max(0.,energy - mass);
+     kineticEnergy = G4std::max(0.,energy - mass);
      timeOfFlight  = p1.timeOfFlight;
      side          = p1.side;
      flag          = p1.flag;
@@ -1038,7 +1058,7 @@ G4HEVector::setDefinition(G4String name)
           }
         else
           {
-               G4cout << "particle " << name << " not known in this generator!!" << endl;
+               G4cout << "particle " << name << " not known in this generator!!" << G4endl;
                return;
           }
         px = 0.;
@@ -1201,7 +1221,7 @@ G4HEVector::Print( G4int L)
           << L << " " << px << " " <<  py << " " <<  pz << " "
           << energy << " " << mass << " " << charge << " " 
           << timeOfFlight << " " << side << " " << flag << " " 
-	  << code << " " << baryon << " " << particleName << endl;
+	  << code << " " << baryon << " " << particleName << G4endl;
      /*
      printf("HEV: %3d %6f.2 %6f.2 %6f.2 %6f.2 %6f.2 %3f.0 %4f.1 %3d
              %3d %6d %6d %s \n", L, px, py, pz, energy, mass, charge,

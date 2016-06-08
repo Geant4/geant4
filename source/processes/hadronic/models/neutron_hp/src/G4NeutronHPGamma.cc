@@ -4,7 +4,7 @@
 //
 #include "G4NeutronHPGamma.hh"
 
-G4bool G4NeutronHPGamma::Init(ifstream & aDataFile)
+G4bool G4NeutronHPGamma::Init(G4std::ifstream & aDataFile)
 {
   G4bool theResult = true;
   if(aDataFile >> levelEnergy)

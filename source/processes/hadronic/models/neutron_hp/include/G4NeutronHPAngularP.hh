@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPAngularP.hh,v 1.3 1999/07/02 09:58:25 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NeutronHPAngularP.hh,v 1.4 1999/12/15 14:53:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4NeutronHPAngularP_h
 #define G4NeutronHPAngularP_h 1
@@ -31,7 +31,7 @@ class G4NeutronHPAngularP
     if(theProb!=NULL) delete [] theProb;
   }
   
-  inline void Init(ifstream & aDataFile)
+  inline void Init(G4std::ifstream & aDataFile)
   {
     G4double eNeu, cosTheta, probDist;
     G4int nProb;

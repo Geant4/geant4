@@ -6,7 +6,7 @@
 
 //
 // $Id: classes.h,v 1.2 1999/05/21 20:20:37 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 /*
 ** Fed-x parser output module for generating C++  class definitions

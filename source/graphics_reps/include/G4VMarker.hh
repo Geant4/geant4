@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.hh,v 1.5.2.1 1999/12/07 20:48:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VMarker.hh,v 1.6 1999/12/15 14:50:34 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.
@@ -71,7 +71,7 @@
 
 class G4VMarker: public G4VVisPrim {
 
-  friend ostream& operator << (ostream& os, const G4VMarker& marker);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VMarker& marker);
 
 public: // With description
 

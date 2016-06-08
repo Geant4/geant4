@@ -47,7 +47,9 @@ private:
    
    G4UIdirectory*             plotDir;   
 
+#ifndef G4NOHIST
    G4UIcmdWithAString*        sethistNameCmd;
+#endif
 
    G4UIcmdWithAnInteger*      setnbinStepCmd; 
    G4UIcmdWithADouble*        setSteplowCmd; 

@@ -5,12 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.cc,v 1.1.10.1 1999/12/07 20:48:04 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FieldTrack.cc,v 1.2 1999/12/15 14:49:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #include "G4FieldTrack.hh"
 
-ostream& operator<<( ostream& os, G4FieldTrack& SixVec)
+G4std::ostream& operator<<( G4std::ostream& os, G4FieldTrack& SixVec)
 {
      G4double *SixV = SixVec.SixVector;
      os << " X= " << SixV[0] << " " << SixV[1] << " " << SixV[2] << " ";

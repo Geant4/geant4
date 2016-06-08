@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tpvector.icc,v 1.4 1999/11/25 10:14:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: tpvector.icc,v 1.6 2000/02/11 14:09:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -17,19 +17,19 @@
 
 template<class T>
 G4RWTPtrVector<T>::G4RWTPtrVector ()
-  : std_pvector(){}
+  : std_pvector(), rwsize(0){}
 
 template<class T>
-G4RWTPtrVector<T>::G4RWTPtrVector (unsigned int n)
-  : std_pvector(n){}
+G4RWTPtrVector<T>::G4RWTPtrVector (size_t n)
+  : std_pvector(n), rwsize(n){}
 
 template<class T>
-G4RWTPtrVector<T>::G4RWTPtrVector (unsigned int n, T* const & iPtr)
-  : std_pvector(n, iPtr){}
+G4RWTPtrVector<T>::G4RWTPtrVector (size_t n, T* const & iPtr)
+  : std_pvector(n, iPtr), rwsize(n){}
 
 template<class T>
 G4RWTPtrVector<T>::G4RWTPtrVector (const G4RWTPtrVector<T>& iPtr)
-  : std_pvector(iPtr){}
+  : std_pvector(iPtr), rwsize(iPtr.rwsize){}
 
 template<class T>
 G4RWTPtrVector<T>::~G4RWTPtrVector(){}
@@ -37,9 +37,10 @@ G4RWTPtrVector<T>::~G4RWTPtrVector(){}
 template<class T>
 G4RWTPtrVector<T>& G4RWTPtrVector<T>::operator = (T* p)
 {
+  rwsize=0;
   for(iterator i = std_pvector::begin(); i != std_pvector::end(); ++i)
     {
-      *i = p;
+      *i = p; rwsize++;
     }
   return *this;
 }
@@ -47,12 +48,23 @@ G4RWTPtrVector<T>& G4RWTPtrVector<T>::operator = (T* p)
 template<class T>
 T* G4RWTPtrVector<T>::operator () ( size_t n ) const
 {
+  #ifdef G4DEBUG
+    if(n>=rwsize)
+      G4RWTHROW(G4RWBoundsErr("G4RWTPtrVector operator()",rwsize,n));
+  #endif
   return std_pvector::operator[](n);
 }
 
 template<class T>
 T*& G4RWTPtrVector<T>::operator () ( size_t n )
 {
+  // temporarly commented; to allow use as left-value rwsize is increased
+  // #ifdef G4DEBUG
+  //   if(n>=rwsize)
+  //     G4RWTHROW(G4RWBoundsErr("G4RWTPtrVector operator()",rwsize,n));
+  // #endif
+  if(rwsize<=n && n<std_pvector::size())
+    rwsize=n+1;
   return std_pvector::operator[](n);
 }
 
@@ -61,12 +73,16 @@ T*& G4RWTPtrVector<T>::operator () ( size_t n )
 template<class T>
 T* G4RWTPtrVector<T>::operator [] ( size_t n ) const
 {
+  if(n>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrVector",rwsize,n));
   return std_pvector::operator[](n);
 }
 
 template<class T>
 T*& G4RWTPtrVector<T>::operator [] ( size_t n )
 {
+  if(n>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrVector",rwsize,n));
   return std_pvector::operator[](n);
 }
 
@@ -83,7 +99,24 @@ size_t G4RWTPtrVector<T>::length()
 }
 
 template<class T>
+void G4RWTPtrVector<T>::resize ( size_t n )
+{
+  if(n>std_pvector::size())
+    {
+      int e=n-std_pvector::size();
+      for(int i=0;i<e;i++)
+        std_pvector::push_back(0);
+    }
+  else
+    {
+      std_pvector::resize(n);
+    }
+  rwsize=n;
+}
+
+template<class T>
 void G4RWTPtrVector<T>::reshape( size_t n )
 {
   std_pvector::resize(n);
+  rwsize=n;
 }

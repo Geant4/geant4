@@ -58,14 +58,14 @@
   
   G4NeutronHPVector::~G4NeutronHPVector()
   {
-//    if(Verbose==1)G4cout <<"G4NeutronHPVector::~G4NeutronHPVector"<<endl;
+//    if(Verbose==1)G4cout <<"G4NeutronHPVector::~G4NeutronHPVector"<<G4endl;
     if(theData!=NULL)     
     {
       delete [] theData;
     }
-//    if(Verbose==1)G4cout <<"Vector: delete theData"<<endl;
+//    if(Verbose==1)G4cout <<"Vector: delete theData"<<G4endl;
     if(theIntegral!=NULL) delete [] theIntegral;
-//    if(Verbose==1)G4cout <<"Vector: delete theIntegral"<<endl;
+//    if(Verbose==1)G4cout <<"Vector: delete theIntegral"<<G4endl;
     isFreed = 1;
   }
   
@@ -124,7 +124,7 @@
     }
     else
     {
-      i=max(0,10*(i-1));
+      i=G4std::max(0,10*(i-1));
       while (i<nEntries)
       {
         if(theData[i].GetX()>e) break;
@@ -173,39 +173,39 @@
 
   void G4NeutronHPVector::Dump()
   {
-    G4cout << nEntries<<endl;
+    G4cout << nEntries<<G4endl;
     for(G4int i=0; i<nEntries; i++)
     {
       G4cout << theData[i].GetX()<<" ";
       G4cout << theData[i].GetY()<<" ";
-//      if (i!=1&&i==5*(i/5)) G4cout << endl;
-      G4cout << endl;
+//      if (i!=1&&i==5*(i/5)) G4cout << G4endl;
+      G4cout << G4endl;
     }
-    G4cout << endl;
+    G4cout << G4endl;
   }
   
   void G4NeutronHPVector::Check(G4int i)
   {
-//    G4cout << "1: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<endl;
+//    G4cout << "1: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPVector");
     if(i==nPoints)
     {
       nPoints += 50;
-//    G4cout << "2a: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<endl;
+//    G4cout << "2a: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
       G4NeutronHPDataPoint * buff = new G4NeutronHPDataPoint[nPoints];
-//    G4cout << "2b: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<endl;
+//    G4cout << "2b: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
       if(nPoints!=50)
       {
-//        G4cout << "copying 1: nEntries="<<nEntries<<" nPoints="<<nPoints<<endl;
+//        G4cout << "copying 1: nEntries="<<nEntries<<" nPoints="<<nPoints<<G4endl;
         for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
-//        G4cout << "copying 2"<<endl;
+//        G4cout << "copying 2"<<G4endl;
         delete [] theData;
-//    G4cout << "3: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<endl;
+//    G4cout << "3: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
       }
       theData = buff;
     }
     if(i==nEntries) nEntries=i+1;
-//    G4cout << "4: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<endl;
+//    G4cout << "4: i: "<<i<<" nEntries: "<<nEntries<<" nPoints: "<<nPoints<<G4endl;
   }
 
   void G4NeutronHPVector::

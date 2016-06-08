@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1EventAction.cc,v 1.1.4.1 1999/12/07 20:46:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em1EventAction.cc,v 1.2 1999/12/15 14:48:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -48,7 +48,7 @@ void Em1EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << endl;
+    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
     
  TotalEnergyDeposit = 0.;}
 
@@ -58,7 +58,7 @@ void Em1EventAction::EndOfEventAction(const G4Event* evt)
 {
   if (drawFlag != "none") G4cout << " Energy deposit: " 
                                  << G4BestUnit(TotalEnergyDeposit,"Energy")
-                                 << endl;
+                                 << G4endl;
 
   if (G4VVisManager::GetConcreteInstance())
   {
@@ -81,7 +81,7 @@ void Em1EventAction::EndOfEventAction(const G4Event* evt)
      G4int evtNb = evt->GetEventID();
      if (evtNb%printModulo == 0)
        { 
-        G4cout << "\n---> End of Event: " << evtNb << endl;
+        G4cout << "\n---> End of Event: " << evtNb << G4endl;
         HepRandom::showEngineStatus();
        }
     }     

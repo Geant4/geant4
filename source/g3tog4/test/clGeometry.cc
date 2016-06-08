@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clGeometry.cc,v 1.9 1999/12/05 17:50:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: clGeometry.cc,v 1.10 1999/12/15 14:49:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -44,32 +44,32 @@ G4int main(int argc, char** argv)
     
   if (argc < 2) {
     G4cerr << "clGeometry: Correct syntax: clGeometry <call_list_file> [ <macro_file> ]"
-	   << endl;
+	   << G4endl;
     G4cerr << "If only one argument is specified, interactive mode will be "
-	   << "entered." << endl << "The second argument, if specified, is "
-	   << "the name of the macro file (batch mode)." << endl;
+	   << "entered." << G4endl << "The second argument, if specified, is "
+	   << "the name of the macro file (batch mode)." << G4endl;
         
     return EXIT_FAILURE;
   }
   if (argc >= 2) {
     // Process the command line
     inFile = argv[1];
-    ifstream in(inFile);
+    G4std::ifstream in(inFile);
     if (!in) {
-      G4cerr << "Cannot open input file \"" << inFile << "\"" << endl;
+      G4cerr << "Cannot open input file \"" << inFile << "\"" << G4endl;
       return EXIT_FAILURE;
     }
   }
   if (argc >= 3) {
     macroFile = argv[2];
-    ifstream mac(macroFile);
+    G4std::ifstream mac(macroFile);
     if (!mac) {
-      G4cout << "Cannot open macro file """ << macroFile << """" << endl;
+      G4cout << "Cannot open macro file """ << macroFile << """" << G4endl;
       return 2;
     }
   }
   if (argc >= 4) {
-    G4cerr << "Too many command line arguments (" << argc <<")" << endl;
+    G4cerr << "Too many command line arguments (" << argc <<")" << G4endl;
     return EXIT_FAILURE;
   }
     
@@ -122,7 +122,7 @@ G4int main(int argc, char** argv)
     if (session != 0) {
       session->SessionStart();
       delete session;
-      //      G4cout << "deleted G4UITerminal..." << endl;
+      //      G4cout << "deleted G4UITerminal..." << G4endl;
     }
   }
   else {

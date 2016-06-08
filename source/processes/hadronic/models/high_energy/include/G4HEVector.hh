@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.hh,v 1.2.8.1 1999/12/07 20:52:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4HEVector.hh,v 1.2.8.1.2.1 1999/12/13 16:33:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // G4 Gheisha friend class G4KinematicParticle  -- header file
@@ -108,9 +108,13 @@ class G4HEVector
 
    G4String getParticleName(G4int code, G4int baryon);
  
-   void setMomentum( G4ParticleMomentum mom ); 
+   void setMomentum( const G4ParticleMomentum mom ); 
 
-   void setMomentumAndUpdate( G4ParticleMomentum mom );
+   void setMomentum( const G4ParticleMomentum * mom ); 
+
+   void setMomentumAndUpdate( const G4ParticleMomentum mom );
+
+   void setMomentumAndUpdate( const G4ParticleMomentum * mom );
 
    const G4ParticleMomentum getMomentum() const ;
 

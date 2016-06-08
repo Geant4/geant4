@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1File.cc,v 1.3.8.1 1999/12/07 20:53:45 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VRML1File.cc,v 1.4 1999/12/15 14:54:16 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4VRML1File.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -45,7 +45,7 @@ G4VSceneHandler* G4VRML1File::CreateSceneHandler(const G4String& name)
 	p = new G4VRML1FileSceneHandler(*this, name);
 
 	G4cout << G4VRML1FileSceneHandler::GetSceneCount()
-		<< " " << fName << " scenes extanct." << endl;
+		<< " " << fName << " scenes extanct." << G4endl;
 
 	return p;
 }

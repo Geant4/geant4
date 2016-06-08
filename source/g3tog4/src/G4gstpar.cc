@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gstpar.cc,v 1.4 1999/12/05 17:50:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4gstpar.cc,v 1.5 1999/12/15 14:49:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
@@ -28,5 +28,5 @@ void G4gstpar(G4int itmed, G4String chpar, G4double parval)
 {
     // set special tracking medium parameter. Apply to all logical
     // volumes making use of the specified tracking medium.
-  G4cerr << "G4gstpar: not implemented." << endl;
+  G4cerr << "G4gstpar: not implemented." << G4endl;
 }

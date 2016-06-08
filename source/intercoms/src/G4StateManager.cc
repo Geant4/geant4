@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StateManager.cc,v 1.1.10.1 1999/12/07 20:49:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4StateManager.cc,v 1.3 2000/02/14 12:24:42 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -139,7 +139,7 @@ void G4StateManager::Pause()
   Pause("G4_pause> ");
 }
 
-void G4StateManager::Pause(char* msg)
+void G4StateManager::Pause(const char* msg)
 {
   G4String msgS = msg;
   Pause(msgS);

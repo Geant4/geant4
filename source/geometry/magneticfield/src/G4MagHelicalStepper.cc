@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.cc,v 1.2.8.1 1999/12/07 20:48:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4MagHelicalStepper.cc,v 1.3 1999/12/15 14:49:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #include "G4MagHelicalStepper.hh"
 #include "G4ThreeVector.hh"

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.8.2.1 1999/12/07 20:51:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4EnergyLossTables.hh,v 1.8.2.1.2.1 1999/12/09 10:28:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // $Id:
 //
@@ -152,7 +152,7 @@ public:
   typedef const G4ParticleDefinition* K;
 
 private:
-  typedef G4std::map<K,G4EnergyLossTablesHelper,less<K> > helper_map;
+  typedef G4std::map<K,G4EnergyLossTablesHelper,G4std::less<K> > helper_map;
   static helper_map dict;
   
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4RunAction.cc,v 1.5 1999/12/05 17:50:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4RunAction.cc,v 1.6 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4ios.hh"
@@ -24,7 +24,7 @@ G3toG4RunAction::~G3toG4RunAction(){;}
 
 void G3toG4RunAction::BeginOfRunAction(const G4Run* aRun){
   ((G4Run *)(aRun))->SetRunID(runIDcounter++);
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   G4UImanager* UI = G4UImanager::GetUIpointer(); 
   

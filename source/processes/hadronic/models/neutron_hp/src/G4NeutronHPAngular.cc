@@ -4,9 +4,9 @@
 //
 #include "G4NeutronHPAngular.hh"
 
-void G4NeutronHPAngular::Init(ifstream & aDataFile)
+void G4NeutronHPAngular::Init(G4std::ifstream & aDataFile)
 {
-//  G4cout << "here we are entering the Angular Init"<<endl;
+//  G4cout << "here we are entering the Angular Init"<<G4endl;
   G4int dummy;
   aDataFile >> theAngularDistributionType >> targetMass;
   aDataFile >> frameFlag;
@@ -57,7 +57,7 @@ void G4NeutronHPAngular::Init(ifstream & aDataFile)
   else
   {
     theIsoFlag = false;
-    G4cout << "unknown distribution found for Angular"<<endl;
+    G4cout << "unknown distribution found for Angular"<<G4endl;
     G4Exception("unknown distribution needs implementation!!!");
   }    
 }
@@ -146,5 +146,5 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
   }
   aHadron.Lorentz(aHadron, -1.*theTarget); 
 //  G4cout << aHadron.GetMomentum()<<" ";
-//  G4cout << aHadron.GetTotalMomentum()<<endl;
+//  G4cout << aHadron.GetTotalMomentum()<<G4endl;
 }

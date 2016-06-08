@@ -30,7 +30,7 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
 {
 	// Temperature
 	G4double Ta = 0.00012; 
-	G4double Tb = max(sqrt(_ExEnergy/(theA*0.12)),0.01*MeV);
+	G4double Tb = G4std::max(sqrt(_ExEnergy/(theA*0.12)),0.01*MeV);
     
 	G4double fTa = this->operator()(Ta); 
 	G4double fTb = this->operator()(Tb); 

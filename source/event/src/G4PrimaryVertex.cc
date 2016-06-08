@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryVertex.cc,v 1.1.10.1 1999/12/07 20:47:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PrimaryVertex.cc,v 1.2 1999/12/15 14:49:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4PrimaryVertex.hh"
@@ -53,8 +53,8 @@ int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
 void G4PrimaryVertex::Print() const
 {
   G4cout << "Vertex  ( "
-       << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" << endl;
-  G4cout << "#### Primary particles" << endl;
+       << X0 << ", " << Y0 << ", " << Z0 << ", " << T0 << " )" << G4endl;
+  G4cout << "#### Primary particles" << G4endl;
   G4PrimaryParticle* aPrim = theParticle;
   if(aPrim != NULL)
   {

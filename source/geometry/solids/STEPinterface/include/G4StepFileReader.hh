@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepFileReader.hh,v 1.1.4.1 1999/12/07 20:48:38 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4StepFileReader.hh,v 1.2 1999/12/15 14:50:20 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4STEPFILEREADER_HH
 #define G4STEPFILEREADER_HH

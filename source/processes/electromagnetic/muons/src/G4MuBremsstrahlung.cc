@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.5.8.1 1999/12/07 20:50:45 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4MuBremsstrahlung.cc,v 1.5.8.1.2.1 1999/12/08 17:34:19 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //    
 // --------------------------------------------------------------
@@ -568,7 +568,7 @@ G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material " << aMaterial->GetName()
-       << " has no elements, NULL pointer returned." << endl;
+       << " has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }
 
@@ -577,7 +577,7 @@ void G4MuBremsstrahlung::PrintInfoDefinition()
   G4String comments = "theoretical cross section \n ";
            comments += "         Good description up to 1000 TeV.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n    PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                      "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

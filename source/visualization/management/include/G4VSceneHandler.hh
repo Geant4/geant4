@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.8.2.1 1999/12/07 20:53:50 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VSceneHandler.hh,v 1.9 1999/12/15 14:54:19 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  19th July 1996.
@@ -53,7 +53,7 @@ class G4VSceneHandler: public G4VGraphicsScene {
 
 public: // With description
 
-  friend ostream& operator << (ostream& os, const G4VSceneHandler& s);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s);
 
   enum MarkerSizeType {world, screen};
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2EventAction.cc,v 1.1.4.1 1999/12/07 20:46:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em2EventAction.cc,v 1.2 1999/12/15 14:49:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -47,7 +47,7 @@ void Em2EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
  if (evtNb%printModulo == 0) 
-    G4cout << "\n---> Begin Of Event: " << evtNb << endl; 
+    G4cout << "\n---> Begin Of Event: " << evtNb << G4endl; 
  
  Em2Run->initializePerEvent();
 }
@@ -78,7 +78,7 @@ void Em2EventAction::EndOfEventAction(const G4Event* evt)
      G4int evtNb = evt->GetEventID();
      if (evtNb%printModulo == 0)
        { 
-        G4cout << "\n---> End of Event: " << evtNb << endl;
+        G4cout << "\n---> End of Event: " << evtNb << G4endl;
         HepRandom::showEngineStatus();
        }
     }       

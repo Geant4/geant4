@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4EventGenerator.hh,v 1.1.10.1 1999/12/07 20:51:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4EventGenerator_h
 #define G4EventGenerator_h 1

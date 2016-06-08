@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmacPlus.cc,v 1.2.6.1 1999/12/07 20:49:32 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SigmacPlus.cc,v 1.2.6.1.2.2 1999/12/14 07:08:05 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -21,8 +21,8 @@
 //  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4SigmacPlus.hh"
 

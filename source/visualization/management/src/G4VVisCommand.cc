@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.cc,v 1.4.4.1 1999/12/07 20:53:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VVisCommand.cc,v 1.6 1999/12/16 17:19:31 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -17,24 +17,8 @@ G4VVisCommand::~G4VVisCommand () {}
 
 G4VisManager* G4VVisCommand::fpVisManager = 0;
 
-G4UIcmdWithAString* G4VVisCommand::fpCommandSceneEdit = 0;
+G4std::vector <G4UIcommand*> G4VVisCommand::sceneNameCommands;
 
-G4UIcmdWithAString* G4VVisCommand::fpCommandSceneNotifyHandlers = 0;
+G4std::vector <G4UIcommand*> G4VVisCommand::sceneHandlerNameCommands;
 
-G4UIcmdWithAString* G4VVisCommand::fpCommandSceneRemove = 0;
-
-G4UIcmdWithAString* G4VVisCommand::fpCommandSceneSelect = 0;
-
-G4UIcmdWithAString* G4VVisCommand::fpCommandSceneHandlerAttach = 0;
-
-G4UIcmdWithAString* G4VVisCommand::fpCommandSceneHandlerRemove = 0;
-
-G4UIcmdWithAString* G4VVisCommand::fpCommandSceneHandlerSelect = 0;
-
-G4UIcommand*        G4VVisCommand::fpCommandViewerCreate = 0;
-
-G4UIcmdWithAString* G4VVisCommand::fpCommandViewerRemove = 0;
-
-G4UIcmdWithAString* G4VVisCommand::fpCommandViewerSelect = 0;
-
-G4UIcmdWithAString* G4VVisCommand::fpCommandViewerUpdate = 0;
+G4std::vector <G4UIcommand*> G4VVisCommand::viewerNameCommands;

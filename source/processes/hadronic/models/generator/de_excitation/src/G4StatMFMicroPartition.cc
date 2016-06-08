@@ -152,7 +152,7 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(const G4double U,
 	
 	// Bracketing the solution
 	G4double Ta = 0.001;
-	G4double Tb = max(sqrt(8.0*U/theA),0.0012*MeV);
+	G4double Tb = G4std::max(sqrt(8.0*U/theA),0.0012*MeV);
 	G4double Tmid = 0.0;
 	
 	G4double Da = (U + FreeInternalE0 - GetPartitionEnergy(Ta))/U;
@@ -180,7 +180,7 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(const G4double U,
 	}
 	// if we arrive here the temperature could not be calculated
 	G4cerr << "G4StatMFMicroPartition::CalcPartitionTemperature: I can't calculate the temperature"  
-			<< endl;
+			<< G4endl;
 	// and set probability to 0 returning T < 0
 	return -1.0;
 	
@@ -237,7 +237,7 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
 	G4double V0 = (4./3.)*pi*theA*G4StatMFParameters::Getr0()*G4StatMFParameters::Getr0()*
 						G4StatMFParameters::Getr0();
 	G4double FreeVolume = kappa*V0;
-	G4double TranslationalS = max(0.0, log(ProbA32/Fact) +
+	G4double TranslationalS = G4std::max(0.0, log(ProbA32/Fact) +
 			(_thePartition.entries()-1.0)*log(FreeVolume/ThermalWaveLenght3) +
 			1.5*(_thePartition.entries()-1.0) - (3./2.)*log(theA));
 

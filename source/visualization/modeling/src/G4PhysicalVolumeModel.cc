@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.6.2.1 1999/12/07 20:54:11 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.8 2000/01/11 17:19:07 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -28,11 +28,7 @@
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
 
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
@@ -53,8 +49,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fppCurrentLV   (0)
 {
   const int len = 8; char a [len];
-  ostrstream o (a, len); o.seekp (ios::beg);
-  o << fpTopPV -> GetCopyNo () << ends;
+  G4std::ostrstream o (a, len); o.seekp (G4std::ios::beg);
+  o << fpTopPV -> GetCopyNo () << G4std::ends;
   fGlobalTag = fpTopPV -> GetName () + "." + a;
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
@@ -123,9 +119,9 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const {
   const int len = 8; char a [len];
-  ostrstream o (a, len); o.seekp (ios::beg);
+  G4std::ostrstream o (a, len); o.seekp (G4std::ios::beg);
   if (fpCurrentPV) {
-    o << fpCurrentPV -> GetCopyNo () << ends;
+    o << fpCurrentPV -> GetCopyNo () << G4std::ends;
     return fpCurrentPV -> GetName () + "." + a;
   }
   else {
@@ -242,7 +238,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	    "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
 	    "\n  built-in replicated volumes replicated in radius are not yet"
 	    "\n  properly visualizable."
-	       << endl;
+	       << G4endl;
 	  break;
 	case kPhi:
 	  rotation.rotateZ (-(offset+n*width));
@@ -302,7 +298,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 	 << rotation.thetaZ() << ", "
 	 << rotation.phiZ();
   G4cout << "\n    Translation: " << theNewAT.getTranslation();
-  G4cout << endl;
+  G4cout << G4endl;
   **********************************************************/
 
   // Make decision to Draw.
@@ -310,7 +306,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (thisToBeDrawn) {
     const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
     if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
-    DescribeSolids (theNewAT, pSol, pVisAttribs, sceneHandler);
+    DescribeSolid (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
   // First check if mother covers...
@@ -337,32 +333,36 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   }
 }
 
-void G4PhysicalVolumeModel::DescribeSolids
+void G4PhysicalVolumeModel::DescribeSolid
 (const G4Transform3D& theAT,
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
   // Look for "constituents".  Could be a Boolean solid.
-  G4VSolid* pBoolSolA = pSol -> GetConstituentSolid (0);
-  if (pBoolSolA) {
-    // Boolean solid - display components...
-    DescribeSolids (theAT, pBoolSolA, pVisAttribs, sceneHandler);
-    G4VSolid* pBoolSolB = pSol -> GetConstituentSolid (1);
-    if (!pBoolSolB) {
+  G4VSolid* pSol0 = pSol -> GetConstituentSolid (0);
+  if (pSol0) {
+    // Composite solid - describe components...
+    DescribeSolid (theAT, pSol0, pVisAttribs, sceneHandler);
+    G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
+    if (!pSol1) {
       G4Exception
-	("G4PhysicalVolumeModel::DescribeSolids:"
+	("G4PhysicalVolumeModel::DescribeSolid:"
 	 " 2nd component solid is missing.");
     }
-    G4Transform3D theBT (theAT);
-    G4DisplacedSolid* pDisSol = pBoolSolB -> GetDisplacedSolidPtr ();
-    if (pDisSol) {
-      theBT = theBT * G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
-				     pDisSol -> GetObjectTranslation ());
-    }
-    DescribeSolids (theBT, pBoolSolB, pVisAttribs, sceneHandler);
+    DescribeSolid (theAT, pSol1, pVisAttribs, sceneHandler);
   }
-  else { // Non-boolean solid.
-    sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  else { // Non-composite solid.
+    G4DisplacedSolid* pDisSol = pSol -> GetDisplacedSolidPtr ();
+    if (pDisSol) {
+      sceneHandler.PreAddThis
+	(theAT *
+	 G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
+			pDisSol -> GetObjectTranslation ()),
+	 *pVisAttribs);
+    }
+    else {
+      sceneHandler.PreAddThis (theAT, *pVisAttribs);
+    }
     pSol -> DescribeYourselfTo (sceneHandler);
     sceneHandler.PostAddThis ();
   }
@@ -431,7 +431,7 @@ G4bool G4PhysicalVolumeModel::Validate () {
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   // The idea now is to seek a PV with the same name and copy no
   // in the hope it's the same one!!
-  G4cout << "G4PhysicalVolumeModel::Validate() called." << endl;
+  G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
   G4PhysicalVolumeSearchScene searchScene (fTopPVName, fTopPVCopyNo);
   G4PhysicalVolumeModel searchModel (world);
   searchModel.DescribeYourselfTo (searchScene);
@@ -442,7 +442,7 @@ G4bool G4PhysicalVolumeModel::Validate () {
 	   << ") still exists and is being used."
       "\n  Be warned that this does not necessarily guarantee it's the same"
       "\n  volume you originally specified in /vis/scene/add/."
-	   << endl;
+	   << G4endl;
     fpTopPV = foundVolume;
     return true;
   }
@@ -450,7 +450,7 @@ G4bool G4PhysicalVolumeModel::Validate () {
     G4cout << "  A volume of the same name and copy number (\""
 	   << fTopPVName << "\", copy " << fTopPVCopyNo
 	   << ") no longer exists."
-	   << endl;
+	   << G4endl;
     return false;
   }
 }

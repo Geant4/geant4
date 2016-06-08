@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.2.8.1 1999/12/07 20:53:28 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.3 1999/12/15 14:54:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -41,7 +41,7 @@ void G4OpenGLXmViewer::zoom_callback (Widget w,
       ten_to_the_dp *= 10.;
     }
   } else {
-    G4cout << "dp is " << dp << endl;
+    G4cout << "dp is " << dp << G4endl;
     return;
   }
 
@@ -77,7 +77,7 @@ void G4OpenGLXmViewer::dolly_callback (Widget w,
       ten_to_the_dp *= 10.;
     }
   } else {
-    G4cout << "dp is " << dp << endl;
+    G4cout << "dp is " << dp << G4endl;
     return;
   }
 
@@ -209,7 +209,7 @@ void G4OpenGLXmViewer::set_pan_sens_callback (Widget w,
       ten_to_the_dp *= 10.;
     }
   } else {
-    G4cout << "dp is " << dp << endl;
+    G4cout << "dp is " << dp << G4endl;
     return;
   }
   

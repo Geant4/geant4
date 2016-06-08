@@ -481,7 +481,7 @@ void G4ReduciblePolygon::Print()
 {
 	ABVertex *curr = vertexHead;
 	do {
-		G4cerr << curr->a << " " << curr->b << endl;
+		G4cerr << curr->a << " " << curr->b << G4endl;
 	} while( curr = curr->next );
 }
 

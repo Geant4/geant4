@@ -33,7 +33,7 @@
 #include "G4PtrLevelVector.hh"
 #include "G4NuclearLevel.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 
 class G4NuclearLevelManager 
 {
@@ -73,7 +73,7 @@ private:
   G4bool operator==(const G4NuclearLevelManager &right) const;
   G4bool operator!=(const G4NuclearLevelManager &right) const;
 
-  G4bool Read(ifstream& aDataFile);
+  G4bool Read(G4std::ifstream& aDataFile);
  
   void MakeLevels();
 

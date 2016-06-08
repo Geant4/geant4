@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRClient.hh,v 1.2.8.1 1999/12/07 20:53:41 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FRClient.hh,v 1.4 1999/12/27 07:49:11 stanaka Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4FRClient.hh
 // Yasuhide Sawada and Satoshi Tanaka
@@ -45,7 +45,7 @@ private:
 };
 
 //manipulator
-G4FRClient& endl(G4FRClient&);
+//G4FRClient& endl(G4FRClient&);
 
 #endif //G4_FR_CLIENT_HH
 #endif //G4VIS_BUILD_VRML_DRIVER

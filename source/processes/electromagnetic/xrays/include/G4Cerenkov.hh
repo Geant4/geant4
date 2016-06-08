@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Cerenkov.hh,v 1.3.4.1 1999/12/07 20:51:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.hh,v 1.3.8.1 1999/12/07 20:48:18 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FConicalSurface.hh,v 1.4 1999/12/15 14:49:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef __FCONIC_H
 #define __FCONIC_H
@@ -90,7 +90,7 @@ public:
 //  function to return class name
   virtual char *Name() const { return "G4FConicalSurface"; }
 //  printing function
-  virtual void PrintOn( ostream& os = G4cout ) const;
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
 
 //  equality operator
   int operator==( const G4FConicalSurface& c );

@@ -30,7 +30,7 @@ public:
     // remove an existing tag collection with the name <tagName>
     HepExplorable *cd = HepExplorable::findExplorable(tagName);
     if (cd) {
-      cout << "removing old tag:" << tagName << endl;
+      cout << "removing old tag:" << tagName << G4endl;
       cd->removeDescription();
       delete cd;
     }

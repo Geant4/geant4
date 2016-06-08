@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.6.8.1 1999/12/07 20:50:46 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4MuPairProduction.cc,v 1.6.8.1.2.2 1999/12/09 16:18:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -786,8 +786,8 @@ G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
   {
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   }
-  cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-       << "' has no elements, NULL pointer returned." << endl;
+  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
+         << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }
 void G4MuPairProduction::PrintInfoDefinition()
@@ -795,7 +795,7 @@ void G4MuPairProduction::PrintInfoDefinition()
   G4String comments = "theoretical cross sections \n ";
            comments += "         Good description up to 1000 TeV.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n    PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                      "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

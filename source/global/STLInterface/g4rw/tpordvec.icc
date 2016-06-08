@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tpordvec.icc,v 1.1 1999/11/25 10:14:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: tpordvec.icc,v 1.2 2000/02/01 16:55:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -38,17 +38,23 @@ G4RWTPtrOrderedVector<T>::operator=(const G4RWTPtrOrderedVector<T>& v)
 template<class T >
 T*& G4RWTPtrOrderedVector<T>::operator()(size_t i) 
 {
-  //if(i>=rwsize)
-  //	G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector ()",rwsize,i));
-  if(i<std_pvector::size() && rwsize<=i) rwsize=i+1;
+  // temporarly commented; to allow use as left-value rwsize is increased
+  // #ifdef G4DEBUG
+  //   if(i>=rwsize)
+  //     G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector []",rwsize,i));
+  // #endif
+  if(rwsize<=i && i<std_pvector::size())
+    rwsize=i+1;
   return std_pvector::operator[](i); 
 }
 
 template<class T >
 T* const& G4RWTPtrOrderedVector<T>::operator()(size_t i) const
 { 
-  if(i>=rwsize)
-    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector const ()",rwsize,i));
+  #ifdef G4DEBUG
+    if(i>=rwsize)
+      G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector []",rwsize,i));
+  #endif
   return std_pvector::operator[](i); 
 }
 
@@ -57,7 +63,6 @@ T*& G4RWTPtrOrderedVector<T>::operator[](size_t i)
 {
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector []",rwsize,i));
-  //if(i<std_pvector::size() && rwsize<=i) rwsize=i+1;
   return std_pvector::operator[](i); 
 }
 
@@ -66,7 +71,7 @@ T* const& G4RWTPtrOrderedVector<T>::operator[](size_t i) const
 {      
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector const []",rwsize,i));
-   return std_pvector::operator[](i); 
+  return std_pvector::operator[](i); 
 }
 
 template<class T >
@@ -199,7 +204,7 @@ T* G4RWTPtrOrderedVector<T>::removeAt( size_t i )
   for(j=0;j<rwsize && j<i;j++) it++;
   if(it!=std_pvector::end())
     {
-      T* tmp = operator[](i);
+      T* tmp = std_pvector::operator[](i);
       std_pvector::erase(it);
       rwsize--;
       return tmp;
@@ -313,7 +318,7 @@ T*& G4RWTPtrOrderedVector<T>::at ( size_t i )
 { 
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector at",rwsize,i));
-  return operator()(i); 
+  return std_pvector::operator[](i); 
 }
 
 template<class T>
@@ -321,7 +326,7 @@ T*const& G4RWTPtrOrderedVector<T>::at ( size_t i ) const
 {       
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector const at",rwsize,i));
-  return operator()(i); 
+  return std_pvector::operator[](i); 
 }
 
 template<class T>

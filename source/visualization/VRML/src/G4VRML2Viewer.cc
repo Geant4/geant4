@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2Viewer.cc,v 1.3.4.1 1999/12/07 20:53:47 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VRML2Viewer.cc,v 1.5 1999/12/27 07:49:22 stanaka Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4VRML2Viewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -41,7 +41,7 @@ G4VRML2Viewer::~G4VRML2Viewer()
 void G4VRML2Viewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::SetView(): No effects" << endl;
+  G4cerr << "***** G4VRML2Viewer::SetView(): No effects" << G4endl;
 #endif
 
 // Do nothing, since VRML a browser is running as a different process.
@@ -53,7 +53,7 @@ void G4VRML2Viewer::SetView()
 void G4VRML2Viewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2Viewer::DrawView()" << endl;
+	G4cerr << "***** G4VRML2Viewer::DrawView()" << G4endl;
 #endif
 	fSceneHandler.VRMLBeginModeling() ;
 
@@ -69,14 +69,14 @@ void G4VRML2Viewer::DrawView()
 void G4VRML2Viewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::ClearView(): No effects" << endl;
+  G4cerr << "***** G4VRML2Viewer::ClearView(): No effects" << G4endl;
 #endif
 }
 
 void G4VRML2Viewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::ShowView()" << endl;
+  G4cerr << "***** G4VRML2Viewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
 }
@@ -84,7 +84,7 @@ void G4VRML2Viewer::ShowView(void)
 void G4VRML2Viewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  G4cerr << "***** G4VRML2Viewer::FinishView(): No effects" << endl;
+  G4cerr << "***** G4VRML2Viewer::FinishView(): No effects" << G4endl;
 #endif
 }
 
@@ -110,15 +110,15 @@ void G4VRML2Viewer::SendViewParameters ()
 	G4Point3D		E(0.0, 0.0, E_z );
 
 	// VRML codes are generated below	
-	fDest << endl;
-	fDest << "#---------- CAMERA" << endl;
-	fDest << "Viewpoint {"         << endl;
+	fDest << "\n";
+	fDest << "#---------- CAMERA" << "\n";
+	fDest << "Viewpoint {"         << "\n";
 	fDest << "\t" << "position "           ;
 	fDest                 << E.x() << " "  ;
 	fDest                 << E.y() << " "  ;
-	fDest                 << E.z() << endl ;
-	fDest << "}" << endl;
-	fDest << endl;
+	fDest                 << E.z() << "\n" ;
+	fDest << "}" << "\n";
+	fDest << "\n";
 
 } 
 

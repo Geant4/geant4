@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Poisson.hh,v 1.4 1999/11/16 17:31:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Poisson.hh,v 1.5 2000/01/06 14:13:08 maire Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -50,7 +50,7 @@ inline G4long G4Poisson(G4double mean)
   t = sqrt(-2*log(RandFlat::shoot()));
   y = twopi*RandFlat::shoot();
   t *= cos(y);
-  value = mean + t*sqrt(mean);
+  value = mean + t*sqrt(mean) + 0.5;
   if(value <= 0) {return 0;}
   if(value >= limit) { return G4long(limit);}
   return G4long(value);

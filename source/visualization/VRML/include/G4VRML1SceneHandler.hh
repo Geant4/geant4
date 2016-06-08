@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandler.hh,v 1.4.4.1 1999/12/07 20:53:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VRML1SceneHandler.hh,v 1.6 1999/12/16 17:25:12 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4VRML1SceneHandler.hh
 // Yasuhide Sawada & Satoshi Tanaka
@@ -42,6 +42,12 @@ public:
 	void AddThis(const G4Sphere&);
 	void AddThis(const G4Para&);
 	void AddThis(const G4Torus&);
+        void AddThis ( const G4Polycone& polycone ) {
+          G4VSceneHandler::AddThis (polycone);
+        }
+        void AddThis ( const G4Polyhedra& polyhedra) {
+          G4VSceneHandler::AddThis (polyhedra);
+        }
 	void AddThis(const G4VSolid&);
 
 	void BeginPrimitives(const G4Transform3D& objectTransformation);

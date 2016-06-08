@@ -4,7 +4,7 @@
 //
 #include "G4NeutronHPDeExGammas.hh"
 
-void G4NeutronHPDeExGammas::Init(ifstream & aDataFile)
+void G4NeutronHPDeExGammas::Init(G4std::ifstream & aDataFile)
 {
   G4NeutronHPGamma ** theGammas = new G4NeutronHPGamma * [50];
   G4int nGammas = 0;

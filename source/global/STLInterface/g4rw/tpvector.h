@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tpvector.h,v 1.7 1999/11/26 17:17:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: tpvector.h,v 1.9 2000/02/11 14:09:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -39,8 +39,8 @@ class G4RWTPtrVector : public G4std::vector<T*>
 public:
 
   G4RWTPtrVector ();
-  G4RWTPtrVector (unsigned int);
-  G4RWTPtrVector (unsigned int, T* const &);
+  G4RWTPtrVector (size_t);
+  G4RWTPtrVector (size_t, T* const &);
   G4RWTPtrVector (const G4RWTPtrVector<T>&);
   virtual ~G4RWTPtrVector();
 
@@ -54,6 +54,11 @@ public:
   inline T* const * data() const;
   inline size_t length();
   inline void reshape(size_t);
+  void resize(size_t);
+
+private:
+
+  size_t rwsize;
 
 };
 

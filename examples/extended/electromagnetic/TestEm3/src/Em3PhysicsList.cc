@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3PhysicsList.cc,v 1.1.4.1 1999/12/07 20:47:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em3PhysicsList.cc,v 1.3 1999/12/15 14:49:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -161,7 +161,7 @@ void Em3PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);      
-
+      
     } else if (particleName == "e+") {
       //positron      
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
@@ -182,7 +182,7 @@ void Em3PhysicsList::ConstructEM()
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation    ,   -1,2,2);      
+      pmanager->AddProcess(new G4hIonisation,       -1,2,2);
     }
   }
 }
@@ -213,7 +213,7 @@ void Em3PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "Em3PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << endl;
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,

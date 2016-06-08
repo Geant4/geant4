@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuEnergyLoss.hh,v 1.2.8.1 1999/12/07 20:50:40 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4IMuEnergyLoss.hh,v 1.2.8.1.2.2 1999/12/14 07:08:19 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // $Id: 
 // -------------------------------------------------------------------
@@ -36,8 +36,8 @@
 #define G4IMuEnergyLoss_h 1
  
 #include "G4ios.hh"
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4IVContinuousDiscreteProcess.hh"

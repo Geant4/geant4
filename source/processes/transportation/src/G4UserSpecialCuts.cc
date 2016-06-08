@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserSpecialCuts.cc,v 1.2.2.1 1999/12/07 20:52:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UserSpecialCuts.cc,v 1.2.2.1.2.1 1999/12/08 17:35:16 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 // 
 // --------------------------------------------------------------
 // History
@@ -27,7 +27,7 @@ G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
   : G4VProcess(aName)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
 

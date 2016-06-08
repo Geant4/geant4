@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileViewer.hh,v 1.3.8.1 1999/12/07 20:53:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VRML1FileViewer.hh,v 1.4 1999/12/15 14:54:14 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4VRML1FileViewer.hh
 // Satoshi Tanaka and Yasuhide Sawada

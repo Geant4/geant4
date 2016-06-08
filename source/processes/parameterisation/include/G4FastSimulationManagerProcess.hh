@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FastSimulationManagerProcess.hh,v 1.4.2.1.2.1 1999/12/07 20:52:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------

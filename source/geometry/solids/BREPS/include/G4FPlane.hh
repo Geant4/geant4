@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.hh,v 1.4.8.1 1999/12/07 20:48:18 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FPlane.hh,v 1.5 1999/12/15 14:49:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // L. Broglia
 // 

@@ -55,7 +55,7 @@ G4PreCompoundTransitions(const G4Fragment & aFragment)
                 aFragment.GetA()*aFragment.GetExcitationEnergy()/MeV;
 
   // Transition probability for \Delta n = -2 (at F(p,h) = 0)
-  //  TransitionProb2 = max(0, (TransitionProb1*P*H*(P+H+1.0)*(P+H-2.0))/(GE*GE));
+  //  TransitionProb2 = G4std::max(0, (TransitionProb1*P*H*(P+H+1.0)*(P+H-2.0))/(GE*GE));
   TransitionProb2 = (TransitionProb1*P*H*(P+H+1.0)*(P+H-2.0))/(GE*GE);
   if (TransitionProb2 < 0.0) TransitionProb2 = 0.0; 
 

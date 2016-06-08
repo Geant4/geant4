@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiLambda.cc,v 1.3.6.1 1999/12/07 20:49:28 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4AntiLambda.cc,v 1.3.6.1.2.2 1999/12/14 07:08:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -20,8 +20,8 @@
 //  Added particle definitions, H.Kurashige, 14 Feb 1997
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4AntiLambda.hh"
 

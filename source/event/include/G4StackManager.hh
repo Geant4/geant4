@@ -5,11 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackManager.hh,v 1.2.4.1 1999/12/07 20:47:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4StackManager.hh,v 1.5 2000/01/26 06:42:14 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
-//
-//  Last Modification : 09/Dec/96 M.Asai
 //
 
 
@@ -24,6 +22,7 @@
 #include "G4TrackStatus.hh"
 #include "globals.hh"
 class G4StackingMessenger;
+class G4VTrajectory;
 
 // class description:
 //
@@ -55,8 +54,8 @@ class G4StackManager
       int operator!=(const G4StackManager &right) const;
 
   public:
-      G4int PushOneTrack(G4Track *newTrack);
-      G4Track * PopNextTrack();
+      G4int PushOneTrack(G4Track *newTrack, G4VTrajectory *newTrajectory = NULL);
+      G4Track * PopNextTrack(G4VTrajectory**newTrajectory);
       G4int PrepareNewEvent();
 
   public: // with description
@@ -103,9 +102,8 @@ class G4StackManager
       { verboseLevel = value; }
       inline void SetUserStackingAction(G4UserStackingAction* value)
       { 
-        if (userStackingAction) delete userStackingAction;
 	userStackingAction = value;
-	userStackingAction->SetStackManager(this);
+        if(userStackingAction) userStackingAction->SetStackManager(this);
       }
 
   private:

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fragment.hh,v 1.5.6.1.2.1 1999/12/07 20:51:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Fragment.hh,v 1.5.6.1.2.1.2.3 1999/12/14 07:08:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -15,7 +15,7 @@
 #define G4Fragment_h 1
 
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 #include "g4rw/tpordvec.h"
 
 #include "globals.hh"
@@ -70,8 +70,8 @@ public:
   G4bool operator==(const G4Fragment &right) const;
   G4bool operator!=(const G4Fragment &right) const;
 
-  friend ostream& operator<<(ostream&, const G4Fragment*);
-  friend ostream& operator<<(ostream&, const G4Fragment&);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4Fragment*);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4Fragment&);
 
 
   inline G4double GetA(void) const;
@@ -180,7 +180,7 @@ inline G4double G4Fragment::GetExcitationEnergy()  const
 inline void G4Fragment::SetExcitationEnergy(const G4double value)
 {
   //   theExcitationEnergy = value;
-  G4cout << "Warning: G4Fragment::SetExcitationEnergy() is a dummy method. Please, avoid to use it." << endl;
+  G4cout << "Warning: G4Fragment::SetExcitationEnergy() is a dummy method. Please, avoid to use it." << G4endl;
 }
 
 inline const G4LorentzVector G4Fragment::GetMomentum()  const

@@ -109,7 +109,7 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   RightMom.setPy(HadronMom.py() - pt.y());
 
   G4double Local1 = HadronMom.minus() + (RightMom.perp2() - LeftMom.perp2())/HadronMom.plus();
-  G4double Local2 = sqrt(max(0., sqr(Local1) - 4.*RightMom.perp2()*HadronMom.minus()/HadronMom.plus()));
+  G4double Local2 = sqrt(G4std::max(0., sqr(Local1) - 4.*RightMom.perp2()*HadronMom.minus()/HadronMom.plus()));
   if (Direction) Local2 = -Local2;
   G4double RightMinus   = 0.5*(Local1 + Local2);
   G4double LeftMinus = HadronMom.minus() - RightMinus;
@@ -229,7 +229,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      aParton = AntiColor.at(aSeaPair); 
      aParton->DefineMomentumInZ(lightCone, Direction);
    }  
-//--DEBUG--   cout <<endl<<"XSAMPLE "<<HPWtest<<endl;
+//--DEBUG--   cout <<G4endl<<"XSAMPLE "<<HPWtest<<G4endl;
    return;
 } 
 

@@ -62,7 +62,7 @@
 
   void G4NeutronHPField::Dump()
   {
-    G4cout << nEntries<<endl;
+    G4cout << nEntries<<G4endl;
     for(G4int i=0; i<nEntries; i++)
     {
       G4cout << theData[i].GetX()<<" ";
@@ -70,7 +70,7 @@
       {
         G4cout << theData[i].GetY(j)<<" ";
       }
-      G4cout << endl;
+      G4cout << G4endl;
     }
   }
   
@@ -81,12 +81,12 @@
     {
       nPoints += 50;
       G4NeutronHPFieldPoint * buff = new G4NeutronHPFieldPoint[nPoints];
-//      G4cout << "copying 1"<<endl;
+//      G4cout << "copying 1"<<G4endl;
       for (G4int j=0; j<nEntries; j++) 
       {
         buff[j] = theData[j];
       }
-//      G4cout << "copying 2"<<endl;
+//      G4cout << "copying 2"<<G4endl;
       delete [] theData;
       theData = buff;
     }

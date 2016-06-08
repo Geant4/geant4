@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.hh,v 1.5.2.1 1999/12/07 20:53:50 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VGraphicsSystem.hh,v 1.6 1999/12/15 14:54:18 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -70,7 +70,7 @@ protected:
   Functionality  fFunctionality;
 };
 
-ostream& operator << (ostream& os, const G4VGraphicsSystem& gs);
+G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs);
 
 #include "G4VGraphicsSystem.icc"
 

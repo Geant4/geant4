@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastTrack.cc,v 1.2.8.1 1999/12/07 20:52:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FastTrack.cc,v 1.2.8.1.2.1 1999/12/08 17:35:14 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //$Id:
 //---------------------------------------------------------------
@@ -130,7 +130,7 @@ G4FastTrack::FRecordsAffineTransformation(const G4Navigator* theNavigator)
   if ( !Done )
     {
       G4cout << "\n\nERROR !!! can't find Transform for " <<
-	fEnvelopePhysicalVolume->GetName() << "\n\n" << endl;
+	fEnvelopePhysicalVolume->GetName() << "\n\n" << G4endl;
     }
   else
     {

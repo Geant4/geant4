@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 1.4.4.1 1999/12/07 20:49:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ParticleWithCuts.hh,v 1.4.4.1.2.1 1999/12/08 17:34:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -191,7 +191,7 @@ inline void G4ParticleWithCuts::ReCalcCuts()
   } else {
     if (GetVerboseLevel()>0) {
       G4cout << "G4ParticleWithCuts::ReCalcCuts() :";
-      G4cout << "theCutInMaxInteractionLength is not defined " << endl; 
+      G4cout << "theCutInMaxInteractionLength is not defined " << G4endl; 
     }
   }
 }

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ios.hh,v 1.4 1999/11/23 15:00:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ios.hh,v 1.5 1999/12/15 18:05:18 gracia Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ---------------------------------------------------------------
@@ -17,6 +17,8 @@
 // ---------------------------------------------------------------
 #ifndef included_G4ios
 #define included_G4ios
+
+#include "G4Types.hh"
 
 #if defined(OO_DDL_TRANSLATION)
 /*
@@ -29,7 +31,6 @@
 #endif
 
 #include "g4std/iostream"
-#include "G4Types.hh"
 
 extern G4std::ostream G4cout;
 extern G4std::ostream G4cerr;

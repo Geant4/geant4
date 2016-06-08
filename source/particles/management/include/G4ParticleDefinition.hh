@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.5.4.1 1999/12/07 20:49:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ParticleDefinition.hh,v 1.5.4.1.2.1 1999/12/08 17:34:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -353,7 +353,7 @@ G4int G4ParticleDefinition::GetQuarkContent(G4int flavor) const
   }else {
     if (verboseLevel >0) {
       G4cout << "Invalid Quark Flavor for G4ParticleDefinition::GetQuarkContent";
-      G4cout << ": flavor=" << flavor <<endl;
+      G4cout << ": flavor=" << flavor <<G4endl;
     }
     return 0;
   }  
@@ -367,7 +367,7 @@ G4int G4ParticleDefinition::GetAntiQuarkContent(G4int flavor) const
   }else {
     if (verboseLevel >0) {
       G4cout <<"Invalid Quark Flavor for G4ParticleDefinition::GetAntiQuarkContent";
-      G4cout << ": flavor=" << flavor <<endl;
+      G4cout << ": flavor=" << flavor <<G4endl;
     }
     return 0;
   }  

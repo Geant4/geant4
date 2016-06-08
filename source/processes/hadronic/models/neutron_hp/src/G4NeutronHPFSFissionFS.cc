@@ -26,8 +26,8 @@
       hasXsec = false;
       return;
     }
-#ifndef WIN32
-    ifstream theData(filename, ios::in);
+#ifdef G4USE_STD_NAMESPACE
+    G4std::ifstream theData(filename, G4std::ios::in);
 #else
     ifstream theData(filename, ios::in|ios::nocreate);
 #endif
@@ -61,7 +61,7 @@
           if(dataType==1) theEnergyRelease.Init(theData); 
           break;
         default:
-          G4cout << "G4NeutronHPFSFissionFS::Init: unknown data type"<<dataType<<endl;
+          G4cout << "G4NeutronHPFSFissionFS::Init: unknown data type"<<dataType<<G4endl;
           G4Exception("G4NeutronHPFSFissionFS::Init: unknown data type");
           break;
       }

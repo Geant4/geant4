@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.2.4.1 1999/12/07 20:53:11 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.3 1999/12/15 14:54:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:34:24 JST 1996
@@ -23,7 +23,7 @@
 // #define DEBUG_FR_SCENE
 
      //----- header files
-#include <fstream.h>
+#include "g4std/fstream"
 //#include <strstream.h>
 #include <string.h>
 #include "globals.hh"
@@ -96,7 +96,7 @@ COMMAND_BUF_SIZE       (G4FRClientServer::SEND_BUFMAX)
 G4FukuiRendererSceneHandler::~G4FukuiRendererSceneHandler () 
 {
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** ~G4FukuiRendererSceneHandler" << endl;
+	G4cerr << "***** ~G4FukuiRendererSceneHandler" << G4endl;
 #endif 
   fSceneCount--;
   ClearStore (); // clear current scene
@@ -109,7 +109,7 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 	if( !FRIsInModeling() )  	
 	{
 #if defined DEBUG_FR_SCENE
-	  G4cerr << "***** G4FukuiRendererSceneHandler::FRBeginModeling (called & started)" << endl;
+	  G4cerr << "***** G4FukuiRendererSceneHandler::FRBeginModeling (called & started)" << G4endl;
 #endif
 
 	  //----- Begin Saving g4.prim file
@@ -145,21 +145,21 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 	  //----- send SET_CAMERA command 
 	  //   !SetCamera
 #if defined DEBUG_FR_SCENE
-		G4cerr << "*****   (!SetCamera in FRBeginModeling())" << endl;
+		G4cerr << "*****   (!SetCamera in FRBeginModeling())" << G4endl;
 #endif
 	  SendStr( FR_SET_CAMERA );
 
 	  //----- open device
 	  //   !OpenDevice
 #if defined DEBUG_FR_SCENE
-		G4cerr << "*****   (!OpenDevice in FRBeginModeling())" << endl;
+		G4cerr << "*****   (!OpenDevice in FRBeginModeling())" << G4endl;
 #endif
 	  SendStr( FR_OPEN_DEVICE      );
 
 	  //----- begin sending primitives
 	  //   !BeginModeling
 #if defined DEBUG_FR_SCENE
-	  G4cerr << "*****   (!BeginModeling in FRBeginModeling())" << endl;
+	  G4cerr << "*****   (!BeginModeling in FRBeginModeling())" << G4endl;
 #endif
 	  SendStr( FR_BEGIN_MODELING );  FRflag_in_modeling = true ;
 

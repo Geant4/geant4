@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSet.hh,v 1.3.8.1 1999/12/07 20:53:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisCommandsSet.hh,v 1.4 1999/12/15 14:54:22 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // /vis~/set/ commands
@@ -56,7 +56,7 @@ public:
       // Recalculate projection matrices, etc.
       pView -> SetView ();
     }
-    G4cout << "Issue Draw or refresh to see effect." << endl;
+    G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 };
 
@@ -79,7 +79,7 @@ public:
     G4cout << "\nNote: this is only effective in surface drawing style,"
       "\nand then only if the volumes are visible and opaque, and then"
       "\nonly if no sections or cutways are in operation."
-	 << endl;
+	 << G4endl;
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCullingCovered (value);
     G4VViewer* pView = pVMan -> GetCurrentViewer ();
@@ -89,7 +89,7 @@ public:
       // Recalculate projection matrices, etc.
       pView -> SetView ();
     }
-    G4cout << "Issue Draw or refresh to see effect." << endl;
+    G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 };
 
@@ -118,7 +118,7 @@ public:
       // Recalculate projection matrices, etc.
       pView -> SetView ();
     }
-    G4cout << "Issue Draw or refresh to see effect." << endl;
+    G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 };
 

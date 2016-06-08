@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: rstream.h,v 1.4 1999/11/25 10:14:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------

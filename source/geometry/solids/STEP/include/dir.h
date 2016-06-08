@@ -6,7 +6,7 @@
 
 //
 // $Id: dir.h,v 1.2 1999/05/21 20:20:38 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifdef __O3DB__

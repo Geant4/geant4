@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fragment.cc,v 1.4.8.1 1999/12/07 20:52:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Fragment.cc,v 1.4.8.1.2.3 1999/12/09 17:45:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -67,8 +67,8 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
       theExcitationEnergy = 0.0;
     else 
     {
-      cout << "A, Z, momentum, theExcitationEnergy"<<
-           A<<" "<<Z<<" "<<aMomentum<<" "<<theExcitationEnergy<<endl;
+      G4cout << "A, Z, momentum, theExcitationEnergy"<<
+           A<<" "<<Z<<" "<<aMomentum<<" "<<theExcitationEnergy<<G4endl;
       G4Exception( "G4Fragment::G4Fragment Excitation Energy < 0.0!" );
     }
 }
@@ -155,17 +155,17 @@ G4bool G4Fragment::operator!=(const G4Fragment &right) const
 }
 
 
-ostream& operator << (ostream &out, const G4Fragment *theFragment)
+G4std::ostream& operator << (G4std::ostream &out, const G4Fragment *theFragment)
 {
-  long old_floatfield = out.setf(0,ios::floatfield);
+  long old_floatfield = out.setf(0,G4std::ios::floatfield);
 
   out 
-    << "Fragment: A = " << setprecision(3) << theFragment->theA 
-    << ", Z = " << setprecision(3) << theFragment->theZ ;
-  out.setf(ios::scientific,ios::floatfield);
+    << "Fragment: A = " << G4std::setprecision(3) << theFragment->theA 
+    << ", Z = " << G4std::setprecision(3) << theFragment->theZ ;
+  out.setf(G4std::ios::scientific,G4std::ios::floatfield);
   out
     << ", U = " << theFragment->theExcitationEnergy/MeV 
-    << " MeV" << endl
+    << " MeV" << G4endl
     << "          P = (" 
     << theFragment->theMomentum.x()/MeV << ","
     << theFragment->theMomentum.y()/MeV << ","
@@ -176,19 +176,19 @@ ostream& operator << (ostream &out, const G4Fragment *theFragment)
   // What about Angular momentum???
 
   if (theFragment->numberOfExcitons != 0) {
-    out << endl;
+    out << G4endl;
     out << "          " 
 	<< "#Excitons = " << theFragment->numberOfExcitons 
 	<< ", #Holes = "   << theFragment->numberOfHoles
 	<< ", #Charged = " << theFragment->numberOfCharged;
   }
-  out.setf(old_floatfield,ios::floatfield);
+  out.setf(old_floatfield,G4std::ios::floatfield);
 
   return out;
     
 }
 
-ostream& operator << (ostream &out, const G4Fragment &theFragment)
+G4std::ostream& operator << (G4std::ostream &out, const G4Fragment &theFragment)
 {
   out << &theFragment;
   return out; 

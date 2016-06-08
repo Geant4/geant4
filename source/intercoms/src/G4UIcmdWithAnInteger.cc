@@ -5,17 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcmdWithAnInteger.cc,v 1.1.10.1 1999/12/07 20:49:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIcmdWithAnInteger.cc,v 1.2 1999/12/15 14:50:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 
 #include "G4UIcmdWithAnInteger.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4UIcmdWithAnInteger::G4UIcmdWithAnInteger
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -29,7 +25,7 @@ G4int G4UIcmdWithAnInteger::GetNewIntValue(G4String paramString)
 {
   G4int vl;
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vl;
   return vl;
 }
@@ -37,7 +33,7 @@ G4int G4UIcmdWithAnInteger::GetNewIntValue(G4String paramString)
 G4String G4UIcmdWithAnInteger::ConvertToString(G4int intValue)
 {
   char st[20];
-  ostrstream os(st,20);
+  G4std::ostrstream os(st,20);
   os << intValue << '\0';
   G4String vl = st;
   return vl;

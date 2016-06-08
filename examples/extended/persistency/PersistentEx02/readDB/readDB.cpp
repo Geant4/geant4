@@ -46,8 +46,8 @@ public:
       int evt_id = pevent_iterator->GetEventID();
       int n_pvertex = pevent_iterator->GetNumberOfPrimaryVertex();
 
-      cout << endl << "Reading event #" << evt_id << ":" << endl;
-      cout << "  No. of primary vertex: " << n_pvertex << endl;
+      cout << G4endl << "Reading event #" << evt_id << ":" << G4endl;
+      cout << "  No. of primary vertex: " << n_pvertex << G4endl;
 
       // Loop for all primary vertex in this event
       for ( int i = 0; i < n_pvertex; i++ )
@@ -55,9 +55,9 @@ public:
         HepRef(G4PPrimaryVertex) pvertex = 
                              pevent_iterator->GetPrimaryVertex(i);
         cout << "    ObjectID of the primary vertex: "
-             << pvertex.sprint() << endl;
+             << pvertex.sprint() << G4endl;
         cout << "    No. of particle in the primary vertex: "
-             << pvertex->GetNumberOfParticle() << endl;
+             << pvertex->GetNumberOfParticle() << G4endl;
 
         for ( int j = 0; j < pvertex->GetNumberOfParticle() ; j++ )
         {
@@ -65,7 +65,7 @@ public:
            cout << "      PDGcode: " << particle->GetPDGcode()
                 << "      Px = " << particle->GetPx()
                 << "      Py = " << particle->GetPy()
-                << "      Pz = " << particle->GetPz() << endl;
+                << "      Pz = " << particle->GetPz() << G4endl;
         }
       }
 
@@ -73,7 +73,7 @@ public:
       const HepRef(G4PHCofThisEvent) hcte = pevent_iterator->GetHCofThisEvent();
       if( hcte != 0 )
       {
-        cout << "  ObjectID of the Hit Collections: " << hcte.sprint() << endl;
+        cout << "  ObjectID of the Hit Collections: " << hcte.sprint() << G4endl;
 
         // Capacity of the Hit Collections VArray
       //  G4int numHC = hcte->GetCapacity();
@@ -81,7 +81,7 @@ public:
         // Actual number of Hit Collections in this event
         G4int numHCact = hcte->GetNumberOfCollections();
 
-        cout << "  No. of the Hit Collections: " << numHCact << endl;
+        cout << "  No. of the Hit Collections: " << numHCact << G4endl;
         for( G4int i = 0; i<numHCact; i++)
         {
           const HepRef(PersEx02TrackerHitsCollection) aHC =
@@ -90,19 +90,19 @@ public:
           {
             cout << "    Hit Collection[" << i << "]:  Name: "
                  << aHC->GetName();
-            cout << "     Sensitive Detector: " << aHC->GetSDname() << endl;
+            cout << "     Sensitive Detector: " << aHC->GetSDname() << G4endl;
 
             HepRef(PersEx02TrackerHit) aHit = aHC->element(0);
             if( aHit != 0 )
             {
-              cout << "      Number of hits:        " << aHC->size() << endl
-                   << "      Edep of the first hit: " << aHit->GetEdep() << endl;
+              cout << "      Number of hits:        " << aHC->size() << G4endl
+                   << "      Edep of the first hit: " << aHit->GetEdep() << G4endl;
             }
           }
         }
       }
       else
-      { cout << "  No Hit Collections for this event." << endl; }
+      { cout << "  No Hit Collections for this event." << G4endl; }
     }
 
     message("End of loop over events.");

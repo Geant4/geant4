@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Win32.cc,v 1.4.8.1 1999/12/07 20:49:11 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Win32.cc,v 1.4.8.1.2.1 1999/12/08 17:34:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G.Barrand
 
@@ -73,7 +73,7 @@ G4Win32::G4Win32 (
     nCmdShow         = a_nCmdShow;
   
     if(hInstance==NULL) {
-      G4cout << "G4Win32::G4Win32 : NULL hInstance given." <<endl;
+      G4cout << "G4Win32::G4Win32 : NULL hInstance given." <<G4endl;
     }
 
     if(hPrevInstance==NULL) {
@@ -97,7 +97,7 @@ G4Win32::G4Win32 (
 				 NULL, NULL, hInstance, NULL);
     
     if(topWindow==NULL) {
-      G4cout << "G4Win32 : Unable to create Win32 window." << endl;
+      G4cout << "G4Win32 : Unable to create Win32 window." << G4endl;
     }
 
     Win32Inited = TRUE;

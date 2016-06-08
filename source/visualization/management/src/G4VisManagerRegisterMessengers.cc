@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.8.4.1 1999/12/07 20:54:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.11 2000/01/11 17:22:32 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // G4VisManager::RegisterMessengers - John Allison 30/July/1998.
@@ -106,13 +106,15 @@ clicks, spawn other windows, change viewpoint, etc.).
 /vis/viewer/create [<scene-handler>] [<viewer-name>]
 /vis/viewer/list
 /vis/viewer/select [<viewer-name>]
+/vis/viewer/refresh [<viewer-name>]
 /vis/viewer/remove <viewer-name>
 * /vis/viewer/set/style wireframe|surface|logical
 * /vis/viewer/set/viewpoint
 * /vis/viewer/set/notifyOption immediate|delayed
 * /vis/viewer/notifyHandler
 * /vis/viewer/clone
-/vis/viewer/update [<viewer-name>]
+/vis/viewer/show [<viewer-name>]
+/vis/viewer/update - synonym for /vis/viewer/show.
 
 
 Global Commands
@@ -141,7 +143,7 @@ would be
 
 /vis/scene/add/volume $1
 /vis/scene/notifyHandlers
-/vis/viewer/update
+/vis/viewer/show
 
 or some such.
 
@@ -204,9 +206,10 @@ or some such.
   command -> SetGuidance ("Operations on Geant4 viewers.");
   fMessengerList.append (new G4VisCommandViewerCreate);
   fMessengerList.append (new G4VisCommandViewerList);
-  fMessengerList.append (new G4VisCommandViewerSelect);
+  fMessengerList.append (new G4VisCommandViewerRefresh);
   fMessengerList.append (new G4VisCommandViewerRemove);
-  fMessengerList.append (new G4VisCommandViewerUpdate);
+  fMessengerList.append (new G4VisCommandViewerSelect);
+  fMessengerList.append (new G4VisCommandViewerShow);
 
   // Camera - OLD STYLE!!
   fMessengerList.append

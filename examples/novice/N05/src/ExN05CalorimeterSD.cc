@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05CalorimeterSD.cc,v 1.1.10.1 1999/12/07 20:47:35 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN05CalorimeterSD.cc,v 1.2 1999/12/15 14:49:30 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "ExN05CalorimeterSD.hh"
@@ -62,13 +62,13 @@ G4bool ExN05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
     int icell = CalCollection->insert( calHit );
     CellID[copyID] = icell - 1;
     if(verboseLevel>0)
-    { G4cout << " New Calorimeter Hit on CellID " << copyID << endl; }
+    { G4cout << " New Calorimeter Hit on CellID " << copyID << G4endl; }
   }
   else
   { 
     (*CalCollection)[CellID[copyID]]->AddEdep( edep );
     if(verboseLevel>0)
-    { G4cout << " Energy added to CellID " << copyID << endl; }
+    { G4cout << " Energy added to CellID " << copyID << G4endl; }
   }
 
   return true;

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4RunActionMessenger.hh,v 1.1.4.1 1999/12/07 20:47:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em4RunActionMessenger.hh,v 1.3 2000/01/20 17:27:56 maire Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -36,7 +36,6 @@ class Em4RunActionMessenger: public G4UImessenger
     
   private:
     Em4RunAction*          Em4Run;   
-    G4UIcmdWithAString*    SaveCmd;
     G4UIdirectory*         RndmDir;
     G4UIcmdWithAnInteger*  RndmSaveCmd;    
     G4UIcmdWithAString*    RndmReadCmd;

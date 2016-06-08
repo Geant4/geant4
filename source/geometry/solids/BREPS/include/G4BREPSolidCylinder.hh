@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidCylinder.hh,v 1.1.10.1 1999/12/07 20:48:16 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4BREPSolidCylinder.hh,v 1.2 1999/12/15 14:49:55 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef __G4BREPSolidCylinder
 #define __G4BREPSolidCylinder

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: templates.hh,v 1.3 1999/11/16 17:40:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: templates.hh,v 1.5 2000/01/03 11:39:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // -*- C++ -*-

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransactionManager.cc,v 1.5.2.1 1999/12/07 20:50:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4TransactionManager.cc,v 1.6 1999/12/15 14:51:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4TransactionManager 
 //
@@ -44,7 +44,7 @@ G4TransactionManager::G4TransactionManager(
   f_dbApp = new HepDbApplication(applicationName);
 
   // Open and Initialize a database
-  G4cout << "Opening federated database OO_FD_BOOT." << endl;
+  G4cout << "Opening federated database OO_FD_BOOT." << G4endl;
   f_dbApp->init();
 
   // Locate or create run,event,geometry databases and containers
@@ -72,11 +72,11 @@ G4bool G4TransactionManager::StartTransaction(
     case kAlreadySelected:
       if(f_verboseLevel>2)
         G4cout << "G4TransactionManager: Sustained transaction for /"
-               << DBName(f_whichDB) << "/ already in progress." << endl;
+               << DBName(f_whichDB) << "/ already in progress." << G4endl;
       break;
     case kCannotOverride:
       G4cerr << "G4TransactionManager: Cannot override the existing "
-             << "transaction for /" << DBName(f_whichDB) << "/" << endl;
+             << "transaction for /" << DBName(f_whichDB) << "/" << G4endl;
       return false;
       break;
     case kStartNewSustained:
@@ -89,7 +89,7 @@ G4bool G4TransactionManager::StartTransaction(
       f_dbApp->commit();
       if(f_verboseLevel>1)
         G4cout << "Sustained transaction for /" << DBName(f_whichDB)
-               << "/ is paused." << endl;
+               << "/ is paused." << G4endl;
       DoStart(dbtype, dbmode, false);
       break;
     case kStartNonSustained:
@@ -139,7 +139,7 @@ G4bool G4TransactionManager::DoStart(ETypeOfDB dbtype,
   if( aDBref == NULL )
   {
     G4cerr << "G4TransactionManager: Could not create or find /"
-           << DBName(dbtype) << "/ database." << endl;
+           << DBName(dbtype) << "/ database." << G4endl;
     return false;
   }
   SetDB( dbtype, aDBref );
@@ -148,7 +148,7 @@ G4bool G4TransactionManager::DoStart(ETypeOfDB dbtype,
   if( aContRef == NULL )
   {
     G4cerr << "G4TransactionManager: Could not create or find /"
-           << ContainerName(dbtype) << "/ container." << endl;
+           << ContainerName(dbtype) << "/ container." << G4endl;
     return false;
   }
   SetContainer( dbtype, aContRef );
@@ -160,9 +160,9 @@ G4bool G4TransactionManager::DoStart(ETypeOfDB dbtype,
     G4cout << "Transaction started for /" << DBName(dbtype) << "/"
            << ContainerName(dbtype) << "/ with ";
     if(isSustained)
-      G4cout << "sustained mode." << endl;
+      G4cout << "sustained mode." << G4endl;
     else
-      G4cout << "non-sustained mode." << endl;
+      G4cout << "non-sustained mode." << G4endl;
   }
 
   return true;
@@ -178,14 +178,14 @@ G4bool G4TransactionManager::Commit(ETypeOfDB dbtype, G4bool isSustained)
 
       if(f_verboseLevel>1)
         G4cout << "Transaction is committed on /" << DBName(dbtype)
-               << "/" << ContainerName(dbtype) << "/" << endl;
+               << "/" << ContainerName(dbtype) << "/" << G4endl;
 
       if( f_isSustained && dbtype != f_whichDB )
       {
         StartTransaction( f_whichDB, f_transactionMode, true );
         if(f_verboseLevel>1)
           G4cout << "Resumeing transaction on /" << DBName(f_whichDB)
-                 << "/" << ContainerName(f_whichDB) << "/" << endl;
+                 << "/" << ContainerName(f_whichDB) << "/" << G4endl;
       }
       else
       {
@@ -198,9 +198,9 @@ G4bool G4TransactionManager::Commit(ETypeOfDB dbtype, G4bool isSustained)
   else
   {
     G4cerr << "Error: Commit() received on /" << DBName(dbtype)
-           << "/" << ContainerName(dbtype) << "/" << endl
+           << "/" << ContainerName(dbtype) << "/" << G4endl
            << "       Current transaction is on /" << DBName(f_currentDB)
-           << "/" << ContainerName(f_currentDB) << "/" << endl;
+           << "/" << ContainerName(f_currentDB) << "/" << G4endl;
     return false;
   }
 }
@@ -215,14 +215,14 @@ G4bool G4TransactionManager::Abort(ETypeOfDB dbtype, G4bool isSustained)
 
       if(f_verboseLevel>1)
         G4cout << "Transaction is aborted on /" << DBName(dbtype)
-               << "/" << ContainerName(dbtype) << "/" << endl;
+               << "/" << ContainerName(dbtype) << "/" << G4endl;
 
       if( f_isSustained && dbtype != f_whichDB )
       {
         StartTransaction( f_whichDB, f_transactionMode, true );
         if(f_verboseLevel>1)
           G4cout << "Resumeing transaction on /" << DBName(f_whichDB)
-                 << "/" << ContainerName(f_whichDB) << "/" << endl;
+                 << "/" << ContainerName(f_whichDB) << "/" << G4endl;
       }
       else
       {
@@ -235,9 +235,9 @@ G4bool G4TransactionManager::Abort(ETypeOfDB dbtype, G4bool isSustained)
   else
   {
     G4cerr << "Error: Abort() received on /" << DBName(dbtype)
-           << "/" << ContainerName(dbtype) << "/" << endl
+           << "/" << ContainerName(dbtype) << "/" << G4endl
            << "       Current transaction is on /" << DBName(f_currentDB)
-           << "/" << ContainerName(f_currentDB) << "/" << endl;
+           << "/" << ContainerName(f_currentDB) << "/" << G4endl;
     return false;
   }
 }
@@ -262,14 +262,14 @@ G4bool G4TransactionManager::SelectDB( ETypeOfDB dbtype,
 
     if(f_verboseLevel>0)
       G4cout << "Set database to /"
-             << DBName(dbtype) << "/." << endl;
+             << DBName(dbtype) << "/." << G4endl;
   }
   else
   {
     Abort( dbtype, false );
     SetDBName(dbtype, oldDBname);
     G4cerr << "G4TransactionManager: Failed to set database /"
-             << DBName(dbtype) << "/." << endl;
+             << DBName(dbtype) << "/." << G4endl;
     theStatus = false;
   }
 

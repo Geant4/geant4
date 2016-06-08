@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.4.4.1 1999/12/07 20:53:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DAWNFILEViewer.hh,v 1.5 1999/12/15 14:54:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Satoshi TANAKA
 // DAWNFILE viewer - opens window, hard copy, etc.
@@ -44,7 +44,7 @@ public:
   const char* GetG4PrimViewer          () { return fG4PrimViewer ;}
   const char* GetG4PrimViewerInvocation() { return fG4PrimViewerInvocation ;}
   const char* GetPSViewer              () { return fPSViewer ;}
-  void  SendDrawingStyleToDAWNGUI( ostream& out ) ;
+  void  SendDrawingStyleToDAWNGUI( G4std::ostream& out ) ;
 
 private:
   G4DAWNFILESceneHandler& fSceneHandler; // Reference to Graphics Scene for this view.

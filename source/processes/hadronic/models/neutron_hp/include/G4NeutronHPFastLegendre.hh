@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFastLegendre.hh,v 1.4 1999/12/03 10:59:07 hpw Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NeutronHPFastLegendre.hh,v 1.5 1999/12/15 14:53:11 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4NeutronHPFastLegendre_h
 #define G4NeutronHPFastLegendre_h 1
@@ -100,10 +100,10 @@ class G4NeutronHPFastLegendre
   {
     G4int bin = GetBin(l, costh);
     G4double y1, y2;
-//    G4cout <<"Testhpw G4NeutronHPFastLegendre::Integrate "<<l<<" "<<bin<<endl;
+//    G4cout <<"Testhpw G4NeutronHPFastLegendre::Integrate "<<l<<" "<<bin<<G4endl;
     y1 = integral[l][bin];
     y2 = integral[l][bin+1];
-//    G4cout <<"Testhpw G4NeutronHPFastLegendre::Integrate exit"<<endl;
+//    G4cout <<"Testhpw G4NeutronHPFastLegendre::Integrate exit"<<G4endl;
     return Interpolate(bin, l, y1, y2, costh);
   }
   

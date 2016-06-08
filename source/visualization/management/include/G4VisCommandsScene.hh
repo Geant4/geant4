@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.hh,v 1.7.4.1 1999/12/07 20:53:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisCommandsScene.hh,v 1.8 1999/12/15 14:54:21 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 

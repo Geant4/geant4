@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.3.6.1 1999/12/07 20:48:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4MagIntegratorDriver.hh,v 1.5 1999/12/15 18:15:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //  Provides Driver that talks to Integrator Stepper, and insures that 
 //  the error is within acceptable bounds.
@@ -152,8 +152,8 @@ private:
       G4double pgrow;    //  exponent for growth
       G4double errcon;
       //  maximum stepsize increase/decrease factors
-      const static G4double max_stepping_increase;
-      const static G4double max_stepping_decrease;
+      static const G4double max_stepping_increase;
+      static const G4double max_stepping_decrease;
 };
 
 #include "G4MagIntegratorDriver.icc"

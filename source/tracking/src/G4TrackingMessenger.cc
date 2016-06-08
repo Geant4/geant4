@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingMessenger.cc,v 1.4.6.1 1999/12/07 20:53:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4TrackingMessenger.cc,v 1.6 2000/01/23 09:51:36 tsasaki Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------
@@ -36,11 +36,7 @@
 #include "G4TrackStatus.hh"
 #include "G4ios.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 ///////////////////////////////////////////////////////////////////
 G4TrackingMessenger::G4TrackingMessenger(G4TrackingManager * trMan)
@@ -106,7 +102,7 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   if( command == VerboseCmd ){
     G4int vl;
     const char* t = newValues;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> vl;
     trackingManager->SetVerboseLevel(vl);
   }
@@ -123,7 +119,7 @@ void G4TrackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
   if( command == StoreTrajectoryCmd ){
     G4int vl;
     const char* t = newValues;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> vl;
     trackingManager->SetStoreTrajectory(vl!=0);
   }
@@ -136,9 +132,14 @@ G4String G4TrackingMessenger::GetCurrentValue(G4UIcommand * command)
 {
   if( command == VerboseCmd ){
     char line[100];
-    ostrstream os(line,100);
+    G4std::ostrstream os(line,100);
     os << trackingManager->GetVerboseLevel() << '\0';
     return G4String(line);
+  }
+  else if( command == StoreTrajectoryCmd ){
+    G4String ll = "0";
+    if(trackingManager->GetStoreTrajectory()) ll = "1";
+    return ll;
   }
   return G4String('\0');
 }

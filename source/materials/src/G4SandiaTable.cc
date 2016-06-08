@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.cc,v 1.4.4.1 1999/12/07 20:49:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SandiaTable.cc,v 1.4.4.1.2.1 1999/12/08 17:34:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
@@ -178,7 +178,7 @@ G4SandiaTable::SandiaIntervals(G4int Z[],
   }
   fMaxInterval += 2 ;
 
-//  G4cout<<"fMaxInterval = "<<fMaxInterval<<endl ;
+//  G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl ;
 
   fPhotoAbsorptionCof = new G4double* [fMaxInterval] ;
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KineticTrack.cc,v 1.3.8.1 1999/12/07 20:52:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4KineticTrack.cc,v 1.3.8.1.2.1 1999/12/08 17:34:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // $Id: G4KineticTrack.cc,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------
@@ -54,9 +54,9 @@ G4KineticTrack::G4KineticTrack() :
 ////////////////
 
 /*
- G4cerr << endl << endl << endl;
+ G4cerr << G4endl << G4endl << G4endl;
  G4cerr << "   G4KineticTrack default constructor invoked! \n";
- G4cerr << "   =========================================== \n" << endl;
+ G4cerr << "   =========================================== \n" << G4endl;
 */
 }
 
@@ -89,9 +89,9 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right)
 ////////////////
 
 /*
- G4cerr << endl << endl << endl;
+ G4cerr << G4endl << G4endl << G4endl;
  G4cerr << "   G4KineticTrack copy constructor invoked! \n";
- G4cerr << "   ======================================== \n" <<endl;
+ G4cerr << "   ======================================== \n" <<G4endl;
 */
 }
 
@@ -183,7 +183,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           if ( !theDaughterIsShortLived[0] && !theDaughterIsShortLived[1] )
              {
 
-//              G4cout << endl << "Both the " << nDaughters <<
+//              G4cout << G4endl << "Both the " << nDaughters <<
 //                              " decay products are stable!";
 
               theActualMom = EvaluateCMMomentum(theActualMass, 
@@ -195,7 +195,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           else if ( !theDaughterIsShortLived[0] && theDaughterIsShortLived[1] )   
              {
 
-//              G4cout << endl << "Only the first of the " << nDaughters <<
+//              G4cout << G4endl << "Only the first of the " << nDaughters <<
 //                              " decay products is stable!";
 
               theActualMom = IntegrateCMMomentum();
@@ -205,7 +205,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           else if ( theDaughterIsShortLived[0] && !theDaughterIsShortLived[1] )   
              {
 
-//              G4cout << endl << "Only the second of the " << nDaughters <<
+//              G4cout << G4endl << "Only the second of the " << nDaughters <<
 //                              " decay products is stable!";
 
 //
@@ -222,7 +222,7 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           else if ( theDaughterIsShortLived[0] && theDaughterIsShortLived[1] )   
              {
 
-//              G4cout << endl << "Both the " << nDaughters <<
+//              G4cout << G4endl << "Both the " << nDaughters <<
 //                              " decay products are resonances!";
 
               /* @@@@@@ code has to be implemented */
@@ -258,14 +258,14 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 
 // for (G4int y = nChannels - 1; y >= 0; y--)
 //     {
-//      G4cout << endl << theActualWidth[y];
+//      G4cout << G4endl << theActualWidth[y];
 //     }
-// G4cout << endl << endl << endl;
+// G4cout << G4endl << G4endl << G4endl;
 
  /*
- G4cerr << endl << endl << endl;
+ G4cerr << G4endl << G4endl << G4endl;
  G4cerr << "   G4KineticTrack by argument constructor invoked! \n";
- G4cerr << "   =============================================== \n" << endl;
+ G4cerr << "   =============================================== \n" << G4endl;
  */
 
 }
@@ -462,8 +462,8 @@ G4double G4KineticTrack::IntegrateCMMomentum() const
                                                               theUpperLimit,
                                                               nIterations);                                    
 
-// G4cout << endl << "Inside IntegrateCMMomentum (actual mass case): ";
-// G4cout << endl << "   Integration result = " << theIntegralOverMass2;
+// G4cout << G4endl << "Inside IntegrateCMMomentum (actual mass case): ";
+// G4cout << G4endl << "   Integration result = " << theIntegralOverMass2;
 
  return theIntegralOverMass2;
 }
@@ -478,8 +478,8 @@ G4double G4KineticTrack::IntegrateCMMomentum(const G4double polemass) const
                                                               theUpperLimit,
                                                               nIterations);                                    
 
-// G4cout << endl << "Inside IntegrateCMMomentum (pole mass case): ";
-// G4cout << endl << "   Integration result = " << theIntegralOverMass2;
+// G4cout << G4endl << "Inside IntegrateCMMomentum (pole mass case): ";
+// G4cout << G4endl << "   Integration result = " << theIntegralOverMass2;
 
  return theIntegralOverMass2;
 }

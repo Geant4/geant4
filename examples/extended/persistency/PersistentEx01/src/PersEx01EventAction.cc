@@ -32,7 +32,7 @@ void PersEx01EventAction::BeginOfEventAction(const G4Event* )
 
 void PersEx01EventAction::EndOfEventAction(const G4Event* evt)
 {
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
   PersEx01TrackerHitsCollection * pTHC1
@@ -40,14 +40,14 @@ void PersEx01EventAction::EndOfEventAction(const G4Event* evt)
   PersEx01TrackerHitsCollection * pTHC2
    = (PersEx01TrackerHitsCollection*)(HCE->GetHC(colID2));
 
-  G4cout << "Event : " << evt->GetEventID() << endl
+  G4cout << "Event : " << evt->GetEventID() << G4endl
          << pTHC1->GetSDname() << "/" << pTHC1->GetName() << "    "
-         << "Number of hits       " << pTHC1->entries() << endl;
+         << "Number of hits       " << pTHC1->entries() << G4endl;
   if( pTHC1->entries() > 0 )
-    G4cout << "  Edep of the first Hit " << (*pTHC1)[0]->GetEdep() << endl;
+    G4cout << "  Edep of the first Hit " << (*pTHC1)[0]->GetEdep() << G4endl;
   G4cout << pTHC2->GetSDname() << "/" << pTHC2->GetName() << "     "
-         << "Number of hits       " << pTHC2->entries() << endl;
+         << "Number of hits       " << pTHC2->entries() << G4endl;
   if( pTHC2->entries() > 0 )
-    G4cout << "  Edep of the first Hit " << (*pTHC2)[0]->GetEdep() << endl;
+    G4cout << "  Edep of the first Hit " << (*pTHC2)[0]->GetEdep() << G4endl;
 }
 

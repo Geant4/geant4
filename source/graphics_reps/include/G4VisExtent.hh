@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisExtent.hh,v 1.3.2.1 1999/12/07 20:48:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisExtent.hh,v 1.4 1999/12/15 14:50:35 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // A.Walkden 28/11/95
@@ -48,7 +48,7 @@ public: // With description
   void SetYmax (G4double ymax);
   void SetZmin (G4double zmin);
   void SetZmax (G4double zmax);
-  friend ostream& operator << (ostream& os, const G4VisExtent& e);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VisExtent& e);
 
 private:
   G4double fXmin, fXmax, fYmin, fYmax, fZmin, fZmax;

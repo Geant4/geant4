@@ -6,8 +6,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1DetectorConstruction.cc,v 1.1.4.1 1999/12/07 20:46:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em1DetectorConstruction.cc,v 1.2 1999/12/15 14:48:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -122,7 +122,7 @@ a = 238.03*g/mole;
 G4Material*  U = new G4Material(name="Uranium"     , z=82., a, density);
 
 
-G4cout << *(G4Material::GetMaterialTable()) << endl;
+G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   aMaterial = Al;
@@ -169,7 +169,7 @@ G4VPhysicalVolume* Em1DetectorConstruction::ConstructVolumes()
 void Em1DetectorConstruction::PrintParameters()
 {
   G4cout << "\n The Box is " << G4BestUnit(BoxSize,"Length")
-         << " of " << aMaterial->GetName() << endl;
+         << " of " << aMaterial->GetName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

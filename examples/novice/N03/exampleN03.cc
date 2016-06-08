@@ -5,19 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.7.8.1 1999/12/07 20:47:28 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: exampleN03.cc,v 1.10 1999/12/15 14:49:22 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - exampleN02 
+//      GEANT 4 - exampleN03 
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD Group
 // --------------------------------------------------------------
 // Comments
 //
-// 
+//#define G4UI_USE_XM 
+//
 // --------------------------------------------------------------
 
 #include "G4RunManager.hh"
@@ -36,13 +37,16 @@
 #include "ExN03RunAction.hh"
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
-#include "Randomize.hh"
+#include "ExN03SteppingVerbose.hh"
 
 int main(int argc,char** argv) {
 
   // choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-   
+  
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
+     
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 

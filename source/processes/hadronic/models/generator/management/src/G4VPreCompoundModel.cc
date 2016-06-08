@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPreCompoundModel.cc,v 1.1.10.1 1999/12/07 20:51:46 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4VPreCompoundModel.hh"

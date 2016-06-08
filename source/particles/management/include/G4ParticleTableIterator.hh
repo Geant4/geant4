@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTableIterator.hh,v 1.2.4.1 1999/12/07 20:49:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ParticleTableIterator.hh,v 1.2.4.1.2.1 1999/12/09 10:28:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -26,7 +26,7 @@
 template < class K, class V > class G4ParticleTableIterator
 {
  public:
-  typedef  G4std::map<K, V, less<K> > Map;
+  typedef  G4std::map<K, V, G4std::less<K> > Map;
   G4ParticleTableIterator( Map &adict):
     mydict(&adict),it(adict.begin()),defined(false){}
 

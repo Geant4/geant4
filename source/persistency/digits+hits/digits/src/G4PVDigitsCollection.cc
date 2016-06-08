@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PVDigitsCollection.cc,v 1.3 1999/11/29 20:11:17 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 // G4PVDigitsCollection

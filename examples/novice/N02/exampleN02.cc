@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN02.cc,v 1.1.10.1 1999/12/07 20:47:22 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: exampleN02.cc,v 1.3 1999/12/15 14:49:19 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -25,6 +25,7 @@
 #include "ExN02PrimaryGeneratorAction.hh"
 #include "ExN02EventAction.hh"
 #include "ExN02SteppingAction.hh"
+#include "ExN02SteppingVerbose.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -40,6 +41,9 @@
 int
 main(int argc,char** argv) {
 
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new ExN02SteppingVerbose);
+  
   // Run manager
   G4RunManager * runManager = new G4RunManager;
 

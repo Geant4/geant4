@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.1.8.1.2.1 1999/12/07 20:52:40 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PiMinusStopMaterial.cc,v 1.1.8.1.2.1.2.1 1999/12/08 17:35:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -143,9 +143,9 @@ G4RWTPtrOrderedVector<G4LorentzVector>* G4PiMinusStopMaterial::P4Vector(const G4
 
       // ---- Debug     
       //      G4cout << " ---- binding = " << binding << ", nucleus mass = " << massNucleus 
-      //	     << ", p nucleus = " << pNucleus << endl;
+      //	     << ", p nucleus = " << pNucleus << G4endl;
       //      G4cout << "eKin1,2 " << eKin1 << " " << eKin2 << " eRecoil " << eRecoil 
-      //	     << " availableE " << availableE << endl;
+      //	     << " availableE " << availableE << G4endl;
       // ----
 
     }  while ((eKin1 + eKin2 + eRecoil) > availableE);

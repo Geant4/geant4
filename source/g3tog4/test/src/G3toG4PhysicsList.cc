@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4PhysicsList.cc,v 1.6 1999/12/05 17:50:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4PhysicsList.cc,v 1.7 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -226,7 +226,7 @@ void G3toG4PhysicsList::SetCuts()
     
   if (verboseLevel >0){
     G4cout << "G3toG4PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << endl;    
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;    
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,

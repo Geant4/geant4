@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SDManager.cc,v 1.1.10.1 1999/12/07 20:47:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SDManager.cc,v 1.1.10.1.2.1 1999/12/08 17:33:16 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4SDManager.hh"
@@ -60,7 +60,7 @@ void G4SDManager::AddNewDetector(G4VSensitiveDetector*aSD)
   if( verboseLevel > 0 )
   {
     G4cout << "New sensitive detector <" << aSD->GetName()
-         << "> is registored at " << pathName << endl;
+         << "> is registored at " << pathName << G4endl;
   }
 }
 
@@ -94,9 +94,9 @@ G4int G4SDManager::GetCollectionID(G4String colName)
 {
   G4int id = HCtable->GetCollectionID(colName);
   if(id==-1)
-  { G4cout << "<" << colName << "> is not found." << endl; }
+  { G4cout << "<" << colName << "> is not found." << G4endl; }
   else if(id==-2)
-  { G4cout << "<" << colName << "> is ambiguous." << endl; }
+  { G4cout << "<" << colName << "> is ambiguous." << G4endl; }
   return id;
 }
 

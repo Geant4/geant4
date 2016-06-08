@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.7.6.1 1999/12/07 20:53:06 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SteppingManager.cc,v 1.8 1999/12/15 14:53:58 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------
@@ -168,7 +168,7 @@ G4StepStatus G4SteppingManager::Stepping()
 
      // Update safety after invocation of all AlongStepDoIts
      endpointSafOrigin= fPostStepPoint->GetPosition();
-     endpointSafety=  max( proposedSafety - GeomStepLength, 0.);
+     endpointSafety=  G4std::max( proposedSafety - GeomStepLength, 0.);
 
      fStep->GetPostStepPoint()->SetSafety( endpointSafety );
 

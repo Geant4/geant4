@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VStringFragmentation.cc,v 1.1.8.1 1999/12/07 20:51:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4VStringFragmentation
 #include "G4VStringFragmentation.hh"

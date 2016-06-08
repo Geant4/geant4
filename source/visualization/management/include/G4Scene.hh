@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.hh,v 1.6.2.1 1999/12/07 20:53:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Scene.hh,v 1.7 1999/12/15 14:54:17 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -32,7 +32,7 @@ class G4Scene {
 
 public: // With description
 
-  friend ostream& operator << (ostream& os, const G4Scene& d);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d);
 
   enum {UNLIMITED = -1};
 

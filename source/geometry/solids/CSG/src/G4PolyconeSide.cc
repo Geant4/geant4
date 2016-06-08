@@ -477,7 +477,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	// Choose phi size of our segment(s) based on constants as
 	// defined in meshdefs.hh
 	//
-	G4int numPhi = deltaPhi/kMeshAngleDefault + 1;
+	G4int numPhi = (G4int)(deltaPhi/kMeshAngleDefault) + 1;
 	if (numPhi < kMinMeshSections) 
 		numPhi = kMinMeshSections;
 	else if (numPhi > kMaxMeshSections)

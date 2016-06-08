@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.cc,v 1.3.6.1 1999/12/07 20:54:12 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VModel.cc,v 1.4 1999/12/15 14:54:32 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -27,7 +27,7 @@ G4VModel::G4VModel (const G4Transform3D& modelTransformation,
 
 G4VModel::~G4VModel () {}
 
-ostream& operator << (ostream& os, const G4VModel& m) {
+G4std::ostream& operator << (G4std::ostream& os, const G4VModel& m) {
   os << m.fGlobalDescription;
   os << "\n  Modeling parameters:";
   if (m.fpMP) {

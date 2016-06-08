@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm5.cc,v 1.1.4.1 1999/12/07 20:47:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: TestEm5.cc,v 1.3 1999/12/15 14:49:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,13 +35,16 @@
 #include "Em5RunAction.hh"
 #include "Em5EventAction.hh"
 #include "Em5SteppingAction.hh"
-
+#include "Em5SteppingVerbose.hh"
 
 int main(int argc,char** argv) {
 
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
   
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new Em5SteppingVerbose);
+    
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 

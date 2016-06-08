@@ -306,7 +306,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const
   }
   else
   {
-     dist= min(fPtrSolidA->DistanceToOut(p),
+     dist= G4std::min(fPtrSolidA->DistanceToOut(p),
                fPtrSolidB->DistanceToIn(p) ) ; 
   }
   return dist; 

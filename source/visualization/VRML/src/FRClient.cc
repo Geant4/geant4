@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FRClient.cc,v 1.2.8.1 1999/12/07 20:53:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: FRClient.cc,v 1.3 1999/12/15 14:54:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // FRClient.cc
 // FukuiRenderer Client
@@ -73,7 +73,7 @@ int FRClient::connect(const char *hostname, int port_)
 	}
 	hp = gethostbyname(hostname) ;
 	if ( !hp ) {
-		G4cerr << "ERROR: gethostbyname() failed" << endl;
+		G4cerr << "ERROR: gethostbyname() failed" << G4endl;
 		return -1; 
 	}
 

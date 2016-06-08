@@ -128,19 +128,19 @@ void G4NuclearLevel::PrintAll() const
 {
   G4cout << "---- Level energy = " << _energy << ", angular momentum = "
 	 << _angularMomentum << ", half life " << _halfLife
-	 << ", " << _nGammas << " photons" << endl;
+	 << ", " << _nGammas << " photons" << G4endl;
   G4int i;
   G4cout << "     Gammas: ";
   for (i=0; i<_nGammas; i++) { G4cout << _energies.at(i) << " "; }
-  G4cout << endl << "     Weights: ";
+  G4cout << G4endl << "     Weights: ";
   for (i=0; i<_nGammas; i++) { G4cout << _weights.at(i) << " "; }
-  G4cout << endl << "     Relative transition probabilities ";
+  G4cout << G4endl << "     Relative transition probabilities ";
   for (i=0; i<_nGammas; i++) { G4cout << _prob.at(i) << " "; }
-  G4cout << endl << "     Cumulative probabilities: ";
+  G4cout << G4endl << "     Cumulative probabilities: ";
   for (i=0; i<_nGammas; i++) { G4cout << _cumProb.at(i) << " "; }
-  G4cout << endl << "     Polarities: ";
+  G4cout << G4endl << "     Polarities: ";
   for (i=0; i<_nGammas; i++) { G4cout << _polarities.at(i) << " "; }
-  G4cout << endl;      
+  G4cout << G4endl;      
 
   return;
 }

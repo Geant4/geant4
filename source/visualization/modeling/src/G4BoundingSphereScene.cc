@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.cc,v 1.2.8.1 1999/12/07 20:54:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4BoundingSphereScene.cc,v 1.3 1999/12/15 14:54:31 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  7th June 1997
@@ -38,7 +38,7 @@ void G4BoundingSphereScene::Accrue (const G4VSolid& solid) {
   AccrueBoundingSphere (thisCentre, thisRadius);
   /***********************************************
     G4cout << "G4BoundingSphereScene::Accrue: centre: " << fCentre
-           << ", radius: " << fRadius << endl;
+           << ", radius: " << fRadius << G4endl;
   ***********************************************/
 }
 

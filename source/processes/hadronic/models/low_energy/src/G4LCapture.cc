@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LCapture.cc,v 1.2.4.1 1999/12/07 20:52:21 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LCapture.cc,v 1.2.4.1.2.1 1999/12/08 17:34:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -61,22 +61,22 @@ G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double Q = aParticle->GetDefinition()->GetPDGCharge();
    G4double pv6 = aParticle->GetDefinition()->GetPDGCharge();
    if (verboseLevel > 1) {
-      G4cout << "G4LCapture:ApplyYourself: incident particle:" << endl;
-      G4cout << "P      " << P << " GeV/c" << endl;
-      G4cout << "Px     " << Px << " GeV/c" << endl;
-      G4cout << "Py     " << Py << " GeV/c" << endl;
-      G4cout << "Pz     " << Pz << " GeV/c" << endl;
-      G4cout << "E      " << E << " GeV" << endl;
-      G4cout << "mass   " << E0 << " GeV" << endl;
-      G4cout << "charge " << Q << endl;
+      G4cout << "G4LCapture:ApplyYourself: incident particle:" << G4endl;
+      G4cout << "P      " << P << " GeV/c" << G4endl;
+      G4cout << "Px     " << Px << " GeV/c" << G4endl;
+      G4cout << "Py     " << Py << " GeV/c" << G4endl;
+      G4cout << "Pz     " << Pz << " GeV/c" << G4endl;
+      G4cout << "E      " << E << " GeV" << G4endl;
+      G4cout << "mass   " << E0 << " GeV" << G4endl;
+      G4cout << "charge " << Q << G4endl;
    }
 // GHEISHA ADD operation to get total energy, mass, charge:
    if (verboseLevel > 1) {
-      G4cout << "G4LCapture:ApplyYourself: material:" << endl;
-      G4cout << "A      " << N << endl;
-      G4cout << "Z   " << Z  << endl;
+      G4cout << "G4LCapture:ApplyYourself: material:" << G4endl;
+      G4cout << "A      " << N << G4endl;
+      G4cout << "Z   " << Z  << G4endl;
       G4cout << "atomic mass " << 
-        Atomas(N, Z) << "GeV" << endl;
+        Atomas(N, Z) << "GeV" << G4endl;
    }
    E = E + Atomas(N, Z);
    G4double E02 = E*E - P*P;
@@ -84,10 +84,10 @@ G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    if (E02 < 0) E0 = -E0;
    Q = Q + Z;
    if (verboseLevel > 1) {
-      G4cout << "G4LCapture:ApplyYourself: total:" << endl;
-      G4cout << "E      " << E << " GeV" << endl;
-      G4cout << "mass   " << E0 << " GeV" << endl;
-      G4cout << "charge " << Q << endl;
+      G4cout << "G4LCapture:ApplyYourself: total:" << G4endl;
+      G4cout << "E      " << E << " GeV" << G4endl;
+      G4cout << "mass   " << E0 << " GeV" << G4endl;
+      G4cout << "charge " << Q << G4endl;
    }
    Px = -Px;
    Py = -Py;

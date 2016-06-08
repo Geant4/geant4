@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsposp.cc,v 1.11 1999/12/05 17:50:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4gsposp.cc,v 1.13 2000/03/07 10:51:40 stesting Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -18,7 +18,7 @@
 #include "G4VSolid.hh"
 
 G4bool G3NegVolPars(G4double pars[], G4int *nparpt, 
-          G3VolTableEntry* vte, G3VolTableEntry* mvte, char routine[]);		       
+          G3VolTableEntry* vte, G3VolTableEntry* mvte, const char routine[]);		       
 
 void PG4gsposp(G4String tokens[]){
   // fill the parameter containers
@@ -49,9 +49,9 @@ void G4ProcessDaughters(G3VolTableEntry* vte)
 // vte daughters
 {
   if (vte->HasNegPars()) {
-    G4cerr << " Warning:" << endl;
+    G4cerr << " Warning:" << G4endl;
     G4cerr << " G4ProcessDaughters: Ignored (vte has negative parameters)." 
-           << endl;
+           << G4endl;
   }  
   else {  
     for (G4int i=0; i<vte->GetNoDaughters(); i++) {

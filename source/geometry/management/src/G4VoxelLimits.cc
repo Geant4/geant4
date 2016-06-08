@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelLimits.cc,v 1.1.12.1 1999/12/07 20:48:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VoxelLimits.cc,v 1.2 1999/12/15 14:49:54 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4VoxelLimits
 // 
@@ -274,7 +274,7 @@ G4int G4VoxelLimits::OutCode(const G4ThreeVector& pVec) const
 }
 
 
-ostream& operator << (ostream& os, const G4VoxelLimits& pLim)
+G4std::ostream& operator << (G4std::ostream& os, const G4VoxelLimits& pLim)
 {
     os << "{";
     if (pLim.IsXLimited())

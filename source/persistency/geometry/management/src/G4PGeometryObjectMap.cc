@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PGeometryObjectMap.cc,v 1.3.2.1 1999/12/07 20:50:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PGeometryObjectMap.cc,v 1.5 1999/12/15 14:51:24 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4PGeometryObjectMap 
 //
@@ -91,7 +91,7 @@ void G4PGeometryObjectMap::Add( HepRef(G4PVPhysicalVolume)  inGeomObj,
       transPhysVolPtrs[i] = outGeomObj;
       break;
     }
-    cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << endl;
+    G4cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << G4endl;
   }
 }
 
@@ -147,7 +147,7 @@ void G4PGeometryObjectMap::Add( HepRef(G4PLogicalVolume)  inGeomObj,
       transLogVolPtrs[i] = outGeomObj;
       break;
     }
-    cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << endl;
+    G4cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << G4endl;
   }
 }
 
@@ -157,8 +157,8 @@ HepRef(G4PVSolid) G4PGeometryObjectMap::LookUp( G4VSolid* inGeomObj )
 
 #ifdef G4PERSISTENCY_DEBUG
   cout << "G4PGeometryObjectMap::LookUp(G4VSolid) -- noSolids is "
-       << noSolids << endl;
-  cout << "  G4VSolid info: " << inGeomObj << endl;
+       << noSolids << G4endl;
+  cout << "  G4VSolid info: " << inGeomObj << G4endl;
 #endif
 
   assert(inGeomObj != NULL);
@@ -166,7 +166,7 @@ HepRef(G4PVSolid) G4PGeometryObjectMap::LookUp( G4VSolid* inGeomObj )
   {
 #ifdef G4PERSISTENCY_DEBUG
     G4VSolid* tmpSolid = transSolidPtrs[i];
-    cout << "[" << i << "] transSolidPtrs[i]=" << tmpSolid <<endl;
+    cout << "[" << i << "] transSolidPtrs[i]=" << tmpSolid <<G4endl;
     cout             << "   persSolidPtrs[i]=";
     HepRef(G4PVSolid) tmpPSolid = persSolidPtrs[i];
     tmpPSolid.print();
@@ -202,7 +202,7 @@ G4VSolid* G4PGeometryObjectMap::LookUp(
 
 #ifdef G4PERSISTENCY_DEBUG
   cout << "G4PGeometryObjectMap::LookUp(G4PVSolid) -- noSolids is "
-       << noSolids << endl;
+       << noSolids << G4endl;
   cout << "  G4PVSolid info:";
   inGeomObj.print(stdout);
 #endif
@@ -215,7 +215,7 @@ G4VSolid* G4PGeometryObjectMap::LookUp(
     HepRef(G4PVSolid) tmpPSolid = persSolidPtrs[i];
     tmpPSolid.print();
     G4VSolid* tmpSolid = transSolidPtrs[i];
-    cout              << " transSolidPtrs[i]=" << tmpSolid <<endl;
+    cout              << " transSolidPtrs[i]=" << tmpSolid <<G4endl;
 #endif
     if( persSolidPtrs[i] == inGeomObj )
       return transSolidPtrs[i];
@@ -235,7 +235,7 @@ void G4PGeometryObjectMap::Add( HepRef(G4PVSolid)  inGeomObj,
       transSolidPtrs[i] = outGeomObj;
       break;
     }
-    cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << endl;
+    G4cerr << "G4PGeometryObjectMap::Add -- transient solid not assigned" << G4endl;
   }
 }
 
@@ -264,17 +264,18 @@ void G4PGeometryObjectMap::InitTransientMap()
   transSolidPtrs.resize(noSolids);
 
 #ifdef G4PERSISTENCY_DEBUG
-  cout << "G4PGeometryObjectMap::InitTransientMap()" << endl;
-  cout << " -- noPhysVol: " << noPhysVol << endl;
-  cout << " -- transPhysVolPtrs.length: " << transPhysVolPtrs.length() << endl;
-  cout << " -- transLogVolPtrs.length: "  << transLogVolPtrs.length()  << endl;
-  cout << " -- transSolidPtrs.length: "   << transSolidPtrs.length()   << endl;
+  cout << "G4PGeometryObjectMap::InitTransientMap()" << G4endl;
+  cout << " -- noPhysVol: " << noPhysVol << G4endl;
+  cout << " -- transPhysVolPtrs.length: " << transPhysVolPtrs.length() << G4endl;
+  cout << " -- transLogVolPtrs.length: "  << transLogVolPtrs.length()  << G4endl;
+  cout << " -- transSolidPtrs.length: "   << transSolidPtrs.length()   << G4endl;
 #endif
 
-  for(G4int i=0;i<noPhysVol;i++)
+  G4int i;
+  for(i=0;i<noPhysVol;i++)
     transPhysVolPtrs[i] = NULL;
-  for(G4int i=0;i<noLogVol;i++)
+  for(i=0;i<noLogVol;i++)
     transLogVolPtrs[i] = NULL;
-  for(G4int i=0;i<noSolids;i++)
+  for(i=0;i<noSolids;i++)
     transSolidPtrs[i] = NULL;
 }

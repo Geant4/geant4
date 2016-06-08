@@ -65,7 +65,7 @@
     {
       for (G4int i1=0; i1<nIsos; i1++)
       {
-//        G4cout <<" Init: normal case"<<endl;
+//        G4cout <<" Init: normal case"<<G4endl;
         G4int A = theElement->GetIsotope(i1)->GetN();
         G4double frac = theElement->GetRelativeAbundanceVector()[i1]/perCent;
         UpdateData(A, Z, count++, frac);
@@ -142,7 +142,7 @@
     }
     while (p!=aPassive->GetVectorLength())
     {
-      if(abs(theMerge->GetEnergy(max(0,m-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
+      if(abs(theMerge->GetEnergy(G4std::max(0,m-1))-aPassive->GetEnergy(p))/aPassive->GetEnergy(p)>0.001)
         theMerge->SetData(m++, aPassive->GetEnergy(p), aPassive->GetXsec(p));
       p++;
     }
@@ -152,7 +152,7 @@
 
   G4ParticleChange * G4NeutronHPChannel::ApplyYourself(const G4Track & theTrack, G4int anIsotope)
   {
-//    G4cout << "G4NeutronHPChannel::ApplyYourself+"<<niso<<endl;
+//    G4cout << "G4NeutronHPChannel::ApplyYourself+"<<niso<<G4endl;
     if(anIsotope != -1) return theFinalStates[anIsotope]->ApplyYourself(theTrack);
     G4double sum=0;
     G4int it=0;
@@ -171,18 +171,18 @@
     } 
     if(sum == 0) 
     {
-//      G4cout << "G4NeutronHPChannel::ApplyYourself theFinalState->Initialize+"<<endl;
-//      G4cout << "G4NeutronHPChannel::ApplyYourself theFinalState->Initialize-"<<endl;
+//      G4cout << "G4NeutronHPChannel::ApplyYourself theFinalState->Initialize+"<<G4endl;
+//      G4cout << "G4NeutronHPChannel::ApplyYourself theFinalState->Initialize-"<<G4endl;
       it = niso*G4UniformRand();
     }
     else
     {
-//      G4cout << "Are we still here? "<<sum<<endl;
-//      G4cout << "TESTHP 23 NISO="<<niso<<endl;
+//      G4cout << "Are we still here? "<<sum<<G4endl;
+//      G4cout << "TESTHP 23 NISO="<<niso<<G4endl;
       G4double random = G4UniformRand();
       G4double running=0;
-//      G4cout << "G4NeutronHPChannel::ApplyYourself Done the sum"<<niso<<endl;
-//      G4cout << "TESTHP 24 NISO="<<niso<<endl;
+//      G4cout << "G4NeutronHPChannel::ApplyYourself Done the sum"<<niso<<G4endl;
+//      G4cout << "TESTHP 24 NISO="<<niso<<G4endl;
       for (G4int ix=0; ix<niso; ix++)
       {
         running += xsec[ix];
@@ -199,10 +199,10 @@
     G4ParticleChange * theFinalState=NULL;
     while(theFinalState==NULL)
     {
-//    G4cout << "TESTHP 24 it="<<it<<endl;
+//    G4cout << "TESTHP 24 it="<<it<<G4endl;
       theFinalState = theFinalStates[it]->ApplyYourself(theTrack);
     }
-//    G4cout <<"THE IMPORTANT RETURN"<<endl;
+//    G4cout <<"THE IMPORTANT RETURN"<<G4endl;
     return theFinalState;
   }
 

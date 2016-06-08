@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonFe56.cc,v 1.1.4.1 1999/12/07 20:47:19 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4IonFe56.cc,v 1.3 2000/01/19 20:55:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -22,8 +22,8 @@
 //  Fixed  parameters by H.Kurashige, 25 Apr 1998
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4IonFe56.hh"
 

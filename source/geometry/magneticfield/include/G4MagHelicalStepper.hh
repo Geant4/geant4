@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.hh,v 1.1.10.1 1999/12/07 20:48:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4MagHelicalStepper.hh,v 1.2 1999/12/15 14:49:47 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //                                         Started from G4MagErrorStepper.hh
 //
 // Abstract base class (ie Interface)

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.icc,v 1.3.6.1 1999/12/07 20:53:04 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SteppingManager.icc,v 1.4 1999/12/15 14:53:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------
@@ -289,10 +289,10 @@ inline void G4SteppingManager::InvokeAtRestDoItProcs()
             if( tBelowCutEnergyAndSafety ){
                 if( !(tempSecondaryTrack->IsGoodForTracking()) ){
 
-////                   G4cout << "!! Warning - G4SteppingManager:" << endl; 
+////                   G4cout << "!! Warning - G4SteppingManager:" << G4endl; 
 ////                        << " This physics process generated a secondary"
 ////                        << " of which energy is below cut but" 
-////                        << " GoodForTracking is off !!!!!" << endl;
+////                        << " GoodForTracking is off !!!!!" << G4endl;
 
                    // Add kinetic energy to the total energy deposit
                    fStep->AddTotalEnergyDeposit(
@@ -394,10 +394,10 @@ inline void G4SteppingManager::InvokeAlongStepDoItProcs()
             if( tBelowCutEnergyAndSafety ){
                 if( !(tempSecondaryTrack->IsGoodForTracking()) ){
 
-////                   G4cout << "!! Warning - G4SteppingManager:" << endl; 
+////                   G4cout << "!! Warning - G4SteppingManager:" << G4endl; 
 ////                        << " This physics process generated a secondary"
 ////                        << " of which energy is below cut but" 
-////                        << " GoodForTracking is off !!!!!" << endl;
+////                        << " GoodForTracking is off !!!!!" << G4endl;
 
                    // Add kinetic energy to the total energy deposit
                    fStep->AddTotalEnergyDeposit(
@@ -505,10 +505,10 @@ inline void G4SteppingManager::InvokePostStepDoItProcs()
                if( tBelowCutEnergyAndSafety ){
                    if( !(tempSecondaryTrack->IsGoodForTracking()) ){
 
-////                      G4cout << "!! Warning - G4SteppingManager:" << endl; 
+////                      G4cout << "!! Warning - G4SteppingManager:" << G4endl; 
 ////                           << " This physics process generated a secondary"
 ////                           << " of which energy is below cut but" 
-////                           << " GoodForTracking is off !!!!!" << endl;
+////                           << " GoodForTracking is off !!!!!" << G4endl;
 
                       // Add kinetic energy to the total energy deposit
                       fStep->AddTotalEnergyDeposit(

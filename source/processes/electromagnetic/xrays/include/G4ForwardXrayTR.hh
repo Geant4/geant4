@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ForwardXrayTR.hh,v 1.2.8.1 1999/12/07 20:51:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4ForwardXrayTR -- header file
 //

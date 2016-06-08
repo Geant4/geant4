@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4AtomicShells.hh,v 1.1.10.1 1999/12/07 20:49:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Class consists of atomic subshell binding energies in   eV !!!
 // for first 100 elements

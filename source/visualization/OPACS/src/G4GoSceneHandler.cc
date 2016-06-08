@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GoSceneHandler.cc,v 1.4.4.1 1999/12/07 20:53:13 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4GoSceneHandler.cc,v 1.7 2000/01/17 10:28:50 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -59,7 +59,7 @@ G4GoSceneHandler::G4GoSceneHandler (
 /*.........................................................................*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::G4GoSceneHandler" << endl;
+  G4cout << "G4GoSceneHandler::G4GoSceneHandler" << G4endl;
 #endif
   fSceneCount++;
 }
@@ -87,7 +87,7 @@ void G4GoSceneHandler::AddPrimitive (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polyline&) " << line.entries () << endl;
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polyline&) " << line.entries () << G4endl;
 #endif
   SetColour        (GetColour(line));
   int              nPoints = line.entries ();
@@ -111,7 +111,7 @@ void G4GoSceneHandler::AddPrimitive (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polymarker&) " << line.entries () << endl;
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polymarker&) " << line.entries () << G4endl;
 #endif
   SetColour  (GetColour(line));
   int        nPoints = line.entries ();
@@ -142,7 +142,7 @@ void G4GoSceneHandler::AddPrimitive (
     << " x : " << center.x() 
     << " y : " << center.y() 
     << " z : " << center.z() 
-    << " ,radius : " << radius << endl;
+    << " ,radius : " << radius << G4endl;
 #endif
   // Direction of circle ?
   //GoAddCircleToNode (fGoNode,radius,center.x(),center.y(),center.z(),0.,0.,1.);
@@ -157,7 +157,7 @@ void G4GoSceneHandler::AddPrimitive (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polyhedron&) " << endl;
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4Polyhedron&) " << G4endl;
 #endif
   SetColour     (GetColour(polyhedron));
 
@@ -227,7 +227,7 @@ void G4GoSceneHandler::AddPrimitive (
 {
   SetColour (GetTextColour(text));
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4Text&) " << endl; 
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4Text&) " << G4endl; 
 #endif
   CWarnF ("G4GoSceneHandler::AddPrimitive G4Text : not yet implemented.\n");
 }
@@ -241,7 +241,7 @@ void G4GoSceneHandler::AddPrimitive (
 {
   SetColour (GetColour(Square));
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4Square&) " << endl; 
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4Square&) " << G4endl; 
 #endif
   CWarnF ("G4GoSceneHandler::AddPrimitive G4Square : not yet implemented.\n");
 }
@@ -256,7 +256,7 @@ void G4GoSceneHandler::AddPrimitive (
 {
   SetColour (GetColour(nurb));
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddPrimitive(G4NURBS&) " << endl;
+  G4cout << "G4GoSceneHandler::AddPrimitive(G4NURBS&) " << G4endl;
 #endif
   CWarnF ("G4GoSceneHandler::AddPrimitive G4NURBS : not yet implemented.\n");
 }
@@ -268,7 +268,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Box&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Box&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (box);
 }
@@ -280,7 +280,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Cons&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Cons&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (cons);
 }
@@ -292,7 +292,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Tubs&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Tubs&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (tubs);
 }
@@ -304,7 +304,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Trd&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Trd&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (trd);
 }
@@ -316,7 +316,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Trap&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Trap&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (trap);
 }
@@ -328,7 +328,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Sphere&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Sphere&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (sphere);
 }
@@ -340,7 +340,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Para&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Para&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (para);
 }
@@ -352,9 +352,33 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4Torus&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4Torus&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (torus);
+}
+/***************************************************************************/
+void G4GoSceneHandler::AddThis (
+ const G4Polycone& polycone
+) 
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Polycone&) " << G4endl;
+#endif
+  G4VSceneHandler::AddThis (polycone);
+}
+/***************************************************************************/
+void G4GoSceneHandler::AddThis (
+ const G4Polyhedra& polyhedra
+) 
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Polyhedra&) " << G4endl;
+#endif
+  G4VSceneHandler::AddThis (polyhedra);
 }
 /***************************************************************************/
 void G4GoSceneHandler::AddThis (
@@ -364,7 +388,7 @@ void G4GoSceneHandler::AddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::AddThis(G4VSolid&) " << endl;
+  G4cout << "G4GoSceneHandler::AddThis(G4VSolid&) " << G4endl;
 #endif
   G4VSceneHandler::AddThis (solid);
 }
@@ -388,7 +412,7 @@ void G4GoSceneHandler::PreAddThis (
   nodeName = CStringCreateF (15+64,"PhysicalVolume/%lu",currentPhysicalVolume );
 
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::PreAddThis : " << nodeName << endl;
+  G4cout << "G4GoSceneHandler::PreAddThis : " << nodeName << G4endl;
 #endif
 }
 /***************************************************************************/
@@ -398,7 +422,7 @@ void G4GoSceneHandler::PostAddThis (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::PostAddThis" << endl;
+  G4cout << "G4GoSceneHandler::PostAddThis" << G4endl;
 #endif
   CStringDelete (nodeName);
   nodeName      = NULL;
@@ -412,7 +436,7 @@ void G4GoSceneHandler::BeginPrimitives (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::BeginPrimitives" << endl;
+  G4cout << "G4GoSceneHandler::BeginPrimitives" << G4endl;
 #endif
 
   G4VSceneHandler::BeginPrimitives (objectTransformation);
@@ -439,7 +463,7 @@ void G4GoSceneHandler::EndPrimitives (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::EndPrimitives" << endl;
+  G4cout << "G4GoSceneHandler::EndPrimitives" << G4endl;
 #endif
   HepRotation     rot = transformation.getRotation();
   Hep3Vector      tra = transformation.getTranslation();
@@ -460,7 +484,7 @@ void G4GoSceneHandler::ClearStore (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::ClearStore" << endl;
+  G4cout << "G4GoSceneHandler::ClearStore" << G4endl;
 #endif
   if(ONodeIsValid(fTransientRootGoNode)==0) fTransientRootGoNode = NULL;
   ONodeDestroyChildren (fTransientRootGoNode);
@@ -474,7 +498,7 @@ void G4GoSceneHandler::ClearTransientStore (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::ClearTransientStore" << endl;
+  G4cout << "G4GoSceneHandler::ClearTransientStore" << G4endl;
 #endif
   if(ONodeIsValid(fTransientRootGoNode)==0) fTransientRootGoNode = NULL;
   ONodeDestroyChildren (fTransientRootGoNode);
@@ -489,7 +513,7 @@ void G4GoSceneHandler::RequestPrimitives (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::RequestPrimitives" << endl;
+  G4cout << "G4GoSceneHandler::RequestPrimitives" << G4endl;
 #endif
   G4VSceneHandler::RequestPrimitives (solid);
 }
@@ -500,7 +524,7 @@ ONode G4GoSceneHandler::GetRootNode (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "G4GoSceneHandler::RequestPrimitives" << endl;
+  G4cout << "G4GoSceneHandler::RequestPrimitives" << G4endl;
 #endif
   if(ONodeIsValid(fRootGoNode)==0) {
     fRootGoNode = NULL;
@@ -522,7 +546,7 @@ void G4GoSceneHandler::SetColour (
   G4cout << "G4GoSceneHandler::SetColour : red : " << a_colour.GetRed ()   <<
                               " green : " << a_colour.GetGreen () <<  
                                " blue : " << a_colour.GetBlue ()  <<
-                              " index : " << index                << endl;
+                              " index : " << index                << G4endl;
 #endif
   OContextSetColorIndex (OContextGetStaticInstance(),index);
 }

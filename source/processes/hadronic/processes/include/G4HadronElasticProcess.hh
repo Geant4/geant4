@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronElasticProcess.hh,v 1.1.8.1.2.1 1999/12/07 20:52:28 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // G4 Hadron Elastic Scattering Process -- header file

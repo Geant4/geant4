@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEDeuteronInelastic.cc,v 1.1.10.1 1999/12/07 20:52:22 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LEDeuteronInelastic.cc,v 1.1.10.1.2.1 1999/12/08 17:34:54 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: Deuteron Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
@@ -27,7 +27,7 @@
     if( verboseLevel > 1 )
     {
       G4Material *targetMaterial = aTrack.GetMaterial();
-      G4cout << "G4LEDeuteronInelastic::ApplyYourself called" << endl;
+      G4cout << "G4LEDeuteronInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
     }

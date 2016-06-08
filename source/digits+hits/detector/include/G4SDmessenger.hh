@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SDmessenger.hh,v 1.2.4.1 1999/12/07 20:47:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4SDmessenger_h

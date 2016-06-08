@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PVDigit.ddl,v 1.2 1999/11/24 20:28:06 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4PVDigit_h

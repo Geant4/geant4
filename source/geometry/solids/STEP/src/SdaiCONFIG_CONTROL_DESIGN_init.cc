@@ -6,7 +6,7 @@
 
 //
 // $Id: SdaiCONFIG_CONTROL_DESIGN_init.cc,v 1.2 1999/05/21 20:21:03 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef  SDAICONFIG_CONTROL_DESIGN_INIT_CC
 #define  SDAICONFIG_CONTROL_DESIGN_INIT_CC

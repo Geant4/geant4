@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeBremsstrahlung.icc,v 1.2.8.1 1999/12/07 20:50:48 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4IeBremsstrahlung.icc,v 1.2.8.1.2.1 1999/12/08 17:34:21 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // $Id: 
 // ---------------------------------------------------------------
@@ -82,10 +82,10 @@ inline G4double G4IeBremsstrahlung::PostStepGetPhysicalInteractionLength(
        {
          G4cout << "G4IeBremsstrahlung PostStepGPIL : Nlambda has been" <<
                  " increased at update.Nlambda old/new :" << nlold <<
-                 "  " << nl << endl;
+                 "  " << nl << G4endl;
          G4cout << "(theNumberOfInteractionLengthLeft has been increased!)"
-                << endl;
-         G4cout << " correction : Nlambda old=new ........." << endl;
+                << G4endl;
+         G4cout << " correction : Nlambda old=new ........." << G4endl;
        }
        nlold = nl ;
      }
@@ -128,9 +128,9 @@ inline G4double G4IeBremsstrahlung::PostStepGetPhysicalInteractionLength(
       if(verboseLevel>2)
       {
         G4cout << "G4IeBremsstrahlung PostStepGPIL: Step < 0.!, Step=" <<
-                  value << endl;
-        G4cout << "range,rangenext:" << range << "  " << rangenext << endl ;
-        G4cout << "correction : rangenext=range ....." << endl;
+                  value << G4endl;
+        G4cout << "range,rangenext:" << range << "  " << rangenext << G4endl ;
+        G4cout << "correction : rangenext=range ....." << G4endl;
       }
       rangenext = range ;
       value = range - rangenext ;

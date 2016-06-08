@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventor.hh,v 1.4.8.1 1999/12/07 20:53:33 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenInventor.hh,v 1.5 1999/12/15 14:54:11 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Guy Barrand 26 Mar 1998.
 // OpenInventor graphics system factory.

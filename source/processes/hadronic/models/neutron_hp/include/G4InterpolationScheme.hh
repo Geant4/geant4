@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4InterpolationScheme.hh,v 1.2 1999/07/02 09:58:05 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4InterpolationScheme_h
 #define G4InterpolationScheme_h 1

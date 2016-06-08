@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateWin32.hh,v 1.3.8.1 1999/12/07 20:53:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLImmediateWin32.hh,v 1.4 1999/12/15 14:54:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // OpenGLImmediateWin32 graphics system factory.

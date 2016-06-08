@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWo.cc,v 1.2.8.1 1999/12/07 20:49:06 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIWo.cc,v 1.2.8.1.2.1 1999/12/08 17:34:02 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //G4UIWo.cc   -- copied from G4UIterminal.cc
 
@@ -202,7 +202,7 @@ void G4UIWo::PauseSessionStart (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
 #ifdef DEBUG
-  G4cout << "debug : G4UIWo::PauseSessionStart : begin : " << a_state << endl;
+  G4cout << "debug : G4UIWo::PauseSessionStart : begin : " << a_state << G4endl;
 #endif
 
   if(a_state=="G4_pause> ")
@@ -229,7 +229,7 @@ void G4UIWo::PauseSessionStart (
     }
 
 #ifdef DEBUG
-  G4cout << "debug : G4UIWo::PauseSessionStart : end." << endl;
+  G4cout << "debug : G4UIWo::PauseSessionStart : end." << G4endl;
 #endif
 }
 /***************************************************************************/

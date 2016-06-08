@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PersEx02DetectorConstruction.cc,v 1.3 1999/11/29 18:33:27 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: PersEx02DetectorConstruction.cc,v 1.3.4.1 1999/12/08 17:33:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "PersEx02DetectorConstruction.hh"
@@ -32,7 +32,7 @@ PersEx02DetectorConstruction::~PersEx02DetectorConstruction()
 
 G4VPhysicalVolume* PersEx02DetectorConstruction::Construct()
 {
-    G4cout << "  -- Tracker type sensitive detector" << endl;
+    G4cout << "  -- Tracker type sensitive detector" << G4endl;
 
 //--------- Material definition ---------
 

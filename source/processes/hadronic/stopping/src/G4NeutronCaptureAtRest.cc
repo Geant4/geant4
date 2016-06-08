@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronCaptureAtRest.cc,v 1.1.10.1 1999/12/07 20:52:39 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NeutronCaptureAtRest.cc,v 1.1.10.1.2.4 1999/12/15 11:43:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -45,7 +45,7 @@ G4NeutronCaptureAtRest::G4NeutronCaptureAtRest(const G4String& processName)
   pdefNeutron(G4Neutron::Neutron())
 {
   if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created "<< endl;
+    G4cout << GetProcessName() << " is created "<< G4endl;
   }
 
   pv   = new G4GHEKinematicsVector [MAX_SECONDARIES+1];
@@ -99,10 +99,10 @@ G4double G4NeutronCaptureAtRest::AtRestGetPhysicalInteractionLength(
 
   if ((currentInteractionLength <0.0) || (verboseLevel>2)){
     G4cout << "G4NeutronCaptureAtRestProcess::AtRestGetPhysicalInteractionLength ";
-    G4cout << "[ " << GetProcessName() << "]" <<endl;
+    G4cout << "[ " << GetProcessName() << "]" <<G4endl;
     track.GetDynamicParticle()->DumpInfo();
-    G4cout << " in Material  " << track.GetMaterial()->GetName() <<endl;
-    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<endl;
+    G4cout << " in Material  " << track.GetMaterial()->GetName() <<G4endl;
+    G4cout << "MeanLifeTime = " << currentInteractionLength/ns << "[ns]" <<G4endl;
   }
 
   return theNumberOfInteractionLengthLeft * currentInteractionLength;
@@ -160,7 +160,7 @@ G4VParticleChange* G4NeutronCaptureAtRest::AtRestDoIt(
   }
 
   if (verboseLevel>1) {
-    G4cout << "G4NeutronCaptureAtRest::AtRestDoIt is invoked " <<endl;
+    G4cout << "G4NeutronCaptureAtRest::AtRestDoIt is invoked " <<G4endl;
     }
 
   G4ParticleMomentum momentum;
@@ -257,7 +257,7 @@ void G4NeutronCaptureAtRest::GenerateSecondaries()
   }
 
   // --- LIMIT THE VALUE OF NGKINE IN CASE OF OVERFLOW ---
-  ngkine = G4int(min(ngkine,G4int(MAX_SECONDARIES)));
+  ngkine = G4int(G4std::min(ngkine,G4int(MAX_SECONDARIES)));
 
 } // GenerateSecondaries
 

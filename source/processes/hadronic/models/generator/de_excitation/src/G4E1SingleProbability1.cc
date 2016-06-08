@@ -87,16 +87,16 @@ G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag,
   G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
 
   // CD
-  //cout<<"  PROB TESTS "<<endl;
-  //cout<<" hbarc = "<<hbarc<<endl;
-  //cout<<" pi = "<<pi<<endl;
-  //cout<<" Uexcite, exciteE = "<<Uexcite<<"  "<<exciteE<<endl;
-  //cout<<" Uexcite, exciteE = "<<Uexcite*MeV<<"  "<<exciteE*MeV<<endl;
-  //cout<<" lev density param = "<<aLevelDensityParam<<endl;
-  //cout<<" level densities = "<<levelDensBef<<"  "<<levelDensAft<<endl;
-  //cout<<" sigma0 = "<<sigma0<<endl;
-  //cout<<" Egdp, GammaR = "<<Egdp<<"  "<<GammaR<<endl;
-  //cout<<" normC = "<<normC<<endl;
+  //cout<<"  PROB TESTS "<<G4endl;
+  //cout<<" hbarc = "<<hbarc<<G4endl;
+  //cout<<" pi = "<<pi<<G4endl;
+  //cout<<" Uexcite, exciteE = "<<Uexcite<<"  "<<exciteE<<G4endl;
+  //cout<<" Uexcite, exciteE = "<<Uexcite*MeV<<"  "<<exciteE*MeV<<G4endl;
+  //cout<<" lev density param = "<<aLevelDensityParam<<G4endl;
+  //cout<<" level densities = "<<levelDensBef<<"  "<<levelDensAft<<G4endl;
+  //cout<<" sigma0 = "<<sigma0<<G4endl;
+  //cout<<" Egdp, GammaR = "<<Egdp<<"  "<<GammaR<<G4endl;
+  //cout<<" normC = "<<normC<<G4endl;
 
   G4double numerator = sigma0 * exciteE*exciteE * GammaR*GammaR;
   G4double denominator = (exciteE*exciteE - Egdp*Egdp)*
@@ -108,8 +108,8 @@ G4double G4E1SingleProbability1::EmissionProbDensity(const G4Fragment& frag,
             levelDensAft/levelDensBef;
 
   // CD
-  //cout<<" sigmaAbs = "<<sigmaAbs<<endl;
-  //cout<<" Probability = "<<theProb<<endl;
+  //cout<<" sigmaAbs = "<<sigmaAbs<<G4endl;
+  //cout<<" Probability = "<<theProb<<G4endl;
 
   return theProb;
 

@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.3 1999/07/02 09:58:50 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.4 1999/12/15 14:53:11 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4NeutronHPEnAngCorrelation_h
 #define G4NeutronHPEnAngCorrelation_h 1
@@ -17,7 +17,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "globals.hh"
 #include "G4NeutronHPProduct.hh"
 #include "G4ReactionProduct.hh"
@@ -36,7 +36,7 @@ class G4NeutronHPEnAngCorrelation
     if(theProducts!=NULL) delete [] theProducts;
   }
   
-  inline void Init(ifstream & aDataFile)
+  inline void Init(G4std::ifstream & aDataFile)
   {
     inCharge = true;
     aDataFile>>targetMass>>frameFlag>>nProducts;

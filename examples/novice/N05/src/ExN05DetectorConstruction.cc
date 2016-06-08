@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05DetectorConstruction.cc,v 1.1.10.1 1999/12/07 20:47:36 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN05DetectorConstruction.cc,v 1.2 1999/12/15 14:49:30 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #include "ExN05DetectorConstruction.hh"
 #include "ExN05CalorimeterSD.hh"
@@ -48,7 +48,7 @@ ExN05DetectorConstruction::~ExN05DetectorConstruction()
 
 G4VPhysicalVolume* ExN05DetectorConstruction::Construct()
 {
-  G4cout << "\nExN05DetectorConstruction....\n" << endl;
+  G4cout << "\nExN05DetectorConstruction....\n" << G4endl;
   
   //--------- Material definition ---------
   

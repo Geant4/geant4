@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4AntiNeutronAnnihilationAtRest.hh,v 1.1.10.1 1999/12/07 20:52:32 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998

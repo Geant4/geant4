@@ -5,10 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRofstream.hh,v 1.2.8.1 1999/12/07 20:53:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FRofstream.hh,v 1.3 1999/12/15 14:54:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
-#include<fstream.h>
+#include"g4std/fstream"
 
 #if !defined G4_FR_OFSTREAM_HH
 #define      G4_FR_OFSTREAM_HH
@@ -49,7 +49,7 @@ class G4FRofstream {
 
  protected:
 	G4bool flag_file_open ;
-	ofstream fout ;
+	G4std::ofstream fout ;
 } ;
 
 
@@ -73,7 +73,7 @@ inline  void G4FRofstream::Close ()
 inline  void    G4FRofstream::SendLine ( const char* message ) 
 {
 	if ( IsOpen() ) {
-		fout << message << endl;
+		fout << message << G4endl;
 	}		
 }
 
@@ -82,7 +82,7 @@ inline  G4bool  G4FRofstream::DoesFileExist ( const char* filename )
 {
 	G4bool status = false ;
 
-	ifstream fout_tmp( filename ) ; 
+	G4std::ifstream fout_tmp( filename ) ; 
 	if( fout_tmp ) { status = true ; }
 	fout_tmp.close();
 

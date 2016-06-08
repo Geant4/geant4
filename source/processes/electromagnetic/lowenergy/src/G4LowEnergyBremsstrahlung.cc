@@ -5,8 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.17.2.1 1999/12/07 20:50:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.21 2000/02/18 12:34:30 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.21 2000/02/18 12:34:30 lefebure Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -15,22 +16,14 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4LowEnergyBremsstrahlung physics process --------
-//                     by Michel Maire, 24 July 1996
 //      ------------ G4LowEnergyBremsstrahlung: low energy modifications --------
 //                   by Alessandra Forti, March 1999
 //
 // **************************************************************
-// 26-09-96 : extension of the total crosssection above 100 GeV, M.Maire
-//  1-10-96 : new type G4OrderedTable; ComputePartialSumSigma(), M.Maire
-// 16-10-96 : DoIt() call to the non static GetEnergyCuts(), L.Urban
-// 13-12-96 : Sign corrected in grejmax and greject
-//            error definition of screenvar, L.Urban
-// 20-03-97 : new energy loss+ionisation+brems scheme, L.Urban
-// 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
-// 13-08-98 : new methods SetBining() PrintInfo()
+// 17.02.2000 Veronique Lefebure
+//  - correct bug : the gamma energy was not deposited when the gamma was 
+//    not produced when its energy was < CutForLowEnergySecondaryPhotons
+//
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Modified PostStepDoIt to insert sampling with with EEDL data A. Forti
@@ -356,7 +349,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 
            if(LPMGammaEnergyLimit > klim)
            {
-             G4double kmax = min(Cut,LPMGammaEnergyLimit) ;
+             G4double kmax = G4std::min(Cut,LPMGammaEnergyLimit) ;
 
              G4double floss = 0. ;
              G4int nmax = 1000 ;
@@ -844,12 +837,13 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   else{
 
     aParticleChange.SetNumberOfSecondaries(0);
+    aParticleChange.SetLocalEnergyDeposit(GammaEnergy); 
   }
     
 #ifdef G4VERBOSE
   if(verboseLevel > 15){
 
-    G4cout<<"LE Bremsstrahlung PostStepDoIt"<<endl;
+    G4cout<<"LE Bremsstrahlung PostStepDoIt"<<G4endl;
   }
 #endif
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -877,10 +871,11 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from EEDL database";
-           comments += "Good description from 1 eV to 100 GeV.\n";
+           comments += "\n At present it can be used for electrons only ";
+           comments += "Good description from 250 eV to 100 GeV.\n";
            comments += "Gamma energy sampled from a parametrised formula.";
                      
-	   G4cout << endl << GetProcessName() << ":  " << comments<<endl;
+	   G4cout << G4endl << GetProcessName() << ":  " << comments<<G4endl;
 
 }         
 

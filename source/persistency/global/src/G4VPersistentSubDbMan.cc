@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPersistentSubDbMan.cc,v 1.2 1999/11/26 20:37:00 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4VPersistentSubDbMan 
 //

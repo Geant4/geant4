@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05SteppingActionMessenger.cc,v 1.1.10.1 1999/12/07 20:47:38 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN05SteppingActionMessenger.cc,v 1.2 1999/12/15 14:49:31 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "ExN05SteppingActionMessenger.hh"
@@ -34,7 +34,7 @@ void ExN05SteppingActionMessenger::SetNewValue(G4UIcommand* command, G4String ne
   {
     G4int vl;
     const char* t = newValues;
-    istrstream is((char*)t);
+    G4std::istrstream is((char*)t);
     is >> vl;
     SteppingAction->SetDrawFlag(vl!=0);
   }

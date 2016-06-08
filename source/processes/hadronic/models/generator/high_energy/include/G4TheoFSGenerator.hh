@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TheoFSGenerator.hh,v 1.2 1999/04/12 15:45:28 hpw Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4TheoFSGenerator_h
 #define G4TheoFSGenerator_h 1

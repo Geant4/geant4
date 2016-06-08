@@ -5,17 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.1.10.1 1999/12/07 20:49:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.2 1999/12/15 14:50:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -39,7 +35,7 @@ G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(G4String paramString
   G4double vz;
   char unts[30];
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   G4double uv = ValueOf(unt);
@@ -53,7 +49,7 @@ G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(G4String paramStr
   G4double vz;
   char unts[30];
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vx >> vy >> vz >> unts;
   return G4ThreeVector(vx,vy,vz);
 }
@@ -65,7 +61,7 @@ G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(G4String paramString)
   G4double vz;
   char unts[30];
   const char* t = paramString;
-  istrstream is((char*)t);
+  G4std::istrstream is((char*)t);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   return ValueOf(unt);
@@ -78,7 +74,7 @@ G4String G4UIcmdWith3VectorAndUnit::ConvertToString
   G4double uv = ValueOf(unitName);
   
   char st[100];
-  ostrstream os(st,100);
+  G4std::ostrstream os(st,100);
   os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv
      << " " << unitName << '\0';
   G4String vl = st;

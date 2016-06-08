@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SphericalSurface.hh,v 1.1.10.1 1999/12/07 20:48:19 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SphericalSurface.hh,v 1.2 1999/12/15 14:49:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef __G4SpheShell_H
 #define __G4SpheShell_H
@@ -84,7 +84,7 @@ public:
   }
 
   virtual char *NameOf() const { return "G4SphericalSurface"; }
-  virtual void PrintOn( ostream& os = G4cout ) const;
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
   int operator==( const G4SphericalSurface& s )
   { return origin  == s.origin  &&  
@@ -180,7 +180,7 @@ private:
 //----->virtual char *NameOf() const { return "G4SphericalSurface"; }
 //
 //  printing function
-//----->virtual void PrintOn( ostream& os = G4cout ) const;
+//----->virtual void PrintOn( G4std::ostream& os = G4cout ) const;
 //
 //  equality operator
 //----->int operator==( const G4SphericalSurface& s )

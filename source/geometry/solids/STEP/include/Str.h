@@ -5,8 +5,8 @@
 
 
 //
-// $Id: Str.h,v 1.2 1999/05/21 20:20:37 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Str.h,v 1.3 1999/12/15 14:50:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef STR_H
@@ -51,7 +51,7 @@ char * PrettyNewName (const char * oldname);
 char * EntityClassName ( char * oldname);
 
 extern Severity CheckRemainingInput
-   (istream &in, ErrorDescriptor *err, 
+   (G4std::istream &in, ErrorDescriptor *err, 
     const char *typeName, // used in error message
     const char *tokenList); // e.g. ",)"
 

@@ -61,7 +61,7 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 	
 	if (exponent > 30.0) exponent = 30.0;
 	
-	_MeanMultiplicity = max((FreeVol*G4double(theA)*sqrt(G4double(theA))/lambda3)*exp(exponent),1.0e-30);
+	_MeanMultiplicity = G4std::max((FreeVol*G4double(theA)*sqrt(G4double(theA))/lambda3)*exp(exponent),1.0e-30);
 	return _MeanMultiplicity;	
 }
 

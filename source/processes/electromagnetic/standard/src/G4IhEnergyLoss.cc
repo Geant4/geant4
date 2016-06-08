@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IhEnergyLoss.cc,v 1.7.6.1 1999/12/07 20:50:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // $Id: 
 // -----------------------------------------------------------

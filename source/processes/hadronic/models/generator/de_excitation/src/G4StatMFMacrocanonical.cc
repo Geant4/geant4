@@ -89,7 +89,7 @@ void G4StatMFMacroCanonical::CalculateTemperature(const G4Fragment & theFragment
 	G4double Z = theFragment.GetZ();
 
 	// Fragment Multiplicity
-	G4double FragMult = max((1.0+(2.31/MeV)*(U/A - 3.5*MeV))*A/100.0, 2.0);
+	G4double FragMult = G4std::max((1.0+(2.31/MeV)*(U/A - 3.5*MeV))*A/100.0, 2.0);
 
 
 	// Parameter Kappa

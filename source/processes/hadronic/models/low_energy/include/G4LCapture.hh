@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LCapture.hh,v 1.3.2.1 1999/12/07 20:52:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // G4 Low energy model: neutron capture -- header file

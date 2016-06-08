@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: eventgendefs.hh,v 1.1.10.1 1999/12/07 20:47:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: eventgendefs.hh,v 1.2 1999/12/15 14:49:40 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef EventGenerator_DEBUG
 #define EventGenerator_DEBUG

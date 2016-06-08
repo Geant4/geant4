@@ -6,7 +6,7 @@
 
 //
 // $Id: scl_hash.cc,v 1.2 1999/05/21 20:21:13 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 /*  ""; */
 

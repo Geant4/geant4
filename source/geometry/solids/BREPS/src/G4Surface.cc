@@ -157,8 +157,8 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
 
 //  Contents ----------------------------------------------------------
 //
-//	operator<<( ostream& os, const Surface& s )
-//	Surface::PrintOn( ostream& os ) const
+//	operator<<( G4std::ostream& os, const Surface& s )
+//	Surface::PrintOn( G4std::ostream& os ) const
 //	Surface::HowNear( const G4ThreeVec& x ) const
 //	Surface::distanceAlongRay( int which_way, const Ray* ry,
 //				   G4ThreeVec& p ) const
@@ -175,7 +175,7 @@ G4double G4Surface::ClosestDistanceToPoint(const G4Point3D& Pt)
 //
 //  End ---------------------------------------------------------------
 
-ostream& operator<<( ostream& os, const G4Surface& s )
+G4std::ostream& operator<<( G4std::ostream& os, const G4Surface& s )
 {
   // overwrite output operator << to Print out Surface objects
   // using the PrintOn function defined below

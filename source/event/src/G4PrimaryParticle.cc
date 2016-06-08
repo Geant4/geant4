@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.cc,v 1.1.10.1 1999/12/07 20:47:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PrimaryParticle.cc,v 1.2 1999/12/15 14:49:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4PrimaryParticle.hh"
@@ -80,20 +80,20 @@ void G4PrimaryParticle::Print() const
 {
   G4cout << "==== PDGcode " << PDGcode << "  Particle name ";
   if(G4code != NULL)
-  { G4cout << G4code->GetParticleName() << endl; }
+  { G4cout << G4code->GetParticleName() << G4endl; }
   else
-  { G4cout << "is not defined in G4." << endl; }
-  G4cout << "     Momentum ( " << Px << ", " << Py << ", " << Pz << " )" << endl;
+  { G4cout << "is not defined in G4." << G4endl; }
+  G4cout << "     Momentum ( " << Px << ", " << Py << ", " << Pz << " )" << G4endl;
   G4cout << "     Polarization ( " << polX << ", " << polY << ", "
-                                 << polZ << " )" << endl;
+                                 << polZ << " )" << G4endl;
   if(daughterParticle != NULL)
   {
-    G4cout << ">>>> Daughters" << endl;
+    G4cout << ">>>> Daughters" << G4endl;
     daughterParticle->Print();
   }
   if(nextParticle != NULL)
   { nextParticle->Print(); }
   else
-  { G4cout << "<<<< End of link" << endl; }
+  { G4cout << "<<<< End of link" << G4endl; }
 }
 

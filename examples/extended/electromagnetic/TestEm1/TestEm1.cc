@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm1.cc,v 1.1.4.1 1999/12/07 20:46:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: TestEm1.cc,v 1.3 1999/12/15 14:48:48 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -30,6 +30,7 @@
 #include "Em1DetectorConstruction.hh"
 #include "Em1PhysicsList.hh"
 #include "Em1PrimaryGeneratorAction.hh"
+#include "Em1SteppingVerbose.hh"
 
 #ifdef Em1NoOptimize
  #include "Em1RunAction.hh"
@@ -47,6 +48,9 @@ int main(int argc,char** argv) {
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
   
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new Em1SteppingVerbose);
+    
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 

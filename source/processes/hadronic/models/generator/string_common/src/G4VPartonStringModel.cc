@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPartonStringModel.cc,v 1.4.4.1 1999/12/07 20:51:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VPartonStringModel.cc,v 1.4.4.1.2.2 1999/12/09 17:37:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -86,7 +86,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   	strings = GetStrings();
   }
   
-//  G4cout << "Number of strings " << strings->entries() << endl << endl;
+//  G4cout << "Number of strings " << strings->entries() << G4endl << G4endl;
 
   G4KineticTrackVector * theResult = new G4KineticTrackVector;
 
@@ -101,13 +101,13 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 	KTsum+= strings->at(astring)->Get4Momentum();
         G4KineticTrackVector * generatedKineticTracks = NULL;
 
-// 	G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << endl; 	
-// 	G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << endl;
-//  	G4cout << " strings["<<astring<<"] Position " << strings->at(astring)->GetPosition() << endl;
-// 	G4cout << "Parton Left  " << strings->at(astring)->GetLeftParton()->Get4Momentum() << endl;
-// 	G4cout << " code " << strings->at(astring)->GetLeftParton()->GetPDGcode()<< endl;
-// 	G4cout << "Parton Right  " << strings->at(astring)->GetRightParton()->Get4Momentum() << endl;
-// 	G4cout << " code " << strings->at(astring)->GetRightParton()->GetPDGcode()<< endl;
+// 	G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << G4endl; 	
+// 	G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << G4endl;
+//  	G4cout << " strings["<<astring<<"] Position " << strings->at(astring)->GetPosition() << G4endl;
+// 	G4cout << "Parton Left  " << strings->at(astring)->GetLeftParton()->Get4Momentum() << G4endl;
+// 	G4cout << " code " << strings->at(astring)->GetLeftParton()->GetPDGcode()<< G4endl;
+// 	G4cout << "Parton Right  " << strings->at(astring)->GetRightParton()->Get4Momentum() << G4endl;
+// 	G4cout << " code " << strings->at(astring)->GetRightParton()->GetPDGcode()<< G4endl;
   
 	if ( strings->at(astring)->IsExcited() )
 	{
@@ -117,21 +117,21 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 	     generatedKineticTracks->insert(strings->at(astring)->GetKineticTrack());
 	}    
 
-//	G4cout <<" number of generated tracks : " << generatedKineticTracks->entries() << endl;
+//	G4cout <<" number of generated tracks : " << generatedKineticTracks->entries() << G4endl;
 
 	if (generatedKineticTracks == NULL) 
 	{
-		G4cout << "G4VPartonStringModel:No KineticTracks produced" << endl;
+		G4cout << "G4VPartonStringModel:No KineticTracks produced" << G4endl;
 		continue;
 	}
 	
 // 	if ( generatedKineticTracks->entries() == 1 ) 
 // 	{
 // 		G4cout << " Only one track created, mass " 
-// 		       << generatedKineticTracks->at(0)->Get4Momentum().mag() << endl;
+// 		       << generatedKineticTracks->at(0)->Get4Momentum().mag() << G4endl;
 // 		       
-// 		G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << endl;
-// 		G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << endl;
+// 		G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << G4endl;
+// 		G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << G4endl;
 // 		
 // 	}
 	G4LorentzVector KTsum1;
@@ -143,34 +143,34 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 // 		G4cout << " Momentum/ Mass " <<
 // 		(*generatedKineticTracks)[aTrack]->Get4Momentum() << 
 // 		" / " << (*generatedKineticTracks)[aTrack]->Get4Momentum().mag()
-// 		<< endl;
+// 		<< G4endl;
 // 		G4cout << " Position " <<
 // 		(*generatedKineticTracks)[aTrack]->GetPosition() 
-// 		<< endl;
+// 		<< G4endl;
 
 	}
 	
-//	G4cout << " KTsum Momentum " << KTsum << endl;
-//	G4cout << " KTsum  Mass     " << KTsum.mag() << endl;
+//	G4cout << " KTsum Momentum " << KTsum << G4endl;
+//	G4cout << " KTsum  Mass     " << KTsum.mag() << G4endl;
 	
 	if  ( abs((KTsum1.e()-strings->at(astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
 	{
 	   NeedEnergyCorrector=true;
 	   
-// 	   G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << endl;  
-//  	   G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << endl;
-//  	   G4cout <<" number of generated tracks : " << generatedKineticTracks->entries() << endl;
+// 	   G4cout << " strings["<<astring<<"] Momentum " << strings->at(astring)->Get4Momentum() << G4endl;  
+//  	   G4cout << " strings["<<astring<<"] Mass     " << strings->at(astring)->Get4Momentum().mag() << G4endl;
+//  	   G4cout <<" number of generated tracks : " << generatedKineticTracks->entries() << G4endl;
 // 	   for ( G4int bTrack=0; bTrack<generatedKineticTracks->entries();bTrack++)
 // 	   {
 // 	   	G4cout << " Particle : " << 
 // 	   	   (*generatedKineticTracks)[bTrack]->GetDefinition()->GetParticleName()
-// 	   	   << endl;
+// 	   	   << G4endl;
 // 		G4cout << " Momentum " <<
 // 		   (*generatedKineticTracks)[bTrack]->Get4Momentum()
-// 		   << endl;
+// 		   << G4endl;
 // 		G4cout << "  Mass " <<
 // 		   (*generatedKineticTracks)[bTrack]->Get4Momentum().mag()
-// 		   << endl;
+// 		   << G4endl;
 // 	   }
 // 		 
  	}
@@ -236,8 +236,8 @@ G4bool G4VPartonStringModel::EnergyAndMomentumCorrector(G4KineticTrackVector* Ou
         if (Scale - 1 <= ErrLimit) goto LTRUE;
         }
     
-    cout << "G4VPartonStringModel::EnergyAndMomentumCorrector"<<endl;
-    cout << "   Increase number of attempts or increase ERRLIMIT"<<endl;
+    G4cout << "G4VPartonStringModel::EnergyAndMomentumCorrector"<<G4endl;
+    G4cout << "   Increase number of attempts or increase ERRLIMIT"<<G4endl;
  
  LTRUE:   
     // Compute c.m.s. interaction velocity and KTV back boost   

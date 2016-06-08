@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMultipleScattering.cc,v 1.2.8.1 1999/12/07 20:50:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4IMultipleScattering.cc,v 1.2.8.1.2.1 1999/12/08 17:34:22 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -811,7 +811,7 @@ void G4IMultipleScattering::PrintInfoDefinition()
         comments += "\n          New model of MSC , computes the lateral \n";
         comments += "          displacement of the particle , too.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,
                                                   "Energy")
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")

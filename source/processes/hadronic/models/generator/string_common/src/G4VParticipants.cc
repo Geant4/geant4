@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VParticipants.cc,v 1.1.8.1 1999/12/07 20:51:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VParticipants.cc,v 1.1.8.1.2.1 1999/12/08 17:34:43 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -29,7 +29,7 @@ G4VParticipants::G4VParticipants() : theNucleus(NULL)
 
 G4VParticipants::~G4VParticipants()
 {
-// G4cout << "G4VParticipants::~G4VParticipants()" << endl;
+// G4cout << "G4VParticipants::~G4VParticipants()" << G4endl;
 	if ( theNucleus != NULL ) delete theNucleus;
 }
 

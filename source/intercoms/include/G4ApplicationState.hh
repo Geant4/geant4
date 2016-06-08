@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ApplicationState.hh,v 1.2.4.1 1999/12/07 20:48:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ApplicationState.hh,v 1.3 1999/12/15 14:50:37 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4APPLICATIONSTATE_H

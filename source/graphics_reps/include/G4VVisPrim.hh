@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisPrim.hh,v 1.4.2.1 1999/12/07 20:48:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VVisPrim.hh,v 1.6 1999/12/15 16:46:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  August 1995
@@ -20,13 +20,13 @@
 #define G4VVISPRIM_HH
 
 #include "G4Visible.hh"
+#include "g4std/iostream"
 
-class ostream;
 class G4VisAttributes;
 
 class G4VVisPrim: public G4Visible {
 
-  friend ostream& operator << (ostream& os, const G4VVisPrim& prim);
+  friend G4std::ostream& operator << (G4std::ostream& os, const G4VVisPrim& prim);
 
 public: // With description
 

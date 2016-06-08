@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tvordvec.icc,v 1.1 1999/11/25 10:14:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: tvordvec.icc,v 1.2 2000/02/01 16:55:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -38,9 +38,12 @@ G4RWTValOrderedVector<T>::operator=(const G4RWTValOrderedVector<T>& v)
 template<class T>
 T& G4RWTValOrderedVector<T>::operator()(size_t i)
 {
-  //if(i>=rwsize)
-  //  G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector ()",rwsize,i));
-  if(i<std_vector::size() && rwsize<=i)
+  // temporarly commented; to allow use as left-value rwsize is increased
+  // #ifdef G4DEBUG
+  //   if(i>=rwsize)
+  //     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector ()",rwsize,i));
+  // #endif
+  if(rwsize<=i && i<std_vector::size())
     rwsize=i+1;
   return std_vector::operator[](i); 
 }
@@ -48,8 +51,10 @@ T& G4RWTValOrderedVector<T>::operator()(size_t i)
 template<class T>
 const T& G4RWTValOrderedVector<T>::operator()(size_t i) const
 { 
-  if(i>=rwsize)
-    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector const()",rwsize,i));
+  #ifdef G4DEBUG
+    if(i>=rwsize)
+      G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector const()",rwsize,i));
+  #endif
   return std_vector::operator[](i);
 }
 
@@ -58,8 +63,6 @@ T& G4RWTValOrderedVector<T>::operator[](size_t i)
 {
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector []",rwsize,i));
-  //if(i<std_vector::size() && rwsize<=i)
-  //  rwsize=i+1;
   return std_vector::operator[](i); 
 }
 
@@ -76,7 +79,7 @@ T& G4RWTValOrderedVector<T>::at(size_t n)
 {
   if(n>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector at",rwsize,n));
-  return operator()(n);
+  return std_vector::operator[](n);
 }
 
 template<class T>
@@ -84,7 +87,7 @@ T  G4RWTValOrderedVector<T>::at(size_t n ) const
 {
   if(n>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector const at",rwsize,n));
-  return operator()(n);
+  return std_vector::operator[](n);
 }
 
 template<class T>
@@ -199,7 +202,7 @@ T G4RWTValOrderedVector<T>::removeAt( size_t i )
 {
   if(i>=rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector removeAt",rwsize,i));
-  T tmp = operator[](i);
+  T tmp = std_vector::operator[](i);
   iterator it=std_vector::begin();
   int j;
   for(j=0;j<rwsize && j<i;j++) it++;

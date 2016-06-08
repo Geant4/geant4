@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentTypes.hh,v 1.1.4.1 1999/12/07 20:50:13 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PersistentTypes.hh,v 1.2 1999/12/15 14:51:26 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 // Persistent-capable typedefs for Geant4/Persistency category

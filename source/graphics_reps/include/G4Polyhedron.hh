@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyhedron.hh,v 1.3.2.1 1999/12/07 20:48:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Polyhedron.hh,v 1.5 1999/12/16 15:26:03 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //
@@ -119,10 +119,12 @@
 #include "G4VVisPrim.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
+#include "G4Vector3D.hh"
+#include "G4Transform3D.hh"
 
 class G4Facet {
   friend class G4Polyhedron;
-  friend ostream& operator<<(ostream&, const G4Facet &facet);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4Facet &facet);
 
  private:
   struct G4Edge { G4int v,f; };
@@ -137,7 +139,7 @@ class G4Facet {
 };
 
 class G4Polyhedron: public G4VVisPrim {
-  friend ostream& operator<<(ostream&, const G4Polyhedron &ph);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4Polyhedron &ph);
 
  private:
   static G4int fNumberOfRotationSteps;
@@ -175,6 +177,9 @@ class G4Polyhedron: public G4VVisPrim {
   // For each edge set reference to neighbouring facet
   void SetReferences();
 
+  // Invert the order on nodes in facets
+  void InvertFacets();
+
  public:
   // Constructor
   G4Polyhedron(G4int Nvert=0, G4int Nface=0)
@@ -198,6 +203,9 @@ class G4Polyhedron: public G4VVisPrim {
 
   // Get number of facets
   G4int GetNoFacets() const { return nface; }
+
+  // Transform the polyhedron
+  G4Polyhedron & Transform(const G4Transform3D &t);
 
   // Get next vertex index of the quadrilateral
   G4bool GetNextVertexIndex(G4int &index, G4int &edgeFlag) const;

@@ -39,8 +39,8 @@ public:
     for(events->start(); events->next() != 0; )
     {
       // use a tag attribute directly in a print statment
-      cout << "Reading event #" << event_id << ":" << endl;
-      cout << "  number of primary vertex: " << n_pvertex << endl;
+      cout << "Reading event #" << event_id << ":" << G4endl;
+      cout << "  number of primary vertex: " << n_pvertex << G4endl;
       
       //
       // [ could do some selection based on tag attributes here ... ]
@@ -57,20 +57,20 @@ public:
 
       if (getEvent(g4evt, events) )
       {
-        cout << "  ObjectID of event: " << g4evt.sprint() << endl;
+        cout << "  ObjectID of event: " << g4evt.sprint() << G4endl;
         cout << "  No. of the primary vertex (from G4PEvent): "
-             << g4evt->GetNumberOfPrimaryVertex() << endl;
+             << g4evt->GetNumberOfPrimaryVertex() << G4endl;
   
         for ( int i = 0; i < n_pvertex; i++ )
         {
           HepRef(G4PPrimaryVertex) pvertex = g4evt->GetPrimaryVertex(i);
-          cout << "    ObjectID of primary vertex: " << pvertex.sprint() << endl;
+          cout << "    ObjectID of primary vertex: " << pvertex.sprint() << G4endl;
           cout << "    No. of particle in the primary vertex: "
-               << pvertex->GetNumberOfParticle() << endl;
+               << pvertex->GetNumberOfParticle() << G4endl;
         }
       }
       else
-      { cout << "  No event object found." << endl; }
+      { cout << "  No event object found." << G4endl; }
 
     }
     

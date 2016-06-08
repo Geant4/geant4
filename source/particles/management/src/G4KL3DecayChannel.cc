@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KL3DecayChannel.cc,v 1.3.8.1 1999/12/07 20:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4KL3DecayChannel.cc,v 1.3.8.1.2.1 1999/12/08 17:34:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -40,7 +40,7 @@ G4KL3DecayChannel::G4KL3DecayChannel(
   //#ifdef G4VERBOSE
   //if (GetVerboseLevel()>1) {
   //  G4cout << "G4KL3DecayChannel:: constructor ";
-  //  G4cout << "addr[" << this << "]" << endl;
+  //  G4cout << "addr[" << this << "]" << G4endl;
   //}
   //#endif
   // check modes
@@ -68,7 +68,7 @@ G4KL3DecayChannel::G4KL3DecayChannel(
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
     //   G4cout << "G4KL3DecayChannel:: constructor :";
-    //   G4cout << "illegal arguments " << endl;;
+    //   G4cout << "illegal arguments " << G4endl;;
     //   DumpInfo();
     // }
     //#endif
@@ -88,7 +88,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   //              assumes the pure V-A coupling
   //              gives incorrect energy spectrum for Nutrinos
 #ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) G4cout << "G4KL3DecayChannel::DecayIt " << endl;
+  if (GetVerboseLevel()>1) G4cout << "G4KL3DecayChannel::DecayIt " << G4endl;
 #endif
   // fill parent particle and its mass
   if (parent == 0) {
@@ -118,9 +118,9 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   // output message
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
-    G4cout << *daughters_name[0] << ":" << daughterP[0]/GeV << "[GeV/c]" <<endl;
-    G4cout << *daughters_name[1] << ":" << daughterP[1]/GeV << "[GeV/c]" <<endl;
-    G4cout << *daughters_name[2] << ":" << daughterP[2]/GeV << "[GeV/c]" <<endl;
+    G4cout << *daughters_name[0] << ":" << daughterP[0]/GeV << "[GeV/c]" <<G4endl;
+    G4cout << *daughters_name[1] << ":" << daughterP[1]/GeV << "[GeV/c]" <<G4endl;
+    G4cout << *daughters_name[2] << ":" << daughterP[2]/GeV << "[GeV/c]" <<G4endl;
   }
 #endif
    //create parent G4DynamicParticle at rest
@@ -171,8 +171,8 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
      G4cout << "G4KL3DecayChannel::DecayIt ";
-     G4cout << "  create decay products in rest frame " <<endl;
-     G4cout << "  decay products address=" << products << endl;
+     G4cout << "  create decay products in rest frame " <<G4endl;
+     G4cout << "  decay products address=" << products << G4endl;
      products->DumpInfo();
   }
 #endif
@@ -233,11 +233,11 @@ void G4KL3DecayChannel::PhaseSpace(G4double parentM,
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2) {
      G4cout << "G4KL3DecayChannel::PhaseSpace    ";
-     G4cout << "Kon mass:" << parentM/GeV << "GeV/c/c" << endl;
+     G4cout << "Kon mass:" << parentM/GeV << "GeV/c/c" << G4endl;
      for (index=0; index<3; index++){
        G4cout << index << " : " << M[index]/GeV << "GeV/c/c  ";
        G4cout << " : " << E[index]/GeV << "GeV  ";
-       G4cout << " : " << P[index]/GeV << "GeV/c " << endl;
+       G4cout << " : " << P[index]/GeV << "GeV/c " << G4endl;
      }
   }
 #endif
@@ -291,13 +291,13 @@ G4double G4KL3DecayChannel::DalitzDensity(G4double Epi, G4double El, G4double En
  
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2) {
-    G4cout << "G4KL3DecayChannel::DalitzDensity  " <<endl;
-    G4cout << " Pi[" << massPi/GeV <<"GeV/c/c] :" << Epi/GeV << "GeV" <<endl;
-    G4cout << " L[" << massL/GeV <<"GeV/c/c] :" << El/GeV << "GeV" <<endl;
-    G4cout << " Nu[" << massNu/GeV <<"GeV/c/c] :" << Enu/GeV << "GeV" <<endl;
-    G4cout << " F :" << F  << " Fmax :" << Fmax << "  Xi :" << Xi << endl;
-    G4cout << " A :" << coeffA << "  B :" << coeffB << "  C :"<< coeffC <<endl; 
-    G4cout << " Rho :" << Rho  << "   RhoMax :" << RhoMax << endl;
+    G4cout << "G4KL3DecayChannel::DalitzDensity  " <<G4endl;
+    G4cout << " Pi[" << massPi/GeV <<"GeV/c/c] :" << Epi/GeV << "GeV" <<G4endl;
+    G4cout << " L[" << massL/GeV <<"GeV/c/c] :" << El/GeV << "GeV" <<G4endl;
+    G4cout << " Nu[" << massNu/GeV <<"GeV/c/c] :" << Enu/GeV << "GeV" <<G4endl;
+    G4cout << " F :" << F  << " Fmax :" << Fmax << "  Xi :" << Xi << G4endl;
+    G4cout << " A :" << coeffA << "  B :" << coeffB << "  C :"<< coeffC <<G4endl; 
+    G4cout << " Rho :" << Rho  << "   RhoMax :" << RhoMax << G4endl;
   }
 #endif
   return (Rho/RhoMax);

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpAbsorption.cc,v 1.1.10.1 1999/12/07 20:52:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpAbsorption.cc,v 1.1.10.1.2.1 1999/12/08 17:35:13 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation
@@ -51,7 +51,7 @@ G4OpAbsorption::G4OpAbsorption(const G4String& processName)
               : G4VDiscreteProcess(processName)
 {
         if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
         }
 }
 
@@ -80,7 +80,7 @@ G4OpAbsorption::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         aParticleChange.SetStatusChange(fStopAndKill);
 
         if (verboseLevel>0) {
-	   G4cout << "\n** Photon Absorbed! **" << endl;
+	   G4cout << "\n** Photon Absorbed! **" << G4endl;
         }
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
@@ -113,11 +113,11 @@ G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
                                          GetProperty (thePhotonMomentum);
            }
            else {
-             G4cout << "No Absorbtion length specified" << endl;
+             G4cout << "No Absorbtion length specified" << G4endl;
            }
         } 
         else {
-           G4cout << "No Absorbtion length specified" << endl;
+           G4cout << "No Absorbtion length specified" << G4endl;
         }	
 
         return AttenuationLength;

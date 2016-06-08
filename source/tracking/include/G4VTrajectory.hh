@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VTrajectory.hh,v 1.2.6.1 1999/12/07 20:53:06 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VTrajectory.hh,v 1.4 2000/01/26 04:20:31 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------
@@ -45,6 +45,7 @@ class G4VTrajectory
    virtual void AppendStep(const G4Step*) = 0;
    virtual int GetPointEntries() const = 0;
    virtual G4VTrajectoryPoint* GetPoint(int) const = 0;
+   virtual void MergeTrajectory(G4VTrajectory*) = 0;
 };
 
 #endif

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4DetectorConstruction.cc,v 1.1.4.1 1999/12/07 20:47:06 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em4DetectorConstruction.cc,v 1.2 1999/12/15 14:49:06 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -58,7 +58,7 @@ G4VPhysicalVolume* Em4DetectorConstruction::Construct()
   matC6F6->AddElement(elC, natoms=6);
   matC6F6->AddElement(elF, natoms=6);
   
-  G4cout << matC6F6 << endl;
+  G4cout << matC6F6 << G4endl;
   
   //     
   // Container

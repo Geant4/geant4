@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4UIXaw.cc,v 1.2.8.1 1999/12/07 20:49:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G.Barrand
 

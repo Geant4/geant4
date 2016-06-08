@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessenger.cc,v 1.2.8.1 1999/12/07 20:54:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisManMessenger.cc,v 1.3 1999/12/15 14:54:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -113,7 +113,7 @@ G4bool G4VisManMessenger::ViewValid () {
     return true;
   }
   else {
-    G4cerr << "Invalid view (have you selected a graphics system?)" << endl;
+    G4cerr << "Invalid view (have you selected a graphics system?)" << G4endl;
     return false;
   }
 }

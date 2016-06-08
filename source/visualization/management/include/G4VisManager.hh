@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.9.2.1 1999/12/07 20:53:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisManager.hh,v 1.11 1999/12/15 18:27:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -72,6 +72,7 @@
 #include "G4UImessenger.hh"
 
 #include "g4rw/tpordvec.h"
+#include "g4std/iostream"
 
 class G4VisManMessenger;
 class G4VPhysicalVolume;
@@ -102,11 +103,11 @@ class G4VisManager: public G4VVisManager {
   friend class G4VSceneHandler;
   friend class G4VViewer;
 
-  friend class ostream & operator <<
-  (class ostream &, const class G4VGraphicsSystem &);
+  friend G4std::ostream & operator <<
+  (G4std::ostream &, const G4VGraphicsSystem &);
 
-  friend class ostream & operator <<
-  (class ostream &, const class G4VSceneHandler &);
+  friend G4std::ostream & operator <<
+  (G4std::ostream &, const G4VSceneHandler &);
 
   friend class G4VisStateDependent;
 

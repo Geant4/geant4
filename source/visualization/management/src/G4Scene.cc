@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.cc,v 1.4.4.1 1999/12/07 20:53:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Scene.cc,v 1.5 1999/12/15 14:54:24 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -37,7 +37,7 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel) {
 	   << "\"\n  is already in the run-duration list of scene \""
 	   << fName
 	   << "\"."
-	   << endl;
+	   << G4endl;
     return false;
   }
   fRunDurationModelList.append (pModel);
@@ -72,7 +72,7 @@ G4bool G4Scene::AddWorldIfEmpty () {
 	  " invisible, e.g.,"
 	  "\n  myWorldLogicalVol ->"
 	  " SetVisAttributes (G4VisAttributes::Invisible);"
-	       << endl;
+	       << G4endl;
       }
       successful = AddRunDurationModel (new G4PhysicalVolumeModel (pWorld));
       // Note: default depth and no modeling parameters.
@@ -80,7 +80,7 @@ G4bool G4Scene::AddWorldIfEmpty () {
 	G4cout <<
 	  "G4Scene::AddWorldIfEmpty: The scene was empty,"
 	  "\n   \"world\" has been added.";
-	G4cout << endl;
+	G4cout << G4endl;
       }
     }
   }
@@ -99,7 +99,7 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel) {
 	   << "\"\n  is already in the run-duration list of scene \""
 	   << fName
 	   << "\"."
-	   << endl;
+	   << G4endl;
     return false;
   }
   fEndOfEventModelList.append (pModel);
@@ -111,7 +111,7 @@ void G4Scene::Clear () {
   fEndOfEventModelList.clearAndDestroy ();
 }
 
-ostream& operator << (ostream& os, const G4Scene& d) {
+G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
 
   os << "Scene data:";
 

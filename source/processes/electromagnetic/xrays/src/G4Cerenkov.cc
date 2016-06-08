@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.6.2.1 1999/12/07 20:51:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Cerenkov.cc,v 1.6.2.1.2.1 1999/12/08 17:34:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -54,7 +54,7 @@ G4Cerenkov::G4Cerenkov(const G4String& processName)
         thePhysicsTable = NULL;
 
 	if (verboseLevel>0) {
-           G4cout << GetProcessName() << " is created " << endl;
+           G4cout << GetProcessName() << " is created " << G4endl;
 	}
 
 	BuildThePhysicsTable();
@@ -264,7 +264,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	if (verboseLevel>0) {
 	G4cout << "\n Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = " 
-	     << aParticleChange.GetNumberOfSecondaries() << endl;
+	     << aParticleChange.GetNumberOfSecondaries() << G4endl;
 	}
 
 	return G4VContinuousProcess::AlongStepDoIt(aTrack, aStep);
@@ -485,8 +485,8 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 		ge = CAImax - CAImin;
 
 		if (verboseLevel>0) {
-			G4cout << "CAImin = " << CAImin << endl;
-			G4cout << "ge = " << ge << endl;
+			G4cout << "CAImin = " << CAImin << G4endl;
+			G4cout << "ge = " << ge << G4endl;
 		}
 	}
 	

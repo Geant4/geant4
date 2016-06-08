@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.cc,v 1.1.4.1 1999/12/07 20:47:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em3RunAction.cc,v 1.4 2000/01/21 09:11:07 maire Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -24,10 +24,11 @@
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
-#include "CLHEP/Hist/HBookFile.h"
+#include "g4std/iomanip"
 
-#include <iomanip.h>
-
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -36,7 +37,6 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 {
   bookHisto(); 
   runMessenger = new Em3RunActionMessenger(this);   
-  saveFlag = "off";
   saveRndm = 1;  
 }
 
@@ -44,28 +44,33 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 
 Em3RunAction::~Em3RunAction()
 {
+  delete runMessenger;
+  
+#ifndef G4NOHIST  
  // Delete HBOOK stuff
   delete ntuple;
   delete hbookManager;
-  delete runMessenger;
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em3RunAction::bookHisto()
 {
+#ifndef G4NOHIST
   // init hbook
   hbookManager = new HBookFile("TestEm3.ntupl", 68);
 
   // book a ntuple
   ntuple = hbookManager->ntuple("sum per event");
+#endif   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
   if (saveRndm > 0)
@@ -83,8 +88,7 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/clear/view");
-      UI->ApplyCommand("/vis/draw/current");
+      UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
 }
 
@@ -93,7 +97,7 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
 void Em3RunAction::EndOfRunAction(const G4Run* aRun)
 {
   if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
      
   //compute and print statistic
   //     
@@ -102,11 +106,11 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
   
-  G4long oldform = G4cout.setf(ios::fixed,ios::floatfield);
+  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
   G4int  oldprec = G4cout.precision(2);
     
   G4cout << "\n-------------------------------------------------------------\n"
-         << setw(51) << "total energy dep" << setw(30) << "total tracklen \n \n";
+         << G4std::setw(51) << "total energy dep" << G4std::setw(30) << "total tracklen \n \n";
 	   
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
@@ -120,21 +124,23 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
      //    
      G4cout
      << " Absorber" << k 
-     << " (" << setw(12) << Detector->GetAbsorMaterial(k)->GetName() << ") :" 
-     << setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
-     << setw( 5) << G4BestUnit( rmsEAbs,"Energy")
-     << setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
-     << setw( 5) << G4BestUnit( rmsLAbs,"Length")
-     << endl;
+     << " (" << G4std::setw(12) << Detector->GetAbsorMaterial(k)->GetName() << ") :" 
+     << G4std::setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
+     << G4std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
+     << G4std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
+     << G4std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
+     << G4endl;
     }
     
   G4cout << "\n-------------------------------------------------------------";
-  G4cout << endl;  
-  G4cout.setf(oldform,ios::floatfield);
+  G4cout << G4endl;  
+  G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
   
+#ifndef G4NOHIST  
   // Write histogram file 
-  if (saveFlag == "on") hbookManager->write();
+  hbookManager->write();
+#endif  
   
   // save Rndm status
   if (saveRndm == 1)

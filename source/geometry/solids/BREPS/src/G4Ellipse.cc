@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ellipse.cc,v 1.1.10.1 1999/12/07 20:48:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Ellipse.cc,v 1.2 1999/12/15 14:50:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4Ellipse.hh"
@@ -72,7 +72,7 @@ void G4Ellipse::InitBounded()
 {
   // original implementation
   // const G4Point3D& center = position.GetLocation();
-  // G4double maxEntent      = max(semiAxis1, semiAxis2);
+  // G4double maxEntent      = G4std::max(semiAxis1, semiAxis2);
   // G4Vector3D halfExtent(maxEntent, maxEntent, maxEntent);
   // bBox.Init(center+halfExtent, center-halfExtent);
 

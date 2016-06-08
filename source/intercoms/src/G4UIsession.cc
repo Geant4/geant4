@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIsession.cc,v 1.1.10.1 1999/12/07 20:49:04 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIsession.cc,v 1.3 1999/12/15 17:52:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ---------------------------------------------------------------------
@@ -23,12 +23,12 @@ void G4UIsession::PauseSessionStart(G4String Prompt) {;}
 
 G4int G4UIsession::ReceiveG4cout(G4String coutString)
 {
-  cout <<  coutString << flush;
+  G4std::cout <<  coutString << G4std::flush;
   return 0;
 }
 
 G4int G4UIsession::ReceiveG4cerr(G4String cerrString)
 {
-  cerr <<  cerrString << flush;
+  G4std::cerr <<  cerrString << G4std::flush;
   return 0;
 }                                                                       

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.4.6.1 1999/12/07 20:51:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.4.6.1.2.2 1999/12/10 15:42:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //  Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -210,10 +210,10 @@ G4ParticleDefinition* G4VLongitudinalStringDecay::CreateHadron(G4int id1, G4int 
       G4int kflb = abs(ifl2);
       G4int kflc = abs(ifl3);
 
-      G4int kfld = max(kfla,kflb);
-            kfld = max(kfld,kflc);
-      G4int kflf = min(kfla,kflb);
-            kflf = min(kflf,kflc);
+      G4int kfld = G4std::max(kfla,kflb);
+            kfld = G4std::max(kfld,kflc);
+      G4int kflf = G4std::min(kfla,kflb);
+            kflf = G4std::min(kflf,kflc);
 
       G4int kfle = kfla + kflb + kflc - kfld - kflf;
       //... barion with content uuu or ddd or sss has always spin = 4
@@ -286,8 +286,8 @@ G4ParticleDefinition * G4VLongitudinalStringDecay::SimpleString::Splitup(G4int &
              //... sample quarks and Construct Diquark ifln 
              G4int i1  = theStringDecay->SampleQuarkFlavor();
              G4int i2  = theStringDecay->SampleQuarkFlavor();
-             G4int i10 = max(i1,i2);
-             G4int i20 = min(i1,i2);
+             G4int i10 = G4std::max(i1,i2);
+             G4int i20 = G4std::min(i1,i2);
              G4int spin = (i10 != i20 && G4UniformRand() <= 0.5)? 1 : 3;
              QuarkEncoding = signdecayEncoding * (i10 * 1000 + i20 * 100 + spin);
              NewDecayEncoding = -QuarkEncoding;
@@ -313,8 +313,8 @@ G4ParticleDefinition * G4VLongitudinalStringDecay::SimpleString::Splitup(G4int &
 	     	
              QuarkEncoding = -decayQuarkEncoding/abs(decayQuarkEncoding)*theStringDecay->SampleQuarkFlavor();
              //... Build new Diquark
-             G4int i10  = max(abs(QuarkEncoding), abs(stableQuarkEncoding));
-             G4int i20  = min(abs(QuarkEncoding), abs(stableQuarkEncoding));
+             G4int i10  = G4std::max(abs(QuarkEncoding), abs(stableQuarkEncoding));
+             G4int i20  = G4std::min(abs(QuarkEncoding), abs(stableQuarkEncoding));
              G4int spin = (i10 != i20 && G4UniformRand() <= 0.5)? 1 : 3;
              NewDecayEncoding = -QuarkEncoding/abs(QuarkEncoding)*(i10 * 1000 + i20 * 100 + spin);
              }
@@ -368,8 +368,8 @@ G4bool G4VLongitudinalStringDecay::SimpleString::SplitLast(G4KineticTrackVector 
 	     //... sample quarks and Construct Diquark ifln 
 	     G4int i1 = theStringDecay->SampleQuarkFlavor();
 	     G4int i2 = theStringDecay->SampleQuarkFlavor();
-	     G4int i10 = max(i1,i2);
-	     G4int i20 = min(i1,i2);
+	     G4int i10 = G4std::max(i1,i2);
+	     G4int i20 = G4std::min(i1,i2);
 	     G4int spin = (i10 != i20 && G4UniformRand() <= 0.5)? 1: 3;
 	     QuarkEncoding = signLeftEncoding*(i10 * 1000 + i20 * 100 + spin);
              }
@@ -660,7 +660,7 @@ G4ParticleDefinition* G4VLongitudinalStringDecay::FindParticle(G4int Encoding)
    if (ptr == NULL) ptr = G4ParticleTable::GetParticleTable()->FindParticle(-Encoding);
    if (ptr == NULL)
        {
-       G4cout << "Particle with encoding "<<Encoding<<" does not exist!!!"<<endl;
+       G4cout << "Particle with encoding "<<Encoding<<" does not exist!!!"<<G4endl;
        G4Exception("Check your particle table");
        }
    return ptr;    

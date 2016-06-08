@@ -32,12 +32,8 @@
 #include "G4NuclearLevel.hh"
 #include "G4ios.hh"
 #include <stdlib.h>
-#include <fstream.h>
-#ifdef WIN32
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include "g4std/fstream"
+#include "g4std/strstream"
 
 G4NuclearLevelManager::G4NuclearLevelManager():
   _nucleusA(0), _nucleusZ(0), _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
@@ -87,11 +83,11 @@ G4bool G4NuclearLevelManager::IsValid(G4int Z, G4int A) const
     G4Exception("G4NuclearLevelManager - Please set the G4LEVELGAMMADATA environment variable");
   G4String dirName(env);
   char name[100] = {""};
-  ostrstream ost(name, 100, ios::out);
+  G4std::ostrstream ost(name, 100, G4std::ios::out);
   ost << dirName << "/" << "z" << Z << ".a" << A;
   G4String file(name); 
   
-  ifstream inFile(file);
+  G4std::ifstream inFile(file);
   if (! inFile) valid = false;  
 
   return valid;
@@ -174,7 +170,7 @@ const G4NuclearLevel* G4NuclearLevelManager::LowestLevel() const
 }
 
 
-G4bool G4NuclearLevelManager::Read(ifstream& dataFile)
+G4bool G4NuclearLevelManager::Read(G4std::ifstream& dataFile)
 {
   const G4double minProbability = 0.001;
 
@@ -193,7 +189,7 @@ G4bool G4NuclearLevelManager::Read(ifstream& dataFile)
       // zero
       if (_probability < minProbability) _probability = minProbability;
 
-      // G4cout << "Read " << _levelEnergy << " " << _gammaEnergy << " " << _probability << endl;
+      // G4cout << "Read " << _levelEnergy << " " << _gammaEnergy << " " << _probability << G4endl;
     }
   else
     {
@@ -211,16 +207,16 @@ void G4NuclearLevelManager::MakeLevels()
     G4Exception("G4NuclearLevelManager: please set the G4LEVELGAMMADATA environment variable");
   G4String dirName(env);
   char name[100] = {""};
-  ostrstream ost(name, 100, ios::out);
+  G4std::ostrstream ost(name, 100, G4std::ios::out);
   ost << dirName << "/" << "z" << _nucleusZ << ".a" << _nucleusA;
   G4String file(name); 
   
-  ifstream inFile(file, ios::in);
+  G4std::ifstream inFile(file, G4std::ios::in);
   
   if (! inFile) 
     {
       //      G4cout << " G4NuclearLevelManager: (" << _nucleusZ << "," << _nucleusA 
-      //  	     << ") does not have LevelsAndGammas file" << endl;
+      //  	     << ") does not have LevelsAndGammas file" << G4endl;
       return;
     }
 
@@ -254,7 +250,7 @@ void G4NuclearLevelManager::MakeLevels()
 
   G4int nData = eLevel.entries();
 
-  //  G4cout << " ==== MakeLevels ===== " << nData << " data read " << endl;
+  //  G4cout << " ==== MakeLevels ===== " << nData << " data read " << G4endl;
 
   G4double thisLevelEnergy = eLevel.at(0);
   G4double thisLevelHalfLife = 0.;
@@ -272,7 +268,7 @@ void G4NuclearLevelManager::MakeLevels()
       {
 	//	  G4cout << "Making a new level... " << e << " " 
 	//		 << thisLevelEnergies.entries() << " " 
-	//		 << thisLevelWeights.entries() << endl;
+	//		 << thisLevelWeights.entries() << G4endl;
 	
 	G4NuclearLevel* newLevel = new G4NuclearLevel(thisLevelEnergy,
 						      thisLevelHalfLife,
@@ -315,10 +311,10 @@ void G4NuclearLevelManager::PrintAll()
   if (_levels != 0) nLevels = _levels->entries();
 
   G4cout << " ==== G4NuclearLevelManager ==== (" << _nucleusZ << ", " << _nucleusA
-	 << ") has " << nLevels << " levels" << endl
+	 << ") has " << nLevels << " levels" << G4endl
 	 << "Highest level is at energy " << MaxLevelEnergy() << " MeV "
-	 << endl << "Lowest level is at energy " << MinLevelEnergy()
-	 << " MeV " << endl;
+	 << G4endl << "Lowest level is at energy " << MinLevelEnergy()
+	 << " MeV " << G4endl;
 
   G4int i = 0;
   for (i=0; i<nLevels; i++)

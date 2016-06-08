@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILE.cc,v 1.4.4.1 1999/12/07 20:53:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DAWNFILE.cc,v 1.5 1999/12/15 14:54:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Satoshi TANAKA
 // DAWNFILE factory.
@@ -49,7 +49,7 @@ G4VSceneHandler* G4DAWNFILE::CreateSceneHandler (const G4String& name)
 	G4VSceneHandler* p = new G4DAWNFILESceneHandler (*this, name);
 
 	G4cout	<< G4DAWNFILESceneHandler::GetSceneCount ()
-		<< ' ' << fName << " scenes extanct." << endl;
+		<< ' ' << fName << " scenes extanct." << G4endl;
 
 	return p;
 }

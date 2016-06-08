@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PEvent.cc,v 1.10.2.1 1999/12/07 20:50:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PEvent.cc,v 1.11 1999/12/15 14:51:20 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 // G4PEvent

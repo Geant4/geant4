@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmFramedBox.cc,v 1.2.8.1 1999/12/07 20:53:28 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLXmFramedBox.cc,v 1.3 1999/12/15 14:54:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //Framed box container class
 
@@ -34,7 +34,7 @@ void G4OpenGLXmFramedBox::AddChild (G4OpenGLXmVWidgetComponent* component)
   XtVaGetValues (box_row_col,
 		 XmNnumChildren, &num_children,
 		 NULL);
-//  G4cout << name << " now parents " << num_children << " children." << endl;
+//  G4cout << name << " now parents " << num_children << " children." << G4endl;
 }
 
 void G4OpenGLXmFramedBox::AddYourselfTo (G4OpenGLXmVWidgetShell* window)

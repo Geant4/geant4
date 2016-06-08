@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.1.8.1 1999/12/07 20:53:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.2 1999/12/15 14:54:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and

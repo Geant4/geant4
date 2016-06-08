@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPElastic.hh,v 1.2 1999/07/02 09:58:45 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97

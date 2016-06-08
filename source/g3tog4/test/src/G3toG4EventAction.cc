@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4EventAction.cc,v 1.6 1999/12/05 17:50:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4EventAction.cc,v 1.7 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -52,7 +52,7 @@ void G3toG4EventAction::EndOfEventAction(const G4Event* Ev)
 {
   const G4Event* evt = fpEventManager->GetConstCurrentEvent();
 
-  G4cout << ">>> Event " << evt->GetEventID() << endl;
+  G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
   G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
@@ -60,7 +60,7 @@ void G3toG4EventAction::EndOfEventAction(const G4Event* Ev)
     n_trajectories = trajectoryContainer->entries(); 
   }
   G4cout << "    " << n_trajectories 
-	 << " trajectories stored in this event." << endl;
+	 << " trajectories stored in this event." << G4endl;
 
   if(G4VVisManager::GetConcreteInstance()){
     for(G4int i=0; i<n_trajectories; i++) {

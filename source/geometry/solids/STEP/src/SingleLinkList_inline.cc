@@ -5,8 +5,8 @@
 
 
 //
-// $Id: SingleLinkList_inline.cc,v 1.2 1999/05/21 20:21:05 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: SingleLinkList_inline.cc,v 1.4 1999/12/15 18:04:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 /*
@@ -23,11 +23,8 @@
 /*  */
 
 #include <SingleLinkList.h>
-#ifdef WIN32
-#  include "G4ios.hh"
-#else
-#  include <stream.h>
-#endif
+
+#include "G4ios.hh"
 
 SingleLinkNode * 	
 SingleLinkNode::NextNode ()  const
@@ -61,7 +58,7 @@ SingleLinkNode *
 SingleLinkList::NewNode () 
 {
     //  defined in subtypes
-    cerr << "\n\n******BUG****** a virtually defined function should \n"
+    G4cerr << "\n\n******BUG****** a virtually defined function should \n"
 	 << "be called for SingleLinkList::NewNode()\n\n";
     return new SingleLinkNode();
 }

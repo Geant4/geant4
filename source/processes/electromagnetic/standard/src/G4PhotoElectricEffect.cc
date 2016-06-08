@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.8.6.1 1999/12/07 20:51:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PhotoElectricEffect.cc,v 1.8.6.1.2.1 1999/12/08 17:34:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -307,7 +307,7 @@ void G4PhotoElectricEffect::PrintInfoDefinition()
            comments += "Good description from 10 KeV to 50 MeV for all Z";
            comments += "\n        Sandia crossSection below 50 KeV";
 	             
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n       PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";

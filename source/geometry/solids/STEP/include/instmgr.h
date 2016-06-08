@@ -6,7 +6,7 @@
 
 //
 // $Id: instmgr.h,v 1.2 1999/05/21 20:20:41 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef instmgr_h

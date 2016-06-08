@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PTubs.cc,v 1.2 1999/11/17 10:49:03 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // class G4PTubs

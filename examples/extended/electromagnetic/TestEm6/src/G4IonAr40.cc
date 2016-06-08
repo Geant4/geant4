@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.cc,v 1.1.4.1 1999/12/07 20:47:18 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4IonAr40.cc,v 1.3 2000/01/19 20:55:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -22,8 +22,8 @@
 //  Fixed  parameters by H.Kurashige, 25 Apr 1998
 // ----------------------------------------------------------------------
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4IonAr40.hh"
 
@@ -74,4 +74,6 @@ G4IonAr40* G4IonAr40::IonAr40Definition(){return &theIonAr40;}
 // initialization for static cut values
 G4double   G4IonAr40::theIonAr40LengthCut;
 G4double*  G4IonAr40::theIonAr40KineticEnergyCuts;
+
+
 

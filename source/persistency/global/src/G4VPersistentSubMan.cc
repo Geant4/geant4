@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPersistentSubMan.cc,v 1.2 1999/11/25 11:33:08 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4VPersistentSubMan 
 //

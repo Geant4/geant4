@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackedTrack.hh,v 1.2.4.1 1999/12/07 20:47:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4StackedTrack.hh,v 1.4 2000/01/26 06:42:15 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
@@ -19,6 +19,7 @@
 #include "G4Track.hh"
 #include "globals.hh"
 #include "G4Allocator.hh"
+class G4VTrajectory;
 
 // class description:
 //
@@ -33,7 +34,7 @@ class G4StackedTrack
       inline void operator delete(void *aStackedTrack);
 
       G4StackedTrack();
-      G4StackedTrack(G4Track * aTrack);
+      G4StackedTrack(G4Track * aTrack, G4VTrajectory * aTrajectory = 0);
       ~G4StackedTrack();
 
       const G4StackedTrack & operator=(const G4StackedTrack &right);
@@ -42,7 +43,8 @@ class G4StackedTrack
 
   private:
       G4double priorityWeight;
-      G4Track *track;
+      G4Track * track;
+      G4VTrajectory * trajectory;
       G4StackedTrack * previousStackedTrack;
       G4StackedTrack * nextStackedTrack;
 
@@ -53,6 +55,8 @@ class G4StackedTrack
       { priorityWeight = value; }
       inline G4Track * GetTrack() const
       { return track; }
+      inline G4VTrajectory * GetTrajectory() const
+      { return trajectory; }
       inline G4StackedTrack * GetPrevious() const
       { return previousStackedTrack; }
       inline G4StackedTrack * GetNext() const

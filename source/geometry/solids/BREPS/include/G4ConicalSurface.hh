@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurface.hh,v 1.1.10.1 1999/12/07 20:48:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ConicalSurface.hh,v 1.2 1999/12/15 14:49:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 /*  /usr/local/gismo/repo/geometry/G4ConicalSurface.h,v 1.5 1993/12/30 02:13:59 rensing Exp  */
 //  File:  G4ConicalSurface.h
@@ -61,7 +61,7 @@ public:
   
   virtual char *NameOf() const { return "G4ConicalSurface"; }
   
-  virtual void PrintOn( ostream& os = G4cout ) const;
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
   int operator==( const G4ConicalSurface& c )
   { 
@@ -128,7 +128,7 @@ private:
 //----->virtual char *NameOf() const { return "G4ConicalSurface"; }
 //
 //  printing function
-//----->virtual void PrintOn( ostream& os = G4cout ) const;
+//----->virtual void PrintOn( G4std::ostream& os = G4cout ) const;
 //
 //  equality operator
 //----->int operator==( const G4ConicalSurface& c )

@@ -63,7 +63,7 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
     }
 
   if (_verbose > 1)
-    G4cout << "G4ContinuumGammaDeexcitation::CreateTransition - Created" << endl;
+    G4cout << "G4ContinuumGammaDeexcitation::CreateTransition - Created" << G4endl;
 
   return new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
 }
@@ -80,7 +80,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
       if (_verbose > 0)
 	G4cout 
 	  << "G4ContinuumGammaDeexcitation::CanDoTransition - Null transition "
-	  << endl;
+	  << G4endl;
     }
 
   G4Fragment nucleus = GetNucleus();
@@ -94,7 +94,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
       if (_verbose > 0) 
 	G4cout 
 	  << "G4ContinuumGammaDeexcitation::CanDoTransition - n/p/H"
-	  << endl;
+	  << G4endl;
     }
 
 
@@ -105,7 +105,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
       if (_verbose > 0) 
 	G4cout 
 	  << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation <= 0"
-	  << endl;
+	  << G4endl;
     }
 
   if (excitation <= _levelManager.MaxLevelEnergy()) 
@@ -114,13 +114,13 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
       if (_verbose > 0)
       G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation " 
 	     << excitation << " below max discrete level " 
-	     << _levelManager.MaxLevelEnergy() << endl;
+	     << _levelManager.MaxLevelEnergy() << G4endl;
     }
   
   if (canDo)
     { if (_verbose > 1) 
       G4cout <<"G4ContinuumGammaDeexcitation::CanDoTransition - CanDo" 
-	     << endl; 
+	     << G4endl; 
     }
 
   return canDo;

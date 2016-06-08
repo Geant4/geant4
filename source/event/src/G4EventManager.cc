@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.cc,v 1.2.8.1 1999/12/07 20:47:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4EventManager.cc,v 1.5 2000/01/26 06:42:15 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //
@@ -19,15 +19,31 @@
 #include "G4UserStackingAction.hh"
 #include "G4SDManager.hh"
 
+G4EventManager* G4EventManager::fpEventManager = 0;
+G4EventManager* G4EventManager::GetEventManager()
+{ return fpEventManager; }
+
 G4EventManager::G4EventManager()
-:verboseLevel(0),trajectoryContainer(NULL),userEventAction(NULL),
+:verboseLevel(0),trajectoryContainer(NULL),
  tracking(false),currentEvent(NULL)
 {
+ if(fpEventManager)
+ {
+  G4Exception("G4EventManager::G4EventManager() has already been made.");
+ }
+ else
+ {
   trackManager = new G4TrackingManager;
   transformer = new G4PrimaryTransformer;
   trackContainer = new G4StackManager;
   theMessenger = new G4EvManMessenger(this);
   sdManager = G4SDManager::GetSDMpointerIfExist();
+  fpEventManager = this;
+  userEventAction = 0;
+  userStackingAction = 0;
+  userTrackingAction = 0;
+  userSteppingAction = 0;
+ }
 }
 
 // private -> never called
@@ -43,7 +59,8 @@ G4EventManager::~G4EventManager()
    delete transformer;
    delete trackManager;
    delete theMessenger;
-   if (userEventAction) delete userEventAction;
+   if(userEventAction) delete userEventAction;
+   fpEventManager = 0;
 }
 
 /*
@@ -63,9 +80,9 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
   {
-    G4cout << "=====================================" << endl;
-    G4cout << "  G4EventManager::ProcessOneEvent()  " << endl;
-    G4cout << "=====================================" << endl;
+    G4cout << "=====================================" << G4endl;
+    G4cout << "  G4EventManager::ProcessOneEvent()  " << G4endl;
+    G4cout << "=====================================" << G4endl;
   }
 #endif
 
@@ -85,7 +102,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   if ( verboseLevel > 1 )
   {
     G4cout << currentEvent->GetNumberOfPrimaryVertex()
-         << " vertices passed from G4Event." << endl;
+         << " vertices passed from G4Event." << G4endl;
   }
 #endif
 
@@ -95,12 +112,13 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   if ( verboseLevel > 0 )
   {
     G4cout << trackContainer->GetNTotalTrack() << " primaries "
-         << "are passed from G4EventTransformer." << endl;
-    G4cout << "!!!!!!! Now start processing an event !!!!!!!" << endl;
+         << "are passed from G4EventTransformer." << G4endl;
+    G4cout << "!!!!!!! Now start processing an event !!!!!!!" << G4endl;
   }
 #endif
-
-  while( ( track = trackContainer->PopNextTrack() ) != NULL )
+  
+  G4VTrajectory* previousTrajectory;
+  while( ( track = trackContainer->PopNextTrack(&previousTrajectory) ) != NULL )
   {
 
 #ifdef G4VERBOSE
@@ -108,7 +126,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     {
       G4cout << "Track " << track << " (trackID " << track->GetTrackID()
   	 << ", parentID " << track->GetParentID() 
-  	 << ") is passed to G4TrackingManager." << endl;
+  	 << ") is passed to G4TrackingManager." << G4endl;
     }
 #endif
 
@@ -122,13 +140,20 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     {
       G4cout << "Track (trackID " << track->GetTrackID()
 	 << ", parentID " << track->GetParentID()
-         << ") is processed with stopping code " << istop << endl;
+         << ") is processed with stopping code " << istop << G4endl;
     }
 #endif
 
 #ifdef G4_STORE_TRAJECTORY
     G4VTrajectory * aTrajectory = trackManager->GimmeTrajectory();
-    if(aTrajectory)
+
+    if(previousTrajectory)
+    {
+      previousTrajectory->MergeTrajectory(aTrajectory);
+      delete aTrajectory;
+      aTrajectory = previousTrajectory;
+    }
+    if(aTrajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
     {
       if(!trajectoryContainer)
       { trajectoryContainer = new G4TrajectoryContainer; }
@@ -141,6 +166,10 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     {
       case fStopButAlive:
       case fSuspend:
+        trackContainer->PushOneTrack( track, aTrajectory );
+        StackTracks( secondaries );
+        break;
+
       case fPostponeToNextEvent:
         trackContainer->PushOneTrack( track );
         StackTracks( secondaries );
@@ -153,7 +182,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
       case fAlive:
         G4cout << "Illeagal TrackStatus returned from G4TrackingManager!"
-             << endl;
+             << G4endl;
       case fKillTrackAndSecondaries:
         if( secondaries ) secondaries->clearAndDestroy();
         delete track;
@@ -164,8 +193,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
   {
-    G4cout << "NULL returned from G4StackManager." << endl;
-    G4cout << "Terminate current event processing." << endl;
+    G4cout << "NULL returned from G4StackManager." << G4endl;
+    G4cout << "Terminate current event processing." << G4endl;
   }
 #endif
 
@@ -202,7 +231,7 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector)
         G4cout << "A new track " << newTrack 
              << " (trackID " << newTrack->GetTrackID()
 	     << ", parentID " << newTrack->GetParentID() 
-	     << ") is passed to G4StackManager." << endl;
+	     << ") is passed to G4StackManager." << G4endl;
       }
 #endif
     }
@@ -212,8 +241,26 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector)
 
 void G4EventManager::SetUserAction(G4UserEventAction* userAction)
 {
-  if (userEventAction) delete userEventAction;
   userEventAction = userAction;
-  userEventAction->SetEventManager(this);
+  if(userEventAction) userEventAction->SetEventManager(this);
 }
+
+void G4EventManager::SetUserAction(G4UserStackingAction* userAction)
+{
+  userStackingAction = userAction;
+  trackContainer->SetUserStackingAction(userAction);
+}
+
+void G4EventManager::SetUserAction(G4UserTrackingAction* userAction)
+{
+  userTrackingAction = userAction;
+  trackManager->SetUserAction(userAction);
+}
+
+void G4EventManager::SetUserAction(G4UserSteppingAction* userAction)
+{
+  userSteppingAction = userAction;
+  trackManager->SetUserAction(userAction);
+}
+
 

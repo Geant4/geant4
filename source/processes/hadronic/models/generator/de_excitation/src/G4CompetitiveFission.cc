@@ -239,7 +239,7 @@ G4int G4CompetitiveFission::FissionAtomicNumber(const G4int A, const G4FissionPa
   G4double C2 = 0.0;
   if (w > 1000.0 ) C2 = C2S;
   else if (w < 0.001) C2 = C2A;
-  else C2 =  max(C2A,C2S);
+  else C2 =  G4std::max(C2A,C2S);
 
   G4double C1 = A-C2;
   if (C1 < 30.0) {
@@ -338,7 +338,7 @@ G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4do
 {
 
   // Find maximal value of A for fragments
-  G4double AfMax = max(Af1,Af2);
+  G4double AfMax = G4std::max(Af1,Af2);
   if (AfMax < (A/2.0)) AfMax = A - AfMax;
 
   // Weights for symmetric and asymmetric components

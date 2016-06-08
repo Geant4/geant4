@@ -679,7 +679,7 @@ G4bool G4PolyPhiFace::InsideEdgesExact( const G4double r, const G4double z,
 	
 //	G4int fanswer = abs(answer);
 //	if (fanswer==1 || fanswer>2) {
-//		G4cerr << "G4PolyPhiFace::InsideEdgesExact: answer is " << answer << endl;
+//		G4cerr << "G4PolyPhiFace::InsideEdgesExact: answer is " << answer << G4endl;
 //	}
 
 	return answer!=0;

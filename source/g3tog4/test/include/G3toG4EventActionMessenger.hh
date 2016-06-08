@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4EventActionMessenger.hh,v 1.2 1999/12/05 17:50:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 

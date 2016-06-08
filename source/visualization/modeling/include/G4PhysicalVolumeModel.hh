@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.6.2.1 1999/12/07 20:54:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.8 2000/01/11 17:19:04 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -93,13 +93,14 @@ protected:
 			   const G4Transform3D&,
 			   G4VGraphicsScene&);
 
-  void DescribeSolids (const G4Transform3D& theAT,
-		       G4VSolid* pSol,
-		       const G4VisAttributes* pVisAttribs,
-		       G4VGraphicsScene& sceneHandler);
+  void DescribeSolid (const G4Transform3D& theAT,
+		      G4VSolid* pSol,
+		      const G4VisAttributes* pVisAttribs,
+		      G4VGraphicsScene& sceneHandler);
 
-  G4bool IsThisCulled     (const G4LogicalVolume*,
-			   const G4Material*);
+  G4bool IsThisCulled (const G4LogicalVolume*,
+		       const G4Material*);
+
   G4bool IsDaughterCulled (const G4LogicalVolume* pMotherLV);
 
   /////////////////////////////////////////////////////////

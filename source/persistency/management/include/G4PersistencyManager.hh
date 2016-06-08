@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistencyManager.hh,v 1.14.2.1 1999/12/07 20:50:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PersistencyManager.hh,v 1.15 1999/12/15 14:51:26 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // History:
 // 98.01.08 Y.Morita  Initial version

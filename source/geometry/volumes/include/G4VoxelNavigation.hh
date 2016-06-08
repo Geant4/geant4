@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.hh,v 1.4.2.1 1999/12/07 20:48:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VoxelNavigation.hh,v 1.5 1999/12/15 14:50:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // class G4VoxelNavigation: Utility for navigation in volumes

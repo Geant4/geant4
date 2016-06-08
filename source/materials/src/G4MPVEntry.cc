@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MPVEntry.cc,v 1.3.2.1 1999/11/11 14:30:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4MPVEntry.cc,v 1.3.2.1.4.1 1999/12/08 17:34:06 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -104,5 +104,5 @@ void G4MPVEntry::DumpEntry()
 	     << ", " 
 	     << theProperty
  	     << ")" 
-	     << endl;	
+	     << G4endl;	
 }

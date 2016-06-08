@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: PersEx02TrackerHitsCollection.ddl,v 1.3 1999/11/29 18:23:33 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef PersEx02TrackerHitsCollection_h

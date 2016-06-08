@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PPrimaryParticle.ddl,v 1.1 1999/12/05 22:32:25 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4PPrimaryParticle_h

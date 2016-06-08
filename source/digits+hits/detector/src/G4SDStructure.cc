@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SDStructure.cc,v 1.1.8.1.2.1 1999/12/07 20:47:45 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SDStructure.cc,v 1.1.8.1.2.1.2.1 1999/12/08 17:33:17 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 // G4SDStructure
@@ -60,7 +60,7 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
     if( tgtSD != NULL )
     {
       G4cout << aSD->GetName() << " had already stored in "
-           << pathName << endl;
+           << pathName << G4endl;
     }
     else
     {
@@ -106,7 +106,7 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
     if( tgtSDS == NULL )
     {  // The subdirectory is not found
-      G4cout << subD << " is not found in " << pathName << endl;
+      G4cout << subD << " is not found in " << pathName << G4endl;
     }
     else
     { 
@@ -129,7 +129,7 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
     G4VSensitiveDetector* tgtSD = GetSD(aPath);
     if( tgtSD == NULL )
     {  // The detector is not found.
-      G4cout << aPath << " is not found in " << pathName << endl;
+      G4cout << aPath << " is not found in " << pathName << G4endl;
     }
     else
     {
@@ -148,7 +148,7 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName)
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
     if( tgtSDS == NULL )
     {  // The subdirectory is not found
-      G4cout << subD << " is not found in " << pathName << endl;
+      G4cout << subD << " is not found in " << pathName << G4endl;
       return NULL;
     }
     else
@@ -161,7 +161,7 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName)
     G4VSensitiveDetector* tgtSD = GetSD(aPath);
     if( tgtSD == NULL )
     {  // The detector is not found.
-      G4cout << aPath << " is not found in " << pathName << endl;
+      G4cout << aPath << " is not found in " << pathName << G4endl;
     }
     return tgtSD;
   }
@@ -199,7 +199,7 @@ void G4SDStructure::Terminate(G4HCofThisEvent*HCE)
 
 void G4SDStructure::ListTree()
 {
-  G4cout << pathName << endl;
+  G4cout << pathName << G4endl;
   for(int i=0; i<detector.entries(); i++)
   {
     G4VSensitiveDetector* sd = detector(i);
@@ -208,7 +208,7 @@ void G4SDStructure::ListTree()
     { G4cout << "   *** Active "; }
     else
     { G4cout << "   XXX Inactive "; }
-    G4cout << endl;
+    G4cout << G4endl;
   }
   for(int j=0; j<structure.entries(); j++)
   { structure(j)->ListTree(); }

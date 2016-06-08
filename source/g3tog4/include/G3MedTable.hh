@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.hh,v 1.6 1999/12/05 17:50:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3MedTable.hh,v 1.7 1999/12/09 01:27:43 lockman Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // by I.Hrivnacova, 27 Sep 99
 
-#ifndef G3_MED_TABLE_H
-#define G3_MED_TABLE_H
+#ifndef G3MEDTABLE_HH
+#define G3MEDTABLE_HH 1
 
 #include "G3MedTableEntry.hh"
 
@@ -42,5 +42,4 @@ class G3MedTable
 };
 
 extern G3MedTable G3Med;
-
-#endif //G3_MED_TABLE_H
+#endif

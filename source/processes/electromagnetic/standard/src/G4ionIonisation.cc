@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ionIonisation.cc,v 1.3.8.1 1999/12/07 20:51:04 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ionIonisation.cc,v 1.3.8.1.2.1 1999/12/08 17:34:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -454,6 +454,6 @@ void G4ionIonisation::PrintInfoDefinition()
            comments += "\n         MeanFreePath is computed at tracking time.\n";
            comments += "         delta ray energy sampled from  differential Xsection.";
 
-  G4cout << endl << GetProcessName() << ":  " << comments << endl;
+  G4cout << G4endl << GetProcessName() << ":  " << comments << G4endl;
 }
 

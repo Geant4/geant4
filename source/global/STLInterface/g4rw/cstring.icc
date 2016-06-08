@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: cstring.icc,v 1.2 1999/11/26 17:17:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: cstring.icc,v 1.4 2000/02/08 14:15:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -363,7 +363,7 @@ G4String G4String::strip (int stripType, char c)
 
 void G4String::toLower ( void )
 {
-  for (int i=0; i<=size();i++)
+  for (int i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
     std_string::operator[](i) = tolower(std_string::operator[](i));
@@ -373,10 +373,10 @@ void G4String::toLower ( void )
 
 void G4String::toUpper ( void )
 {
-  for (int i=0; i<=size();i++)
+  for (int i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
-    std_string::operator[](i) = tolower(std_string::operator[](i));
+    std_string::operator[](i) = toupper(std_string::operator[](i));
     //at(i) = toupper(at(i)); 
   }
 }

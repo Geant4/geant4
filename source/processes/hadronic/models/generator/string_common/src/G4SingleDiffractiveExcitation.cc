@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.3.4.1 1999/12/07 20:51:54 gunter Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.3.4.1.2.1 1999/12/08 17:34:43 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -47,17 +47,17 @@ G4bool G4SingleDiffractiveExcitation::
   	   G4LorentzVector Ptarget=target->Get4Momentum();
    	   G4double Mtarget2=sqr(target->GetDefinition()->GetPDGMass() + minExtraMass);
 //	     G4cout << "E proj, target :" << Pprojectile.e() << ", " <<
-//					    Ptarget.e() << endl;
+//					    Ptarget.e() << G4endl;
 
 	   G4bool KeepProjectile= G4UniformRand() > 0.5;
 
 //     reset the min.mass of the non diffractive particle to its value, ( minus a bit for rounding...)	   
 	   if ( KeepProjectile ) 
 	   {
-//	   	cout << " Projectile fix" << endl;
+//	   	cout << " Projectile fix" << G4endl;
 	   	Mprojectile2 = sqr(projectile->GetDefinition()->GetPDGMass() * (1-perCent) ); 
 	   } else {
-//	   	cout << " Target fix" << endl;
+//	   	cout << " Target fix" << G4endl;
 	   	Mtarget2=sqr(target->GetDefinition()->GetPDGMass() * (1-perCent) );
 	   }
 
@@ -73,15 +73,15 @@ G4bool G4SingleDiffractiveExcitation::
 	   if ( Ptmp.pz() <= 0. )
 	   {
 	   // "String" moving backwards in  CMS, abort collision !!
-//	   	   G4cout << " abort Collision!! " << endl;
+//	   	   G4cout << " abort Collision!! " << G4endl;
 		   return false; 
 	   }
 	   		   
 	   toCms.rotateZ(-1*Ptmp.phi());
 	   toCms.rotateY(-1*Ptmp.theta());
 
-//	   G4cout << "Pprojectile  be4 boost " << Pprojectile << endl;
-//	   G4cout << "Ptarget be4 boost : " << Ptarget << endl;
+//	   G4cout << "Pprojectile  be4 boost " << Pprojectile << G4endl;
+//	   G4cout << "Ptarget be4 boost : " << Ptarget << G4endl;
 	
 
 
@@ -99,11 +99,11 @@ G4bool G4SingleDiffractiveExcitation::
 	       if (whilecount++ >= 500 && (whilecount%100)==0) 
 //	   	 G4cout << "G4SingleDiffractiveExcitation::ExciteParticipants possibly looping"
 //	   	 << ", loop count/ maxPtSquare : " 
-//           	 << whilecount << " / " << maxPtSquare << endl;
+//           	 << whilecount << " / " << maxPtSquare << G4endl;
                if (whilecount > 1000 ) 
                {
            	   Qmomentum=0;
-//	   	 G4cout << "G4SingleDiffractiveExcitation::ExciteParticipants: Aborting loop!" << endl;
+//	   	 G4cout << "G4SingleDiffractiveExcitation::ExciteParticipants: Aborting loop!" << G4endl;
 	   	 return false; 	  //  Ignore this interaction 
                }
 	       Qmomentum=G4LorentzVector(GaussianPt(widthOfPtSquare,maxPtSquare),0);
@@ -134,11 +134,11 @@ G4bool G4SingleDiffractiveExcitation::
 	       Qmomentum.setPz( (Qplus-Qminus)/2 );
 	       Qmomentum.setE(  (Qplus+Qminus)/2 );
 
-//	 G4cout << "Qplus / Qminus " << Qplus << " / " << Qminus<<endl;
-//	 G4cout << "pt2 " << pt2 << endl;
-//	 G4cout << "Qmomentum " << Qmomentum << endl;
+//	 G4cout << "Qplus / Qminus " << Qplus << " / " << Qminus<<G4endl;
+//	 G4cout << "pt2 " << pt2 << G4endl;
+//	 G4cout << "Qmomentum " << Qmomentum << G4endl;
 //	 G4cout << " Masses (P/T) : " << (Pprojectile+Qmomentum).mag() <<
-//			   " / " << (Ptarget-Qmomentum).mag() << endl;
+//			   " / " << (Ptarget-Qmomentum).mag() << G4endl;
 
 	   } while (  (Ptarget-Qmomentum).mag2() <= Mtarget2 
 	   	     || (Pprojectile+Qmomentum).mag2() <= Mprojectile2
@@ -152,24 +152,24 @@ G4bool G4SingleDiffractiveExcitation::
 
 	   Ptarget     -= Qmomentum;
 	   
-//	   G4cout << "Pprojectile.e()  : " << Pprojectile.e() << endl;
-//	   G4cout << "Ptarget.e()      : " << Ptarget.e() << endl;
+//	   G4cout << "Pprojectile.e()  : " << Pprojectile.e() << G4endl;
+//	   G4cout << "Ptarget.e()      : " << Ptarget.e() << G4endl;
 
-// 	   G4cout << "end event_______________________________________________"<<endl;
+// 	   G4cout << "end event_______________________________________________"<<G4endl;
 // 	   
 
 
-// 	   G4cout << "Pprojectile with Q : " << Pprojectile << endl;
-// 	   G4cout << "Ptarget with Q : " << Ptarget << endl;
-// 	   G4cout << "Projectile back: " << toLab * Pprojectile << endl;
-// 	   G4cout << "Target back: " << toLab * Ptarget << endl;
+// 	   G4cout << "Pprojectile with Q : " << Pprojectile << G4endl;
+// 	   G4cout << "Ptarget with Q : " << Ptarget << G4endl;
+// 	   G4cout << "Projectile back: " << toLab * Pprojectile << G4endl;
+// 	   G4cout << "Target back: " << toLab * Ptarget << G4endl;
 
 // Transform back and update SplitableHadron Participant.
 	   Pprojectile.transform(toLab);
 	   Ptarget.transform(toLab);
 
-//	   G4cout << "Target	 mass  " <<  Ptarget.mag() << endl;
-//	   G4cout << "Projectile mass  " <<  Pprojectile.mag() << endl;
+//	   G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;
+//	   G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
 	   		   
 	   target->Set4Momentum(Ptarget);
 	   projectile->Set4Momentum(Pprojectile);
@@ -193,7 +193,7 @@ G4double G4SingleDiffractiveExcitation::ChooseX(G4double Xmin, G4double Xmax) co
 	
 	if ( Xmin <= 0. || range <=0. ) 
 	{
-		G4cout << " Xmin, range : " << Xmin << " , " << range << endl;
+		G4cout << " Xmin, range : " << Xmin << " , " << range << G4endl;
 		G4Exception("G4SingleDiffractiveExcitation::ChooseX : Invalid arguments ");
 	}
 
@@ -202,7 +202,7 @@ G4double G4SingleDiffractiveExcitation::ChooseX(G4double Xmin, G4double Xmax) co
 	    x=Xmin + G4UniformRand() * range;
 	}  while ( Xmin/x < G4UniformRand() );
 
-//	cout << "DiffractiveX "<<x<<endl;
+//	cout << "DiffractiveX "<<x<<G4endl;
 	return x;
 }
 

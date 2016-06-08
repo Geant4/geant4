@@ -101,7 +101,7 @@ void G4ContinuumGammaTransition::SelectGamma()
 
       if(_verbose > 10)
 	G4cout << "*---* G4ContinuumTransition: e = " << e 
-	       << " pdf = " << sampleArray[i] << endl;
+	       << " pdf = " << sampleArray[i] << G4endl;
     }
   G4RandGeneralTmp randGeneral(sampleArray, nBins);
   G4double random = randGeneral.shoot();
@@ -113,7 +113,7 @@ void G4ContinuumGammaTransition::SelectGamma()
   if(_verbose > 10)
     G4cout << "*---*---* G4ContinuumTransition: eGamma = " << _eGamma
 	   << "   finalExcitation = " << finalExcitation 
-	   << " random = " << random << endl;
+	   << " random = " << random << G4endl;
 
 //  if (finalExcitation < 0)
   if(finalExcitation < _minLevelE/2.)
@@ -133,7 +133,7 @@ void G4ContinuumGammaTransition::SelectGamma()
 
   if(_verbose > 10)
     G4cout << "*---*---* G4ContinuumTransition: _gammaCreationTime = "
-	   << _gammaCreationTime/second << endl;
+	   << _gammaCreationTime/second << G4endl;
 
   return;  
 }
@@ -172,7 +172,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
 
   if(_verbose > 20)
     G4cout << _nucleusA << " LevelDensityParameter = " <<  aLevelDensityParam
-	   << " Bef Aft " << levelDensBef << " " << levelDensAft << endl;
+	   << " Bef Aft " << levelDensBef << " " << levelDensAft << G4endl;
   
   // Now form the probability density
 
@@ -197,7 +197,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
     G4cout << ".. " << Egdp << " .. " << GammaR 
 	   << " .. " << normC << " .. " << sigmaAbs  
 	   << " .. " << e*e << " .. " << levelDensAft/levelDensBef
-	   << endl;
+	   << G4endl;
 
   //  theProb = normC * sigmaAbs * e*e * levelDensAft/levelDensBef;
   theProb =  sigmaAbs * e*e * levelDensAft/levelDensBef;

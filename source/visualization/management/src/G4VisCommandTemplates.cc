@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandTemplates.cc,v 1.3.2.1 1999/12/07 20:54:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisCommandTemplates.cc,v 1.4 1999/12/15 14:54:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Visualization Command Messenger Template private functions.
@@ -46,7 +46,7 @@ G4int G4VisButtonCommandMessengerInterpret (G4String newValues) {
       choice.compareTo ("true", G4String::ignoreCase) == 0) iSelector = 1;
   if (iSelector < 0 || choice.isNull ()) {
     G4cout << "Choice not recognised."
-      "\n  Choice is 0 (or off or false) or 1 (or on or true)." << endl;;
+      "\n  Choice is 0 (or off or false) or 1 (or on or true)." << G4endl;;
   }
   return iSelector;
 }

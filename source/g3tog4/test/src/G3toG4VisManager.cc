@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4VisManager.cc,v 1.3 1999/12/05 17:50:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4VisManager.cc,v 1.4 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison 24th January 1998.
@@ -132,7 +132,7 @@ void G3toG4VisManager::RegisterGraphicsSystems () {
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
-	 << endl;
+	 << G4endl;
     PrintAvailableGraphicsSystems ();
   }
 }

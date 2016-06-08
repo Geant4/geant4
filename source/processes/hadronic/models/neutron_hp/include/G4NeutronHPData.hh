@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPData.hh,v 1.2 1999/07/02 09:58:39 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NeutronHPData.hh,v 1.3 1999/12/15 14:53:11 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -46,8 +46,8 @@ public:
   }
   inline G4PhysicsVector * MakePhysicsVector(G4Element * thE, G4NeutronHPInelasticData * theP)
   {
-//     G4cout << "entered G4NeutronHPData::MakePhysicsVector!!!"<<endl;
-//     G4cout << "thE->GetIndex()="<<thE->GetIndex()<<endl;
+//     G4cout << "entered G4NeutronHPData::MakePhysicsVector!!!"<<G4endl;
+//     G4cout << "thE->GetIndex()="<<thE->GetIndex()<<G4endl;
      return DoPhysicsVector(theData[thE->GetIndex()].GetData(theP));
   }
 

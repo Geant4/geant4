@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.5.4.1 1999/12/07 20:53:36 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.6 1999/12/15 14:54:12 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -636,10 +636,10 @@ void G4OpenInventorSceneHandler::PreAddThis
       }
       else {
         G4cerr << "OIScene non-leaf protocol error.  Mother volume " << 
-	          MotherVolume->GetName() << " missing." << endl;
+	          MotherVolume->GetName() << " missing." << G4endl;
         G4cerr << "                         Daughter volume was: "
 	     << fpCurrentPV->GetName()
-	     << endl;
+	     << G4endl;
       }
       MotherVolume=MotherVolume->GetMother();
     }
@@ -662,10 +662,10 @@ void G4OpenInventorSceneHandler::PreAddThis
       }
       else {
 	G4cerr << "OIScene leaf protocol error.  Mother volume " << 
-	          MotherVolume->GetName() <<  " missing." << endl;
+	          MotherVolume->GetName() <<  " missing." << G4endl;
 	G4cerr << "                         Daughter volume was: "
 	     << fpCurrentPV->GetName()
-	     << endl;
+	     << G4endl;
       }
       MotherVolume = MotherVolume->GetMother();
     }

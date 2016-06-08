@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ParticleVector.hh,v 1.1.8.1.2.1 1999/12/07 20:52:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // ------------------------------------------------------------
 // HPW decoupling theo models from RW (Mon Mar 16 1998)

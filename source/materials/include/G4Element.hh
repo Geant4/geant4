@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.2.6.1.2.1 1999/12/07 20:49:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Element.hh,v 1.2.6.1.2.1.2.1 1999/12/08 17:34:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //      ------------------- class G4Element -------------------
@@ -123,9 +123,9 @@ public:
 
     G4IonisParamElm* GetIonisation() const {return fIonisation;};
    
-    friend ostream& operator<<(ostream&, G4Element*);    
-    friend ostream& operator<<(ostream&, G4Element&);    
-    friend ostream& operator<<(ostream&, G4ElementTable);
+    friend G4std::ostream& operator<<(G4std::ostream&, G4Element*);    
+    friend G4std::ostream& operator<<(G4std::ostream&, G4Element&);    
+    friend G4std::ostream& operator<<(G4std::ostream&, G4ElementTable);
     
     G4int operator==(const G4Element&) const;
     G4int operator!=(const G4Element&) const;

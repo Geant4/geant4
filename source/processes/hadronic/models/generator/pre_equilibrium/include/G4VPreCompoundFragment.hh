@@ -12,7 +12,7 @@
 #define G4VPreCompoundFragment_h 1
 
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -44,8 +44,8 @@ public:
   
   G4int operator!=(const G4VPreCompoundFragment &right) const;
 
-  friend ostream& operator<<(ostream&, const G4VPreCompoundFragment*);
-  friend ostream& operator<<(ostream&, const G4VPreCompoundFragment&);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4VPreCompoundFragment*);
+  friend G4std::ostream& operator<<(G4std::ostream&, const G4VPreCompoundFragment&);
 
 
   // methods

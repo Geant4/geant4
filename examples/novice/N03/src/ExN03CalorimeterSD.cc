@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03CalorimeterSD.cc,v 1.2.8.1 1999/12/07 20:47:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN03CalorimeterSD.cc,v 1.3 1999/12/15 14:49:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -79,7 +79,7 @@ G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (physVol == Detector->GetGap     ()) calHit->AddGap(edep,stepl);
       HitID[LayerNumber] = CalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on layer: " << LayerNumber << endl;
+        G4cout << " New Calorimeter Hit on layer: " << LayerNumber << G4endl;
     }
   else
     { 
@@ -88,7 +88,7 @@ G4bool ExN03CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (physVol == Detector->GetGap())
          (*CalCollection)[HitID[LayerNumber]]->AddGap(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to Layer: " << LayerNumber << endl; 
+        G4cout << " Energy added to Layer: " << LayerNumber << G4endl; 
     }
     
   return true;

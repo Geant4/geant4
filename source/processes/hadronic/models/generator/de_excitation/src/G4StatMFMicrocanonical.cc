@@ -175,7 +175,7 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
 	const G4double U = theFragment.GetExcitationEnergy();
 	const G4double A13 = pow(A,1.0/3.0);
 
-	G4double Ta = max(sqrt(U/(0.125*A)),0.0012*MeV); 
+	G4double Ta = G4std::max(sqrt(U/(0.125*A)),0.0012*MeV); 
 	G4double Tb = Ta;
   
 	G4double ECompoundNucleus = CalcFreeInternalEnergy(theFragment,Ta);
@@ -230,7 +230,7 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
 		} 
 	}
 
-	G4cerr << "G4StatMFMicrocanoncal::CalcEntropyOfCompoundNucleus: I can't calculate the temperature" << endl;
+	G4cerr << "G4StatMFMicrocanoncal::CalcEntropyOfCompoundNucleus: I can't calculate the temperature" << G4endl;
 
 	return 0.0;
 }

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationHistory.cc,v 1.1.10.1 1999/12/07 20:48:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NavigationHistory.cc,v 1.2 1999/12/15 14:50:26 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // G4NavigationHistory Implementation P.Kent August 96
@@ -14,9 +14,9 @@
 #include "G4NavigationHistory.hh"
 #include "G4ios.hh"
 
-ostream& operator << (ostream& os, const G4NavigationHistory& nav)
+G4std::ostream& operator << (G4std::ostream& os, const G4NavigationHistory& nav)
 {
-  G4cout << "History depth="<<nav.GetDepth()<< endl;
+  G4cout << "History depth="<<nav.GetDepth()<< G4endl;
   for (G4int i=0;i<=nav.GetDepth();i++)
   {
       os << "Level=["<<i<<"]: " ;
@@ -39,7 +39,7 @@ ostream& operator << (ostream& os, const G4NavigationHistory& nav)
       }else{
 	 os << "Phys = <Null>";
       }
-      os << endl;
+      os << G4endl;
   }
   return os;
 }

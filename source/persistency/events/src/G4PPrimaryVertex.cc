@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPrimaryVertex.cc,v 1.6.2.1 1999/12/07 20:50:06 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PPrimaryVertex.cc,v 1.7 1999/12/15 14:51:21 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4PPrimaryVertex.hh"

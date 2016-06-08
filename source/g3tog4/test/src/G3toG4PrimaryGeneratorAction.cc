@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4PrimaryGeneratorAction.cc,v 1.3 1999/12/05 17:50:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4PrimaryGeneratorAction.cc,v 1.4 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "globals.hh"
@@ -39,7 +39,7 @@ G3toG4PrimaryGeneratorAction::~G3toG4PrimaryGeneratorAction(){
 void 
 G3toG4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
   G4ThreeVector direction = GetRandomDirection();
-  G4cout << ">>>>>>>> Primary direction: " << direction << endl;
+  G4cout << ">>>>>>>> Primary direction: " << direction << G4endl;
   particleGun->SetParticleMomentumDirection( direction.unit() ) ;
   particleGun->GeneratePrimaryVertex(anEvent);
   particleGun->GeneratePrimaryVertex(anEvent);

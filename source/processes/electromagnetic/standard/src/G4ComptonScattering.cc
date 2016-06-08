@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonScattering.cc,v 1.2.8.1 1999/12/07 20:50:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ComptonScattering.cc,v 1.2.8.1.2.1 1999/12/08 17:34:22 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -286,7 +286,7 @@ void G4ComptonScattering::PrintInfoDefinition()
            comments += "Good description from 10 KeV to (100/Z) GeV. \n";
            comments += "        Scattered gamma energy according Klein-Nishina.";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
+  G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";

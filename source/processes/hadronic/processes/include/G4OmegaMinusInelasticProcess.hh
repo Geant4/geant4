@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OmegaMinusInelasticProcess.hh,v 1.1.10.1 1999/12/07 20:52:29 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: OmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Nov-1996

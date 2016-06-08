@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VIntraNuclearTransportModel.hh,v 1.3.8.1 1999/12/07 20:51:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

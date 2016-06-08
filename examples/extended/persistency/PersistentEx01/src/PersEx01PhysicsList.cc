@@ -1,4 +1,4 @@
-// $Id: PersEx01PhysicsList.cc,v 1.2 1999/11/04 12:55:02 morita Exp $
+// $Id: PersEx01PhysicsList.cc,v 1.2.6.3 1999/12/14 07:07:43 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -24,7 +24,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"                
 
 
 PersEx01PhysicsList::PersEx01PhysicsList():  G4VUserPhysicsList()
@@ -185,7 +185,7 @@ void PersEx01PhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "PersEx01PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
 
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 

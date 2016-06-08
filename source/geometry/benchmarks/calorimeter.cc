@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: calorimeter.cc,v 1.1.8.1 1999/12/07 20:47:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: calorimeter.cc,v 1.2 1999/12/15 14:49:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // calorimeter
 //
@@ -37,10 +37,10 @@ int main()
     G4VPhysicalVolume *myTopNode;
     G4Timer timer;
 
-    G4cout << "  Calorimeter Performance Test - P.Kent 21.08.95" << endl
-	 << "Using calorimeter from CERN School of Computing '95" << endl;
+    G4cout << "  Calorimeter Performance Test - P.Kent 21.08.95" << G4endl
+	 << "Using calorimeter from CERN School of Computing '95" << G4endl;
 #ifndef NDEBUG
-    G4cout << "WARNING: *** ASSERTs are compiled IN ***" << endl;
+    G4cout << "WARNING: *** ASSERTs are compiled IN ***" << G4endl;
 #endif
 
     myTopNode=BuildCalorimeter();	// Build the geometry
@@ -56,13 +56,13 @@ int main()
 	{
 	    G4cout << "Optimisation OFF";
 	}
-    G4cout << " Geometry close took " << timer << endl;
+    G4cout << " Geometry close took " << timer << G4endl;
 
 #ifdef G4GEOMETRY_VERBOSE
-    G4cout << endl << "Voxels for:" 
-	 << G4LogicalVolumeStore::GetInstance()->at(1)->GetName() << endl
+    G4cout << G4endl << "Voxels for:" 
+	 << G4LogicalVolumeStore::GetInstance()->at(1)->GetName() << G4endl
 	<< *G4LogicalVolumeStore::GetInstance()->at(1)->GetVoxelHeader()
-	<< endl;
+	<< G4endl;
 #endif
     G4SmartVoxelHeader* top=G4LogicalVolumeStore::GetInstance()
 	                   ->at(1)->GetVoxelHeader();
@@ -72,27 +72,27 @@ int main()
 	    switch (top->GetAxis())
 		{
 		case kXAxis:
-		    G4cout << "X" << endl;
+		    G4cout << "X" << G4endl;
 		    break;
 		case kYAxis:
-		    G4cout << "Y" << endl;
+		    G4cout << "Y" << G4endl;
 		    break;
 		case kZAxis:
-		    G4cout << "Z" << endl;
+		    G4cout << "Z" << G4endl;
 		    break;
 		    
 		}
 	}
 
-    G4cout << endl << "Shooting from " << origin << " along " << vx << endl;
+    G4cout << G4endl << "Shooting from " << origin << " along " << vx << G4endl;
     ShootVerbose(myTopNode,origin,vx);
     Shoot(numShoot,myTopNode,origin,vx);
 
-    G4cout << endl << "Shooting from " << origin << " along " << vy << endl;
+    G4cout << G4endl << "Shooting from " << origin << " along " << vy << G4endl;
     ShootVerbose(myTopNode,origin,vy);
     Shoot(numShoot,myTopNode,origin,vy);
 
-    G4cout << endl << "Shooting from " << origin << " along " << vxy << endl;
+    G4cout << G4endl << "Shooting from " << origin << " along " << vxy << G4endl;
     ShootVerbose(myTopNode,origin,vxy);
     Shoot(numShoot,myTopNode,origin,vxy);
 

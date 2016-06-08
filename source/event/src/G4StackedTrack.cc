@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackedTrack.cc,v 1.1.10.1 1999/12/07 20:47:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4StackedTrack.cc,v 1.3 2000/01/26 06:42:16 asaim Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
@@ -17,10 +17,12 @@
 G4Allocator<G4StackedTrack> aStackedTrackAllocator;
 
 G4StackedTrack::G4StackedTrack() 
+:track(NULL),trajectory(NULL),priorityWeight(0.),
+ previousStackedTrack(NULL),nextStackedTrack(NULL)
 { }
 
-G4StackedTrack::G4StackedTrack(G4Track * newTrack) 
-:track(newTrack),priorityWeight(0.),
+G4StackedTrack::G4StackedTrack(G4Track * newTrack, G4VTrajectory * aTrajectory) 
+:track(newTrack),trajectory(aTrajectory),priorityWeight(0.),
  previousStackedTrack(NULL),nextStackedTrack(NULL)
 { }
 

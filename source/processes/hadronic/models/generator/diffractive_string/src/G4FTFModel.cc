@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FTFModel.cc,v 1.2.2.1.2.1 1999/12/07 20:51:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FTFModel.cc,v 1.2.2.1.2.1.2.1 1999/12/08 17:34:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 // ------------------------------------------------------------
@@ -108,7 +108,7 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	    
 	
 //	G4cout << "BuildStrings prim/targ " << primaries.entries() << " , " <<
-//					     targets.entries() << endl;
+//					     targets.entries() << G4endl;
 
 
 	G4int ahadron;
@@ -131,15 +131,15 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 
 G4bool G4FTFModel::ExciteParticipants()
 {
-//	G4cout << "G4FTFModel::ExciteParticipants starting " << endl;
+//	G4cout << "G4FTFModel::ExciteParticipants starting " << G4endl;
 	
 	while (theParticipants.Next())
 	{
-//	   G4cout << "next Collision " << endl;
+//	   G4cout << "next Collision " << G4endl;
 	   
 	   const G4InteractionContent & collision=theParticipants.GetInteraction();
 	   
-//	   G4cout << " soft colls : " << collision.GetNumberOfSoftCollisions() << endl;
+//	   G4cout << " soft colls : " << collision.GetNumberOfSoftCollisions() << G4endl;
 
 	   G4VSplitableHadron * projectile=collision.GetProjectile();
 	   G4VSplitableHadron * target=collision.GetTarget();

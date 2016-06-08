@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.4.6.1.2.1 1999/12/07 20:52:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Fancy3DNucleus.cc,v 1.4.6.1.2.1.2.1 1999/12/08 17:34:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -34,7 +34,7 @@ G4Fancy3DNucleus::G4Fancy3DNucleus()
 	currentNucleon=-1;
 	myA=0;
 	myZ=0;
-//G4cout <<"G4Fancy3DNucleus::G4Fancy3DNucleus()"<<endl;
+//G4cout <<"G4Fancy3DNucleus::G4Fancy3DNucleus()"<<G4endl;
 }
 
 /* No use for these
@@ -66,7 +66,7 @@ G4Fancy3DNucleus::~G4Fancy3DNucleus()
 void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 {
   G4int i;
-//  G4cout << "G4Fancy3DNucleus::Init(theA, theZ) called"<<endl;
+//  G4cout << "G4Fancy3DNucleus::Init(theA, theZ) called"<<G4endl;
   currentNucleon=-1;
   if(theNucleons!=NULL) delete [] theNucleons;
 
@@ -77,7 +77,7 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 
   theNucleons = new G4Nucleon[myA];
   
-//  G4cout << "myA, myZ" << myA << ", " << myZ << endl;
+//  G4cout << "myA, myZ" << myA << ", " << myZ << G4endl;
 
   if(theDensity!=NULL) delete theDensity;
   if ( myA < 17 ) {
@@ -242,7 +242,7 @@ void G4Fancy3DNucleus::ChooseNucleons()
 	  {
 	       theNucleons[nucleons++].SetParticleType(G4Neutron::Neutron());
 	  }
-	  else G4cout << "G4Fancy3DNucleus::ChooseNucleons not efficient" << endl;
+	  else G4cout << "G4Fancy3DNucleus::ChooseNucleons not efficient" << G4endl;
 	}
 	return;
 }
@@ -294,13 +294,13 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 	
 	if (ReduceSum(momentum,fermiM) ) 
 	  break;
-//       G4cout <<" G4FancyNucleus: iterating to find momenta: "<< ntry<< endl;
+//       G4cout <<" G4FancyNucleus: iterating to find momenta: "<< ntry<< G4endl;
     }
 
 //     G4ThreeVector sum;
 //     for (G4int index=0; index<myA;sum+=momentum[index++])
 //     ;
-//     cout << "final sum / mag() " << sum << " / " << sum.mag() << endl;
+//     cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
     
     
     G4double energy;
@@ -344,10 +344,10 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     private:
     	G4Fancy3DNucleusHelper operator =(const G4Fancy3DNucleusHelper &right) const 
     	{
-    		G4cout <<" G4Fancy3DNucleus::G4Fancy3DNucleusHelper op = called------------------" << endl;
+    		G4cout <<" G4Fancy3DNucleus::G4Fancy3DNucleusHelper op = called------------------" << G4endl;
 		return G4Fancy3DNucleusHelper();
     	}
-    	G4Fancy3DNucleusHelper(): Vector(0), Size(0), anInt(0) {G4cout << "def ctor for MixMasch" << endl;}
+    	G4Fancy3DNucleusHelper(): Vector(0), Size(0), anInt(0) {G4cout << "def ctor for MixMasch" << G4endl;}
 	const G4ThreeVector Vector;
 	const G4double Size;
 	const G4int anInt;
@@ -423,11 +423,11 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 	
 	// Now we have a nucleon with a bigger Fermi Momentum.
 	// Exchange with last nucleon.. and iterate.
-// 	G4cout << " Nucleon to swap with : " << swapit << endl;
+// 	G4cout << " Nucleon to swap with : " << swapit << G4endl;
 // 	G4cout << " Fermi momentum test, and better.. " << PFermi << " / "
-// 	    << theFermi.GetFermiMomentum(theDensity->GetDensity(theNucleons[swapit].GetPosition())) << endl;
-//	cout << theNucleons[swapit]<< endl << theNucleons[myA-1] << endl;
-//	cout << momentum[swapit] << endl << momentum[myA-1] << endl;
+// 	    << theFermi.GetFermiMomentum(theDensity->GetDensity(theNucleons[swapit].GetPosition())) << G4endl;
+//	cout << theNucleons[swapit]<< G4endl << theNucleons[myA-1] << G4endl;
+//	cout << momentum[swapit] << G4endl << momentum[myA-1] << G4endl;
 	G4Nucleon swap= theNucleons[swapit];
 	G4ThreeVector mom_swap=momentum[swapit];
 	G4double pf=pFermiM[swapit];
@@ -437,7 +437,7 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 	theNucleons[myA-1]=swap;
 	momentum[myA-1]=mom_swap;
 	pFermiM[myA-1]=pf;
-//	cout << "after swap" <<endl<< theNucleons[swapit] << endl << theNucleons[myA-1] << endl;
-//	cout << momentum[swapit] << endl << momentum[myA-1] << endl;
+//	cout << "after swap" <<G4endl<< theNucleons[swapit] << G4endl << theNucleons[myA-1] << G4endl;
+//	cout << momentum[swapit] << G4endl << momentum[myA-1] << G4endl;
 	return ReduceSum(momentum,pFermiM);	
 }

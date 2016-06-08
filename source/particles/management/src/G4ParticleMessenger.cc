@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleMessenger.cc,v 1.3.6.1 1999/12/07 20:49:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ParticleMessenger.cc,v 1.3.6.1.2.3 1999/12/14 07:08:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------
@@ -26,7 +26,7 @@
 //---------------------------------------------------------------
 
 #include "G4ios.hh"                 // Include from 'system'
-#include <iomanip.h>                  // Include from 'system'
+#include "g4std/iomanip"                  // Include from 'system'
 
 #include "G4ParticleMessenger.hh"
 #include "G4UImanager.hh"
@@ -98,30 +98,30 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     while( (*piter)() ){
       G4ParticleDefinition *particle = piter->value();
       if ((newValues=="all") || (newValues==particle->GetParticleType())) {
-        G4cout << setw(19) << particle->GetParticleName();
+        G4cout << G4std::setw(19) << particle->GetParticleName();
 	if ((counter++)%4 == 3) {
-	  G4cout << endl;
+	  G4cout << G4endl;
 	} else {
 	  G4cout << ",";
 	}
       }
     }
-    G4cout << endl;
-    if (counter == 0) G4cout << newValues << " is not found " << endl;
+    G4cout << G4endl;
+    if (counter == 0) G4cout << newValues << " is not found " << G4endl;
 
   } else if( command==selectCmd ){
     //Commnad   /particle/select
     currentParticle = theParticleTable->FindParticle(newValues);
     if(currentParticle == 0) {
-      G4cout << "Unknown particle [" << newValues << "]. Command ignored." << endl;
+      G4cout << "Unknown particle [" << newValues << "]. Command ignored." << G4endl;
     }   
   } else if( command==findCmd ){
     //Commnad   /particle/find
     G4ParticleDefinition* tmp = theParticleTable->FindParticle( findCmd->GetNewIntValue(newValues));
     if(tmp == 0) {
-      G4cout << "Unknown particle [" << newValues << "]. Command ignored." << endl;
+      G4cout << "Unknown particle [" << newValues << "]. Command ignored." << G4endl;
     } else {
-      G4cout << tmp->GetParticleName() << endl;
+      G4cout << tmp->GetParticleName() << G4endl;
       tmp->DumpTable();
     }
   }    

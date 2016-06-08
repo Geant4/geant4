@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.cc,v 1.6 1999/12/05 17:50:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3EleTable.cc,v 1.9 2000/03/02 17:54:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #include "G4strstreambuf.hh"
@@ -23,13 +23,13 @@ G3EleTable::G3EleTable() :_MaxEle(109){
 G3EleTable::~G3EleTable(){
   delete [] _EleNames;
   delete [] _Ele;
-};
+}
 
 G4Element* 
 G3EleTable::GetEle(G4double Z){
   G4double A;
   char name[20], sym[3];
-  G4int index = Z-1;
+  G4int index = (G4int) Z-1;
   if (!parse(Z, name, sym, A)) {
     G4String nm(name);
     G4String sy(sym);
@@ -45,14 +45,14 @@ int
 G3EleTable::parse(G4double& Z, char* name, char* sym, G4double& A){ 
  int rc = 0;
   if (Z>0 && Z <=_MaxEle){
-    G4int z = Z-1;
-    istrstream in(_EleNames[z]);
+    G4int z = (G4int) Z-1;
+    G4std::istrstream in(_EleNames[z]);
     in >> name >> sym >> A;
   } else {
     rc = -1;
   }
   return rc;
-};
+}
 
 void
 G3EleTable::LoadUp(){

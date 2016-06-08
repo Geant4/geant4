@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesons.cc,v 1.2.6.1 1999/12/07 20:50:04 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ExcitedMesons.cc,v 1.2.6.1.2.2 1999/12/14 07:08:16 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -18,8 +18,8 @@
 //      4th April 1996, G.Cosmo
 // **********************************************************************
 
-#include <fstream.h>
-#include <iomanip.h>
+#include "g4std/fstream"
+#include "g4std/iomanip"
 
 #include "G4ExcitedMesons.hh"
 

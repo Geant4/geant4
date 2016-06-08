@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3VolTable.hh,v 1.11 1999/12/05 17:50:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3VolTable.hh,v 1.14 2000/03/02 17:54:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // modified by I.Hrivnacova, 13.10.99
 
-#ifndef _G3VOLTABLE_
-#define _G3VOLTABLE_ 1
+#ifndef G3VOLTABLE_HH
+#define G3VOLTABLE_HH 1
 
 #include "g4std/map"
 #include "G3VolTableEntry.hh"
@@ -24,7 +24,7 @@ class G3VolTable{
 private:
   G3VolTableEntry* G3toG4TopVTE;
   G4String _FirstKey;
-  G4std::map<G4String, G3VolTableEntry*, less<G4String> > VTD;
+  G4std::map<G4String, G3VolTableEntry*, G4std::less<G4String> > VTD;
   G4int _NG3Pos;
 
 public:
@@ -38,18 +38,7 @@ public:
   void SetFirstVTE();
   void VTEStat();
   void CountG3Pos();
+  void Clear();
 };
 extern G3VolTable G3Vol;
 #endif
-
-
-
-
-
-
-
-
-
-
-
-

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistencyManager.cc,v 1.15.2.1 1999/12/07 20:50:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PersistencyManager.cc,v 1.16 1999/12/15 14:51:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // class G4PersistencyManager 
 //
@@ -76,7 +76,7 @@ G4PersistencyManager::~G4PersistencyManager()
   // they are "persistent"!
 
   if(f_verboseLevel>0)
-    G4cout << "PersistencyManager is deleting." << endl;
+    G4cout << "PersistencyManager is deleting." << G4endl;
 }
 
 //----------------------------------------------------------------------------
@@ -92,9 +92,9 @@ G4bool G4PersistencyManager::Store(const G4Event* anEvent)
       G4cout << " -- G4PEvent " << f_pEventMan->CurrentEventID() << " stored in "
              << DBContainerName(kEventDB);
       if( f_transactionMan->SustainedMode() )
-        G4cout << " (sustained)" << endl;
+        G4cout << " (sustained)" << G4endl;
       else
-        G4cout << endl;
+        G4cout << G4endl;
     }
     f_transactionMan->Commit(kEventDB, false);
     return true;
@@ -103,7 +103,7 @@ G4bool G4PersistencyManager::Store(const G4Event* anEvent)
   {
     f_transactionMan->Abort(kEventDB, false);
     G4cerr << "G4PersistencyManager: Failed to store G4PEvent in "
-           << DBContainerName(kEventDB) << endl;
+           << DBContainerName(kEventDB) << G4endl;
     return false;
   }
 }
@@ -116,7 +116,7 @@ G4bool G4PersistencyManager::Store(const G4Run* aRun)
   {
     if( f_verboseLevel>0 )
       G4cout << " -- G4PRun " << f_pRunMan->CurrentRunID() << " stored in "
-             << DBContainerName(kRunDB) << endl;
+             << DBContainerName(kRunDB) << G4endl;
     f_transactionMan->Commit(kRunDB, false);
     return true;
   }
@@ -124,7 +124,7 @@ G4bool G4PersistencyManager::Store(const G4Run* aRun)
   {
     f_transactionMan->Abort(kRunDB, false);
     G4cerr << "G4PersistencyManager: Failed to store G4PRun in "
-           << DBContainerName(kRunDB) << endl;
+           << DBContainerName(kRunDB) << G4endl;
     return false;
   }
 }
@@ -137,7 +137,7 @@ G4bool G4PersistencyManager::Store(const G4VPhysicalVolume* aWorld)
   {
     if( f_verboseLevel>0 )
       G4cout << " -- Geometry stored in "
-             << DBContainerName(kGeomDB) << endl;
+             << DBContainerName(kGeomDB) << G4endl;
     f_transactionMan->Commit(kGeomDB, false);
     return true;
   }
@@ -145,7 +145,7 @@ G4bool G4PersistencyManager::Store(const G4VPhysicalVolume* aWorld)
   {
     f_transactionMan->Abort(kGeomDB, false);
     G4cerr << "G4PersistencyManager: Failed to store Geometry in "
-           << DBContainerName(kGeomDB) << endl;
+           << DBContainerName(kGeomDB) << G4endl;
     return false;
   }
 }
@@ -161,11 +161,11 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& anEvent)
       if( anEvent )
         G4cout << " -- G4Event " << f_pEventMan->CurrentEventID()
                << " retrieved from "
-               << DBContainerName(kEventDB) << endl;
+               << DBContainerName(kEventDB) << G4endl;
       else
         G4cout << " -- scan of G4Event from "
                << DBContainerName(kEventDB)
-               << " is completed." << endl;
+               << " is completed." << G4endl;
     }
     f_transactionMan->Commit(kEventDB, false);
     return true;
@@ -174,7 +174,7 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& anEvent)
   {
     f_transactionMan->Abort(kEventDB, false);
     G4cerr << "G4PersistencyManager: Failed to retrieve G4Event from "
-           << DBContainerName(kEventDB) << endl;
+           << DBContainerName(kEventDB) << G4endl;
     return false;
   }
 }
@@ -190,11 +190,11 @@ G4bool G4PersistencyManager::Retrieve(G4Run*& aRun)
       if( aRun )
         G4cout << " -- G4Run " << f_pRunMan->CurrentRunID()
                << " retrieved from "
-               << DBContainerName(kRunDB) << "." << endl;
+               << DBContainerName(kRunDB) << "." << G4endl;
       else
         G4cout << " -- scan of G4Run from "
                << DBContainerName(kRunDB)
-               << " is completed." << endl;
+               << " is completed." << G4endl;
     }
     f_transactionMan->Commit(kRunDB, false);
     return true;
@@ -203,7 +203,7 @@ G4bool G4PersistencyManager::Retrieve(G4Run*& aRun)
   {
     f_transactionMan->Abort(kRunDB, false);
     G4cerr << "G4PersistencyManager: Failed to retrieve G4Run from "
-           << DBContainerName(kRunDB) << endl;
+           << DBContainerName(kRunDB) << G4endl;
     return false;
   }
 }
@@ -218,7 +218,7 @@ G4bool G4PersistencyManager::Retrieve(G4VPhysicalVolume*& theWorld)
     {
       if( theWorld )
         G4cout << " -- Geometry retrieved from "
-               << DBContainerName(kGeomDB) << endl;
+               << DBContainerName(kGeomDB) << G4endl;
     }
     f_transactionMan->Commit(kGeomDB, false);
     return true;
@@ -227,7 +227,7 @@ G4bool G4PersistencyManager::Retrieve(G4VPhysicalVolume*& theWorld)
   {
     f_transactionMan->Abort(kGeomDB, false);
     G4cerr << "G4PersistencyManager: Failed to retrieve Geometry from "
-           << DBContainerName(kGeomDB) << endl;
+           << DBContainerName(kGeomDB) << G4endl;
     return false;
   }
 }

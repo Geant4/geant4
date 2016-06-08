@@ -6,7 +6,7 @@
 
 //
 // $Id: s_HEADER_SCHEMA_init.cc,v 1.2 1999/05/21 20:21:12 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef  S_HEADER_SCHEMA_INIT_CC
 #define  S_HEADER_SCHEMA_INIT_CC

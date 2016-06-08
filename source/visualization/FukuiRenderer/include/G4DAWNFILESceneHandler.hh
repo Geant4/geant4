@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.3.4.1 1999/12/07 20:53:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.5 1999/12/16 17:24:48 johna Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // Satoshi TANAKA
 
@@ -64,6 +64,12 @@ public:
   void AddThis ( const G4Sphere& sphere );
   void AddThis ( const G4Para&   para   );
   void AddThis ( const G4Torus&  torus  );
+  void AddThis ( const G4Polycone& polycone ) {
+    G4VSceneHandler::AddThis (polycone);
+  }
+  void AddThis ( const G4Polyhedra& polyhedra) {
+    G4VSceneHandler::AddThis (polyhedra);
+  }
   void AddThis ( const G4VSolid& solid  );
 
   void ClearStore (){}

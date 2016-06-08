@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4BuildTree.hh,v 1.3 1999/12/05 17:50:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3toG4BuildTree.hh,v 1.4 1999/12/09 01:27:47 lockman Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // modified by I.Hrivnacova, 13.10.99
 
-#ifndef _G3TOG4BUILDTREE_
-#define _G3TOG4BUILDTREE_ 1
+#ifndef G3TOG4BUILDTREE_HH
+#define G3TOG4BUILDTREE_HH 1
 
 #include "G3VolTableEntry.hh"
 

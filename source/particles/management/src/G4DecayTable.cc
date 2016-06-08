@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.cc,v 1.4.8.1 1999/12/07 20:49:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DecayTable.cc,v 1.4.8.1.2.1 1999/12/08 17:34:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -40,7 +40,7 @@ void G4DecayTable::Insert( G4VDecayChannel * aChannel){
 #ifdef G4VERBOSE
     G4cout << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) ";
     G4cout << "       " << parent->GetParticleName();
-    G4cout << " input:" << aChannel->GetParent()->GetParticleName() << endl;
+    G4cout << " input:" << aChannel->GetParent()->GetParticleName() << G4endl;
 #endif
   } else {
     channels->insert(aChannel);
@@ -74,14 +74,14 @@ G4VDecayChannel *G4DecayTable::SelectADecayChannel()
 
 void G4DecayTable::DumpInfo() const
 {
-  G4cout << "G4DecayTable:  " << parent->GetParticleName() << endl;
+  G4cout << "G4DecayTable:  " << parent->GetParticleName() << G4endl;
   G4int numberofchannels = channels->entries();
   for (G4int index= numberofchannels -1; index >=0 ; index -=1)
   {
     G4cout << index << ": ";
     ((*channels)(index))->DumpInfo();
   }
-  G4cout << endl;
+  G4cout << G4endl;
 }
 
 

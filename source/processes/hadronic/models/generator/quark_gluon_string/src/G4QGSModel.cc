@@ -24,7 +24,7 @@ void G4QGSModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
      // this is an approximation, neglecting the motion of nucleons in the nucleus & p,n mass differences. @@@
     G4double vz = aProjectile.Get4Momentum().pz()/
                   (aProjectile.Get4Momentum().e() + G4Proton::Proton()->GetPDGMass());
-//--DEBUG--    cout << "IncomingMomentum "<<aProjectile.Get4Momentum()<<endl;
+//--DEBUG--    cout << "IncomingMomentum "<<aProjectile.Get4Momentum()<<G4endl;
     theCurrentVelocity.setZ(vz);
     theParticipants.GetWoundedNucleus()->DoLorentzBoost(-theCurrentVelocity); 
     G4LorentzVector Mom = aProjectile.Get4Momentum();
@@ -33,7 +33,7 @@ void G4QGSModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
     theProjectile.SetDefinition(aProjectile.GetDefinition());
     theProjectile.SetTotalEnergy(Mom.e());
     theProjectile.SetMomentum(Mom);
-//--DEBUG--    cout << "PreInteractionMomentum "<<Mom<<endl;
+//--DEBUG--    cout << "PreInteractionMomentum "<<Mom<<G4endl;
     theParticipants.BuildInteractions(theProjectile);
     theParticipants.GetWoundedNucleus()->DoLorentzBoost(theCurrentVelocity);
     }
@@ -59,10 +59,10 @@ G4ExcitedStringVector * G4QGSModel::GetStrings()
     aString->Boost(theCurrentVelocity);  
     theStrings->insert(aString);
   }
-//--DEBUG--  cout << endl;
+//--DEBUG--  cout << G4endl;
   for(G4int i=0; i<theStrings->length(); i++)
   {
-//--DEBUG--    cout << "String = "<<theStrings->at(i)->Get4Momentum()<<endl;
+//--DEBUG--    cout << "String = "<<theStrings->at(i)->Get4Momentum()<<G4endl;
   }
   return theStrings;
 }

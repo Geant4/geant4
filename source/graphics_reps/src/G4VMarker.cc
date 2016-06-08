@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMarker.cc,v 1.4.8.1 1999/12/07 20:48:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VMarker.cc,v 1.5 1999/12/15 14:50:36 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -35,7 +35,7 @@ G4VMarker& G4VMarker::operator = (const G4VMarker& right) {
   return *this;
 }
 
-ostream& operator << (ostream& os, const G4VMarker& marker) {
+G4std::ostream& operator << (G4std::ostream& os, const G4VMarker& marker) {
   os << "G4VMarker: position: " << marker.fPosition
      << ", world size: " << marker.fWorldSize
      << ", screen size: " << marker.fScreenSize << '\n'

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleon.hh,v 1.2.8.1 1999/12/07 20:51:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Nucleon.hh,v 1.2.8.1.2.1 1999/12/08 17:34:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4Nucleon_h
 #define G4Nucleon_h 1
@@ -85,7 +85,7 @@ class G4Nucleon : public G4VKineticNucleon
 
 };
 
-ostream & operator << (ostream &, const G4Nucleon&);
+G4std::ostream & operator << (G4std::ostream &, const G4Nucleon&);
 
 inline int G4Nucleon::operator==(const G4Nucleon &right) const
 {

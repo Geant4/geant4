@@ -5,8 +5,8 @@
 
 
 //
-// $Id: scl_string.h,v 1.2 1999/05/21 20:20:44 japost Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: scl_string.h,v 1.3 1999/12/15 18:04:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef _SCL_STRING_H
 #define _SCL_STRING_H
@@ -36,11 +36,8 @@
 // this file is not in gnu C++ but it doesn't seem to be needed.
 #include <stdarg.h>
 #endif
-#ifdef WIN32
-#  include "G4ios.hh"
-#else
-#  include <stream.h>
-#endif
+
+#include "G4ios.hh"
 #include <string.h>
 
 /******************************************************************

@@ -7,15 +7,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPAngular.hh,v 1.3 1999/07/02 09:58:23 johna Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4NeutronHPAngular.hh,v 1.4 1999/12/15 14:53:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4NeutronHPAngular_h
 #define G4NeutronHPAngular_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <fstream.h>
+#include "g4std/fstream"
 #include "G4ReactionProduct.hh"
 #include "Randomize.hh"
 #include "G4NeutronHPLegendreStore.hh"
@@ -32,7 +32,7 @@ class G4NeutronHPAngular
   } 
   ~G4NeutronHPAngular(){}
   
-  void Init(ifstream & aDataFile);
+  void Init(G4std::ifstream & aDataFile);
   
   void SampleAndUpdate(G4ReactionProduct & aNeutron);
     

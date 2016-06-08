@@ -5,17 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtInterface.cc,v 1.2.8.1 1999/12/07 20:47:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4HEPEvtInterface.cc,v 1.3 1999/12/15 14:49:40 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------------
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 #include "G4ios.hh"
 #include "G4HEPEvtInterface.hh"

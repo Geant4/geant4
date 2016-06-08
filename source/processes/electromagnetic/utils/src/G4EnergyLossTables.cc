@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4EnergyLossTables.cc,v 1.9.2.1 1999/12/07 20:51:22 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // ------------------------------------------------------------------- 
 // first version created by P.Urban , 06/04/1998

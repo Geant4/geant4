@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTableMessenger.cc,v 1.2.8.1 1999/12/07 20:49:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4DecayTableMessenger.cc,v 1.2.8.1.2.3 1999/12/14 07:08:14 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 //---------------------------------------------------------------
@@ -35,7 +35,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"                 // Include from 'system'
-#include <iomanip.h>                  // Include from 'system'
+#include "g4std/iomanip"                  // Include from 'system'
 
 G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
                      :theParticleTable(pTable)
@@ -79,11 +79,11 @@ G4DecayTableMessenger::~G4DecayTableMessenger()
 void G4DecayTableMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
   if (SetCurrentParticle()==0) {
-    G4cout << "Particle is not selected yet !! Command ignored." << endl;
+    G4cout << "Particle is not selected yet !! Command ignored." << G4endl;
     return;
   }
   if (currentDecayTable==0) {
-    G4cout << "The particle has no decay table !! Command ignored." << endl;
+    G4cout << "The particle has no decay table !! Command ignored." << G4endl;
     return;
   }
 
@@ -96,21 +96,21 @@ void G4DecayTableMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     G4int index = selectCmd->GetNewIntValue(newValue) ;
     currentChannel = currentDecayTable->GetDecayChannel(index);
     if ( currentChannel == 0 ) {
-      G4cout << "Invalid index. Command ignored." << endl;
+      G4cout << "Invalid index. Command ignored." << G4endl;
     } else {
       idxCurrentChannel = index;
     }
 
   } else {
     if ( currentChannel == 0 ) {
-      G4cout << "Select a decay channel. Command ignored." << endl;
+      G4cout << "Select a decay channel. Command ignored." << G4endl;
       return;
     }
     if (command == brCmd) {
       //Commnad   /particle/property/decay/br
       G4double  br = brCmd->GetNewDoubleValue(newValue);
       if( (br<0.0) || (br>1.0) ) { 
-	G4cout << "Invalid brancing ratio. Command ignored." << endl;
+	G4cout << "Invalid brancing ratio. Command ignored." << G4endl;
       } else {
 	currentChannel->SetBR(br);
       }

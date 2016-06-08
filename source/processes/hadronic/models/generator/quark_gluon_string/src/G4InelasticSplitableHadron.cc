@@ -71,7 +71,7 @@ void G4InelasticSplitableHadron::GetValenceQuarkFlavors(G4int PDGcode, G4int& aE
       {
       G4int heavy =  absPDGcode/100;
       G4int light = (absPDGcode%100)/10;
-      G4int anti  = 1 - 2*(max(heavy, light)%2);
+      G4int anti  = 1 - 2*(G4std::max(heavy, light)%2);
       if (PDGcode < 0 ) anti = -anti;
       heavy *= anti;
       light *= -1 * anti;

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyVisManager.hh,v 1.3.2.1 1999/12/07 20:53:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: MyVisManager.hh,v 1.4 1999/12/15 14:54:23 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison 24th January 1998.

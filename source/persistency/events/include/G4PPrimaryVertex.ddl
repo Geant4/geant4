@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PPrimaryVertex.ddl,v 1.7 1999/12/05 22:32:26 morita Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //
 

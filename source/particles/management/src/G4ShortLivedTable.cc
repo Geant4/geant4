@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.cc,v 1.7.4.1 1999/12/07 20:50:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ShortLivedTable.cc,v 1.7.4.1.2.5 1999/12/14 09:16:48 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -25,11 +25,7 @@
 
 #include "G4ios.hh"
 
-#ifdef WIN32
-#  include <Strstrea.h>
-#else
-#  include <strstream.h>
-#endif
+#include "g4std/strstream"
 
 
 G4ShortLivedTable::G4ShortLivedTable()
@@ -76,7 +72,7 @@ void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
     //  G4cout << "G4ShortLivedTable::Insert :" << particle->GetParticleName() ;
-    //  G4cout << " is not short lived" << endl; 
+    //  G4cout << " is not short lived" << G4endl; 
     //}
     //#endif
   }
@@ -100,7 +96,7 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4ShortLivedTable::Remove :" << particle->GetParticleName() ;
-      G4cout << " is not short lived" << endl; 
+      G4cout << " is not short lived" << G4endl; 
     }
 #endif
   }

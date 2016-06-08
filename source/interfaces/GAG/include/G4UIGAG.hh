@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.hh,v 1.3.4.1 1999/12/07 20:49:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4UIGAG.hh,v 1.3.4.1.2.2 1999/12/14 07:07:55 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4UIGAG.hh
 // GAG(Geant4 adaptive GUI) interface class
@@ -20,8 +20,8 @@
 
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
-#include <fstream.h>
-#include <g4std/vector>
+#include "g4std/fstream"
+#include "g4std/vector"
 
 enum UImode { terminal_mode , java_mode, tcl_mode };
 enum ChangeOfTree  { notChanged=0, added, deleted, addedAndDeleted };

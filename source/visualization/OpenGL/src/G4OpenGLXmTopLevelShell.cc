@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmTopLevelShell.cc,v 1.2.8.1 1999/12/07 20:53:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLXmTopLevelShell.cc,v 1.3 1999/12/15 14:54:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //Top level shell class
 
@@ -85,7 +85,7 @@ void G4OpenGLXmTopLevelShell::Realize ()
   XtVaGetValues (toplevel,
 		 XmNnumChildren, &num_children,
 		 NULL);
-//  G4cout << name << " now parents " << num_children << " children." << endl;
+//  G4cout << name << " now parents " << num_children << " children." << G4endl;
   XtManageChild (toplevel);
   XtRealizeWidget (toplevel);
   XtPopup (toplevel, XtGrabNonexclusive);

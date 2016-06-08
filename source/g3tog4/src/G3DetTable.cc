@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3DetTable.cc,v 1.7 1999/12/05 17:50:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G3DetTable.cc,v 1.9 2000/03/02 17:54:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #include "globals.hh"
 #include "G3DetTable.hh"
 
-typedef G4std::map<G4String, G3DetTableEntry*, less<G4String> >
+typedef G4std::map<G4String, G3DetTableEntry*, G4std::less<G4String> >
 ::iterator DTDiterator;
 
 G4String 
@@ -24,13 +24,13 @@ G3DetTable::G3DetTable(){
 
 G3DetTable::~G3DetTable(){
   if (DTD.size() > 0) {
-    //    G4cout << "Deleting DTD" << endl;
+    //    G4cout << "Deleting DTD" << G4endl;
     for (DTDiterator i=DTD.begin(); i != DTD.end(); i++) {
       delete (*i).second;
     }
     DTD.clear();
   }
-};
+}
 
 G4VSensitiveDetector* 
 G3DetTable::GetSD(G4String& set, G4String& det){
@@ -70,7 +70,7 @@ G3DetTable::Put(G4String& set, G4String& det, G4int id,
   // make hash ID
   G4String ShashID = MakeHash(set, det);
   G3DetTableEntry* DTE = new G3DetTableEntry(set, det, id, D);
-  G4cout << "Inserted DTE with id " << ShashID << endl;
+  G4cout << "Inserted DTE with id " << ShashID << G4endl;
   DTD[ShashID] = DTE;
 }
 
@@ -78,12 +78,12 @@ void
 G3DetTable::PrintAll(){
   if (DTD.size()>0){
     G4int count=0;
-    G4cout << "Dump of DTD - " << DTD.size() << " entries:" << endl;
+    G4cout << "Dump of DTD - " << DTD.size() << " entries:" << G4endl;
     for (DTDiterator i=DTD.begin(); i != DTD.end(); i++) {
       count++;
       G3DetTableEntry* DTE = (*i).second;
-      G4cout << "DTD entry " << setw(3) << count << " sensitive detector name: " 
-	     << DTE->GetSD()->GetName() << endl;
+      G4cout << "DTD entry " << G4std::setw(3) << count << " sensitive detector name: " 
+	     << DTE->GetSD()->GetName() << G4endl;
     }
   }
 }

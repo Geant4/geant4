@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SolidStore.cc,v 1.3.2.1 1999/12/07 20:48:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4SolidStore.cc,v 1.4 1999/12/15 14:49:53 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // G4SolidStore
 //

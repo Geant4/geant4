@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtInterface.hh,v 1.2.2.1.2.1 1999/12/07 20:47:50 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4HEPEvtInterface.hh,v 1.4 1999/12/15 14:49:38 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 
 #ifndef G4HEPEvtInterface_h
 #define G4HEPEvtInterface_h 1
 
-#include <fstream.h>
+#include "g4std/fstream"
 #include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4VPrimaryGenerator.hh"
@@ -69,7 +69,7 @@ class G4HEPEvtInterface:public G4VPrimaryGenerator
 
   private:
     G4String fileName;
-    ifstream inputFile;
+    G4std::ifstream inputFile;
     G4RWTPtrOrderedVector<G4HEPEvtParticle> HPlist;
 };
 

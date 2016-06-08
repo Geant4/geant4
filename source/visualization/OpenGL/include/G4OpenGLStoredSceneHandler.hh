@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.6.2.1 1999/12/07 20:53:18 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.7 1999/12/15 14:54:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -59,7 +59,7 @@ friend class G4OpenGLStoredViewer;
   
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
-  G4std::map <const G4VSolid*, G4int, less <const G4VSolid*> > fSolidMap;
+  G4std::map <const G4VSolid*, G4int, G4std::less <const G4VSolid*> > fSolidMap;
 };
 
 inline G4int G4OpenGLStoredSceneHandler::GetSceneCount () {

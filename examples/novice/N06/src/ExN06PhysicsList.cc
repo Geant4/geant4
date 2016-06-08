@@ -7,7 +7,7 @@
 //
 
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 
 #include "globals.hh"
 #include "ExN06PhysicsList.hh"
@@ -211,7 +211,7 @@ void ExN06PhysicsList::ConstructOp()
       pmanager->AddContinuousProcess(theCerenkovProcess);
     }
     if (particleName == "opticalphoton") {
-      G4cout << " AddDiscreteProcess to OpticalPhoton " << endl;
+      G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
       pmanager->AddDiscreteProcess(theAbsorptionProcess);
       pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
       pmanager->AddDiscreteProcess(theBoundaryProcess);

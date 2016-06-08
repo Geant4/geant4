@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05MinRangeCuts.cc,v 1.1.10.1 1999/12/07 20:47:37 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: ExN05MinRangeCuts.cc,v 1.2 1999/12/15 14:49:31 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -31,7 +31,7 @@ ExN05MinRangeCuts::ExN05MinRangeCuts(const G4String& aName)
   : ExN05SpecialCuts(aName)
 {
    if (verboseLevel>1) {
-     G4cout << GetProcessName() << " is created "<< endl;
+     G4cout << GetProcessName() << " is created "<< G4endl;
    }
    SetProcessType(fUserDefined);
 }

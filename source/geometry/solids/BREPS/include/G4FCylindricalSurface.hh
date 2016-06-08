@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 1.4.8.1 1999/12/07 20:48:18 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FCylindricalSurface.hh,v 1.5 1999/12/15 14:49:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef __FCYLINDER_H
 #define __FCYLINDER_H
@@ -101,7 +101,7 @@ class G4FCylindricalSurface: public G4Surface
   }
   
   //  printing function
-  virtual void PrintOn( ostream& os = G4cout ) const;
+  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
   //  equality operator
   int operator==( const G4FCylindricalSurface& c );

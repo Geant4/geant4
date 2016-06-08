@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurface.cc,v 1.1.10.1 1999/12/07 20:48:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ConicalSurface.cc,v 1.2 1999/12/15 14:50:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 /*  /usr/local/gismo/repo/geometry/G4ConicalSurface.cc,v 1.6 1994/08/03 17:15:01 burnett Exp  */
 //  File:  G4ConicalSurface.cc
@@ -17,7 +17,7 @@
 //	G4ConicalSurface::G4ConicalSurface()
 //	G4ConicalSurface::G4ConicalSurface( const G4Vector3D& o, 
 //                                          const G4Vector3D& a, G4double e )
-//	G4ConicalSurface::PrintOn( ostream& os ) const
+//	G4ConicalSurface::PrintOn( G4std::ostream& os ) const
 //	G4ConicalSurface::HowNear( const G4Vector3D& x ) const
 //	G4ConicalSurface::distanceAlongRay( int which_way, const Ray* ry,
 //				 G4Vector3D& p ) const
@@ -91,9 +91,9 @@ void G4ConicalSurface::CalcBBox()
 }
 
 
-void G4ConicalSurface::PrintOn( ostream& os ) const
+void G4ConicalSurface::PrintOn( G4std::ostream& os ) const
 { 
-  // printing function using C++ ostream class
+  // printing function using C++ G4std::ostream class
   os << "G4ConicalSurface surface with origin: " << origin << "\t"
      << "angle: " << angle << " radians \tand axis " << axis << "\n";
 }

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.hh,v 1.1.10.1 1999/12/07 20:48:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FieldTrack.hh,v 1.2 1999/12/15 14:49:46 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 //  
 //  Data structure bringing together a magnetic track's state.
@@ -88,7 +88,7 @@ class  G4FieldTrack{
      void DumpToArray(   G4double valArr[ncompSVEC] ) const; 
      void LoadFromArray( const G4double valArr[ncompSVEC] ); 
      
-     friend  ostream& operator<<( ostream& os, G4FieldTrack& SixVec);
+     friend  G4std::ostream& operator<<( G4std::ostream& os, G4FieldTrack& SixVec);
 
    private:
      G4double  SixVector[6];

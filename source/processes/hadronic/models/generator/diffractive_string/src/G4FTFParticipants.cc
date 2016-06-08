@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FTFParticipants.cc,v 1.1.10.1 1999/12/07 20:51:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4FTFParticipants.cc,v 1.1.10.1.2.1 1999/12/08 17:34:42 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -40,7 +40,7 @@ G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &right)
 
 G4FTFParticipants::~G4FTFParticipants()
 {
-// G4cout << "G4FTFParticipants::~G4FTFParticipants() called" << endl;
+// G4cout << "G4FTFParticipants::~G4FTFParticipants() called" << G4endl;
 }
 
 
@@ -67,9 +67,9 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 		 sqr( G4Proton::Proton()->GetPDGMass() ) +
 		 2*thePrimary.GetTotalEnergy()*G4Proton::Proton()->GetPDGMass();
 
-//    G4cout << " primary Total E (GeV): " << thePrimary.GetTotalEnergy()/GeV << endl;
-//    G4cout << " primary Mass    (GeV): " << thePrimary.GetMass() /GeV << endl;
-//    G4cout << "cms sqrt(s) (GeV) = " << sqrt(s) / GeV << endl;
+//    G4cout << " primary Total E (GeV): " << thePrimary.GetTotalEnergy()/GeV << G4endl;
+//    G4cout << " primary Mass    (GeV): " << thePrimary.GetMass() /GeV << G4endl;
+//    G4cout << "cms sqrt(s) (GeV) = " << sqrt(s) / GeV << G4endl;
 
     G4PomeronCrossSection theCrossSection(thePrimary.GetDefinition());
     
@@ -82,7 +82,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
     G4double xyradius;
     xyradius =theNucleus->GetOuterRadius() + deltaxy;
 
-//    G4cout <<"  G4FTFParticipants::StartLoop: xyradius " << xyradius << endl;
+//    G4cout <<"  G4FTFParticipants::StartLoop: xyradius " << xyradius << G4endl;
 
     G4bool nucleusNeedsShift = true;
     
@@ -98,7 +98,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 	G4double impactX=x*xyradius;
 	G4double impactY=y*xyradius;
 
-//	G4cout << " impctX, impctY " << impactX/fermi << "    "<<impactY/fermi << " fm" << endl;
+//	G4cout << " impctX, impctY " << impactX/fermi << "    "<<impactY/fermi << " fm" << G4endl;
 
 	theNucleus->StartLoop();
 	G4Nucleon * nucleon;
@@ -130,7 +130,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 
 //	G4cout << "Number of Hit nucleons " << theInteractions.entries() 
 //		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
-//		<< "\t" << sqrt(sqr(impactX)+sqr(impactY))/fermi <<endl;
+//		<< "\t" << sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
 	 
     }
    

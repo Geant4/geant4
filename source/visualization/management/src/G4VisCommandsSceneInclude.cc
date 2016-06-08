@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneInclude.cc,v 1.3.8.1 1999/12/07 20:54:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4VisCommandsSceneInclude.cc,v 1.4 1999/12/15 14:54:26 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -42,7 +42,7 @@ void G4VisCommandSceneIncludeHits::SetNewValue (G4UIcommand* command,
   G4SceneList& list = fpVisManager -> SetSceneList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
-	   << endl;
+	   << G4endl;
     return;
   }
 
@@ -52,7 +52,7 @@ void G4VisCommandSceneIncludeHits::SetNewValue (G4UIcommand* command,
   pCurrentScene -> AddEndOfEventModel (model);
   G4cout << "Hits will be drawn in scene \""
 	 << currentSceneName << "\"."
-	 << endl;
+	 << G4endl;
 }
 
 ////////////// /vis/scene/include/trajectories ///////////////////////////////////////
@@ -81,7 +81,7 @@ void G4VisCommandSceneIncludeTrajectories::SetNewValue (G4UIcommand* command,
   G4SceneList& list = fpVisManager -> SetSceneList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
-	   << endl;
+	   << G4endl;
     return;
   }
 
@@ -91,5 +91,5 @@ void G4VisCommandSceneIncludeTrajectories::SetNewValue (G4UIcommand* command,
   pCurrentScene -> AddEndOfEventModel (model);
   G4cout << "Trajectories will be drawn in scene \""
 	 << currentSceneName << "\"."
-	 << endl;
+	 << G4endl;
 }

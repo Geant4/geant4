@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PreCompoundModel.cc,v 1.7.4.1 1999/12/07 20:51:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4PreCompoundModel.cc,v 1.7.4.1.2.1 1999/12/08 17:34:42 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // by V. Lara
 
@@ -240,7 +240,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	    theChannels(aChannel)->GetKineticEnergy(aFragment);
 	  
 
-	  // G4cout << "Kinetic energy of Emitted fragment " << KineticEnergyOfEmittedFragment << endl;
+	  // G4cout << "Kinetic energy of Emitted fragment " << KineticEnergyOfEmittedFragment << G4endl;
 	  
 	  // Sample Fermi momentum of emitted fragment
 	  static const G4double FermiMaxMom = 250.0; // MeV

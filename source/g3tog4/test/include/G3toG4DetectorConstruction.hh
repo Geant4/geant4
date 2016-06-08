@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4DetectorConstruction.hh,v 1.3 1999/12/05 17:50:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1

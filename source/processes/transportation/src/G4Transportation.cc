@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.7.2.1 1999/12/07 20:52:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4Transportation.cc,v 1.7.2.1.2.1 1999/12/08 17:35:16 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -277,14 +277,14 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 
 #ifdef G4DEBUG_TRANSPORT      
       cout.precision(5);
-      cout << "***Transportation::AlongStepGPIL ** " << endl ;
-      cout << "  Called Navigator->ComputeSafety " << endl
-	   << "    with position = " << fTransportEndPosition << endl
-	   << "    and it returned safety= " << endSafety << endl; 
+      cout << "***Transportation::AlongStepGPIL ** " << G4endl ;
+      cout << "  Called Navigator->ComputeSafety " << G4endl
+	   << "    with position = " << fTransportEndPosition << G4endl
+	   << "    and it returned safety= " << endSafety << G4endl; 
       cout << "  I add the endpoint distance " << endpointDistance 
 	   << "   to it " 
 	   << "   to obtain a pseudo-safety= " << currentSafety 
-	   << "   which I return."  << endl; 
+	   << "   which I return."  << G4endl; 
 #endif
   }				    
 
@@ -430,17 +430,17 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 			                        true);
        if( fCurrentTouchable->GetVolume() != track.GetVolume() ){
           // 
-          G4cerr << " ERROR: A relocation within safety has caused a volume change! " << endl ; 
+          G4cerr << " ERROR: A relocation within safety has caused a volume change! " << G4endl ; 
           G4cerr << "   The old volume is called " 
-	         << track.GetVolume()->GetName() << endl; 
+	         << track.GetVolume()->GetName() << G4endl; 
           G4cerr << "   The new volume is called ";
           if ( fCurrentTouchable->GetVolume() != 0 )
-	     G4cerr << fCurrentTouchable->GetVolume()->GetName() << endl; 
+	     G4cerr << fCurrentTouchable->GetVolume()->GetName() << G4endl; 
           else
-	     G4cerr << "Out of World" << endl; 
+	     G4cerr << "Out of World" << G4endl; 
 
           G4cerr.precision(7);
-          G4cerr << "   The position is " << track.GetPosition() <<  endl;
+          G4cerr << "   The position is " << track.GetPosition() <<  G4endl;
 
           // Let us relocate again, for debuging
           fLinearNavigator-> LocateGlobalPointAndUpdateTouchable( 
@@ -450,9 +450,9 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 			                        true);
           G4cerr << "   The newer volume is called " ;
           if ( fCurrentTouchable->GetVolume() != 0 )
-	     G4cerr << fCurrentTouchable->GetVolume()->GetName() << endl; 
+	     G4cerr << fCurrentTouchable->GetVolume()->GetName() << G4endl; 
           else
-	     G4cerr << "Out of World" << endl; 
+	     G4cerr << "Out of World" << G4endl; 
        }
 
        assert( fCurrentTouchable->GetVolume()->GetName() == 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.hh,v 1.1.10.1 1999/12/07 20:48:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4ThreeMat.hh,v 1.2 1999/12/15 14:49:58 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 /*  G4ThreeMat.h,v 1.7 1993/12/30 02:15:55 rensing Exp  */
 //  File: G4ThreeMat.h
@@ -55,8 +55,8 @@ public:
 //  function to return class name
 	virtual char *NameOf() const { return "G4ThreeMat"; }
 //  printing functions (derived classes do not need to overwrite operator <<)
-	friend ostream& operator<<( ostream& os, const G4ThreeMat& m );
-	virtual void PrintOn( ostream& os = G4cout ) const;
+	friend G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m );
+	virtual void PrintOn( G4std::ostream& os = G4cout ) const;
 //  equality operator
 	int operator==( const G4ThreeMat& m );
 //

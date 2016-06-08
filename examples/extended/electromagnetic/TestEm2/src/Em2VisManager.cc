@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2VisManager.cc,v 1.1.4.1 1999/12/07 20:46:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em2VisManager.cc,v 1.2 1999/12/15 14:49:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // John Allison 24th January 1998.
@@ -131,7 +131,7 @@ void Em2VisManager::RegisterGraphicsSystems () {
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
-	 << endl;
+	 << G4endl;
     PrintAvailableGraphicsSystems ();
   }
 }

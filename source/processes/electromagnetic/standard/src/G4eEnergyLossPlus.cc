@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.16.6.1 1999/12/07 20:51:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4eEnergyLossPlus.cc,v 1.16.6.1.2.2 1999/12/10 15:41:59 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //  
 // $Id: 
 // -----------------------------------------------------------
@@ -264,13 +264,13 @@ void G4eEnergyLossPlus::BuildDEDXTable(
      {
        // create array for the min. delta cuts in kinetic energy 
        G4double absLowerLimit = 1.*keV ;
-       G4cout << endl;
+       G4cout << G4endl;
        G4cout.precision(5) ;
        G4cout << " eIoni+ Minimum Delta cut in range=" << MinDeltaCutInRange/mm
-              << "  mm." << endl;
-       G4cout << " min. delta energies (keV) " << endl;
-       G4cout << "   material         min.delta energy " << endl;
-       G4cout << endl;
+              << "  mm." << G4endl;
+       G4cout << " min. delta energies (keV) " << G4endl;
+       G4cout << "   material         min.delta energy " << G4endl;
+       G4cout << G4endl;
 
        if(MinDeltaEnergy) delete MinDeltaEnergy ;
        MinDeltaEnergy = new G4double [numOfMaterials] ; 
@@ -285,8 +285,8 @@ void G4eEnergyLossPlus::BuildDEDXTable(
            MinDeltaEnergy[mat] = absLowerLimit ; 
 
          if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat]=Tlowerlimit ;
-         G4cout << setw(20) << (*theMaterialTable)(mat)->GetName() 
-                << setw(15) << MinDeltaEnergy[mat]/keV << endl;
+         G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName() 
+                << G4std::setw(15) << MinDeltaEnergy[mat]/keV << G4endl;
        }
      }
   }
@@ -1016,7 +1016,7 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
       postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
         
-      safety=min(presafety,postsafety);
+      safety=G4std::min(presafety,postsafety);
 
       if(safety<rcut)
       {
@@ -1279,7 +1279,7 @@ G4double G4eEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1292,7 +1292,7 @@ G4double G4eEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1319,14 +1319,14 @@ G4double G4eEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1335,7 +1335,7 @@ G4double G4eEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);

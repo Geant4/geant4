@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VHighEnergyGenerator.hh,v 1.2.8.1 1999/12/07 20:51:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1

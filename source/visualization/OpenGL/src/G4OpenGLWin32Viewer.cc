@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.1.8.1 1999/12/07 20:53:27 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.2 1999/12/15 14:54:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific

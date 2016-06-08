@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2DetectorConstruction.cc,v 1.1.4.1 1999/12/07 20:46:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-00 $
+// $Id: Em2DetectorConstruction.cc,v 1.3 2000/02/14 14:09:16 maire Exp $
+// GEANT4 tag $Name: geant4-01-01 $
 //
 // 
 
@@ -142,7 +142,7 @@ void Em2DetectorConstruction::DefineMaterials()
     G4Material* pb = new G4Material(name="Lead", density, ncomponents=1);
     pb->AddElement(Pb, fractionmass=1.0);
      
-    G4cout << *(G4Material::GetMaterialTable()) << endl;
+    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //choose material
   myMaterial = PbWO;
@@ -186,8 +186,8 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
                                     physiRing,false,0);               
 
 
-  cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
-       << " of " << myMaterial->GetName() << endl; 
+  G4cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
+       << " of " << myMaterial->GetName() << G4endl; 
 
 
   G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
