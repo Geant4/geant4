@@ -1,4 +1,14 @@
-
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4StatMFMacroCanonical.cc,v 1.6 2000/08/03 08:47:47 gcosmo Exp $
+// GEANT4 tag $Name: de_excitation-V02-00-00r $
+//
+// --------------------------------------------------------------------
 
 #include "G4StatMFMacroCanonical.hh"
 
@@ -239,7 +249,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
 				G4double ZDispersion = sqrt(FragmentsA(i)*__MeanTemperature/CC);
 				G4int z;
 				do {
-					RandZ = RandGauss::shoot(ZMean,ZDispersion);
+					RandZ = G4RandGauss::shoot(ZMean,ZDispersion);
 					z = G4int(RandZ+0.5);
 				} while (z < 0 || z > A);
 					FragmentsZ(i) = z;

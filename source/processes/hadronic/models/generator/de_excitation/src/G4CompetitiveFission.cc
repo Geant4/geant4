@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -318,7 +318,7 @@ G4int G4CompetitiveFission::FissionCharge(const G4double A,
  
 	G4double theZ;
 	do {
-		theZ = RandGauss::shoot(Zmean,sigma);
+		theZ = G4RandGauss::shoot(Zmean,sigma);
 	} while (theZ  < 1.0 || theZ > (Z-1.0) || theZ > Af);
 	//  return static_cast<G4int>(theZ+0.5);
 	return G4int(theZ+0.5);
@@ -404,7 +404,7 @@ G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4do
 	G4double KineticEnergy;
 	G4int i = 0;
 	do {
-		KineticEnergy = RandGauss::shoot(TaverageAfMax,ESigma);
+		KineticEnergy = G4RandGauss::shoot(TaverageAfMax,ESigma);
 		if (i++ > 100) return Eaverage;
 	} while (KineticEnergy < Eaverage-3.72*ESigma || 
 				KineticEnergy > Eaverage+3.72*ESigma ||

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.cc,v 1.3 2000/06/15 17:38:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VXrayTRmodel.cc,v 1.5 2000/08/03 09:01:39 gcosmo Exp $
+// GEANT4 tag $Name: param-V02-00-00r $
 //
 
 #include "G4Timer.hh"
@@ -98,7 +98,18 @@ G4VXrayTRmodel::G4VXrayTRmodel(G4Envelope *anEnvelope, G4double a, G4double b) :
 
 G4VXrayTRmodel::~G4VXrayTRmodel()
 {
-  ;
+   G4int i ;
+   for(i=0;i<fGasIntervalNumber;i++)
+   {
+     delete[] fGasPhotoAbsCof[i] ;
+   }
+   delete[] fGasPhotoAbsCof ;
+
+   for(i=0;i<fPlateIntervalNumber;i++)
+   {
+     delete[] fPlatePhotoAbsCof[i] ;
+   }
+   delete[] fPlatePhotoAbsCof ; 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,7 +247,7 @@ void G4VXrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
 
         sumEnergyTR += energyTR ;
 
-        theta = abs(RandGauss::shoot(0.0,pi/gamma)) ;
+        theta = abs(G4RandGauss::shoot(0.0,pi/gamma)) ;
 
         if( theta >= 0.1 ) theta = 0.1 ;
 

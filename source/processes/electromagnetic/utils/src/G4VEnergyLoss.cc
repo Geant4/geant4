@@ -1,19 +1,19 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.11 2000/05/26 07:40:09 urban Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VEnergyLoss.cc,v 1.11.2.1 2000/08/03 08:12:21 gcosmo Exp $
+// GEANT4 tag $Name: utils-V02-00-00r $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
 //	For information related to this code contact:
-//	CERN, CN Division, ASD Group
+//	GEANT4 Collaboration
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
@@ -924,7 +924,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   if(MeanLoss >= kappa*Tm)
   {
     siga = sqrt(MeanLoss*Tm*(1.-0.5*beta2)) ;
-    loss = RandGauss::shoot(MeanLoss,siga) ;
+    loss = G4RandGauss::shoot(MeanLoss,siga) ;
     if(loss < 0.) loss = 0. ;
     return loss ;
   }
@@ -960,7 +960,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -979,7 +979,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1008,7 +1008,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -1017,7 +1017,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1036,7 +1036,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -1052,14 +1052,14 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           rfac       = dp3/(G4float(nmaxCont2)+dp3);
           namean     = G4float(p3)*rfac;
           sa         = G4float(nmaxCont1)*rfac;
-          na         = RandGauss::shoot(namean,sa);
+          na         = G4RandGauss::shoot(namean,sa);
           if (na > 0.)
           {
             alfa   = w1*G4float(nmaxCont2+p3)/(w1*G4float(nmaxCont2)+G4float(p3));
             alfa1  = alfa*log(alfa)/(alfa-1.);
             ea     = na*ipotFluct*alfa1;
             sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-            lossc += RandGauss::shoot(ea,sea);
+            lossc += G4RandGauss::shoot(ea,sea);
           }
         }
 

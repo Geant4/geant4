@@ -14,14 +14,12 @@
 ###
 ###############################################################################
 
-G4TARGET = rztog4
+G4TARGET := rztog4
 
-name = G3toG4
-
-curdir = $(shell /bin/pwd)
+name := G3toG4
 
 ifndef G4INSTALL
-  G4INSTALL = ../..
+  G4INSTALL := ../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
@@ -46,8 +44,8 @@ CPPFLAGS  += \
              -I$(G4BASE)/track/include \
              -I$(G4BASE)/tracking/include \
              -I$(G4BASE)/digits+hits/detector/include \
-             -I$(G4BASE)/digits+hits/hits/include \
-             -Itest
+             -I$(G4BASE)/digits+hits/hits/include
+
 ###	kludge for AIX
 
 ifeq ($(FC),xlf)
@@ -102,31 +100,24 @@ cernlibs := $(shell cernlib -v $(cernlibv) geant321 packlib)
 
 first: lib
 
-global: lib
+global: lib bin
 
-all: lib bin examples
-	@echo $@ stage done in $(curdir)
-
-examples: cltog4 clGeometry
-	@echo $@ stage done in $(curdir)
-
-cltog4:
-	cd test; $(MAKE) "G4TARGET=cltog4"
-
-clGeometry:
-	cd test; $(MAKE) "G4TARGET=clGeometry"
+all: lib
 
 lib: libc libF
-	@echo $@ stage done in $(curdir)
 
+ifneq ($(G4MAKESHLIB),)
+libc : $(G4LIBDIR)/lib$(name).$(SHEXT)
+else
 libc : $(G4LIBDIR)/lib$(name).a
-	@echo $@ stage done in $(curdir)
+endif
+	@echo $@ stage done
 
 libF : $(G4LIBDIR)/lib$(name)F.a
-	@echo $@ stage done in $(curdir)
+	@echo $@ stage done
 
 bin: $(G4BINDIR)/$(G4TARGET)
-	@echo $@ stage done in $(curdir)
+	@echo $@ stage done
 
 ### Make Fortran library.
 
@@ -190,9 +181,6 @@ cleanf:
 	@$(RM) $(Fbinobjects)
 	@$(RM) $(Fdependencies)
 	@$(RM) $(G4BINDIR)/$(G4TARGET)
-
-cleantest:
-	cd test; $(MAKE) clean
 
 include $(G4INSTALL)/config/common.gmk
 

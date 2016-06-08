@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: cstring.icc,v 1.5 2000/06/26 16:25:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: cstring.icc,v 1.6 2000/07/21 10:47:48 gcosmo Exp $
+// GEANT4 tag $Name: global-V02-00-02r $
 //
 // 
 //---------------------------------------------------------------
@@ -279,14 +279,14 @@ G4String& G4String::append(const G4String& s)
 G4std::istream&
 G4String::readLine (G4std::istream& s, G4bool skipWhite)
 {
-  char tmp[256];
+  char tmp[1024];
   if ( skipWhite ) {
     s >> G4std::ws;
-    s.getline(tmp,256);
+    s.getline(tmp,1024);
     *this=tmp;
   }
   else {
-    s.getline(tmp,256);    
+    s.getline(tmp,1024);    
     *this=tmp;
   } 
   return s;

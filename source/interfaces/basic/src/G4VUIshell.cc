@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUIshell.cc,v 1.2 2000/06/14 03:19:00 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4VUIshell.cc,v 1.4 2000/07/31 08:00:01 gracia Exp $
+// GEANT4 tag $Name: interfaces-V02-00-01 $
 //
 
 #include "G4UImanager.hh"
@@ -40,7 +40,7 @@ G4VUIshell::~G4VUIshell()
 }
 
 /////////////////////////////
-void G4VUIshell::MakePrompt() 
+void G4VUIshell::MakePrompt(const char* msg) 
 /////////////////////////////
 {
   if(promptSetting.length()<=1) {
@@ -51,14 +51,20 @@ void G4VUIshell::MakePrompt()
   promptString="";
   G4int i;
   for(i=0; i<promptSetting.length()-1; i++){
-    if(promptSetting[i]=='%'){
-      switch (promptSetting[i+1]) {
+    if(promptSetting[(size_t)i]=='%'){
+      switch (promptSetting[(size_t)(i+1)]) {
       case 's':  // current application status
 	{
-	G4StateManager* statM= G4StateManager::GetStateManager();
-	G4String stateStr= statM-> GetStateString(statM->GetCurrentState());
-	promptString.append(stateStr);
-	i++;
+           G4String stateStr;
+           if(msg)
+           { stateStr = msg; }
+           else
+           {
+	     G4StateManager* statM= G4StateManager::GetStateManager();
+	     stateStr= statM-> GetStateString(statM->GetCurrentState());
+           }
+	   promptString.append(stateStr);
+	   i++;
 	}
         break;
       case '/':  // current working directory
@@ -66,17 +72,17 @@ void G4VUIshell::MakePrompt()
 	i++;
         break;
       default:
-	promptString.append(G4String(promptSetting[i]));
+	promptString.append(G4String(promptSetting[(size_t)i]));
         break;
       }           
     } else {
-      promptString.append(G4String(promptSetting[i]));
+      promptString.append(G4String(promptSetting[(size_t)i]));
     }
   }
 
   // append last chaacter
   if(i == promptSetting.length()-1) 
-    promptString.append(G4String(promptSetting[i]));
+    promptString.append(G4String(promptSetting[(size_t)i]));
 }
 
 
@@ -121,7 +127,7 @@ G4String G4VUIshell::GetAbsCommandDirPath(const G4String& apath) const
   // if "apath" does not start with "/", 
   //   then it is treared as relative path
   G4String bpath= apath;
-  if(apath[0] != '/') bpath= currentCommandDir + apath;
+  if(apath[(size_t)0] != '/') bpath= currentCommandDir + apath;
 
   // parsing...
   G4String absPath= "/";
@@ -158,13 +164,13 @@ G4String G4VUIshell::GetCommandPathTail(const G4String& apath) const
 
   // for trancating "/"
   G4bool Qsla= FALSE;
-  if(apath[lstr-1]=='/') Qsla= TRUE;
+  if(apath[(size_t)(lstr-1)]=='/') Qsla= TRUE;
 
   // searching last '/' from tail
   G4int indx= -1;
   for(G4int i=lstr-1; i>=0; i--) {
-    if(Qsla && apath[i]!='/') Qsla= FALSE; // break "/" flag!!
-    if(apath[i]=='/' && !Qsla) {
+    if(Qsla && apath[(size_t)i]!='/') Qsla= FALSE; // break "/" flag!!
+    if(apath[(size_t)i]=='/' && !Qsla) {
       indx= i;
       break;
     } 
@@ -203,7 +209,7 @@ void G4VUIshell::ListCommand(const G4String& dir,
   if(! input.empty()) {
     G4int indx= -1;
     for(G4int i=len-1; i>=0; i--) { // search last '/'
-      if(input[i]=='/') {
+      if(input[(size_t)i]=='/') {
         indx= i;
         break;
       }   

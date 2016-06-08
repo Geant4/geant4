@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3CalcParams.cc,v 1.3 1999/12/15 14:49:42 gunter Exp $ 
-// GEANT4 tag $Name: geant4-02-00 $ 
+// $Id: G3CalcParams.cc,v 1.4 2000/07/24 11:32:14 gcosmo Exp $ 
+// GEANT4 tag $Name: g3tog4-V02-00-03 $ 
 //
 // Change: G3CalcParamsFn returns true only in case
 // the parameters *after* processing this method
@@ -27,7 +27,8 @@ G4bool G3CalcParamsFn(G4double *Rpar, G4int npar, G4double *Rparm,
   // negative parameters
   // treat only the legal cases
   if (shapem == shape) {
-    if (shape == "BOX" || shape == "TRD1" || shape == "TRD2") {
+    if (shape == "BOX" || shape == "TRD1" || shape == "TRD2" || 
+        shape == "ELTU") {
       for (G4int i=0;i<npar;i++) {
         if (Rpar[i] < 0) {
           if (Rparm != 0) Rpar[i] = Rparm[i];

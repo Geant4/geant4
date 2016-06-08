@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-02-00 $
-                                (10-Mar-2000)
+ Geant4 version $Name: examples-V02-00-01 $
+                                (30-Jun-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -183,10 +183,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  278.67 MeV       total track length:  17.078 cm 
-        Gap: total energy:  12.938 MeV       total track length:  6.3775 cm 
+   Absorber: total energy:  273.63 MeV       total track length:  16.804 cm 
+        Gap: total energy:  8.6535 MeV       total track length:  4.3941 cm 
 
-     9 hits are stored in ExN03CalorHitsCollection.
+     6 hits are stored in ExN03CalorHitsCollection.
 #
 # list the existing physics processes
      Transportation,              hIoni,                msc,              eIoni
@@ -201,11 +201,11 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1105568778, 682814057
+ Current couple of seeds = 1018070348, 54426648
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  276.15 MeV       total track length:   15.41 cm 
-        Gap: total energy:  21.932 MeV       total track length:  11.454 cm 
+   Absorber: total energy:  279.37 MeV       total track length:  14.971 cm 
+        Gap: total energy:   19.38 MeV       total track length:  9.2205 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
 #
@@ -230,10 +230,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 656008347, 35818481
+ Current couple of seeds = 191071928, 1973215037
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  347.62 MeV       total track length:  78.847 cm 
-        Gap: total energy:  79.849 MeV       total track length:  2.2713 m  
+   Absorber: total energy:  216.51 MeV       total track length:  51.308 cm 
+        Gap: total energy:  53.547 MeV       total track length:  1.5095 m  
 
-     28 hits are stored in ExN03CalorHitsCollection.
+     22 hits are stored in ExN03CalorHitsCollection.

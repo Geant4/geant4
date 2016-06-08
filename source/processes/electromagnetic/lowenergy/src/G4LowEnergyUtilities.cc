@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.4 2000/01/26 09:50:01 lefebure Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4LowEnergyUtilities.cc,v 1.5 2000/07/11 18:46:48 pia Exp $
+// GEANT4 tag $Name: emlowen-V02-00-02r $
 //
 // 
 // --------------------------------------------------------------

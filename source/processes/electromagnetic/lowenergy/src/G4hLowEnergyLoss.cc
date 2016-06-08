@@ -5,15 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.1 2000/03/31 15:15:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4hLowEnergyLoss.cc,v 1.4 2000/08/03 08:23:36 gcosmo Exp $
+// GEANT4 tag $Name: emlowen-V02-00-02r $
 //
-// $Id: 
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
 //      For information related to this code contact:
-//      CERN, IT Division, ASD group
+//      GEANT4 Collaboration
 //      History: based on object model of
 //      2nd December 1995, G.Cosmo
 //      ---------- G4hEnergyLoss physics process -----------
@@ -28,12 +27,15 @@
 // 22/10/98 : cleanup , L.Urban
 // 07/12/98 : works for ions as well+ bug corrected, L.Urban
 // 02/02/99 : several bugs fixed, L.Urban
-// 31/03/00 : rename to lowenergy subdirectory as G4hLowEnergyLoss.cc V.Ivanchenko
+// 31/03/00 : rename to lowenergy as G4hLowEnergyLoss.cc V.Ivanchenko
 // --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4hLowEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // Initialisation of static members ******************************************
 // contributing processes : ion.loss ->NumberOfProcesses is initialized
@@ -116,6 +118,8 @@ G4double G4hLowEnergyLoss::LowestKineticEnergy,G4hLowEnergyLoss::HighestKineticE
 G4int    G4hLowEnergyLoss::TotBin ;
 G4double G4hLowEnergyLoss::RTable,G4hLowEnergyLoss::LOGRTable;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 // constructor and destructor
  
 G4hLowEnergyLoss::G4hLowEnergyLoss(const G4String& processName)
@@ -129,7 +133,9 @@ G4hLowEnergyLoss::G4hLowEnergyLoss(const G4String& processName)
      nmaxDirectFluct (100),
      nmaxCont1(4),
      nmaxCont2(16) 
-{ }
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyLoss::~G4hLowEnergyLoss() 
 {
@@ -138,6 +144,8 @@ G4hLowEnergyLoss::~G4hLowEnergyLoss()
         delete theLossTable;
      }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 void G4hLowEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
@@ -285,6 +293,8 @@ void G4hLowEnergyLoss::BuildDEDXTable(
     proton_mass_c2/aParticleType.GetPDGMass(),TotBin);
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
       
 void G4hLowEnergyLoss::BuildRangeTable(
                              const G4ParticleDefinition& aParticleType)
@@ -324,6 +334,8 @@ void G4hLowEnergyLoss::BuildRangeTable(
      theRangeTable->insert(aVector);
    }
 }    
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyLoss::BuildTimeTables(
                              const G4ParticleDefinition& aParticleType)
@@ -381,8 +393,10 @@ void G4hLowEnergyLoss::BuildTimeTables(
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyLoss::BuildRangeVector(G4int materialIndex,
-                                     G4PhysicsLogVector* rangeVector)
+                                        G4PhysicsLogVector* rangeVector)
 //  create range vector for a material
 {
   G4int nbin=100;
@@ -459,8 +473,10 @@ void G4hLowEnergyLoss::BuildRangeVector(G4int materialIndex,
   }
 }    
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyLoss::BuildLabTimeVector(G4int materialIndex,
-                                     G4PhysicsLogVector* timeVector)
+                                          G4PhysicsLogVector* timeVector)
 //  create lab time vector for a material
 {
 
@@ -519,8 +535,10 @@ void G4hLowEnergyLoss::BuildLabTimeVector(G4int materialIndex,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyLoss::BuildProperTimeVector(G4int materialIndex,
-                                     G4PhysicsLogVector* timeVector)
+                                             G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material
 {
   G4int nbin=100;
@@ -578,8 +596,10 @@ void G4hLowEnergyLoss::BuildProperTimeVector(G4int materialIndex,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4hLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
-                                    G4int nbin)
+                                       G4int nbin)
 //  num. integration, linear binning
 {
   G4double dtau,Value,taui,ti,lossi,ci;
@@ -607,9 +627,10 @@ G4double G4hLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
   return Value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
-                                    G4int nbin)
+                                       G4int nbin)
 //  num. integration, logarithmic binning
 {
   G4double ltt,dltau,Value,ui,taui,ti,lossi,ci;
@@ -639,8 +660,10 @@ G4double G4hLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
   return Value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4hLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
-                                    G4int nbin)
+                                         G4int nbin)
 //  num. integration, logarithmic binning
 {
   G4double ltt,dltau,Value,ui,taui,ti,lossi,ci;
@@ -670,8 +693,10 @@ G4double G4hLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
   return Value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4hLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
-                                    G4int nbin)
+                                            G4int nbin)
 //  num. integration, logarithmic binning
 {
   G4double ltt,dltau,Value,ui,taui,ti,lossi,ci;
@@ -700,6 +725,8 @@ G4double G4hLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
   Value *= ParticleMass*dltau/c_light;
   return Value;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyLoss::BuildRangeCoeffATable(
                             const G4ParticleDefinition& aParticleType)
@@ -772,6 +799,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
   } 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyLoss::BuildRangeCoeffBTable(
                             const G4ParticleDefinition& aParticleType)
@@ -843,6 +871,8 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
   } 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyLoss::BuildRangeCoeffCTable(
                             const G4ParticleDefinition& aParticleType)
 // Build tables of coefficients for the energy loss calculation
@@ -913,6 +943,8 @@ void G4hLowEnergyLoss::BuildRangeCoeffCTable(
   } 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyLoss::BuildInverseRangeTable(
                              const G4ParticleDefinition& aParticleType)
 // Build inverse table of the range table
@@ -967,8 +999,10 @@ void G4hLowEnergyLoss::BuildInverseRangeTable(
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyLoss::InvertRangeVector(G4int materialIndex,
-                                     G4PhysicsLogVector* aVector)
+                                         G4PhysicsLogVector* aVector)
 //  invert range vector for a material
 {
   G4double LowEdgeRange,A,B,C,discr,KineticEnergy ;
@@ -1015,8 +1049,10 @@ void G4hLowEnergyLoss::InvertRangeVector(G4int materialIndex,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4hLowEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
-                                              G4Material *aMaterial)
+                                                G4Material *aMaterial)
 {
   // returns the Step limit
   // dRoverRange is the max. allowed relative range loss in one step
@@ -1068,8 +1104,11 @@ G4double G4hLowEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
   return StepLimit ;
 }
 
-G4VParticleChange* G4hLowEnergyLoss::AlongStepDoIt( 
-                              const G4Track& trackData,const G4Step& stepData) 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* G4hLowEnergyLoss::AlongStepDoIt(
+                                     const G4Track& trackData,
+                                     const G4Step& stepData) 
  // compute the energy loss after a step 
 {
   const G4DynamicParticle* aParticle;
@@ -1157,10 +1196,11 @@ G4VParticleChange* G4hLowEnergyLoss::AlongStepDoIt(
   return &aParticleChange ;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
-                                               G4Material* aMaterial,
-                                               G4double    MeanLoss)
+                                                  G4Material* aMaterial,
+                                                  G4double    MeanLoss)
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is the same as in Glandz in Geant3.
 {
@@ -1231,7 +1271,7 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1244,7 +1284,7 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           if(a1>alim)
           {
             siga=sqrt(a1) ;
-            p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+            p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
           }
           else
             p1 = G4Poisson(a1);
@@ -1272,14 +1312,14 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1288,7 +1328,7 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -1302,14 +1342,14 @@ G4double G4hLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
           namean     = p3*rfac;
 
           sa         = nmaxCont1*rfac;
-          na         = RandGauss::shoot(namean,sa);
+          na         = G4RandGauss::shoot(namean,sa);
           if (na > 0.)
             {
               alfa   = w2*(nmaxCont2+p3)/(w2*nmaxCont2+p3);
               alfa1  = alfa*log(alfa)/(alfa-1.);
               ea     = na*ipotFluct*alfa1;
               sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-              lossc += RandGauss::shoot(ea,sea);
+              lossc += G4RandGauss::shoot(ea,sea);
             }
         }
 

@@ -1,5 +1,5 @@
-$Id: History,v 1.105 2000/05/23 06:48:25 gcosmo Exp $
-$Name: geant4-02-00 $
+$Id: History,v 1.107 2000/08/01 12:38:18 gcosmo Exp $
+$Name: config-V02-00-01 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st August 2000  Gabriele Cosmo (config-V02-00-01)
+- Added setup WIN32-g++ for Windows/NT/9X with Cygwin and g++ compiler.
+  Configuration non officially supported (courtesy of S.Agostinelli and
+  IST group, Genova).
+
+24th July 2000  Gabriele Cosmo (config-V02-00-00)
+- Added path to g3tog4 for global libs.
 
 23rd May 2000  John Allison (config-V01-01-04)
 - Added -I$(G4BASE)/processes/hadronic/models/radiative_decay/include to

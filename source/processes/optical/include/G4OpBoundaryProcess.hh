@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.4.4.1 1999/12/07 20:52:51 gunter Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4OpBoundaryProcess.hh,v 1.5 1999/12/15 14:53:44 gunter Exp $
+// GEANT4 tag $Name: op-V02-00-00r $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

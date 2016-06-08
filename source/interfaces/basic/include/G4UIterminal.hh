@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.hh,v 1.5 2000/03/26 23:03:48 asaim Exp $
-// GEANT4 tag $Name: geant4-02-00 $
+// $Id: G4UIterminal.hh,v 1.6 2000/07/22 10:52:28 asaim Exp $
+// GEANT4 tag $Name: interfaces-V02-00-01 $
 //
 
 #ifndef G4UIterminal_h
@@ -69,7 +69,7 @@ public:
 
 private:
   void ExecuteCommand(G4String aCommand);
-  G4String GetCommand();
+  G4String GetCommand(const char* msg=0);
   G4bool GetHelpChoice(G4int& aInt);
   void ExitHelp();
   

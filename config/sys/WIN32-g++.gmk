@@ -1,0 +1,53 @@
+#
+# ------ GNU/WIN32 CYGNUS ------   !!! not supported !!!
+#                                  cygnus b20 with cygwin1.dll 1.1.5 patch
+#                                  Windows 95 4.00.1111
+#
+# Sys file by Stefano Agostinelli, July 2000
+# IST Group: Franca Foppiano, Stefania Garelli, Stefano Agostinelli
+#
+ifeq ($(G4SYSTEM),WIN32-g++)
+  CXX       := g++
+  GNU_GCC = 1
+  CXXFLAGS  := -pipe -fno-for-scope -DGNU_GCC
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -O
+    FCFLAGS   := -O
+    CCFLAGS   := -O
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  += -g
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
+  endif
+  ifdef G4MAKESHLIB
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
+  endif
+  FC := g77
+  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
+  FCLIBS := -lg2c -lnsl
+  ECHO    := echo -e
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  XMFLAGS   := -I/usr/X11R6/include
+  XMLIBS    := -lXm -lXpm
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+  OIVFLAGS  += -I$(OIHOME)/include 
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
+    CPPFLAGS += -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)
+  endif
+  ifdef G4ODBMS
+    G4OODDLX_FLAGS += -D__STL_CLASS_PARTIAL_SPECIALIZATION -Dstd=""
+  endif
+endif
+

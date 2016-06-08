@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2000/06/26 16:25:56 gcosmo Exp $
+$Id: History,v 1.23 2000/07/21 10:47:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,10 @@ committal in the CVS repository !
 
                          STL Interface
                          -------------
+
+July 21, 2000 G.Cosmo
+- STLInterface/cstring.icc: extended buffer for G4String::readLine from
+  256 to 1024 characters.
 
 June 26, 00 G.Cosmo (STLInterface-V01-01-01)
 - Fixes for problem report #104:
