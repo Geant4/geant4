@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleus.cc,v 2.6 1998/10/05 09:12:40 pia Exp $
-// GEANT4 tag $Name: geant4-00 $
+// $Id: G4Nucleus.cc,v 1.2 1999/01/20 17:55:58 hpw Exp $
+// GEANT4 tag $Name: hadronic-01-00-00-01 $
 //
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -108,8 +108,8 @@
     
     G4int myZ = G4int(Z + 0.5);
     G4int myA = G4int(A + 0.5);
-    if( myZ < 0 )return 0.0;
-    if( myZ > myA )return 0.0;
+    if( myA <= 0 )return DBL_MAX;
+    if( myZ > myA)return DBL_MAX;
     if( myA == 1 )
     {
       if( myZ == 0 )return neutron_mass*MeV;
