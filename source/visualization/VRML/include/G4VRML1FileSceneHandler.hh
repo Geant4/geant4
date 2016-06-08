@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.2 1999/05/10 15:39:06 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.4.4.1 1999/12/07 20:53:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // G4VRML1FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -16,7 +16,6 @@
 #ifndef G4VRML1FILE_SCENE_HANDLER_HH
 #define G4VRML1FILE_SCENE_HANDLER_HH
 
-#include <rw/tvhdict.h>
 #include <fstream.h>
 
 #include "globals.hh"
@@ -61,8 +60,8 @@ public:
 	void BeginModeling();
 	void EndModeling();
 
-	void beginSending();
-	void endSending();
+	void VRMLBeginModeling();
+	void VRMLEndModeling();
 
 	static G4int GetSceneCount() { return fSceneCount; }
 

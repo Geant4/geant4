@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.hh,v 1.2 1999/04/15 14:00:37 grichine Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SandiaTable.hh,v 1.3.8.1 1999/12/07 20:49:17 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
@@ -49,11 +49,11 @@ public:
 //
 // Methods for PAI model
 
-         inline void SandiaSwap( G4double da[][5],
+         inline void SandiaSwap( G4double** da,
                                  G4int i,
                                  G4int j );
 
-         void SandiaSort( G4double da[][5],
+         void SandiaSort( G4double** da,
                           G4int sz );
 
 	 G4int SandiaIntervals( G4int Z[],
@@ -90,13 +90,17 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 //
-// data memebers for PAI model
+// data members for PAI model
 
          static const G4int    fNumberOfElements  ;
          static const G4int    fIntervalLimit ;
          static const G4int    fNumberOfIntervals  ;
 		
-	 G4double fPhotoAbsorptionCof[101][5] ;	// SandiaTable  for mixture
+         // G4double fPhotoAbsorptionCof[101][5] ; // SandiaTable  for mixture
+
+	 G4double** fPhotoAbsorptionCof ;	// SandiaTable  for mixture
+
+         // G4OrderedTable*
 	 G4int fMaxInterval ;
 
   
@@ -179,7 +183,7 @@ G4double G4SandiaTable::GetZtoA(G4int Z)
 
 inline
 void
-G4SandiaTable::SandiaSwap( G4double da[][5],
+G4SandiaTable::SandiaSwap( G4double** da ,
                            G4int i,
                            G4int j )
 {

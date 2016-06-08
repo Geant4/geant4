@@ -1,17 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeStore.hh,v 1.1 1999/01/07 16:07:16 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PhysicalVolumeStore.hh,v 1.2.2.1 1999/12/07 20:48:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4PhysicalVolume
 //
 // Container for all solids, with functionality derived from
-// RWTPtrOrderedVector<T>. The class is `singleton', in that only
+// G4RWTPtrOrderedVector<T>. The class is `singleton', in that only
 // one can exist, and access is facillitated via
 // G4PhysicalVolumeStore::GetInstance()
 //
@@ -20,7 +20,7 @@
 // container initially has a capacity of 100.
 //
 // If much additional functionality is added, should consider containment
-// instead of inheritance for RWTPtrOrderedVector<T>
+// instead of inheritance for G4RWTPtrOrderedVector<T>
 //
 // Class member functions:
 //
@@ -49,11 +49,11 @@
 #ifndef G4PHYSICALVOLUMESTORE_HH
 #define G4PHYSICALVOLUMESTORE_HH
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4VPhysicalVolume.hh"
 
-class G4PhysicalVolumeStore : public RWTPtrOrderedVector<G4VPhysicalVolume>
+class G4PhysicalVolumeStore : public G4RWTPtrOrderedVector<G4VPhysicalVolume>
 {
   public:
     static void Register(G4VPhysicalVolume* pSolid);

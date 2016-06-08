@@ -1,34 +1,44 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.6 1999/05/28 21:08:55 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G3MatTable.cc,v 1.12 1999/12/05 17:50:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
+// by I.Hrivnacova, 27 Sep 99
 
-#include "globals.hh"
 #include "G3MatTable.hh"
-#include "G4Material.hh"
 
-G3MatTable::G3MatTable(){
-  _Mat = new 
-    RWTPtrOrderedVector<G4Material>;
-};
+G3MatTable::G3MatTable()
+{
+  fMatVector = new G3MaterialVector();
+}
 
-G3MatTable::~G3MatTable(){
-  _Mat->clear();
-  G4cout << "Deleted G3MatTable..." << endl;
-  delete _Mat;
-};
+G3MatTable::~G3MatTable()
+{
+  fMatVector->clearAndDestroy();
+  delete fMatVector;
+}
 
-G4Material*
-G3MatTable::get(G4int MatID){
-  return (*_Mat)[MatID-1];
-};
+G4Material* G3MatTable::get(G4int id) const
+{
+  for (G4int i=0; i< fMatVector->entries(); i++) {
+    G3MatTableEntry* mte = (*fMatVector)[i];
+    if (id == mte->GetID()) return mte->GetMaterial();
+  }
+  return 0;
+}    
 
-void G3MatTable::put(G4int MatID, G4Material* MatPT){
-  _Mat->insertAt(MatID-1, MatPT);
-};
+void G3MatTable::put(G4int id, G4Material* material)
+{
+  G3MatTableEntry* mte = new G3MatTableEntry(id, material);
+  fMatVector->insert(mte);
+}
+
+void G3MatTable::Clear()
+{
+  fMatVector->clearAndDestroy();
+}

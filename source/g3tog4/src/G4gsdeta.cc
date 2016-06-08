@@ -1,17 +1,23 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdeta.cc,v 1.2 1999/05/07 04:16:14 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4gsdeta.cc,v 1.4 1999/12/05 17:50:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
+//
+// modified by I.Hrivnacova, 6 Oct 99
+
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
 
-void PG4gsdeta(RWCString tokens[])
+void G4gsdeta(G4String chset, G4String chdet, G4String,
+              G4int nwhi, G4int nwdi);
+
+void PG4gsdeta(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdeta);

@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFastLegendre.hh,v 1.3 1999/07/02 09:58:57 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4NeutronHPFastLegendre.hh,v 1.4 1999/12/03 10:59:07 hpw Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4NeutronHPFastLegendre_h
 #define G4NeutronHPFastLegendre_h 1
@@ -129,7 +129,7 @@ class G4NeutronHPFastLegendre
   inline G4int GetBin(G4int l, G4double costh)
   {
     G4int bin=0;
-    bin = (theNbin[l]-1)*(costh+1)/2.;
+    bin = G4int( (theNbin[l]-1)*(costh+1)/2. );
     if(bin == theNbin[l]-1) bin--;
     return bin;
   }

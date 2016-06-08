@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.4 1999/05/10 14:04:13 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VSceneHandler.cc,v 1.7.2.1 1999/12/07 20:53:59 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -49,7 +49,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpViewer               (0),
   fReadyForTransients    (false),
   fpModel                (0),
-  fpObjectTransformation (0),
+  fpObjectTransformation (&G4Transform3D::Identity),
   fpVisAttribs           (0),
   fCurrentDepth          (0),
   fpCurrentPV            (0),
@@ -71,6 +71,25 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 G4VSceneHandler::~G4VSceneHandler () {
   fViewerList.clearAndDestroy ();
 }
+
+void G4VSceneHandler::EndModeling () {}
+
+void G4VSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
+                                  const G4VisAttributes& visAttribs) {
+  fpObjectTransformation = &objectTransformation;
+  fpVisAttribs = &visAttribs;
+}
+
+void G4VSceneHandler::PostAddThis () {
+  fpObjectTransformation = &G4Transform3D::Identity;
+  fpVisAttribs = 0;
+}
+
+void G4VSceneHandler::ClearStore () {
+  fpViewer -> NeedKernelVisit ();
+}
+
+void G4VSceneHandler::ClearTransientStore () {}
 
 void G4VSceneHandler::AddThis (const G4Box& box) {
   RequestPrimitives (box);
@@ -262,7 +281,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
-  const RWTPtrOrderedVector <G4VModel>& runDurationModelList =
+  const G4RWTPtrOrderedVector <G4VModel>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.entries ()) {
@@ -280,7 +299,8 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
       // comes to do this, then perhaps there should be a default
       // set of modeling parameters in the view parameters for the
       // case of a zero modeling parameters pointer.)
-      // (I think for the G4 Vis System we'll rely on view parameters and convert.  
+      // (I think for the G4 Vis System we'll rely on view parameters
+      // and convert using pMP = CreateModelingParameters () as above.)
       pModel -> SetModelingParameters (pMP);
       SetModel (pModel);  // Store for use by derived class.
       BeginModeling ();

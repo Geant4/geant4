@@ -1,0 +1,47 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: Em3PrimaryGeneratorMessenger.cc,v 1.1.4.1 1999/12/07 20:47:02 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
+// 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "Em3PrimaryGeneratorMessenger.hh"
+
+#include "Em3PrimaryGeneratorAction.hh"
+#include "G4UIcmdWithoutParameter.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+Em3PrimaryGeneratorMessenger::Em3PrimaryGeneratorMessenger(Em3PrimaryGeneratorAction* Em3Gun)
+:Em3Action(Em3Gun)
+{ 
+  DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
+  DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
+  DefaultCmd->AvailableForStates(PreInit,Idle);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+Em3PrimaryGeneratorMessenger::~Em3PrimaryGeneratorMessenger()
+{
+  delete DefaultCmd;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em3PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+{ 
+  if( command == DefaultCmd )
+   { Em3Action->SetDefaultKinematic();}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

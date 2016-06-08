@@ -1,18 +1,25 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NURBS.hh,v 1.3 1999/05/19 08:33:37 stesting Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4NURBS.hh,v 1.4.2.1 1999/12/07 20:48:48 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
 // G4NURBS.hh
 // prototype for class G4NURBS - see documentation in graphics_reps/doc.
 // OC 280896
+
+// Class Description:
+// Base class for shapes with NURBS drawing style.
+// See documentation in graphics_reps/doc for details.
+// Class Description - End:
+
+
 
 #ifndef __C_G4NURBS__ 
 #define __C_G4NURBS__ 1

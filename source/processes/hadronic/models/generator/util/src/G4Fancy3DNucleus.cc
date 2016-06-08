@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.4 1999/05/20 13:24:38 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Fancy3DNucleus.cc,v 1.4.6.1.2.1 1999/12/07 20:52:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -24,7 +24,7 @@
 #include "G4NucleiPropertiesTable.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "rw/tvvector.h"
+#include "g4rw/tvvector.h"
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
@@ -120,7 +120,7 @@ G4Nucleon * G4Fancy3DNucleus::GetNextNucleon()
 }
 
 
-const RWTPtrOrderedVector<G4Nucleon> & G4Fancy3DNucleus::GetNucleons()
+const G4RWTPtrOrderedVector<G4Nucleon> & G4Fancy3DNucleus::GetNucleons()
 {
 	if ( theRWNucleons.isEmpty() )
 	{
@@ -370,7 +370,7 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 	
 // find all possible changes in momentum, changing only the component parallel to sum
 	G4ThreeVector testDir=sum.unit();
-	RWTPtrSortedVector<G4Fancy3DNucleusHelper> testSums(myA-1);		// Sorted on delta.mag()
+	G4RWTPtrSortedVector<G4Fancy3DNucleusHelper> testSums(myA-1);		// Sorted on delta.mag()
 	for ( G4int aNucleon=0; aNucleon < myA-1; aNucleon++){
 		G4ThreeVector delta=2*((momentum[aNucleon]*testDir)* testDir);
 		testSums.insert(new G4Fancy3DNucleusHelper(delta,delta.mag(),aNucleon));		

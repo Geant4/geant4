@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolume.hh,v 1.2 1999/02/15 10:58:13 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LogicalVolume.hh,v 1.3.2.1 1999/12/07 20:48:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4LogicalVolume
@@ -140,7 +140,7 @@
 //
 // Member data:
 //
-// RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters
+// G4RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters
 //   Vector of daughters. Given initial size of 0.
 // G4FieldManager *fFieldManager 
 //   Pointer (possibly NULL) to (magnetic or other) field manager object
@@ -180,7 +180,7 @@
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"	// Need operator == for vector fdaughters
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 #include <assert.h>
 
 // Forward declarations
@@ -255,7 +255,7 @@ private:
 //  Data members:   
 
 private:
-    RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters;    
+    G4RWTPtrOrderedVector<G4VPhysicalVolume> fDaughters;    
     G4FieldManager *fFieldManager;
     G4Material *fMaterial;
     G4String fName;

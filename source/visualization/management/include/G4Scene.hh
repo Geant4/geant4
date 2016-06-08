@@ -1,15 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.hh,v 1.3 1999/05/25 09:14:06 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Scene.hh,v 1.6.2.1 1999/12/07 20:53:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // Scene  John Allison  19th July 1996.
+//
+// Class Description:
 //
 // Defines the viewable scene.
 
@@ -24,11 +26,11 @@ class G4VPhysicalVolume;
 #include "G4VisExtent.hh"
 #include "G4Point3D.hh"
 #include "G4VModel.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4Scene {
 
-public:
+public: // With description
 
   friend ostream& operator << (ostream& os, const G4Scene& d);
 
@@ -50,11 +52,11 @@ public:
 
   G4bool IsEmpty () const;
 
-  const RWTPtrOrderedVector <G4VModel>& GetRunDurationModelList () const;
+  const G4RWTPtrOrderedVector <G4VModel>& GetRunDurationModelList () const;
   // Contains models which are expected to last for the duration of
   // the run, for example geometry volumes.
 
-  const RWTPtrOrderedVector <G4VModel>& GetEndOfEventModelList () const;
+  const G4RWTPtrOrderedVector <G4VModel>& GetEndOfEventModelList () const;
   // Contains models which are described at the end of event when the
   // scene is current.
 
@@ -67,23 +69,26 @@ public:
   //////////////////////////////////////////////
   // Add, Set, Clear functions...
 
-  void AddRunDurationModel (G4VModel*);
+  G4bool AddRunDurationModel (G4VModel*);
   // Adds models of type which are expected to last for the duration
   // of the run, for example geometry volumes.
+  // Returns false if model is already in the list.
 
-  void AddWorldIfEmpty ();
+  G4bool AddWorldIfEmpty ();
   // In some situations, if the user asks for a drawing and has not
   // yet set any run duration models it makes sense to put the "world"
   // in there by default.
+  // Returns false if model is already in the list.
 
-  void AddEndOfEventModel (G4VModel*);
+  G4bool AddEndOfEventModel (G4VModel*);
   // Adds models of type which are described at the end of event when
   // the scene is current.
+  // Returns false if model is already in the list.
 
-  RWTPtrOrderedVector <G4VModel>& SetRunDurationModelList ();
+  G4RWTPtrOrderedVector <G4VModel>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!
 
-  RWTPtrOrderedVector <G4VModel>& SetEndOfEventModelList ();
+  G4RWTPtrOrderedVector <G4VModel>& SetEndOfEventModelList ();
   // Allows you to change the model list - do with care!
 
   void Clear ();
@@ -91,8 +96,8 @@ public:
 
 private:
   G4String fName;
-  RWTPtrOrderedVector <G4VModel> fRunDurationModelList;
-  RWTPtrOrderedVector <G4VModel> fEndOfEventModelList;
+  G4RWTPtrOrderedVector <G4VModel> fRunDurationModelList;
+  G4RWTPtrOrderedVector <G4VModel> fEndOfEventModelList;
   G4VisExtent fExtent;
   G4Point3D   fStandardTargetPoint;
 };

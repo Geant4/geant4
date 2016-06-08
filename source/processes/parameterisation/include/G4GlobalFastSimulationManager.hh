@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.3 1999/04/28 10:06:39 mora Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.4.2.1.2.1 1999/12/07 20:52:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //  
 //---------------------------------------------------------------
@@ -29,7 +29,7 @@
 #ifndef  G4GlobalFastSimulationManager_hh
 #define  G4GlobalFastSimulationManager_hh
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4VGlobalFastSimulationManager.hh"
 #include "G4FastSimulationManager.hh"
@@ -46,13 +46,34 @@ enum  listType {
 
 class G4FastSimulationMessenger;
 
+// Class Description:
+// This a singleton class which provides the management of the G4FastSimulationManager
+// objects and some ghost facilities. 
+//
+// You can get access to it by:
+//
+// #include "G4GlobalFastSimulationManager.hh"
+// ...
+// ...
+// G4GlobalFastSimulationManager* globalFSM;
+// globalFSM = G4GlobalFastSimulationManager::getGlobalFastSimulationManager();
+// ...
+// ...
+//    
+// Presently, you will mainly need to use the GlobalFastSimulationManager if you use ghost 
+// geometries.
+//
+
 class G4GlobalFastSimulationManager : public G4VStateDependent, 
 				      public G4VGlobalFastSimulationManager
 {
-public:
-  // Global access to the GlobalFastSimulationManager
+public: // With  description 
+
   static G4GlobalFastSimulationManager* GetGlobalFastSimulationManager();
-  
+  // Provides a global access to the GlobalFastSimulationManager
+   
+public: // Without description
+
   // Destructor
   ~G4GlobalFastSimulationManager(); 
 
@@ -63,10 +84,18 @@ public:
   void AddFastSimulationManager(G4FastSimulationManager*);
   void RemoveFastSimulationManager(G4FastSimulationManager*);
 
-  // Open/Close Parameterisation
+  // Flag that the Parameterisation must be closed.
   void FastSimulationNeedsToBeClosed();
-  void CloseFastSimulation();
 
+
+public: // With  description 
+  void CloseFastSimulation();
+  // Build the parallel worlds when you are using ghost volumes. In this case the Parameterisation
+  // MUST be closed BEFORE closing the geometry. It's enough to call this method just before 
+  // closing the geometry.
+  //
+
+public: // Without description
   // print/control commands
   void ListEnvelopes(const G4String& aName = "all",
 		     listType aListType = NAMES_ONLY);
@@ -92,13 +121,13 @@ private:
   G4FastSimulationMessenger* fTheFastSimulationMessenger;
 
   // List of G4FastSimulationManagers
-  RWTPtrOrderedVector<G4FastSimulationManager> ManagedManagers;
+  G4RWTPtrOrderedVector<G4FastSimulationManager> ManagedManagers;
 
   // fClosed flags if the NeededFlavoredWorlds List was Build.
   G4bool fClosed;
 
   // List of needed ParallelWorlds after close
-  RWTPtrOrderedVector<G4FlavoredParallelWorld> NeededFlavoredWorlds;
+  G4RWTPtrOrderedVector<G4FlavoredParallelWorld> NeededFlavoredWorlds;
 
   // Internal fonction to Build world volume clones.
   G4VPhysicalVolume* GiveMeAWorldVolumeClone();

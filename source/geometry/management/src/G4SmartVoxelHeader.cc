@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.4 1999/06/04 17:26:37 sgiani Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SmartVoxelHeader.cc,v 1.4.10.1 1999/12/07 20:48:14 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4SmartVoxelHeader

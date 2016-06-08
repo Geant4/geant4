@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackManager.hh,v 1.1 1999/01/07 16:06:34 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4StackManager.hh,v 1.2.4.1 1999/12/07 20:47:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -25,6 +25,23 @@
 #include "globals.hh"
 class G4StackingMessenger;
 
+// class description:
+//
+//  This is the manager class of handling stacks of G4Track objects.
+// This class must be a singleton and be constructed by G4EventManager.
+// Almost all methods must be invoked exclusively by G4EventManager.
+// Especially, some Clear() methods MUST NOT be invoked by the user.
+// Event abortion is handled by G4EventManager.
+//
+//  This G4StackingManager has three stacks, the urgent stack, the
+// waiting stack, and the postpone to next event stack. The meanings
+// of each stack is descrived in the Geant4 user's manual.
+//
+//  The only method the user can invoke is ReClassify(), which can
+// be used from the user's concrete class of G4UserStackingAction.
+//
+
+
 class G4StackManager 
 {
   public:
@@ -41,7 +58,16 @@ class G4StackManager
       G4int PushOneTrack(G4Track *newTrack);
       G4Track * PopNextTrack();
       G4int PrepareNewEvent();
+
+  public: // with description
       void ReClassify();
+      //  Send all tracks stored in the Urgent stack one by one to 
+      // the user's concrete ClassifyNewTrack() method. This method
+      // can be invoked from the user's G4UserStackingAction concrete
+      // class, especially fron its NewStage() method. Be aware that
+      // when the urgent stack becomes empty, all tracks in the waiting
+      // stack are send to the urgent stack and then the user's NewStage()
+      // method is invoked.
 
   private:
       G4UserStackingAction * userStackingAction;
@@ -56,31 +82,31 @@ class G4StackManager
       { 
         ClearUrgentStack();
         ClearWaitingStack();
-      };
+      }
       inline void ClearUrgentStack()
-      { urgentStack->clear(); };
+      { urgentStack->clear(); }
       inline void ClearWaitingStack()
-      { waitingStack->clear(); };
+      { waitingStack->clear(); }
       inline void ClearPostponeStack()
-      { postponeStack->clear(); };
+      { postponeStack->clear(); }
       inline G4int GetNTotalTrack() const
       { return urgentStack->GetNTrack()
              + waitingStack->GetNTrack()
-             + postponeStack->GetNTrack(); };
+             + postponeStack->GetNTrack(); }
       inline G4int GetNUrgentTrack() const
-      { return urgentStack->GetNTrack(); };
+      { return urgentStack->GetNTrack(); }
       inline G4int GetNWaitingTrack() const
-      { return waitingStack->GetNTrack(); };
+      { return waitingStack->GetNTrack(); }
       inline G4int GetNPostponedTrack() const
-      { return postponeStack->GetNTrack(); };
+      { return postponeStack->GetNTrack(); }
       inline void SetVerboseLevel( int const value )
-      { verboseLevel = value; };
+      { verboseLevel = value; }
       inline void SetUserStackingAction(G4UserStackingAction* value)
       { 
         if (userStackingAction) delete userStackingAction;
 	userStackingAction = value;
 	userStackingAction->SetStackManager(this);
-      };
+      }
 
   private:
       inline G4ClassificationOfNewTrack 
@@ -90,7 +116,7 @@ class G4StackManager
         if( aTrack->GetTrackStatus() == fPostponeToNextEvent )
         { classification = fPostpone; }
         return classification;
-      };
+      }
 };
 
 #endif

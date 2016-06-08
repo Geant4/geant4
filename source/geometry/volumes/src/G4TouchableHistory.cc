@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TouchableHistory.cc,v 1.1 1999/01/07 16:08:49 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4TouchableHistory.cc,v 1.2.2.1 1999/12/07 20:48:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4TouchableHistory Implementation
@@ -15,5 +15,33 @@
 
 G4TouchableHistory::~G4TouchableHistory()
 {
+}
+const G4ThreeVector& G4TouchableHistory::GetTranslation(G4int depth) const
+{
+   // The value returned will change at the next call
+   //  Copy it if you want to use it!
+   //   
+   static G4ThreeVector currTranslation;
+   if(depth==0.0) {
+      return ftlate;
+   }else{
+      currTranslation= fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
+      return currTranslation;
+   }
+}
+
+const G4RotationMatrix* G4TouchableHistory::GetRotation(G4int depth) const
+{
+   // The value returned will change at the next call
+   //  Copy it if you want to use it!
+   //
+   static G4RotationMatrix rotM;
+
+   if(depth==0.0) {
+      return &frot;
+   }else{
+      rotM= fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+      return &rotM;
+   }
 }
 

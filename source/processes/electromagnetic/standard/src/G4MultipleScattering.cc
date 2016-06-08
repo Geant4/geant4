@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.7 1999/06/14 12:51:08 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MultipleScattering.cc,v 1.16.6.1 1999/12/07 20:50:59 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -21,6 +21,9 @@
 // **************************************************************
 // 24/10/97  correction in PostStepDoIt for tau << 1. L.Urban
 // 09/12/98: charge can be different from +-1 !!!! L.Urban
+// 29/07/99: corr. for low energy , L.Urban
+// 17/09/99: corr. for high energy and/or small step , L.Urban
+// 30/09/99: nuclear size effect correction,  L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -49,6 +52,7 @@
        scatteringparameter(0.9),
        tuning (1.00),
        cpar (1.5),
+       NuclCorrPar (0.0615),FactPar(0.40),
        fLatDisplFlag(true) 
   { }
 
@@ -68,13 +72,16 @@
 
   //   tables are built for MATERIALS
   {
+    // parameter for "low energy" msc (not for ions)
     if((&aParticleType == G4Electron::Electron()) ||
        (&aParticleType == G4Positron::Positron())   )
-       Tlimit = 100.*keV ;
+    //   Tlimit = 100.*keV ;
+               ;
     
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius ;
-    G4double KineticEnergy,AtomicNumber,sigma,lambda ;
+    G4double KineticEnergy,AtomicNumber,AtomicWeight,
+             sigma,lambda ;
     G4double density ;
 
   // destroy old tables if any
@@ -119,9 +126,11 @@
           for (G4int iel=0; iel<NumberOfElements; iel++)
           {
             AtomicNumber = (*theElementVector)(iel)->GetZ() ;
+            AtomicWeight = (*theElementVector)(iel)->GetA() ;
             sigma += theAtomicNumDensityVector[iel]*
                      ComputeTransportCrossSection(aParticleType,
-                                     KineticEnergy,AtomicNumber) ;
+                                     KineticEnergy,
+                                     AtomicNumber,AtomicWeight) ;
           }
           sigma *= sigmafactor ;
  
@@ -146,7 +155,7 @@
   G4double G4MultipleScattering::ComputeTransportCrossSection(
                    const G4ParticleDefinition& aParticleType,
                          G4double KineticEnergy,
-                         G4double AtomicNumber)
+                         G4double AtomicNumber,G4double AtomicWeight)
   {
     const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                                Bohr_radius*Bohr_radius/(hbarc*hbarc) ;
@@ -295,6 +304,38 @@
      sigma *=ChargeSquare*AtomicNumber*AtomicNumber/rat2 ;
      sigma /= beta2*bg2 ;
 
+  // nuclear size effect correction for high energy
+  // ( a simple approximation at present)
+     G4double corrnuclsize,a,x0,w1,w2,w ;
+
+     x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
+               exp(log(AtomicWeight/(g/mole))/3.)) ;
+     if((x0 < -1.) || (KineticEnergy  <= 10.*MeV))
+     {
+       x0=-1. ;
+       corrnuclsize = 1. ;
+     }
+     else
+     {
+     a = 1.+1./eps ;
+     if(eps > epsmax)
+       w1=log(2.*eps)+1./eps-3./(8.*eps*eps) ;
+     else
+       w1=log((a+1.)/(a-1.))-2./(a+1.) ;
+
+     w = 1./((1.-x0)*eps) ;
+     if(w < epsmin)
+       w2=-log(w)-1.+2.*w-1.5*w*w ;
+     else
+       w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0) ;
+ 
+     corrnuclsize = w1/w2 ;
+
+     // ####################################################
+     corrnuclsize = exp(-FactPar*proton_mass_c2/KineticEnergy)*
+                    (corrnuclsize-1.)+1. ;
+     }
+
   //  correct this value using the corrections computed for e+/e-
      KineticEnergy *= electron_mass_c2/ParticleMass ;
 
@@ -364,6 +405,8 @@
 
      sigma *= corrfactor ;
 
+     sigma /= corrnuclsize ;
+
      return sigma ;
   } 
 
@@ -372,7 +415,7 @@
                                                const G4Track& trackData,
                                                const G4Step& stepData)
   {
-    static const G4double  taulim = 1.e-10 , randlim = 0.25*taulim*taulim ;
+    static G4double taulim=1.e-6 , randlim = 0.25*taulim*taulim  ;
     static const G4double tausmall = 5.e-5,taubig =50.,
           kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
     const G4DynamicParticle* aParticle ;
@@ -401,12 +444,19 @@
     if(stepFlag == 0)
     {
       tau = truestep/fTransportMeanFreePath ;
+
+     if(tau > taulim) 
       prob = exp(-tau)*(1.+scatteringparameter*tau) ;
+     else
+      prob=1.-(1.-scatteringparameter)*tau ;
     }
     else
     {
       tau = truestep/range ;
-      prob = exp((alpha1-1.)*log(1.-tau))*(1.+scatteringparameter*tau) ;
+      if(tau < taulim)
+        prob = exp(-(alpha1-1.)*tau)*(1.+scatteringparameter*tau) ;
+      else  
+        prob = exp((alpha1-1.)*log(1.-tau))*(1.+scatteringparameter*tau) ;
     }
 
     if(G4UniformRand()<prob)
@@ -415,7 +465,10 @@
       {
         rand = G4UniformRand() ;
         if(rand > randlim)
-          cth = 1.-tau*(1./sqrt(rand)-1.)  ;
+        {
+          cth = 1.-scatteringparameter*tau*(1./sqrt(rand)-1.)  ;
+          if(cth < -1.) cth = -1. ;
+        }
         else 
           cth = -1. ; 
       }
@@ -440,6 +493,7 @@
     G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
     G4ThreeVector newDirection(dirx,diry,dirz) ;
+
 
     newDirection.rotateUz(ParticleDirection) ;
 

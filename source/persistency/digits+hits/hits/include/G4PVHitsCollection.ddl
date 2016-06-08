@@ -1,41 +1,43 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVHitsCollection.ddl,v 1.1 1999/01/07 16:10:45 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PVHitsCollection.ddl,v 1.12 1999/12/01 14:45:13 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
-#ifndef G4VHitsCollection_h
-#define G4VHitsCollection_h 1
+#ifndef G4PVHitsCollection_h
+#define G4PVHitsCollection_h 1
 
 #include "globals.hh"
+#include "G4PersistentTypes.hh"
+#include "G4PersistentSchema.hh"
 
-class G4VHitsCollection 
+#include "HepODBMS/odbms/HepODBMS.h"
+
+class G4PVHitsCollection 
+ : public HepPersObj
 {
   public:
-      G4VHitsCollection();
-      G4VHitsCollection(G4String detName,G4String colNam);
-      virtual ~G4VHitsCollection();
-      int operator==(const G4VHitsCollection &right) const;
-
-      virtual void DrawAllHits();
-      virtual void PrintAllHits();
+      G4PVHitsCollection(G4String detName,G4String colNam);
+      ~G4PVHitsCollection();
+      int operator==(const G4PVHitsCollection &right) const;
 
   protected:
 
-      // Collection name
-      G4String collectionName;
-      G4String SDname;
+      // Persistent Collection name
+      G4PString pcollectionName;
+      G4PString pSDname;
 
   public:
       inline G4String GetName()
-      { return collectionName; }
+      { return (G4String) pcollectionName; }
       inline G4String GetSDname()
-      { return SDname; }
+      { return (G4String) pSDname; }
+
 };
 
 #endif

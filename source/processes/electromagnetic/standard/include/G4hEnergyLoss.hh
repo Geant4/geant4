@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.hh,v 1.2 1999/02/16 13:34:49 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4hEnergyLoss.hh,v 1.5.6.1 1999/12/07 20:50:54 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -90,6 +90,12 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
 
   protected:
 
+    virtual G4double GetConstraints(const G4DynamicParticle *aParticle,
+                            G4Material *aMaterial);
+                                       
+    virtual G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
+                              G4Material *aMaterial,
+                              G4double MeanLoss) ;
 
   private:
 
@@ -98,33 +104,17 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     G4hEnergyLoss(G4hEnergyLoss &);
     G4hEnergyLoss & operator=(const G4hEnergyLoss &right);
 
-    G4double GetConstraints(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
-                                       
-    G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
-                              G4Material *aMaterial,
-                              G4double MeanLoss) ;
 
 // =====================================================================
 
   public:
 
-
-  protected:
-
-    G4PhysicsTable* theLossTable ;
-   
-    G4double MinKineticEnergy ;
-
   private:
-
-    G4double fdEdx;      // computed in GetContraints
-    G4double fRangeNow ; // computed in GetContraints
-    G4double linLossLimit ;
 
     // variables for the integration routines
      static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
 
+  protected:
     // data members to speed up the fluctuation calculation
     G4Material *lastMaterial ;
     G4int imat ;
@@ -248,6 +238,16 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static G4double pbartableElectronCutInRange;
 
     static G4double Charge ;
+
+
+    static G4double LowestKineticEnergy;
+    static G4double HighestKineticEnergy;
+    static G4int TotBin; // number of bins in table,
+                         // calculated in BuildPhysicsTable
+                                   
+    static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
+                                      //          /LowestKineticEnergy)/TotBin
+                                      //   RTable = exp(LOGRTable)
   private:
 
     static G4PhysicsTable* theDEDXTable;
@@ -272,9 +272,20 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static G4PhysicsTable* theRangeCoeffATable;
     static G4PhysicsTable* theRangeCoeffBTable;
     static G4PhysicsTable* theRangeCoeffCTable;
+    static G4int NumberOfProcesses ;
 
     static G4double dRoverRange ; // maximum allowed deltarange/range
                                   //  in one step  
+  protected:
+
+    G4PhysicsTable* theLossTable ;
+
+    G4double linLossLimit ;
+   
+    G4double MinKineticEnergy ;
+
+    G4double fdEdx;      // computed in GetContraints
+    G4double fRangeNow ; // computed in GetContraints
 
     static G4double finalRange ;  // last step before stop
     static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
@@ -282,20 +293,11 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static G4bool rndmStepFlag ;
     static G4bool EnlossFlucFlag ;
 
-    static G4int NumberOfProcesses ;
-
-    static G4double LowestKineticEnergy;
-    static G4double HighestKineticEnergy;
-    static G4int TotBin; // number of bins in table,
-                         // calculated in BuildPhysicsTable
-                                   
-    static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
-                                      //          /LowestKineticEnergy)/TotBin
-                                      //   RTable = exp(LOGRTable)
-
 };
  
 #include "G4hEnergyLoss.icc"
 
 #endif
  
+
+

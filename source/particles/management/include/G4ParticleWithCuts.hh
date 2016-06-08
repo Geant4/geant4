@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleWithCuts.hh,v 1.3 1999/04/14 10:28:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ParticleWithCuts.hh,v 1.4.4.1 1999/12/07 20:49:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -26,7 +26,7 @@
 //      added  GetEnergyThreshold  H.Kurashige 08 June 1998
 //      change Lowest/HighestEnergy as static H.Kurashige 18 June 1998 
 // ----------------------------------------------------------------
-//
+// Class Description
 // "theCutInMaxInteractionLength", for charged particles, is
 //    coincident with a cut in stopping range; for neutral
 //    particles it corresponds to the distance allowed by
@@ -51,6 +51,7 @@
 // const G4double* GetCutsInEnergy();
 //    Returns vector of energy cuts (ordered per material)
 //    corresponding to the current stopping range or absorption length
+//
 
 #ifndef G4ParticleWithCuts_h
 #define G4ParticleWithCuts_h 1
@@ -93,7 +94,7 @@ class G4ParticleWithCuts : public G4ParticleDefinition
     G4double  theCutInMaxInteractionLength;
     G4double* theKineticEnergyCuts;
 
-  public:
+  public:  // With Description
    // virtual methods derived from G4ParticleDefinition
    virtual void          ResetCuts();
    // Reset alll cut values in energy 
@@ -109,7 +110,7 @@ class G4ParticleWithCuts : public G4ParticleDefinition
    virtual G4double      	GetEnergyThreshold(const G4Material* aMaterial) const;
    static  void          	SetEnergyRange(G4double, G4double);
 
-   protected:
+ protected:
     virtual   void  CalcEnergyCuts(G4double aCut);
 
     // BuildPhysicsTable is defined as a dummy routine

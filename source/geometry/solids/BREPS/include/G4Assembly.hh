@@ -18,7 +18,7 @@
 #include "G4OrderedTable.hh"   
 #include "G4BREPSolid.hh"
 
-typedef RWTPtrOrderedVector<G4PlacedSolid> G4PlacedVector;  
+typedef G4RWTPtrOrderedVector<G4PlacedSolid> G4PlacedVector;  
     
 //  End Interface Dependencies ---------------------------------------
 

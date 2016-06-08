@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.2 1999/05/28 12:55:34 stesting Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: exampleN05.cc,v 1.4.2.1 1999/12/07 20:47:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -47,7 +47,7 @@
 
 #ifdef GNU_GCC
   #include "ExN05CalorimeterHit.hh"
-  template class RWTValVector<ExN05CalorimeterHit>;
+  template class G4RWTValVector<ExN05CalorimeterHit>;
   template class G4Allocator<ExN05CalorimeterHit>;
 #endif
 
@@ -129,10 +129,10 @@ int main(int argc, char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
-  delete runManager;
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+  delete runManager;
   return EXIT_SUCCESS;
 }
 

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.hh,v 1.2 1999/04/13 07:58:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Ions.hh,v 1.5.4.1 1999/12/07 20:49:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -17,6 +17,8 @@
 //      History: first implementation, based on object model of
 //      Hisaya Kurashige, 27 June 1998
 // ----------------------------------------------------------------
+//      Add excitation energy         17 Aug. 1999 H.Kurashige
+//
 
 
 #ifndef G4Ions_h
@@ -32,11 +34,16 @@
 
 class G4Ions : public G4ParticleWithCuts
 {
+ // Class Description
+ //  All nuclei/ions created on the fly are objects of this class
+ //  This class has Excitation Energy in addition to the normal particle
+ //
+
  private:
    G4double  theIonsLengthCut;
    G4double* theIonsKineticEnergyCuts;
 
- public:
+ public: //With Description
    G4Ions(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -48,17 +55,63 @@ class G4Ions : public G4ParticleWithCuts
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
-   virtual    			~G4Ions(){};
-   G4Ions*    			IonsDefinition(){return this;};
-   G4Ions*    			Ions(){return this;};
 
+ public:
+   virtual    			~G4Ions(){};
+   G4Ions*    			IonsDefinition();
+   G4Ions*    			Ions();
+
+ public: //With Description
    virtual G4double 	   	GetCuts() {return theIonsLengthCut;}   
    virtual const G4double* 	GetCutsInEnergy() {return theIonsKineticEnergyCuts;};
 
-   virtual void 			SetCuts(G4double aCut); 
+   virtual void 		SetCuts(G4double aCut); 
+
+
+ public:  //With Description
+   G4int    GetAtomicNumber() const;
+   G4int    GetAtomicMass() const;
+
+   G4double GetExcitationEnergy() const ; 
+   void     SetExcitationEnergy(G4double value);
+  
+  private:
+   G4double theExcitationEnergy; 
+
 };
 
-inline void G4Ions::SetCuts(G4double aCut)
+inline
+ G4Ions* G4Ions::Ions() 
+{
+  return this;
+}
+
+inline
+ G4int G4Ions::GetAtomicNumber() const 
+{
+  return int(GetPDGCharge()/eplus); 
+}
+
+inline
+ G4int G4Ions::GetAtomicMass() const 
+{
+  return GetBaryonNumber();
+}
+
+inline
+ G4double G4Ions::GetExcitationEnergy() const 
+{
+  return theExcitationEnergy;
+}
+
+inline
+ void G4Ions::SetExcitationEnergy(G4double value) 
+{
+  theExcitationEnergy = value;
+}
+
+inline 
+ void G4Ions::SetCuts(G4double aCut)
 {
   CalcEnergyCuts(aCut);
   theIonsLengthCut = theCutInMaxInteractionLength;  

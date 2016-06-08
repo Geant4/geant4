@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.6 1999/07/12 09:36:17 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ChordFinder.cc,v 1.8.6.1 1999/12/07 20:48:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 
@@ -75,7 +75,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
   G4double stepPossible;
   G4double dyErr;
   G4FieldTrack yEnd( yCurrent);
-
+  G4double  startCurveLen= yCurrent.GetCurveLength();
   G4bool dbg= false; 
 
 #ifdef G4VERBOSE
@@ -85,23 +85,30 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
 #endif
 
   stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep);
+  G4bool good_advance;
   if ( dyErr < epsStep * stepPossible )
   {
      // Accept this accuracy.
      yCurrent = yEnd;
+     good_advance = true; 
   }
   else
   {
      // Advance more accurately to "end of chord"
-#ifdef G4VERBOSE
-     if (dbg) G4cerr << "Accurate advance to end of chord needed\n";
-#endif
-     fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep);
+     good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep);
+     #ifdef G4VERBOSE
+     if (dbg) G4cerr << "Accurate advance to end of chord attemped"
+		       << "with result " << good_advance << endl ;
+     #endif
+     if ( ! good_advance ){ 
+       // In this case the driver could not do the full distance
+       stepPossible= yCurrent.GetCurveLength()-startCurveLen;
+     }
   }
 
 #ifdef G4VERBOSE
   if( dbg ) G4cerr << "Exiting FindNextChord Limited with:\n yCurrent: " 
-		 << yCurrent<< endl;
+		 << yCurrent<< endl; 
 #endif
 
   return stepPossible;
@@ -282,11 +289,13 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
 
   new_st_length= AE_fraction * curve_length; 
 
+  G4bool good_advance;
   if ( AE_fraction > 0.0 ) { 
-     G4bool good_advance = 
+     good_advance = 
       fIntgrDriver->AccurateAdvance(Current_PointVelocity, 
 				    new_st_length,
-				    eps_step/AE_fraction ); // Relative accuracy
+				    eps_step ); // Relative accuracy
+     // In this case it does not matter if it cannot advance the full distance
   }
 
   // If there was a memory of the step_length actually require at the start 

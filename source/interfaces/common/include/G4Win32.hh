@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Win32.hh,v 1.3 1999/05/07 10:34:11 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Win32.hh,v 1.4.4.1 1999/12/07 20:49:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //  To unify Windows message treatment between 
 // G4/interfaces Windows sessions and G4/visualizations Windows drivers.
@@ -21,6 +21,14 @@
 #include <windowsx.h>
 
 #include "G4VInteractorManager.hh"
+
+// Class description :
+//
+//  G4Win32 : a singleton to handle GUI sessions and visualization 
+// drivers built over Windows. It permits to have one Windows main 
+// loop for the whole application. 
+//
+// Class description - end :
 
 class G4Win32 : public G4VInteractorManager {
 public:

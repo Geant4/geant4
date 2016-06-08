@@ -8,8 +8,6 @@
 /control/saveHistory
 /run/verbose 2
 #
-/run/particle/dumpCutValues
-#
 # Create empty scene ("world" is default)
 /vis/scene/create
 #
@@ -20,7 +18,7 @@
 # Edit the next line(s) to choose another graphic system
 #
 #/vis/sceneHandler/create DAWNFILE
-/vis/sceneHandler/create OGLIXm
+/vis/sceneHandler/create OGLIX
 #
 # Create a viewer
 /vis/viewer/create
@@ -32,3 +30,7 @@
 # if too many tracks cause core dump => storeTrajectory 0
 /tracking/storeTrajectory 1
 #/vis/scene/include/trajectories
+#
+# Flush visualization
+/vis/viewer/update
+

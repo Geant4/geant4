@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVPhysicalVolume.cc,v 1.1 1999/01/07 16:10:49 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PVPhysicalVolume.cc,v 1.2.4.1 1999/12/07 20:50:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 //                         Takashi.Sasaki@kek.jp
@@ -22,10 +22,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PLogicalVolume.hh"
-
-#ifndef OO_VARRAY_D_DOUBLE
-implement(HepVArray,d_Double)
-#endif
 
 G4PVPhysicalVolume::G4PVPhysicalVolume()
 : flogical(NULL), fname(NULL), fmother(NULL)

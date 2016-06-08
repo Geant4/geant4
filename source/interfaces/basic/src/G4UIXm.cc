@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.cc,v 1.4 1999/05/11 13:26:31 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UIXm.cc,v 1.5.4.1 1999/12/07 20:49:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // G.Barrand
 
@@ -52,10 +52,6 @@ static void ExecuteChangeSizeFunction(Widget);
 static G4bool exitSession = true;
 static G4bool exitPause = true;
 static G4bool exitHelp = true;
-static unsigned CommandsHashFun (const Widget& interactor) {
-  // Is it correct to return a pointer ?
-  return (unsigned)(unsigned long)interactor;
-}
 /***************************************************************************/
 G4UIXm::G4UIXm (
  int argc
@@ -65,7 +61,6 @@ G4UIXm::G4UIXm (
 ,command(NULL)
 ,menuBar(NULL)
 ,text(NULL)
-,commands(CommandsHashFun)
 ,fHelp(false)
 ,fHelpChoice(0)
 /***************************************************************************/

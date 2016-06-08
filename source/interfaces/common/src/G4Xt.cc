@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xt.cc,v 1.2 1999/04/13 01:26:33 yhajime Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Xt.cc,v 1.4.6.1 1999/12/07 20:49:11 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // G.Barrand
 
@@ -14,6 +14,10 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#include <X11/Intrinsic.h>
+#include <X11/Shell.h>
+
 #include "G4ios.hh"
 
 #include "G4Xt.hh"
@@ -30,6 +34,7 @@ G4Xt* G4Xt::instance    = NULL;
 static G4bool XtInited  = FALSE;
 static int    argn      = 0;
 static char** args      = NULL;
+static XtAppContext appContext = NULL;
 static Widget topWidget = NULL;
 /***************************************************************************/
 G4Xt* G4Xt::getInstance (
@@ -79,11 +84,12 @@ G4Xt::G4Xt (
     int          argc;
     argc         = a_argn;
 #endif
-    XtAppContext appContext;
+    Arg          xargs[1];
+    XtSetArg     (xargs[0],XtNgeometry,"100x100"); 
     topWidget    = XtAppInitialize (&appContext,a_class,
 				    NULL,(Cardinal)0,
 				    &argc,a_args,NULL,
-				    NULL,(Cardinal)0);
+				    xargs,1);
     if(topWidget==NULL) {
       G4cout        << "G4Xt : Unable to init Xt." << endl;
     }
@@ -130,8 +136,8 @@ void* G4Xt::GetEvent (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   static XEvent  event;
+  if(appContext==NULL) return NULL;
   if(topWidget==NULL) return NULL;
-  XtAppContext   appContext = XtWidgetToApplicationContext(topWidget);
   XtAppNextEvent (appContext, &event);
   return         &event;
 }

@@ -1,15 +1,33 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.hh,v 1.3 1999/05/25 09:10:14 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VisAttributes.hh,v 1.4.2.1 1999/12/07 20:48:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  23rd October 1996
+
+// Class Description:
+// Visualization attributes are a set of information associated with the 
+// visualizable objects. This information is necessary only for 
+// visualization, and is not included in geometrical information such 
+// as shapes, position, and orientation. 
+// A typical example of a visualization attribute is "colour". 
+// For example, in visualizing a box, the Visualization Manager must know 
+// its colour. If an object to be visualized has not been assigned a set of 
+// visualization attributes, then a proper default set is used 
+// automatically. A set of visualization attributes is held by an 
+// instance of class G4VisAttributes defined in the graphics_reps 
+// category. The followings are commonly-used attributes:
+//   - visibility
+//   - force wireframe style, force solid style
+//   - colour 
+// Class Description - End:
+
 
 #ifndef __G4VISATTRIBUTES_HH__
 #define __G4VISATTRIBUTES_HH__
@@ -23,7 +41,7 @@ class G4VisAttributes {
 
   friend ostream& operator << (ostream& os, const G4VisAttributes& a);
 
-public:
+public: // With description
 
   // Constructors, etc. - begin snippet.
   enum LineStyle {unbroken, dashed, dotted};

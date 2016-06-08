@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhaseSpaceDecayChannel.hh,v 1.1 1999/01/07 16:10:31 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PhaseSpaceDecayChannel.hh,v 1.2.4.1 1999/12/07 20:49:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // ------------------------------------------------------------
@@ -27,7 +27,7 @@
 
 class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 {
-  public:
+  public:  // With Description
     //Constructors 
       G4PhaseSpaceDecayChannel(G4int Verbose = 1);
       G4PhaseSpaceDecayChannel(const G4String& theParentName,
@@ -38,11 +38,14 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 			       const G4String& theDaughterName3 = "",
 			       const G4String& theDaughterName4 = ""   );
 
-    //  Destructor
+  public: 
+   //  Destructor
       virtual ~G4PhaseSpaceDecayChannel();
 
-  public:
+  public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);   
+
+  public: 
      static G4double Pmx(G4double e, G4double p1, G4double p2);
 
   private: 

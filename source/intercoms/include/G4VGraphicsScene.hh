@@ -1,19 +1,19 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsScene.hh,v 1.1 1999/04/28 14:19:31 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
-//
-// 
+// $Id: G4VGraphicsScene.hh,v 1.3.4.1 1999/12/07 20:49:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 // John Allison  19th July 1996
-// Abstract interface class for the concept of a graphics scene.
-// It is a minimal scene for the GEANT4 kernel.
-// See G4VScene for a fuller description.  G4VScene is the full abstract
-// interface to graphics systems.
+//
+// Class Description:
+// Abstract interface class for a graphics scene handler.
+// It is a minimal scene handler for the GEANT4 kernel.
+// See G4VSceneHadler for a fuller description.  G4VScenehandler is
+// the full abstract interface to graphics systems.
 
 #ifndef G4VGRAPHICSSCENE_HH
 #define G4VGRAPHICSSCENE_HH
@@ -31,19 +31,34 @@ class G4Torus;
 class G4PhysicalVolumeModel;
 class G4Polycone;
 class G4Polyhedra;
+class G4Polyline;
+class G4Text;
+class G4Circle;
+class G4Square;
+class G4Polymarker;
+class G4Polyhedron;
+class G4NURBS;
 
 #include "G4Transform3D.hh"
 
-// Scene Interface - begin snippet.
 class G4VGraphicsScene {
 
-public:
+public: // With description
 
   ///////////////////////////////////////////////////////////////////
-  // Functions for adding raw GEANT4 objects.  The concrete graphics
-  // scene has the option of implementing its own model or asking the
-  // solid to provide a G4Polyhedron or similar primitive - see, for
-  // example, G4VScene in the Visualization Category.
+  // Functions for adding raw GEANT4 objects to the scene handler.
+  // The concrete graphics scene handler has the option of
+  // implementing its own model or asking the solid to provide a
+  // G4Polyhedron or similar primitive - see, for example,
+  // G4VSceneHandler in the Visualization Category.
+
+  virtual void PreAddThis (const G4Transform3D& objectTransformation,
+			   const G4VisAttributes& visAttribs) = 0;
+  // objectTransformation is the transformation in the world
+  // coordinate system of the object about to be added, and
+  // visAttribs is its visualization attributes.
+
+  virtual void PostAddThis () = 0;
 
   virtual void AddThis (const G4Box&)       = 0;
   virtual void AddThis (const G4Cons&)      = 0;
@@ -58,7 +73,33 @@ public:
   virtual void AddThis (const G4VSolid&)    = 0;  // For solids not above.
 
   ///////////////////////////////////////////////////////////////////
-  // Other functions.
+  // Functions for adding graphics primitives to the scene handler.
+
+  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) = 0;
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::BeginPrimitives
+  // (const G4Transform3D& objectTransformation) {
+  //   G4VSceneHandler::BeginPrimitives (objectTransformation);
+  //   ...
+  // }
+
+  virtual void EndPrimitives () = 0;
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::EndPrimitives () {
+  //   ...
+  //   G4VSceneHandler::EndPrimitives ();
+  // }
+
+  virtual void AddPrimitive (const G4Polyline&)   = 0;
+  virtual void AddPrimitive (const G4Text&)       = 0;
+  virtual void AddPrimitive (const G4Circle&)     = 0;
+  virtual void AddPrimitive (const G4Square&)     = 0;
+  virtual void AddPrimitive (const G4Polymarker&) = 0;
+  virtual void AddPrimitive (const G4Polyhedron&) = 0;
+  virtual void AddPrimitive (const G4NURBS&)      = 0;
+
+  ///////////////////////////////////////////////////////////////////
+  // Special functions for particular models.
 
   virtual void EstablishSpecials (G4PhysicalVolumeModel&) {}
   // Used to establish any special relationships between scene and
@@ -68,15 +109,6 @@ public:
   virtual void DecommissionSpecials (G4PhysicalVolumeModel&) {}
   // Used to reverse the effect of EstablishSpecials, if required.
 
-  virtual void PreAddThis (const G4Transform3D& objectTransformation,
-			   const G4VisAttributes& visAttribs) = 0;
-  // objectTransformation is the transformation in the world
-  // coordinate system of the object about to be added, and
-  // visAttribs is its visualization attributes.
-
-  virtual void PostAddThis () = 0;
-
 };
-// Scene Interface - end snippet.
 
 #endif

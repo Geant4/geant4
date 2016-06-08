@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EMShowerModel.hh,v 1.1 1999/01/07 16:06:12 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN05EMShowerModel.hh,v 1.1.8.1.2.1 1999/12/07 20:47:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 //----------------------------------------------
@@ -23,7 +23,7 @@
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 class ExN05EMShowerModel : public G4VFastSimulationModel
 {
@@ -58,7 +58,7 @@ private:
   G4Navigator *fpNavigator;
   G4bool       fNaviSetup;
 
-  RWTValOrderedVector<ExN05EnergySpot> feSpotList;
+  G4RWTValOrderedVector<ExN05EnergySpot> feSpotList;
 
 };
 #endif

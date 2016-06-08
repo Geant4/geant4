@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGunMessenger.hh,v 1.1 1999/01/07 16:06:33 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ParticleGunMessenger.hh,v 1.2.4.1 1999/12/07 20:47:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 
@@ -26,6 +26,12 @@ class G4UIcmdWithAnInteger;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
+
+// class description:
+//
+//  This is a concrete class of G4UImessenger which handles commands for
+// G4ParticleGun.
+//
 
 class G4ParticleGunMessenger: public G4UImessenger
 {

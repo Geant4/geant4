@@ -1,17 +1,20 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: clparse.cc,v 1.5 1999/05/26 03:50:35 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: clparse.cc,v 1.8 1999/12/05 17:50:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
+// modified by I.Hrivnacova
+// added G3SensVol
+
 #include "globals.hh"
-#include <fstream.h>
-#include <rw/rstream.h>
-#include <rw/ctoken.h>
+#include "g4std/fstream"
+#include "g4rw/rstream.h"
+#include "g4rw/ctoken.h"
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
 #include "G3VolTable.hh"
@@ -20,6 +23,7 @@
 #include "G3RotTable.hh"
 #include "G3PartTable.hh"
 #include "G3DetTable.hh"
+#include "G3SensVolVector.hh"
 
 ofstream ofile;
 
@@ -36,39 +40,40 @@ G3RotTable G3Rot; // rotation ID <-> G4 transform object table
 G3PartTable G3Part; // particle ID <-> ParticleDefinition pointer
 G3DetTable G3Det; // sensitive detector name <-> pointer
 G3EleTable G3Ele; // element names table
+G3SensVolVector G3SensVol; // vector of sensitive logical volumes
 
 G4int narray;
 
 G4int Ipar[1000];
 G4double Rpar[1000];
-RWCString Spar[1000];
+G4String Spar[1000];
 
-G4int G3CLTokens(RWCString *line, RWCString *tokens);
-void G3CLEval(RWCString *tokens, char *select);
+G4int G3CLTokens(G4String *line, G4String *tokens);
+void G3CLEval(G4String *tokens, char *select);
 
 // front-end decoders for G3 routines
-void PG4gsvolu(RWCString *tokens);
-void PG4gspos (RWCString *tokens);
-void PG4gsposp(RWCString *tokens);
-void PG4gsatt (RWCString *tokens);
-void PG4gsrotm(RWCString *tokens);
-void PG4gsdvn (RWCString *tokens);
-void PG4gsdvt (RWCString *tokens);
-void PG4gsdvx (RWCString *tokens);
-void PG4gsdvn2(RWCString *tokens);
-void PG4gsdvt2(RWCString *tokens);
-void PG4gsmate(RWCString *tokens);
-void PG4gsmixt(RWCString *tokens);
-void PG4gstmed(RWCString *tokens);
-void PG4gstpar(RWCString *tokens);
-void PG4gspart(RWCString *tokens);
-void PG4gsdk  (RWCString *tokens);
-void PG4gsdet (RWCString *tokens);
-void PG4gsdetv(RWCString *tokens);
-void PG4gsdeta(RWCString *tokens);
-void PG4gsdeth(RWCString *tokens);
-void PG4gsdetd(RWCString *tokens);
-void PG4gsdetu(RWCString *tokens);
+void PG4gsvolu(G4String *tokens);
+void PG4gspos (G4String *tokens);
+void PG4gsposp(G4String *tokens);
+void PG4gsatt (G4String *tokens);
+void PG4gsrotm(G4String *tokens);
+void PG4gsdvn (G4String *tokens);
+void PG4gsdvt (G4String *tokens);
+void PG4gsdvx (G4String *tokens);
+void PG4gsdvn2(G4String *tokens);
+void PG4gsdvt2(G4String *tokens);
+void PG4gsmate(G4String *tokens);
+void PG4gsmixt(G4String *tokens);
+void PG4gstmed(G4String *tokens);
+void PG4gstpar(G4String *tokens);
+void PG4gspart(G4String *tokens);
+void PG4gsdk  (G4String *tokens);
+void PG4gsdet (G4String *tokens);
+void PG4gsdetv(G4String *tokens);
+void PG4gsdeta(G4String *tokens);
+void PG4gsdeth(G4String *tokens);
+void PG4gsdetd(G4String *tokens);
+void PG4gsdetu(G4String *tokens);
 void PG4ggclos();
 
 void G3CLRead(G4String & fname, char *select = NULL){
@@ -80,8 +85,8 @@ void G3CLRead(G4String & fname, char *select = NULL){
 //  fname: call List filename
 //
   
-  RWCString line;
-  RWCString tokens[1000];
+  G4String line;
+  G4String tokens[1000];
 
   const char* ofname = "clparse.out";
   ofile.open(ofname);
@@ -103,7 +108,7 @@ void G3CLRead(G4String & fname, char *select = NULL){
 }
 
 
-G4int G3CLTokens(RWCString *line, RWCString tokens[])
+G4int G3CLTokens(G4String *line, G4String tokens[])
 //
 // G3CLTokens
 //
@@ -111,11 +116,11 @@ G4int G3CLTokens(RWCString *line, RWCString tokens[])
 // are extracted as single tokens, despite embedded spaces.
 //
 {
-    RWCTokenizer next(*line);
+    G4Tokenizer next(*line);
     // first tokenize using " to identify strings
     G4int itok = 0;
     G4int ntokens = 0;
-    RWCString token1, token2;
+    G4String token1, token2;
     while (!(token1=next("\"")).isNull())
         {
             itok++;
@@ -124,7 +129,7 @@ G4int G3CLTokens(RWCString *line, RWCString tokens[])
                     tokens[ntokens++] = token1;
                 } else        // not in a quoted string: finish tokenization
                 {
-                    RWCTokenizer lev2(token1);
+                    G4Tokenizer lev2(token1);
                     while (!(token2=lev2()).isNull())
                         {
                             tokens[ntokens] = token2;
@@ -135,7 +140,7 @@ G4int G3CLTokens(RWCString *line, RWCString tokens[])
     return ntokens;
 }
 
-void G3CLEval(RWCString tokens[], char *select)
+void G3CLEval(G4String tokens[], char *select)
 //
 // G3CLEval
 //
@@ -195,7 +200,7 @@ void G3CLEval(RWCString tokens[], char *select)
     if ( !strcmp(routine,"GGCLOS") ) { PG4ggclos(); return;}
 }
 
-void G3fillParams(RWCString *tokens, char *ptypes)
+void G3fillParams(G4String *tokens, char *ptypes)
 //
 // G3fillParams
 //
@@ -230,6 +235,16 @@ void G3fillParams(RWCString *tokens, char *ptypes)
                     }
                 break;
             case 'R':
+                for (k=0; k < narray; k++) 
+                    { 
+                        Rpar[nr] = atof(tokens[ipt].data()); 
+                        nr++; ipt++;
+                    }
+                break;
+            case 'Q':
+                // special case of reading three successive R arrays 
+                // into one (used in gsmixt)
+                narray = 3 * abs(narray);
                 for (k=0; k < narray; k++) 
                     { 
                         Rpar[nr] = atof(tokens[ipt].data()); 

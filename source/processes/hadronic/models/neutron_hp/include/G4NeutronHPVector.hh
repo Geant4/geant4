@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.2.2.3 1999/07/02 12:27:09 hpw Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4NeutronHPVector.hh,v 1.7 1999/11/19 18:47:39 hpw Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
@@ -25,11 +25,16 @@
 
 class G4NeutronHPVector
 {
+  friend G4NeutronHPVector & operator + (const G4NeutronHPVector & left, 
+                                         const G4NeutronHPVector & right);
+  
   public:
   
   G4NeutronHPVector();
   
   ~G4NeutronHPVector();
+  
+  G4NeutronHPVector & operator = (const G4NeutronHPVector & right);
   
   inline void SetVerbose(G4int ff)
   {
@@ -49,7 +54,7 @@ class G4NeutronHPVector
     }
   }
   
-  inline void SetPoint(G4int i, G4NeutronHPDataPoint & it)
+  inline void SetPoint(G4int i, const G4NeutronHPDataPoint & it)
   {
     G4double x = it.GetX();
     G4double y = it.GetY();
@@ -82,27 +87,26 @@ class G4NeutronHPVector
     Check(i);
     theData[i].SetY(x);
   }
-  inline G4double GetEnergy(G4int i) { return theData[i].GetX(); }
-  inline G4double GetXsec(G4int i)   { return theData[i].GetY(); }
-  inline G4double GetX(G4int i) 
+  inline G4double GetEnergy(G4int i) const { return theData[i].GetX(); }
+  inline G4double GetXsec(G4int i) const { return theData[i].GetY(); }
+  inline G4double GetX(G4int i) const 
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
-    if(i==-1) G4Exception("G4NeutronHPVector::GetX: Trying to read zero length vector");
     return theData[i].GetX();
   }
-  inline G4double GetY(G4int i) 
+  inline G4double GetY(G4int i)  const
   { 
     if (i<0) i=0;
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
     return theData[i].GetY(); 
   }
-  inline G4NeutronHPDataPoint & GetPoint(G4int i) { return theData[i]; }
+  inline const G4NeutronHPDataPoint & GetPoint(G4int i) const { return theData[i]; }
   
-  G4double GetXsec(G4double e);
+  G4double GetXsec(G4double e) const;
 
-  inline G4double GetY(G4double x) {return GetXsec(x);}
-  inline G4int GetVectorLength() {return nEntries;}
+  inline G4double GetY(G4double x)  const {return GetXsec(x);}
+  inline G4int GetVectorLength() const {return nEntries;}
 
   void Dump();
   
@@ -421,6 +425,8 @@ class G4NeutronHPVector
   
   G4NeutronHPInterpolator theInt;
   G4int Verbose;
+  // debug only
+  G4int isFreed;
 };
 
 #endif

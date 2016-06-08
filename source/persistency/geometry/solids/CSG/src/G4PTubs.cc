@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PTubs.cc,v 1.1 1999/01/07 16:10:54 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PTubs.cc,v 1.2 1999/11/17 10:49:03 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4PTubs
@@ -19,12 +19,11 @@
 #include "G4PTubs.hh"
 #include "G4Tubs.hh"
 
-#include "G4AffineTransform.hh"
-#include "meshdefs.hh"
-
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //             - note if pdphi>2PI then reset to 2PI
-G4PTubs::G4PTubs(const G4Tubs* theTubs) : G4PCSGSolid(theTubs->GetName()) {
+G4PTubs::G4PTubs(const G4Tubs* theTubs)
+ : G4PCSGSolid(theTubs->GetName())
+{
 
     G4double pRMin = theTubs->GetInnerRadius();
     G4double pRMax = theTubs->GetOuterRadius();
@@ -92,7 +91,8 @@ G4PTubs::~G4PTubs()
 {;}
 
 // make a transient object
-G4VSolid* G4PTubs::MakeTransientObject() const {
+G4VSolid* G4PTubs::MakeTransientObject() const
+{
     G4VSolid* transientObject = new G4Tubs(GetName(),
 					 fRMin, fRMax,
 					 fDz,

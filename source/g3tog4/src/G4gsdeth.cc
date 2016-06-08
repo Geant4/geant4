@@ -1,19 +1,19 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdeth.cc,v 1.2 1999/05/07 04:16:20 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
-//
+// $Id: G4gsdeth.cc,v 1.4 1999/12/05 17:50:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
 
 class G4VSensitiveDetector;
 
-void PG4gsdeth(RWCString tokens[])
+void PG4gsdeth(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdeth);
@@ -35,7 +35,7 @@ void G4gsdeth(G4String chset, G4String chdet, G4int nh, G4String chnamh[],
               G4int nbitsh[], G4double orig[], G4double fact[])
 {
     // Get pointer to sensitive detector chset
-    G4VSensitiveDetector* sdet = G3Det.getSD(chset, chdet);
+    G4VSensitiveDetector* sdet = G3Det.GetSD(chset, chdet);
     // Add hits to sensitive detector
     for (G4int i=0; i<nh; i++) {
       // $$$        sdet->AddHit(chnamh[i],nbitsh[i],orig[i],fact[i]);

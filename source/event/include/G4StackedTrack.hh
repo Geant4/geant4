@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackedTrack.hh,v 1.1 1999/01/07 16:06:34 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4StackedTrack.hh,v 1.2.4.1 1999/12/07 20:47:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
@@ -19,6 +19,12 @@
 #include "G4Track.hh"
 #include "globals.hh"
 #include "G4Allocator.hh"
+
+// class description:
+//
+//  This class is exclusively used by G4StackManager and G4TrackStack
+// classes for storing a G4Track object in the form of bi-directional
+// linked list.
 
 class G4StackedTrack 
 {
@@ -42,19 +48,19 @@ class G4StackedTrack
 
   public:
       inline G4double GetPriorityWeight() const
-      { return priorityWeight; };
+      { return priorityWeight; }
       inline void SetPriorityWeight(const G4double value)
-      { priorityWeight = value; };
+      { priorityWeight = value; }
       inline G4Track * GetTrack() const
-      { return track; };
+      { return track; }
       inline G4StackedTrack * GetPrevious() const
-      { return previousStackedTrack; };
+      { return previousStackedTrack; }
       inline G4StackedTrack * GetNext() const
-      { return nextStackedTrack; };
+      { return nextStackedTrack; }
       inline void SetPrevious(G4StackedTrack * value)
-      { previousStackedTrack = value; };
+      { previousStackedTrack = value; }
       inline void SetNext(G4StackedTrack * value)
-      { nextStackedTrack = value; };
+      { nextStackedTrack = value; }
 };
 
 extern G4Allocator<G4StackedTrack> aStackedTrackAllocator;

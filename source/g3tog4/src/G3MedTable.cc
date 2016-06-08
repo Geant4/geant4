@@ -1,35 +1,46 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.cc,v 1.6 1999/05/28 21:08:58 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G3MedTable.cc,v 1.10 1999/12/05 17:50:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
+// by I.Hrivnacova, 27 Sep 99
 
-#include "globals.hh"
 #include "G3MedTable.hh"
-#include "G4Material.hh"
 
-G3MedTable::G3MedTable(){
-  _Med = new 
-    RWTPtrOrderedVector<G4Material>;
-};
+G3MedTable::G3MedTable()
+{
+  fMedVector = new G3MediumVector();
+}
 
-G3MedTable::~G3MedTable(){
-  _Med->clear();
-  delete _Med;
-  G4cout << "Deleted G3MedTable..." << endl;
-};
+G3MedTable::~G3MedTable()
+{
+  fMedVector->clearAndDestroy();
+  delete fMedVector;
+}
 
-G4Material*
-G3MedTable::get(G4int MedID){
-  return (*_Med)[MedID-1];
-};
+G3MedTableEntry* G3MedTable::get(G4int id) const
+{
+  for (G4int i=0; i< fMedVector->entries(); i++) {
+    G3MedTableEntry* mte = (*fMedVector)[i];
+    if (id == mte->GetID()) return mte;
+  }
+  return 0;
+}    
 
-void 
-G3MedTable::put(G4int MedID, G4Material* MatPT){
-  _Med->insertAt(MedID-1, MatPT);
-};
+void G3MedTable::put(G4int id, G4Material* material, G4MagneticField* field,
+       G4UserLimits* limits, G4int isvol)
+{
+  G3MedTableEntry* mte 
+    = new G3MedTableEntry(id, material, field, limits, isvol);
+  fMedVector->insert(mte);
+}
+
+void G3MedTable::Clear()
+{
+  fMedVector->clearAndDestroy();
+}

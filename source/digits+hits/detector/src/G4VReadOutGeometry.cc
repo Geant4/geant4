@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VReadOutGeometry.cc,v 1.1 1999/01/07 16:06:27 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VReadOutGeometry.cc,v 1.2.6.1 1999/12/07 20:47:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4VReadOutGeometry.hh"
@@ -101,17 +101,20 @@ G4bool G4VReadOutGeometry::FindROTouchable(G4Step*currentStep)
 
   // At first invokation, creates the touchable history. Note
   // that default value (false) of Locate method is used.
+  //  ---------> But the default Value is TRUE <-------------------- J.A. 
   if(!touchableHistory)
     {
       touchableHistory = new G4TouchableHistory();
       ROnavigator->LocateGlobalPointAndUpdateTouchable(
 		         currentStep->GetPreStepPoint()->GetPosition(),
+		         currentStep->GetPreStepPoint()->GetMomentumDirection(),
 		         touchableHistory);
     }
   else
     {
       ROnavigator->LocateGlobalPointAndUpdateTouchable(
 		         currentStep->GetPreStepPoint()->GetPosition(),
+		         currentStep->GetPreStepPoint()->GetMomentumDirection(),
 		         touchableHistory,
 		         true);
     }

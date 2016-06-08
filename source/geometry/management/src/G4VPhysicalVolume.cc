@@ -1,15 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPhysicalVolume.cc,v 1.1 1999/01/07 16:07:22 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VPhysicalVolume.cc,v 1.2.4.1 1999/12/07 20:48:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4VPhysicalVolume Implementation
+// 09.11.99 J.Apostolakis  Made GetObjectRotation() non-inline (it uses static)
+//                         To be made obsolecent, in favour of more robust
+//                           GetObjectRotationValue()
 
 #include "G4VPhysicalVolume.hh"
 
@@ -38,3 +41,21 @@ G4VPhysicalVolume::~G4VPhysicalVolume()
     G4PhysicalVolumeStore::DeRegister(this);
 }
 
+G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
+{
+  static G4RotationMatrix  aRotM; 
+  static G4RotationMatrix  IdentityRM;  // Never changed (from "1")
+  G4RotationMatrix* retval; 
+
+  // Insure against frot being a null pointer
+  if(frot)
+    {
+      aRotM= frot->inverse();
+      retval= &aRotM;
+    }
+  else
+    {
+      retval= &IdentityRM;
+    }
+  return retval;
+}

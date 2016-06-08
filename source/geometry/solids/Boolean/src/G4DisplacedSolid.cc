@@ -4,6 +4,7 @@
 // History:
 //
 // 28.10.98 V.Grichine, creation according J. Apostolakis's recommendations
+// 14.11.99 V.Grichine, modifications in CalculateExtent(...) method
 
 #include "G4DisplacedSolid.hh"
 
@@ -37,22 +38,39 @@ G4DisplacedSolid( const G4String& pName,
   fDirectTransform = new G4AffineTransform(rotMatrix,transVector) ;
 }
 
-///////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //
+//
+G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
+                                          G4VSolid* pSolid ,
+			            const G4Transform3D& transform  ) :
+  G4VSolid(pName)
+{
+  fPtrSolid = pSolid ;
+  fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
+                                           transform.getTranslation()) ;
+
+  fPtrTransform    = new G4AffineTransform(transform.getRotation().inverse(),
+                                           transform.getTranslation()) ;
+  fPtrTransform->Invert() ;
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+//  Constructor for use with creation of Transient object from Persistent object
 //
 
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                     G4VSolid* pSolid ,
-			      const G4Transform3D& transform  ) :
+			      const G4AffineTransform directTransform ) :
   G4VSolid(pName)
 {
   fPtrSolid = pSolid ;
-  fPtrTransform = new G4AffineTransform(transform.getRotation().inverse(),
-                                        transform.getTranslation()) ;
-  fPtrTransform->Invert() ;
-  fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
-                                        transform.getTranslation()) ;
+  fDirectTransform = new G4AffineTransform( directTransform );
+  fPtrTransform    = new G4AffineTransform( directTransform.Inverse() ) ; 
 }
+
+///////////////////////////////////////////////////////////////////
+//
 
 G4DisplacedSolid::~G4DisplacedSolid() 
 {
@@ -63,20 +81,64 @@ G4DisplacedSolid::~G4DisplacedSolid()
   }
 }
 
+const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const   
+{ return this; }
 
+      G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() 
+{ return this; }
 
+G4VSolid* G4DisplacedSolid::GetConstituentMovedSolid()
+{ return fPtrSolid; } 
 
+G4AffineTransform  G4DisplacedSolid::GetTransform() const
+{
+   G4AffineTransform aTransform= *fPtrTransform;
+   return aTransform;
+}
+
+G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
+{
+   G4AffineTransform aTransform= *fDirectTransform;
+   return aTransform;
+}
+
+G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
+{
+   G4RotationMatrix InvRotation= fPtrTransform->NetRotation();
+   InvRotation.invert();
+   return InvRotation;
+}
+
+G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
+{
+   return fPtrTransform->NetTranslation();
+}
+
+///////////////////////////////////////////////////////////////
+G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
+{
+   G4RotationMatrix Rotation= fDirectTransform->NetRotation();
+   return Rotation;
+}
+
+G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
+{
+   return fDirectTransform->NetTranslation();
+}
 ///////////////////////////////////////////////////////////////
 //
 //
      
 G4bool 
-G4DisplacedSolid::CalculateExtent(const EAxis pAxis,
-			       const G4VoxelLimits& pVoxelLimit,
-			       const G4AffineTransform& pTransform,
-				     G4double& pMin, G4double& pMax) const 
+G4DisplacedSolid::CalculateExtent( const EAxis pAxis,
+			           const G4VoxelLimits& pVoxelLimit,
+			           const G4AffineTransform& pTransform,
+				         G4double& pMin, 
+                                         G4double& pMax           ) const 
 {
-  return fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,
+  G4AffineTransform sumTransform ;
+  sumTransform.Product(*fDirectTransform,pTransform) ;
+  return fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
                                     pMin,pMax) ;
 }
  
@@ -215,6 +277,8 @@ G4DisplacedSolid::CreateNURBS      () const
 {
   return fPtrSolid->CreateNURBS() ;
 }
+
+
 
 
 

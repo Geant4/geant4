@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.6 1999/06/08 11:22:07 sgiani Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4FPlane.cc,v 1.6.8.1 1999/12/07 20:48:24 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // Corrections by S.Giani:
 // - The constructor using iVec now properly stores both the internal and

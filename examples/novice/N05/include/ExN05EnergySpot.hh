@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EnergySpot.hh,v 1.1 1999/01/07 16:06:12 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN05EnergySpot.hh,v 1.1.8.1.2.1 1999/12/07 20:47:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef ExN05EnergySpot_h
 #define ExN05EnergySpot_h
@@ -28,7 +28,7 @@ public:
   inline G4ThreeVector GetPosition() const {return Point;}
 
   // Required by Rogue Wave explicitely,
-  // when using RWTValOrderedVector<ExN05EnergySpot>
+  // when using G4RWTValOrderedVector<ExN05EnergySpot>
   int operator==(const ExN05EnergySpot& eSpot) const
   {
     return (Energy==eSpot.Energy && Point==eSpot.Point) ? 1 : 0;

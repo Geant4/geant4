@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.hh,v 1.3 1999/04/16 10:06:06 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VInteractorManager.hh,v 1.5.4.1 1999/12/07 20:49:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // G.Barrand
 
@@ -14,11 +14,21 @@
 #define G4VINTERACTORMANAGER_HH
 
 #include "globals.hh"
-#include <rw/tvordvec.h>
+#include "g4std/vector"
 
 typedef void*  G4Interactor;
 typedef G4bool (*G4DispatchFunction)(void*);
 typedef void   (*G4SecondaryLoopAction)();
+
+// Class description :
+//
+//  G4VInteractorManager : a base class to isolate common things
+// to various GUI "toolkits" like WIndows, Xt.
+//  The word "interactor" is for "piece of user interface" or
+// "widget" (which means nothing). Then a GUI "toolkit" could be 
+// defined as a manager of interactors.
+//
+// Class description - end :
 
 class G4VInteractorManager {
 public:
@@ -56,10 +66,10 @@ private:
   int                    argc;
   char**                 argv;
   G4Interactor           mainInteractor;
-  RWTValOrderedVector<G4DispatchFunction> dispatchers;
-  RWTValOrderedVector<G4SecondaryLoopAction> preActions;
-  RWTValOrderedVector<G4SecondaryLoopAction> postActions;
-  RWTValOrderedVector<G4Interactor> shells;
+  G4std::vector<G4DispatchFunction> dispatchers;
+  G4std::vector<G4SecondaryLoopAction> preActions;
+  G4std::vector<G4SecondaryLoopAction> postActions;
+  G4std::vector<G4Interactor> shells;
   G4bool                 secondaryLoopEnabled;
   G4bool                 alreadyInSecondaryLoop;
   int                    exitSecondaryLoop;

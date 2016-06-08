@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FTFModel.cc,v 1.1 1999/01/07 16:12:01 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4FTFModel.cc,v 1.2.2.1.2.1 1999/12/07 20:51:43 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 // ------------------------------------------------------------
@@ -31,6 +31,13 @@
 G4FTFModel::G4FTFModel(G4double sigmaPt, G4double minExtraMass,G4double x0Mass) 
 : 
 theExcitation(new G4DiffractiveExcitation(sigmaPt,minExtraMass,x0Mass))
+{
+	G4VPartonStringModel::SetThisPointer(this);
+}
+
+G4FTFModel::G4FTFModel(G4DiffractiveExcitation * anExcitation) 
+: 
+theExcitation(anExcitation)
 {
 	G4VPartonStringModel::SetThisPointer(this);
 }
@@ -85,8 +92,8 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	G4ExcitedStringVector * strings;
 	strings = new G4ExcitedStringVector();
 	
-	RWTPtrOrderedVector<G4VSplitableHadron> primaries;
-	RWTPtrOrderedVector<G4VSplitableHadron> targets;
+	G4RWTPtrOrderedVector<G4VSplitableHadron> primaries;
+	G4RWTPtrOrderedVector<G4VSplitableHadron> targets;
 	
 	theParticipants.StartLoop();    // restart a loop 
 	while ( theParticipants.Next() ) 

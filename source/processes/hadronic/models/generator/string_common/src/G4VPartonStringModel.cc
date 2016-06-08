@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPartonStringModel.cc,v 1.2 1999/04/15 09:32:43 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VPartonStringModel.cc,v 1.4.4.1 1999/12/07 20:51:55 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -95,6 +95,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   
   for ( G4int astring=0; astring < strings->entries(); astring++)
   {
+//    rotate string to lab frame, models have it aligned to z
   	strings->at(astring)->LorentzRotate(toLab);
   	
 	KTsum+= strings->at(astring)->Get4Momentum();
@@ -108,7 +109,13 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 // 	G4cout << "Parton Right  " << strings->at(astring)->GetRightParton()->Get4Momentum() << endl;
 // 	G4cout << " code " << strings->at(astring)->GetRightParton()->GetPDGcode()<< endl;
   
-  	generatedKineticTracks=stringFragmentationModel->FragmentString(*strings->at(astring));
+	if ( strings->at(astring)->IsExcited() )
+	{
+  	     generatedKineticTracks=stringFragmentationModel->FragmentString(*strings->at(astring));
+	} else {
+	     generatedKineticTracks = new G4KineticTrackVector;
+	     generatedKineticTracks->insert(strings->at(astring)->GetKineticTrack());
+	}    
 
 //	G4cout <<" number of generated tracks : " << generatedKineticTracks->entries() << endl;
 
@@ -146,7 +153,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 //	G4cout << " KTsum Momentum " << KTsum << endl;
 //	G4cout << " KTsum  Mass     " << KTsum.mag() << endl;
 	
-	if  ( abs( KTsum1.e() -  strings->at(astring)->Get4Momentum().e() ) > 1. * MeV ) 
+	if  ( abs((KTsum1.e()-strings->at(astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
 	{
 	   NeedEnergyCorrector=true;
 	   

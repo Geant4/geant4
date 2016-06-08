@@ -1,7 +1,7 @@
 #include "G4ParametrizedHadronicVertex.hh"
 
 G4VParticleChange * G4ParametrizedHadronicVertex::
-ApplyYourself(const G4Nucleus & theTarget, const G4Track &thePhoton)
+ApplyYourself(G4Nucleus & theTarget, const G4Track &thePhoton)
 {   
     G4double theKineticEnergy = thePhoton.GetKineticEnergy();
     if(RandFlat::shootBit())

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistencyManager.cc,v 1.1 1999/01/07 16:10:57 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PersistencyManager.cc,v 1.15.2.1 1999/12/07 20:50:14 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4PersistencyManager 
 //
@@ -19,6 +19,16 @@
 #include "G4PersistencyManager.hh"
 
 #include "G4ios.hh"
+
+// forward declarations
+#include "G4PersistentHitMan.hh"
+#include "G4PersistentDigitMan.hh"
+#include "G4PersistentEventMan.hh"
+#include "G4PersistentRunMan.hh"
+#include "G4PersistentGeomMan.hh"
+#include "G4PersistencyMessenger.hh"
+#include "G4TransactionManager.hh"
+#include "HepODBMS/clustering/HepDbApplication.h"
 
 G4PersistencyManager* G4PersistencyManager::f_PersistencyManager = NULL;
 
@@ -35,87 +45,246 @@ G4PersistencyManager* G4PersistencyManager::get_PersistencyManagerIfExist()
 { return f_PersistencyManager; }
 
 G4PersistencyManager::G4PersistencyManager()
+ : f_verboseLevel(0)
 {
+  f_pHitMan   = G4PersistentHitMan::GetPersistentHitMan();
+  f_pDigitMan = G4PersistentDigitMan::GetPersistentDigitMan();
+  f_pEventMan = new G4PersistentEventMan(f_pHitMan, f_pDigitMan);
+  f_pRunMan   = new G4PersistentRunMan;
+  f_pGeomMan  = new G4PersistentGeomMan;
 
-  dbApp = new HepDbApplication("g4example");
-
-  if (!dbApp)
-  {
-    G4cerr << "could not allocate HepDbApplication in G4PersistencyManager!" << endl;
-  }
-
-  // Open and Initialize a database
-
-  // Note: The name of the federated database file "G4EXAMPLE" is 
-  //       hard-coded here for now.
-  //       In near future G4PersistencyManager should take an argument
-  //       of the file name so that user can specify it on the fly.
-
-  const G4String bootFileName = "G4EXAMPLE";
-  G4cout << "Opening Federated Database " << bootFileName << "." << endl;
-  dbApp->fdBootName(bootFileName);
-  dbApp->Init();
-
-  // Locate or create run databases and containers
-  const G4String runDBName = "Runs";
-  if( ! f_pRunMan.LocateDB( dbApp, runDBName) )
-  {
-    G4cerr << "could not locate run database in G4PersistencyManager!" << endl;
-  }
-
-  // Locate or create event databases and containers
-  const G4String eventDBName = "Events";
-  if( ! f_pEventMan.LocateDB( dbApp, eventDBName) )
-  {
-    G4cerr << "could not locate event database in G4PersistencyManager!" << endl;
-  }
-
+  f_persMessenger  = new G4PersistencyMessenger(this);
+  f_transactionMan = new G4TransactionManager
+                          (f_pRunMan, f_pEventMan, f_pHitMan, f_pDigitMan, 
+                           f_pGeomMan);
 }
 
 G4PersistencyManager::~G4PersistencyManager()
 {
-  // Any persistent objects which are created during save() should
-  // not be deleted in ~G4PersistencyManager() implicitly, because
+  // delete utility classes
+
+  delete f_pHitMan;
+  delete f_pDigitMan;
+  delete f_pEventMan;
+  delete f_pRunMan;
+  delete f_pGeomMan;
+  delete f_persMessenger;
+  delete f_transactionMan;
+
+  // Any persistent objects which are created during Store()
+  // should not be deleted in ~G4PersistencyManager(), because
   // they are "persistent"!
 
-  // On the contrary, any transient objects which are created during
-  // Retrieve() should be deleted explicitly when they are no longer
-  // in use.  It is the responsibility of the caller of Retrieve()
-  // to destroy the retrieved transient objects if Retrieve() is to be
-  // called repeatedlly.
-
-  G4cout << "PersistencyManager is deleting." << endl;
+  if(f_verboseLevel>0)
+    G4cout << "PersistencyManager is deleting." << endl;
 }
 
 //----------------------------------------------------------------------------
 
 G4bool G4PersistencyManager::Store(const G4Event* anEvent)
 {
-  return f_pEventMan.Store(dbApp, anEvent);
+  f_transactionMan->StartTransaction(kEventDB, kUpdate, false);
+
+  if( f_pEventMan->Store(f_transactionMan->DbApp(), anEvent) )
+  {
+    if( f_verboseLevel>1 )
+    {
+      G4cout << " -- G4PEvent " << f_pEventMan->CurrentEventID() << " stored in "
+             << DBContainerName(kEventDB);
+      if( f_transactionMan->SustainedMode() )
+        G4cout << " (sustained)" << endl;
+      else
+        G4cout << endl;
+    }
+    f_transactionMan->Commit(kEventDB, false);
+    return true;
+  }
+  else
+  {
+    f_transactionMan->Abort(kEventDB, false);
+    G4cerr << "G4PersistencyManager: Failed to store G4PEvent in "
+           << DBContainerName(kEventDB) << endl;
+    return false;
+  }
 }
 
 G4bool G4PersistencyManager::Store(const G4Run* aRun)
 {
-  return f_pRunMan.Store(dbApp, aRun);
+  f_transactionMan->StartTransaction(kRunDB, kUpdate, false);
+
+  if( f_pRunMan->Store(f_transactionMan->DbApp(), aRun) )
+  {
+    if( f_verboseLevel>0 )
+      G4cout << " -- G4PRun " << f_pRunMan->CurrentRunID() << " stored in "
+             << DBContainerName(kRunDB) << endl;
+    f_transactionMan->Commit(kRunDB, false);
+    return true;
+  }
+  else
+  {
+    f_transactionMan->Abort(kRunDB, false);
+    G4cerr << "G4PersistencyManager: Failed to store G4PRun in "
+           << DBContainerName(kRunDB) << endl;
+    return false;
+  }
 }
 
 G4bool G4PersistencyManager::Store(const G4VPhysicalVolume* aWorld)
 {
-  return f_pGeomMan.Store(dbApp, aWorld);
+  f_transactionMan->StartTransaction(kGeomDB, kUpdate, false);
+
+  if( f_pGeomMan->Store(f_transactionMan->DbApp(), aWorld) )
+  {
+    if( f_verboseLevel>0 )
+      G4cout << " -- Geometry stored in "
+             << DBContainerName(kGeomDB) << endl;
+    f_transactionMan->Commit(kGeomDB, false);
+    return true;
+  }
+  else
+  {
+    f_transactionMan->Abort(kGeomDB, false);
+    G4cerr << "G4PersistencyManager: Failed to store Geometry in "
+           << DBContainerName(kGeomDB) << endl;
+    return false;
+  }
 }
 
 G4bool G4PersistencyManager::Retrieve(G4Event*& anEvent)
 {
-  return f_pEventMan.Retrieve(dbApp, anEvent);
+  f_transactionMan->StartTransaction(kEventDB, kRead, false);
+
+  if( f_pEventMan->Retrieve(f_transactionMan->DbApp(), anEvent) )
+  {
+    if( f_verboseLevel>1 )
+    {
+      if( anEvent )
+        G4cout << " -- G4Event " << f_pEventMan->CurrentEventID()
+               << " retrieved from "
+               << DBContainerName(kEventDB) << endl;
+      else
+        G4cout << " -- scan of G4Event from "
+               << DBContainerName(kEventDB)
+               << " is completed." << endl;
+    }
+    f_transactionMan->Commit(kEventDB, false);
+    return true;
+  }
+  else
+  {
+    f_transactionMan->Abort(kEventDB, false);
+    G4cerr << "G4PersistencyManager: Failed to retrieve G4Event from "
+           << DBContainerName(kEventDB) << endl;
+    return false;
+  }
 }
 
 G4bool G4PersistencyManager::Retrieve(G4Run*& aRun)
 {
-  return f_pRunMan.Retrieve(dbApp, aRun);
+  f_transactionMan->StartTransaction(kRunDB, kRead, false);
+
+  if( f_pRunMan->Retrieve(f_transactionMan->DbApp(), aRun) )
+  {
+    if( f_verboseLevel>0 )
+    {
+      if( aRun )
+        G4cout << " -- G4Run " << f_pRunMan->CurrentRunID()
+               << " retrieved from "
+               << DBContainerName(kRunDB) << "." << endl;
+      else
+        G4cout << " -- scan of G4Run from "
+               << DBContainerName(kRunDB)
+               << " is completed." << endl;
+    }
+    f_transactionMan->Commit(kRunDB, false);
+    return true;
+  }
+  else
+  {
+    f_transactionMan->Abort(kRunDB, false);
+    G4cerr << "G4PersistencyManager: Failed to retrieve G4Run from "
+           << DBContainerName(kRunDB) << endl;
+    return false;
+  }
 }
 
 G4bool G4PersistencyManager::Retrieve(G4VPhysicalVolume*& theWorld)
 {
-  return f_pGeomMan.Retrieve(dbApp, theWorld);
+  f_transactionMan->StartTransaction(kGeomDB, kRead, false);
+
+  if( f_pGeomMan->Retrieve(f_transactionMan->DbApp(), theWorld) )
+  {
+    if( f_verboseLevel>0 )
+    {
+      if( theWorld )
+        G4cout << " -- Geometry retrieved from "
+               << DBContainerName(kGeomDB) << endl;
+    }
+    f_transactionMan->Commit(kGeomDB, false);
+    return true;
+  }
+  else
+  {
+    f_transactionMan->Abort(kGeomDB, false);
+    G4cerr << "G4PersistencyManager: Failed to retrieve Geometry from "
+           << DBContainerName(kGeomDB) << endl;
+    return false;
+  }
+}
+
+
+//----------------------------------------------------------------------------
+
+HepDbApplication* G4PersistencyManager::DbApp()
+{ return f_transactionMan->DbApp(); }
+
+//----------------------------------------------------------------------------
+
+G4bool G4PersistencyManager::SelectDB(ETypeOfDB dbtype,
+                                      G4String dbname, G4bool updateMode)
+{ return f_transactionMan->SelectDB(dbtype, dbname, updateMode); }
+
+G4String G4PersistencyManager::DBName(ETypeOfDB dbtype)
+{ return f_transactionMan->DBName(dbtype); }
+
+G4String G4PersistencyManager::ContainerName(ETypeOfDB dbtype)
+{ return f_transactionMan->ContainerName(dbtype); }
+
+HepDatabaseRef G4PersistencyManager::DBref(ETypeOfDB dbtype)
+{ return f_transactionMan->DBref(dbtype); }
+
+HepContainerRef G4PersistencyManager::ContainerRef(ETypeOfDB dbtype)
+{ return f_transactionMan->ContainerRef(dbtype); }
+
+G4String G4PersistencyManager::DBContainerName(ETypeOfDB dbtype)
+{ return f_transactionMan->DBContainerName(dbtype); }
+
+//----------------------------------------------------------------------------
+
+G4bool G4PersistencyManager::StartTransaction( ETypeOfDB dbtype,
+                                               ETransactionMode dbmode,
+                                               G4bool isSustained)
+{
+  return f_transactionMan->StartTransaction( 
+                                      dbtype, dbmode, isSustained );
+}
+
+G4bool G4PersistencyManager::Commit(ETypeOfDB dbtype, G4bool isSustained)
+{ return f_transactionMan->Commit(dbtype, isSustained); }
+
+G4bool G4PersistencyManager::Abort(ETypeOfDB dbtype, G4bool isSustained)
+{ return f_transactionMan->Abort(dbtype, isSustained); }
+
+//----------------------------------------------------------------------------
+
+void G4PersistencyManager::SetVerboseLevel(G4int vl)
+{
+  f_verboseLevel = vl;
+  f_pHitMan->SetVerboseLevel(vl);
+  f_pDigitMan->SetVerboseLevel(vl);
+  f_pRunMan->SetVerboseLevel(vl);
+  f_pEventMan->SetVerboseLevel(vl);
+  f_pGeomMan->SetVerboseLevel(vl);
+  f_transactionMan->SetVerboseLevel(vl);
 }
 

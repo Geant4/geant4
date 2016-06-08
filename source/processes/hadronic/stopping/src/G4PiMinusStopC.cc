@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopC.cc,v 1.1 1999/01/07 16:13:45 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PiMinusStopC.cc,v 1.1.8.1.2.1 1999/12/07 20:52:40 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -28,9 +28,9 @@
 
 #include "G4PiMinusStopC.hh"
 
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
+#include "g4rw/cstring.h"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -109,11 +109,11 @@ G4PiMinusStopC::G4PiMinusStopC()
   // R ratio
   _R = 1. / (1. + npRatio);
 
-  _definitions = new RWTPtrOrderedVector<G4ParticleDefinition>();
-  _momenta = new RWTPtrOrderedVector<G4LorentzVector>();
+  _definitions = new G4RWTPtrOrderedVector<G4ParticleDefinition>();
+  _momenta = new G4RWTPtrOrderedVector<G4LorentzVector>();
 
-  RWTValOrderedVector<double> eKinVector;
-  RWTValOrderedVector<double> eKinDataVector;
+  G4RWTValOrderedVector<double> eKinVector;
+  G4RWTValOrderedVector<double> eKinDataVector;
   int i;
   for (i=0; i<eKinEntries; i++)
     {
@@ -123,8 +123,8 @@ G4PiMinusStopC::G4PiMinusStopC()
   eKinVector.insert(eKin[eKinEntries]);
   _distributionE = new G4DistributionGenerator(eKinVector,eKinDataVector);
 
-  RWTValOrderedVector<double> angleVector;
-  RWTValOrderedVector<double> angleDataVector;
+  G4RWTValOrderedVector<double> angleVector;
+  G4RWTValOrderedVector<double> angleDataVector;
   for (i=0; i<angleEntries; i++)
     {
       angleVector.insert(angle[i]);

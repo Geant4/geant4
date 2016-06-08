@@ -1,0 +1,35 @@
+$Id: README,v 1.1 1999/12/03 11:20:26 morita Exp $
+-------------------------------------------------------------------
+
+                             createTag
+                             ---------
+
+This short program demonstrates how to create a HepODBMS tag
+based on attibutes stored in G4PEvent objects.
+
+To create and populate the database, see the README file
+of PersistentEx01.
+
+=====
+Setup
+=====
+In addition to the variables required by PersistentEx01,
+set OO_FD_BOOT to your runtime federeate database boot file.
+
+   OO_FD_BOOT    <path of your runtime federated database file>
+
+See setup.sh/setup.csh for example setup.
+
+====================
+createTag executable
+====================
+createTag executable can be made by simply typing "gmake" in this
+directory.
+
+After gmake, type "createTab" to create a new selection of tags
+in OO_FD_BOOT.
+
+To access the tag attributes created by this example, see
+readTag/README.
+
+--

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3EleTable.cc,v 1.4 1999/05/28 21:08:50 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G3EleTable.cc,v 1.6 1999/12/05 17:50:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4strstreambuf.hh"
@@ -23,7 +23,6 @@ G3EleTable::G3EleTable() :_MaxEle(109){
 G3EleTable::~G3EleTable(){
   delete [] _EleNames;
   delete [] _Ele;
-  G4cout << "Deleted G3EleTable..." << endl;
 };
 
 G4Element* 

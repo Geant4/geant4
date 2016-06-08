@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.3 1999/06/01 14:52:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ProcTblElement.hh,v 1.4.2.1 1999/11/11 14:31:29 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -17,13 +17,16 @@
 //	History: first implementation, based on object model of
 //	4th Aug 1998, H.Kurashige
 // ------------------------------------------------------------
+// Class Description  
+//  This class is used by G4ProcessTable ONLY for booking !!!
+//
 
 #ifndef G4ProcTblElement_h
 #define G4ProcTblElement_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
@@ -52,7 +55,7 @@ class G4ProcTblElement
     // equal / unequal operator
 
   protected:
-    typedef RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
+    typedef G4RWTPtrOrderedVector<G4ProcessManager> G4ProcMgrVector;
 
     inline G4int Length() const ;
     inline void  Insert(G4ProcessManager* aProcMgr);

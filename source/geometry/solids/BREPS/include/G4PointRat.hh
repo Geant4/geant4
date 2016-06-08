@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.hh,v 1.2 1999/05/21 18:40:34 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PointRat.hh,v 1.3.4.1 1999/12/07 20:48:19 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // Modif 8 oct 98 : A.Floquet
@@ -25,10 +25,7 @@
 
 // L. Broglia
 // Before included in G4Point.hh
-#include "STEPentity.h"
 #include "STEPaggregate.h"
-#include "STEPcomplex.h"
-#include "instmgr.h"
 #include "G4Plane.hh"
 #include "G4UVHit.hh"
 #define SQRT_SMALL_FASTF 1.0e-18

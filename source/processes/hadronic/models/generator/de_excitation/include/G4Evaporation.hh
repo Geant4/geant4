@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -11,8 +11,8 @@
 #define G4Evaporation_h 1
 
 #include "globals.hh"
-#include <rw/tvvector.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tvvector.h"
+#include "g4rw/tpordvec.h"
 
 
 #include "G4ios.hh"
@@ -53,73 +53,73 @@ private:
 
 
   // Excitation energy levels for each channel
-  RWTValVector<G4double> ExcitEnergyChann00;  // n
-  RWTValVector<G4double> ExcitEnergyChann01;  // p
-  RWTValVector<G4double> ExcitEnergyChann02;  // deuteron
-  RWTValVector<G4double> ExcitEnergyChann03;  // triton
-  RWTValVector<G4double> ExcitEnergyChann04;  // He3
-  RWTValVector<G4double> ExcitEnergyChann05;  // alpha
-  RWTValVector<G4double> ExcitEnergyChann06;  // He5 
-  RWTValVector<G4double> ExcitEnergyChann07;  // He6
-  RWTValVector<G4double> ExcitEnergyChann08;  // Li5
-  RWTValVector<G4double> ExcitEnergyChann09;  // Li5
-  RWTValVector<G4double> ExcitEnergyChann10;
-  RWTValVector<G4double> ExcitEnergyChann11;
-  RWTValVector<G4double> ExcitEnergyChann12;
-  RWTValVector<G4double> ExcitEnergyChann13;
-  RWTValVector<G4double> ExcitEnergyChann14;
-  RWTValVector<G4double> ExcitEnergyChann15;
-  RWTValVector<G4double> ExcitEnergyChann16;
-  RWTValVector<G4double> ExcitEnergyChann17;
-  RWTValVector<G4double> ExcitEnergyChann18;
-  RWTValVector<G4double> ExcitEnergyChann19;
-  RWTValVector<G4double> ExcitEnergyChann20;
-  RWTValVector<G4double> ExcitEnergyChann21;
-  RWTValVector<G4double> ExcitEnergyChann22;
-  RWTValVector<G4double> ExcitEnergyChann23;
-  RWTValVector<G4double> ExcitEnergyChann24;
-  RWTValVector<G4double> ExcitEnergyChann25;
-  RWTValVector<G4double> ExcitEnergyChann26;
-  RWTValVector<G4double> ExcitEnergyChann27;
-  RWTValVector<G4double> ExcitEnergyChann28;
-  RWTValVector<G4double> ExcitEnergyChann29; 
-  RWTValVector<G4double> ExcitEnergyChann30;
-  RWTValVector<G4double> ExcitEnergyChann31; 
+  G4RWTValVector<G4double> ExcitEnergyChann00;  // n
+  G4RWTValVector<G4double> ExcitEnergyChann01;  // p
+  G4RWTValVector<G4double> ExcitEnergyChann02;  // deuteron
+  G4RWTValVector<G4double> ExcitEnergyChann03;  // triton
+  G4RWTValVector<G4double> ExcitEnergyChann04;  // He3
+  G4RWTValVector<G4double> ExcitEnergyChann05;  // alpha
+  G4RWTValVector<G4double> ExcitEnergyChann06;  // He5 
+  G4RWTValVector<G4double> ExcitEnergyChann07;  // He6
+  G4RWTValVector<G4double> ExcitEnergyChann08;  // Li5
+  G4RWTValVector<G4double> ExcitEnergyChann09;  // Li5
+  G4RWTValVector<G4double> ExcitEnergyChann10;
+  G4RWTValVector<G4double> ExcitEnergyChann11;
+  G4RWTValVector<G4double> ExcitEnergyChann12;
+  G4RWTValVector<G4double> ExcitEnergyChann13;
+  G4RWTValVector<G4double> ExcitEnergyChann14;
+  G4RWTValVector<G4double> ExcitEnergyChann15;
+  G4RWTValVector<G4double> ExcitEnergyChann16;
+  G4RWTValVector<G4double> ExcitEnergyChann17;
+  G4RWTValVector<G4double> ExcitEnergyChann18;
+  G4RWTValVector<G4double> ExcitEnergyChann19;
+  G4RWTValVector<G4double> ExcitEnergyChann20;
+  G4RWTValVector<G4double> ExcitEnergyChann21;
+  G4RWTValVector<G4double> ExcitEnergyChann22;
+  G4RWTValVector<G4double> ExcitEnergyChann23;
+  G4RWTValVector<G4double> ExcitEnergyChann24;
+  G4RWTValVector<G4double> ExcitEnergyChann25;
+  G4RWTValVector<G4double> ExcitEnergyChann26;
+  G4RWTValVector<G4double> ExcitEnergyChann27;
+  G4RWTValVector<G4double> ExcitEnergyChann28;
+  G4RWTValVector<G4double> ExcitEnergyChann29; 
+  G4RWTValVector<G4double> ExcitEnergyChann30;
+  G4RWTValVector<G4double> ExcitEnergyChann31; 
 
 
   // Spin of excitation energy levels for each channel
-  RWTValVector<G4int> ExcitSpinChann00;
-  RWTValVector<G4int> ExcitSpinChann01;
-  RWTValVector<G4int> ExcitSpinChann02;
-  RWTValVector<G4int> ExcitSpinChann03;
-  RWTValVector<G4int> ExcitSpinChann04;
-  RWTValVector<G4int> ExcitSpinChann05;
-  RWTValVector<G4int> ExcitSpinChann06;
-  RWTValVector<G4int> ExcitSpinChann07;
-  RWTValVector<G4int> ExcitSpinChann08;
-  RWTValVector<G4int> ExcitSpinChann09;
-  RWTValVector<G4int> ExcitSpinChann10;
-  RWTValVector<G4int> ExcitSpinChann11;
-  RWTValVector<G4int> ExcitSpinChann12;
-  RWTValVector<G4int> ExcitSpinChann13;
-  RWTValVector<G4int> ExcitSpinChann14;
-  RWTValVector<G4int> ExcitSpinChann15;
-  RWTValVector<G4int> ExcitSpinChann16;
-  RWTValVector<G4int> ExcitSpinChann17;
-  RWTValVector<G4int> ExcitSpinChann18;
-  RWTValVector<G4int> ExcitSpinChann19;
-  RWTValVector<G4int> ExcitSpinChann20;
-  RWTValVector<G4int> ExcitSpinChann21;
-  RWTValVector<G4int> ExcitSpinChann22;
-  RWTValVector<G4int> ExcitSpinChann23;
-  RWTValVector<G4int> ExcitSpinChann24;
-  RWTValVector<G4int> ExcitSpinChann25;
-  RWTValVector<G4int> ExcitSpinChann26;
-  RWTValVector<G4int> ExcitSpinChann27;
-  RWTValVector<G4int> ExcitSpinChann28;
-  RWTValVector<G4int> ExcitSpinChann29; 
-  RWTValVector<G4int> ExcitSpinChann30;
-  RWTValVector<G4int> ExcitSpinChann31;
+  G4RWTValVector<G4int> ExcitSpinChann00;
+  G4RWTValVector<G4int> ExcitSpinChann01;
+  G4RWTValVector<G4int> ExcitSpinChann02;
+  G4RWTValVector<G4int> ExcitSpinChann03;
+  G4RWTValVector<G4int> ExcitSpinChann04;
+  G4RWTValVector<G4int> ExcitSpinChann05;
+  G4RWTValVector<G4int> ExcitSpinChann06;
+  G4RWTValVector<G4int> ExcitSpinChann07;
+  G4RWTValVector<G4int> ExcitSpinChann08;
+  G4RWTValVector<G4int> ExcitSpinChann09;
+  G4RWTValVector<G4int> ExcitSpinChann10;
+  G4RWTValVector<G4int> ExcitSpinChann11;
+  G4RWTValVector<G4int> ExcitSpinChann12;
+  G4RWTValVector<G4int> ExcitSpinChann13;
+  G4RWTValVector<G4int> ExcitSpinChann14;
+  G4RWTValVector<G4int> ExcitSpinChann15;
+  G4RWTValVector<G4int> ExcitSpinChann16;
+  G4RWTValVector<G4int> ExcitSpinChann17;
+  G4RWTValVector<G4int> ExcitSpinChann18;
+  G4RWTValVector<G4int> ExcitSpinChann19;
+  G4RWTValVector<G4int> ExcitSpinChann20;
+  G4RWTValVector<G4int> ExcitSpinChann21;
+  G4RWTValVector<G4int> ExcitSpinChann22;
+  G4RWTValVector<G4int> ExcitSpinChann23;
+  G4RWTValVector<G4int> ExcitSpinChann24;
+  G4RWTValVector<G4int> ExcitSpinChann25;
+  G4RWTValVector<G4int> ExcitSpinChann26;
+  G4RWTValVector<G4int> ExcitSpinChann27;
+  G4RWTValVector<G4int> ExcitSpinChann28;
+  G4RWTValVector<G4int> ExcitSpinChann29; 
+  G4RWTValVector<G4int> ExcitSpinChann30;
+  G4RWTValVector<G4int> ExcitSpinChann31;
 
 
   G4VEvaporationChannel * theChannels[TotNumberOfChannels];

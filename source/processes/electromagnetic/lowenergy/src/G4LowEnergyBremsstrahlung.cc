@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.13 1999/07/06 14:35:47 aforti Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.17.2.1 1999/12/07 20:50:23 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -19,6 +19,9 @@
 //      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyBremsstrahlung physics process --------
 //                     by Michel Maire, 24 July 1996
+//      ------------ G4LowEnergyBremsstrahlung: low energy modifications --------
+//                   by Alessandra Forti, March 1999
+//
 // **************************************************************
 // 26-09-96 : extension of the total crosssection above 100 GeV, M.Maire
 //  1-10-96 : new type G4OrderedTable; ComputePartialSumSigma(), M.Maire
@@ -28,6 +31,11 @@
 // 20-03-97 : new energy loss+ionisation+brems scheme, L.Urban
 // 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
 // 13-08-98 : new methods SetBining() PrintInfo()
+// Added Livermore data table construction methods A. Forti
+// Modified BuildMeanFreePath to read new data tables A. Forti
+// Modified PostStepDoIt to insert sampling with with EEDL data A. Forti
+// Added SelectRandomAtom A. Forti
+// Added map of the elements A. Forti
 // --------------------------------------------------------------
 
 // This Class Header
@@ -104,13 +112,14 @@ void G4LowEnergyBremsstrahlung::SetPhysicsTableBining(G4double lowE, G4double hi
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// SET CUT FOR LOW ENERGY SECONDARY PHOTONS A. FORTI
 void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut){
 
   CutForLowEnergySecondaryPhotons = cut;
 }
 
+  // METHOD BELOW  FROM STANDARD E_M PROCESSES CODE
 void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
-//  just call BuildLossTable+BuildLambdaTable
 {
 
     BuildLossTable(aParticleType) ;
@@ -126,20 +135,21 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     CounterOfPositronProcess++;
    }
 
-    BuildZVec();
-    BuildCrossSectionTable() ;
-    BuildMeanFreePathTable() ;
-    BuildDEDXTable  (aParticleType) ;
+  BuildZVec();
 
-    // smpling energy formula coefficient
-    BuildATable();
-    BuildBTable();
+  BuildCrossSectionTable() ;
+  BuildMeanFreePathTable() ;
 
-    //  if(&aParticleType==G4Electron::Electron())
-    // PrintInfoDefinition();
-    //}
+  BuildDEDXTable  (aParticleType) ;
+
+  // energy sampling formula coefficient
+  BuildATable();
+  BuildBTable();
+
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+  // CONSTRUCT THE CROSS SECTION TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC. 
 void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
  
   if (theCrossSectionTable) {
@@ -161,6 +171,7 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
   }//end for on atoms
 }
 
+// CONSTRUCT THE TABLE OF THE FIRST PARAMETER OF THE SAMPLING FORMULA 
 void G4LowEnergyBremsstrahlung::BuildATable(){
 
   if (ATable) {
@@ -172,6 +183,8 @@ void G4LowEnergyBremsstrahlung::BuildATable(){
 
 }
 
+// CONSTRUCT THE TABLE OF THE PARAMETERS OF THE FORMULA OF THE 
+// SECOND PARAMETER OF THE SAMPLING FORMULA
 void G4LowEnergyBremsstrahlung::BuildBTable(){
 
   if (BTable) {
@@ -183,6 +196,8 @@ void G4LowEnergyBremsstrahlung::BuildBTable(){
 
 }
 
+// Vector mapping the existing elements in the material table
+// needed at initialization time to load only the necessary data
 void G4LowEnergyBremsstrahlung::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
@@ -217,9 +232,13 @@ void G4LowEnergyBremsstrahlung::BuildZVec(){
   }
 }
 
+//  Build table for energy loss due to soft brems
+//  tables are built for *MATERIALS* already in the standard processes
+// to be changed when the new energy loss will be calculated.
+//
+// // METHOD BELOW  FROM STANDARD E_M PROCESSES LEFT BUT AT THE MOMENT NOT USED
+//
 void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType)
-  //  Build table for energy loss due to soft brems
-  //  tables are built for *MATERIALS*
 {
   G4double KineticEnergy,TotalEnergy,bremloss,Z,x,
            losslim,loss,rate,natom,Cut;
@@ -327,6 +346,7 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 
            const G4double LPMconstant = fine_structure_const*electron_mass_c2*
                                 electron_mass_c2/(8.*pi*hbarc) ;
+	   
            const G4double kmin = 1.*eV ;
            const G4double klim = 1.*keV ;
 
@@ -395,7 +415,9 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//
+// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE LEFT BUT AT THE MOMENT NOT USED
+//
 G4double G4LowEnergyBremsstrahlung::ComputeXYPolynomial(G4double x,  G4double y,
                                              G4int xSize, G4int ySize,
                                              const G4double coeff[])
@@ -403,7 +425,7 @@ G4double G4LowEnergyBremsstrahlung::ComputeXYPolynomial(G4double x,  G4double y,
   // Computes the polynomial (1 y y^2 ...) * matrix * (1 x x^2 ...) .
   // xSize and ySize are the dimensions of the matrix,
   // coeff containts the elements, stored row-wise.    
-  
+
   G4double* a= new G4double[xSize];
   G4int i, j;
 
@@ -423,12 +445,15 @@ G4double G4LowEnergyBremsstrahlung::ComputeXYPolynomial(G4double x,  G4double y,
 }                                             
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//
+// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE LEFT BUT AT THE MOMENT NOT USED
+//
 G4double G4LowEnergyBremsstrahlung::ComputeBremLoss(G4double Z,G4double natom,
                          G4double T,G4double Cut,G4double x)
 
 // compute loss due to soft brems 
 // 'Migdal' version , this is the default in GEANT3 
+
 {
   const G4double beta=0.99,ksi=2.51,ve=0.00004 ;
   const G4double corrfac = classic_electr_radius*electron_Compton_length*electron_Compton_length/pi  ;
@@ -500,6 +525,10 @@ G4double G4LowEnergyBremsstrahlung::ComputeBremLoss(G4double Z,G4double natom,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+//
+// METHOD BELOW  FROM STANDARD E_M PROCESSES LEFT BUT AT THE MOMENT NOT USED
+//
+
 G4double G4LowEnergyBremsstrahlung::ComputePositronCorrFactorLoss(
                             G4double Z,G4double KineticEnergy,G4double GammaCut)
 
@@ -523,10 +552,15 @@ G4double G4LowEnergyBremsstrahlung::ComputePositronCorrFactorLoss(
       
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
+//
+// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
+// LIVERMORE DATA (using log-log interpolation as reported in stepanek paper) 
+//
 void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
 
 // Build  mean free path tables for the gamma emission by e- or e+.
-// tables are Build for MATERIALS. 
+// tables are Build for MATERIALS. see GENERAL part of processes in GEANT4
+  // manual
 {
    G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2.;
 
@@ -588,11 +622,16 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+//
+// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
+// LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
+//
 void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
 						       const G4Material* aMaterial)
 
 // Build the table of cross section per element. The table is built for MATERIALS.
 // This table is used by DoIt to select randomly an element in the material. 
+
 {
    G4int Imate = aMaterial->GetIndex();
    G4int NbOfElements = aMaterial->GetNumberOfElements();
@@ -623,26 +662,18 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
 
 G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 							   const G4Step& stepData){
-  //
-  // The emitted gamma energy is sampled using a parametrized formula from L. Urban.
-  // This parametrization is derived from :
-  //    cross-section values of Seltzer and Berger for electron energies 1 keV - 10 GeV,
-  //    screened Bethe Heilter differential cross section above 10 GeV,
-  //    Migdal corrections in both case. 
-  //  Seltzer & Berger: Nim B 12:95 (1985)
-  //  Nelson, Hirayama & Rogers: Technical report 265 SLAC (1985)
-  //  Migdal: Phys Rev 103:1811 (1956); Messel & Crawford: Pergamon Press (1970)
+
+  // This parametrization is derived from : 
+  // Migdal corrections (dielectric suppression). 
+  // Migdal: Phys Rev 103:1811 (1956); Messel & Crawford: Pergamon Press (1970)
+  // MIGDAL constant and LPM effect LEFT FROM STANDARD PROCESS
   //     
-  // A modified version of the random number techniques of Butcher & Messel is used 
-  //    (Nuc Phys 20(1960),15).
-  //
-  // GEANT4 internal units.
-  // 
   
   const G4double MigdalConstant = classic_electr_radius
     *electron_Compton_length
     *electron_Compton_length/pi;
-  
+
+
   const G4double LPMconstant = fine_structure_const*electron_mass_c2*
     electron_mass_c2/(8.*pi*hbarc) ;
   
@@ -692,10 +723,13 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   G4double LPMGammaEnergyLimit = TotalEnergysquare/LPMEnergy ;
   
   //
-  //  sample the energy rate of the emitted gamma for electron kinetic energy
-  //  sampling formula: spet(T) = A(T)/E+B(T)
-  //
-  
+  // The emitted gamma energy is from EEDL data fitted with A/E+B function.
+  // Original formula A/E+B+C*E and sampling methods are reported by  J. Stepanek 
+  // formula has been modified by A. Forti and S. Giani. 
+
+  // 
+  //  sample the energy of the emitted gamma for electron kinetic energy
+  //  
   G4double p1 = 0, p2 = 0;
   G4double coeffA = 0, coeffB = 0;
   G4int AtomicNum = (G4int) anElement->GetZ();
@@ -715,14 +749,15 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     G4double R2 = G4UniformRand();
     GammaEnergy = ElectKinEn*pow((lowEnergyCut/ElectKinEn),R2);   
   }
-  else if(p1 < R1 <= p1+p2){
+  else if ((p1 < R1) && (R1 <= p1+p2)){
     
     G4double R2 = G4UniformRand();
     GammaEnergy = ElectKinEn - R2*(ElectKinEn - lowEnergyCut);
   }
   
-  // now comes the supression due to the LPM effect I leave it
-  
+  // now comes the supression due to the LPM effect (gamma production suppression
+  // due to the multiple scattering of the electron) SEE ABOVE
+
   if(GammaEnergy < LPMGammaEnergyLimit){
     
     G4double S2LPM = LPMEnergy*GammaEnergy/TotalEnergysquare ;
@@ -747,7 +782,6 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   //**********************//
   
   //  angles of the emitted gamma. ( Z - axis along the parent particle)
-  //
   //  universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
@@ -780,7 +814,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 
       if(GammaEnergy <  GammaEnergyCut){
 
-	 aParticleChange.SetLocalEnergyDeposit (GammaEnergy); 
+	 aParticleChange.SetLocalEnergyDeposit(GammaEnergy); 
       }
       else{
 
@@ -790,7 +824,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 	
 	aParticleChange.SetNumberOfSecondaries(1);
 	aParticleChange.AddSecondary(aGamma); 
-	aParticleChange.SetLocalEnergyDeposit (0);
+	aParticleChange.SetLocalEnergyDeposit(0);
       }
     } 
     else{
@@ -814,6 +848,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     
 #ifdef G4VERBOSE
   if(verboseLevel > 15){
+
     G4cout<<"LE Bremsstrahlung PostStepDoIt"<<endl;
   }
 #endif
@@ -821,10 +856,11 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
+// LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
 G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 {
-  // select randomly 1 element within the material
+
 
   const G4int Index = aMaterial->GetIndex();
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
@@ -833,8 +869,6 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
   G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
   for ( G4int i=0; i < NumberOfElements; i++ )
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
-  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-  //   << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 
@@ -842,15 +876,12 @@ G4Element* G4LowEnergyBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) co
 
 void G4LowEnergyBremsstrahlung::PrintInfoDefinition()
 {
-  G4String comments = "Total cross sections from a parametrisation(L.Urban). ";
-           comments += "Good description from 1 KeV to 100 GeV.\n";
-           comments += "        log scale extrapolation above 100 GeV \n";
-           comments += "        Gamma energy sampled from a parametrised formula.";
+  G4String comments = "Total cross sections from EEDL database";
+           comments += "Good description from 1 eV to 100 GeV.\n";
+           comments += "Gamma energy sampled from a parametrised formula.";
                      
-  G4cout << endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
-         << " in " << TotBin << " bins. \n";
+	   G4cout << endl << GetProcessName() << ":  " << comments<<endl;
+
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

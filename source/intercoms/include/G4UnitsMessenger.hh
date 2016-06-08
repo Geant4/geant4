@@ -1,14 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsMessenger.hh,v 1.1 1999/01/07 16:09:24 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UnitsMessenger.hh,v 1.2.2.1 1999/12/07 20:49:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
-// 
+// class description
+//
+// This class is the messenger of the class which maintain the table of Units.
+// (located in global/management/include/G4UnitsTable.hh)
+// Its contains the commands to interact with the table of Units 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

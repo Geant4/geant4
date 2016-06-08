@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -28,9 +28,9 @@
 #define G4PTRLEVELVECTOR_HH
 
 class G4NuclearLevel;
-#include <rw/tpsrtvec.h>
+#include "g4rw/tpsrtvec.h"
 
-typedef RWTPtrSortedVector<G4NuclearLevel> G4PtrLevelVector;
+typedef G4RWTPtrSortedVector<G4NuclearLevel> G4PtrLevelVector;
 
 
 #endif

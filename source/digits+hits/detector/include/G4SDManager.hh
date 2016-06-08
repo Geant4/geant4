@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SDManager.hh,v 1.1 1999/01/07 16:06:24 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SDManager.hh,v 1.2.4.1 1999/12/07 20:47:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4SDManager_h
@@ -20,10 +20,21 @@ class G4VSensitiveDetector;
 class G4HCofThisEvent;
 class G4SDmessenger;
 
+// class description:
+//
+//  This is a singleton class which manages the sensitive detectors.
+// The user cannot access to the constructor. The pointer of the
+// only existing object can be got via G4SDManager::GetSDMpointer()
+// static method. The first invokation of this static method makes
+// the singleton object.
+//
+
 class G4SDManager 
 {
-  public:
+  public: // with description
       static G4SDManager* GetSDMpointer();
+      // Returns the pointer to the singleton object.
+  public:
       static G4SDManager* GetSDMpointerIfExist();
 
   protected:
@@ -31,13 +42,22 @@ class G4SDManager
 
   public:
       ~G4SDManager();
+
+  public: // with description
       void AddNewDetector(G4VSensitiveDetector*aSD); 
-      G4HCofThisEvent* PrepareNewEvent();
-      void TerminateCurrentEvent(G4HCofThisEvent* HCE);
+      //  Registors the user's sensitive detector. This method must be invoked
+      // when the user construct his/her sensitive detector.
       void Activate(G4String dName, G4bool activeFlag);
+      //  Activate/inactivate the registered sensitive detector. For the inactivated
+      // detectors, hits collections will not be stored to the G4HCofThisEvent object.
       G4int GetCollectionID(G4String colName);
       G4int GetCollectionID(G4VHitsCollection * aHC);
+      //  These two methods return the ID number of the sensitive detector.
+
+  public:
       G4VSensitiveDetector* FindSensitiveDetector(G4String dName);
+      G4HCofThisEvent* PrepareNewEvent();
+      void TerminateCurrentEvent(G4HCofThisEvent* HCE);
 
   private: 
       static G4SDManager * fSDManager;

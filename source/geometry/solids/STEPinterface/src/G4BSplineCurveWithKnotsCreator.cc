@@ -1,6 +1,6 @@
 #include "G4BSplineCurveWithKnotsCreator.hh"
 #include "G4BSplineCurve.hh"
-typedef RWTValVector<G4double> G4doubleVector;
+typedef G4RWTValVector<G4double> G4doubleVector;
 
 G4BSplineCurveWithKnotsCreator G4BSplineCurveWithKnotsCreator::csc;
 

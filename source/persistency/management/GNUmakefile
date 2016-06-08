@@ -1,46 +1,44 @@
-# $Id: GNUmakefile,v 1.1 1999/01/07 16:10:55 gunter Exp $
+# $Id: GNUmakefile,v 1.16 1999/12/01 15:21:07 morita Exp $
 
 name := G4pmanagement
 G4ODBMS := true
+G4ODBMS_INSTALLATION := true
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+
 include $(G4INSTALL)/config/architecture.gmk
 
-# $(G4TMPDIR) will be overrided in common.gmk later.
-G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
+G4OODDLX_BOOT := $(G4TMPSCHEMA_BOOT)
 
 CPPFLAGS  += \
              -Iinclude \
-             -I$(G4TMPDIR) \
-             -I../geometry/management/include \
-             -I$(G4TMP)/$(G4SYSTEM)/G4pgeomn \
-             -I../geometry/volumes/include \
-             -I$(G4TMP)/$(G4SYSTEM)/G4pvol \
-             -I../geometry/solids/CSG/include \
-             -I$(G4TMP)/$(G4SYSTEM)/G4pcsg \
-             -I../events/include \
+             -I$(G4SCHEMA_HEADER_DIR) \
+             -I$(G4TMP)/$(G4SYSTEM)/G4pdigits \
+             -I$(G4TMP)/$(G4SYSTEM)/G4phits \
              -I$(G4TMP)/$(G4SYSTEM)/G4pevents \
              -I$(G4TMP)/$(G4SYSTEM)/G4prun \
+             -I$(G4TMP)/$(G4SYSTEM)/G4pgeomGlobal \
+             -I$(G4TMP)/$(G4SYSTEM)/G4pcsg \
+             -I$(G4TMP)/$(G4SYSTEM)/G4pgeomBoolean \
+             -I$(G4TMP)/$(G4SYSTEM)/G4pgeomn \
+             -I$(G4INSTALL)/source/persistency/global/include \
+             -I$(G4INSTALL)/source/persistency/digits+hits/hits/include \
+             -I$(G4INSTALL)/source/persistency/digits+hits/digits/include \
+             -I$(G4INSTALL)/source/persistency/events/include \
+             -I$(G4INSTALL)/source/persistency/geometry/global/include \
+             -I$(G4INSTALL)/source/persistency/geometry/management/include \
+             -I$(G4INSTALL)/source/persistency/run/include \
+             -I$(G4INSTALL)/source/digits+hits/hits/include \
+             -I$(G4INSTALL)/source/digits+hits/digits/include \
              -I$(G4INSTALL)/source/run/include \
              -I$(G4INSTALL)/source/event/include \
-             -I$(G4INSTALL)/source/global/management/include \
-             -I$(G4INSTALL)/source/global/HEPRandom/include \
              -I$(G4INSTALL)/source/global/HEPGeometry/include \
              -I$(G4INSTALL)/source/geometry/management/include \
              -I$(G4INSTALL)/source/geometry/volumes/include \
-             -I$(G4INSTALL)/source/geometry/solids/CSG/include \
-             -I$(G4INSTALL)/source/events+tracks/include \
-             -I$(G4INSTALL)/source/processes/management/include \
-             -I$(G4INSTALL)/source/materials/include \
-             -I$(G4INSTALL)/source/particles/management/include \
-             -I$(G4INSTALL)/source/graphics_reps/include \
-             -I$(G4INSTALL)/source/tracking/include \
-             -I$(G4INSTALL)/source/track/include \
-             -I$(G4INSTALL)/source/digits+hits/detector/include \
-             -I$(G4INSTALL)/source/digits+hits/hits/include \
-             -I$(G4INSTALL)/source/digits+hits/digits/include
+             -I$(G4INSTALL)/source/global/management/include \
+             -I$(G4INSTALL)/source/intercoms/include
 
 
 #--------------------------------------------------------------------
@@ -51,9 +49,6 @@ include $(G4INSTALL)/config/common.gmk
 
 #--------------------------------------------------------------------
 # Explicit DDL dependencies:
-#  G4PEvent.ddl includes G4PPrimaryVertex.hh, so G4PPrimaryVertex.hh
-#  should be created before G4PEvent.hh.
 
-$(G4TMPDIR)/G4PEvent.hh: $(G4TMPDIR)/G4PPrimaryVertex.hh
 #--------------------------------------------------------------------
 

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.hh,v 1.3 1999/02/17 17:31:05 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VoxelNavigation.hh,v 1.4.2.1 1999/12/07 20:48:42 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4VoxelNavigation: Utility for navigation in volumes
@@ -30,8 +30,8 @@
 #include "G4SmartVoxelProxy.hh"
 #include "G4SmartVoxelNode.hh"
 #include "G4SmartVoxelHeader.hh"
-#include <rw/tvvector.h>
-#include <rw/tpvector.h>
+#include "g4rw/tvvector.h"
+#include "g4rw/tpvector.h"
 
 // Voxel stack depth maximum [no resizing]
 const G4int kNavigatorVoxelStackMax = 3;
@@ -85,19 +85,19 @@ private:
     G4int fVoxelDepth;
 
 // Voxel axes
-    RWTValVector<EAxis> fVoxelAxisStack;
+    G4RWTValVector<EAxis> fVoxelAxisStack;
 
 // No slices per voxel at each level
-    RWTValVector<G4int> fVoxelNoSlicesStack;
+    G4RWTValVector<G4int> fVoxelNoSlicesStack;
 
 // Width of voxels at each level 
-    RWTValVector<G4double> fVoxelSliceWidthStack; 
+    G4RWTValVector<G4double> fVoxelSliceWidthStack; 
 
 // Node no point is inside at each level 
-    RWTValVector<G4int> fVoxelNodeNoStack;	  
+    G4RWTValVector<G4int> fVoxelNodeNoStack;	  
 				
 // Voxel headers at each level
-    RWTPtrVector<G4SmartVoxelHeader> fVoxelHeaderStack;
+    G4RWTPtrVector<G4SmartVoxelHeader> fVoxelHeaderStack;
 
 // Node containing last located point
     G4SmartVoxelNode* fVoxelNode;

@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.3 1999/07/02 09:59:31 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
 #define G4NeutronHPNBodyPhaseSpace_h 1

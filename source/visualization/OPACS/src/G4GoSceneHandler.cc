@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GoSceneHandler.cc,v 1.3 1999/05/31 17:20:56 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4GoSceneHandler.cc,v 1.4.4.1 1999/12/07 20:53:13 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -267,6 +267,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Box&) " << endl;
+#endif
   G4VSceneHandler::AddThis (box);
 }
 /***************************************************************************/
@@ -276,6 +279,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Cons&) " << endl;
+#endif
   G4VSceneHandler::AddThis (cons);
 }
 /***************************************************************************/
@@ -285,6 +291,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Tubs&) " << endl;
+#endif
   G4VSceneHandler::AddThis (tubs);
 }
 /***************************************************************************/
@@ -294,6 +303,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Trd&) " << endl;
+#endif
   G4VSceneHandler::AddThis (trd);
 }
 /***************************************************************************/
@@ -303,6 +315,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Trap&) " << endl;
+#endif
   G4VSceneHandler::AddThis (trap);
 }
 /***************************************************************************/
@@ -312,6 +327,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Sphere&) " << endl;
+#endif
   G4VSceneHandler::AddThis (sphere);
 }
 /***************************************************************************/
@@ -321,6 +339,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Para&) " << endl;
+#endif
   G4VSceneHandler::AddThis (para);
 }
 /***************************************************************************/
@@ -330,6 +351,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4Torus&) " << endl;
+#endif
   G4VSceneHandler::AddThis (torus);
 }
 /***************************************************************************/
@@ -339,6 +363,9 @@ void G4GoSceneHandler::AddThis (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+#ifdef DEBUG
+  G4cout << "G4GoSceneHandler::AddThis(G4VSolid&) " << endl;
+#endif
   G4VSceneHandler::AddThis (solid);
 }
 /***************************************************************************/
@@ -387,8 +414,10 @@ void G4GoSceneHandler::BeginPrimitives (
 #ifdef DEBUG
   G4cout << "G4GoSceneHandler::BeginPrimitives" << endl;
 #endif
+
   G4VSceneHandler::BeginPrimitives (objectTransformation);
   transformation  = objectTransformation;
+
   fGoNode         = nodeName!=NULL ? ONodeCreate (nodeName) : ONodeMake ();
   if(ONodeIsValid(fRootGoNode)==0) {
     fRootGoNode = ONodeMake ();
@@ -412,18 +441,15 @@ void G4GoSceneHandler::EndPrimitives (
 #ifdef DEBUG
   G4cout << "G4GoSceneHandler::EndPrimitives" << endl;
 #endif
-  G4double        g4angle;
-  G4ThreeVector   g4axis;
-  G4ThreeVector   g4trans;
-  transformation.getRotation().getAngleAxis(g4angle,g4axis);
-  g4trans         = transformation.getTranslation();
-  OMatrix         orot = OMatrixCreate (OMatrixRotationAxis,g4angle,g4axis.x(),g4axis.y(),g4axis.z());
-  OMatrix         otra = OMatrixCreate (OMatrixTranslation,g4trans.x(),g4trans.y(),g4trans.z());
-  OMatrix         omatrix = OMatrixMultiply (otra,orot);
+  HepRotation     rot = transformation.getRotation();
+  Hep3Vector      tra = transformation.getTranslation();
+  OMatrix         omatrix = OMatrixCreate(OMatrixFollowing,
+		  rot.xx(),rot.xy(),rot.xz(),tra.x(),
+		  rot.yx(),rot.yy(),rot.yz(),tra.y(),
+		  rot.zx(),rot.zy(),rot.zz(),tra.z(),
+			0.,      0.,      0.,     1.); 
   ONodeSetMatrix  (fGoNode,omatrix);
   OMatrixDelete   (omatrix);
-  OMatrixDelete   (orot);
-  OMatrixDelete   (otra);
   fGoNode         = NULL;
   G4VSceneHandler::EndPrimitives ();
 }

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999/05/21 04:29:04 kurasige Exp $
+$Id: History,v 1.15 1999/12/02 16:26:05 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 2 99, M.Asai (run-V00-01-04)
+- G4RunManager displays the version number when it is constructed.
+
+Nov 7 99, H.Kurashige (run-V00-01-03)
+-  Comments are enriched for software reference manual.
+
+
+Nov 4, 99, M.Asai (tag run-V00-01-02)
+- Comments are enriched for software reference manual.
+
+Oct 7, 99, J.Allison (tag run-V00-01-01)
+- Removed -I$(G4BASE)/graphics_reps/include from GNUmakefile (no
+  longer necessary after G4VVisManager moved to intercoms).
+
+Jul 25, 99 M.Asai (tag run-V00-01-00)
+- Store/restore the status of the random number engine to
+  separate files
+
+Jun 09, 99 M.Asai (tag run-01-00-06)
+- Store/restore the status of the random number engine
+- Get methods of G4RunManager for the user action classes
+
 May 21, 99 H.Kurashige (run-01-00-05)
 - Fixed bug in G4VUserPhysicsList::InitializeProcessManager()
 

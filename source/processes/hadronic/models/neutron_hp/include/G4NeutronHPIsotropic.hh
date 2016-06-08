@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPIsotropic.hh,v 1.3 1999/07/02 09:59:17 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4NeutronHPIsotropic_h
 #define G4NeutronHPIsotropic_h 1

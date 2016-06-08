@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.hh,v 1.2 1999/04/28 15:07:53 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4hEnergyLossPlus.hh,v 1.3.8.1 1999/12/07 20:50:54 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -253,6 +253,15 @@ class G4hEnergyLossPlus : public G4VContinuousDiscreteProcess
     static G4double MinDeltaCutInRange; // minimum cut for delta rays
     static G4double* MinDeltaEnergy ;
 
+    static G4double LowestKineticEnergy;
+    static G4double HighestKineticEnergy;
+    static G4int TotBin; // number of bins in table,
+                         // calculated in BuildPhysicsTable
+                                   
+    static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
+                                      //          /LowestKineticEnergy)/TotBin
+                                      //   RTable = exp(LOGRTable)
+    
     static G4double Charge ;
   private:
 
@@ -289,16 +298,6 @@ class G4hEnergyLossPlus : public G4VContinuousDiscreteProcess
     static G4bool EnlossFlucFlag ;
 
     static G4int NumberOfProcesses ;
-
-    static G4double LowestKineticEnergy;
-    static G4double HighestKineticEnergy;
-    static G4int TotBin; // number of bins in table,
-                         // calculated in BuildPhysicsTable
-                                   
-    static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
-                                      //          /LowestKineticEnergy)/TotBin
-                                      //   RTable = exp(LOGRTable)
-    
 
     static G4double c0N,c1N,c2N,c3N ;    // coeffs to compute nb of deltas
     static G4int Ndeltamax ;             // upper limit for nb of subcutoff

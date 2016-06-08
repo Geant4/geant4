@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05EventAction.cc,v 1.2 1999/04/16 12:05:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN05EventAction.cc,v 1.2.6.1.2.1 1999/12/07 20:47:37 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "ExN05EventAction.hh"
@@ -22,7 +22,7 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 #include "G4ios.hh"
 
 ExN05EventAction::ExN05EventAction()

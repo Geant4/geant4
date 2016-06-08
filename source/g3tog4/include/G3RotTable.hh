@@ -1,33 +1,46 @@
-#ifndef _G3ROTTABLE_
-#define _G3ROTTABLE_ 1
-
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.hh,v 1.5 1999/05/26 03:46:29 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G3RotTable.hh,v 1.9 1999/12/05 17:50:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
-//
-// G3 materials table.
-// Maps G3 material indices to their G4 material object counterparts.
-// Maintains a linked List of G3 material index/G4 material pointer pairs.
+// by I.Hrivnacova, 27 Sep 99
 
-#include <rw/tpordvec.h>
-#include "G3toG4RotationMatrix.hh"
+#ifndef G3_ROT_TABLE_H
+#define G3_ROT_TABLE_H
 
-class G3RotTable {
-private:
-  RWTPtrOrderedVector<G3toG4RotationMatrix>* _Rot;
-public:
-  G3RotTable();
-  ~G3RotTable();
-  G3toG4RotationMatrix* Get(G4int rotid);
-  void Put(G4int rotid, G3toG4RotationMatrix* rotpt);
+#include "G3RotTableEntry.hh"
+
+#include "globals.hh"
+
+#include "g4rw/tpordvec.h"
+
+class G4Material;
+
+typedef G4RWTPtrOrderedVector<G3RotTableEntry>  G3RotMatrixVector;
+
+class G3RotTable
+{
+  public:
+    G3RotTable();
+    virtual ~G3RotTable();
+    
+    // methods
+    // keep the same names of methods as in G4 g3tog4
+    // G3toG4RotationMatrix type changed to G4RotationMatrix)
+    //
+    G4RotationMatrix* Get(G4int id) const;
+    void Put(G4int id, G4RotationMatrix* matrix);
+    void Clear();
+
+  private:
+    G3RotMatrixVector*  fRotVector;
 };
 
 extern G3RotTable G3Rot;
-#endif
+
+#endif //G3_ROT_TABLE_H

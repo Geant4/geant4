@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuEnergyLoss.cc,v 1.6 1999/06/18 11:30:47 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MuEnergyLoss.cc,v 1.8.6.1 1999/12/07 20:50:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -30,6 +30,7 @@
 
 #include "G4MuEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4Poisson.hh"
 
 // Initialisation of static members *******************************************
 // contributing processes : ion.loss,bremsstrahlung,pair production
@@ -1226,7 +1227,7 @@ G4double G4MuEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double threshold,w1,w2,w3,lnw3,C,prob,
            beta2,suma,e0,Em,loss,lossc ,w;
   G4double a1,a2,a3;
-  long p1,p2,p3;
+  G4long p1,p2,p3;
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
   G4double dp1,dnmaxDirectFluct,dp3,dnmaxCont2;
@@ -1268,14 +1269,14 @@ G4double G4MuEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       if (Tm <= 0.)
         {
           a1 = MeanLoss/e0;
-          p1 = RandPoisson::shoot(a1);
+          p1 = G4Poisson(a1);
           loss = p1*e0 ;
         }
      else
         {
           Em = Tm+e0;
           a1 = MeanLoss*(Em-e0)/(Em*e0*log(Em/e0));
-          p1 = RandPoisson::shoot(a1);
+          p1 = G4Poisson(a1);
           w  = (Em-e0)/Em;
           // just to save time
           if (p1 > nmaxDirectFluct)
@@ -1295,11 +1296,11 @@ G4double G4MuEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   else                              // not so small Step
     {
-      p1 = RandPoisson::shoot(a1);
-      p2 = RandPoisson::shoot(a2);
+      p1 = G4Poisson(a1);
+      p2 = G4Poisson(a2);
       loss = p1*e1Fluct+p2*e2Fluct;
       if (loss>0.) loss += (1.-2.*G4UniformRand())*e1Fluct;
-      p3 = RandPoisson::shoot(a3);
+      p3 = G4Poisson(a3);
 
       lossc = 0.; na = 0.; alfa = 1.;
       if (p3 > nmaxCont2)

@@ -1,3 +1,6 @@
+VRML-V00-01-01 4th November 1999  Satoshi Tanaka
+- Introduction of VRMLBeginModeling() for new vis commands
+
 VRML-00-03-07	Satoshi TANAKA	Dec 07, 1998  
 - An environmental variable "G4VRML_VIEWER" is renames to 
   "G4VRMLFILE_VIEWER" for consistency.

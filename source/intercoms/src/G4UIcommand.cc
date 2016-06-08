@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.cc,v 1.2 1999/05/19 17:33:00 stesting Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UIcommand.cc,v 1.4.2.1 1999/12/07 20:49:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 
@@ -16,7 +16,7 @@
 #include "G4UIcommandStatus.hh"
 #include "G4StateManager.hh"
 #include "G4UnitsTable.hh"
-#include <rw/ctoken.h>
+#include "g4rw/ctoken.h"
 #include "G4ios.hh"
 
 G4UIcommand::G4UIcommand():paramERR(0) { }
@@ -85,7 +85,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
   {
     G4String aToken;
     G4String correctToken;
-    RWCTokenizer parameterToken( parameterList );
+    G4Tokenizer parameterToken( parameterList );
     for( int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ )
     {
       if(i_thParameter > 0)
@@ -111,7 +111,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         { 
           if(parameter[i_thParameter]->GetCurrentAsDefault())
           {
-            RWCTokenizer cvt(messenger->GetCurrentValue(this));
+            G4Tokenizer cvt(messenger->GetCurrentValue(this));
             G4String parVal;
             for(int ii=0;ii<i_thParameter;ii++)
             { parVal = cvt(); }

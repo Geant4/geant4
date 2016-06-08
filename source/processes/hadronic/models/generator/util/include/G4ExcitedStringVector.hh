@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedStringVector.hh,v 1.1 1999/01/07 16:12:19 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedStringVector.hh,v 1.1.8.1.2.1 1999/12/07 20:51:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4ExcitedStringVector_h
 #define G4ExcitedStringPartonVector_h 1
@@ -21,8 +21,8 @@
 // ------------------------------------------------------------
 
 #include "G4ExcitedString.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
-typedef RWTPtrOrderedVector<G4ExcitedString> G4ExcitedStringVector;
+typedef G4RWTPtrOrderedVector<G4ExcitedString> G4ExcitedStringVector;
 
 #endif

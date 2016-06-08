@@ -1,13 +1,13 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdetv.cc,v 1.3 1999/05/12 08:10:03 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
-//
+// $Id: G4gsdetv.cc,v 1.5 1999/12/05 17:50:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+
 #include "G4ios.hh"
 #include "G3toG4.hh"
 #include "G3DetTable.hh"
@@ -15,7 +15,7 @@
 
 class G4VSensitiveDetector;
 
-void PG4gsdetv(RWCString tokens[])
+void PG4gsdetv(G4String tokens[])
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdetv);

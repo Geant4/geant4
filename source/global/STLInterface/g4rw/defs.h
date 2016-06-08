@@ -1,0 +1,117 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: defs.h,v 1.7 1999/11/29 16:52:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
+// 
+//---------------------------------------------------------------
+//  GEANT 4 class header file
+//
+//  G4RWBoundsErr, G4RWGeneralException
+//
+//  Class description:
+//
+//  STL wrapper classes for Errors and Exceptions utilities.
+//  It implements Rogue Wave RWBoundsErr and RWGeneralException
+//  signatures but intrinsically decoupled from Rogue Wave.
+
+//---------------------------------------------------------------
+
+#ifndef __defs
+#define __defs
+
+#include <stdio.h>
+#include <string>
+#include "G4Types.hh"
+
+#define G4RWDEFAULT_CAPACITY (64)
+
+#ifndef FALSE
+  #define FALSE 0
+#endif
+#ifndef TRUE
+  #define TRUE 1
+#endif
+
+#define CLHEP_MAX_MIN_DEFINED
+#include <CLHEP/config/TemplateFunctions.h>
+
+class G4RWBoundsErr
+{
+public:
+
+  G4RWBoundsErr(const char* s,int b=0,int v=0)
+    {
+      char btmp[80],vtmp[80];
+      sprintf(btmp,"%d",b);
+      sprintf(vtmp,"%d",v);
+      str=new char[strlen(s)+8+strlen(btmp)+7+strlen(vtmp)+1];
+      strcpy(str,s);
+      strcat(str,": bound:");
+      strcat(str,btmp);
+      strcat(str," value:");
+      strcat(str,vtmp);
+    }
+
+  G4RWBoundsErr(const G4RWBoundsErr&e)
+    {
+      str=new char[strlen(e.str)+1];
+      strcpy(str,e.str);
+    }
+
+  ~G4RWBoundsErr()
+    {
+      delete str;
+    }
+
+  const char * why() const
+    {
+      return str;
+    }
+
+private:
+
+  char* str;
+
+};
+      
+class G4RWGeneralException
+{
+public:
+
+  G4RWGeneralException(const char* s)
+    {
+      str=new char[strlen(s)+1];
+      strcpy(str,s);
+    }
+
+  G4RWGeneralException(const G4RWGeneralException&e)
+    {
+      str=new char[strlen(e.str)+1];
+      strcpy(str,e.str);
+    }
+
+  ~G4RWGeneralException()
+    {
+      delete str;
+    }
+
+  const char * why() const
+    {
+      return str;
+    }
+
+private:
+
+  char* str;
+
+};
+  
+#define G4RWTHROW(a) throw a
+
+#endif

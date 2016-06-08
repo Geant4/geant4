@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.hh,v 1.3 1999/05/03 01:52:36 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ProcessManager.hh,v 1.5.2.1 1999/11/11 14:31:29 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -17,6 +17,26 @@
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 //   ----------------  G4ProcessManager  -----------------
+// Class Description 
+//  It collects all physics a particle can undertake as seven vectors.
+//  These vectors are 
+//   one vector for all processes (called as "process List")
+//   two vectors for processes with AtRestGetPhysicalInteractionLength
+//                                    and AtRestDoIt
+//   two vectors for processes with AlongStepGetPhysicalInteractionLength
+//                                    and AlongStepDoIt
+//   two vectors for processes with PostStepGetPhysicalInteractionLength
+//                                    and PostStepDoIt
+//  The tracking will message three types of GetPhysicalInteractionLength
+//  in order to limit the Step and select the occurence of processes. 
+//  It will message the corresponding DoIt() to apply the selected 
+//  processes. In addition, the Tracking will limit the Step
+//  and select the occurence of the processes according to
+//  the shortest physical interaction length computed (except for
+//  processes at rest, for which the Tracking will select the
+//  occurence of the process which returns the shortest mean
+//  life-time from the GetPhysicalInteractionLength()).
+//
 // History:
 // revised by G.Cosmo, 06 May 1996
 //    Added vector of processes at rest, 06 May 1996
@@ -32,7 +52,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "G4VProcess.hh"
 #include "G4ProcessVector.hh"
@@ -65,25 +85,7 @@ enum G4ProcessVectorOrdering
 
 class G4ProcessManager 
 {
-  //  It collects all physics a particle can undertake as seven vectors.
-  //  These vectors are 
-  //   one vector for all processes (called as "process List")
-  //   two vectors for processes with AtRestGetPhysicalInteractionLength
-  //                                    and AtRestDoIt
-  //   two vectors for processes with AlongStepGetPhysicalInteractionLength
-  //                                    and AlongStepDoIt
-  //   two vectors for processes with PostStepGetPhysicalInteractionLength
-  //                                    and PostStepDoIt
-  //  The tracking will message three types of GetPhysicalInteractionLength
-  //  in order to limit the Step and select the occurence of processes. 
-  //  It will message the corresponding DoIt() to apply the selected 
-  //  processes. In addition, the Tracking will limit the Step
-  //  and select the occurence of the processes according to
-  //  the shortest physical interaction length computed (except for
-  //  processes at rest, for which the Tracking will select the
-  //  occurence of the process which returns the shortest mean
-  //  life-time from the GetPhysicalInteractionLength()).
-
+ 
   public: 
       // copy constructor
       G4ProcessManager(G4ProcessManager &right);
@@ -105,6 +107,7 @@ class G4ProcessManager
       G4int operator==(const G4ProcessManager &right) const;
       G4int operator!=(const G4ProcessManager &right) const;
 
+ public: //  with description
       G4ProcessVector* GetProcessList() const;
       //  Returns the address of the vector of all processes 
 
@@ -248,6 +251,31 @@ class G4ProcessManager
       // in order to inform Start/End of tracking for each track
       // to the process manager and all physics processes 
 
+
+  public:
+      enum {SizeOfProcVectorArray = 6};
+  private:
+      G4ProcessVector* theProcVector[SizeOfProcVectorArray];
+      // vector for processes with GetPhysicalInteractionLength/DoIt
+
+      typedef G4RWTPtrOrderedVector<G4ProcessAttribute> G4ProcessAttrVector; 
+      G4ProcessAttrVector*  theAttrVector;
+      // vector for process attribute  
+
+  protected: // with description
+      G4int InsertAt(G4int position, G4VProcess* process, G4int ivec);
+      // insert process at position in theProcVector[ivec]
+
+      G4int RemoveAt(G4int position, G4VProcess* process, G4int ivec);
+      // remove process at position in theProcVector[ivec]
+
+      G4int FindInsertPosition(G4int ord, G4int ivec);
+      // find insert position according to ordering parameter 
+      // in theProcVector[ivec]
+
+      G4int GetProcessVectorId(G4ProcessVectorDoItIndex idx,
+			       G4ProcessVectorTypeIndex typ  = typeGPIL) const;
+ 
   private:     
       G4ProcessAttribute* GetAttribute(G4int      index) const;
       G4ProcessAttribute* GetAttribute(G4VProcess *aProcess) const;
@@ -265,198 +293,29 @@ class G4ProcessManager
       G4ProcessVector*  theProcessList;
       // vector for all processes (called as "process List")
 
-  public:
-      enum {SizeOfProcVectorArray = 6};
-  private:
-      G4ProcessVector* theProcVector[SizeOfProcVectorArray];
-      // vector for processes with GetPhysicalInteractionLength/DoIt
-
-      typedef RWTPtrOrderedVector<G4ProcessAttribute> G4ProcessAttrVector; 
-      G4ProcessAttrVector*  theAttrVector;
-      // vector for process attribute  
-
-  protected:
-      G4int InsertAt(G4int position, G4VProcess* process, G4int ivec);
-      // insert process at position in theProcVector[ivec]
-
-      G4int RemoveAt(G4int position, G4VProcess* process, G4int ivec);
-      // remove process at position in theProcVector[ivec]
-
-      G4int FindInsertPosition(G4int ord, G4int ivec);
-      // find insert position according to ordering parameter 
-      // in theProcVector[ivec]
-
-      G4int GetProcessVectorId(G4ProcessVectorDoItIndex idx,
-			       G4ProcessVectorTypeIndex typ  = typeGPIL) const;
- 
-  private:
+ private:
       G4bool  duringTracking;
       void    CreateGPILvectors();
       void    SetIndexToProcessVector(G4int ivec);
 
- public:
+ public: // with description
    void  DumpInfo();
+
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
-
- protected:
-   G4int verboseLevel;
    // controle flag for output message
    //  0: Silent
    //  1: Warning message
    //  2: More
- 
+
+ protected:
+   G4int verboseLevel;
+  
  private:
    static G4ProcessManagerMessenger* fProcessManagerMessenger;
    static G4int                      counterOfObjects;
 };
-#include "G4ProcessAttribute.hh"
-
-// -----------------------------------------
-//  inlined function members implementation
-// -----------------------------------------
-inline  
- void G4ProcessManager::SetParticleType(const G4ParticleDefinition* aParticle)
-{
-  theParticleType = aParticle;
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetProcessList() const
-{
-  return theProcessList;
-}
-
-inline
- G4int  G4ProcessManager::GetProcessListLength() const
-{
-  return numberOfProcesses;
-}
-
-inline 
- G4int  G4ProcessManager::GetProcessIndex(G4VProcess* aProcess) const
-{
-  G4int idx = theProcessList->index(aProcess);
-  if (idx>=numberOfProcesses) idx = -1;
-  return idx;
-}
-
-inline 
- G4int G4ProcessManager::GetProcessVectorId(G4ProcessVectorDoItIndex idx,
-					    G4ProcessVectorTypeIndex typ) const
-{
-  if ( idx == idxAtRest ) {
-    if (typ == typeGPIL) { return 0; }
-    else                 { return 1; }
-  } else if ( idx == idxAlongStep ) {
-    if (typ == typeGPIL) { return 2; }
-    else                 { return 3; }
-  } else if ( idx == idxPostStep ) {
-    if (typ == typeGPIL) { return 4; }
-    else                 { return 5; }
-  } else {
-    return -1;
-  }
-}
- 
-inline  
- G4ProcessVector* G4ProcessManager::GetProcessVector(
-				       G4ProcessVectorDoItIndex idx,  
-				       G4ProcessVectorTypeIndex typ
-                                      ) const
-{
-  G4int ivec = GetProcessVectorId(idx, typ);
-  if ( ivec >=0 ) {
-    return theProcVector[ivec];
-  } else {
-    return 0;
-  }
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetAtRestProcessVector(G4ProcessVectorTypeIndex typ) const
-{
-  if (typ == typeGPIL) { return theProcVector[0]; }
-  else                { return theProcVector[1]; }
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetAlongStepProcessVector(G4ProcessVectorTypeIndex typ) const
-{
-  if (typ == typeGPIL) { return theProcVector[2]; }
-  else                { return theProcVector[3]; }
-}
-
-inline 
- G4ProcessVector* G4ProcessManager::GetPostStepProcessVector(G4ProcessVectorTypeIndex typ) const
-{
-  if (typ == typeGPIL) { return theProcVector[4]; }
-  else                { return theProcVector[5]; }
-}
-
-inline
- G4int G4ProcessManager::GetAtRestIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-			   ) const
-{
-  return GetProcessVectorIndex(aProcess, idxAtRest, typ);
-}
-
-inline 
- G4int G4ProcessManager::GetAlongStepIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-			   ) const
-{
-  return GetProcessVectorIndex(aProcess, idxAlongStep, typ);
-}
-
-inline
- G4int G4ProcessManager::GetPostStepIndex(
-                           G4VProcess* aProcess,
-			   G4ProcessVectorTypeIndex typ 
-                         ) const
-{
-  return GetProcessVectorIndex(aProcess, idxPostStep, typ);
-}
-
-inline 
- G4int G4ProcessManager::AddRestProcess(G4VProcess *aProcess,G4int ord)
-{
-  return AddProcess(aProcess, ord, ordInActive, ordInActive);
-}
-
-inline 
- G4int G4ProcessManager::AddContinuousProcess(G4VProcess *aProcess,G4int ord)
-{
-  return AddProcess(aProcess, ordInActive, ord, ordInActive);
-}
-
-inline 
- G4int G4ProcessManager::AddDiscreteProcess(G4VProcess *aProcess,G4int ord)
-{
-  return AddProcess(aProcess, ordInActive, ordInActive, ord);
-}
-
-inline 
- G4ParticleDefinition* G4ProcessManager::GetParticleType() const
-{ 
-  return (G4ParticleDefinition* )theParticleType; 
-}
-
-
-inline 
- void G4ProcessManager::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-}
-
-inline  
- G4int G4ProcessManager::GetVerboseLevel() const
-{
-  return  verboseLevel;
-}
+#include "G4ProcessManager.icc"
 
 #endif
 

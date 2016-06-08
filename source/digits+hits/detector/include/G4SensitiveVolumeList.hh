@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SensitiveVolumeList.hh,v 1.1 1999/01/07 16:06:25 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SensitiveVolumeList.hh,v 1.2.2.1.2.1 1999/12/07 20:47:42 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1996
@@ -22,11 +22,18 @@
 #ifndef G4SensitiveVolumeList_h
 #define G4SensitiveVolumeList_h 1
 
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
+// class description:
+//
+//  This class object can have lists of logical and physical volumes.
+// In case a sensitive detector is shared by several logical volumes and/or
+// a logical volume is shared by several physical volumes, this class can be
+// used by the veto list for individual logical/physical volumes.
+//
 
 class G4SensitiveVolumeList 
 {
@@ -53,11 +60,11 @@ class G4SensitiveVolumeList
       G4bool CheckLV(const G4LogicalVolume *lvp) const;
 
     //Get and Set Operations for Has Relationships
-      const RWTPtrOrderedVector<G4VPhysicalVolume>& GetThePhysicalVolumeList() const;
-      void SetThePhysicalVolumeList(const RWTPtrOrderedVector<G4VPhysicalVolume> value);
+      const G4RWTPtrOrderedVector<G4VPhysicalVolume>& GetThePhysicalVolumeList() const;
+      void SetThePhysicalVolumeList(const G4RWTPtrOrderedVector<G4VPhysicalVolume> value);
 
-      const RWTPtrOrderedVector<G4LogicalVolume>& GetTheLogicalVolumeList() const;
-      void SetTheLogicalVolumeList(const RWTPtrOrderedVector<G4LogicalVolume> value);
+      const G4RWTPtrOrderedVector<G4LogicalVolume>& GetTheLogicalVolumeList() const;
+      void SetTheLogicalVolumeList(const G4RWTPtrOrderedVector<G4LogicalVolume> value);
 
 
 
@@ -65,8 +72,8 @@ class G4SensitiveVolumeList
 
     //Data Members for Has Relationships
 
-      RWTPtrOrderedVector<G4VPhysicalVolume> thePhysicalVolumeList;
-      RWTPtrOrderedVector<G4LogicalVolume> theLogicalVolumeList;
+      G4RWTPtrOrderedVector<G4VPhysicalVolume> thePhysicalVolumeList;
+      G4RWTPtrOrderedVector<G4LogicalVolume> theLogicalVolumeList;
 
 };
 

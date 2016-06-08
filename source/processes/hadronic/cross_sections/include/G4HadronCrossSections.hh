@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSections.hh,v 1.1 1999/01/07 16:11:31 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4HadronCrossSections.hh,v 1.2.4.1 1999/12/07 20:51:28 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // GEANT4 Hadron physics class -- header file
@@ -74,7 +74,7 @@ class G4HadronCrossSections
 {
 public:
 
-   G4HadronCrossSections() : verboseLevel(0)
+   G4HadronCrossSections() : verboseLevel(0), prevParticleDefinition(0)
    {
    }
 

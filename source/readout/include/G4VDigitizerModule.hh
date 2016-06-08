@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDigitizerModule.hh,v 1.1 1999/01/07 16:14:13 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VDigitizerModule.hh,v 1.2.2.1.2.1 1999/12/07 20:52:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4VDigitizerModule_H
@@ -15,18 +15,35 @@
 class G4DigiManager;
 class G4VDigiCollection;
 #include "globals.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
+
+// class description:
+//
+//  This is the abstract base class of the digitizer module. The user's
+// digitizer module which generates digits must be derived from this
+// class.
+//  In the derived class constructor, name(s) of digi collection(s) which
+// are made by the digitizer module must be set to "collectionName" string
+// vector.
 
 class G4VDigitizerModule
 {
-  public:
+  public: // with description
     G4VDigitizerModule(G4String modName);
+    //  Constructor. The user's concrete class must use this constructor
+    // by the constructor initializer of the derived class. The name of
+    // the detector module must be unique.
+  public:
     virtual ~G4VDigitizerModule();
     int operator==(const G4VDigitizerModule &right) const;
     int operator!=(const G4VDigitizerModule &right) const;
 
-  public:
+  public: // with description
     virtual void Digitize() = 0;
+    //  The pure virtual method that the derived class must implement.
+    // In the concrete implementation of this method, necessary digi
+    // collection object must be constructed and set to G4DCofThisEvent
+    // by StoreDigiCollection protected method.
 
   protected:
     void StoreDigiCollection(G4VDigiCollection* aDC);
@@ -35,7 +52,7 @@ class G4VDigitizerModule
   protected:
     G4DigiManager* DigiManager;
     G4String moduleName;
-    RWTValOrderedVector<G4String> collectionName;
+    G4RWTValOrderedVector<G4String> collectionName;
     G4int verboseLevel;
 
   public:

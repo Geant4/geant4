@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.hh,v 1.2 1999/02/16 13:21:23 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MultipleScattering.hh,v 1.6.6.1 1999/12/07 20:50:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id:
 // --------------------------------------------------------------
@@ -21,6 +21,7 @@
 // **************************************************************
 //      UNIVERSAL: for arbitrary single charged particle
 //  09/12/98:      charge can be != +- 1 !!!!   L.Urban
+//  30/09/99:    nuclear size effect correction L.Urban 
 // --------------------------------------------------------------
 // 22/10/98: cleanup , L.Urban
 
@@ -34,6 +35,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"
+#include "G4PionPlus.hh"
 #include "G4Proton.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4GPILSelection.hh"
@@ -80,14 +82,19 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
            { scatteringparameter = value ; } ;
    void SetTuning(G4double value) { tuning = value ; };
    void SetCpar  (G4double value) { cpar   = value ; };
+   void SetTlimitmsc  (G4double value) { Tlimit = value ; };
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
+   
+   void SetNuclCorrPar(G4double val) { NuclCorrPar = val; } ;
+   void SetFactPar(G4double val) { FactPar = val ; } ;
 
  protected:
 
    G4double ComputeTransportCrossSection(
                              const G4ParticleDefinition& aParticleType,
                                    G4double KineticEnergy,
-                                   G4double AtomicNumber) ;
+                                   G4double AtomicNumber,
+                                   G4double AtomicWeight) ;
 
    G4double TrueToGeomTransformation(const G4DynamicParticle* aParticle,
                                      G4Material* aMaterial,
@@ -127,10 +134,17 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4double Tlimit ;
 
+   // model parameters
    G4double scatteringparameter;
    G4double tuning;
    G4double cpar;
+
+   // with/without lateral displacement
    G4bool fLatDisplFlag ;
+
+   // nuclear size effect correction
+   G4double NuclCorrPar ;
+   G4double FactPar ;
 
    //New ParticleChange
    G4ParticleChangeForMSC fParticleChange ;

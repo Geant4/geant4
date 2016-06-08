@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedDeltaConstructor.cc,v 1.2 1999/06/09 17:28:15 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedDeltaConstructor.cc,v 1.3.6.1 1999/12/07 20:50:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -449,7 +449,7 @@ G4DecayTable*  G4ExcitedDeltaConstructor::AddDeltaPiMode(
   return decayTable;
 }
 
-const G4String G4ExcitedDeltaConstructor::name[] = 
+const char* G4ExcitedDeltaConstructor::name[] = 
 {
   "delta(1600)", "delta(1620)", "delta(1700)", "delta(1900)", "delta(1905)",
   "delta(1910)", "delta(1920)", "delta(1930)", "delta(1950)"

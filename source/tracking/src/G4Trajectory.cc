@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.4 1999/05/25 21:04:36 stesting Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Trajectory.cc,v 1.5.4.1.2.1 1999/12/07 20:53:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // ---------------------------------------------------------------
@@ -57,7 +57,7 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    PDGEncoding = fpParticleDefinition->GetPDGEncoding();
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
-   positionRecord = new RWTPtrOrderedVector<G4VTrajectoryPoint>;
+   positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
    positionRecord->insert(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
 
@@ -70,7 +70,7 @@ G4Trajectory::G4Trajectory(G4Trajectory & right)
   PDGEncoding = right.PDGEncoding;
   fTrackID = right.fTrackID;
   fParentID = right.fParentID;
-  positionRecord = new RWTPtrOrderedVector<G4VTrajectoryPoint>;
+  positionRecord = new G4RWTPtrOrderedVector<G4VTrajectoryPoint>;
   for(int i=0;i<right.positionRecord->entries();i++)
   {
     G4TrajectoryPoint* rightPoint = (G4TrajectoryPoint*)((*(right.positionRecord))[i]);

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Types.hh,v 1.1 1999/05/24 18:23:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Types.hh,v 1.3 1999/11/16 17:40:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // GEANT4 native types
@@ -18,9 +18,18 @@
 
 #include <CLHEP/config/CLHEP.h>
 
+// Define G4std namespace for standard std.
+// Needed to allow both ISO/not-ISO ANSI compliant code installations
+//
+#ifndef G4USE_STD_NAMESPACE
+  #define G4std
+#else
+  #define G4std std
+#endif
+
 // Typedefs to decouple from library classes
 // Typedefs for numeric types
-// [NOTE: Will in future need to be made more sophisticated]
+//
 typedef HepDouble G4double;
 typedef HepFloat G4float;
 typedef HepInt G4int;
@@ -32,4 +41,3 @@ typedef HepInt G4int;
 typedef long G4long;
 
 #endif /* G4TYPES_HH */
-

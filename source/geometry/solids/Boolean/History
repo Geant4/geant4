@@ -1,5 +1,5 @@
 
-$Id: History,v 1.1 1999/01/07 16:07:48 gunter Exp $
+$Id: History,v 1.4 1999/11/24 20:17:20 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,41 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ Nov 24   1999 				geom-solid-bool-V00-01-05
+
+  - Small fix in src/G4DisplacedSolid.cc to the return type 
+         (const G4AffineTransform --> G4AffineTransform)
+    to conform with the specification of the class.
+
+ Nov 19   1999                          geom-solid-bool-V00-01-04
+
+  -  Fixes from Vladimir, and additional tests
+
+ Nov 10   1999                          geom-solid-bool-V00-01-03b
+
+  - Renamed  GetConstituentSolid to GetConstituentMovedSolid in G4DisplacedSolid
+     to avoid clashing with method that gets the contituents of a G4BooleanSolid.
+
+ Nov 10   1999                          geom-solid-bool-V00-01-03a
+
+  - Tag with additional methods for Persistency
+
+ Nov 10   1999                          geom-solid-bool-V00-01-03-cand
+
+  New method: Get Object Rotation/Translation methods in Displaced Solid
+
+ Nov  9   1999                          geom-solid-bool-V00-01-02-cand
+  
+  - Tag with additional methods for Visualisation
+
+   G4DisplacedSolid,  G4BooleanSolid
+
+      Added methods to access data members:
+          Get Constituent Solid  (int) for Boolean   Solid 
+          Get Constituent Solid        for Displaced Solid 
+          Get Frame Rotation/Translation methods in Displaced Solid
+
+
 
   Dec  1   1998   John Apostolakis                       geom-boolean-4-ja
 

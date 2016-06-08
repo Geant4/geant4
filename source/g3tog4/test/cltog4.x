@@ -1,0 +1,15 @@
+/control/verbose 1
+/tracking/verbose 1
+#
+# Initialize GEANT4
+#
+/run/initialize
+#
+/gun/position   0. -1.5 0.
+/gun/direction  0.  1.   0.
+/gun/energy 1 GeV
+/gun/particle chargedgeantino
+/run/beamOn 10
+#
+# Termination
+#

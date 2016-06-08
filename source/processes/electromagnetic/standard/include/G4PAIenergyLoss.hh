@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIenergyLoss.hh,v 1.2 1999/04/16 09:06:01 grichine Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PAIenergyLoss.hh,v 1.3.2.1 1999/12/07 20:50:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4ios.hh"
 #include <fstream.h>
 #include <iomanip.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "Randomize.hh"

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.2 1999/04/12 15:45:54 hpw Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.3.4.1 1999/12/07 20:51:51 gunter Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -32,10 +32,10 @@ class G4DiffractiveExcitation
   public:
 
       G4DiffractiveExcitation(G4double sigmaPt=0.6*GeV, G4double minExtraMass=250*MeV,G4double x0mass=250*MeV);
-      ~G4DiffractiveExcitation();
+      virtual ~G4DiffractiveExcitation();
 
-      G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
-      G4ExcitedString * String(G4VSplitableHadron * aHadron, G4bool isProjectile) const;
+      virtual G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
+      virtual G4ExcitedString * String(G4VSplitableHadron * aHadron, G4bool isProjectile) const;
       
 //      void SetPtWidth(G4double aValue) { widthOfPtSquare = aValue*aValue; }
 //      void SetExtraMass(G4double aValue) { minExtraMass = aValue; }

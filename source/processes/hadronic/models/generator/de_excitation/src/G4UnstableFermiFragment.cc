@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -44,13 +44,13 @@ G4bool G4UnstableFermiFragment::operator!=(const G4UnstableFermiFragment &right)
 }
 
 
-RWTPtrOrderedVector<G4LorentzVector> *
+G4RWTPtrOrderedVector<G4LorentzVector> *
 G4UnstableFermiFragment::FragmentsMomentum(G4double KinE, const G4int K, const G4double * Masses)
   // Calculates momentum for K fragments (Kopylov's method of sampling is used)
   // KinetEnergy is the available kinetic energy
 {  
-  RWTPtrOrderedVector<G4LorentzVector>* MomentumList = 
-    new RWTPtrOrderedVector<G4LorentzVector>(K);
+  G4RWTPtrOrderedVector<G4LorentzVector>* MomentumList = 
+    new G4RWTPtrOrderedVector<G4LorentzVector>(K);
 
   G4double AvalaibleMass = 0; 
   for (G4int i=0; i<K; i++) AvalaibleMass += Masses[i];

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FTFModel.hh,v 1.1 1999/01/07 16:12:00 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4FTFModel.hh,v 1.2.4.1 1999/12/07 20:51:43 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4FTFModel_h
 #define G4FTFModel_h 1
@@ -37,6 +37,7 @@ class G4FTFModel : public G4VPartonStringModel
 
   public:
       G4FTFModel(G4double sigmaPt=800*MeV, G4double minExtraMass=300*MeV,G4double x0Mass=150*MeV);
+      G4FTFModel(G4DiffractiveExcitation * anExcitation);
       G4FTFModel(const G4FTFModel &right);
       ~G4FTFModel();
       const G4FTFModel & operator=(const G4FTFModel &right);

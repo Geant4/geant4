@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LCapture.hh,v 1.1 1999/01/07 16:12:38 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LCapture.hh,v 1.3.2.1 1999/12/07 20:52:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // G4 Low energy model: neutron capture -- header file
@@ -22,7 +22,6 @@
 #ifndef G4LCapture_h
 #define G4LCapture_h 1
  
-#include <rw/tphdict.h>
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4Element.hh"

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PTrap.cc,v 1.1 1999/01/07 16:10:53 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PTrap.cc,v 1.2 1999/11/17 10:49:03 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4PTrap
 //
@@ -21,16 +21,12 @@
 #include "G4PTrap.hh"
 #include "G4Trap.hh"
 
-#include "G4AffineTransform.hh"
-
 const G4double kCoplanar_Tolerance=1E-4;
 
 // Destructor
 
 G4PTrap::~G4PTrap()
-{
-    ;
-}
+{;}
 
 // make a transient object
 G4VSolid* G4PTrap::MakeTransientObject() const {
@@ -44,7 +40,8 @@ G4VSolid* G4PTrap::MakeTransientObject() const {
 // Constructor for G4Trd
 
 G4PTrap::G4PTrap(const G4Trap* theTrap)
-    : G4PCSGSolid(theTrap->GetName()) {
+ : G4PCSGSolid(theTrap->GetName())
+{
 
     G4double pDx1 = theTrap->GetXHalfLength1();
     G4double pDx2 = theTrap->GetXHalfLength2();

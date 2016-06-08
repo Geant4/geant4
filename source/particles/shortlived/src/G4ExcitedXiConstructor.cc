@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedXiConstructor.cc,v 1.1 1999/01/07 16:10:42 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedXiConstructor.cc,v 1.2.6.1 1999/12/07 20:50:05 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -266,7 +266,7 @@ G4DecayTable*  G4ExcitedXiConstructor::AddXiPiMode(
 }
 
 
-const G4String G4ExcitedXiConstructor::name[] = {
+const char* G4ExcitedXiConstructor::name[] = {
    "xi(1530)", "xi(1690)", "xi(1820)", "xi(1950)", "xi(2030)"
 };
 

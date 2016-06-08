@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonMinusInelasticProcess.hh,v 1.1 1999/01/07 16:13:33 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4KaonMinusInelasticProcess.hh,v 1.1.10.1 1999/12/07 20:52:28 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
  // Hadronic Process: KaonMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 12-Feb-1997

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandTemplates.cc,v 1.2 1999/01/09 16:31:18 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VisCommandTemplates.cc,v 1.3.2.1 1999/12/07 20:54:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // Visualization Command Messenger Template private functions.
@@ -39,11 +39,11 @@ G4int G4VisButtonCommandMessengerInterpret (G4String newValues) {
   G4String& choice = newValues;
   G4int iSelector = -1;
   if (choice.compareTo ("0") == 0 ||
-      choice.compareTo ("off", RWCString::ignoreCase) == 0 ||
-      choice.compareTo ("false", RWCString::ignoreCase) == 0) iSelector = 0;
+      choice.compareTo ("off", G4String::ignoreCase) == 0 ||
+      choice.compareTo ("false", G4String::ignoreCase) == 0) iSelector = 0;
   if (choice.compareTo ("1") == 0 ||
-      choice.compareTo ("on",  RWCString::ignoreCase) == 0 ||
-      choice.compareTo ("true", RWCString::ignoreCase) == 0) iSelector = 1;
+      choice.compareTo ("on",  G4String::ignoreCase) == 0 ||
+      choice.compareTo ("true", G4String::ignoreCase) == 0) iSelector = 1;
   if (iSelector < 0 || choice.isNull ()) {
     G4cout << "Choice not recognised."
       "\n  Choice is 0 (or off or false) or 1 (or on or true)." << endl;;

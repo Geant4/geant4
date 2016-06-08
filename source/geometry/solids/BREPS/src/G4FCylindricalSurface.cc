@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.8 1999/05/27 10:44:55 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4FCylindricalSurface.cc,v 1.8.8.1 1999/12/07 20:48:24 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
 //  File:  FG4Cylinder.cc

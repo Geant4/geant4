@@ -1,18 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIparameter.cc,v 1.1 1999/01/07 16:09:28 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UIparameter.cc,v 1.3.2.1 1999/12/07 20:49:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4UIparameter.hh"
 #include "G4UIcommandStatus.hh"
 
-#include <rw/ctoken.h>
+#include "g4rw/ctoken.h"
 
 #include "G4ios.hh"
 G4UIparameter::G4UIparameter():paramERR(0)
@@ -126,7 +126,7 @@ CheckNewValue( G4String newValue ) {
 
 int G4UIparameter::
 CandidateCheck(G4String newValue) {
-    RWCTokenizer candidateTokenizer(parameterCandidate);
+    G4Tokenizer candidateTokenizer(parameterCandidate);
     G4String aToken;
     int iToken = 0;
     while( ! (aToken=candidateTokenizer()).isNull() )

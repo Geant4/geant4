@@ -1,0 +1,37 @@
+#
+# @(#) Script to build an inTeractive geant executable
+#
+set name=testem2
+
+set extnam=" "
+if ($G4SYSTEM == AIX-xlC) set extnam=-qextname
+#
+mkdir $G4SYSTEM
+cd    $G4SYSTEM
+#
+# Run patchy
+#
+ypatchy - $name ../$name $name - $name :go
+#
+# fortran compilation
+#
+fsplit $name.f
+rm   $name.f
+hepf77  $extnam -c -g *.f 
+#
+# Link
+#
+echo 'linking geant3+cernlib libraries...'
+#
+hepf77  $extnam -g -o $name.xt  *.o \
+   `cernlib geant321 pawlib graflib packlib mathlib kernlib`
+#
+#
+chmod +x $name.xt
+#
+# cleanup
+#
+rm *.lis *.lst *.f *.o
+echo 'done'  
+exit
+ 

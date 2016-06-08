@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.2 1999/04/16 09:29:54 grichine Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Hype.cc,v 1.3.2.1 1999/12/07 20:48:32 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4Hype: this class implements in G4 the volume equivalent 
 //               to the HYPE volume in Geant 3, i.e. a tube with 
@@ -982,14 +982,15 @@ G4double G4Hype::DistanceToIn(const G4ThreeVector& p) const
     }
 }
 
-
-
+////////////////////////////////////////////////////////////////////////
+//
 // Calculate distance to surface of shape from `inside', allowing for tolerance
+
 G4double G4Hype::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 			       const G4bool calcNorm, G4bool *validNorm,G4ThreeVector *n) const
 {
     G4double snxt=kInfinity;			// snxt = default return value
-    ESide side;
+    ESide side = kUndefined ;
     double xi,yi,zi;  // service parameters
     double zero_tolerance=1E-6;
 

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PCons.ddl,v 1.1 1999/01/07 16:10:50 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PCons.ddl,v 1.2.2.1 1999/12/07 20:50:10 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4Cons
 //
@@ -16,6 +16,7 @@
 #ifndef G4PCons_DDL
 #define G4PCons_DDL
 
+#include "G4PersistentSchema.hh"
 #include "G4PCSGSolid.hh"
 
 class G4Cons;

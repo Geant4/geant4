@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -75,7 +75,7 @@ G4FragmentVector * G4B9FermiFragment::GetFragment(const G4LorentzVector & aMomen
     2.0*Masses[0];
 
 
-  RWTPtrOrderedVector<G4LorentzVector> * SubFragsMomentum =
+  G4RWTPtrOrderedVector<G4LorentzVector> * SubFragsMomentum =
     FragmentsMomentum(AvalKineticE, NumSubFrag,Masses);
 
   G4FragmentVector * theResult = new G4FragmentVector;

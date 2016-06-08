@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.4 1999/06/29 18:06:56 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4OpenGLXViewer.hh,v 1.5.2.1 1999/12/07 20:53:20 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -21,7 +21,7 @@
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "globals.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>

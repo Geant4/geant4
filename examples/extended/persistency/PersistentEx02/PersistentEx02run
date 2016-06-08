@@ -1,0 +1,48 @@
+#! /bin/csh -f
+
+# check some configurations
+
+if ( ! $?G4EXAMPLE_FDID ) then
+  echo "G4EXAMPLE_FDID is not defined.  Stop."
+  exit 2
+endif
+
+# setup some variables
+
+set name = PersistentEx02
+
+set CWD          = `pwd`
+set G4ROOT       = ${CWD}/../../../..
+if ( $?G4WORKDIR ) then
+  set G4BIN = ${G4WORKDIR}/bin/${G4SYSTEM}
+else
+  set G4BIN = ${G4ROOT}/bin/${G4SYSTEM}
+endif
+
+# check for LHC++ variables
+
+source ${G4ROOT}/examples/extended/persistency/PersistentEx01/setup_lhcxx.csh
+
+# install new runtime federated database
+
+set G4EXAMPLE_FD = $G4WORKDIR/exampleFD/$G4SYSTEM/${name}
+
+echo "Copying G4EXAMPLE_BOOT into runtime federated database..."
+gmake newfd
+
+setenv OO_FD_BOOT $G4EXAMPLE_FD
+
+echo "OO_FD_BOOT is set to $OO_FD_BOOT"
+echo ""
+
+if ( $?BACKGROUND ) then
+  if ( -e ${name}.log.old ) rm -f ${name}.log.old
+  if ( -e ${name}.log )     mv -f ${name}.log ${name}.log.old
+  ${G4BIN}/${name} ${name}.in >& ${name}.log &
+  echo "Job ${name} submitted..."
+  sleep 2
+  echo "tail -f ${name}.log"
+  tail -f ${name}.log
+else
+  ${G4BIN}/${name} ${name}.in
+endif

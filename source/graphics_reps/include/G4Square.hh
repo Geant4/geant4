@@ -1,15 +1,21 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Square.hh,v 1.2 1999/06/05 15:13:12 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Square.hh,v 1.3.2.1 1999/12/07 20:48:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  17/11/96.
+
+// Class Description:
+// G4Square is a kind of 3D-position marker. 
+// Its shape is 2-dimensional right square.
+// It inherits G4VMarker.  See G4VMarker.hh for more details.
+// Class Description - End:
 
 #ifndef G4SQUARE_HH
 #define G4SQUARE_HH
@@ -18,7 +24,7 @@
 
 class G4Square: public G4VMarker {
 
-public:
+public: // With description
 
   G4Square ();
   G4Square (const G4Point3D& pos);

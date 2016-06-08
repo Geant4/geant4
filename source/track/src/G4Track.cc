@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.cc,v 1.1 1999/01/07 16:14:27 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Track.cc,v 1.2.6.1 1999/12/07 20:53:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //---------------------------------------------------------------
@@ -79,7 +79,41 @@ G4Track::~G4Track()
    delete fpDynamicParticle;
 }
 
+///////////////////
+G4double G4Track::GetVelocity() const
+///////////////////
+{ 
+  G4double velocity ;
+  
+  G4double mass = fpDynamicParticle->GetMass();
 
+  // mass less particle  
+  if( mass == 0. ){
+    velocity = c_light ; 
+    G4String name = fpDynamicParticle->GetDefinition()->GetParticleName();
+
+    // special case for photons
+    if(( name=="gamma")||(name=="opticalphoton")){
+      G4Material*
+	mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
+ 
+      if(mat->GetMaterialPropertiesTable() != 0){
+	if(mat->GetMaterialPropertiesTable()->GetProperty("RINDEX") != 0 ){ 
+          // light velocity = c/reflection-index 
+	  velocity /= 
+	    mat->GetMaterialPropertiesTable()->GetProperty("RINDEX")->
+	    GetMinProperty() ; 
+	}
+      }  
+    }
+  } else {
+    G4double T = fpDynamicParticle->GetKineticEnergy();
+    velocity = c_light*sqrt(T*(T+2.*mass))/(T+mass) ;
+  }
+  
+  return velocity ; 
+}
+ 
 
 
 

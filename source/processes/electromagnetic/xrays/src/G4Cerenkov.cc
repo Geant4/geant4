@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.1 1999/01/07 16:11:29 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Cerenkov.cc,v 1.6.2.1 1999/12/07 20:51:24 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -17,7 +17,9 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     1997-08-08 by Peter Gumplinger
+// Updated:     1999-10-29 by Peter Gumplinger
+//              > change: == into <= in GetContinuousStepLimit
+//              1997-08-08 by Peter Gumplinger
 //              > add protection against /0
 //              > G4MaterialPropertiesTable; new physics/tracking scheme
 // mail:        gum@triumf.ca
@@ -123,7 +125,6 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4double step_length;
         step_length = aStep.GetStepLength();
-        if(step_length == 0.0)step_length = aStep.GetStepLength();
 
 	MeanNumPhotons = MeanNumPhotons * step_length;
 
@@ -132,7 +133,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4int NumPhotons = (G4int) RandPoisson::shoot(MeanNumPhotons);
 
-	if (NumPhotons == 0) {
+	if (NumPhotons <= 0) {
 
 		// return unchanged particle and no secondaries  
 
@@ -387,7 +388,7 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
 	// be generated in a Step, then return the Step length for that 
 	// number of photons. 
  
-	if (fMaxPhotons == 0) return DBL_MAX;
+	if (fMaxPhotons <= 0) return DBL_MAX;
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();
@@ -403,7 +404,7 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
 	G4double MeanNumPhotons = 
                  GetAverageNumberOfPhotons(aParticle,aMaterial,Rindex);
 
-        if(MeanNumPhotons == 0.0) return DBL_MAX;
+        if(MeanNumPhotons <= 0.0) return DBL_MAX;
 
 	G4double StepLimit = fMaxPhotons / MeanNumPhotons;
 
@@ -423,7 +424,7 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 {
 	const G4double Rfact = 369.81/(eV * cm);
 
-        if(aParticle->GetTotalMomentum() == 0.0)return 0.0;
+        if(aParticle->GetTotalMomentum() <= 0.0)return 0.0;
 
 	G4double BetaInverse = aParticle->GetTotalEnergy() /
 			       aParticle->GetTotalMomentum();
@@ -493,8 +494,8 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 	G4double charge = aParticle->GetDefinition()->GetPDGCharge();
 
 	// Calculate number of photons 
-	G4double NumPhotons =
-                 Rfact * charge*charge * (dp - ge * BetaInverse*BetaInverse);
+	G4double NumPhotons = Rfact * charge/eplus * charge/eplus *
+                                 (dp - ge * BetaInverse*BetaInverse);
 
-	return NumPhotons / cm;		
+	return NumPhotons;		
 }

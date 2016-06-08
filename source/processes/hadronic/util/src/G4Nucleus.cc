@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleus.cc,v 1.3 1999/03/29 09:48:41 hpw Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Nucleus.cc,v 1.3.8.1 1999/12/07 20:52:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996

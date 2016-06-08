@@ -1,0 +1,281 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: tvordvec.icc,v 1.1 1999/11/25 10:14:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
+// 
+//---------------------------------------------------------------
+//  GEANT 4 class header file
+//
+//  G4RWTValOrderedVector
+//---------------------------------------------------------------
+
+template<class T>
+G4RWTValOrderedVector<T>::G4RWTValOrderedVector(size_t capacity)
+  : std_vector(capacity),rwsize(0){}
+
+template<class T>
+G4RWTValOrderedVector<T>::G4RWTValOrderedVector(const G4RWTValOrderedVector<T>& v)
+  : std_vector(v),rwsize(v.rwsize){}
+
+template<class T>
+G4RWTValOrderedVector<T>::~G4RWTValOrderedVector(){}
+
+template<class T>
+G4RWTValOrderedVector<T>&
+G4RWTValOrderedVector<T>::operator=(const G4RWTValOrderedVector<T>& v)
+{
+  std_vector::operator=(v);
+  rwsize=v.rwsize;
+  return *this;
+}
+
+template<class T>
+T& G4RWTValOrderedVector<T>::operator()(size_t i)
+{
+  //if(i>=rwsize)
+  //  G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector ()",rwsize,i));
+  if(i<std_vector::size() && rwsize<=i)
+    rwsize=i+1;
+  return std_vector::operator[](i); 
+}
+
+template<class T>
+const T& G4RWTValOrderedVector<T>::operator()(size_t i) const
+{ 
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector const()",rwsize,i));
+  return std_vector::operator[](i);
+}
+
+template<class T>
+T& G4RWTValOrderedVector<T>::operator[](size_t i) 
+{
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector []",rwsize,i));
+  //if(i<std_vector::size() && rwsize<=i)
+  //  rwsize=i+1;
+  return std_vector::operator[](i); 
+}
+
+template<class T>
+const T& G4RWTValOrderedVector<T>::operator[](size_t i) const
+{ 
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector const []",rwsize,i));
+  return std_vector::operator[](i); 
+}
+
+template<class T>
+T& G4RWTValOrderedVector<T>::at(size_t n)
+{
+  if(n>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector at",rwsize,n));
+  return operator()(n);
+}
+
+template<class T>
+T  G4RWTValOrderedVector<T>::at(size_t n ) const
+{
+  if(n>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector const at",rwsize,n));
+  return operator()(n);
+}
+
+template<class T>
+void G4RWTValOrderedVector<T>::clear( void ) 
+{ 
+  //std_vector::erase(std_vector::begin(), std_vector::end());
+  for(size_t i=0;i<rwsize;i++)
+    std_vector::operator[](i)=T();
+  rwsize=0;
+}
+
+template<class T>
+size_t G4RWTValOrderedVector<T>::length() const
+{
+  return rwsize;
+}
+
+template<class T>
+size_t G4RWTValOrderedVector<T>::entries () const
+{
+  return rwsize;
+}
+
+template<class T>
+void G4RWTValOrderedVector<T>::append ( const T& a )
+{ 
+  insert ( a );
+}
+
+template<class T>
+T G4RWTValOrderedVector<T>::first() const
+{
+  if(!rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector first",rwsize,0));
+  return std_vector::front();
+}
+
+template<class T>
+T G4RWTValOrderedVector<T>::last() const
+{
+  if(rwsize)
+    return std_vector::operator[](rwsize-1);
+  else
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector last",rwsize,0));
+}
+
+template<class T> 
+size_t G4RWTValOrderedVector<T>::index( const T& a ) 
+{
+  iterator i;
+  size_t ptn = 0;
+  for (i = std_vector::begin();ptn<rwsize; i++,ptn++)
+    {
+      if (*i==a) return ptn;  
+    }
+  return (ptn=~(size_t)0);
+}
+
+template<class T> 
+size_t G4RWTValOrderedVector<T>::occurrencesOf( const T& a ) const
+{
+  const_iterator i;
+  size_t ptn = 0;
+  size_t sz=0;
+  for (i = std_vector::begin(); sz<rwsize; i++,sz++)
+    {
+      if (*i==a) ptn++;
+    }
+  return ptn;
+}
+
+template<class T> 
+G4bool G4RWTValOrderedVector<T>::remove( const T& a )  
+{
+  iterator i;
+  size_t sz=0;
+  size_t rwsz=rwsize;
+  for (i = std_vector::begin(); sz<rwsz; i++,sz++)
+    {
+      if (*i==a) 
+	{
+	  std_vector::erase(i);
+	  rwsize--;
+	  return true;
+	}
+    } 
+  return false;
+}
+
+template<class T>
+size_t G4RWTValOrderedVector<T>::removeAll( const T& a )  
+{
+  iterator i;
+  size_t ptn = 0;
+  size_t sz=0;
+  size_t rwsz=rwsize;
+  for (i = std_vector::begin();sz<rwsz; i++,sz++)
+    {
+      if (*i==a) 
+	{
+	  std_vector::erase(i);
+	  ptn++;
+          i--;
+	  rwsize--;
+	} 
+    }
+  return ptn;
+}
+
+template<class T>
+T G4RWTValOrderedVector<T>::removeAt( size_t i )  
+{
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector removeAt",rwsize,i));
+  T tmp = operator[](i);
+  iterator it=std_vector::begin();
+  int j;
+  for(j=0;j<rwsize && j<i;j++) it++;
+  if(it!=std_vector::end())
+    {
+      std_vector::erase(it);
+      rwsize--;
+    }
+  return tmp;
+}
+
+template<class T>
+void G4RWTValOrderedVector<T>::resize(size_t N)
+{
+  if(N>std_vector::size())
+    {
+      int e=N-std_vector::size();
+      for(int i=0;i<e;i++)
+	std_vector::push_back(T());
+    }
+  else if(N>rwsize )
+    {
+      iterator it=std_vector::begin();
+      for(int i=0;i<N;i++,it++);
+      std_vector::erase(it,std_vector::end());
+    }
+}
+
+template<class T>
+G4bool G4RWTValOrderedVector<T>::contains( const T a ) const
+{
+  const_iterator i;
+  size_t sz=0;
+  for (i = std_vector::begin();sz<rwsize; i++,sz++)
+    {
+      if (*i==a) return true;
+    }
+  return false;
+} 
+
+template<class T>
+G4bool G4RWTValOrderedVector<T>::insert ( const T& a ) 
+{ 
+  if(rwsize<std_vector::size())
+    {
+      this->std_vector::operator[](rwsize)=a;
+      rwsize++;
+    }
+  else
+    {
+      std_vector::push_back(a);
+      rwsize=std_vector::size();
+    }
+  return true;
+}
+
+// insertAt throws an exception of type G4RWBoundsErr if you try
+// to insert out of range
+//
+template<class T>
+void G4RWTValOrderedVector<T>::insertAt ( size_t i, const T& a ) 
+{
+  if(i>rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector insertAt",rwsize,i));
+  if(rwsize<std_vector::size())
+    {
+      for(int j=rwsize;j>i;j--)
+	std_vector::operator[](j)=this->std_vector::operator[](j-1);
+      std_vector::operator[](i)=a;
+      rwsize++;
+    }
+  else
+    {
+      iterator it=std_vector::begin();
+      for(int j=0;j<i;j++,it++);
+      std_vector::insert(it,a);
+      rwsize++;
+    }
+}

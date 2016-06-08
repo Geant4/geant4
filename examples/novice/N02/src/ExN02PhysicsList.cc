@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02PhysicsList.cc,v 1.2 1999/04/16 11:19:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN02PhysicsList.cc,v 1.3.6.1 1999/12/07 20:47:26 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -57,7 +57,7 @@ void ExN02PhysicsList::ConstructParticle()
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
-  ConstructBarions();
+  ConstructBaryons();
 
 }
 
@@ -106,7 +106,7 @@ void ExN02PhysicsList::ConstructMesons()
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
-void ExN02PhysicsList::ConstructBarions()
+void ExN02PhysicsList::ConstructBaryons()
 {
   //  barions
   G4Proton::ProtonDefinition();

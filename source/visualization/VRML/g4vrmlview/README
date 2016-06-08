@@ -1,0 +1,222 @@
+    ----- How to visualize Geant4 simulation -----
+    ----- with VRML-network drivers  and  g4vrmlview  -----
+
+                November 04, 1999
+
+		Satoshi Tanaka  and  Yasuhide Sawada
+		Fukui University, Japan
+		tanaka@i1nws1.fuis.fukui-u.ac.jp
+
+------------------------
+Section 1: Introduction
+------------------------
+
+This is a document to explain how to perform Geant4 
+"remote" visualization with VRML.  You can visualize Geant4 
+simulation on your WWW browser. 
+You have to prepare the following softwares beforehand:
+
+  (1) Geant4 
+  (2) g4vrmlview, a small java software included in the Geant4 package  
+
+       geant4/source/visualization/VRML/g4vrmlview/
+
+      Or you can also obtain it from our ftp site: 
+
+       ftp://i1nws2.fuis.fukui-u.ac.jp/pub/graphics
+              /fukui_graphics_system/g4vrmlview_VERSION.tar.gz
+
+
+  (3) VRML browser, e.g., vrweb, VRMLview, etc
+
+
+-----------------------------------------------
+Section 2: What is the Geant4 VRML-network drivers?
+-----------------------------------------------
+
+  Geant4 VRML-network drivers are included in visualization category of 
+  the Geant4 package:
+
+    geant4/source/visualization/VRML/
+
+  The VRML-network drivers work as follows:
+
+  (1) Convert 3D data of Geant4 simulation into VRML 1.0/2.0 codes.
+  (2) Send the generated VRML codes to another process of "g4vrmlview",
+      running at either local or remote host.
+
+  (Note: For local visualization, use the VRML-file drivers, 
+         which can be invoked with the following commands:
+
+         .....
+
+           Idle> /vis/sceneHandler/create VRML1FILE
+
+         for VRML 1.0 and 
+
+           Idle> /vis/sceneHandler/create VRML2FILE
+ 
+         for VRML 2.0.
+
+
+------------------------------------------------------------------------
+Section 3: Environmental variables to customize the VRML-network drivers
+------------------------------------------------------------------------
+
+  You can customize the VRML-network drivers by setting environmental 
+  variables at Geant4 host, i.e., the host where Geant4 runs:
+
+    Geant4_host % setenv   G4VRML_PORT        port_number  
+    Geant4_host % setenv   G4VRML_HOST_NAME   host_name 
+
+  The default port number is 40801, and the default host name 
+  is "localhost".  You need not define the environmental 
+  variables if you use the default values.
+
+
+---------------------------------
+Section 4: What is g4vrmlview?
+---------------------------------
+
+g4vrmlview is a software written in java. 
+It works as follows:
+
+ (1) Receive VRML codes from a VRML-network driver of Geant4 
+     via local or wide-area network.
+ (2) Save the received VRML codes to a local file named "g4.wrl" etc. 
+ (3) Invoke a VRML viewer, which is specified at the command line, 
+     automatically. 
+
+--------------------------------------
+Section 5: How to install g4vrmlview
+--------------------------------------
+
+  You need JDK1.1 to install g4vrmlview.
+  The installation can be done by doing the following steps:
+
+  (1) % cd g4vrmlview
+  (2) Edit Makefile and set a proper directory name to variable 
+      "INSTALL_DIR".  The default setting is:
+
+       INSTALL_DIR = "/usr/local/javaclass" 
+ 
+       Later, java classes (g4vrmlview.class etc) are installed 
+       to the directory specified by the variable INSTALL_DIR.
+
+  (3) Set the environmental variable "CLASSPATH" in .cshrc etc.
+      (This step can be skipped in some platforms.)
+      For example, if JDK1.1.1 is installed in the directory
+      "/usr/local/dev/jdk1.1.1"  and you want to install g4vrmlview 
+      into  "/usr/local/javaclass",  then the variable CLASSPATH 
+      should be defined as:
+
+        # java in Unix (.cshrc)
+        setenv CLASSPATH .:/usr/local/dev/jdk1.1.1/lib/classes.zip:\
+        /usr/local/javaclass
+
+      Similarly, in Windows NT/95, if JDK.1.1 is installed in 
+      the directory  "C:\jdk1.1.1" and you want to install g4vrmlview
+      into C:\dev\javaclass, you should add the following lines to 
+      AUTOEXEC.BAT:
+
+       # java in Windows NT/95 (autoexec.bat)
+       SET CLASSPATH = .;C:\jdk1.1.1\lib\classes.zip;C:\dev\javaclass
+
+  (4) % make clean
+  (5) % make 
+
+  (6) Test created java classes using g4mini.
+      You can do it using two separate windows, 
+      instead of using two separate hosts.
+      Here we assume that we use windows named "window_1" 
+      and "window_2", and use the VRML browser "vrweb".
+
+        window_1 % java g4vrmlview vrweb
+        Waiting for requests at port  40801 ...
+
+        window_2 % java g4vrmlview vrweb
+        % java g4mini
+        Usage: java g4mini  src_file  server_hostname
+
+        window_2 % java g4mini sample.wrl localhost
+
+      The test is successful if you see pictures on the VRML browser.
+
+  Now you can use g4vrmlview if the class path of java is, 
+  explicitly or implicitly set to the current directory.
+  Go on to the next step if you want to install g4vrmlview into
+  a public place.
+
+  Here you have to become root if you do not have permission 
+  to INSTALL_DIR.  If the directory INSTALL_DIR does not exist, 
+  it will be created automatically. 
+    
+   (5) % make install 
+
+
+--------------------------------------
+Section 6: How to use g4vrmlview
+--------------------------------------
+
+  (1) Invoke g4vrmlview at the host where g4vrmlview runs,
+      say, "VRML_host". For example, 
+
+        VRML_host% java g4vrmlview  VRML_browser_name
+
+      where the last argument is a name of your favorite VRML browser. 
+
+  (2) Invoke Geant4 at the host, where Geant4 runs, say, Geant4_host.
+      For example,
+
+       Geant4_host% exampleN03
+
+       .....
+
+         Idel> /vis/sceneHandler/create VRML1
+
+       for VRML 1.0 and  
+
+         Idel> /vis/sceneHandler/create VRML2
+
+       for VRML 2.0.
+
+
+---------------------------------------
+Section 7: More notes on g4vrmlview
+---------------------------------------
+
+  (1) Format of invoking g4vrmlview:
+
+      % java  g4vrmlview  VRML_browser_name  [port_number]
+
+        VRML_browser_name: 
+             "netscape", "vrweb", etc, 
+             or "NONE" to suppress invoking VRML browser
+
+        port_number: 
+             The default port number is 40801.
+             If you have set the environmental variable 
+             "G4VRML_PORT" at Geant4 host, 
+             you have to give the same port number. 
+             For example, 
+
+             Geant4_host % setenv G4VRML_PORT         40802 
+             VRML_host   % java g4vrmlview  netscape  40802
+
+  (2) Auto increment of port number:
+        If the port number 40801 is already in use, it is 
+        automatically incremented one by one up to 40810.
+
+  (3) Multiple thread:
+        g4vrmlview is a multi-thread software.
+        It can accept data from plural Geant4 at the same time.
+
+  (4) Saving VRML codes to files:
+      VRML codes sent from Geant4 is saved to a file named 
+      "g4.wrl".  If g4.wrl already exists, the file name is 
+      incremented to  g4_2.wrl.  Similarly the file name is 
+      incremented to g4_3.wrl, g4_4.wrl, etc.
+      The files are created in the directory where you invoked g4vrmlview. 
+
+
+===== End of document =====

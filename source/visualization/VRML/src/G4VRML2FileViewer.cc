@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2FileViewer.cc,v 1.2 1999/01/11 00:48:11 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VRML2FileViewer.cc,v 1.3.4.1 1999/12/07 20:53:47 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // G4VRML2FileViewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -42,8 +42,7 @@ G4VRML2FileViewer::~G4VRML2FileViewer()
 void G4VRML2FileViewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2FileViewer::SetView()" << endl;
-	G4cerr << "G4VRML2FileViewer::SetView(); not imlemented. " << endl;
+  G4cerr << "***** G4VRML2FileViewer::SetView(): No effects" << endl;
 #endif
 
 // Do nothing, since VRML a browser is running as a different process.
@@ -57,8 +56,7 @@ void G4VRML2FileViewer::DrawView()
 	G4cerr << "***** G4VRML2FileViewer::DrawView()" << endl;
 #endif
 
-	// Open VRML2 file and output header comments
-	fSceneHandler.beginSending() ; 
+	fSceneHandler.VRMLBeginModeling() ; 
 
         // Viewpoint node
         SendViewParameters(); 
@@ -72,23 +70,22 @@ void G4VRML2FileViewer::DrawView()
 void G4VRML2FileViewer::ClearView(void)
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2File1View::ClearView()" << endl;
-	G4cerr << "G4VRML2FileViewer::ClearView(); not implemented. " << endl;
+  G4cerr << "***** G4VRML2File1View::ClearView(): No effects" << endl;
 #endif
 }
 
 void G4VRML2FileViewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2FileViewer::ShowView()" << endl;
+  G4cerr << "***** G4VRML2FileViewer::ShowView()" << endl;
 #endif
-	fSceneHandler.endSending();
+	fSceneHandler.VRMLEndModeling();
 }
 
 void G4VRML2FileViewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4VRML2FileViewer::FinishView()" << endl;
+  G4cerr << "***** G4VRML2FileViewer::FinishView(): No effects" << endl;
 #endif
 }
 

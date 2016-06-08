@@ -1,7 +1,7 @@
 // This code is utilised in the GEANT4 detector simulation toolkit.
 //
 // $Id: STEPfile.cc,v 1.2 1999/05/21 20:20:51 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 /*

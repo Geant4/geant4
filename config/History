@@ -1,5 +1,5 @@
-$Id: History,v 1.50 1999/07/06 17:54:47 johna Exp $
-$Name: geant4-00-01 $
+$Id: History,v 1.92 1999/12/07 08:51:38 gcosmo Exp $
+$Name: geant4-01-00 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,170 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th December 1999  Gabriele Cosmo (config-V00-01-19)
+- architecture.gmk: minor fix on OSPACELIBS path for Win/NT.
+
+5th December 1999  Youhei Morita (config-V00-01-18) 
+- architecture.gmk: defined G4OODDLX_FLAGS
+- common.gmk: use G4OODDLX_FLAGS
+
+5th December 1999  Gabriele Cosmo (config-V00-01-17)
+- architecture.gmk: fixes for Win/NT.
+  o fixed path for OSPACELIBS
+  o removed -DG4NOT_ISO_DELETES flag
+
+3rd December 1999  Gabriele Cosmo (config-V00-01-16)
+- architecture.gmk: set G4_HAVE_BOOL for SUN-CC5.
+
+3rd December 1999  Youhei Morita
+- common.gmk: fixed minor typo in G4OODDLX_SCHEMA_NAME
+
+1st December 1999  Gabriele Cosmo (config-V00-01-15)
+- architecture.gmk:
+  o added new G4SYSTEM flavor SUN-CC5, used for testing on the new C++
+    compiler v5.0 on SunOS. Requires ISO/ANSI-C++ installation and native
+    STL by default. Compatibility with old no ISO/ANSI code is assured
+    through the -compat compiler option and the usage of ObjectSpace STL
+    (i.e. G4USE_OSPACE set).
+  o added new flag G4NO_STD_NAMESPACE.
+    HP-aCC setup with native STL assumes the ISO-ANSI installation by default,
+    the new flag should be explicitly set in the environment to avoid this.
+  o upgraded SGI-CC setup to IRIX 6.5.5, CC 7.2.1 and ObjectSpace STL.
+    Tests on this configuration has NOT been tested though.
+
+1st December 1999  Youhei Morita
+- architecture.gmk: added G4EXAMPLE_BOOT and G4EXAMPLE_FD
+- common.gmk: copy only the .hh files
+- binmake.gmk: added persistent include paths
+               added new targed cleandb, newboot, newfd
+               added G4SKIP_DEPEND for dependencies
+
+29th November 1999  Youhei Morita
+- architecture.gmk: added G4SYSTEM to G4SCHEMA_DIR, G4TMPSCHEMA_DIR
+- common.gmk: changed G4SCHEMA_HEADER_DIR from G4TMPSCHEMA_INCLUDE to G4TMPDIR
+              added target install_schema for schema copying
+- globlib.gmk: create schema header files at G4TMPDIR, then install
+
+29th November 1999  John Allison
+- Introduced LDLIBS2EXTRA so that granular libraries are not
+  expanded too soon.
+
+25th November 1999  Gabriele Cosmo (config-V00-01-14)
+- architecture.gmk: redefined OSPACEDIR as OSPACE_BASE_DIR to conform to
+  an omogeneous format. Added existence check for OSPACE and CLHEP paths.
+
+23rd November 1999  Gabriele Cosmo (config-V00-01-13)
+- architecture.gmk: added setup for ISO/ANSI installation on DEC-cxx.
+  If using native STL (i.e. G4USE_OSPACE not set), G4USE_STD_NAMESPACE is
+  implicitly defined and a strict-ANSI installation is assumed. Note that
+  in this case, also CLHEP must have been installed in strict-ANSI mode.
+
+20th November 1999  Youhei Morita (config-V00-01-12)
+- common.gmk: added G4OODDLX_SCHEMA_NAME to use Geant4 named schema
+
+19th November 1999  Youhei Morita
+- liblist.c: avoid coredumps when it was given non-existing directly.
+
+18th November 1999  Gabriele Cosmo (config-V00-01-11)
+- architecture.gmk: added -e option to $ECHO for Linux-g++ setup.
+
+17th November 1999  John Allison (config-V00-01-10)
+- binmake.gnk: added isotope_production/include to -I list (Hans-Peter).
+
+17th November 1999  Youhei Morita (config-V00-01-09)
+- moved schema header files to G4INSTALL/schema/include
+  architecture.gmk: introduced G4SCHEMA_INCLUDE and G4TMPSCHEMA_INCLUDE
+  common.gmk: introduced G4SCHEMA_HEADER_DIR and G4SCHEMA_SRC_DIR 
+  globlib.gmk: added tmp schema header copying
+
+15th November 1999  Gabriele Cosmo (config-V00-01-08)
+- Tagged.
+
+14th November 1999  Youhei Morita
+- globlib.gmk: moved contruction of libmap for G4ODBMS to
+               source/GNUmakefile
+
+12th November 1999  Youhei Morita
+- common.gmk: introduced G4ODBMS_DEPEND and G4SKIP_DEPEND for
+              better handling of dependencies
+- globlib.gmk: use G4ODBMS_DEPEND, automatic rebuilding of libmap
+
+11th November 1999  Gabriele Cosmo (config-V00-01-07)
+- Migration RWT->G4RWT performed:
+  o Removed every occurence of Rogue-Wave from configuration, replaced
+    RWBASE with G4STLBASE. Modified scripts: architecture.gmk, common.gmk
+    and binmake.gmk.
+  o Made setup for Native-STL the default, removed test on conditional
+    flag G4USE_STL.
+  o Removed setup for Win/NT-g++, no longer supported.
+
+10th November 1999  Youhei Morita (config-V00-01-06)
+- binmake.gmk: added path to persistency/global/include.
+- common.gmk: Change G4ODBMS_DEPEND to G4ODBMS_NODDL
+- globlib.gmk: removed G4ODBMS_DEPEND, modified target "global"
+
+10th November 1999  Gabriele Cosmo (config-V00-01-05)
+- binmake.gmk: added path to HEPNumerics/include which was missing.
+
+29th October 1999  Guy Barrand
+- architecture.gmk, interactivity.gmk: introduced
+  "G4_OPACS_WIDGET_SET lesstif" logic to handle the case
+  of using, on Linux, the bugged lesstif with the non bugged OPACS.
+
+29th October 1999  Gabriele Cosmo
+- Introduced fixes for shared library setup (courtesy of F.Carminati).
+  Modified files: architecture.gmk, common.gmk, globlib.gmk, makeshlib.sh.
+
+28th October 1999  Gabriele Cosmo (config-V00-01-04)
+- architecture.gmk: removed G4STREAM and G4STREAM_STREAMBUF_IMPLEMENTATION
+  flags, now no longer needed. Streambuf implementation is the default for
+  every platform. (by H.Yoshida)
+
+26th October 1999  John Allison
+- Augmented liblist to look for dependencies on auto-generated
+  headers in $G4TMP.
+
+26th October 1999  Gabriele Cosmo (config-V00-01-03)
+- Removed AIX-xlC as default platform for G4SYSTEM in architecture.gmk.
+  Configuration is still kept but no longer supported.
+
+26th October 1999  Youhei Morita
+- architecture.gmk: include $(HEP_ODBMS_DIR)/etc/$(OS).mk instead of
+  defininig load module separately.  Defined G4ODBMS_LIBS.
+- binmake.gmk: Use G4ODBMS_LIBS.
+
+20th October 1999  Gabriele Cosmo (config-V00-01-02)
+- architecture.gmk: removed option -DOS_NO_TYPEDEF_5 from HP-aCC
+  OSpace setup. Not anymore needed.
+
+20th October 1999  John Allison
+- architecture.gmk: removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES (was needed
+                    only for HP aCC; now not needed at all).
+
+19th Octobre 1999  Youhei Morita
+- common.gmk: Surpress verbose output for G4ODBMS if CPPVERBOSE 
+              is not defined.
+
+7th October 1999  John Allison (config-V00-01-01)
+- Removed WARNINGs about granular libraries.  Now standard usage.  Simple
+  using messages printed.
+
+17th Sep 1999  Youhei Morita
+- architecture.gmk: Defined G4TMPSCHEMA_DIR, G4TMPSCHEMA_BOOT
+                    Added OBJY_LDLIB definition for Objectivity 5.1
+- binmake.gmk: LDLIBS1 += -lG4persistency
+- common.gmk: Changed ooddlx boot file option to G4OODDLX_BOOT
+- globlib.gmk: Changed G4EXAMPLE_BOOT to G4TMPSCHEMA_BOOT
+- G4ODBMS_BUILD.gmk: Defined HEP_ODBMS_EXPORT for HepODBMS 0.3.0.x
+
+27th July 1999  Gonzalo Gracia Abril
+- Changed OSPACELIBS := '-libpath:c:\dev\ospace\lib std-2.1-vc5.0-mt.lib'
+  to      OSPACELIBS := '-libpath:$(OSPACEDIR)\lib std-2.1-vc5.0-mt.lib'
+  in architecture.gmk for NT  
+
+20th July 1999  John Allison (config-V00-01-00)
+- Added EXTRA_LINK_DEPENDENCIES to binmake.gmk.
 
 6th July 1999  John Allison (config-01-00-10)
 - Changed -L/usr/X11/lib to -L/usr/X11R6/lib for Linux.

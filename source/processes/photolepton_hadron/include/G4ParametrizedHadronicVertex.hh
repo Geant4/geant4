@@ -14,7 +14,7 @@
 class G4ParametrizedHadronicVertex
 {
   public:
-   G4VParticleChange * ApplyYourself(const G4Nucleus & theTarget, 
+   G4VParticleChange * ApplyYourself(G4Nucleus & theTarget, 
                                      const G4Track &thePhoton);
 
   private:

@@ -1,16 +1,22 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.hh,v 1.2 1999/01/11 00:48:49 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VModel.hh,v 1.4.2.1 1999/12/07 20:54:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  31st December 1997.
-// Base class for models.
+//
+// Class Description:
+//
+// G4VModel is a base class for visualization models.  A model is a
+// graphics-system-indepedent description of a Geant4 component.
+// The key fuctionality of a model is to know how to describe itself
+// to a scene handler.  A scene is a collection of models.
 
 #ifndef G4VMODEL_HH
 #define G4VMODEL_HH
@@ -24,9 +30,9 @@ class G4ModelingParameters;
 
 class G4VModel {
 
-  friend ostream& operator << (ostream& os, const G4VModel&);
+public: // With description
 
-public:
+  friend ostream& operator << (ostream& os, const G4VModel&);
 
   G4VModel
   (const G4Transform3D& modelTransformation = G4Transform3D::Identity,
@@ -34,42 +40,43 @@ public:
    
   virtual ~G4VModel ();
 
-  // For RWTPtrOrderedVector...
+public: // Without description
+
   G4bool operator == (const G4VModel&) const;
+  // For G4RWTPtrOrderedVector...
+
+public: // With description
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&) = 0;
   // The main task of a model is to describe itself to the scene.
 
-  virtual G4String GetCurrentTag () const;
-  // A tag which depends on the current state of the model.
+  const G4ModelingParameters* GetModelingParameters () const;
 
   virtual G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
 
-  virtual G4bool Validate ();
-  // Validate, but allow internal changes (hence non-const function).
+  virtual G4String GetCurrentTag () const;
+  // A tag which depends on the current state of the model.
 
-  //////////////////////////////////////////////////////////
-  // Access functions...
-
-  const G4ModelingParameters* GetModelingParameters () const;
-
-  const G4String& GetGlobalTag () const;
-  // A tag which does not change and lasts the life of the model.
+  const G4VisExtent& GetExtent () const;
+  // Extent of visible objects in local coordinate system.
   // Define protected data member in derived class constructor.
 
   const G4String& GetGlobalDescription () const;
   // A description which does not change and lasts the life of the model.
   // Define protected data member in derived class constructor.
 
-  const G4VisExtent& GetExtent () const;
-  // Extent of visible objects in local coordinate system.
+  const G4String& GetGlobalTag () const;
+  // A tag which does not change and lasts the life of the model.
   // Define protected data member in derived class constructor.
 
   const G4Transform3D& GetTransformation () const;
   // Model transformation, i.e., position and orientation of model in world.
 
   void SetModelingParameters (const G4ModelingParameters*);
+
+  virtual G4bool Validate ();
+  // Validate, but allow internal changes (hence non-const function).
 
 protected:
 

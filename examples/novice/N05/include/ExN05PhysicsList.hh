@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN05PhysicsList.hh,v 1.3 1999/04/23 04:43:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN05PhysicsList.hh,v 1.4.6.1 1999/12/07 20:47:34 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 #ifndef ExN05PhysicsList_h
@@ -34,7 +34,7 @@ protected:
   virtual void ConstructBosons();
   virtual void ConstructLeptons();
   virtual void ConstructMesons();
-  virtual void ConstructBarions();
+  virtual void ConstructBaryons();
   virtual void ConstructIons();
   
 protected:

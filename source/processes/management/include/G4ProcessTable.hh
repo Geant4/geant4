@@ -1,13 +1,13 @@
 
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTable.hh,v 1.2 1999/04/13 09:45:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ProcessTable.hh,v 1.4.2.1 1999/11/11 14:31:30 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -17,6 +17,10 @@
 //	CERN, IT Division, ASD group
 //	History: first implementation, based on object model of
 //	4th Aug 1998, H.Kurashige
+//
+// Class Description
+//  This class is used for "book keeping" of all processes 
+//  which are registered in all particles
 //
 //  History:
 //      Added G4ProcessTableMesseneger      16 Aug. 1998, H.Kurashige
@@ -28,8 +32,8 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
 
 #include "G4ProcTblElement.hh"
 #include "G4ProcessVector.hh"
@@ -37,7 +41,6 @@ class G4ProcessTableMessenger;
 
 class G4ProcessTable
 {
- // this class is used by G4ProcessTable ONLY for booking !!!
  public:
   G4ProcessTable();
   //  Constructors
@@ -53,12 +56,15 @@ class G4ProcessTable
   G4int operator!=(const G4ProcessTable &right) const;
   // equal / unequal operator
   
- public:
+ 
+ public: // with description
   static G4ProcessTable* GetProcessTable();
   // return the pointer to G4ProcessTable object
   //   G4ProcessTable is a "singleton" and can get its pointer by this function
 
   G4int  Length() const;
+  // return the number of processes in the table
+
   G4int  Insert(G4VProcess* aProcess, G4ProcessManager* aProcMgr);
   G4int  Remove(G4VProcess* aProcess, G4ProcessManager* aProcMgr);  
   // insert and remove methods
@@ -103,14 +109,19 @@ class G4ProcessTable
   void SetProcessActivation( G4ProcessType   processType,
 		             G4ProcessManager* processManager, 
 			     G4bool          fActive  );
+  // These methods are provided to activate or inactivate processes
 
  public:
-  typedef RWTPtrOrderedVector<G4ProcTblElement>  G4ProcTableVector;
-  typedef RWTValOrderedVector<G4String> G4ProcNameVector;
+  typedef G4RWTPtrOrderedVector<G4ProcTblElement>  G4ProcTableVector;
+  typedef G4RWTValOrderedVector<G4String> G4ProcNameVector;
 
+ public: // with description
   G4ProcNameVector*  GetNameList();
-  G4ProcTableVector* GetProcTableVector();
+  // return pointer of the list of process name
 
+  G4ProcTableVector* GetProcTableVector();
+  // return pointer of the vector of G4ProcTblElement
+  
  private:
   G4ProcTableVector* Find(  G4ProcTableVector* procTableVector,
 			    const G4String& processName );
@@ -120,18 +131,26 @@ class G4ProcessTable
   //  which includes ProcTbleElement specified
 
   G4ProcessVector*   ExtractProcesses( G4ProcTableVector* procTableVector);
-   
- public: 
+  // extract all process objects from the process table 
+ 
+ public: // with description
   void DumpInfo(G4VProcess* process, G4ParticleDefinition* particle=0);
-
- public:
+  // dump out information of the process table
+  //  second argument is used to specify processes designated by a particle 
+  
+ public: // with description
    G4UImessenger* CreateMessenger();
    void           DeleteMessenger();
-
+   // These methods are used by RunManager to let the process table
+   // know the timing of creation/destructuion of  messengers
   
- public:
+ public: // with description
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
+   // Set/Get controle flag for output message
+   //  0: Silent
+   //  1: Warning message
+   //  2: More
 
 
  private:
@@ -149,9 +168,7 @@ class G4ProcessTable
  private:
    G4int verboseLevel;
    // controle flag for output message
-   //  0: Silent
-   //  1: Warning message
-   //  2: More
+
 };
 
 inline 

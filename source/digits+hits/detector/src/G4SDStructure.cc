@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SDStructure.cc,v 1.1 1999/01/07 16:06:26 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SDStructure.cc,v 1.1.8.1.2.1 1999/12/07 20:47:45 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 // G4SDStructure
@@ -92,7 +92,7 @@ G4String G4SDStructure::ExtractDirName(G4String aName)
 {
   G4String subD = aName;
   int i = aName.first('/');
-  if( i != RW_NPOS ) subD.remove(i+1);
+  if( i != G4std::string::npos ) subD.remove(i+1);
   return subD;
 }
 
@@ -100,7 +100,7 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
 {
   G4String aPath = aName;
   aPath.remove(0,pathName.length());
-  if( aPath.first('/') != RW_NPOS )
+  if( aPath.first('/') != G4std::string::npos )
   {  // Command is ordered for a subdirectory.
     G4String subD = ExtractDirName(aPath);
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
@@ -142,7 +142,7 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName)
 {
   G4String aPath = aName;
   aPath.remove(0,pathName.length());
-  if( aPath.first('/') != RW_NPOS )
+  if( aPath.first('/') != G4std::string::npos )
   { // SD exists in sub-directory
     G4String subD = ExtractDirName(aPath);
     G4SDStructure* tgtSDS = FindSubDirectory(subD);

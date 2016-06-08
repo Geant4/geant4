@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BlockingList.hh,v 1.1 1999/01/07 16:08:40 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4BlockingList.hh,v 1.2.2.1 1999/12/07 20:48:38 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4BlockingList
 //
@@ -66,7 +66,7 @@
 #define G4BLOCKINGLIST_HH
 
 #include "globals.hh"
-#include <rw/tvvector.h>
+#include "g4rw/tvvector.h"
 
 const G4int kBlockingListMaxDefault = 500; // Block up to 511 daughters
 				           // initially
@@ -91,7 +91,7 @@ private:
 	G4int fBlockTagNo,fStride;		
 // Blocked volumes: Elements with indices
 // corresponding to blocked volume set to fBlockTagNo
-    	RWTValVector<G4int> fBlockingList; 
+    	G4RWTValVector<G4int> fBlockingList; 
 	
 };
 

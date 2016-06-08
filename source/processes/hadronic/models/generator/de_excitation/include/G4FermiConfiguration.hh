@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -24,8 +24,8 @@
 #include "G4IonTable.hh"
 #include "G4Fragment.hh"
 
-#include <rw/tvvector.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tvvector.h"
+#include "g4rw/tvordvec.h"
 
 
   static const G4int NumberOfFragments = 100;
@@ -58,8 +58,8 @@ private:
   G4double CoulombBarrier(void);
 
 
-  //  RWTPtrOrderedVector<G4ParticleMomentum>* FragmentsMomentum(G4double KineticEnergy);
-  RWTPtrOrderedVector<G4LorentzVector>* FragmentsMomentum(G4double KineticEnergy);
+  //  G4RWTPtrOrderedVector<G4ParticleMomentum>* FragmentsMomentum(G4double KineticEnergy);
+  G4RWTPtrOrderedVector<G4LorentzVector>* FragmentsMomentum(G4double KineticEnergy);
   
   G4double RNKSI(const G4int K);
 
@@ -191,7 +191,7 @@ private:
   //  G4VFermiFragment * theConfiguration[MaxConfigSize];
 
   //  G4int Index[MaxConfigSize];
-  RWTValOrderedVector<G4int> Index;
+  G4RWTValOrderedVector<G4int> Index;
 
 };
 

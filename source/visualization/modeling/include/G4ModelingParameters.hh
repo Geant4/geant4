@@ -1,15 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ModelingParameters.hh,v 1.3 1999/05/25 09:14:23 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ModelingParameters.hh,v 1.4.2.1 1999/12/07 20:54:06 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  31st December 1997.
+//
+// Class Description:
+//
 // Parameters associated with the modeling of GEANT4 objects.
 
 #ifndef G4MODELINGPARAMETERS_HH
@@ -24,9 +27,9 @@ class G4VisAttributes;
 
 class G4ModelingParameters {
 
-friend ostream& operator << (ostream& os, const G4ModelingParameters&);
+public: // With description
 
-public:
+  friend ostream& operator << (ostream& os, const G4ModelingParameters&);
 
   enum RepStyle {
     wireframe,  // Use G4Wireframe.
@@ -46,8 +49,7 @@ public:
 			G4bool isDensityCulling,
 			G4double visibleDensity,
 			G4bool isCullingCovered,
-			G4int noOfSides
-			);
+			G4int noOfSides);
   // noOfSides is suggested no. of sides per circle in case a
   // polygonal representation is produced.
 
@@ -61,8 +63,7 @@ public:
 			G4int noOfSides,
 			G4bool isViewGeom,
 			G4bool isViewHits,
-			G4bool isViewDigis
-			);
+			G4bool isViewDigis);
   // noOfSides is suggested no. of sides per circle in case a
   // polygonal representation is produced.
 

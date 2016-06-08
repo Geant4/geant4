@@ -1,0 +1,17 @@
+LIST
+C
+C     Lead-liquidArgon  50 layers; electon 1 GeV
+C
+CALOR  2 (nbAbs) 50 (nbLay)  40. (calorYZ) 0. (field)
+MATE   8 (lead)  5 (larg)
+THICK  0.23(cm)  0.57 (cm)
+TRIG   1000
+KINE   3 (Itype) 1.0 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+DEBUG  10  5 100
+SWIT   0 (draw) 1 (save)
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m) 2*217.0e-6 (dcute/m)
+ABAN   0
+LOSS   1
+HADR   0
+TIME   2=1.

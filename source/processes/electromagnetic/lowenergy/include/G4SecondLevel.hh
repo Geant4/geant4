@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -26,9 +26,9 @@
 #define G4SECONDLEVEL_HH
 
 #include "G4FirstLevel.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
-class G4SecondLevel : public RWTPtrOrderedVector< G4FirstLevel >{
+class G4SecondLevel : public G4RWTPtrOrderedVector< G4FirstLevel >{
 
 
 public:

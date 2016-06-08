@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999/03/19 17:21:04 japost Exp $
+$Id: History,v 1.5 1999/11/30 12:21:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 30, 99      G. Cosmo              geommng-V00-01-01a
+
+G4DrawVoxels.cc:
+
+Fixed initialization of (const G4VPhysicalVolume*) in method
+GetAbsoluteTransformation(). Fix needed for NT/VC++ compiler.
+
+November 09, 99      J. Apostolakis        geommng-V00-01-01
+
+G4VPhysicalVolume:
+  i) Made G4RotationMatrix G4VPhysicalVolume::GetObjectRotation() const
+      non-inline and moved it to source file from inline file.
+ ii) Added GetObjectRotationValue() method.
+iii) Minimal changes of comments for Software Ref. Manual in header file
+
+  [ Change i) caused problem with HP aCC compiler A.01.19.  Atlas 
+     was patching the code to try to get around this, but this 
+     resolution is much better ] 
 
 March    17, 99      J. Apostolakis        geommng-01-00-02
 

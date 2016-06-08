@@ -1,4 +1,4 @@
-$Id: History,v 1.9 1999/05/31 20:48:28 barrand Exp $
+$Id: History,v 1.20 1999/11/10 16:12:19 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,46 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10 Nov 1999 Hajime Yoshida  (interfaces-V00-01-03)
+- Added less<G4String> argument (Guy).
+- G4UIWin32.hh, G4UIXm.hh : usage of G4std::less in G4std::map.
+- G4VInteractorManager.cc : G4std::find, G4std::remove.
+
+08 Nov 1999 Hajime Yoshida
+- tag interfaces--V00-01-02 for STT
+
+08 Nov 1999 Hajime Yoshida
+- GAG/src/G4UIGAG.cc RWT => STL vector
+- basic/include/G4UIterminal.hh, GAG/include/G4UIGAG.hh => documentation
+
+02 Nov 1999 Guy Barrand
+- doc comments for G4UIWin32.hh, G4UIXm.hh, G4UIXaw.hh, G4Xt.hh, G4Win32.hh, G4VInterativeSession.hh, G4VInteractorManager.hh.
+
+02 Nov 1999 Guy Barrand
+- basic/G4UIWin32, G4UIXm : RW -> STL.
+- common/G4VBasicShell, G4VInteractiveSession, G4VInteractorManager : RW -> STL.
+29 Oct. 1999 Hajime Yoshida
+- tag interfaces-V00-01-01
+
+27 Oct. 1999 Guy Barrand
+- interfaces/common/src/G4Xt.cc : protect XtAppInit against 
+  shell zero widthxheight. Give a default to geometry resource.
+
+21 Oct. 1999 John Allison
+- Made XtAppContext appContext static in G4Xt.cc.  Speeds OGLSXm but
+  OGLIXm is still slow - why?
+
+12 Oct. 1999 John Allison for Hajime Yoshida (tag interfaces-V00-01-00a)
+- Protection for zero length strings for Sun in G4UIterminal and G4UIGAG.
+
+02 Sep. 1999 Hajime Yoshida
+  to geant4-00-01-ref-01 (Revision 1.9)
+  a new tag is interfaces-01-00-04
+  after which a tag interfaces-V00-01-00 was added identical to
+    interfaces-01-00-04 except for this History file.
+
+- G4UIterminal.cc and G4UIGAG.cc now shows prompt characters
+	to an input of return (or null command line).
 
 head 31 Mai 1999  Guy Barrand
 - G4VInteractorManager::SecondaryLoop : add a message to indicate

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisationPlus.hh,v 1.1 1999/03/05 09:03:26 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4hIonisationPlus.hh,v 1.2.8.1 1999/12/07 20:50:55 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -89,14 +89,6 @@ class G4hIonisationPlus : public G4hEnergyLossPlus
   //  private data members ...............................
 
     G4PhysicsTable* theMeanFreePathTable;
-
-    // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins 
-    //  ---------in the energy ionisation loss table-------------------
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
-    G4int TotBin;
 
     // particles , cuts in kinetic energy ........
     const G4Electron* theElectron;

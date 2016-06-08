@@ -1,0 +1,15 @@
+FILE  geant3.plot04
+LIST
+ABSOR  23 (mate)  92.6e-4 (thicknX) 10.0 (sizeYZ)  0. (field)
+KINE   14 (Itype) 0.00656 (Ekine) 90.0 (teta)  0.0 (phi)      
+TRIG   100000
+DEBUG  1  1  
+SWIT   0 (draw)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*10.0e-6 (dcute/m)
+TIME   2=5.
+HIS3  60   0.   6.
+END

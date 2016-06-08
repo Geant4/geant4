@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.3 1999/01/10 13:25:51 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.6.2.1 1999/12/07 20:54:11 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -20,6 +20,8 @@
 #include "G4VPVParameterisation.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4BooleanSolid.hh"
+#include "G4DisplacedSolid.hh"
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 #include "G4BoundingSphereScene.hh"
@@ -36,7 +38,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
  G4int                       soughtDepth,
  const G4Transform3D& modelTransformation,
- const G4ModelingParameters* pMP):
+ const G4ModelingParameters* pMP,
+ G4bool useFullExtent):
   G4VModel       (modelTransformation, pMP),
   fpTopPV        (pVPV),
   fTopPVName     (pVPV -> GetName ()),
@@ -55,46 +58,51 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fGlobalTag = fpTopPV -> GetName () + "." + a;
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
-  G4BoundingSphereScene bsScene;
-  const G4ModelingParameters* tempMP = fpMP;
-  G4ModelingParameters mParams
-    (0,      // No default vis attributes.
-     G4ModelingParameters::wireframe,
-     true,   // Global culling.
-     true,   // Cull invisible volumes.
-     false,  // Density culling.
-     0.,     // Density (not relevant if density culling false).
-     true,   // Cull daughters of opaque mothers.
-     24,     // No of sides (not relevant for this operation).
-     true,   // View geometry.
-     false,  // View hits - not relevant for physical volume model.
-     false); // View digis - not relevant for physical volume model.
-  fpMP = &mParams;
-  //bsScene.SetBoundingSphereExtent
-  //  (fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ());
-  DescribeYourselfTo (bsScene);
-  fExtent = bsScene.GetBoundingSphereExtent ();
-  fpMP = tempMP;
+  if (useFullExtent) {
+    fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
+  }
+  else {
+    G4BoundingSphereScene bsScene;
+    const G4ModelingParameters* tempMP = fpMP;
+    G4ModelingParameters mParams
+      (0,      // No default vis attributes.
+       G4ModelingParameters::wireframe,
+       true,   // Global culling.
+       true,   // Cull invisible volumes.
+       false,  // Density culling.
+       0.,     // Density (not relevant if density culling false).
+       true,   // Cull daughters of opaque mothers.
+       24,     // No of sides (not relevant for this operation).
+       true,   // View geometry.
+       false,  // View hits - not relevant for physical volume model.
+       false); // View digis - not relevant for physical volume model.
+    fpMP = &mParams;
+    DescribeYourselfTo (bsScene);
+    fExtent = bsScene.GetBoundingSphereExtent ();
+    fpMP = tempMP;
+  }
 }
 
-void G4PhysicalVolumeModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
+G4PhysicalVolumeModel::~G4PhysicalVolumeModel () {}
+
+void G4PhysicalVolumeModel::DescribeYourselfTo
+(G4VGraphicsScene& sceneHandler) {
 
   if (fpMP && fpMP -> IsViewGeom ()) {
 
-    scene.EstablishSpecials (*this);
+    sceneHandler.EstablishSpecials (*this);
     // See .hh file for explanation of this mechanism.
 
     fCurrentDepth = 0;
     // Store in working space (via pointer to working space).
     if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
 
-    //G4Transform3D startingTransformation = fTransform;
-    G4Transform3D startingTransformation;
+    G4Transform3D startingTransformation = fTransform;
 
     VisitGeometryAndGetVisReps (fpTopPV,
 				fSoughtDepth,
 				startingTransformation,
-				scene);
+				sceneHandler);
 
     // Clear current data and working space (via pointers to working space).
     fCurrentDepth = 0;
@@ -104,7 +112,7 @@ void G4PhysicalVolumeModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
     if (fppCurrentPV)   *fppCurrentPV   = fpCurrentPV;
     if (fppCurrentLV)   *fppCurrentLV   = fpCurrentLV;
 
-    scene.DecommissionSpecials (*this);
+    sceneHandler.DecommissionSpecials (*this);
 
     // Clear pointers to working space.
     fpCurrentDepth = 0;
@@ -142,11 +150,11 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 (G4VPhysicalVolume* pVPV,
  G4int soughtDepth,
  const G4Transform3D& theAT,
- G4VGraphicsScene& scene) {
+ G4VGraphicsScene& sceneHandler) {
 
   // Visits geometry structure to a given depth (soughtDepth), starting
   //   at given physical volume with given starting transformation and
-  //   describes volumes to the scene.
+  //   describes volumes to the scene handler.
   // soughtDepth < 0 (default) implies full visit.
   // theAT is the Accumulated Transformation.
 
@@ -164,7 +172,16 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 
   G4VSolid* pSol;
   G4Material* pMaterial;
-  if (pVPV -> IsReplicated ()) {
+
+  if (!(pVPV -> IsReplicated ())) {
+    // Non-replicated physical volume.
+    pSol = pLV -> GetSolid ();
+    pMaterial = pLV -> GetMaterial ();
+    DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
+			theAT, sceneHandler);
+  }
+  else {
+    // Replicated or parametrised physical volume.
     EAxis axis;
     G4int nReplicas;
     G4double width;
@@ -180,7 +197,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pSol -> ComputeDimensions (pP, n, pVPV);
 	pVPV -> SetCopyNo (n);
 	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
-			    theAT, scene);
+			    theAT, sceneHandler);
       }
     }
     else {  // Plain replicated volume.  From geometry_guide.txt...
@@ -240,14 +257,9 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pSol = pLV -> GetSolid ();
 	pMaterial = pLV -> GetMaterial ();
 	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
-			    theAT, scene);
+			    theAT, sceneHandler);
       }
     }
-  }
-  else {
-    pSol = pLV -> GetSolid ();
-    pMaterial = pLV -> GetMaterial ();
-    DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial, theAT, scene);
   }
 
   return;
@@ -260,12 +272,12 @@ void G4PhysicalVolumeModel::DescribeAndDescend
  G4VSolid* pSol,
  const G4Material* pMaterial,
  const G4Transform3D& theAT,
- G4VGraphicsScene& scene) {
+ G4VGraphicsScene& sceneHandler) {
 
   const HepRotation* pObjectRotation = pVPV -> GetObjectRotation ();
   const Hep3Vector&  translation     = pVPV -> GetTranslation ();
-  G4Transform3D theLT = G4Transform3D (*pObjectRotation, translation);
-  G4Transform3D theNewAT = theAT * theLT;
+  G4Transform3D theLT (G4Transform3D (*pObjectRotation, translation));
+  G4Transform3D theNewAT (theAT * theLT);
 
   /********************************************************
   G4cout << "G4PhysicalVolumeModel::DescribeAndDescend: "
@@ -296,9 +308,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Make decision to Draw.
   G4bool thisToBeDrawn = !IsThisCulled (pLV, pMaterial);
   if (thisToBeDrawn) {
-    scene.PreAddThis (theNewAT, *(pLV -> GetVisAttributes ()));
-    pSol -> DescribeYourselfTo (scene);
-    scene.PostAddThis ();
+    const G4VisAttributes* pVisAttribs = pLV -> GetVisAttributes ();
+    if (!pVisAttribs) pVisAttribs = fpMP -> GetDefaultVisAttributes ();
+    DescribeSolids (theNewAT, pSol, pVisAttribs, sceneHandler);
   }
 
   // First check if mother covers...
@@ -316,11 +328,43 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 	  G4VPhysicalVolume* pVPV = pLV -> GetDaughter (iDaughter);
 	  // Descend the geometry structure recursively...
 	  fCurrentDepth++;
-	  VisitGeometryAndGetVisReps (pVPV, soughtDepth - 1, theNewAT, scene);
+	  VisitGeometryAndGetVisReps
+	    (pVPV, soughtDepth - 1, theNewAT, sceneHandler);
 	  fCurrentDepth--;
 	}
       }
     }
+  }
+}
+
+void G4PhysicalVolumeModel::DescribeSolids
+(const G4Transform3D& theAT,
+ G4VSolid* pSol,
+ const G4VisAttributes* pVisAttribs,
+ G4VGraphicsScene& sceneHandler) {
+  // Look for "constituents".  Could be a Boolean solid.
+  G4VSolid* pBoolSolA = pSol -> GetConstituentSolid (0);
+  if (pBoolSolA) {
+    // Boolean solid - display components...
+    DescribeSolids (theAT, pBoolSolA, pVisAttribs, sceneHandler);
+    G4VSolid* pBoolSolB = pSol -> GetConstituentSolid (1);
+    if (!pBoolSolB) {
+      G4Exception
+	("G4PhysicalVolumeModel::DescribeSolids:"
+	 " 2nd component solid is missing.");
+    }
+    G4Transform3D theBT (theAT);
+    G4DisplacedSolid* pDisSol = pBoolSolB -> GetDisplacedSolidPtr ();
+    if (pDisSol) {
+      theBT = theBT * G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
+				     pDisSol -> GetObjectTranslation ());
+    }
+    DescribeSolids (theBT, pBoolSolB, pVisAttribs, sceneHandler);
+  }
+  else { // Non-boolean solid.
+    sceneHandler.PreAddThis (theAT, *pVisAttribs);
+    pSol -> DescribeYourselfTo (sceneHandler);
+    sceneHandler.PostAddThis ();
   }
 }
 

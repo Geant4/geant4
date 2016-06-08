@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Exception.cc,v 1.4 1999/06/21 09:11:16 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Exception.cc,v 1.8 1999/11/29 10:17:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -20,40 +20,25 @@
 
 #include "G4ios.hh"
 #include <stdlib.h>
+#include "g4rw/cstring.h"
 
 void G4Exception(const char* s)
 {
     if (s)
 	{
-	    G4cerr << s << endl;
+	    G4cerr << s << G4endl;
 	}
 
-   G4cerr << endl << "*** G4Exception: Aborting execution ***" << endl;
+   G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
    abort();
 }
 
-#ifdef G4USE_STL
-#include <string>
-void G4Exception(string s)
+void G4Exception(G4std::string s)
 {
   G4Exception(s.c_str());
 }
-// Other typedefs
-#include <rw/cstring.h>
-typedef RWCString G4String;
 
 void G4Exception(G4String s)
 {
   G4Exception(s.c_str());
 }
-#endif
-
-
-
-
-
-
-
-
-
-

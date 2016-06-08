@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackStack.hh,v 1.1 1999/01/07 16:06:35 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4TrackStack.hh,v 1.2.4.1 1999/12/07 20:47:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -18,6 +18,12 @@
 
 #include "G4StackedTrack.hh"
 #include "globals.hh"
+
+// class description:
+//
+//  This is a stack class used by G4StackManager. This class object
+// stores G4StackedTrack class objects in the form of bi-directional
+// linked list.
 
 class G4TrackStack 
 {
@@ -45,7 +51,7 @@ class G4TrackStack
 
   public:
       inline G4int GetNTrack() const
-      { return n_stackedTrack; };
+      { return n_stackedTrack; }
 };
 
 #endif

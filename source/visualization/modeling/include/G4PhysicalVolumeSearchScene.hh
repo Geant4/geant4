@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.4 1999/05/10 14:04:25 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.5.6.1 1999/12/07 20:54:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  10th August 1998.
@@ -54,6 +54,19 @@ public:
   G4int                GetFoundDepth          () const;
   G4VPhysicalVolume*   GetFoundVolume         () const;
   const G4Transform3D& GetFoundTransformation () const;
+
+  ////////////////////////////////////////////////////////////////
+  // Functions not used by required by the abstract interface.
+
+  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
+  virtual void EndPrimitives () {}
+  virtual void AddPrimitive (const G4Polyline&)   {}
+  virtual void AddPrimitive (const G4Text&)       {}
+  virtual void AddPrimitive (const G4Circle&)     {}
+  virtual void AddPrimitive (const G4Square&)     {}
+  virtual void AddPrimitive (const G4Polymarker&) {}
+  virtual void AddPrimitive (const G4Polyhedron&) {}
+  virtual void AddPrimitive (const G4NURBS&)      {}
 
 private:
   void FindVolume (const G4VSolid&);

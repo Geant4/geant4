@@ -1,18 +1,21 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisExtent.hh,v 1.2 1999/05/25 09:10:15 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VisExtent.hh,v 1.3.2.1 1999/12/07 20:48:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // A.Walkden 28/11/95
-// VisExtent.hh, header file to prototype Extent functions for use in
+
+// Class Description:
+// G4VisExtent is a class to prototype extent functions for use in
 // instantiating Visualisation windows with an appropriate field of
 // view for the object(s) being drawn.
+// Class Description - End:
 
 #ifndef G4VISEXTENT_HH
 #define G4VISEXTENT_HH
@@ -22,7 +25,8 @@
 
 class G4VisExtent
 {
-public:
+public: // With description
+
   G4VisExtent (G4double xmin = 0., G4double xmax = 0., 
                G4double ymin = 0., G4double ymax = 0., 
                G4double zmin = 0., G4double zmax = 0.);

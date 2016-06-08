@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PTrd.cc,v 1.1 1999/01/07 16:10:54 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PTrd.cc,v 1.2 1999/11/17 10:49:03 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // Implementation for G4Trd class
@@ -20,14 +20,13 @@
 #include "G4PTrd.hh"
 #include "G4Trd.hh"
 
-#include "G4AffineTransform.hh"
-
 #include <math.h>
 
 
 // Constructor - check & set half widths
 
-G4PTrd::G4PTrd(const G4Trd* theTrd) : G4PCSGSolid(theTrd->GetName())
+G4PTrd::G4PTrd(const G4Trd* theTrd)
+ : G4PCSGSolid(theTrd->GetName())
 {
     G4double pdx1 = theTrd->GetXHalfLength1();
     G4double pdx2 = theTrd->GetXHalfLength2(); 
@@ -40,7 +39,8 @@ G4PTrd::G4PTrd(const G4Trd* theTrd) : G4PCSGSolid(theTrd->GetName())
 void
 G4PTrd::CheckAndSetAllParameters (G4double pdx1,  G4double pdx2,
 				 G4double pdy1,  G4double pdy2,
-				 G4double pdz) {
+				 G4double pdz)
+{
   if (pdx1>0&&pdx2>0&&pdy1>0&&pdy2>0&&pdz>0)
     {
       fDx1=pdx1; fDx2=pdx2;
@@ -70,12 +70,13 @@ G4PTrd::CheckAndSetAllParameters (G4double pdx1,  G4double pdx2,
 // Destructor
 
 G4PTrd::~G4PTrd()
-{}
+{;}
 
 // -----------------------------------------------------------------------
 
 // make a transient object
-G4VSolid* G4PTrd::MakeTransientObject() const {
+G4VSolid* G4PTrd::MakeTransientObject() const
+{
     G4VSolid* transientObject = new G4Trd(GetName(),
 				       fDx1, fDx2,
 				       fDy1, fDy2,

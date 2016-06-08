@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedString.hh,v 1.2 1999/02/19 13:28:07 hpw Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedString.hh,v 1.3.2.1.2.1 1999/12/07 20:51:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4ExcitedString_h
@@ -29,6 +29,7 @@
 #include "G4LorentzRotation.hh"
 #include "G4Parton.hh"
 #include "G4PartonVector.hh"
+#include "G4KineticTrack.hh"
 
 class G4ExcitedString 
 {
@@ -42,7 +43,8 @@ class G4ExcitedString
 
       G4ExcitedString(G4Parton* Color, G4Parton* Gluon,  G4Parton* AntiColor, G4int Direction=PROJECTILE);
       G4ExcitedString(G4Parton* Color, G4Parton* AntiColor, G4int Direction=PROJECTILE);
-      
+      G4ExcitedString(G4KineticTrack * atrack);
+     
       G4ExcitedString(const G4ExcitedString &right);
 
       ~G4ExcitedString();
@@ -72,12 +74,16 @@ class G4ExcitedString
       G4Parton* GetGluon(void) const;
       G4Parton* GetAntiColorParton(void) const;
       G4Parton* GetGluon(G4int GluonPos) const;
+      
+      G4KineticTrack * GetKineticTrack() const;
 
       G4Parton* GetLeftParton(void) const;
       G4Parton* GetRightParton(void) const;
 
       G4bool    IsItKinkyString(void) const;
       G4int     GetDirection(void) const;
+      
+      G4bool    IsExcited() const;
 
 
   private:
@@ -85,8 +91,7 @@ class G4ExcitedString
       G4int    theDirection;  // must be 1 or -1 (PROJECTILE or TARGET)
       G4ThreeVector thePosition;
       G4PartonVector thePartons;  // would like initial capacity for 3 Partons.
-
-//      G4LorentzVector theMomenta; this member nowhere uses
+      G4KineticTrack* theTrack;
 
 };
 
@@ -143,7 +148,7 @@ void G4ExcitedString::InsertParton(G4Parton *aParton, const G4Parton * addafter)
 	if ( addafter != NULL ) 
 	{
 	   insert_index=thePartons.index(addafter);
-	   if (insert_index == RW_NPOS)		// No object addafter in thePartons
+	   if (insert_index == G4std::string::npos)		// No object addafter in thePartons
 	   {
 	   	G4Exception("G4ExcitedString::InsertParton called with invalid second argument");
 	   }
@@ -189,6 +194,18 @@ inline
 const G4PartonVector * G4ExcitedString::GetPartonList() const
 {
 	return &thePartons;
+}
+
+inline 
+G4KineticTrack * G4ExcitedString::GetKineticTrack() const
+{
+	return theTrack;
+}
+
+inline 
+G4bool G4ExcitedString::IsExcited() const
+{
+	return theTrack == 0;
 }
 
 

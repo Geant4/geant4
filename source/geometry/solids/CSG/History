@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999/05/21 19:32:36 japost Exp $
+$Id: History,v 1.8 1999/11/19 16:22:52 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,33 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 17,   99   J. Apostolakis             geom-solids-csg-01-00-03
+ 
+ - Tagged
+
+Nov 17,   99   V. Grichine
+
+   Added initialisation to Eside "side" variable in DistanceToOut(p,v)
+   in CSG solids.    
+                            --> Problem report from D.C. Williams, BaBaR
+
+   A check in G4Trap Makeplane added.
+
+
+
+Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-02-cand
+
+  - Included  David Williams' modifications to 
+        G4IntersectingCone.cc, G4PolyconeSide.cc and G4VCSGfaceted.cc
+
+     and to  test/SBT/SBT.cc  and  test/SBT/polycone.geant4
+
+
+Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-01
+
+  - Tagged
+
 
 May 18,   99   David Wiliams
   Replaced 1/DBL_MAX with DBL_MIN (valid correction, seen in tests for STL) 

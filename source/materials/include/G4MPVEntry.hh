@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MPVEntry.hh,v 1.1 1999/01/07 16:09:41 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MPVEntry.hh,v 1.3.2.1 1999/11/11 14:30:14 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -19,7 +19,8 @@
 // Version:	1.0
 // Created:	1996-02-08	
 // Author:	Juliet Armstrong
-// Updated:     1997-03-25 by Peter Gumplinger
+// Updated:     1999-10-29 add method and class descriptors
+//              1997-03-25 by Peter Gumplinger
 //		> cosmetics (only)
 // mail:        gum@triumf.ca
 //
@@ -35,20 +36,25 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
+// Class Description:
+// A G4MPVEntry is an MaterialPropertyVector Entry.
+// One Material Property Vector contains many MPVEntries.
+// Class Description - End:
+
 /////////////////////
 // Class Definition
 /////////////////////
 
 class G4MPVEntry {
 
-public:
+public: // Without description
 
 	//////////////
 	// Operators
 	//////////////G4MPVEntry.hh
 		
 	// Well defined semantics for these operators
-	// required by RWTPtrSortedVector
+	// required by G4RWTPtrSortedVector
 
 	G4bool operator <(const G4MPVEntry &right) const;	
 	G4bool operator ==(const G4MPVEntry &right) const;

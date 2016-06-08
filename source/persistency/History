@@ -15,6 +15,100 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 6, 99   Y.Morita (persistency-V00-01-12)
+- Bug fix in G4PGeometryObjectMap.cc
+
+December 5, 99   Y.Morita (persistency-V00-01-11)
+- added G4PPrimaryParticle
+
+December 2, 99   Y.Morita (persistency-V00-01-10)
+- bug fix in G4PHCofThisEvent, G4PHCofThisEvent, G4PersistentEventMan
+
+December 1, 99   Y.Morita (persistency-V00-01-09)
+- fix for HP-aCC, Geant4 NamedSchema
+- added G4TMPDIR to GNUmakefile include path
+
+November 29, 99  Y.Morita (persistency-V00-01-08)
+- bug fix for persistent hits (works with PersistentEx02-V00-01-01)
+
+November 26, 99  Y.Morita
+- Introduced G4TransactionManager for sustained transaction control
+
+November 23, 99  Y.Morita (persistency-V00-01-07)
+- bug fix in G4PersistentEventMan, G4PersistentGeomMan, G4PersistentRunMan
+- use /db commands
+
+November 22, 99  Y.Morita
+- added digits+hits/digits
+- removed dependency of transient hits
+- introduced G4PersistencyMessenger
+
+November 20, 99  Y.Morita
+- Introduced G4PersistentSchema.hh to use Geant4 named schema
+  (requires config-V00-01-12)
+
+November 19, 99  Y.Morita (persistency-V00-01-06)
+- bug fixes in G4PersistentEventMan.cc and G4PersistentRunMan.cc
+
+November 18, 99  Y.Morita
+- Use absolute path in GNUmakefile to include right dependencies for liblist
+- bug fixes in G4PBooleanSolid, G4PersistentEventMan
+
+November 17, 99  Y.Morita
+- Move schema header files from tmp to schema/include (requires new config)
+
+November 16, 99  Y.Morita
+- more fix on circular dependencies:
+  + Moved G4PVSolids and G4PAffineTransform to pgeomGlobal
+  + G4PersistencyManager: Splitted classes into separate objects
+  + Added G4PersistentHitMan
+
+November 12, 99  Y.Morita
+- GNUmakefile fix for dependency files
+- Use d_Varray<d_Ref<>> instead of HepRefVArray()
+
+November 12, 99  Y.Morita (persistency-V00-01-05)
+- Fix for RW->G4RW changes
+- Bug fixes:
+  +Container of PrimaryVertex in G4PEvent
+  +Association of Boolean Solids
+
+November 10, 99  Y.Morita (persistency-V00-01-04)
+- Added Boolean Solid Types
+
+November 9, 99  Y.Morita (persistency-V00-01-03)
+- Bug fix in G4PEvent, G4PHCofThisEvent, G4PVHitsCollection,
+  G4PersistencyManager, G4PersistentEventMan
+- Mod GNUmakefile
+
+November 8, 99  Y.Morita (persistency-V00-01-02)
+- Modified HepVArray/HepRefVArray to d_Varray<>, d_Varray<d_Ref<>>
+- Modified ooRef() to d_Ref<>
+- Some mod G4int to G4Pint
+- G4PEvent: Set associations to G4PPrimaryVertex, G4PHCofThisEvent
+- Created G4PVHitsCollection and G4PHCofThisEvent
+
+November 4, 99  Y.Morita
+- ./GNUmakefile: Added G4phits
+- digits+hits/hits/GNUmakefile:
+   Added G4OODDLX_BOOT
+   Added explicit dependencies of G4PHCofThisEvent.hh: G4PVHitsCollection.hh
+- moved G4PLogicalVolume from persistency/geometry/volumes to
+  persistency/geometry/management to avoid circular dependency
+- G4PersistencyManager: Allow constructor with the name of Boot file
+
+October 27, 99  J.Allison 
+- Created persistency/global/include.
+- Moved management/include/G4PersistentTypes.hh to global/include.
+- Modified GNUmakefiles to add persistency/global/include to -I path.
+
+October 21, 99  Y.Morita (persistency-V00-01-01)
+- One more bug fix in G4PEvent.cc (thePrimaryVertex)
+
+October 8, 99  Y.Morita (persistency-V00-01-00)
+- GNUmakefile changes for G4TMPSCHEMA_BOOT (requires config-V00-01-01)
+- Bug fix in G4PEvent.cc (thePrimaryVertex)
+
 April 29, 99  Y.Morita (persistency-00-04-01)
 - removed overlapping definition of HepRefVArray for G4PVPhysicalVolume
   in G4PGeometryObjectMap.cc

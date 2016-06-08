@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.5 1999/06/16 11:48:10 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.6.6.1 1999/12/07 20:50:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -1350,7 +1350,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add2KPiMode(
 }
 
 
-const G4String G4ExcitedMesonConstructor::name[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] =
+const char* G4ExcitedMesonConstructor::name[G4ExcitedMesonConstructor::NMultiplets ][ G4ExcitedMesonConstructor::NMesonTypes ] =
 {
   { "b1(1235)",   "h1(1170)",   "h1(1380)",      "k1(1270)",      "k1(1270)" },
   { "a0(1450)",   "f0(1370)",           "", "k0_star(1430)", "k0_star(1430)" },

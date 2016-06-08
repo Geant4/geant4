@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.1 1999/01/07 16:07:05 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MagIntegratorDriver.hh,v 1.3.6.1 1999/12/07 20:48:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //  Provides Driver that talks to Integrator Stepper, and insures that 
 //  the error is within acceptable bounds.
@@ -49,7 +49,8 @@ class G4MagInt_Driver
       // Access functions
       // ----------------
       //
-      G4double Hmin(){ return hminimum_val;} 
+      G4double GetHmin(){ return hminimum_val;} 
+      G4double Hmin()   { return hminimum_val;}     // Obsolete
       G4double GetSafety(){ return safety; }
       G4double GetPshrnk(){ return pshrnk;} 
       G4double GetPgrow(){ return pgrow;} 
@@ -121,12 +122,29 @@ class G4MagInt_Driver
       G4double ComputeNewStepSize_WithinLimits( 
 			  G4double  errMaxNorm,    // normalised error
 			  G4double  hstepCurrent); // current step size
-   private:
+
+      G4int    GetMaxNoSteps();
+      void     SetMaxNoSteps( G4int val); 
+
+protected:
+      //  Issue warnings for undesirable situations
+      void WarnSmallStepSize( G4double hnext, G4double hstep, 
+			      G4double h,     G4double xDone,
+			      G4int noSteps);
+      void WarnTooManyStep( G4double x1start, G4double x2end, G4double xCurrent);
+      void WarnEndPointTooFar (G4double  endPointDist, 
+			       G4double  hStepSize , 
+			       G4double  epsilonRelative,
+			       G4int     debugFlag);
+
+private:
       G4double hminimum_val;  //  Minimum Step allowed in a Step
 
       const G4int nvar;
 
       G4MagIntegratorStepper *pIntStepper;
+      G4int   fMaxNoSteps;
+      static const G4int  fMaxStepBase;  
 
       //  Parameters used to grow and shrink trial stepsize
       G4double safety;

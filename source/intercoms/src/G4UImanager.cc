@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.1 1999/01/07 16:09:27 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UImanager.cc,v 1.3.2.1 1999/12/07 20:49:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ---------------------------------------------------------------------
@@ -100,7 +100,7 @@ int parameterNumber, G4bool reGet)
   {
     savedParameters = GetCurrentValues( aCommand );
   }
-  RWCTokenizer savedToken( savedParameters );
+  G4Tokenizer savedToken( savedParameters );
   G4String token;
   for(int i_thParameter=0;i_thParameter<parameterNumber;i_thParameter++)
   {
@@ -211,7 +211,7 @@ int G4UImanager::ApplyCommand(G4String aCommand)
   G4String commandString;
   G4String commandParameter;
   int i = aCommand.index(" ");
-  if( i != RW_NPOS )
+  if( i != G4std::string::npos )
   {
     commandString = aCommand(0,i);
     commandParameter = aCommand(i+1,aCommand.length()-(i+1));
@@ -318,10 +318,8 @@ void G4UImanager::Interact(G4String pC)
 
  void G4UImanager::SetCoutDestination(G4UIsession *const value)
 {
-#ifdef G4STREAM
     G4coutbuf.SetDestination(value);
     G4cerrbuf.SetDestination(value);
-#endif
 }
 
 

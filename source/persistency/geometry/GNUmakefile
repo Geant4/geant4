@@ -5,8 +5,8 @@
 
 # order of SUBDIRS are important for creating header files.
 # don't mess it up!
-SUBDIRS = management solids/CSG volumes
-SUBLIBS = G4pgeomn G4pcsg G4pvol
+SUBDIRS = global solids/CSG solids/Boolean management 
+SUBLIBS = G4pgeomGlobal G4pcsg G4pgeomBoolean G4pgeomn 
 
 ifndef G4INSTALL
   G4INSTALL = ../../..

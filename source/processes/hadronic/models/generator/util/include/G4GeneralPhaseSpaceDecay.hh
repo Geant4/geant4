@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GeneralPhaseSpaceDecay.hh,v 1.1 1999/01/07 16:12:20 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4GeneralPhaseSpaceDecay.hh,v 1.2.4.1 1999/12/07 20:51:58 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //$Id: G4GeneralPhaseSpaceDecay.hh,v 1.1 1997/05/21
 // ----------------------------------------------------------------
@@ -56,7 +56,7 @@ class G4GeneralPhaseSpaceDecay : public G4VDecayChannel
      virtual G4DecayProducts* DecayIt(G4double mass=0.0);   
      static G4double Pmx(G4double e, G4double p1, G4double p2);
 
-  private: 
+  protected:
      G4DecayProducts* OneBodyDecayIt();
      G4DecayProducts* TwoBodyDecayIt();
      G4DecayProducts* ThreeBodyDecayIt();

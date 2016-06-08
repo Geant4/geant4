@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.3 1999/06/29 18:06:54 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.6.2.1 1999/12/07 20:53:18 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -23,14 +23,13 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
-#include <rw/tvhdict.h>
+#include "g4std/map"
 
 class G4OpenGLStored;
 
 class G4OpenGLStoredSceneHandler: public G4OpenGLSceneHandler {
     
 public:
-  typedef unsigned long G4VSolidPointer;
   G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
   virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
@@ -51,16 +50,16 @@ friend class G4OpenGLStoredViewer;
   
   // PODL = Persistent Object Display List.
   GLint           fTopPODL;       // List which calls the other PODLs.
-  RWTValOrderedVector<G4int> fPODLList; 
-  RWTValOrderedVector<G4Transform3D> fPODLTransformList; 
+  G4RWTValOrderedVector<G4int> fPODLList; 
+  G4RWTValOrderedVector<G4Transform3D> fPODLTransformList; 
   
   // TODL = Transient  Object Display List.
-  RWTValOrderedVector<G4int> fTODLList; 
-  RWTValOrderedVector<G4Transform3D> fTODLTransformList; 
+  G4RWTValOrderedVector<G4int> fTODLList; 
+  G4RWTValOrderedVector<G4Transform3D> fTODLTransformList; 
   
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
-  RWTValHashDictionary<G4VSolidPointer, G4int> fSolidDictionary;
+  G4std::map <const G4VSolid*, G4int, less <const G4VSolid*> > fSolidMap;
 };
 
 inline G4int G4OpenGLStoredSceneHandler::GetSceneCount () {

@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.29 1999/07/06 15:19:42 gunter Exp $
+# $Id: binmake.gmk,v 1.39 1999/12/01 14:40:43 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -19,6 +19,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \
+              -I$(G4BASE)/global/HEPNumerics/include \
               -I$(G4BASE)/run/include \
               -I$(G4BASE)/materials/include \
               -I$(G4BASE)/particles/management/include \
@@ -56,6 +57,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/low_energy/include \
               -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
+              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
               -I$(G4BASE)/processes/hadronic/stopping/include \
               -I$(G4BASE)/geometry/management/include \
               -I$(G4BASE)/geometry/solids/CSG/include \
@@ -78,18 +80,16 @@ endif
 
 ifdef G4ODBMS
   INCFLAGS += \
-              -I$(G4BASE)/persistency/management/include \
-              -I$(G4BASE)/persistency/events/include \
+              -I$(G4BASE)/persistency/global/include \
               -I$(G4BASE)/persistency/digits+hits/hits/include \
-              -I$(G4BASE)/persistency/geometry/management/include \
-              -I$(G4BASE)/persistency/geometry/volumes/include \
+              -I$(G4BASE)/persistency/digits+hits/digits/include \
+              -I$(G4BASE)/persistency/events/include \
+              -I$(G4BASE)/persistency/geometry/global/include \
               -I$(G4BASE)/persistency/geometry/solids/CSG/include \
-              -I$(G4TMP)/$(G4SYSTEM)/G4pmanagement \
-              -I$(G4TMP)/$(G4SYSTEM)/G4pevents \
-              -I$(G4TMP)/$(G4SYSTEM)/G4phits \
-              -I$(G4TMP)/$(G4SYSTEM)/G4pgeomn \
-              -I$(G4TMP)/$(G4SYSTEM)/G4pvol \
-              -I$(G4TMP)/$(G4SYSTEM)/G4pcsg \
+              -I$(G4BASE)/persistency/geometry/solids/Boolean/include \
+              -I$(G4BASE)/persistency/geometry/management/include \
+              -I$(G4BASE)/persistency/management/include \
+              -I$(G4SCHEMA_INCLUDE) \
               -I$(OBJY_DIR)/include \
               -I$(HEP_ODBMS_DIR)/include \
               -DHep_HAS_BUILDIN_BOOL_CONSTANTS
@@ -131,11 +131,12 @@ ifdef GLOBALLIBS
   LDLIBS1 += $(VISLIBS) $(UILIBS)
 endif
 
-ifdef G4ODBMS
-  LDLIBS1 += -lG4persistency
-endif
-
 ifdef GLOBALLIBS
+
+  ifdef G4ODBMS
+    LDLIBS1 += -lG4persistency
+  endif
+
   LDLIBS2 := -lG4readout \
              -lG4run \
              -lG4event \
@@ -159,8 +160,10 @@ else
 	$(G4LIB)/$(G4SYSTEM)/liblist \
 	  -d $(G4TMPDIR) \
 	  < $(G4LIB)/$(G4SYSTEM)/libname.map; fi)
+# Warning: do not add to LDLIBS2 with += becuase this causes it to be
+# expanded too soon.  Hence extra libraries must have a different name...
 # Extra libraries to resolve remaining circular dependencies...
-#  LDLIBS2 += 
+#  LDLIBS2EXTRA = 
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
@@ -176,10 +179,10 @@ ifdef G4ODBMS
   LDFLAGS  += -L$(OBJY_DIR)/lib \
               -L$(HEP_ODBMS_DIR)/lib
 
-#  Note: -l$(OBJY_LDLIB) and -lHepODBMS should be placed
-#        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
+#  Note: $(G4ODBMS_LIBS) should be placed
+#        _before_ -l$(CLHEP_LIB)
 
-  LDLIBS4 += -l$(OBJY_LDLIB) -lHepODBMS
+  LDLIBS4 += $(G4ODBMS_LIBS)
 endif
 ifdef G4USE_OSPACE
   LDLIBS4 += $(OSPACELIBS)
@@ -193,7 +196,8 @@ LDLIBS4 += $(LOADLIBS)
 ifdef USER_DEFINED_LDLIBS
   LDLIBS_PREFINAL := $(LDLIBS)
 else
-  LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS3)
+# Again, do not use := or +=.  See note on LDLIBS2 above.
+  LDLIBS_PREFINAL = $(LDLIBS1) $(LDLIBS2) $(LDLIBS2EXTRA) $(LDLIBS3)
 endif
 LDLIBS_PREFINAL += $(LDLIBS4)
 
@@ -210,9 +214,13 @@ sources := $(wildcard $(G4TARGET).cc)
 objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 
-LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last
+LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
 
+ifndef G4ODBMS
 .PHONY: bin clean clean_bin debug
+else
+.PHONY: bin clean clean_bin debug cleandb newboot newfd
+endif
 
 # Make $(G4TARGET) executable.
 bin: $(G4BINDIR)/$(G4TARGET)
@@ -220,14 +228,7 @@ bin: $(G4BINDIR)/$(G4TARGET)
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
 ifndef USER_DEFINED_LDLIBS
   ifndef GLOBALLIBS
-	@echo "WARNING: This assumes you are using granular libraries!"
-	@echo "WARNING: It looked for your global library G4global and,"
-	@echo "         not finding it, assumes you are using granular"
-	@echo "         libraries."
-	@echo "WARNING: If you did not intend this, interrupt now (CTRL-C),"
-	@echo "         and go back and make global libraries, i.e.,"
-	@echo '           cd $$G4INSTALL/source'
-	@echo "           gmake global"
+	@echo "Using granular libraries."
 	@if [ ! \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
 	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
 	  echo "ERROR: No liblist program or library map file."; \
@@ -239,6 +240,8 @@ ifndef USER_DEFINED_LDLIBS
 	  echo "       granular libraries:"; \
 	  echo "         gmake libmap"; \
 	  exit 1; fi
+  else
+	@echo "Using global libraries."
   endif
 endif
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
@@ -273,14 +276,19 @@ else
 endif
 
 # Make the $(G4TARGET).d file and include it.
+ifdef G4SKIP_DEPEND
+$(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
+	@echo Skip dependency file creation for file $< ...
+else
 $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
 	@($(ECHO) $(G4TMPDIR)/exe/\\c ; \
-	g++ -MM $(RWINCGPP) $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
+	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4TMPDIR)/exe/$*.o!& $@!' >$@
 -include $(dependencies)
+endif
 
 clean:
 	@echo Cleaning up ...
@@ -296,3 +304,31 @@ clean_bin:
 	@echo Removing application $(G4TARGET) ...
 	@rm -f ./core
 	@rm -f $(G4BINDIR)/$(G4TARGET)
+
+############################+ targets for G4ODBMS +############################
+ifdef G4ODBMS
+
+cleandb: clean newboot
+
+newboot:
+	@echo Copying schema file to $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_BOOT_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4SCHEMA_DIR)/G4SCHEMA \
+	                            $(G4EXAMPLE_BOOT) $(G4SCHEMA_FDID)
+
+newfd:
+ifndef G4EXAMPLE_FDID
+	@echo G4EXAMPLE_FDID is not defined.  Stop.
+	exit 1
+endif
+	@echo Creating new runtime federated database $(G4EXAMPLE_BOOT) for FDID $(G4EXAMPLE_FDID)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name)
+	@rm -f $(G4EXAMPLE_FD_DIR)/$(name).FDDB
+	@rm -f $(G4EXAMPLE_FD_DIR)/*.$(name).DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
+	                            $(G4EXAMPLE_FD) $(G4EXAMPLE_FDID)
+endif
+############################- targets for G4ODBMS -############################
+

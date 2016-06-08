@@ -16,7 +16,11 @@ void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
    ostrstream ost(the, 100, ios::out);
    ost <<gammaPath<<"z"<<ZR<<".a"<<AR;
    G4String * aName = new G4String(the);
+#ifndef WIN32
    ifstream from(*aName, ios::in);
+#else
+   ifstream from(*aName, ios::in|ios::nocreate);
+#endif
    if(!from) return; // no data found for this isotope
    ifstream theGammaData(*aName, ios::in);
     
@@ -44,7 +48,11 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     hasXsec = false;
     return;
   }
+#ifndef WIN32
   ifstream theData(filename, ios::in);
+#else
+  ifstream theData(filename, ios::in|ios::nocreate);
+#endif
   if(!theData)
   {
     hasAnyData = false;

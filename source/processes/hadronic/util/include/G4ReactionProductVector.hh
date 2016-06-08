@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionProductVector.hh,v 1.1 1999/01/07 16:13:50 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ReactionProductVector.hh,v 1.1.8.1.2.1 1999/12/07 20:52:43 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //	For information related to this code contact:
@@ -23,14 +23,14 @@
 #include "G4ios.hh"
 
 class G4ReactionProduct;
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 // #ifdef STL
 // //in future use STL vector as container of reaction products ...
 // typedef Vector<G4ReactionProduct> G4ReactionProductVector;
 // #elseifdef RWT
 
-typedef RWTPtrOrderedVector<G4ReactionProduct> G4ReactionProductVector;
+typedef G4RWTPtrOrderedVector<G4ReactionProduct> G4ReactionProductVector;
 
 // #endif
 

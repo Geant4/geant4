@@ -6,7 +6,7 @@
 
 //
 // $Id: STEPcomplex.cc,v 1.2 1999/05/21 20:20:50 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include <ctype.h>

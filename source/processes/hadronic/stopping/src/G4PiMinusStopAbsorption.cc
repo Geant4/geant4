@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.3 1999/05/27 09:59:47 pia Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.3.6.1.2.1 1999/12/07 20:52:39 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -26,9 +26,9 @@
 
 
 #include "G4PiMinusStopAbsorption.hh"
-#include <rw/tpordvec.h>
-#include <rw/tvordvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpordvec.h"
+#include "g4rw/tvordvec.h"
+#include "g4rw/cstring.h"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -69,7 +69,7 @@ G4PiMinusStopAbsorption::~G4PiMinusStopAbsorption()
 
 G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 {
-  RWTPtrOrderedVector<G4ParticleDefinition>* defNucleons = _materialAlgo->DefinitionVector();
+  G4RWTPtrOrderedVector<G4ParticleDefinition>* defNucleons = _materialAlgo->DefinitionVector();
 
   G4double newA = _nucleusA;
   G4double newZ = _nucleusZ;
@@ -92,7 +92,7 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
   G4double mass = G4NucleiProperties::GetNuclearMass(newA,newZ);
 
 
-  RWTPtrOrderedVector<G4LorentzVector>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
+  G4RWTPtrOrderedVector<G4LorentzVector>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
 
   if (defNucleons != 0 && p4Nucleons != 0)
     {

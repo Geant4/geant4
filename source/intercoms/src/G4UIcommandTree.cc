@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.cc,v 1.1 1999/01/07 16:09:27 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UIcommandTree.cc,v 1.2.2.1 1999/12/07 20:49:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4UIcommandTree.hh"
@@ -57,7 +57,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
     return;
   }
   int i = remainingPath.first('/');
-  if( i == RW_NPOS )
+  if( i == G4std::string::npos )
   {
     // Find command
     int n_commandEntry = command.entries();
@@ -102,7 +102,7 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
   else
   {
     int i = remainingPath.first('/');
-    if( i == RW_NPOS )
+    if( i == G4std::string::npos )
     {
       // Find command
       int n_commandEntry = command.entries();
@@ -142,12 +142,12 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
 
 G4UIcommand * G4UIcommandTree::FindPath(G4String commandPath)
 {
-  if( commandPath.index( pathName ) == RW_NPOS )
+  if( commandPath.index( pathName ) == G4std::string::npos )
   { return NULL; }
   G4String remainingPath = commandPath;
   remainingPath.remove(0,pathName.length());
   int i = remainingPath.first('/');
-  if( i == RW_NPOS )
+  if( i == G4std::string::npos )
   {
     // Find command
     int n_commandEntry = command.entries();

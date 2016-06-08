@@ -1,19 +1,20 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: SystemOfUnits.h,v 1.1 1999/01/07 16:09:04 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
-//
-// -*- C++ -*-
+// $Id: SystemOfUnits.h,v 1.4 1999/11/19 09:19:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 // 
 // ----------------------------------------------------------------------
+//
+// Class description:
+//
 // HEP coherent system of Units
 //
-// This file has been provided by Geant4 (simulation toolkit for HEP).
+// This file has been provided to CLHEP by Geant4 (simulation toolkit for HEP).
 //
 // The basic units are :
 //  		millimeter              (millimeter)
@@ -36,6 +37,7 @@
 // The others physical constants are defined in the header file :
 //			PhysicalConstants.h
 //
+
 // Authors: M.Maire, S.Giani
 //
 // History:

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleMomentum.hh,v 1.2 1999/02/06 10:10:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ParticleMomentum.hh,v 1.3.4.1 1999/12/07 20:49:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -18,11 +18,13 @@
 //	2nd December 1995, G.Cosmo
 // ------------------------------------------------------------
 //
+// Class Description
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //  G4ParticleMomentum is "momentum direction" not "momentum vector"
 //  The name is miss-leading so you should not use G4ParticleMomentum
 //  and you are recommended to use G4ThreeVector instead
 //  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
 
 #ifndef G4ParticleMomentum_h
 #define G4ParticleMomentum_h 1

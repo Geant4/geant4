@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronElasticProcess.hh,v 1.1 1999/01/07 16:13:33 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4HadronElasticProcess.hh,v 1.1.8.1.2.1 1999/12/07 20:52:28 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // G4 Hadron Elastic Scattering Process -- header file
@@ -103,7 +103,7 @@ private:
 // Note: DEC compiler won't accept "const G4ParticleDefinition" here
 // because it instantiates the ClearAndDestroy method that deletes the 
 // pointers in the dictionary.
-  //   RWTPtrHashDictionary<G4ParticleDefinition, G4PhysicsTable> 
+  //   G4RWTPtrHashDictionary<G4ParticleDefinition, G4PhysicsTable> 
   //     thePhysicsDictionary;
 
   //   G4HadronCrossSections theCrossSectionData;

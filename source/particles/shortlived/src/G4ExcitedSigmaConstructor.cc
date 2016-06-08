@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.2 1999/06/08 07:33:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.3.6.1 1999/12/07 20:50:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -549,7 +549,7 @@ G4DecayTable*  G4ExcitedSigmaConstructor::AddLambdaStarPiMode(
   return decayTable;
 }
 
-const G4String G4ExcitedSigmaConstructor::name[] = {
+const char* G4ExcitedSigmaConstructor::name[] = {
   "sigma(1385)","sigma(1660)","sigma(1670)","sigma(1750)","sigma(1775)",
   "sigma(1915)","sigma(1940)","sigma(2030)"
 };

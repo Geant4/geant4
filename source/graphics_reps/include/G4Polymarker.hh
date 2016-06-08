@@ -1,15 +1,20 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.hh,v 1.3 1999/05/25 09:10:10 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Polymarker.hh,v 1.4.2.1 1999/12/07 20:48:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  November 1996
+
+// Class Description:
+// A set of markers.
+// Class Description - End:
+
 
 #ifndef G4POLYMARKER_HH
 #define G4POLYMARKER_HH
@@ -18,7 +23,9 @@
 #include "G4Point3DList.hh"
 
 class G4Polymarker: public G4VMarker, public G4Point3DList {
-public:
+
+public: // With description
+
   friend ostream& operator << (ostream& os, const G4Polymarker& marker);
   enum MarkerType {line, dots, circles, squares};
   G4Polymarker ();

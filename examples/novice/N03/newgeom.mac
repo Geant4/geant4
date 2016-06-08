@@ -22,7 +22,7 @@
 #
 /calor/setField 5 tesla
 #
-/vis~/clear/scene
-/vis~/clear/view
-/vis~/draw/current
+/vis/clear/scene
+/vis/clear/view
+/vis/draw/current
 

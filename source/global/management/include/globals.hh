@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.8 1999/05/25 03:44:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: globals.hh,v 1.11 1999/11/23 15:00:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // Global Constants and typedefs
@@ -45,8 +45,8 @@
 #endif
 
 #ifdef G4USE_STL
-#include <algorithm>
-#define CLHEP_MAX_MIN_DEFINED
+  #include "g4std/algorithm"
+  #define CLHEP_MAX_MIN_DEFINED
 #endif
 // min, max, abs and sqr are in TemplateFunctions.h.
 // Includes also CLHEP.h with typedef for numeric types and
@@ -56,16 +56,15 @@
 // Include base types
 #include "G4Types.hh"
 
-// Other typedefs
-#include <rw/cstring.h>
-typedef RWCString G4String;
+// Get definition of G4String
+#include "g4rw/cstring.h"
 
 // Includes some additional definitions
 #include "templates.hh"
 
 // cbrt() function - define G4_NO_CBRT if the function is not available
 #ifdef G4_NO_CBRT
-static double cbrt(double x) { return pow(x,1./3.); }
+  static double cbrt(double x) { return pow(x,1./3.); }
 #endif
 
 // System of Units and Physical Constants
@@ -75,9 +74,9 @@ static double cbrt(double x) { return pow(x,1./3.); }
 // Global error function
 void G4Exception(const char* s=0);
 #ifdef G4USE_STL
-#include <string>
-void G4Exception(string s);
-void G4Exception(G4String s);
+  void G4Exception(G4std::string s);
+  void G4Exception(G4String s);
 #endif
+
 #endif /* GLOBALS_HH */
 

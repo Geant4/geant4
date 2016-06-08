@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.20 1999/07/06 13:20:25 aforti Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LowEnergyIonisation.cc,v 1.25.2.1 1999/12/07 20:50:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // -------------------------------------------------------------
@@ -14,18 +14,20 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: based on object model of
+//      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
-//      ---------- G4LowEnergyIonisation physics process -----------
-//                by Laszlo Urban, 20 March 1997 
+//      ------------ G4LowEnergyIonisation physics process --------
+//                   by Michel Maire, April 1996
+//      ---------- G4LowEnergyIonisation low energy modifications -----------
+//                by Alessandra Forti May 1999  
 // **************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.
-// It calculates the ionisation of e+/e-.
-// **************************************************************
-//
-// 07-04-98: remove 'tracking cut' of the ionizing particle, MMa 
-// 04-09-98: new methods SetBining() PrintInfo()
-// 07-09-98: Cleanup
+// Added Livermore data table construction methods A. Forti
+// Modified BuildMeanFreePath to read new data tables A. Forti
+// Added EnergySampling method A. Forti
+// Modified PostStepDoIt to insert sampling with EEDL data A. Forti
+// Added SelectRandomAtom A. Forti
+// Added map of the elements A. Forti
+//                                                                 
 // --------------------------------------------------------------
  
 // This Class Header
@@ -35,8 +37,9 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Gamma.hh"
 #include "G4UnitsTable.hh"
+#include <fstream.h>
 
-typedef RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 
 // constructor and destructor
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
@@ -45,7 +48,7 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
      theBindingEnergyTable(0),
      theFluorTransitionTable(0),
      theSamplingCoeffTable(0),
-     LowestKineticEnergy(250.*eV),
+     LowestKineticEnergy(10.*eV),
      HighestKineticEnergy(100.*GeV),
      CutForLowEnergySecondaryPhotons(0.),
      CutForLowEnergySecondaryElectrons(0.),
@@ -91,7 +94,6 @@ G4LowEnergyIonisation::~G4LowEnergyIonisation()
     ZNumVecFluor->clear();
     delete ZNumVecFluor;
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -114,14 +116,14 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
 
   if(&aParticleType==G4Electron::Electron())
   {
-    RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable ;
-    CounterOfElectronProcess++;
-  }
-  else
-  {
+   RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable ;
+   CounterOfElectronProcess++;
+   }
+   else
+   {
     RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable ;
     CounterOfPositronProcess++;
-  }
+   }
  
   BuildDEDXTable(aParticleType);
   
@@ -135,51 +137,55 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
   
   BuildSamplingCoeffTable();
 
+  PrintInfoDefinition();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+// METHOD BELOW  FROM STANDARD E_M PROCESSES CODELEFT BUT AT THE MOMENT NOT USED
+void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType) {
 
-void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
-{
-// Build tables for the ionization energy loss
-//  the tables are built for *MATERIALS*
-
-    const G4double twoln10 = 2.*log(10.);
-    const G4double Factor = twopi_mc2_rcl2;
-
-    G4double LowEdgeEnergy, ionloss;
     
-    // material properties
-    G4double ElectronDensity,Eexc,Eexcm2,Cden,Mden,Aden,X0den,X1den ;
-    // some local variables
-    G4double tau,Tmax,gamma,gamma2,bg2,beta2,d,d2,d3,d4,delta,x,y ;
-
-    ParticleMass = aParticleType.GetPDGMass();
-    G4double* ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
-
-    //  create table
-    
-    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    G4int numOfMaterials = theMaterialTable->length();
-
-     if (theLossTable) { theLossTable->clearAndDestroy();
-                         delete theLossTable;
-                       }
-                       
-    theLossTable = new G4PhysicsTable(numOfMaterials);
-
-//  loop for materials
-
-    for (G4int J=0; J<numOfMaterials; J++)
-    {
-      // create physics vector and fill it
-
-      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-                    LowestKineticEnergy, HighestKineticEnergy, TotBin);
+  // Build tables for the ionization energy loss
+  //  the tables are built for *MATERIALS*
   
-      // get material parameters needed for the energy loss calculation   
-      const G4Material* material= (*theMaterialTable)[J];
+  const G4double twoln10 = 2.*log(10.);
+  const G4double Factor = twopi_mc2_rcl2;
+  
+  G4double LowEdgeEnergy, ionloss;
+  
+  // material properties
+  G4double ElectronDensity,Eexc,Eexcm2,Cden,Mden,Aden,X0den,X1den ;
+  // some local variables
+  G4double tau,Tmax,gamma,gamma2,bg2,beta2,d,d2,d3,d4,delta,x,y ;
 
+  ParticleMass = aParticleType.GetPDGMass();
+  G4double* ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
+  
+  //  create table
+  
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numOfMaterials = theMaterialTable->length();
+  
+  if (theLossTable) { theLossTable->clearAndDestroy();
+  delete theLossTable;
+  }
+  
+  theLossTable = new G4PhysicsTable(numOfMaterials);
+  
+  //  loop for materials
+  
+  for (G4int J=0; J<numOfMaterials; J++){
+    
+      // create physics vector and fill it
+      
+      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(LowestKineticEnergy,
+							   HighestKineticEnergy,
+							   TotBin);
+      
+      // get material parameters needed for the energy loss calculation
+      const G4Material* material= (*theMaterialTable)[J];
+      
       ElectronDensity = material->GetElectronDensity();
       Eexc   = material->GetIonisation()->GetMeanExcitationEnergy();
       Eexc  /= ParticleMass; Eexcm2 = Eexc*Eexc;
@@ -188,23 +194,22 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
       Aden   = material->GetIonisation()->GetAdensity();
       X0den  = material->GetIonisation()->GetX0density();
       X1den  = material->GetIonisation()->GetX1density();
-
       // now comes the loop for the kinetic energy values
-
+      
       for (G4int i = 0 ; i < TotBin ; i++)
          {
-          LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;      
+          LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
           tau = LowEdgeEnergy/ParticleMass ;
 
-          // Seltzer-Berger formula 
-          gamma = tau + 1.; gamma2 = gamma*gamma; 
+          // Seltzer-Berger formula
+          gamma = tau + 1.; gamma2 = gamma*gamma;
           bg2 = tau*(tau+2.);
           beta2 = bg2/gamma2;
 
           // electron
           if (&aParticleType==G4Electron::Electron())
             {
-              Tmax = LowEdgeEnergy/2.;  
+              Tmax = LowEdgeEnergy/2.;
               d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               ionloss = log(2.*(tau+2.)/Eexcm2)-1.-beta2
                        + log((tau-d)*d)+tau/(tau-d)
@@ -212,35 +217,37 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
             }
           else        //positron
             {
-              Tmax = LowEdgeEnergy ;  
+              Tmax = LowEdgeEnergy ;
               d = min(ParticleCutInKineticEnergy[J], Tmax)/ParticleMass;
               d2=d*d/2.; d3=d*d*d/3.; d4=d*d*d*d/4.;
               y=1./(1.+gamma);
               ionloss = log(2.*(tau+2.)/Eexcm2)+log(tau*d)
                        - beta2*(tau+2.*d-y*(3.*d2+y*(d-d3+y*(d2-tau*d3+d4))))/tau;
-            } 
+            }
 
           //density correction
           x = log(bg2)/twoln10;
           if (x < X0den) delta = 0.;
           else { delta = twoln10*x - Cden;
                  if (x < X1den) delta += Aden*pow((X1den-x),Mden);
-               } 
+               }
 
           //now you can compute the total ionization loss
           ionloss -= delta ;
           ionloss *= Factor*ElectronDensity/beta2 ;
           if (ionloss <= 0.) ionloss = 0.;
-   
+
           aVector->PutValue(i,ionloss) ;
-         }          
+         }
 
       theLossTable->insert(aVector);
     }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+// CONSTRUCT THE CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC USING EEDL DATA
 void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
 
    if (allAtomShellCrossSec) {
@@ -261,6 +268,7 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
    
    }//end for on atoms
 }
+// CONSTRUCT THE CROSS SECTION TABLE FOR ALL THE ELEMENTS
 void G4LowEnergyIonisation::BuildBindingEnergyTable(){
 
   if (theBindingEnergyTable) {
@@ -273,7 +281,8 @@ void G4LowEnergyIonisation::BuildBindingEnergyTable(){
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// CONSTRUCT THE TABLE FOR THE ELEMENTS MAPPED IN ZNUMVECFLUOR DIFFERENT 
+// FROM ZNUMVEC BECAUSE THERE IS NO FLUORESCENCE FOR THE FIRST 5 ELEMENTS. 
 void G4LowEnergyIonisation::BuildFluorTransitionTable(){
 
   if (theFluorTransitionTable) {
@@ -300,7 +309,7 @@ void G4LowEnergyIonisation::BuildFluorTransitionTable(){
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+// BUILD THE TABLE OF COEFFICIENT FOR THE ELEMENTS MAPPED IN ZNUMVEC
 void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
 
   if (theSamplingCoeffTable) {
@@ -310,11 +319,11 @@ void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
   
   theSamplingCoeffTable = new allAtomTable();
   
-  G4int dataNum = 12;
+  G4int dataNum = 17;
 
   for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
-    oneAtomTable* oneAtomShellSc = util.BuildSecondLevelTables(AtomInd, dataNum, "ioni/ion-co-");
+    oneAtomTable* oneAtomShellSc = util.BuildSecondLevelTables(AtomInd, dataNum, "ioni/io-co-");
     
     theSamplingCoeffTable->insert(oneAtomShellSc);
 
@@ -323,7 +332,9 @@ void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//
+// vector mapping the elements of the material table 
+// 
 void G4LowEnergyIonisation::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
@@ -361,7 +372,10 @@ void G4LowEnergyIonisation::BuildZVec(){
 G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 						    const G4double IncEnergy){
   // calculates the microscopic cross section from subshell cross sections
-  //(it is called for elements , AtomicNumber = Z )
+  //(it is called for elements , AtomicNumber = Z ) all the subshell
+  // cross section are computed at the energy IncEnergy with a log-log 
+  // interpolation as reported by stepanek and then summed to get the 
+  // total cross section 
  
   G4double TotalCrossSection(0.);
 
@@ -396,54 +410,67 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
 G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData,   
 							const G4Step&  stepData){
 
+  // Fluorescence (as reported by stepanek):
+  // J. Stepanek " A program to determine the radiation spectra due to a single atomic 
+  // subshell ionisation by a particle or due to deexcitation or decay of radionuclides", 
+  // Comp. Phys. Comm. 1206 pp 1-19 (1997)
+  // 
+
   aParticleChange.Initialize(trackData);
   
   G4Material*               aMaterial = trackData.GetMaterial() ;
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle() ;
 
-  // select randomly one element constituing the material.
-  G4Element* anElement = SelectRandomAtom(aParticle, aMaterial);
-  G4int AtomIndex = (G4int) anElement->GetZ();
+  //  get kinetic energy cut for the electron
+  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy() ;
+  G4double  DeltaThreshold = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
+ 
   G4double KineticEnergy = aParticle->GetKineticEnergy();
 
-  if(KineticEnergy <= LowestKineticEnergy){
-    
+  // kill e- if Tkin is too small ......
+  if(KineticEnergy <= 2.*DeltaThreshold)
+  { 
     aParticleChange.SetStatusChange(fStopAndKill);
     aParticleChange.SetEnergyChange(0.);
-    aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
     
+ if(KineticEnergy < 0.)
+   G4cout << " 1. negative deposit:" << KineticEnergy/eV << endl; 
+    aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
+
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
   }
 
+  // select randomly one element constituing the material.
+  G4Element* anElement = SelectRandomAtom(aParticle, aMaterial);
+  G4int AtomIndex = (G4int) anElement->GetZ();
 
-  // Select the subshell WARNING!!!!
+  // First Ionised subshell chosen basing on subshell integrated cross section EPDL97
+  // partial sum method
+  // Select the subshell WARNING!!!!: it returns the subshell index in the table.
   G4int subShellIndex = SelectRandomShell(AtomIndex, KineticEnergy);
 
+  //mv ionsubShellIndex = 20; // WARNING: REMEMBER TO REMOVE THIS CONSTRAIN
   G4FirstLevel* theBindEnVec = (*theBindingEnergyTable)[AtomIndex-1];
   G4int thePrimaryShell = (G4int) (*(*theBindEnVec)[0])[subShellIndex];
   G4double BindingEn = (*(*theBindEnVec)[1])[subShellIndex];
   G4double theEnergyDeposit = BindingEn; 
 
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
-  ParticleMass = aParticle->GetDefinition()->GetPDGMass();
+  if(KineticEnergy <= BindingEn)
+  {
+    G4cout << " Tkin=" << KineticEnergy/eV << "  Ebind=" << BindingEn/eV
+           << "   selection of subshell ???????" << endl;
+    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+  }
 
-  G4double Psquare = KineticEnergy*(KineticEnergy+2*ParticleMass);
-  G4double TotalMomentum = sqrt(Psquare);
   G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
-  //  get kinetic energy cut for the electron
-  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy() ;
-  G4double  DeltaThreshold = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
- 
   // some kinematics
-  G4double MaxKineticEnergyTransfer;
 
-  if (charge < 0.) MaxKineticEnergyTransfer = 0.5*(KineticEnergy);
-  else             MaxKineticEnergyTransfer =     KineticEnergy;
+  G4double MaxKineticEnergyTransfer = 0.5*KineticEnergy;
 
   // sampling kinetic energy of the delta ray 
-  if (MaxKineticEnergyTransfer <= 0 || MaxKineticEnergyTransfer <= LowestKineticEnergy/2){
+  if (MaxKineticEnergyTransfer <= LowestKineticEnergy/2){
 
     // pathological case (should not happen, there is no change at all)
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -451,26 +478,46 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
   // **** normal case ****
 
-  //Energy Sampling
+  // Energy Sampling
   G4double DeltaKineticEnergy = EnergySampling(AtomIndex, subShellIndex, KineticEnergy);
+  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy - BindingEn;
 
-  // protection :do not produce a secondary with 0. kinetic energy !
-  if (DeltaKineticEnergy <= 0.){
+  if(finalKineticEnergy < 0.){
 
-    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-  } 
+    G4cout << "Tkin=" << KineticEnergy/eV << "  Tdel=" << DeltaKineticEnergy/eV
+	   << "  BindingEn=" << BindingEn/eV << "  ***********" << endl;
+  }
 
+  // deposit energy if delta energy is below cut
   if(DeltaKineticEnergy <= DeltaThreshold){
 
-    aParticleChange.SetNumberOfSecondaries(0);
-    aParticleChange.SetEnergyChange(KineticEnergy - DeltaKineticEnergy - BindingEn);
-    aParticleChange.SetLocalEnergyDeposit(DeltaKineticEnergy+BindingEn);
-    
+    if(finalKineticEnergy > 2.*DeltaThreshold){
+
+      aParticleChange.SetEnergyChange(KineticEnergy - DeltaKineticEnergy - BindingEn);
+
+      if((DeltaKineticEnergy+BindingEn) < 0.){
+
+	G4cout << " 2. negative deposit:" << (DeltaKineticEnergy+BindingEn)/eV << endl; 
+      }
+
+      aParticleChange.SetLocalEnergyDeposit(DeltaKineticEnergy+BindingEn);
+    }
+    else{
+      
+      aParticleChange.SetStatusChange(fStopAndKill);
+      aParticleChange.SetEnergyChange(0.);
+
+      if(KineticEnergy < 0.){
+
+	G4cout << " 3. negative deposit:" << KineticEnergy/eV << endl; 
+      }
+
+      aParticleChange.SetLocalEnergyDeposit(KineticEnergy);
+  
+    }
+
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   } 
-
-  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
-  //  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy - BindingEn;
     
   if(thePrimShVec.length() != 0){
     
@@ -480,53 +527,49 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   thePrimShVec.insert(thePrimaryShell);
   
   // delta ray kinematics
-  G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
-							   2. * electron_mass_c2 ));
-  
-  if(finalKineticEnergy > 0.){
-    
-    G4double finalMomentum=sqrt(finalKineticEnergy*
-				(finalKineticEnergy+2.*ParticleMass));
-    
-    G4double costheta = (Psquare-(finalMomentum*finalMomentum)+
-			 (DeltaTotalMomentum*DeltaTotalMomentum))/(2*DeltaTotalMomentum*TotalMomentum); 
- 
-    G4double costhetasc = (Psquare+(finalMomentum*finalMomentum)-
-			   (DeltaTotalMomentum*DeltaTotalMomentum))/(2*finalMomentum*TotalMomentum); 
+  // step 1. costheta from assumption : atomic e- free and at rest 
+
+    G4double costheta = sqrt(DeltaKineticEnergy*(KineticEnergy+2.*electron_mass_c2)/
+                             KineticEnergy*(DeltaKineticEnergy+2.*electron_mass_c2));
 
     if (costheta < -1.) costheta = -1.;
     if (costheta > +1.) costheta = +1.;
     
-    //  direction of the delta electron
     G4double phi = twopi * G4UniformRand(); 
     G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
     
-    G4double dirx = sintheta * cos(phi), diry = sintheta * sin(phi), dirz = costheta;
-    
+   // step 2. correction of the delta momentum direction 
+    G4double dirx,diry,dirz ;
+    static G4double cmom=2. ;
+
+    G4double peinit=sqrt(2.*cmom*electron_mass_c2*BindingEn) ;
+    G4double pdelta=sqrt(DeltaKineticEnergy*(DeltaKineticEnergy+2.*electron_mass_c2)) ;
+    G4double ct=-1.*2.*G4UniformRand() ;
+    if(ct > 1.) ct=1. ;
+    if(ct <-1.) ct=-1. ;
+    G4double st=sqrt(1.-ct*ct) ;
+    G4double ph = twopi * G4UniformRand();
+    dirx=pdelta*sintheta*cos(phi)+peinit*st*cos(ph) ;
+    diry=pdelta*sintheta*sin(phi)+peinit*st*sin(ph) ;
+    dirz=pdelta*costheta+peinit*ct ;
+    G4double mom=sqrt(dirx*dirx+diry*diry+dirz*dirz) ;
+    if(mom > 0.)
+    {
+     dirx=dirx/mom ;
+     diry=diry/mom ;
+     dirz=dirz/mom ;
+    }
+    else
+    {
+     dirx = sintheta * cos(phi), diry = sintheta * sin(phi), dirz = costheta;
+    }
+
     G4ThreeVector DeltaDirection(dirx,diry,dirz);
     DeltaDirection.rotateUz(ParticleDirection);
     
-    // finalKineticEnergy and finalMomentum defined above 
-    // because needed for costheta computation  
-    
-    G4double finalPx = (TotalMomentum*ParticleDirection.x()
-			- DeltaTotalMomentum*DeltaDirection.x())/finalMomentum; 
-
-    G4double finalPy = (TotalMomentum*ParticleDirection.y()
-			- DeltaTotalMomentum*DeltaDirection.y())/finalMomentum; 
-
-    G4double finalPz = (TotalMomentum*ParticleDirection.z()
-			- DeltaTotalMomentum*DeltaDirection.z())/finalMomentum; 
-    
-    G4double momtot = sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
-    
-
-
-    if(momtot-1. > 1e-6){
-      
-      finalPx /= momtot; finalPy /= momtot; finalPz /= momtot;
-
-    }
+    G4double finalPx=ParticleDirection.x() ;
+    G4double finalPy=ParticleDirection.y() ;
+    G4double finalPz=ParticleDirection.z() ;
     
     // Create lists of pointers to DynamicParticles (photons and electrons) 
     G4ParticleVector photvec;
@@ -551,7 +594,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     // transition probability), k = previous vectors.
     
     // Fluorescence data start from element 6
-    
+
     if(AtomIndex > 5){
       
       G4bool ThereAreShells = TRUE;
@@ -655,31 +698,36 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       theEnergyDeposit = 0;
     }
     
-    aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
-    aParticleChange.SetEnergyChange(finalKineticEnergy);
-    aParticleChange.SetLocalEnergyDeposit (0.);
-    aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
-  }
-    
-  else{
-    
-    finalKineticEnergy = 0.;
-    
-    if (charge < 0.) aParticleChange.SetStatusChange(fStopAndKill);
-    else             aParticleChange.SetStatusChange(fStopButAlive);
-  }
+    if(finalKineticEnergy > 2.*DeltaThreshold)
+    {
+      aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
+      aParticleChange.SetEnergyChange(finalKineticEnergy);
+ if(theEnergyDeposit < 0.)
+   G4cout << " 4. negative deposit:" << theEnergyDeposit/eV << endl; 
+      aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
+    }
+    else
+    {
+      theEnergyDeposit += finalKineticEnergy ;
+ if(theEnergyDeposit < 0.)
+ {
+   G4cout << " 5. negative deposit:" << theEnergyDeposit/eV << endl; 
+   G4cout << " finalKineticEnergy=" << finalKineticEnergy/eV << endl;
+ }
+
+      aParticleChange.SetLocalEnergyDeposit (theEnergyDeposit);
+      aParticleChange.SetEnergyChange(0.);
+      aParticleChange.SetStatusChange(fStopAndKill);
+    }
     
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LowEnergyIonisation::Print()
-{
-}         
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//
+// selection of the first ionized subshell: partial sum method
+// 
 G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex, const G4double IncEnergy){
   
   G4double partialSum = 0;
@@ -714,7 +762,9 @@ G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex, const G4do
   return 0;
 }
 
-
+//
+// Element selction in the material already in the standard processes
+// 
 G4Element*
 G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticle, 
 					G4Material* aMaterial){
@@ -728,8 +778,6 @@ G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticl
   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
 
   G4double PartialSumSigma = 0. ;
-
-  // G4int materialIndex = aMaterial->GetIndex();
 
   G4double rval = G4UniformRand()/MeanFreePath;
  
@@ -756,15 +804,20 @@ G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticl
   return (*theElementVector)(0);
 }
 
+//
+// Select a random transition with the transition probabilities and the partial sum 
+// method using EADL data (A. Forti)
+//
+
 G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell, 
 						     G4double* TransParam,
 						     const oneAtomTable* TransitionTable){
   
   G4int SubShellCol = 0, ProbCol = 1, EnergyCol = 2;
+  // transitionTable contains all the transition probabilities of one atom:
+  // loop on subshell is inside the method.
 
-  //transitionTable means  for one atom not for one shell
-
-  // too check when the subshell are finished
+  // when the last subshell is reached CollIsFull becomes FALSE.
   G4bool ColIsFull = TRUE;
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
@@ -779,8 +832,11 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
       
       ShellNum++;
     }
-    
-    //TransProb start from 1 because the first element of the list is the primary shall id number
+
+    // TransProb is the index of the loop and of the table of transition. it starts from 1 
+    // because the first element of the data table is the primary shell id number and not a 
+    // transition probability: it must not be added to TotalSum. 
+  
     G4int TransProb = 1;
     for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
       
@@ -819,6 +875,21 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 					       const G4int ShellIndex, 
 					       const G4double KinEn){
 
+  // Sampling Method: acceptation - rejection method from
+  // EGS4 W.R. Nelson et al. The EGS4 Code System. SLAC-Report-265 , December 1985 
+  // Fit functions:
+  //
+  // first function: sum_i A_i/(en+bind)^i  i=2,7 used in all the cases/subshells (see below)
+  //
+  // second function: B_1*(en)**B_2 used in 9 cases/subshells (no references)
+  //
+  // third function: sum_i C_i/(en+bind)^i i=2,5 used in 462 cases/subshells (see below)
+  //
+  // Y.-K.Kim M.E.Rudd http://physics.nist.gov/PhysRefData/Ionization/intro.html
+  // First and Third functions are a modified version: degree of monomial in the 
+  // truncated sum is from 2 to 7 instead that from 2 to 6. 
+  // method A. Forti.
+
   //  1) Load Coefficients (I need Z number and the index of the shell)
   oneAtomTable* oneAtomCoeffTable = (*theSamplingCoeffTable)[ZNumVec->index(AtomicNumber)];
 
@@ -832,7 +903,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   const G4int LastPar = energyVec->length()-1;
   G4Data Parms;
 
-  for(G4int ind = 1; ind < CoeffNumber-1; ind++){
+  for(G4int ind = 1; ind < CoeffNumber-2; ind++){
 
     const G4Data* oneCoeffVec = (*oneShellCoeffTable)[ind]; 
 
@@ -847,13 +918,21 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 
     else{
 
+      // NO REFERENCES for SEMI-LOG interpolation it is used because coefficients
+      // can be negative. 
+
       G4double par = util.DataSemiLogInterpolation(KinEn,(*energyVec),(*oneCoeffVec));
       Parms.insert(par);
     }
   }
 
-  // cut in energy is always the same
-  Parms.insert((*(*oneShellCoeffTable)[CoeffNumber-1])[0]);
+  // cuts in energy are always the same
+
+  // First cut
+  G4double fstCut = (*(*oneShellCoeffTable)[CoeffNumber-2])[0] == 0. ? DBL_MAX : (*(*oneShellCoeffTable)[CoeffNumber-2])[0]*MeV;
+
+  // Second cut
+  G4double sndCut = (*(*oneShellCoeffTable)[CoeffNumber-1])[0] == 0. ? DBL_MAX : (*(*oneShellCoeffTable)[CoeffNumber-1])[0]*MeV;
 
   // 2') order of parameters:
   //     * Parms[0] = par1 LET
@@ -862,121 +941,221 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   //     * Parms[3] = par4 LET
   //     * Parms[4] = par5 LET
   //     * Parms[5] = par6 LET
-  //     * Parms[6] = par1 HET
-  //     * Parms[7] = max rejection function: g(x)
-  //     * Parms[8] = area1
-  //     * Parms[9] = area2
-  //     * Parms[10] = cut in energy
+  //     * Parms[6] = max rej 1
+  //     * Parms[7] = b1 HET      
+  //     * Parms[8] = b2 HET
+  //     * Parms[9] = b3 HET
+  //     * Parms[10] = b4 HET
+  //     * Parms[11] = max rej 2
+  //     * Parms[12] = c1 MET
+  //     * Parms[13] = c2 MET
 
   // 3) Compute partial areas (with functions here the cut is used)
+  // **************************************************************
+  // Sampling energy limits and areas variable declaration
+  static const G4double minEn = 0.1*eV;
+  G4double maxEn = (KinEn-BindingEn)/2;
+  G4double area1 = 0.,  area2 = 0., area3 = 0.;
 
-  // minimum energy that can take an ejected electron
-  const G4double minEn = 0.1*eV;
+  // **************************************************************
+  // AREAS
+  // **************************************************************
+  // compute here the weights of the two regions (areas)
+  // temporary solution, but needed for consistent sampling
+  
+  // NOTATION the number order of the functions follows the energy increasing order
+  // even if what is called second function should be the third following the number 
+  // of cases in which it appears (only 9)
 
-  const G4double argmax = 1/(BindingEn+Parms[10]);
-  const G4double argmin = 1/(minEn+BindingEn);
-  const G4double area1 = Parms[8];
-  //Parms[0]*log(argmin/argmax)+Parms[1]*(argmin-argmax)+
-  //2*Parms[2]*(pow(argmin,2)-pow(argmax,2))+3*Parms[3]*(pow(argmin,3)-pow(argmax,3))+
-  //4*Parms[4]*(pow(argmin,4)-pow(argmax,4))+5*Parms[5]*(pow(argmin,5)-pow(argmax,5));
-
-  const G4double maxEn = (KinEn-BindingEn)/2;
-
-  G4double area2;
-  if(maxEn >= Parms[10]){
-
-    area2 = Parms[9];
+  // Area of the first function ALWAYS computed
+  G4double high = maxEn+BindingEn;
+  if(fstCut < maxEn){
+    
+    high = fstCut+BindingEn;
   }
-  else{
+  
+  G4double low = BindingEn+minEn;
 
-    area2 = 0;
+  //
+  // First Function: sum_2(A_i/(energy+Binding)^i)  i = 2,3,4,5,6,7
+  //
+  G4double aa=1./low ;
+  G4double bb=1./high ;
+  G4double saa = aa, sbb = bb;
+  G4double llow = low*low;
+  G4double s1 = 0. ;
+  
+  for (G4int ii = 1; ii < 7; ii++){
+
+    //
+    // area1: integral of the normalized first function
+    //
+    area1 += Parms[ii-1]*(saa-sbb)/float(ii) ;
+    saa *= aa ;
+    sbb *= bb ;
+    
+    //
+    //function itself at the minimum value (0.1*eV)
+    //
+    s1 += Parms[ii-1]/llow;
+    llow *= low ;
   }
+  
+  // Area of the second function of the third function
+  //
+  // ATTENTION!!!! this flux works because in the three function case maxEn 
+  // is always > than the second cut 
+  G4double whatCut = 0.;
+  if (maxEn >= sndCut){
+    
+    //
+    // three functions used. 
+    //
 
-  G4double areaTot = area1+area2;
+    // Second Function: B1*energy**B2
+    //
+    G4double expon = Parms[13]-1;
+    
+    // area2: integral of the normalized second function
+    area2 = (Parms[12]/expon)*(pow(sndCut,expon)-pow(fstCut,expon));
+    
+    // Third Function: sum_2(Ci/(energy+Binding)^i)  i = 2,3,4,5 
+    // it is the same as the first function but with two degree less
+    //
+    aa = 1./(sndCut+BindingEn); // equivalent to 1./low in the first function 
+    bb = 1./(maxEn+BindingEn);  // equivalent to 1./high in the first function
+    
+    G4double saa = aa, sbb = bb;
+    
+    for(G4int kk = 1; kk < 5; kk++){ 
+      
+      // area3: integral of the normalized third function
+      area3 += Parms[kk+6]*(saa-sbb)/float(kk);
+      saa *= aa;
+      sbb *= bb;     
+    }
+    
+    whatCut = sndCut;
+  }
+  
+  else if(maxEn >= fstCut){ 
+    
+    // two functions used.
+    //
+    // In this case the area2 keeps her initial value area2 = 0.
+    //
+    // Third Function: sum_2(Ci/(energy+Binding)^i)  i = 2,3,4,5 
+    // it is the same as the first function but with two degree less
+    //
+    aa = 1./(fstCut+BindingEn); // equivalent to 1./low in the first function 
+    bb = 1./(maxEn+BindingEn);  // equivalent to 1./high in the first function
+    G4double saa = aa, sbb = bb;
+    
+    for(G4int kk = 1; kk < 5; kk++){
+
+      // area3: integral of the normalized third function
+      area3 += Parms[kk+6]*(saa-sbb)/float(kk);
+      saa *= aa;
+      sbb *= bb;     
+    }
+     
+    whatCut = fstCut;
+  }
+   
+  // **********************************************************************************
+  // SAMPLING 
+  // **********************************************************************************
+  
+  G4double areaTot = area1+area2+area3;
+  G4double areaDue = area1+area2;
   G4int which;
   // 4) Generate a random number .to select the region of work
   G4double rand1 = areaTot*G4UniformRand();
-
+  
   // 5) Sampling
   G4double sample = 0;
-
-  if(rand1 < area1){
+  
+  if(rand1 <= area1){
+    // Sampling from the first function
+    
     // Low energy transfer 
     G4double rejection = 0;
-    which =1;
+    which = 1;
     do{
       
       G4double rand2 = G4UniformRand();
       G4double Ka = 0;
-
-      if(Parms[10] < maxEn){
-
-	Ka = (BindingEn + Parms[10])/(minEn+BindingEn);
+      
+      if(fstCut < maxEn){
+	
+	Ka = (BindingEn + fstCut)/(minEn+BindingEn);
       }
-
+      
       else{
-
+	
 	Ka = (BindingEn + maxEn)/(minEn+BindingEn);
       }
-
+      
       sample = (minEn + BindingEn)*pow(Ka,rand2)-BindingEn;
-
+      
       G4double arg = sample + BindingEn;
-
+      
       rejection = Parms[0]/arg+Parms[1]/pow(arg,2)+Parms[2]/pow(arg,3)+
 	Parms[3]/pow(arg,4)+Parms[4]/pow(arg,5)+Parms[5]/pow(arg,6);
-
+      
       rejection /= Parms[7];
-	
-    }while(rejection < G4UniformRand());
+      
+    }while(rejection < G4UniformRand()); 
   }
-
-  else if(area1 < rand1 && rand1 < areaTot){
+  
+  else if(rand1 > area1 && rand1 <= areaDue){
+    
+    //Sampling from the second function only 9 subshells
+    G4double expon = Parms[13]-1;
+    G4double norm = (pow(sndCut,expon)-pow(fstCut,expon));
+    G4double sum = norm*G4UniformRand()+pow(fstCut,expon);
+    G4double exponInv = 1/expon;
+    sample = pow(sum,exponInv);
     which = 2;
-     // High energy transfer
-      G4double Norm = (1/Parms[10])-(1/maxEn);
-      G4double rand2 = Norm*G4UniformRand();
-      sample = 1/((1/Parms[10])-rand2);
-     
   }
-  //cout<<"ShellIndex: "<<ShellIndex<<" ShellId: "<<(*(*(*theBindingEnergyTable)[AtomicNumber-1])[0])[ShellIndex]<<endl;
-
+  
+  else if (rand1 > areaDue && rand1 <= areaTot){ 
+    
+    // Sampling from the third function 462 cases of which 9 with the second
+    G4double rejection = 0;
+    which = 3;
+    do{
+      
+      G4double rand2 = G4UniformRand();
+      G4double Ka = 0;
+      
+      if(whatCut < maxEn){
+	
+	Ka = (BindingEn + maxEn)/(whatCut+BindingEn);
+      }
+      
+      sample = (whatCut + BindingEn)*pow(Ka,rand2)-BindingEn;
+      
+      G4double arg = sample + BindingEn;
+      
+      rejection = Parms[7]/arg+Parms[8]/pow(arg,2)+Parms[9]/pow(arg,3)+Parms[10]/pow(arg,4);
+      
+      rejection /= Parms[11];
+      
+    }while(rejection < G4UniformRand()); 
+  }
+  
   return sample;
 }
 
+void G4LowEnergyIonisation::PrintInfoDefinition()
+{
+  G4String comments = "First version of low energy ionisation code,";
+           comments += "\n At present it can be used for electrons only ";
+           comments += " in the energy range [250 eV,100 GeV]";
+  G4cout << endl << GetProcessName() << ":  " << comments << endl;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 

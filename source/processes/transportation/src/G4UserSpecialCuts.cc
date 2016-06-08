@@ -1,23 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserSpecialCuts.cc,v 1.1 1999/01/07 16:14:11 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
-//
+// $Id: G4UserSpecialCuts.cc,v 1.2.2.1 1999/12/07 20:52:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 // 
 // --------------------------------------------------------------
-//	GEANT 4 class implementation file 
+// History
 //
-//	For information related to this code contact:
-//	CERN, CN Division, ASD Group
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-// --------------------------------------------------------------
-//                   15 April 1998 M.Maire
+// 15-04-98 first implementation, mma                   
 // --------------------------------------------------------------
 
 #include "G4UserSpecialCuts.hh"
@@ -27,6 +21,8 @@
 #include "G4VParticleChange.hh"
 #include "G4EnergyLossTables.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
   : G4VProcess(aName)
 {
@@ -35,13 +31,18 @@ G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4UserSpecialCuts::~G4UserSpecialCuts()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UserSpecialCuts::G4UserSpecialCuts(G4UserSpecialCuts& right)
   : G4VProcess(right)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4double G4UserSpecialCuts::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
@@ -64,23 +65,27 @@ G4double G4UserSpecialCuts::PostStepGetPhysicalInteractionLength(
        G4double temp = beta*c_light*dTime;
        if (temp < 0.) return 0.;
        if (ProposedStep > temp) ProposedStep = temp;                  
-       //min remaining range
+       //min remaining range (only for charged particle)
        G4ParticleDefinition* Particle = aTrack.GetDefinition();
-       G4double              Ekine    = aTrack.GetKineticEnergy();
-       G4Material*           Material = aTrack.GetMaterial();
-       G4double RangeNow = G4EnergyLossTables::GetRange(Particle,Ekine,Material);
-       temp = (RangeNow - pUserLimits->GetUserMinRange(aTrack));
-       if (temp < 0.) return 0.;
-       if (ProposedStep > temp) ProposedStep = temp;
-       //min kinetic energy
-       G4double Emin = pUserLimits->GetUserMinEkine(aTrack);
-       G4double Rmin = G4EnergyLossTables::GetRange(Particle,Emin,Material);
-       temp = RangeNow - Rmin;
-       if (temp < 0.) return 0.;
-       if (ProposedStep > temp) ProposedStep = temp;        
+       if (Particle->GetPDGCharge() != 0.)
+         {G4double              Ekine    = aTrack.GetKineticEnergy();
+          G4Material*           Material = aTrack.GetMaterial();
+          G4double RangeNow = G4EnergyLossTables::GetRange(Particle,Ekine,Material);
+          temp = (RangeNow - pUserLimits->GetUserMinRange(aTrack));
+          if (temp < 0.) return 0.;
+          if (ProposedStep > temp) ProposedStep = temp;
+          //min kinetic energy (only for charged particle)
+          G4double Emin = pUserLimits->GetUserMinEkine(aTrack);
+          G4double Rmin = G4EnergyLossTables::GetRange(Particle,Emin,Material);
+          temp = RangeNow - Rmin;
+          if (temp < 0.) return 0.;
+          if (ProposedStep > temp) ProposedStep = temp;
+	 }         
      }   
    return ProposedStep;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VParticleChange* G4UserSpecialCuts::PostStepDoIt(
 			     const G4Track& aTrack,
@@ -96,3 +101,5 @@ G4VParticleChange* G4UserSpecialCuts::PostStepDoIt(
    aParticleChange.SetStatusChange(fStopAndKill);
    return &aParticleChange;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

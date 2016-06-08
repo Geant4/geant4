@@ -1,0 +1,15 @@
+#
+#  PersistentEx02.in
+#
+/control/verbose 2
+/db/verbose 2
+###/db/run NewRuns
+###/db/event NewEvents
+###/db/geometry NewGeometry
+/run/initialize
+#
+# 100 events
+#
+/run/beamOn 100
+#
+exit

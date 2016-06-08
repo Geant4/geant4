@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OrderedTable.hh,v 1.1 1999/01/07 16:09:01 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4OrderedTable.hh,v 1.4 1999/11/16 17:40:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -21,16 +21,16 @@
 #define G4OrderedTable_h 1
 
 #include "globals.hh"
-#include <rw/tvordvec.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tvordvec.h"
+#include "g4rw/tpordvec.h"
 
-class G4ValVector : public RWTValOrderedVector<G4double>
+class G4ValVector : public G4RWTValOrderedVector<G4double>
 {
 
   public:
 
-      G4ValVector(size_t capac=RWDEFAULT_CAPACITY)
-        : RWTValOrderedVector<G4double>(capac) {;}
+      G4ValVector(size_t capac=G4RWDEFAULT_CAPACITY)
+        : G4RWTValOrderedVector<G4double>(capac) {;}
 
       virtual ~G4ValVector() {;}
 
@@ -42,6 +42,6 @@ class G4ValVector : public RWTValOrderedVector<G4double>
 
 };
 
-typedef RWTPtrOrderedVector<G4ValVector> G4OrderedTable;
+typedef G4RWTPtrOrderedVector<G4ValVector> G4OrderedTable;
 
 #endif

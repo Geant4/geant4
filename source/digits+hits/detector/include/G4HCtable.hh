@@ -1,19 +1,31 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HCtable.hh,v 1.1 1999/01/07 16:06:24 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4HCtable.hh,v 1.2.2.1.2.1 1999/12/07 20:47:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4HCtable_H
 #define G4HCtable_H 1
 
 #include "globals.hh"
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
+
+// class description:
+//
+//  This class is used by G4SDManager for book keeping the
+// sensitive detector modules and hits collections. The order of
+// hits collections stored in G4HCofThisEvent is same as the
+// order of HClist. 
+//  The order may vary from run to run, if the user adds/changes
+// some of his/her sensitive detector modules.
+//  In case user wants to make G4Run object persistent, this
+// G4HCtable class object should be copied and stored with
+// G4Run object.
 
 class G4HCtable
 {
@@ -26,8 +38,8 @@ class G4HCtable
     G4int GetCollectionID(G4String HCname);
 
   private:
-    RWTValOrderedVector<G4String> SDlist;
-    RWTValOrderedVector<G4String> HClist;
+    G4RWTValOrderedVector<G4String> SDlist;
+    G4RWTValOrderedVector<G4String> HClist;
 
   public:
     inline G4int entries() const

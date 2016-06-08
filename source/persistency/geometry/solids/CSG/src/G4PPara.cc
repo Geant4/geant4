@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPara.cc,v 1.1 1999/01/07 16:10:53 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PPara.cc,v 1.2 1999/11/17 10:49:03 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4PPara
 //
@@ -21,11 +21,10 @@
 #include "G4PPara.hh"
 #include "G4Para.hh"
 
-#include "G4AffineTransform.hh"
-
 // Constructor - check and set half-widths
 
-G4PPara::G4PPara(const G4Para* thePara) : G4PCSGSolid(thePara->GetName())
+G4PPara::G4PPara(const G4Para* thePara)
+ : G4PCSGSolid(thePara->GetName())
 {
     G4double pDx = thePara->GetXHalfLength();
     G4double pDy = thePara->GetYHalfLength();
@@ -46,9 +45,7 @@ G4PPara::G4PPara(const G4Para* thePara) : G4PCSGSolid(thePara->GetName())
 // ----------------------------------------------------------------------------
 
 G4PPara::~G4PPara()
-{
-   ;
-}
+{;}
 
 // ----------------------------------------------------------------------------
 

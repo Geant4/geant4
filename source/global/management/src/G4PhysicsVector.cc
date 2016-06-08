@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.cc,v 1.1 1999/01/07 16:09:06 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PhysicsVector.cc,v 1.4 1999/11/23 15:00:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -24,6 +24,12 @@
 
 #include "G4PhysicsVector.hh"
 
+G4PhysicsVector::G4PhysicsVector()
+ : edgeMin(0.), edgeMax(0.), numberOfBin(0),
+   lastEnergy(0.), lastValue(0.), lastBin(0),
+   ptrNextTable(0) {}
+
+G4PhysicsVector::~G4PhysicsVector() {}
 
 G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
 {
@@ -64,7 +70,7 @@ G4bool G4PhysicsVector::IsFilledVectorExist() const
   return status;
 }
 
-void G4PhysicsVector::LinkPhysicsTable(RWTPtrOrderedVector<G4PhysicsVector>& theTable)
+void G4PhysicsVector::LinkPhysicsTable(G4RWTPtrOrderedVector<G4PhysicsVector>& theTable)
 {
   ptrNextTable = &theTable;
 } 

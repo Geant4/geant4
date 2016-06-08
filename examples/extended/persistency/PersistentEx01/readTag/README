@@ -1,0 +1,25 @@
+$Id: README,v 1.1 1999/12/03 11:20:29 morita Exp $
+-------------------------------------------------------------------
+
+                          readTag
+                          -------
+
+This short program demonstrates how to access tag attributes
+created by createTag example, and how to follow the association
+of the original objects.
+
+See the README file of createTag and create a new tag before
+running this example.
+
+=====
+Setup
+=====
+See setup.sh/setup.csh for example setup.
+
+==================
+readTag executable
+==================
+readTag executable can be made by simply typing "gmake" in this
+directory.  After gmake, type "readTag".
+
+--

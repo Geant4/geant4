@@ -66,7 +66,7 @@ public:
                             const G4VPhysicalVolume* pRep ) ;
                                    
     virtual G4GeometryType  GetEntityType() const 
-    { return G4String("G4IntersectionSolid"); }
+    { return G4String("G4UnionSolid"); }
 
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4VisExtent   GetExtent        () const ;

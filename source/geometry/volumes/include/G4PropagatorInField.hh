@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.3 1999/02/17 17:41:55 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PropagatorInField.hh,v 1.5.6.1 1999/12/07 20:48:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------------------
@@ -90,21 +90,27 @@ class G4PropagatorInField {
    G4double  GetEpsilonStep();  // Relative accuracy for current Step (Calc.)
    void      SetEpsilonStep(G4double newEps);
 
-   //   A maximum for the number of steps that a (looping) particle 
-   //    can take.
-   // 
-   G4int          GetMaxLoopCount();
-   void           SetMaxLoopCount(G4int new_max);
-
    void SetChargeMomentumMass( G4double Charge,         // in e+ units
 			       G4double Momentum,       // in Geant4 units
 			       G4double pMass);  
 
    G4ChordFinder* GetChordFinder();
-   // void           SetChordFinder(G4ChordFinder* newCF);  // Not yet relevant
+   // void        SetChordFinder(G4ChordFinder* newCF);  // Not yet relevant
 
    G4int  SetVerboseLevel( G4int Verbose ){ return fVerboseLevel=Verbose; }
    G4int  Verbose(){ return fVerboseLevel; }
+
+                                   //   Accuracies:
+   G4double  GetDeltaIntersection();   //   for boundary intersection
+   G4double  GetDeltaOneStep();        //   for one tracking/physics step
+                                    
+   // Sets both accuracies,
+   //    maintaining a particular ratio Delta Interaction / OneStep )
+   void    SetAccuraciesWithDeltaOneStep(G4double deltaOneStep);  
+
+   // A maximum for the number of steps that a (looping) particle can take
+   G4int   GetMaxLoopCount();
+   void    SetMaxLoopCount(G4int new_max);
 
    //   Print Method - useful mostly for debugging this class
    //
@@ -122,17 +128,6 @@ class G4PropagatorInField {
    G4FieldTrack    GetEndState() { return End_PointAndTangent; }
 
  private:
-
-   // The  Field Manager of the whole Detector
-   // 
-   G4FieldManager *fDetectorFieldMgr; 
-
-   G4Navigator   *fNavigator;
-
-   // End point storage:
-   //
-   G4FieldTrack    End_PointAndTangent;
-
    // If such an intersection exists, this function 
    // calculate the intersection point of the true path of the particle 
    // with the surface of the current volume (or of one of its daughters). 
@@ -143,24 +138,50 @@ class G4PropagatorInField {
 	    const  G4FieldTrack&       CurveEndPointTangent,    //  B
 	    const  G4ThreeVector&     TrialPoint,              //  E
 		   G4FieldTrack&       IntersectPointTangent);  // Output
-   //
-   //  [ Should this have fewer or additional arguments ? 
-   //         pointer to info on solution already obtained
-   //         tolerance
-   //  ]
- 
+
+
+  //  DATA Members
+  // ----------------------------------------------------------------------
+ private:
+
+   // The  Field Manager of the whole Detector
+   // 
+   G4FieldManager *fDetectorFieldMgr; 
+
+   G4Navigator   *fNavigator;
+
+   //  STATE information
+   // ------------------
+
    G4double    fEpsilonStep;  // Relative accuracy for current Step (Calc.)
 
+   // End point storage:
+   //
+   G4FieldTrack    End_PointAndTangent;
+
    G4bool      fParticleIsLooping;
+
    //  For debuging purposes
    G4int  fVerboseLevel;
 
-   //  For the moment class constants ...  set in G4PropagatemagField.cc
+   //  Values for the required accuracies
    //
-   static const G4double  delta_intersection_val; // = 0.1 * mm;
-   static const G4double  delta_one_step_val;    //  = 0.25 * mm;
+   G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
+   G4double  fDelta_Intersection_Val;    //  for boundary intersection
+
+   //  Their default values ...  (set in G4PropagatemagField.cc)
+   //
+   static const G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
+   static const G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
 
    G4int  fmax_loop_count;
+
+   //  Variables to keep track of "abnormal" case - which causes loop
+   G4int     fNoZeroStep;                //  Counter of zeroStep
+   G4int     fThresholdNo_ZeroSteps;    //  Threshold: above this - action
+                       // G4double  fMidPoint_CurveLen_of_LastAttempt= -1;
+   G4double  fFull_CurveLen_of_LastAttempt; 
+   G4double  fLast_ProposedStepLength; 
 }; // End of class G4PropagatorInField {
 
 //  Defines the constructor.

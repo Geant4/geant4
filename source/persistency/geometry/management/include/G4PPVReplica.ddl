@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PPVReplica.ddl,v 1.1 1999/01/07 16:10:48 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PPVReplica.ddl,v 1.3.2.1 1999/12/07 20:50:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4PPVReplica
@@ -19,6 +19,8 @@
 #ifndef G4PPVREPLICA_DDL
 #define G4PPVREPLICA_DDL
 
+#include "G4PersistentTypes.hh"
+#include "G4PersistentSchema.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4RotationMatrix.hh"
 
@@ -45,10 +47,10 @@ protected:
 
 protected:
   EAxis faxis;
-  G4int fnReplicas;
-  G4double fwidth,foffset;
+  G4Pint fnReplicas;
+  G4Pdouble fwidth,foffset;
     
-  G4int    fcopyNo;
+  G4Pint    fcopyNo;
 };
 
 #endif

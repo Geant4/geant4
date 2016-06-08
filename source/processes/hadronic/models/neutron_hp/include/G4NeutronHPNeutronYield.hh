@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPNeutronYield.hh,v 1.3 1999/07/02 09:59:44 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4NeutronHPNeutronYield_h
 #define G4NeutronHPNeutronYield_h 1

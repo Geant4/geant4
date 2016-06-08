@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.1 1999/01/07 16:05:57 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.2.8.1 1999/12/07 20:47:31 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 
@@ -25,9 +25,9 @@ ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(ExN03PrimaryGener
 { 
   RndmCmd = new G4UIcmdWithAString("/gun/random",this);
   RndmCmd->SetGuidance("Shoot randomly the incident particle.");
-  RndmCmd->SetGuidance("  Choice : on, off(default)");
+  RndmCmd->SetGuidance("  Choice : on(default), off");
   RndmCmd->SetParameterName("choice",true);
-  RndmCmd->SetDefaultValue("off");
+  RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
   RndmCmd->AvailableForStates(PreInit,Idle);
 }

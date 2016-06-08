@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.8 1999/06/17 09:02:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ProcessManager.cc,v 1.10.4.1 1999/12/07 20:52:48 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -367,18 +367,16 @@ G4int G4ProcessManager::AddProcess(
   aErrorMessage += " particle[" + theParticleType->GetParticleName() + "]";
   
   //check the process is applicable to this particle type
-  if ( ( !aProcess->IsApplicable(*theParticleType) ) ||
-       (theParticleType->IsShortLived() )                ){
+  if (  !aProcess->IsApplicable(*theParticleType) ) {
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
+    if (GetVerboseLevel()>1) {
       G4cout << aErrorMessage << endl;
-      G4cout << "This process is not applicable to this particle";
+      G4cout << "This process is not applicable to this particle" << endl;
     }
 #endif
-    // --comment out for alpha version   ----
     //  G4Exception((const char*)aErrorMessage); 
-    //  return -1;
-   }
+    return -1;
+  }
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>2) {

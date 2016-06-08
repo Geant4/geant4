@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03VisManager.cc,v 1.1 1999/01/07 16:05:58 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN03VisManager.cc,v 1.2.8.1 1999/12/07 20:47:32 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison 24th January 1998.
@@ -54,10 +54,6 @@
 
 #ifdef G4VIS_USE_OIWIN32
 #include "G4OpenInventorWin32.hh"
-#endif
-
-#ifdef G4VIS_USE_RAYX
-#include "G4RayX.hh"
 #endif
 
 #ifdef G4VIS_USE_VRML
@@ -112,10 +108,6 @@ void ExN03VisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
-#endif
-
-#ifdef G4VIS_USE_RAYX
-  RegisterGraphicsSystem (new G4RayX);
 #endif
 
 #ifdef G4VIS_USE_VRML

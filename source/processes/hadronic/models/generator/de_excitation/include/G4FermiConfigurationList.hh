@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -15,8 +15,8 @@
 #include "G4FermiConfiguration.hh"
 #include "Randomize.hh"
 
-#include <rw/tvvector.h>
-#include <rw/tvordvec.h>
+#include "g4rw/tvvector.h"
+#include "g4rw/tvordvec.h"
 
 
 class G4FermiConfigurationList 
@@ -50,9 +50,9 @@ private:
 
   G4double NumOfConfigurations[MaxNumOfFragments]; // NumberOfChannelsPerFragment[MaxNumOfFragments];
 
-  RWTValOrderedVector<G4double> NormalizedWeights;
+  G4RWTValOrderedVector<G4double> NormalizedWeights;
   
-  RWTValOrderedVector<G4FermiConfiguration> Configurations;
+  G4RWTValOrderedVector<G4FermiConfiguration> Configurations;
 };
 
 

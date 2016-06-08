@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -15,8 +15,8 @@
 G4EvaporationChannel::G4EvaporationChannel(const G4int theGamma,
 					   const G4int theA,
 					   const G4int theZ,
-					   RWTValVector<G4double> * theExcitationEnergies,
-					   RWTValVector<G4int> * theExcitationSpins):
+					   G4RWTValVector<G4double> * theExcitationEnergies,
+					   G4RWTValVector<G4int> * theExcitationSpins):
   Gamma(theGamma),
   A(theA),
   Z(theZ),

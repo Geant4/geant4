@@ -1,0 +1,89 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: tpvector.icc,v 1.4 1999/11/25 10:14:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
+// 
+//---------------------------------------------------------------
+//  GEANT 4 class header file
+//
+//  G4RWTPtrVector
+//---------------------------------------------------------------
+
+template<class T>
+G4RWTPtrVector<T>::G4RWTPtrVector ()
+  : std_pvector(){}
+
+template<class T>
+G4RWTPtrVector<T>::G4RWTPtrVector (unsigned int n)
+  : std_pvector(n){}
+
+template<class T>
+G4RWTPtrVector<T>::G4RWTPtrVector (unsigned int n, T* const & iPtr)
+  : std_pvector(n, iPtr){}
+
+template<class T>
+G4RWTPtrVector<T>::G4RWTPtrVector (const G4RWTPtrVector<T>& iPtr)
+  : std_pvector(iPtr){}
+
+template<class T>
+G4RWTPtrVector<T>::~G4RWTPtrVector(){}
+
+template<class T>
+G4RWTPtrVector<T>& G4RWTPtrVector<T>::operator = (T* p)
+{
+  for(iterator i = std_pvector::begin(); i != std_pvector::end(); ++i)
+    {
+      *i = p;
+    }
+  return *this;
+}
+  
+template<class T>
+T* G4RWTPtrVector<T>::operator () ( size_t n ) const
+{
+  return std_pvector::operator[](n);
+}
+
+template<class T>
+T*& G4RWTPtrVector<T>::operator () ( size_t n )
+{
+  return std_pvector::operator[](n);
+}
+
+// The [] operator should perform bound checking
+//	
+template<class T>
+T* G4RWTPtrVector<T>::operator [] ( size_t n ) const
+{
+  return std_pvector::operator[](n);
+}
+
+template<class T>
+T*& G4RWTPtrVector<T>::operator [] ( size_t n )
+{
+  return std_pvector::operator[](n);
+}
+
+template<class T>
+T* const * G4RWTPtrVector<T>::data() const
+{
+  return &(std_pvector::front());
+}
+
+template<class T>
+size_t G4RWTPtrVector<T>::length()
+{
+  return std_pvector::size();
+}
+
+template<class T>
+void G4RWTPtrVector<T>::reshape( size_t n )
+{
+  std_pvector::resize(n);
+}

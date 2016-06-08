@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HCtable.cc,v 1.1 1999/01/07 16:06:26 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4HCtable.cc,v 1.1.8.1.2.1 1999/12/07 20:47:44 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4HCtable.hh"
@@ -27,7 +27,7 @@ G4int G4HCtable::Registor(G4String SDname,G4String HCname)
 G4int G4HCtable::GetCollectionID(G4String HCname)
 {
   G4int i = -1;
-  if(HCname.index("/")==RW_NPOS) // HCname only
+  if(HCname.index("/")==G4std::string::npos) // HCname only
   {
     for(G4int j=0;j<HClist.entries();j++)
     {

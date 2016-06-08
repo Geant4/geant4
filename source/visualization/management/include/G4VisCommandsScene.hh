@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.hh,v 1.5 1999/05/10 14:04:06 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VisCommandsScene.hh,v 1.7.4.1 1999/12/07 20:53:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -25,8 +25,9 @@ public:
   G4VVisCommandScene ();
   ~G4VVisCommandScene ();
 protected:
+  G4String CurrentSceneName ();
   void UpdateCandidateLists ();
-  void UpdateVisManagerSceneAndViewParameters (const G4String& sceneName = "");
+  void UpdateVisManagerScene (const G4String& sceneName = "");
 };
 
 class G4VisCommandSceneCreate: public G4VVisCommandScene {
@@ -40,6 +41,17 @@ private:
   G4String NextName ();
   G4UIcmdWithAString* fpCommand;
   G4int fId;
+};
+
+class G4VisCommandSceneEdit: public G4VVisCommandScene {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandSceneEdit ();
+  ~G4VisCommandSceneEdit ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandSceneList: public G4VVisCommandScene {

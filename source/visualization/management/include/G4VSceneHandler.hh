@@ -1,17 +1,20 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.4 1999/05/12 13:57:25 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VSceneHandler.hh,v 1.8.2.1 1999/12/07 20:53:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  19th July 1996.
+//
+// Class description
+//
 // Abstract interface class for graphics scene handlers.
-// Inherits from G4VGraphicsScene, in the graphics_reps component, which is
+// Inherits from G4VGraphicsScene, in the intercoms category, which is
 // a minimal abstract interface for the GEANT4 kernel.
 
 #ifndef G4VSCENEHANDLER_HH
@@ -39,13 +42,6 @@
 class G4VGraphicsSystem;
 class G4VViewer;
 class G4VSolid;
-class G4Polyline;
-class G4Text;
-class G4Circle;
-class G4Square;
-class G4Polymarker;
-class G4Polyhedron;
-class G4NURBS;
 class G4VisAttributes;
 class G4Colour;
 class G4Visible;
@@ -55,17 +51,19 @@ class G4LogicalVolume;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
-  friend ostream& operator << (ostream& os, const G4VSceneHandler& s);
+public: // With description
 
-public:
+  friend ostream& operator << (ostream& os, const G4VSceneHandler& s);
 
   enum MarkerSizeType {world, screen};
 
-  G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name = "");
+  G4VSceneHandler (G4VGraphicsSystem& system,
+		   G4int id,
+		   const G4String& name = "");
 
   virtual ~G4VSceneHandler ();
 
-  // For RWTPtrOrderedVector...
+  // For G4RWTPtrOrderedVector...
   G4bool operator == (const G4VSceneHandler& scene) const;
 
   //////////////////////////////////////////////////////////////
@@ -103,15 +101,16 @@ public:
   // coordinate system of the object about to be added, and visAttribs
   // is its visualization attributes.
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::PreAddThis (const G4Transform3D& objectTransformation,
-  //                              const G4VisAttributes& visAttribs) {
+  // void MyXXXSceneHandler::PreAddThis
+  //  (const G4Transform3D& objectTransformation,
+  //   const G4VisAttributes& visAttribs) {
   //   G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);
   //   ...
   // }
 
   virtual void PostAddThis ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::PostAddThis () {
+  // void MyXXXSceneHandler::PostAddThis () {
   //   ...
   //   G4VSceneHandler::PostAddThis (objectTransformation, visAttribs);
   // }
@@ -135,7 +134,7 @@ public:
 
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::BeginPrimitives
+  // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
   //   G4VSceneHandler::BeginPrimitives (objectTransformation);
   //   ...
@@ -143,18 +142,19 @@ public:
 
   virtual void EndPrimitives ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::EndPrimitives () {
+  // void MyXXXSceneHandler::EndPrimitives () {
   //   ...
   //   G4VSceneHandler::EndPrimitives ();
   // }
 
-  virtual void AddPrimitive (const G4Polyline&) = 0;
-  virtual void AddPrimitive (const G4Text&) = 0;
-  virtual void AddPrimitive (const G4Circle&) = 0;
-  virtual void AddPrimitive (const G4Square&) = 0;
-  virtual void AddPrimitive (const G4Polymarker&);  // Uses the above.
-  virtual void AddPrimitive (const G4Polyhedron&) = 0;
-  virtual void AddPrimitive (const G4NURBS&) = 0;
+  virtual void AddPrimitive (const G4Polyline&)   = 0;
+  virtual void AddPrimitive (const G4Text&)       = 0;
+  virtual void AddPrimitive (const G4Circle&)     = 0;      
+  virtual void AddPrimitive (const G4Square&)     = 0;      
+  virtual void AddPrimitive (const G4Polymarker&);  // Implemented in terms
+  // of the above but can be over-ridden.
+  virtual void AddPrimitive (const G4Polyhedron&) = 0;  
+  virtual void AddPrimitive (const G4NURBS&)      = 0;       
 
   //////////////////////////////////////////////////////////////
   // Access functions.
@@ -218,8 +218,22 @@ public:
   G4int IncrementViewCount ();
 
   virtual void ClearStore ();
+  // Clears graphics database (display lists) if any.  This base class
+  // implements some common functionality so...
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::ClearStore () {
+  //   G4VSceneHandler::ClearStore ();
+  //   ...
+  // }
+
   virtual void ClearTransientStore ();
-  // Clears graphics database (display lists) if any.
+  // Clears transient part of graphics database (display lists) if any.
+  // This base class implements some common functionality so...
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::ClearTransientStore () {
+  //   G4VSceneHandler::ClearTransientStore ();
+  //   ...
+  // }
 
   void AddViewerToList      (G4VViewer* pView);  // Add view to view List.
   void RemoveViewerFromList (G4VViewer* pView);  // Remove view from view List.

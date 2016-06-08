@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTable.hh,v 1.2 1999/04/13 07:58:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4DecayTable.hh,v 1.3.2.1 1999/12/07 20:49:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // ------------------------------------------------------------
@@ -23,7 +23,7 @@
 #define G4DecayTable_h 1
 
 #include "G4ios.hh"
-#include <rw/tpsrtvec.h>
+#include "g4rw/tpsrtvec.h"
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
@@ -31,7 +31,7 @@
 class G4DecayTable 
 {
  public:
-   typedef RWTPtrSortedVector<G4VDecayChannel> G4VDecayChannelVector;
+   typedef G4RWTPtrSortedVector<G4VDecayChannel> G4VDecayChannelVector;
 
   //constructors
  public:

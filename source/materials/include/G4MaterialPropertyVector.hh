@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.1 1999/01/07 16:09:42 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MaterialPropertyVector.hh,v 1.3.2.1 1999/11/11 14:30:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,8 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1997-03-25 by Peter Gumplinger
+// Updated:     1999-10-29 add method and class descriptors
+//              1997-03-25 by Peter Gumplinger
 //              > value.h -> templates.hh
 // mail:        gum@triumf.ca
 //
@@ -33,9 +34,13 @@
 // Includes
 /////////////
 
-#include <rw/tpsrtvec.h>
-#include <rw/cstring.h>
+#include "g4rw/tpsrtvec.h"
+#include "g4rw/cstring.h"
 #include "G4MPVEntry.hh"
+
+// Class Description:
+// A one-to-one mapping from Photon Momentum to some optical property.
+// Class Description - End:
 
 /////////////////////
 // Class Definition
@@ -43,7 +48,7 @@
 
 class G4MaterialPropertyVector {
 
-public:
+public: // Without description
 
 	//////////////
 	// Operators
@@ -62,10 +67,15 @@ public:
 		CurrentEntry = -1;
 		NumEntries   = 0;
 	};
+
+public: // With description
 	
 	G4MaterialPropertyVector(G4double *PhotonMomenta, 
 		  	   	 G4double *PropertyValues,
 				 G4int     NumElements);
+        // Constructor of G4MaterialPropertyVector object.
+
+public: // Without description
 
 	G4MaterialPropertyVector(const G4MaterialPropertyVector &right);
 
@@ -79,18 +89,27 @@ public:
         // Methods
         ////////////
 
+public: // With description
+
 	void ResetIterator();
 
         void AddElement(G4double aPhotonMomentum, 
 			G4double aPropertyValue);
+        // Add a new element (pair of numbers) to the G4MaterialPropertyVector.
 	void RemoveElement(G4double aPhotonMomentum);
+        // Remove the element with given x-value.
 
         G4double GetProperty(G4double aPhotonMomentum) const;
+        // Returns the y-value for given x-value (with interpolation).
 	G4double GetPhotonMomentum(G4double aProperty) const;
-
-	// for use with G4MaterialPropertyVector iterator:
-	// return property (or Photon momentum) at current point 
-	// of iterator
+        // Returns the x-value for given y-value (with interpolation).
+        // NOTE: Assumes that the y-value is an increasing function of 
+        //       the x-value. Returns the x-value corresponding to the 
+        //       y-value passed in. If several x-values correspond to 
+        //       the y-value passed in, the method returns the first 
+        //       x-value in the vector that corresponds to that value.
+	// For use with G4MaterialPropertyVector iterator: return
+        // property (or Photon momentum) at current point of iterator.
 
 	G4double GetProperty() const;
 	G4double GetPhotonMomentum() const;
@@ -121,7 +140,7 @@ private:
         // Private Data Members
 	/////////////////////////
 
-	RWTPtrSortedVector<G4MPVEntry> MPV;
+	G4RWTPtrSortedVector<G4MPVEntry> MPV;
 	G4int NumEntries;
 	G4int CurrentEntry;
 };

@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -52,7 +52,7 @@ G4bool G4FermiConfigurationList::Initialize(const G4int A, const G4int Z, const 
 	Configurations.clear();
 	NormalizedWeights.clear();
 	G4FermiConfiguration aConfiguration;
-	RWTValOrderedVector<G4double> NOTNormalizedWeights;
+	G4RWTValOrderedVector<G4double> NOTNormalizedWeights;
 	G4double NormStatWeight = 0.0;
 	for (G4int k = 2; k <= 6; k++) {
 		// Initialize Configuration for k fragments

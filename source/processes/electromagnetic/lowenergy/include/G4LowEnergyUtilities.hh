@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.hh,v 1.1 1999/06/28 15:47:05 aforti Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LowEnergyUtilities.hh,v 1.1.8.1 1999/12/07 20:50:21 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------

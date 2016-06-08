@@ -207,7 +207,7 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 	//
 	G4int nside = cone->LineHitsCone( p, v, &s1, &s2 );
 	if (nside == 0) return false;
-	
+		
 	//
 	// Check the first side first, since it is (supposed to be) closest
 	//
@@ -217,34 +217,46 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 		//
 		// Good intersection! What about the normal? 
 		//
-		G4double vdotN = v.dot(normal);
-		if (normSign*vdotN > 0) {
+		if (normSign*v.dot(normal) > 0) {
 			//
-			// Good normal! Check distance
+			// We have a valid intersection, but it could very easily
+			// be behind the point. To decide if we tolerate this,
+			// we have to see if the point p is on the surface near
+			// the intersecting point.
 			//
-			// We want to apply an addition surface tolerance
-			// if the point p is on the surface. Is it?
+			// What does it mean exactly for the point p to be "near"
+			// the intersection? It means that if we draw a line from
+			// p to the hit, the line remains entirely within the
+			// tolerance bounds of the cone. To test this, we can
+			// ask if the normal is correct near p.
 			//
-			G4bool opposite = (p.x()*hit.x()+p.y()*hit.y() < 0);
-			G4double distOutside2;
-			G4double notUsed = -normSign*DistanceAway( p, opposite, distOutside2 );
-					
-			//
-			// The distance from the surface is defined along the
-			// normal at the intersection point.
-			//
-			// I think.
-			//	
-			distFromSurface = normSign*s1*vdotN;
-		
-			//
-			// Apply tolerance, but only if the point is outside 
-			// the edges of the cone
-			//
-			if (distFromSurface > (distOutside2 > 0 ? 0 : -surfTolerance)) {
+			G4double pr = p.perp();
+			if (pr < DBL_MIN) pr = DBL_MIN;
+			G4ThreeVector pNormal( rNorm*p.x()/pr, rNorm*p.y()/pr, zNorm );
+			if (normSign*v.dot(pNormal) > 0) {
 				//
-				// Good intersection. Return now, since it is the closest.
+				// p and intersection in same hemisphere
 				//
+				G4double distOutside2;
+				distFromSurface = -normSign*DistanceAway( p, false, distOutside2 );
+				if (distOutside2 < surfTolerance*surfTolerance) {
+					if (distFromSurface > -surfTolerance) {
+						//
+						// We are just inside or away from the
+						// surface. Accept *any* value of distance.
+						//
+						distance = s1;
+						return true;
+					}
+				}
+			}
+			else 
+				distFromSurface = s1;
+			
+			//
+			// Accept positive distances
+			//
+			if (s1 > 0) {
 				distance = s1;
 				return true;
 			}
@@ -262,34 +274,24 @@ G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v
 		//
 		// Good intersection! What about the normal? 
 		//
-		G4double vdotN = v.dot(normal);
-		if (normSign*vdotN > 0) {
-			//
-			// Good normal! Check distance
-			//
-			// We want to apply an addition surface tolerance
-			// if the point p is on the surface. Is it?
-			//
-			G4bool opposite = (p.x()*hit.x()+p.y()*hit.y() < 0);
-			G4double distOutside2;
-			G4double notUsed = -normSign*DistanceAway( p, opposite, distOutside2 );
-					
-			//
-			// The distance from the surface is defined along the
-			// normal at the intersection point.
-			//
-			// I think.
-			//	
-			distFromSurface = normSign*s2*vdotN;
-		
-			//
-			// Apply tolerance, but only if the point is outside 
-			// the edges of the cone
-			//
-			if (distFromSurface > (distOutside2 > 0 ? 0 : -surfTolerance)) {
-				//
-				// Good intersection. Return now, since it is the closest.
-				//
+		if (normSign*v.dot(normal) > 0) {
+			G4double pr = p.perp();
+			if (pr < DBL_MIN) pr = DBL_MIN;
+			G4ThreeVector pNormal( rNorm*p.x()/pr, rNorm*p.y()/pr, zNorm );
+			if (normSign*v.dot(pNormal) > 0) {
+				G4double distOutside2;
+				distFromSurface = -normSign*DistanceAway( p, false, distOutside2 );
+				if (distOutside2 < surfTolerance*surfTolerance) {
+					if (distFromSurface > -surfTolerance) {
+						distance = s2;
+						return true;
+					}
+				}
+			}
+			else 
+				distFromSurface = s2;
+			
+			if (s2 > 0) {
 				distance = s2;
 				return true;
 			}
@@ -804,7 +806,10 @@ G4double G4PolyconeSide::DistanceAway( const G4ThreeVector &p, const G4bool oppo
 	}
 	else if (s > length) {
 		distOutside2 = sqr( s-length );
-		if (edgeRZnorm) *edgeRZnorm = deltaR*rNormEdge[1] + deltaZ*zNormEdge[1];
+		if (edgeRZnorm) {
+			G4double deltaR  = rx - r[1], deltaZ = zx - z[1];
+			*edgeRZnorm = deltaR*rNormEdge[1] + deltaZ*zNormEdge[1];
+		}
 	}
 	else {
 		distOutside2 = 0;
@@ -893,8 +898,6 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit, const G4double nor
 	//
 	// We have a good hit! Calculate normal
 	//
-	if (rx<0) rx = hit.perp();
-	
 	if (rx < DBL_MIN) 
 		normal = G4ThreeVector( 0, 0, zNorm < 0 ? -1 : 1 );
 	else

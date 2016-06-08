@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.3 1999/05/12 14:01:00 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.5.4.1 1999/12/07 20:53:36 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -69,21 +69,9 @@
 typedef SoDetectorTreeKit SoG4DetectorTreeKit;
 G4Point3D translation;
 
-inline static unsigned pSolidHashFun
-(const G4OpenInventorSceneHandler::G4VSolidPointer& pSolid) {
-  return (unsigned)pSolid;
-}
-
-inline static unsigned pVPhysicalVolumeHashFun
-(const G4OpenInventorSceneHandler::G4VPhysicalVolumePointer & volume) {
-  return (unsigned)(unsigned long)volume;
-}
-
 G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
 					  const G4String& name)
 :G4VSceneHandler (system, fSceneIdCount++, name)
-,fSolidDictionary (pSolidHashFun)
-,SeparatorSet(pVPhysicalVolumeHashFun)
 ,root(NULL)
 ,staticRoot(NULL)
 ,transientRoot(NULL)
@@ -496,6 +484,7 @@ void G4OpenInventorSceneHandler::EndModeling () {
 }
 
 void G4OpenInventorSceneHandler::ClearStore () {
+  G4VSceneHandler::ClearStore();
   staticRoot->removeAllChildren();
   transientRoot->removeAllChildren();
 }
@@ -633,7 +622,7 @@ void G4OpenInventorSceneHandler::PreAddThis
     // Add the full separator to the dictionary; it is indexed by the 
     // address of the physical volume!
     //
-    SeparatorSet[fpCurrentPV]=fullSeparator;
+    SeparatorMap[fpCurrentPV]=fullSeparator;
 
     //
     // Find out where to add this volume.  This means locating its mother.  
@@ -641,8 +630,8 @@ void G4OpenInventorSceneHandler::PreAddThis
     //
     G4VPhysicalVolume* MotherVolume = fpCurrentPV->GetMother();
     while (MotherVolume) {
-      if (SeparatorSet.contains(MotherVolume)) {
-	SeparatorSet[MotherVolume]->addChild(g4DetectorTreeKit);
+      if (SeparatorMap.find(MotherVolume) != SeparatorMap.end()) {
+	SeparatorMap[MotherVolume]->addChild(g4DetectorTreeKit);
         break;
       }
       else {
@@ -667,8 +656,8 @@ void G4OpenInventorSceneHandler::PreAddThis
     currentSeparator = NULL;
     G4VPhysicalVolume* MotherVolume = fpCurrentPV->GetMother();
     while (MotherVolume) {
-      if (SeparatorSet.contains(MotherVolume)) {
-	currentSeparator=SeparatorSet[MotherVolume];
+      if (SeparatorMap.find(MotherVolume) != SeparatorMap.end()) {
+	currentSeparator=SeparatorMap[MotherVolume];
         break;
       }
       else {

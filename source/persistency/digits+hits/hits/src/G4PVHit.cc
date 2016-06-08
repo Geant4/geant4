@@ -1,19 +1,29 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVHit.cc,v 1.1 1999/01/07 16:10:45 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
-//                                            Takashi.Sasaki@kek.jp 
+// $Id: G4PVHit.cc,v 1.4 1999/11/24 20:27:24 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
 
 #include "G4PVHit.hh"
-
-#include "G4VHit.hh"
+#include "globals.hh"
 
 G4PVHit::G4PVHit()
-{
-}
+{;}
+
+G4PVHit::~G4PVHit()
+{;}
+
+int G4PVHit::operator==(const G4PVHit &right) const
+{ return false; }
+
+void G4PVHit::Draw()
+{;}
+
+void G4PVHit::Print()
+{;}
 

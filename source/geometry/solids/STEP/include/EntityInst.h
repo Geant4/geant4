@@ -6,7 +6,7 @@
 
 //
 // $Id: EntityInst.h,v 1.2 1999/05/21 20:20:28 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef ENTITYINST_H
 #define	ENTITYINST_H 1

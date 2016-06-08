@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.1 1999/01/07 16:14:01 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4OpBoundaryProcess.hh,v 1.4.4.1 1999/12/07 20:52:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -18,6 +18,13 @@
 //                                  optical interfaces
 // Version:     1.1
 // Created:     1997-06-18
+// Modified:    1999-10-29 add method and class descriptors
+//              1999-10-10 - Fill NewMomentum/NewPolarization in 
+//                           DoAbsorption. These members need to be
+//                           filled since DoIt calls 
+//                           aParticleChange.SetMomentumChange etc.
+//                           upon return (thanks to: Clark McGrew)
+//
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
 // mail:        gum@triumf.ca
@@ -46,6 +53,11 @@
 #include "G4OpticalPhoton.hh"
 #include "G4TransportationManager.hh"
 
+// Class Description:
+// Discrete Process -- reflection/refraction at optical interfaces.
+// Class inherits publicly from G4VDiscreteProcess.                  
+// Class Description - End:             
+
 /////////////////////
 // Class Definition
 /////////////////////
@@ -70,7 +82,7 @@ private:
 
         // G4OpBoundaryProcess(const G4OpBoundaryProcess &right);
 
-public:
+public: // Without description
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -84,18 +96,29 @@ public:
 	// Methods
         ////////////
 
+public: // With description
+
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        // Returns true -> 'is applicable' only for an optical photon.
 
 	G4double GetMeanFreePath(const G4Track& ,
 				 G4double ,
 				 G4ForceCondition* condition);
+        // Returns infinity; i. e. the process does not limit the step,
+        // but sets the 'Forced' condition for the DoIt to be invoked at
+        // every step. However, only at a boundary will any action be
+        // taken. 
 
 	G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
 				       const G4Step&  aStep);
+        // This is the method implementing boundary processes.
 
 	G4OpticalSurfaceModel GetModel() const;
+        // Returns the optical surface mode.
+
 	void           SetModel(G4OpticalSurfaceModel model);
-	// set/get the optical surface model to be followed (glisur || unified)
+	// Set the optical surface model to be followed 
+        // (glisur || unified). 
 
 private:
 
@@ -314,6 +337,7 @@ inline
 void G4OpBoundaryProcess::DoAbsorption()
 {
               theStatus = Absorption;
+
               if ( G4BooleanRand(theEfficiency) ) {
                  // EnergyDeposited =/= 0 means: photon has been detected
                  theStatus = Detection;
@@ -322,6 +346,10 @@ void G4OpBoundaryProcess::DoAbsorption()
               else {
                  aParticleChange.SetLocalEnergyDeposit(0.0);
               }
+
+              NewMomentum = OldMomentum;
+              NewPolarization = OldPolarization;
+
 //              aParticleChange.SetEnergyChange(0.0);
               aParticleChange.SetStatusChange(fStopAndKill);
 }

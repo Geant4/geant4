@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiSigmaPlus.cc,v 1.2 1999/06/09 16:08:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4AntiSigmaPlus.cc,v 1.3.6.1 1999/12/07 20:49:29 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ G4AntiSigmaPlus::G4AntiSigmaPlus(
        G4int               baryon,       G4int               encoding,
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable )
- : G4VBarion( aName,mass,width,charge,iSpin,iParity,
+ : G4VBaryon( aName,mass,width,charge,iSpin,iParity,
               iConjugation,iIsospin,iIsospin3,gParity,pType,
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {

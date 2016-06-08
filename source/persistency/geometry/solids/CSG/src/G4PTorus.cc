@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PTorus.cc,v 1.1 1999/01/07 16:10:53 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PTorus.cc,v 1.2.2.1 1999/12/07 20:50:12 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4PTorus
@@ -20,13 +20,10 @@
 #include "G4PTorus.hh"
 #include "G4Torus.hh"
 
-#include "G4AffineTransform.hh"
-#include "meshdefs.hh"
-
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //             - note if pdphi>2PI then reset to 2PI
 G4PTorus::G4PTorus(const G4Torus* theTorus)
-    : G4PCSGSolid(theTorus->GetName())
+ : G4PCSGSolid(theTorus->GetName())
 {
     SetAllParameters(theTorus->GetRmin(),
 		     theTorus->GetRmax(),

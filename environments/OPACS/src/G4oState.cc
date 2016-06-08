@@ -1,16 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oState.cc,v 1.2 1999/04/16 10:03:39 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4oState.cc,v 1.3.2.1.2.1 1999/12/07 20:46:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //#define DEBUG
 
-//#include "G4ios.hh"
+// GB : put this include before the GL ones. 
+// It avoid a clash with STL includes on Linux.
+#include "g4rw/tvhdict.h"
 
 //G4
 #include <globals.hh>
@@ -35,27 +37,42 @@ G4oState::G4oState(
   G4UImanager::GetUIpointer()->SetSession(this);  //So that Pause works..
 }
 /***************************************************************************/
+G4oState::~G4oState(
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+}
+/***************************************************************************/
 G4bool G4oState::Notify (
  G4ApplicationState requestedState
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4StateManager*            statM = G4StateManager::GetStateManager();
+  G4StateManager* statM = G4StateManager::GetStateManager();
   G4ApplicationState previousState = statM->GetPreviousState();
 
-  if(previousState==Idle && requestedState==GeomClosed) {             //beginOfRun
-    G4String string   = "RunBegin.osh"; 
-    OShellExecuteFile (G4oGetShell(),(char*)(name + string).data());
-  } else if(previousState==GeomClosed && requestedState==Idle) {      //endOfRun
-    G4String string   = "RunEnd.osh"; 
-    OShellExecuteFile (G4oGetShell(),(char*)(name + string).data());
-  } else if(previousState==GeomClosed && requestedState==EventProc) { //beginOfEvent
-    G4String string   = "EventBegin.osh"; 
-    OShellExecuteFile (G4oGetShell(),(char*)(name + string).data());
-  } else if(previousState==EventProc && requestedState==GeomClosed) { // EndOfEvent
-    G4String string   = "EventEnd.osh"; 
-    OShellExecuteFile (G4oGetShell(),(char*)(name + string).data());
+  if(previousState==Idle && requestedState==GeomClosed) {             
+    //beginOfRun
+    G4String string   = name; 
+    string += "RunBegin.osh"; 
+    OShellExecuteFile (G4oGetShell(),(char*)string.data());
+  } else if(previousState==GeomClosed && requestedState==Idle) {      
+    //endOfRun
+    G4String string = name; 
+    string += "RunEnd.osh"; 
+    OShellExecuteFile (G4oGetShell(),(char*)string.data());
+  } else if(previousState==GeomClosed && requestedState==EventProc) { 
+    //beginOfEvent
+    G4String string = name; 
+    string += "EventBegin.osh"; 
+    OShellExecuteFile (G4oGetShell(),(char*)string.data());
+  } else if(previousState==EventProc && requestedState==GeomClosed) { 
+    // EndOfEvent
+    G4String string = name; 
+    string += "EventEnd.osh"; 
+    OShellExecuteFile (G4oGetShell(),(char*)string.data());
   }
 
   return true;

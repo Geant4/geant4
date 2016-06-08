@@ -8,16 +8,16 @@
 //#include "G4Placement.hh"
 #include "G4Axis2Placement3D.hh"
 
-//typedef RWTPtrOrderedVector<G4Curve> G4CurveVector;
-//typedef RWTPtrOrderedVector<G4CurveVector> G4BoundaryVector;
-typedef RWTPtrOrderedVector<G4PlacedSolid> G4PlacedSolidVector;
-//typedef RWTPtrOrderedVector<G4GeometryCreator> G4CreatorVector;
-typedef RWTPtrOrderedVector<G4Surface> G4SurfaceVector;
-typedef RWTPtrOrderedVector<G4BREPSolid> G4SolidVector;
-//typedef RWTPtrOrderedVector<G4Placement> G4PlacementVector;
+//typedef G4RWTPtrOrderedVector<G4Curve> G4CurveVector;
+//typedef G4RWTPtrOrderedVector<G4CurveVector> G4BoundaryVector;
+typedef G4RWTPtrOrderedVector<G4PlacedSolid> G4PlacedSolidVector;
+//typedef G4RWTPtrOrderedVector<G4GeometryCreator> G4CreatorVector;
+typedef G4RWTPtrOrderedVector<G4Surface> G4SurfaceVector;
+typedef G4RWTPtrOrderedVector<G4BREPSolid> G4SolidVector;
+//typedef G4RWTPtrOrderedVector<G4Placement> G4PlacementVector;
 
 //#include "G4STEPEntity.hh"
-//erator ==(class RWTPtrOrderedVector<G4Curve> a, class RWTPtrOrderedVector<G4Curve> b){}
+//erator ==(class G4RWTPtrOrderedVector<G4Curve> a, class G4RWTPtrOrderedVector<G4Curve> b){}
 #include "globals.hh"
 #include "instmgr.h"
 #include "STEPentity.h"

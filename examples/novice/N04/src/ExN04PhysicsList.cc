@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN04PhysicsList.cc,v 1.5 1999/06/17 04:18:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN04PhysicsList.cc,v 1.6.6.1 1999/12/07 20:47:32 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 
@@ -22,7 +22,7 @@
 #include "G4BosonConstructor.hh"
 #include "G4LeptonConstructor.hh"
 #include "G4MesonConstructor.hh"
-#include "G4BarionConstructor.hh"
+#include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
@@ -57,7 +57,7 @@ void ExN04PhysicsList::ConstructParticle()
   ConstructAllBosons();
   ConstructAllLeptons();
   ConstructAllMesons();
-  ConstructAllBarions();
+  ConstructAllBaryons();
   ConstructAllIons();
   ConstructAllShortLiveds();
 }
@@ -669,10 +669,10 @@ void ExN04PhysicsList::ConstructAllMesons()
   pConstructor.ConstructParticle();
 }
 
-void ExN04PhysicsList::ConstructAllBarions()
+void ExN04PhysicsList::ConstructAllBaryons()
 {
   //  Construct all barions
-  G4BarionConstructor pConstructor;
+  G4BaryonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
 

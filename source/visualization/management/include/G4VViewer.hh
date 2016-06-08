@@ -1,15 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.2 1999/01/11 00:48:16 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VViewer.hh,v 1.4.2.1 1999/12/07 20:53:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  27th March 1996
+//
+// Class description
+//
 // Abstract interface class for graphics viewers.
 
 #ifndef G4VVIEWER_HH
@@ -23,14 +26,14 @@ class G4VSceneHandler;
 
 class G4VViewer {
 
-  friend ostream& operator << (ostream& os, const G4VViewer& v);
+public: // With description
 
-public:
+  friend ostream& operator << (ostream& os, const G4VViewer& v);
 
   G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();
 
-  // For RWTPtrOrderedVector...
+  // For G4RWTPtrOrderedVector...
   G4bool operator == (const G4VViewer& view) const;
 
   //////////////////////////////////////////////////////////////

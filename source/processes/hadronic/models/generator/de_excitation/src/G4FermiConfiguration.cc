@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -465,7 +465,7 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   
   
   // Calculate Momenta of K fragments
-  RWTPtrOrderedVector<G4LorentzVector>* MomentumComponents = 
+  G4RWTPtrOrderedVector<G4LorentzVector>* MomentumComponents = 
     FragmentsMomentum(AvalKineticEnergy);
   
   G4FragmentVector * theResult = new G4FragmentVector;
@@ -496,7 +496,7 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
 
 
 
-RWTPtrOrderedVector<G4LorentzVector>* 
+G4RWTPtrOrderedVector<G4LorentzVector>* 
 G4FermiConfiguration::FragmentsMomentum(G4double KineticEnergy)
 {
   // Calculates momentum for K fragments (Kopylov's method of sampling is used)
@@ -506,8 +506,8 @@ G4FermiConfiguration::FragmentsMomentum(G4double KineticEnergy)
   G4int K = Index.entries();
 
   
-  RWTPtrOrderedVector<G4LorentzVector>* MomentumList = 
-    new RWTPtrOrderedVector<G4LorentzVector>(K);
+  G4RWTPtrOrderedVector<G4LorentzVector>* MomentumList = 
+    new G4RWTPtrOrderedVector<G4LorentzVector>(K);
   
   G4double AvalaibleMass = 0; 
   for (G4int i=0; i<K; i++) AvalaibleMass += theListOfFragments[Index[i]-1]->GetFragmentMass();

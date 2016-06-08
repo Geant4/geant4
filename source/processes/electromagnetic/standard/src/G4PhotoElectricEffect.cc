@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.7 1999/06/08 13:29:23 maire Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PhotoElectricEffect.cc,v 1.8.6.1 1999/12/07 20:51:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -305,10 +305,10 @@ void G4PhotoElectricEffect::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from a parametrisation. ";
            comments += "Good description from 10 KeV to 50 MeV for all Z";
-           comments += "Sandia crossSection below 50 KeV";
+           comments += "\n        Sandia crossSection below 50 KeV";
 	             
   G4cout << endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
+         << "\n       PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";
 }         

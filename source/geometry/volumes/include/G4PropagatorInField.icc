@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.2 1999/02/17 17:35:59 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PropagatorInField.icc,v 1.5.2.1 1999/12/07 20:48:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------------------
@@ -30,10 +30,20 @@ G4PropagatorInField( G4Navigator    *theNavigator,
 		     G4FieldManager *detectorFieldMgr) :
     fNavigator(theNavigator),
     fDetectorFieldMgr(detectorFieldMgr), 
-    fmax_loop_count(1000),
-    End_PointAndTangent(G4ThreeVector(0.,0.,0.),G4ThreeVector(0.,0.,0.),0.0,0.0)
+    fmax_loop_count(10000),
+    End_PointAndTangent(G4ThreeVector(0.,0.,0.),
+			G4ThreeVector(0.,0.,0.),0.0,0.0),
+    fDelta_One_Step_Value(fDefault_Delta_One_Step_Value),
+    fDelta_Intersection_Val(fDefault_Delta_Intersection_Val),
+    fVerboseLevel(0)
 {
-   // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
+     // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
+
+     fNoZeroStep=0;                
+     fThresholdNo_ZeroSteps= 2; 
+     // fMidPoint_CurveLen_of_LastAttempt= -1;
+     fFull_CurveLen_of_LastAttempt= -1; 
+     fLast_ProposedStepLength= -1; 
 }
 
 inline
@@ -91,8 +101,15 @@ inline void     G4PropagatorInField::SetMaxLoopCount(G4int new_max)
 
 // inline void     G4PropagatorInField::SetChordFinder(G4ChordFinder* newCF)
 
-inline G4double G4PropagatorInField::DeltaOneStep() 
-{ return delta_one_step_val; }
 
-inline G4double G4PropagatorInField::DeltaIntersection()
-{ return delta_intersection_val; } 
+inline G4double G4PropagatorInField::GetDeltaIntersection()
+{ return fDelta_Intersection_Val; } 
+inline G4double G4PropagatorInField::     GetDeltaOneStep()    
+{ return fDelta_One_Step_Value;  }                                    
+
+// void  SetDeltaIntersection(G4double);   
+inline void G4PropagatorInField::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
+{ 
+  fDelta_One_Step_Value= valDeltaOneStep;  
+  fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
+}

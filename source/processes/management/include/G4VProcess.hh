@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.3 1999/04/14 10:50:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VProcess.hh,v 1.5 1999/11/07 17:11:47 kurasige Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -16,6 +16,12 @@
 //	CERN, CN Division, ASD group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
+//
+// Class Description
+//  This class is the virtual class for physics process objects. 
+//   It defines public methods which describe the behavior of 
+//   a physics process.
+//
 // ------------------------------------------------------------
 //   New Physics scheme           18 Dec. 1996  H.Kurahige
 // ------------------------------------------------------------
@@ -55,7 +61,7 @@ class G4VProcess
   //  G4VProcess G4VProcess();  
       G4VProcess & operator=(const G4VProcess &right);
 
-  public:
+  public: // with description
   //  constructor requires the process name and type
       G4VProcess(const G4String& aName =  "NoName",
 		 G4ProcessType   aType = fNotDefined );
@@ -64,11 +70,18 @@ class G4VProcess
   //  physics table (0 pointer is assigned)
       G4VProcess(G4VProcess &right);
 
+  public: 
+  //  destructor 
       virtual ~G4VProcess();
 
+  // equal opperators
       G4int operator==(const G4VProcess &right) const;
       G4int operator!=(const G4VProcess &right) const;
 
+  public: // with description
+  ////////////////////////////
+  // DoIt    /////////////////
+  ///////////////////////////
       virtual G4VParticleChange* PostStepDoIt(
 			     const G4Track& track,
 			     const G4Step&  stepData
@@ -92,6 +105,9 @@ class G4VProcess
       //      const G4Step&     stepData:
       //        reference to the current G4Step information
 
+  //////////////////////////
+  // GPIL    //////////////
+  /////////////////////////  
       virtual G4double AlongStepGetPhysicalInteractionLength(
                              const G4Track& track,
 			     G4double  previousStepSize,
@@ -136,9 +152,12 @@ class G4VProcess
       //        this value is used for transformation of
       //        true path length to geometrical path length
 
+
+  ////////////////////// 
       virtual G4bool IsApplicable(const G4ParticleDefinition&){return true;};
       // Returns true if this process object is applicable to
       // the particle type
+      // Process will not be registered to a particle if IsApplicable is false   
 
       virtual void BuildPhysicsTable(const G4ParticleDefinition&){};
       // Messaged by the Particle definition (via the Process manager)
@@ -153,6 +172,7 @@ class G4VProcess
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
 
+  ////////////////////////////
       const G4String& GetProcessName() const;
       //  Returns the name of the process.
 
@@ -188,11 +208,11 @@ class G4VProcess
       G4double          currentInteractionLength;
      // The InteractionLength in the current material
 
- public:
+ public: // with description
       virtual void      ResetNumberOfInteractionLengthLeft();
      // reset (determine the value of)NumberOfInteractionLengthLeft
  
- protected: 
+ protected:  // with description
      virtual void      SubtractNumberOfInteractionLengthLeft(
 				  G4double previousStepSize
                                 );
@@ -211,19 +231,22 @@ class G4VProcess
       G4ProcessType theProcessType;
       //  The type of the process
 
- public:
+ public: // with description
    virtual void  DumpInfo() const;
-   
- public:
+   // dump out process information    
+
+ public: // with description
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
+   // set/get controle flag for output message
+   //  0: Silent
+   //  1: Warning message
+   //  2: More
+
 
  protected:
    G4int verboseLevel;
    // controle flag for output message
-   //  0: Silent
-   //  1: Warning message
-   //  2: More
 
 };
 

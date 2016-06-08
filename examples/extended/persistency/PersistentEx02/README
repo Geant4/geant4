@@ -1,0 +1,142 @@
+$Id: README,v 1.6 1999/12/05 22:27:05 morita Exp $
+------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                       Example PersistentEx02
+                       ----------------------
+
+This example program demonstrates how users can use object database 
+with Geant4 Persistency Manager with HepODBMS and Objectivity/DB.
+Ask your local system manager for the availability of these
+products on your system.  For more detail description of the 
+setup, see the README file of PersistentEx01.
+
+============
+Introduction
+============
+PersistentEx02 demonstrates how to store persistent hits, in
+addition to other objects demonstrated in PersistentEx01.
+
+To make persistent hits, schema definitions of PersEx02TrackerHit and 
+PersEx02TrackerHitsCollection must inherit from Geant4 persistent
+hit classes G4PVHit and G4PVHitsCollection.  Note that the data
+members in persistent hits must be persistent-capable types.
+
+    -------------------------
+    In PersEx02TrackerHit.ddl
+    -------------------------
+    class PersEx02TrackerHit : public G4PVHit
+    {
+      public:
+       :
+      private:
+          G4Pdouble edep;
+          G4ThreeVector pos;
+       :
+    }
+
+    ------------------------------------
+    In PersEx02TrackerHitsCollection.ddl
+    ------------------------------------
+    typedef d_Varray< d_Ref<PersEx02TrackerHit> > PersEx02TrackerHitsVArray;
+
+    class PersEx02TrackerHitsCollection : public G4PVHitsCollection
+    {
+      public:
+       :
+      private:
+          PersEx02TrackerHitsVArray hitsCollection;
+       :
+    }
+
+When persistent hits collections are made at runtime, each hit collection
+should be registered to the collection of hits collections
+(G4PHCofThisEvent) by the user SensitiveDetector (PersEx02TrackerSD).
+Each event object stored in the database has an association to this 
+collection of the collections for the future reference.
+
+====================
+Sustained Transation
+====================
+
+There are two types of database transactions in the Geant4
+persistency.  By default, Geant4 persistent objects are
+stored at the end of each event as an atmic database transaction.
+
+In this example, user-defined persistent hits are created
+during the event.  To enable this, user should explicitly call
+StartTransaction() and Commit() of G4PersistencyManager.
+These calls are implemented in BeginOfRunAction() and
+EndOfRunAction() of the RunAction class.
+
+    void PersEx02RunAction::BeginOfRunAction(const G4Run* aRun)
+    {
+     ....
+      persM->StartTransaction(kEventDB, kUpdate, true);
+     ....
+    }
+
+    void PersEx02RunAction::EndOfRunAction(const G4Run* )
+    {
+     ....
+      persM->Commit(kEventDB, true);
+     ....
+    }
+
+To make a "check point", a pair of Commit()/StartTransaction()
+is called at EndOfEventAction() in the EventAction class at
+every 10 events.
+
+    void PersEx02EventAction::EndOfEventAction(const G4Event* evt)
+    {
+     ....
+      if( persM && (evt->GetEventID() % 10 == 0))
+      {
+        persM->Commit(kEventDB, true);
+        persM->StartTransaction(kEventDB, kUpdate, true);
+      }
+     ....
+    }
+
+=========================
+PersistentEx02 executable
+=========================
+PersistentEx02 executable can be made by simply typing "gmake" in this
+directory.  Use PersistentEx02run csh-script for a simple test.
+
+example:
+   gmake                # creates PersistentEx02 executable
+   PersistentEx02run    # run PersistentEx02
+
+PersistentEx02run will copy the G4EXAMPLE_BOOT file into runtime
+federated database.  Whenever PersistentEx02run is executed again,
+it will delete the old federeated database and start from the 
+new copy of G4EXAMPLE_BOOT.
+
+=================
+Persistent output
+=================
+When PersistentEx02 is run correctly, following database files will be
+created in your runtime federeated database directory.
+
+Events.PersistentEx02.DB       Geometry.PersistentEx02.DB  
+PersistentEx02                 PersistentEx02.FDDB         
+Runs.PersistentEx02.DB         System.PersistentEx02.DB
+
+Hits are stored in "Events" database.
+
+To browse the database contents, refer to the README file in
+PersistentEx01.  Persistent hits are stored in the Events
+database.
+
+======
+readDB
+======
+A simple standalone application readDB, provided in this directory,
+can also be used to access the event and hits objects.
+See PersistentEx02/readDB/README for more detail.
+
+--

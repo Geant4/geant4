@@ -1,34 +1,33 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVHit.ddl,v 1.1 1999/01/07 16:10:44 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
-//                                            Takashi.Sasaki@kek.jp 
+// $Id: G4PVHit.ddl,v 1.6 1999/11/24 20:27:24 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
 
 #ifndef G4PVHit_h
 #define G4PVHit_h 1
 
-#include "globals.hh"
+#include "G4PersistentSchema.hh"
+
+#include "G4VHit.hh"
+
 #include "HepODBMS/odbms/HepODBMS.h"
 
-class G4VHit;
-
-class G4PVHit : public HepPersObj 
+class G4PVHit
+ : public HepPersObj, public G4VHit
 {
 
   public:
       G4PVHit();
       virtual ~G4PVHit();
-      int operator==(const G4PVHit &right) const
-       {
-	 return (this==&right) ? true : false;
-       };
-
-      virtual G4VHit* MakeTransientObject()=0;
+      int operator==(const G4PVHit &right) const;
+      virtual void Draw();
+      virtual void Print();
 };
 
 #endif

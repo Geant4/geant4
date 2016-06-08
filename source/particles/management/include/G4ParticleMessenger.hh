@@ -1,19 +1,19 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleMessenger.hh,v 1.2 1999/04/13 07:58:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ParticleMessenger.hh,v 1.3.4.1 1999/12/07 20:49:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //---------------------------------------------------------------
 //
 //  G4ParticleMessenger.hh
 //
-//  Description:
+//  Class Description:
 //    This is a messenger class to interface to exchange information
 //    between Particle related classes and UI.
 //
@@ -68,10 +68,11 @@ class G4UIcmdWithAnInteger;
 
 class G4ParticleMessenger: public G4UImessenger
 {
-  public:
+  public: 
     G4ParticleMessenger(G4ParticleTable* pTable = 0);
     virtual ~G4ParticleMessenger();
 
+  public: // With Description
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
 

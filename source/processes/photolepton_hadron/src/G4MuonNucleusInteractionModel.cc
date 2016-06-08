@@ -271,13 +271,13 @@
 
 //-----------------------------------------------------------------------------
   G4double G4MuonNucleusInteractionModel::computeDifferentialCrossSection
-    (G4double initialEnergy, G4double finalEnergy, G4double cosTheta)
+    (G4double initialEnergy, G4double finalEnergy, G4double aCosTheta)
 //-----------------------------------------------------------------------------
   {
     G4double muonMass = G4MuonMinus::MuonMinus()->GetPDGMass();
 
     if(finalEnergy < muonMass) return(0.0);
-    if(cosTheta >= 1.0) return DBL_MAX;
+    if(aCosTheta >= 1.0) return DBL_MAX;
 
     G4double initialMomentum 
       = sqrt(initialEnergy*initialEnergy - muonMass*muonMass);
@@ -289,7 +289,7 @@
     // and invariant mass of final state of hadrons (W2)
     G4double Q2 
       = 2.0*(initialEnergy*finalEnergy
-             -initialMomentum*finalMomentum*cosTheta-muonMass*muonMass);
+             -initialMomentum*finalMomentum*aCosTheta-muonMass*muonMass);
     if(Q2 < 0.0) return(0.0);
 
     G4double W2
@@ -305,7 +305,7 @@
     G4double fNu = initialEnergy-finalEnergy;
     G4double fK = fNu+Q2/(2.0*fNu);
     G4double fEpsilon 
-      = 1.0/(1.0+2.0*((1.0-cosTheta)/(1.0+cosTheta))*(Q2+fNu*fNu)/Q2);
+      = 1.0/(1.0+2.0*((1.0-aCosTheta)/(1.0+aCosTheta))*(Q2+fNu*fNu)/Q2);
     if(fEpsilon > 1.0) return DBL_MAX;
 
 

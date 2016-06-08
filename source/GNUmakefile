@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 1999/06/24 10:49:47 johna Exp $
+# $Id: GNUmakefile,v 1.15 1999/12/05 22:36:52 morita Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -13,7 +13,7 @@ MAKEFLAGS= --no-print-directory
 SUBDIR1 = global particles processes geometry digits+hits
 SUBDIR2 = event tracking track materials run graphics_reps intercoms readout
 SUBDIR3 = g3tog4 interfaces visualization
-SUBDIR4 = # persistency
+SUBDIR4 = persistency
 
 ifndef G4INSTALL
   G4INSTALL = ..
@@ -28,21 +28,42 @@ unique := $(shell echo $$$$)
 .PHONY: all glob global libmap clean_libs clean clean_all
 
 all:
+ifdef G4USE_HEPODBMS
+	@$(ECHO) Making granular libraries with HepODBMS option ...
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done
+	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
+	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
+	 fi
+endif
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+ifdef G4USE_HEPODBMS
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE)); done
+endif
 	$(MAKE) libmap
 
 glob global:
+ifdef G4USE_HEPODBMS
+	@$(ECHO) Making global libraries with HepODBMS option ...
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done
+	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
+	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
+	 fi
+endif
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) global); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+ifdef G4USE_HEPODBMS
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) global); done
+endif
+
 
 libmap: $(G4LIBDIR)/liblist
 	@echo "WARNING: Making a library map of granular libraries."
 	@echo "         This is a list of libraries in order of use, and for"
 	@echo "         each library a list of other libraries used."
-	@echo "         To do this is needs a complete set of dependency"
+	@echo "         To do this it needs a complete set of dependency"
 	@echo "         files, e.g., after gmake in the source/ directory."
 	@echo "Searching $(G4INSTALL)/source"
 	@echo '  for GNUmakefiles containing "name" and sorting...'
@@ -67,7 +88,7 @@ libmap: $(G4LIBDIR)/liblist
 	done
 	@echo "Making libname.map..."
 	@rm -f $(G4LIBDIR)/libname.map;
-	G4TMP=$(G4TMP); export G4TMP; \
+	@G4TMP=$(G4TMP); export G4TMP; \
 	  $(G4LIBDIR)/liblist -l -d $(G4TMPDIR) \
 	  < /tmp/G4libname.map.starter.$(unique) \
 	  > $(G4LIBDIR)/libname.map

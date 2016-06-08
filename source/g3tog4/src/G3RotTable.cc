@@ -1,36 +1,44 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.6 1999/05/28 21:09:06 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G3RotTable.cc,v 1.11 1999/12/05 17:50:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
+// by I.Hrivnacova, 27 Sep 99
 
-#include "globals.hh"
-#include "G3toG4RotationMatrix.hh"
-#include "G3toG4.hh"
 #include "G3RotTable.hh"
 
-G3RotTable::G3RotTable(){
-  _Rot = new 
-    RWTPtrOrderedVector<G3toG4RotationMatrix>;
-};
+G3RotTable::G3RotTable()
+{
+  fRotVector = new G3RotMatrixVector();
+}
 
-G3RotTable::~G3RotTable(){
-  _Rot->clearAndDestroy();
-  delete _Rot;
-  G4cout << "Deleted G3RotTable..." << endl;
-};
+G3RotTable::~G3RotTable()
+{
+  fRotVector->clearAndDestroy();
+  delete fRotVector;
+}
 
-G3toG4RotationMatrix*
-G3RotTable::Get(G4int RotID){
-  return (*_Rot)[RotID];
-};
+G4RotationMatrix* G3RotTable::Get(G4int id) const
+{
+  for (G4int i=0; i<fRotVector->entries(); i++) {
+    G3RotTableEntry* rte = (*fRotVector)[i];
+    if (id == rte->GetID()) return rte->GetMatrix();
+  }
+  return 0;
+}    
 
-void 
-G3RotTable::Put(G4int RotID, G3toG4RotationMatrix *RotPT){
-  _Rot->insertAt(RotID, RotPT);
-};
+void G3RotTable::Put(G4int id, G4RotationMatrix* matrix)
+{
+  G3RotTableEntry* rte = new G3RotTableEntry(id, matrix);
+  fRotVector->insert(rte);
+}
+
+void G3RotTable::Clear()
+{
+  fRotVector->clearAndDestroy();
+}

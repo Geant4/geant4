@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.9 1999/07/06 13:21:02 aforti Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LowEnergyIonisation.hh,v 1.11.6.1 1999/12/07 20:50:20 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -14,17 +14,11 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
 //      ---------- G4LowEnergyIonisation physics process -----------
-//                by Laszlo Urban, 20 March 1997 
-// ************************************************************
-// It is the first implementation of the NEW IONISATION     
-// PROCESS. ( delta rays + continuous energy loss)
-// It calculates the ionisation for e+/e-.      
+//                by Alessandra Forti July 1999
 // ************************************************************
 //
-// 04-09-98: new methods SetBining()  PrintInfo(), MMa  
+// 14/07/99: corrections , L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4LowEnergyIonisation_h
@@ -32,14 +26,12 @@
 
 
 // Base Class Headers
-#include "G4VDiscreteProcess.hh"
 #include "G4eEnergyLoss.hh"
 
 // Contained Variables Headers
 #include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include <fstream.h>
 
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
@@ -70,8 +62,8 @@ public:
   G4VParticleChange *PostStepDoIt(const G4Track& track,         
 				  const G4Step& Step ) ;                 
   
-  void Print();
-  
+  void PrintInfoDefinition();
+
   protected:
   
   virtual G4double ComputeCrossSection(const G4double AtomicNumber,

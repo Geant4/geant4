@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.3 1999/04/28 10:06:39 mora Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.4.2.1.2.1 1999/12/07 20:52:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -30,7 +30,7 @@
 #ifndef G4FastSimulationManagerProcess_h
 #define G4FastSimulationManagerProcess_h 1
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "G4VProcess.hh"
@@ -48,6 +48,13 @@
 //        G4FastSimulationManagerProcess class
 //
 //------------------------------------------
+
+
+// Class Description:
+// This is a G4VProcess. It provides the interface between the tracking and the parameterisation.
+// It has to be set in the process list of the particles you want to parameterise. 
+//
+
 class G4FastSimulationManagerProcess : public G4VProcess
 {
 public:

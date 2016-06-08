@@ -1,0 +1,38 @@
+$Id: History,v 1.7 1999/12/05 22:28:52 morita Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    PersistentEx02 History file
+                    ---------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+5th December 1999   Y.Morita (PersistentEx02-V00-01-03)
+- LD_LIBRARY_PATH change for Linux
+- readDB: added access to G4PPrimaryParticle.
+
+3rd December 1999   Y.Morita (PersistentEx02-V00-01-02)
+- more bug fixes (TrackerSD)
+
+1st December 1999   Y.Morita (PersistentEx02-V00-01-01)
+- Fix GNUmakefile to pick up right dependency files.
+- new PersistentEx01run script file for new config.
+
+29th November 1999  Y.Morita
+- Bug fix for persistent hits collection based on PersistentEx01.
+  (Requires persistency-V00-01-08)
+
+10th November 1999  Y.Morita (PersistentEx02-V00-01-00)
+- tagged for release 4.1
+
+Oct 18, 1999  Y. Morita
+- Example for persistent hits, started from exampleN02.
+

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserRunAction.cc,v 1.2 1999/04/09 02:28:10 asaim Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UserRunAction.cc,v 1.2.8.1 1999/12/07 20:53:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4UserRunAction.hh"

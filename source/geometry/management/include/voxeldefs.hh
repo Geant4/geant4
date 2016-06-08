@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: voxeldefs.hh,v 1.2 1999/02/15 11:14:01 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: voxeldefs.hh,v 1.2.10.1 1999/12/07 20:48:12 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 //

@@ -1,0 +1,32 @@
+$Id: README,v 1.3 1999/12/03 11:20:58 morita Exp $
+-------------------------------------------------------------------
+
+                              readDB
+                              ------
+
+This short program demonstrates how to access events and their
+associations which are stored in the database.
+
+To create and populate the database, see the README file
+of PersistentEx01.
+
+=====
+Setup
+=====
+In addition to the variables required by PersistentEx01,
+set OO_FD_BOOT to your runtime federeate database boot file.
+
+   OO_FD_BOOT    <path of your runtime federated database file>
+
+See setup.sh/setup.csh for example setup.
+
+=================
+readDB executable
+=================
+readDB executable can be made by simply typing "gmake" in this
+directory.
+
+After gmake, type "readDB" to access the database defined by
+OO_FD_BOOT.
+
+--

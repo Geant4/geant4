@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DCofThisEvent.hh,v 1.1 1999/01/07 16:06:28 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4DCofThisEvent.hh,v 1.2.2.1.2.1 1999/12/07 20:47:46 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4DCofThisEvent_h
@@ -15,7 +15,18 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VDigiCollection.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
+
+// class description:
+//
+//  This is a class which stores digi collections generated at one event.
+// This class is exclusively constructed by G4DigiManager when the first
+// digi collection of an event is passed to the manager, and this class
+// object is deleted by G4RunManager when a G4Event class object is deleted.
+//  Almost all public methods must be used by Geant4 kernel classes and
+// the user should not invoke them. The user can use two const methods,
+// GetDC() and GetNumberOfCollections() for accessing to the stored digi
+// collection(s).
 
 class G4DCofThisEvent 
 {
@@ -29,15 +40,16 @@ class G4DCofThisEvent
       void AddDigiCollection(G4int DCID,G4VDigiCollection * aDC);
 
   private:
-      RWTPtrOrderedVector<G4VDigiCollection> * DC;
+      G4RWTPtrOrderedVector<G4VDigiCollection> * DC;
 
-  public:
+  public: // with description
       inline G4VDigiCollection* GetDC(G4int i) const
       { return (*DC)[i]; }
-      inline G4int GetCapacity() const
-      {
-        return DC->entries();
-      }
+      //  Returns a pointer to a digi collection. Null will be returned
+      // if the particular collection is not stored at the current event.
+      // The integer argument is ID number which is assigned by G4DigiManager
+      // and the number can be obtained by G4DigiManager::GetDigiCollectionID()
+      // method.
       inline G4int GetNumberOfCollections() const
       {
         G4int n = 0;
@@ -46,6 +58,13 @@ class G4DCofThisEvent
           if((*DC)[i]) n++;
         }
         return n;
+      }
+      //  Returns the number of digi collections which are stored in this class
+      // object.
+  public:
+      inline G4int GetCapacity() const
+      {
+        return DC->entries();
       }
 };
 

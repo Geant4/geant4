@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PreCompoundModel.cc,v 1.6 1999/06/23 09:49:06 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PreCompoundModel.cc,v 1.7.4.1 1999/12/07 20:51:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // by V. Lara
 
@@ -76,24 +76,6 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   anInitialState.SetZ(aZ);
   
   
-  // Nucleus mass
-  //  G4double nucleusMass = 
-  //    (theNucleus.GetN()-theNucleus.GetZ())*G4Neutron::Neutron()->GetPDGMass()
-  //    + theNucleus.GetZ()*G4Proton::Proton()->GetPDGMass() 
-  //    - G4NucleiPropertiesTable::GetBindingEnergy(theNucleus.GetN() , theNucleus.GetZ());
-  G4double nucleusMass =  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),
-											 theNucleus.GetN());
-   
-   
-  // Excitation Energy
-  G4double anEnergy = 0;
-  anEnergy =  nucleusMass + thePrimary.GetTotalEnergy();
-  // anEnergy += -aZ*G4Proton::Proton()->GetPDGMass() 
-  //   - (anA-aZ)*G4Neutron::Neutron()->GetPDGMass()
-  //   -G4NucleiPropertiesTable::GetBindingEnergy(anA,aZ);
-  anEnergy -= G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ,anA);
-  //  anInitialState.SetExcitationEnergy(anEnergy);
-  
   // Number of Excitons
   anInitialState.SetNumberOfExcitons(thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
   
@@ -103,9 +85,17 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   // Number of Holes 
   anInitialState.SetNumberOfHoles(0);
   
+  // pre-compound nucleus energy.
+  G4double anEnergy = 0;
+  G4double nucleusMass =  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),
+                                                                                         theNucleus.GetN());
+  anEnergy =  nucleusMass + thePrimary.GetTotalEnergy();
+  
   // Momentum
   G4ThreeVector p = thePrimary.GetDynamicParticle()->Get4Momentum().vect();
-  G4LorentzVector momentum(p, sqrt(p.mag2()+(anEnergy+nucleusMass) * (anEnergy+nucleusMass)) );
+
+  // 4-momentum
+  G4LorentzVector momentum(p, anEnergy);
   anInitialState.SetMomentum(momentum);
   
   

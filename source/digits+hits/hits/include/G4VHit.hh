@@ -1,16 +1,24 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VHit.hh,v 1.1 1999/01/07 16:06:30 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VHit.hh,v 1.3.4.1 1999/12/07 20:47:48 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4VHit_h
 #define G4VHit_h 1
+
+// class description:
+//
+//  This is the base class of hit object. The user should derive this
+// base class to make his/her own hit class. Two virtual method Draw()
+// and Print() can be implemented if the user wants these functionarities.
+//  If a concrete hit class is used as a transient class, G4Allocator
+// must be used.
 
 class G4VHit 
 {

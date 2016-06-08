@@ -1,7 +1,7 @@
 #ifndef G4HadronicInteractionRegistry_h
 #define G4HadronicInteractionRegistry_h 1
 
-#include <rw/tpvector.h>
+#include "g4rw/tpvector.h"
 #include "globals.hh"
 class G4HadronicInteraction;
 
@@ -27,7 +27,7 @@ class G4HadronicInteractionRegistry
   void AddModel(G4HadronicInteraction * aModel);
   
   G4int nModels;
-  RWTPtrVector<G4HadronicInteraction> allModels;
+  G4RWTPtrVector<G4HadronicInteraction> allModels;
   static G4HadronicInteractionRegistry theRegistry;
 
 };

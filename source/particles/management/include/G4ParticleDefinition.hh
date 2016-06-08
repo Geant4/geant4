@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.hh,v 1.3 1999/04/14 10:28:17 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ParticleDefinition.hh,v 1.5.4.1 1999/12/07 20:49:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -43,11 +43,13 @@ class G4Material;
 
 class G4ParticleDefinition 
 {
+  // Class Description
   //  This class containes all the static data of a particle.
   //  It also has uses a process manager in order to collect
   //  all the processes this kind of particle can undertake.
+  //
 
-  public:
+ public: // With Description
   //  Only one type of constructor can be used for G4ParticleDefinition.
   //  If you want to create new particle, you must set name of the particle 
   //  at construction. Most of members seen as arguments of the constructor 
@@ -77,27 +79,8 @@ class G4ParticleDefinition
 			   G4bool           shortlived = false);
 
        virtual ~G4ParticleDefinition();
-
-  private:
-  //  !!!  can not use "copy constructor" nor "default constructor" !!!!
-       G4ParticleDefinition(const G4ParticleDefinition &right);
-       G4ParticleDefinition();
-
-  private:  
-  //  !!!  Assignment operation is forbidden !!!
-      const G4ParticleDefinition & operator=(const G4ParticleDefinition &right);
-
-  public:
-      G4int operator==(const G4ParticleDefinition &right) const;
-      G4int operator!=(const G4ParticleDefinition &right) const;
-
-      void DumpTable() const;
-      //  Prints information of data members.
-
-      G4ParticleTable* GetParticleTable();
-      // get pointer to the particle table
       
-  public:
+  public: // With Description
       // These methods concerning cut values are provided 
       // to invoke corresponding methods for each particle type.
       // Actual implementation can be seen in the class 
@@ -113,7 +96,7 @@ class G4ParticleDefinition
       G4bool                GetApplyCutsFlag() const;
       void                  SetApplyCutsFlag(G4bool flag);
       
-  public:
+  public: // With Description
   // By these following Getxxxx methods, you can get values 
   // for members which can not be changed
   //  
@@ -139,6 +122,8 @@ class G4ParticleDefinition
 
       G4int    GetPDGEncoding() const { return thePDGEncoding; }
       G4int    GetAntiPDGEncoding() const { return theAntiPDGEncoding; }
+      void     SetAntiPDGEncoding(G4int aEncoding);
+
  
       G4int    GetQuarkContent(G4int flavor) const;
       G4int    GetAntiQuarkContent(G4int flavor) const;
@@ -146,7 +131,7 @@ class G4ParticleDefinition
       //  The value of flavor is assigned as follows 
       // 1:d, 2:u, 3:s, 4:c, 5:b, 6:t, 7:l(down type quark) 8:h(up type quark) 
  
-  public:
+  public: // With Description
       // ShortLived flag
       G4bool   IsShortLived() const { return fShortLivedFlag; }
 
@@ -155,17 +140,52 @@ class G4ParticleDefinition
 
       G4double GetPDGLifeTime() const { return thePDGLifeTime; }
       void     SetPDGLifeTime(G4double aLifeTime) { thePDGLifeTime = aLifeTime; }
-   public:
+
+  public:// With Description
       G4DecayTable* GetDecayTable();
       void          SetDecayTable(G4DecayTable* aDecayTable); 
       // Set/Get Decay Table
       //   !! Decay Table can be modified !!  
 
-  public:
+  public: // With Description
       G4ProcessManager* GetProcessManager() const; 
       void SetProcessManager(G4ProcessManager* aProcessManager); 
       // Set/Get Process Manager
       //   !! Process Manager can be modified !!  
+
+      G4ParticleTable* GetParticleTable();
+      // get pointer to the particle table
+
+      void DumpTable() const;
+      //  Prints information of data members.
+
+  protected:
+      G4int   FillQuarkContents();
+      //  calculate quark and anti-quark contents
+      //  return value is PDG encoding for this particle.
+      //  It means error if the return value is deffernt from
+      //  this->thePDGEncoding.
+
+ public:
+      void  SetVerboseLevel(G4int value);
+      G4int GetVerboseLevel() const;
+      // controle flag for output message
+      //  0: Silent
+      //  1: Warning message
+      //  2: More
+
+  private:
+  //  !!!  can not use "copy constructor" nor "default constructor" !!!!
+       G4ParticleDefinition(const G4ParticleDefinition &right);
+       G4ParticleDefinition();
+
+  private:  
+  //  !!!  Assignment operation is forbidden !!!
+      const G4ParticleDefinition & operator=(const G4ParticleDefinition &right);
+
+  public:
+      G4int operator==(const G4ParticleDefinition &right) const;
+      G4int operator!=(const G4ParticleDefinition &right) const;
 
   private:
   //  Values following can not be changed
@@ -227,11 +247,8 @@ class G4ParticleDefinition
  
       G4int theAntiPDGEncoding;
       //  The Particle Data Group integer identifier of the anti-particle
-   public:
-      void  SetAntiPDGEncoding(G4int aEncoding)
-      { theAntiPDGEncoding = aEncoding; }
 
-   protected:
+  protected:
       enum {NumberOfQuarkFlavor = 8};
       G4int  theQuarkContent[NumberOfQuarkFlavor];
       G4int  theAntiQuarkContent[NumberOfQuarkFlavor];
@@ -240,12 +257,7 @@ class G4ParticleDefinition
       //    0:d, 1:u, 2:s, 3:c, 
       //    4:b, 5:t, 6:l(down type quark) 7:h(up type quark) 
 
-      G4int   FillQuarkContents();
-      //  calculate quark and anti-quark contents
-      //  return value is PDG encoding for this particle.
-      //  It means error if the return value is deffernt from
-      //  this->thePDGEncoding.
-   
+
   private:
     // Following members can be changed after construction
 
@@ -277,14 +289,6 @@ class G4ParticleDefinition
   
  private:
    G4int verboseLevel;
-   // controle flag for output message
-   //  0: Silent
-   //  1: Warning message
-   //  2: More
-
- public:
-   void  SetVerboseLevel(G4int value);
-   G4int GetVerboseLevel() const;
 };
 
 inline 
@@ -384,7 +388,10 @@ inline G4double      	G4ParticleDefinition::GetEnergyThreshold(const G4Material*
   return -1.0 * eV;   
 }
  
-
+inline void             G4ParticleDefinition::SetAntiPDGEncoding(G4int aEncoding)
+{ 
+  theAntiPDGEncoding = aEncoding; 
+}
 
 #endif
 

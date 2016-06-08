@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitationHandler.hh,v 1.2 1999/04/12 15:45:24 hpw Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitationHandler.hh,v 1.3.4.1 1999/12/07 20:51:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -23,7 +23,7 @@
 #ifndef G4ExcitationHandler_h
 #define G4ExcitationHandler_h 1
 
-#include "G4MultiFragmentation.hh"
+#include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
 #include "G4VEvaporation.hh"
 #include "G4VPhotonEvaporation.hh"
@@ -59,7 +59,7 @@ public:
 
   void SetEvaporation(G4VEvaporation *const  value);
 
-  void SetMultiFragmentation(G4MultiFragmentation *const  value);
+  void SetMultiFragmentation(G4VMultiFragmentation *const  value);
 
   void SetFermiModel(G4VFermiBreakUp *const  value);
 
@@ -76,7 +76,7 @@ private:
 
   const G4VEvaporation * GetEvaporation() const;
 
-  const G4MultiFragmentation * GetMultiFragmentation() const;
+  const G4VMultiFragmentation * GetMultiFragmentation() const;
 
   const G4VFermiBreakUp * GetFermiModel() const;
 
@@ -91,7 +91,7 @@ private:
   
   G4VEvaporation *theEvaporation;
   
-  G4MultiFragmentation *theMultiFragmentation;
+  G4VMultiFragmentation *theMultiFragmentation;
   
   G4VFermiBreakUp *theFermiModel;
  
@@ -124,12 +124,12 @@ inline void G4ExcitationHandler::SetEvaporation(G4VEvaporation *const  value)
   theEvaporation = value;
 }
 
-inline const G4MultiFragmentation * G4ExcitationHandler::GetMultiFragmentation() const
+inline const G4VMultiFragmentation * G4ExcitationHandler::GetMultiFragmentation() const
 {
   return theMultiFragmentation;
 }
 
-inline void G4ExcitationHandler::SetMultiFragmentation(G4MultiFragmentation *const  value)
+inline void G4ExcitationHandler::SetMultiFragmentation(G4VMultiFragmentation *const  value)
 {
   if (theMultiFragmentation != 0 && MyOwnMultiFragmentationClass) delete theMultiFragmentation;
   MyOwnMultiFragmentationClass = false;

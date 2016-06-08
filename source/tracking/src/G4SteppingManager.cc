@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.5 1999/06/29 16:16:59 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SteppingManager.cc,v 1.7.6.1 1999/12/07 20:53:06 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //---------------------------------------------------------------
@@ -25,12 +25,14 @@
 //---------------------------------------------------------------
 
 #include "G4SteppingManager.hh"
+#include "G4SteppingVerbose.hh"
 #include "G4UImanager.hh"
 #include "G4ForceCondition.hh"
 #include "G4GPILSelection.hh"
 #include "G4SteppingControl.hh"
 #include "G4TransportationManager.hh"
 #include "G4UserLimits.hh"
+#include "G4VSensitiveDetector.hh"    // Include from 'hits/digi'
 
 //////////////////////////////////////
 G4SteppingManager::G4SteppingManager()
@@ -44,7 +46,17 @@ G4SteppingManager::G4SteppingManager()
    fPreStepPoint  = fStep->GetPreStepPoint();
    fPostStepPoint = fStep->GetPostStepPoint();
 #ifdef G4VERBOSE
-   fVerbose = new G4SteppingVerbose(this);
+   if(G4VSteppingVerbose::GetInstance()==0) {
+     fVerbose =  new G4SteppingVerbose();
+     G4VSteppingVerbose::SetInstance(fVerbose);
+     fVerbose -> SetManager(this);
+     KillVerbose = true;
+   }
+   else { 
+      fVerbose = G4VSteppingVerbose::GetInstance();
+      fVerbose -> SetManager(this);
+	  KillVerbose = false;
+   }
 #endif
    fSelectedAtRestDoItVector 
       = new G4SelectedAtRestDoItVector(SIZEofSelectedDoIt);
@@ -74,7 +86,7 @@ G4SteppingManager::~G4SteppingManager()
    delete fTouchable2;
    if (fUserSteppingAction) delete fUserSteppingAction;
 #ifdef G4VERBOSE
-   delete fVerbose;
+   if(KillVerbose) delete fVerbose;
 #endif
 }
 
@@ -108,6 +120,8 @@ G4StepStatus G4SteppingManager::Stepping()
    fN2ndariesAlongStepDoIt = 0;
    fN2ndariesPostStepDoIt = 0;
 
+//JA Set the volume before it is used (in DefineStepLength() for User Limit) 
+   fCurrentVolume = fStep->GetPreStepPoint()->GetPhysicalVolume();
 
 //-----------------
 // AtRest Processes

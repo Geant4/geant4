@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVPhysicalVolume.ddl,v 1.1 1999/01/07 16:10:48 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PVPhysicalVolume.ddl,v 1.3.2.1 1999/12/07 20:50:07 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4PVPhysicalVolume
@@ -17,12 +17,12 @@
 #include "globals.hh"
 #include "geomdefs.hh"
 #include "G4PersistentTypes.hh"
+#include "G4PersistentSchema.hh"
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 
 #include "HepODBMS/odbms/HepODBMS.h"
-#include "HepODBMS/odbms/HepVArray.h"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -33,10 +33,6 @@ class G4LogicalVolume;
 // the circular dependency between G4PLogicalVolume and G4PVPhysicalVolume
 class G4PLogicalVolume;
 #pragma ooclassref G4PLogicalVolume "G4PLogicalVolume_ref.hh"
-
-#ifndef OO_VARRAY_D_DOUBLE
-declare(HepVArray,d_Double)
-#endif
 
 class G4PVPhysicalVolume: public HepPersObj
 {
@@ -74,14 +70,14 @@ public:
     virtual void  SetCopyNo(G4int CopyNo) = 0;
 
 protected:
-    HepVArray(d_Double) frot;
-    HepVArray(d_Double) ftrans;
+    d_Varray<d_Double> frot;
+    d_Varray<d_Double> ftrans;
 
     G4ThreeVector ftransvector;
 
-    ooRef(G4PLogicalVolume) flogical;
+    d_Ref<G4PLogicalVolume> flogical;
     G4PString fname;	            	// name of the volume
-    ooRef(G4PVPhysicalVolume) fmother;	// The current moher volume
+    d_Ref<G4PVPhysicalVolume> fmother;	// The current moher volume
 
 };
 

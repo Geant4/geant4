@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999/06/21 09:11:14 allison Exp $
+$Id: History,v 1.35 1999/11/29 10:17:34 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,17 +17,129 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 21st J.Allison (global-01-00-05)
+November 29, 99 G.Cosmo (global-V00-01-14)
+- Removed g4std/string wrapper since not anymore needed.
+  It was previously made available only for Win/NT-VC++.
+  Inclusion of system <string> is handled only in g4rw/cstring where
+  G4String is defined.
+
+November 26, 99 G.Cosmo (global-V00-01-13)
+- STLInterface: backed up inline keyword for simple methods in
+  vectors' classes (test comparison with previous tag).
+- Reorganised cstring[.h.icc], no functional changes.
+
+November 25, 99 G.Cosmo (global-V00-01-12)
+- STLInterface: changes for ISO/ANSI C++ support:
+  o Reorganised method definitions on wrapper classes; made templated
+    vectors' methods all not inlined (test). Created .icc files accordingly.
+  o Changed #define to typedef for std_string and protected in class
+    scope. Introduced std_vector and std_pvector for collections,
+    replaced G4std::vector<T> and G4std::vector<T*> accordingly.
+- Added default comment header to files in STLInterface and class
+  descriptions for Software Reference Manual.
+
+November 23, 99 G.Cosmo (global-V00-01-11)
+- Introduced changes to support ISO/ANSI code:
+  o Modified STLInterface wrappers to invoke STL containers from G4std
+    namespace.
+  o Modified #include statements to invoke g4std wrappers.
+  o Introduced G4endl and G4cin in G4ios.hh. Modified code accordingly.
+- Made destructors for vector wrappers collections in STLInterface virtual.
+- Added comments to G4UserLimits.hh for the Software Reference Manual
+  (by M.Maire).
+
+November 19, 99 G.Cosmo (global-V00-01-10)
+- Addition of comments for the Software Reference Manual (by M.Maire):
+  G4UnitsTable.hh, G4UnitsTest.hh, PhysicalConstants.h, SystemOfUnits.h.
+
+November 16, 99 G.Cosmo (global-V00-01-09)
+- STLInterface: removed wrappers for Dictionaries.
+  Removed files: tvhdict.h, tphdict.h, rwstlhash.h.
+  Removed also hash_map wrappers for every system.
+- Removed temporary 'using' statements in g4std wrappers.
+- Reorganised inline function definitions in management/include:
+  added G4PhysicsVector.icc, G4LPhysicsFreeVector.icc and
+  G4PhysicsOrderedFreeVector.icc.
+- Fixed bug G4PhysicsVector. Initialised data members in default constructor.
+- Removed 'RD44' from header description in every file.
+- Modifications for Software Reference Manual for existing class descriptions.
+
+November 15, 99 G.Cosmo (global-V00-01-08)
+- Fixes for keywords which did not migrate by mistake in the conversion
+  of the HEAD. Namely: RWDEFAULT_CAPACITY, RWBoundsErr, RWGeneralException,
+  RWTHROW, RW2STL_LessPtr and in some cases RWCString.
+
+November 11, 99 G.Cosmo (global-V00-01-07)
+- Migration RWT->G4RWT performed:
+  o Moved STLInterface wrapper classes to STLinterface/g4rw.
+  o Renamed RWCString to G4String and removed related typedef.
+  o Removed RW_NPOS from defs.h and renamed other RW types/constants
+    according to the migration.
+
+November 10, 99 G.Cosmo (global-V00-01-06)
+- Temporarly redefined RW_NPOS in STLInterface/rw/defs.h.
+  Will be removed in the RWT->G4RWT migration and replaced with
+  G4std::string::npos directly in the code.
+
+November 09, 99 G.Cosmo (global-V00-01-05)
+- Added new signature HashDefault(const unsigned long&) in STLInterface
+  rw/rwstlhash.h.
+
+October 28, 99 G.Cosmo (global-V00-01-04)
+- Removed G4STREAM implementation from G4ios and G4strstreambuf, no longer
+  needed. Incremented buffer size to 4096 chars. (by H.Yoshida)
+
+October 22, 99 G.Cosmo (global-V00-01-03)
+- Added first implementation of wrapper files for ISO-ANSI migration:
+  added new directory management/include/g4std.
+- Added definition of G4std keyword in G4Types.hh.
+ 
+October 20, 99 G.Cosmo (global-V00-01-02)
+- Tagged.
+
+October 20, 99 J.Allison
+- STLInterface: cstring.h: changed (*this)[i] to std_string::operator[](i).
+- STLInterface: removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES; introduced
+  typename keyword where needed for HP aCC. Files modified:
+  cstring.h, tpordvec.h, tpsrtvec.h, tpvector.h, tvhdict.h, tvordvec.h
+  and tvvector.h.
+
+October 6, 99 G.Cosmo (global-V00-01-01)
+- STLInterface: Changed tolower/toupper to old implementation in cstring.h
+  (by F.Behner)
+ 
+September 14, 99 G.Cosmo
+- STLInterface: renamed classes HashPtr and Hash to G4HashPtr and G4Hash in
+  tphdict and tvhdict to make them compliant with G4 coding standards and
+  avoid clashes with external software in global scope.
+- STLInterface: removed useless tests over size_t < 0 in files tvordvec.h,
+  tvvector.h, tpsrtvec.h and tpordvec.h.
+- STLInterface: casted pointers to long in rwstlhash.h instead of unsigned.
+
+September 13, 99 V.Grichine
+- Added new class G4Integrator (.hh/.icc) and test file
+  G4IntegratorTest.cc in HEPNumerics for integration of generic
+  functions.
+
+September 10, 99 G.Cosmo
+- Added inline keyword to G4Poisson function in HEPRandom/include
+  which was missing.
+
+August 24, 99 J.Allison (global-V00-01-00)
+- Initialised pointer in first constructor of G4DataInterpolation.
+- Included STLInterface-V00-01-00.
+
+June 21, 99 J.Allison (global-01-00-05)
 - Changed G4Exception to abort, i.e., produce core dump.
 - Includes STLInterface-18.
 
-May 24th G.Cosmo (global-01-00-04)
+May 24, 99 G.Cosmo (global-01-00-04)
 - globals.hh: removed inclusion of G4Timer.hh, left only G4Types.hh.
   The attempted solution does not work in situation where STL headers are pulled
   in before globals.hh. Several of this cases experienced on HP-aCC.
 - STLInterface/rw/tphdict.h: added find() method to retrieve a key.
 
-May 24th G.Cosmo (global-01-00-03)
+May 24, 99 G.Cosmo (global-01-00-03)
 - G4Timer.hh: removed CPP cludge for the "times" clash in ObjectSpace.
   Removed direct inclusion of global.hh to decouple translation unit from
   RW/STL headers. (F.Benher)
@@ -36,50 +148,50 @@ May 24th G.Cosmo (global-01-00-03)
 - Added inclusion of G4Timer.hh in globals.hh to get rid of clashes about the
   order of inclusion. G4Timer.hh must appear -before- STL's <algorithm>.
 
-May 19th G.Cosmo (global-01-00-02)
+May 19, 99 G.Cosmo (global-01-00-02)
 - templates.hh: added definition of DBL_EPSILON and FLT_EPSILON.
   Added 'F' to single precision literal constants.
 - Updates to STLInterface wrappers from the STL task-force. Added
   AIX-xlC STL wrappers.
 
-May 17th J.Allison
+May 17, 99 J.Allison
 - Added #undef os_times in G4Timer.hh to avoid clash with ObjectSpace when
   using STLInterface on Sun.
 
-May 14th G.Cosmo (global-01-00-01)
+May 14, 99 G.Cosmo (global-01-00-01)
 - Still updates to STLInterface from the STL task-force (internal tag considered
   is STLInterface-04). Introduced wrapper files differentiated for each architecture.
 
-May 11th G.Cosmo
+May 11, 99 G.Cosmo
 - Updates and fixes to STLInterface headers. Input mainly from DEC and HP.
 - Added G4Poisson.hh to HEPRandom/include. It includes the implementation
   of the global function "G4long G4Poisson(G4double)" which reproduces the
   GPOISS algorithm adopted in Geant3. Uses the CLHEP standard engines as
   basic random generators.
 
-May 3rd G.Cosmo (global-01-00-00)
+May 3, 99 G.Cosmo (global-01-00-00)
 - Updates to STL interface ISO/ANSI headers (F.Benher)
 - Added G4Exception call with STL strings in globals.hh and G4Exception.cc (F.Benher)
 
-April 29th  G.Cosmo
+April 29, 99 G.Cosmo
 - Moved SystemOfUnits.SI.h to G4UnitsTest.hh in management/include. This file is
   used only for test purposes and will not be tagged for public versions.
 
-March 30th  M.Maire
+March 30, 99 M.Maire
 - CodeWizard cleanup in G4UnitsTable. Fixed definition of operator=.
 
-March 18th  J.Allison
+March 18, 99 J.Allison
 - globals.hh: Added #ifdef G4USE_STL, changed position of
-  #include <rw/cstring.h>.
+  #include "g4rw/cstring.h".
 
-December 17th 1998  J.Allison  (global-00-04-03)
+December 17, 98  J.Allison  (global-00-04-03)
 - Added first version of STL interface.
 
-December 2, 1998 M.Asai (global-00-04-02)
+December 2, 98 M.Asai (global-00-04-02)
 - Remove the construction of G4UnitsMessenger in G4UnitsTable. This messenger is
   constructed/destructed by G4UImanager to avoid a loop dependency.
 
-December 1, 1998 G.Cosmo (global-00-04-01)
+December 1, 98 G.Cosmo (global-00-04-01)
 - Removed G4Allocator.cc containing all template declarations for GNU-g++
   compiler not supported anymore.
 - Removed g4templates.hh contining all template declarations for the old
@@ -89,7 +201,7 @@ December 1, 1998 G.Cosmo (global-00-04-01)
 - Updated management/GNUmakefile: not anymore dependencies over external
   categories. Dependency over intercoms to be fixed still.
 
-December 1, 1998 M.Nagamatu, H Yoshida
+December 1, 98 M.Nagamatu, H Yoshida
 - G4ios.cc guarded by G4STREAM
 
 November 27, 98 M.Asai
@@ -163,8 +275,8 @@ July 14, 98 G.Cosmo (global-00-01-05)
   (H.Kurasige)
 
 July 8, 98 G.Cosmo (global-00-01-04)
-- Removed forward declarations of RWTPtrOrderedVector<G4KineticTrack>
-  and RWTPtrSortedVector<G4CollisionInitialState> from g4templates.hh.
+- Removed forward declarations of G4RWTPtrOrderedVector<G4KineticTrack>
+  and G4RWTPtrSortedVector<G4CollisionInitialState> from g4templates.hh.
 
 July 7, 98 G.Cosmo (global-00-01-03)
 - Removed old unit symbols in globals.hh (M.Maire)

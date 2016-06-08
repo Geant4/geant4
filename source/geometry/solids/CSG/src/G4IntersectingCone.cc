@@ -147,7 +147,7 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p, const G4ThreeVec
 // We *don't* want to miss these! How do we identify them? Well, since
 // this case is rare, we can at least swallow a little more CPU than we would
 // normally be comfortable with. Intersection with the z axis means
-// x0*tx + y0*ty = 0. Case (1) means a==0, and we've already dealt with that
+// x0*ty - y0*tx = 0. Case (1) means a==0, and we've already dealt with that
 // above. Case (2) means a < 0.
 //
 // Now: x0*tx + y0*ty = 0 in terms of roundoff error. We can write:
@@ -176,20 +176,24 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p, const G4ThreeVe
 		//
 		// The radical is roughly zero: check for special, very rare, cases
 		//
-		if ( (fabs(x0*tx + y0*ty) < fabs(1E-6/B)) && (a < -1/kInfinity) ) {
-			*s1 = -0.5*b/a;
-			return 1;
+		if (fabs(a) > 1/kInfinity) {
+			if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B)) {
+				*s1 = -0.5*b/a;
+				return 1;
+			}
+			return 0;
 		}
 	}
-	
-	radical = sqrt(radical);
+	else {
+		radical = sqrt(radical);
+	}
 	
 	if (a > 1/kInfinity) {
 		G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
 		sa = q/a;
 		sb = c/q;
 		if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-		if (B*(z0+(*s1)*tz) < -A) return 0;
+		if (A + B*(z0+(*s1)*tz) < 0) return 0;
 		return 2;
 	}
 	else if (a < -1/kInfinity) {
@@ -204,6 +208,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p, const G4ThreeVe
 	}
 	else {
 		*s1 = -c/b;
+		if (A + B*(z0+(*s1)*tz) < 0) return 0;
 		return 1;
 	}
 }
@@ -263,15 +268,19 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p, const G4ThreeVe
 		//
 		// The radical is roughly zero: check for special, very rare, cases
 		//
-		if ( (fabs(x0*tx + y0*ty) < fabs(1E-6*B)) && (a < -1/kInfinity) ) {
-			*s1 = -0.5*b/a;
-			return 1;
+		if (fabs(a) > 1/kInfinity) {
+			if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B)) {
+				*s1 = -0.5*b/a;
+				return 1;
+			}
+			return 0;
 		}
 	}
+	else {
+		radical = sqrt(radical);
+	}
 	
-	radical = sqrt(radical);
-	
-	if (a < 1/kInfinity) {
+	if (a < -1/kInfinity) {
 		G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
 		sa = q/a;
 		sb = c/q;
@@ -279,7 +288,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p, const G4ThreeVe
 		if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
 		return 2;
 	}
-	else if (a > -1/kInfinity) {
+	else if (a > 1/kInfinity) {
 		G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
 		sa = q/a;
 		sb = c/q;
@@ -291,6 +300,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p, const G4ThreeVe
 	}
 	else {
 		*s1 = -c/b;
+		if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
 		return 1;
 	}
 }

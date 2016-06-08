@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhEnergyLoss.hh,v 1.1 1999/01/07 16:11:12 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4IhEnergyLoss.hh,v 1.2.8.1 1999/12/07 20:50:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -241,6 +241,10 @@ class G4IhEnergyLoss : public G4IVContinuousDiscreteProcess
     // cut in range
     static G4double CutInRange;
 
+    static G4double LowestKineticEnergy;
+    static G4double HighestKineticEnergy;
+    static G4int TotBin; // number of bins in table,
+                         // calculated in BuildPhysicsTable
     static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
                                       //          /LowestKineticEnergy)/TotBin
                                       //   RTable = exp(LOGRTable)
@@ -280,11 +284,6 @@ class G4IhEnergyLoss : public G4IVContinuousDiscreteProcess
 
     static G4int NumberOfProcesses ;
 
-    static G4double LowestKineticEnergy;
-    static G4double HighestKineticEnergy;
-    static G4int TotBin; // number of bins in table,
-                         // calculated in BuildPhysicsTable
-                                   
 
 };
  

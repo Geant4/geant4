@@ -1,20 +1,27 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.7 1999/06/04 12:43:35 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Tubs.cc,v 1.11.2.1 1999/12/07 20:48:33 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4Tubs
 //
-// Implementation
-// 18.06.98 n-normalisation in DistanceToOut(p.v) V. Grichine
-// 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
-// 23.03.99 V.Grichine, bug fixed in DistanceToIn(p,v)
+// History:
+//
+// 1994-95  P.Kent,     implementation
+//
+// 18.06.98 V.Grichine, n-normalisation in DistanceToOut(p.v) 
+// 09.10.98 V.Grichine, modifications in Distance ToOut(p,v,...)
+// 23.03.99 V.Grichine, bug fixed in DistanceToIn(p,v) 
+// 25.05.99 V.Grichine, bugs fixed in DistanceToIn(p,v) 
+// 28.05.99 V.Grichine, bugs fixed in  Distance ToOut(p,v,...)
+// 13.10.99 V.Grichine, bugs fixed in DistanceToIn(p,v) 
+// 19.11.99 V. Grichine, side = kNull in Distance ToOut(p,v,...)
 
 
 #include "G4Tubs.hh"
@@ -34,8 +41,11 @@
 #include "G4NURBStubesector.hh"
 #include "G4VisExtent.hh"
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
 //             - note if pdphi>2PI then reset to 2PI
+
 G4Tubs::G4Tubs(const G4String &pName,
 	       G4double pRMin,
 	       G4double pRMax,
@@ -46,25 +56,27 @@ G4Tubs::G4Tubs(const G4String &pName,
 {
 // Check z-len
     if (pDz>0)
-	{
-	    fDz=pDz;
-	}
+    {
+       fDz=pDz;
+    }
     else
-	{
-	    G4Exception("Error in G4Tubs::G4Tubs - invalid z half-length");
-	}
+    {
+       G4Exception("Error in G4Tubs::G4Tubs - invalid z half-length");
+    }
 
 // Check radii
+
     if (pRMin<pRMax&&pRMin>=0)
-	{
-	    fRMin=pRMin; fRMax=pRMax;
-	}
+    {
+       fRMin=pRMin; fRMax=pRMax;
+    }
     else
-	{
-	    G4Exception("Error in G4Tubs::G4Tubs - invalid radii");
-	}
+    {
+       G4Exception("Error in G4Tubs::G4Tubs - invalid radii");
+    }
 
 // Check angles
+
     if (pDPhi>=2.0*M_PI)
 	{
 	    fDPhi=2*M_PI;
@@ -82,29 +94,36 @@ G4Tubs::G4Tubs(const G4String &pName,
 	}
 	
 // Ensure psphi in 0-2PI or -2PI-0 range if shape crosses 0
+
     fSPhi = pSPhi;
 
-    if (fSPhi<0)
-	{
+    if ( fSPhi < 0 )
+    {
 	    fSPhi=2.0*M_PI-fmod(fabs(fSPhi),2.0*M_PI);
-	}
+    }
     else
-	{
+    {
 	    fSPhi=fmod(fSPhi,2.0*M_PI);
-	}
+    }
 
     if (fSPhi+fDPhi>2.0*M_PI)
-	{
-	    fSPhi-=2.0*M_PI;
-	}
+    {
+	    fSPhi -= 2.0*M_PI ;
+    }
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
 // Destructor
+
 G4Tubs::~G4Tubs()
 {;}
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
+
 void G4Tubs::ComputeDimensions(G4VPVParameterisation* p,
                               const G4int n,
                               const G4VPhysicalVolume* pRep)
@@ -112,8 +131,10 @@ void G4Tubs::ComputeDimensions(G4VPVParameterisation* p,
     p->ComputeDimensions(*this,n,pRep);
 }
 
-
+////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
+
 G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 			      const G4VoxelLimits& pVoxelLimit,
 			      const G4AffineTransform& pTransform,
@@ -138,8 +159,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    xMax=xoffset+fRMax;
 	    if (pVoxelLimit.IsXLimited())
 		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
-			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
+		    if (xMin>pVoxelLimit.GetMaxXExtent()
+			||xMax<pVoxelLimit.GetMinXExtent())
 			{
 			    return false;
 			}
@@ -161,8 +182,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    yMax=yoffset+fRMax;
 	    if (pVoxelLimit.IsYLimited())
 		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
-			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
+		    if (yMin>pVoxelLimit.GetMaxYExtent()
+			||yMax<pVoxelLimit.GetMinYExtent())
 			{
 			    return false;
 			}
@@ -185,8 +206,8 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	    zMax=zoffset+fDz;
 	    if (pVoxelLimit.IsZLimited())
 		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
-			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
+		    if (zMin>pVoxelLimit.GetMaxZExtent()
+			||zMax<pVoxelLimit.GetMinZExtent())
 			{
 			    return false;
 			}
@@ -319,7 +340,10 @@ G4bool G4Tubs::CalculateExtent(const EAxis pAxis,
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 // Return whether point inside/outside/on surface
+
 EInside G4Tubs::Inside(const G4ThreeVector& p) const
 {
     G4double r2,pPhi,tolRMin,tolRMax;
@@ -458,6 +482,8 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
     return in;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
 // Return unit normal of surface closest to p
 // - note if point on z axis, ignore phi divided sides
 // - unsafe if point close to z axis a rmin=0 - no explicit checks
@@ -663,7 +689,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
      if (p.z()*v.z()<0)		// at +Z going in -Z or visa versa
      {
 	s=(fabs(p.z())-fDz)/fabs(v.z());     // Z intersect distance
-        if(s<0.0) s = 0.0 ;                  // negative dist -> zero
+        if(s < 0.0) s = 0.0 ;
 	xi=p.x()+s*v.x();         	     // Intersection coords
         yi=p.y()+s*v.y();
 	rho2=xi*xi+yi*yi;
@@ -763,23 +789,25 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
    // This code is shown here just to make explicit the logic contained
    // in the condition if (t3>tolIRMin2 && t2<0 && fabs(p.z())<=tolIDz),
    // which is placed below.
-	    else if (t3>=tolIRMax2 && t2<0 && fabs(p.z())<=tolIDz)
-	    {                                // Point on Rmax surface
-	       if (!seg)
-	       {
-		  return s = 0 ;   // No Phi cut and move inside
-	       }
-	       else
-	       {
-		  cosPsi=(p.x()*cosCPhi+
-	          p.y()*sinCPhi)/fRMax;
-	          if (cosPsi>=cosHDPhiOT)
-		  { 
-		     return s = 0 ;    // On real Rmax surface and move inside
-		  }
-	       }
-	    }
-*/ ///////////////////////////////////////////////////////////////////////
+
+//	    else if (t3>=tolIRMax2 && t2<0 && fabs(p.z())<=tolIDz)
+//	    {                                // Point on Rmax surface
+//	       if (!seg)
+//	       {
+//		  return s = 0 ;   // No Phi cut and move inside
+//	       }
+//	       else
+//	       {
+//		  cosPsi=(p.x()*cosCPhi+
+//	          p.y()*sinCPhi)/fRMax;
+//	          if (cosPsi>=cosHDPhiOT)
+//		  { 
+//		     return s = 0 ;    // On real Rmax surface and move inside
+//		  }
+//	       }
+//	    }
+
+************************************************************************* */ 
 
        else 
        {
@@ -819,10 +847,10 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 	      s=-b+sqrt(d);
 
-	      if (s >= 0)	// check forwards
+	      if (s >= -0.5*kCarTolerance)	// check forwards
 	      {
 // Check z intersection
-
+                 if(s < 0.0) s = 0.0 ;
 		 zi=p.z()+s*v.z();
 
 		 if (fabs(zi)<=tolODz)
@@ -834,12 +862,11 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
                     }
 		    else
 		    {
-
 		       xi=p.x()+s*v.x();
 		       yi=p.y()+s*v.y();
 		       cosPsi=(xi*cosCPhi+yi*sinCPhi)/fRMin;
 
-		       if (cosPsi>=cosHDPhiIT)
+		       if (cosPsi >= cosHDPhiIT)
 		       {
 // Good inner radius isect - but earlier phi isect still possible
 
@@ -869,7 +896,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
        cosSPhi=cos(fSPhi);
        Comp=v.x()*sinSPhi-v.y()*cosSPhi;
 	                	
-       if (Comp<0)  // Compnent in outwards normal dirn
+       if (Comp<0)  // Component in outwards normal dirn
        {
 	  Dist=(p.y()*cosSPhi-p.x()*sinSPhi);
 
@@ -891,9 +918,15 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 		   yi=p.y()+s*v.y();
  		   rho2=xi*xi+yi*yi;
 
- 		   if (  (rho2 >= tolIRMin2 && rho2 <= tolIRMax2)
-		       ||(rho2 > tolORMin2  && rho2 < tolIRMin2 && t2 >= 0)
-		       ||(rho2 > tolIRMax2 && rho2 < tolORMax2 && t2 < 0) )
+ 		   if (   ( rho2 >= tolIRMin2 && rho2 <= tolIRMax2     )
+
+		       || ( rho2 > tolORMin2  && rho2 < tolIRMin2  && 
+                            ( v.y()*cosSPhi - v.x()*sinSPhi >  0 ) && 
+                            ( v.x()*cosSPhi + v.y()*sinSPhi >= 0 )     )
+
+		       || ( rho2 > tolIRMax2 && rho2 < tolORMax2   && 
+                            ( v.y()*cosSPhi - v.x()*sinSPhi > 0 )  && 
+                            ( v.x()*cosSPhi + v.y()*sinSPhi < 0 )      )  )
                    {
 // z and r intersections good - check intersecting with correct half-plane
 
@@ -914,7 +947,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
        cosEPhi=cos(ePhi);
        Comp=-(v.x()*sinEPhi-v.y()*cosEPhi);
 				
-       if (Comp<0)  // Compnent in outwards normal dirn
+       if (Comp<0)  // Component in outwards normal dirn
        {
 	  Dist=-(p.y()*cosEPhi-p.x()*sinEPhi);
 
@@ -936,10 +969,16 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 		   yi=p.y()+s*v.y();
  		   rho2=xi*xi+yi*yi;
 
- 		   if (  (rho2>=tolIRMin2&&rho2<=tolIRMax2)
-		       ||(rho2>tolORMin2&&rho2<tolIRMin2&&t2>=0)
-		       ||(rho2>tolIRMax2&&rho2<tolORMax2&&t2<0)     )	
- 		   {
+ 		   if (   ( rho2 >= tolIRMin2 && rho2 <= tolIRMax2     )
+
+		       || ( rho2 > tolORMin2  && rho2 < tolIRMin2  && 
+                            ( v.x()*sinEPhi - v.y()*cosEPhi >  0 ) && 
+                            ( v.x()*cosEPhi + v.y()*sinEPhi >= 0 )     )
+
+		       || ( rho2 > tolIRMax2 && rho2 < tolORMax2   && 
+                            ( v.x()*sinEPhi - v.y()*cosEPhi > 0 )  && 
+                            ( v.x()*cosEPhi + v.y()*sinEPhi < 0 )      )  )
+     		   {
 // z and r intersections good - check intersecting with correct half-plane
 
 		      if ((yi*cosCPhi-xi*sinCPhi)>=0)
@@ -995,7 +1034,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p) const
     else safe=safe2;
     if (safe3>safe) safe=safe3;
 
-    if (fDPhi<2.0*M_PI&&rho)
+    if (fDPhi < 2.0*M_PI && rho)
 	{
 	    phiC=fSPhi+fDPhi*0.5;
 	    cosPhiC=cos(phiC);
@@ -1021,7 +1060,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p) const
     return safe;
 }
 
-//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to surface of shape from `inside', allowing for tolerance
 // - Only Calc rmax intersection if no valid rmin intersection
@@ -1032,7 +1071,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 			        G4bool *validNorm,
                                 G4ThreeVector *n    ) const
 {
-   ESide side,sider,sidephi;
+   ESide side = kNull ,sider,sidephi;
 
    G4double snxt,sr,sphi,pdist;
 
@@ -1131,14 +1170,15 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
 	    if (calcNorm) 
 	    {
-	       if ( p.x() || p.y() )
-	       {
-		  *n=G4ThreeVector(p.x(),p.y(),0);
-	       }
-	       else
-	       {
-		  *n=v;
-	       }
+	      // if ( p.x() || p.y() )
+	      // {
+	      //  *n=G4ThreeVector(p.x(),p.y(),0);
+	      // }
+	      // else
+	      // {
+	      //  *n=v;
+	      // }
+	       *n=G4ThreeVector(p.x()/fRMax,p.y()/fRMax,0);
 	       *validNorm=true;
 	    }
 	    return snxt=0; // Leaving by rmax immediately
@@ -1148,7 +1188,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
       {
 // Possible rmin intersection
 
-	 if (fRMin)
+	 if ( fRMin )
 	 {
 	    deltaR=t3-fRMin*fRMin;
 	    b=t2/t1;
@@ -1159,16 +1199,16 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	    {
 // NOTE: SHould use rho-rmin>kRadTolerance*0.5 - avoid sqrt for efficiency
 
-	       if (deltaR>kRadTolerance*fRMin)
+	       if (deltaR > kRadTolerance*fRMin)
 	       {
-		  sr=-b-sqrt(d2);
-		  sider=kRMin;
+		  sr = -b-sqrt(d2) ;
+		  sider = kRMin ;
 	       }
 	       else
 	       {
 		  if (calcNorm)
 		  {
-		     *validNorm=false;	// Convex side
+		     *validNorm = false ;	// Concave side
 		  }
 		  return snxt=0;
 	       }
@@ -1219,7 +1259,12 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	     compE=sinEPhi*v.x()-cosEPhi*v.y();
 	     sidephi=kNull;
 
-	     if ( pDistS <= 0 && pDistE <= 0 )
+	     //	     if ( pDistS <= 0 && pDistE <= 0 )
+
+             if( ( fDPhi <= pi && ( pDistS <= 0.5*kCarTolerance && 
+                                    pDistE <= 0.5*kCarTolerance    ) )   ||
+                 ( fDPhi > pi && !( pDistS > 0.5*kCarTolerance && 
+                                    pDistE > 0.5*kCarTolerance     ) )  )
 	     {
 // Inside both phi *full* planes
 
@@ -1255,7 +1300,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
 // Only check further if < starting phi intersection
 
-		   if (sphi2 < sphi)
+		   if (sphi2 > -0.5*kCarTolerance && sphi2 < sphi )
 		   {
 		      xi=p.x()+sphi2*v.x();
 		      yi=p.y()+sphi2*v.y();
@@ -1279,6 +1324,10 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 		   }
 		}
 	     }
+             else sphi = kInfinity ;
+
+	     /* *******************************************
+
 	     else if ( pDistS >= 0 && pDistE >= 0 )
 	     {
 // Outside both *full* phi planes
@@ -1383,7 +1432,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	     }
 	     else
 	     {
-// Must be pDistS<0&&pDistE>0
+// Must be pDistS < 0 && pDistE > 0
 // Inside full starting plane, outside full ending plane
 
 		if (fDPhi>M_PI)
@@ -1447,6 +1496,9 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 		   }
 		}
 	     }
+
+	     ******************************  */
+
 	  }
 	  else
 	  {
@@ -1536,7 +1588,10 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
     return snxt;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
 // Calcluate distance (<=actual) to closest surface of shape from inside
+
 G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
 {
     G4double safe,rho,safeR1,safeR2,safeZ;
@@ -1586,6 +1641,8 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
     return safe;	
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
 // Create a List containing the transformed vertices
 // Ordering [0-3] -fDz cross section
 //          [4-7] +fDz cross section such that [0] is below [4],
@@ -1594,6 +1651,7 @@ G4double G4Tubs::DistanceToOut(const G4ThreeVector& p) const
 //  Caller has deletion resposibility
 //  Potential improvement: For last slice, use actual ending angle
 //                         to avoid rounding error problems.
+
 G4ThreeVectorList*
 G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
@@ -1654,11 +1712,16 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 		}
 	}
     else
-	{
-	    G4Exception("G4Tubs::CreateRotatedVertices Out of memory - Cannot alloc vertices");
-	}
+    {
+      G4Exception("G4Tubs::CreateRotatedVertices Out of memory - Cannot alloc vertices");
+    }
     return vertices;
 }
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Methods for visualisation
+
 
 void G4Tubs::DescribeYourselfTo (G4VGraphicsScene& scene) const {
   scene.AddThis (*this);
@@ -1695,3 +1758,8 @@ G4NURBS* G4Tubs::CreateNURBS () const {
   }
   return pNURBS;
 }
+
+//
+//
+/////////////////////////////////// End of G4Tubs.cc ////////////////////////
+

@@ -6,7 +6,7 @@
 
 //
 // $Id: mgrnodearray.cc,v 1.2 1999/05/21 20:21:10 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 /*

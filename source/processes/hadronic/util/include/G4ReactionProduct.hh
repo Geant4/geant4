@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionProduct.hh,v 1.1 1999/01/07 16:13:49 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ReactionProduct.hh,v 1.1.10.1 1999/12/07 20:52:43 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996

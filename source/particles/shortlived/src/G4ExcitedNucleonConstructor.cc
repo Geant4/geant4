@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedNucleonConstructor.cc,v 1.2 1999/06/09 17:28:17 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedNucleonConstructor.cc,v 1.3.6.1 1999/12/07 20:50:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -524,7 +524,7 @@ G4DecayTable*  G4ExcitedNucleonConstructor::AddLambdaKMode(
 
 
 
-const G4String G4ExcitedNucleonConstructor::name[] = {
+const char* G4ExcitedNucleonConstructor::name[] = {
    "N(1440)", "N(1520)", "N(1535)", "N(1650)", "N(1675)",
    "N(1680)", "N(1700)", "N(1710)", "N(1720)", "N(1900)", 
    "N(1990)", "N(2090)", "N(2190)", "N(2220)", "N(2250)"

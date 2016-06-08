@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.5 1999/05/25 21:04:22 stesting Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Trajectory.hh,v 1.6.4.1.2.1 1999/12/07 20:53:05 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //---------------------------------------------------------------
@@ -38,7 +38,7 @@ class G4Trajectory;
 #include "G4Allocator.hh"
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include <rw/tpordvec.h>            // RWTValOrderedVector
+#include "g4rw/tpordvec.h"            // G4RWTValOrderedVector
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
@@ -96,7 +96,7 @@ class G4Trajectory : public G4VTrajectory
    private:
 //---------
 
-  RWTPtrOrderedVector<G4VTrajectoryPoint>* positionRecord;
+  G4RWTPtrOrderedVector<G4VTrajectoryPoint>* positionRecord;
   G4int fTrackID;
   G4int fParentID;
   G4String ParticleName;

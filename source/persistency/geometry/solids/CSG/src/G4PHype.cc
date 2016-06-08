@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PHype.cc,v 1.1 1999/01/07 16:10:52 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PHype.cc,v 1.2 1999/11/17 10:49:02 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4PHype
 //
@@ -17,13 +17,10 @@
 #include "G4PHype.hh"
 #include "G4Hype.hh"
 
-#include "G4AffineTransform.hh"
-#include "meshdefs.hh"
-
-#define  SURFACE_PRECISION  (0.5*kCarTolerance)
-
 // Constructor - check parameters, and fills protected data members
-G4PHype::G4PHype(const G4Hype* theHype) : G4PCSGSolid(theHype->GetName()) {
+G4PHype::G4PHype(const G4Hype* theHype)
+ : G4PCSGSolid(theHype->GetName())
+{
 
     const G4double newInnerRadius = theHype->GetInnerRadius();
     const G4double newOuterRadius = theHype->GetOuterRadius();

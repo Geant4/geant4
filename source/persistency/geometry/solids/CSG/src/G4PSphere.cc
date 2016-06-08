@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PSphere.cc,v 1.1 1999/01/07 16:10:53 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PSphere.cc,v 1.3 1999/11/17 10:49:03 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // class G4PSphere
@@ -16,20 +16,13 @@
 // History:
 // 19.06.98 A.Kimura Converted G4Sphere.cc
 
-#include <assert.h>
-
 #include "G4VSolid.hh"
 #include "G4PSphere.hh"
 #include "G4Sphere.hh"
 
-#include "G4AffineTransform.hh"
-#include "meshdefs.hh"
-
 // Destructor
-G4PSphere::~G4PSphere(){
-   ;
-}
-
+G4PSphere::~G4PSphere()
+{;}
 
 // make a transient object
 G4VSolid* G4PSphere::MakeTransientObject() const {

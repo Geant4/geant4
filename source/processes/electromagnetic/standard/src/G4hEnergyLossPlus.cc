@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.7 1999/06/18 11:30:18 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4hEnergyLossPlus.cc,v 1.16.6.1 1999/12/07 20:51:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id: 
 // -----------------------------------------------------------
@@ -34,6 +34,9 @@
 
 #include "G4hEnergyLossPlus.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4Poisson.hh"
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
 
 // Initialisation of static members ******************************************
 // contributing processes : ion.loss ->NumberOfProcesses is initialized
@@ -107,7 +110,7 @@ G4double     G4hEnergyLossPlus::c1lim = dRoverRange ;
 G4double     G4hEnergyLossPlus::c2lim = 2.*(1.-dRoverRange)*finalRange ;
 G4double     G4hEnergyLossPlus::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
-G4double         G4hEnergyLossPlus::MinDeltaCutInRange = 0.1*mm ;
+G4double         G4hEnergyLossPlus::MinDeltaCutInRange = 0.01*mm ;
 G4double*        G4hEnergyLossPlus::MinDeltaEnergy     = NULL   ;
 
 G4double         G4hEnergyLossPlus::Charge ;   
@@ -115,8 +118,8 @@ G4double         G4hEnergyLossPlus::Charge ;
 G4bool   G4hEnergyLossPlus::rndmStepFlag   = false ;
 G4bool   G4hEnergyLossPlus::EnlossFlucFlag = true ;
 
-G4double G4hEnergyLossPlus::LowestKineticEnergy= 1.00*keV;
-G4double G4hEnergyLossPlus::HighestKineticEnergy= 100.*TeV;
+G4double G4hEnergyLossPlus::LowestKineticEnergy;
+G4double G4hEnergyLossPlus::HighestKineticEnergy;
 G4int G4hEnergyLossPlus::TotBin;
 G4double G4hEnergyLossPlus::RTable,G4hEnergyLossPlus::LOGRTable;
 
@@ -1170,7 +1173,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
 
   //   subcutoff delta ray production start                          
   G4double MinDeltaEnergyNow,Tc,TmintoProduceDelta,w,ww ;
-  G4double rcut,T0,presafety,postsafety,
+  G4double rcut,T0,presafety,postsafety,safety,
            delta,fragment,Tmax,mass ;
   G4double frperstep,x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
   G4double epsil = MinKineticEnergy/2. ;
@@ -1199,14 +1202,19 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
     if((Tc > MinDeltaEnergyNow) && (Tmax > MinDeltaEnergyNow))
     {
       presafety  = stepData.GetPreStepPoint()->GetSafety() ;
-      postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+     // postsafety = stepData.GetPostStepPoint()->GetSafety() ;
 
-      if((presafety>=rcut)&&(postsafety>=rcut))
-      {
-        fragment = 0. ;
-      } 
-      else
-      {
+      G4Navigator *navigator=
+         G4TransportationManager::GetTransportationManager()
+                                   ->GetNavigatorForTracking();
+      postsafety =
+          navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
+
+      safety = min(presafety,postsafety) ;
+
+      if(safety < rcut)
+     {
+
         x1=stepData.GetPreStepPoint()->GetPosition().x();
         y1=stepData.GetPreStepPoint()->GetPosition().y();
         z1=stepData.GetPreStepPoint()->GetPosition().z();
@@ -1238,7 +1246,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
 
           frperstep=-fragment/Step;
         }
-      }
 
       if(fragment>0.)
       {
@@ -1254,13 +1261,22 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
         G4int N=int(fragment*(c0N/(E*T0)+c1N/T0-(c2N+c3N*T0)/Tc)* 
                 (aMaterial->GetTotNbOfElectPerVolume())+0.5) ;
 
+        G4double Px,Py,Pz ;
+        G4ThreeVector ParticleDirection ;
+        ParticleDirection=stepData.GetPostStepPoint()->
+                                   GetMomentumDirection() ;
+        Px =ParticleDirection.x() ;
+        Py =ParticleDirection.y() ;
+        Pz =ParticleDirection.z() ;
+     
+        G4int subdelta = 0;
+
         if(N > 0)
         {
           G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
-                   Pnew,Px,Py,Pz,delToverTc,
+                   Pnew,delToverTc,
                    delTkin,delLoss,rate,
                    urandom ;
-          G4ThreeVector ParticleDirection ;
           G4StepPoint *point ;
   
           Tkin = E ;
@@ -1268,7 +1284,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
           P    = sqrt(Tkin*(Etot+mass)) ;
 
           aParticleChange.SetNumberOfSecondaries(N);
-          G4int subdelta = 0;
           do {
                subdelta += 1 ;
 
@@ -1296,16 +1311,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
                  dirx=sintheta*cos(phi);
                  diry=sintheta*sin(phi);
                  dirz=costheta;
-               }
-               else
-               {
-                 T=epsil ;
-                 p=sqrt(T*(T+2.*electron_mass_c2)) ;
-                 dirx=0.;
-                 diry=0.;
-                 dirz=1.;
-               } 
-
+                
                urandom = G4UniformRand() ;
                // distribute x,y,z along Pre-Post !
                G4double xd,yd,zd ;
@@ -1314,8 +1320,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
                zd=z1+frperstep*dz*urandom ;
                G4ThreeVector DeltaPosition(xd,yd,zd) ;
                DeltaTime=time0+frperstep*dTime*urandom ;
-               ParticleDirection=stepData.GetPostStepPoint()->
-                                   GetMomentumDirection() ;
 
                G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
                DeltaDirection.rotateUz(ParticleDirection);
@@ -1349,13 +1353,16 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
 
                aParticleChange.AddSecondary(deltaTrack) ;
 
+               }
+
              } while (subdelta<N) ;
 
              // update the particle direction and kinetic energy
-             aParticleChange.SetMomentumChange(Px,Py,Pz) ;
+             if(subdelta > 0)
+               aParticleChange.SetMomentumChange(Px,Py,Pz) ;
              E = Tkin ;
            }
-
+          }
          }
        }
      }
@@ -1388,6 +1395,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
   return &aParticleChange ;
 }
 
+
 G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
                                                G4double    MeanLoss)
@@ -1415,7 +1423,7 @@ G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double threshold,w1,w2,w3,lnw3,C,prob,
            beta2,suma,e0,Em,loss,lossc ,w;
   G4double a1,a2,a3;
-  long p1,p2,p3;
+  G4long p1,p2,p3;
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
   G4double dp1,dnmaxDirectFluct,dp3,dnmaxCont2;
@@ -1464,7 +1472,7 @@ G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
             p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
-            p1 = RandPoisson::shoot(a1);
+            p1 = G4Poisson(a1);
           loss = p1*e0 ;
         }
      else
@@ -1477,7 +1485,7 @@ G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
             p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
           }
           else
-            p1 = RandPoisson::shoot(a1);
+            p1 = G4Poisson(a1);
           w  = (Em-e0)/Em;
           // just to save time
           if (p1 > nmaxDirectFluct)
@@ -1505,14 +1513,14 @@ G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
         p1 = max(0,int(RandGauss::shoot(a1,siga)+0.5));
       }
       else
-       p1 = RandPoisson::shoot(a1);
+       p1 = G4Poisson(a1);
       if(a2>alim)
       {
         siga=sqrt(a2) ;
         p2 = max(0,int(RandGauss::shoot(a2,siga)+0.5));
       }
       else
-        p2 = RandPoisson::shoot(a2);
+        p2 = G4Poisson(a2);
       loss = p1*e1Fluct+p2*e2Fluct;
       if (loss>0.) loss += (1.-2.*G4UniformRand())*e1Fluct;
       if(a3>alim)
@@ -1521,7 +1529,7 @@ G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
         p3 = max(0,int(RandGauss::shoot(a3,siga)+0.5));
       }
       else
-        p3 = RandPoisson::shoot(a3);
+        p3 = G4Poisson(a3);
 
       lossc = 0.; na = 0.; alfa = 1.;
       if (p3 > nmaxCont2)

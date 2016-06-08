@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.6 1999/06/09 18:55:33 japost Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Transportation.cc,v 1.7.2.1 1999/12/07 20:52:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -210,17 +210,22 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 		      track.GetProperTime(),   // tof proper
 		      &spin );
 
-     //  Do the Transport in the field (non recti-linear)
-     lengthAlongCurve=fFieldPropagator->ComputeStep( aFieldTrack,
-						     currentMinimumStep, 
-						     currentSafety,
-						     track.GetVolume() );
-     //               ----------------
-     if( lengthAlongCurve< currentMinimumStep){
-        geometryStepLength=lengthAlongCurve;
-	fGeometryLimitedStep= true;
+     if( currentMinimumStep > 0 ) {
+        //  Do the Transport in the field (non recti-linear)
+        lengthAlongCurve=fFieldPropagator->ComputeStep( aFieldTrack,
+							currentMinimumStep, 
+							currentSafety,
+							track.GetVolume() );
+	//               ----------------
+	if( lengthAlongCurve< currentMinimumStep){
+	   geometryStepLength=lengthAlongCurve;
+	   fGeometryLimitedStep= true;
+	}else{
+  	   geometryStepLength=currentMinimumStep;
+	   fGeometryLimitedStep= false;
+	}
      }else{
-        geometryStepLength=currentMinimumStep;
+        geometryStepLength= lengthAlongCurve= 0.0;
 	fGeometryLimitedStep= false;
      }
 

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.cc,v 1.3 1999/05/24 20:39:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Timer.cc,v 1.5 1999/11/23 15:00:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ void G4Exception(const char* s=0);
 #endif /* WIN32 */
 
 // Print timer status n ostream
-ostream& operator << (ostream& os, const G4Timer& t)
+G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t)
 {
     if (t.IsValid())
 	{

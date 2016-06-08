@@ -1,0 +1,173 @@
+Opening federated database OO_FD_BOOT.
+WARNING: g4example: Could not find naming root directory: Naming will be disabled.
+#
+#  PersistentEx01.in
+#
+/db/verbose 2
+###/db/run NewRuns
+###/db/event NewEvents
+###/db/geometry NewGeometry
+/run/initialize
+  -- Tracker type sensitive detector
+PersEx01PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+#
+# 10 events
+#
+/run/beamOn 10
+Transaction started for /Geometry/GeomContainer/ with non-sustained mode.
+ -- Geometry stored in /Geometry/GeomContainer/
+Transaction is committed on /Geometry/GeomContainer/
+>>> Event 0
+Event : 0
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 34.3698
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 18.4405
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 0 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 1
+Event : 1
+mySD/EvenCollection    Number of hits       22
+  Edep of the first Hit 99.9396
+mySD/OddCollection     Number of hits       20
+  Edep of the first Hit 25.443
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 1 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 2
+Event : 2
+mySD/EvenCollection    Number of hits       22
+  Edep of the first Hit 6.23362
+mySD/OddCollection     Number of hits       19
+  Edep of the first Hit 64.6385
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 2 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 3
+Event : 3
+mySD/EvenCollection    Number of hits       13
+  Edep of the first Hit 48.4612
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 14.5902
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 3 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 4
+Event : 4
+mySD/EvenCollection    Number of hits       32
+  Edep of the first Hit 50.5145
+mySD/OddCollection     Number of hits       16
+  Edep of the first Hit 57.8215
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 4 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 5
+Event : 5
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 139.802
+mySD/OddCollection     Number of hits       35
+  Edep of the first Hit 109.904
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 5 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 6
+Event : 6
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 21.8663
+mySD/OddCollection     Number of hits       28
+  Edep of the first Hit 14.2566
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 6 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 7
+Event : 7
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 2.93176
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 3.13845
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 7 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 8
+Event : 8
+mySD/EvenCollection    Number of hits       18
+  Edep of the first Hit 13.787
+mySD/OddCollection     Number of hits       35
+  Edep of the first Hit 13.6233
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 8 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+>>> Event 9
+Event : 9
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 42.2712
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 21.0987
+Transaction started for /Events/EventContainer/ with non-sustained mode.
+ -- G4PEvent 9 stored in /Events/EventContainer/
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Runs/RunContainer/ with non-sustained mode.
+ -- G4PRun 0 stored in /Runs/RunContainer/
+Transaction is committed on /Runs/RunContainer/
+#
+exit
+PersistencyManager is deleting.

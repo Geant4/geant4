@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.2 1999/04/14 12:49:04 maire Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MaterialPropertyVector.cc,v 1.3.2.1 1999/11/11 14:30:16 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ G4MaterialPropertyVector::operator =(const G4MaterialPropertyVector& right)
 	MPV.clearAndDestroy();
 
         // create an actual copy (instead of the shallow copy that the
-        // assignment operator defaults to for RWTPtrSortedVector)
+        // assignment operator defaults to for G4RWTPtrSortedVector)
 
         NumEntries = 0;
         CurrentEntry = -1;
@@ -97,7 +97,7 @@ G4MaterialPropertyVector::G4MaterialPropertyVector
 			  (const G4MaterialPropertyVector &right)
 {
 	// create an actual copy (instead of the shallow copy that the
-	// assignment operator defaults to for RWTPtrSortedVector)
+	// assignment operator defaults to for G4RWTPtrSortedVector)
 
         NumEntries = 0;
         CurrentEntry = -1;

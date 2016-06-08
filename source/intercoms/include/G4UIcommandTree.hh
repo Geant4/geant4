@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.hh,v 1.1 1999/01/07 16:09:23 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UIcommandTree.hh,v 1.3.2.1 1999/12/07 20:49:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4UIcommandTree_h
@@ -15,7 +15,13 @@
 
 #include "G4UIcommand.hh"
 #include "globals.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
+
+// class description:
+//
+//  This class is exclusively used by G4UImanager for handling the
+// tree structure of the commands. The user MUST NOT construct/use
+// this class object.
 
 class G4UIcommandTree 
 {
@@ -36,8 +42,8 @@ class G4UIcommandTree
       void ListCurrentWithNum();
 
   private:
-      RWTPtrOrderedVector<G4UIcommand> command;
-      RWTPtrOrderedVector<G4UIcommandTree> tree;
+      G4RWTPtrOrderedVector<G4UIcommand> command;
+      G4RWTPtrOrderedVector<G4UIcommandTree> tree;
       G4UIcommand *guidance;
       G4String pathName;
 

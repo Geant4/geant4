@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.cc,v 1.4 1999/05/11 14:29:38 mora Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4FastStep.cc,v 1.5.6.1 1999/12/07 20:52:53 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //$Id:
 //---------------------------------------------------------------
@@ -438,12 +438,14 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
   G4bool    exitWithError = false;
   G4double  accuracy;
   
-  if (theEnergyChange > aTrack.GetKineticEnergy() * (1.0 - accuracyForWarning)) {
+  // Energy should not be larger than the initial value
+  accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
+  if (accuracy > accuracyForWarning) {
     G4cout << "  G4FastStep::CheckIt    : ";
-    G4cout << "the energy becomes larger than the initial energy !!"
-	   << " Difference :  " << (theEnergyChange -aTrack.GetKineticEnergy())/MeV
-	   << "[MeV] " <<endl;
+    G4cout << "the energy becomes larger than the initial value !!" << endl;
+    G4cout << "  Difference:  " << accuracy  << "[MeV] " <<endl;
     itsOK = false;
+    if (accuracy > accuracyForException) exitWithError = true;
   }
 
   G4bool itsOKforMomentum = true;

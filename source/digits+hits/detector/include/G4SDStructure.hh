@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SDStructure.hh,v 1.1 1999/01/07 16:06:25 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SDStructure.hh,v 1.2.2.1.2.1 1999/12/07 20:47:41 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4SDStructure_h
@@ -16,10 +16,16 @@
 #include "globals.hh"
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
-// RWTPtrOrderedVector
-#include <rw/tpordvec.h>
+// G4RWTPtrOrderedVector
+#include "g4rw/tpordvec.h"
 
 class G4HCofThisEvent;
+
+// class description:
+//
+//  This class is exclusively used by G4SDManager for handling the tree
+// structure of the user's sensitive detector names.
+//
 
 class G4SDStructure 
 {
@@ -42,8 +48,8 @@ class G4SDStructure
       G4String ExtractDirName(G4String aPath);
 
   private:
-      RWTPtrOrderedVector<G4SDStructure> structure;
-      RWTPtrOrderedVector<G4VSensitiveDetector> detector;
+      G4RWTPtrOrderedVector<G4SDStructure> structure;
+      G4RWTPtrOrderedVector<G4VSensitiveDetector> detector;
       G4String pathName;
       G4String dirName;
       G4int verboseLevel;

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Ions.cc,v 1.1 1999/01/07 16:10:33 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Ions.cc,v 1.3.6.1 1999/12/07 20:49:56 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -41,7 +41,12 @@ G4Ions::G4Ions(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
-  // Initialise cuts at construction to enable production cuts since
-  // ions are not in the particle table at initialisation.
-  // SetCuts(1.e-30);
+  // initialize excitation energy/level
+   theExcitationEnergy = 0.0;
+}
+
+
+G4Ions* G4Ions::IonsDefinition()
+{
+  return this;
 }

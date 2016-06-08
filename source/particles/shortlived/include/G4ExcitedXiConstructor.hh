@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedXiConstructor.hh,v 1.1 1999/01/07 16:10:39 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedXiConstructor.hh,v 1.2.6.1 1999/12/07 20:50:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4ExcitedXiConstructor: public G4ExcitedBaryonConstructor
     enum     { XiIsoSpin = 1 };
 
   private:
-    static const G4String name[ NStates ];
+    static const char* name[ NStates ];
     static const G4double mass[ NStates ];
     static const G4double width[ NStates ];
     static const G4int    iSpin[ NStates ];

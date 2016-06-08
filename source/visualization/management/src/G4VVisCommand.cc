@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.cc,v 1.3 1999/05/10 14:04:14 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VVisCommand.cc,v 1.4.4.1 1999/12/07 20:53:59 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -16,6 +16,8 @@
 G4VVisCommand::~G4VVisCommand () {}
 
 G4VisManager* G4VVisCommand::fpVisManager = 0;
+
+G4UIcmdWithAString* G4VVisCommand::fpCommandSceneEdit = 0;
 
 G4UIcmdWithAString* G4VVisCommand::fpCommandSceneNotifyHandlers = 0;
 
@@ -34,3 +36,5 @@ G4UIcommand*        G4VVisCommand::fpCommandViewerCreate = 0;
 G4UIcmdWithAString* G4VVisCommand::fpCommandViewerRemove = 0;
 
 G4UIcmdWithAString* G4VVisCommand::fpCommandViewerSelect = 0;
+
+G4UIcmdWithAString* G4VVisCommand::fpCommandViewerUpdate = 0;

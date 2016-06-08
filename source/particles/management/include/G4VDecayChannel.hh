@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.2 1999/04/13 07:58:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VDecayChannel.hh,v 1.5.4.1 1999/12/07 20:49:53 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // ------------------------------------------------------------
@@ -30,7 +30,10 @@ class    G4ParticleTable;
 
 class G4VDecayChannel
 {
-  // This class is a abstract class
+ // Class Description
+ // This class is a abstract class to describe decay kinematics
+ //
+
   public:
     //Constructors 
       G4VDecayChannel(const G4String &aName, G4int Verbose = 1);
@@ -59,10 +62,10 @@ class G4VDecayChannel
     // less-than operator is defined for G4DecayTable
     G4int operator<(const G4VDecayChannel &right) const;
 
-  public:
+  public: // With Description
    virtual G4DecayProducts* DecayIt(G4double parentMass = -1.0) = 0;
 
-  public:    
+  public: // With Description
      //get kinematics name
      G4String  GetKinematicsName() const;
      //get branching ratio
@@ -76,9 +79,9 @@ class G4VDecayChannel
      G4ParticleDefinition * GetDaughter(G4int anIndex);
 
      //get the name of the parent particle
-     G4String& GetParentName() const;
+     const G4String& GetParentName() const;
      //get the name of a daughter particle
-     G4String& GetDaughterName(G4int anIndex) const;
+     const G4String& GetDaughterName(G4int anIndex) const;
 
      // get mass of parent
      G4double GetParentMass() const; 
@@ -97,7 +100,7 @@ class G4VDecayChannel
      void SetDaughter(G4int anIndex, 
 		      const G4String &particle_name);
 
-  protected:
+  protected: 
     // kinematics name
     G4String   kinematics_name;
     // branching ratio  [0.0 - 1.0]
@@ -109,7 +112,7 @@ class G4VDecayChannel
     //daughter particles
     G4String** daughters_name;
 
-  protected:
+  protected: // With Description
     // celar daughters array
     void ClearDaughtersName();
 
@@ -131,7 +134,7 @@ class G4VDecayChannel
     // fill parent
     void FillParent();
 
-  public:
+  public:  // With Description
     void  SetVerboseLevel(G4int value);
     G4int GetVerboseLevel()  const;
     void  DumpInfo();
@@ -143,6 +146,7 @@ class G4VDecayChannel
     //  1: Warning message
     //  2: More
 
+    static const G4String   noName;
 };
 
 inline
@@ -168,9 +172,8 @@ inline
 }
 
 inline
- G4String& G4VDecayChannel::GetDaughterName(G4int anIndex) const
+ const G4String& G4VDecayChannel::GetDaughterName(G4int anIndex) const
 {
-  static G4String noName = "";
   if ( (anIndex>=0) && (anIndex<numberOfDaughters) ) {
     return *daughters_name[anIndex];
   } else {
@@ -206,7 +209,7 @@ inline
 }
 
 inline
- G4String& G4VDecayChannel::GetParentName() const
+ const G4String& G4VDecayChannel::GetParentName() const
 {
   return *parent_name;
 }

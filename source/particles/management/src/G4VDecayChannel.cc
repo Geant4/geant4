@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.cc,v 1.4 1999/06/16 11:42:33 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VDecayChannel.cc,v 1.5.6.1 1999/12/07 20:50:01 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -24,6 +24,8 @@
 #include "G4DecayTable.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
+
+const G4String G4VDecayChannel::noName = " ";
 
 G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
                :kinematics_name(aName),

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.12 1999/07/06 15:03:02 aforti Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LowEnergyCompton.cc,v 1.15.6.1 1999/12/07 20:50:24 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -19,6 +19,9 @@
 //      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyCompton physics process --------
 //                   by Michel Maire, April 1996
+
+//      ------------ G4LowEnergyCompton low energy modifications --------
+//                   by Alessandra Forti, October 1998
 // **************************************************************
 // 28-05-96, DoIt() small change in ElecDirection, by M.Maire
 // 10-06-96, simplification in ComputeMicroscopicCrossSection(), by M.Maire
@@ -29,6 +32,11 @@
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
 // 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// Added Livermore data table construction methods A. Forti
+// Modified BuildMeanFreePath to read new data tables A. Forti
+// Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
+// Added SelectRandomAtom A. Forti
+// Added map of the elements A. Forti
 // --------------------------------------------------------------
 
 // This Class Header
@@ -86,8 +94,6 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
  
 // methods.............................................................................
 
-// to change with other functions like in G4eIonization
- 
 void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
 
   BuildZVec();
@@ -102,7 +108,7 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType
   BuildScatteringFunctionTable();
 
 }
-
+// BUILD THE CS TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
 void G4LowEnergyCompton::BuildCrossSectionTable(){
  
   if (theCrossSectionTable) {
@@ -123,7 +129,7 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
     
   }//end for on atoms
 }
-
+// BUILD THE SF TABLE FOR THE ELEMENTS MAPPED IN ZNUMVEC
 void G4LowEnergyCompton::BuildScatteringFunctionTable(){
 
   if (theScatteringFunctionTable) {
@@ -144,7 +150,7 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
    
   }//end for on atoms
 }
-
+// vector mapping the elements in the material table
 void G4LowEnergyCompton::BuildZVec(){
 
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
@@ -184,6 +190,15 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
 //
 // The scattered gamma energy is sampled according to Klein - Nishina formula.
+// And then Accepted or rejected basing of the Scattering Function multiplied by factor 
+// from Klein - Nishina formula. Expression of the angular distribution as Klein Nishina 
+// angular and energy distribution and Scattering fuctions is taken from
+// D. E. Cullen "A simple model of photon transport" Nucl. Instr. Meth. 
+// Phys. Res. B 101 (1995). Method of sampling with form factors is different 
+// data are interpolated while in the article they are fitted.
+// Reference to the article is from J. Stepanek New Photon, Positron
+// and Electron Interaction Data for GEANT in Energy Range from 1 eV to 10
+// TeV (draft). 
 // The random number techniques of Butcher & Messel are used 
 // (Nuc Phys 20(1960),15).
 // GEANT4 internal units
@@ -247,7 +262,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
     greject = (1. - epsilon*sint2/(1.+ epsilonsq))*ScatteringFunction;
     
-  }  while(greject < elementZ*G4UniformRand());
+  }  while(greject < G4UniformRand()*elementZ);
   
   G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
   G4double Phi     = twopi * G4UniformRand() ;
@@ -305,7 +320,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
-
+// used log-log interpolation instead of linear interpolation to build the MFP 
+// as reported in the stepanek paper 
 void G4LowEnergyCompton::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
@@ -359,7 +375,8 @@ void G4LowEnergyCompton::BuildMeanFreePathTable(){
   }
 }
 
-
+// METHOD BELOW  FROM STANDARD E_M PROCESSES CODE MODIFIED TO USE 
+// LIVERMORE DATA (using log-log interpolation as reported in stepanek paper)
 G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynamicGamma,
                                                G4Material* aMaterial){
   // select randomly 1 element within the material 
@@ -370,7 +387,7 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
   if (NumberOfElements == 1) return (*theElementVector)(0);
 
   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  //GetMeanFreePath
+ 
   G4double PartialSumSigma = 0.;
 
   G4double rval = 0;
@@ -397,8 +414,6 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
     if(rval <= PartialSumSigma) return ((*theElementVector)(i));
   }
 
-  //  G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-  // << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
 

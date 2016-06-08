@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.3 1999/01/11 00:48:39 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VisManMessSet.cc,v 1.5.2.1 1999/12/07 20:54:02 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -205,8 +205,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     const char* t = newValues;
     istrstream is ((char*)t); is >> choice >> density;
     G4int iSelector = -1;
-    if (choice.compareTo ("off",RWCString::ignoreCase) == 0) iSelector = 0;
-    if (choice.compareTo ("on",RWCString::ignoreCase) == 0) iSelector = 1;
+    if (choice.compareTo ("off",G4String::ignoreCase) == 0) iSelector = 0;
+    if (choice.compareTo ("on",G4String::ignoreCase) == 0) iSelector = 1;
     if (iSelector < 0) {
       G4cout << "Choice not recognised (on/off)." << endl;
       const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();
@@ -406,8 +406,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     istrstream is ((char*)t); is >> choice >> x >> y >> z >> unit
 				  >> nx >> ny >> nz;
     G4int iSelector = -1;
-    if (choice.compareTo ("off",RWCString::ignoreCase) == 0) iSelector = 0;
-    if (choice.compareTo ("on",RWCString::ignoreCase) == 0) iSelector = 1;
+    if (choice.compareTo ("off",G4String::ignoreCase) == 0) iSelector = 0;
+    if (choice.compareTo ("on",G4String::ignoreCase) == 0) iSelector = 1;
     if (iSelector < 0) {
       G4cout << "Choice not recognised (on/off)." << endl;
       const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();
@@ -631,7 +631,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   ///////////////////////////////////////////  /vis~/set/view  /////////
   if (commandPath == "/vis~/set/view") {
     // Make List of available views.
-    RWTPtrOrderedVector<G4VViewer> vList;
+    G4RWTPtrOrderedVector<G4VViewer> vList;
     const G4SceneHandlerList& gml = fpVMan -> GetAvailableSceneHandlers ();
     G4int nViewTotal = 0;
     G4int iGM, nScenes = gml.entries ();

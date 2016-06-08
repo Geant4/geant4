@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewer.cc,v 1.2 1999/05/12 14:01:02 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4OpenInventorViewer.cc,v 1.2.8.1 1999/12/07 20:53:37 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation

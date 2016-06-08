@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.2 1999/07/06 15:19:44 gunter Exp $
+# $Id: globlib.gmk,v 1.10 1999/11/30 19:41:08 morita Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -18,14 +18,22 @@ ifndef G4ODBMS
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done
 else
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) headers); done
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) d_files); done
-	@for dir in $(SUBDIRS); do (cd $$dir; G4ODBMS_DEPEND=1; export G4ODBMS_DEPEND; $(MAKE)); done
+	@for dir in $(SUBDIRS); do (cd $$dir; G4ODBMS_DEPEND=1;  \
+	               export G4ODBMS_DEPEND; $(MAKE)); done
+	@echo Copying tmp schema header from G4TMPDIR to $(G4SCHEMA_INCLUDE)
+	@rm -f $(G4SCHEMA_INCLUDE)/*.hh
+	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) install_schema); done
+	@echo Copying tmp schema to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
+	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA
+	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4TMPSCHEMA_BOOT) \
+	  $(G4SCHEMA_DIR)/G4SCHEMA $(G4SCHEMA_FDID)
 endif
 
 ifndef G4ODBMS
 glob global: objs wipe_libs $(G4LIBDIR)/lib$(name).a
 else
-glob global: all $(G4LIBDIR)/lib$(name).a $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
+glob global: headers d_files objs wipe_libs $(G4LIBDIR)/lib$(name).a $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
 endif
 
 $(G4LIBDIR)/lib$(name).a: \
@@ -67,7 +75,7 @@ $(G4LIBDIR)/lib$(name).a: \
 ifneq ($(G4MAKESHLIB),)
 	@for lib in $(SUBLIBS); do (cp $(G4TMP)/$(G4SYSTEM)/$$lib/*.o $(G4LIBDIR)/.); done
 	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
-	$(RM) $(G4LIBDIR)/*.o
+	@$(RM) $(G4LIBDIR)/*.o
 endif
 
 ifdef G4ODBMS
@@ -77,14 +85,12 @@ headers:
 d_files:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) d_files); done
 
-$(G4SCHEMA_DIR)/G4SCHEMA.FDDB: $(G4EXAMPLE_BOOT_DIR)/G4EXAMPLE.FDDB
-ifdef G4SCHEMA_DIR
+$(G4SCHEMA_DIR)/G4SCHEMA.FDDB: $(G4TMPSCHEMA_DIR)/G4SCHEMA.FDDB
 	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA
 	@rm -f $(G4SCHEMA_DIR)/G4SCHEMA.FDDB
 	@echo Copying schema file to $(G4SCHEMA_DIR) for FDID $(G4SCHEMA_FDID)
-	@$(HEP_ODBMS_DIR)/etc/getdb $(G4EXAMPLE_BOOT) \
+	@$(HEP_ODBMS_DIR)/etc/getdb $(G4TMPSCHEMA_BOOT) \
 	  $(G4SCHEMA_DIR)/G4SCHEMA $(G4SCHEMA_FDID)
-endif
 endif
 
 objs:

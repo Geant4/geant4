@@ -1,0 +1,355 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: tpordvec.icc,v 1.1 1999/11/25 10:14:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
+// 
+//---------------------------------------------------------------
+//  GEANT 4 class implementation file
+//
+//  G4RWTPtrOrderedVector
+//---------------------------------------------------------------
+
+template<class T >
+G4RWTPtrOrderedVector<T>::G4RWTPtrOrderedVector(size_t capacity)
+  : std_pvector(capacity,(T*)0),rwsize(0){}
+
+template<class T >
+G4RWTPtrOrderedVector<T>::G4RWTPtrOrderedVector(const G4RWTPtrOrderedVector<T>& v)
+  : std_pvector(v),rwsize(v.rwsize){}
+
+template<class T >
+G4RWTPtrOrderedVector<T>::~G4RWTPtrOrderedVector(){}
+
+template<class T >
+G4RWTPtrOrderedVector<T>&
+G4RWTPtrOrderedVector<T>::operator=(const G4RWTPtrOrderedVector<T>& v)
+{
+  std_pvector::operator=(v),
+  rwsize=v.rwsize;
+  return *this;
+}
+
+template<class T >
+T*& G4RWTPtrOrderedVector<T>::operator()(size_t i) 
+{
+  //if(i>=rwsize)
+  //	G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector ()",rwsize,i));
+  if(i<std_pvector::size() && rwsize<=i) rwsize=i+1;
+  return std_pvector::operator[](i); 
+}
+
+template<class T >
+T* const& G4RWTPtrOrderedVector<T>::operator()(size_t i) const
+{ 
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector const ()",rwsize,i));
+  return std_pvector::operator[](i); 
+}
+
+template<class T >
+T*& G4RWTPtrOrderedVector<T>::operator[](size_t i) 
+{
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector []",rwsize,i));
+  //if(i<std_pvector::size() && rwsize<=i) rwsize=i+1;
+  return std_pvector::operator[](i); 
+}
+
+template<class T >
+T* const& G4RWTPtrOrderedVector<T>::operator[](size_t i) const
+{      
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector const []",rwsize,i));
+   return std_pvector::operator[](i); 
+}
+
+template<class T >
+void G4RWTPtrOrderedVector<T>::clear() 
+{
+  // std_pvector::erase(std_pvector::begin(), std_pvector::end());
+  rwsize=0;
+}
+
+template<class T >
+void G4RWTPtrOrderedVector<T>::clearAndDestroy() 
+{
+  int sz;
+  G4std::set<T*,G4std::greater<T*> > tmp;
+  for (sz=0;sz<rwsize;sz++)
+    {
+      T* current;
+      current=std_pvector::operator[](sz);
+      if ( current )
+         tmp.insert(current);
+    }
+  typename G4std::set<T*,G4std::greater<T*> >::iterator it;
+  for(it=tmp.begin();it!=tmp.end();it++)
+    {
+      delete *it;
+    }
+  // std_pvector::erase(std_pvector::begin(), std_pvector::end());
+  rwsize=0;
+}
+
+template<class T>
+size_t G4RWTPtrOrderedVector<T>::index( const T* a ) const
+{
+  const_iterator i;
+  size_t ptn = 0;
+  for (i = std_pvector::begin();ptn<rwsize; i++,ptn++)
+    {
+      if (**i==*a) return ptn;  
+    }
+  return (ptn=~(size_t)0);
+}
+
+template<class T >
+void G4RWTPtrOrderedVector<T>::insert ( T* a )
+{ 
+  if(rwsize<std_pvector::size())
+  {
+    std_pvector::operator[](rwsize)=a;
+    rwsize++;
+  }
+  else
+  {
+    std_pvector::push_back(a);
+    rwsize=std_pvector::size();
+  }
+}
+
+template<class T>
+size_t G4RWTPtrOrderedVector<T>::occurrencesOf( const T* a ) const
+{
+  const_iterator i;
+  size_t ptn = 0;
+  size_t sz=0;
+  for (i = std_pvector::begin();sz<rwsize; i++,sz++)
+    {
+      if (**i==*a) ptn++;
+    }
+  return ptn;
+}
+
+template<class T> 
+G4bool G4RWTPtrOrderedVector<T>::contains( const T* a ) const
+{
+  const_iterator i;
+  size_t ptn=0;
+  for (i = std_pvector::begin(); ptn<rwsize; i++,ptn++)
+    {
+      if (**i==*a) return true;
+    }
+  return false;
+}
+
+template<class T>
+T* G4RWTPtrOrderedVector<T>::remove( const T* a )  
+{
+  iterator i;
+  size_t ptn=0;
+  size_t rwsz=rwsize;
+  for (i = std_pvector::begin();ptn<rwsz; i++,ptn++)
+    {
+      if (**i==*a) 
+	{
+	  T* tmp=*i;
+	  std_pvector::erase(i);
+	  rwsize--;
+	  return tmp;
+	} 
+    }
+  return 0;
+}
+
+template<class T> 
+size_t G4RWTPtrOrderedVector<T>::removeAll( const T* a )  
+{
+  iterator i;
+  size_t ptn = 0;
+  size_t sz=0;
+  size_t rwsz=rwsize;  
+  for (i = std_pvector::begin();sz<rwsz; i++,sz++)
+    {
+      if (**i==*a) 
+	{
+	  std_pvector::erase(i);
+	  rwsize--;
+          i--;
+	  ptn++;
+	} 
+    }
+  return ptn;
+}
+
+// should throw exception if ...
+template<class T> 
+T* G4RWTPtrOrderedVector<T>::removeAt( size_t i )  
+{
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector removeAt",rwsize,i));
+  iterator it=std_pvector::begin();
+  int j;
+  for(j=0;j<rwsize && j<i;j++) it++;
+  if(it!=std_pvector::end())
+    {
+      T* tmp = operator[](i);
+      std_pvector::erase(it);
+      rwsize--;
+      return tmp;
+    }
+  else
+    return 0;
+}
+
+template<class T>	
+T* G4RWTPtrOrderedVector<T>::find(const T* a) const
+{
+  const_iterator i;
+  size_t ptn=0;
+  for (i = std_pvector::begin(); ptn<rwsize; i++,ptn++)
+    {
+      if (**i==*a) 
+	{
+	  return *i;
+	} 
+    }
+  return 0;
+}
+
+template<class T>	
+void G4RWTPtrOrderedVector<T>::resize(size_t N)
+{
+  if(N>std_pvector::size())
+    {
+      int e=N-std_pvector::size();
+      for(int i=0;i<e;i++)
+	std_pvector::push_back(0);
+    }
+  else if(N>rwsize)
+    {
+      iterator it=std_pvector::begin();
+      for(int i=0;i<N;i++,it++);
+      std_pvector::erase(it,std_pvector::end());
+    }
+}
+
+template<class T>	
+void G4RWTPtrOrderedVector<T>::insertAt ( size_t i, T* a ) 
+{
+  // insertAt throws an exception of type G4RWBoundsErr
+  // if you try to insert out of range
+  //
+  if(i>rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector insertAt",rwsize,i));
+  if(rwsize<std_pvector::size())
+    {
+      for(int j=rwsize;j>i;j--)
+	std_pvector::operator[](j)=std_pvector::operator[](j-1);
+      std_pvector::operator[](i)=a;
+      rwsize++;
+    }
+  else
+    {
+      iterator it=std_pvector::begin();
+      for(int j=0;j<i;j++,it++);
+      std_pvector::insert(it,a);
+      rwsize++;
+    }
+}
+
+template<class T>	
+T* G4RWTPtrOrderedVector<T>::removeFirst ()
+{
+  if(rwsize!=0)
+    {
+      T* tmp=std_pvector::front();
+      std_pvector::erase(std_pvector::begin());
+      rwsize--;
+      return tmp;
+    }
+  else
+    return 0;
+}
+
+template<class T>
+T* G4RWTPtrOrderedVector<T>::removeLast ()
+{
+  if(rwsize==0) return (T*) 0;
+  
+  rwsize--;
+  T* tmp=std_pvector::operator[](rwsize);
+  std_pvector::operator[](rwsize)=0;
+
+  return tmp;
+}
+
+template<class T>
+size_t G4RWTPtrOrderedVector<T>::entries() const
+{
+  return rwsize;
+}
+
+template<class T>
+void G4RWTPtrOrderedVector<T>::append ( T* a ) 
+{ 
+  insert( a );
+}
+
+template<class T>
+size_t G4RWTPtrOrderedVector<T>::length() const
+{
+  return rwsize;
+}
+
+template<class T>
+T*& G4RWTPtrOrderedVector<T>::at ( size_t i ) 
+{ 
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector at",rwsize,i));
+  return operator()(i); 
+}
+
+template<class T>
+T*const& G4RWTPtrOrderedVector<T>::at ( size_t i ) const
+{       
+  if(i>=rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector const at",rwsize,i));
+  return operator()(i); 
+}
+
+template<class T>
+G4bool G4RWTPtrOrderedVector<T>::isEmpty() const
+{
+  return rwsize==0;
+}
+  
+template<class T>
+T* G4RWTPtrOrderedVector<T>::first() const
+{
+  if(!rwsize)
+    G4RWTHROW(G4RWBoundsErr("G4RWTPtrOrderedVector front",rwsize,0));
+  return std_pvector::front();
+}
+
+template<class T>
+T* G4RWTPtrOrderedVector<T>::last() const
+{
+  if(rwsize)
+    return std_pvector::operator[](rwsize-1);
+  else
+    return 0;
+}
+
+template<class T>
+void G4RWTPtrOrderedVector<T>::prepend(T* const ptr)
+{
+  std_pvector::insert(std_pvector::begin(),ptr);
+  rwsize++;
+}

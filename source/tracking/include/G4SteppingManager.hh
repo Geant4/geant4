@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.3 1999/04/16 02:14:50 tsasaki Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4SteppingManager.hh,v 1.6.4.1.2.1 1999/12/07 20:53:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -25,7 +25,7 @@
 //---------------------------------------------------------------
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
 
-#include <rw/tvordvec.h>            // Include from 'RogueWave'
+#include "g4rw/tvordvec.h"            // Include from 'RogueWave'
 
 class G4SteppingManager;
 
@@ -52,18 +52,18 @@ class G4VSensitiveDetector;
 #include "G4UserSteppingAction.hh"    // Include from 'tracking'
 #include "G4Step.hh"                  // Include from 'tracking'
 #include "G4StepPoint.hh"             // Include from 'tracking'
-#include "G4SteppingVerbose.hh"       // Include from 'tracking'
+#include "G4VSteppingVerbose.hh"       // Include from 'tracking'
 #include "G4VTouchable.hh"            // Include from 'geometry'
 #include "G4TouchableHistory.hh"      // Include from 'geometry'
 
 //  must be changed in elegant way
 static const G4int SIZEofSelectedDoIt=100;
 // RogueWave Tools.h++
-   typedef RWTValOrderedVector<G4int> 
+   typedef G4RWTValOrderedVector<G4int> 
              G4SelectedAtRestDoItVector;
-   typedef RWTValOrderedVector<G4int> 
+   typedef G4RWTValOrderedVector<G4int> 
              G4SelectedAlongStepDoItVector;
-   typedef RWTValOrderedVector<G4int>
+   typedef G4RWTValOrderedVector<G4int>
              G4SelectedPostStepDoItVector;
 
 
@@ -163,8 +163,8 @@ class G4SteppingManager
    G4double GetphysIntLength();
    G4ForceCondition GetfCondition();
    G4GPILSelection  GetfGPILSelection();
-
-
+  //
+   G4bool KillVerbose;
 //---------   
    private:
 //---------   

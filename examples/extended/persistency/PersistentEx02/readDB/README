@@ -1,0 +1,18 @@
+$Id: README,v 1.2 1999/12/02 20:51:49 morita Exp $
+-------------------------------------------------------------------
+
+                              readDB
+                              ------
+
+This short program demonstrates how to access events and their
+associations which are stored in the database.
+
+To create and populate the database, see the file PersistentEx02/README.  
+
+For the setup of readDB, see PersistentEx01/readDB/README.
+
+The difference between PersistentEx01/readDB and this example
+is the additional capability to look into the user derived
+persistent hits.
+
+--

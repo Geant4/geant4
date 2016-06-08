@@ -133,8 +133,8 @@ void G4Polyhedra::Create( const G4double phiStart,
 		G4Exception( "G4Polyhedra: Illegal input parameters: All R values must be >= 0" );
 		
 	G4double rzArea = rz->Area();
-	if (rzArea < -kCarTolerance) 
-		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z values must be specified clockwise" );
+	if (rzArea < -kCarTolerance) rz->ReverseOrder();
+
 	else if (rzArea < -kCarTolerance)
 		G4Exception( "G4Polyhedra: Illegal input parameters: R/Z cross section is zero or near zero" );
 		

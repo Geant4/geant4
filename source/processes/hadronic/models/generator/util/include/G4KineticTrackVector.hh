@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KineticTrackVector.hh,v 1.1 1999/01/07 16:12:21 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4KineticTrackVector.hh,v 1.1.8.1.2.1 1999/12/07 20:51:59 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 
 // Modified at 8-Oct-1998 by Maxim Komogorov. Methods BoostBeam,Boost,Shift
 // were added.
@@ -16,9 +16,9 @@
 
 #include "globals.hh"
 #include "G4KineticTrack.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
-class G4KineticTrackVector : public RWTPtrOrderedVector<G4KineticTrack>
+class G4KineticTrackVector : public G4RWTPtrOrderedVector<G4KineticTrack>
     {
 public:
   G4KineticTrackVector();

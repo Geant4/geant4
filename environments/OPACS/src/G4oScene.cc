@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oScene.cc,v 1.2 1999/04/16 10:03:38 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4oScene.cc,v 1.3.2.1.2.1 1999/12/07 20:46:52 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
@@ -24,6 +24,10 @@
 #ifdef DEBUG
 #include <stdio.h>
 #endif
+
+// GB : put this include before the GL ones. 
+// It avoid a clash with STL includes on Linux.
+#include "g4rw/tvhdict.h"
 
 /*Co*/
 #include <CPrinter.h>

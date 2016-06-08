@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.4 1999/04/15 15:35:55 hpw Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.5.4.1 1999/12/07 20:51:53 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -230,9 +230,9 @@ G4ExcitedString * G4DiffractiveExcitation::
 	end->Set4Momentum(Pend);
 	
 #ifdef G4_FTFDEBUG
-	G4cout << " generated string flavors          " << stringStart << " / " << stringEnd << endl;
-	G4cout << " generated string momenta:   quark " << start->Get4Momentum() << endl;
-	G4cout << " generated string momenta: Diquark " << end ->Get4Momentum() << endl;
+	G4cout << " generated string flavors          " << start->GetPDGcode() << " / " << end->GetPDGcode() << endl;
+	G4cout << " generated string momenta:   quark " << start->Get4Momentum() << "mass : " <<start->Get4Momentum().mag()<< endl;
+	G4cout << " generated string momenta: Diquark " << end ->Get4Momentum() << "mass : " <<end->Get4Momentum().mag()<< endl;
 	G4cout << " sum of ends                       " << Pstart+Pend << endl;
 	G4cout << " Original                          " << hadron->Get4Momentum() << endl;
 #endif

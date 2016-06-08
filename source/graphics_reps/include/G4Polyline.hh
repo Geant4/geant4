@@ -1,15 +1,22 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyline.hh,v 1.3 1999/05/25 09:10:09 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Polyline.hh,v 1.4.2.1 1999/12/07 20:48:50 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  July 1995
+
+// Class Description:
+// A set of line segments defined with a set of vertices.
+// G4Polyline is used for visualizing trajectories, steps, coordinate axes,
+// etc.
+// Class Description - End:
+
 
 #ifndef G4POLYLINE_HH
 #define G4POLYLINE_HH
@@ -19,7 +26,9 @@
 
 class G4Polyline: public G4VVisPrim, public G4Point3DList {
   friend ostream& operator << (ostream& os, const G4Polyline& line);
-public:
+
+public: // With description
+
   G4Polyline ();
   G4Polyline (const G4VVisPrim& prim);
   virtual G4Visible&  operator = (const G4Visible& right);

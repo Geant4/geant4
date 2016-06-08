@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999/07/06 15:02:39 gunter Exp $
+$Id: History,v 1.16 1999/11/29 10:17:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,48 @@ committal in the CVS repository !
                          STL Interface
                          -------------
 
+November 29, 99 G.Cosmo
+- Removed references to g4std/string, now removed since not anymore
+  needed.
+
+November 26, 99 G.Cosmo (STLInterface-V00-01-04)
+- Backed up inline keyword for simple methods in vectors' classes
+  (test comparison with previous tag).
+- Reorganised cstring[.h.icc], no functional changes.
+
+November 25, 99 G.Cosmo (STLInterface-V00-01-03)
+- STLInterface: changes for ISO/ANSI C++ support:
+  o Reorganised method definitions on wrapper classes; made templated
+    vectors' methods all not inlined (test). Created .icc files accordingly.
+  o Changed #define to typedef for std_string and protected in class
+    scope. Introduced std_vector and std_pvector for collections, 
+    replaced G4std::vector<T> and G4std::vector<T*> accordingly.
+- Added default comment header to files in STLInterface and class
+  descriptions for Software Reference Manual.
+
+November 23, 99 G.Cosmo
+- Introduced changes to support ISO/ANSI code:
+  o Modified STLInterface wrappers to invoke STL containers from G4std
+    namespace.
+  o Modified #include statements to invoke g4std wrappers.
+  o Introduced G4endl and G4cin in G4ios.hh. Modified code accordingly.
+- Made destructors for vector wrappers collections in STLInterface virtual.
+
+16th November 1999   Gabriele Cosmo (STLInterface-V00-01-02)
+- Includes global migration RWT->G4RWT:
+  o Moved all wrapper files from STLInterface/rw to STLInterface/g4rw.
+  o Changed RW to G4RW everywhere, except: RWBoolean to G4Bool,
+    RWCString to G4String, RWTokenizer to G4Tokenizer.
+  o Removed definition of RW_NPOS from defs.h.
+- Removed wrappers for Dictionaries: tvhdict.h, tphdict.h, rwstlhash.h.
+  Removed also hash_map wrappers.
+
+6th October 1999   Frank Behner (STLInterface-V00-01-01)
+- Changed tolower/toupper to old implementation in cstring.h.
+
+4th August 1999   Frank Behner (STLInterface-V00-01-00)
+- Implementation of RWCString::hash(const RWCString&).
+
 6th July 1999   Gunter Folger
 - name for hash_map for WIN32 is hashmap.h ONLY with Object space; 
   other implementations on WIN32 should use hash_map.h
@@ -39,12 +81,12 @@ committal in the CVS repository !
 - Tagged Frank's fixes to tpordvec re insertAt(0,...) and similar.
 
 20th June 1999  John Allison (STLInterface-18)
-- Removed RWTPtrHashDictionary(size_t n):fhm(n){}.
-- Implemented RWTPtrHashDictionary::clearAndDestroy of values *and*
+- Removed G4RWTPtrHashDictionary(size_t n):fhm(n){}.
+- Implemented G4RWTPtrHashDictionary::clearAndDestroy of values *and*
   keys, protecting against duplicate entries.
-- Reimplemented RWTPtrOrderedVector::clearAndDestroy with vector<T*>
+- Reimplemented G4RWTPtrOrderedVector::clearAndDestroy with vector<T*>
   instead of set<T*>.
-- Prevented RWTPtrOrderedVector::resize and RWTValOrderedVector::resize
+- Prevented G4RWTPtrOrderedVector::resize and G4RWTValOrderedVector::resize
   from reducing the size below the number if items.
 
 20th June 1999  John Allison

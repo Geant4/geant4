@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.hh,v 1.4 1999/05/10 14:04:20 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4BoundingSphereScene.hh,v 1.5.6.1 1999/12/07 20:54:04 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // John Allison  7th June 1997
@@ -52,7 +52,6 @@ public:
   G4VisExtent GetBoundingSphereExtent ();
 
   ////////////////////////////////////////////////////////////////
-
   // The following 2 functions can be used by any code which wishes to
   // accrue a bounding sphere.  Just instantiate a
   // G4BoundingSphereScene and use AccrueBoundingSphere.
@@ -60,6 +59,19 @@ public:
   void ResetBoundingSphere ();
   void AccrueBoundingSphere (const G4Point3D& centre,
 			     G4double radius);
+
+  ////////////////////////////////////////////////////////////////
+  // Functions not used by required by the abstract interface.
+
+  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
+  virtual void EndPrimitives () {}
+  virtual void AddPrimitive (const G4Polyline&)   {}
+  virtual void AddPrimitive (const G4Text&)       {}
+  virtual void AddPrimitive (const G4Circle&)     {}
+  virtual void AddPrimitive (const G4Square&)     {}
+  virtual void AddPrimitive (const G4Polymarker&) {}
+  virtual void AddPrimitive (const G4Polyhedron&) {}
+  virtual void AddPrimitive (const G4NURBS&)      {}
 
 private:
   void Accrue (const G4VSolid& solid);

@@ -1,33 +1,44 @@
-#ifndef _G3MATTABLE_
-#define _G3MATTABLE_ 1
-
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.hh,v 1.3 1999/05/06 17:46:37 lockman Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G3MatTable.hh,v 1.7 1999/12/05 17:50:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
-//
-// G3 materials table.
-// Maps G3 material indices to their G4 material object counterparts.
+// by I.Hrivnacova, 27 Sep 99
 
-#include <rw/tpordvec.h>
+#ifndef G3_MAT_TABLE_H
+#define G3_MAT_TABLE_H
+
+#include "G3MatTableEntry.hh"
+
+#include "globals.hh"
+
+#include "g4rw/tpordvec.h"
 
 class G4Material;
 
-class G3MatTable {
-private:
-  RWTPtrOrderedVector<G4Material>* _Mat;
-public:
-  G3MatTable();
-  ~G3MatTable();
-  G4Material* get(G4int matid);
-  void put(G4int matid, G4Material* matpt);
+typedef G4RWTPtrOrderedVector<G3MatTableEntry>  G3MaterialVector;
+
+class G3MatTable
+{
+  public:
+    G3MatTable();
+    virtual ~G3MatTable();
+    
+    // methods
+    // keep the same names of methods as in G4 g3tog4
+    G4Material* get(G4int id) const;
+    void put(G4int id, G4Material* material);
+    void Clear();
+
+  private:
+    G3MaterialVector*  fMatVector;
 };
 
 extern G3MatTable G3Mat;
-#endif
+
+#endif //G3_MAT_TABLE_H

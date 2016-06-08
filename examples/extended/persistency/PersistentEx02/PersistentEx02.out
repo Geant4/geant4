@@ -1,0 +1,805 @@
+Opening federated database OO_FD_BOOT.
+WARNING: g4example: Could not find naming root directory: Naming will be disabled.
+#
+#  PersistentEx02.in
+#
+/db/verbose 2
+###/db/run NewRuns
+###/db/event NewEvents
+###/db/geometry NewGeometry
+/run/initialize
+  -- Tracker type sensitive detector
+PersEx02PhysicsList::SetCuts:CutLength : 1 (mm)
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+#
+# 100 events
+#
+/run/beamOn 100
+Transaction started for /Geometry/GeomContainer/ with non-sustained mode.
+ -- Geometry stored in /Geometry/GeomContainer/
+Transaction is committed on /Geometry/GeomContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+>>> Event 0
+Event : 0
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 34.3698
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 18.4405
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 0 stored in /Events/EventContainer/ (sustained)
+>>> Event 1
+Event : 1
+mySD/EvenCollection    Number of hits       21
+  Edep of the first Hit 99.9396
+mySD/OddCollection     Number of hits       20
+  Edep of the first Hit 25.443
+ -- G4PEvent 1 stored in /Events/EventContainer/ (sustained)
+>>> Event 2
+Event : 2
+mySD/EvenCollection    Number of hits       21
+  Edep of the first Hit 6.23362
+mySD/OddCollection     Number of hits       19
+  Edep of the first Hit 64.6385
+ -- G4PEvent 2 stored in /Events/EventContainer/ (sustained)
+>>> Event 3
+Event : 3
+mySD/EvenCollection    Number of hits       13
+  Edep of the first Hit 48.4612
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 14.5902
+ -- G4PEvent 3 stored in /Events/EventContainer/ (sustained)
+>>> Event 4
+Event : 4
+mySD/EvenCollection    Number of hits       31
+  Edep of the first Hit 50.5145
+mySD/OddCollection     Number of hits       16
+  Edep of the first Hit 57.8215
+ -- G4PEvent 4 stored in /Events/EventContainer/ (sustained)
+>>> Event 5
+Event : 5
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 139.802
+mySD/OddCollection     Number of hits       34
+  Edep of the first Hit 109.904
+ -- G4PEvent 5 stored in /Events/EventContainer/ (sustained)
+>>> Event 6
+Event : 6
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 21.8663
+mySD/OddCollection     Number of hits       27
+  Edep of the first Hit 14.2566
+ -- G4PEvent 6 stored in /Events/EventContainer/ (sustained)
+>>> Event 7
+Event : 7
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 2.93176
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 3.13845
+ -- G4PEvent 7 stored in /Events/EventContainer/ (sustained)
+>>> Event 8
+Event : 8
+mySD/EvenCollection    Number of hits       18
+  Edep of the first Hit 13.787
+mySD/OddCollection     Number of hits       34
+  Edep of the first Hit 13.6233
+ -- G4PEvent 8 stored in /Events/EventContainer/ (sustained)
+>>> Event 9
+Event : 9
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 42.2712
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 21.0987
+ -- G4PEvent 9 stored in /Events/EventContainer/ (sustained)
+>>> Event 10
+Event : 10
+mySD/EvenCollection    Number of hits       24
+  Edep of the first Hit 14.0895
+mySD/OddCollection     Number of hits       24
+  Edep of the first Hit 7.74588
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 10 stored in /Events/EventContainer/ (sustained)
+>>> Event 11
+Event : 11
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 106.832
+mySD/OddCollection     Number of hits       35
+  Edep of the first Hit 30.1659
+ -- G4PEvent 11 stored in /Events/EventContainer/ (sustained)
+>>> Event 12
+Event : 12
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 7.46186
+mySD/OddCollection     Number of hits       36
+  Edep of the first Hit 16.788
+ -- G4PEvent 12 stored in /Events/EventContainer/ (sustained)
+>>> Event 13
+Event : 13
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 16.4669
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 55.2629
+ -- G4PEvent 13 stored in /Events/EventContainer/ (sustained)
+>>> Event 14
+Event : 14
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 21.5352
+mySD/OddCollection     Number of hits       36
+  Edep of the first Hit 7.92271
+ -- G4PEvent 14 stored in /Events/EventContainer/ (sustained)
+>>> Event 15
+Event : 15
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 17.9607
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 8.11967
+ -- G4PEvent 15 stored in /Events/EventContainer/ (sustained)
+>>> Event 16
+Event : 16
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 39.8096
+mySD/OddCollection     Number of hits       37
+  Edep of the first Hit 13.969
+ -- G4PEvent 16 stored in /Events/EventContainer/ (sustained)
+>>> Event 17
+Event : 17
+mySD/EvenCollection    Number of hits       11
+  Edep of the first Hit 29.4604
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 5.21882
+ -- G4PEvent 17 stored in /Events/EventContainer/ (sustained)
+>>> Event 18
+Event : 18
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 23.4087
+mySD/OddCollection     Number of hits       37
+  Edep of the first Hit 2.57686
+ -- G4PEvent 18 stored in /Events/EventContainer/ (sustained)
+>>> Event 19
+Event : 19
+mySD/EvenCollection    Number of hits       28
+  Edep of the first Hit 68.7516
+mySD/OddCollection     Number of hits       14
+  Edep of the first Hit 36.0667
+ -- G4PEvent 19 stored in /Events/EventContainer/ (sustained)
+>>> Event 20
+Event : 20
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 41.2316
+mySD/OddCollection     Number of hits       36
+  Edep of the first Hit 32.5255
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 20 stored in /Events/EventContainer/ (sustained)
+>>> Event 21
+Event : 21
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 33.6799
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 2.63774
+ -- G4PEvent 21 stored in /Events/EventContainer/ (sustained)
+>>> Event 22
+Event : 22
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 15.6979
+mySD/OddCollection     Number of hits       35
+  Edep of the first Hit 82.3056
+ -- G4PEvent 22 stored in /Events/EventContainer/ (sustained)
+>>> Event 23
+Event : 23
+mySD/EvenCollection    Number of hits       27
+  Edep of the first Hit 23.5513
+mySD/OddCollection     Number of hits       12
+  Edep of the first Hit 27.8059
+ -- G4PEvent 23 stored in /Events/EventContainer/ (sustained)
+>>> Event 24
+Event : 24
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 43.1612
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 5.25522
+ -- G4PEvent 24 stored in /Events/EventContainer/ (sustained)
+>>> Event 25
+Event : 25
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 52.9242
+mySD/OddCollection     Number of hits       30
+  Edep of the first Hit 14.3396
+ -- G4PEvent 25 stored in /Events/EventContainer/ (sustained)
+>>> Event 26
+Event : 26
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 18.0676
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 66.0532
+ -- G4PEvent 26 stored in /Events/EventContainer/ (sustained)
+>>> Event 27
+Event : 27
+mySD/EvenCollection    Number of hits       30
+  Edep of the first Hit 1.07471
+mySD/OddCollection     Number of hits       18
+  Edep of the first Hit 2.81278
+ -- G4PEvent 27 stored in /Events/EventContainer/ (sustained)
+>>> Event 28
+Event : 28
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 71.478
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 38.2902
+ -- G4PEvent 28 stored in /Events/EventContainer/ (sustained)
+>>> Event 29
+Event : 29
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 18.7046
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 24.2962
+ -- G4PEvent 29 stored in /Events/EventContainer/ (sustained)
+>>> Event 30
+Event : 30
+mySD/EvenCollection    Number of hits       5
+  Edep of the first Hit 17.7432
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 8.45743
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 30 stored in /Events/EventContainer/ (sustained)
+>>> Event 31
+Event : 31
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 15.4573
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 5.60297
+ -- G4PEvent 31 stored in /Events/EventContainer/ (sustained)
+>>> Event 32
+Event : 32
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 49.3456
+mySD/OddCollection     Number of hits       37
+  Edep of the first Hit 4.42142
+ -- G4PEvent 32 stored in /Events/EventContainer/ (sustained)
+>>> Event 33
+Event : 33
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 39.7136
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 40.911
+ -- G4PEvent 33 stored in /Events/EventContainer/ (sustained)
+>>> Event 34
+Event : 34
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 71.5197
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 49.5622
+ -- G4PEvent 34 stored in /Events/EventContainer/ (sustained)
+>>> Event 35
+Event : 35
+mySD/EvenCollection    Number of hits       11
+  Edep of the first Hit 38.1744
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 3.09679
+ -- G4PEvent 35 stored in /Events/EventContainer/ (sustained)
+>>> Event 36
+Event : 36
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 52.4219
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 18.9069
+ -- G4PEvent 36 stored in /Events/EventContainer/ (sustained)
+>>> Event 37
+Event : 37
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 15.05
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 6.99795
+ -- G4PEvent 37 stored in /Events/EventContainer/ (sustained)
+>>> Event 38
+Event : 38
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 11.2992
+mySD/OddCollection     Number of hits       37
+  Edep of the first Hit 63.4584
+ -- G4PEvent 38 stored in /Events/EventContainer/ (sustained)
+>>> Event 39
+Event : 39
+mySD/EvenCollection    Number of hits       3
+  Edep of the first Hit 143.19
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 20.4067
+ -- G4PEvent 39 stored in /Events/EventContainer/ (sustained)
+>>> Event 40
+Event : 40
+mySD/EvenCollection    Number of hits       5
+  Edep of the first Hit 49.8201
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 35.403
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 40 stored in /Events/EventContainer/ (sustained)
+>>> Event 41
+Event : 41
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 56.283
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 19.0004
+ -- G4PEvent 41 stored in /Events/EventContainer/ (sustained)
+>>> Event 42
+Event : 42
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 57.1055
+mySD/OddCollection     Number of hits       37
+  Edep of the first Hit 36.6327
+ -- G4PEvent 42 stored in /Events/EventContainer/ (sustained)
+>>> Event 43
+Event : 43
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 7.60171
+mySD/OddCollection     Number of hits       44
+  Edep of the first Hit 18.0399
+ -- G4PEvent 43 stored in /Events/EventContainer/ (sustained)
+>>> Event 44
+Event : 44
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 53.2389
+mySD/OddCollection     Number of hits       34
+  Edep of the first Hit 5.52172
+ -- G4PEvent 44 stored in /Events/EventContainer/ (sustained)
+>>> Event 45
+Event : 45
+mySD/EvenCollection    Number of hits       11
+  Edep of the first Hit 48.5526
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 25.8542
+ -- G4PEvent 45 stored in /Events/EventContainer/ (sustained)
+>>> Event 46
+Event : 46
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 29.785
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 1.97563
+ -- G4PEvent 46 stored in /Events/EventContainer/ (sustained)
+>>> Event 47
+Event : 47
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 49.2885
+mySD/OddCollection     Number of hits       37
+  Edep of the first Hit 14.1009
+ -- G4PEvent 47 stored in /Events/EventContainer/ (sustained)
+>>> Event 48
+Event : 48
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 17.334
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 28.9757
+ -- G4PEvent 48 stored in /Events/EventContainer/ (sustained)
+>>> Event 49
+Event : 49
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 30.2462
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 41.7358
+ -- G4PEvent 49 stored in /Events/EventContainer/ (sustained)
+>>> Event 50
+Event : 50
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 7.09492
+mySD/OddCollection     Number of hits       33
+  Edep of the first Hit 129.963
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 50 stored in /Events/EventContainer/ (sustained)
+>>> Event 51
+Event : 51
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 1.77473
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 1.6009
+ -- G4PEvent 51 stored in /Events/EventContainer/ (sustained)
+>>> Event 52
+Event : 52
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 22.1206
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 5.21217
+ -- G4PEvent 52 stored in /Events/EventContainer/ (sustained)
+>>> Event 53
+Event : 53
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 13.318
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 71.7173
+ -- G4PEvent 53 stored in /Events/EventContainer/ (sustained)
+>>> Event 54
+Event : 54
+mySD/EvenCollection    Number of hits       28
+  Edep of the first Hit 10.4189
+mySD/OddCollection     Number of hits       21
+  Edep of the first Hit 34.7557
+ -- G4PEvent 54 stored in /Events/EventContainer/ (sustained)
+>>> Event 55
+Event : 55
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 14.7846
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 17.1474
+ -- G4PEvent 55 stored in /Events/EventContainer/ (sustained)
+>>> Event 56
+Event : 56
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 26.8971
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 31.0888
+ -- G4PEvent 56 stored in /Events/EventContainer/ (sustained)
+>>> Event 57
+Event : 57
+mySD/EvenCollection    Number of hits       5
+  Edep of the first Hit 44.9334
+mySD/OddCollection     Number of hits       35
+  Edep of the first Hit 66.4154
+ -- G4PEvent 57 stored in /Events/EventContainer/ (sustained)
+>>> Event 58
+Event : 58
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 2.20857
+mySD/OddCollection     Number of hits       33
+  Edep of the first Hit 1.23394
+ -- G4PEvent 58 stored in /Events/EventContainer/ (sustained)
+>>> Event 59
+Event : 59
+mySD/EvenCollection    Number of hits       22
+  Edep of the first Hit 15.214
+mySD/OddCollection     Number of hits       23
+  Edep of the first Hit 3.83712
+ -- G4PEvent 59 stored in /Events/EventContainer/ (sustained)
+>>> Event 60
+Event : 60
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 16.8675
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 44.7627
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 60 stored in /Events/EventContainer/ (sustained)
+>>> Event 61
+Event : 61
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 3.47969
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 30.56
+ -- G4PEvent 61 stored in /Events/EventContainer/ (sustained)
+>>> Event 62
+Event : 62
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 15.0186
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 2.9719
+ -- G4PEvent 62 stored in /Events/EventContainer/ (sustained)
+>>> Event 63
+Event : 63
+mySD/EvenCollection    Number of hits       12
+  Edep of the first Hit 41.015
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 5.60219
+ -- G4PEvent 63 stored in /Events/EventContainer/ (sustained)
+>>> Event 64
+Event : 64
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 19.799
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 16.2043
+ -- G4PEvent 64 stored in /Events/EventContainer/ (sustained)
+>>> Event 65
+Event : 65
+mySD/EvenCollection    Number of hits       14
+  Edep of the first Hit 15.7985
+mySD/OddCollection     Number of hits       33
+  Edep of the first Hit 9.14023
+ -- G4PEvent 65 stored in /Events/EventContainer/ (sustained)
+>>> Event 66
+Event : 66
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 14.5406
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 67.0776
+ -- G4PEvent 66 stored in /Events/EventContainer/ (sustained)
+>>> Event 67
+Event : 67
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 53.7664
+mySD/OddCollection     Number of hits       36
+  Edep of the first Hit 53.2186
+ -- G4PEvent 67 stored in /Events/EventContainer/ (sustained)
+>>> Event 68
+Event : 68
+mySD/EvenCollection    Number of hits       11
+  Edep of the first Hit 0.0268595
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 13.2218
+ -- G4PEvent 68 stored in /Events/EventContainer/ (sustained)
+>>> Event 69
+Event : 69
+mySD/EvenCollection    Number of hits       4
+  Edep of the first Hit 28.0916
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 8.14295
+ -- G4PEvent 69 stored in /Events/EventContainer/ (sustained)
+>>> Event 70
+Event : 70
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 46.4878
+mySD/OddCollection     Number of hits       44
+  Edep of the first Hit 0.310941
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 70 stored in /Events/EventContainer/ (sustained)
+>>> Event 71
+Event : 71
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 11.3829
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 5.78213
+ -- G4PEvent 71 stored in /Events/EventContainer/ (sustained)
+>>> Event 72
+Event : 72
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 102.104
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 31.2024
+ -- G4PEvent 72 stored in /Events/EventContainer/ (sustained)
+>>> Event 73
+Event : 73
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 25.7397
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 13.4817
+ -- G4PEvent 73 stored in /Events/EventContainer/ (sustained)
+>>> Event 74
+Event : 74
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 4.22867
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 7.92935
+ -- G4PEvent 74 stored in /Events/EventContainer/ (sustained)
+>>> Event 75
+Event : 75
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 53.4164
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 61.7056
+ -- G4PEvent 75 stored in /Events/EventContainer/ (sustained)
+>>> Event 76
+Event : 76
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 9.39781
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 24.0445
+ -- G4PEvent 76 stored in /Events/EventContainer/ (sustained)
+>>> Event 77
+Event : 77
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 6.83122
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 44.4089
+ -- G4PEvent 77 stored in /Events/EventContainer/ (sustained)
+>>> Event 78
+Event : 78
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 1.36272
+mySD/OddCollection     Number of hits       45
+  Edep of the first Hit 1.69722
+ -- G4PEvent 78 stored in /Events/EventContainer/ (sustained)
+>>> Event 79
+Event : 79
+mySD/EvenCollection    Number of hits       29
+  Edep of the first Hit 56.4575
+mySD/OddCollection     Number of hits       13
+  Edep of the first Hit 2.42198
+ -- G4PEvent 79 stored in /Events/EventContainer/ (sustained)
+>>> Event 80
+Event : 80
+mySD/EvenCollection    Number of hits       32
+  Edep of the first Hit 6.56751
+mySD/OddCollection     Number of hits       16
+  Edep of the first Hit 64.8193
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 80 stored in /Events/EventContainer/ (sustained)
+>>> Event 81
+Event : 81
+mySD/EvenCollection    Number of hits       23
+  Edep of the first Hit 77.0987
+mySD/OddCollection     Number of hits       20
+  Edep of the first Hit 43.7444
+ -- G4PEvent 81 stored in /Events/EventContainer/ (sustained)
+>>> Event 82
+Event : 82
+mySD/EvenCollection    Number of hits       29
+  Edep of the first Hit 31.2056
+mySD/OddCollection     Number of hits       11
+  Edep of the first Hit 30.487
+ -- G4PEvent 82 stored in /Events/EventContainer/ (sustained)
+>>> Event 83
+Event : 83
+mySD/EvenCollection    Number of hits       18
+  Edep of the first Hit 8.34544
+mySD/OddCollection     Number of hits       18
+  Edep of the first Hit 18.5952
+ -- G4PEvent 83 stored in /Events/EventContainer/ (sustained)
+>>> Event 84
+Event : 84
+mySD/EvenCollection    Number of hits       15
+  Edep of the first Hit 1.30057
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 11.4435
+ -- G4PEvent 84 stored in /Events/EventContainer/ (sustained)
+>>> Event 85
+Event : 85
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 38.8382
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 14.691
+ -- G4PEvent 85 stored in /Events/EventContainer/ (sustained)
+>>> Event 86
+Event : 86
+mySD/EvenCollection    Number of hits       11
+  Edep of the first Hit 6.5076
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 103.732
+ -- G4PEvent 86 stored in /Events/EventContainer/ (sustained)
+>>> Event 87
+Event : 87
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 4.17298
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 70.4753
+ -- G4PEvent 87 stored in /Events/EventContainer/ (sustained)
+>>> Event 88
+Event : 88
+mySD/EvenCollection    Number of hits       31
+  Edep of the first Hit 17.119
+mySD/OddCollection     Number of hits       22
+  Edep of the first Hit 28.4859
+ -- G4PEvent 88 stored in /Events/EventContainer/ (sustained)
+>>> Event 89
+Event : 89
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 47.2302
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 49.3412
+ -- G4PEvent 89 stored in /Events/EventContainer/ (sustained)
+>>> Event 90
+Event : 90
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 23.1413
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 18.5923
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Events/EventContainer/ with sustained mode.
+ -- G4PEvent 90 stored in /Events/EventContainer/ (sustained)
+>>> Event 91
+Event : 91
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 27.6976
+mySD/OddCollection     Number of hits       41
+  Edep of the first Hit 28.5904
+ -- G4PEvent 91 stored in /Events/EventContainer/ (sustained)
+>>> Event 92
+Event : 92
+mySD/EvenCollection    Number of hits       14
+  Edep of the first Hit 7.49035
+mySD/OddCollection     Number of hits       36
+  Edep of the first Hit 85.1197
+ -- G4PEvent 92 stored in /Events/EventContainer/ (sustained)
+>>> Event 93
+Event : 93
+mySD/EvenCollection    Number of hits       28
+  Edep of the first Hit 30.053
+mySD/OddCollection     Number of hits       25
+  Edep of the first Hit 26.7725
+ -- G4PEvent 93 stored in /Events/EventContainer/ (sustained)
+>>> Event 94
+Event : 94
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 15.6043
+mySD/OddCollection     Number of hits       43
+  Edep of the first Hit 61.7972
+ -- G4PEvent 94 stored in /Events/EventContainer/ (sustained)
+>>> Event 95
+Event : 95
+mySD/EvenCollection    Number of hits       25
+  Edep of the first Hit 20.5769
+mySD/OddCollection     Number of hits       21
+  Edep of the first Hit 11.6616
+ -- G4PEvent 95 stored in /Events/EventContainer/ (sustained)
+>>> Event 96
+Event : 96
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 1.25488
+mySD/OddCollection     Number of hits       36
+  Edep of the first Hit 75.4839
+ -- G4PEvent 96 stored in /Events/EventContainer/ (sustained)
+>>> Event 97
+Event : 97
+mySD/EvenCollection    Number of hits       8
+  Edep of the first Hit 1.63689
+mySD/OddCollection     Number of hits       31
+  Edep of the first Hit 80.3105
+ -- G4PEvent 97 stored in /Events/EventContainer/ (sustained)
+>>> Event 98
+Event : 98
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 36.8743
+mySD/OddCollection     Number of hits       37
+  Edep of the first Hit 29.8302
+ -- G4PEvent 98 stored in /Events/EventContainer/ (sustained)
+>>> Event 99
+Event : 99
+mySD/EvenCollection    Number of hits       11
+  Edep of the first Hit 8.25636
+mySD/OddCollection     Number of hits       31
+  Edep of the first Hit 24.0489
+ -- G4PEvent 99 stored in /Events/EventContainer/ (sustained)
+Transaction is committed on /Events/EventContainer/
+Transaction started for /Runs/RunContainer/ with non-sustained mode.
+ -- G4PRun 0 stored in /Runs/RunContainer/
+Transaction is committed on /Runs/RunContainer/
+#
+exit
+PersistencyManager is deleting.

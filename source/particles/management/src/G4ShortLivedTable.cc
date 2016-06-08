@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedTable.cc,v 1.2 1999/04/14 10:28:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ShortLivedTable.cc,v 1.7.4.1 1999/12/07 20:50:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,9 +39,19 @@ G4ShortLivedTable::G4ShortLivedTable()
 
 G4ShortLivedTable::~G4ShortLivedTable()
 {
+  if (fShortLivedList ==0) return;
   // remove all contents in the short lived List and delete all particles  
+#ifdef G4USE_STL
+  G4ShortLivedList::iterator i;
+  for (i = fShortLivedList->begin(); i!= fShortLivedList->end(); ++i) {
+    delete (*i);
+  }
+  fShortLivedList->clear();
+#else
   fShortLivedList->clearAndDestroy();
+#endif
   delete fShortLivedList;
+  fShortLivedList =0;
 }
 
 G4int G4ShortLivedTable::GetVerboseLevel() const
@@ -57,7 +67,11 @@ G4bool G4ShortLivedTable::IsShortLived(G4ParticleDefinition* particle) const
 void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
 {
   if (IsShortLived(particle)) {
+#ifdef G4USE_STL
+    fShortLivedList->push_back(particle);
+#else
     fShortLivedList->insert(particle);
+#endif
   } else {
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
@@ -71,7 +85,17 @@ void G4ShortLivedTable::Insert(G4ParticleDefinition* particle)
 void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
 {
   if (IsShortLived(particle)) {
+#ifdef G4USE_STL
+    G4ShortLivedList::iterator idx;
+    for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {
+      if ( particle == *idx) {
+        fShortLivedList->erase(idx);
+      }
+    }
+#else
     fShortLivedList->remove(particle);
+#endif
+
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
@@ -85,11 +109,21 @@ void G4ShortLivedTable::Remove(G4ParticleDefinition* particle)
 
 void G4ShortLivedTable::DumpTable(const G4String &particle_name) const
 {
+  G4ParticleDefinition* particle;
+
+#ifdef G4USE_STL
+  G4ShortLivedList::iterator idx;
+  for (idx = fShortLivedList->begin(); idx!= fShortLivedList->end(); ++idx) {
+    particle = *idx;
+#else
   for (G4int idx= 0; idx < fShortLivedList->entries() ; idx++) {
+    particle = (*fShortLivedList)(idx);
+#endif 
+
     if (( particle_name == "ALL" ) || (particle_name == "all")){
-      ((*fShortLivedList)(idx))->DumpTable();
-    } else if ( particle_name == ((*fShortLivedList)(idx))->GetParticleName() ) {
-      ((*fShortLivedList)(idx))->DumpTable();
+      particle->DumpTable();
+    } else if ( particle_name == particle->GetParticleName() ) {
+      particle->DumpTable();
     }
   }
 }

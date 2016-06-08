@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DigiManager.cc,v 1.1 1999/01/07 16:14:14 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4DigiManager.cc,v 1.1.8.1.2.1 1999/12/07 20:52:58 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4DigiManager.hh"
@@ -52,7 +52,7 @@ G4DigiManager::~G4DigiManager()
 void G4DigiManager::AddNewModule(G4VDigitizerModule* DM)
 {
   G4String DMname = DM->GetName();
-  if(DMtable.index(DM) != RW_NPOS)
+  if(DMtable.index(DM) != G4std::string::npos)
   { 
     G4cout << "<" << DMname << "> has already been registored." << endl; 
     return;

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN03EventAction.cc,v 1.3 1999/04/16 11:55:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: ExN03EventAction.cc,v 1.4.6.1.2.1 1999/12/07 20:47:30 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 
@@ -18,7 +18,7 @@
 #include "ExN03CalorHit.hh"
 #include "ExN03EventActionMessenger.hh"
 
-#include <rw/tvordvec.h>
+#include "g4rw/tvordvec.h"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"

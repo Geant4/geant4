@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.hh,v 1.1 1999/01/07 16:11:35 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4HadronicProcess.hh,v 1.4.2.1 1999/12/07 20:51:30 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
  // This is the top level Hadronic Process class
  // The inelastic, elastic, capture, and fission processes
@@ -34,6 +34,9 @@
 #include "G4PhysicsVector.hh"
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
+#include "g4rw/tpordvec.h"
+#include "G4VIsotopeProduction.hh"
+#include "G4IsoParticleChange.hh"
  
  class G4HadronicProcess : public G4VDiscreteProcess
  {
@@ -41,10 +44,10 @@
     
     G4HadronicProcess( const G4String &processName = "Hadronic" ) :
       G4VDiscreteProcess( processName )
-    { }
+    { isoIsOnAnyway = 0; }
     
     virtual ~G4HadronicProcess()
-    { }
+    { theProductionModels.clearAndDestroy(); }
     
     inline void RegisterMe( G4HadronicInteraction *a )
     { GetManagerPointer()->RegisterMe( a ); }
@@ -83,6 +86,25 @@
     
     G4double GetCurrentN()
     { return currentN; }
+    
+    // Set methods for isotope production
+    
+    static void EnableIsotopeProductionGlobally();
+    static void DisableIsotopeProductionGlobally();
+    
+    void EnableIsotopeCounting()  {isoIsOnAnyway = 1;}
+    void DisableIsotopeCounting() {isoIsOnAnyway = -1;}
+    
+    void RegisterIsotopeProductionModel(G4VIsotopeProduction * aModel)
+    { theProductionModels.insert(aModel); }
+
+    static G4IsoParticleChange * GetIsotopeProductionInfo() 
+    { 
+      G4IsoParticleChange * anIsoResult = theIsoResult;
+      if(theIsoResult) theOldIsoResult = theIsoResult;
+      theIsoResult = NULL;
+      return anIsoResult;
+    }
 
  protected:
     
@@ -97,9 +119,31 @@
     
  private:
     
+    G4VParticleChange * DoIsotopeCounting(G4VParticleChange * aResult,
+                                          const G4Track & aTrack,
+                                          const G4Nucleus & aNucleus);
+                                          
+    G4IsoResult * ExtractResidualNucleus(const G4Track & aTrack,
+                                         const G4Nucleus & aNucleus,
+                                         G4VParticleChange * aResult);
+    
+ private:
+    
     G4double currentZ;
     G4double currentN;
     G4HadronicProcess *dispatch;
+
+// swiches for isotope production
+    
+    static G4bool isoIsEnabled; // true or false; local swich overrides
+    G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
+    
+    G4IsoParticleChange theIsoPC;
+    G4RWTPtrOrderedVector<G4VIsotopeProduction> theProductionModels;
+
+    static G4IsoParticleChange * theIsoResult;
+    static G4IsoParticleChange * theOldIsoResult;
+    
  };
  
 #endif

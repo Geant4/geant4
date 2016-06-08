@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DCofThisEvent.cc,v 1.1 1999/01/07 16:06:29 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4DCofThisEvent.cc,v 1.1.8.1.2.1 1999/12/07 20:47:47 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #include "G4DCofThisEvent.hh"
@@ -15,12 +15,12 @@ G4Allocator<G4DCofThisEvent> anDCoTHAllocator;
 
 G4DCofThisEvent::G4DCofThisEvent()
 {
-  DC = new RWTPtrOrderedVector<G4VDigiCollection>;
+  DC = new G4RWTPtrOrderedVector<G4VDigiCollection>;
 }
 
 G4DCofThisEvent::G4DCofThisEvent(G4int cap)
 {
-  DC = new RWTPtrOrderedVector<G4VDigiCollection>;
+  DC = new G4RWTPtrOrderedVector<G4VDigiCollection>;
   for(int i=0;i<cap;i++)
   {
     DC->insert((G4VDigiCollection*)NULL);

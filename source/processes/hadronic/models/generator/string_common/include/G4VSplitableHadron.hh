@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSplitableHadron.hh,v 1.1 1999/05/06 13:52:59 stesting Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VSplitableHadron.hh,v 1.1.6.1.2.1 1999/12/07 20:51:53 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4VSplitableHadron_h
@@ -31,7 +31,7 @@ class G4Nucleon;
 class G4Parton;
 class G4VKineticNucleon;
 
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4VSplitableHadron 
 {

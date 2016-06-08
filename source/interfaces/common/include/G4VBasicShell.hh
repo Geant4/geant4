@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.hh,v 1.3 1999/04/16 10:06:05 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VBasicShell.hh,v 1.4.4.1 1999/12/07 20:49:09 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 #ifndef G4VBasicShell_H
@@ -17,6 +17,19 @@ class G4UIcommand;
 
 #include "G4UIsession.hh"
 #include "globals.hh"
+
+// Class description :
+//
+//  G4VBasicShell : a base class to extract common things to various
+// sessions. 
+//
+//  It handles "seek" completion logic, help logic.
+//  VBasicShell handles also commands like "cd, ls, pwd"
+// without passing by a Geant4 "intercom" command. This feature,
+// which is similar to a UNIX shell one, had given.
+// its name to the class.
+//
+// Class description - end :
 
 class G4VBasicShell : public G4UIsession
 {

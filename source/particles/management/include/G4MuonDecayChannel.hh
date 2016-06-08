@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.hh,v 1.1 1999/01/07 16:10:29 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4MuonDecayChannel.hh,v 1.2.4.1 1999/12/07 20:49:51 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 // ------------------------------------------------------------
@@ -26,14 +26,14 @@
 
 class G4MuonDecayChannel :public G4VDecayChannel
 {
-  public:
+  public:  // With Description
     //Constructors 
       G4MuonDecayChannel(const G4String& theParentName,
 			 G4double        theBR);
     //  Destructor
       virtual ~G4MuonDecayChannel();
 
-  public:
+  public:  // With Description
      virtual G4DecayProducts *DecayIt(G4double);     
   
 };  

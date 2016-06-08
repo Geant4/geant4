@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -37,7 +37,7 @@ void ExN06PhysicsList::ConstructParticle()
   ConstructBosons();
   ConstructLeptons();
   ConstructMesons();
-  ConstructBarions();
+  ConstructBaryons();
 
 }
 
@@ -75,7 +75,7 @@ void ExN06PhysicsList::ConstructMesons()
   G4PionZero::PionZeroDefinition();
 }
 
-void ExN06PhysicsList::ConstructBarions()
+void ExN06PhysicsList::ConstructBaryons()
 {
 //  barions
   G4Proton::ProtonDefinition();

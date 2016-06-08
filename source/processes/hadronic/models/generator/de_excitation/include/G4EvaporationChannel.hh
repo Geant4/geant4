@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -22,7 +22,7 @@
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-#include <rw/tvvector.h>
+#include "g4rw/tvvector.h"
 
 class G4EvaporationChannel : public G4VEvaporationChannel
 {
@@ -31,8 +31,8 @@ public:
   G4EvaporationChannel(const G4int theGamma,
 		       const G4int theA,
 		       const G4int theZ,
-		       RWTValVector<G4double> * theExcitationEnergies,
-		       RWTValVector<G4int> * theExcitationSpins);
+		       G4RWTValVector<G4double> * theExcitationEnergies,
+		       G4RWTValVector<G4int> * theExcitationSpins);
 
   // destructor
   ~G4EvaporationChannel();
@@ -85,10 +85,10 @@ private:
   G4int Z;
 
   // 
-  RWTValVector<G4double> * ExcitationEnergies;
+  G4RWTValVector<G4double> * ExcitationEnergies;
 
   //
-  RWTValVector<G4int> * ExcitationSpins;
+  G4RWTValVector<G4int> * ExcitationSpins;
 
 
   // For evaporation probability calcualtion

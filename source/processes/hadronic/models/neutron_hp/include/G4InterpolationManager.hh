@@ -7,8 +7,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InterpolationManager.hh,v 1.3 1999/07/02 09:58:04 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4InterpolationManager.hh,v 1.4 1999/08/27 07:42:56 hpw Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4InterpolationManager_h
 #define G4InterpolationManager_h 1
@@ -105,7 +105,7 @@ class G4InterpolationManager
    
    G4InterpolationScheme MakeScheme(G4int it);
    
-   inline G4InterpolationScheme GetScheme(G4int index)
+   inline G4InterpolationScheme GetScheme(G4int index) const
    {
      G4int it = 0;
      for(G4int i=1; i<nRanges; i++)

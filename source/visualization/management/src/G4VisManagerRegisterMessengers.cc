@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.6 1999/05/25 09:14:21 johna Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.8.4.1 1999/12/07 20:54:03 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // G4VisManager::RegisterMessengers - John Allison 30/July/1998.
@@ -64,10 +64,11 @@ manages a list of scenes.
 /vis/scene/select [<scene-name>]
 * /vis/scene/edit
 /vis/scene/remove <scene-name>
-/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>] 
 /vis/scene/add/ghosts [<particle>]
 * /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
-                     [<copy-no>] [<depth>]
+*                      [<copy-no>] [<depth>]
+/vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
+/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>] 
 /vis/scene/include/hits [<sensitive-volume-name>] (argument not impl'd yet.)
 /vis/scene/include/trajectories [<sensitive-volume-name>] (do.)
 * /vis/scene/include/transientObjects
@@ -92,7 +93,7 @@ The commands would look something like:
 /vis/sceneHandler/select [<scene-handler-name>]
 /vis/sceneHandler/remove <scene-handler-name>
 * /vis/sceneHandler/processScene
-* /vis/sceneHandler/notifyEndOfProcessiing
+* /vis/sceneHandler/notifyEndOfProcessing
 
 
 Viewers
@@ -111,7 +112,7 @@ clicks, spawn other windows, change viewpoint, etc.).
 * /vis/viewer/set/notifyOption immediate|delayed
 * /vis/viewer/notifyHandler
 * /vis/viewer/clone
-* /vis/viewer/update
+/vis/viewer/update [<viewer-name>]
 
 
 Global Commands
@@ -139,8 +140,7 @@ and
 would be
 
 /vis/scene/add/volume $1
-/vis/sceneHandler/processScene
-/vis/sceneHandler/notifyEndOfProcessiing
+/vis/scene/notifyHandlers
 /vis/viewer/update
 
 or some such.
@@ -179,6 +179,7 @@ or some such.
   command = new G4UIdirectory ("/vis/scene/");
   command -> SetGuidance ("Operations on Geant4 scenes.");
   fMessengerList.append (new G4VisCommandSceneCreate);
+  // fMessengerList.append (new G4VisCommandSceneEdit);
   fMessengerList.append (new G4VisCommandSceneList);
   fMessengerList.append (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.append (new G4VisCommandSceneSelect);
@@ -187,6 +188,7 @@ or some such.
   command -> SetGuidance ("Add model to current scene.");
   fMessengerList.append (new G4VisCommandSceneAddVolume);
   fMessengerList.append (new G4VisCommandSceneAddGhosts);
+  fMessengerList.append (new G4VisCommandSceneAddLogicalVolume);
   command = new G4UIdirectory ("/vis/scene/include/");
   command -> SetGuidance ("Include drawing option in current scene.");
   fMessengerList.append (new G4VisCommandSceneIncludeHits);
@@ -204,6 +206,7 @@ or some such.
   fMessengerList.append (new G4VisCommandViewerList);
   fMessengerList.append (new G4VisCommandViewerSelect);
   fMessengerList.append (new G4VisCommandViewerRemove);
+  fMessengerList.append (new G4VisCommandViewerUpdate);
 
   // Camera - OLD STYLE!!
   fMessengerList.append

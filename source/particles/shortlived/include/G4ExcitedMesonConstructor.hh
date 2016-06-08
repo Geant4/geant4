@@ -1,12 +1,12 @@
 // This code plementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.hh,v 1.2 1999/06/09 17:28:10 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedMesonConstructor.hh,v 1.3.6.1 1999/12/07 20:50:02 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -65,7 +65,7 @@ class G4ExcitedMesonConstructor
 
     G4bool Exist(G4int idxState, G4int idxType);
     G4double GetCharge(G4int iIsoSpin3, G4int idxType);
-    static const G4String name[ NMultiplets ][ NMesonTypes ];
+    static const char* name[ NMultiplets ][ NMesonTypes ];
     static const G4double mass[ NMultiplets ][ NMesonTypes ];
     static const G4double massKdiff[ NMultiplets ];
     static const G4double width[ NMultiplets ][ NMesonTypes ];

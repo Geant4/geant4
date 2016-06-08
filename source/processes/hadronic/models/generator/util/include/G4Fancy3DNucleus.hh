@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fancy3DNucleus.hh,v 1.4 1999/05/26 15:21:32 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Fancy3DNucleus.hh,v 1.4.6.1.2.1 1999/12/07 20:51:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1
@@ -27,7 +27,7 @@
 #include "G4Nucleon.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4Fancy3DNucleus : public G4V3DNucleus
 {
@@ -54,7 +54,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void Init(G4double theA, G4double theZ);
       G4bool StartLoop();
       G4Nucleon * GetNextNucleon();
-      const RWTPtrOrderedVector<G4Nucleon> & GetNucleons();
+      const G4RWTPtrOrderedVector<G4Nucleon> & GetNucleons();
       G4int GetMassNumber();
       G4double GetMass();
       G4int GetCharge();
@@ -73,7 +73,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   G4int myA;
   G4int myZ;
   G4Nucleon * theNucleons;
-  RWTPtrOrderedVector<G4Nucleon> theRWNucleons;  // should not have two...
+  G4RWTPtrOrderedVector<G4Nucleon> theRWNucleons;  // should not have two...
   G4int currentNucleon;
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  

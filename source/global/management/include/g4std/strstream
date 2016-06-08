@@ -1,0 +1,26 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: strstream,v 1.3 1999/11/16 17:43:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-01-00 $
+//
+//      ---------------- strstream ----------------
+//
+#ifndef G4_STRSTREAM_H
+#define G4_STRSTREAM_H
+
+#ifndef G4USE_STD_NAMESPACE
+  #ifdef WIN32
+    #include <strstrea.h>
+  #else
+    #include <strstream.h>
+  #endif /* WIN32 */
+#else
+  #include <strstream>
+#endif /* G4USE_STD_NAMESPACE */
+
+#endif /* G4_STRSTREAM_H */

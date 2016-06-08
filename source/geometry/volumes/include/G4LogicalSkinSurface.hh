@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.1 1999/01/07 16:08:42 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4LogicalSkinSurface.hh,v 1.2.2.1 1999/12/07 20:48:39 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // G4LogicalSkinSurface Definition
@@ -34,8 +34,8 @@
 #include "G4LogicalSurface.hh"
 #include "G4LogicalVolume.hh"
 
-// RWTPtrOrderedVector
-#include <rw/tpordvec.h>
+// G4RWTPtrOrderedVector
+#include "g4rw/tpordvec.h"
 
 
 /////////////////////
@@ -79,7 +79,7 @@ public:
         static void DumpInfo(); // const 
 
 #if THESE_ARE_NEEDED
-	// static const RWTPtrOrderedVector<G4LogicalSkinSurface>* 
+	// static const G4RWTPtrOrderedVector<G4LogicalSkinSurface>* 
 	//          GetSurfaceTable()
 	//                              { return &theSurfaceTable; };
 
@@ -105,14 +105,14 @@ private:
 	G4LogicalVolume* LogVolume;	// Logical Volume pointer on side 1
 
 //	The static Table of Surfaces
-  	static RWTPtrOrderedVector<G4LogicalSkinSurface> theSurfaceTable;
+  	static G4RWTPtrOrderedVector<G4LogicalSkinSurface> theSurfaceTable;
 //	static G4LogicalSkinSurfaceTable theSurfaceTable;
 
 	size_t theIndexInTable;		// Index of surface in the surface table
 
 };
 
-typedef RWTPtrOrderedVector<G4LogicalSkinSurface> G4LogicalSkinSurfaceTable;
+typedef G4RWTPtrOrderedVector<G4LogicalSkinSurface> G4LogicalSkinSurfaceTable;
 
 ////////////////////
 // Inline methods

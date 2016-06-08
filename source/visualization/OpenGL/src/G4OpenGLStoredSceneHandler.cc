@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.2 1999/01/11 00:47:45 allison Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.5.4.1 1999/12/07 20:53:25 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -43,17 +43,11 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 
-inline static unsigned pSolidHashFun
-(const G4OpenGLStoredSceneHandler::G4VSolidPointer& pSolid) {
-  return (unsigned)pSolid;
-}
-
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
-fTopPODL (0),
-fSolidDictionary (pSolidHashFun)
+fTopPODL (0)
 {
   fSceneCount++;
 }
@@ -114,6 +108,8 @@ void G4OpenGLStoredSceneHandler::EndPrimitives () {
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
 
+  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
+
   int i;
 
   // Delete OpenGL display lists.
@@ -142,7 +138,7 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   fTODLList.clear ();
   fPODLTransformList.clear ();
   fTODLTransformList.clear ();
-  fSolidDictionary.clear ();
+  fSolidMap.clear ();
 }
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
@@ -187,15 +183,16 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   else {
     // Stop-gap solution for display List re-use.  A proper
     // implementation would use geometry hierarchy.
-    G4VSolidPointer pSolid = (G4VSolidPointer) &solid;
+    const G4VSolid* pSolid = &solid;
     if (!(fpCurrentPV -> IsReplicated ()) &&
-	fSolidDictionary.findValue (pSolid, fDisplayListId)) {
+	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
+      fDisplayListId = fSolidMap [pSolid];
       fPODLList.append (fDisplayListId);
       fPODLTransformList.append (*fpObjectTransformation);
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);
-      fSolidDictionary.insertKeyAndValue (pSolid, fDisplayListId);
+      fSolidMap [pSolid] = fDisplayListId;
     }
   }
 }
@@ -205,4 +202,3 @@ G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
 G4int G4OpenGLStoredSceneHandler::fSceneCount = 0;
 
 #endif
-

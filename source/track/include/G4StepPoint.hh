@@ -1,19 +1,19 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.hh,v 1.2 1999/04/13 09:43:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4StepPoint.hh,v 1.4 1999/11/07 16:32:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //---------------------------------------------------------------
 //
 // G4StepPoint.hh
 //
-// Description:
+// Class Description:
 //   This class represents information associated with the
 //   each end of a Step like the space/time data of the
 //   particle.
@@ -46,11 +46,14 @@ class G4StepPoint
 
 //--------
    public:
-//--------
+
 
 // Constructor/Destructor
    G4StepPoint();
    ~G4StepPoint();
+
+//--------
+   public: // with description 
 
 // Get/Set functions
    inline const G4ThreeVector& GetPosition() const
@@ -59,7 +62,8 @@ class G4StepPoint
    { fPosition = aValue; }
    inline void AddPosition(const G4ThreeVector& aValue)
    { fPosition += aValue; }
-
+     // Position where the track locates
+    
    inline G4double GetLocalTime() const
    { return fLocalTime; }
    inline void SetLocalTime(const G4double aValue)
@@ -92,7 +96,8 @@ class G4StepPoint
    inline void AddMomentumDirection(const G4ThreeVector& aValue)
    { fMomentumDirection += aValue;
    }
-
+     // Direction of momentum  (should be an unit vector)
+    
    inline G4ThreeVector GetMomentum() const
    { 
      G4double tMomentum = sqrt(fKineticEnergy*fKineticEnergy +
@@ -101,11 +106,13 @@ class G4StepPoint
 			  fMomentumDirection.y()*tMomentum,
 			  fMomentumDirection.z()*tMomentum);
    }
+     // Total momentum of the track
 
    inline G4double GetTotalEnergy() const
    { 
      return fKineticEnergy + fMass; 
    }
+     // Total energy of the track
 
    inline G4double GetKineticEnergy() const
    { return fKineticEnergy; }
@@ -113,13 +120,8 @@ class G4StepPoint
    { fKineticEnergy = aValue; }
    inline void AddKineticEnergy(const G4double aValue)
    { fKineticEnergy += aValue; }
+     // Kinetic Energy of the track
 
-   // This velocity is the velocity as if in vacuum.
-   // (So it is not corrected for the refraction index
-   //   in the case of photons - optical or X-rays.)
-   // In order to get the velocity in the material, use
-   //   GetVelocity of G4Track.
-   //
    inline G4double GetVelocity() const
    { 
      if(fMass==0.){
@@ -132,6 +134,23 @@ class G4StepPoint
         return tMomentum/tTotalEnergy*c_light;
      }   
    }
+   // This velocity is the velocity as if in vacuum.
+   // (So it is not corrected for the refraction index
+   //   in the case of photons - optical or X-rays.)
+   // In order to get the velocity in the material, use
+   //   GetVelocity of G4Track.
+   //
+
+  inline G4double GetBeta() const
+   { return (fMass==0.) ? 
+      1.0 : 
+      sqrt(fKineticEnergy*fKineticEnergy + 2.0*fKineticEnergy*fMass)
+      /(fKineticEnergy+fMass); }
+    // Velocity of the track in unit of c(light velocity)
+
+   inline G4double GetGamma() const
+   { return (fMass==0.) ? DBL_MAX : (fKineticEnergy+fMass)/fMass; }
+     // Gamma factor (1/sqrt[1-beta*beta]) of the track    
 
    inline G4VPhysicalVolume* GetPhysicalVolume()
    { return fpTouchable->GetVolume(); }
@@ -165,18 +184,15 @@ class G4StepPoint
    inline void SetProcessDefinedStep(G4VProcess* aValue)
    { fpProcessDefinedStep = aValue; }
 
-   inline G4double GetGamma() const
-   { return (fMass==0.) ? DBL_MAX : (fKineticEnergy+fMass)/fMass; }
-   inline G4double GetBeta() const
-   { return (fMass==0.) ? 
-      1.0 : 
-      sqrt(fKineticEnergy*fKineticEnergy + 2.0*fKineticEnergy*fMass)
-      /(fKineticEnergy+fMass); }
-
    inline G4double GetMass() const
    { return fMass; }
    inline void SetMass(G4double value)
    { fMass = value; }
+
+   inline G4double GetCharge() const
+   { return fCharge; }
+   inline void SetCharge(G4double value)
+   { fCharge = value; }
 
    inline G4Material* GetMaterial()
    { return fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); }
@@ -211,8 +227,11 @@ class G4StepPoint
       // Process which defined the current Step.
    G4double fMass;
       // Dynamical mass of the particle
-  G4double fWeight;
+   G4double fCharge;
+      // Dynamical Charge of the particle
+   G4double fWeight;
 };
 
 
 #endif
+

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PCons.cc,v 1.1 1999/01/07 16:10:52 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4PCons.cc,v 1.2 1999/11/17 10:49:02 morita Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4PCons
 //
@@ -22,19 +22,8 @@
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
-// #include "G4PVPVParameterisation.hh"
-
-#include "meshdefs.hh"
-
-#include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
-#include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
-
-G4PCons::~G4PCons() {
-   ;
-}
+G4PCons::~G4PCons() 
+{;}
 
 // make a transient object
 G4VSolid* G4PCons::MakeTransientObject() const {

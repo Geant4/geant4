@@ -1,0 +1,54 @@
+#ifndef G4StatMFMacroNucleon_h
+#define G4StatMFMacroNucleon_h 1
+
+#include "G4VStatMFMacroCluster.hh"
+
+
+class G4StatMFMacroNucleon : public G4VStatMFMacroCluster {
+
+public:
+
+	// Default constructor
+	G4StatMFMacroNucleon() : 
+	_NeutronMeanMultiplicity(0.0),_ProtonMeanMultiplicity(0.0),
+	G4VStatMFMacroCluster(1) {};
+
+	// Destructor
+	~G4StatMFMacroNucleon() {};
+	
+
+private:
+
+	// Copy constructor
+	G4StatMFMacroNucleon(const G4StatMFMacroNucleon & right);
+
+	// operators
+	G4StatMFMacroNucleon & operator=(const G4StatMFMacroNucleon & right);
+	G4bool operator==(const G4StatMFMacroNucleon & right) const;
+	G4bool operator!=(const G4StatMFMacroNucleon & right) const;
+
+public:
+
+	G4double CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
+											const G4double nu, const G4double T);
+	
+	G4double CalcZARatio(const G4double nu) 
+	{ if (_ProtonMeanMultiplicity+_NeutronMeanMultiplicity > 0.0)
+				return theZARatio = _ProtonMeanMultiplicity/
+						(_ProtonMeanMultiplicity+_NeutronMeanMultiplicity);
+		else return 0.0; }
+						
+						
+	G4double CalcEnergy(const G4double T);
+	
+	G4double CalcEntropy(const G4double T, const G4double FreeVol);
+
+	
+private:
+
+	G4double _NeutronMeanMultiplicity;
+	G4double _ProtonMeanMultiplicity;
+
+};
+
+#endif

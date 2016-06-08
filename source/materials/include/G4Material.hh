@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.2 1999/04/14 12:48:59 maire Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Material.hh,v 1.4.6.1.2.1 1999/12/07 20:49:17 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //      ------------------- class G4Material ---------------------
@@ -51,6 +51,7 @@
 // 04-08-98, new method GetMaterial(materialName), M.Maire
 // 05-10-98, change name: NumDensity -> NbOfAtomsPerVolume
 // 18-11-98, SandiaTable interface modified.
+// 19-07-99, new data member (chemicalFormula) added by V.Ivanchenko
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -58,18 +59,18 @@
 #define G4MATERIAL_HH
 
 #include "G4ios.hh"
-#include <rw/tpvector.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tpvector.h"
+#include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4Element.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
 #include "G4SandiaTable.hh"
 
-typedef RWTPtrVector<G4Element> G4ElementVector;
+typedef G4RWTPtrVector<G4Element> G4ElementVector;
 
 class G4Material;              //forward declaration
-typedef RWTPtrOrderedVector<G4Material> G4MaterialTable;
+typedef G4RWTPtrOrderedVector<G4Material> G4MaterialTable;
 
 enum G4State { kStateUndefined, kStateSolid, kStateLiquid, kStateGas };
 
@@ -102,6 +103,31 @@ public:
                      G4double  pressure = STP_Pressure);	//pressure
 
     //
+    // Constructor to create a material with chemical formula from scratch.
+    //
+    G4Material(const G4String& name,				//its name
+	       const G4String& chFormula,                       //chemical formula
+                     G4double  z, 				//atomic number
+                     G4double  a,				//mass of mole
+                     G4double  density, 			//density
+                     G4State   state    = kStateUndefined,	//solid,liqid,gas
+                     G4double  temp     = STP_Temperature,	//temperature
+                     G4double  pressure = STP_Pressure);	//pressure
+
+    //
+    // Constructor to create a material with chemical formula from a 
+    // combination of elements and/or materials subsequently added via 
+    // AddElement and/or AddMaterial
+    //
+    G4Material(const G4String& name,				//its name
+	       const G4String& chFormula,                       //chemical formula
+                     G4double  density, 			//density
+                     G4int     nComponents,			//nb of components 
+                     G4State   state    = kStateUndefined,	//solid,liquid,gas
+                     G4double  temp     = STP_Temperature,	//temperature
+                     G4double  pressure = STP_Pressure);	//pressure
+
+    //
     // Add an element, giving number of atoms
     //
     void AddElement(G4Element* element,				//the element
@@ -122,8 +148,9 @@ public:
     //
     // retrieval methods
     // 
-    G4String GetName()        const {return fName;};
-    G4double GetDensity()     const {return fDensity;};
+    G4String GetName()            const {return fName;};
+    G4String GetChemicalFormula() const {return fChemicalFormula;};
+    G4double GetDensity()         const {return fDensity;};
 
     G4State  GetState()       const {return fState;};
     G4double GetTemperature() const {return fTemp;};
@@ -202,6 +229,7 @@ private:
 //
 
     G4String         fName;                 // Material name
+    G4String         fChemicalFormula;      // Material chemical formula
     G4double         fDensity;              // Material density
    
     G4State          fState;                // Material state (defaults to undefined,  

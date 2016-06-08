@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.cc,v 1.1 1999/01/07 16:07:47 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ThreeMat.cc,v 1.1.10.1 1999/12/07 20:48:27 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 /*  G4ThreeMat.cc,v 1.5 1993/08/02 22:21:27 atwood Exp  */
 // File: G4ThreeMat.cc

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fragment.hh,v 1.5 1999/05/26 16:52:25 hpw Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4Fragment.hh,v 1.5.6.1.2.1 1999/12/07 20:51:57 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -16,7 +16,7 @@
 
 #include "G4ios.hh"
 #include <iomanip.h>
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "G4LorentzVector.hh"
@@ -33,7 +33,7 @@
 class G4ParticleDefinition;
 
 class G4Fragment;     // Forward deckaration
-typedef RWTPtrOrderedVector<G4Fragment> G4FragmentVector;
+typedef G4RWTPtrOrderedVector<G4Fragment> G4FragmentVector;
 
 class G4Fragment 
 {

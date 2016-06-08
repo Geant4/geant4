@@ -1,14 +1,18 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: EXPO.cc,v 1.4 1999/05/18 13:27:23 barrand Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: EXPO.cc,v 1.5.2.1.2.1 1999/12/07 20:46:48 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #include <stdlib.h>
+
+// GB : put this include before the GL ones. 
+// It avoid a clash with STL includes on Linux.
+#include "g4rw/tvhdict.h"
 
 /*Geant4*/
 #include <G4RunManager.hh>
@@ -17,10 +21,10 @@
 #include "EXPO_Templates.hh"
 // This :
 /*
-template class RWTValOrderedVector<MyTrackerHit>;
-template class RWTValOrderedVector<MyCalorimeterHit>;
-template class RWTValVector<MyTrackerHit>;
-template class RWTValVector<MyCalorimeterHit>;
+template class G4RWTValOrderedVector<MyTrackerHit>;
+template class G4RWTValOrderedVector<MyCalorimeterHit>;
+template class G4RWTValVector<MyTrackerHit>;
+template class G4RWTValVector<MyCalorimeterHit>;
 template class G4Allocator<MyCalorimeterHit>;
 template class G4Allocator<MyTrackerHit>;
 */
@@ -195,8 +199,8 @@ int main (
   WoProcessEvents ();
   WoClearClass    ();
 
-  delete          runManager;
   delete          state;
+  delete          runManager;
 
   return          EXIT_SUCCESS;
 }

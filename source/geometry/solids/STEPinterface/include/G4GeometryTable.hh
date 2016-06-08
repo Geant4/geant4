@@ -5,17 +5,17 @@
 //#include "G4OrderedTable.hh"
 //#include "G4NISTStepReader.hh"
 
-//typedef RWTPtrOrderedVector<G4Curve> G4CurveVector;
-//typedef RWTPtrOrderedVector<G4CurveVector> G4BoundaryVector;
-//typedef RWTPtrOrderedVector<G4PlacedSolid> G4PlacedSolidVector;
-//typedef RWTPtrOrderedVector<G4GeometryCreator*> G4CreatorVector;
-typedef RWTPtrOrderedVector<G4GeometryCreator> G4CreatorVector;
-//typedef RWTPtrOrderedVector<G4Surface> G4SurfaceVector;
-//typedef RWTPtrOrderedVector<G4BREPSolid> G4SolidVector;
+//typedef G4RWTPtrOrderedVector<G4Curve> G4CurveVector;
+//typedef G4RWTPtrOrderedVector<G4CurveVector> G4BoundaryVector;
+//typedef G4RWTPtrOrderedVector<G4PlacedSolid> G4PlacedSolidVector;
+//typedef G4RWTPtrOrderedVector<G4GeometryCreator*> G4CreatorVector;
+typedef G4RWTPtrOrderedVector<G4GeometryCreator> G4CreatorVector;
+//typedef G4RWTPtrOrderedVector<G4Surface> G4SurfaceVector;
+//typedef G4RWTPtrOrderedVector<G4BREPSolid> G4SolidVector;
 
 
 
-//operator ==(class RWTPtrOrderedVector<G4Curve> a, class RWTPtrOrderedVector<G4Curve> b){}
+//operator ==(class G4RWTPtrOrderedVector<G4Curve> a, class G4RWTPtrOrderedVector<G4Curve> b){}
 
 
 class G4GeometryTable

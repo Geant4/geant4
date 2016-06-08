@@ -1,5 +1,6 @@
 #include "G4GeometryCreator.hh"
 #include "G4GeometryTable.hh"
+#include "STEPcomplex.h"
 
 InstMgr G4GeometryCreator::instanceManager;
 G4int G4GeometryCreator::objectId = 0;

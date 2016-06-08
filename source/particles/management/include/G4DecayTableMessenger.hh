@@ -1,22 +1,22 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayTableMessenger.hh,v 1.2 1999/04/13 07:58:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4DecayTableMessenger.hh,v 1.3.4.1 1999/12/07 20:49:49 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 //
 //---------------------------------------------------------------
 //
+//
 //  G4DecayTableMessenger.hh
 //
-//  Description:
+// Class Description:
 //    This is a messenger class to interface to exchange information
-//    between Decay Table/Decay Channel and UI.
-//
+//    between Decay Table/Decay Channel and UI.  
 // G4DecayTableMessenger
 //  /particle/property/decay/   Decay Table control commands.
 //   Commands : 
@@ -48,7 +48,7 @@ class G4UIcmdWithADouble;
 
 class G4DecayTableMessenger: public G4UImessenger
 {
-  public:
+  public: // With Description
     G4DecayTableMessenger(G4ParticleTable* pTable = 0);
     virtual ~G4DecayTableMessenger();
 

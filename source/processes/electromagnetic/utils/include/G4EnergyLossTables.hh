@@ -1,33 +1,36 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.hh,v 1.5 1999/04/15 07:46:10 urban Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4EnergyLossTables.hh,v 1.8.2.1 1999/12/07 20:51:20 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // $Id:
-
+//
+// -------------------------------------------------------------------
 
 #ifndef included_G4EnergyLossTables
 #define included_G4EnergyLossTables
 
+#include "g4std/map"
 #include "globals.hh"
-#include <rw/tvhdict.h>
 
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 #include "G4ios.hh"
 
+// -------------------------------------------------------------------
 // A utility class, containing the energy loss tables
 // for each particle
 //
 // Energy loss processes have to register their tables with this 
 // class. The responsibility of creating and deleting the tables
 // remains with the energy loss classes.
+// -------------------------------------------------------------------
 //
 // P. Urban, 06/04/1998
 // L. Urban, 27/05/1988 , modifications + new functions added
@@ -37,12 +40,19 @@
 // L.Urban , 12/04/99 , bug fixed
 // don't use the helper class.
 // It can't be hidden for Rogue Wave uses it.
+// 10/11/99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
+// -------------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4EnergyLossTablesHelper {
+
 friend class G4EnergyLossTables;
   // the only instances are within the class G4EnergyLossTables
+  
 public:
   G4EnergyLossTablesHelper();
+  
 private:
   G4EnergyLossTablesHelper(const G4PhysicsTable* aDEDXTable,
 			   const G4PhysicsTable* aRangeTable,
@@ -64,6 +74,8 @@ private:
   G4double theMassRatio;
   G4int theNumberOfBins;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4EnergyLossTables {
 
@@ -140,10 +152,9 @@ public:
   typedef const G4ParticleDefinition* K;
 
 private:
-  static RWTValHashDictionary<K, G4EnergyLossTablesHelper> dict;
+  typedef G4std::map<K,G4EnergyLossTablesHelper,less<K> > helper_map;
+  static helper_map dict;
   
-  static unsigned HashFun(const K& particle);
-
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);
 
   static G4EnergyLossTablesHelper t ;
@@ -154,6 +165,8 @@ private:
   static G4double rmin,rmax,Thigh ;
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4EnergyLossTables.icc"
 

@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSolid.cc,v 1.1 1999/01/07 16:07:22 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4VSolid.cc,v 1.2.4.1 1999/12/07 20:48:15 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 // class G4VSolid
 //
@@ -306,3 +306,15 @@ void G4VSolid::ClipPolygonToSimpleLimits(G4ThreeVectorList& pPolygon,
 	}
 
 }
+
+ const G4VSolid* G4VSolid::GetConstituentSolid(G4int no) const
+{ return 0; } 
+
+       G4VSolid* G4VSolid::GetConstituentSolid(G4int no)
+{ return 0; } 
+
+ const G4DisplacedSolid* G4VSolid::GetDisplacedSolidPtr() const
+{ return 0; } 
+
+       G4DisplacedSolid* G4VSolid::GetDisplacedSolidPtr() 
+{ return 0; } 

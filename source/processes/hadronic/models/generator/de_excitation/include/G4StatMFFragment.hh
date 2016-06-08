@@ -1,127 +1,77 @@
 #ifndef G4StatMFFragment_h
 #define G4StatMFFragment_h 1
 
-
 #include "G4StatMFParameters.hh"
+#include "G4ThreeVector.hh"
+#include "G4Fragment.hh"
 
 class G4StatMFFragment {
-public:
-  // default constructor
-  G4StatMFFragment():
-    InvLevelDensity(0.0),
-    ZARatio(0.0),
-    DegeneracyFactor(0.0),
-    Multiplicity(0.0),
-    A(0.0),
-    Z(0.0),
-    Energy(0.0)
-    {};
-  // destructor
-  ~G4StatMFFragment() {};
-
-private:
-  // copy constructor
-  G4StatMFFragment(const G4StatMFFragment & right);
-
-  // operators
-  const G4StatMFFragment & operator=(const G4StatMFFragment & right);
 
 public:
-  G4bool operator==(const G4StatMFFragment & right) const;
-  G4bool operator!=(const G4StatMFFragment & right) const;
+	// Constructor
+	G4StatMFFragment(const G4int anA, const G4int aZ) :
+	theA(anA),theZ(aZ),
+	_position(0.0,0.0,0.0),
+	_momentum(0.0,0.0,0.0)
+	{}
 
+
+	// Destructor
+	virtual ~G4StatMFFragment() {};
 
 
 private:
-  
-  // Inverse Level Density
-  G4double InvLevelDensity;
+	// Default constructor
+	G4StatMFFragment(){};
+	
+	// Copy constructor
+	G4StatMFFragment(const G4StatMFFragment & right);
 
-  // Z/A ratio
-  G4double ZARatio;
-
-
-  // Degeneracy Factor
-  G4double DegeneracyFactor;
-
-  // Fragments Multiplicitie
-  G4double Multiplicity;
-
-  // Atomic number
-  G4double A;
-  
-  // Charge
-  G4double Z;
-
-
-  // Energy
-  G4double Energy;
-
+	// operators
+	G4StatMFFragment & operator=(const G4StatMFFragment & right);
+public:
+	G4bool operator==(const G4StatMFFragment & right) const;
+	G4bool operator!=(const G4StatMFFragment & right) const;
+	
 public:
 
-  void SetInvLevelDensity(const G4double value) {
-    InvLevelDensity = value;
-  }
-  void SetInvLevelDensity(const G4int value) {
-    // 
-    if (value == 0) InvLevelDensity = 0.0;
-    else InvLevelDensity = G4StatMFParameters::GetEpsilon0()/
-	   (1.0+0.002*((value+1.0)/25.0)*((value+1.0)/25.0));
-  }
-  const G4double GetInvLevelDensity() const {
-    return InvLevelDensity;
-  }
+	G4double GetCoulombEnergy(void);
+	
+	G4double GetEnergy(const G4double T);
+	
+	G4double GetInvLevelDensity(void);
 
+	G4double GetA(void) const {return theA;}
+	
+	G4double GetZ(void) const {return theZ;}
+	
+	void SetPosition(const G4ThreeVector aPosition) {_position = aPosition;}
+	
+	G4ThreeVector GetPosition(void) {return _position;}
+	
+	void SetMomentum(const G4ThreeVector aMomentum) {_momentum = aMomentum;}
 
-  void SetZARatio(const G4double value) {
-     ZARatio = value;
-  }
-  const G4double GetZARatio() const {
-    return ZARatio;
-  }
+	G4ThreeVector GetMomentum(void) {return _momentum;}
 
+	G4Fragment * GetFragment(const G4double T);
+	
+	G4double GetNuclearMass(void)
+	{return G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theZ,theA);}
+	
 
-  void SetDegeneracyFactor(const G4double value) {
-    DegeneracyFactor = value;
-  }
-  const G4double GetDegeneracyFactor() const {
-    return DegeneracyFactor;
-  }
+private:
 
+	G4double CalcExcitationEnergy(const G4double T);
 
-  void SetMultiplicity(const G4double value) {
-     Multiplicity = value;
-  }
-  const G4double GetMultiplicity() const {
-    return Multiplicity;
-  }
+private:
 
-
-  void SetA(const G4double value) {
-    A = value;
-  }
-  const G4double GetA() const {
-    return A;
-  }
-
-  void SetZ(const G4double value) {
-    Z = value;
-  }
-  const G4double GetZ() const {
-    return Z;
-  }
-
-  void SetEnergy(const G4double value) {
-    Energy = value;
-  }
-  const G4double GetEnergy() const {
-    return Energy;
-  }
-
-
-
+	G4double theA;
+	
+	G4double theZ;
+	
+	G4ThreeVector _position;
+	
+	G4ThreeVector _momentum;
 };
-
-
 
 #endif

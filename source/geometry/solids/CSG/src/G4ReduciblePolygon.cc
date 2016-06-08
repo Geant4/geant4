@@ -303,6 +303,58 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( const G4double tolerance )
 
 
 //
+// ReverseOrder
+//
+// Reverse the order of the vertices
+//
+void G4ReduciblePolygon::ReverseOrder()
+{
+	//
+	// Loop over all vertices
+	//
+	ABVertex *prev = vertexHead;
+	if (prev==0) return;		// No vertices
+	
+	ABVertex *curr = prev->next;
+	if (curr==0) return;		// Just one vertex
+	
+	//
+	// Our new tail
+	//
+	vertexHead->next = 0;
+	
+	for(;;) {
+		//
+		// Save pointer to next vertex (in original order)
+		//
+		ABVertex *save = curr->next;
+		
+		//
+		// Replace it with a pointer to the previous one
+		// (in original order)
+		//
+		curr->next = prev;
+		
+		//
+		// Last vertex?
+		//
+		if (save == 0) break;
+		
+		//
+		// Next vertex
+		//
+		prev = curr;
+		curr = save;
+	}
+	
+	//
+	// Our new head
+	//
+	vertexHead = curr;
+}
+
+
+//
 // CrossesItself
 //
 // Return "true" if the polygon crosses itself

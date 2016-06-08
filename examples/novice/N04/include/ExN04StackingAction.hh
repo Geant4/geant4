@@ -5,7 +5,7 @@
 #include "globals.hh"
 #include "G4UserStackingAction.hh"
 #include "G4ThreeVector.hh"
-#include <rw/tpordvec.h>
+#include "g4rw/tpordvec.h"
 
 class G4Track;
 

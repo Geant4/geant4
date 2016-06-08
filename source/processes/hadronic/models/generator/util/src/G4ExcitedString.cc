@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedString.cc,v 1.1 1999/01/07 16:12:22 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4ExcitedString.cc,v 1.2.4.1 1999/12/07 20:52:00 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 
 // ------------------------------------------------------------
@@ -19,7 +19,6 @@
 //       class for an excited string used by Parton String Models
 // ------------------------------------------------------------
 
-// Modified at 8-Oct-1998 by Maxim Komogorov.  
 
 // G4ExcitedString
 #include "G4ExcitedString.hh"
@@ -33,6 +32,7 @@ G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* AntiColor, G4int Dir
     thePartons.insert(AntiColor);
     thePosition = Color->GetPosition();
     theDirection = Direction;
+    theTrack=0;
     }
 
 G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* Gluon,  G4Parton* AntiColor, G4int Direction)
@@ -42,7 +42,15 @@ G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* Gluon,  G4Parton* An
     thePartons.insert(AntiColor);
     thePosition = Color->GetPosition();
     theDirection = Direction;
+    theTrack=0;
     }
+
+G4ExcitedString::G4ExcitedString(G4KineticTrack * track)
+{
+	thePosition = track->GetPosition();
+	theTrack= track;
+	theDirection=0;
+}
 
 G4ExcitedString::~G4ExcitedString()
 {

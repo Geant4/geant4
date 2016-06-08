@@ -1,0 +1,47 @@
+#
+# Macro file for the initialization phase of "TestEm6.cc"
+#
+# It creates the default geometry (simple absorber box )        
+#
+#/control/verbose 2
+#control/saveHistory
+/run/verbose 2
+#/step/verbose 2
+#/tracking/verbose 2
+#/stepping/verbose 2
+#/event/verbose 4
+#
+#/run/initialize
+#
+#/calor/setAbsMat Silicon   
+#/calor/setAbsThick 50. mum  
+#/calor/setAbsYZ 10. cm
+#/calor/update
+#
+#  hist file name
+/plots/sethistName ionip.plot 
+#  PLOT: angle distr. of transmitted particles
+/plots/setnbinTh 60
+/plots/setThlow 0.0 deg
+/plots/setThhigh 6.0 deg
+#
+/calor/cutG 2130.0 micrometer
+/calor/cutE 50.0 mm
+#/calor/cutE 1.000 micrometer
+/run/initialize
+#
+#/gun/particle gamma
+/gun/particle proton
+#/gun/particle IonC12
+#/gun/energy 6.56 MeV
+/gun/energy 10.0 MeV
+#
+#/run/beamOn 10
+/run/beamOn 10000
+#
+#
+
+
+
+
+

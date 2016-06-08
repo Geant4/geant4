@@ -1,17 +1,17 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KnotVector.hh,v 1.1 1999/01/07 16:07:32 gunter Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4KnotVector.hh,v 1.2.4.1 1999/12/07 20:48:19 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef __KNOTVECTOR_H
 #define __KNOTVECTOR_H
 #include <math.h>
-#include "STEPaggregate.h"
+//#include "STEPaggregate.h"
 #include "geomdefs.hh"
 
 
@@ -20,8 +20,8 @@ class G4KnotVector
  public:
  
   G4KnotVector();
-  G4KnotVector(const int Size, const int* MultiList, STEPaggregate& Aggr);
-  G4KnotVector(const int Size, STEPaggregate& Aggr);
+//  G4KnotVector(const int Size, const int* MultiList, STEPaggregate& Aggr);
+//  G4KnotVector(const int Size, STEPaggregate& Aggr);
   G4KnotVector(const int sz);
   G4KnotVector(const G4KnotVector& old_kv);
   ~G4KnotVector();
@@ -76,36 +76,3 @@ class G4KnotVector
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

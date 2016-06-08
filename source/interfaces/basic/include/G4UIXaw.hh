@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXaw.hh,v 1.2 1999/04/13 01:26:24 yhajime Exp $
-// GEANT4 tag $Name: geant4-00-01 $
+// $Id: G4UIXaw.hh,v 1.3.4.1 1999/12/07 20:49:08 gunter Exp $
+// GEANT4 tag $Name: geant4-01-00 $
 //
 #ifndef G4UIXaw_h
 #define G4UIXaw_h 
@@ -19,6 +19,19 @@
 
 class G4UIsession;
 class G4UImanager;
+
+// Class description :
+//
+//  G4UIXaw : class to handle an interactive session.
+// G4UIXaw is the "Athena" version of G4UIterminal.
+// It has been provided at a time where no free Motif
+// where available. Now that some exists (lesstif), 
+// G4UIXm should be prefered. The look and feel of 
+// G4UIXaw is hugly...
+//
+//  No command completion is available.
+//
+// Class description - end :
 
 class G4UIXaw : public G4VBasicShell {
 public:

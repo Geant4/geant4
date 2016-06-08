@@ -1,4 +1,5 @@
 #include "G4BoundedSurfaceCreator.hh"
+#include "STEPcomplex.h"
 
 G4BoundedSurfaceCreator G4BoundedSurfaceCreator::csc;
 
