@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.cc,v 1.5.6.1.2.1 1999/12/08 17:34:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VDecayChannel.cc,v 1.8 2000/05/29 01:30:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -17,6 +17,7 @@
 //      History: first implementation, based on object model of
 //      27 July 1996 H.Kurashige
 //      30 May 1997  H.Kurashige
+//      23 Mar. 2000 H.Weber      : add GetAngularMomentum
 // ------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -360,6 +361,59 @@ void G4VDecayChannel::SetParent(const G4ParticleDefinition * parent_type)
   if (parent_type != 0) SetParent(parent_type->GetParticleName());
 }
 
+G4int G4VDecayChannel::GetAngularMomentum()
+{
+  // determine angular momentum
+
+  // fill pointers to daughter particles if not yet set  
+  if (daughters == 0) FillDaughters();
+
+  const G4int PiSpin = parent->GetPDGiSpin();
+  const G4int PParity = parent->GetPDGiParity();
+  if (2==numberOfDaughters) {     // up to now we can only handle two particle decays
+    const G4int D1iSpin  = daughters[0]->GetPDGiSpin();
+    const G4int D1Parity = daughters[0]->GetPDGiParity();
+    const G4int D2iSpin  = daughters[1]->GetPDGiSpin();
+    const G4int D2Parity = daughters[1]->GetPDGiParity();
+    const G4int MiniSpin = abs (D1iSpin - D2iSpin);
+    const G4int MaxiSpin = D1iSpin + D2iSpin;
+    const G4int lMax = (PiSpin+D1iSpin+D2iSpin)/2; // l is allways int
+    G4int lMin;
+#ifdef G4VERBOSE
+    if (verboseLevel>1) {
+      G4cout << "iSpin: " << PiSpin << " -> " << D1iSpin << " + " << D2iSpin << G4endl;
+      G4cout << "2*jmin, 2*jmax, lmax " << MiniSpin << " " << MaxiSpin << " " << lMax << G4endl;
+    }
+#endif
+    for (G4int j=MiniSpin; j<=MaxiSpin; j+=2){    // loop over all possible spin couplings
+      lMin = abs(PiSpin-j)/2;
+#ifdef G4VERBOSE 
+      if (verboseLevel>1)
+	G4cout << "-> checking 2*j=" << j << G4endl;
+#endif
+      for (G4int l=lMin; l<=lMax; l++) {
+#ifdef G4VERBOSE
+	if (verboseLevel>1)
+	  G4cout << " checking l=" << l << G4endl;
+#endif
+        if (l%2==0) {
+	  if (PParity == D1Parity*D2Parity) {    // check parity for this l
+	    return l;
+          } 
+	} else {
+	  if (PParity == -1*D1Parity*D2Parity) {    // check parity for this l
+            return l;
+          }
+        }
+      }
+    }
+  } else {
+    G4Exception ("G4VDecayChannel::GetAngularMomentum: Sorry, can't handle 3 particle decays (up to now)");
+  }
+  G4Exception ("G4VDecayChannel::GetAngularMomentum: Can't find angular momentum for this decay!");
+  return 0;
+}
+
 void G4VDecayChannel::DumpInfo()
 {
   G4cout << " BR:  " << rbranch << "  [" << kinematics_name << "]";
@@ -374,10 +428,4 @@ void G4VDecayChannel::DumpInfo()
   }
   G4cout << G4endl;
 }
-
-
-
-
-
-
 

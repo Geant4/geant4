@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 1999/11/24 20:23:07 morita Exp $
+# $Id: GNUmakefile,v 1.5 2000/06/09 12:54:38 morita Exp $
 
 name := G4pglobal
 G4ODBMS := true
@@ -17,7 +17,8 @@ G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 CPPFLAGS  += \
              -Iinclude \
              -I$(G4TMPDIR) \
-             -I$(G4INSTALL)/source/global/management/include
+             -I$(G4INSTALL)/source/global/management/include \
+             -I$(G4INSTALL)/source/materials/include
 
 #--------------------------------------------------------------------
 

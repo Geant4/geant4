@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.2 1999/12/15 14:54:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and

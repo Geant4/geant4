@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tpvector.icc,v 1.6 2000/02/11 14:09:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: tpvector.icc,v 1.7 2000/03/10 15:53:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -21,8 +21,8 @@ G4RWTPtrVector<T>::G4RWTPtrVector ()
 
 template<class T>
 G4RWTPtrVector<T>::G4RWTPtrVector (size_t n)
-  : std_pvector(n), rwsize(n){}
-
+  : std_pvector(n, (T*)0), rwsize(n){}  // Here Rogue-Wave would leave
+                                        // pointers T* uninitialised.
 template<class T>
 G4RWTPtrVector<T>::G4RWTPtrVector (size_t n, T* const & iPtr)
   : std_pvector(n, iPtr), rwsize(n){}

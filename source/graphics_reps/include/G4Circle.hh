@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Circle.hh,v 1.4 1999/12/15 14:50:31 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  17/11/96.

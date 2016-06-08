@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4StackManager.cc,v 1.3 2000/01/26 06:42:16 asaim Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai

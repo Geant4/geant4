@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VFissionBarrier.cc,v 1.1.10.1 1999/12/07 20:51:41 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VFissionBarrier.cc,v 1.3 2000/06/09 11:43:37 larazb Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

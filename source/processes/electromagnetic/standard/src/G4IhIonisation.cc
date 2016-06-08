@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IhIonisation.cc,v 1.5.8.1.2.2 1999/12/09 16:18:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4IhIonisation.cc,v 1.7 2000/04/25 14:33:09 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -34,7 +34,7 @@
 // constructor and destructor
  
 G4IhIonisation::G4IhIonisation(const G4String& processName)
-   : G4IhEnergyLoss(processName),
+   : G4VIhEnergyLoss(processName),
      theMeanFreePathTable(NULL),
      NumberOfBuildPhysicsTableCalls(0),
      theProton (G4Proton::Proton()),

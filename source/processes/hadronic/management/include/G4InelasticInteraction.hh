@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4InelasticInteraction.hh,v 1.1.10.1 1999/12/07 20:51:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4InelasticInteraction.hh,v 1.2 1999/12/15 14:52:07 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
  // Hadronic Process: Inelastic Interaction 
  // This class is an abstract base class, since the pure virtual

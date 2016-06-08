@@ -1,0 +1,27 @@
+#
+#  This file permits to customize, with commands,
+# the menu bar of the G4UIXm, G4UIWin32 sessions.
+# It has no effect with G4UIterminal.
+#
+# File :
+/gui/addMenu file File
+/gui/addButton file Continue continue
+/gui/addButton file Exit "exit"
+#
+# Run menu :
+/gui/addMenu run Run
+/gui/addButton run run1 "/control/execute run1.mac"
+/gui/addButton run run2 "/control/execute run2.mac"
+#
+# Vis menu :
+/gui/addMenu vis Vis
+/gui/addButton vis Vis0 "/control/execute exN03Vis0.mac"
+/gui/addButton vis Vis1 "/control/execute exN03Vis1.mac"
+/gui/addButton vis Vis2 "/control/execute exN03Vis2.mac"
+/gui/addButton vis Vis3 "/control/execute exN03Vis3.mac"
+/gui/addButton vis Vis4 "/control/execute exN03Vis4.mac"
+/gui/addButton vis Vis5 "/control/execute exN03Vis5.mac"
+/gui/addButton vis Vis6 "/control/execute exN03Vis6.mac"
+#
+# To limit the output flow in the "dump" widget :
+/event/printModulo 100

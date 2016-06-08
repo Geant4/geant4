@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesons.hh,v 1.2.6.1 1999/12/07 20:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ExcitedMesons.hh,v 1.4 2000/02/27 07:48:50 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -44,10 +44,19 @@ class G4ExcitedMesons : public G4VShortLivedParticle
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+
    G4ExcitedMesons*    ExcitedMesonsDefinition(){return this;};
    G4ExcitedMesons*    ExcitedMesons(){return this;};
+  
+   void                SetMultipletName(const G4String& );
+
 };
 
+inline
+ void G4ExcitedMesons::SetMultipletName(const G4String& name)
+{
+   SetParticleSubType(name);
+}
 
 #endif
 

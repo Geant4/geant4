@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PersistencyMessenger.cc,v 1.7 1999/11/26 16:50:21 morita Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "G4PersistencyMessenger.hh"

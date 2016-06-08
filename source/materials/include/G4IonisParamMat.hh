@@ -5,9 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.hh,v 1.2.8.1 1999/12/07 20:49:16 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4IonisParamMat.hh,v 1.4 1999/12/16 18:11:09 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
+
+// class description
+//
+// The class contains few (physical) quantities related to the Ionisation
+// process, for a material defined by its pointer G4Material*
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 // 09-07-98, data moved from G4Material, M.Maire
@@ -24,7 +31,7 @@ class G4Material;                        // forward declaration
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-class G4IonisParamMat
+class G4IonisParamMat  // with description
 {
 public:
 
@@ -33,19 +40,22 @@ public:
 
     //
     // retrieval methods
-    // 
-
+    //
+     
+    // parameters for mean energy loss calculation:
     G4double  GetMeanExcitationEnergy()   const {return fMeanExcitationEnergy;};
     G4double  GetLogMeanExcEnergy()       const {return fLogMeanExcEnergy;};
     G4double* GetShellCorrectionVector()  const {return fShellCorrectionVector;};
     G4double  GetTaul()                   const {return fTaul;};
-
+    
+    // parameters of the density correction:
     G4double  GetCdensity()               const {return fCdensity;};
     G4double  GetMdensity()               const {return fMdensity;};
     G4double  GetAdensity()               const {return fAdensity;};
     G4double  GetX0density()              const {return fX0density;};
     G4double  GetX1density()              const {return fX1density;};
 
+    // parameters of the energy loss fluctuation model:
     G4double  GetF1fluct()                const {return fF1fluct;};
     G4double  GetF2fluct()                const {return fF2fluct;};
     G4double  GetEnergy1fluct()           const {return fEnergy1fluct;};
@@ -54,6 +64,8 @@ public:
     G4double  GetLogEnergy2fluct()        const {return fLogEnergy2fluct;};
     G4double  GetEnergy0fluct()           const {return fEnergy0fluct;};
     G4double  GetRateionexcfluct()        const {return fRateionexcfluct;};
+
+public:  // without description
           
     G4int operator==(const G4IonisParamMat&) const;
     G4int operator!=(const G4IonisParamMat&) const;
@@ -79,7 +91,7 @@ private:
 //
     G4Material* fMaterial;                    // this material
 
-   // parameters for energy loss calculation
+   // parameters for mean energy loss calculation
     G4double  fMeanExcitationEnergy;          // 
     G4double  fLogMeanExcEnergy;              // 
     G4double* fShellCorrectionVector;         // shell correction coefficients
@@ -92,7 +104,7 @@ private:
     G4double fX0density;                     //
     G4double fX1density;                     //
 
-   // parameters of the energy fluctuation model
+   // parameters of the energy loss fluctuation model
     G4double fF1fluct;                       
     G4double fF2fluct;                       
     G4double fEnergy1fluct;

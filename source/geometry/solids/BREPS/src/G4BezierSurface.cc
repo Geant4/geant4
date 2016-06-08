@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BezierSurface.cc,v 1.2 1999/12/15 14:50:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // L. Broglia, 10/10/98
 // Error in line 331 and replaced addition of coordinates by 

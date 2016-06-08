@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999/09/15 12:28:18 barrand Exp $
+$Id: History,v 1.3 2000/03/17 08:59:46 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 March 2000  Guy Barrand
+- Modification to compile on Linux-g++ with STL.
 
 15 Sep 1999  Guy Barrand
 - Modification to compile on Linux-g++ with STL.

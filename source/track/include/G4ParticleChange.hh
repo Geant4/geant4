@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.hh,v 1.5 1999/11/07 16:31:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ParticleChange.hh,v 1.6 2000/02/13 15:08:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -152,7 +152,6 @@ class G4ParticleChange: public G4VParticleChange
     G4double GetWeightChange() const;
     void SetWeightChange(G4double w);
     //   Get/Set theWeightChange 
-    //    these methods are valid if fUseEB is true;
 
     //  -- Utility functions --
     G4ThreeVector GetGlobalPosition(const G4ThreeVector& displacement) const;

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4UIcommandTree.cc,v 1.4 2000/02/14 12:24:42 asaim Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "G4UIcommandTree.hh"

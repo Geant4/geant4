@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonMinusCaptureAtRest.hh,v 1.1.10.1 1999/12/07 20:52:33 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4MuonMinusCaptureAtRest.hh,v 1.3 2000/04/07 16:06:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998
@@ -34,6 +34,8 @@
 #include "G4VParticleChange.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4GHEKinematicsVector.hh"
+#include "G4StopElementSelector.hh"
+#include "G4MuMinusCaptureCascade.hh"
 
 class G4MuonMinusCaptureAtRest : public G4VRestProcess
  
@@ -115,8 +117,10 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
      G4GHEKinematicsVector* Secondaries;
      G4GHEKinematicsVector* Evaporates;
      G4GHEKinematicsVector* Gkin;
+     G4GHEKinematicsVector* Cascade;
 
      G4int    nGkine;
+     G4int    nCascade;
 
      G4int    nSecPart;
      G4int    nallFragm;
@@ -176,7 +180,15 @@ class G4MuonMinusCaptureAtRest : public G4VRestProcess
      G4ParticleDefinition* pdefNeutron;
      G4ParticleDefinition* pdefFragm[6];
 
+     G4StopElementSelector*   pSelector;
+     G4MuMinusCaptureCascade* pEMCascade;
+
 };
 
 #endif
  
+
+
+
+
+

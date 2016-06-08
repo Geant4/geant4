@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02PhysicsList.hh,v 1.4 1999/12/15 14:49:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: ExN02PhysicsList.hh,v 1.6 2000/02/29 12:01:52 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------

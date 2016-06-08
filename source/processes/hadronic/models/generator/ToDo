@@ -1,0 +1,18 @@
+Known problems/ missing topics
+
+date	 	date	   who	description
+found		fixed
+
+5-Nov 98 		   GF	String models need projectile momentum along +z;
+				G4VPartonStringModel should do this rotation.
+		Nov98           Above is wrong. for the excitation the 
+				transformation to the correct frame is done.		
+				
+5-Nov-98		   GF	G4VPartonStringModel must use momentum corrector
+				Do not forget Nucleus in this.
+		9-Dec98		Done. Nucleon momenta are included by correcting 
+				to sum of strings; these were checked to conserve 
+				E/p. 		
+
+30-Oct			   GF	dtor of G4VPartonStringModel should delete things;
+				Or should derived classes actually do this?

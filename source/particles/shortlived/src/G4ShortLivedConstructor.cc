@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.3.6.1 1999/12/07 20:50:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ShortLivedConstructor.cc,v 1.7 2000/03/02 00:52:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-
+//      Add "rho0"                         25  Feb. 2000 H.Kurashige
 #include "G4ShortLivedConstructor.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -334,7 +334,7 @@ void G4ShortLivedConstructor::ConstructBaryons()
 {
   G4DecayTable*   decayTable;
   G4VDecayChannel* mode;
-  G4ParticleDefinition* particle;
+  G4ExcitedBaryons* particle;
 
   //    Construct Resonace particles as dynamic object
   //    Arguments for constructor are as follows
@@ -352,6 +352,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              +3,             0,             
              "baryon",               0,            +1,          2224,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of delta++ -> proton + pi+
@@ -369,6 +371,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              +1,             0,             
              "baryon",               0,            +1,          2214,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta(1232)");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of delta+  -> proton + Gamma
@@ -397,6 +401,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              -1,             0,             
              "baryon",               0,            +1,          2114,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta(1232)");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of delta+  -> neutron + gamma
@@ -423,6 +429,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              -3,             0,             
              "baryon",               0,            +1,          1114,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta(1232)");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of delta+  -> neutron + pi-
@@ -442,6 +450,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              -3,             0,             
              "baryon",               0,            -1,         -2224,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta(1232)");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of delta++ -> anti_proton + pi-
@@ -459,6 +469,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              -1,             0,             
              "baryon",               0,            -1,         -2214,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta(1232)");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of anti_delta+  -> anti_proton + pi0
@@ -480,6 +492,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              +1,             0,             
              "baryon",               0,            -1,         -2114,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta(1232)");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of anti_delta+  -> anti_proton + pi+
@@ -501,6 +515,8 @@ void G4ShortLivedConstructor::ConstructBaryons()
                     3,              +3,             0,             
              "baryon",               0,            -1,         -1114,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("delta(1232)");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of delta-  -> neutron + pi+
@@ -518,7 +534,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 {
   G4DecayTable*   decayTable;
   G4VDecayChannel* mode;
-  G4ParticleDefinition* particle;
+  G4ExcitedMesons* particle;
 
   //    Construct Resonace particles as dynamic object
   //    Arguments for constructor are as follows
@@ -537,6 +553,8 @@ void G4ShortLivedConstructor::ConstructMesons()
               "meson",               0,             0,           223,
 		false,             0.0,          NULL);
   particle->SetAntiPDGEncoding(223);
+  // set sub type
+  particle->SetMultipletName("omega");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of omega -> pi+ + pi- + pi0
@@ -555,7 +573,9 @@ void G4ShortLivedConstructor::ConstructMesons()
               "meson",               0,             0,           333,
 		false,             0.0,          NULL);
   particle->SetAntiPDGEncoding(333);
-  // create decay table
+  // set sub type
+  particle->SetMultipletName("phi");
+   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of phi -> kaon+ + kaon-
   //                                   parent    BR     #daughters
@@ -583,6 +603,8 @@ void G4ShortLivedConstructor::ConstructMesons()
                     2,              +2,            +1,             
               "meson",               0,             0,           213,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("rho");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of rho+ -> pi+ + pi0
@@ -600,6 +622,8 @@ void G4ShortLivedConstructor::ConstructMesons()
                     2,              -2,            +1,             
               "meson",               0,             0,          -213,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("rho");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of rho- -> pi- + pi0
@@ -610,6 +634,26 @@ void G4ShortLivedConstructor::ConstructMesons()
   decayTable->Insert(mode);
   particle->SetDecayTable(decayTable);
   
+  // rho0
+  particle = new G4ExcitedMesons(            
+               "rho0",       770.0*MeV,     150.7*MeV,         0.0, 
+                    2,              -1,            -1,          
+                    2,               0,            +1,             
+              "meson",               0,             0,         113,
+                false,          0.0*ns,          NULL );
+  particle->SetAntiPDGEncoding(113);
+  // set sub type
+  particle->SetMultipletName("rho");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of rho0 -> pi+ + pi-
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("rho0",1.000, 2,
+				                    "pi+","pi-");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
   // k_star+
   particle = new G4ExcitedMesons(            
 	    "k_star+",       891.6*MeV,      50.8*MeV,    +1.0*eplus, 
@@ -617,6 +661,8 @@ void G4ShortLivedConstructor::ConstructMesons()
                     1,              +1,             0,             
               "meson",               0,             0,           323,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("k_star");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of k_star+ -> kaon+ + pi0
@@ -640,6 +686,8 @@ void G4ShortLivedConstructor::ConstructMesons()
                     1,              -1,             0,             
               "meson",               0,             0,           313,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("k_star");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of k_star0 -> kaon+ + pi-
@@ -663,6 +711,8 @@ void G4ShortLivedConstructor::ConstructMesons()
                     1,              +1,             0,             
               "meson",               0,             0,          -323,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("k_star");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of k_star- -> kaon- + pi0
@@ -687,6 +737,8 @@ void G4ShortLivedConstructor::ConstructMesons()
                     1,              -1,             0,             
               "meson",               0,             0,          -313,
 		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("k_star");
   // create decay table
   decayTable =  new G4DecayTable();
   // create decay channel of anti_k_star0 -> kaon- + pi+

@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.42 2000/02/14 11:24:45 gcosmo Exp $
+# $Id: binmake.gmk,v 1.45 2000/05/23 05:32:14 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -58,9 +58,11 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/low_energy/include \
               -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
               -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
+              -I$(G4BASE)/processes/hadronic/models/radiative_decay/include \
               -I$(G4BASE)/processes/hadronic/stopping/include \
               -I$(G4BASE)/geometry/management/include \
               -I$(G4BASE)/geometry/solids/CSG/include \
+              -I$(G4BASE)/geometry/solids/specific/include \
               -I$(G4BASE)/geometry/solids/BREPS/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
               -I$(G4BASE)/geometry/solids/STEP/include \

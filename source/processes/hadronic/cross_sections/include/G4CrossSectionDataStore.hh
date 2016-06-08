@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CrossSectionDataStore.hh,v 1.1.10.1 1999/12/07 20:51:27 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4CrossSectionDataStore.hh,v 1.2 1999/12/15 14:52:06 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // GEANT4 physics class: G4CrossSectionDataStore -- header file

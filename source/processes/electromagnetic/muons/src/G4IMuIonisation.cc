@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuIonisation.cc,v 1.2.8.1.2.2 1999/12/09 16:18:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4IMuIonisation.cc,v 1.4 2000/04/25 14:19:01 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -31,7 +31,7 @@
 // constructor and destructor
  
 G4IMuIonisation::G4IMuIonisation(const G4String& processName)
-   : G4IMuEnergyLoss("IMuIonisation"),
+   : G4VIMuEnergyLoss("IMuIonisation"),
      LowestKineticEnergy(1.00*keV),
      HighestKineticEnergy(1000000.*TeV),
      TotBin(200),
@@ -88,7 +88,7 @@ void G4IMuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleTyp
      BuildLambdaTable(aParticleType) ;
    }
  
-    G4IMuEnergyLoss::BuildDEDXTable(aParticleType) ;
+    G4VIMuEnergyLoss::BuildDEDXTable(aParticleType) ;
  }
  else
  {

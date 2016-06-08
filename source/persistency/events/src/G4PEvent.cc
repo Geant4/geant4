@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PEvent.cc,v 1.11 1999/12/15 14:51:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 // G4PEvent

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HCtable.cc,v 1.1.8.1.2.1 1999/12/07 20:47:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "G4HCtable.hh"

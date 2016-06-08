@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BREPSolidPolyhedra.hh,v 1.3 1999/12/15 14:49:55 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // The polygonal solid G4BREPSolidPolyhedra is a shape defined by an inner 

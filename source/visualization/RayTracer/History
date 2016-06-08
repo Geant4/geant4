@@ -1,0 +1,65 @@
+$Id: History,v 1.7 2000/05/02 10:07:08 johna Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     *************************************************************
+     * Note that modeling and test have their own History files. *
+     *************************************************************
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization category
+---------------------------------------
+
+2nd May 2000  John Allison
+- G4RayTracer: set out-of-world ray to black.
+- G4RayTracerViewer: corrected trapping of orthogonal projection.
+
+10th March 2000  Makoto Asai
+- Added some comments for copyright notice and for the software reference manual.
+
+24th February 2000  John Allison
+- Added protection for null viewer in G4RTSteppingAction.cc and
+  G4RayTrajectory.cc.
+- Corrected for zoom, etc., in G4RayTracerViewer.cc.
+
+23rd February 2000  John Allison
+- Added G4RayTracerSceneHandler and Viewer.
+- Some modifications to other RayTracer routines for vis compliance.
+- (Note: headAngle still not right - ray traced views are sometimes tipped.)
+
+22nd February 2000  John Allison (raytracer-V01-00-01a)
+- Added G4std:: in a few places to obtain ISO compliance.
+- Change "char*" to "const char*" in G4OutBitStream::CopyByte(...).
+
+22nd February 2000  Makoto Asai (raytracer-V01-00-01)
+- Change "char*" to "const char*"
+- use g4std/fstream
+
+17th February 2000  Makoto Asai (raytracer-V01-00-00)
+- Primary tag of sub-category
+
+29th January 2000  Makoto Asai
+- Introduction of G4RayTracer (visualization/RayTracer/...)
+- Migration of G4RayTracer
+  affected files :
+    visualization/GNUmakefile
+    visualization/management/include/MyVisManager.cc
+    visualization/management/src/G4VisManager.cc
+  affected files in other directory :
+    config/G4VIS_BUILD.gmk
+    config/G4VIS_USE.gmk
+

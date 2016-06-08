@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.10 1999/12/16 17:19:33 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.13 2000/05/18 13:45:45 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -39,7 +39,10 @@ void G4VVisCommandSceneHandler::UpdateCandidateLists () {
   sceneHandlerNameCommandsIterator i;
   for (i = sceneHandlerNameCommands.begin ();
        i != sceneHandlerNameCommands.end (); ++i) {
-    (*i)->GetParameter (0) -> SetParameterCandidates (sceneHandlerNameList);
+    G4String candidates = sceneHandlerNameList;
+    if ((*i) -> GetCommandPath () == G4String ("/vis/sceneHandler/list"))
+      candidates += " all";
+    (*i) -> GetParameter (0) -> SetParameterCandidates (candidates);
   }
 }
 
@@ -127,24 +130,22 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   fpCommand -> SetGuidance
     ("/vis/sceneHandler/create");
   fpCommand -> SetGuidance
-    ("     <graphics-system> [<scene-handler-name>] [<scene-name>]");
+    ("     <graphics-system-name> [<scene-handler-name>]");
   fpCommand -> SetGuidance
     ("Creates an scene handler for a specific graphics system.");
   fpCommand -> SetGuidance
-    ("Attaches specified scene.");
-  fpCommand -> SetGuidance
-    ("Default graphics system is current graphics system.");
-  fpCommand -> SetGuidance
-    ("Invents a name if not supplied.");
-  fpCommand -> SetGuidance
-    ("Default scene is current scene.  You can change attached scenes with");
+    ("Attaches current scene, if any.  You can change attached scenes with");
   fpCommand -> SetGuidance
     ("  /vis/sceneHandler/attach [<scene-name>].");
   fpCommand -> SetGuidance
-    ("This graphics system, scene handler and scene become current.");
+    ("Default graphics system is current graphics system.");
+  fpCommand -> SetGuidance
+    ("Invents a scene handler name if not supplied.");
+  fpCommand -> SetGuidance
+    ("This scene handler becomes current.");
   G4UIparameter* parameter;
-  parameter = new G4UIparameter ("graphics-system", 's', omitable = false);
-  //parameter -> SetCurrentAsDefault (true);
+  parameter = new G4UIparameter ("graphics-system-name",
+				 's', omitable = false);
   const G4GraphicsSystemList& gslist =
     fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;
@@ -199,23 +200,14 @@ G4String G4VisCommandSceneHandlerCreate::GetCurrentValue
     }
   }
 
-  G4String sceneName;
-  const G4VSceneHandler* scene = fpVisManager -> GetCurrentSceneHandler ();
-  if (scene) {
-    sceneName = scene -> GetName ();
-  }
-  else {
-    sceneName = "none";
-  }
-
-  return graphicsSystemName + " " + NextName () + " " + sceneName;
+  return graphicsSystemName + " " + NextName ();
 }
 
 void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
-  G4String graphicsSystem, newName, sceneName;
+  G4String graphicsSystem, newName;
   G4std::istrstream is ((char*)newValue.data());
-  is >> graphicsSystem >> newName >> sceneName;
+  is >> graphicsSystem >> newName;
 
   const G4GraphicsSystemList& gsl =
     fpVisManager -> GetAvailableGraphicsSystems ();
@@ -272,11 +264,13 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
 
   //Create scene handler.
   fpVisManager -> CreateSceneHandler (newName);
+  if (fpVisManager -> GetCurrentSceneHandler () -> GetName () != newName)
+    return;
+
   G4cout << "New scene handler \"" << newName << "\" created." << G4endl;
 
   // Attach scene.
-  G4String commandString = "/vis/sceneHandler/attach " + sceneName;
-  G4UImanager::GetUIpointer () -> ApplyCommand (commandString);
+  G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/sceneHandler/attach");
 
   UpdateCandidateLists ();
 }
@@ -302,6 +296,7 @@ G4VisCommandSceneHandlerList::G4VisCommandSceneHandlerList () {
 				 omitable = true);
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
+  fpCommand -> SetParameter (parameter);
   sceneHandlerNameCommands.push_back (fpCommand);
 }
 

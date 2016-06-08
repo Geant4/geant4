@@ -5,34 +5,24 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.3 1999/12/15 14:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4BSplineSurface.hh,v 1.6 2000/02/25 15:58:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef __BSPLINESURFACE_H
 #define __BSPLINESURFACE_H
-
 
 #include "G4Point3D.hh"
 #include "G4PointRat.hh"
 #include "G4Surface.hh"
 #include "G4ProjectedSurface.hh"
-
-
-
-//#ifdef WIN32
-//#  include "G4ios.hh"
-//#else
-//#  include <stream.h>
-//#endif
-
-
+#include "G4UVHit.hh"
 
 class G4BSplineSurface : public G4Surface
 {
 public:
 
   G4BSplineSurface();
-  G4BSplineSurface(char*, G4Ray&);
+  G4BSplineSurface(const char*, G4Ray&);
   G4BSplineSurface(const  G4BSplineSurface &tmp);
   G4BSplineSurface(G4int, G4int, G4KnotVector&,  G4KnotVector&, 
 		   G4ControlPoints&);    
@@ -110,14 +100,3 @@ private:
 }; 
 
 #endif
-
-
-
-
-
-
-
-
-
-
-

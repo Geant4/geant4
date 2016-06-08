@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.8 2000/01/11 17:19:07 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.11 2000/05/29 09:59:15 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -20,8 +20,6 @@
 #include "G4VPVParameterisation.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
-#include "G4BooleanSolid.hh"
-#include "G4DisplacedSolid.hh"
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 #include "G4BoundingSphereScene.hh"
@@ -158,14 +156,6 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
   // local variables to preserve re-entrancy.
   G4LogicalVolume* pLV  = pVPV -> GetLogicalVolume ();
 
-  // Maintain data members and store in working space (via pointers to
-  // working space).
-  if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
-  fpCurrentPV = pVPV;
-  fpCurrentLV = pLV;
-  if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
-  if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
-
   G4VSolid* pSol;
   G4Material* pMaterial;
 
@@ -191,7 +181,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pMaterial = pP -> ComputeMaterial (n, pVPV);
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
-	pVPV -> SetCopyNo (n);
+	// pVPV -> SetCopyNo (n);  // Uncertain of effect of this.
 	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
@@ -249,7 +239,8 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	} 
 	pVPV -> SetTranslation (translation);
 	pVPV -> SetRotation    (pRotation);
-	pVPV -> SetCopyNo      (n);
+	// pVPV -> SetCopyNo (n); // Has no effect and might even be
+	// dangerous.
 	pSol = pLV -> GetSolid ();
 	pMaterial = pLV -> GetMaterial ();
 	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
@@ -269,6 +260,14 @@ void G4PhysicalVolumeModel::DescribeAndDescend
  const G4Material* pMaterial,
  const G4Transform3D& theAT,
  G4VGraphicsScene& sceneHandler) {
+
+  // Maintain data members and store in working space (via pointers to
+  // working space).
+  if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
+  fpCurrentPV = pVPV;
+  fpCurrentLV = pLV;
+  if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
+  if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
 
   const HepRotation* pObjectRotation = pVPV -> GetObjectRotation ();
   const Hep3Vector&  translation     = pVPV -> GetTranslation ();
@@ -338,34 +337,9 @@ void G4PhysicalVolumeModel::DescribeSolid
  G4VSolid* pSol,
  const G4VisAttributes* pVisAttribs,
  G4VGraphicsScene& sceneHandler) {
-  // Look for "constituents".  Could be a Boolean solid.
-  G4VSolid* pSol0 = pSol -> GetConstituentSolid (0);
-  if (pSol0) {
-    // Composite solid - describe components...
-    DescribeSolid (theAT, pSol0, pVisAttribs, sceneHandler);
-    G4VSolid* pSol1 = pSol -> GetConstituentSolid (1);
-    if (!pSol1) {
-      G4Exception
-	("G4PhysicalVolumeModel::DescribeSolid:"
-	 " 2nd component solid is missing.");
-    }
-    DescribeSolid (theAT, pSol1, pVisAttribs, sceneHandler);
-  }
-  else { // Non-composite solid.
-    G4DisplacedSolid* pDisSol = pSol -> GetDisplacedSolidPtr ();
-    if (pDisSol) {
-      sceneHandler.PreAddThis
-	(theAT *
-	 G4Transform3D (pDisSol -> GetObjectRotation ().inverse (),
-			pDisSol -> GetObjectTranslation ()),
-	 *pVisAttribs);
-    }
-    else {
-      sceneHandler.PreAddThis (theAT, *pVisAttribs);
-    }
-    pSol -> DescribeYourselfTo (sceneHandler);
-    sceneHandler.PostAddThis ();
-  }
+  sceneHandler.PreAddThis (theAT, *pVisAttribs);
+  pSol -> DescribeYourselfTo (sceneHandler);
+  sceneHandler.PostAddThis ();
 }
 
 G4bool G4PhysicalVolumeModel::IsThisCulled (const G4LogicalVolume* pLV,

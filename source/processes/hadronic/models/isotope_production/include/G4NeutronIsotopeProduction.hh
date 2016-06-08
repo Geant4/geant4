@@ -3,7 +3,8 @@
 
 #include "globals.hh"
 #include "G4VIsotopeProduction.hh"
-#include "G4NeutronElementIsoCrossSections.hh"
+#include "G4ElementIsoCrossSections.hh"
+#include "G4NeutronIsoIsoCrossSections.hh"
 #include "Randomize.hh"
 
 class G4NeutronIsotopeProduction : public G4VIsotopeProduction
@@ -17,7 +18,7 @@ class G4NeutronIsotopeProduction : public G4VIsotopeProduction
 
   private:
     
-  G4NeutronElementIsoCrossSections ** theData;
+  G4ElementIsoCrossSections<G4NeutronIsoIsoCrossSections> ** theData;
   G4int numberOfElements;
 };
 

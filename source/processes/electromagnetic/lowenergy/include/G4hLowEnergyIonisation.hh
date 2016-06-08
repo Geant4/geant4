@@ -23,8 +23,9 @@
 // described in CERN-OPEN-99-121. User have a possibility to define
 // a parametrisation table via its name. 
 // Class Description - End
-
+//
 // ************************************************************
+// 23 May 2000    MG Pia  Clean up for QAO model 
 // 28 July 1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli implemented ICRU parametrization (protons)  
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
@@ -36,7 +37,9 @@
  
 #include "G4ios.hh"
 #include "Randomize.hh"
-#include "G4hEnergyLoss.hh"
+#include "G4hLowEnergyLoss.hh"
+#include "G4VhEnergyLossModel.hh"
+#include "G4QAOLowEnergyLoss.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -44,7 +47,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
 
-class G4hLowEnergyIonisation : public G4hEnergyLoss
+class G4hLowEnergyIonisation : public G4hLowEnergyLoss
 {
 public: // Without description
   
@@ -54,14 +57,13 @@ public: // Without description
   
   G4bool IsApplicable(const G4ParticleDefinition&);
   
-  void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-  
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
   
+  void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
+
   void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
   
-  G4double GetMeanFreePath(
-			   const G4Track& track,
+  G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition ) ;
   
@@ -74,11 +76,11 @@ public: // Without description
   
 protected:
   
-  virtual G4double ComputeMicroscopicCrossSection(
-						  const G4ParticleDefinition& aParticleType,
+  virtual G4double ComputeMicroscopicCrossSection(const G4ParticleDefinition& aParticleType,
 						  G4double KineticEnergy,
-						  G4double AtomicNumber);
-      
+						  G4double AtomicNumber,
+                                                  G4double ExcEnergy);
+  
 public: // With description
   
   void SetStoppingPowerTableName(const G4String& dedxTable);
@@ -100,12 +102,12 @@ public: // With description
   		        	       const G4double KinEnergy,
 			               const G4double DeltaRayCutNow);
   // This method returns parametrised energy loss.
-
+  
   G4double GetPreciseDEDX(G4Material* aMaterial,
   			  const G4double KinEnergy,
 		          const G4ParticleDefinition* aParticleType);
   // This method returns electron ionisation energy loss for any energy.
-
+  
   G4double GetNuclearDEDX(G4Material* aMaterial,
   			  const G4double KinEnergy,
 		          const G4ParticleDefinition* aParticleType);
@@ -222,10 +224,12 @@ private:
   
 private:
   //  private data members ...............................
+  G4VhEnergyLossModel* qaoLoss;
 
 protected:
   //  protected data members ...............................
   
+
   G4PhysicsTable* theMeanFreePathTable;
   
   // interval of parametrisation of electron stopping power 
@@ -262,6 +266,23 @@ protected:
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
     
+  /*
+   static G4double LowerBoundLambda ; // bining for lambda table
+   static G4double UpperBoundLambda ;
+   static G4int    NbinLambda ;
+
+   G4double LowestKineticEnergy,HighestKineticEnergy ;
+   G4int    TotBin ;
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
+    */
 };
 
 #include "G4hLowEnergyIonisation.icc"

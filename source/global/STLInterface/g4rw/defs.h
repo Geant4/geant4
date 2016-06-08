@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: defs.h,v 1.7 1999/11/29 16:52:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: defs.h,v 1.8 2000/06/26 16:25:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -60,13 +60,14 @@ public:
 
   G4RWBoundsErr(const G4RWBoundsErr&e)
     {
+      delete [] str;
       str=new char[strlen(e.str)+1];
       strcpy(str,e.str);
     }
 
   ~G4RWBoundsErr()
     {
-      delete str;
+      delete [] str;
     }
 
   const char * why() const
@@ -92,13 +93,14 @@ public:
 
   G4RWGeneralException(const G4RWGeneralException&e)
     {
+      delete [] str;
       str=new char[strlen(e.str)+1];
       strcpy(str,e.str);
     }
 
   ~G4RWGeneralException()
     {
-      delete str;
+      delete [] str;
     }
 
   const char * why() const
@@ -112,6 +114,10 @@ private:
 
 };
   
-#define G4RWTHROW(a) throw a
+#ifndef G4NO_STD_EXCEPTIONS
+  #define G4RWTHROW(a) throw a
+#else
+  #define G4RWTHROW(a) abort()
+#endif
 
 #endif

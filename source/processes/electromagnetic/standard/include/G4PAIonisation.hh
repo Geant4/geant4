@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIonisation.hh,v 1.2.8.1 1999/12/07 20:50:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PAIonisation.hh,v 1.4 2000/04/25 14:33:02 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4PAIenergyLoss.hh"
+#include "G4VPAIenergyLoss.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -46,7 +46,7 @@
 #include "G4PhysicsVector.hh"
  
  
-class G4PAIonisation : public G4PAIenergyLoss 
+class G4PAIonisation : public G4VPAIenergyLoss 
  
 {
   public:

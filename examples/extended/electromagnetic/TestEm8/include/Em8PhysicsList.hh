@@ -1,16 +1,13 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8PhysicsList.hh,v 1.1 2000/01/07 14:50:21 grichine Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em8PhysicsList.hh,v 1.3 2000/06/27 13:29:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Em8PhysicsList_h
 #define Em8PhysicsList_h 1
@@ -42,7 +39,6 @@ class Em8StepCut;
 class Em8DetectorConstruction;
 class Em8PhysicsListMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em8PhysicsList: public G4VUserPhysicsList
 {
@@ -65,7 +61,10 @@ class Em8PhysicsList: public G4VUserPhysicsList
     void ConstructBarions();
 
   protected:
-  // these methods Construct physics processes and register them
+
+    // these methods Construct physics processes and register them
+
+    void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
     

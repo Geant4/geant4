@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: TestEm2.cc,v 1.3 1999/12/15 14:48:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Comments
 //

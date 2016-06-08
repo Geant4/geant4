@@ -5,39 +5,38 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.cc,v 1.3 1999/12/15 14:50:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4BSplineSurface.cc,v 1.7 2000/02/25 15:58:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
-#include "EntityInst.h"
 #include "G4BSplineSurface.hh"
 #include "G4BezierSurface.hh"
-
-class G4ControlPoints;
-class G4BoundingBox;
+#include "G4ControlPoints.hh"
+#include "G4BoundingBox3D.hh"
 
 G4BSplineSurface::G4BSplineSurface()
 {
   distance = kInfinity;
   dir=ROW;
-  first_hit = Hit=(G4UVHit*)0;
+  first_hit = Hit = (G4UVHit*)0;
   ctl_points = (G4ControlPoints*)0;
+  u_knots = v_knots = tmp_knots = (G4KnotVector*)0;
 }
 
 
-G4BSplineSurface::G4BSplineSurface(char* nurbfilename, G4Ray& rayref)
+G4BSplineSurface::G4BSplineSurface(const char* nurbfilename, G4Ray& rayref)
 {
   distance = kInfinity;    
-  Hit=(G4UVHit*)0;
-  first_hit = Hit;
+  first_hit = Hit = (G4UVHit*)0;
+  ctl_points = (G4ControlPoints*)0;
+  u_knots = v_knots = tmp_knots = (G4KnotVector*)0;
 }
 
 
 G4BSplineSurface::G4BSplineSurface(const  G4BSplineSurface &tmp) 
 {
   distance = tmp.distance;
-  Hit=(G4UVHit*)0;  
-  first_hit=Hit;
+  first_hit = Hit = (G4UVHit*)0;
 
   //    next=this;
   order[0] = tmp.order[0];
@@ -46,19 +45,23 @@ G4BSplineSurface::G4BSplineSurface(const  G4BSplineSurface &tmp)
 
   u_knots    = new G4KnotVector(*tmp.u_knots);
   v_knots    = new G4KnotVector(*tmp.v_knots);
+  tmp_knots  = (G4KnotVector*)0;
 
   ctl_points = new G4ControlPoints(*tmp.ctl_points);
 }
 
 
 G4BSplineSurface::G4BSplineSurface(G4int u, G4int v, G4KnotVector& u_kv, 
-				   G4KnotVector& v_kv,G4ControlPoints& cp)
+				   G4KnotVector& v_kv, G4ControlPoints& cp)
 {
+  first_hit = Hit = (G4UVHit*)0;
+
   order[0] = u+1;
   order[1] = v+1;
 
-  u_knots = new G4KnotVector(u_kv);
-  v_knots = new G4KnotVector(v_kv);
+  u_knots    = new G4KnotVector(u_kv);
+  v_knots    = new G4KnotVector(v_kv);
+  tmp_knots  = (G4KnotVector*)0;
   
   ctl_points =  new G4ControlPoints(cp);
 }
@@ -70,13 +73,14 @@ G4BSplineSurface::~G4BSplineSurface()
   delete v_knots;
   delete ctl_points;
   G4UVHit* temphit=Hit;
+  Hit = first_hit;
   while(Hit!=(G4UVHit*)0)
   {
     Hit=Hit->next;
     delete temphit;
     temphit=Hit;
   }
-  delete temphit;// remove last
+  // delete temphit;// remove last
   
 }
 
@@ -166,9 +170,18 @@ G4Point3D G4BSplineSurface::FinalIntersection()
 	  // Move to first
 	  bezier_list.MoveToFirst();
 	  // Find the second last.
+// What!?  Casting a G4Surface* to a G4SurfaceList*  !?!?!? - GC
+//
+//	  if(bezier_list.index != bezier_list.last)
+//	    while ( ((G4SurfaceList*)bezier_list.index)->next !=
+//		    bezier_list.last)  bezier_list.Step();
+//
+// Try the following instead (if that's the wished behavior)...
+//
 	  if(bezier_list.index != bezier_list.last)
-	    while ( ((G4SurfaceList*)bezier_list.index)->next !=
-		    bezier_list.last)  bezier_list.Step();
+	    while (bezier_list.next != bezier_list.last)
+	      bezier_list.Step();
+	  
 	  G4BezierSurface* tmp = (G4BezierSurface*) bezier_list.GetSurface();
 	  tmp->CalcBBox();
 	  
@@ -335,8 +348,9 @@ void G4BSplineSurface::FindIntersections(const G4Ray& rayref)
     if(bez_ptr->Distance() < distance) distance = bez_ptr->Distance();  
     
     // Remove the temporary Hit
+    if (first_hit == Hit) first_hit = (G4UVHit*)0;
     delete Hit;
-    first_hit = Hit = (G4UVHit*)0;
+    Hit = (G4UVHit*)0;
     
     // Move to next in the List
     bezier_list.Step();
@@ -538,7 +552,8 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
     param = Hit->v;
 	
     // Evaluate the diff_curve...
-    G4PointRat rat_result = (G4PointRat&) InternalEvalCrv(0, diff_curve);
+    // G4PointRat rat_result = (G4PointRat&) InternalEvalCrv(0, diff_curve);
+    G4PointRat rat_result(InternalEvalCrv(0, diff_curve));
     
     // Calc the 3D values.
     // L. Broglia
@@ -553,7 +568,8 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
       for ( i = 0; i < row_size; i++)
       {
 	ord = GetOrder(ROW);
-	G4Point3D rtr_pt  = (G4Point3D&) InternalEvalCrv(i, curves);
+	// G4Point3D rtr_pt  = (G4Point3D&) InternalEvalCrv(i, curves);
+	G4Point3D rtr_pt = (InternalEvalCrv(i, curves)).pt();
 	diff_curve->put(0,i,rtr_pt);
       }
 	
@@ -571,7 +587,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
       param = Hit->v;
 
       // Evaluate the diff_curve...
-      result = (G4Point3D&) InternalEvalCrv(0, diff_curve);
+      result = (InternalEvalCrv(0, diff_curve)).pt();
     }
   
   delete diff_curve;
@@ -592,7 +608,7 @@ G4Point3D G4BSplineSurface::Evaluation(const G4Ray& rayref)
     temphit=Hit;
   }
   
-  delete temphit;
+  // delete temphit;
   
   // Get the real Hit point
   closest_hit = FinalIntersection();

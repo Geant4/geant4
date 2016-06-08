@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.cc,v 1.7.4.1.2.3 1999/12/15 11:43:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VInteractorManager.cc,v 1.8 1999/12/15 14:50:47 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // G.Barrand
 

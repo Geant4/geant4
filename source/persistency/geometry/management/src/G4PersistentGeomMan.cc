@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentGeomMan.cc,v 1.11 2000/02/23 13:10:36 morita Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PersistentGeomMan.cc,v 1.14 2000/06/09 12:56:44 morita Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // class G4PersistentGeomMan 
 //
@@ -31,13 +31,18 @@
 // other used classes
 #include "G4PBox.hh"
 #include "G4PCons.hh"
-#include "G4PHype.hh"
 #include "G4PPara.hh"
 #include "G4PSphere.hh"
 #include "G4PTorus.hh"
 #include "G4PTrap.hh"
 #include "G4PTrd.hh"
 #include "G4PTubs.hh"
+
+//#include "G4PEllipticalTube.hh"
+#include "G4PHype.hh"
+//#include "G4PPolycone.hh"
+//#include "G4PPolyhedra.hh"
+
 #include "G4PDisplacedSolid.hh"
 #include "G4PIntersectionSolid.hh"
 #include "G4PSubtractionSolid.hh"
@@ -123,6 +128,14 @@ G4bool G4PersistentGeomMan::Retrieve( HepDbApplication* dbApp,
                                       G4VPhysicalVolume*& theWorld)
 {
   theWorld = NULL;
+
+  G4VMaterialMap* f_Materialmap = G4VMaterialMap::GetMaterialMap();
+  if(f_verboseLevel>0)
+  {
+    if(!f_MaterialMap)
+      G4cout << "G4PersistentGeomMan::Retrieve"
+             << " -- Material Map not provided by user code." << G4endl;
+  }
 
   // ----------------------- Objectivity Feature ----------------------- //
   // Load the geometry object map from the database with read-only mode
@@ -319,25 +332,40 @@ HepRef(G4PVSolid) G4PersistentGeomMan::MakePersistentObject (
 
     // Construct persistent and concrete solid object
     // according to the entity type of theSolid
-    if                ( theSolidType == "G4Box")
+
+    // Pure CSG
+    if            ( theSolidType == "G4Box")
       persSolid  = new(f_container) G4PBox  ( (G4Box*)theSolid );
-    else if          ( theSolidType == "G4Cons")
+    else if      ( theSolidType == "G4Cons")
       persSolid = new(f_container) G4PCons  ( (G4Cons*)theSolid );
-    else if          ( theSolidType == "G4Hype")
-      persSolid = new(f_container) G4PHype  ( (G4Hype*)theSolid );
-    else if          ( theSolidType == "G4Para")
+    else if      ( theSolidType == "G4Para")
       persSolid = new(f_container) G4PPara  ( (G4Para*)theSolid );
-    else if          ( theSolidType == "G4Sphere")
+    else if      ( theSolidType == "G4Sphere")
       persSolid = new(f_container) G4PSphere( (G4Sphere*)theSolid );
-    else if          ( theSolidType == "G4Torus")
+    else if      ( theSolidType == "G4Torus")
       persSolid = new(f_container) G4PTorus ( (G4Torus*)theSolid );
-    else if          ( theSolidType == "G4Trap")
+    else if      ( theSolidType == "G4Trap")
       persSolid = new(f_container) G4PTrap  ( (G4Trap*)theSolid );
-    else if          ( theSolidType == "G4Trd")
+    else if      ( theSolidType == "G4Trd")
       persSolid = new(f_container) G4PTrd   ( (G4Trd*)theSolid );
-    else if          ( theSolidType == "G4Tubs")
+    else if      ( theSolidType == "G4Tubs")
       persSolid = new(f_container) G4PTubs  ( (G4Tubs*)theSolid );
 
+   // Specific CSG
+   //  else if      ( theSolidType == "G4EllipticalTube")
+   //    persSolid = new(f_container) G4PEllipticalTube
+   //                              ( (G4EllipticalTube*)theSolid );
+    else if      ( theSolidType == "G4Hype")
+      persSolid = new(f_container) G4PHype
+                                 ( (G4Hype*)theSolid );
+   //  else if      ( theSolidType == "G4Polycone")
+   //    persSolid = new(f_container) G4PPolycone
+   //                               ( (G4Polycone*)theSolid );
+   //  else if      ( theSolidType == "G4Polyhedra")
+   //    persSolid = new(f_container) G4PPolyhedra
+   //                               ( (G4Polyhedra*)theSolid );
+
+    // Boolian Solids
     else if ( theSolidType == "G4UnionSolid"        || 
               theSolidType == "G4SubtractionSolid"  ||
               theSolidType == "G4IntersectionSolid" )
@@ -473,14 +501,23 @@ G4LogicalVolume* G4PersistentGeomMan::MakeTransientObject (
     // check if the transient version of persSolid exists
     G4VSolid* theSolid = f_GeomMap->LookUp(persSolid);
 
+#ifdef G4DEBUG
     if ( theSolid == NULL )
     {
       G4cerr << "G4PersistentGeomMan::MakeTransientObject" <<
        " -- transient Solid not found for the persistent Solid" << G4endl;
     }
+#endif
+
+    // Lookup the material from name
+    G4Material* theMaterial = NULL;
+    if( f_MaterialMap )
+    {
+      theMaterial = f_MaterialMap->LookUp(persLogVol->GetMaterialName());
+    }
 
     // Construct the persistent version of theLogVol with theSolid
-    theLogVol = persLogVol->MakeTransientObject(theSolid);
+    theLogVol = persLogVol->MakeTransientObject(theSolid, theMaterial);
 #ifdef G4DEBUG
     assert( theLogVol != NULL );
 #endif

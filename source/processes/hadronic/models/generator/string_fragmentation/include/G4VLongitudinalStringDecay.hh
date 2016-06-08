@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.3.8.1.2.2 1999/12/09 16:59:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.6 1999/12/15 17:51:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -53,6 +53,17 @@ public:
    G4ParticleDefinition* CreateHadron(G4int id1, G4int id2, G4bool theGivenSpin, G4int theSpin); 
    void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
 
+   void SetSigmaTransverseMomentum(G4double aQT);
+   void SetStrangenessSuppression(G4double aValue);
+   void SetDiquarkSuppression(G4double aValue);
+   void SetDiquarkBreakProbability(G4double aValue);
+
+   void SetVectorMesonProbability(G4double aValue);
+   void SetSpinThreeHalfBarionProbability(G4double aValue);
+   
+   void SetScalarMesonMixings( G4std::vector<G4double> aVector);
+   void SetVectorMesonMixings( G4std::vector<G4double> aVector);
+        
 protected:
    // Additional protected declarations 
    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py) = 0;      
@@ -73,8 +84,13 @@ private:
    G4int     ClusterLoopInterrupt;
 
    void ConstructParticle();
+
+   G4double pspin_meson;
+   G4double pspin_barion;
+   G4double pmix_meson1[6];
+   G4double pmix_meson0[6];
    
-   
+   G4bool    PastInitPhase;
    
 class SimpleString
 {
@@ -105,7 +121,7 @@ public:
 	void update();
 
 private:
-	SimpleString(){G4cout << " error calling bad ctor for class SimpleString"<< G4endl;}
+	SimpleString(){G4cout << " error calling bad ctor for class SimpleString"<< G4endl;};
 	
 	SideOfString * left, * right;
 	SideOfString * decay, * stable;

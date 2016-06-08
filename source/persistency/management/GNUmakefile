@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.16 1999/12/01 15:21:07 morita Exp $
+# $Id: GNUmakefile,v 1.17 2000/06/09 12:55:01 morita Exp $
 
 name := G4pmanagement
 G4ODBMS := true
@@ -38,6 +38,7 @@ CPPFLAGS  += \
              -I$(G4INSTALL)/source/geometry/management/include \
              -I$(G4INSTALL)/source/geometry/volumes/include \
              -I$(G4INSTALL)/source/global/management/include \
+             -I$(G4INSTALL)/source/materials/include \
              -I$(G4INSTALL)/source/intercoms/include
 
 

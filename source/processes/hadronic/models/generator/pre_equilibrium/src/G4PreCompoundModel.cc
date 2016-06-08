@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PreCompoundModel.cc,v 1.7.4.1.2.1 1999/12/08 17:34:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PreCompoundModel.cc,v 1.8 1999/12/15 14:52:39 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // by V. Lara
 

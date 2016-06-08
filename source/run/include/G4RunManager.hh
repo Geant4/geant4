@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RunManager.hh,v 1.7.2.1 1999/12/07 20:52:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 

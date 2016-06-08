@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.10 1999/12/15 14:49:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4BREPSolid.cc,v 1.12 2000/04/11 16:15:17 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 
 #include "G4BREPSolid.hh"
 #include "G4VoxelLimits.hh"
@@ -19,13 +19,10 @@
 #include "G4BSplineSurface.hh"
 #include "G4ToroidalSurface.hh"
 #include "G4SphericalSurface.hh"
-#include "instmgr.h"
 
 G4Ray G4BREPSolid::Track;
 G4double G4BREPSolid::ShortestDistance= kInfinity;
 int G4BREPSolid::NumberOfSolids=0;
-InstMgr G4BREPSolid::InstanceList;
-
 
 G4BREPSolid::G4BREPSolid(const G4String name) : G4VSolid(name)
 {
@@ -1019,14 +1016,6 @@ void G4BREPSolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 }
 
 
-G4VisExtent G4BREPSolid::GetExtent() const 
-{
-  G4Point3D Min = bbox->GetBoxMin();
-  G4Point3D Max = bbox->GetBoxMax();  
-  return G4VisExtent (Min.x(), Max.x(), Min.y(), Max.y(), Min.z(), Max.z());
-}
-
-
 G4Polyhedron* G4BREPSolid::CreatePolyhedron () const
 {
   // temporary
@@ -1044,27 +1033,6 @@ G4NURBS* G4BREPSolid::CreateNURBS () const
   G4Point3D Max = bbox->GetBoxMax();  
 
   return new G4NURBSbox (Max.x(), Max.y(), Max.z());
-}
-
-
-int G4BREPSolid::CreateSTEPData()
-{
-  // create the solid entity
-  //STEPentity* ent = new STEPentity();
-  //stateEnum *sEnu = new stateEnum("newSE");
-  //MgrNode *mnode = new MgrNode(ent, sEnu);
-
-  // create the attributelist & attributes for this solid
-  //    STEPattributeList *aList = new STEPattributeList();
-  //AttrDescriptor *aDesc = new AttrDescriptor();
-  //  STEPattribute *name_attr = new STEPattribute(aDesc, name);
-  
-  // create the mgrnode neede by the instance List
-
-  // append node to instance List
-  
-  // call entoity creation routines for child entities.
-  return 0; // to shut up compilers
 }
 
 
@@ -1488,20 +1456,3 @@ G4Point3D G4BREPSolid::Scope()
   
   return scope;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

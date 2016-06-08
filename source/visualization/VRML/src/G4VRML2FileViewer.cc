@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2FileViewer.cc,v 1.4 1999/12/15 14:54:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VRML2FileViewer.cc,v 1.5 2000/05/13 10:55:30 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // G4VRML2FileViewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -107,7 +107,9 @@ void G4VRML2FileViewer::SendViewParameters ()
 	G4double camera_distance = extent_radius / fsin_VHA ;
 
 	// camera position on Z axis
-	const G4Point3D&	target_point = fVP.GetCurrentTargetPoint();
+	const G4Point3D&	target_point
+	  = fSceneHandler.GetScene()->GetStandardTargetPoint()
+	  + fVP.GetCurrentTargetPoint();
 	G4double		E_z = target_point.z() + camera_distance;
 	G4Point3D		E(0.0, 0.0, E_z );
 

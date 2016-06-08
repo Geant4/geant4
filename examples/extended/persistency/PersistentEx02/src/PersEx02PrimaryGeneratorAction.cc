@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: PersEx02PrimaryGeneratorAction.cc,v 1.3 1999/11/29 18:33:28 morita Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "PersEx02PrimaryGeneratorAction.hh"

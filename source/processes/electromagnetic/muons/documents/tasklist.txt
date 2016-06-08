@@ -1,0 +1,36 @@
+List of problems with G4muons				15.05.00
+
+(Rostislav, Andrew, Laszlo, Michel, Stas, …, May 15th – May 22nd )
+
+1) Tests electromagnetic (conduction, search of the possible 
+sources of disagreement,…)
+a) brems
+b) pairs
+c) knock-on
+
+2) Tests photonuclear
+
+3) Physics Reference Manual
+Brems, pairs, photonuclear, ionisation
+a) to agree
+b) to correct
+c) to verify
+d) to commission
+
+4)”A Quick Overview” - corrections
+
+5) Summary Note on HE muons in G4
+a) to prepare draft
+b) to discuss and to correct
+c) to prepare the iteration (pre-final)
+
+6) Discussions:
+a) final states in the above processes
+b) multiple scattering – applicability for HE muons
+c) muon pairs by photon
+d) muon pairs by muon
+e) diffractive bremsstrahlung
+f) …
+
+7) Concluding remarks and summary
+

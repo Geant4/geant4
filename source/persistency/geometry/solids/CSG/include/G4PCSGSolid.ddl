@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PCSGSolid.ddl,v 1.3 1999/12/15 14:51:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //  
 // class G4CSGSolid

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gsatt.cc,v 1.8 2000/03/02 17:54:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 
 #include "g4rw/cstring.h"
 #include "G3toG4.hh"

@@ -1,3 +1,13 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SubtractionSolid.cc,v 1.8 2000/06/26 16:16:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
+//
 // Implementation of methods for the class G4IntersectionSolid
 //
 // History:
@@ -24,7 +34,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 ///////////////////////////////////////////////////////////////////
 //
@@ -268,7 +277,15 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
 {
     if( Inside(p) == kOutside )
     {
-         G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v), point p is outside") ;
+      G4cout << "Position:"  << G4endl << G4endl;
+      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+      G4cout << "Direction:" << G4endl << G4endl;
+      G4cout << "v.x() = "   << v.x() << G4endl;
+      G4cout << "v.y() = "   << v.y() << G4endl;
+      G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
+      G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v), point p is outside") ;
     }
 
     G4double distout;
@@ -286,7 +303,6 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
     else
     {
       distout= distA ; 
-      *validNorm = true ;
     } 
     return distout;
 }
@@ -331,17 +347,7 @@ G4SubtractionSolid::ComputeDimensions( G4VPVParameterisation* p,
 void 
 G4SubtractionSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  return ;
-}
-
-/////////////////////////////////////////////////////////////
-//
-//
-
-G4VisExtent   
-G4SubtractionSolid::GetExtent        () const 
-{
-  return   G4VisExtent(-1.0,1.0,-1.0,1.0,-1.0,1.0) ;
+  scene.AddThis (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -351,7 +357,12 @@ G4SubtractionSolid::GetExtent        () const
 G4Polyhedron* 
 G4SubtractionSolid::CreatePolyhedron () const 
 {
-  return new G4PolyhedronBox (1.0, 1.0, 1.0);
+  G4Polyhedron* pA = fPtrSolidA->CreatePolyhedron();
+  G4Polyhedron* pB = fPtrSolidB->CreatePolyhedron();
+  G4Polyhedron* resultant = new G4Polyhedron (pA->subtract(*pB));
+  delete pB;
+  delete pA;
+  return resultant;
 }
 
 /////////////////////////////////////////////////////////
@@ -361,10 +372,7 @@ G4SubtractionSolid::CreatePolyhedron () const
 G4NURBS*      
 G4SubtractionSolid::CreateNURBS      () const 
 {
-  return new G4NURBSbox (1.0, 1.0, 1.0);
+  // Take into account boolean operation - see CreatePolyhedron.
+  // return new G4NURBSbox (1.0, 1.0, 1.0);
+  return 0;
 }
-
-
-
-
-

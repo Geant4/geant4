@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 1.4.8.1.2.1 1999/12/08 17:34:09 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4MuonDecayChannel.cc,v 1.6 2000/02/25 07:36:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -32,13 +32,6 @@ G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName,
 				       G4double        theBR)
                    :G4VDecayChannel("Muon Decay",1)
 {
-  //#ifdef G4VERBOSE
-  //if (GetVerboseLevel()>1) {
-  //  G4cout << "G4MuonDecayChannel:: constructor ";
-  //  G4cout << "addr[" << this << "]" << G4endl;
-  //}
-  //#endif
-
   // set names for daughter particles
   if (theParentName == "mu+") {
     SetBR(theBR);
@@ -55,13 +48,13 @@ G4MuonDecayChannel::G4MuonDecayChannel(const G4String& theParentName,
     SetDaughter(1, "anti_nu_e");
     SetDaughter(2, "nu_mu");
   } else {
-    //#ifdef G4VERBOSE
-    //  if (GetVerboseLevel()>0) {
-    //   G4cout << "G4MuonDecayChannel:: constructor :";
-    //   G4cout << " parent particle is not muon but ";
-    //   G4cout << theParentName << G4endl;
-    // }
-    //#endif
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4MuonDecayChannel:: constructor :";
+      G4cout << " parent particle is not muon but ";
+      G4cout << theParentName << G4endl;
+    }
+#endif
   }
 }
 

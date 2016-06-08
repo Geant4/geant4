@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IsotopeProperty.hh,v 1.2 1999/10/28 23:24:10 kurasige Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------

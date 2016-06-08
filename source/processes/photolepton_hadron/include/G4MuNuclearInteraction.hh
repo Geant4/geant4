@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuNuclearInteraction.hh,v 1.1.10.1 1999/12/07 20:52:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4MuNuclearInteraction.hh,v 1.3 2000/06/11 10:35:12 jwellisc Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -117,7 +117,7 @@ class G4MuNuclearInteraction : public G4VDiscreteProcess
      // tables for sampling ..............
      static G4int nzdat,ntdat,NBIN ;
      static G4double zdat[5],adat[5],tdat[8] ;
-     static G4double ya[1000],proba[5][8][1000] ;
+     static G4double ya[1001],proba[5][8][1001] ;
      
      // for the hadronic final state; use base cass * in next release
      G4ParametrizedHadronicVertex theHadronicVertex;

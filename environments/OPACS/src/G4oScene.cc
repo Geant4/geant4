@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oScene.cc,v 1.3.2.1.2.1 1999/12/07 20:46:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4oScene.cc,v 1.7 2000/06/09 10:00:58 barrand Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
@@ -24,10 +24,6 @@
 #ifdef DEBUG
 #include <stdio.h>
 #endif
-
-// GB : put this include before the GL ones. 
-// It avoid a clash with STL includes on Linux.
-#include "g4rw/tvhdict.h"
 
 /*Co*/
 #include <CPrinter.h>
@@ -52,6 +48,7 @@
 #include <G4Polyline.hh>
 #include <G4Transform3D.hh>
 #include <G4PhysicalVolumeModel.hh>
+#include <G4Normal3D.hh>
 
 #include <G4oScene.hh>
 
@@ -249,6 +246,100 @@ void G4oScene::AddThis (
   printf ("debug : solid.\n");
 #endif
   AddPolyhedron (solid.CreatePolyhedron());
+}
+/***************************************************************************/
+void G4oScene::BeginPrimitives(
+ const G4Transform3D& objectTransformation
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  //G4VSceneHandler::BeginPrimitives (objectTransformation);
+}
+/***************************************************************************/
+void G4oScene::EndPrimitives(
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  //G4VSceneHandler::EndPrimitives ();
+}
+/***************************************************************************/
+void G4oScene::AddPrimitive(
+ const G4Polyline&
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  printf ("debug : AddPrimitive : polyline.\n");
+#endif
+}
+/***************************************************************************/
+void G4oScene::AddPrimitive(
+ const G4Text&
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  printf ("debug : AddPrimitive : text.\n");
+#endif
+}
+/***************************************************************************/
+void G4oScene::AddPrimitive(
+ const G4Circle&
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  printf ("debug : AddPrimitive : circle.\n");
+#endif
+}
+/***************************************************************************/
+void G4oScene::AddPrimitive(
+ const G4Square&
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  printf ("debug : AddPrimitive : square.\n");
+#endif
+}
+/***************************************************************************/
+void G4oScene::AddPrimitive(
+ const G4Polymarker&
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  printf ("debug : AddPrimitive : polymarker.\n");
+#endif
+}
+/***************************************************************************/
+void G4oScene::AddPrimitive(
+ const G4Polyhedron&
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  printf ("debug : AddPrimitive : polyhedron.\n");
+#endif
+}
+/***************************************************************************/
+void G4oScene::AddPrimitive(
+ const G4NURBS&
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+#ifdef DEBUG
+  printf ("debug : AddPrimitive : NURBS.\n");
+#endif
 }
 /***************************************************************************/
 void G4oScene::SetNodeName (

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleus.cc,v 1.3.8.1.2.1 1999/12/10 15:42:18 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Nucleus.cc,v 1.4 1999/12/15 14:53:40 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996

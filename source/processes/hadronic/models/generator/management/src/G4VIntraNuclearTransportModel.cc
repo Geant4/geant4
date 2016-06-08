@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.2.8.1 1999/12/07 20:51:46 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.3 1999/12/15 14:52:38 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

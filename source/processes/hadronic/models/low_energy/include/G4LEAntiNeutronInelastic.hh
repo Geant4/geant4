@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEAntiNeutronInelastic.hh,v 1.1.10.1 1999/12/07 20:52:16 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4LEAntiNeutronInelastic.hh,v 1.2 1999/12/15 14:53:05 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
  // Hadronic Process: Low Energy AntiNeutron Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

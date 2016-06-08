@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenInventor.cc,v 1.6 1999/12/15 14:54:12 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 

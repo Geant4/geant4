@@ -1,5 +1,5 @@
 
-$Id: History,v 1.5 2000/01/19 19:24:25 gcosmo Exp $
+$Id: History,v 1.12 2000/06/26 16:16:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,42 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- Gen 19   2000	Gabriele Cosmo		geom-solid-bool-V01-00-00
+ June 26  2000  Vladimir Grichine    geom-solid-bool-V01-01-03
+
+  - Fixed bug in G4SubtractionSolid::DistanceToOut(p,v,...). validNorm
+    flag was uncorrectly set to true. Fixes report #102.
+
+ June 6   2000  John Apostolakis     geom-solid-bool-V01-01-02
+
+  - Protecting the use of pointers validNorm and n, if calcNorm is false
+
+ June 6   2000  John Allison         geom-solid-bool-V01-01-01
+
+  - Re-enabled CreatePolyhedron() method from G4UnionSolid, G4IntersectionSolid
+    and G4SubtractionSolid.  Coworks with greps-V01-01-04.
+
+ May 26   2000  John Allison         geom-solid-bool-V01-01-00
+
+  - Disabled CreatePolyhedron() method from G4UnionSolid, G4IntersectionSolid
+    and G4SubtractionSolid. It now temporarly returns a NULL pointer.
+    Visualisation of Boolean solids is therefore temporarly disabled, pending
+    a definitive fix in graphics_reps.
+    Files G4UnionSolid.cc, G4SubtractionSolid.cc and G4IntersectionSolid.cc
+    are included in the branch-tag "boolean_nopoly_branch".
+
+ Apr 27   2000  Gabriele Cosmo
+
+  - Reorganised comments for the Software Reference Manual.
+  - Added CVS headers and standard G4 header where missing.
+
+ Apr 11   2000  John Allison
+
+  - CreatePolyhedron implemented for BooleanSolids.
+  - G4DisplacedSolid: reversed implementation of GetFrameRotation and
+    GetObjectRotation, removing inappropriate invertion.
+  - G4DisplacedSolid::GetConstituentMovedSolid() made const.
+
+ Jan 19   2000	Gabriele Cosmo		geom-solid-bool-V01-00-00
 
   - Syncronized file versions with HEAD (essentially CVS headers changes)
   - Fixed cases of G4std::min which were not migrated on the HEAD in files:

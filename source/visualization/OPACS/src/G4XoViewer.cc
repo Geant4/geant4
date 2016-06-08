@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4XoViewer.cc,v 1.4 1999/12/15 14:54:03 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4XoViewer.cc,v 1.7 2000/05/13 10:57:31 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -29,13 +29,17 @@
 /*Xo*/
 #include <XoCamera.h>
 //G4
+#include "G4Scene.hh"
 #include "G4GoSceneHandler.hh"
 #include "G4Xo.hh"
 #include "G4VInteractorManager.hh"
 //This
 #include "G4XoViewer.hh"
 
-static Bool   WaitForNotify    (Display*,XEvent*,char*);
+extern "C" {
+Bool   WaitForNotify    (Display*,XEvent*,XPointer);
+}
+
 static void   ActivateCallback (Widget,XtPointer,XtPointer);
 static void   CollectCallback  (Widget,XtPointer,XtPointer);
 /***************************************************************************/
@@ -145,7 +149,9 @@ void G4XoViewer::SetView (
 // later due to user interaction via visualization system's GUI.)
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  const G4Point3D  target  = fVP.GetCurrentTargetPoint ();
+  const G4Point3D  target
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
   G4double radius  = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
   if(radius<=0.) radius = 1. * m;
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
@@ -206,7 +212,7 @@ void G4XoViewer::ShowView (
 Bool WaitForNotify (
  Display* d
 ,XEvent*  e
-,char*    arg
+,XPointer arg
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/

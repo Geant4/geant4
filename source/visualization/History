@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2000/01/17 10:36:40 johna Exp $
+$Id: History,v 1.88 2000/06/09 08:42:46 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,170 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+9th June 2000  John Allison  (vis-V01-01-06)
+- Tagged for system testing.
+
+8th June 2000  Guy Barrand
+- OPACS/src/G4GoSceneHandler.cc : correct polyhedron 
+  wire-frame in order to remove some edges. Now the
+  rendering is the same than for OpenGL driver.
+   This was requested for long by ALICE, and had been
+  requested for ATLAS by Gaston Parrour recently.
+
+7th June 2000  John Allison
+- /vis/viewer/update preferred, synonym /vis/viewer/show deprecated.
+
+7th June 2000  Makoto Asai
+- Fix the flip view of RayTracer.
+
+2nd June May 2000  John Allison
+- Forced /control/verbose 2 for compound commands.
+
+20th May 2000  John Allison
+- Bug fix in G4PhysicalVolumeModel for replicas (Guy Barrand).
+
+26 May 2000  Guy Barrand
+- management/src/G4VisCommandsScene.
+  Protect against a null pointer for aScene in NotifyHandlers::SetNewValue.
+- OPACS/src/G4WoViewer.cc :
+  Change camera name checking so that a viewer created
+  by the GUI (Wo) could be hooked.
+- OPACS/src/G4GoSceneHandler.cc :
+  Change circle rendering.
+- OpenInventor/G4OpenInventorSceneHandler : protect against null pointers.
+
+22nd May 2000  John Allison  (vis-V01-01-05)
+- Many bug fixes from in OpenGL (opengl-V01-01-00) - see OpenGL/History.  Main
+  features:
+  o workaround for bug in Mesa which slowed OpenGLXm (Guy Barrand).
+  o multiple OpenGLXm windows no longer cause crash on exit (Guy).
+- modeling-V01-01-00: Added G4VTreeGraphicsScene (DTREE).
+- G4Scene::IsEmpty if empty of RunDurationModels - VisManager adds world in
+  this case.
+
+18th/19th May 2000  John Allison
+- Introduced some /vis/viewer/set commands.
+- /vis/scene/include/trajectories changed to /vis/scene/add/trajectories.
+  Similarly hits.  (Old commands kept but deprecated.)
+- G4ViewParameters.cc: bug fix in density culling printing.
+- G4VisCommandsSceneHandler.cc: bug fix in /vis/sceneHandler/create.
+- G4VisManagerRegisterMessengers.cc: improved comments.
+
+18th May 2000  John Allison  vis-V01-01-04
+- Included DAWN-V01-01-04: Automatic filename incrementation is made default.
+
+15th May 2000  John Allison
+- Added compound commands /vis/open, /vis/drawVolume and /vis/specify.
+- /vis/viewer/reset now resets *all* view parameters.
+- Fixed double application of transformation in /vis/scene/add/volume.
+- Fixed verbosity parameter in /vis/scene/list.
+- Made G4BoundingSphereScene::PreAddThis non-inline.
+
+13th May 2000  John Allison
+- Redefined current target point to be *relative* to standard target point.
+  (No longer necessary to initialize current target point in G4VViewer
+  constructor.  The fix of 4th May is reversed.)
+
+11th May 2000  Satoshi Tanaka vis-V01-01-03
+- In G4DAWNFILEViewer.cc, 
+  <       strcpy( fPSViewer, "ghostview" );
+  ---
+  > //    strcpy( fPSViewer, "ghostview" );
+  >       strcpy( fPSViewer, "gv" );
+
+
+4th May 2000  John Allison
+- Tidied comments in G4VisManagerRegisterMessengers.cc.
+- Initialize current target point in G4VViewer constructor.
+- Re-implemented /vis/viewer/reset to change view parameters of
+  viewer directly.
+
+2nd May 2000  John Allison  vis-V01-01-02
+- Added /vis/viewer/reset.
+- G4VSceneHandler, G4VViewer, G4OpenGLXmMainMenubarCallbacks: corrected
+  some name anomolies - "scene" was still being used in places where it
+  meant "scene handler".
+- G4VViewer: added GetShortName(), corrected SetName(...).
+- G4ViewParameters.hh: improved class description.
+- G4VisManager: added ViewerShortName(...) and GetViewer(...) utilities.
+- G4RayTracer: set out-of-world ray to black.
+- G4RayTracerViewer: corrected trapping of orthogonal projection.
+- Some minor enhancements to tests.
+
+27th April 2000  Gabriele Cosmo
+- Removed unnecessary #include "G4Transform.hh" from VRML.  (Since
+  geometry-V01-01-02 G4Transform.hh no longer exists.)  
+
+27th April 2000  John Allison
+- Updated README file.
+
+12th April 2000  John Allison  vis-V01-01-01
+- Made G4PhysicalVolumeModel::DescribeSolid virtual.
+- G4PhysicalVolumeModel::DescribeSolid no longer deals with composite
+  solids - now programmed into CompositeSolid::CreatePolyhedron, where
+  CompositeSolid means G4IntersectionSolid, G4SubtractionSolid and
+  G4UnionSolid.
+- G4PhysicalVolumeModel::DescribeSolid no longer deals with displaced
+  solids - now programmed into G4DisplacedSolid::CreatePolyhedron.
+- Added G4LogicalVolumeModel::DescribeSolid, which explicitly adds
+  components of composite solids as white forced-wireframe objects.
+- Removed unnecessary #includes from G4VSceneHandler.hh which required
+  consequent inclusion in many other scene handlers and viewers.
+
+7th April 2000  John Allison  vis-V01-01-00
+- Modified GNUmakefiles for restructured geometry.
+
+29th February 2000  John Allison  vis-V01-00-06
+- Changed `char*' to `const char*' in G4FRClientServer::Err(...).
+
+28th February 2000  John Allison
+- Cosmetic improvements to G4RayTracerSceneHandler.hh and G4RayTracerViewer.hh.
+
+24th February 2000  John Allison
+- Minor inmprovement of messages from /vis/viewer/refresh.
+- Cosmetic tidying in G4OpenGLViewer.cc.
+- Added protection for null viewer in G4RTSteppingAction.cc and
+  G4RayTrajectory.cc.
+- Corrected for zoom, etc., in G4RayTracerViewer.cc.
+
+23rd February 2000  John Allison
+- Added G4RayTracerSceneHandler and Viewer.
+- Some modifications to other RayTracer routines for vis compliance.
+- (Note: headAngle still not right - ray traced views are sometimes tipped.)
+
+23rd February 2000  John Allison  vis-V01-00-05
+- Includes raytracer-V01-00-01a which is original version plus fixes for
+  ISO compliance.
+
+21st February 2000  John Allison
+- /vis/viewer/refresh no longer invokes ShowView().
+- G4VViewer: introduced data member fShortName.
+- Added G4RTSteppingAction and G4RayTrajectory to list of G4VisManager's
+  friends.
+- Improved G4VisManager::CreateSceneHandler() and CreateViewer() and
+  handling of error in G4VisCommandSceneHandler::Create() and
+  G4VisCommandViewer::Create().
+- OpenGL: char* becomes const char*.  Small output text improvement.
+- test: some changes for Ray Tracer.  Boolean intersection instead of union.
+
+02 February 2000  Guy Barrand
+- OPACS/src/G4XoViewer.cc : change WaitForNotify signature to 
+  be able to compile with DEC-cxx 6.1.
+
+vis-V01-00-04 29th January 2000  Satoshi Tanaka
+- CVS tag is assigned to the Makoto's committing below.
+
+29th January 2000  Makoto Asai
+- Introduction of G4RayTracer (visualization/RayTracer/...)
+- Migration of G4RayTracer
+  affected files :
+    visualization/GNUmakefile
+    visualization/management/include/MyVisManager.cc
+    visualization/management/src/G4VisManager.cc
+  affected files in other directory :
+    config/G4VIS_BUILD.gmk
+    config/G4VIS_USE.gmk
 
 vis-V01-00-03  17th January 2000  John Allison
 - Added protection for no voxelisation in G4LogicalVolumeModel.cc.

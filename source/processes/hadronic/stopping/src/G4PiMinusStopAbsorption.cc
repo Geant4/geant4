@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.3.6.1.2.1.2.2 1999/12/09 16:58:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.6 1999/12/15 17:51:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

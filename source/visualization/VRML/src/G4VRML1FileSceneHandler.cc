@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileSceneHandler.cc,v 1.2 1999/12/15 14:54:16 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VRML1FileSceneHandler.cc,v 1.4 2000/04/27 13:56:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // G4VRML1FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -24,17 +24,21 @@
 #include <stdlib.h>
 
 #include "globals.hh"
+#include "G4Scene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Point3D.hh"
 #include "G4VisAttributes.hh"
-#include "G4Transform.hh"
 #include "G4Polyhedron.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Polyline.hh"
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
+#include "G4Trap.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Sphere.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"

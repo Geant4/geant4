@@ -1,5 +1,5 @@
-$Id: History,v 1.97 2000/02/14 11:27:42 gcosmo Exp $
-$Name: geant4-01-01 $
+$Id: History,v 1.105 2000/05/23 06:48:25 gcosmo Exp $
+$Name: geant4-02-00 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,42 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23rd May 2000  John Allison (config-V01-01-04)
+- Added -I$(G4BASE)/processes/hadronic/models/radiative_decay/include to
+  binmake.gmk.
+
+19th May 2000  Gabriele Cosmo (config-V01-01-03)
+- architecture.gmk:
+  o changed -pic option to -KPIC for SUN architectures.
+  o fixed HP-aCC setup to cope with new CLHEP version 1.5.
+  o implemented modular setup. Now system specific configurations are
+    grouped in separated files $G4SYSTEM.gmk and placed in the new
+    directory config/sys.
+
+7th April 2000  Gabriele Cosmo (config-V01-01-02)
+- binmake.gmk: added include path to the new directory
+  geometry/solids/specific.
+- Updated PERL script g4step_correct.pl for parsing STEP files.
+
+30th March 2000  Gabriele Cosmo (config-V01-01-01)
+- makeshlib.sh:
+  o added few corrections to the script in order to allow
+    creation of shared libraries without need of the static archive on
+    platforms which allow this.
+  o added section for SunOS systems.
+  (courtesy of I.G.Caballero)
+- architecture.gmk:
+  o on SUN-CC and SUN-CC5, added -pic to CXXFLAGS for building shared
+    libraries.
+
+21st March 2000  Gabriele Cosmo
+- makeshlib.sh: corrected invokation of compiler for HP-aCC setup.
+  Changed CC to aCC (fixes bug-report #68).
+
+13th March 2000  Gabriele Cosmo (config-V01-01-00)
+- architecture.gmk: corrected FCLIBS for Linux-g++
+  o added -lg2c -lnsl and removed -lf2c.
 
 14th February 2000  Gabriele Cosmo (config-V01-00-02)
 - architecture.gmk: added option '+W823' to HP-aCC compilation setup to

@@ -1,16 +1,13 @@
 #ifndef __SOLID_H
 #define __SOLID_H
+
 #include "G4VSolid.hh"	      
-#include "G4VisExtent.hh"      
 #include "G4Surface.hh"
 #include "G4Axis2Placement3D.hh"
 #include "G4PointRat.hh"	 
 #include "G4BoundingBox3D.hh"	 
 
-class STEPentity;
-class InstMgr;
 class G4Ray;
-
 
 class G4BREPSolid : public G4VSolid
 {
@@ -23,7 +20,6 @@ public:
 
   virtual G4String GetEntityType() const {return "Closed_Shell";}  
   virtual void Initialize();
-  G4int CreateSTEPData(); // not yet implemented 
 
   G4bool CalculateExtent(const EAxis              pAxis      ,
 			 const G4VoxelLimits&     pVoxelLimit,
@@ -50,7 +46,6 @@ public:
   G4Point3D Scope(); // ???
 
   void DescribeYourselfTo (G4VGraphicsScene& scene) const;
-  G4VisExtent   GetExtent        () const;
   G4Polyhedron* CreatePolyhedron () const;
   G4NURBS*      CreateNURBS      () const;
 
@@ -87,7 +82,6 @@ public:
   }
 
   static G4int NumberOfSolids;
-  static InstMgr InstanceList;
 
   G4double GetShortestDistance() const {return ShortestDistance;}
 
@@ -178,12 +172,3 @@ protected:
 };
 
 #endif
-
-
-
-
-
-
-
-
-

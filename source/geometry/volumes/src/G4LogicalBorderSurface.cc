@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.2 1999/12/15 14:50:26 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4LogicalBorderSurface.cc,v 1.3 2000/04/25 16:15:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // G4LogicalBorderSurface Implementation
@@ -79,6 +79,17 @@ G4int G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) co
   ////////////
   // Methods
   ////////////
+
+const G4RWTPtrOrderedVector<G4LogicalBorderSurface>*
+G4LogicalBorderSurface::GetSurfaceTable()
+{
+	return &theBorderSurfaceTable;
+}
+
+size_t G4LogicalBorderSurface::GetNumberOfBorderSurfaces()
+{
+	return theBorderSurfaceTable.length();
+}
 
 G4LogicalBorderSurface* G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
 				 const G4VPhysicalVolume* vol2)

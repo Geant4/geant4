@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4o.h,v 1.2.6.1 1999/12/07 20:46:50 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4o.h,v 1.3 1999/12/15 14:48:41 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */

@@ -1,0 +1,37 @@
+#ifndef G4LshellECDecayChannel_h
+#define G4LshellECDecayChannel_h 1
+
+#include "globals.hh"
+#include "G4NuclearDecayChannel.hh"
+#include "G4RadioactiveDecayMode.hh"
+////////////////////////////////////////////////////////////////////////////////
+//
+class G4LshellECDecayChannel : public G4NuclearDecayChannel
+{
+  // class description 
+  //
+  //   Derived class from G4NuclearDecayChannel.  It is specific for
+  //   Electron Capture proceess with electron from the L shell
+  //
+  // class  description - end
+
+public:
+    G4LshellECDecayChannel (G4int Verbose,
+			    const G4ParticleDefinition *theParentNucleus, 
+			    G4double theBR,G4double theQtransit=0.0,
+			    G4double theDaughterExcitation=0.0) :
+      G4NuclearDecayChannel (LshellEC, Verbose, theParentNucleus, theBR,
+			     theQtransit, theParentNucleus->GetBaryonNumber(),
+			     int(theParentNucleus->GetPDGCharge()/eplus)-1, 
+			     theDaughterExcitation,
+			     "nu_e")
+  {  
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>1)
+      G4cerr <<"G4LshellECDecayChannel constructor" << G4endl;
+#endif
+  }
+  ~G4LshellECDecayChannel () {;}
+};
+#endif
+

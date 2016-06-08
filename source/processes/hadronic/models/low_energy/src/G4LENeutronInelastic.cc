@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LENeutronInelastic.cc,v 1.2.8.1.2.2 1999/12/10 15:42:13 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
 //
 // Hadronic Process: Low Energy Neutron Inelastic Process
 // J.L. Chuma, TRIUMF, 04-Feb-1997
@@ -238,6 +236,7 @@
       pd->SetDefinition( vec[i]->GetDefinition() );
       pd->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( pd );
+      delete vec[i];
     }
   }
  

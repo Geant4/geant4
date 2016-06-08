@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.6 1999/12/15 14:54:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4DAWNFILEViewer.cc,v 1.9 2000/05/15 07:48:27 stanaka Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.
@@ -66,7 +66,8 @@ G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& scene,
 	}
 
 	// Set a PostScript Viewer
-	strcpy( fPSViewer, "ghostview" ); 
+//	strcpy( fPSViewer, "ghostview" ); 
+	strcpy( fPSViewer, "gv" ); 
 	if( getenv( "G4DAWNFILE_PS_VIEWER" ) != NULL ) {
 		strcpy( fPSViewer, getenv( "G4DAWNFILE_PS_VIEWER" ) ) ;			
 	} 
@@ -148,6 +149,7 @@ void G4DAWNFILEViewer::ShowView( void )
 
 
 		//----- Invoke DAWN
+		G4cout << G4endl ;
 		if( false == G4FRofstream::DoesFileExist( fSceneHandler.GetG4PrimFileName() ) )   
 		{
 			G4cout << "ERROR: Failed to generate file  ";
@@ -268,7 +270,9 @@ void G4DAWNFILEViewer::SendViewParameters ()
         gui_out << "0"  << G4endl     ; // auto target
 
 		//----- target point 
-	const G4Point3D&  target_point = fVP.GetCurrentTargetPoint();
+	const G4Point3D&  target_point
+	  = fSceneHandler.GetScene()->GetStandardTargetPoint()
+	  + fVP.GetCurrentTargetPoint();
 	gui_out << target_point.x()          << G4endl ;
 	gui_out << target_point.y()          << G4endl ;
 	gui_out << target_point.z()          << G4endl ;

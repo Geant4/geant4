@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpRayleigh.cc,v 1.1.10.1.2.1 1999/12/08 17:35:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

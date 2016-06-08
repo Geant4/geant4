@@ -1,0 +1,36 @@
+#
+# -------- SGI ---------   !!! not supported !!!
+#                           Irix-6.5.5 CC-7.2.1
+ifeq ($(G4SYSTEM),SGI-CC)
+  CXX       := CC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := -O -OPT:Olimit=5000
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  := -g 
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
+  endif
+  G4_HAVE_BOOL := yes
+  CXXFLAGS  += -ptused
+  FC        := f77
+  FCLIBS    := -lftn
+  SHEXT     := so
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/lib -lXmu -lXt -lXext -lX11
+  XMLIBS    := -L/usr/lib -lXm
+  ifndef OGLFLAGS
+    OGLFLAGS  :=
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L/usr/lib -lGLU -lGL
+  endif
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
+  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_IRIX_6_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+  endif
+endif

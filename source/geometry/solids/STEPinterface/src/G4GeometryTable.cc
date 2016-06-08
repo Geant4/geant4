@@ -1,5 +1,26 @@
-#include "G4GeometryTable.hh"
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4GeometryTable.cc,v 1.6 2000/02/25 16:36:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
+//
+// 
+// ----------------------------------------------------------------------
+// Class G4GeometryTable
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
 #include "includes"
+#include "G4GeometryTable.hh"
 
 
 G4GeometryTable G4GeometryTable::gt;
@@ -11,7 +32,6 @@ G4GeometryTable::G4GeometryTable()
 
 G4GeometryTable::~G4GeometryTable()
 {
-
 }
 
 G4bool G4GeometryTable::ExistsInTable(G4String& objectName)
@@ -50,25 +70,29 @@ G4GeometryCreator* G4GeometryTable::GetObject(G4String objectName)
   return (G4GeometryCreator*)0;
 }
 
-
 void* G4GeometryTable::CreateObject(STEPentity& Ent)
 {
   Ent.ResetAttributes();
   G4String name = Ent.EntityName();
   G4GeometryCreator* gctmp = GetObject(name);
 
+#ifdef G4_STEPINTERFACE_DEBUG
+  G4cout << "G4GeometryTable::CreateObject(STEPentity&) - "
+         << "Found STEPEntity " << name << " :" << G4endl;
+#endif
+
   if(gctmp)
   {
     gctmp->CreateG4Geometry(Ent);
     void* obj = gctmp->GetCreatedObject();
 
-//#define G4_STEPINTERFACE_DEBUG 1 
 #ifdef G4_STEPINTERFACE_DEBUG
     if (obj == 0) 
       G4cout << "G4 object of type " << gctmp->Name() 
 	     << " not necessary" << G4endl;
     else 
-      //G4cout << "Created G4 object of type " << gctmp->Name() << G4endl;
+      G4cout << "Created G4 object of type "
+             << gctmp->Name() << G4endl;
 #endif
 
     return obj;
@@ -76,12 +100,11 @@ void* G4GeometryTable::CreateObject(STEPentity& Ent)
   else
   {
     G4String err = "Geometry creator for entity " + name +  " not found.";
-    G4cout << err << G4endl;
-    //      G4Exception(err);
+    G4cerr << err << G4endl;
+    // G4Exception(err);
     return 0;
   } 
 }
-
 
 void* G4GeometryTable::CreateSTEPObject(void* G4obj, G4String& objName)
 {
@@ -96,14 +119,13 @@ void* G4GeometryTable::CreateSTEPObject(void* G4obj, G4String& objName)
     }
   else
     {
-      G4String err = "\nSTEP creator for entity " + objName +  " not found.\n";
-      G4cout << err;
-      //      G4Exception(err);
+      G4String err = "STEP creator for entity " + objName +  " not found.";
+      G4cerr << err << G4endl;
+      // G4Exception(err);
       return 0;
     }
 
 }
-
 
 void G4GeometryTable::PrintObjectNames()
 {
@@ -128,7 +150,6 @@ void G4GeometryTable::PrintObjectNames()
     }
 
 }
-
 
 G4PointCreator a;
 G4CartesianPointCreator b;
@@ -170,7 +191,7 @@ G4SphericalSurfaceCreator s6;
 G4ConicalSurfaceCreator s7;
 G4BSplineSurfaceCreator s8;
 G4BoundedSurfaceCreator s9;
-G4RationalBSplineSurfaceCreator s10;
+//G4RationalBSplineSurfaceCreator s10;
 G4BSplineSurfaceWithKnotsCreator s11;
 
 G4ClosedShellCreator sc1;
@@ -194,10 +215,3 @@ G4ShapeRepresentationCreator srcs;
 
 G4ShapeDefinitionRepresentationCreator sdr;
 G4GeometricRepresentationContextCreator grc;
-
-
-
-
-
-
-

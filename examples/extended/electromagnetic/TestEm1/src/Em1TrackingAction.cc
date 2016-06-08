@@ -7,7 +7,7 @@
 // and all its terms.
 //
 // $Id: Em1TrackingAction.cc,v 1.3 2000/01/21 12:29:26 maire Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 

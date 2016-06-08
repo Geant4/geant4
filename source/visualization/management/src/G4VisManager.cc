@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.13 1999/12/15 14:54:27 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VisManager.cc,v 1.17 2000/05/04 08:52:10 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -128,6 +128,9 @@ void G4VisManager::Initialise () {
 #ifdef G4VIS_BUILD_VRMLFILE_DRIVER
       "\n    G4VIS_USE_VRMLFILE"
 #endif
+#ifdef G4VIS_BUILD_RAYTRACER_DRIVER
+      "\n    G4VIS_USE_RAYTRACER"
+#endif
       "\n  Thus, in your main() you have something like:"
       "\n    G4VisManager* visManager = new MyVisManager;"
       "\n    visManager -> Initialize ();"
@@ -149,6 +152,9 @@ void G4VisManager::Initialise () {
 
   fInitialised = true;
 }
+
+// void G4VisManager::RegisterMessengers () - see separate file,
+// G4VisManagerRegisterMessengers.cc.
 
 const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
   G4int nSystems = fAvailableGraphicsSystems.entries ();
@@ -437,13 +443,9 @@ void G4VisManager::CreateSceneHandler (G4String name) {
     }
     else {
       G4cout << "Error in G4VisManager::CreateSceneHandler during "
-	   << fpGraphicsSystem -> GetName ()
-	   << " scene creation."
-	   << G4endl;
-      fpSceneHandler = 0;
-      fpViewer  = 0;
-      // Make it impossible for user action code to Draw.
-      fpConcreteInstance = 0;
+	     << fpGraphicsSystem -> GetName ()
+	     << " scene creation.\n  No action taken."
+	     << G4endl;
     }
   }
   else PrintInvalidPointers ();
@@ -472,7 +474,7 @@ void G4VisManager::CreateViewer (G4String name) {
 	G4cout <<
 	  "\n  NOTE: objects with visibility flag set to \"false\""
 	  " will not be drawn!"
-	  "\n  \"/vis~/set/culling off\" to Draw such objects.";
+	  "\n  \"/vis/set/culling off\" to Draw such objects.";
       }
       if (fVP.IsCullingCovered ()) {
 	if (!warnings) {
@@ -482,13 +484,18 @@ void G4VisManager::CreateViewer (G4String name) {
 	G4cout <<
 	  "\n  ALSO: covered objects in solid mode will not be part of"
 	  " the scene!"
-	  "\n  \"/vis~/set/cull_covered_daughters off\" to reverse this.";
+	  "\n  \"/vis/set/cull_covered_daughters off\" to reverse this.";
       }
       if (warnings) {
-	G4cout << "\n  Also see other \"/vis~/set\" commands."
+	G4cout << "\n  Also see other \"/vis/set\" commands."
 	     << G4endl;
       }
-
+    }
+    else {
+      G4cout << "Error in G4VisManager::CreateViewer during "
+	     << fpGraphicsSystem -> GetName ()
+	     <<	" viewer creation.\n  No action taken."
+	     << G4endl;
     }
   }
   else PrintInvalidPointers ();
@@ -545,7 +552,7 @@ void G4VisManager::DeleteCurrentViewer () {
 	 << fpViewer -> GetName () 
 	 << "\" being deleted.";
   if (fpViewer ) {
-    fpViewer -> GetScene () -> RemoveViewerFromList (fpViewer);
+    fpViewer -> GetSceneHandler () -> RemoveViewerFromList (fpViewer);
     delete fpViewer;
   }
   const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
@@ -661,7 +668,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
     for (iSH = nSH - 1; iSH >= 0; iSH--) {
       if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
     }
-    if (iSH >= nSH) {
+    if (iSH >= 0) {
       fpSceneHandler = sceneHandlerList [iSH];
       G4cout << "\n  Scene Handler now "
 	     << fpSceneHandler -> GetName ();
@@ -680,7 +687,7 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
       fpSceneHandler = 0;
       fpViewer = 0;
       // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
+      fpConcreteInstance = 0;
     }
   }
   G4cout << G4endl;
@@ -722,7 +729,7 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
   G4cout << "G4VisManager::SetCurrentViewer: viewer now "
 	 << pViewer -> GetName ()
 	 << G4endl;
-  fpSceneHandler = fpViewer -> GetScene ();
+  fpSceneHandler = fpViewer -> GetSceneHandler ();
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
   IsValidView ();  // Checks.
@@ -762,7 +769,7 @@ void G4VisManager::PrintCurrentView () const {
   if (fpGraphicsSystem && fpSceneHandler && fpViewer) {
     G4cout << "Current View is: ";
     G4cout << fpGraphicsSystem -> GetName () << '-'
-	   << fpSceneHandler  -> GetSceneId () << '-'
+	   << fpSceneHandler  -> GetSceneHandlerId () << '-'
 	   << fpViewer   -> GetViewId ()
 	   << " selected (check: " << fpViewer -> GetName () << ").";
     G4cout << '\n' << *fpViewer;
@@ -796,9 +803,10 @@ void G4VisManager::PrintAllGraphicsSystems () const {
        << "\n\n  Open Inventor"
        << G4VisFeaturesOfOpenInventor ()
        << "\n\n  VRML1     (produces VRML 1 file over network)"
-       << "\n\n  VRML1File (produces VRML 1 file locally    )"
-       << "\n\n  VRML2     (produces VRML 2 file over network), in preparation"
-       << "\n\n  VRML2File (produces VRML 2 file locally    ), in preparation"
+       << "\n\n  VRML1FILE (produces VRML 1 file locally    )"
+       << "\n\n  VRML2     (produces VRML 2 file over network)"
+       << "\n\n  VRML2FILE (produces VRML 2 file locally    )"
+       << "\n\n  RayTracer (produces JPEG file)"
        << G4endl;
 }
 
@@ -830,11 +838,14 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #endif
 #ifdef G4VIS_BUILD_VRML_DRIVER
        << "\n  VRML1 (produces VRML 1 file over network)"
-       << "\n  VRML2 (produces VRML 2 file over network), in preparation"
+       << "\n  VRML2 (produces VRML 2 file over network)"
 #endif
 #ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-       << "\n  VRML1File (produces VRML 1 file locally)"
-       << "\n  VRML2File (produces VRML 2 file locally), in preparation"
+       << "\n  VRML1FILE (produces VRML 1 file locally)"
+       << "\n  VRML2FILE (produces VRML 2 file locally)"
+#endif
+#ifdef G4VIS_BUILD_RAYTRACER_DRIVER
+       << "\n  RayTracer (produces JPEG file)"
 #endif
        << G4endl;
 }
@@ -895,6 +906,35 @@ void G4VisManager::EndOfEvent () {
     }
     delete pMP;
   }
+}
+
+G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
+  G4String viewerShortName (viewerName);
+  viewerShortName = viewerShortName (0, viewerShortName.find (' '));
+  return viewerShortName.strip ();
+}
+
+G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
+  G4String viewerShortName = ViewerShortName (viewerName);
+  G4int nHandlers = fAvailableSceneHandlers.entries ();
+  G4int iHandler, iViewer;
+  G4VSceneHandler* sceneHandler;
+  G4VViewer* viewer;
+  G4bool found = false;
+  for (iHandler = 0; iHandler < nHandlers; iHandler++) {
+    sceneHandler = fAvailableSceneHandlers [iHandler];
+    const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
+    for (iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
+      viewer = viewerList [iViewer];
+      if (viewerShortName == viewer -> GetShortName ()) {
+	found = true;
+	break;
+      }
+    }
+    if (found) break;
+  }
+  if (found) return viewer;
+  else return 0;
 }
 
 G4bool G4VisManager::IsValidView () {
@@ -1008,6 +1048,19 @@ public:
 G4DAWNFILE::G4DAWNFILE ():
   G4VGraphicsSystem ("FukuiRendererFile",
                      "DAWNFILE",
+		     G4VGraphicsSystem::noFunctionality) {}
+
+#endif
+
+#ifndef G4VIS_BUILD_RAYTRACER_DRIVER
+
+class G4RayTracer: public G4VGraphicsSystem {
+public:
+  G4RayTracer ();
+};
+G4RayTracer::G4RayTracer ():
+  G4VGraphicsSystem ("RayTracer",
+                     "RayTracer",
 		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif

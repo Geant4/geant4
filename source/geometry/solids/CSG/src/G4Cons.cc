@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.6 1999/12/15 14:50:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Cons.cc,v 1.9 2000/04/11 16:04:27 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // class G4Cons
 //
@@ -14,6 +14,7 @@
 //
 // History:
 //
+// 06.03.00 V.Grichine, modifications in DistanceToOut(p,v,...) 
 // 18.11.99 V.Grichine side = kNull initialisation in DistanceToOut(p,v,...)
 // 28.04.99 V. Grichine bugs fixed in  Distance ToOut(p,v,...) and  
 //          Distance ToIn(p,v)
@@ -34,7 +35,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -2059,9 +2059,9 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 	}
 
     if (calcNorm)
-	{
-	    switch(side)
-		{
+    {
+      switch(side)
+      {
 		case kRMax:
 					// Note: returned vector not normalised
 					// (divide by frmax for unit vector)
@@ -2104,11 +2104,33 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 		    *n=G4ThreeVector(0,0,-1);
 		    *validNorm=true;
 		    break;
-		default:
-		    G4Exception("Invalid enum in G4Cons::DistanceToOut");
-		    break;
-		}
-	}
+	default:
+
+          G4cout.precision(16);
+          G4cout << G4endl;
+          G4cout << "Cons parameters:" << G4endl << G4endl;
+          G4cout << "fRmin1 = "  << fRmin1/mm << " mm" << G4endl;
+          G4cout << "fRmax1 = "  << fRmax1/mm << " mm" << G4endl;
+          G4cout << "fRmin2 = "  << fRmin2/mm << " mm" << G4endl;
+          G4cout << "fRmax2 = "  << fRmax2/mm << " mm" << G4endl;
+          G4cout << "fDz = "     << fDz/mm << " mm" << G4endl;
+          G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+          G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl;
+          G4cout << "Position:"  << G4endl << G4endl;
+          G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+          G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+          G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+          G4cout << "Direction:" << G4endl << G4endl;
+          G4cout << "v.x() = "   << v.x() << G4endl;
+          G4cout << "v.y() = "   << v.y() << G4endl;
+          G4cout << "v.z() = "   << v.z() << G4endl<< G4endl;
+          G4cout << "Proposed distance :" << G4endl<< G4endl;
+          G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+	 
+          G4Exception("Invalid enum in G4Cons::DistanceToOut");
+	  break;
+      }
+    }
 
     return snxt;
 }
@@ -2265,15 +2287,6 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 void G4Cons::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddThis (*this);
-}
-
-  // Define the sides of the box into which the G4Cons instance would fit.
-
-G4VisExtent G4Cons::GetExtent() const
-{
-    G4double RMax = (fRmax2 >= fRmax1) ? fRmax2 : fRmax1 ;
-    
-    return G4VisExtent (-RMax, RMax, -RMax, RMax, -fDz, fDz);
 }
 
 G4Polyhedron* G4Cons::CreatePolyhedron () const

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IeBremsstrahlung.hh,v 1.2.8.1 1999/12/07 20:50:48 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4IeBremsstrahlung.hh,v 1.4 2000/04/25 14:33:00 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -39,7 +39,7 @@
 #include "G4ios.hh" 
 #include "globals.hh"
 #include "Randomize.hh" 
-#include "G4IeEnergyLoss.hh"
+#include "G4VIeEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -50,7 +50,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
  
-class G4IeBremsstrahlung : public G4IeEnergyLoss
+class G4IeBremsstrahlung : public G4VIeEnergyLoss
  
 { 
   public:

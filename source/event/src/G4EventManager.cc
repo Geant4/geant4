@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4EventManager.cc,v 1.5 2000/01/26 06:42:15 asaim Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //

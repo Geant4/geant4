@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.15 2000/01/26 09:50:01 lefebure Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4LowEnergyRayleigh.cc,v 1.17 2000/03/13 11:15:32 lefebure Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -220,13 +220,13 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
     
     Theta_Half = G4UniformRand()*pi/2;
     SinThHalf = sin(Theta_Half);
-    x = SinThHalf/wlGamma;
+    x = SinThHalf/(wlGamma/cm);
     
     const G4FirstLevel* oneAtomFF
       = (*theFormFactorTable)[ZNumVec->index(elementZ)];
 
     DataFormFactor = util.DataLogInterpolation(x, (*(*oneAtomFF)[0]), 
-					       (*(*oneAtomFF)[1]))/cm;
+					       (*(*oneAtomFF)[1]));
     RandomFormFactor = G4UniformRand()*elementZ*elementZ;
 
     Theta = Theta_Half*2;

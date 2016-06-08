@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLXmResources.hh,v 1.3 1999/12/15 14:54:06 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // Default resources file for GEANT4 OpenGL Motif windows.

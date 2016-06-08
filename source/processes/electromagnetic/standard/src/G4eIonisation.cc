@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.cc,v 1.3.8.1.2.2 1999/12/10 15:42:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4eIonisation.cc,v 1.10 2000/05/23 14:42:21 urban Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // -------------------------------------------------------------
@@ -27,22 +27,23 @@
 // 04-09-98: new methods SetBining() PrintInfo()
 // 07-09-98: Cleanup
 // 02/02/99: correction inDoIt , L.Urban
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
  
-
 #include "G4eIonisation.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
+G4double G4eIonisation::LowerBoundLambda = 1.*keV ;
+G4double G4eIonisation::UpperBoundLambda = 100.*TeV ;
+G4int    G4eIonisation::NbinLambda = 100 ;
+
 // constructor and destructor
  
 G4eIonisation::G4eIonisation(const G4String& processName)
-   : G4eEnergyLoss(processName),
-     theMeanFreePathTable(NULL),
-     LowestKineticEnergy(1.*keV),
-     HighestKineticEnergy(100.*TeV),
-     TotBin(100)
+   : G4VeEnergyLoss(processName),
+     theMeanFreePathTable(NULL)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -58,16 +59,13 @@ G4eIonisation::~G4eIonisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eIonisation::SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins)
-{
-  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE; TotBin = nBins;
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+    // get bining from EnergyLoss
+    LowestKineticEnergy  = GetLowerBoundEloss() ;
+    HighestKineticEnergy = GetUpperBoundEloss() ;
+    TotBin               = GetNbinEloss() ;
  
     BuildLossTable(aParticleType) ;
 
@@ -99,6 +97,8 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 
     const G4double twoln10 = 2.*log(10.);
     const G4double Factor = twopi_mc2_rcl2;
+
+    static const G4double Tl = 0.2*keV ;
 
     G4double LowEdgeEnergy, ionloss;
     
@@ -142,11 +142,27 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
       X0den  = material->GetIonisation()->GetX0density();
       X1den  = material->GetIonisation()->GetX1density();
 
+      // for the lowenergy extrapolation
+      G4double Zeff = material->GetTotNbOfElectPerVolume()/
+	              material->GetTotNbOfAtomsPerVolume() ;
+      G4double Th = 0.25*sqrt(Zeff)*keV ;
+
+      G4double Tsav ;
+
       // now comes the loop for the kinetic energy values
 
       for (G4int i = 0 ; i < TotBin ; i++)
          {
-          LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;      
+          LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ; 
+          //  low energy ?     
+          if(LowEdgeEnergy < Th)
+          {
+            Tsav = LowEdgeEnergy ;
+            LowEdgeEnergy = Th ;
+          }
+          else
+            Tsav = 0. ;
+
           tau = LowEdgeEnergy/ParticleMass ;
 
           // Seltzer-Berger formula 
@@ -185,6 +201,15 @@ void G4eIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
           ionloss *= Factor*ElectronDensity/beta2 ;
           if (ionloss <= 0.) ionloss = 0.;
    
+          // low energy ?
+          if(Tsav > 0.)
+          {
+            if(Tsav >= Tl)
+              ionloss *= sqrt(LowEdgeEnergy/Tsav) ;
+            else
+              ionloss *= sqrt(LowEdgeEnergy*Tsav)/Tl ;
+          }
+
           aVector->PutValue(i,ionloss) ;
          }          
       theLossTable->insert(aVector);
@@ -211,9 +236,19 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
   // get electron  cuts in kinetic energy
+  // The electron cuts needed in the case of the positron , too!
+  // This is the reason why SetCut has to be called for electron first !!!!!!!
+
+  if((G4Electron::Electron()->GetCutsInEnergy() == 0) &&
+     ( &aParticleType == G4Positron::Positron()))
+  {
+     G4cout << " The ELECTRON energy cuts needed to compute energy loss/mean free path "
+               " for POSITRON , too. " << G4endl;
+     G4Exception(" Call SetCut for e- first !!!!!!") ;
+  }
+   
   G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetCutsInEnergy() ;
  
-
   // loop for materials 
 
  for (G4int J=0 ; J < numOfMaterials; J++)
@@ -221,7 +256,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      //create physics vector then fill it ....
 
      G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-               LowestKineticEnergy, HighestKineticEnergy, TotBin);
+               LowerBoundLambda, UpperBoundLambda, NbinLambda);
 
      // compute the (macroscopic) cross section first
  
@@ -238,7 +273,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      // (--> it will be the same for all the elements in this material )
      G4double DeltaThreshold = DeltaCutInKineticEnergy[J] ;
 
-     for (G4int i = 0 ; i < TotBin ; i++)
+     for (G4int i = 0 ; i < NbinLambda ; i++)
         {
           LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
           SIGMA = 0.;           
@@ -257,7 +292,6 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
         }
      theMeanFreePathTable->insert(aVector);
     }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -450,9 +484,9 @@ void G4eIonisation::PrintInfoDefinition()
            comments += "        delta ray energy sampled from  differential Xsection.";
                      
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
-         << " in " << TotBin << " bins. \n";
+         << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,"Energy")
+         << " to " << G4BestUnit(UpperBoundLambda,"Energy") 
+         << " in " << NbinLambda << " bins. \n";
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

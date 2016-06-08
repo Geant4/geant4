@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonScattering.cc,v 1.2.8.1.2.1 1999/12/08 17:34:22 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ComptonScattering.cc,v 1.3 1999/12/15 14:51:50 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -28,7 +28,7 @@
 // 05-03-97, new Physics scheme, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 15-12-98, cross section=0 below 10 keV
 // --------------------------------------------------------------

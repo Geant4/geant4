@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GoSceneHandler.cc,v 1.7 2000/01/17 10:28:50 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4GoSceneHandler.cc,v 1.9 2000/06/07 22:36:02 barrand Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -146,6 +146,8 @@ void G4GoSceneHandler::AddPrimitive (
 #endif
   // Direction of circle ?
   //GoAddCircleToNode (fGoNode,radius,center.x(),center.y(),center.z(),0.,0.,1.);
+  OContextSetMarkerStyle (OContextGetStaticInstance(),OMarkerStyleCircle);
+  OContextSetMarkerSize (OContextGetStaticInstance(),5);
   GoAddMarkerToNode (fGoNode,center.x(),center.y(),center.z());
 }
 /***************************************************************************/
@@ -174,48 +176,78 @@ void G4GoSceneHandler::AddPrimitive (
     break;
   }	
 
-  G4bool        notLastFace;
-  G4Normal3D    SurfaceNormal;
-  double        xs[5];
-  double        ys[5];
-  double        zs[5];
+  double xs[5];
+  double ys[5];
+  double zs[5];
+  G4Normal3D SurfaceNormal;
+  G4Point3D vertex;
 
-  do 
-    {
-      G4bool        notLastEdge;
-      G4Point3D     vertex;
-      G4int         edgeFlag = 1;
-      int           iPoint;
-      iPoint        = 0;
-      notLastFace   = polyhedron.GetNextNormal (SurfaceNormal);
-      do 
-	{
-	  notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
-	  xs[iPoint]  = vertex.x();
-	  ys[iPoint]  = vertex.y();
-	  zs[iPoint]  = vertex.z();
-	  iPoint++;
-	} while (notLastEdge);
-      if( (iPoint!=3) && (iPoint!=4) )  
-	{
-	  CWarnF ("G4GoSceneHandler::AddPrimitive G4Polyhedron : not a quad or a triangle : %d\n",iPoint);
-	}
-      else
-	{
-	  if (modeling==OModelingWireFrame) 
-	    {
-	      xs[iPoint]  = xs[0];
-	      ys[iPoint]  = ys[0];
-	      zs[iPoint]  = zs[0];
-	      iPoint++;
-	      ONodeAddLines   (fGoNode,OContextGetStaticInstance(),iPoint,xs,ys,zs);
+  G4bool notLastFace;
+  do {
+    G4int edgeFlag = 1;
+    G4int lastEdgeFlag = edgeFlag;
+    int   iPoint  = 0;
+    notLastFace = polyhedron.GetNextNormal (SurfaceNormal);
+    G4bool notLastEdge;
+    do {
+      notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
+      if (modeling==OModelingWireFrame) {
+	if (edgeFlag != lastEdgeFlag) {
+	  if (edgeFlag) {
+	    // Pass to visible edges, restart to accumulate :
+	    iPoint = 0;
+	    xs[iPoint]  = vertex.x();
+	    ys[iPoint]  = vertex.y();
+	    zs[iPoint]  = vertex.z();
+	    iPoint++;
+	  } else {
+	    // Pass to invisible edges, flush the visible ones :
+	    xs[iPoint]  = vertex.x();
+	    ys[iPoint]  = vertex.y();
+	    zs[iPoint]  = vertex.z();
+	    iPoint++;
+	    if(iPoint>=2) {
+	      ONodeAddLines(fGoNode,OContextGetStaticInstance(),
+			    iPoint,xs,ys,zs);
 	    }
-	  else if (modeling==OModelingSolid) 
-	    {
-	      ONodeAddPolygon (fGoNode,OContextGetStaticInstance(),iPoint,xs,ys,zs);
-	    }
+	  }
+	  lastEdgeFlag = edgeFlag;
+	} else {
+	  if (edgeFlag) {
+	    xs[iPoint]  = vertex.x();
+	    ys[iPoint]  = vertex.y();
+	    zs[iPoint]  = vertex.z();
+	    iPoint++;
+	  } else {
+	  }
 	}
-    } while (notLastFace);
+      } else {
+	xs[iPoint]  = vertex.x();
+	ys[iPoint]  = vertex.y();
+	zs[iPoint]  = vertex.z();
+	iPoint++;
+      }
+    } while (notLastEdge);
+    if (modeling==OModelingWireFrame) {
+      if(iPoint!=0) { // Some line started, flush it :
+	/*
+	xs[iPoint]  = xs[0];
+	ys[iPoint]  = ys[0];
+	zs[iPoint]  = zs[0];
+	iPoint++;
+	*/
+	if(iPoint>=2) {
+	  ONodeAddLines(fGoNode,OContextGetStaticInstance(),iPoint,xs,ys,zs);
+	}
+      }
+    } else if (modeling==OModelingSolid) {
+      if( (iPoint!=3) && (iPoint!=4) ) {
+	CWarnF ("G4GoSceneHandler::AddPrimitive G4Polyhedron : not a quad or a triangle : %d\n",iPoint);
+      } else {
+	ONodeAddPolygon (fGoNode,OContextGetStaticInstance(),iPoint,xs,ys,zs);
+      }
+    }
+  } while (notLastFace);
 }
 /***************************************************************************/
 void G4GoSceneHandler::AddPrimitive (
@@ -444,15 +476,24 @@ void G4GoSceneHandler::BeginPrimitives (
 
   fGoNode         = nodeName!=NULL ? ONodeCreate (nodeName) : ONodeMake ();
   if(ONodeIsValid(fRootGoNode)==0) {
+#ifdef DEBUG
+    G4cout << " build Root, Static, Transient nodes" << G4endl;
+#endif
     fRootGoNode = ONodeMake ();
     fStaticRootGoNode = ONodeMake ();
     fTransientRootGoNode = ONodeMake ();
     ONodeAddChild   (fRootGoNode,fStaticRootGoNode);
     ONodeAddChild   (fRootGoNode,fTransientRootGoNode);
-  }
+  } 
   if (fReadyForTransients) {
+#ifdef DEBUG
+    G4cout << " add node to transient scene graph" << G4endl;
+#endif
     ONodeAddChild   (fTransientRootGoNode,fGoNode);
   } else {
+#ifdef DEBUG
+    G4cout << " add node to static scene graph" << G4endl;
+#endif
     ONodeAddChild   (fStaticRootGoNode,fGoNode);
   }
 }

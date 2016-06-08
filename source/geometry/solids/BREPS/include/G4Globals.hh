@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Globals.hh,v 1.2 1999/12/15 14:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 /*  /usr/local/gismo/repo/support/globals.h,v 1.8 1994/04/18 18:29:03 atwood Exp  */
 //  File: globals.h

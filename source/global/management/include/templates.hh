@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: templates.hh,v 1.5 2000/01/03 11:39:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // -*- C++ -*-

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.8.6.1.2.1 1999/12/08 17:34:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PhotoElectricEffect.cc,v 1.9 1999/12/15 14:51:52 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -27,7 +27,7 @@
 // 08-01-97, crossection table + meanfreepath table, M.Maire
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of Atomic shells in PostStepDoIt
 // 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma

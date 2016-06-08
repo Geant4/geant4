@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitationHandler.cc,v 1.3.8.1 1999/12/07 20:51:37 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ExcitationHandler.cc,v 1.6 2000/06/21 14:26:24 stesting Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -78,7 +78,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   G4FragmentVector* theResult = 0; 
   G4double exEnergy = theInitialState.GetExcitationEnergy();
   G4double A = theInitialState.GetA();
-  G4int Z = theInitialState.GetZ();
+  G4int Z = G4int(theInitialState.GetZ());
   G4int Zmax = GetMaxZ();
   G4double Amax = GetMaxA();
   
@@ -113,7 +113,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
     exEnergy = theResult->at(i)->GetExcitationEnergy();
     if (exEnergy > 0.0) {
       A = theResult->at(i)->GetA();
-      Z = theResult->at(i)->GetZ();
+      Z = G4int(theResult->at(i)->GetZ());
       theExcitedNucleus = *(theResult->at(i));
       // try to de-excite this fragment
       if(A<GetMaxA()&&Z<GetMaxZ()&&
@@ -211,8 +211,8 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
 
   for (G4int i = 0; i < theFragmentVector->entries(); i++) {
 //     theFragmentVector->at(i)->DumpInfo();
-    theFragmentA = theFragmentVector->at(i)->GetA();
-    theFragmentZ = theFragmentVector->at(i)->GetZ();
+    theFragmentA = G4int(theFragmentVector->at(i)->GetA());
+    theFragmentZ = G4int(theFragmentVector->at(i)->GetZ());
     theFragmentMomentum = theFragmentVector->at(i)->GetMomentum();
     theKindOfFragment = 0;
     if (theFragmentA == 0 && theFragmentZ == 0) {       // photon
@@ -246,6 +246,18 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
       theFragmentVector->clearAndDestroy();
       delete theFragmentVector;
     }
+  G4int debugit;
+  for(debugit=0; debugit<theReactionProductVector->length(); debugit++)
+  {
+    if(theReactionProductVector->at(debugit)->GetTotalEnergy()<1.*eV)
+    {
+       G4cerr << "G4ExcitationHandler: Warning: Photonevaporation data not exact."<<G4endl;
+       G4cerr << "G4ExcitationHandler: Warning: Found gamma with energy = "
+              << theReactionProductVector->at(debugit)->GetTotalEnergy()/MeV << "MeV"
+              << G4endl;
+       theReactionProductVector->removeAt(debugit);
+    }
+  }
   return theReactionProductVector;
 }
 

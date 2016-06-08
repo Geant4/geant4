@@ -86,8 +86,12 @@ G4bool G4NuclearLevelManager::IsValid(G4int Z, G4int A) const
   G4std::ostrstream ost(name, 100, G4std::ios::out);
   ost << dirName << "/" << "z" << Z << ".a" << A;
   G4String file(name); 
-  
-  G4std::ifstream inFile(file);
+
+#ifdef G4USE_STD_NAMESPACE  
+  G4std::ifstream inFile(file, G4std::ios::in);
+#else
+  ifstream inFile(file, ios::in|ios::nocreate);
+#endif
   if (! inFile) valid = false;  
 
   return valid;
@@ -210,9 +214,11 @@ void G4NuclearLevelManager::MakeLevels()
   G4std::ostrstream ost(name, 100, G4std::ios::out);
   ost << dirName << "/" << "z" << _nucleusZ << ".a" << _nucleusA;
   G4String file(name); 
-  
+#ifdef G4USE_STD_NAMESPACE  
   G4std::ifstream inFile(file, G4std::ios::in);
-  
+#else
+  ifstream inFile(file, ios::in|ios::nocreate);
+#endif
   if (! inFile) 
     {
       //      G4cout << " G4NuclearLevelManager: (" << _nucleusZ << "," << _nucleusA 

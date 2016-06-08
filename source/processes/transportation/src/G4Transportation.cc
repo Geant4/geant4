@@ -5,8 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.7.2.1.2.1 1999/12/08 17:35:16 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Transportation.cc,v 1.11 2000/06/19 16:13:48 japost Exp $
+// GEANT4 tag $Name: geant4-02-00 $
+
 //
 // 
 // ------------------------------------------------------------
@@ -288,6 +289,8 @@ G4double G4Transportation::AlongStepGetPhysicalInteractionLength(
 #endif
   }				    
 
+  fParticleChange.SetTrueStepLength(geometryStepLength) ;
+
   return geometryStepLength;
 }
 
@@ -371,7 +374,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 			     const G4Step&  stepData
 			    )
 {
-  G4VTouchable* retCurrentTouchable;   // The one to return
+  const G4VTouchable* retCurrentTouchable;   // The one to return
 
   //   Initialize ParticleChange  (by setting all its members equal
   //                               to corresponding members in G4Track)
@@ -403,6 +406,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
        fParticleChange.SetStatusChange( fStopAndKill ) ;
     }
     retCurrentTouchable= fCurrentTouchable;
+    fParticleChange.SetTouchableChange( fCurrentTouchable );
   }
   else{                    // fGeometryLimitedStep  is false
 #ifdef G4DEBUG
@@ -458,8 +462,11 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
        assert( fCurrentTouchable->GetVolume()->GetName() == 
                track.GetVolume()->GetName() );
        retCurrentTouchable = fCurrentTouchable; 
+       fParticleChange.SetTouchableChange( fCurrentTouchable );
+       
     }else{
        retCurrentTouchable = track.GetTouchable();
+       fParticleChange.SetTouchableChange( track.GetTouchable() );
     }
     //  This must be done in the above if ( AtSur ) fails
     //  We also do it for if (true) in order to get debug/opt to  
@@ -476,10 +483,21 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
     //      overwrite the (unset) one in particle change)
     //  Although in general this is fCurrentTouchable, at the start of
     //   a step it could be different ... ??
+    fParticleChange.SetTouchableChange( track.GetTouchable() );
     retCurrentTouchable = track.GetTouchable();
 #endif
 
   }                   // endif ( fGeometryLimitedStep ) 
+
+  const G4VPhysicalVolume *pNewVol = retCurrentTouchable->GetVolume();
+  const G4Material *pNewMaterial=0; 
+  if( pNewVol != 0 ) pNewMaterial= pNewVol->GetLogicalVolume()->GetMaterial(); 
+
+  // ( <const_cast> pNewMaterial );
+  fParticleChange.SetMaterialChange( (G4Material *) pNewMaterial );
+  //    temporarily until Get/Set Material of ParticleChange, 
+  //    and StepPoint can be made const. 
+
 
   // Set the touchable in ParticleChange
   //   this must always be done because the particle change always

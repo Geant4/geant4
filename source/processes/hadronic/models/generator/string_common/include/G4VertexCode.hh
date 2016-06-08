@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VertexCode.hh,v 1.1.10.1 1999/12/07 20:51:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VertexCode.hh,v 1.2 1999/12/15 14:52:46 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef G4VertexCode_h
 #define G4VertexCode_h 1

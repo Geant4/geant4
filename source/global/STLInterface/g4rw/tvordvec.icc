@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tvordvec.icc,v 1.2 2000/02/01 16:55:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: tvordvec.icc,v 1.5 2000/06/26 16:25:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -17,8 +17,9 @@
 
 template<class T>
 G4RWTValOrderedVector<T>::G4RWTValOrderedVector(size_t capacity)
-  : std_vector(capacity),rwsize(0){}
-
+  : std_vector(capacity, T()),rwsize(0){} // Here Rogue-Wave would leave
+                                          // members T uninitialised and
+                                          // would create an EMPTY vector!
 template<class T>
 G4RWTValOrderedVector<T>::G4RWTValOrderedVector(const G4RWTValOrderedVector<T>& v)
   : std_vector(v),rwsize(v.rwsize){}
@@ -128,10 +129,9 @@ T G4RWTValOrderedVector<T>::first() const
 template<class T>
 T G4RWTValOrderedVector<T>::last() const
 {
-  if(rwsize)
-    return std_vector::operator[](rwsize-1);
-  else
+  if(!rwsize)
     G4RWTHROW(G4RWBoundsErr("G4RWTValOrderedVector last",rwsize,0));
+  return std_vector::operator[](rwsize-1);
 }
 
 template<class T> 

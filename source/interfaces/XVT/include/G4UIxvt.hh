@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIxvt.hh,v 1.2.8.1.2.2 1999/12/14 07:07:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4UIxvt.hh,v 1.3 1999/12/15 14:50:46 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 //                     XVT driver class header                        //

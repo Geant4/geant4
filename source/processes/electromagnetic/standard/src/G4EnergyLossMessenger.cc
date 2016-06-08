@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.2.6.1.2.5 1999/12/14 09:16:48 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4EnergyLossMessenger.cc,v 1.5 2000/05/23 14:42:21 urban Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 
@@ -15,10 +15,8 @@
 
 #include "G4EnergyLossMessenger.hh"
 
-#include "G4eEnergyLoss.hh"
-#include "G4hEnergyLoss.hh"
-#include "G4eEnergyLossPlus.hh"
-#include "G4hEnergyLossPlus.hh"
+#include "G4VeEnergyLoss.hh"
+#include "G4VhEnergyLoss.hh"
 
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
@@ -41,6 +39,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   EnlossFlucCmd->SetParameterName("choice",true);
   EnlossFlucCmd->SetDefaultValue(true);
   EnlossFlucCmd->AvailableForStates(Idle);
+
+  SubSecCmd = new G4UIcmdWithABool("/process/Loss/subsec",this);
+  SubSecCmd->SetGuidance("Switch on/off the subcutoff generation.");
+  SubSecCmd->SetParameterName("choice",true);
+  SubSecCmd->SetDefaultValue(true);
+  SubSecCmd->AvailableForStates(Idle);
 
   StepFuncCmd = new G4UIcommand("/process/eLoss/StepFunction",this);
   StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters.");
@@ -69,6 +73,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
 {
   delete RndmStepCmd;
   delete EnlossFlucCmd;
+  delete SubSecCmd;
   delete StepFuncCmd;
 }
 
@@ -77,17 +82,18 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
 void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if (command == RndmStepCmd)
-   { G4eEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
-     G4hEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
-     G4eEnergyLossPlus::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
-     G4hEnergyLossPlus::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
+   { G4VeEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
+     G4VhEnergyLoss::SetRndmStep(RndmStepCmd->GetNewBoolValue(newValue));
    }
    
   if (command == EnlossFlucCmd)
-   { G4eEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
-     G4hEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
-     G4eEnergyLossPlus::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
-     G4hEnergyLossPlus::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue)); 
+   { G4VeEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+     G4VhEnergyLoss::SetEnlossFluc(EnlossFlucCmd->GetNewBoolValue(newValue));
+   }
+
+  if (command == SubSecCmd)
+   { G4VeEnergyLoss::SetSubSec(SubSecCmd->GetNewBoolValue(newValue));
+     G4VhEnergyLoss::SetSubSec(SubSecCmd->GetNewBoolValue(newValue));
    }
 
   if (command == StepFuncCmd)
@@ -99,10 +105,8 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      is >> v1 >> v2 >> unts;
      G4String unt = unts;
      v2 *= G4UIcommand::ValueOf(unt);
-     G4eEnergyLoss::SetStepFunction(v1,v2);
-     G4hEnergyLoss::SetStepFunction(v1,v2);
-     G4eEnergyLossPlus::SetStepFunction(v1,v2);
-     G4hEnergyLossPlus::SetStepFunction(v1,v2);    
+     G4VeEnergyLoss::SetStepFunction(v1,v2);
+     G4VhEnergyLoss::SetStepFunction(v1,v2);
    }
 }
 

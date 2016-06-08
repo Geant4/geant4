@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiPropertiesTableB.cc,v 1.3.6.1 1999/12/07 20:49:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4NucleiPropertiesTableB.cc,v 1.4 1999/12/15 14:51:14 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997

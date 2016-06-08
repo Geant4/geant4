@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SigmaMinusInelasticProcess.hh,v 1.1.10.1 1999/12/07 20:52:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4SigmaMinusInelasticProcess.hh,v 1.2 1999/12/15 14:53:34 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
  // G4 Process: SigmaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Nov-1996

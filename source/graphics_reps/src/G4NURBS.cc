@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4NURBS.cc,v 1.3 1999/12/15 14:50:35 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996

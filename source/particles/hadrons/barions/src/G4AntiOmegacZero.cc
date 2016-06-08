@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiOmegacZero.cc,v 1.3.6.1.2.2 1999/12/14 07:08:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4AntiOmegacZero.cc,v 1.5 2000/02/27 06:17:03 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -47,6 +47,7 @@ G4AntiOmegacZero::G4AntiOmegacZero(
               iConjugation,iIsospin,iIsospin3,gParity,pType,
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("omega_c");
 }
 
 // ......................................................................

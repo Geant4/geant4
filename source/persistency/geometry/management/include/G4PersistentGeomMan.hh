@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PersistentGeomMan.hh,v 1.8 1999/12/15 14:51:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PersistentGeomMan.hh,v 1.9 2000/06/09 12:56:01 morita Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // class G4PersistentGeomMan 
 //
@@ -28,6 +28,7 @@
 #include "G4VPersistentSubMan.hh"
 #include "G4VPersistentSubDbMan.hh"
 #include "G4PGeometryObjectMap.hh"
+#include "G4VMaterialMap.hh"
 
 #define G4_PHYS_VOLUME_DEPTH_MAX 1000000
 
@@ -54,6 +55,7 @@ class G4PersistentGeomMan
 
   private:
       HepRef(G4PGeometryObjectMap) f_GeomMap;
+      G4VMaterialMap* f_MaterialMap;
 
   private:
       // interface with G4PersistencyManager

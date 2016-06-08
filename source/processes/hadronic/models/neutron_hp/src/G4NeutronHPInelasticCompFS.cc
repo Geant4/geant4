@@ -9,6 +9,7 @@
 #include "G4Alpha.hh"
 #include "G4Electron.hh"
 #include "G4NeutronHPDataUsed.hh"
+#include "G4ParticleTable.hh"
 
 void G4NeutronHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 {
@@ -134,11 +135,14 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
   }
   G4double random = G4UniformRand();
   G4double sum = running[49];
-  G4int it = 0;
-  for(i=0; i<50; i++)
+  G4int it = 50;
+  if(0!=sum)
   {
-    it = i;
-    if(random < running[i]/sum) break;
+    for(i=0; i<50; i++)
+    {
+      it = i;
+      if(random < running[i]/sum) break;
+    }
   }
 //debug:  it = 1;
   return it;
@@ -146,7 +150,7 @@ G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)
 
 void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4ParticleDefinition * aDefinition)
 {
-  theResult.Initialize(theTrack); 
+    theResult.Initialize(theTrack); 
 
 // prepare neutron
     G4double eKinetic = theTrack.GetKineticEnergy();
@@ -160,15 +164,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     for(i=0; i<50; i++) if(theXsection[i] != NULL) break; 
     G4double targetMass=0;
     G4double eps = 0.0001;
-    targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(theBaseZ+eps, theBaseA+eps)-
-                            theBaseZ*G4Electron::ElectronDefinition()->GetPDGMass() ) /
-                 G4Neutron::Neutron()->GetPDGMass();
-    if(theEnergyAngData[i]!=NULL)
-        targetMass = theEnergyAngData[i]->GetTargetMass();
-    else if(theAngularDistribution[i]!=NULL)
-        targetMass = theAngularDistribution[i]->GetTargetMass();
-    else if(theFinalStatePhotons[50]!=NULL)
-        targetMass = theFinalStatePhotons[50]->GetTargetMass();
+    targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(theBaseZ+eps, theBaseA+eps)) /
+                   G4Neutron::Neutron()->GetPDGMass();
+//    if(theEnergyAngData[i]!=NULL)
+//        targetMass = theEnergyAngData[i]->GetTargetMass();
+//    else if(theAngularDistribution[i]!=NULL)
+//        targetMass = theAngularDistribution[i]->GetTargetMass();
+//    else if(theFinalStatePhotons[50]!=NULL)
+//        targetMass = theFinalStatePhotons[50]->GetTargetMass();
     G4Nucleus aNucleus;
     G4ReactionProduct theTarget; 
     theTarget = aNucleus.GetThermalNucleus(targetMass);
@@ -177,14 +180,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     G4double residualMass=0;
     G4double residualZ = theBaseZ - aDefinition->GetPDGCharge();
     G4double residualA = theBaseA - aDefinition->GetBaryonNumber()+1;
-    residualMass = ( G4NucleiPropertiesTable::GetAtomicMass(residualZ+eps, residualA+eps)-
-                            residualZ*G4Electron::ElectronDefinition()->GetPDGMass() ) /
+    residualMass = ( G4NucleiPropertiesTable::GetNuclearMass(residualZ+eps, residualA+eps) ) /
                      G4Neutron::Neutron()->GetPDGMass();
 
 // prepare energy in target rest frame
     G4ReactionProduct boosted;
     boosted.Lorentz(theNeutron, theTarget);
     eKinetic = boosted.GetKineticEnergy();
+    G4double momentumInCMS = boosted.GetTotalMomentum();
   
 // select exit channel for composite FS class.
     G4int it = SelectExitChannel(eKinetic);
@@ -196,18 +199,26 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     G4ReactionProductVector * theParticles = NULL;
     G4ReactionProduct aHadron;
     aHadron.SetDefinition(aDefinition); // what if only cross-sections exist ==> Na 23 11 @@@@    
-    aHadron.SetKineticEnergy(theNeutron.GetKineticEnergy() +
-                             theNeutron.GetMass() - aHadron.GetMass() +
-                             (targetMass - residualMass)*G4Neutron::Neutron()->GetPDGMass());
-    aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
-                         sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
-                              aHadron.GetMass()*aHadron.GetMass())
-                       );
+    G4double availableEnergy = theNeutron.GetKineticEnergy() + theNeutron.GetMass() - aHadron.GetMass() +
+                             (targetMass - residualMass)*G4Neutron::Neutron()->GetPDGMass();
+    G4int nothingWasKnownOnHadron = 0;
     G4int dummy;
     G4int nSecGamma = 0;
     G4double eGamm = 0;
     G4int iLevel=it-1;
-    while( iLevel!=-1 && theGammas.GetLevel(iLevel)==NULL ) iLevel--;
+    if(50==it) 
+    {
+      iLevel=-1;
+      aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
+                               (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
+      aHadron.SetMomentum(theNeutron.GetMomentum()*(1./theNeutron.GetTotalMomentum())*
+                           sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+                                aHadron.GetMass()*aHadron.GetMass()));
+    }
+    else
+    {
+      while( iLevel!=-1 && theGammas.GetLevel(iLevel)==NULL ) iLevel--;
+    }
     if(theAngularDistribution[it]!= NULL)
     {
       if(theEnergyDistribution[it]!=NULL)
@@ -227,7 +238,10 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       {
         G4double eExcitation = 0;
         if(iLevel>=0) eExcitation = theGammas.GetLevel(iLevel)->GetLevelEnergy();    
-        aHadron.SetKineticEnergy(eKinetic - eExcitation);
+        
+	aHadron.SetKineticEnergy(aHadron.GetKineticEnergy() - eExcitation);
+	// consistency of data assumed....@@@@@
+	
       }
       theAngularDistribution[it]->SampleAndUpdate(aHadron);
       if(theFinalStatePhotons[it] == NULL)
@@ -249,13 +263,14 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 	}
       }
     }
-    else if(theEnergyAngData[it]!= NULL)  
+    else if(theEnergyAngData[it] != NULL)  
     {
       theParticles = theEnergyAngData[it]->Sample(eKinetic);
     }
     else
     {
-      // @@@ what to do, if we have photon data, but no info on the proton itself
+      // @@@ what to do, if we have photon data, but no info on the hadron itself
+      nothingWasKnownOnHadron = 1;
     }
     if(theFinalStatePhotons[it]!=NULL) 
     {
@@ -269,10 +284,13 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       if(thePhotons!=NULL && thePhotons->entries()!=0) aBaseEnergy-=thePhotons->at(0)->GetTotalEnergy();
       if(theFinalStatePhotons[it]->NeedsCascade())
       {
-        while(abs(aBaseEnergy)>0.01*keV)
+	while(aBaseEnergy>0.01*keV)
         {
           // cascade down the levels
-          for(G4int i=1; i<it; i++)
+	  G4bool foundMatchingLevel = false;
+          G4int closest;
+	  G4double deltaEold = -1;
+	  for(G4int i=1; i<it; i++)
           {
             if(theFinalStatePhotons[i]!=NULL) 
             {
@@ -282,17 +300,33 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
             {
               testEnergy = 0;
             }
-            if(abs(testEnergy-aBaseEnergy)<0.1*keV)
+	    G4double deltaE = abs(testEnergy-aBaseEnergy);
+            if(deltaE<0.1*keV)
             {
               G4ReactionProductVector * theNext = 
         	theFinalStatePhotons[i]->GetPhotons(anEnergy);
               thePhotons->insert(theNext->at(0));
               aBaseEnergy = testEnergy-theNext->at(0)->GetTotalEnergy();
               delete theNext;
-              break;
+	      foundMatchingLevel = true;
+              break; // ===>
             }
-          }
-        } // <=== the break goes here.
+	    if(deltaE<deltaEold||deltaEold<0.)
+	    {
+	      closest = i;
+	      deltaEold = deltaE;     
+	    }
+          } // <=== the break goes here.
+	  if(!foundMatchingLevel)
+	  {
+            G4ReactionProductVector * theNext = 
+               theFinalStatePhotons[closest]->GetPhotons(anEnergy);
+            thePhotons->insert(theNext->at(0));
+	    testEnergy = theFinalStatePhotons[closest]->GetLevelEnergy();
+            aBaseEnergy = testEnergy-theNext->at(0)->GetTotalEnergy();
+            delete theNext;
+	  }
+        } 
       }
     }
     if(thePhotons!=NULL)
@@ -303,9 +337,31 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
 	thePhotons->at(i)->Lorentz(*(thePhotons->at(i)), -1.*theTarget);
       }
     }
+    if(nothingWasKnownOnHadron)
+    {
+      G4double totalPhotonEnergy = 0;
+      if(thePhotons!=NULL)
+      {
+        G4int nPhotons = thePhotons->length();
+	for(i=0; i<nPhotons; i++)
+        {
+          totalPhotonEnergy += thePhotons->at(i)->GetTotalEnergy();
+        }
+      }
+      availableEnergy -= totalPhotonEnergy;
+      residualMass += totalPhotonEnergy/G4Neutron::Neutron()->GetPDGMass();
+      aHadron.SetKineticEnergy(availableEnergy*residualMass*G4Neutron::Neutron()->GetPDGMass()/
+                               (aHadron.GetMass()+residualMass*G4Neutron::Neutron()->GetPDGMass()));
+      G4double CosTheta = 1.0 - 2.0*G4UniformRand();
+      G4double SinTheta = sqrt(1.0 - CosTheta*CosTheta);
+      G4double Phi = twopi*G4UniformRand();
+      G4ThreeVector Vector(cos(Phi)*SinTheta, sin(Phi)*SinTheta, CosTheta);
+      aHadron.SetMomentum(Vector* sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
+                                       aHadron.GetMass()*aHadron.GetMass()));
+    }
 
 // fill the result
-    G4int nSecondaries = 1; // the hadron
+    G4int nSecondaries = 2; // the hadron and the recoil
     if(theParticles != NULL) nSecondaries = theParticles->length();
     G4int nPhotons = 0;
     if(thePhotons!=NULL) nPhotons = thePhotons->length();
@@ -320,6 +376,25 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       theSec->SetDefinition(aHadron.GetDefinition());
       theSec->SetMomentum(aHadron.GetMomentum());
       theResult.AddSecondary(theSec);    
+ 
+ 	aHadron.Lorentz(aHadron, theTarget);
+        G4ReactionProduct theResidual;   
+        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()->GetIon(residualZ, residualA, 0));  
+        theResidual.SetKineticEnergy(aHadron.GetKineticEnergy()*aHadron.GetMass()/theResidual.GetMass());
+        theResidual.SetMomentum(-1.*aHadron.GetMomentum());
+	theResidual.Lorentz(theResidual, -1.*theTarget);
+	G4ThreeVector totalPhotonMomentum(0,0,0);
+	if(thePhotons!=NULL)
+	{
+          for(i=0; i<nPhotons; i++)
+          {
+            totalPhotonMomentum += thePhotons->at(i)->GetMomentum();
+          }
+	}
+        theSec = new G4DynamicParticle;   
+        theSec->SetDefinition(theResidual.GetDefinition());
+        theSec->SetMomentum(theResidual.GetMomentum()-totalPhotonMomentum);
+        theResult.AddSecondary(theSec);    
     }
     else
     {

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DrawVoxels.cc,v 1.10 2000/01/19 17:26:30 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // class G4DrawVoxels

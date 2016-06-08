@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ConicalSurface.hh,v 1.2 1999/12/15 14:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ConicalSurface.hh,v 1.4 2000/02/16 12:02:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 /*  /usr/local/gismo/repo/geometry/G4ConicalSurface.h,v 1.5 1993/12/30 02:13:59 rensing Exp  */
 //  File:  G4ConicalSurface.h
@@ -59,7 +59,7 @@ public:
   // G4ConicalSurface( const G4ConicalSurface& c ): G4Surface( c.origin )
   //			 { axis = c.axis;  angle = c.angle; }
   
-  virtual char *NameOf() const { return "G4ConicalSurface"; }
+  virtual const char* NameOf() const { return "G4ConicalSurface"; }
   
   virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
@@ -125,7 +125,7 @@ private:
 //----->		 { axis = c.axis;  angle = c.angle; }
 //
 //  function to return class name
-//----->virtual char *NameOf() const { return "G4ConicalSurface"; }
+//----->virtual const char* NameOf() const { return "G4ConicalSurface"; }
 //
 //  printing function
 //----->virtual void PrintOn( G4std::ostream& os = G4cout ) const;

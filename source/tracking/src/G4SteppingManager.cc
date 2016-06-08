@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.8 1999/12/15 14:53:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4SteppingManager.cc,v 1.10 2000/06/02 09:53:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //---------------------------------------------------------------
@@ -82,8 +82,8 @@ G4SteppingManager::~G4SteppingManager()
    delete fSelectedAtRestDoItVector;
    delete fSelectedAlongStepDoItVector;
    delete fSelectedPostStepDoItVector;
-   delete fTouchable1;
-   delete fTouchable2;
+   delete (G4VTouchable*)(fTouchable1);
+   delete (G4VTouchable*)(fTouchable2);
    if (fUserSteppingAction) delete fUserSteppingAction;
 #ifdef G4VERBOSE
    if(KillVerbose) delete fVerbose;
@@ -252,7 +252,7 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
 // Initialize VTouchable using the point in the global coordinate
 // system. 
-   G4VTouchable* pTouchableFree = GetFreeTouchable();
+   G4VTouchable* pTouchableFree = (G4VTouchable*)(GetFreeTouchable());
    fNavigator->LocateGlobalPointAndUpdateTouchable(
                      fTrack->GetPosition(),
                      pTouchableFree,

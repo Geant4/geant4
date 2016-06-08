@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.cc,v 1.3 1999/12/15 14:53:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Track.cc,v 1.4 2000/06/02 05:36:53 asaim Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //---------------------------------------------------------------
@@ -47,6 +47,8 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
    fBelowThreshold = false;
    fGoodForTracking = false;
    fWeight = 1.0;
+
+   fpUserInformation = 0;
 }
 
 //////////////////
@@ -70,6 +72,8 @@ G4Track::G4Track()
    fBelowThreshold = false;
    fGoodForTracking = false;
    fWeight = 1.0;
+
+   fpUserInformation = 0;
 }
 
 ///////////////////
@@ -77,6 +81,7 @@ G4Track::~G4Track()
 ///////////////////
 {
    delete fpDynamicParticle;
+   delete fpUserInformation;
 }
 
 ///////////////////

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.4.6.1.2.2 1999/12/10 15:42:07 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.6 1999/12/15 14:52:48 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //  Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -40,9 +40,15 @@
 // Constructors
 
 G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
-   {
+{
    MassCut  = 0.35*GeV; 
    ClusterMass = 0.15*GeV;
+
+   SmoothParam      = 0.9; 
+   StringLoopInterrupt    = 1000;
+   ClusterLoopInterrupt   =  500;
+
+// Changable Parameters below.
    
    SigmaQT = 0.5 * GeV;
    
@@ -50,10 +56,33 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    DiquarkSuppress  = 0.1;
    DiquarkBreakProb = 0.1;
    
-   SmoothParam      = 0.9; 
-   StringLoopInterrupt    = 1000;
-   ClusterLoopInterrupt   =  500;
-   }
+   //... pspin_meson is probability to create vector meson 
+   pspin_meson = 0.5;
+
+   //... pspin_barion is probability to create 3/2 barion 
+   pspin_barion = 0.5;
+
+   //... pmix_meson0[] is quark mixing parameters for scalar mesons (Variable spin=1)
+   pmix_meson1[0] = 0.5;
+   pmix_meson1[1] = 0.0;
+   pmix_meson1[2] = 0.5;
+   pmix_meson1[3] = 0.0;
+   pmix_meson1[4] = 1.0;
+   pmix_meson1[5] = 1.0; 
+
+   //... pmix_meson1[] is quark mixing parameters for vector mesons (Variable spin = 3)
+   pmix_meson0[0] = 0.5; 
+   pmix_meson0[1] = 0.25; 
+   pmix_meson0[2] = 0.5; 
+   pmix_meson0[3] = 0.25; 
+   pmix_meson0[4] = 1.0; 
+   pmix_meson0[5] = 0.5; 
+
+// Parameters may be changed until the first fragmentation starts
+   PastInitPhase=false;
+   
+}
+   
 
 G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
    {
@@ -62,18 +91,22 @@ G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
 //********************************************************************************
 // Operators
 
-//const G4VLongitudinalStringDecay & G4VLongitudinalStringDecay::operator=(const G4VLongitudinalStringDecay &right)
+//const  & G4VLongitudinalStringDecay::operator=(const G4VLongitudinalStringDecay &right)
 //    {
 //    }
 
 int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &right) const
     {
-    return !memcmp(this, &right, sizeof(G4VLongitudinalStringDecay));
+	G4Exception("G4VLongitudinalStringDecay::operator== forbidden");
+	return false;
+//    return !memcmp(this, &right, sizeof(G4VLongitudinalStringDecay));
     }
 
 int G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &right) const
     {
-    return memcmp(this, &right, sizeof(G4VLongitudinalStringDecay));
+	G4Exception("G4VLongitudinalStringDecay::operator!= forbidden");
+	return true;
+//    return memcmp(this, &right, sizeof(G4VLongitudinalStringDecay));
     }
 
 
@@ -148,14 +181,6 @@ void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitial
 
 G4ParticleDefinition* G4VLongitudinalStringDecay::CreateHadron(G4int id1, G4int id2, G4bool theGivenSpin, G4int theSpin) 
    {
-   //... pmix_meson0[] is quark mixing parameters for mesons with spin = 1
-    const G4double pmix_meson1[] = {0.5, 0.,   0.5,   0., 1.0, 1.0}; 
-   //... pmix_meson1[] is quark mixing parameters for mesons with spin = 3 
-    const G4double pmix_meson0[] = {0.5, 0.25, 0.5, 0.25, 1.0, 0.5}; 
-   //... pspin_meson is probability to create vector meson 
-    const G4double pspin_meson = 0.5;
-   //... pspin_barion is probability to create 3/2 barion 
-    const G4double pspin_barion = 0.5;
 
    G4int PDGEncoding;
    if (abs(id1) < abs(id2))
@@ -410,7 +435,9 @@ G4bool G4VLongitudinalStringDecay::SimpleString::SplitLast(G4KineticTrackVector 
 //----------------------------------------------------------------------------------------------------------
 G4KineticTrackVector* G4VLongitudinalStringDecay::FragmentString(const G4ExcitedString& theString)
 {
-
+//    Can no longer modify Parameters for Fragmentation.
+	PastInitPhase=true;
+	
 // 	check if string has enough mass to fragment...
 	G4KineticTrackVector * LeftVector=LightFragmentationTest(theString);
 	if ( LeftVector != 0 ) return LeftVector;
@@ -732,3 +759,90 @@ void G4VLongitudinalStringDecay::Sample4Momentum(G4LorentzVector* Mom, G4double 
     }
     
 //***********************************************************************************************************    
+   
+void G4VLongitudinalStringDecay::SetSigmaTransverseMomentum(G4double aValue)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetSigmaTransverseMomentum after FragmentString() not allowed");
+	} else {
+		SigmaQT = aValue;
+	}
+}
+
+void G4VLongitudinalStringDecay::SetStrangenessSuppression(G4double aValue)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetStrangenessSuppression after FragmentString() not allowed");
+	} else {
+		StrangeSuppress = aValue;
+	}
+}
+
+void G4VLongitudinalStringDecay::SetDiquarkSuppression(G4double aValue)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetDiquarkSuppression after FragmentString() not allowed");
+	} else {
+		DiquarkSuppress = aValue;
+	}
+}
+
+void G4VLongitudinalStringDecay::SetDiquarkBreakProbability(G4double aValue)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetDiquarkBreakProbability after FragmentString() not allowed");
+	} else {
+		DiquarkBreakProb = aValue;
+	}
+}
+		
+
+void G4VLongitudinalStringDecay::SetVectorMesonProbability(G4double aValue)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetVectorMesonProbability after FragmentString() not allowed");
+	} else {
+		pspin_meson = aValue;
+	}
+}
+
+void G4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability(G4double aValue)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability after FragmentString() not allowed");
+	} else {
+		pspin_barion = aValue;
+	}
+}
+
+void G4VLongitudinalStringDecay::SetScalarMesonMixings(G4std::vector<G4double> aVector)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetScalarMesonMixings after FragmentString() not allowed");
+	} else {
+	  if ( aVector.size() < 6 ) 
+	      G4Exception("4VLongitudinalStringDecay::SetScalarMesonMixings( argument Vector too small");
+	  pmix_meson1[0] = aVector[0];
+	  pmix_meson1[1] = aVector[1];
+	  pmix_meson1[2] = aVector[2];
+	  pmix_meson1[3] = aVector[3];
+	  pmix_meson1[4] = aVector[4];
+	  pmix_meson1[5] = aVector[5];
+	}
+}
+
+void G4VLongitudinalStringDecay::SetVectorMesonMixings(G4std::vector<G4double> aVector)
+{
+	if ( PastInitPhase ) {
+		G4Exception("4VLongitudinalStringDecay::SetVectorMesonMixings after FragmentString() not allowed");
+	} else {
+	  if ( aVector.size() < 6 ) 
+	      G4Exception("4VLongitudinalStringDecay::SetVectorMesonMixings( argument Vector too small");
+	  pmix_meson0[0] = aVector[0];
+	  pmix_meson0[1] = aVector[1];
+	  pmix_meson0[2] = aVector[2];
+	  pmix_meson0[3] = aVector[3];
+	  pmix_meson0[4] = aVector[4];
+	  pmix_meson0[5] = aVector[5];
+	}
+}	

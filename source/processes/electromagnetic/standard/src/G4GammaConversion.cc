@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaConversion.cc,v 1.2.8.1.2.2 1999/12/10 15:41:58 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4GammaConversion.cc,v 1.3 1999/12/15 14:51:50 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,7 +35,7 @@
 // 14-03-97, new Physics scheme for geant4alpha, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 19-06-97, correction in ComputeMicroscopicCrossSection, L.Urban
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
 // --------------------------------------------------------------
 
@@ -341,7 +341,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    G4double PositKineEnergy = G4std::max(0.,PositTotEnergy - electron_mass_c2) ;
 
   //  if (G4EnergyLossTables::GetRange(G4Positron::Positron(),PositKineEnergy,aMaterial)
-  //      < min(G4Positron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) )  
+  //      < G4std::min(G4Positron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) )  
      if((G4EnergyLossTables::GetRange(G4Positron::Positron(),
           PositKineEnergy,aMaterial)<aStep.GetPostStepPoint()->GetSafety())
          &&

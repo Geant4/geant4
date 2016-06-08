@@ -1,0 +1,80 @@
+$Id: History,v 1.10 2000/06/27 16:20:11 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27-Jun-2000, G.Cosmo  (geom-solids-specific-V01-01-02)
+--------------------
+- G4Polycone[.hh.cc]: better fix for bug-report #110.
+  Removed struct and replaced with class.
+
+26-Jun-2000, G.Cosmo  (geom-solids-specific-V01-01-01)
+--------------------
+- G4Polycone.cc: fixed memory leak by invoking destruction of member
+  enclosingCylinder, which was not cleaned up in the destructor.
+  This fixes problem report #107.
+- G4Polycone.hh: added forward declaration of struct G4PolyconeHistorical
+  and made it friend, for porting on KCC --strict. This fixes report #110.
+- G4Polyhedra.hh: fixed typo in method name. Changed GetNumSIde() to
+  GetNumSide(). This fixes problem report #105.
+
+08-Jun-2000, G.Gracia
+---------------------
+- G4VCSGfaceted.cc: fix for Win/NT in function GetExtent().
+
+27-Apr-2000, G.Cosmo
+--------------------
+- Removed dependency over the CSG domain in GNUmakefile.
+
+18-Apr-2000, D.Williams
+-----------------------
+- Removed meaningless "const" specifiers from methods in G4ClippablePolygon,
+  and G4EllipticalTube.
+- G4EllipticalTube, G4Hype and G4VCSGfaceted now inherit directly
+  from G4VSolid (before was G4CSGSolid).
+- Reintroduced GetExtent() in G4EllipticalTube, G4Hype and G4VCSGfaceted
+  (in principle, not needed).
+- Modified assertations in unit test testG4Hype.cc.
+
+11-Apr-2000, J.Allison
+----------------------
+- Removed implementations of GetExtent in most sub-classes of G4VSolid (a
+  default implementation exists in G4VSolid).
+- All implementations of DescribeYourselfTo (G4VGraphicsScene& scene) const
+  now correctly written: scene.AddThis(*this).
+
+05-Apr-2000, G.Cosmo   (geom-solids-specific-V01-01-00)
+--------------------
+- Restructured solids/CSG domain, by moving to "specific" the following
+  classes: G4ClippablePolygon, G4EnclosingCylinder, G4Hype, G4PolyPhiFace,
+  G4Polycone, G4PolyconeSide, G4Polyhedra, G4PolyhedraSide, G4ReduciblePolygon,
+  G4IntersectingCone, G4SolidExtentList, G4VCSGface, G4VCSGfaceted.
+  The new module's library for "specific" is now called 'G4specsolids'.
+- Created specific/test directory and moved testG4Hype.cc and testG4Polycone,cc
+  from CSG/test.
+- Organised class description comments for the Software Reference Manual
+  and added CVS headers to files.
+
+29-Mar-2000, D.Williams
+-----------------------
+- Added first implementation of G4EllipticalTube.
+  It defines a simple elliptical tube, as in geant3 "ELTU".
+  Files introduced: G4EllipticalTube[.hh.cc].
+
+25-Mar-2000, G.Cosmo
+--------------------
+- History file created.

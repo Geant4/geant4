@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPVector.hh,v 1.8 1999/12/15 14:53:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1

@@ -2,7 +2,6 @@
 // G4Conic
 
 G4Conic::G4Conic (): pShift(0) {}
-G4Conic::G4Conic (STEPentity& Ent){};    
 G4Conic::~G4Conic() {}
 
 

@@ -1,11 +1,39 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4BoundedSurfaceCreator.cc,v 1.4 2000/02/25 16:36:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
+//
+// ----------------------------------------------------------------------
+// Class G4BoundedSurfaceCreator
+//
+// Authors: J.Sulkimo, P.Urban.
+// Revisions by: L.Broglia, G.Cosmo.
+//
+// History:
+//   18-Nov-1999: First step of re-engineering - G.Cosmo
+// ----------------------------------------------------------------------
+
+#include <instmgr.h>
+#include <STEPcomplex.h>
+
 #include "G4BoundedSurfaceCreator.hh"
-#include "STEPcomplex.h"
+#include "G4GeometryTable.hh"
+#include "G4ControlPoints.hh"
+#include "G4BSplineSurface.hh"
 
 G4BoundedSurfaceCreator G4BoundedSurfaceCreator::csc;
 
-G4BoundedSurfaceCreator::G4BoundedSurfaceCreator(){G4GeometryTable::RegisterObject(this);}
+G4BoundedSurfaceCreator::G4BoundedSurfaceCreator()
+{
+  G4GeometryTable::RegisterObject(this);
+}
 
-G4BoundedSurfaceCreator::~G4BoundedSurfaceCreator(){}
+G4BoundedSurfaceCreator::~G4BoundedSurfaceCreator() {}
 
 void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 {
@@ -19,25 +47,40 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   if(complexEnt->EntityExists("B_Spline_Surface"))
     {
       subEnt = complexEnt->EntityPart("B_Spline_Surface");
-      bSpline =(SdaiB_spline_surface*)G4GeometryTable::CreateObject(*subEnt);      
+      bSpline =(SdaiB_spline_surface*)G4GeometryTable::CreateObject(*subEnt);
+      if (!bSpline)
+        G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+               << "\tComplex entity part -BSpline surface- not found !" << G4endl;
     }
   
   if(complexEnt->EntityExists("B_Spline_Surface_With_Knots"))
     {
       subEnt = complexEnt->EntityPart("B_Spline_Surface_With_Knots");
       bSplineWithKnots =(SdaiB_spline_surface_with_knots*)G4GeometryTable::CreateObject(*subEnt);
+      if (!bSplineWithKnots)
+        G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+               << "\tComplex entity part -BSpline surface with knots- not found !" << G4endl;
     }
 
   if(complexEnt->EntityExists("Rational_B_Spline_Surface"))
     {
       subEnt = complexEnt->EntityPart("Rational_B_Spline_Surface");
       rationalBSpline =(SdaiRational_b_spline_surface*)G4GeometryTable::CreateObject(*subEnt);
+      if (!rationalBSpline)
+        G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+               << "\tComplex entity part -Rational BSpline surface- not found !" << G4endl;
     }
 
+  if ((!bSpline) || (!bSplineWithKnots) || (!rationalBSpline))
+  {
+    G4cerr << "\tComplex Bounded Surface NOT created." << G4endl;
+    createdObject = 0;
+    return;
+  }
 
   G4int u,v;
-  u=bSpline->U_degree();
-  v=bSpline->V_degree();
+  u=bSpline->u_degree_();
+  v=bSpline->v_degree_();
 
 
   // Get control points
@@ -50,7 +93,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
   G4int Index;
   STEPentity *Entity;
   SCLstring s;
-  STEPaggregate *Aggr=bSpline->Control_points_list();
+  STEPaggregate *Aggr=bSpline->control_points_list_();
   const char *Str = Aggr->asStr(s);
 
   G4int stringlength = strlen(Str);  
@@ -101,16 +144,21 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 	//Entity = InstanceList.GetSTEPentity(Index);
 	MgrNode* MgrTmp = instanceManager.FindFileId(Index);
 	Index = instanceManager.GetIndex(MgrTmp);
-	Entity = instanceManager.GetSTEPentity(Index);
+//      Entity = instanceManager.GetSTEPentity(Index);
+        Entity = instanceManager.GetApplication_instance(Index);
 	void *tmp =G4GeometryTable::CreateObject(*Entity);
-	controlPoints.put(a,b,*(G4PointRat*)tmp);
+	if (tmp)
+	  controlPoints.put(a,b,*(G4PointRat*)tmp);
+	else
+          G4cerr << "WARNING - G4BoundedSurfaceCreator::CreateG4Geometry" << G4endl
+                 << "\tNULL control point (G4PointRat) detected." << G4endl;
       }  
   
   
   // Get knot vectors
-      STEPaggregate *multAggr = bSplineWithKnots->U_multiplicities();
+  STEPaggregate *multAggr = bSplineWithKnots->u_multiplicities_();
   G4int uMultCount = multAggr->EntryCount();
-  STEPaggregate *knotAggr = bSplineWithKnots->U_knots();
+  STEPaggregate *knotAggr = bSplineWithKnots->u_knots_();
   G4int uKnotCount = knotAggr->EntryCount();
 
   G4int totalUKnotCount = 0;
@@ -122,7 +170,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
       multiNode = (IntNode*)multiNode->NextNode();
     }
   
-  G4KnotVector *uKnots  = new G4KnotVector(totalUKnotCount);
+  G4KnotVector uKnots(totalUKnotCount);
 
   RealNode* knotNode = (RealNode*)knotAggr->GetHead();
   multiNode = (IntNode*)multAggr->GetHead();
@@ -137,7 +185,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
       for(G4int b=0;b<multValue;b++)
 	{
-	  uKnots->PutKnot(index, knotValue);
+	  uKnots.PutKnot(index, knotValue);
 	  index++;
 	}
       knotNode = (RealNode*)knotNode->NextNode();
@@ -146,10 +194,10 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
 
   // V dir
-   multAggr = bSplineWithKnots->V_multiplicities();
+  multAggr = bSplineWithKnots->v_multiplicities_();
   G4int vMultCount = multAggr->EntryCount();
   
-  knotAggr = bSplineWithKnots->V_knots();
+  knotAggr = bSplineWithKnots->v_knots_();
   G4int vKnotCount = knotAggr->EntryCount();
 
   G4int totalVKnotCount = 0;
@@ -160,7 +208,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
       totalVKnotCount += multiNode->value;
       multiNode = (IntNode*)multiNode->NextNode();
     }
-  G4KnotVector *vKnots  = new G4KnotVector(totalVKnotCount);
+  G4KnotVector vKnots(totalVKnotCount);
 
   knotNode = (RealNode*)knotAggr->GetHead();
   multiNode = (IntNode*)multAggr->GetHead();
@@ -176,7 +224,7 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
       for(G4int b=0;b<multValue;b++)
 	{
-	  vKnots->PutKnot(index, knotValue);
+	  vKnots.PutKnot(index, knotValue);
 	  index++;
 	}
       knotNode = (RealNode*)knotNode->NextNode();
@@ -185,7 +233,8 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
 
 
   // copy weights data
-    STEPaggregate *weightAggr =  rationalBSpline->Weights_data();
+  STEPaggregate *weightAggr =  rationalBSpline->weights_data_();
+
   // Temp solution until NIST supports
   // two dimensional instances.grrh
   const char* Str2 = weightAggr->asStr(s);
@@ -227,19 +276,19 @@ void G4BoundedSurfaceCreator::CreateG4Geometry(STEPentity& Ent)
     }
 
   controlPoints.SetWeights(ratVector);
-
+  delete [] ratVector;
   
   // create BSpline
   G4BSplineSurface* bSplineSrf = new G4BSplineSurface(
 						   u,
 						   v,
-						   *uKnots,
-						   *vKnots,
+						   uKnots,
+						   vKnots,
 						   controlPoints
-						     );  
+						     );
+  createdObject = bSplineSrf;
 }
 
 void G4BoundedSurfaceCreator::CreateSTEPGeometry(void * G4obj)
 {
-
 }

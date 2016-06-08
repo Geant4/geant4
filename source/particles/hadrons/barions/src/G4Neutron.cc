@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Neutron.cc,v 1.2.6.1.2.2 1999/12/14 07:08:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Neutron.cc,v 1.4 2000/02/27 06:17:04 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -41,6 +41,7 @@ G4Neutron::G4Neutron(
               iConjugation,iIsospin,iIsospin3,gParity,pType,
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+   SetParticleSubType("nucleon");
 }
 
 // ......................................................................

@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -23,7 +23,7 @@ class G4VEmissionProbability
 {
 public:
   G4VEmissionProbability() {};
-  virtual ~G4VEmissionProbability() {}; // *
+  virtual ~G4VEmissionProbability() {};
 
 private:  
   G4VEmissionProbability(const G4VEmissionProbability &right);
@@ -33,7 +33,7 @@ private:
   G4bool operator!=(const G4VEmissionProbability &right) const;
   
 public:
-  virtual G4double EmissionProbability(const G4Fragment & fragment, const G4double photonExcitation) = 0;
+  virtual G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy) = 0;
 
 };
 

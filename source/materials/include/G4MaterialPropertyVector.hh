@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.3.2.1 1999/11/11 14:30:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4MaterialPropertyVector.hh,v 1.4 1999/11/11 15:36:09 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

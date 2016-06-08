@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEAlphaInelastic.cc,v 1.1.10.1.2.1 1999/12/08 17:34:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
 //
  // Hadronic Process: Alpha Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
@@ -69,6 +67,7 @@
       pd->SetDefinition( vec[i]->GetDefinition() );
       pd->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( pd );
+      delete vec[i];
     }
     
     return &theParticleChange;

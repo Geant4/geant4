@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VHit.hh,v 1.3.4.1 1999/12/07 20:47:48 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #ifndef G4VHit_h

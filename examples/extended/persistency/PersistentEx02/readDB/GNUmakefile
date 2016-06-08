@@ -45,8 +45,8 @@ LIBS :=      -L$(G4TMP)/$(G4SYSTEM)/PersistentEx02 \
              -lPersistentEx02 \
              -L$(G4LIB)/$(G4SYSTEM) \
              -lG4pmanagement -lG4pgeomn -lG4pgeomBoolean  -lG4pcsg \
-             -lG4pgeomGlobal -lG4prun -lG4pevents -lG4phits -lG4pglobal \
-             -lG4event -lG4partman -lG4hits -lG4digits \
+             -lG4pgeomGlobal -lG4prun -lG4pevents -lG4phits -lG4pdigits \
+             -lG4pglobal -lG4event -lG4partman -lG4hits -lG4digits \
              -lG4materials \
              -lG4intercoms -lG4globman -lG4hepnumerics \
              $(LIBS) \

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.hh,v 1.1.10.1 1999/12/07 20:50:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4eBremsstrahlung.hh,v 1.6 2000/05/23 15:44:01 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -22,7 +22,8 @@
 // ************************************************************
 // 1-10-96 : new type G4OrderedTable;  ComputePartialSumSigma()
 // 20/03/97: new energy loss+ionisation+brems scheme, L.Urban
-// 01-09-98, new methods SetBining()  and PrintInfo() 
+// 01-09-98, new method  PrintInfo() 
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
 
 #ifndef G4eBremsstrahlung_h
@@ -31,7 +32,7 @@
 #include "G4ios.hh" 
 #include "globals.hh"
 #include "Randomize.hh" 
-#include "G4eEnergyLoss.hh"
+#include "G4VeEnergyLoss.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4Gamma.hh"
@@ -41,7 +42,7 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
  
-class G4eBremsstrahlung : public G4eEnergyLoss
+class G4eBremsstrahlung : public G4VeEnergyLoss
  
 { 
   public:
@@ -51,8 +52,6 @@ class G4eBremsstrahlung : public G4eEnergyLoss
     ~G4eBremsstrahlung();
 
      G4bool IsApplicable(const G4ParticleDefinition&);
-     
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
      
      void PrintInfoDefinition();
            
@@ -119,11 +118,26 @@ class G4eBremsstrahlung : public G4eEnergyLoss
 
      G4PhysicsTable* theMeanFreePathTable ;              
 
-     G4OrderedTable PartialSumSigma;    // partial sum of total crosssection
+     G4OrderedTable PartialSumSigma;       // partial sum of total crosssection
 
-     G4double LowestKineticEnergy;      // low  energy limit of the crossection formula
-     G4double HighestKineticEnergy;     // high energy limit of the crossection formula 
-     G4int    TotBin;                   // number of bins in the tables 
+     static G4double LowerBoundLambda;     // low  energy limit of the crossection formula
+     static G4double UpperBoundLambda;     // high energy limit of the crossection formula 
+     static G4int    NbinLambda;           // number of bins in the tables 
+     
+     G4double MinThreshold;                // minimun value for the production threshold
+     
+     G4double LowestKineticEnergy,HighestKineticEnergy; // bining of the Eloss table
+     G4int    TotBin;                                   // (from G4VeEnergyLoss)
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
+
 };
 
 #include "G4eBremsstrahlung.icc"

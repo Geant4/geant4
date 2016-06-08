@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.11 1999/12/16 17:19:32 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VisCommandsScene.cc,v 1.15 2000/05/29 09:21:40 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -196,6 +196,7 @@ G4VisCommandSceneList::G4VisCommandSceneList () {
 				 omitable = true);
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
+  fpCommand -> SetParameter (parameter);
   sceneNameCommands.push_back (fpCommand);
 }
 
@@ -317,25 +318,33 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   for (G4int iSH = 0; iSH < nSceneHandlers; iSH++) {
     G4VSceneHandler* aSceneHandler = sceneHandlerList [iSH];
     G4Scene* aScene = aSceneHandler -> GetScene ();
-    const G4String& aSceneName = aScene -> GetName ();
-    if (sceneName == aSceneName) {
-      aSceneHandler -> ClearStore ();
-      aSceneHandler -> ClearTransientStore ();
-      G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
-      const G4int nViewers = viewerList.entries ();
-      for (G4int iV = 0; iV < nViewers; iV++) {
-	G4VViewer* aViewer = viewerList [iV];
-	aViewer -> ClearView ();
-	aViewer -> DrawView ();
-	// Triggers rebuild of graphical database by notifying the scene
-	// handler.  The viewer is supposed to be smart enough to know
-	// when not to do this.  E.g., the second viewer of a scene
-	// handler does not do it.
-	G4cout << "Viewer \"" << aViewer -> GetName ()
-	       << "\" of scene handler \"" << aSceneHandler -> GetName ()
-	       << "\"\n  prepared at request of scene \"" << sceneName
-	       << "\"." << G4endl;
+    if (aScene) {
+      const G4String& aSceneName = aScene -> GetName ();
+      if (sceneName == aSceneName) {
+	aSceneHandler -> ClearStore ();
+	aSceneHandler -> ClearTransientStore ();
+	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
+	const G4int nViewers = viewerList.entries ();
+	for (G4int iV = 0; iV < nViewers; iV++) {
+	  G4VViewer* aViewer = viewerList [iV];
+	  aViewer -> ClearView ();
+	  aViewer -> DrawView ();
+	  // Triggers rebuild of graphical database by notifying the scene
+	  // handler.  The viewer is supposed to be smart enough to know
+	  // when not to do this.  E.g., the second viewer of a scene
+	  // handler does not do it.
+	  G4cout << "Viewer \"" << aViewer -> GetName ()
+		 << "\" of scene handler \"" << aSceneHandler -> GetName ()
+		 << "\"\n  prepared at request of scene \"" << sceneName
+		 << "\"." << G4endl;
+	}
       }
+    }
+    else {
+      G4cout << "G4VisCommandSceneNotifyHandlers: scene handler \""
+	     << aSceneHandler->GetName()
+	     << "\" has a null scene."
+	       << G4endl;
     }
   }
 }

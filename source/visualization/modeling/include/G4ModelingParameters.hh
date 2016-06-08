@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ModelingParameters.hh,v 1.5 1999/12/15 14:54:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  31st December 1997.

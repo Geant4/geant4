@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gsdetu.cc,v 1.3 1999/12/05 17:50:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 
 #include "G3toG4.hh"
 

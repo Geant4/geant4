@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5SteppingVerbose.cc,v 1.2 1999/12/15 14:49:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em5SteppingVerbose.cc,v 1.3 2000/02/29 12:24:13 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //---------------------------------------------------------------
@@ -15,10 +15,6 @@
 //
 // Description:
 //    Implementation of  the Em5SteppingVerbose class
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
 //
 //---------------------------------------------------------------
 

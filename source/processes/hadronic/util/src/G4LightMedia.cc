@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LightMedia.cc,v 1.1.10.1.2.1 1999/12/10 15:42:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4LightMedia.cc,v 1.2 1999/12/15 14:53:40 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
  // Hadronic Process: Light Media Charge and/or Strangeness Exchange
  // J.L. Chuma, TRIUMF, 21-Feb-1997

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.5.8.1.2.1 1999/12/08 17:35:15 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4MuNuclearInteraction.cc,v 1.7 2000/05/23 09:44:51 urban Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -32,9 +32,9 @@ G4double G4MuNuclearInteraction::adat[]={1.01,9.01,26.98,63.55,238.03};
 G4int G4MuNuclearInteraction::ntdat = 8 ;
 G4double G4MuNuclearInteraction::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,
                                                              1.e9,1.e10};
-G4int G4MuNuclearInteraction::NBIN = 100 ;  //500 ;
-G4double G4MuNuclearInteraction::ya[1000]={0.};
-G4double G4MuNuclearInteraction::proba[5][8][1000]={0.};
+G4int G4MuNuclearInteraction::NBIN = 1000 ;  
+G4double G4MuNuclearInteraction::ya[1001]={0.};
+G4double G4MuNuclearInteraction::proba[5][8][1001]={0.};
  
 G4MuNuclearInteraction::G4MuNuclearInteraction(const G4String& processName)
   : G4VDiscreteProcess(processName),  
@@ -42,7 +42,7 @@ G4MuNuclearInteraction::G4MuNuclearInteraction(const G4String& processName)
     theMeanFreePathTable(NULL),
     LowestKineticEnergy (1.*GeV),
     HighestKineticEnergy (1000000.*TeV),
-    TotBin(50),
+    TotBin(100),
     theMuonMinus ( G4MuonMinus::MuonMinus() ),
     theMuonPlus ( G4MuonPlus::MuonPlus() ),
     thePionZero (G4PionZero::PionZero() ),
@@ -272,7 +272,6 @@ void G4MuNuclearInteraction::MakeSamplingTables(
                                      const G4ParticleDefinition* ParticleType)
 {
  
-  G4double epbin[1000],xbin[1000],prbin[1000] ;
   G4int nbin;
   G4double AtomicNumber,AtomicWeight,KineticEnergy,
            TotalEnergy,Maxep ;  
@@ -322,9 +321,6 @@ void G4MuNuclearInteraction::MakeSamplingTables(
         if(nbin<NBIN)
         {
           nbin += 1 ;
-          epbin[nbin]=ep;
-          xbin[nbin]=x;
-          prbin[nbin]=CrossSection ;
           ya[nbin]=y ;
           proba[iz][it][nbin] = CrossSection ;
         }
@@ -335,7 +331,6 @@ void G4MuNuclearInteraction::MakeSamplingTables(
       {
         for(G4int ib=0; ib<=nbin; ib++)
         {
-          prbin[ib] /= CrossSection ;
           proba[iz][it][ib] /= CrossSection ;
         }
       }
@@ -528,7 +523,7 @@ G4Element* G4MuNuclearInteraction::SelectRandomAtom(G4Material* aMaterial) const
 void G4MuNuclearInteraction::PrintInfoDefinition()
 {
   G4String comments = "cross sections from R. Kokoulin \n ";
-           comments += "         Good description up to 1000 TeV.";
+           comments += "         Good description up to 1000 PeV.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
          << "\n    PhysicsTables from " << G4BestUnit(LowestKineticEnergy,

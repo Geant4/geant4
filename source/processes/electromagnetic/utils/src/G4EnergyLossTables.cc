@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.9.2.1 1999/12/07 20:51:22 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4EnergyLossTables.cc,v 1.12 2000/05/23 14:25:26 urban Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // ------------------------------------------------------------------- 
 // first version created by P.Urban , 06/04/1998
@@ -80,7 +80,8 @@ void G4EnergyLossTables::Register(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-     dEdx = (*dEdxTable)(materialIndex)->GetValue(
+     dEdx = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)
+            *(*dEdxTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 
   } else if (scaledKineticEnergy>t.theHighestKineticEnergy) {
@@ -128,7 +129,7 @@ void G4EnergyLossTables::Register(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-    Range = scaledKineticEnergy/t.theLowestKineticEnergy*
+    Range = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
 

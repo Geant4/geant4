@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Trajectory.hh,v 1.9 2000/01/26 04:20:31 asaim Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //---------------------------------------------------------------

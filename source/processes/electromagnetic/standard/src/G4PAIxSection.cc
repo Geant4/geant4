@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSection.cc,v 1.3.6.1.2.1 1999/12/08 17:34:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PAIxSection.cc,v 1.4 1999/12/15 14:51:51 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // G4PAIxSection.cc -- class implementation file

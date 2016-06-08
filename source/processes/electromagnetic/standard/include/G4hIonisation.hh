@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.hh,v 1.4.8.1 1999/12/07 20:50:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4hIonisation.hh,v 1.9 2000/05/23 14:46:35 urban Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -26,6 +26,7 @@
 // corrected by L.Urban on 24/09/97
 // corrected by L.Urban on 13/01/98
 // bugs fixed by L.Urban on 02/02/99
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4hIonisation_h
@@ -34,7 +35,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4hEnergyLoss.hh"
+#include "G4VhEnergyLoss.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -43,7 +44,7 @@
 #include "G4PhysicsLinearVector.hh"
  
  
-class G4hIonisation : public G4hEnergyLoss 
+class G4hIonisation : public G4VhEnergyLoss 
  
 {
   public:
@@ -53,8 +54,6 @@ class G4hIonisation : public G4hEnergyLoss
     ~G4hIonisation();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
-
-    void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
 
     void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
 
@@ -98,6 +97,23 @@ class G4hIonisation : public G4hEnergyLoss
     const G4double* DeltaCutInKineticEnergy ; 
  
     G4double DeltaCutInKineticEnergyNow ;
+    static G4double Tmincut ;
+
+    static G4double LowerBoundLambda ; // bining for lambda table
+    static G4double UpperBoundLambda ;
+    static G4int    NbinLambda ;
+    G4double LowestKineticEnergy,HighestKineticEnergy ;
+    G4int    TotBin ;
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
+
 };
  
 #include "G4hIonisation.icc"

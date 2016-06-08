@@ -5,9 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SandiaTable.hh,v 1.3.8.1 1999/12/07 20:49:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4SandiaTable.hh,v 1.6 2000/06/15 17:35:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
+
+// class description
 //
+// This class is an interface to G4StaticSandiaData.
+// it provides - Sandia coeff for an element, given its Z
+//             - sandia coeff for a material, given a pointer to it
+//
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
 // 18.11.98 simplified public interface; new methods for materials.  mma
@@ -29,21 +36,25 @@ class G4Material;
 
 class G4SandiaTable
 {
-public:
+public:  // with description
 
     G4SandiaTable(G4int);	         
     G4SandiaTable(G4Material*);	         
    ~G4SandiaTable();
-   
+
+    //per atom of an Element:   
     static G4int     GetNbOfIntervals   (G4int Z);
     static G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
     static G4double* GetSandiaCofPerAtom(G4int Z, G4double energy);
     static G4double  GetIonizationPot   (G4int Z);
     static G4double  GetZtoA            (G4int Z);
     
+    //per volume of a material:
            G4int     GetMatNbOfIntervals()  {return fMatNbOfIntervals;};
            G4double  GetSandiaCofForMaterial(G4int,G4int);
            G4double* GetSandiaCofForMaterial(G4double energy);
+	   
+public:  // without description
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -128,7 +139,7 @@ G4double  G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4int interval, G4int j)
    G4int row = fCumulInterval[Z-1] + interval;
    if (j==0) return fSandiaTable[row][0]*keV;
    G4double AoverAvo = Z/(fZtoAratio[Z]*Avogadro*mole);         
-   return fSandiaTable[row][j]*AoverAvo*cm2*pow(keV,(int)j);     
+   return fSandiaTable[row][j]*AoverAvo*cm2*pow(keV,G4double(j));     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

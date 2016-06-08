@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FPlane.cc,v 1.7 1999/12/15 14:50:01 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Corrections by S.Giani:
 // - The constructor using iVec now properly stores both the internal and

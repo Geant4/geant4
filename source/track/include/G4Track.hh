@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.5 1999/11/07 16:32:03 kurasige Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Track.hh,v 1.8 2000/06/02 10:16:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //---------------------------------------------------------------
@@ -39,6 +39,7 @@
 #include "G4DynamicParticle.hh"       // Include from 'particle+matter'
 #include "G4TrackStatus.hh"           // Include from 'tracking'
 #include "G4VTouchable.hh"            // Include from 'geometry'
+#include "G4VUserTrackInformation.hh"
 
 #include "G4Material.hh"
 
@@ -115,11 +116,11 @@ public: // With description
    G4Material* GetMaterial() const;
    G4Material* GetNextMaterial() const;
 
-   G4VTouchable* GetTouchable() const;
-   void SetTouchable(G4VTouchable* apValue);
+   const G4VTouchable* GetTouchable() const;
+   void SetTouchable(const G4VTouchable* apValue);
 
-   G4VTouchable* GetNextTouchable() const;
-   void SetNextTouchable(G4VTouchable* apValue);
+   const G4VTouchable* GetNextTouchable() const;
+   void SetNextTouchable(const G4VTouchable* apValue);
 
   // energy
    G4double GetKineticEnergy() const;
@@ -163,8 +164,8 @@ public: // With description
       // Accumulated the track length
 
   // step information
-   G4Step* GetStep() const;
-   void SetStep(G4Step* aValue);
+   const G4Step* GetStep() const;
+   void SetStep(const G4Step* aValue);
 
    G4int GetCurrentStepNumber() const;
    void IncrementCurrentStepNumber();
@@ -200,6 +201,10 @@ public: // With description
    G4double GetWeight() const;
    void     SetWeight(G4double aValue);
 
+  // User information
+  G4VUserTrackInformation* GetUserInformation() const;
+  void SetUserInformation(G4VUserTrackInformation* aValue);
+
 //---------
    private:
 //---------
@@ -213,8 +218,8 @@ public: // With description
    G4int fParentID;
    G4int fTrackID;
 
-   G4VTouchable* fpTouchable;
-   G4VTouchable* fpNextTouchable;
+   const G4VTouchable* fpTouchable;
+   const G4VTouchable* fpNextTouchable;
 
    G4DynamicParticle* fpDynamicParticle;
    G4TrackStatus fTrackStatus;
@@ -237,7 +242,7 @@ public: // With description
      // to execute inclusive simulation for hadronic/electomagnetic shower
      // and neutron transportation etc. 
 
-   G4Step* fpStep;
+   const G4Step* fpStep;
 
    G4ThreeVector fVtxPosition;          // (x,y,z) of the vertex
    G4ThreeVector fVtxMomentumDirection; // Momentum direction at the vertex
@@ -245,7 +250,9 @@ public: // With description
    G4LogicalVolume* fpLVAtVertex;       //Logical Volume at the vertex
    G4VProcess* fpCreatorProcess;        // Process which created the track
    
+   G4VUserTrackInformation* fpUserInformation;
 };
+#include "G4Step.hh"
 #include "G4Track.icc"
 
 #endif

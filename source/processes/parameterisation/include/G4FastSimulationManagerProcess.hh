@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.4.2.1.2.1 1999/12/07 20:52:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.7 2000/05/30 08:30:32 mora Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -29,8 +29,6 @@
 
 #ifndef G4FastSimulationManagerProcess_h
 #define G4FastSimulationManagerProcess_h 1
-
-#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "G4VProcess.hh"

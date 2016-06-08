@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPLegendreStore.hh,v 1.4 1999/12/15 14:53:12 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef G4NeutronHPLegendreStore_h
 #define G4NeutronHPLegendreStore_h 1

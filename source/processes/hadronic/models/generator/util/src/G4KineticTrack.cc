@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KineticTrack.cc,v 1.3.8.1.2.1 1999/12/08 17:34:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4KineticTrack.cc,v 1.8 2000/06/09 13:59:56 jwellisc Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // $Id: G4KineticTrack.cc,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------
@@ -32,6 +32,12 @@
 #include "G4GeneralPhaseSpaceDecay.hh"
 #include "G4DecayProducts.hh"
 #include "G4LorentzRotation.hh"
+
+//
+// Some static clobal for integration
+//
+
+static G4double  G4KineticTrack_Gmass, G4KineticTrack_Gmass1, G4KineticTrack_Gmass2,G4KineticTrack_Ggamma1,G4KineticTrack_Ggamma2,G4KineticTrack_xmass1;
 
 //
 //   Default constructor
@@ -96,7 +102,6 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right)
 }
 
 
-
 //
 //   By argument constructor
 //
@@ -150,16 +155,18 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
   
   if(nChannels!=0) theActualWidth = new G4double[nChannels];
 
+  //  cout << " ****CONSTR*** ActualMass ******* " << theActualMass << G4endl;
   G4int index;
   for (index = nChannels - 1; index >= 0; index--)
      {
       G4VDecayChannel* theChannel = theDecayTable->GetDecayChannel(index);
       G4int nDaughters = theChannel->GetNumberOfDaughters();
-
+      G4double theMotherWidth;
       if (nDaughters == 2) 
          {
-          G4double thePoleMass = theDefinition->GetPDGMass();
-          G4double thePoleWidth = theChannel->GetBR();
+          G4double thePoleMass  = theDefinition->GetPDGMass();
+          theMotherWidth = theDefinition->GetPDGWidth();
+          G4double thePoleWidth = theChannel->GetBR()*theMotherWidth;
           G4ParticleDefinition* aDaughter;
           theDaughterMass = new G4double[nDaughters];
           theDaughterWidth = new G4double[nDaughters];
@@ -183,30 +190,59 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
           if ( !theDaughterIsShortLived[0] && !theDaughterIsShortLived[1] )
              {
 
-//              G4cout << G4endl << "Both the " << nDaughters <<
-//                              " decay products are stable!";
+	       //              G4cout << G4endl << "Both the " << nDaughters <<
+	       //                              " decay products are stable!";
+	       //	       	       cout << " LB: Both decay products STABLE !" << G4endl;
+	       //	       	       cout << " parent:     " << theChannel->GetParentName() << G4endl;
+	       //	       	       cout << " particle1:  " << theChannel->GetDaughterName(0) << G4endl;
+	       //	       	       cout << " particle2:  " << theChannel->GetDaughterName(1) << G4endl;
 
               theActualMom = EvaluateCMMomentum(theActualMass, 
                                                 theDaughterMass);   
               thePoleMom = EvaluateCMMomentum(thePoleMass, 
                                               theDaughterMass);
-
+	      //	      cout << G4endl;
+	      //	      cout << " LB: ActualMass/DaughterMass  " << theActualMass << "   " << theDaughterMass << G4endl; 
+	      //	      cout << " LB: ActualMom " << theActualMom << G4endl;
+	      //	      cout << " LB: PoleMom   " << thePoleMom << G4endl;
+	      //	      cout << G4endl;
              }
           else if ( !theDaughterIsShortLived[0] && theDaughterIsShortLived[1] )   
              {
 
-//              G4cout << G4endl << "Only the first of the " << nDaughters <<
-//                              " decay products is stable!";
+	       //              G4cout << G4endl << "Only the first of the " << nDaughters <<" decay products is stable!";
+	       //	       cout << " LB: only the first decay product is STABLE !" << G4endl;
+	       //	       cout << " parent:     " << theChannel->GetParentName() << G4endl;
+	       //	       cout << " particle1:  " << theChannel->GetDaughterName(0) << G4endl;
+	       //	       cout << " particle2:  " << theChannel->GetDaughterName(1) << G4endl;
 
+// global variable definition
+               G4KineticTrack_Gmass = theActualMass;
+               G4KineticTrack_Gmass1 = theDaughterMass[0];
+               G4KineticTrack_Gmass2 = theDaughterMass[1];
+              G4KineticTrack_Ggamma2 = theDaughterWidth[1];
               theActualMom = IntegrateCMMomentum();
+
+               G4KineticTrack_Gmass = thePoleMass;
               thePoleMom = IntegrateCMMomentum(thePoleMass);
-                
+	      //	      cout << " LB Parent Mass = " <<  G4KineticTrack_Gmass << G4endl;
+	      //	      cout << " LB Actual Mass = " << theActualMass << G4endl;
+	      //	      cout << " LB Daughter1 Mass = " <<  G4KineticTrack_Gmass1 << G4endl;
+	      //	      cout << " LB Daughter2 Mass = " <<  G4KineticTrack_Gmass2 << G4endl;
+	      //	      cout << " The Actual Momentum = " << theActualMom << G4endl;
+	      //	      cout << " The Pole Momentum   = " << thePoleMom << G4endl;
+	      //	      cout << G4endl;
+
              }        
           else if ( theDaughterIsShortLived[0] && !theDaughterIsShortLived[1] )   
              {
 
 //              G4cout << G4endl << "Only the second of the " << nDaughters <<
-//                              " decay products is stable!";
+	       //                              " decay products is stable!";
+	       //	       	       cout << " LB: only the second decay product is STABLE !" << G4endl;
+	       //	       cout << " parent:     " << theChannel->GetParentName() << G4endl;
+	       //	       cout << " particle1:  " << theChannel->GetDaughterName(0) << G4endl;
+	       //	       cout << " particle2:  " << theChannel->GetDaughterName(1) << G4endl;
 
 //
 //               Swap the content of the theDaughterMass and theDaughterWidth arrays!!!
@@ -215,8 +251,22 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
               G4SwapObj(theDaughterMass, theDaughterMass + 1);
               G4SwapObj(theDaughterWidth, theDaughterWidth + 1);
 
+// global variable definition
+               G4KineticTrack_Gmass = theActualMass;
+               G4KineticTrack_Gmass1 = theDaughterMass[0];
+               G4KineticTrack_Gmass2 = theDaughterMass[1];
+              G4KineticTrack_Ggamma2 = theDaughterWidth[1];
               theActualMom = IntegrateCMMomentum();
+
+               G4KineticTrack_Gmass = thePoleMass;
               thePoleMom = IntegrateCMMomentum(thePoleMass);
+	      //	      cout << " LB Parent Mass = " <<  G4KineticTrack_Gmass << G4endl;
+	      //	      cout << " LB Actual Mass = " << theActualMass << G4endl;
+	      //	      cout << " LB Daughter1 Mass = " <<  G4KineticTrack_Gmass1 << G4endl;
+	      //	      cout << " LB Daughter2 Mass = " <<  G4KineticTrack_Gmass2 << G4endl;
+	      //	      cout << " The Actual Momentum = " << theActualMom << G4endl;
+	      //	      cout << " The Pole Momentum   = " << thePoleMom << G4endl;
+	      //              cout << G4endl;
                 
              }        
           else if ( theDaughterIsShortLived[0] && theDaughterIsShortLived[1] )   
@@ -224,14 +274,33 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 
 //              G4cout << G4endl << "Both the " << nDaughters <<
 //                              " decay products are resonances!";
+	       //	       cout << " LB: both decay products are RESONANCES !" << G4endl;
+	       //	       cout << " parent:     " << theChannel->GetParentName() << G4endl;
+	       //	       cout << " particle1:  " << theChannel->GetDaughterName(0) << G4endl;
+	       //	       cout << " particle2:  " << theChannel->GetDaughterName(1) << G4endl;
 
-              /* @@@@@@ code has to be implemented */
+// global variable definition
+               G4KineticTrack_Gmass = theActualMass;
+               G4KineticTrack_Gmass1 = theDaughterMass[0];
+              G4KineticTrack_Ggamma1 = theDaughterWidth[0];
+               G4KineticTrack_Gmass2 = theDaughterMass[1];
+              G4KineticTrack_Ggamma2 = theDaughterWidth[1];
+	      theActualMom = IntegrateCMMomentum2();
+
+               G4KineticTrack_Gmass = thePoleMass;
+	      thePoleMom = IntegrateCMMomentum2();
+	      //	      cout << " LB Parent Mass = " <<  G4KineticTrack_Gmass << G4endl;
+	      //	      cout << " LB Daughter1 Mass = " <<  G4KineticTrack_Gmass1 << G4endl;
+	      //	      cout << " LB Daughter2 Mass = " <<  G4KineticTrack_Gmass2 << G4endl;
+	      //              cout << " The Actual Momentum = " << theActualMom << G4endl;
+	      //              cout << " The Pole Momentum   = " << thePoleMom << G4endl;
+	      //              cout << G4endl;
 
              }        
 
           G4double theMassRatio = thePoleMass / theActualMass;
           G4double theMomRatio = theActualMom / thePoleMom;
-          G4int l = 1;   /* code has to be made more general */
+          G4int l = 0;   /* code has to be made more general */
 
 //
 //           Evaluate tha "actual widths"
@@ -239,7 +308,12 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 
           theActualWidth[index] = thePoleWidth * theMassRatio *
                                   pow(theMomRatio, (2 * l + 1)) *
-                                  (1.2 / (0.2 + pow(theMomRatio, (2 * l))));
+                                  (1.2 / (1+ 0.2*pow(theMomRatio, (2 * l))));
+
+	  //	  	  cout << " LB The Mass Ratio   = " << theMassRatio << G4endl;
+	  //	  	  cout << " LB The Mom. Ratio   = " << theMomRatio << G4endl;
+	  //	  	  cout << " LB The Pole Width   = " << thePoleWidth << G4endl;
+	  //	  	  cout << " LB The Actual Width = " << theActualWidth[index] << "index: " << index << G4endl;
 
           delete [] theDaughterMass;
 	  theDaughterMass = NULL;
@@ -248,7 +322,8 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
          }
       else
          {
-          theActualWidth[index] = theChannel->GetBR();
+          theMotherWidth = theDefinition->GetPDGWidth();
+          theActualWidth[index] = theChannel->GetBR()*theMotherWidth;
          }
      }
 
@@ -291,12 +366,12 @@ const G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
      thePosition = right.GetPosition();
      the4Momentum = right.Get4Momentum();  
      if (theActualWidth != NULL) delete [] theActualWidth;
+     nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
      for (i = 0; i < nChannels; i++) 
         {
          theActualWidth[i] = right.theActualWidth[i];
         }
-     nChannels = right.GetnChannels();      
     }
  return *this;
 }
@@ -322,6 +397,10 @@ G4KineticTrackVector* G4KineticTrack::Decay()
 //
 //   Select a possible decay channel
 //
+  //  G4int index1;
+  //  for (index1 = nChannels - 1; index1 >= 0; index1--)
+    //  cout << "DECAY Actual Width IND/ActualW " << index1 << "  " << theActualWidth[index1] << G4endl;
+    //  cout << "DECAY Actual Mass " << theActualMass << G4endl;
  
  G4double theTotalActualWidth = this->EvaluateTotalActualWidth();
  if (theTotalActualWidth !=0)
@@ -333,7 +412,10 @@ G4KineticTrackVector* G4KineticTrack::Decay()
         {
          theSumActualWidth += theActualWidth[index];
          theCumActualWidth[index] = theSumActualWidth;
-        }
+	 //	 cout << "DECAY Cum. Width " << index << "  " << theCumActualWidth[index] << G4endl;
+	}
+     //	 cout << "DECAY Total Width " << theSumActualWidth << G4endl;
+     //	 cout << "DECAY Total Width " << theTotalActualWidth << G4endl;
      G4double r = theTotalActualWidth * G4UniformRand();
      G4ParticleDefinition* theDefinition = this->GetDefinition();
      G4DecayTable* theDecayTable = theDefinition->GetDecayTable();
@@ -343,6 +425,8 @@ G4KineticTrackVector* G4KineticTrack::Decay()
          if (r < theCumActualWidth[index])
             {
              theDecayChannel = theDecayTable->GetDecayChannel(index);
+	     //	     cout << "DECAY SELECTED CHANNEL" << index << G4endl;
+             chosench=index;
              break; 
             }
         }
@@ -350,6 +434,8 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4String theParentName = theDecayChannel->GetParentName();
      G4double theParentMass = this->GetActualMass();
      G4double theBR = theActualWidth[index];
+     //     cout << "**BR*** DECAYNEW  " << theBR << G4endl;
+     //     cout << "**PMass*** DECAYNEW  " << theParentMass << G4endl;
      G4int theNumberOfDaughters = theDecayChannel->GetNumberOfDaughters();
      G4String theDaughtersName1 = "";
      G4String theDaughtersName2 = "";
@@ -419,67 +505,141 @@ G4KineticTrackVector* G4KineticTrack::Decay()
     }
 }
 
-
-
-G4double G4KineticTrackIntegrandFunction1(G4double xmass)
+G4double G4KineticTrack_IntegrandFunction1(G4double xmass)
 {
- G4double result = 1.0;
-// G4double mass = theActualMass;   /* the actual mass value */
-// G4double mass1 = theDaughterMass[0];
-// G4double mass2 = theDaughterMass[1];
-// G4double gamma2 = theDaughtherWidth[1];
-// result = (mass1 / (2 * mass)) *
-//          sqrt(((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
-//               ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))) *
-//          twopi * (gamma2 / ((mass1 - xmass) * (mass2 - xmass) + ((gamma2 * gamma2) / 4)));    
+  // G4double mass = theActualMass;   /* the actual mass value */
+ G4double mass =  G4KineticTrack_Gmass;   /* the actual mass value */
+ // G4double mass1 = theDaughterMass[0];
+ G4double mass1 =  G4KineticTrack_Gmass1;
+ // G4double mass2 = theDaughterMass[1];
+ G4double mass2 =  G4KineticTrack_Gmass2;
+ // G4double gamma2 = theDaughterWidth[1];
+ G4double gamma2 = G4KineticTrack_Ggamma2;
+ G4KineticTrack wei;
+ G4double result = (1. / (2 * mass)) *
+          sqrt(((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
+               ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))) *
+          wei.BrWig(gamma2, mass2, xmass);
  return result;
 }
 
-G4double G4KineticTrackIntegrandFunction2(G4double xmass)
+G4double G4KineticTrack_IntegrandFunction2(G4double xmass)
 {
- G4double result = 2.0;
-// G4double mass = theDefinition->GetPDGMass();   /* the pole mass value */
-// G4double mass1 = theDaughterMass[0];
-// G4double mass2 = theDaughterMass[1];
-// G4double gamma2 = theDaughtherWidth[1];
-// result = (mass1 / (2 * mass)) *
-//          sqrt(((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
-//               ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))) *
-//          twopi * (gamma2 / ((mass1 - xmass) * (mass2 - xmass) + ((gamma2 * gamma2) / 4)));    
-//
+  // G4double mass = theDefinition->GetPDGMass();   /* the pole mass value */
+ G4double mass =  G4KineticTrack_Gmass;   /* the actual mass value */
+  // G4double mass1 = theDaughterMass[0];
+ G4double mass1 =  G4KineticTrack_Gmass1;
+  // G4double mass2 = theDaughterMass[1];
+ G4double mass2 =  G4KineticTrack_Gmass2;
+  // G4double gamma2 = theDaughterWidth[1];
+ G4double gamma2 = G4KineticTrack_Ggamma2;
+ G4KineticTrack wei;
+ G4double result = (1. / (2 * mass)) *
+          sqrt(((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
+               ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))) *
+          wei.BrWig(gamma2, mass2, xmass);
  return result;
 }
 
+G4double G4KineticTrack_IntegrandFunction3(G4double xmass)
+{
+ G4double mass =  G4KineticTrack_Gmass;   /* the actual mass value */
+ G4double mass1 =  G4KineticTrack_Gmass1;
+ G4double gamma1 = G4KineticTrack_Ggamma1;
+ G4double mass2 =  G4KineticTrack_Gmass2;
+ G4double gamma2 = G4KineticTrack_Ggamma2;
+ G4KineticTrack wei;
+ G4double result = (1. / (2 * mass)) *
+          sqrt(((mass * mass) - (G4KineticTrack_xmass1 + xmass) * (G4KineticTrack_xmass1 + xmass)) *
+               ((mass * mass) - (G4KineticTrack_xmass1 - xmass) * (G4KineticTrack_xmass1 - xmass))) *
+          wei.BrWig(gamma2, mass2, xmass);
+ return result;
+}
 
+G4double G4KineticTrack_IntegrandFunction4(G4double xmass)
+{
+ G4double mass =  G4KineticTrack_Gmass;
+ G4double mass1 =  G4KineticTrack_Gmass1;
+ G4double gamma1 = G4KineticTrack_Ggamma1;
+ G4double mass2 =  G4KineticTrack_Gmass2;
+ G4double gamma2 = G4KineticTrack_Ggamma2;
+ G4KineticTrack wei;
+ G4double G4KineticTrack_xmass1=xmass;
+ G4double theLowerLimit = 0.0;
+ G4double theUpperLimit = mass - xmass;
+ G4int nIterations = 100;
+ G4SimpleIntegration theIntegrandMomentum(&G4KineticTrack_IntegrandFunction3);
+ G4double result = wei.BrWig(gamma1, mass1, xmass)*
+                   theIntegrandMomentum.Simpson(theLowerLimit,
+						theUpperLimit,
+						nIterations);
+ return result;
+}
 
 G4double G4KineticTrack::IntegrateCMMomentum() const
 {
  G4double theLowerLimit = 0.0;
  G4double theUpperLimit = theActualMass - theDaughterMass[0];
  G4int nIterations = 100;
- G4SimpleIntegration theIntegrandMomentum(&G4KineticTrackIntegrandFunction1);
- G4double theIntegralOverMass2 = theIntegrandMomentum.Simpson(theLowerLimit,
+ G4SimpleIntegration theIntegrandMomentum(&G4KineticTrack_IntegrandFunction1);
+ G4double theIntegralOverMass2;
+ if(theUpperLimit>0.)
+  theIntegralOverMass2 = theIntegrandMomentum.Simpson(theLowerLimit,
                                                               theUpperLimit,
                                                               nIterations);                                    
+ else
+   theIntegralOverMass2 = 0.;
 
-// G4cout << G4endl << "Inside IntegrateCMMomentum (actual mass case): ";
-// G4cout << G4endl << "   Integration result = " << theIntegralOverMass2;
-
+ // G4cout << G4endl << "Inside IntegrateCMMomentum (actual mass case): ";
+ // G4cout << G4endl << "   Integration result = " << theIntegralOverMass2 << G4endl ;
  return theIntegralOverMass2;
 }
 
 G4double G4KineticTrack::IntegrateCMMomentum(const G4double polemass) const
 {
  G4double theLowerLimit = 0.0;
- G4double theUpperLimit = theActualMass - theDaughterMass[0];
+ G4double theUpperLimit = polemass - theDaughterMass[0];
  G4int nIterations = 100;
- G4SimpleIntegration theIntegrandMomentum(&G4KineticTrackIntegrandFunction2);
- G4double theIntegralOverMass2 = theIntegrandMomentum.Simpson(theLowerLimit,
+ G4SimpleIntegration theIntegrandMomentum(&G4KineticTrack_IntegrandFunction1);
+ G4double theIntegralOverMass2;
+ if(theUpperLimit>0.)
+  theIntegralOverMass2 = theIntegrandMomentum.Simpson(theLowerLimit,
                                                               theUpperLimit,
-                                                              nIterations);                                    
+                                                              nIterations);  
+ else
+   theIntegralOverMass2 = 0.;
 
-// G4cout << G4endl << "Inside IntegrateCMMomentum (pole mass case): ";
-// G4cout << G4endl << "   Integration result = " << theIntegralOverMass2;
+ // G4cout << G4endl << "Inside IntegrateCMMomentum (pole mass case): ";
+ // G4cout << G4endl << "   Integration result = " << theIntegralOverMass2 << G4endl;
+ // G4cout << G4endl << " Lower / upper limit " << theLowerLimit << " / " << theUpperLimit << G4endl;
 
  return theIntegralOverMass2;
 }
+
+G4double G4KineticTrack::IntegrateCMMomentum2() const
+{
+ G4double theLowerLimit = 0.0;
+ G4double theUpperLimit = theActualMass;
+ G4int nIterations = 100;
+ G4SimpleIntegration theIntegrandMomentum(&G4KineticTrack_IntegrandFunction4);
+ G4double theIntegralOverMass2;
+ if(theUpperLimit>0.)
+  theIntegralOverMass2 = theIntegrandMomentum.Simpson(theLowerLimit,
+                                                              theUpperLimit,
+                                                              nIterations);  
+ else
+   theIntegralOverMass2 = 0.;
+
+ // G4cout << G4endl << "Inside IntegrateCMMomentum 2: ";
+ // G4cout << G4endl << "   Integration result = " << theIntegralOverMass2 << G4endl;
+
+ return theIntegralOverMass2;
+}
+
+
+
+
+
+
+
+

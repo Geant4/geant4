@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPartonStringModel.cc,v 1.4.4.1.2.2 1999/12/09 17:37:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VPartonStringModel.cc,v 1.6 1999/12/15 17:51:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file

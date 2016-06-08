@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VGaussianQuadrature.cc,v 1.2 1999/11/16 17:31:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Implementation file for G4VGaussianQuadrature virtual base class
 //

@@ -19,18 +19,23 @@ setenv CLHEPROOT /lal/CLHEP/1.4/HP-UX-aCC
 setenv RWLIBS    "-lrwtool"
 endif
 if ( `uname -n` == "asc" ) then
+setenv G4WORKDIR /geant4/geant4-01-01
+setenv G4INSTALL $G4WORKDIR
+setenv G4LIB     $G4WORKDIR/lib
+setenv G4SYSTEM  DEC-cxx
 setenv CLHEPROOT /lal/CLHEP/1.4/OSF1-cxx
-setenv RWROOT    /lal/rogue/6.1/OSF1-cxx
-setenv RWFLAGS   "-I${RWROOT}"
-setenv RWLIBS    "-L${RWROOT}/lib -lrwtool"
+setenv RWFLAGS   "-I$G4INSTALL/source/global/STLInterface"
+setenv RWLIBS    ""
+# To be able to link :
+limit datasize 500000
 endif
 if ( `uname -n` == "lx1.lal.in2p3.fr" ) then
+setenv G4WORKDIR /geant4/geant4-01-01
+setenv G4INSTALL $G4WORKDIR
+setenv G4LIB     $G4WORKDIR/lib
+setenv G4SYSTEM  Linux-g++
 setenv CLHEPROOT /lal/CLHEP/1.4/Linux-gxx
-# With RogueWave :
-#setenv RWROOT    /lal/rogue/6.1/Linux-gxx
-#setenv RWFLAGS   "-I${RWROOT}"
-#setenv RWLIBS    "-L${RWROOT}/lib -lrwtool"
-# With STL :
+# With STL, hook the dummy rw things :
 setenv RWFLAGS   "-I$G4INSTALL/source/global/STLInterface"
 setenv RWLIBS    ""
 endif

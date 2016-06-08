@@ -2,7 +2,7 @@
 #define G4NeutronIsoIsoCrossSections_h
 
 #include "G4NeutronHPVector.hh"
-#include "G4NeutronIsoProdCrossSections.hh"
+#include "G4IsoProdCrossSections.hh"
 #include "G4NeutronHPNames.hh"
 
 class G4NeutronIsoIsoCrossSections
@@ -22,7 +22,7 @@ public:
 private:
   
   G4int theNumberOfProducts;
-  G4NeutronIsoProdCrossSections ** theProductionData;
+  G4IsoProdCrossSections ** theProductionData;
   G4NeutronHPVector theCrossSection;
   G4NeutronHPNames theNames;
   G4bool hasData;

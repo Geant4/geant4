@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PersistentEx01.cc,v 1.4.2.1 1999/12/07 20:47:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: PersistentEx01.cc,v 1.5 1999/12/15 14:49:16 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // --------------------------------------------------------------

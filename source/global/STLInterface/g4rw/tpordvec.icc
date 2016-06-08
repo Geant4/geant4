@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tpordvec.icc,v 1.2 2000/02/01 16:55:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: tpordvec.icc,v 1.4 2000/03/22 08:05:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -17,8 +17,9 @@
 
 template<class T >
 G4RWTPtrOrderedVector<T>::G4RWTPtrOrderedVector(size_t capacity)
-  : std_pvector(capacity,(T*)0),rwsize(0){}
-
+  : std_pvector(capacity,(T*)0),rwsize(0){} // Here Rogue-Wave would leave
+                                            // pointers T* uninitialised and
+                                            // would create an EMPTY vector!
 template<class T >
 G4RWTPtrOrderedVector<T>::G4RWTPtrOrderedVector(const G4RWTPtrOrderedVector<T>& v)
   : std_pvector(v),rwsize(v.rwsize){}

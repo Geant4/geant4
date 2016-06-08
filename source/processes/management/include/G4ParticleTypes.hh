@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTypes.hh,v 1.3 1999/11/07 17:11:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ParticleTypes.hh,v 1.4 2000/02/25 10:11:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,7 +56,6 @@
 #include "G4PionZero.hh"
 #include "G4Eta.hh"
 #include "G4EtaPrime.hh"
-#include "G4RhoZero.hh"
 
 #include "G4KaonPlus.hh"
 #include "G4KaonMinus.hh"

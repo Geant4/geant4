@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserLimits.icc,v 1.3 1999/11/22 15:12:45 maire Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4UserLimits.icc,v 1.5 2000/02/17 16:13:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //
@@ -27,9 +27,28 @@ inline G4UserLimits::G4UserLimits(G4double ustepMax,
 			          G4double uekinMin,
 			          G4double urangMin)
 :fMaxStep (ustepMax),fMaxTrack(utrakMax),fMaxTime(utimeMax),
- fMinEkine(uekinMin),fMinRange(urangMin)
+ fMinEkine(uekinMin),fMinRange(urangMin),fType("base")
 {}
 
+inline G4UserLimits::G4UserLimits(const G4String& type,
+				  G4double ustepMax,
+			          G4double utrakMax,
+			          G4double utimeMax,
+			          G4double uekinMin,
+			          G4double urangMin)
+:fMaxStep (ustepMax),fMaxTrack(utrakMax),fMaxTime(utimeMax),
+ fMinEkine(uekinMin),fMinRange(urangMin),fType(type)
+{}
+
+inline const G4String& G4UserLimits::GetType() const
+{
+  return fType;
+}
+
+inline void G4UserLimits::SetType(const G4String& type)
+{
+  fType = type;
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4UserLimits::~G4UserLimits(){}

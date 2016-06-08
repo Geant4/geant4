@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KineticTrack.hh,v 1.1.10.1 1999/12/07 20:51:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4KineticTrack.hh,v 1.3 1999/12/15 14:52:50 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // $Id: G4KineticTrack.hh,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------
@@ -34,10 +34,6 @@
 class G4KineticTrackVector;
 
 
-
-G4double G4KineticTrackIntegrandFunction1 (G4double xmass);
-
-G4double G4KineticTrackIntegrandFunction2 (G4double xmass);
 
 
 
@@ -80,16 +76,17 @@ class G4KineticTrack : public G4VKineticNucleon
 
       G4KineticTrackVector* Decay();
      
-
+  // LB move to public (before was private) LB
+      G4double* GetActualWidth() const;
 
   private:
+
 
       G4int GetnChannels() const;
       void SetnChannels(const G4int aChannel);
 
       G4double GetActualMass() const;
       
-      G4double* GetActualWidth() const;
       void SetActualWidth(G4double* anActualWidth); 
       
       G4double EvaluateTotalActualWidth();
@@ -101,14 +98,25 @@ class G4KineticTrack : public G4VKineticNucleon
 
       G4double IntegrateCMMomentum(const G4double polemass) const;
 
+      G4double IntegrateCMMomentum2() const;
 
 
   public:
       
-      friend G4double G4KineticTrackIntegrandFunction1 (G4double xmass);
+      G4double BrWig(const G4double Gamma, 
+                     const G4double rmass, 
+                     const G4double mass) const;
 
-      friend G4double G4KineticTrackIntegrandFunction2 (G4double xmass);
+      friend G4double IntegrandFunction1 (G4double xmass);
+
+      friend G4double IntegrandFunction2 (G4double xmass);
+
+      friend G4double IntegrandFunction3 (G4double xmass);
+
+      friend G4double IntegrandFunction4 (G4double xmass);
       
+  // LB new variable created LB
+      G4int chosench;
 
 
   private:
@@ -261,11 +269,23 @@ inline G4double G4KineticTrack::SampleResidualLifetime()
 inline G4double G4KineticTrack::EvaluateCMMomentum(const G4double m, 
                                                  const G4double* m_ij) const
 {
- G4double theCMMomentum = 1 / (2 * m) * 
+  G4double theCMMomentum;
+  if((m_ij[0]+m_ij[1])<m)
+   theCMMomentum = 1 / (2 * m) * 
           sqrt (((m * m) - (m_ij[0] + m_ij[1]) * (m_ij[0] + m_ij[1])) *
-                ((m * m) - (m_ij[0] - m_ij[1]) * (m_ij[0] - m_ij[1])));             
+                ((m * m) - (m_ij[0] - m_ij[1]) * (m_ij[0] - m_ij[1])));
+  else
+   theCMMomentum=0.;
 
  return theCMMomentum;
 }     
 
+inline G4double G4KineticTrack::BrWig(const G4double Gamma, const G4double rmass, const G4double mass) const 
+{                
+  G4double Norm = twopi;
+  return (Gamma/((mass-rmass)*(mass-rmass)+Gamma*Gamma/4.))/Norm;
+}
 #endif
+
+
+

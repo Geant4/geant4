@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.6.8.1.2.2 1999/12/10 15:41:59 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4eBremsstrahlung.cc,v 1.11 2000/05/23 15:44:29 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -29,6 +29,7 @@
 // 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
 // 13-08-98 : new methods SetBining() PrintInfo()
 // 03-03-99 : Bug fixed in LPM effect, L.Urban
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlung.hh"
@@ -36,17 +37,19 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
+G4double G4eBremsstrahlung::LowerBoundLambda = 1.*keV ;
+G4double G4eBremsstrahlung::UpperBoundLambda = 100.*TeV ;
+G4int	 G4eBremsstrahlung::NbinLambda = 100 ;
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 // constructor
  
 G4eBremsstrahlung::G4eBremsstrahlung(const G4String& processName)
-  : G4eEnergyLoss(processName),      // initialization
-    theMeanFreePathTable(NULL),
-    LowestKineticEnergy (1.*keV),
-    HighestKineticEnergy(100.*TeV),
-    TotBin(100)
-{ }
+  : G4VeEnergyLoss(processName),      // initialization
+    theMeanFreePathTable(NULL)
+{MinThreshold = 10*keV; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -66,16 +69,13 @@ G4eBremsstrahlung::~G4eBremsstrahlung()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins)
-{
-  LowestKineticEnergy = lowE;  HighestKineticEnergy = highE; TotBin = nBins;
-} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4eBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+    // get bining from EnergyLoss
+    LowestKineticEnergy  = GetLowerBoundEloss() ;
+    HighestKineticEnergy = GetUpperBoundEloss() ;
+    TotBin               = GetNbinEloss() ;
 
     BuildLossTable(aParticleType) ;
  
@@ -108,7 +108,6 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
            losslim,loss,rate,natom,Cut;
 
   const G4double MinKinEnergy = 1.*keV;
-  const G4double MinCut = 1.*keV;
   const G4double Thigh = 100.*GeV;
   const G4double Cuthigh = 50.*GeV;
   const G4double Factorhigh = 36./(1450.*GeV);
@@ -151,15 +150,13 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
           TotalEnergy = KineticEnergy+ParticleMass ;
 
           Cut = GammaCutInKineticEnergy[J] ;
-          if (Cut < MinCut) Cut = MinCut ;
-          if (Cut > KineticEnergy) Cut = KineticEnergy ;
+          if (Cut < MinThreshold)  Cut = MinThreshold;
+          if (Cut > KineticEnergy) Cut = KineticEnergy;
 
           bremloss = 0.;
 
           if (KineticEnergy>MinKinEnergy)
             {
-             if (Cut > KineticEnergy) Cut = KineticEnergy ;
-
              //  loop for elements in the material
              for (G4int iel=0; iel<NumberOfElements; iel++)
                {
@@ -418,7 +415,7 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
 // tables are Build for MATERIALS. 
 {
    G4double LowEdgeEnergy , Value;
-   G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2.;
+   G4double FixedEnergy = (LowerBoundLambda + UpperBoundLambda)/2.;
 
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
@@ -433,12 +430,12 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
    for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
        { 
         //create physics vector then fill it ....
-        ptrVector = new G4PhysicsLogVector(LowestKineticEnergy, HighestKineticEnergy,
-                                           TotBin ) ;
+        ptrVector = new G4PhysicsLogVector(LowerBoundLambda, UpperBoundLambda,
+                                           NbinLambda ) ;
 
         const G4Material* material= (*theMaterialTable)[J];
 
-        for ( G4int i = 0 ; i < TotBin ; i++ )      
+        for ( G4int i = 0 ; i < NbinLambda ; i++ )      
            {
              LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
              Value = ComputeMeanFreePath( &ParticleType, LowEdgeEnergy,
@@ -456,31 +453,27 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* ParticleType,
-                                               G4double KineticEnergy,
-                                               const G4Material* aMaterial)
-
-// Build the table of cross section per element. The table is built for MATERIALS.
-// This table is used by DoIt to select randomly an element in the material. 
+G4double G4eBremsstrahlung::ComputeMeanFreePath(
+                                  const G4ParticleDefinition* ParticleType,
+                                  G4double KineticEnergy,
+                                  const G4Material* aMaterial)
 {
-   G4int Imate = aMaterial->GetIndex();
-   G4int NbOfElements = aMaterial->GetNumberOfElements();
-   const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
-   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
+  if (GammaEnergyCut < MinThreshold) GammaEnergyCut = MinThreshold;
+     
+  G4double SIGMA = 0 ;
 
-   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
-
-   G4double SIGMA = 0. ;
-
-   for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ )
+  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
-        SIGMA += theAtomNumDensityVector[Ielem] * 
-                 ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                                 (*theElementVector)(Ielem)->GetZ(), 
-                                                 GammaEnergyCut );
-        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
-   }
+            SIGMA += theAtomNumDensityVector[i] * 
+                     ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+                                                     (*theElementVector)(i)->GetZ(), 
+                                                     GammaEnergyCut );
+      }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -677,6 +670,35 @@ G4double G4eBremsstrahlung::ComputePositronCorrFactorSigma( G4double AtomicNumbe
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* ParticleType,
+                                               G4double KineticEnergy,
+                                               const G4Material* aMaterial)
+
+// Build the table of cross section per element. The table is built for MATERIALS.
+// This table is used by DoIt to select randomly an element in the material. 
+{
+   G4int Imate = aMaterial->GetIndex();
+   G4int NbOfElements = aMaterial->GetNumberOfElements();
+   const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
+   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
+
+   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
+
+   G4double SIGMA = 0. ;
+
+   for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ )
+      {             
+        SIGMA += theAtomNumDensityVector[Ielem] * 
+                 ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+                                                 (*theElementVector)(Ielem)->GetZ(), 
+                                                 GammaEnergyCut );
+        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
+   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
                                                   const G4Step& stepData)
 //
@@ -734,7 +756,8 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 
    // Gamma production cut in this material
    G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
-
+   if (GammaEnergyCut < MinThreshold) GammaEnergyCut = MinThreshold;
+  
    // check against insufficient energy
     if (KineticEnergy < GammaEnergyCut)
        {
@@ -933,14 +956,14 @@ G4Element* G4eBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 void G4eBremsstrahlung::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from a parametrisation. ";
-           comments += "Good description from 1 KeV to 100 GeV.\n";
+           comments += "Good description from 10 KeV to 100 GeV.\n";
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";
                      
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestKineticEnergy,"Energy")
-         << " to " << G4BestUnit(HighestKineticEnergy,"Energy") 
-         << " in " << TotBin << " bins. \n";
+         << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,"Energy")
+         << " to " << G4BestUnit(UpperBoundLambda,"Energy") 
+         << " in " << NbinLambda << " bins. \n";
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TrackingMessenger.cc,v 1.6 2000/01/23 09:51:36 tsasaki Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //---------------------------------------------------------------

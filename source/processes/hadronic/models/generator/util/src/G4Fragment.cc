@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fragment.cc,v 1.4.8.1.2.3 1999/12/09 17:45:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Fragment.cc,v 1.6 1999/12/15 17:51:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)

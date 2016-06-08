@@ -1,0 +1,52 @@
+#
+# ------ WIN32/VC ------
+#
+ifeq ($(G4SYSTEM),WIN32-VC)
+  CXX       := CL
+  G4_HAVE_BOOL := yes
+  G4_NO_CBRT := yes
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -Ox
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
+    endif
+  endif
+  CXXFLAGS += -MD -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
+  CXXFLAGS += -D_WIN32 -DOS
+  CPPFLAGS += -DWIN32
+  #
+  # Should set $INCLUDE environment, if not set as below
+  #
+  ifdef G4USE_OSPACE
+    CXXFLAGS += $(OSPACEINC)
+  else 
+    ifdef G4USE_STLPORT
+      CXXFLAGS += $(OSPACEINC)
+    else
+  #  If native STL is selected, use ISO standard version.
+      G4USE_STD_NAMESPACE := yes 
+      CPPFLAGS += -DG4USE_STD_NAMESPACE
+    endif
+  endif   #ospace
+
+  LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
+
+  #
+  # Should set $LIB environment to include VC++ Studio lib directories, e.g.
+  #
+  #       $(LIB_PATH)"c:\ProgramFiles\DevStudio\vc\lib" \
+  #       $(LIB_PATH)'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\LIB' \
+  #       $(LIB_PATH)'\\srv1_info\v2\DecFtn5\x86\df\lib'
+      
+  AR := LIB
+  ECHO := echo -e
+  FC := f77
+#  FCLIBS := -lf2c
+  ifndef OGLFLAGS
+    OGLFLAGS  :=
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -lGLU  -lGL
+  endif
+endif

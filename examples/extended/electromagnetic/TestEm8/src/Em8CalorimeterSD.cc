@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8CalorimeterSD.cc,v 1.1 2000/01/07 14:50:44 grichine Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em8CalorimeterSD.cc,v 1.3 2000/06/27 13:29:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 
@@ -77,14 +77,14 @@ G4bool Em8CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
       if (physVol == Detector->GetAbsorber()) calHit->AddAbs(edep,stepl);
       HitID[Em8Number] = CalCollection->insert(calHit) - 1;
       if (verboseLevel>0)
-        G4cout << " New Calorimeter Hit on Em8: " << Em8Number << endl;
+        G4cout << " New Calorimeter Hit on Em8: " << Em8Number << G4endl;
     }
   else
     { 
       if (physVol == Detector->GetAbsorber())
          (*CalCollection)[HitID[Em8Number]]->AddAbs(edep,stepl);
       if (verboseLevel>0)
-        G4cout << " Energy added to Em8: " << Em8Number << endl; 
+        G4cout << " Energy added to Em8: " << Em8Number << G4endl; 
     }
     
   return true;

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: PhysicalConstants.h,v 1.4 1999/11/19 09:19:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 // 
 // ----------------------------------------------------------------------
 //

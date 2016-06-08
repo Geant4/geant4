@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PTrd.cc,v 1.3 1999/12/15 14:51:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // Implementation for G4Trd class

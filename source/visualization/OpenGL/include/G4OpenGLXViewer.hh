@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.6 1999/12/15 14:54:05 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4OpenGLXViewer.hh,v 1.8 2000/05/22 08:06:50 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -56,7 +56,7 @@ protected:
   void printBuffer(GLint, GLfloat*);
   GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
   void spewSortedFeedback (FILE*, GLint, GLfloat*);
-  void spewWireframeEPS (FILE*, GLint, GLfloat*, char*);
+  void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
   void print3DcolorVertex(GLint, GLint*, GLfloat*);
   G4float                           pointSize;
 
@@ -73,6 +73,8 @@ protected:
 
   XWindowAttributes                 xwa;
   Display                           *dpy;
+  static XVisualInfo                *vi_single_buffer;
+  static XVisualInfo                *vi_double_buffer;
   XVisualInfo                       *vi_immediate,
                                     *vi_stored,
                                     *vi;

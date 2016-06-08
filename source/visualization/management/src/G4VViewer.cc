@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.5 1999/12/15 14:54:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VViewer.cc,v 1.9 2000/05/13 10:52:51 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  27th March 1996
@@ -17,21 +17,20 @@
 #include "G4ios.hh"
 #include "g4std/strstream"
 
-#include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
 #include "G4VSceneHandler.hh"
+#include "G4Scene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
 #include "G4Event.hh"
 
-G4VViewer::G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name):
-fSceneHandler (scene),
+G4VViewer::G4VViewer (G4VSceneHandler& sceneHandler,
+		      G4int id, const G4String& name):
+fSceneHandler (sceneHandler),
 fViewId (id),
 fModified (true),
 fNeedKernelVisit (true)
 {
-  G4VisManager* pVMan = G4VisManager::GetInstance ();
-  fVP = pVMan -> GetCurrentViewParameters ();
   if (name == "") {
     char charname [50];
     G4std::ostrstream ost (charname, 50);
@@ -41,9 +40,17 @@ fNeedKernelVisit (true)
   else {
     fName = name;
   }
+  fShortName = fName (0, fName.find (' '));
+  fShortName.strip ();
 }
 
 G4VViewer::~G4VViewer () {}
+
+void G4VViewer::SetName (const G4String& name) {
+  fName = name;
+  fShortName = fName (0, fName.find (' '));
+  fShortName.strip ();
+}
 
 const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
 (const G4VisAttributes* pVisAttribs) const {

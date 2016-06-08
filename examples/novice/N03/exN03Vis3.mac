@@ -4,14 +4,17 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: November 10, 1999                                            #
+#        May      20, 2000                                            # 
+#        June     06, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating various drawing styles   #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis3.mac                      #
+#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute exN03Vis3.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 of after)       #
-#                                  Ghostview, Tcl/Tk                  #
+#                                  DAWN (version 3.80 or after)       #
+#                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
@@ -27,28 +30,38 @@
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
 #  Addional Notes:                                                    #
+#    The compound command "/vis/open <graphics-system-name>"          #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/sceneHandler/create $1                                    #
+#      /vis/viewer/create                                             #
 #                                                                     #
 #######################################################################
 
-#########################################################
-Setting to store particle trajactories for visualization
-#########################################################
+##############################################
+Store particle trajactories for visualization
+##############################################
 /tracking/storeTrajectory 1
-#/vis/scene/include/trajectories
 
 ######################################################
 # Visualization with OGLIX (OpenGL Immediate X) driver
 ######################################################
 
-# Create "scene-0" 
+# Invoke the OGLIX driver 
+/vis/open OGLIX
+
+# Create a new scene
 /vis/scene/create
 
-# Invoke the OGLSX driver 
-/vis/sceneHandler/create OGLIX
-/vis/viewer/create
+# Attach the current visualization driver 
+# to the current scene
+/vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
 /vis/scene/add/volume
+
+# Add trajectories to the current scene
+/vis/scene/add/trajectories
 
 # Bird-eye view of events with the hidden-surface 
 #  drawing style.
@@ -60,78 +73,53 @@ Setting to store particle trajactories for visualization
 ##########################################################
 # Visualization with DAWNFILE driver
 #
-#  * The visualized view is saved to a file "g4.eps"  
+#  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
 #
-#  * In order to make the file "g4.eps" printable, 
+#  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel
-#    or by hand.
+#    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI.
+#  * Set as follows to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 #
-#  * In order to save all views with a "multi-page" 
-#    EPS file "g4.eps", set the followings 
-#    in the 4th page of the DAWN GUI panel at 
-#    "every" visualization.
-#
-#      Add  showpage: Yes
-#      Append mode  : Yes 
-#
-#    More automatically, you can also generate the 
-#    multi-page EPS file "g4.eps", using the 
-#    batch-append mode of DAWN:
-#
-#      % setenv DAWN_BATCH  a
-#      % rm -f  g4.eps
-#      % $G4BINDIR/exampleN03 exN03Vis3.mac 
-#      % ghostview g4.eps
-#      (See each page using the menu of ghostview.) 
-#  
 ##########################################################
 
-# Create "scene-1" 
+# Invoke the DAWNFILE driver 
+/vis/open DAWNFILE
+
+# Create a new scene
 /vis/scene/create
 
-# Invoke the DAWNFILE driver 
-/vis/sceneHandler/create DAWNFILE
-/vis/viewer/create
+# Attach the current visualization driver 
+# to the current scene
+/vis/sceneHandler/attach
 
 # Add detector geometry to the current scene
 /vis/scene/add/volume
 
-# Set camera parameters
-#  Camera is zoomed up by 1.5 times of the standard setting
+# Add trajectories to the current scene
+/vis/scene/add/trajectories
+
+# Set camera 
+#  Camera is zoomed up by 1.5 times of the standard setting.
 /vis/camera/reset 
 /vis/camera/zoom 1.5
+/vis/camera/viewpoint    45 45 
 
 # Bird-eye view of events with the wireframe drawing style
-/vis/camera/viewpoint    45 45 
 /vis/set/drawing_style   0 
 /run/beamOn              5
 
 # Bird-eye view of events with the hidden-surface 
 #  drawing style.
-/vis/camera/viewpoint    45 45 
 /vis/set/drawing_style   2 
 /run/beamOn              50
 
 # Cull detector geometry and show only trajectories.
-#  * The command "/vis/camera/reset" resets the zoom 
-#    factor to one.  But it does not reset view point.
 /vis/camera/reset 
-/vis/camera/viewpoint    0 0
 /vis/set/culling         on 
 /vis/set/cull_by_density on 999
 /vis/set/drawing_style   0 
 /run/beamOn              10
-
-
-
-
-
-
-
-
-

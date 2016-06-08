@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTableIterator.hh,v 1.2.4.1.2.1 1999/12/09 10:28:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ParticleTableIterator.hh,v 1.3 1999/12/15 14:51:11 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------

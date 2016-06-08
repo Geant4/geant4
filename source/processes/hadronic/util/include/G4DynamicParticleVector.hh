@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticleVector.hh,v 1.1.8.1.2.1 1999/12/07 20:52:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4DynamicParticleVector.hh,v 1.3 1999/12/15 14:53:40 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //	For information related to this code contact:

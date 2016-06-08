@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Em2RunAction.hh,v 1.4 2000/01/21 10:56:14 maire Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 

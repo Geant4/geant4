@@ -24,5 +24,6 @@
 /calor/update
 /gun/particle gamma
 /gun/energy 500 MeV
+/event/printModulo 500
 /run/beamOn 5000
 exit

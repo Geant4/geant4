@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.1.10.1 1999/12/07 20:50:48 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4EnergyLossMessenger.hh,v 1.3 2000/05/23 14:39:27 urban Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 
@@ -37,6 +37,7 @@ class G4EnergyLossMessenger: public G4UImessenger
       
     G4UIcmdWithABool*          RndmStepCmd;
     G4UIcmdWithABool*          EnlossFlucCmd;
+    G4UIcmdWithABool*          SubSecCmd;
     G4UIcommand*               StepFuncCmd;
 };
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gspos.cc,v 1.11 1999/12/05 17:50:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // by I.Hrivnacova, 13.10.99
 

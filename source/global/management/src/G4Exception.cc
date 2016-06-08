@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Exception.cc,v 1.8 1999/11/29 10:17:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ----------------------------------------------------------------------

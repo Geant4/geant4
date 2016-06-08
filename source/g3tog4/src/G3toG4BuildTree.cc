@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4BuildTree.cc,v 1.11 1999/12/15 14:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // modified by I. Hrivnacova, 2.8.99 
 

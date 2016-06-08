@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.16 1999/12/15 16:36:30 stesting Exp $
+# $Id: GNUmakefile,v 1.20 2000/06/21 11:02:54 johna Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -30,32 +30,32 @@ unique := $(shell echo $$$$)
 all:
 ifdef G4USE_HEPODBMS
 	@$(ECHO) Making granular libraries with HepODBMS option ...
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done;:
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) cleandb); done;:
 	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
 	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
 	 fi
 endif
-	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE)); done;:
-	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done;:
-	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done;:
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE)); done;:
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	$(MAKE) libmap
 
 glob global:
 ifdef G4USE_HEPODBMS
 	@$(ECHO) Making global libraries with HepODBMS option ...
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done;:
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) cleandb); done;:
 	@if [ ! -f $(G4TMPDIR)/schema/G4SCHEMA ] ; then \
 	  $(ECHO) "Temporary boot file does not exist.  Stop." ; exit 1 ; \
 	 fi
 endif
-	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) global); done;:
-	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done;:
-	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done;:
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 ifdef G4USE_HEPODBMS
-	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) global); done;:
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE) global); done;:
 endif
 
 
@@ -68,12 +68,13 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "Searching $(G4INSTALL)/source"
 	@echo '  for GNUmakefiles containing "name" and sorting...'
 	@find $(G4INSTALL)/source \
-	  -name GNUmakefile -exec $(GREP) -l 'name :=' {} \; \
+	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
-	@echo "Weeding out global level GNUmakefiles and non-libraries..."
+	@echo "Weeding out /test[s]/, global level GNUmakefiles, etc..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
+	  echo $$i | $(GREP) -q '/tests\?/' || \
 	  $(GREP) -q SUBDIR $$i || \
 	  $(GREP) -q G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
@@ -82,7 +83,7 @@ libmap: $(G4LIBDIR)/liblist
 	@touch /tmp/G4libname.map.starter.$(unique);
 	@for i in `cat /tmp/G4_granlib_makefiles.$(unique)`; \
 	do \
-	  $(GREP) 'name :=' $$i | cut -d \  -f 3 \
+	  $(GREP) '^ *name *:=' $$i | cut -d \  -f 3 \
 	  >> /tmp/G4libname.map.starter.$(unique); \
 	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
 	done
@@ -103,9 +104,9 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 
 clean_libs:
 	@echo Removing all libraries ...
-	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) clean_libs); done
-	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE) clean_libs); done
-	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE) clean_libs); done
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) clean_libs); done
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) clean_libs); done
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) clean_libs); done
 	@rm -rf $(G4LIBDIR)/libname.map
 
 clean:

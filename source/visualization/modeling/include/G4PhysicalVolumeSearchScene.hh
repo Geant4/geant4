@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.6 1999/12/15 14:54:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.7 2000/05/22 07:36:57 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  10th August 1998.
@@ -56,7 +56,7 @@ public:
   const G4Transform3D& GetFoundTransformation () const;
 
   ////////////////////////////////////////////////////////////////
-  // Functions not used by required by the abstract interface.
+  // Functions not used but required by the abstract interface.
 
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
   virtual void EndPrimitives () {}

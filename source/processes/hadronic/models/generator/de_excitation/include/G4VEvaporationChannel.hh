@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -38,16 +38,6 @@ public:
   virtual G4double GetEmissionProbability(void) const = 0;
 
 
-
-  virtual inline G4int GetA(void) const { return 0; }
-  virtual inline G4int GetZ(void) const { return 0; }
-  virtual inline G4int GetResidualA(void) const { return 0; }
-  virtual inline G4int GetResidualZ(void) const { return 0; }
-  virtual inline G4int GetGamma(void) const { return 0; }
-  virtual inline G4double GetLevelDensityParameter(void) const { return 0.0; }
-  virtual inline G4double GetCoulombBarrier(void) const { return 0.0; }
-  virtual inline G4double GetMaximalKineticEnergy(void) const  { return 0.0; };
-  virtual inline G4double GetFissionBarrier(void) const { return 0.0;}
 };
 
 

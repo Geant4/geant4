@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8RunMessenger.cc,v 1.1 2000/01/07 14:50:47 grichine Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em8RunMessenger.cc,v 1.3 2000/06/27 13:29:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 
@@ -363,7 +363,7 @@ void Em8RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
       runAction->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValues));
 		 
   if (command == RndmReadCmd)
-    { G4cout << "\n---> rndm status restored from file: " << newValues << endl;
+    { G4cout << "\n---> rndm status restored from file: " << newValues << G4endl;
       HepRandom::restoreEngineStatus(newValues);
       HepRandom::showEngineStatus();
     }   

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Gluons.cc,v 1.1.10.1.2.2 1999/12/14 07:08:16 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Gluons.cc,v 1.3 2000/02/27 07:48:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -41,4 +41,5 @@ G4Gluons::G4Gluons(
            iConjugation,iIsospin,iIsospin3,gParity,pType,
            lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+   SetParticleSubType("gluon");
 }

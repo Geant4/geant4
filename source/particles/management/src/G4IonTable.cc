@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.22.4.6 1999/12/14 09:16:47 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4IonTable.cc,v 1.25 2000/02/25 07:36:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -61,15 +61,9 @@ G4IonTable::~G4IonTable()
 
   // delete ion objects
   G4ParticleDefinition* particle;
-#ifdef G4USE_STL
   G4IonList::reverse_iterator i;
   for (i = fIonList->rbegin(); i!= fIonList->rend(); ++i) {
     particle = *i;
-#else
-  G4int idx;
-  for (idx=(fIonList->entries()-1); idx >=0 ; idx--) {
-    particle = (*fIonList)(idx);
-#endif
 
     if ( !IsLightIon(particle) ) {
       // delete if not static objects
@@ -114,6 +108,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 
   G4double life = -1.0;
   G4DecayTable* decayTable =0;
+  G4bool stable = true;
 
   G4IsotopeProperty*  fProperty = FindIsotope(Z, A, E, J);
   if (fProperty !=0 ){
@@ -122,7 +117,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
     life = fProperty->GetLifeTime();
     decayTable = fProperty->GetDecayTable();
   }
-
+  stable = (life <= 0.);
   G4double mass =  GetNucleusMass(Z, A)+ E;
   G4double charge =  G4double(Z)*eplus;
   
@@ -133,7 +128,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 			 J,              +1,             0,          
 			 0,               0,             0,             
 		 "nucleus",               0,             A,           0,
-		      true,            life,    decayTable);
+		    stable,            life,    decayTable);
+
+  // Set Excitation Energy
+  ((G4Ions*)(ion))->SetExcitationEnergy(E);
 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -209,15 +207,9 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   G4bool isFound = false;
 
   // -- loop over all particles in Ion table
-#ifdef G4USE_STL
   G4IonList::iterator idx;
   for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
     ion = *idx;
-#else
-  G4int idx;
-  for (idx= 0; idx < fIonList->entries() ; ++idx) {
-    ion = (*fIonList)(idx);
-#endif
 
     // Z = Atomic Number 
     G4int anAtomicNumber = 0;
@@ -373,11 +365,7 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
 void G4IonTable::Insert(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
-#ifdef G4USE_STL
     fIonList->push_back(particle);
-#else
-    fIonList->insert(particle);
-#endif
   } else {
     //#ifdef G4VERBOSE
     //if (GetVerboseLevel()>0) {
@@ -392,17 +380,12 @@ void G4IonTable::Insert(G4ParticleDefinition* particle)
 void G4IonTable::Remove(G4ParticleDefinition* particle)
 {
   if (IsIon(particle)) {
-#ifdef G4USE_STL
     G4IonList::iterator idx;
     for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
       if ( particle == *idx) {
         fIonList->erase(idx);
       }
     }
-#else
-    fIonList->remove(particle);
-#endif
-
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
@@ -422,14 +405,9 @@ void G4IonTable::Remove(G4ParticleDefinition* particle)
 void G4IonTable::DumpTable(const G4String &particle_name) const
 {
   G4ParticleDefinition* ion;
-#ifdef G4USE_STL
   G4IonList::iterator idx;
   for (idx = fIonList->begin(); idx!= fIonList->end(); ++idx) {
     ion = *idx;
-#else
-  for (G4int idx= 0; idx < fIonList->entries() ; idx++) {
-    ion = (*fIonList)(idx);
-#endif 
     if (( particle_name == "ALL" ) || (particle_name == "all")){
       ion->DumpTable();
     } else if ( particle_name == ion->GetParticleName() ) {
@@ -543,25 +521,10 @@ G4VIsotopeTable* G4IonTable::GetIsotopeTable() const
 ////////////////////
 G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int J)
 {
-  G4IsotopeProperty* fProperty = new G4IsotopeProperty();   
-
-  // Set Isotope Property
-  fProperty->SetAtomicNumber(Z);
-  fProperty->SetAtomicMass(A);
-  fProperty->SetEnergy(E);
-  fProperty->SetiSpin(J);
-  fProperty->SetLifeTime(-1.0);
-  fProperty->SetDecayTable(0);
-
   if (fIsotopeTable ==0) return 0;
 
-  // ask IsotopeTable
-  if (fIsotopeTable->FindIsotope(fProperty)) {
-    return fProperty;
-  } else {
-    delete fProperty;
-    return 0;
-  }
+  // ask IsotopeTable // ask IsotopeTable
+  return fIsotopeTable->GetIsotope(Z,A,E);
 }
 
 

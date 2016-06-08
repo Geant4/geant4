@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.hh,v 1.6 1999/12/15 14:54:28 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4BoundingSphereScene.hh,v 1.7 2000/05/15 11:08:49 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  7th June 1997
@@ -45,9 +45,7 @@ public:
   void AddThis (const G4Polyhedra& s) {Accrue (s);}
   void AddThis (const G4VSolid& s) {Accrue (s);}
   void PreAddThis (const G4Transform3D& objectTransformation,
-		   const G4VisAttributes&) {
-    fpObjectTransformation = &objectTransformation;
-  }
+		   const G4VisAttributes&);
   void PostAddThis () {}
   G4VisExtent GetBoundingSphereExtent ();
 

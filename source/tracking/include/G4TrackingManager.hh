@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.7 2000/01/26 04:20:30 asaim Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4TrackingManager.hh,v 1.9 2000/06/02 09:13:31 asaim Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //---------------------------------------------------------------
@@ -40,6 +40,7 @@ class G4TrackingManager;
 #include "G4UserSteppingAction.hh"     // Include from 'tracking'
 #include "G4VTrajectory.hh"             // Include from 'tracking'
 
+class G4VUserTrackInformation;
 
 ////////////////////////
 class G4TrackingManager 
@@ -98,6 +99,11 @@ class G4TrackingManager
       // G4TrackStatus in 'fUserKillTrackAndSecondaries'.
       // By this the EventManager deletes the current track and all 
       // its accoicated csecondaries.
+
+   void SetUserTrackInformation(G4VUserTrackInformation* aValue);
+      // This method can be invoked from the user's G4UserTrackingAction
+      // implementation to set his/her own G4VUserTrackInformation concrete
+      // class object to a G4Track object.
 
 //---------
    private:
@@ -179,5 +185,8 @@ class G4TrackingManager
      return verboseLevel; 
    }
 
+   inline void G4TrackingManager::SetUserTrackInformation(G4VUserTrackInformation* aValue) {
+     if(fpTrack) fpTrack->SetUserInformation(aValue);
+   }
 
 #endif

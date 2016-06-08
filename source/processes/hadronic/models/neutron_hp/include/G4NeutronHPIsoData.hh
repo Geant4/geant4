@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPIsoData.hh,v 1.6 1999/12/15 14:53:12 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef G4NeutronHPIsoData_h
 #define G4NeutronHPIsoData_h 1

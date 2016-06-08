@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN03CalorimeterSD.hh,v 1.2 1999/12/15 14:49:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 

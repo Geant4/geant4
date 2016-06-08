@@ -5,9 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuIonisation.hh,v 1.3.8.1 1999/12/07 20:50:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
-//
+// $Id: G4MuIonisation.hh,v 1.8 2000/04/25 14:18:58 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -24,6 +23,7 @@
 // It calculates the ionisation for muons.      
 // ************************************************************
 // 
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4MuIonisation_h
@@ -32,7 +32,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4MuEnergyLoss.hh"
+#include "G4VMuEnergyLoss.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -40,7 +40,7 @@
 #include "G4PhysicsLinearVector.hh"
  
  
-class G4MuIonisation : public G4MuEnergyLoss 
+class G4MuIonisation : public G4VMuEnergyLoss 
  
 {
   public:
@@ -48,8 +48,6 @@ class G4MuIonisation : public G4MuEnergyLoss
      G4MuIonisation(const G4String& processName = "MuIoni"); 
 
      ~G4MuIonisation();
-
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
 
      G4bool IsApplicable(const G4ParticleDefinition&);
 
@@ -93,13 +91,25 @@ class G4MuIonisation : public G4MuEnergyLoss
 
     G4PhysicsTable* theMeanFreePathTable;
 
-    G4double LowestKineticEnergy;
-    G4double HighestKineticEnergy;
-    G4int TotBin;
+    static G4double LowerBoundLambda ; // bining for lambda table
+    static G4double UpperBoundLambda ;
+    static G4int    NbinLambda ;
+    G4double LowestKineticEnergy,HighestKineticEnergy ;
+    G4int    TotBin ;
 
     const G4double* DeltaCutInKineticEnergy ; 
  
     G4double DeltaCutInKineticEnergyNow ;
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
+
 };
  
 #include "G4MuIonisation.icc"

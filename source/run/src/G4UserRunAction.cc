@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4UserRunAction.cc,v 1.2.8.1 1999/12/07 20:53:00 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "G4UserRunAction.hh"

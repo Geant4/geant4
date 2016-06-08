@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisManMessDraw.cc,v 1.5 1999/12/15 14:54:27 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.

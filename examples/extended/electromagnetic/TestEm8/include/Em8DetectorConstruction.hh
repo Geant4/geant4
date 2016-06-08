@@ -1,17 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8DetectorConstruction.hh,v 1.1 2000/01/07 14:50:20 grichine Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em8DetectorConstruction.hh,v 1.3 2000/06/27 13:29:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Em8DetectorConstruction_h
 #define Em8DetectorConstruction_h 1
@@ -29,7 +26,7 @@ class G4UniformMagField;
 class Em8DetectorMessenger;
 class Em8CalorimeterSD;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 class Em8DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -74,7 +71,7 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
      
      const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
      const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
-     G4LogicalVolume* GetLogicalAbsorber()   {return logicAbsorber;};
+     G4LogicalVolume* GetLogicalAbsorber()    {return logicAbsorber;};
                  
   private:
      
@@ -82,6 +79,16 @@ class Em8DetectorConstruction : public G4VUserDetectorConstruction
      G4Material*        AbsorberMaterial;
      G4double           AbsorberThickness;
      G4double           AbsorberRadius;
+
+  G4Material*        fWindowMat ;
+  G4double           fWindowThick ;
+
+  G4Material*        fElectrodeMat ;
+  G4double           fElectrodeThick ;
+
+  G4Material*        fGapMat ;
+  G4double           fGapThick ;
+
  
      G4double           zAbsorber ;
      G4double           zstartAbs , zendAbs ;

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SimpleHeum.cc,v 1.3 1999/12/15 14:49:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //  Simple Heum:
 //        x_1 = x_0 + h *

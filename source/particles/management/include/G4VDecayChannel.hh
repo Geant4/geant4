@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.hh,v 1.5.4.1.2.1 1999/12/08 17:34:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VDecayChannel.hh,v 1.7 2000/03/23 16:43:41 hweber Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // ------------------------------------------------------------
@@ -17,6 +17,7 @@
 //      History: first implementation, based on object model of
 //      27 July 1996 H.Kurashige
 //      30 May  1997 H.Kurashige
+//      23 Mar. 2000 H.Weber      : add GetAngularMomentum()
 // ------------------------------------------------------------
 #ifndef G4VDecayChannel_h
 #define G4VDecayChannel_h 1
@@ -78,6 +79,8 @@ class G4VDecayChannel
      //get the pointer to a daughter particle 
      G4ParticleDefinition * GetDaughter(G4int anIndex);
 
+     //get the angular momentum of the decay
+     G4int GetAngularMomentum();
      //get the name of the parent particle
      const G4String& GetParentName() const;
      //get the name of a daughter particle

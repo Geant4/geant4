@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4UIcontrolMessenger.cc,v 1.2 1999/12/15 14:50:42 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "G4UIcontrolMessenger.hh"

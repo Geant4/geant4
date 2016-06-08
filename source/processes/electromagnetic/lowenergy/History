@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2000/01/21 13:36:11 vnivanch Exp $
+$Id: History,v 1.22 2000/06/24 18:00:50 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,139 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.06.2000 - MGP, tag emlowen-V01-01-22
+             Modification to hTest G4Ion... classes by V. Ivanchenko to 
+             fix crash on exit on Linux
+
+22.06.2000 - MGP, tag emlowen-V01-01-21
+	     MGP: Bug fix in G4VeLowEnergyLoss (calculation of fluctuations);
+	     correction to prevent log of negative argument
+             Fixes problems with test14 in system testing on HP 
+	     To be further verified 
+
+22.06.2000 - MGP, tag emlowen-V01-01-20
+	     Minor improvements in test/G4BremsstrahlungTest and
+	     and test/G4eIonisationTest
+	     Cosmetics (found $ tag $ in many header files, where does it
+             come from?)
+
+20.06.2000 - MGP, tag emlowen-V01-01-19
+	     Fixed printout in test/G4eIonisationTest
+
+20.06.2000 - MGP, tag emlowen-V01-01-18
+	     Two new unit tests created by MGP: test/G4BremsstrahlungTest
+             and test/G4eIonisationTest
+
+24.05.2000 - MGP, tag emlowen-V01-01-17
+             Modifications to G4QAOLowEnergyloss and G4hLowEnergyIonisation
+	     by Stephane Chauvie: physics fixes
+	     Modifications to G4QAOLowEnergyloss and G4hLowEnergyIonisation
+	     by MG Pia:	fixes to the private interface,
+                        fixes to remove compilation warnings
+                        added protections
+                        proper code indentation to improve legibility
+             Reorganization of the test directory by Petteri Nieminen:
+			content of eUnitTests/ moved to ePhotonIntegration/
+                        (indeed they were not unit tests)
+			content of validation/ moved to aluminumtest/
+	     Corrections by MG Pia to GNUmakefiles in test/ subdirectories 
+             TestEm6, TestP, eUnitTests and validation are obsolete
+             directories, still in the repository but not to be used
+
+23.05.2000 - MGP, tag emlowen-V01-01-16
+             New G4QAOLowEnergyloss class by Stephane Chauvie for
+             antiproton energy loss model
+	     Modifications to G4hLowEnergyIonisation for the new
+             antiproton models
+	     Physics extension to lower energies for antiprotons for a 
+             set of materials
+	     New test/hTest for integration/physics testing of hadrons/ions
+             (was previously TestEm6)
+
+25.05.2000 - Stephane Chauvie added class for energy loss of antiprotons
+             G4QAOLowEnergyloss + modifications in G4hlowEnergyIonisation 
+
+22.05.2000 - MGP, tag emlowen-V01-01-15
+	     Modifications in G4VhEnergyLossModel.hh 
+
+19.05.2000 - MGP, tag emlowen-V01-01-14
+	     Includes typo correction in G4VhEnergyLossModel.hh
+
+ 8.05.2000 - MGP, tag emlowen-V01-01-13
+	     Includes minor modifications in G4VhEnergyLossModel.hh
+
+ 7.05.2000 - MGP, tag emlowen-V01-01-12
+             Includes the G4VhEnergyLossModel abstract class,
+             as part of the design iteration in the hadronic domain
+
+ 7.05.2000 - MGP, tag emlowen-V01-01-11
+             Includes Francesco Longo's fix of missing units in 
+	     G4LowEnergyGammaConversion.cc
+
+ 7.05.2000 - MGP, tag emlowen-V01-01-10
+             Includes Vladimir's test/TestEm6 and test/TestP directories
+             requires removing two (!) duplicate TestEm6 directories
+             elsewhere
+             Includes Stephane's unit tests  G4hLETestLossTable.cc
+             and G4hLETestAlongPostStep.cc
+              
+19.04.2000 - MGP, tag emlowen-V01-01-09
+             same as emlowen-V01-01-08, with modifications by V.L. for
+             first implementation of continuous energy loss in 
+             G4LowEnergyBremsstrahlung
+
+18.04.2000 - MGP, tag emlowen-V01-01-08
+	     same as emlowen-V01-01-06,
+             with modification to G4LowEnergyBremsstrahlung.cc to correct
+             error introduced by V.L
+
+18.04.2000 - MGP, tag emlowen-V01-01-07
+             same as emlowen-V01-01-05 
+             (disregarding modifications in emlowen-V01-01-06),
+             with modification to G4LowEnergyBremsstrahlung.cc to correct
+             error introduced by V.L. 
+
+18.04.2000 - MGP, tag emlowen-V01-01-06
+             includes Veronique's modifications to 
+		G4LowEnergyIonisation.hh
+		G4LowEnergyIonisation.icc
+		G4LowEnergyIonisation.icc
+		G4eLowEnergyLoss.cc
+		G4G4LowEnergyPhotoElectric.cc
+             for integration of cross sections, float/G4double conversions
+             and corrections of fluorescence transition probabilities 
+	     to take into account non-radiative transitions
+             (no Auger electron simulated yet)
+
+
+04.04.2000 - MGP, tag emlowen-V01-01-05
+             removed dependency on standard category (G4eEnergyLoss)
+
+04.04.2000 - MGP, tag emlowen-V01-01-04
+             tag Vladimir's and Stephane's modifications for antiprotons
+
+03.04.2000 - Vladimir Ivanchenko and Stephane Chauvie
+             1) Linearity into Barkas effect and nuclear stopping power
+                for antiprotons
+
+02.04.2000 - MGP, tag emlowen-V01-01-03
+             tag V.L.'s modifications to G4LowEnergyIonisation (units)
+
+02.04.2000 - MGP, tag emlowen-V01-01-02
+             tag V.L.'s fix of typo in G4LowEnergyGammaConversion
+
+02.04.2000 - MGP, tag emlowen-V01-01-01
+             tag V.I.'s modifications, 31.03.2000 
+
+31.03.2000 - Vladimir Ivanchenko update 
+             1) G4hLowEnergyIonisation.cc limitation DeltaCut > Eexc
+                is insert in dedx, cross section calculation and sampling
+             2) G4hLowEnergyLoss.cc is creating in the lowenergy as a
+                klon of G4hEnergyLoss.cc
+             3) Spin 1/2 and spin 1 corrections are inserted is cross
+                section calculation, cross section sampling, de/dx
+             4) IfAplicable check lepton number
+                
 21.01.2000 - Vladimir Ivanchenko update 
              1) G4hLowEnergyIonisation.cc Barkas effect calculation
                 and inicialisation 

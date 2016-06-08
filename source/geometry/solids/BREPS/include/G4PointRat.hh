@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.hh,v 1.4 1999/12/15 14:49:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PointRat.hh,v 1.6 2000/02/25 15:59:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // Modif 8 oct 98 : A.Floquet
@@ -25,9 +25,7 @@
 
 // L. Broglia
 // Before included in G4Point.hh
-#include "STEPaggregate.h"
 #include "G4Plane.hh"
-#include "G4UVHit.hh"
 #define SQRT_SMALL_FASTF 1.0e-18
 #define SMALL                   SQRT_SMALL_FASTF       
 #define ROW 0
@@ -45,8 +43,6 @@ public:
   G4PointRat(const G4Point3D&);
 
   ~G4PointRat();
-
-  void CopyRationalValue(const RealNode& Rnode);
 
   int GetType(void)const { return 4; } // This function should be removed
 				       // if calls to this are also removed

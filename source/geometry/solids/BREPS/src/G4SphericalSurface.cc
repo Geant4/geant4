@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SphericalSurface.cc,v 1.2 1999/12/15 14:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 /*  $Header: /private/Net/unixhub/u1/ea/liml/gismo/gismo-0.2/geometry/RCS/G4SphericalSurface.cc,v 1.10 1992/08   */
 //  File:  G4SphericalSurface.cc

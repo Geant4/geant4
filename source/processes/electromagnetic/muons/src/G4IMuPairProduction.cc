@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuPairProduction.cc,v 1.2.8.1.2.4 1999/12/12 12:31:20 gracia Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4IMuPairProduction.cc,v 1.5 2000/04/25 14:19:01 maire Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -19,7 +19,7 @@
 //      -------- G4IMuPairProduction physics process ---------
 //                by Laszlo Urban, May 1998 
 // **************************************************************
-// 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
+// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // --------------------------------------------------------------
 
 #include "G4IMuPairProduction.hh"
@@ -40,7 +40,7 @@ G4double G4IMuPairProduction::proba[5][8][1000]={0.};
 // constructor
  
 G4IMuPairProduction::G4IMuPairProduction(const G4String& processName)
-  : G4IMuEnergyLoss("IMuPairProduction"),      // initialization
+  : G4VIMuEnergyLoss("IMuPairProduction"),      // initialization
     LowestKineticEnergy (1.*keV),
     HighestKineticEnergy (1000000.*TeV),
     TotBin(200),
@@ -53,13 +53,13 @@ G4IMuPairProduction::G4IMuPairProduction(const G4String& processName)
     theMuonPlus ( G4MuonPlus::MuonPlus() )
 {
 
-  theMeanFreePathTable = NULL ;
+    theMeanFreePathTable = NULL ;
 
   G4cout << G4endl ;
   G4cout << "****************************************************************" << G4endl;
   G4cout << "****************************************************************" << G4endl;
   G4cout << "**                                                            **" << G4endl; 
-  G4cout << "**   G4IMuPairProduction :                                    **" << G4endl;
+  G4cout << "**   G4IMuPairProduction :                                     **" << G4endl;
   G4cout << "**      cross section/energy loss is calculated using         **" << G4endl;
   G4cout << "**      the accurate cross section formula of R.Kokoulin,     **" << G4endl;
   G4cout << "**      ( building the tables takes a lot of time,            **" << G4endl;
@@ -115,7 +115,7 @@ void G4IMuPairProduction::BuildPhysicsTable(const G4ParticleDefinition& aParticl
 
     MakeSamplingTables(&aParticleType) ;
 
-    G4IMuEnergyLoss::BuildDEDXTable(aParticleType) ;
+    G4VIMuEnergyLoss::BuildDEDXTable(aParticleType) ;
  }
  else
  {
@@ -1411,6 +1411,6 @@ G4Element* G4IMuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
     if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
   }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
-         << "' has no elements, NULL pointer returned." << G4endl;
+       << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }

@@ -1,5 +1,5 @@
 
- testem5.cra is the geant3 equivalent of TestEm5
+ testem5 is the geant3 equivalent of TestEm5
 
  % cd geant3
  % gmakeB           to make an executable  (Batch version)
@@ -8,7 +8,7 @@
  To execute:
 
  % cd geant3
- % $G4SYSTEM/testem5.xb (for batch) 
+ % $G4SYSTEM/testem5.xb (for batch) or  testem5.xt (for interactive)
 
  The program will ask:
  G3 > gives the filename of the data cards to be read:
@@ -17,7 +17,7 @@
 
  data cards:  most of the data cards used in runxx.dat are
  ----------   standard data cards of GEANT3, but some of them
-              are defined in testem5.cra. These latter cards are:
+              are defined in testem5. These latter cards are:
 
               KEY      VARIABLE/type     Short description
 
@@ -41,5 +41,5 @@
    in GEANT3 .
 
    materials: the materials used in this test are defined in
-   ---------  testem5.cra with materialnumbers 21 - 30 (see testem5.cra). 
-~
+   ---------  ugeom.F with material numbers 21 - 30  
+

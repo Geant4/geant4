@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: cstring.h,v 1.7 1999/12/15 18:12:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: cstring.h,v 1.8 2000/06/26 16:25:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -155,6 +155,8 @@ public:
   inline size_t index (const G4String&, size_t, size_t, caseCompare) const;
 
   inline const char* data() const;
+
+  inline int strcasecompare(const char*, const char*) const;
 
   inline unsigned int hash( caseCompare cmp = exact ) const;
   inline unsigned int stlhash() const;

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BuildGeom.cc,v 1.12 1999/12/15 14:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // modified by I. Hrivnacova, 13.10.99 
 

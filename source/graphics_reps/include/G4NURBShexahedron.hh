@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4NURBShexahedron.hh,v 1.5 1999/12/15 14:50:32 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Hexa hedron builder prototype
 // OC 17 9 96

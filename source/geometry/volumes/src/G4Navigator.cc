@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Navigator.cc,v 1.7.6.1.2.4 1999/12/14 07:07:52 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96

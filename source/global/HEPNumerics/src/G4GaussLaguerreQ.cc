@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GaussLaguerreQ.cc,v 1.2 1999/11/16 17:31:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #include "G4GaussLaguerreQ.hh"
 

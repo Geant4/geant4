@@ -5,10 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VFastSimulationModel.cc,v 1.2.8.1 1999/12/07 20:52:54 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VFastSimulationModel.cc,v 1.4 2000/05/30 08:30:39 mora Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
-// $Id:
 //---------------------------------------------------------------
 //
 //  G4VFastSimulationModel.cc

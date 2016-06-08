@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3VolTable.cc,v 1.19 2000/03/02 17:54:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // modified by I.Hrivnacova, 13.10.99
 

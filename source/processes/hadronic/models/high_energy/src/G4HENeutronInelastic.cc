@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HENeutronInelastic.cc,v 1.2.8.1.2.2 1999/12/10 15:42:10 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4HENeutronInelastic.cc,v 1.3 1999/12/15 14:52:56 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 

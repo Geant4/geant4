@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4MakeSolid.cc,v 1.4 1999/12/15 14:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
 

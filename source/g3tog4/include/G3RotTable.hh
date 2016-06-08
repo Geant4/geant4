@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3RotTable.hh,v 1.10 1999/12/09 01:27:46 lockman Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3DetTableEntry.cc,v 1.3 2000/03/02 17:54:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #include "globals.hh"
 #include "G3DetTableEntry.hh"

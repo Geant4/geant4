@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.5 1999/12/15 14:54:19 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VViewer.hh,v 1.7 2000/05/02 09:51:22 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  27th March 1996
@@ -64,9 +64,10 @@ public: // With description
   //////////////////////////////////////////////////////////////
   // Access functions.
   const G4String&         GetName           () const;
+  const G4String&         GetShortName      () const;
   void                    SetName           (const G4String&);
   G4int                   GetViewId         () const;
-        G4VSceneHandler*         GetScene          () const;
+  G4VSceneHandler*        GetSceneHandler   () const;
   const G4ViewParameters& GetViewParameters () const;
   void SetViewParameters  (const G4ViewParameters& vp);
 
@@ -93,6 +94,7 @@ protected:
   G4VSceneHandler&        fSceneHandler;     // Abstract scene for this view.
   G4int            fViewId;    // Id of this instance.
   G4String         fName;
+  G4String         fShortName; // Up to first ' ' character, if any.
   G4ViewParameters fVP;        // Viewing parameters.
 
   //////////////////////////////////////////////////////////////

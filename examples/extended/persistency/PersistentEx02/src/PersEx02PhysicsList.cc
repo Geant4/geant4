@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PersEx02PhysicsList.cc,v 1.3.4.3 1999/12/14 07:07:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: PersEx02PhysicsList.cc,v 1.4 1999/12/15 14:49:18 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "globals.hh"

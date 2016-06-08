@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3CalcParams.hh,v 1.3 1999/12/09 01:27:41 lockman Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // class G3CalcParams
 //

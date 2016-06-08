@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8RunAction.hh,v 1.1 2000/01/07 14:50:22 grichine Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em8RunAction.hh,v 1.3 2000/06/28 09:55:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 
@@ -18,16 +18,17 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-#include <iostream.h>
+#include "g4std/iostream"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Em8RunMessenger;
-
-class HepTupleManager;
-class HepHistogram;
-
 class G4Run;
+
+#ifndef G4NOHIST
+  class HepTupleManager;
+  class HepHistogram;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -114,9 +115,12 @@ class Em8RunAction : public G4UserRunAction
   private:
 
     G4String histName ;
+
+#ifndef G4NOHIST
     HepTupleManager* hbookManager;
     HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
     HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10;
+#endif
 
     G4double EnergySumAbs,EnergySquareSumAbs;
     G4double tlSumAbs,tlsquareSumAbs;

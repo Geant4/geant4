@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4MakeSolid.hh,v 1.4 1999/12/09 01:27:47 lockman Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef G3TOG4MAKESOLID_HH
 #define G3TOG4MAKESOLID_HH 1

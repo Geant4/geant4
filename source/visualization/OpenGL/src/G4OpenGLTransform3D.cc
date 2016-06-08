@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLTransform3D.cc,v 1.3 1999/12/15 14:54:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Andrew Walkden  24th October 1996

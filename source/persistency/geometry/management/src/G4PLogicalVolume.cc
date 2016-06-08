@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PLogicalVolume.cc,v 1.4 1999/12/15 14:51:24 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PLogicalVolume.cc,v 1.5 2000/06/09 12:56:44 morita Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 //                                      Takashi.Sasaki@kek.jp
@@ -76,10 +76,11 @@ class G4SmartVoxelHeader;
 class G4VisAttributes;
 class G4FastSimulationManager;
 
-G4LogicalVolume* G4PLogicalVolume::MakeTransientObject(G4VSolid* theSolid)
+G4LogicalVolume* G4PLogicalVolume::MakeTransientObject(
+                                             G4VSolid* theSolid,
+                                             G4Material* theMaterial)
 {
   // These are null poineters temporaly 
-  G4Material*            fMaterial      = NULL;
   G4SmartVoxelHeader*    fVoxel = NULL;
   const G4VisAttributes* fVisAttributes = NULL;
 
@@ -89,22 +90,9 @@ G4LogicalVolume* G4PLogicalVolume::MakeTransientObject(G4VSolid* theSolid)
 //		    G4VSensitiveDetector *pSDetector=0,
 //		    G4UserLimits *pULimits=0);
 
-//--------- Material definition ---------
-//
-//  G4double a, iz, z, density;
-//
-//    a = 207.19*g/mole;
-//    density = 11.35*g/cm3;
-//    G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
-//
-//  G4LogicalVolume* testvolume = new G4LogicalVolume(
-//                       theSolid, Pb, fName, 0, 0, 0);
-//
-//--------- Material definition ---------
-
   G4String name;
   G4LogicalVolume* aLogicalVolume = new G4LogicalVolume(
-                       theSolid, fMaterial, name=fName, 0, 0, 0);
+                       theSolid, theMaterial, name=fName, 0, 0, 0);
 
   // if ( aLogicalVolume )
   //   aLogicalVume->SetVisAttributes(*fVisAttributes);

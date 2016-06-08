@@ -1,14 +1,4 @@
 
-
-//
-
-
-
-//
-// $Id: stat.h,v 1.2 1999/05/21 20:20:45 japost Exp $
-// GEANT4 tag $Name: geant4-01-01 $
-//
-
 #ifdef __O3DB__
 #include <OpenOODB.h>
 #endif
@@ -41,7 +31,7 @@
 
 #ifndef sys_stat_h
 
-#ifdef __cplusplus
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
@@ -49,9 +39,6 @@ extern "C" {
 #ifdef WIN32
 #  include <sys/Stat.h>
 #else
-#ifdef __FreeBSD__
-#  include <sys/time.h>
-#endif
 #  include "//usr/include/sys/stat.h"
 #endif
 #undef KERNEL
@@ -65,7 +52,7 @@ extern int stat(const char* path, struct stat*);
 extern int fstat(int fd, struct stat*);
 extern int lstat(const char* path, struct stat*);
 
-#ifdef __cplusplus
+#if defined(__cplusplus)
 }
 #endif
 

@@ -5,8 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopMaterial.hh,v 1.1.8.1.2.1 1999/12/07 20:52:35 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PiMinusStopMaterial.hh,v 1.4 2000/04/18 17:18:35 pia Exp $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -74,7 +73,7 @@ protected:
   G4RWTPtrOrderedVector<G4LorentzVector>* _momenta; 
   G4DistributionGenerator* _distributionE;
   G4DistributionGenerator* _distributionAngle;
-  G4double _R; 
+  G4double theR; 
 
   G4double GenerateAngle(G4double range);
   G4LorentzVector MakeP4(G4double p, G4double theta, 

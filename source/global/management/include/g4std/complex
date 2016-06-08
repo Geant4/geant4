@@ -1,0 +1,30 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+//
+// $Id: complex,v 1.3 2000/06/15 17:32:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
+//
+//      ---------------- complex ----------------
+//
+#ifndef G4_COMPLEX_H
+#define G4_COMPLEX_H
+
+#ifndef G4USE_STD_NAMESPACE
+  #if defined(__hpux) || defined(__linux)
+    #include <complex>
+    typedef complex<double> G4complex;
+  #else
+    #include <complex.h>
+    typedef complex G4complex;
+  #endif
+#else
+  #include <complex>
+  typedef std::complex<double> G4complex;
+#endif
+
+#endif /* G4_COMPLEX_H */

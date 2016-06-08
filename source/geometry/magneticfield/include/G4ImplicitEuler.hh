@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ImplicitEuler.hh,v 1.2 1999/12/15 14:49:47 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // W. Wander <wwc@mit.edu> 12/09/97

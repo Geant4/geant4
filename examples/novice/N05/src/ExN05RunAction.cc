@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN05RunAction.cc,v 1.5 2000/01/06 15:06:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 // Make this appear first!

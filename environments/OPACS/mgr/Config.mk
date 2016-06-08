@@ -39,7 +39,7 @@ OSF1-cxx : This_needed
 "CCLDFLAGS     = -std1" \
 "CCLDEND       = -lots -lSM -lICE -ldnet_stub" \
 "CXX           = cxx" \
-"CXXFLAGS      = -ptr ${OREPOSITORY} -DG4_HAVE_BOOL -g" \
+"CXXFLAGS      = -std strict_ansi -ptr ${OREPOSITORY} -DG4_HAVE_BOOL -g" \
 "CXXLD         = cxx" \
 "CXXLDFLAGS    = -ptr ${OREPOSITORY} -non_shared" \
 "CXXLDEND      = -lots -lSM -lICE -ldnet_stub" \
@@ -131,7 +131,7 @@ Linux-gxx : This_needed
 "libXt         = -L/usr/X11R6/lib -lXt" \
 "libXmu        = -L/usr/X11R6/lib -lXmu" \
 "libXaw        = -L/usr/X11R6/lib -lXaw" \
-"libXm         = -L/usr/X11R6/lib -lXm" \
+"libXm         = -L/usr/X11R6/lib -lXm -lXaw" \
 $(This_macros)
 
 SunOS-CC : This_needed

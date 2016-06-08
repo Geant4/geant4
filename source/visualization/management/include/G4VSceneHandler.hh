@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.9 1999/12/15 14:54:19 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VSceneHandler.hh,v 1.11 2000/05/02 09:49:27 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  19th July 1996.
@@ -23,31 +23,18 @@
 #include "globals.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Scene.hh"
 #include "G4ViewerList.hh"
 #include "G4ViewParameters.hh"
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
-#include "G4Para.hh"
-#include "G4Torus.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
-#include "G4Transform3D.hh"
-#include "G4VModel.hh"
 
-class G4VGraphicsSystem;
+class G4Scene;
 class G4VViewer;
-class G4VSolid;
-class G4VisAttributes;
 class G4Colour;
 class G4Visible;
-class G4VSolid;
 class G4ModelingParameters;
+class G4VModel;
+class G4VGraphicsSystem;
 class G4LogicalVolume;
+class G4VPhysicalVolume;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 
@@ -160,7 +147,7 @@ public: // With description
   // Access functions.
   const G4String&     GetName           () const;
   void                SetName           (const G4String&);
-  G4int               GetSceneId        () const;
+  G4int               GetSceneHandlerId () const;
   G4int               GetViewCount      () const;
   G4VGraphicsSystem*  GetGraphicsSystem () const;
   G4Scene*            GetScene          () const;
@@ -248,13 +235,13 @@ protected:
   //////////////////////////////////////////////////////////////
   // Data members
 
-  G4VGraphicsSystem&     fSystem;      // Graphics system.
-  const G4int            fSceneId;     // Id of this instance.
+  G4VGraphicsSystem&     fSystem;          // Graphics system.
+  const G4int            fSceneHandlerId;  // Id of this instance.
   G4String               fName;
-  G4int                  fViewCount;   // To determine view ids.
-  G4ViewerList           fViewerList;  // Viewers.
-  G4VViewer*             fpViewer;     // Current viewer.
-  G4Scene*               fpScene;      // Scene for this scene handler.
+  G4int                  fViewCount;       // To determine view ids.
+  G4ViewerList           fViewerList;      // Viewers.
+  G4VViewer*             fpViewer;         // Current viewer.
+  G4Scene*               fpScene;          // Scene for this scene handler.
 
   //////////////////////////////////////////////////////////////
   // Workspace...

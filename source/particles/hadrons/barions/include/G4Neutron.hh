@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Neutron.hh,v 1.3.6.1 1999/12/07 20:49:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Neutron.hh,v 1.5 2000/02/25 07:37:10 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -66,6 +66,26 @@ class G4Neutron : public G4VBaryon
    static G4double* GetCutsInEnergy() {return theNeutronKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
+
+ public:  //With Description
+   G4int    GetAtomicNumber() const;
+   G4int    GetAtomicMass() const;
+
+   G4double GetExcitationEnergy() const {return 0.;} 
+   void     SetExcitationEnergy(G4double ){}
+   // These two methods are dummy because all particles derived from 
+   // G4Neutron is "groud state" nuclei  
 };
 
+inline
+ G4int G4Neutron::GetAtomicNumber() const 
+{
+  return 0; 
+}
+
+inline
+ G4int G4Neutron::GetAtomicMass() const 
+{
+  return 1;
+}
 #endif

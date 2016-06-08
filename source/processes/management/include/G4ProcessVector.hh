@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessVector.hh,v 1.3.2.1 1999/11/11 14:31:30 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ProcessVector.hh,v 1.5 1999/11/15 10:39:47 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------

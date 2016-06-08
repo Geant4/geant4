@@ -1,0 +1,17 @@
+FILE  1000gev.1mm.paw
+LIST
+ABSOR  25 (iron)  200. (thicknX) 200. (sizeYZ)  0. (field)
+KINE   5  (muon)  1000. (Ekine)   90.0 (teta)  0.0 (phi)      
+TRIG   1000
+DEBUG  1  0  10  
+SWIT   0 (draw)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+C      2*10.0e+3 (bcute/m)  2*10.0e+3 (dcute/m)  10.0e+3 (ppcutm)
+       2*21.0e-6 (bcute/m)   2*1.3e-3 (dcute/m)  10.0e-3 (ppcutm)
+HIS2   50   0.       50.e+3      
+HIS5   50  950.e+3   1000.e+3      
+TIME   2=3.
+END

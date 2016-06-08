@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.1.8.1.2.1.2.1 1999/12/08 17:35:09 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PiMinusStopMaterial.cc,v 1.4 2000/04/18 17:18:37 pia Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -82,7 +82,7 @@ G4RWTPtrOrderedVector<G4ParticleDefinition>* G4PiMinusStopMaterial::DefinitionVe
   _definitions->append(G4Neutron::Neutron());
 
   G4double ranflat = G4UniformRand();
-  if (ranflat < _R)
+  if (ranflat < theR)
     { _definitions->append(G4Proton::Proton()); }
   else
     { _definitions->append(G4Neutron::Neutron()); }

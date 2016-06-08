@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.6.2.1.2.1.2.7 1999/12/17 12:04:58 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4UIGAG.cc,v 1.9 1999/12/17 12:09:50 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.2 1999/12/15 14:54:17 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VRML2SceneHandler.cc,v 1.4 2000/04/27 13:56:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -26,8 +26,9 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Point3D.hh"
+#include "G4VModel.hh"
+#include "G4Scene.hh"
 #include "G4VisAttributes.hh"
-#include "G4Transform.hh"
 #include "G4Polyhedron.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"

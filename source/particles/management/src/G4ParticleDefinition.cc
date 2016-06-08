@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.6.6.1.2.1 1999/12/08 17:34:09 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ParticleDefinition.cc,v 1.9 2000/02/27 06:44:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -72,6 +72,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGIsospin(iIsospin*0.5),
 		   thePDGIsospin3(iIsospin3*0.5),
 		   theParticleType(pType), 
+		   theParticleSubType(""), 
 		   theLeptonNumber(lepton),
 		   theBaryonNumber(baryon),
 		   thePDGEncoding(encoding),
@@ -214,7 +215,8 @@ void G4ParticleDefinition::DumpTable() const
   G4cout << ", " << theAntiQuarkContent[5] << G4endl;
   G4cout << " Lepton number : " << theLeptonNumber;
   G4cout << " Baryon number : " << theBaryonNumber << G4endl;
-  G4cout << " Particle type : " << theParticleType << G4endl;
+  G4cout << " Particle type : " << theParticleType ;
+  G4cout << " [" << theParticleSubType << "]" << G4endl;
 
   if ( fShortLivedFlag ){
     G4cout << " ShortLived : ON" << G4endl;

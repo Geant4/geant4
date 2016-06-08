@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4UnitsTable.hh,v 1.9 2000/01/19 11:16:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // -----------------------------------------------------------------

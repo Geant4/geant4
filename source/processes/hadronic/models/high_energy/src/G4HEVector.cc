@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEVector.cc,v 1.2.8.1.2.3 1999/12/13 16:33:53 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4HEVector.cc,v 1.4 1999/12/15 16:42:01 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 

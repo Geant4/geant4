@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessManager.cc,v 1.10.4.1.2.5 1999/12/14 09:16:49 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ProcessManager.cc,v 1.15 2000/03/11 00:58:47 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -21,6 +21,7 @@
 //   remove sprintf              14 Nov 1997  H.Kurahige
 //   fixed bugs in FindInsertPosition
 //                               18 July 1998 H.Kurashige
+//   Use STL vector instead of RW vector    1. Mar 00 H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4ProcessManagerMessenger.hh"
@@ -39,6 +40,7 @@
 // ---------------------------------
 G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = 0;
 G4int  G4ProcessManager::counterOfObjects = 0;
+
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
                 theParticleType(aParticleType),
@@ -106,7 +108,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
      G4ProcessAttribute* sAttr = (*right.theAttrVector)[idx];
      G4ProcessAttribute* dAttr = new G4ProcessAttribute(*sAttr);
      // adds  a G4ProcessAttribute object
-     theAttrVector->insert(dAttr);
+     theAttrVector->push_back(dAttr);
      numberOfProcesses +=1;
    }
   
@@ -119,10 +121,14 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
       G4String aErrorMessage("G4ProcessManager::G4ProcessManager():");
       G4Exception((const char*)(aErrorMessage));
     }
+
+    G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
     G4ProcessVector* src = right.theProcVector[i];
     for (G4int j=0; j< src->entries() ; j++){
       // copy j-th process in i-th ProcessVector 
       theProcVector[i]->insert((*src)[j]);
+      //add aProcess and this ProcessManager into ProcesssTable
+      theProcessTable->Insert((*src)[j], this);
     }
   }
 
@@ -159,7 +165,11 @@ G4ProcessManager::~G4ProcessManager()
   theProcessList->clear();
   delete theProcessList;
 
-  theAttrVector->clearAndDestroy();
+  G4ProcessAttrVector::iterator itr;
+  for (itr = theAttrVector->begin(); itr!= theAttrVector->end(); ++itr) {
+    delete (*itr);
+  }
+  theAttrVector->clear();
   delete  theAttrVector;
 
   counterOfObjects-=1; 
@@ -253,9 +263,10 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
 #endif
    // re-ordering attribute vector 
     G4ProcessAttribute *pAttr = 0;
-    for (G4int i=0; i<theAttrVector->entries(); i++){
-      if ( ((*theAttrVector)[i])->idxProcessList == index) {
-	pAttr = (*theAttrVector)[i];
+    G4ProcessAttrVector::iterator itr;
+    for (itr = theAttrVector->begin(); itr!= theAttrVector->end(); ++itr) {
+      if ( (*itr)->idxProcessList == index) {
+	pAttr = (*itr);
 	break;
       }
     }      
@@ -442,7 +453,7 @@ G4int G4ProcessManager::AddProcess(
   }
 
   //add ProcessAttribute to ProcessAttrVector
-  theAttrVector->insert(pAttr);
+  theAttrVector->push_back(pAttr);
 
   numberOfProcesses += 1;
 
@@ -507,7 +518,13 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
   }
   // remove from the process List and delete the attribute
   theProcessList->removeAt(index);
-  theAttrVector->remove(pAttr);
+  G4ProcessAttrVector::iterator itr;
+  for (itr = theAttrVector->begin(); itr!= theAttrVector->end(); ++itr) {
+    if ( (*itr) == pAttr) {
+      theAttrVector->erase(itr);
+      break;
+    }
+  }
   delete pAttr;
   numberOfProcesses -= 1;
   
@@ -540,23 +557,12 @@ G4int G4ProcessManager::GetProcessOrdering(
 {
   // get Process Vector Id
   G4int ivec = GetProcessVectorId(idDoIt, typeDoIt);
-  if (ivec <0 ) {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cout << "G4ProcessManager::SetProcessOrdering: ";
-      G4cout << " illegal DoIt Index [= " << idDoIt << "]";
-      G4cout << G4endl;
+  if (ivec >=0 ) {
+    // get attribute
+    G4ProcessAttribute* pAttr = GetAttribute(aProcess); 
+    if (pAttr != 0) { 
+      return pAttr->ordProcVector[ivec];
     }
-#endif
-    return -1;
-  }
-  
-  // get attribute
-  G4ProcessAttribute* pAttr = GetAttribute(aProcess); 
-  if (pAttr != 0) { 
-    return pAttr->ordProcVector[ivec];
-  } else {
-    return -1;
   }
   return -1;
 }
@@ -775,16 +781,6 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
       }
     } 
     pAttr->isActive = false;
-
-  } else { 
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << aErrorMessage;
-      G4cout << "particle["<<theParticleType->GetParticleName()<<"] " ;
-      G4cout << "process["<<pProcess->GetProcessName()<<"]   " ;
-      G4cout << "The process is already inactive" << G4endl;
-    }
-#endif
   }
   return pProcess;
 } 
@@ -818,14 +814,7 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 
   const G4String aErrorMessage(" G4ProcessManager::ActivateProcess():");
 
-  if (pAttr->isActive) {
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << aErrorMessage << G4endl;
-      G4cout << "The process is already active" << G4endl;
-    }
-#endif
-  } else { 
+  if (!pAttr->isActive) {
     // remove process from vectors if the process is active
     for (G4int i=0; i<SizeOfProcVectorArray; i++) {
       G4ProcessVector* pVector = theProcVector[i];
@@ -900,7 +889,7 @@ void G4ProcessManager::DumpInfo()
     G4cout << G4VProcess::GetProcessTypeName( ((*theProcessList)(idx))->GetProcessType() )<< "]";
 
     // process attribute    
-    G4ProcessAttribute* pAttr = (*theAttrVector)(idx);
+    G4ProcessAttribute* pAttr = (*theAttrVector)[idx];
     // status
     if ( pAttr-> isActive ) {
       G4cout << " Active ";
@@ -1019,7 +1008,7 @@ void G4ProcessManager::EndTracking()
 	return false;
   }
   // process attribute    
-  G4ProcessAttribute* pAttr = (*theAttrVector)(index);
+  G4ProcessAttribute* pAttr = (*theAttrVector)[index];
   // status
   return pAttr-> isActive;
 }

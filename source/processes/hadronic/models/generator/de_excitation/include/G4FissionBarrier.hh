@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FissionBarrier.hh,v 1.1.10.1 1999/12/07 20:51:33 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4FissionBarrier.hh,v 1.3 2000/06/09 11:36:52 larazb Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -16,6 +16,7 @@
 
 #include "G4VFissionBarrier.hh"
 #include "globals.hh"
+#include "G4CameronShellPlusPairingCorrections.hh"
 
 class G4FissionBarrier : public G4VFissionBarrier
 {
@@ -31,13 +32,17 @@ private:
   G4bool operator!=(const G4FissionBarrier & right) const;
   
 public:
-  G4double FissionBarrier(const G4int A, const G4int Z);
+  G4double FissionBarrier(const G4int A, const G4int Z, const G4double U);
 
 
 private:
 
   G4double BarashenkovFissionBarrier(const G4int A, const G4int Z);
   
+  G4double SellPlusPairingCorrection(const G4int Z, const G4int N)
+  { return G4CameronShellPlusPairingCorrections::GetShellPlusPairingZ(Z) +
+  			  G4CameronShellPlusPairingCorrections::GetShellPlusPairingN(N); 
+	}
 
 };
 

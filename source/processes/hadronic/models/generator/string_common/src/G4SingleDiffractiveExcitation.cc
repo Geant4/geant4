@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.3.4.1.2.1 1999/12/08 17:34:43 gunter Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.4 1999/12/15 14:52:46 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //

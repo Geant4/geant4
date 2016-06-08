@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3MedTable.cc,v 1.10 1999/12/05 17:50:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

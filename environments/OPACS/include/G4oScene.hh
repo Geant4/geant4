@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4oScene.hh,v 1.2.6.1 1999/12/07 20:46:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4oScene.hh,v 1.4 2000/03/17 08:58:32 barrand Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
@@ -43,6 +43,16 @@ public:
   void AddThis (const G4Polycone&);
   void AddThis (const G4Polyhedra&);
   void AddThis (const G4VSolid& solid);  // For solids not above.
+
+  void BeginPrimitives (const G4Transform3D&);
+  void EndPrimitives ();
+  void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Text&);
+  void AddPrimitive (const G4Circle&);
+  void AddPrimitive (const G4Square&);
+  void AddPrimitive (const G4Polymarker&);
+  void AddPrimitive (const G4Polyhedron&);
+  void AddPrimitive (const G4NURBS&);
 
   void PreAddThis        (const G4Transform3D& objectTransformation,
 			  const G4VisAttributes& visAttribs);

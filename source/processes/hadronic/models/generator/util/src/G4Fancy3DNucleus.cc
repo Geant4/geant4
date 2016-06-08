@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.4.6.1.2.1.2.1 1999/12/08 17:34:44 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4Fancy3DNucleus.cc,v 1.7 2000/01/27 12:42:13 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -72,7 +72,7 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 
   theRWNucleons.clear();
 
-  myZ = theZ;
+  myZ = G4int(theZ);
   myA= ( G4UniformRand()>theA-G4int(theA) ) ? G4int(theA) : G4int(theA)+1;
 
   theNucleons = new G4Nucleon[myA];

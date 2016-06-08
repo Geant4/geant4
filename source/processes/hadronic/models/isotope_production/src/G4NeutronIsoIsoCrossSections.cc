@@ -142,13 +142,13 @@ Init(G4int A, G4int Z, G4double frac)
   {
     G4std::ifstream aDataSet(aName, G4std::ios::in);
     aDataSet>>theNumberOfProducts;
-    theProductionData = new G4NeutronIsoProdCrossSections * [theNumberOfProducts];
+    theProductionData = new G4IsoProdCrossSections * [theNumberOfProducts];
     for(G4int i=0; i<theNumberOfProducts; i++)
     {
       G4String aName;
       aDataSet >> aName;
       aDataSet >> dummy >> dummy;
-      theProductionData[i] = new G4NeutronIsoProdCrossSections(aName);
+      theProductionData[i] = new G4IsoProdCrossSections(aName);
       theProductionData[i]->Init(aDataSet);
     }
   }

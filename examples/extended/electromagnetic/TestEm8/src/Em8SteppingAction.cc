@@ -1,12 +1,12 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8SteppingAction.cc,v 1.1 2000/01/07 14:50:47 grichine Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em8SteppingAction.cc,v 1.3 2000/06/27 13:29:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 
@@ -25,7 +25,7 @@
 #include "G4EventManager.hh"
 #include "Em8SteppingMessenger.hh"
 #include "G4ios.hh"
-#include <iomanip.h>
+#include "g4std/iomanip"
 #include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

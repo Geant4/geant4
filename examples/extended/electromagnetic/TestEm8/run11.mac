@@ -25,9 +25,9 @@
 #
 #  PLOT: energy deposit distribution in absorber
 #
-/plots/setnbinEn 50
+/plots/setnbinEn 95
 /plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.020  MeV  
+/plots/setEnhigh 0.1  MeV  
 #
 #/calor/cutG 3.0 mm    
 #
@@ -40,12 +40,18 @@
 # 
 #/gun/energy 200.00 GeV
 #
-/gun/energy 2.00 MeV
+/gun/energy 9000.0 MeV
 #
 #/tracking/verbose 2
 #
 /run/beamOn 1000
 #
 #
+
+
+
+
+
+
 
 

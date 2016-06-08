@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PersistentSchema.hh,v 1.5 1999/12/05 22:32:26 morita Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // Persistent-capable schema definitions required for ooddlx processor
 //

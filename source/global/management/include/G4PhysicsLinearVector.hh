@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PhysicsLinearVector.hh,v 1.2 1999/11/16 17:40:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //--------------------------------------------------------------------

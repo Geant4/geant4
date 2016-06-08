@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 1.5 1999/12/15 14:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4FCylindricalSurface.hh,v 1.7 2000/02/16 12:02:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef __FCYLINDER_H
 #define __FCYLINDER_H
@@ -95,7 +95,7 @@ class G4FCylindricalSurface: public G4Surface
   void CalcBBox();
   
   //  function to return class name   
-  virtual char *NameOf() const 
+  virtual const char* NameOf() const 
   {
     return "G4FCylindricalSurface"; 
   }

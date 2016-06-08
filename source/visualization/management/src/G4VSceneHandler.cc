@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.8 1999/12/15 14:54:25 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VSceneHandler.cc,v 1.11 2000/05/22 08:27:29 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -35,12 +35,23 @@
 #include "G4Visible.hh"
 #include "G4VisAttributes.hh"
 #include "G4VModel.hh"
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Tubs.hh"
+#include "G4Trd.hh"
+#include "G4Trap.hh"
+#include "G4Sphere.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
+#include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
-  fSceneId               (id),
+  fSceneHandlerId        (id),
   fViewCount             (0),
   fpViewer               (0),
   fReadyForTransients    (false),
@@ -56,7 +67,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   if (name == "") {
     char charname [50];
     G4std::ostrstream ost (charname, 50);
-    ost << fSystem.GetName () << '-' << fSceneId << G4std::ends;
+    ost << fSystem.GetName () << '-' << fSceneHandlerId << G4std::ends;
     fName = charname;
   }
   else {
@@ -459,12 +470,10 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
 
 G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
 
-  G4VisManager* pVMan = G4VisManager::GetInstance ();
-
   os << "Scene " << s.fName << " has "
      << s.fViewerList.entries () << " viewers:";
   for (int i = 0; i < s.fViewerList.entries (); i++) {
-    os << "\n  " << s.fViewerList [i];
+    os << "\n  " << *(s.fViewerList [i]);
   }
 
   os << "\n  " << *s.fpScene;

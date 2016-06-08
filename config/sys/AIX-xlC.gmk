@@ -1,0 +1,37 @@
+#
+# -------- AIX ----------     !!! not supported !!!
+#                                 AIX-4.3.2 xlC
+ifeq ($(G4SYSTEM),AIX-xlC)
+  CXX       := xlC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := -O3 -qtwolink -+
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  := -g -qdbxextra -qcheck=all -qfullpath -qtwolink -+
+      FCFLAGS := -g
+      CCFLAGS := -g
+    endif
+  endif
+  FC := xlf
+  FCFLAGS += -qextname
+  FCLIBS := -lxlf90 -lxlf
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/lib -lXmu -lX11 -lXext
+  XMFLAGS   := -I/usr/include/Motif1.2
+  XMLIBS    := -L/usr/lib -lXm -lXt -lX11
+  XAWFLAGS  := -I/usr/include/X11
+  XAWLIBS   := -L/usr/lib -lXaw -lXmu -lXt -lX11 -lXext
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+  CPPFLAGS += -DG4NOT_ISO_DELETES
+  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+  endif
+endif

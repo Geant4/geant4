@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PLogicalVolume.ddl,v 1.7 1999/12/15 14:51:23 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PLogicalVolume.ddl,v 1.8 2000/06/09 12:56:01 morita Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // class G4PLogicalVolume
@@ -18,6 +18,7 @@
 #include "globals.hh"
 #include "G4PersistentTypes.hh" 
 #include "G4PersistentSchema.hh"
+#include "G4VMaterialMap.hh"
 #include "HepODBMS/odbms/HepODBMS.h"
 
 #include "G4PVSolid.hh"
@@ -39,7 +40,8 @@ public:
                       HepRef(G4PVSolid) persSolid);
     ~G4PLogicalVolume();
 
-    G4LogicalVolume* MakeTransientObject(G4VSolid* aSolid); 
+    G4LogicalVolume* MakeTransientObject(G4VSolid* aSolid,
+                                         G4Material* aMaterial);
 
     HepRef(G4PVSolid) GetSolid();
     void SetSolid( HepRef(G4PVSolid) pSolid );

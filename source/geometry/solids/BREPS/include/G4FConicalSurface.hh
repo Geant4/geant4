@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.hh,v 1.4 1999/12/15 14:49:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4FConicalSurface.hh,v 1.6 2000/02/16 12:02:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef __FCONIC_H
 #define __FCONIC_H
@@ -88,7 +88,7 @@ public:
   // STEP additions
 //
 //  function to return class name
-  virtual char *Name() const { return "G4FConicalSurface"; }
+  virtual const char* Name() const { return "G4FConicalSurface"; }
 //  printing function
   virtual void PrintOn( G4std::ostream& os = G4cout ) const;
 

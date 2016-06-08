@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4strstreambuf.hh,v 1.6 1999/12/16 08:15:57 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ---------------------------------------------------------------

@@ -5,14 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: EXPO.cc,v 1.5.2.1.2.1 1999/12/07 20:46:48 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: EXPO.cc,v 1.8 2000/03/17 08:56:10 barrand Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #include <stdlib.h>
-
-// GB : put this include before the GL ones. 
-// It avoid a clash with STL includes on Linux.
-#include "g4rw/tvhdict.h"
 
 /*Geant4*/
 #include <G4RunManager.hh>

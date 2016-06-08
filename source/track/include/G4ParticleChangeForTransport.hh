@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.2 1999/11/07 16:32:01 kurasige Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ParticleChangeForTransport.hh,v 1.5 2000/05/16 00:34:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -17,6 +17,7 @@
 // 
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 10 May. 1998  H.Kurahige
+//   Added theMaterialChange                        16 FEb. 2000  H.Kurahige
 //
 // Class Description
 //  This class is a concrete class for ParticleChange for transportation
@@ -64,10 +65,19 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //   "Change", what it stores (and returns in get) are the "FINAL" 
     //   values of the Position, Momentum, etc.
 
-    G4VTouchable* GetTouchableChange() const;
-    void  SetTouchableChange(G4VTouchable* fTouchable);
+    const G4VTouchable* GetTouchableChange() const;
+    void  SetTouchableChange(const G4VTouchable* fTouchable);
     //  Get/Set the touchable of the current particle.
     //  Note: Touchable in PostStepPoint will be updated only after PostStepDoIt
+
+    G4Material* GetMaterialChange() const;
+    void SetMaterialChange(G4Material* fMaterial);
+    //  Get/Set the material in the touchable of the current particle.
+
+    const G4ThreeVector* GetPolarizationChange() const;
+    void SetPolarizationChange(G4double Px, G4double Py, G4double Pz);
+    void SetPolarizationChange(const G4ThreeVector& finalPoralization);
+    // Get/Set thePolarizationChange vector.
 
     G4bool GetMomentumChanged() const;
     void SetMomentumChanged(G4bool b);
@@ -76,12 +86,16 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     virtual void DumpInfo() const;
 
   protected:
-    G4VTouchable* theTouchableChange;
+    const G4VTouchable* theTouchableChange;
     //  The changed touchable of a given particle.
 
   private:
-    G4bool isMomentumChanged;
-
+    G4bool     isMomentumChanged;
+    //  The flag which is set if mometum is changed in this stepi
+    G4Material* theMaterialChange;
+     //  The material where given track currently locates
+    G4ThreeVector thePolarizationChange;
+    //  The changed (final) polarization of a given track
 };
 
 #include "G4ParticleChangeForTransport.icc"

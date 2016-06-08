@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: geomdefs.hh,v 1.2 1999/12/15 14:49:46 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 // Constants, typedefs, enums for Geometry Section

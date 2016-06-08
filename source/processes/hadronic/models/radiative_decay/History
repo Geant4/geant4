@@ -1,0 +1,29 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                 Radiative decay History file
+                 -------------------------------------
+This file should be used by responsible rdm developers to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27th June 2000  Fan Lei  (radiative_decay-V01-01-04)
+- fix for DEC-cxx debug non-ISO.
+- update test log files.
+
+15th June 2000  Fan Lei (radiative_decay_V01-01-03)
+- Minor fix on Linux
+
+15th June 2000  Fan Lei (radiative_decay_V01-01-02)
+- ISO compliance.
+
+initial tag by Hans_Pete (radiative_decay_V01-01-00)
+
+

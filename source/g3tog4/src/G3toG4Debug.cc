@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4Debug.cc,v 1.1 1999/12/09 01:27:49 lockman Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 
 #include "G3toG4Debug.hh"

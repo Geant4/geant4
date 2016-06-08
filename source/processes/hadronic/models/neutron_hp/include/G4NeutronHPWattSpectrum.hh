@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPWattSpectrum.hh,v 1.4 1999/12/15 14:53:14 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef G4NeutronHPWattSpectrum_h
 #define G4NeutronHPWattSpectrum_h 1

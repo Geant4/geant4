@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Shoot.hh,v 1.3 2000/02/29 09:45:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef SHOOT_HH
 #define SHOOT_HH

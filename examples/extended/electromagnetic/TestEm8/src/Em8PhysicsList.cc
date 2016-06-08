@@ -1,14 +1,15 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em8PhysicsList.cc,v 1.1 2000/01/07 14:50:45 grichine Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: Em8PhysicsList.cc,v 1.4 2000/06/27 13:29:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 // 
 
+#include "G4Timer.hh"
    
 #include "Em8PhysicsList.hh"
 #include "Em8DetectorConstruction.hh"
@@ -23,9 +24,11 @@
 #include "G4Material.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
-#include "G4Timer.hh"
 #include "G4ios.hh"
-#include <iomanip.h>                
+#include "g4std/iomanip"
+               
+#include "G4FastSimulationManagerProcess.hh"
+
 
 /////////////////////////////////////////////////////////////
 //
@@ -134,6 +137,8 @@ void Em8PhysicsList::ConstructBarions()
 void Em8PhysicsList::ConstructProcess()
 {
   AddTransportation();
+  AddParameterisation();
+
   ConstructEM();
   ConstructGeneral();
 }
@@ -167,6 +172,7 @@ void Em8PhysicsList::ConstructProcess()
 void Em8PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
+
   while( (*theParticleIterator)() )
   {
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -178,8 +184,8 @@ void Em8PhysicsList::ConstructEM()
       // Construct processes for gamma
 
       thePhotoElectricEffect = new G4PhotoElectricEffect();      
-      theComptonScattering = new G4ComptonScattering();
-      theGammaConversion = new G4GammaConversion();
+      theComptonScattering   = new G4ComptonScattering();
+      theGammaConversion     = new G4GammaConversion();
       
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
       pmanager->AddDiscreteProcess(theComptonScattering);
@@ -273,11 +279,15 @@ void Em8PhysicsList::ConstructEM()
                || particleName == "kaon-"  
               )
     {
-      //  Em8StepCut* thehadronStepCut = new Em8StepCut();
+        Em8StepCut* thehadronStepCut = new Em8StepCut();
 
       //  G4hIonisation* thehIonisation = new G4hIonisation() ; 
       //   G4MultipleScattering* thehMultipleScattering =
       //                  new G4MultipleScattering() ;
+
+        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
+                                     pDet->GetLogicalAbsorber(),
+                                    "IonisationByLogVolHadr"),-1,2,2);
 
       //  pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       //  pmanager->AddProcess(thehIonisation,-1,2,2);
@@ -285,8 +295,8 @@ void Em8PhysicsList::ConstructEM()
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
       // pmanager->AddProcess(new G4PAIonisation("Argon"),-1,2,2) ;
       
-      //  pmanager->AddProcess( thehadronStepCut,-1,-1,3);
-      //  thehadronStepCut->SetMaxStep(MaxChargedStep) ;
+        pmanager->AddProcess( thehadronStepCut,-1,-1,3);
+        thehadronStepCut->SetMaxStep(MaxChargedStep) ;
       // thehadronStepCut->SetMaxStep(10*mm) ;
      
     }
@@ -322,6 +332,28 @@ void Em8PhysicsList::ConstructGeneral()
 
 /////////////////////////////////////////////////////////////////////////////
 
+void Em8PhysicsList::AddParameterisation()
+{
+  G4FastSimulationManagerProcess* theFastSimulationManagerProcess = 
+                                  new G4FastSimulationManagerProcess() ;
+  theParticleIterator->reset();
+
+  while( (*theParticleIterator)() )
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value() ;
+    G4ProcessManager* pmanager = particle->GetProcessManager() ;
+
+    // both postStep and alongStep action are required: because
+    // of the use of ghost volumes. If no ghost, the postStep is sufficient.
+
+    pmanager->AddProcess(theFastSimulationManagerProcess, -1, 1, 1);
+  }
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+
 void Em8PhysicsList::SetCuts()
 {
   G4Timer theTimer ;
@@ -329,7 +361,7 @@ void Em8PhysicsList::SetCuts()
   if (verboseLevel >0)
   {
     G4cout << "Em8PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << endl;
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
@@ -354,8 +386,8 @@ void Em8PhysicsList::SetCuts()
 
   theTimer.Stop();
   G4cout.precision(6);
-  G4cout << endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<endl;
+  G4cout << G4endl ;
+  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
 
 }
 
@@ -429,10 +461,10 @@ void Em8PhysicsList::GetRange(G4double val)
   G4double cut;
   part = theParticleTable->FindParticle("e-");
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  G4cout << "material : " << currMat->GetName() << endl;
-  G4cout << "particle : " << part->GetParticleName() << endl;
-  G4cout << "energy   : " << val / keV << " (keV)" << endl;
-  G4cout << "range    : " << cut / mm << " (mm)" << endl;
+  G4cout << "material : " << currMat->GetName() << G4endl;
+  G4cout << "particle : " << part->GetParticleName() << G4endl;
+  G4cout << "energy   : " << val / keV << " (keV)" << G4endl;
+  G4cout << "range    : " << cut / mm << " (mm)" << G4endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -440,7 +472,7 @@ void Em8PhysicsList::GetRange(G4double val)
 void Em8PhysicsList::SetMaxStep(G4double step)
 {
   MaxChargedStep = step ;
-  G4cout << " MaxChargedStep=" << MaxChargedStep << endl;
-  G4cout << endl;
+  G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
+  G4cout << G4endl;
 }
 

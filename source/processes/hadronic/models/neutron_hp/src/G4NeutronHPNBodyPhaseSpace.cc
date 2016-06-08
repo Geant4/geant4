@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.2 1999/07/02 10:01:14 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"

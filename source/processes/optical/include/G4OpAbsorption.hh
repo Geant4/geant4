@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpAbsorption.hh,v 1.4.4.1 1999/12/07 20:52:51 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Definition

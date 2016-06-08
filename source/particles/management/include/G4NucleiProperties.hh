@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NucleiProperties.hh,v 1.8.4.1.2.1 1999/12/08 17:34:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4NucleiProperties.hh,v 1.10 2000/02/04 03:05:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -32,17 +32,18 @@
 
 class G4NucleiProperties
 {
-private:
+ // Class Description
+ //   G4NucleiProperties is an utility class to provide mass formula of nuclei
+ //   (i.e. it has static member function only)
 
-  // Default constructor (singleton)
-  G4NucleiProperties();
 
-  static G4NucleiProperties theInstance;
-
-public:
+public: 
 
   // Destructor
   ~G4NucleiProperties() { };
+
+  // Default constructor ()
+  G4NucleiProperties(){};
 
 
 public:  // With Description

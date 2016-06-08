@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AntiNeutrinoTau.cc,v 1.1.10.1.2.2 1999/12/14 07:08:13 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4AntiNeutrinoTau.cc,v 1.3 2000/02/27 06:23:41 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -42,6 +42,7 @@ G4AntiNeutrinoTau::G4AntiNeutrinoTau(
               iConjugation,iIsospin,iIsospin3,gParity,pType,
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("tau");
 }
 
 // ......................................................................

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.3.4.1 1999/12/07 20:51:51 gunter Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.4 1999/12/15 14:52:45 gunter Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1

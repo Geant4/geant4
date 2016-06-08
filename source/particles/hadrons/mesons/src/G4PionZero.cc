@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PionZero.cc,v 1.2.8.1.2.2 1999/12/14 07:08:12 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4PionZero.cc,v 1.4 2000/02/27 05:57:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -50,6 +50,7 @@ G4PionZero::G4PionZero(
              iConjugation,iIsospin,iIsospin3,gParity,pType,
              lepton,baryon,encoding,stable,lifetime,decaytable )
 {
+  SetParticleSubType("pi");
   // Anti-particle of Pi0 is pi0 itself  
   SetAntiPDGEncoding(encoding);
 

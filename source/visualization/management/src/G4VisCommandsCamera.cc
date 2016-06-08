@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCamera.cc,v 1.5 2000/01/11 17:23:25 johna Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4VisCommandsCamera.cc,v 1.7 2000/05/13 10:52:14 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 
@@ -19,17 +19,13 @@ void G4VisCommandCameraReset::SetValue () {
   if (pVMan -> IsValidView ()) {
     const G4Scene* pScene = pVMan -> GetCurrentScene ();
     G4ViewParameters& vp = pVMan -> SetCurrentViewParameters ();
-    vp.SetCurrentTargetPoint (pScene -> GetStandardTargetPoint ());
+    vp.SetCurrentTargetPoint (G4Point3D());
     vp.SetZoomFactor (1.);
     vp.SetDolly (0.);
     vp.SetViewpointDirection (G4Vector3D (0., 0., 1.));
     vp.SetUpVector (G4Vector3D (0., 1., 0.));
     G4cout << "Target point reset to centre of scene, ("
-	   << G4BestUnit (pScene -> GetStandardTargetPoint ().x(), "Length")
-	   << ", "
-	   << G4BestUnit (pScene -> GetStandardTargetPoint ().y(), "Length")
-	   << ", "
-	   << G4BestUnit (pScene -> GetStandardTargetPoint ().z(), "Length")
+	   << G4BestUnit (pScene -> GetStandardTargetPoint (), "Length")
 	   << ")";
     G4cout << "\nZoom factor reset to 1.";
     G4cout << "\nDolly distance reset to 0.";

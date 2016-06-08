@@ -51,5 +51,5 @@ G4BREPSolidOpenPCone::G4BREPSolidOpenPCone  (G4String name,
 
 
 void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const {
-  scene.AddThis ( *fPtrSolidA );
+  scene.AddThis ( *this );
 }

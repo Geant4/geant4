@@ -4,14 +4,17 @@
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE: November 10, 1999                                            #
+#        May      20, 2000                                            # 
+#        June     06, 2000                                            # 
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of detector geometry     #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis1.mac                      #
+#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute exN03Vis1.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
-#                                  DAWN (version 3.80 of after)       #
-#                                  Ghostview, Tcl/Tk                  #
+#                                  DAWN (version 3.80 or after)       #
+#                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
@@ -20,35 +23,42 @@
 #    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
 #    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
 #                                                                     #
-#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:               #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
 #    % setenv G4VIS_USE_OPENGLX            1                          #
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     # 
 #  Addional Notes:                                                    #
+#    The compound command "/vis/open <graphics-system-name>"          #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/sceneHandler/create $1                                    #
+#      /vis/viewer/create                                             #
+#                                                                     #
+#    The compound command "/vis/drawVolume <physical-volume-name>"    #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/scene/create                                              #
+#      /vis/scene/add/volume $1                                       #
+#      /vis/sceneHandler/attach                                       #
+#      /vis/viewer/refresh                                            #
+#      /vis/viewer/update                                             #
 #                                                                     #
 #######################################################################
 
-#####################################
+###########################################
 # Visualization of detector geometry 
-#  with the OGLSX driver
-#####################################
-
-# Create "scene-0" 
-/vis/scene/create
+#  with the OGLSX (OpenGL Stored X) driver
+###########################################
 
 # Invoke the OGLSX driver 
-/vis/sceneHandler/create OGLSX
-/vis/viewer/create
-
-# Add the detector geometry to the current scene
-/vis/scene/add/volume
+/vis/open OGLSX
 
 # Visualize the detector geometry 
 #  with the defalut camera parameters
-/vis/scene/notifyHandlers
-/vis/viewer/update
+/vis/camera/reset
+/vis/drawVolume
 
 # Slide show (spinning) of the view visualized above.
 #  Draw 60 frames with steps of 3 degrees.
@@ -68,7 +78,7 @@
 #  Note: The visualization commands are under reconstruction.
 #        In future, the lines below should be rewritten, 
 #        replacing  /vis/draw/... with  /vis/add/... .
-#        In using /vis/draw/..., use /vis/show/view 
+#        For the commands /vis/draw/..., use /vis/show/view 
 #        instead of  /vis/viewer/update  
 #        in order to flush visualization. 
 #
@@ -83,29 +93,29 @@
 ##########################################################
 # Visualization with DAWNFILE driver
 #
-#  * The visualized view is saved to a file "g4.eps"  
+#  * Each visualized view is saved to a file "g4_XX.eps"  
 #    with the "vectorized" PostScript format.
 #
-#  * In order to make the file "g4.eps" printable, 
+#  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel 
 #    or by editing the file by hand.
 #
-#  * Set as follows to skip DAWN GUI.
+#  * Set as follows to skip DAWN GUI:
 #    % setenv G4DAWNFILE_VIEWER "dawn -d"
 ##########################################################
 
 #-----
-# Create "scene-1" (Absorber.0)
+# Invoke the DAWNFILE driver 
+/vis/open DAWNFILE
+
+#-----
+# Create a new scene 
 /vis/scene/create
 
-# Invoke the DAWNFILE driver 
-/vis/sceneHandler/create DAWNFILE
-/vis/viewer/create
-
-# Attach the current visualization driver to "scene-1".
-# This line is omittable.
-/vis/sceneHandler/attach scene-1
+# Attach the current visualization driver 
+# to the current scene
+/vis/sceneHandler/attach
 
 # Bird's-eye view of a detector component (Absorber.0)
 #  viewpoint  : (theta,phi) = (35*deg, 35*deg), 
@@ -120,20 +130,16 @@
 /vis/camera/viewpoint  35 35
 /vis/draw/current
 /vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm  50 -300 -200   Absorber.0 
+/vis/draw/text         0 0 0 mm  50 -100 -200   Absorber.0 
 /vis/show/view
 
 #-----  
-# Create "scene-2" (Gap.0)
+# Create a new scene 
 /vis/scene/create
 
-# Invoke the DAWNFILE driver 
-/vis/sceneHandler/create DAWNFILE
-/vis/viewer/create
-
-# Attach the current visualization driver to "scene-2".
-# This line is omittable.
-/vis/sceneHandler/attach scene-2
+# Attach the current visualization driver 
+# to the current scene.
+/vis/sceneHandler/attach
 
 # Bird's-eye view of a detector component (Gap.0)
 #
@@ -143,27 +149,24 @@
 /vis/camera/viewpoint  35 35
 /vis/draw/current
 /vis/draw/axes         0 0 0 500
-/vis/draw/text         0 0 0 mm 50 -200 -200   Gap.0
+/vis/draw/text         0 0 0 mm 50 -100 -200   Gap.0
 /vis/show/view
 
 #-----
-# Create "scene-3" (world)
+# Create a new scene 
 /vis/scene/create
 
-# Invoke the DAWNFILE driver 
-/vis/sceneHandler/create DAWNFILE
-/vis/viewer/create
-
-# Attach the current visualization driver to "scene-3".
-# This line is omittable.
-/vis/sceneHandler/attach scene-3
+# Attach the current visualization driver 
+# to the current scene.
+/vis/sceneHandler/attach
 
 # Bird's-eye view of the whole detector components
-#  * The argument of /vis/scene/add/volume, "world",
-#    is omittable.
-#  * "/vis/set/culling off" makes invisible volume 
-#    "world" visible.
-#
+#  * The argument "world" of the command 
+#    "/vis/scene/add/volume" is omittable.
+#  * "/vis/set/culling off" makes the invisible 
+#    world volume visible.
+#    (The invisibility of the world volume is set 
+#     in ExN03DetectorConstruction.cc.)
 /vis/scene/add/volume  world
 /vis/camera/reset
 /vis/camera/zoom       0.9 

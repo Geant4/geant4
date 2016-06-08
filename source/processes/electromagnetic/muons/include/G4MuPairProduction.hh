@@ -5,10 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.hh,v 1.2.8.1 1999/12/07 20:50:43 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4MuPairProduction.hh,v 1.8 2000/05/23 16:03:25 urban Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
-// $Id: 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
@@ -19,6 +18,8 @@
 //      -------- G4MuPairProduction physics process ---------
 //                by Laszlo Urban, May 1998      
 // ************************************************************
+// 10/02/00  modifications , new e.m. structure, L.Urban
+//
 
 #ifndef G4MuPairproduction_h
 #define G4MuPairproduction_h 1
@@ -26,14 +27,14 @@
 #include "G4ios.hh" 
 #include "globals.hh"
 #include "Randomize.hh" 
-#include "G4MuEnergyLoss.hh"
+#include "G4VMuEnergyLoss.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4OrderedTable.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
  
-class G4MuPairProduction : public G4MuEnergyLoss
+class G4MuPairProduction : public G4VMuEnergyLoss
  
 { 
   public:
@@ -43,8 +44,6 @@ class G4MuPairProduction : public G4MuEnergyLoss
     ~G4MuPairProduction();
 
      G4bool IsApplicable(const G4ParticleDefinition&);
-
-     void SetPhysicsTableBining(G4double lowE,G4double highE,G4int nBins);
 
      void BuildPhysicsTable(const G4ParticleDefinition& ParticleType);
 
@@ -60,6 +59,12 @@ class G4MuPairProduction : public G4MuEnergyLoss
  
      G4VParticleChange *PostStepDoIt(const G4Track& track,
                                      const G4Step& Step  ) ;                 
+
+     G4double GetDMicroscopicCrossSection(
+                                      const G4ParticleDefinition* ParticleType,
+                                      G4double KineticEnergy, 
+                                      G4double AtomicNumber,
+                                      G4double PairEnergy);
 
   protected:
 
@@ -110,9 +115,11 @@ class G4MuPairProduction : public G4MuEnergyLoss
 
      G4OrderedTable PartialSumSigma;     
 
-     G4double LowestKineticEnergy; 
-     G4double HighestKineticEnergy; 
-     G4int TotBin;                      
+     static G4double LowerBoundLambda ; // bining for lambda table
+     static G4double UpperBoundLambda ;
+     static G4int    NbinLambda ;
+     G4double LowestKineticEnergy,HighestKineticEnergy ;
+     G4int    TotBin ;
 
      const G4double* ElectronCutInKineticEnergy;
      const G4double* PositronCutInKineticEnergy;
@@ -123,7 +130,17 @@ class G4MuPairProduction : public G4MuEnergyLoss
      // tables for sampling ..............
      static G4int nzdat,ntdat,NBIN ;
      static G4double zdat[5],tdat[8] ;
-     static G4double ya[1000],proba[5][8][1000] ;
+     static G4double ya[1001],proba[5][8][1001] ;
+     static G4double MinPairEnergy ;
+
+  public:
+
+    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
+    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
+    static void SetNbinLambda(G4int n) {NbinLambda = n;};
+    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
+    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
+    static G4int GetNbinLambda() {return NbinLambda;};
 
 };
 

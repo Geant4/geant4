@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LFission.hh,v 1.3.2.1 1999/12/07 20:52:20 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4LFission.hh,v 1.4 1999/12/15 14:53:06 gunter Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 //
 // G4 Low-energy Model: Fission -- header file

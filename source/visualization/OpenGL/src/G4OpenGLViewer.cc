@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.4 1999/12/15 14:54:08 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4OpenGLViewer.cc,v 1.8 2000/05/22 08:09:15 johna Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -25,6 +25,7 @@
 #include <assert.h>
 #include <unistd.h>
 
+#include "G4Scene.hh"
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -33,12 +34,12 @@
 #include "G4Plane3D.hh"
 
 int G4OpenGLViewer::snglBuf_RGBA[10] =
-{ GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3, 
-  GLX_BLUE_SIZE, 2, GLX_DEPTH_SIZE, 1, None };
+{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, 
+  GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
 
 int G4OpenGLViewer::dblBuf_RGBA[11] =
-{ GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3,
-  GLX_BLUE_SIZE, 2, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
+{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
+  GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
@@ -95,16 +96,16 @@ void G4OpenGLViewer::SetView () {
   glLightfv (GL_LIGHT0, GL_AMBIENT, ambient);
   glLightfv (GL_LIGHT0, GL_DIFFUSE, diffuse);
   
-  const G4Point3D& target = fVP.GetCurrentTargetPoint ();
-
-  // Get radius of scene.
+  // Get radius of scene, etc.
+  // Note that this procedure properly takes into account zoom, dolly and pan.
+  const G4Point3D& targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
   G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
   if(radius<=0.) radius = 1.;
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
-
-  const G4Point3D& pCamera =
-    target + cameraDistance * fVP.GetViewpointDirection().unit();
-  
+  const G4Point3D cameraPosition =
+    targetPoint + cameraDistance * fVP.GetViewpointDirection().unit();
   const GLdouble near   = fVP.GetNearDistance (cameraDistance, radius);
   const GLdouble far    = fVP.GetFarDistance  (cameraDistance, near, radius);
   const GLdouble right  = fVP.GetFrontHalfHeight (near, radius);
@@ -128,12 +129,13 @@ void G4OpenGLViewer::SetView () {
   const G4Normal3D& upVector = fVP.GetUpVector ();  
   G4Point3D gltarget;
   if (cameraDistance > 1.e-6 * radius) {
-    gltarget = target;
+    gltarget = targetPoint;
   }
   else {
-    gltarget = target - radius * fVP.GetViewpointDirection().unit();
+    gltarget = targetPoint - radius * fVP.GetViewpointDirection().unit();
   }
-  
+
+  const G4Point3D& pCamera = cameraPosition;  // An alias for brevity.
   gluLookAt (pCamera.x(),  pCamera.y(),  pCamera.z(),       // Viewpoint.
 	     gltarget.x(), gltarget.y(), gltarget.z(),      // Target point.
 	     upVector.x(), upVector.y(), upVector.z());     // Up vector.

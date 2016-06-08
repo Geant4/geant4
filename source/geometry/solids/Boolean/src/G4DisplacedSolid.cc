@@ -1,3 +1,13 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4DisplacedSolid.cc,v 1.11 2000/04/27 09:59:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
+//
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
 //
@@ -18,7 +28,6 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4NURBSbox.hh"
-#include "G4VisExtent.hh"
 
 ////////////////////////////////////////////////////////////////
 //
@@ -87,7 +96,7 @@ const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const
       G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() 
 { return this; }
 
-G4VSolid* G4DisplacedSolid::GetConstituentMovedSolid()
+G4VSolid* G4DisplacedSolid::GetConstituentMovedSolid() const
 { return fPtrSolid; } 
 
 G4AffineTransform  G4DisplacedSolid::GetTransform() const
@@ -104,8 +113,7 @@ G4AffineTransform  G4DisplacedSolid::GetDirectTransform() const
 
 G4RotationMatrix G4DisplacedSolid::GetFrameRotation() const
 {
-   G4RotationMatrix InvRotation= fPtrTransform->NetRotation();
-   InvRotation.invert();
+   G4RotationMatrix InvRotation= fDirectTransform->NetRotation();
    return InvRotation;
 }
 
@@ -117,7 +125,7 @@ G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
 ///////////////////////////////////////////////////////////////
 G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
 {
-   G4RotationMatrix Rotation= fDirectTransform->NetRotation();
+   G4RotationMatrix Rotation= fPtrTransform->NetRotation();
    return Rotation;
 }
 
@@ -245,17 +253,7 @@ G4DisplacedSolid::ComputeDimensions( G4VPVParameterisation* p,
 void 
 G4DisplacedSolid::DescribeYourselfTo ( G4VGraphicsScene& scene ) const 
 {
-  fPtrSolid->DescribeYourselfTo(scene) ;
-}
-
-/////////////////////////////////////////////////////////////
-//
-//
-
-G4VisExtent   
-G4DisplacedSolid::GetExtent        () const 
-{
-  return fPtrSolid->GetExtent()  ;
+  scene.AddThis (*this);
 }
 
 ////////////////////////////////////////////////////
@@ -265,7 +263,10 @@ G4DisplacedSolid::GetExtent        () const
 G4Polyhedron* 
 G4DisplacedSolid::CreatePolyhedron () const 
 {
-  return fPtrSolid->CreatePolyhedron() ;
+  G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
+  polyhedron->Transform
+    (G4Transform3D(GetObjectRotation(),GetObjectTranslation()));
+  return polyhedron;
 }
 
 /////////////////////////////////////////////////////////
@@ -275,10 +276,7 @@ G4DisplacedSolid::CreatePolyhedron () const
 G4NURBS*      
 G4DisplacedSolid::CreateNURBS      () const 
 {
-  return fPtrSolid->CreateNURBS() ;
+  // Take into account local transformation - see CreatePolyhedron.
+  // return fPtrSolid->CreateNURBS() ;
+  return 0;
 }
-
-
-
-
-

@@ -1,7 +1,7 @@
 LD_LIBRARY_PATH = /usr/local/libexec/jdk/1.1.6/lib:/opt/SUNWspro/lib:/usr/openwin/lib:/usr/dt/lib:/usr/local/lib:/afs/cern.ch/sw/lhcxx/specific/sun/Objectivity/5.1/lib:/afs/cern.ch/sw/lhcxx/specific/@sys/HepODBMS/0.3.0.1/lib
 
 Copying G4EXAMPLE_BOOT into runtime federated database...
-Creating new runtime federated database /afs/cern.ch/sw/geant4/stt/dev/SUN-CC/debug/exampleSchema/SUN-CC/PersistentEx01 for FDID 207
+Creating new runtime federated database /afs/cern.ch/sw/geant4/stt/dev2/SUN-CC/debug_NONISO/exampleSchema/SUN-CC/PersistentEx01 for FDID 207
 Run with active lockserver
 Schema import from PersistentEx01 to PersistentEx01
 
@@ -10,12 +10,12 @@ Now updating System Name Space (catalog) values...
 Now updating Database File locations...
 
 Federated Database Installation complete.
-OO_FD_BOOT is set to /afs/cern.ch/sw/geant4/stt/dev/SUN-CC/debug/exampleFD/SUN-CC/PersistentEx01
+OO_FD_BOOT is set to /afs/cern.ch/sw/geant4/stt/dev2/SUN-CC/debug_NONISO/exampleFD/SUN-CC/PersistentEx01
 
 Opening federated database OO_FD_BOOT.
 **********************************************
- Geant4 version $Name: geant4-01-01 $
-                                  (07-Dec-99)
+ Geant4 version $Name: geant4-02-00 $
+                                (10-Mar-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 #
@@ -50,7 +50,15 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=0.1  mm.
+
+           material       min.delta energy(keV) 
+
+           Aluminium         125.07
+                Lead         229.66
+                 Air           0.99
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -64,10 +72,18 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
+ hIoni    Minimum Delta cut in range=0.1  mm.
+
+           material        min.delta energy(keV) 
+
+           Aluminium         125.07
+                Lead         229.66
+                 Air           0.99
+
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -77,15 +93,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 #
 # 10 events
 #
@@ -95,91 +111,91 @@ Transaction started for /Geometry/GeomContainer/ with non-sustained mode.
 Transaction is committed on /Geometry/GeomContainer/
 >>> Event 0
 Event : 0
-mySD/EvenCollection    Number of hits       9
-  Edep of the first Hit 34.3763
-mySD/OddCollection     Number of hits       39
-  Edep of the first Hit 18.4413
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 31.596
+mySD/OddCollection     Number of hits       36
+  Edep of the first Hit 59.343
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 0 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 1
 Event : 1
-mySD/EvenCollection    Number of hits       22
-  Edep of the first Hit 99.9458
-mySD/OddCollection     Number of hits       20
-  Edep of the first Hit 25.4437
+mySD/EvenCollection    Number of hits       13
+  Edep of the first Hit 1.7624
+mySD/OddCollection     Number of hits       40
+  Edep of the first Hit 21.652
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 1 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 2
 Event : 2
-mySD/EvenCollection    Number of hits       22
-  Edep of the first Hit 6.24018
-mySD/OddCollection     Number of hits       19
-  Edep of the first Hit 64.64
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 10.362
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 46.736
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 2 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 3
 Event : 3
-mySD/EvenCollection    Number of hits       13
-  Edep of the first Hit 48.4619
-mySD/OddCollection     Number of hits       39
-  Edep of the first Hit 14.5986
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 38.603
+mySD/OddCollection     Number of hits       35
+  Edep of the first Hit 15.55
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 3 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 4
 Event : 4
-mySD/EvenCollection    Number of hits       32
-  Edep of the first Hit 50.5145
-mySD/OddCollection     Number of hits       16
-  Edep of the first Hit 57.8223
+mySD/EvenCollection    Number of hits       9
+  Edep of the first Hit 46.253
+mySD/OddCollection     Number of hits       38
+  Edep of the first Hit 19.721
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 4 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 5
 Event : 5
 mySD/EvenCollection    Number of hits       6
-  Edep of the first Hit 139.808
-mySD/OddCollection     Number of hits       35
-  Edep of the first Hit 109.911
+  Edep of the first Hit 11.805
+mySD/OddCollection     Number of hits       39
+  Edep of the first Hit 30.611
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 5 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 6
 Event : 6
-mySD/EvenCollection    Number of hits       10
-  Edep of the first Hit 21.8663
-mySD/OddCollection     Number of hits       28
-  Edep of the first Hit 14.2581
+mySD/EvenCollection    Number of hits       13
+  Edep of the first Hit 4.4673
+mySD/OddCollection     Number of hits       42
+  Edep of the first Hit 38.656
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 6 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 7
 Event : 7
-mySD/EvenCollection    Number of hits       12
-  Edep of the first Hit 2.93176
+mySD/EvenCollection    Number of hits       7
+  Edep of the first Hit 36.725
 mySD/OddCollection     Number of hits       43
-  Edep of the first Hit 3.1392
+  Edep of the first Hit 35.941
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 7 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 8
 Event : 8
-mySD/EvenCollection    Number of hits       18
-  Edep of the first Hit 13.794
-mySD/OddCollection     Number of hits       34
-  Edep of the first Hit 13.6248
+mySD/EvenCollection    Number of hits       6
+  Edep of the first Hit 58.073
+mySD/OddCollection     Number of hits       47
+  Edep of the first Hit 38.947
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 8 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/
 >>> Event 9
 Event : 9
-mySD/EvenCollection    Number of hits       14
-  Edep of the first Hit 4.16745
-mySD/OddCollection     Number of hits       35
-  Edep of the first Hit 43.0885
+mySD/EvenCollection    Number of hits       10
+  Edep of the first Hit 36.099
+mySD/OddCollection     Number of hits       34
+  Edep of the first Hit 51.997
 Transaction started for /Events/EventContainer/ with non-sustained mode.
  -- G4PEvent 9 stored in /Events/EventContainer/
 Transaction is committed on /Events/EventContainer/

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: tvvector.h,v 1.7 1999/11/26 17:17:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: tvvector.h,v 1.8 2000/03/10 15:53:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 //---------------------------------------------------------------

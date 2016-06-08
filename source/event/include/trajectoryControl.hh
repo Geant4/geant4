@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: trajectoryControl.hh,v 1.2 1999/12/15 14:49:40 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 ////#define G4_STORE_TRAJECTORY 1
 

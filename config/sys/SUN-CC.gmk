@@ -1,0 +1,50 @@
+#
+# -------- SUN ---------
+#
+ifeq ($(G4SYSTEM),SUN-CC)
+  CXX       := CC
+  ifdef G4OPTIMISE
+    CXXFLAGS  := -O
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  := -g
+      FCFLAGS := -g
+      CCFLAGS := -g
+    endif
+  endif
+  ifdef G4MAKESHLIB
+    CXXFLAGS += -KPIC
+  endif
+#  CXXFLAGS += -fnonstd
+  CFRONT_G4TEMPLATE_REPOSITORY  := true
+  FC     := f77
+  SHEXT  := so
+  AR     := $(CXX) -xar -ptr$(G4TREP) -o
+  ECHO   := /bin/echo
+  GREP   := /usr/xpg4/bin/grep
+  FCLIBS := -lM77 -lF77 -lsunmath
+  X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11
+  X11FLAGS  += -I/usr/openwin/include
+  X11LIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
+  X11LIBS   += -R/usr/openwin/lib -lXmu -lX11 -lXext 
+  XMLIBS    := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
+  XMLIBS    += -R/usr/openwin/lib -lXt -lXm -lX11
+  XAWFLAGS  := -I/usr/openwin/include/X11
+  XAWLIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
+  XAWLIBS   += -R/usr/openwin/lib -lXaw -lXmu -lXt -lX11 -lXext
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
+  LOADLIBS += -L/usr/lib -lsocket -lnsl
+  CPPFLAGS += -DG4NOT_ISO_DELETES
+  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
+    CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
+    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
+  endif
+endif

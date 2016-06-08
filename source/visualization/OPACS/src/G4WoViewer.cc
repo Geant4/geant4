@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4WoViewer.cc,v 1.3 1999/12/15 14:54:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4WoViewer.cc,v 1.6 2000/05/28 13:35:14 barrand Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -27,6 +27,7 @@
 #include <Wo.h>
 //G4
 #include "G4VInteractorManager.hh"
+#include "G4Scene.hh"
 #include "G4Wo.hh"
 #include "G4GoSceneHandler.hh"
 //This
@@ -54,8 +55,10 @@ G4WoViewer::G4WoViewer (
     CWarn ("G4WoViewer : Wo is not initialized !\n");
     return;
   } 
-
-  char* defName = CStringDuplicate((char*)fName.data());
+  char* defNameGS = CStringDuplicate((char*)fName.data());
+  char* defName = CStringGetFirstWord(defNameGS);
+  CStringDelete(defNameGS);
+  
   CStringReplacePart (&defName,"-","_");
 
   fGoCamera = OCameraGetIdentifier (defName);
@@ -141,7 +144,9 @@ void G4WoViewer::SetView (
 // later due to user interaction via visualization system's GUI.)
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  const G4Point3D  target  = fVP.GetCurrentTargetPoint ();
+  const G4Point3D  target
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();                                            
   G4double radius  = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
   if(radius<=0.) radius = 1. * m;
   const G4double cameraDistance = fVP.GetCameraDistance (radius);

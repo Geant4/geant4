@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.5 1999/12/15 14:53:56 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// $Id: G4ParticleChangeForTransport.cc,v 1.7 2000/05/16 00:34:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -64,6 +64,7 @@ G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4P
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
       theTouchableChange = right.theTouchableChange;
+      theMaterialChange = right.theMaterialChange;
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
@@ -139,8 +140,8 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForAlongStep(G4Step* pStep)
 
 
   // update polarization
-  //pPostStepPoint->AddPolarization( thePolarizationChange
-  //				   - pPreStepPoint->GetPolarization());
+  pPostStepPoint->AddPolarization( thePolarizationChange
+  				   - pPreStepPoint->GetPolarization());
       
   // update position and time
   pPostStepPoint->AddPosition( thePositionChange 
@@ -175,6 +176,8 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
   // update next touchable 
   // (touchable can be changed only at PostStepDoIt) 
   pPostStepPoint->SetTouchable( theTouchableChange );
+
+  pPostStepPoint->SetMaterial( theMaterialChange );
 
   // It used to call base class's method 
   //   - but this would copy uninitialised data members

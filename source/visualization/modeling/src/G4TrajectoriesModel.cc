@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TrajectoriesModel.cc,v 1.6 1999/12/15 14:54:32 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 // 
 // John Allison  26th August 1998.

@@ -1,5 +1,5 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
@@ -41,31 +41,45 @@ G4bool G4FissionProbability::operator!=(const G4FissionProbability &right) const
 }
 
 
-G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, const G4double photonExcitation)
-  //
+G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy)
+	// Compute integrated probability of fission channel
 {
-  G4double A = fragment.GetA();
-  G4double Z = fragment.GetZ();
-  G4double U = fragment.GetExcitationEnergy();
-  G4double SystemEntropy = 2.0*sqrt((theEvapLDP.LevelDensityParameter(A,Z,U)/(1./MeV))*A*U/MeV);
+	if (MaximalKineticEnergy <= 0.0) return 0.0;
+	G4double A = fragment.GetA();
+	G4double Z = fragment.GetZ();
+	G4double U = fragment.GetExcitationEnergy();
+  
+	G4double Ucompound = U - EvaporationPairingCorrection(G4int(A),G4int(Z));
+	G4double Ufission = U - FissionPairingCorrection(G4int(A),G4int(Z));
+  
+	G4double SystemEntropy = 2.0*sqrt(theEvapLDP.LevelDensityParameter(A,Z,Ucompound)*Ucompound);
+	
+	G4double afission = theFissLDP.LevelDensityParameter(A,Z,Ufission);
 
-  // Compute integrated probability of fission channel
-  if (theChannel->GetMaximalKineticEnergy() <= 0.0) return 0.0;
+	G4double Cf = 2.0*sqrt(afission*MaximalKineticEnergy);
 
-  G4double Q1 = 2.0*sqrt((theFissLDP.LevelDensityParameter(A,Z,U)/(1./MeV))*A*
-			 theChannel->GetMaximalKineticEnergy()/MeV);
-
-  G4double Q2 = 1./(4.0*pi);
-
-  //  G4double Tfis = 21.e-6*940.0;
-
-
-  //return min(Tfis,(Q2/((theFissLDP.LevelDensityParameter(A,Z,U)/(1./MeV))*A))*
-  //	     ((Q1-1.0)*exp(Q1-SystemEntropy)+exp(-SystemEntropy)));
-
-
-   return (Q2/((theFissLDP.LevelDensityParameter(A,Z,U)/(1./MeV))*A))*
-     ((Q1-1.0)*exp(Q1-SystemEntropy)+exp(-SystemEntropy));
+	G4double Q1 = 1.0 + (Cf - 1.0)*exp(Cf);
+	G4double Q2 = 4.0*pi*afission*exp(SystemEntropy);
+	
+	G4double probability = Q1/Q2;
+ 
+	return probability;
 }
 
+G4double G4FissionProbability::EvaporationPairingCorrection(const G4int A, const G4int Z) const
+{
+	const G4double PairingConstant = 12.0*MeV;
+	const G4int N = A - Z;
+	G4double Pair = (1.0 - G4double(Z) + 2.0*(Z/2)) + (1.0 - G4double(N) + 2.0*(N/2));
+	G4double PCorrection = Pair*PairingConstant/sqrt(G4double(A));
+	return PCorrection;
+}
 
+G4double G4FissionProbability::FissionPairingCorrection(const G4int A, const G4int Z) const
+{
+	const G4double PairingConstant = 14.0*MeV;
+	const G4int N = A - Z;
+	G4double Pair = (1.0 - G4double(Z) + 2.0*(Z/2)) + (1.0 - G4double(N) + 2.0*(N/2));
+	G4double PCorrection = Pair*PairingConstant/sqrt(G4double(A));
+	return PCorrection;
+}

@@ -4,26 +4,15 @@
 set name=testem5
 
 set extnam=" "
-if ($G4SYSTEM == AIX-xlC) set extnam=-qextname
+if ($G4SYSTEM == AIX-AFS) set extnam=-qextname
 #
 mkdir $G4SYSTEM
 cd    $G4SYSTEM
 #
-# Run patchy
-#
-cat > temp.cra << eocra
-+USE,batch.
-eocra
-cat ../$name.cra >> temp.cra
-#
-ypatchy - $name temp $name - $name :go
-rm temp.cra
-#
 # fortran compilation
 #
-fsplit $name.f
-rm   $name.f
-hepf77  $extnam -c -g *.f 
+hepf77  $extnam -c -g -Dbatch  -I/cern/pro/include -I../include ../src/*.F
+
 #
 # Link
 #
@@ -37,7 +26,7 @@ chmod +x $name.xb
 #
 # cleanup
 #
-rm *.lis *.lst *.f *.o
+rm *.o
 echo 'done'  
 exit
  

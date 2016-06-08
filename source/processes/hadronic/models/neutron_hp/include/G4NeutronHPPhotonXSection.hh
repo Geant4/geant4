@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPPhotonXSection.hh,v 1.4 1999/12/15 14:53:13 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 #ifndef G4NeutronHPPhotonXSection_h
 #define G4NeutronHPPhotonXSection_h 1

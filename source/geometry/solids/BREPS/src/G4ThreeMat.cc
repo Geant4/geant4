@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ThreeMat.cc,v 1.2 1999/12/15 14:50:02 gunter Exp $
-// GEANT4 tag $Name: geant4-01-01 $
+// GEANT4 tag $Name: geant4-02-00 $
 //
 /*  G4ThreeMat.cc,v 1.5 1993/08/02 22:21:27 atwood Exp  */
 // File: G4ThreeMat.cc
