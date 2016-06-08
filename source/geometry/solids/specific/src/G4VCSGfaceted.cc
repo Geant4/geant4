@@ -26,8 +26,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.6.4.1 2001/06/28 19:09:26 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VCSGfaceted.cc,v 1.7 2001/07/11 10:00:17 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------------

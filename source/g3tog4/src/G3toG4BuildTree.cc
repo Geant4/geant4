@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4BuildTree.cc,v 1.14.2.1 2001/06/28 19:08:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3toG4BuildTree.cc,v 1.18 2001/11/21 14:25:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // modified by I. Hrivnacova, 2.8.99 
 
@@ -35,6 +35,8 @@
 #include "G3Pos.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4ReflectionFactory.hh"
+#include "G4Transform3D.hh"
 
 void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
 {
@@ -66,7 +68,7 @@ void G3toG4BuildLVTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
       
       // insert logical volume to G3SensVol vector
       // in case it is sensitive
-      if (mte->GetISVOL()) G3SensVol.insert(curLog);
+      if (mte->GetISVOL()) G3SensVol.push_back(curLog);
     }  
   }
   else {
@@ -119,25 +121,44 @@ void G3toG4BuildPVTree(G3VolTableEntry* curVTE)
               mothLV = 0;
             }  
     
-            // rotation matrix
-            G4int irot = theG3Pos->GetIrot();
-            G4RotationMatrix* theMatrix = 0;
-            if (irot>0) theMatrix = G3Rot.Get(irot);
-
             // copy number
             // (in G3 numbering starts from 1 but in G4 from 0)
             G4int copyNo = theG3Pos->GetCopy() - 1;
       
             // position it if not top-level volume
+
 	    if (mothLV != 0) {
-	      new G4PVPlacement(theMatrix,              // rotation matrix
-	  		        *(theG3Pos->GetPos()),  // its position
-			        curLog,                 // its LogicalVolume 
-			        curVTE->GetName(),      // PV name
-			        mothLV,                 // Mother LV
-			        0,                      // only
-			        copyNo);                // copy
-	
+
+              // transformation
+              G4int irot = theG3Pos->GetIrot();
+              G4RotationMatrix* theMatrix = 0;
+              if (irot>0) theMatrix = G3Rot.Get(irot);
+              G4Rotate3D rotation;
+              if (theMatrix) {            
+  	        rotation = G4Rotate3D(*theMatrix);
+	      }
+
+              #ifndef G3G4_NO_REFLECTION
+              G4Translate3D translation(*(theG3Pos->GetPos()));
+	      G4Transform3D transform3D = translation * (rotation.inverse());
+
+              G4ReflectionFactory::Instance()
+	        ->Place(transform3D,       // transformation
+	                curVTE->GetName(), // PV name
+			curLog,            // its logical volume 
+			mothLV,            // mother logical volume
+			false,             // only
+			copyNo);           // copy
+              #else
+              new G4PVPlacement(theMatrix,            // rotation matrix
+                              *(theG3Pos->GetPos()),  // its position
+                              curLog,                 // its LogicalVolume 
+                              curVTE->GetName(),      // PV name
+                              mothLV,                 // Mother LV
+                              0,                      // only
+                              copyNo);                // copy
+              #endif
+
               // verbose
   	      #ifdef G3G4DEBUG
 	        G4cout << "PV: " << i << "th copy of " << curVTE->GetName()
@@ -145,7 +166,7 @@ void G3toG4BuildPVTree(G3VolTableEntry* curVTE)
 		       << copyNo << "  irot: " << irot << "  pos: " 
 		       << *(theG3Pos->GetPos()) << G4endl;
 	      #endif
-            }
+            }	    
 	  }
         }
         // clear this position

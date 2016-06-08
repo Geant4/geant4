@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.cc,v 1.3.2.1 2001/06/28 19:06:58 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em3DetectorMessenger.cc,v 1.6 2001/11/05 15:28:40 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3DetectorMessenger.hh"
 
@@ -39,7 +39,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
 :Em3Detector(Em3Det)
@@ -52,19 +52,19 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   SizeYZCmd->SetParameterName("Size",false);
   SizeYZCmd->SetRange("Size>0.");
   SizeYZCmd->SetUnitCategory("Length");
-  SizeYZCmd->AvailableForStates(Idle);
+  SizeYZCmd->AvailableForStates(PreInit,Idle);
   
   NbLayersCmd = new G4UIcmdWithAnInteger("/calor/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
   NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
-  NbLayersCmd->AvailableForStates(Idle);
+  NbLayersCmd->AvailableForStates(PreInit,Idle);
   
   NbAbsorCmd = new G4UIcmdWithAnInteger("/calor/setNbOfAbsor",this);
   NbAbsorCmd->SetGuidance("Set number of Absorbers.");
   NbAbsorCmd->SetParameterName("NbAbsor",false);
   NbAbsorCmd->SetRange("NbAbsor>0");
-  NbAbsorCmd->AvailableForStates(Idle);
+  NbAbsorCmd->AvailableForStates(PreInit,Idle);
    
   AbsorCmd = new G4UIcommand("/calor/setAbsor",this);
   AbsorCmd->SetGuidance("Set the absor nb, the material, the thickness.");
@@ -88,8 +88,8 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   //
   G4UIparameter* unitPrm = new G4UIparameter("unit",'s',false);
   unitPrm->SetGuidance("unit of thickness");
-  G4String unitCandidates = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
-  unitPrm->SetParameterCandidates(unitCandidates);
+  G4String unitList = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
+  unitPrm->SetParameterCandidates(unitList);
   AbsorCmd->SetParameter(unitPrm);
   //
   AbsorCmd->AvailableForStates(Idle);
@@ -115,7 +115,7 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   MaxStepCmd->AvailableForStates(Idle); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3DetectorMessenger::~Em3DetectorMessenger()
 {
@@ -129,7 +129,7 @@ Em3DetectorMessenger::~Em3DetectorMessenger()
   delete Em3detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {    
@@ -165,4 +165,4 @@ void Em3DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { Em3Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

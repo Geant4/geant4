@@ -21,27 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingAction.cc,v 1.4.4.1 2001/06/28 19:07:31 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02SteppingAction.cc,v 1.7 2001/11/05 08:24:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02SteppingAction.hh"
 #include "G4SteppingManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02SteppingAction::ExN02SteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN02SteppingAction::UserSteppingAction(const G4Step* aStep)
+void ExN02SteppingAction::UserSteppingAction(const G4Step*)
 { 
-  const G4VPhysicalVolume* currentVolume =
-                           aStep->GetPreStepPoint()->GetPhysicalVolume();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

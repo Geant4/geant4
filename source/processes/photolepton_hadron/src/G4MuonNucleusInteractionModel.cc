@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonNucleusInteractionModel.cc,v 1.3.4.1 2001/06/28 19:15:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MuonNucleusInteractionModel.cc,v 1.5 2001/10/24 17:47:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // --------------------------------------------------------------
 // G4MuonNucleusInteractionModel.cc
@@ -144,8 +144,8 @@
     (const G4Track &muonTrack, G4Nucleus &targetNucleus )
 //-----------------------------------------------------------------------------
   {
-    G4int icos, ie1;
-    G4double E1, P1;
+    G4int icos=0, ie1=0;
+    G4double E1=0., P1=0.;
     G4double rndm[3];
     G4bool isOutRange;
 

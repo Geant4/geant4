@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.5.2.1 2001/06/28 19:13:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StatMFChannel.cc,v 1.8 2001/10/05 16:13:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -62,7 +62,7 @@ G4bool G4StatMFChannel::operator!=(const G4StatMFChannel & right) const
 
 G4bool G4StatMFChannel::CheckFragments(void)
 {
-    for (G4int i = 0; i < _theFragments.size(); i++) {
+    for (unsigned int i = 0; i < _theFragments.size(); i++) {
 	G4int A = G4int(_theFragments[i]->GetA());
 	G4int Z = G4int(_theFragments[i]->GetZ());
 	if (A > 1 && (Z >= A || Z <= 0) || (A==1 && Z > A) || A <= 0) return false;
@@ -94,7 +94,7 @@ void G4StatMFChannel::CreateFragment(const G4double A, const G4double Z)
 G4double G4StatMFChannel::GetFragmentsCoulombEnergy(void)
 {
     G4double Coulomb = 0.0;
-    for (G4int i = 0;i < _theFragments.size(); i++)
+    for (unsigned int i = 0;i < _theFragments.size(); i++)
 	Coulomb += _theFragments[i]->GetCoulombEnergy();
     return Coulomb;
 }
@@ -107,7 +107,7 @@ G4double G4StatMFChannel::GetFragmentsEnergy(const G4double T) const
 	
     G4double TranslationalEnergy = (3./2.)*T*_theFragments.size();
 	
-    for (G4int i = 0;i < _theFragments.size(); i++)
+    for (unsigned int i = 0;i < _theFragments.size(); i++)
 	Energy += _theFragments[i]->GetEnergy(T);
     return Energy + TranslationalEnergy;	
 }
@@ -126,7 +126,7 @@ G4FragmentVector * G4StatMFChannel::GetFragments(const G4double anA,
 
 
     G4FragmentVector * theResult = new G4FragmentVector;
-    for (G4int i = 0; i < _theFragments.size(); i++)
+    for (unsigned int i = 0; i < _theFragments.size(); i++)
 	theResult->push_back(_theFragments[i]->GetFragment(T));
 
     return theResult;
@@ -175,7 +175,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 
 	// Sample the position of the remaining fragments
 	G4bool ThereAreOverlaps = false;
-	for (G4int i = 1; i < _theFragments.size(); i++) {
+	for (unsigned int i = 1; i < _theFragments.size(); i++) {
 	    G4int counter = 0;
 	    do {
 		R = (Rsys - R0*pow(_theFragments[i]->GetA(),1./3.))*
@@ -183,7 +183,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 		_theFragments[i]->SetPosition(IsotropicVector(R));
 			
 				// Check that there are not overlapping fragments
-		for (G4int j = 0; j < i; j++) {
+		for (unsigned int j = 0; j < i; j++) {
 		    G4ThreeVector FragToFragVector = 
 			_theFragments[i]->GetPosition() - _theFragments[j]->GetPosition();
 					

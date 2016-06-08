@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.3.4.1 2001/06/28 19:08:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ClassicalRK4.cc,v 1.4 2001/07/11 09:59:10 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "G4ClassicalRK4.hh"
 #include "G4ThreeVector.hh"

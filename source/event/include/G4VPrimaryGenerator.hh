@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimaryGenerator.hh,v 1.3.4.1 2001/06/28 19:07:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPrimaryGenerator.hh,v 1.6 2001/11/21 13:48:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VPrimaryGenerator_h
 #define G4VPrimaryGenerator_h 1
+
+#include "G4ThreeVector.hh"
 
 class G4Event;
 
@@ -45,6 +47,21 @@ class G4VPrimaryGenerator
      virtual ~G4VPrimaryGenerator();
 
      virtual void GeneratePrimaryVertex(G4Event* evt) = 0;
+
+  protected:
+     G4ThreeVector         particle_position;
+     G4double              particle_time;
+
+  public:
+     G4ThreeVector GetParticlePosition()
+     { return particle_position; }
+     G4double GetParticleTime()
+     { return particle_time; }
+     void SetParticlePosition(G4ThreeVector aPosition)
+     { particle_position = aPosition; }
+     void SetParticleTime(G4double aTime)
+     { particle_time = aTime; }
+
 };
 
 #endif

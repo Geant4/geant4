@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -120,10 +120,6 @@ private:
 // Note: DEC compiler won't accept "const G4ParticleDefinition" here
 // because it instantiates the ClearAndDestroy method that deletes the 
 // pointers in the dictionary.
-  //   G4RWTPtrHashDictionary<G4ParticleDefinition, G4PhysicsTable> 
-  //     thePhysicsDictionary;
-
-  //   G4HadronicCrossSections theCrossSectionData;
    G4CrossSectionDataStore* theCrossSectionDataStore;
 
    G4double GetMicroscopicCrossSection(const G4DynamicParticle* aParticle,

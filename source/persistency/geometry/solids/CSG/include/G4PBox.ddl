@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PBox.ddl,v 1.3.4.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4PBox
-//
+// $Id: G4PBox.ddl,v 1.5 2001/07/11 10:02:22 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4Box solid.
+
 // History:
 // 19.06.98 A.Kimura Converted from G4Box.hh
 
@@ -38,15 +39,19 @@
 class G4VSolid;
 class G4Box;
 
-class G4PBox : public G4PCSGSolid {
-public:
+class G4PBox
+ : public G4PCSGSolid
+{
+public: // With description
     G4PBox(const G4Box* theBox);
     virtual ~G4PBox();
+    // Constructor and Destructor
 
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient boolean solid object.
 
-    // Naming method (pseudo-RTTI : run-time type identification
     virtual G4GeometryType  GetEntityType() const { return G4String("G4Box"); }
+    // Returns the G4GeometryType of this solid.
 
 private:
     G4double fDx,fDy,fDz;

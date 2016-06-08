@@ -21,16 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.10.2.1 2001/06/28 19:15:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DAWNFILEViewer.cc,v 1.13 2001/07/27 22:33:01 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.
 
-
-//=================//
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-//=================//
 
 #define __G_ANSI_C__
 #define G4DAWNFILE_STRUCTURE_PRIORITY  1.
@@ -347,7 +343,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
         }
 
 	gui_out << GetPSViewer() << G4endl; // PS viewer
-	gui_out << 0 << G4endl            ; // Do not add showpage 
+	gui_out << 1 << G4endl            ; // Do not add showpage 
 	gui_out << 0 << G4endl            ; // Non-append mode
 
 	gui_out.close();
@@ -355,7 +351,3 @@ void G4DAWNFILEViewer::SendViewParameters ()
 
 
 } 
-
-
-#endif // G4VIS_BUILD_DAWNFILE_DRIVER
-

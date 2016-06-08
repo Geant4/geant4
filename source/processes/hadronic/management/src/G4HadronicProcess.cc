@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -45,10 +45,10 @@
     
     if( numberOfElements == 1 ) 
     {
-      currentZ = G4double((*theElementVector)(0)->GetZ());
-      currentN = (*theElementVector)(0)->GetN();
+      currentZ = G4double( ((*theElementVector)[0])->GetZ());
+      currentN = (*theElementVector)[0]->GetN();
       targetNucleus.SetParameters(currentN, currentZ);
-      return (*theElementVector)(0);
+      return (*theElementVector)[0];
     }
     
     const G4double *theAtomicNumberDensity = aMaterial->GetAtomicNumDensityVector();
@@ -59,7 +59,7 @@
     for( i=0; i < numberOfElements; ++i )
     {
       runningSum.push_back(theAtomicNumberDensity[i] *
-        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)(i), aTemp));
+        dispatch->GetMicroscopicCrossSection( aParticle, (*theElementVector)[i], aTemp));
       crossSectionTotal+=runningSum[i];
     }
     
@@ -68,16 +68,16 @@
     { 
       if( random<=runningSum[i]/crossSectionTotal )
       {
-        currentZ = G4double((*theElementVector)(i)->GetZ());
-        currentN = (*theElementVector)(i)->GetN();
+        currentZ = G4double( ((*theElementVector)[i])->GetZ());
+        currentN = ((*theElementVector)[i])->GetN();
         targetNucleus.SetParameters(currentN, currentZ);
-        return (*theElementVector)(i);
+        return (*theElementVector)[i];
       }
     }
-    currentZ = G4double((*theElementVector)(numberOfElements-1)->GetZ());
-    currentN = (*theElementVector)(numberOfElements-1)->GetN();
+    currentZ = G4double((*theElementVector)[numberOfElements-1]->GetZ());
+    currentN = (*theElementVector)[numberOfElements-1]->GetN();
     targetNucleus.SetParameters(currentN, currentZ);
-    return (*theElementVector)(numberOfElements-1);
+    return (*theElementVector)[numberOfElements-1];
   }
  
  G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
@@ -91,7 +91,18 @@
                                                           aMaterial, anElement );
     G4VParticleChange *result =
       theInteraction->ApplyYourself( aTrack, targetNucleus);
-    ResetNumberOfInteractionLengthLeft();
+    if(getenv("HadronicDoitLogging") )
+    {
+      G4cout << "HadronicDoitLogging "
+             << GetProcessName() <<" "
+             << aParticle->GetDefinition()->GetPDGEncoding()<<" "
+	     << kineticEnergy<<" "
+	     << aParticle->GetMomentum()<<" "
+	     << targetNucleus.GetN()<<" "
+	     << targetNucleus.GetZ()<<" "
+	     << G4endl;
+    }
+    ClearNumberOfInteractionLengthLeft();
     if(isoIsOnAnyway!=-1)
     {
       if(isoIsEnabled||isoIsOnAnyway)
@@ -113,9 +124,9 @@
     theIsoResult = new G4IsoParticleChange;
     G4bool done = false;
     G4IsoResult * anIsoResult = NULL;
-    for(G4int i=0; i<theProductionModels.length(); i++)
+    for(unsigned int i=0; i<theProductionModels.size(); i++)
     {
-      anIsoResult = theProductionModels(i)->GetIsotope(aTrack, aNucleus);
+      anIsoResult = theProductionModels[i]->GetIsotope(aTrack, aNucleus);
       if(anIsoResult!=NULL)
       {
         done = true;
@@ -175,7 +186,7 @@
     // prepare the IsoResult.
     char the1[100] = {""};
     G4std::ostrstream ost1(the1, 100, G4std::ios::out);
-    ost1 <<Z<<"_"<<A;
+    ost1 <<Z<<"_"<<A<<"\0";
     G4String * biff = new G4String(the1);
     G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);
     

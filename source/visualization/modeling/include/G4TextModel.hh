@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.hh,v 1.1.2.1 2001/06/28 19:16:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TextModel.hh,v 1.4 2001/08/24 20:36:21 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  3rd April 2001
@@ -50,7 +50,7 @@ public: // With description
   virtual ~G4TextModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the scene.
+  // The main task of a model is to describe itself to the graphics scene.
 
   virtual G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
@@ -58,12 +58,9 @@ public: // With description
   virtual G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
 
-  virtual G4bool Validate ();
-  // Validate, but allow internal changes (hence non-const function).
-
 private:
 
-  // Private copy contructor and assignmen to forbid uset...
+  // Private copy contructor and assignment to forbid use...
   G4TextModel (const G4TextModel&);
   G4TextModel& operator = (const G4TextModel&);
 

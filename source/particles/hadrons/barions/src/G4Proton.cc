@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Proton.cc,v 1.4.4.2 2001/06/28 20:19:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Proton.cc,v 1.7 2001/10/16 08:15:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -82,6 +82,8 @@ G4Proton G4Proton::theProton(
 );
 
 G4Proton* G4Proton::ProtonDefinition(){return &theProton;}
-// initialization for static cut values
-G4double   G4Proton::theProtonLengthCut = -1.0;
-G4double*  G4Proton::theProtonKineticEnergyCuts = NULL;
+
+G4Proton* G4Proton::Proton()
+{ 
+  return &theProton; 
+}

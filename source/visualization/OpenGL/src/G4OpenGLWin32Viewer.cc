@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.2.4.1 2001/06/28 19:15:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.3 2001/07/11 10:08:56 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific

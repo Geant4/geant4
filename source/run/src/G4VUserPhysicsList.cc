@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.13.2.1 2001/06/28 19:15:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VUserPhysicsList.cc,v 1.26 2001/10/23 02:36:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -61,12 +61,12 @@
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
                    :verboseLevel(1), 
-		    numberOfMaterial(0),
 		    fRetrievePhysicsTable(false),
-                    directoryPhysicsTable("."),
-		    fIsCheckedForRetrievePhysicsTable(false),
 		    fStoredInAscii(true),
-		    fIsRestoredCutValues(false)
+		    fIsCheckedForRetrievePhysicsTable(false),
+		    fIsRestoredCutValues(false),
+                    directoryPhysicsTable("."),
+		    numberOfMaterial(0)
 
 {
   // default cut value  (1.0mm) 
@@ -436,6 +436,57 @@ void G4VUserPhysicsList::SetCutsWithDefault()
 
 
 ////////////////////////////////////////////////////////
+void  G4VUserPhysicsList::SetApplyCuts(G4bool value, const G4String& name)
+{
+  // Sets a value to particle 
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+
+    // check if the cut value has already been set
+    if (name =="all" || name =="ALL" ){
+      particle->SetApplyCutsFlag(value);
+    } else if (name == particle->GetParticleName()){
+      particle->SetApplyCutsFlag(value);
+#ifdef G4VERBOSE    
+      if (verboseLevel >1) {
+	G4cout << "Set ApplyCutsFLag ";
+	if (value) {
+	  G4cout << "TRUE ";
+	} else {
+	  G4cout << "FALSE ";
+	}
+	G4cout << "for " << particle->GetParticleName() << G4endl;
+      }
+#endif
+      break;
+    }
+  }
+}
+////////////////////////////////////////////////////////
+G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
+{
+  // Sets a value to particle 
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+
+    // check if the cut value has already been set
+    if (name == particle->GetParticleName()){
+      return particle->GetApplyCutsFlag();
+    }
+  }
+#ifdef G4VERBOSE    
+  if (verboseLevel >0){
+    G4cout << "G4VUserPhysicsList::GetApplyCuts: ";
+    G4cout << " particle " <<  name  ;
+    G4cout << " does not exist " << G4endl;
+  }
+#endif
+  return false;
+}
+
+////////////////////////////////////////////////////////
 void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 {
  // check cut value is positive
@@ -463,7 +514,7 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 
     if (!particle->IsShortLived()) {
       // check if the cut value has already been set
-      if ((particle->GetLengthCuts()<0.0) ||(particle->GetEnergyCuts()==0)) {
+      if ((particle->GetLengthCuts()==0) ||(particle->GetEnergyCuts()==0)){
 	// set cut value
 	SetParticleCuts( cutValue ,particle );
 	// build physics table 
@@ -474,8 +525,12 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 	  G4cout << "Set cuts for " << particle->GetParticleName() << G4endl;
 #endif
       }
+      // special treatment for particles for store cuts
+      G4int idx = isParticleForStoreCuts(particle);
+      if (idx >=0) {
+	if (!isBuildPhysicsTable[idx])BuildPhysicsTable(particle);
+      }
     }
-
   }
 }
 
@@ -534,7 +589,6 @@ void G4VUserPhysicsList::ReCalcCutValueForOthers()
   }
 }
 
-
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* particle)
@@ -559,6 +613,8 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* pa
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
+  G4int idx = isParticleForStoreCuts(particle);
+  if (idx >=0) isBuildPhysicsTable[idx] = true;
   if (fRetrievePhysicsTable) {
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
@@ -590,10 +646,10 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
   G4int j;
   // Rebuild the physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     (*pVector)[j]->BuildPhysicsTable(*particle);
   }
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     // temporary addition to make the integral schema
     BuildIntegralPhysicsTable((*pVector)[j], particle); 
   }
@@ -675,24 +731,34 @@ void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
     // name field
     G4cout << " --- " << particle->GetParticleName() << " ------ " << G4endl;
 
-    // cut value in range field
-    G4cout << "   - Cut in range = " << G4BestUnit(particle->GetLengthCuts(),"Length") << G4endl;
+    // cut value in range
+    G4double* theRangeCuts = particle->GetLengthCuts();
 
     // material and energy cut value for the material 
     G4double*  theKineticEnergyCuts = particle->GetEnergyCuts();
     
-    if (theKineticEnergyCuts != 0) {
+    if (theRangeCuts != 0) {
       const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-      G4cout << "   - Material ---------------- Energy Cut ---" << G4endl;
-      for (G4int idx=0; idx<materialTable->entries(); idx++){
+      size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+      G4cout << "   - Material --- Cut in range ------------- Energy Cut ---" << G4endl;
+      for (size_t idx=0; idx<numberOfMaterials; idx++){
 	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
-	G4cout << " : "   << G4std::setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
+	G4cout <<" : ";
+	G4cout << G4std::setw(12)<< G4BestUnit(theRangeCuts[idx],"Length");
+	if (theKineticEnergyCuts ==0) {
+	  G4cout << " : --------------------------------";
+	} else {
+	  G4cout << " : ";
+	  G4cout << G4std::setw(10)<< G4BestUnit(theKineticEnergyCuts[idx],"Energy");
+	}	
 	G4cout << G4endl;
       }
-
+      if (theKineticEnergyCuts ==0) {
+	G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
+	G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
+      }
     } else {
-      G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
-      G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
+      G4cout << "   - Cuts in range are not set yet --" << G4endl;
     }
 
   }
@@ -729,24 +795,32 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
   }
   G4cout << G4endl;
 
+  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
   // line 4
-  G4cout << "Cut in range       ";
-  for (idx=0; idx <size_display; idx++) {
-    if (particle[idx] == 0) {
-      G4cout << "            ";
-    } else {
-      G4cout << " " << G4std::setw(11) << G4BestUnit(particle[idx]->GetLengthCuts(),"Length");
+  G4cout << "Cut in range       " << G4endl;
+  for (size_t I=0; I<numberOfMaterials; I++) {
+    G4cout << " " << G4std::setw(18) << ((*materialTable)[I])->GetName();
+    for (idx=0; idx <size_display; idx++) {
+      if (particle[idx] == 0) {
+        G4cout << "            ";
+      } else {
+        if (particle[idx]->GetLengthCuts() == 0) {
+          G4cout << " ---------- ";
+        } else {
+          G4cout << " " << G4std::setw(11) << G4BestUnit((particle[idx]->GetLengthCuts())[I],"Length");
+        }
+      }
     }
+    G4cout << G4endl;
   }
-  G4cout << G4endl;
 
   // line 5
   G4cout << "Cut in energy";
   G4cout << G4endl;
 
- // line 6 ..
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  for (G4int J=0; J<materialTable->entries(); J++) {
+  // line 6 ..
+  for (size_t J=0; J<numberOfMaterials; J++) {
     G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
     for (idx=0; idx <size_display; idx++) {
       if (particle[idx] == 0) {
@@ -778,18 +852,18 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 ///////////////////////////////////////////////////////////////
 G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 {
-  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   G4bool   ascii = fStoredInAscii;
   G4String dir   = directory;
-  if (dir.isNull()) dir = directoryPhysicsTable;  
+  if (dir.isNull()) dir = directoryPhysicsTable; 
+  else directoryPhysicsTable = dir; 
   if (!StoreMaterialInfo(dir, ascii)) return false;
   if (!StoreCutValues(dir,ascii)) return false;
 #ifdef G4VERBOSE  
   if (verboseLevel>2){
     G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
-    G4cout << " Store material and cu values successfully" << G4endl;
+    G4cout << " Store material and cut values successfully" << G4endl;
   }
 #endif
 
@@ -802,12 +876,12 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     // Store physics tables for every process for this particle type
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
     G4int  j;
-    for ( j=0; j < pVector->entries(); ++j) {
-      if (!(*pVector)[j]->StorePhysicsTable(directoryPhysicsTable,ascii)){   
+    for ( j=0; j < pVector->size(); ++j) {
+      if (!(*pVector)[j]->StorePhysicsTable(particle,dir,ascii)){   
 #ifdef G4VERBOSE  
 	if (verboseLevel>2){
 	  G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
-	  G4cout << " Fail to retrieve for ";
+	  G4cout << " Fail to store for ";
 	  G4cout << (*pVector)[j]->GetProcessName();
 	  G4cout << "(" << particle->GetParticleName() <<")" << G4endl;
 	}
@@ -850,7 +924,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
   
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   // number of materials in the table
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial =   G4Material::GetNumberOfMaterials();
 
   if (ascii) {
     /////////////// ASCII mode  /////////////////
@@ -863,7 +937,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.setf(G4std::ios::scientific);
   
     // material name and density
-    for (size_t idx=0; idx<matTable->entries(); ++idx){
+    for (size_t idx=0; idx<size_t(numberOfMaterial); ++idx){
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
     }
@@ -884,9 +958,9 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.write( (char*)(&numberOfMaterial), sizeof (G4int));
     
     // material name and density
-    for (size_t imat=0; imat<matTable->entries(); ++imat){
+    for (size_t imat=0; imat<size_t(numberOfMaterial); ++imat){
       G4String name =  ((*matTable)[imat])->GetName();
-      G4double density = ((*matTable)[imat])->GetDensity();
+      G4double density = ((*matTable)[imat])->GetDensity()/(g/cm3);
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
       for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=name[i];
       fOut.write(temp, FixedStringLengthForStore);
@@ -940,9 +1014,15 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
     for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
     for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
     fOut.write(temp, FixedStringLengthForStore);
+   
+    const G4String defKey="Default";
+    for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0';
+    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=defKey[i];
+    fOut.write(temp, FixedStringLengthForStore);
 
+    G4double defaultCutValueInmm = defaultCutValue/mm;
     // default cut value
-    fOut.write( (char*)(&defaultCutValue), sizeof (G4double));
+    fOut.write( (char*)(&defaultCutValueInmm), sizeof (G4double));
   }
 
  // loop over all particles in G4ParticleTable 
@@ -950,34 +1030,53 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     // Only following particles are concerned
-    if ( (particle->GetParticleName() == "gamma" ) ||
-	 (particle->GetParticleName() == "e-"    ) ||
-	 (particle->GetParticleName() == "e+"    ) ||
-	 (particle->GetParticleName() == "mu-"   ) ||
-	 (particle->GetParticleName() == "mu+"   ) ||
-	 (particle->GetParticleName() == "proton" ) ||
-	 (particle->GetParticleName() == "anti_proton" ) ||
-	 (particle->GetParticleName() == "neutron" ) ||
-	 (particle->GetParticleName() == "anti_neutron" ) ){
-      
-      
-      // particle name and cut in length
+    G4int idx = isParticleForStoreCuts(particle);
+    if (idx >=0 ){
+      // particle name 
       if (ascii) {
 	/////////////// ASCII mode  /////////////////
 	fOut.setf(G4std::ios::scientific);
 	fOut << G4std::setw(FixedStringLengthForStore) << particle->GetParticleName();
-	fOut << G4std::setw(20) << particle->GetLengthCuts()/mm  << G4endl;
 	fOut.unsetf(G4std::ios::scientific);
       } else {
 	/////////////// Binary mode  /////////////////
 	G4String name =  particle->GetParticleName();
-	G4double cutLength = particle->GetLengthCuts();
 	for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
 	for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=name[i];
 	fOut.write(temp, FixedStringLengthForStore);
-	fOut.write((char*)(&cutLength), sizeof (G4double));
       }
 
+      // range cut  for each material
+      G4double* rangeArray =  particle->GetLengthCuts();
+      if (rangeArray ==0) {
+#ifdef G4VERBOSE
+        if (verboseLevel>0){
+          G4cout << "G4VUserPhysicsList::StoreCutValues        " ;
+          G4cout << ":  Range Cut Values have not be set for";
+          G4cout << particle->GetParticleName() << G4endl;
+        }
+#endif
+        return false;
+      }
+      if (ascii) {
+        /////////////// ASCII mode  /////////////////
+        fOut.setf(G4std::ios::scientific);
+        G4int ii =0;
+        for(G4int jdx=0; jdx<numberOfMaterial; ++jdx, ++ii) {
+          if (ii==4) {
+            fOut << G4endl;
+            ii =0;
+          }
+          fOut << G4std::setw(20) << rangeArray[jdx];
+        }
+        fOut << G4endl;
+        fOut.unsetf(G4std::ios::scientific);
+      } else {
+        /////////////// Binary mode  /////////////////
+        fOut.write( (char*)(rangeArray), numberOfMaterial*(sizeof (G4double)) );
+      }
+
+      // cut energy for each material
       G4double*  cutArray =  particle->GetEnergyCuts(); 
       if (cutArray ==0) {
 #ifdef G4VERBOSE  
@@ -989,18 +1088,16 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
 #endif
 	return false;
       }
-
-      // cut energy for each material
       if (ascii) {
 	/////////////// ASCII mode  /////////////////
 	fOut.setf(G4std::ios::scientific);
 	G4int jj =0;
-	for(size_t idx=0; idx<numberOfMaterial; ++idx, ++jj) {
+	for(G4int idx=0; idx<numberOfMaterial; ++idx, ++jj) {
 	  if (jj==4) {
 	    fOut << G4endl;
 	    jj =0;
 	  }
-	  fOut << G4std::setw(20) << cutArray[idx]/keV;
+	  fOut << G4std::setw(20) << cutArray[idx];
 	}
 	fOut << G4endl;
 	fOut.unsetf(G4std::ios::scientific);
@@ -1036,9 +1133,9 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
   G4bool success[100];  
   // Retrieve physics tables for every process for this particle type
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     success[j] = 
-       (*pVector)[j]->RetrievePhysicsTable(directory,ascii);
+       (*pVector)[j]->RetrievePhysicsTable(particle,directory,ascii);
 
     if (!success[j]) {
 #ifdef G4VERBOSE  
@@ -1052,7 +1149,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
       (*pVector)[j]->BuildPhysicsTable(*particle);
     }
   }
-  for ( j=0; j < pVector->entries(); ++j) {
+  for ( j=0; j < pVector->size(); ++j) {
     // temporary addition to make the integral schema
     if (!success[j]) BuildIntegralPhysicsTable((*pVector)[j], particle); 
   }
@@ -1062,14 +1159,10 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
 G4bool  G4VUserPhysicsList::CheckForRetrievePhysicsTable(const G4String& directory, 
 							 G4bool          ascii)
 {
-  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   if (!fIsCheckedForRetrievePhysicsTable) {
-    if (CheckMaterialInfo(directory, ascii)) {
-      if (CheckCutValues(directory,ascii)) 
-	fIsCheckedForRetrievePhysicsTable = true;
-    }
+    fIsCheckedForRetrievePhysicsTable = CheckMaterialInfo(directory, ascii);
   }
   return fIsCheckedForRetrievePhysicsTable;
 }
@@ -1100,7 +1193,6 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
   
   char temp[FixedStringLengthForStore];
-  size_t i;
 
   // key word
   G4String keyword;    
@@ -1121,7 +1213,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
 
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
   // number of materials in the table
   G4int nmat;
   if (ascii) {
@@ -1140,7 +1232,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
   
   // list of material
-  for (G4int idx=0; idx<matTable->entries(); ++idx){
+  for (size_t idx=0; idx<size_t(numberOfMaterial); ++idx){
     // check eof
     if(fIn.eof()) {
 #ifdef G4VERBOSE  
@@ -1191,152 +1283,6 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   return true;
 }
 
-///////////////////////////////////////////////////////////////
-G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory, 
-					  G4bool          ascii)
-{
-  const G4String fileName = directory + "/" + "cut_value.dat";
-  const G4String key = "CUT_VALUE";
-  G4std::ifstream fIn;  
-
-  // open input file //
-#ifdef G4USE_STD_NAMESPACE
-  if (!ascii ) 
-    fIn.open(fileName,G4std::ios::in|G4std::ios::binary);
-  else
-#endif 
-    fIn.open(fileName,G4std::ios::in);
-
-  // check if the file has been opened successfully 
-  if (!fIn) {
-#ifdef G4VERBOSE  
-    G4cerr << "G4VUserPhysicsList::CheckCutValues  ";
-    G4cerr << " Can not open file " << fileName << G4endl;
-#endif
-    return false;
-  }
-
-  char temp[FixedStringLengthForStore];
-  size_t i;
-
-  // key word
-  G4String keyword;    
-  if (ascii) {
-    fIn >> keyword;
-  } else {
-    fIn.read(temp, FixedStringLengthForStore);
-    keyword = (const char*)(temp);
-  }
-  if (key!=keyword) {
-#ifdef G4VERBOSE  
-    if (verboseLevel>0){
-      G4cout << "G4VUserPhysicsList::CheckCutValues ";
-      G4cout << " Can not find key word " << keyword << G4endl;
-    }
-#endif
-  }
-
-  // default cut value
-  G4double defaultCut;
-  if (ascii) {
-    fIn >> keyword >> defaultCut;
-  } else {
-    fIn.read( (char*)(&defaultCut), sizeof (G4double));
-  }
-  if (fIn.fail()) {
-#ifdef G4VERBOSE  
-    if (verboseLevel>0){
-      G4cout << "G4VUserPhysicsList::CheckCutValues  ";
-      G4cout << " Bad data format " << G4endl;
-    }
-#endif   
-    fIn.close();
-    return false;
-  } 
-
-  // check default value
-  G4double ratio =   abs(defaultCut / (defaultCutValue/mm) );
-  if ((keyword != "Default")|| (ratio<0.999) ||(ratio>1.001) ){
-#ifdef G4VERBOSE  
-    if (verboseLevel>0){
-      G4cout << "G4VUserPhysicsList::CheckCutValues ";
-      G4cout << " Inconsistent default cut values" << G4endl;;
-    }
-#endif   
-    fIn.close();
-    return false;
-  }
-
-  // loop over all particles 
-  while(!fIn.eof()){
-    // read in particle name and cut in length
-    char name[FixedStringLengthForStore];
-    G4double cutLength;
-    if (ascii) {
-      fIn >> name >> cutLength; 
-    } else {
-     fIn.read(name, FixedStringLengthForStore);
-     fIn.read((char*)(&cutLength), sizeof (G4double));
-    }
-    if (fIn.eof()) break;
-    if (fIn.fail()) {
-#ifdef G4VERBOSE  
-      if (verboseLevel>0){
-	G4cout << "G4VUserPhysicsList::CheckCutValues  ";
-	G4cout << " Bad data format " << G4endl;
-      }
-#endif
-      fIn.close();
-      return false;
-    }
-
-    // Search particle
-    G4ParticleDefinition* particle = theParticleTable->FindParticle(name);
-    if (particle==0) {
-#ifdef G4VERBOSE  
-      if (verboseLevel>0){
-	G4cout << "G4VUserPhysicsList::CheckCutValues  ";
-	G4cout << " Particle " << name <<" is not found "<< G4endl;
-      } 
-      fIn.close();
-      return false;
-#endif     
-    } 
-
-    // chech cut value in length
-    ratio = abs(cutLength/ (particle->GetLengthCuts()/mm) );
-    if ((ratio<0.999) ||(ratio>1.001) ){
-#ifdef G4VERBOSE  
-      if (verboseLevel>0){
-	G4cout << "G4VUserPhysicsList::CheckCutValues ";
-	G4cout << " Inconsistent cut values for " << name << G4endl;;
-      }
-#endif   
-      fIn.close();
-      return false;
-    }  
-
-    G4double* cutArray = new G4double[numberOfMaterial];
-    // read in energy cut for all materials 
-    if (ascii) {
-      /////////////// ASCII mode  /////////////////
-      G4int jj; 
-      for(size_t idx=0; idx<numberOfMaterial; ++idx) {
-	G4double value;
-	fIn >> value;
-	cutArray[idx] = value;
-      }
-    } else {
-      /////////////// Binary mode  /////////////////
-      fIn.read( (char*)(cutArray), numberOfMaterial*(sizeof (G4double)) );
-    }
- 
-  }
-
-  fIn.close();
-  return true;
-}
-  
 
 ///////////////////////////////////////////////////////////////
 G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
@@ -1371,7 +1317,6 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   }
 
   char temp[FixedStringLengthForStore];
-  size_t i;
 
   // key word
   const G4String key = "CUT_VALUE";
@@ -1396,6 +1341,8 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   if (ascii) {
     fIn >> keyword >> defaultCut;
   } else {
+    fIn.read(temp, FixedStringLengthForStore);
+    keyword = (const char*)(temp);
     fIn.read( (char*)(&defaultCut), sizeof (G4double));
   }
   if (fIn.fail()) {
@@ -1410,7 +1357,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   } 
 
    // set default value
-  defaultCutValue = defaultCut;
+  defaultCutValue = defaultCut*mm;
 #ifdef G4VERBOSE  
   if (verboseLevel>2){
     G4cout.setf(G4std::ios::scientific);
@@ -1428,21 +1375,17 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   } 
 
   // number of materials in the table
-  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->entries();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   // loop over all particles 
   while(!fIn.eof()){
-    // read in particle name and cut in length
+    // read in particle name
     char name[FixedStringLengthForStore];
-    G4double cutLength;
     if (ascii) {
-      fIn >> name >> cutLength; 
+      fIn >> name ;
     } else {
      fIn.read(name, FixedStringLengthForStore);
-     fIn.read((char*)(&cutLength), sizeof (G4double));
     }
-
     if (fIn.eof()) break;
     if (fIn.fail()) {
 #ifdef G4VERBOSE  
@@ -1458,7 +1401,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
       G4cout.setf(G4std::ios::scientific);
-      G4cout << name << G4std::setw(20) << cutLength << G4endl;
+      G4cout << name << G4endl;
       G4cout.unsetf(G4std::ios::scientific);
     }
 #endif
@@ -1476,13 +1419,25 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 #endif     
     } 
 
-    G4double* cutArray = new G4double[numberOfMaterial];
-
-    // read in energy cut for all materials 
+    // read in range cut for all materials
+    G4double* rangeArray = new G4double[numberOfMaterial];
     if (ascii) {
       /////////////// ASCII mode  /////////////////
-      G4int jj; 
-      for(size_t idx=0; idx<numberOfMaterial; ++idx) {
+      for(G4int jdx=0; jdx<numberOfMaterial; ++jdx) {
+        G4double value;
+        fIn >> value;
+        rangeArray[jdx] = value;
+      }
+    } else {
+      /////////////// Binary mode  /////////////////
+      fIn.read( (char*)(rangeArray), numberOfMaterial*(sizeof (G4double)) );
+    }
+
+    // read in energy cut for all materials 
+    G4double* cutArray = new G4double[numberOfMaterial];
+    if (ascii) {
+      /////////////// ASCII mode  /////////////////
+      for(G4int idx=0; idx<numberOfMaterial; ++idx) {
 	G4double value;
 	fIn >> value;
 	cutArray[idx] = value;
@@ -1494,10 +1449,12 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
  
   
     // restore cut values
-    particle->RestoreCuts( cutLength , cutArray) ; 
+    particle->RestoreCuts( rangeArray , cutArray) ; 
 #ifdef G4VERBOSE    
     if (verboseLevel >2)DumpCutValues(particle); 
 #endif
+    G4int idx = isParticleForStoreCuts(particle);
+    if (idx >=0) isBuildPhysicsTable[idx] = false;
    }
   
 #ifdef G4VERBOSE    
@@ -1512,9 +1469,28 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   return true;
 }
 
+G4int G4VUserPhysicsList::isParticleForStoreCuts(const G4ParticleDefinition* particle) const
+{
+  G4int idx;
+  for ( idx =0; idx < NumberOfParticlesForStoreCuts; ++idx) {
+    if (particle->GetParticleName()==particleForStoreCuts[idx]) return idx;
+  }
+  return -1;
+}
 
-
-
+const G4String 
+  G4VUserPhysicsList::particleForStoreCuts[NumberOfParticlesForStoreCuts] =
+{
+  "gamma",
+  "e-",
+  "e+",
+  "mu-",
+  "mu+",
+  "proton",
+  "anti_proton",
+  "neutron",
+  "anti_neutron"
+};
 
 
 

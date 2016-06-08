@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3G4Interface.hh,v 1.7.4.1 2001/06/28 19:08:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3G4Interface.hh,v 1.9 2001/11/08 16:07:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //   Interfaces for G3 equivalent routines
 //
@@ -44,6 +44,8 @@ void G4gspos(G4String name, G4int num, G4String moth,
 void G4gsposp(G4String name, G4int num, G4String moth, 
 	      G4double x, G4double y, G4double z, G4int irot, 
 	      G4String only, G4double Rpar[], G4int npar);
+
+void G4gsbool(G4String volName, G4String manyVolName);
 
 void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
               G4double theta2, G4double phi2, G4double theta3, G4double phi3);

@@ -21,15 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILE.cc,v 1.7.2.1 2001/06/28 19:15:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DAWNFILE.cc,v 1.9 2001/07/27 22:32:59 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE factory.
 
-//=================//
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-//=================//
 
 //#define DEBUG_FR_SYSTEM
 
@@ -77,6 +74,3 @@ G4VViewer* G4DAWNFILE::CreateViewer (G4VSceneHandler& scene, const G4String& nam
 	  new G4DAWNFILEViewer ((G4DAWNFILESceneHandler&) scene, name);
 	return pView;
 }
-
-
-#endif // G4VIS_BUILD_DAWNFILE_DRIVER

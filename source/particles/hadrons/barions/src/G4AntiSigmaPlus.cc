@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaPlus.cc,v 1.5.4.2 2001/06/28 20:19:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiSigmaPlus.cc,v 1.8 2001/10/16 08:15:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -103,9 +103,11 @@ G4AntiSigmaPlus* G4AntiSigmaPlus::AntiSigmaPlusDefinition()
   return &theAntiSigmaPlus;
 }
 
-// initialization for static cut values
-G4double   G4AntiSigmaPlus::theAntiSigmaPlusLengthCut = -1.0;
-G4double*  G4AntiSigmaPlus::theAntiSigmaPlusKineticEnergyCuts = NULL;
+G4AntiSigmaPlus* G4AntiSigmaPlus::AntiSigmaPlus()
+{
+  return &theAntiSigmaPlus;
+}
+
 
 
 

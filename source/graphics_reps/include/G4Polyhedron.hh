@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedron.hh,v 1.9.2.1 2001/06/28 19:10:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Polyhedron.hh,v 1.10 2001/07/11 10:01:02 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 #ifndef G4POLYHEDRON_HH
 #define G4POLYHEDRON_HH

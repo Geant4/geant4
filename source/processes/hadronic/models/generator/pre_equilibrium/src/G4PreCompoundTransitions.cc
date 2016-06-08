@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.6.2.1 2001/06/28 19:13:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PreCompoundTransitions.cc,v 1.9 2001/08/01 17:08:32 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by V. Lara
 
@@ -159,7 +159,13 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
   if ((deltaN > 0 || result.GetNumberOfCharged() > 0) &&
       (G4UniformRand() <= result.GetZ()/result.GetA())){
     result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2);
-  }  
+  }
+
+  // Number of charged can not be greater that number of particles
+  if ( result.GetNumberOfParticles() < result.GetNumberOfCharged() ) {
+    result.SetNumberOfCharged(result.GetNumberOfParticles());
+  }
+  
   return result;
 }
 

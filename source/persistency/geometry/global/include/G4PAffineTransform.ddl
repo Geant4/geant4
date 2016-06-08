@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAffineTransform.ddl,v 1.4.4.1 2001/06/28 19:11:27 gunter Exp $
-// GEANT4 tag $Name:  $
-//
+// $Id: G4PAffineTransform.ddl,v 1.6 2001/07/11 10:02:16 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
 // persistenet class of G4AffineTransform
-//
+
 // History:
 // 10.11.99 Y.Morita, initial creation
 
@@ -41,11 +42,13 @@ class G4AffineTransform;
 class G4PAffineTransform
  : public HepPersObj
 {
-  public:
+  public: // With description
 	G4PAffineTransform( const G4AffineTransform aTrans );
 	~G4PAffineTransform();
+          // Constructor and Destructor
 
         G4AffineTransform MakeTransientObject();
+          // Creates a transient G4AffineTransform object
 
   private:
 	G4Pdouble rxx,rxy,rxz;

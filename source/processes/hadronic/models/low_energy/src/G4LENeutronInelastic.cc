@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -138,19 +138,7 @@
    G4ReactionProduct &modifiedOriginal,
    G4ReactionProduct &targetParticle,
    G4Nucleus &targetNucleus )
-  {
-    G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
-    G4ParticleDefinition *aDeuteron = G4Deuteron::Deuteron();
-    G4ParticleDefinition *aTriton = G4Triton::Triton();
-    G4ParticleDefinition *anAlpha = G4Alpha::Alpha();
-    
-    const G4double aProtonMass = aProton->GetPDGMass()/MeV;
-    const G4double aNeutronMass = aNeutron->GetPDGMass()/MeV;
-    const G4double aDeuteronMass = aDeuteron->GetPDGMass()/MeV;
-    const G4double aTritonMass = aTriton->GetPDGMass()/MeV;
-    const G4double anAlphaMass = anAlpha->GetPDGMass()/MeV;
-    
+  {        
     const G4double A = targetNucleus.GetN();    // atomic weight
     const G4double Z = targetNucleus.GetZ();    // atomic number
     
@@ -222,7 +210,7 @@
       theParticleChange.AddSecondary( pd );
       return;
     }
-    G4FastVector<G4ReactionProduct,3> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
@@ -359,7 +347,7 @@
     const G4double expxl = -expxu;        // lower bound for arg. of exp
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4int ieab = availableEnergy*5.0/GeV;
+    G4int ieab = static_cast<G4int>(availableEnergy*5.0/GeV);
     const G4double supp[] = {0.,0.4,0.55,0.65,0.75,0.82,0.86,0.90,0.94,0.98};
     G4double test, w0, wp, wt, wm;
     if( (availableEnergy < 2.0*GeV) && (G4UniformRand() >= supp[ieab]) )

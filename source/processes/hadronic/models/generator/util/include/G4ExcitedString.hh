@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedString.hh,v 1.5.8.2 2001/06/28 20:20:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ExcitedString.hh,v 1.9 2001/10/06 08:17:01 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4ExcitedString_h
@@ -44,6 +44,7 @@
 #include "G4Parton.hh"
 #include "G4PartonVector.hh"
 #include "G4KineticTrack.hh"
+#include "g4std/algorithm"
 
 class G4ExcitedString 
 {
@@ -137,7 +138,7 @@ inline
 G4LorentzVector G4ExcitedString::Get4Momentum() const
 {
 	G4LorentzVector momentum;
-	for ( G4int index=0; index < thePartons.entries() ; index++ )
+	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
 	    momentum += thePartons[index]->Get4Momentum();
 	}
@@ -147,7 +148,7 @@ G4LorentzVector G4ExcitedString::Get4Momentum() const
 inline
 void G4ExcitedString::LorentzRotate(const G4LorentzRotation & rotation)
 {
-	for ( G4int index=0; index < thePartons.entries() ; index++ )
+	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
 	    thePartons[index]->Set4Momentum(rotation*thePartons[index]->Get4Momentum());
 	}
@@ -157,18 +158,18 @@ inline
 void G4ExcitedString::InsertParton(G4Parton *aParton, const G4Parton * addafter)
 {
 
-	G4int insert_index=1;
+	G4PartonVector::iterator insert_index;
 	
 	if ( addafter != NULL ) 
 	{
-	   insert_index=thePartons.index(addafter);
-	   if (insert_index == G4std::string::npos)		// No object addafter in thePartons
+	   insert_index=G4std::find(thePartons.begin(), thePartons.end(), addafter);
+	   if (insert_index == thePartons.end())		// No object addafter in thePartons
 	   {
 	   	G4Exception("G4ExcitedString::InsertParton called with invalid second argument");
 	   }
 	}
 	
-	thePartons.insertAt(insert_index+1, aParton);
+	thePartons.insert(insert_index+1, aParton);
 } 
 
 inline
@@ -177,7 +178,7 @@ G4LorentzRotation G4ExcitedString::TransformToCenterOfMass()
 	G4LorentzVector momentum=Get4Momentum();
 	G4LorentzRotation toCms(-1*momentum.boostVector());
 
-	for ( G4int index=0; index < thePartons.entries() ; index++ )
+	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
 	    momentum=toCms * thePartons[index]->Get4Momentum();
 	    thePartons[index]->Set4Momentum(momentum);
@@ -195,7 +196,7 @@ G4LorentzRotation G4ExcitedString::TransformToAlignedCms()
 	toAlignedCms.rotateZ(-1*momentum.phi());
 	toAlignedCms.rotateY(-1*momentum.theta());
 	
-	for ( G4int index=0; index < thePartons.entries() ; index++ )
+	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
 	    momentum=toAlignedCms * thePartons[index]->Get4Momentum();
 	    thePartons[index]->Set4Momentum(momentum);

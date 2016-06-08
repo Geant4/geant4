@@ -1,0 +1,33 @@
+#
+# Macro file for the initialization phase of field01
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/tracking/verbose 1
+/run/verbose 1
+#
+#
+#
+/field/setStepperType 4
+#
+#/field/setMinStep 10 mm
+#
+/field/setMinStep 1 mm
+#
+/field/update
+#
+/run/initialize
+#
+/run/particle/dumpCutValues
+#
+/gun/particle e-
+#
+#/gun/particle proton
+#
+#/gun/particle chargedgeantino
+#
+/gun/energy 500.0 MeV
+#
+#/event/printModulo 1
+/run/beamOn 100
+#

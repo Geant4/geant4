@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVContinuousDiscreteProcess.hh,v 1.6.4.2 2001/06/28 20:20:10 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4IVContinuousDiscreteProcess.hh,v 1.7 2001/07/11 10:08:16 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // $Id: 
 // ------------------------------------------------------------

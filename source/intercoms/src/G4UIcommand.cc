@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.8.2.1 2001/06/28 19:10:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIcommand.cc,v 1.18 2001/10/23 07:51:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
@@ -32,7 +32,7 @@
 #include "G4UIcommandStatus.hh"
 #include "G4StateManager.hh"
 #include "G4UnitsTable.hh"
-#include "g4rw/ctoken.h"
+#include "G4Tokenizer.hh"
 #include "G4ios.hh"
 
 G4UIcommand::G4UIcommand():paramERR(0) { }
@@ -60,6 +60,7 @@ G4UIcommand::G4UIcommand(const char * theCommandPath,
   availabelStateList.push_back(Idle);
   availabelStateList.push_back(GeomClosed);
   availabelStateList.push_back(EventProc);
+  availabelStateList.push_back(Abort);
 }
 
 void G4UIcommand::G4UIcommandCommonConstructorCode
@@ -67,7 +68,7 @@ void G4UIcommand::G4UIcommandCommonConstructorCode
 { 
   commandPath = theCommandPath;
   commandName = theCommandPath;
-  int commandNameIndex = commandName.last('/');
+  G4int commandNameIndex = commandName.last('/');
   commandName.remove(0,commandNameIndex+1);
 
   G4UImanager::GetUIpointer()->AddNewCommand(this);
@@ -78,18 +79,18 @@ G4UIcommand::~G4UIcommand()
   G4UImanager* fUImanager = G4UImanager::GetUIpointer();
   if(fUImanager) fUImanager->RemoveCommand(this);
   
-  int n_parameterEntry = parameter.size();
-  for( int i_thParameter=0; i_thParameter < n_parameterEntry; i_thParameter++ )
+  G4int n_parameterEntry = parameter.size();
+  for( G4int i_thParameter=0; i_thParameter < n_parameterEntry; i_thParameter++ )
   { delete parameter[i_thParameter]; }
   parameter.clear();
 }
 
-int G4UIcommand::operator==(const G4UIcommand &right) const
+G4int G4UIcommand::operator==(const G4UIcommand &right) const
 {
   return ( commandPath == right.GetCommandPath() );
 }
 
-int G4UIcommand::operator!=(const G4UIcommand &right) const
+G4int G4UIcommand::operator!=(const G4UIcommand &right) const
 {
   return ( commandPath != right.GetCommandPath() );
 }
@@ -97,13 +98,13 @@ int G4UIcommand::operator!=(const G4UIcommand &right) const
 G4int G4UIcommand::DoIt(G4String parameterList)
 {
   G4String correctParameters;
-  int n_parameterEntry = parameter.size();
+  G4int n_parameterEntry = parameter.size();
   if( n_parameterEntry != 0 )
   {
     G4String aToken;
     G4String correctToken;
     G4Tokenizer parameterToken( parameterList );
-    for( int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ )
+    for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ )
     {
       if(i_thParameter > 0)
       {
@@ -112,7 +113,8 @@ G4int G4UIcommand::DoIt(G4String parameterList)
       aToken = parameterToken();
       if( aToken.length()>0 && aToken(0)=='"' )
       {
-        while( aToken(aToken.length()-1) != '"' )
+        while( aToken(aToken.length()-1) != '"'
+               || ( aToken.length()==1 && aToken(0)=='"' ))
         {
           G4String additionalToken = parameterToken();
           if( additionalToken.isNull() )
@@ -120,24 +122,58 @@ G4int G4UIcommand::DoIt(G4String parameterList)
           aToken += " ";
           aToken += additionalToken;
         }
-        // aToken.strip(G4String::both,'"');
       }
+      else if(i_thParameter==n_parameterEntry-1 && parameter[i_thParameter]->GetParameterType()=='s')
+      {
+        G4String anotherToken;
+        while(!((anotherToken=parameterToken()).isNull()))
+        {
+          G4int idxs = anotherToken.index("#");
+          if(idxs==G4int(G4std::string::npos))
+          {
+            aToken += " ";
+            aToken += anotherToken;
+          }
+          else if(idxs>0)
+          {
+            aToken += " ";
+            aToken += anotherToken(0,idxs);
+            break;
+          }
+          else
+          { break; }
+        }
+      }
+
       if( aToken.isNull() || aToken == "!" )
       {
         if(parameter[i_thParameter]->IsOmittable())
         { 
           if(parameter[i_thParameter]->GetCurrentAsDefault())
           {
-            G4Tokenizer cvt(messenger->GetCurrentValue(this));
+            G4Tokenizer cvSt(messenger->GetCurrentValue(this));
             G4String parVal;
-            for(int ii=0;ii<i_thParameter;ii++)
-            { parVal = cvt(); }
-	    G4String aCVToken = cvt();
+            for(G4int ii=0;ii<i_thParameter;ii++)
+            {
+	      parVal = cvSt();
+	      if (parVal(0)=='"')
+		{
+		  while( parVal(parVal.length()-1) != '"' )
+		    {
+		      G4String additionalToken = cvSt();
+		      if( additionalToken.isNull() )
+			{ return fParameterUnreadable+i_thParameter; }
+		      parVal += " ";
+		      parVal += additionalToken;
+		    }
+		}
+	    }
+	    G4String aCVToken = cvSt();
 	    if (aCVToken(0)=='"')
 	    {
 	      while( aCVToken(aCVToken.length()-1) != '"' )
 	      {
-		G4String additionalToken = cvt();
+		G4String additionalToken = cvSt();
 		if( additionalToken.isNull() )
 		{ return fParameterUnreadable+i_thParameter; }
 		aCVToken += " ";
@@ -155,7 +191,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
       }
       else
       {
-        int stat = parameter[i_thParameter]->CheckNewValue( aToken );
+        G4int stat = parameter[i_thParameter]->CheckNewValue( aToken );
         if(stat) return stat+i_thParameter;
         correctParameters.append(aToken);
       }
@@ -230,8 +266,8 @@ G4bool G4UIcommand::IsAvailable()
   G4ApplicationState currentState 
    = G4StateManager::GetStateManager()->GetCurrentState();
    
-  int nState = availabelStateList.size();
-  for(int i=0;i<nState;i++)
+  G4int nState = availabelStateList.size();
+  for(G4int i=0;i<nState;i++)
   {
   	if(availabelStateList[i]==currentState)
   	{
@@ -270,12 +306,12 @@ G4String G4UIcommand::UnitsList(G4String unitCategory)
   G4UnitsContainer& UCnt = UTbl[i]->GetUnitsList();
   retStr = UCnt[0]->GetSymbol();
   G4int je = UCnt.size();
-  for(int j=1;j<je;j++)
+  for(G4int j=1;j<je;j++)
   {
     retStr += " ";
     retStr += UCnt[j]->GetSymbol();
   }
-  for(int k=0;k<je;k++)
+  for(G4int k=0;k<je;k++)
   {
     retStr += " ";
     retStr += UCnt[k]->GetName();
@@ -290,15 +326,15 @@ void G4UIcommand::List()
   if(commandPath(commandPath.length()-1)!='/')
   { G4cout << "Command " << commandPath << G4endl; }
   G4cout << "Guidance :" << G4endl;
-  int n_guidanceEntry = commandGuidance.size();
-  for( int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ )
+  G4int n_guidanceEntry = commandGuidance.size();
+  for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ )
   { G4cout << commandGuidance[i_thGuidance] << G4endl; }
   if( ! rangeString.isNull() )
   { G4cout << " Range of parameters : " << rangeString << G4endl; }
-  int n_parameterEntry = parameter.size();
+  G4int n_parameterEntry = parameter.size();
   if( n_parameterEntry > 0 )
   {
-    for( int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ )
+    for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ )
     { parameter[i_thParameter]->List(); }
   }
   G4cout << G4endl;
@@ -313,7 +349,7 @@ void G4UIcommand::List()
 //#include "checkNewValue_debug.icc"
 //#define DEBUG 1
 
-int G4UIcommand::
+G4int G4UIcommand::
 CheckNewValue(G4String newValue)
 {
    yystype result;
@@ -325,7 +361,7 @@ CheckNewValue(G4String newValue)
 
 // ------------------ type check routines -------------------
 
-int G4UIcommand::
+G4int G4UIcommand::
 TypeCheck(G4String newValues)
 {
     G4String aNewValue;
@@ -367,14 +403,14 @@ TypeCheck(G4String newValues)
 }
 
 
-int G4UIcommand::
+G4int G4UIcommand::
 IsInt(const char* buf, short maxDigits)
 {
     const char* p= buf;
-    int length=0;
+    G4int length=0;
     if( *p == '+' || *p == '-') { ++p; }
-    if( isdigit( (int)(*p) )) {
-        while( isdigit( (int)(*p) )) { ++p;  ++length; }
+    if( isdigit( (G4int)(*p) )) {
+        while( isdigit( (G4int)(*p) )) { ++p;  ++length; }
         if( *p == '\0' ) {
             if( length > maxDigits) {
                 G4cerr <<"digit length exceeds"<<G4endl;
@@ -391,23 +427,23 @@ IsInt(const char* buf, short maxDigits)
 }
 
 
-int G4UIcommand::
+G4int G4UIcommand::
 ExpectExponent(const char* str)   // used only by IsDouble()
 {
-    int maxExplength;
+    G4int maxExplength;
     if( IsInt( str, maxExplength=7 )) return 1;
     else return 0;
 }
 
 
-int G4UIcommand::
+G4int G4UIcommand::
 IsDouble(const char* buf)
 {
     const char* p= buf;
     switch( *p) {
         case '+':  case '-': ++p;
             if( isdigit(*p) ) {
-                 while( isdigit( (int)(*p) )) { ++p; }
+                 while( isdigit( (G4int)(*p) )) { ++p; }
                  switch ( *p ) {
                      case '\0':    return 1;
 		        // break;
@@ -418,7 +454,7 @@ IsDouble(const char* buf)
                          if( *p == '\0' )  return 1;
                          if( *p == 'e' || *p =='E' ) return ExpectExponent(++p );
                          if( isdigit(*p) ) {
-                             while( isdigit( (int)(*p) )) { ++p; }
+                             while( isdigit( (G4int)(*p) )) { ++p; }
                              if( *p == '\0' )  return 1;
                              if( *p == 'e' || *p =='E') return ExpectExponent(++p);
                          } else return 0;   break;
@@ -427,7 +463,7 @@ IsDouble(const char* buf)
             }
             if( *p == '.' ) { ++p;
                  if( isdigit(*p) ) {
-                     while( isdigit( (int)(*p) )) { ++p; }
+                     while( isdigit( (G4int)(*p) )) { ++p; }
                      if( *p == '\0' )  return 1;
                      if( *p == 'e' || *p =='E')  return ExpectExponent(++p);
                  }
@@ -435,20 +471,20 @@ IsDouble(const char* buf)
             break;
         case '.':  ++p;
             if( isdigit(*p) ) {
-                 while( isdigit( (int)(*p) )) { ++p; }
+                 while( isdigit( (G4int)(*p) )) { ++p; }
                  if( *p == '\0' )  return 1;
                  if( *p == 'e' || *p =='E' )  return ExpectExponent(++p);
             }    break;
         default: // digit is expected
             if( isdigit(*p) ) {
-                 while( isdigit( (int)(*p) )) { ++p; }
+                 while( isdigit( (G4int)(*p) )) { ++p; }
                  if( *p == '\0' )  return 1;
                  if( *p == 'e' || *p =='E')  return ExpectExponent(++p);
                  if( *p == '.' ) { ++p;
                       if( *p == '\0' )  return 1;
                       if( *p == 'e' || *p =='E')  return ExpectExponent(++p);
                       if( isdigit(*p) ) {
-                          while( isdigit( (int)(*p) )) { ++p; }
+                          while( isdigit( (G4int)(*p) )) { ++p; }
                           if( *p == '\0' )  return 1;
                           if( *p == 'e' || *p =='E') return ExpectExponent(++p);
                       }
@@ -460,7 +496,7 @@ IsDouble(const char* buf)
 
 
 // ------------------ range Check routines -------------------
-int G4UIcommand::
+G4int G4UIcommand::
 RangeCheck(G4String newValue) {
     yystype result;
     char type;
@@ -578,7 +614,7 @@ yystype G4UIcommand::
 EqualityExpression(void)
 { 
     yystype  arg1, arg2;
-    int operat;
+    G4int operat;
     yystype result;
     #ifdef DEBUG
         G4cerr << " EqualityExpression()" <<G4endl;
@@ -609,7 +645,7 @@ yystype G4UIcommand::
 RelationalExpression(void)
 { 
     yystype  arg1, arg2;
-    int operat;
+    G4int operat;
     yystype result;
     #ifdef DEBUG
         G4cerr << " RelationalExpression()" <<G4endl;
@@ -732,8 +768,8 @@ PrimaryExpression(void)
 
 //---------------- semantic routines ---------------------------------
 
-int G4UIcommand::
-Eval2(yystype arg1, int op, yystype arg2)
+G4int G4UIcommand::
+Eval2(yystype arg1, G4int op, yystype arg2)
 {
     char newValtype;
     if( (arg1.type != IDENTIFIER) && (arg2.type != IDENTIFIER)) {
@@ -790,10 +826,10 @@ Eval2(yystype arg1, int op, yystype arg2)
     return 0;
 }
 
-int G4UIcommand::
-CompareInt(int arg1, int op, int arg2)
+G4int G4UIcommand::
+CompareInt(G4int arg1, G4int op, G4int arg2)
 {   
-    int result=-1;
+    G4int result=-1;
     G4String opr;
     switch (op) {
        case GT:  result = ( arg1 >  arg2); opr= ">" ;  break;
@@ -815,10 +851,10 @@ CompareInt(int arg1, int op, int arg2)
     return result;
 }
 
-int G4UIcommand::
-CompareDouble(double arg1, int op, double arg2)
+G4int G4UIcommand::
+CompareDouble(G4double arg1, G4int op, G4double arg2)
 {   
-    int result=-1;
+    G4int result=-1;
     G4String opr;
     switch (op) {
         case GT:  result = ( arg1 >  arg2); opr= ">";   break;
@@ -877,7 +913,7 @@ IsParameter(G4String nam)
 tokenNum G4UIcommand::
 Yylex()         // reads input and returns token number, KR486
 {               // (returns EOF)
-    int c;             
+    G4int c;             
     G4String buf;
 
     while(( c= G4UIpGetc())==' '|| c=='\t' || c== '\n' )
@@ -932,10 +968,10 @@ Yylex()         // reads input and returns token number, KR486
 }
 
 
-int G4UIcommand::
-Follow(int expect, int ifyes, int ifno)
+G4int G4UIcommand::
+Follow(G4int expect, G4int ifyes, G4int ifno)
 {
-    int c = G4UIpGetc();
+    G4int c = G4UIpGetc();
     if ( c== expect)
           return ifyes;
     G4UIpUngetc(c);
@@ -943,16 +979,16 @@ Follow(int expect, int ifyes, int ifno)
 }
 
 //------------------ low level routines -----------------------------
-int G4UIcommand::
+G4int G4UIcommand::
 G4UIpGetc() {                        // emulation of getc() 
-    int length = rangeString.length();
+    G4int length = rangeString.length();
     if( bp < length)
         return  rangeString(bp++);
     else 
         return EOF;
 }
-int G4UIcommand::
-G4UIpUngetc(int c) {                 // emulation of ungetc() 
+G4int G4UIcommand::
+G4UIpUngetc(G4int c) {                 // emulation of ungetc() 
     if (c<0) return -1;
     if (bp >0 && c == rangeString(bp-1)) {
          --bp;

@@ -21,51 +21,57 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.17.2.2 2001/06/28 20:19:45 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MuPairProduction.cc,v 1.26 2001/11/09 13:52:32 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      -------- G4MuPairProduction physics process ---------
+//--------------- G4MuPairProduction physics process ---------------------------
 //                by Laszlo Urban, May 1998 
-// **************************************************************
-// 04-06-98, in DoIt,secondary production condition:range>G4std::min(threshold,safety)
-// 26/10/98, new stuff from R. Kokoulin + cleanup , L.Urban
-// 06/05/99 , bug fixed , L.Urban
-// 10/02/00  modifications+bug fix , new e.m. structure, L.Urban
-// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
-// --------------------------------------------------------------
+//------------------------------------------------------------------------------
+// 04-06-98 in DoIt,secondary production condition:
+//          range>G4std::min(threshold,safety)
+// 26/10/98 new stuff from R. Kokoulin + cleanup , L.Urban
+// 06/05/99 bug fixed , L.Urban
+// 10/02/00 modifications+bug fix , new e.m. structure, L.Urban
+// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 17-09-01 migration of Materials to pure STL (mma)
+// 20-09-01 (L.Urban) in ComputeMicroscopicCrossSection, remove:
+//          if(MaxPairEnergy<CutInPairEnergy) MaxPairEnergy=CutInPairEnergy
+// 26-09-01 completion of store/retrieve PhysicsTable
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
+// 29-10-01 all static functions no more inlined (mma)
+// 07-11-01 particleMass becomes a local variable (mma)      
+//------------------------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 
-// static members ........
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+// static members
 
-G4int G4MuPairProduction::nzdat = 5 ;
+G4int    G4MuPairProduction::nzdat = 5 ;
 G4double G4MuPairProduction::zdat[]={1.,4.,13.,26.,92.};
-G4int G4MuPairProduction::ntdat = 8 ;
+G4int    G4MuPairProduction::ntdat = 8 ;
 G4double G4MuPairProduction::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
-G4int G4MuPairProduction::NBIN = 1000 ; //100 ;
-//G4double G4MuPairProduction::ya[1001]={0.};
-//G4double G4MuPairProduction::proba[5][8][1001]={0.};
+G4int    G4MuPairProduction::NBIN = 1000 ; //100 ;
 G4double G4MuPairProduction::ya[1001];
 G4double G4MuPairProduction::proba[5][8][1001];
-G4double G4MuPairProduction::MinPairEnergy = 4.*electron_mass_c2 ;
+G4double G4MuPairProduction::MinPairEnergy = 4.*electron_mass_c2;
 
-G4double G4MuPairProduction::LowerBoundLambda = 1.*keV ;
-G4double G4MuPairProduction::UpperBoundLambda = 1000000.*TeV ;
-G4int	 G4MuPairProduction::NbinLambda = 150 ;
+G4double G4MuPairProduction::LowerBoundLambda = 1.*keV;
+G4double G4MuPairProduction::UpperBoundLambda = 1000000.*TeV;
+G4int	 G4MuPairProduction::NbinLambda = 150;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MuPairProduction::G4MuPairProduction(const G4String& processName)
   : G4VMuEnergyLoss(processName),  
     theMeanFreePathTable(NULL)
 {  }
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4MuPairProduction::~G4MuPairProduction()
 {
@@ -79,6 +85,38 @@ G4MuPairProduction::~G4MuPairProduction()
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4MuPairProduction::SetLowerBoundLambda(G4double val)
+     {LowerBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4MuPairProduction::SetUpperBoundLambda(G4double val)
+     {UpperBoundLambda = val;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void G4MuPairProduction::SetNbinLambda(G4int n)
+     {NbinLambda = n;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4MuPairProduction::GetLowerBoundLambda()
+     { return LowerBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double G4MuPairProduction::GetUpperBoundLambda()
+     { return UpperBoundLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+ G4int G4MuPairProduction::GetNbinLambda()
+     {return NbinLambda;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuPairProduction::BuildPhysicsTable(
                                const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
@@ -91,7 +129,7 @@ void G4MuPairProduction::BuildPhysicsTable(
 
   BuildLossTable(aParticleType) ;
  
-  if(&aParticleType==theMuonMinus)
+  if(&aParticleType==G4MuonMinus::MuonMinus())
   {
     RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable ;
     CounterOfmuminusProcess++;
@@ -104,17 +142,18 @@ void G4MuPairProduction::BuildPhysicsTable(
 
   // sampling table should be made only once !
   if(theMeanFreePathTable == NULL)
-     MakeSamplingTables(&aParticleType) ;
+     MakeSamplingTables(&aParticleType);
 
-  G4double electronCutInRange = G4Electron::Electron()->GetCuts();
-  if(electronCutInRange != lastelectronCutInRange)
+  G4double* electronCutInRange = G4Electron::Electron()->GetLengthCuts();  
+  if( !EqualCutVectors(electronCutInRange, lastelectronCutInRange))
     BuildLambdaTable(aParticleType) ;
 
-  G4VMuEnergyLoss::BuildDEDXTable(aParticleType) ;
+  G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
 
-  if(&aParticleType==theMuonPlus)
-    PrintInfoDefinition() ;
+  if(&aParticleType==G4MuonPlus::MuonPlus()) PrintInfoDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuPairProduction::BuildLossTable(
                                    const G4ParticleDefinition& aParticleType)
@@ -124,11 +163,11 @@ void G4MuPairProduction::BuildLossTable(
 
   const G4MaterialTable* theMaterialTable =
                                 G4Material::GetMaterialTable();
-  ParticleMass = aParticleType.GetPDGMass() ;
-  ElectronCutInKineticEnergy = (*theElectron).GetEnergyCuts() ;
-  PositronCutInKineticEnergy = (*thePositron).GetEnergyCuts() ;
+  G4double particleMass = aParticleType.GetPDGMass();
+  ElectronCutInKineticEnergy = G4Electron::Electron()->GetEnergyCuts();
+  PositronCutInKineticEnergy = G4Positron::Positron()->GetEnergyCuts();
 
-  G4int numOfMaterials = theMaterialTable->length() ;
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if (theLossTable) {
       theLossTable->clearAndDestroy();
@@ -154,7 +193,7 @@ void G4MuPairProduction::BuildLossTable(
     for (G4int i=0; i<TotBin; i++)
     {
       KineticEnergy = aVector->GetLowEdgeEnergy(i) ;
-      TotalEnergy = KineticEnergy+ParticleMass ;
+      TotalEnergy = KineticEnergy+particleMass ;
       eCut = ElectronCutInKineticEnergyNow ;
       pCut = PositronCutInKineticEnergyNow ;
 
@@ -166,7 +205,7 @@ void G4MuPairProduction::BuildLossTable(
       pairloss = 0.;
       for (G4int iel=0; iel<NumberOfElements; iel++)
       {
-        Z=(*theElementVector)(iel)->GetZ();
+        Z=(*theElementVector)[iel]->GetZ();
         natom = theAtomicNumDensityVector[iel] ;
         loss = ComputePairLoss(&aParticleType,
                                  Z,KineticEnergy,eCut,pCut) ;   
@@ -180,6 +219,8 @@ void G4MuPairProduction::BuildLossTable(
     theLossTable->insert(aVector);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuPairProduction::ComputePairLoss(
                                      const G4ParticleDefinition* ParticleType,
@@ -204,8 +245,9 @@ G4double G4MuPairProduction::ComputePairLoss(
   G4double CutInPairEnergy = ElectronEnergyCut+PositronEnergyCut
                             +2.*electron_mass_c2 ;
   if( CutInPairEnergy <= MinPairEnergy ) return loss ;
-
-  G4double MaxPairEnergy = KineticEnergy+ParticleMass*(1.-0.75*sqrte*z13) ;
+  
+  G4double particleMass = ParticleType->GetPDGMass();
+  G4double MaxPairEnergy = KineticEnergy+particleMass*(1.-0.75*sqrte*z13) ;
   if(MaxPairEnergy < MinPairEnergy)
      MaxPairEnergy = MinPairEnergy ;
      
@@ -239,7 +281,8 @@ G4double G4MuPairProduction::ComputePairLoss(
   if (loss < 0.) loss = 0.;
   return loss ;
 }
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuPairProduction::BuildLambdaTable(
                                    const G4ParticleDefinition& ParticleType)
@@ -282,6 +325,8 @@ void G4MuPairProduction::BuildLambdaTable(
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuPairProduction::ComputePartialSumSigma(
                                     const G4ParticleDefinition* ParticleType,
                                                G4double KineticEnergy,
@@ -292,8 +337,8 @@ void G4MuPairProduction::ComputePartialSumSigma(
   const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
   const G4double* theAtomNumDensityVector = aMaterial->
                                                 GetAtomicNumDensityVector();
-  G4double ElectronEnergyCut = (G4Electron::GetCutsInEnergy())[Imate];
-  G4double PositronEnergyCut = (G4Positron::GetCutsInEnergy())[Imate];
+  G4double ElectronEnergyCut = (G4Electron::Electron()->GetEnergyCuts())[Imate];
+  G4double PositronEnergyCut = (G4Positron::Positron()->GetEnergyCuts())[Imate];
 
   PartialSumSigma[Imate] = new G4DataVector();
 
@@ -303,12 +348,14 @@ void G4MuPairProduction::ComputePartialSumSigma(
   {             
     SIGMA += theAtomNumDensityVector[Ielem] * 
              ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                        (*theElementVector)(Ielem)->GetZ(), 
+                                        (*theElementVector)[Ielem]->GetZ(), 
                                         ElectronEnergyCut,PositronEnergyCut );
 
     PartialSumSigma[Imate]->push_back(SIGMA);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuPairProduction::ComputeMicroscopicCrossSection(
                                      const G4ParticleDefinition* ParticleType,
@@ -337,10 +384,9 @@ G4double G4MuPairProduction::ComputeMicroscopicCrossSection(
 
   if( CutInPairEnergy < 4.*electron_mass_c2 )
     CutInPairEnergy = 4.*electron_mass_c2 ;
-
-  G4double MaxPairEnergy = KineticEnergy+ParticleMass*(1.-0.75*sqrte*z13) ;
-  if(MaxPairEnergy < CutInPairEnergy)
-     MaxPairEnergy = CutInPairEnergy ;
+    
+  G4double particleMass = ParticleType->GetPDGMass();
+  G4double MaxPairEnergy = KineticEnergy+particleMass*(1.-0.75*sqrte*z13) ;
   if( CutInPairEnergy >= MaxPairEnergy ) return CrossSection ;
 
   G4double aaa,bbb,hhh,x,epln,ep ;
@@ -370,6 +416,8 @@ G4double G4MuPairProduction::ComputeMicroscopicCrossSection(
   return CrossSection;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuPairProduction::MakeSamplingTables(
                                    const G4ParticleDefinition* ParticleType)
 {
@@ -378,6 +426,7 @@ void G4MuPairProduction::MakeSamplingTables(
   G4double c,y,ymin,ymax,dy,yy,dx,x,ep ;
 
   static const G4double sqrte = sqrt(exp(1.)) ;
+  G4double particleMass = ParticleType->GetPDGMass();  
 
   for (G4int iz=0; iz<nzdat; iz++)
   {
@@ -387,7 +436,7 @@ void G4MuPairProduction::MakeSamplingTables(
     for (G4int it=0; it<ntdat; it++)
     {
       KineticEnergy = tdat[it];
-      G4double MaxPairEnergy = KineticEnergy+ParticleMass*(1.-0.75*sqrte*z13) ;
+      G4double MaxPairEnergy = KineticEnergy+particleMass*(1.-0.75*sqrte*z13) ;
 
       G4double CrossSection = 0.0 ;
 
@@ -429,7 +478,8 @@ void G4MuPairProduction::MakeSamplingTables(
     }
   }
 } 
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
                                  const G4ParticleDefinition* ParticleType,
@@ -446,15 +496,16 @@ G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
   G4double g2tf = 5.3e-5 ;
   G4double g1h  = 4.4e-5 ;
   G4double g2h  = 4.8e-5 ;
-
-  G4double massratio = ParticleMass/electron_mass_c2 ;
+  
+  G4double particleMass = ParticleType->GetPDGMass();
+  G4double massratio = particleMass/electron_mass_c2 ;
   G4double massratio2 = massratio*massratio ;
-  G4double TotalEnergy = KineticEnergy + ParticleMass ;
+  G4double TotalEnergy = KineticEnergy + particleMass ;
   G4double z13 = exp(log(AtomicNumber)/3.) ;
   G4double z23 = z13*z13 ;
   G4double EnergyLoss = TotalEnergy - PairEnergy ;
 
-  G4double c3 = 3.*sqrte*ParticleMass/4. ;
+  G4double c3 = 3.*sqrte*particleMass/4. ;
 
   G4double DDCrossSection = 0. ;
  
@@ -462,7 +513,7 @@ G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
     return DDCrossSection ;
 
   G4double c7 = 4.*electron_mass_c2 ;
-  G4double c8 = 6.*ParticleMass*ParticleMass ;
+  G4double c8 = 6.*particleMass*particleMass ;
   G4double alf = c7/PairEnergy ;
   G4double a3 = 1. - alf ;
 
@@ -483,10 +534,10 @@ G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
     g1  = g1tf ;
     g2  = g2tf ;
   }
-  zeta1 = 0.073 * log(TotalEnergy/(ParticleMass+g1*z23*TotalEnergy))-0.26 ;
+  zeta1 = 0.073 * log(TotalEnergy/(particleMass+g1*z23*TotalEnergy))-0.26 ;
   if( zeta1 > 0.)
   {
-    zeta2 = 0.058*log(TotalEnergy/(ParticleMass+g2*z13*TotalEnergy))-0.14 ;
+    zeta2 = 0.058*log(TotalEnergy/(particleMass+g2*z13*TotalEnergy))-0.14 ;
     zeta  = zeta1/zeta2 ;
   }
   else
@@ -560,6 +611,8 @@ G4double G4MuPairProduction::ComputeDDMicroscopicCrossSection(
   return DDCrossSection ;
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
       
 G4double G4MuPairProduction::GetDMicroscopicCrossSection(
                                  const G4ParticleDefinition* ParticleType,
@@ -569,7 +622,9 @@ G4double G4MuPairProduction::GetDMicroscopicCrossSection(
   return ComputeDMicroscopicCrossSection(ParticleType,KineticEnergy,
                                          AtomicNumber,PairEnergy) ;
 }
-      
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4MuPairProduction::ComputeDMicroscopicCrossSection(
                                  const G4ParticleDefinition* ParticleType,
                                  G4double KineticEnergy, G4double AtomicNumber,
@@ -586,9 +641,10 @@ G4double G4MuPairProduction::ComputeDMicroscopicCrossSection(
 
   G4double DCrossSection = 0. ;
 
-  G4double TotalEnergy = KineticEnergy + ParticleMass ;
+  G4double particleMass = ParticleType->GetPDGMass();
+  G4double TotalEnergy = KineticEnergy + particleMass;
   G4double EnergyLoss = TotalEnergy - PairEnergy ;
-  G4double a = 6.*ParticleMass*ParticleMass/(TotalEnergy*EnergyLoss) ;
+  G4double a = 6.*particleMass*particleMass/(TotalEnergy*EnergyLoss) ;
   G4double b = 4.*electron_mass_c2/PairEnergy ;
 
   if((b+2.*a*(1.-b))/(1.+(1.-a)*sqrt(1.-b)) <= 0.) return DCrossSection ;
@@ -613,7 +669,9 @@ G4double G4MuPairProduction::ComputeDMicroscopicCrossSection(
   return DCrossSection ;
 
 }
-      
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
 G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
                                                   const G4Step& stepData)
 {
@@ -622,15 +680,16 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
    aParticleChange.Initialize(trackData);
    G4Material* aMaterial=trackData.GetMaterial() ;
    const G4DynamicParticle* aDynamicParticle=trackData.GetDynamicParticle();  
-   G4double           KineticEnergy     = aDynamicParticle->GetKineticEnergy();
+   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
+   G4double particleMass  = aDynamicParticle->GetDefinition()->GetPDGMass();   
    G4ParticleMomentum ParticleDirection = 
                                       aDynamicParticle->GetMomentumDirection();
 
    // e-e+ cut in this material
    G4double ElectronEnergyCut = electron_mass_c2+
-      ((*G4Electron::Electron()).GetCutsInEnergy())[aMaterial->GetIndex()];
+                     G4Electron::Electron()->GetEnergyThreshold(aMaterial);
    G4double PositronEnergyCut = electron_mass_c2+
-      ((*G4Positron::Positron()).GetCutsInEnergy())[aMaterial->GetIndex()];
+                     G4Positron::Positron()->GetEnergyThreshold(aMaterial);
    G4double CutInPairEnergy = ElectronEnergyCut + PositronEnergyCut ;
 
    if (CutInPairEnergy < MinPairEnergy) CutInPairEnergy = MinPairEnergy ;
@@ -643,10 +702,10 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
    G4Element* anElement = SelectRandomAtom(aMaterial);
 
    // limits of the energy sampling
-   G4double TotalEnergy = KineticEnergy + ParticleMass ;
-   //G4double TotalMomentum = sqrt(KineticEnergy*(TotalEnergy+ParticleMass)) ;
+   G4double TotalEnergy = KineticEnergy + particleMass ;
+   //G4double TotalMomentum = sqrt(KineticEnergy*(TotalEnergy+particleMass)) ;
    G4double Z3 = anElement->GetIonisation()->GetZ3() ;
-   G4double MaxPairEnergy = TotalEnergy-0.75*esq*ParticleMass*Z3 ;
+   G4double MaxPairEnergy = TotalEnergy-0.75*esq*particleMass*Z3 ;
 
    if(MinPairEnergy >= MaxPairEnergy)
      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
@@ -716,7 +775,7 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
    PairEnergy = MinPairEnergy*exp(x*log(MaxPairEnergy/MinPairEnergy)) ;
 
   // sample r=(E+-E-)/PairEnergy  ( uniformly .....)
-   G4double rmax = (1.-6.*ParticleMass*ParticleMass/(TotalEnergy*
+   G4double rmax = (1.-6.*particleMass*particleMass/(TotalEnergy*
                                                (TotalEnergy-PairEnergy)))
                                        *sqrt(1.-MinPairEnergy/PairEnergy) ;
    r = rmax * (-1.+2.*G4UniformRand()) ;
@@ -791,7 +850,7 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
         aParticleChange.AddSecondary( aParticle2 ) ; 
 
    G4double NewKinEnergy = KineticEnergy - ElectronEnergy - PositronEnergy ;
-   //G4double finalMomentum=sqrt(NewKinEnergy*(NewKinEnergy+2.*ParticleMass));
+   //G4double finalMomentum=sqrt(NewKinEnergy*(NewKinEnergy+2.*particleMass));
 
    aParticleChange.SetMomentumChange( ParticleDirection );
 
@@ -814,6 +873,8 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
 {
   // select randomly 1 element within the material
@@ -827,12 +888,124 @@ G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
 
   for ( G4int i=0; i < NumberOfElements; i++ )
   {
-    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)[i]);
   }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4MuPairProduction::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+  
+  // store stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  // store PartialSumSigma table (G4OrderedTable)
+  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
+  if ( !PartialSumSigma.Store(filename, ascii) ){
+    G4cout << " FAIL PartialSumSigma.store in " << filename
+           << G4endl;
+    return false;
+  }  
+  G4cout << GetProcessName() << "for " << particle->GetParticleName()
+         << ": Success to store the PhysicsTables in "  
+         << directory << G4endl;
+	 
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4MuPairProduction::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theLossTable and theMeanFreePathTable
+  if (theLossTable != 0) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable; 
+  }   
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+  if (&PartialSumSigma != 0) PartialSumSigma.clear();
+    
+  // get bining from EnergyLoss
+  LowestKineticEnergy  = GetLowerBoundEloss();
+  HighestKineticEnergy = GetUpperBoundEloss();
+  TotBin               = GetNbinEloss();
+
+  G4String filename;
+  
+  // retreive stopping power table
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  theLossTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  // retrieve PartialSumSigma table (G4OrderedTable)
+  filename = GetPhysicsTableFileName(particle,directory,"PartSumSigma",ascii);
+  if ( !PartialSumSigma.Retrieve(filename, ascii) ){
+    G4cout << " FAIL PartialSumSigma.retrieve in " << filename
+           << G4endl;
+    return false;
+  }
+     
+  G4cout << GetProcessName() << "for " << particle->GetParticleName()
+         << ": Success to retrieve the PhysicsTables from "
+         << directory << G4endl;
+	 
+  if (particle->GetPDGCharge() < 0.)
+    {
+      RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
+      CounterOfmuminusProcess++;
+    }
+  else
+    {
+      RecorderOfmuplusProcess[CounterOfmuplusProcess] = (*this).theLossTable;
+      CounterOfmuplusProcess++;
+    }
+    
+  MakeSamplingTables(particle);
+ 
+  G4VMuEnergyLoss::BuildDEDXTable(*particle);
+    	 
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuPairProduction::PrintInfoDefinition()
 {
   G4String comments = "theoretical cross sections \n ";
@@ -845,4 +1018,5 @@ void G4MuPairProduction::PrintInfoDefinition()
          << " in " << NbinLambda << " bins. \n";
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

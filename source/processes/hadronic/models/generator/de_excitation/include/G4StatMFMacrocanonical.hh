@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.hh,v 1.6.2.1 2001/06/28 19:13:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StatMFMacroCanonical.hh,v 1.9 2001/10/06 08:32:27 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -50,7 +50,7 @@ class G4StatMFMacroCanonical : public G4VStatMFEnsemble {
 public:
 
     // G4StatMFMacroCanonical class must be initialized with a G4Fragment.
-    G4StatMFMacroCanonical(const G4Fragment & theFragment);
+    G4StatMFMacroCanonical(G4Fragment const & theFragment);
 
     // destructor
     ~G4StatMFMacroCanonical();

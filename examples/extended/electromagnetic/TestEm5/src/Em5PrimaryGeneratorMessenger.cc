@@ -21,43 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.2.4.1 2001/06/28 19:07:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5PrimaryGeneratorMessenger.cc,v 1.5 2001/11/05 17:58:02 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5PrimaryGeneratorMessenger.hh"
 
 #include "Em5PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em5PrimaryGeneratorMessenger::Em5PrimaryGeneratorMessenger(Em5PrimaryGeneratorAction* Em5Gun)
+Em5PrimaryGeneratorMessenger::Em5PrimaryGeneratorMessenger(
+                                             Em5PrimaryGeneratorAction* Em5Gun)
 :Em5Action(Em5Gun)
 { 
-  DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
-  DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
-  DefaultCmd->AvailableForStates(PreInit,Idle);
+ DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
+ DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
+ DefaultCmd->AvailableForStates(Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PrimaryGeneratorMessenger::~Em5PrimaryGeneratorMessenger()
 {
   delete DefaultCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em5PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Em5PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                               G4String newValue)
 { 
-  if( command == DefaultCmd )
-   { Em5Action->SetDefaultKinematic();}
+  if (command == DefaultCmd)
+    {Em5Action->SetDefaultKinematic();}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

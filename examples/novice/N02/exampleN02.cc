@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN02.cc,v 1.4.4.1 2001/06/28 19:07:27 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: exampleN02.cc,v 1.7 2001/10/24 12:20:42 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02DetectorConstruction.hh"
 #include "ExN02PhysicsList.hh"
@@ -45,7 +45,7 @@
 #include "ExN02VisManager.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -89,7 +89,7 @@ int main(int argc,char** argv) {
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute initInter.mac");    
+    UI->ApplyCommand("/control/execute vis.mac");    
     session->SessionStart();
     delete session;
   }
@@ -109,5 +109,5 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

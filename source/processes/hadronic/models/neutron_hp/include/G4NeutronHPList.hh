@@ -14,15 +14,12 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4NeutronHPList.hh,v 1.4.8.1 2001/06/28 19:14:17 gunter Exp $
-// GEANT4 tag $Name:  $
 //
 #ifndef G4NeutronHPList_h
 #define G4NeutronHPList_h 1
@@ -37,8 +34,8 @@ class G4NeutronHPList
   
   G4NeutronHPList()
   {
-    theData = new G4double[100]; 
-    nPoints=100;
+    theData = new G4double[2]; 
+    nPoints=2;
     nEntries=0;
   }
   

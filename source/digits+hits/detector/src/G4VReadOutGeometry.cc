@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.cc,v 1.3.2.1 2001/06/28 19:07:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VReadOutGeometry.cc,v 1.5 2001/07/13 15:00:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4VReadOutGeometry.hh"
@@ -30,8 +30,8 @@
 
 
 G4VReadOutGeometry::G4VReadOutGeometry()
-  :ROworld(NULL),touchableHistory(NULL),
-   fincludeList(NULL),fexcludeList(NULL)
+  :ROworld(0),fincludeList(0),
+   fexcludeList(0),touchableHistory(0)
 {
   name = "unknown";
   ROnavigator = new G4Navigator();
@@ -43,14 +43,14 @@ G4VReadOutGeometry::G4VReadOutGeometry(const G4VReadOutGeometry &right)
   fexcludeList = right.fexcludeList;
   name = right.name;
   ROworld = right.ROworld;
-  touchableHistory = NULL;
+  touchableHistory = 0;
   // COPY CONSTRUCTOR NOT STRAIGHT FORWARD: need to copy the touchabelHistory
   // VALUE, same foe navigator and same for the World+Geom hierachy ??
 }
 
 G4VReadOutGeometry::G4VReadOutGeometry(G4String n) 
-  :name(n),ROworld(NULL),touchableHistory(NULL),
-   fincludeList(NULL),fexcludeList(NULL)
+  :ROworld(0),fincludeList(0),
+   fexcludeList(0),name(n),touchableHistory(0)
 {
   ROnavigator = new G4Navigator();
 }
@@ -70,7 +70,7 @@ const G4VReadOutGeometry & G4VReadOutGeometry::operator=(const G4VReadOutGeometr
   fexcludeList     = right.fexcludeList;
   name             = right.name;
   ROworld          = right.ROworld;
-  touchableHistory = NULL;
+  touchableHistory = 0;
   return *this;
 }
 
@@ -88,7 +88,7 @@ void G4VReadOutGeometry::BuildROGeometry()
 
 G4bool G4VReadOutGeometry::CheckROVolume(G4Step*currentStep,G4TouchableHistory*& ROhist)
 {
-  ROhist = NULL;
+  ROhist = 0;
   G4bool incFlg = true;
   G4VPhysicalVolume* PV = currentStep->GetPreStepPoint()->GetPhysicalVolume();
   if((fexcludeList)&&(fexcludeList->CheckPV(PV)))
@@ -142,12 +142,12 @@ G4bool G4VReadOutGeometry::FindROTouchable(G4Step*currentStep)
   // at the safety value only.
   
   // checks if volume is sensitive:
-  G4VPhysicalVolume* currentVolume;
+  G4VPhysicalVolume* currentVolume = touchableHistory->GetVolume();
   // checks first if a physical volume exists here:
-  if ( currentVolume = touchableHistory->GetVolume() )
+  if ( currentVolume )
     {
       return currentVolume->GetLogicalVolume()->
-	GetSensitiveDetector() != NULL;
+	GetSensitiveDetector() != 0;
     }
   // no sensitive volume found: returns false
   return false;

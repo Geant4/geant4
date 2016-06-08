@@ -14,15 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4PreCompoundEmission.hh,v 1.3.2.1 2001/06/28 19:13:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PreCompoundEmission.hh,v 1.8 2001/12/13 12:04:18 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -77,13 +76,17 @@ private:
   G4double rho(const G4double p, const G4double h, const G4double g, 
 	       const G4double E, const G4double Ef) const;
 
-  G4double bessi0(const G4double x) const;					 
+  //  G4double bessi0(const G4double x) const;					 
 					 
   // A vector with the allowed emission fragments 
   G4PreCompoundFragmentVector theFragmentsVector;
 	
   // Projectile energy
   G4double ProjEnergy;
+
+  // Projectile direction
+  G4ThreeVector theIncidentDirection;
+
 
 };
 #endif

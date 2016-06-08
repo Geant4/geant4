@@ -21,16 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.6.2.1 2001/06/28 19:15:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.11 2001/12/01 20:52:06 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
-
-
-//=================//
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-//=================//
 
 
 #define __G_ANSI_C__
@@ -76,7 +71,7 @@ const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_00.prim";
 // const int   FR_MAX_FILE_NUM = 10 ;
 // const int   FR_MAX_FILE_NUM = 15 ;
 // const int   FR_MAX_FILE_NUM = 20 ;
-   const int   FR_MAX_FILE_NUM = 99 ;
+   const int   FR_MAX_FILE_NUM = 100 ;
 
 
 ///////////////////////////
@@ -86,8 +81,8 @@ const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_00.prim";
 
 	//----- G4DAWNFILESceneHandler, constructor
 G4DAWNFILESceneHandler::G4DAWNFILESceneHandler (G4DAWNFILE& system, const G4String& name):
-fSystem   (system)                        ,
 G4VSceneHandler  (system, fSceneIdCount++, name) ,
+fSystem   (system)                        ,
 fPrimDest ()                              ,
 FRflag_in_modeling     (false)            ,
 flag_saving_g4_prim    (false)            ,
@@ -274,9 +269,9 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 // Common to DAWN and DAWNFILE drivers //
 /////////////////////////////////////////
 
-#define  G4FRSCENE  G4DAWNFILESceneHandler
+#define  G4FRSCENEHANDLER  G4DAWNFILESceneHandler
 #include "G4FRSceneFunc.icc"
-#undef   G4FRSCENE 
+#undef   G4FRSCENEHANDLER 
 
 //////////////////////
 // static variables //
@@ -287,5 +282,3 @@ G4int G4DAWNFILESceneHandler::fSceneIdCount = 0;
 
 G4int G4DAWNFILESceneHandler::fSceneCount = 0;   
 			// num of existing instances
-
-#endif // G4VIS_BUILD_DAWNFILE_DRIVER

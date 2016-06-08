@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFastLegendre.hh,v 1.5.8.1 2001/06/28 19:14:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPFastLegendre.hh,v 1.8 2001/10/04 20:00:35 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4NeutronHPFastLegendre_h
 #define G4NeutronHPFastLegendre_h 1
@@ -150,7 +150,7 @@ class G4NeutronHPFastLegendre
   
   inline G4double Interpolate(G4int bin, G4int l, G4double y1, G4double y2, G4double x)
   {
-    G4double slope = 0, off = 0, x1=0, x2=0, x1mx2;
+    G4double slope = 0, off = 0, x2=0, x1mx2;
     G4int half = (theNbin[l]-1)/2;
 //    x1 = (bin-half)/G4double(half);
     x2 = (bin+1-half)/G4double(half);

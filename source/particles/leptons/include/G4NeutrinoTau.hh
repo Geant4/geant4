@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoTau.hh,v 1.3.4.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutrinoTau.hh,v 1.8 2001/10/28 05:05:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,8 +53,6 @@ class G4NeutrinoTau : public G4VLepton
 {
  private:
    static G4NeutrinoTau theNeutrinoTau;
-   static G4double  theNeutrinoTauLengthCut;
-   static G4double* theNeutrinoTauKineticEnergyCuts;
 
  private:
    G4NeutrinoTau(
@@ -73,11 +71,9 @@ class G4NeutrinoTau : public G4VLepton
    virtual  ~G4NeutrinoTau(){} 
 
    static G4NeutrinoTau* NeutrinoTauDefinition();
-   static G4NeutrinoTau* NeutrinoTau() {return &theNeutrinoTau;}
-   static G4double  GetCuts() {return theNeutrinoTauLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theNeutrinoTauKineticEnergyCuts;};
+   static G4NeutrinoTau* NeutrinoTau();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

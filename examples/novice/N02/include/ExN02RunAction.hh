@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02RunAction.hh,v 1.4.4.1 2001/06/28 19:07:28 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02RunAction.hh,v 1.6 2001/10/11 12:32:36 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02RunAction_h
 #define ExN02RunAction_h 1
@@ -33,7 +33,7 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 
@@ -47,6 +47,8 @@ class ExN02RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

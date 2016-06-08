@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.icc,v 1.2.4.1 2001/06/28 19:15:17 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Transportation.icc,v 1.4 2001/11/06 01:38:19 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // 
@@ -54,26 +54,3 @@ inline G4bool G4Transportation::DoesGlobalFieldExist()
   return transportMgr->GetFieldManager()->DoesFieldExist();
 }
 
-inline void G4Transportation::SetTheOtherTouchableFree(G4VTouchable* value)
-{
-  if(value == fTouchable1){
-     fIsTouchable2Free = true;
-  }
-  else if(value == fTouchable2){
-     fIsTouchable1Free = true;
-  }
-}
-
-inline G4VTouchable* G4Transportation::GetFreeTouchable(){
-  if(fIsTouchable1Free){
-    fIsTouchable1Free = false;
-    return fTouchable1;
-  } 
-  else if(fIsTouchable2Free){
-    fIsTouchable2Free = false;
-    return fTouchable2;
-  }
-  else {
-    return NULL;
-  }
-}

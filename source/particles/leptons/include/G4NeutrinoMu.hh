@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoMu.hh,v 1.3.4.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutrinoMu.hh,v 1.8 2001/10/28 05:05:29 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,8 +54,6 @@ class G4NeutrinoMu : public G4VLepton
 {
  private:
    static G4NeutrinoMu theNeutrinoMu;
-   static G4double  theNeutrinoMuLengthCut;
-   static G4double* theNeutrinoMuKineticEnergyCuts;
 
  private:
    G4NeutrinoMu(
@@ -74,11 +72,9 @@ class G4NeutrinoMu : public G4VLepton
    virtual  ~G4NeutrinoMu(){}
 
    static G4NeutrinoMu* NeutrinoMuDefinition();
-   static G4NeutrinoMu* NeutrinoMu() {return &theNeutrinoMu;}
-   static G4double  GetCuts() {return theNeutrinoMuLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theNeutrinoMuKineticEnergyCuts;};
+   static G4NeutrinoMu* NeutrinoMu();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

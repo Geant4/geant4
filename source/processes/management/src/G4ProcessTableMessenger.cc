@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.8.2.1 2001/06/28 19:15:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ProcessTableMessenger.cc,v 1.10 2001/10/11 13:53:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
@@ -54,10 +54,8 @@
 #include "G4ParticleTable.hh"
 
 #include "G4ios.hh"                 
+#include "G4Tokenizer.hh"
 #include "g4std/iomanip"               
-#include "g4rw/ctoken.h"               
-#include "g4rw/rstream.h"               
-
 #include "g4std/strstream"
 
 /////////////////////////////////////////

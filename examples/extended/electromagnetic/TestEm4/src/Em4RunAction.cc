@@ -21,18 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.cc,v 1.8.2.1 2001/06/28 19:07:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em4RunAction.cc,v 1.11 2001/11/28 15:07:22 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em4RunAction.hh"
-#include "Em4RunActionMessenger.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -43,22 +43,17 @@
  #include "CLHEP/Hist/HBookFile.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4RunAction::Em4RunAction()
 {
   bookHisto();
-  
-  runMessenger = new Em4RunActionMessenger(this);
-  saveRndm = 1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4RunAction::~Em4RunAction()
 {
-  delete runMessenger;
-  
 #ifndef G4NOHIST
  // Write histogram file 
   hbookManager->write();
@@ -69,7 +64,7 @@ Em4RunAction::~Em4RunAction()
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4RunAction::bookHisto()
 {
@@ -83,40 +78,29 @@ void Em4RunAction::bookHisto()
 #endif      
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  } 
+  if (G4VVisManager::GetConcreteInstance())
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4RunAction::EndOfRunAction(const G4Run* aRun)
 {  
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");      
-    }                
+  // show Rndm status
+  HepRandom::showEngineStatus();         
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

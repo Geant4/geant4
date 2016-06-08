@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIclusterModel.cc,v 1.1.4.1 2001/06/28 19:10:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PAIclusterModel.cc,v 1.6 2001/09/18 09:30:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4Timer.hh"
@@ -65,7 +65,7 @@ G4PAIclusterModel::~G4PAIclusterModel()
 
 G4bool G4PAIclusterModel::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return  ( particle.GetPDGCharge() != 0.0 ) ; 
+  return  ( particle.GetPDGCharge() != 0.0 && particle.GetPDGMass() != 0 ) ; 
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -81,10 +81,12 @@ G4bool G4PAIclusterModel::IsApplicable(const G4ParticleDefinition& particle)
 
 G4bool G4PAIclusterModel::ModelTrigger(const G4FastTrack& fastTrack) 
 {
-  //  if (gamma >= 100.0) return true  ;
-  //  else                return false ;
-
-  return true ;
+  G4double kinEnergy, mass, gamma ;
+  kinEnergy  = fastTrack.GetPrimaryTrack()->GetKineticEnergy() ;
+  mass       = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGMass() ;
+  gamma      = 1.0 + kinEnergy/mass ;
+  if (gamma >= 1.2) return true  ;
+  else              return false ;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -95,8 +97,12 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
 		                    G4FastStep&  fastStep         )
 {
   G4double charge, charge2, kinEnergy, mass, massRatio, scaledTkin ;
-  G4double distance, energyTransfer, energyLoss, lambda, step, stepSum = 0.0 ;
+  G4double distance, energyTransfer, lambda, step, stepSum = 0.0 ;
+  G4double energyLoss = 0.0 ;
   G4ThreeVector clusterPosition ;
+
+  fClusterPositionVector.clear() ;
+  fClusterEnergyVector.clear() ;
 
   charge     = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGCharge() ;
   charge2    = charge*charge ;
@@ -123,8 +129,9 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
   step   = RandExponential::shoot(lambda) ;
   //  if (step < 0.0) step = 0.0 ;
   stepSum += step ;
-  distance -= stepSum ;
-  if(distance < 0.0) // no change, return 
+  //  distance -= stepSum ;
+  //  if(distance < 0.0) // no change, return 
+  if(stepSum > distance ) // no change, return 
   {
     return ;  
   }
@@ -135,7 +142,8 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
     G4ParticleMomentum globalDirection = fastTrack.GetPrimaryTrack()->
                                          GetMomentumDirection() ; 
 
-    while(distance >= 0.0)  // global (or local ?) cluster coordinates
+    //  while(distance >= 0.0)  
+    while(stepSum <= distance )  // global (or local ?) cluster coordinates
     {
       //  clusterPosition = fastTrack.GetPrimaryTrackLocalPosition() + 
       //                  stepSum*direction ;  
@@ -143,12 +151,13 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
       clusterPosition = globalStartPosition  + stepSum*globalDirection ;    
       energyTransfer  = fPAIonisation->GetRandomEnergyTransfer(scaledTkin) ;
 
-      fClusterPositionVector.insert(clusterPosition) ;      
-      fClusterEnergyVector.insert(energyTransfer) ;
+      fClusterPositionVector.push_back(clusterPosition) ;      
+      fClusterEnergyVector.push_back(energyTransfer) ;
+
       step = RandExponential::shoot(lambda) ;
       // if (step < 0.0) step = 0.0 ;
       stepSum    += step ;
-      distance   -= step ;
+      //  distance   -= step ;
       energyLoss += energyTransfer ;     
     } 
     kinEnergy -= energyLoss ;
@@ -164,6 +173,14 @@ void G4PAIclusterModel::DoIt( const G4FastTrack& fastTrack ,
 //
 //
 ///////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
 
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01RunAction.cc,v 1.3.4.1 2001/06/28 19:06:46 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: AnaEx01RunAction.cc,v 1.5 2001/11/16 14:31:13 barrand Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 

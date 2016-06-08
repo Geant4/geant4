@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.9.2.2 2001/06/28 20:19:45 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VMuEnergyLoss.cc,v 1.19 2001/11/08 15:31:06 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
@@ -40,12 +40,20 @@
 // corrections due to new e.m. structure L.Urban 10/02/00
 // signature in GetLossWithFluct changed L.Urban 30/10/00
 // 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 10/09/01 L.Urban : loss+ mechanism (subcutoff delta rays) implemented
+// 12/09/01 min.delta cut is set as rcut/100 + some optimisation, L.Urban
+// 17-09-01 migration of Materials to pure STL (mma)
+// 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
+// 29-10-01 all static functions no more inlined (mma) 
+// 08-11-01 some small cosmetics , L.Urban
 // --------------------------------------------------------------
  
 
 #include "G4VMuEnergyLoss.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
 
 // Initialisation of static members *******************************************
 
@@ -82,6 +90,10 @@ G4double G4VMuEnergyLoss::UpperBoundEloss = 1000000.*TeV ;
 G4int    G4VMuEnergyLoss::NbinEloss = 150 ;
 G4double G4VMuEnergyLoss::RTable,G4VMuEnergyLoss::LOGRTable;
 
+G4double G4VMuEnergyLoss::cN       = 0.077*MeV*cm2/g ;
+G4int    G4VMuEnergyLoss::Ndeltamax = 100                   ;
+
+
 G4EnergyLossMessenger* G4VMuEnergyLoss::eLossMessenger = 0 ;
 
 // constructor and destructor
@@ -89,12 +101,8 @@ G4EnergyLossMessenger* G4VMuEnergyLoss::eLossMessenger = 0 ;
 G4VMuEnergyLoss::G4VMuEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
      theLossTable(0),
-     lastgammaCutInRange(0.),
-     lastelectronCutInRange(0.),
-     theElectron ( G4Electron::Electron() ),
-     thePositron ( G4Positron::Positron() ),
-     theMuonPlus ( G4MuonPlus::MuonPlus() ),
-     theMuonMinus ( G4MuonMinus::MuonMinus() ),
+     lastgammaCutInRange(0),
+     lastelectronCutInRange(0),
      theRangeCoeffATable(0),
      theRangeCoeffBTable(0),
      theRangeCoeffCTable(0)
@@ -109,8 +117,29 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
      }
 
 }
+
+void  G4VMuEnergyLoss::SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;}
+    // Sets number of processes giving contribution to the energy loss
+
+void  G4VMuEnergyLoss::PlusNbOfProcesses()        {NbOfProcesses++ ;}
+    // Increases number of processes giving contribution to the energy loss
+
+void  G4VMuEnergyLoss::MinusNbOfProcesses()       {NbOfProcesses-- ;}
+    // Decreases number of processes giving contribution to the energy loss
+
+G4int G4VMuEnergyLoss::GetNbOfProcesses()         {return NbOfProcesses;}
+    // Gets number of processes giving contribution to the energy loss
+    // ( default value = 3)
+
+void G4VMuEnergyLoss::SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;}
+void G4VMuEnergyLoss::SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;}
+void G4VMuEnergyLoss::SetNbinEloss(G4int nb)           {NbinEloss=nb;}
+
+G4double G4VMuEnergyLoss::GetLowerBoundEloss() {return LowerBoundEloss;}
+G4double G4VMuEnergyLoss::GetUpperBoundEloss() {return UpperBoundEloss;}
+G4int    G4VMuEnergyLoss::GetNbinEloss()       {return NbinEloss;}
  
-   void G4VMuEnergyLoss::BuildDEDXTable(
+void G4VMuEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
 
@@ -121,8 +150,10 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
 
   //set physically consistent value for finalRange
   //  and parameters for en.loss step limit
-  if(finalRange > G4Electron::Electron()->GetCuts())
-    finalRange = G4Electron::Electron()->GetCuts() ;
+  for (size_t idxMate=0; idxMate<G4Material::GetNumberOfMaterials(); idxMate++){
+    if(finalRange > (G4Electron::Electron()->GetLengthCuts())[idxMate])
+      finalRange = (G4Electron::Electron()->GetLengthCuts())[idxMate];
+  }
   c1lim = dRoverRange ;
   c2lim = 2.*(1.-dRoverRange)*finalRange ;
   c3lim = -(1.-dRoverRange)*finalRange*finalRange;
@@ -130,32 +161,35 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
   G4bool MakeTable ;
   ParticleMass = aParticleType.GetPDGMass() ; 
   G4double Charge = aParticleType.GetPDGCharge()/eplus ;
-  G4double gammaCutInRange = G4Gamma::Gamma()->GetCuts(); 
-  G4double electronCutInRange = G4Electron::Electron()->GetCuts(); 
+  G4double* gammaCutInRange = G4Gamma::Gamma()->GetLengthCuts();
+  G4double* electronCutInRange = G4Electron::Electron()->GetLengthCuts();
 
   MakeTable = false ;
   // Create tables only if there are new cut values 
-  if((gammaCutInRange == lastgammaCutInRange) &&
-     (electronCutInRange == lastelectronCutInRange))
+  if(EqualCutVectors(gammaCutInRange,lastgammaCutInRange) &&
+     EqualCutVectors(electronCutInRange,lastelectronCutInRange))
   {
      ;
   }
   else
   {
+    lastgammaCutInRange = CopyCutVectors(lastgammaCutInRange,gammaCutInRange);
+    lastelectronCutInRange = CopyCutVectors(lastelectronCutInRange,electronCutInRange);   
     if((Charge > 0.)&&(CounterOfmuplusProcess==NbOfProcesses))
        MakeTable = true ;
     if((Charge < 0.)&&(CounterOfmuminusProcess==NbOfProcesses))
        MakeTable = true ;
   }
       
+  const G4MaterialTable* theMaterialTable=
+                                   G4Material::GetMaterialTable();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+
   if( MakeTable )
   {
    // Build energy loss table as a sum of the energy loss due to the
    //           different processes.                                           
-    const G4MaterialTable* theMaterialTable=
-                                     G4Material::GetMaterialTable();
-
-    G4int numOfMaterials = theMaterialTable->length();
 
     if( Charge >0.)    
     {
@@ -309,8 +343,55 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
       (Charge > 0)? theProperTimemuplusTable: theProperTimemuminusTable,
       LowerBoundEloss, UpperBoundEloss, 1.,NbinEloss);
 
-    lastgammaCutInRange = gammaCutInRange ;
-    lastelectronCutInRange = electronCutInRange ;
+
+   // create array for the min. delta cuts in kinetic energy
+    if(!setMinDeltaCutInRange) {
+      MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[0];
+      for (size_t idxMate=1; idxMate<G4Material::GetNumberOfMaterials(); idxMate++){
+	if(MinDeltaCutInRange > (G4Electron::Electron()->GetLengthCuts())[idxMate])
+	  MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[idxMate];
+      }
+      MinDeltaCutInRange *= 0.01;
+    }
+ // if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
+ // {
+ //   G4cout << G4endl;
+ //   G4cout.precision(5) ;
+ //   G4cout << " hIoni    Minimum Delta cut in range=" << MinDeltaCutInRange/mm
+ //          << "  mm." << G4endl;
+ //   G4cout << G4endl;
+ //   G4cout << "           material        min.delta energy(keV) " << G4endl;
+ //   G4cout << G4endl;
+ // }
+
+    if(MinDeltaEnergy) {delete [] MinDeltaEnergy; MinDeltaEnergy=0;}
+    MinDeltaEnergy = new G4double [numOfMaterials];
+    if(LowerLimitForced) {delete [] LowerLimitForced; LowerLimitForced=0;}
+    LowerLimitForced = new G4bool [numOfMaterials];
+    G4double Tlowerlimit = 1.*keV ;
+    for(G4int mat=0; mat<numOfMaterials; mat++)
+    {
+      LowerLimitForced[mat] = false ;
+
+      MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                            G4Electron::Electron(),MinDeltaCutInRange,
+                                       (*theMaterialTable)[mat]) ;
+      if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat]=Tlowerlimit ;
+
+      if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetEnergyCuts()[mat])
+        MinDeltaEnergy[mat]=G4Electron::Electron()->GetEnergyCuts()[mat] ;
+
+   //  if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
+   //  {
+   //    G4cout << G4std::setw(20) << (*theMaterialTable)[mat]->GetName()
+   //         << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+   //      if(LowerLimitForced[mat])
+   //           G4cout << "  lower limit forced." << G4endl;
+   //      else
+   //           G4cout << G4endl ;
+   //  }
+    }
+
 
 }
       
@@ -410,10 +491,10 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   // get particle and material pointers from trackData
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
   G4double E      = aParticle->GetKineticEnergy() ;
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
+  G4double Charge = aParticle->GetDefinition()->GetPDGCharge();
  
   G4Material* aMaterial = trackData.GetMaterial();
-  //G4int index = aMaterial->GetIndex();
+  G4int index = aMaterial->GetIndex();
  
   G4double Step = stepData.GetStepLength();
  
@@ -441,16 +522,222 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
     if(Step/fRangeNow < linLossLimit) finalT = E-Step*fdEdx ;
     else
     {
-       if (charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                               theMuonMinus,fRangeNow-Step,aMaterial);
+       if (Charge<0.) finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
+                             G4MuonMinus::MuonMinus(),fRangeNow-Step,aMaterial);
        else           finalT = G4EnergyLossTables::GetPreciseEnergyFromRange(
-                               theMuonPlus,fRangeNow-Step,aMaterial);
+                             G4MuonPlus::MuonPlus(),fRangeNow-Step,aMaterial);
      }
   }
 
   if(finalT < MinKineticEnergy) finalT = 0. ;
 
   MeanLoss = E-finalT ; 
+
+  //   subcutoff delta ray production start 
+ if((subSecFlag) && (trackData.GetCurrentStepNumber() > 1))
+ {
+  G4double MinDeltaEnergyNow,Tc,TmintoProduceDelta,w,ww ;
+  G4double rcut,T0,presafety,postsafety,safety,delta,Tmax,mass ;
+  G4double fragment = Step;
+  G4double frperstep = 1.0;
+  G4double x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
+  //G4double epsil = MinKineticEnergy/2. ;
+
+  MinDeltaEnergyNow = MinDeltaEnergy[index] ;
+  Tc=G4Electron::Electron()->GetEnergyCuts()[index];
+  const G4ParticleDefinition* aParticleType=aParticle->GetDefinition() ;
+  mass=aParticleType->GetPDGMass() ;
+  w=mass+electron_mass_c2 ;
+  ww=2.*mass-MinDeltaEnergyNow ;
+  TmintoProduceDelta=0.5*(sqrt(ww*ww+2.*w*w*MinDeltaEnergyNow/
+                       electron_mass_c2)-ww) ;
+
+  if((E > TmintoProduceDelta) && (MeanLoss > MinDeltaEnergyNow)
+                                   && (finalT > MinKineticEnergy))
+  {
+    // max. possible delta energy
+    Tmax = 2.*electron_mass_c2*E*(E+2.*mass)/
+           (mass*mass+2.*electron_mass_c2*(E+mass)+
+            electron_mass_c2*electron_mass_c2) ;
+
+    rcut=(G4Electron::Electron()->GetLengthCuts())[index]; 
+
+    if(Tc > Tmax) Tc=Tmax ;
+    // generate subcutoff delta rays only if Tc>MinDeltaEnergyNow!
+    if((Tc > MinDeltaEnergyNow) && (Tmax > MinDeltaEnergyNow))
+    {
+      presafety  = stepData.GetPreStepPoint()->GetSafety() ;
+     // postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+
+      G4Navigator *navigator=
+         G4TransportationManager::GetTransportationManager()
+                                   ->GetNavigatorForTracking();
+      postsafety =
+          navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
+
+      safety = G4std::min(presafety,postsafety) ;
+      if(safety < rcut)
+     {
+
+        x1=stepData.GetPreStepPoint()->GetPosition().x();
+        y1=stepData.GetPreStepPoint()->GetPosition().y();
+        z1=stepData.GetPreStepPoint()->GetPosition().z();
+        dx=stepData.GetPostStepPoint()->GetPosition().x()-x1 ;
+        dy=stepData.GetPostStepPoint()->GetPosition().y()-y1 ;
+        dz=stepData.GetPostStepPoint()->GetPosition().z()-z1 ;
+        time0=stepData.GetPreStepPoint()->GetGlobalTime();
+        dTime=stepData.GetPostStepPoint()->GetGlobalTime()-time0;
+
+        if((presafety<rcut)&&(postsafety<rcut))
+        {
+          fragment = Step ;
+          frperstep=1. ;
+        }
+        else if(presafety<rcut)
+        {
+          delta=presafety*Step/(postsafety-presafety) ;
+          fragment=rcut*(Step+delta)/postsafety-delta ;
+          frperstep=fragment/Step;
+        }
+        else if(postsafety<rcut)
+        {
+          delta=postsafety*Step/(presafety-postsafety) ;
+          fragment=rcut*(Step+delta)/presafety-delta ;
+          x1 += dx;
+          y1 += dy;
+          z1 += dz; 
+          time0 += dTime ;
+
+          frperstep=-fragment/Step;
+        }
+      if(fragment>0.)
+      {
+        T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
+                                             G4Electron::Electron(),
+                                             G4std::min(presafety,postsafety),
+                                             aMaterial) ;
+
+        // absolute lower limit for T0
+       // if(T0<MinDeltaEnergyNow) T0=MinDeltaEnergyNow ;
+        if((T0<MinDeltaEnergyNow)||(LowerLimitForced[aMaterial->GetIndex()]))
+                             T0=MinDeltaEnergyNow ;
+
+        // compute nb of delta rays to be generated
+        // approximate value based on Bethe-Bloch and   
+        //   assuming an 1/E**2 delta spectrum 
+        G4double deldedx=cN*aMaterial->GetDensity()*
+                         ((E+mass)*(E+mass)*log(Tc/T0)/(E*(E+mass))) ;
+        G4double delToverTc=1.-T0/Tc ;
+        G4double N = G4int(deldedx*fragment*delToverTc/(T0*log(Tc/T0))+0.5) ;
+        if(N > Ndeltamax) N = Ndeltamax ;
+ 
+        G4double Px,Py,Pz ;
+        G4ThreeVector ParticleDirection ;
+        ParticleDirection=aParticle->
+                                   GetMomentumDirection() ;
+        Px =ParticleDirection.x() ;
+        Py =ParticleDirection.y() ;
+        Pz =ParticleDirection.z() ;
+
+        G4int subdelta = 0;
+
+        if(N > 0)
+        {
+          G4double Tkin,Etot,P,T,p,costheta,sintheta,phi,dirx,diry,dirz,
+                   Pnew,urandom;
+          //delTkin,delLoss,rate,
+          //G4StepPoint *point ;
+
+          Tkin = E ;
+          Etot = Tkin+mass ;
+          P    = sqrt(Tkin*(Etot+mass)) ;
+
+          aParticleChange.SetNumberOfSecondaries(N);
+          do {
+               subdelta += 1 ;
+
+               Tmax = 2.*electron_mass_c2*Tkin*(Tkin+2.*mass)/
+                      (mass*mass+2.*electron_mass_c2*(Tkin+mass)+
+                        electron_mass_c2*electron_mass_c2) ;
+
+               if(Tc>Tmax) Tc = Tmax ;
+
+               //check if there is enough energy ....
+               if((Tkin>TmintoProduceDelta)&&(Tc > T0)&&(MeanLoss>0.))
+               {
+                 T=T0/(1.-delToverTc*G4UniformRand()) ;
+                 if(T > MeanLoss) T=MeanLoss ;
+                 MeanLoss -= T ;
+                 p=sqrt(T*(T+2.*electron_mass_c2)) ;
+
+                 costheta = T*(Etot+electron_mass_c2)/(P*p) ;
+                 if(costheta<-1.) costheta=-1.;
+                 if(costheta> 1.) costheta= 1.;
+
+                 phi=twopi*G4UniformRand() ;
+                 sintheta=sqrt(1.-costheta*costheta);
+                 dirx=sintheta*cos(phi);
+                 diry=sintheta*sin(phi);
+                 dirz=costheta;
+
+               urandom = G4UniformRand() ;
+               // distribute x,y,z along Pre-Post !
+               G4double xd,yd,zd ;
+               xd=x1+frperstep*dx*urandom ;
+               yd=y1+frperstep*dy*urandom ;
+               zd=z1+frperstep*dz*urandom ;
+               G4ThreeVector DeltaPosition(xd,yd,zd) ;
+               DeltaTime=time0+frperstep*dTime*urandom ;
+
+               G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
+               DeltaDirection.rotateUz(ParticleDirection);
+
+               G4DynamicParticle* theDelta = new G4DynamicParticle ;
+               theDelta->SetDefinition(G4Electron::Electron());
+               theDelta->SetKineticEnergy(T);
+
+               theDelta->SetMomentumDirection(DeltaDirection.x(),
+                              DeltaDirection.y(),DeltaDirection.z());
+
+               // update initial particle,fill ParticleChange
+               Tkin -= T ;
+               Px =(P*ParticleDirection.x()-p*DeltaDirection.x()) ;
+               Py =(P*ParticleDirection.y()-p*DeltaDirection.y()) ;
+               Pz =(P*ParticleDirection.z()-p*DeltaDirection.z()) ;
+               Pnew = sqrt(Px*Px+Py*Py+Pz*Pz) ;
+               Px /= Pnew ;
+               Py /= Pnew ;
+               Pz /= Pnew ;
+               P  = Pnew ;
+               G4ThreeVector ParticleDirectionnew(Px,Py,Pz) ;
+               ParticleDirection = ParticleDirectionnew;
+
+               G4Track* deltaTrack =
+                        new G4Track(theDelta,DeltaTime,DeltaPosition);
+               deltaTrack->
+                   SetTouchableHandle(stepData.GetPostStepPoint()->GetTouchableHandle()) ;
+
+               deltaTrack->SetParentID(trackData.GetTrackID()) ;
+               aParticleChange.AddSecondary(deltaTrack) ;
+
+               }
+
+             } while (subdelta<N) ;
+
+             // update the particle direction and kinetic energy
+             if(subdelta > 0)
+               aParticleChange.SetMomentumChange(Px,Py,Pz) ;
+             E = Tkin ;
+           }
+          }
+         }
+       }
+     }
+  }
+  //   end of subcutoff business
+
+  finalT = E - MeanLoss ;
+  if(finalT < MinKineticEnergy) finalT = 0. ;
 
   //now the loss with fluctuation
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
@@ -467,7 +754,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
       aParticleChange.SetStatusChange(fStopButAlive);
     }
 
-  aParticleChange.SetNumberOfSecondaries(0);
+ // aParticleChange.SetNumberOfSecondaries(0);
   aParticleChange.SetEnergyChange(finalT);
   aParticleChange.SetLocalEnergyDeposit(E-finalT);
 

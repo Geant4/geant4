@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigitizerModule.cc,v 1.2.2.1 2001/06/28 19:15:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VDigitizerModule.cc,v 1.3 2001/07/11 10:08:32 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4VDigitizerModule.hh"

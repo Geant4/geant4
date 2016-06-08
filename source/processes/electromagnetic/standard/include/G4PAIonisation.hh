@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.8.2.2 2001/06/28 20:19:46 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PAIonisation.hh,v 1.11 2001/10/29 16:23:40 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -133,9 +133,9 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
   //    static                                   
 
-    static G4double GetMaxKineticEnergy() { return HighestKineticEnergy ; } ;
-    static G4double GetMinKineticEnergy() { return  LowestKineticEnergy ; } ;
-    static G4int    GetBinNumber()        { return               TotBin ; } ;
+    static G4double GetMaxKineticEnergy();
+    static G4double GetMinKineticEnergy();
+    static G4int    GetBinNumber();
 
   // Access to Sandia table coefficients
 
@@ -166,8 +166,8 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
     // cut in range
 
-    G4double CutInRange ;
-    G4double lastCutInRange ;
+    G4double* CutInRange ;
+    G4double* lastCutInRange ;
 
     // particles , cuts in kinetic energy 
 

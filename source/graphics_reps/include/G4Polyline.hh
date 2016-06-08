@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyline.hh,v 1.6.2.1 2001/06/28 19:10:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Polyline.hh,v 1.9 2001/08/20 23:28:43 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  July 1995
@@ -40,10 +40,15 @@
 #include "G4VVisPrim.hh"
 #include "G4Point3DList.hh"
 
+#include "G4Transform3D.hh"
+
 class G4Polyline: public G4VVisPrim, public G4Point3DList {
+
   friend G4std::ostream& operator << (G4std::ostream& os, const G4Polyline& line);
 
 public: // With description
+
+  typedef G4Point3DList::iterator iterator;
 
   G4Polyline ();
   G4Polyline (const G4VVisPrim& prim);
@@ -51,6 +56,7 @@ public: // With description
   virtual G4Visible&  operator = (const G4Visible& right);
   virtual G4VVisPrim& operator = (const G4VVisPrim& right);
   virtual G4Polyline& operator = (const G4Polyline& right);
+  G4Polyline& transform (const G4Transform3D&);
 };
 
 #endif

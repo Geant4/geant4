@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -53,24 +53,20 @@
     
     // returns the mean free path in GEANT4 internal units
     
-    const G4RWTPtrVector<G4Element> *theElementVector =
-      aMaterial->GetElementVector();
-    
     const G4double *theAtomicNumDensityVector =
       aMaterial->GetAtomicNumDensityVector();
     
     G4double aTemp = aMaterial->GetTemperature();
-    G4Element *anElement = (*theElementVector)[0];
-    G4int j = anElement->GetIndex();
         
     G4double sigma = 0.0;
     for( G4int i=0; i<nElements; ++i )
     {
       G4double xSection =
-        GetMicroscopicCrossSection( aParticle, (*theElementVector)[i], aTemp);
+        GetMicroscopicCrossSection( aParticle, (*aMaterial->GetElementVector())[i], aTemp);
       sigma += theAtomicNumDensityVector[i] * xSection;
     }
     sigma *= aScaleFactor;
+    theLastCrossSection = sigma;
     if( sigma > 0.0 )
       return 1.0/sigma;
     else

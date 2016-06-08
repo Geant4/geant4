@@ -28,8 +28,8 @@
 // * MODULE:            XrayTelRunAction.hh                             *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.4                                             *
-// * Date:              06/11/00                                        *
+// * Version:           0.5                                             *
+// * Date:              16/10/01                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -37,6 +37,12 @@
 // 
 // CHANGE HISTORY
 // --------------
+//
+// 07.11.2001 M.G. Pia
+// - Modified the analysis management
+//
+// 16.10.2001 R.Nartallo
+// - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
 //
 // 06.11.2000 R.Nartallo
 // - First implementation of X-ray Telescope advanced example.
@@ -49,34 +55,28 @@
 #define XrayTelRunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "G4ThreeVector.hh"
 #include "globals.hh"
-#include "g4std/vector"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4Run;
-class XrayTelAnalysisManager;
 
 class XrayTelRunAction : public G4UserRunAction
 {
 public:
-  XrayTelRunAction(G4std::vector<G4double*> *enEnergy,
-		   G4std::vector<G4ThreeVector*> *enDirect,
-		   G4bool* dEvent,
-		   XrayTelAnalysisManager* = 0);
+  XrayTelRunAction();
+
   ~XrayTelRunAction();
 
-public:
   void BeginOfRunAction(const G4Run*);
+
   void EndOfRunAction(const G4Run*);
 
-private:
-  G4bool* drawEvent;
-  G4std::vector<G4double*>* enteringEnergy;
-  G4std::vector<G4ThreeVector*>* enteringDirection;
+  void Update(G4double energy);
 
-  XrayTelAnalysisManager* fAnalysisManager;
+private:
+ 
+  G4int nEnteringTracks;
+  G4double totEnteringEnergy;
+
 };
 
 #endif

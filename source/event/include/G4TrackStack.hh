@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.hh,v 1.3.4.1 2001/06/28 19:07:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TrackStack.hh,v 1.5 2001/07/13 15:01:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -50,8 +50,8 @@ class G4TrackStack
   private:
       const G4TrackStack & operator=
                           (const G4TrackStack &right);
-      int operator==(const G4TrackStack &right) const;
-      int operator!=(const G4TrackStack &right) const;
+      G4int operator==(const G4TrackStack &right) const;
+      G4int operator!=(const G4TrackStack &right) const;
 
   public:
       void PushToStack(G4StackedTrack * aStackedTrack);

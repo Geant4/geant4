@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ToroidalSurface.cc,v 1.5.4.1 2001/06/28 19:08:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ToroidalSurface.cc,v 1.6 2001/07/11 09:59:48 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

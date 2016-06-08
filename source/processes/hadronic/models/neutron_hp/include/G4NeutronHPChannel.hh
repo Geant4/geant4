@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.5.2.1 2001/06/28 19:14:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPChannel.hh,v 1.8 2001/10/04 20:00:35 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -63,7 +63,6 @@ public:
   ~G4NeutronHPChannel()
   {
     delete theChannelData; 
-    G4int i;
     // Following statement disabled to avoid SEGV
     // theBuffer is also deleted as "theChannelData" in
     // ~G4NeutronHPIsoData.  FWJ 06-Jul-1999

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPersistencyManager.cc,v 1.2.4.1 2001/06/28 19:15:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPersistencyManager.cc,v 1.4 2001/07/13 15:57:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4VPersistencyManager.hh"
@@ -41,7 +41,7 @@ G4VPersistencyManager::G4VPersistencyManager()
 
 G4VPersistencyManager::~G4VPersistencyManager()
 {
-  fPersistencyManager = NULL;
+  fPersistencyManager = 0;
 }
 
 

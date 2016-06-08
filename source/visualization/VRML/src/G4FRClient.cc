@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRClient.cc,v 1.4.4.1 2001/06/28 19:16:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FRClient.cc,v 1.6 2001/09/18 07:53:15 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4FRClient.cc
 // Yasuhide Sawada & Satoshi Tanaka

@@ -1,0 +1,23 @@
+// This code implementation is the intellectual property of
+// the authors in the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: deque,v 1.2 2001/10/22 14:33:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+//
+//      ---------------- deque ----------------
+//
+#ifndef G4_DEQUE_H
+#define G4_DEQUE_H
+
+#ifdef G4USE_OLDSTL
+  #include <deque.h>
+#else
+  #include <deque>
+#endif /* G4USE_OLDSTL */
+
+#endif /* G4_DEQUE_H */
+

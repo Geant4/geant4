@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ReactionProductVector.hh,v 1.3.8.2 2001/06/28 20:20:10 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ReactionProductVector.hh,v 1.7 2001/10/05 16:10:06 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //	History: first implementation, alternative to G4FastVector
@@ -36,16 +36,10 @@
 #include "globals.hh"
 #include "G4ios.hh"
 
-class G4ReactionProduct;
-#include "g4rw/tpordvec.h"
+#include "G4ReactionProduct.hh"
+#include "g4std/vector"
 
-// #ifdef STL
-// //in future use STL vector as container of reaction products ...
-// typedef Vector<G4ReactionProduct> G4ReactionProductVector;
-// #elseifdef RWT
-
-typedef G4RWTPtrOrderedVector<G4ReactionProduct> G4ReactionProductVector;
-
-// #endif
+typedef G4std::vector<G4ReactionProduct *> G4ReactionProductVector;
+struct DeleteReactionProduct{ void operator()(G4ReactionProduct * aR){delete aR;} };
 
 #endif

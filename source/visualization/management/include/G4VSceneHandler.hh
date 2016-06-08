@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.13.2.1 2001/06/28 19:16:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSceneHandler.hh,v 1.18 2001/08/14 18:36:07 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  19th July 1996.
@@ -132,7 +132,8 @@ public: // With description
   //   G4VSceneHandler::EndModeling ();
   // }
 
-  virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
+  virtual void BeginPrimitives
+  (const G4Transform3D& objectTransformation);
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
@@ -148,11 +149,13 @@ public: // With description
   // }
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;
+  virtual void AddPrimitive (const G4Scale&);
+  // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Text&)       = 0;
   virtual void AddPrimitive (const G4Circle&)     = 0;      
   virtual void AddPrimitive (const G4Square&)     = 0;      
-  virtual void AddPrimitive (const G4Polymarker&);  // Implemented in terms
-  // of the above but can be over-ridden.
+  virtual void AddPrimitive (const G4Polymarker&);
+  // Default implementation in this class but can be over-ridden.
   virtual void AddPrimitive (const G4Polyhedron&) = 0;  
   virtual void AddPrimitive (const G4NURBS&)      = 0;       
 
@@ -165,12 +168,16 @@ public: // With description
   G4VGraphicsSystem*  GetGraphicsSystem () const;
   G4Scene*            GetScene          () const;
   const G4ViewerList& GetViewerList     () const;
-  const G4VModel*     GetModel          () const;
+  G4VModel*           GetModel          () const;
   G4VViewer*          GetCurrentViewer  () const;
+  G4bool              GetMarkForClearingTransientStore () const;
   void          SetCurrentViewer (G4VViewer*);
   void          SetScene         (G4Scene*);
   G4ViewerList& SetViewerList    ();  // Non-const so you can change.
-  void          SetModel         (const G4VModel*);
+  void          SetModel         (G4VModel*);
+  void          SetMarkForClearingTransientStore (G4bool);
+  // Sets flag which will cause transient store to be cleared at the
+  // next call to BeginPrimitives().
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -255,17 +262,18 @@ protected:
   G4ViewerList           fViewerList;      // Viewers.
   G4VViewer*             fpViewer;         // Current viewer.
   G4Scene*               fpScene;          // Scene for this scene handler.
+  G4bool                 fMarkForClearingTransientStore;
 
   //////////////////////////////////////////////////////////////
   // Workspace...
 
-  G4bool fReadyForTransients;  // I.e., not processing scene.
-  const G4VModel*          fpModel;      // Current model.
-  const G4Transform3D*     fpObjectTransformation;  // Accum'd obj. transfn.
-  const G4VisAttributes*   fpVisAttribs; // Working vis attributes.
-  G4int              fCurrentDepth; // Current depth of geom. hierarchy.
-  G4VPhysicalVolume* fpCurrentPV;   // Current physical volume.
-  G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
+  G4bool fReadyForTransients;           // I.e., not processing scene.
+  G4VModel*              fpModel;       // Current model.
+  const G4Transform3D*   fpObjectTransformation;  // Accum'd obj. transfn.
+  const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
+  G4int                  fCurrentDepth; // Current depth of geom. hierarchy.
+  G4VPhysicalVolume*     fpCurrentPV;   // Current physical volume.
+  G4LogicalVolume*       fpCurrentLV;   // Current logical volume.
 
 private:
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithABool.hh,v 1.3.4.1 2001/06/28 19:10:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIcmdWithABool.hh,v 1.4 2001/07/11 10:01:12 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 

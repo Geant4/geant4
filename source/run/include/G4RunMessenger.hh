@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.6.4.1 2001/06/28 19:15:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RunMessenger.hh,v 1.8 2001/11/23 16:20:30 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //	GEANT 4 class header file 
@@ -86,9 +86,17 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
     G4UIcmdWithoutParameter *   cutCmd;
-    G4UIcmdWithAnInteger *      storeRandCmd;
-    G4UIcmdWithAString *        restoreRandCmd;   
+    
+    G4UIdirectory *             randomDirectory;
     G4UIcmdWithAString *        randDirCmd;
+    G4UIcmdWithABool *          savingFlagCmd;
+    G4UIcmdWithoutParameter *   saveThisRunCmd;
+    G4UIcmdWithoutParameter *   saveThisEventCmd;
+    G4UIcmdWithAString *        restoreRandCmd;
+    
+    G4UIcmdWithAString *        randDirOld;
+    G4UIcmdWithAnInteger *      storeRandOld;
+    G4UIcmdWithAString *        restoreRandOld;  
 };
 
 #endif

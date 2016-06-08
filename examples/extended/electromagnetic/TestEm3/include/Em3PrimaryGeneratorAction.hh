@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PrimaryGeneratorAction.hh,v 1.4.2.1 2001/06/28 19:06:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em3PrimaryGeneratorAction.hh,v 1.6 2001/10/22 10:58:50 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3PrimaryGeneratorAction_h
 #define Em3PrimaryGeneratorAction_h 1
@@ -40,7 +40,7 @@ class G4Event;
 class Em3DetectorConstruction;
 class Em3PrimaryGeneratorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -62,6 +62,8 @@ class Em3PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
     Em3PrimaryGeneratorMessenger* gunMessenger; 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

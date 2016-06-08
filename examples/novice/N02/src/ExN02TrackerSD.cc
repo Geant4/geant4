@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerSD.cc,v 1.3.4.1 2001/06/28 19:07:31 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02TrackerSD.cc,v 1.5 2001/10/11 12:32:38 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02TrackerSD.hh"
 #include "G4HCofThisEvent.hh"
@@ -34,7 +34,7 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02TrackerSD::ExN02TrackerSD(G4String name)
 :G4VSensitiveDetector(name)
@@ -43,11 +43,11 @@ ExN02TrackerSD::ExN02TrackerSD(G4String name)
   collectionName.insert(HCname="trackerCollection");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02TrackerSD::~ExN02TrackerSD(){ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
@@ -59,7 +59,7 @@ void ExN02TrackerSD::Initialize(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection( HCID, trackerCollection ); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 {
@@ -69,7 +69,8 @@ G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
 
   ExN02TrackerHit* newHit = new ExN02TrackerHit();
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber());
+  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchable()
+                                               ->GetReplicaNumber());
   newHit->SetEdep     (edep);
   newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
   trackerCollection->insert( newHit );
@@ -80,7 +81,7 @@ G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02TrackerSD::EndOfEvent(G4HCofThisEvent* HCE)
 {
@@ -92,5 +93,5 @@ void ExN02TrackerSD::EndOfEvent(G4HCofThisEvent* HCE)
     } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

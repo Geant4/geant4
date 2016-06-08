@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaMinus.cc,v 1.5.4.2 2001/06/28 20:19:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SigmaMinus.cc,v 1.8 2001/10/16 08:15:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -97,6 +97,5 @@ G4SigmaMinus G4SigmaMinus::theSigmaMinus(
 );
 
 G4SigmaMinus* G4SigmaMinus::SigmaMinusDefinition(){return &theSigmaMinus;}
-// initialization for static cut values
-G4double   G4SigmaMinus::theSigmaMinusLengthCut = -1.0;
-G4double*  G4SigmaMinus::theSigmaMinusKineticEnergyCuts = NULL;
+
+G4SigmaMinus* G4SigmaMinus::SigmaMinus(){return &theSigmaMinus;}

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewerList.cc,v 1.2.2.1 2001/06/28 19:16:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ViewerList.cc,v 1.3 2001/07/11 10:09:18 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 #include "G4ViewerList.hh"
 

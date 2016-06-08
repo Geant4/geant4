@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.4.2.1 2001/06/28 19:15:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.6 2001/07/14 21:47:55 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -56,6 +56,11 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
       " G4OpenGLXmViewer couldn't get a visual." << G4endl;
     return;
   }
+}
+
+G4OpenGLStoredXmViewer::~G4OpenGLStoredXmViewer () {}
+
+void G4OpenGLStoredXmViewer::Initialise () {
 
   CreateGLXContext (vi_stored);
 
@@ -74,8 +79,6 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glShadeModel (GL_FLAT);
 }
-
-G4OpenGLStoredXmViewer::~G4OpenGLStoredXmViewer () {}
 
 void G4OpenGLStoredXmViewer::DrawView () {
 

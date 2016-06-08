@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3NegVolPars.cc,v 1.8.2.1 2001/06/28 19:08:04 gunter Exp $ 
-// GEANT4 tag $Name:  $
+// $Id: G3NegVolPars.cc,v 1.9 2001/07/11 09:58:59 gunter Exp $ 
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // modified by I. Hrivnacova, 13.10.99 
 

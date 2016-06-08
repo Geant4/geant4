@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.hh,v 1.4.4.1 2001/06/28 19:16:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: MyVisManager.hh,v 1.5 2001/07/11 10:09:17 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison 24th January 1998.

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh,v 1.2.8.2 2001/06/28 20:20:00 gunter Exp $
-// GEANT4 tag $Name:  $ Maxim Komogorov
+// $Id: G4LundStringFragmentation.hh,v 1.5 2001/10/04 20:00:31 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $ Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -43,7 +43,7 @@ public:
     G4LundStringFragmentation();
 //    G4LundStringFragmentation(G4double sigmaPt);
     G4LundStringFragmentation(const G4LundStringFragmentation &right);
-   ~G4LundStringFragmentation();
+   virtual ~G4LundStringFragmentation();
 
 public:
     const G4LundStringFragmentation & operator=(const G4LundStringFragmentation &right);

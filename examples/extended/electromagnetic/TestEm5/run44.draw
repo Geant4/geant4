@@ -6,21 +6,20 @@
 /control/verbose 2
 /run/verbose 2
 #
+/run/initialize
+#
 /calor/setAbsMat Silicon   
 /calor/setAbsThick 10 mum  
 /calor/setAbsYZ 20 mum
 /calor/update
 /gun/setDefault
 #
-/vis/camera/zoom 1.4
-/vis/drawVolume
-#
 /gun/particle e-
 /gun/energy 500 keV
 /tracking/verbose 1
 #
-/step/setMaxStep 1 mm
-/run/beamOn 20
+#/step/setMaxStep 1 mm
+#/run/beamOn 20
 #
 #/step/setMaxStep 2 mum
 #/run/beamOn 20

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.10.2.1 2001/06/28 19:15:43 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.13 2001/08/14 18:03:17 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -42,22 +42,9 @@
 #include <GL/glx.h>
 #include <GL/glu.h>
 
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLTransform3D.hh"
-#include "G4Point3D.hh"
-#include "G4Normal3D.hh"
-#include "G4Transform3D.hh"
-#include "G4Polyline.hh"
-#include "G4Text.hh"
-#include "G4Circle.hh"
-#include "G4Square.hh"
-#include "G4Polyhedron.hh"
-#include "G4VisAttributes.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4ModelingParameters.hh"
-#include "G4VModel.hh"
 #include "G4OpenGLStoredSceneHandler.hh"
+
+#include "G4VPhysicalVolume.hh"
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
@@ -123,13 +110,53 @@ void G4OpenGLStoredSceneHandler::EndPrimitives () {
   G4VSceneHandler::EndPrimitives ();
 }
 
+void G4OpenGLStoredSceneHandler::BeginModeling () {
+  G4VSceneHandler::BeginModeling();
+  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
+    initialize_hlr = true;
+  }
+  ClearStore();  // ...and all that goes with it.
+}
+
+void G4OpenGLStoredSceneHandler::EndModeling () {
+  // Make a List which calls the other lists.
+  fTopPODL = glGenLists (1);
+  if (!fTopPODL) {
+    G4cout <<
+      "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
+      "  display List for fTopPODL - suggest trying OpenGL Immediated mode."
+	   << G4endl;
+  }
+  else {
+
+    glNewList (fTopPODL, GL_COMPILE); {
+      for (size_t i = 0; i < fPODLList.size (); i++) {
+	glPushMatrix();
+	G4OpenGLTransform3D oglt (fPODLTransformList [i]);
+	glMultMatrixd (oglt.GetGLMatrix ());
+	glCallList (fPODLList[i]);
+	glPopMatrix();
+      }
+    }
+    glEndList ();
+
+    if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
+      initialize_hlr = false;
+      //    glDisable (GL_POLYGON_OFFSET_FILL);
+    }
+
+  }
+
+  G4VSceneHandler::EndModeling ();
+}
+
 void G4OpenGLStoredSceneHandler::ClearStore () {
 
   G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
   size_t i;
 
-  // Delete OpenGL display lists.
+  // Delete OpenGL permanent display lists.
   for (i = 0; i < fPODLList.size (); i++) {
     if (fPODLList [i]) {
       glDeleteLists (fPODLList [i], 1);
@@ -137,6 +164,34 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
       G4cerr << "Warning : NULL display List in fPODLList." << G4endl;
     }
   }
+
+  if (fTopPODL) glDeleteLists (fTopPODL, 1);
+  fTopPODL = 0;
+
+  // Clear other lists, dictionary, etc.
+  fPODLList.clear ();
+  fPODLTransformList.clear ();
+  fSolidMap.clear ();
+
+  // ...and clear transient store...
+  for (i = 0; i < fTODLList.size (); i++) {
+    if (fTODLList [i]) {
+      glDeleteLists (fTODLList [i], 1);
+    } else {
+      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
+    }
+  }
+  fTODLList.clear ();
+  fTODLTransformList.clear ();
+}
+
+void G4OpenGLStoredSceneHandler::ClearTransientStore () {
+
+  G4VSceneHandler::ClearTransientStore ();
+
+  size_t i;
+
+  // Delete OpenGL transient display lists.
   for (i = 0; i < fTODLList.size (); i++) {
     if (fTODLList [i]) {
       glDeleteLists (fTODLList [i], 1);
@@ -145,56 +200,20 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
     }
   }
 
-  if (fTopPODL) glDeleteLists (fTopPODL, 1);
-  fTopPODL = 0;
-
-  fMemoryForDisplayLists = glIsList (fTopPODL = glGenLists (1));
-
   // Clear other lists, dictionary, etc.
-  fPODLList.clear ();
   fTODLList.clear ();
-  fPODLTransformList.clear ();
   fTODLTransformList.clear ();
-  fSolidMap.clear ();
-}
 
-void G4OpenGLStoredSceneHandler::BeginModeling () {
-
-  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
-    initialize_hlr = true;
-  }
-  G4VSceneHandler::BeginModeling();
-}
-
-void G4OpenGLStoredSceneHandler::EndModeling () {
-  // Make a List which calls the other lists.
-
-//  if (!(fTopPODL = glGenLists (1))) {
-//    G4Exception ("Unable to allocate display List for fTopPODL in G4OpenGLStoredSceneHandler");
-//  }
-
-  glNewList (fTopPODL, GL_COMPILE); {
-    for (size_t i = 0; i < fPODLList.size (); i++) {
-      glPushMatrix();
-      G4OpenGLTransform3D oglt (fPODLTransformList [i]);
-      glMultMatrixd (oglt.GetGLMatrix ());
-      glCallList (fPODLList[i]);
-      glPopMatrix();
-    }
-  }
-  glEndList ();
-  G4VSceneHandler::EndModeling ();
-
-  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
-    initialize_hlr = false;
-    //    glDisable (GL_POLYGON_OFFSET_FILL);
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
   }
 }
 
 void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  if (fReadyForTransients ||
-      GetModel () -> GetModelingParameters () -> GetRepStyle () ==
-      G4ModelingParameters::hierarchy) {
+  if (fReadyForTransients) {
     G4VSceneHandler::RequestPrimitives (solid);
   }
   else {

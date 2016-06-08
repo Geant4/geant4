@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITree.cc,v 1.5.2.1 2001/06/28 19:15:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ASCIITree.cc,v 1.7 2001/08/05 19:02:12 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -61,7 +61,7 @@ G4VViewer* G4ASCIITree::CreateViewer (G4VSceneHandler& scene,
     new G4ASCIITreeViewer ((G4ASCIITreeSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
-      G4cerr << "G4ASCIITree::CreateViewer: error flagged by negative"
+      G4cout << "G4ASCIITree::CreateViewer: ERROR flagged by negative"
         " view id in G4ASCIITreeViewer creation."
         "\n Destroying view and returning null pointer."
            << G4endl;
@@ -70,7 +70,7 @@ G4VViewer* G4ASCIITree::CreateViewer (G4VSceneHandler& scene,
     }
   }
   else {
-    G4cerr << "G4ASCIITree::CreateViewer: null pointer on"
+    G4cout << "G4ASCIITree::CreateViewer: ERROR: null pointer on"
       " new G4ASCIITreeViewer." << G4endl;
   }
   return pView;

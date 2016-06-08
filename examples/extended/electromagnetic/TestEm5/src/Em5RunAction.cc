@@ -21,17 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.cc,v 1.8.2.1 2001/06/28 19:07:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5RunAction.cc,v 1.11 2001/11/28 16:08:18 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "Em5RunAction.hh"
 #include "Em5RunMessenger.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -44,14 +45,13 @@
 #include <assert.h>
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5RunAction::Em5RunAction()
   :histName("histfile"),nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),nbinvertexz(0)
 {
   runMessenger = new Em5RunMessenger(this);
-  saveRndm = 1;
   
 #ifndef G4NOHIST
   histo1=0; histo2=0; histo3=0; histo4=0; histo5=0; histo6=0; histo7=0;
@@ -59,7 +59,7 @@ Em5RunAction::Em5RunAction()
 #endif      
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5RunAction::~Em5RunAction()
 {
@@ -82,7 +82,7 @@ Em5RunAction::~Em5RunAction()
 #endif  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::bookHisto()
 {
@@ -105,7 +105,7 @@ void Em5RunAction::bookHisto()
     assert (histo2 != 0);
     				     
     hi2bis = hbookManager->histogram("energy deposit: normalized distribution"
-                                     ,nbinEn,Enlow,Enhigh) ;				     
+                                     ,nbinEn,Enlow,Enhigh) ;
     assert (hi2bis != 0);
   }
   if(nbinTh>0)
@@ -122,64 +122,62 @@ void Em5RunAction::bookHisto()
   }
   if(nbinTt>0)
   {
-    histo5 = hbookManager->histogram("kinetic energy of the primary at exit(MeV)"
-                                     ,nbinTt,Ttlow,Tthigh)  ;
+    histo5 = hbookManager->histogram(
+                           "kinetic energy of the primary at exit(MeV)"
+                           ,nbinTt,Ttlow,Tthigh);
     assert (histo5 != 0);
   }
   if(nbinThback>0)
   {
-    histo6 = hbookManager->histogram("angle distribution of backscattered primaries(deg)"
-                                     ,nbinThback,Thlowback/deg,Thhighback/deg) ;
+    histo6 = hbookManager->histogram(
+                           "angle distribution of backscattered primaries(deg)"
+                           ,nbinThback,Thlowback/deg,Thhighback/deg);
     assert (histo6 != 0);
   }
   if(nbinTb>0)
   {
-    histo7 = hbookManager->histogram("kinetic energy of the backscattered primaries (MeV)"
-                                     ,nbinTb,Tblow,Tbhigh)  ;
+    histo7 = hbookManager->histogram(
+                           "kinetic energy of the backscattered primaries (MeV)"
+                           ,nbinTb,Tblow,Tbhigh);
     assert (histo7 != 0);
   }
   if(nbinTsec>0)
   {
-    histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
-                                     ,nbinTsec,Tseclow,Tsechigh)  ;
+    histo8 = hbookManager->histogram(
+                           "kinetic energy of the charged secondaries (MeV)"
+                           ,nbinTsec,Tseclow,Tsechigh);
     assert (histo8 != 0);
   }
   if(nbinvertexz>0)
   {
-    histo9 = hbookManager->histogram("z of secondary charged vertices(mm)"
-                                     ,nbinvertexz ,zlow,zhigh)  ;
+    histo9 = hbookManager->histogram(
+                           "z of secondary charged vertices(mm)"
+                           ,nbinvertexz ,zlow,zhigh);
     assert (histo9 != 0);
   }
   if(nbinGamma>0)
   {
-    histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
-                                //     ,nbinGamma,ElowGamma,EhighGamma)  ;
-                                ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
+    histo10= hbookManager->histogram(
+                          "kinetic energy of gammas escaping the absorber (MeV)"
+                                //     ,nbinGamma,ElowGamma,EhighGamma);
+                          ,nbinGamma,log10(ElowGamma),log10(EhighGamma));
     assert (histo10 != 0);
   }
 #endif  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
 
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-   
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-  {
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  }
+  if (G4VVisManager::GetConcreteInstance())
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
       
   EnergySumAbs = 0. ;
   EnergySquareSumAbs = 0.;
@@ -325,7 +323,7 @@ void Em5RunAction::BeginOfRunAction(const G4Run* aRun)
   bookHisto();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::EndOfRunAction(const G4Run* aRun)
 {
@@ -436,7 +434,7 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
    }     
   }
   if(nbinEn>0)
-  {G4double E , dnorm, norm,fmax,Emp,width ;
+  {G4double E , dnorm, norm,fmax,Emp; 
    Emp=-999.999 ;
    G4cout << " energy deposit distribution " << G4endl ;
    G4cout << "#entries=" << entryEn << "    #underflows=" << underEn <<
@@ -633,10 +631,11 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
       fnorm = fac0*distTh[ien] ;
       if( fnorm > pere)
         Thpere = Th ; 
-      G4cout << G4std::setw(5) << ien << G4std::setw(10) << Thdeg << "   " <<
-                G4std::setw(10) << Th << "  " <<   
-                G4std::setw(12) << distTh[ien] << "  " <<
-                G4std::setw(12) << dnorm << "  " << G4std::setw(12) << fnorm <<G4endl ;
+      G4cout << G4std::setw( 5) << ien << G4std::setw(10) << Thdeg << "   " 
+             << G4std::setw(10) << Th << "  "    
+             << G4std::setw(12) << distTh[ien] << "  " 
+             << G4std::setw(12) << dnorm << "  "
+	     << G4std::setw(12) << fnorm <<G4endl;
      }
      Thmean /= sum ;
      G4cout << G4endl;
@@ -679,16 +678,17 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
       fnormb = fac0b*distThback[ien] ;
       if( fnormb > pereb)
         Thpereb = Thb ;
-      G4cout << G4std::setw(5) << ien << G4std::setw(10) << Thdegb << "   " <<
-                G4std::setw(10) << Thb << "  " <<
-                G4std::setw(12) << distThback[ien] << "  " <<
-                G4std::setw(12) << dnormb << "  " << G4std::setw(12) << fnormb <<G4endl ;
+      G4cout << G4std::setw(5) << ien << G4std::setw(10) << Thdegb << "   "
+             << G4std::setw(10) << Thb << "  "
+             << G4std::setw(12) << distThback[ien] << "  "
+             << G4std::setw(12) << dnormb << "  "
+	     << G4std::setw(12) << fnormb <<G4endl;
      }
      Thmeanb /= sumb ;
      G4cout << G4endl;
      G4cout << " mean = " << Thmeanb << "  rad  or " << 180.*Thmeanb/pi <<
                " deg." << G4endl;
-     G4cout << " theta(1/e)=" << Thpereb << " - " << Thpereb+dThback << " rad   "
+     G4cout << " theta(1/e)=" << Thpereb << " - " << Thpereb+dThback << " rad  "
             << " or " << 180.*Thpereb/pi << " - " << 180.*(Thpereb+dThback)/pi
             << " deg." << G4endl;
      G4cout << G4endl;
@@ -705,7 +705,7 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
      fact=exp(dEGamma) ;
      E = ElowGamma/fact  ;
      norm = TotNbofEvents*dEGamma;
-     G4cout << " bin nb         Elow      entries       normalized " << G4endl ;
+     G4cout << " bin nb         Elow      entries       normalized " << G4endl;
      for(G4int itt=0; itt<nbinGamma; itt++)
      {
       E *= fact ;
@@ -721,8 +721,9 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
   if(nbinvertexz >0)
   {G4double z , dnorm, norm  ;
    G4cout << " vertex Z  distribution " << G4endl ;
-   G4cout << "#entries=" << entryvertexz  << "    #underflows=" << undervertexz  <<
-             "    #overflows=" << oververtexz  << G4endl ;
+   G4cout << "#entries=" << entryvertexz  
+          << "    #underflows=" << undervertexz
+          << "    #overflows="  << oververtexz  << G4endl;
    if( entryvertexz >0.)
    {
      z =zlow - dz  ;
@@ -746,21 +747,18 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
    
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
-    }     
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::CountEvent()
 {
   TotNbofEvents += 1. ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::AddnStepsCharged(G4double ns)
 {
@@ -768,7 +766,7 @@ void Em5RunAction::AddnStepsCharged(G4double ns)
   nStepSum2Charged += ns*ns;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::AddnStepsNeutral(G4double ns)
 {
@@ -776,7 +774,7 @@ void Em5RunAction::AddnStepsNeutral(G4double ns)
   nStepSum2Neutral += ns*ns;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::AddEdeps(G4double Eabs)
 {
@@ -784,7 +782,7 @@ void Em5RunAction::AddEdeps(G4double Eabs)
   EnergySquareSumAbs += Eabs*Eabs;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::AddTrackLength(G4double tlabs)
 {
@@ -792,7 +790,7 @@ void Em5RunAction::AddTrackLength(G4double tlabs)
   tlsquareSumAbs += tlabs*tlabs ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::AddTrRef(G4double tr,G4double ref)
 {
@@ -800,7 +798,7 @@ void Em5RunAction::AddTrRef(G4double tr,G4double ref)
   Reflected   += ref;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillNbOfSteps(G4double ns)
 {
@@ -820,7 +818,7 @@ void Em5RunAction::FillNbOfSteps(G4double ns)
     {
       n = ns+eps ;
       bin = (n-Steplow)/dStep ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       distStep[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -829,7 +827,7 @@ void Em5RunAction::FillNbOfSteps(G4double ns)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillEn(G4double En)
 {
@@ -847,7 +845,7 @@ void Em5RunAction::FillEn(G4double En)
     else
     {
       bin = (En-Enlow)/dEn ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       distEn[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -856,7 +854,7 @@ void Em5RunAction::FillEn(G4double En)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillTt(G4double En)
 {
@@ -876,7 +874,7 @@ void Em5RunAction::FillTt(G4double En)
     else
     {
       bin = (En-Ttlow)/dTt ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       distTt[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -885,7 +883,7 @@ void Em5RunAction::FillTt(G4double En)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillTb(G4double En)
 {
@@ -905,7 +903,7 @@ void Em5RunAction::FillTb(G4double En)
     else
     {
       bin = (En-Tblow)/dTb ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       distTb[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -914,7 +912,7 @@ void Em5RunAction::FillTb(G4double En)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillTsec(G4double En)
 {
@@ -932,7 +930,7 @@ void Em5RunAction::FillTsec(G4double En)
     else
     {
       bin = (En-Tseclow)/dTsec ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       distTsec[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -941,7 +939,7 @@ void Em5RunAction::FillTsec(G4double En)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillGammaSpectrum(G4double En)
 {
@@ -959,7 +957,7 @@ void Em5RunAction::FillGammaSpectrum(G4double En)
     else
     {
       bin = log(En/ElowGamma)/dEGamma;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       distGamma[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -968,7 +966,7 @@ void Em5RunAction::FillGammaSpectrum(G4double En)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillTh(G4double Th)
 {
@@ -991,7 +989,7 @@ void Em5RunAction::FillTh(G4double Th)
     else
     {
       bin = (Th-Thlow)/dTh ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       Thbin = Thlow+ibin*dTh ;
       if(Th > 0.001*dTh)
         wg=cn/sin(Th) ;
@@ -1010,7 +1008,7 @@ void Em5RunAction::FillTh(G4double Th)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillThBack(G4double Th)
 {
@@ -1031,7 +1029,7 @@ void Em5RunAction::FillThBack(G4double Th)
     else
     {
       bin = (Th-Thlowback)/dThback ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       Thbin = Thlowback+ibin*dThback ;
       if(Th > 0.001*dThback)
         wg=cn/sin(Th) ;
@@ -1051,7 +1049,7 @@ void Em5RunAction::FillThBack(G4double Th)
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::FillR(G4double R )
 {
@@ -1071,7 +1069,7 @@ void Em5RunAction::FillR(G4double R )
     else
     {
       bin = (R -Rlow)/dR  ;
-      ibin= bin ;
+      ibin= (G4int) bin ;
       distR[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -1080,7 +1078,7 @@ void Em5RunAction::FillR(G4double R )
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::Fillvertexz(G4double z )
 {
@@ -1098,7 +1096,7 @@ void Em5RunAction::Fillvertexz(G4double z )
     else
     {
       bin = (z -zlow)/dz  ;
-      ibin= bin ;
+      ibin= (G4int)bin ;
       distvertexz[ibin] += 1. ;
     }
 #ifndef G4NOHIST    
@@ -1107,7 +1105,7 @@ void Em5RunAction::Fillvertexz(G4double z )
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5RunAction::SethistName(G4String name)
 {
@@ -1315,4 +1313,4 @@ void Em5RunAction::AddEP(G4double nele,G4double npos)
   Spositron += npos;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

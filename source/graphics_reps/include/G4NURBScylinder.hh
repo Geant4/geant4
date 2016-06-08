@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBScylinder.hh,v 1.5.4.1 2001/06/28 19:10:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NURBScylinder.hh,v 1.6 2001/07/11 10:01:02 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996

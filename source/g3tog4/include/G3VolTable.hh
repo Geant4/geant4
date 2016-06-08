@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTable.hh,v 1.15.4.1 2001/06/28 19:08:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3VolTable.hh,v 1.16 2001/07/11 09:58:58 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------
 // Class description:

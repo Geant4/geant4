@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.3.4.2 2001/06/28 20:18:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.6 2001/11/29 11:19:18 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -36,6 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#include "G4RunManager.hh"
 #include "GammaRayTelPrimaryGeneratorAction.hh"
 
 #include "GammaRayTelDetectorConstruction.hh"
@@ -49,11 +50,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction
-(GammaRayTelDetectorConstruction* GammaRayTelDC)
-  :GammaRayTelDetector(GammaRayTelDC),rndmFlag("off"),
-   nSourceType(0),nSpectrumType(0)
+GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
+  :rndmFlag("off"),nSourceType(0),nSpectrumType(0)
 {
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  GammaRayTelDetector =
+    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
+
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
   
@@ -98,7 +101,8 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   dir0 = G4ThreeVector(0.,0.,-1.);
 
   G4double theta, phi, y, f;
-  G4double theta0,phi0;
+  G4double theta0=0.;
+  G4double phi0=0.;
   
   switch(nSourceType) {
   case 0:

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.6.2.1 2001/06/28 19:10:45 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Neutron.cc,v 1.13 2001/10/28 05:08:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -37,6 +37,8 @@
 #include "g4std/iomanip"
 
 #include "G4Neutron.hh"
+#include "G4NeutronBetaDecayChannel.hh"
+#include "G4DecayTable.hh"
 
 // ######################################################################
 // ###                           NEUTRON                              ###
@@ -57,6 +59,17 @@ G4Neutron::G4Neutron(
               lepton,baryon,encoding,stable,lifetime,decaytable )
 {
    SetParticleSubType("nucleon");
+
+   //create Decay Table 
+   G4DecayTable*   table = GetDecayTable();
+   if (table!=NULL) delete table;
+   table = new G4DecayTable();
+   
+   // create a decay channel
+   G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
+   table->Insert(mode);
+   
+   SetDecayTable(table);
 }
 
 // ......................................................................
@@ -79,35 +92,20 @@ G4Neutron G4Neutron::theNeutron(
 );
 
 G4Neutron* G4Neutron::NeutronDefinition(){return &theNeutron;}
-// initialization for static cut values
-G4double   G4Neutron::theNeutronLengthCut = -1.0;
-G4double*  G4Neutron::theNeutronKineticEnergyCuts = NULL;
+G4Neutron* G4Neutron::Neutron(){return &theNeutron;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4Neutron::SetCuts(G4double aCut)
+void G4Neutron::CalcEnergyCuts( const G4Material* )
 {
-  theCutInMaxInteractionLength = aCut;
-
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
-
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = LowestEnergy;
-  }
-  theNeutronLengthCut = theCutInMaxInteractionLength;  
-  theNeutronKineticEnergyCuts = theKineticEnergyCuts;
-  // Rebuild the physics tables for every process for this particle type
   
+
+  // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(LowestEnergy);
+
 }
 
 

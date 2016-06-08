@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.10.2.1 2001/06/28 19:15:43 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLSceneHandler.cc,v 1.14 2001/08/24 18:37:09 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -116,16 +116,25 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
+
+  static G4int callCount (0);
+  ++callCount;
+
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
-  G4cout
-    << "G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) not implemented yet."
-    << "\n  Called with text \"" << text.GetText ()
-    << "\" at " << text.GetPosition ()
-    << ", size " << size
-    << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
-    << ", type " << G4int(sizeType)
-    << G4endl;
+  G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
+  if (callCount <= 10 || callCount%100 == 0) {
+    G4cout <<
+      "G4OpenGLSceneHandler::AddPrimitive (const G4Text&) call count "
+	   << callCount <<
+      "\n  Not implemented yet.  Called with text \""
+	   << text.GetText ()
+	   << "\"\n  at " << position
+	   << ", size " << size
+	   << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
+	   << ", type " << G4int(sizeType)
+	   << G4endl;
+  }
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
@@ -240,7 +249,7 @@ recreate the display lists.  The down side is that the markers
 rotate.  The only way to avoid this is to play with the modelview
 and projection matrices of OpenGL - which I need to think about.
 For future reference, here is the code to draw in window
-coordinates; it's down side is tha markers do not follow global
+coordinates; its down side is that markers do not follow global
 transformations.  Some clever stuff is needed.
 
   ...

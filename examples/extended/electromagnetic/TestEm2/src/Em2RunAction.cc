@@ -21,23 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.10.2.1 2001/06/28 19:06:53 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2RunAction.cc,v 1.13 2001/11/28 18:57:24 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 08.03.01 Hisaya: Adapted MyVector for STL   
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2RunAction.hh"
 
 #include "Em2DetectorConstruction.hh"
 #include "Em2PrimaryGeneratorAction.hh"
-#include "Em2RunActionMessenger.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -52,7 +52,7 @@
  #include "CLHEP/Hist/HBookFile.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
                            Em2PrimaryGeneratorAction* kin)
@@ -75,9 +75,6 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
   sumERadialCumul.resize(nRbin, 0.0);
   sumE2Radial.resize(nRbin, 0.0);
   sumE2RadialCumul.resize(nRbin, 0.0);
-   
-  runMessenger = new Em2RunActionMessenger(this);   
-  saveRndm = 1;
   
 #ifndef G4NOHIST
    hbookManager = NULL;
@@ -85,15 +82,14 @@ Em2RunAction::Em2RunAction(Em2DetectorConstruction*   det,
     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2RunAction::~Em2RunAction()
 {
   cleanHisto();    
-  delete runMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2RunAction::bookHisto()
 {
@@ -117,7 +113,7 @@ void Em2RunAction::bookHisto()
   histo4 = hbookManager->histogram("longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
                                     
-  G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;                                 
+  G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
   histo5 = hbookManager->histogram("cumul longit energy dep (% of E inc)",
                                     nLbin,Zmin,Zmax);
                                     
@@ -136,15 +132,15 @@ void Em2RunAction::bookHisto()
   hist10 = hbookManager->histogram("radial energy profile (% of E inc)",
                                     nRbin,0.,nRbin*dRradl);
                                     
-  G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;                                 
+  G4double Rmin=0.5*dRradl, Rmax=Rmin+nRbin*dRradl;
   hist11 = hbookManager->histogram("cumul radial energy dep (% of E inc)",
                                     nRbin,Rmin,Rmax);
                                     
   hist12 = hbookManager->histogram("rms on cumul radial Edep (% of E inc)",
                                     nRbin,Rmin,Rmax);
-#endif				                                                                                                                                                                                                                                                                                                                                     
+#endif
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2RunAction::cleanHisto()
 {
@@ -160,18 +156,16 @@ void Em2RunAction::cleanHisto()
 #endif  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }    
-  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
+
   //reshape arrays if needed  
   //
   G4bool rebin(false);
@@ -218,13 +212,10 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
   //drawing
   // 
   if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    } 
+    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2RunAction::fillPerEvent()
 {
@@ -268,7 +259,7 @@ void Em2RunAction::fillPerEvent()
 #endif      
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2RunAction::EndOfRunAction(const G4Run* aRun)
 {
@@ -281,7 +272,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   G4double kinEnergy = Em2Kin->GetParticleGun()->GetParticleEnergy();   
   assert(NbOfEvents*kinEnergy > 0);
   
-  G4double mass=Em2Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();  
+  G4double mass=Em2Kin->GetParticleGun()->GetParticleDefinition()->GetPDGMass();
   G4double norme = 100./(NbOfEvents*(kinEnergy+mass));
   
   //longitudinal
@@ -354,7 +345,7 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
                                          
   G4double MeanNeutrTrLength = norme*sumNeutrTrLength;
   G4double  rmsNeutrTrLength = norme*sqrt(abs(NbOfEvents*sum2NeutrTrLength
-                                         - sumNeutrTrLength*sumNeutrTrLength));                                         
+                                         - sumNeutrTrLength*sumNeutrTrLength));
    
   //print
   // 
@@ -372,12 +363,13 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
    {
      G4double inf=i*dLradl, sup=inf+dLradl;
        
-     G4cout << G4std::setw(8) << inf << "->" << G4std::setw(5) << sup << " radl: " 
-                                      << G4std::setw(7) << MeanELongit[i] << "%  " 
-                                      << G4std::setw(9) << rmsELongit[i] << "%       "                                  
-                       << "      0->" << G4std::setw(5) << sup << " radl: " 
-                                      << G4std::setw(7) << MeanELongitCumul[i] << "%  " 
-                                      << G4std::setw(7) << rmsELongitCumul[i] << "% " 
+     G4cout << G4std::setw(8) << inf << "->" 
+            << G4std::setw(5) << sup << " radl: " 
+            << G4std::setw(7) << MeanELongit[i] << "%  " 
+            << G4std::setw(9) << rmsELongit[i] << "%       "
+            << "      0->" << G4std::setw(5) << sup << " radl: " 
+            << G4std::setw(7) << MeanELongitCumul[i] << "%  " 
+            << G4std::setw(7) << rmsELongitCumul[i] << "% " 
             <<G4endl;
    }
    
@@ -393,12 +385,13 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
    {
      G4double inf=i*dRradl, sup=inf+dRradl;
        
-     G4cout << G4std::setw(8) << inf << "->" << G4std::setw(5) << sup << " radl: " 
-                                      << G4std::setw(7) << MeanERadial[i] << "%  " 
-                                      << G4std::setw(9) << rmsERadial[i] << "%       "                                  
-                       << "      0->" << G4std::setw(5) << sup << " radl: " 
-                                      << G4std::setw(7) << MeanERadialCumul[i] << "%  " 
-                                      << G4std::setw(7) << rmsERadialCumul[i] << "% " 
+     G4cout << G4std::setw(8) << inf << "->" 
+            << G4std::setw(5) << sup << " radl: " 
+            << G4std::setw(7) << MeanERadial[i] << "%  " 
+            << G4std::setw(9) << rmsERadial[i] << "%       "
+            << "      0->" << G4std::setw(5) << sup << " radl: " 
+            << G4std::setw(7) << MeanERadialCumul[i] << "%  " 
+            << G4std::setw(7) << rmsERadialCumul[i] << "% " 
             <<G4endl;
    }  
   G4cout << G4endl;
@@ -417,11 +410,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
 
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
-    }                           
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

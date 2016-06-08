@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmResources.hh,v 1.3.4.1 2001/06/28 19:15:40 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmResources.hh,v 1.4 2001/07/11 10:08:51 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // Default resources file for GEANT4 OpenGL Motif windows.

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -53,7 +53,7 @@ G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
   _energy = energy;
   _halfLife = halfLife;
   _angularMomentum = angularMomentum;
-  G4int i;
+  unsigned int i;
   for (i=0; i<eGamma.size(); i++)
     {
       _energies.push_back(eGamma[i]);

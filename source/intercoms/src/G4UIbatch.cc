@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.3.2.1 2001/06/28 19:10:17 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIbatch.cc,v 1.9 2001/10/16 08:14:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4UIbatch.hh"
@@ -55,7 +55,7 @@ G4UIsession * G4UIbatch::SessionStart()
   if(!openFailed)
   {
     char commandLine[256];
-    int lineLength = 255;
+    G4int lineLength = 255;
 
     while(1)
     {
@@ -67,10 +67,39 @@ G4UIsession * G4UIbatch::SessionStart()
       }
       if( macroFile.eof() ) break;
       commandLine[lineLength] = '\0';
-      if( commandLine[0] != '#' )
-      { UImanager->ApplyCommand(commandLine); }
+      G4String commandString = commandLine;
+      G4String nC= commandString.strip(G4String::both);
+      if( commandLine[0] == '#')
+      { if(G4UImanager::GetUIpointer()->GetVerboseLevel()==2)
+        { G4cout << commandLine << G4endl; }
+      }
+      else if( nC.length() == 0 )
+      { continue; }
+      else if(nC == "exit")
+      { break; }
       else
-      { G4cout << commandLine << G4endl; }
+      { 
+        G4int rc = UImanager->ApplyCommand(commandLine);
+        if(rc)
+        {
+          switch(rc) 
+          {
+          case fCommandNotFound:
+            G4cerr << "***** COMMAND NOT FOUND <"
+                   << commandLine << "> *****" << G4endl;
+            break;
+          case fIllegalApplicationState:
+            G4cerr << "***** Illegal application state <"
+                   << commandLine << "> *****" << G4endl;
+            break;
+          default:
+            G4int pn = rc%100;
+            G4cerr << "***** Illegal parameter (" << pn << ") <"
+                   << commandLine << "> *****" << G4endl;
+          }
+          G4cerr << "***** Command ignored *****" << G4endl;
+        }
+      }
     }
   }
   return previousSession;

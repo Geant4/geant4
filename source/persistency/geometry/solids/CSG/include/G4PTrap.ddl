@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PTrap.ddl,v 1.5.2.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4PTrap
-//
+// $Id: G4PTrap.ddl,v 1.7 2001/07/11 10:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PTrap solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Trap.hh
 
@@ -46,18 +47,18 @@ struct PTrapSidePlane
 				// => Ax+By+Cz+D=0  
 };
 
-class G4PTrap : public G4PCSGSolid {
-
-public:
-
-    // The most general constructor for G4Trap     
-
+class G4PTrap
+ : public G4PCSGSolid
+{
+public: // With description
     G4PTrap(const G4Trap* theTrap);
     virtual ~G4PTrap() ;
+    // Constructor and Destructor
 
-    // Access functions
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient boolean solid object.
 
+public:
     void SetAllParameters ( G4double pDz,
 			    G4double pTheta,
 			    G4double pPhi,
@@ -70,8 +71,9 @@ public:
 			    G4double pDx4,
 			    G4double pAlp2);
 	                              
-    // Naming method (pseudo-RTTI : run-time type identification
+public: // With description
     virtual G4GeometryType  GetEntityType() const { return G4String("G4Trap"); }
+    // Returns the G4GeometryType of this solid.
 
 protected:
 

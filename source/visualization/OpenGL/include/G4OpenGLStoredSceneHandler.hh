@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.10.2.1 2001/06/28 19:15:38 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.13 2001/08/14 18:03:14 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -54,16 +54,21 @@ public:
   void BeginModeling ();
   void EndModeling ();
   static G4int GetSceneCount ();
-  
 private:
-friend class G4OpenGLStoredViewer;
+  friend class G4OpenGLStoredViewer;
   // ..allows access to P/TODLs.
   void ClearStore ();
+  void ClearTransientStore ();
   void RequestPrimitives (const G4VSolid& solid);
-  static G4int    fSceneIdCount;   // static counter for OpenGLStored scenes.
-  static G4int    fSceneCount;     // No. of extanct scene handlers.
-  G4int           fDisplayListId;  // Workspace.
-  G4bool  fMemoryForDisplayLists;  // avoid memory overflow
+  static G4int     fSceneIdCount;   // static counter for OpenGLStored scenes.
+  static G4int     fSceneCount;     // No. of extanct scene handlers.
+  G4int            fDisplayListId;  // Workspace.
+  G4bool  fMemoryForDisplayLists;   // avoid memory overflow
+  G4ViewParameters fLastVP; // Keeps memory of last view parameters,
+         // namely the ones which go with the graphical database
+         // (display lists).  A view may interrogate this to decide if
+         // it needs to visit the kernel, i.e., to remake the
+         // graphical database.
   
   // PODL = Persistent Object Display List.
   GLint           fTopPODL;       // List which calls the other PODLs.

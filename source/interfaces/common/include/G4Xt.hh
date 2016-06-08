@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Xt.hh,v 1.4.4.1 2001/06/28 19:10:24 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Xt.hh,v 1.5 2001/07/11 10:01:22 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //  To unify X11 event treatment between 
 // G4/interfaces Xt sessions and G4/visualizations Xt drivers.

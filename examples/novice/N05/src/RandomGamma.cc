@@ -46,7 +46,7 @@ double RandomGamma(double p)
     }
   else
     {
-      int m = p;
+      int m = int(p);
       double f = p - m;
       if (m > 0)
 	{

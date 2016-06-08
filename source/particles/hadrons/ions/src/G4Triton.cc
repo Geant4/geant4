@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.3.4.2 2001/06/28 20:19:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Triton.cc,v 1.6 2001/10/16 08:16:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -84,6 +84,4 @@ G4Triton G4Triton::theTriton(
 );
 
 G4Triton* G4Triton::TritonDefinition(){return &theTriton;}
-// initialization for static cut values
-G4double   G4Triton::theTritonLengthCut;
-G4double*  G4Triton::theTritonKineticEnergyCuts;
+G4Triton* G4Triton::Triton(){return &theTriton;}

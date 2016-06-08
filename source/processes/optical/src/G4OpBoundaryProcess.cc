@@ -44,6 +44,9 @@
 //                           (thanks to Stefano Magni)
 //              1999-10-10 - Accommodate changes done in DoAbsorption by
 //                           changing logic in DielectricMetal
+//              2001-10-18 - avoid Linux (gcc-2.95.2) warning about variables
+//                           might be used uninitialized in this function
+//                           moved E2_perp, E2_parl and E2_total out of 'if'
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -516,14 +519,15 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	         E1_parl  = 1.0;
 	      }
 
-	      G4double E2_perp, E2_parl, E2_total, TransCoeff;
+              G4double s1 = Rindex1*cost1;
+              G4double E2_perp = 2.*s1*E1_perp/(Rindex1*cost1+Rindex2*cost2);
+              G4double E2_parl = 2.*s1*E1_parl/(Rindex2*cost1+Rindex1*cost2);
+              G4double E2_total = E2_perp*E2_perp + E2_parl*E2_parl;
+              G4double s2 = Rindex2*cost2*E2_total;
+
+              G4double TransCoeff;
 
 	      if (cost1 != 0.0) {
-	         G4double s1 = Rindex1*cost1;
-	         E2_perp = 2.*s1*E1_perp/(Rindex1*cost1+Rindex2*cost2);
-	         E2_parl = 2.*s1*E1_parl/(Rindex2*cost1+Rindex1*cost2);
-	         E2_total = E2_perp*E2_perp + E2_parl*E2_parl;
-	         G4double s2 = Rindex2*cost2*E2_total;
 	         TransCoeff = s2/s1;
 	      }
 	      else {

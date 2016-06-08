@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.15.2.1 2001/06/28 19:16:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PhysicalVolumeModel.cc,v 1.20 2001/08/24 20:34:25 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -55,6 +55,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fTopPVName      (pVPV -> GetName ()),
   fTopPVCopyNo    (pVPV -> GetCopyNo ()),
   fRequestedDepth (requestedDepth),
+  fUseFullExtent  (useFullExtent),
   fCurrentDepth   (0),
   fpCurrentPV     (0),
   fpCurrentLV     (0),
@@ -69,11 +70,17 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fGlobalTag = fpTopPV -> GetName () + "." + a;
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
-  if (useFullExtent) {
+  CalculateExtent ();
+}
+
+G4PhysicalVolumeModel::~G4PhysicalVolumeModel () {}
+
+void G4PhysicalVolumeModel::CalculateExtent () {
+  if (fUseFullExtent) {
     fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
   }
   else {
-    G4BoundingSphereScene bsScene;
+    G4BoundingSphereScene bsScene(this);
     const G4ModelingParameters* tempMP = fpMP;
     G4ModelingParameters mParams
       (0,      // No default vis attributes.
@@ -93,8 +100,6 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
     fpMP = tempMP;
   }
 }
-
-G4PhysicalVolumeModel::~G4PhysicalVolumeModel () {}
 
 void G4PhysicalVolumeModel::DescribeYourselfTo
 (G4VGraphicsScene& sceneHandler) {
@@ -225,6 +230,8 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       //   They have phi of offset+n*width to offset+(n+1)*width where
       //   n=0..nReplicas-1
       // 
+      G4ThreeVector originalTranslation = pVPV -> GetTranslation ();
+      G4RotationMatrix* pOriginalRotation = pVPV -> GetRotation ();
       for (int n = 0; n < nReplicas; n++) {
 	G4ThreeVector translation;  // Null.
 	G4RotationMatrix rotation;  // Null - life long enough for visualizing.
@@ -241,7 +248,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	  translation = G4ThreeVector (0,0,-width*(nReplicas-1)*0.5+n*width);
 	  break;
 	case kRho:
-	  G4cerr <<
+	  G4cout <<
 	    "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
 	    "\n  built-in replicated volumes replicated in radius are not yet"
 	    "\n  properly visualizable."
@@ -263,6 +270,9 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
+      // Restore originals...
+      pVPV -> SetTranslation (originalTranslation);
+      pVPV -> SetRotation    (pOriginalRotation);
     }
   }
 
@@ -432,32 +442,41 @@ G4bool G4PhysicalVolumeModel::IsDaughterCulled
   }
 }
 
-G4bool G4PhysicalVolumeModel::Validate () {
+G4bool G4PhysicalVolumeModel::Validate (G4bool warn) {
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()
     -> GetNavigatorForTracking () -> GetWorldVolume ();
   // The idea now is to seek a PV with the same name and copy no
   // in the hope it's the same one!!
-  G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
+  if (warn) {
+    G4cout << "G4PhysicalVolumeModel::Validate() called." << G4endl;
+  }
   G4PhysicalVolumeSearchScene searchScene (fTopPVName, fTopPVCopyNo);
   G4PhysicalVolumeModel searchModel (world);
+  G4ModelingParameters mp;  // Default modeling parameters for this search.
+  searchModel.SetModelingParameters (&mp);
   searchModel.DescribeYourselfTo (searchScene);
   G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
   if (foundVolume) {
-    G4cout << "  Volume of the same name and copy number (\""
-	   << fTopPVName << "\", copy " << fTopPVCopyNo
-	   << ") still exists and is being used."
-      "\n  Be warned that this does not necessarily guarantee it's the same"
-      "\n  volume you originally specified in /vis/scene/add/."
-	   << G4endl;
+    if (warn) {
+      G4cout << "  Volume of the same name and copy number (\""
+	     << fTopPVName << "\", copy " << fTopPVCopyNo
+	     << ") still exists and is being used."
+	"\n  Be warned that this does not necessarily guarantee it's the same"
+	"\n  volume you originally specified in /vis/scene/add/."
+	     << G4endl;
+    }
     fpTopPV = foundVolume;
+    CalculateExtent ();
     return true;
   }
   else {
-    G4cout << "  A volume of the same name and copy number (\""
-	   << fTopPVName << "\", copy " << fTopPVCopyNo
-	   << ") no longer exists."
-	   << G4endl;
+    if (warn) {
+      G4cout << "  A volume of the same name and copy number (\""
+	     << fTopPVName << "\", copy " << fTopPVCopyNo
+	     << ") no longer exists."
+	     << G4endl;
+    }
     return false;
   }
 }

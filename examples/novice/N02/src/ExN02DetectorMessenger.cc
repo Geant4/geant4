@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.3.4.1 2001/06/28 19:07:30 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02DetectorMessenger.cc,v 1.6 2001/10/11 12:32:37 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN02DetectorMessenger.hh"
 
@@ -35,9 +35,9 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction * myDet)
+ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction* myDet)
 :myDetector(myDet)
 { 
 
@@ -56,14 +56,14 @@ ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction * myDet
   
   FieldCmd = new G4UIcmdWithADoubleAndUnit("/mydet/setField",this);  
   FieldCmd->SetGuidance("Define magnetic field.");
-  FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  FieldCmd->SetParameterName("Bz",false);
+  FieldCmd->SetGuidance("Magnetic field will be in X direction.");
+  FieldCmd->SetParameterName("Bx",false);
   FieldCmd->SetDefaultUnit("tesla");
   FieldCmd->SetUnitCategory("Magnetic flux density");
   FieldCmd->AvailableForStates(PreInit,Idle);  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02DetectorMessenger::~ExN02DetectorMessenger()
 {
@@ -73,18 +73,18 @@ ExN02DetectorMessenger::~ExN02DetectorMessenger()
   delete mydetDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN02DetectorMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
+void ExN02DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == TargMatCmd )
-   { myDetector->setTargetMaterial(newValues);}
+   { myDetector->setTargetMaterial(newValue);}
    
   if( command == ChamMatCmd )
-   { myDetector->setChamberMaterial(newValues);}  
+   { myDetector->setChamberMaterial(newValue);}  
   
   if( command == FieldCmd )
-   { myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValues));}
+   { myDetector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

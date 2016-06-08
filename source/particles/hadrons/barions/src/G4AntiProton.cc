@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.cc,v 1.4.4.2 2001/06/28 20:19:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiProton.cc,v 1.7 2001/10/16 08:15:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -79,9 +79,8 @@ G4AntiProton G4AntiProton::theAntiProton(
 );
 
 G4AntiProton* G4AntiProton::AntiProtonDefinition(){return &theAntiProton;}
-// initialization for static cut values
-G4double   G4AntiProton::theAntiProtonLengthCut = -1.0;
-G4double*  G4AntiProton::theAntiProtonKineticEnergyCuts = NULL;
+G4AntiProton* G4AntiProton::AntiProton(){return &theAntiProton;}
+
 
 
 

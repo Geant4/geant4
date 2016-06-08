@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersistencyManager.hh,v 1.15.4.1 2001/06/28 19:11:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PersistencyManager.hh,v 1.16 2001/07/11 10:02:26 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // History:
 // 98.01.08 Y.Morita  Initial version

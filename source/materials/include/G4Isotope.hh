@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.7.2.1 2001/06/28 19:10:28 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Isotope.hh,v 1.13 2001/10/17 07:59:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // class description
 //
@@ -39,26 +39,27 @@
 // Isotopes can be assembled into elements via the G4Element class.
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// 30.03.01: suppression of the warnig message in GetIsotope
+// 14.09.01: fCountUse: nb of elements which use this isotope 
+// 13.09.01: stl migration. Suppression of the data member fIndexInTable
+// 30.03.01: suppression of the warning message in GetIsotope
 // 04.08.98: new method GetIsotope(isotopeName) (mma)
 // 17.01.97: aesthetic rearrangement (mma)
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4ISOTOPE_HH
 #define G4ISOTOPE_HH
 
-#include "G4ios.hh"
-#include "g4rw/tpordvec.h"
 #include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/vector"
 
 class G4Isotope;
-typedef G4RWTPtrOrderedVector<G4Isotope> G4IsotopeTable;
+typedef G4std::vector<G4Isotope*> G4IsotopeTable;
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo......
 
 class G4Isotope
 {
@@ -70,20 +71,28 @@ class G4Isotope
                     G4int     n,		//number of nucleons
                     G4double  a);		//mass of mole
                     
-   virtual ~G4Isotope();
+    virtual ~G4Isotope();
 
     // Retrieval methods
     G4String GetName()  const {return fName;};    
     G4int    GetZ()     const {return fZ;};
     G4int    GetN()     const {return fN;};
     G4double GetA()     const {return fA;};
-    size_t   GetIndex() const {return fIndexInTable;};
     
-    static  G4Isotope* GetIsotope(G4String name);
+    G4int GetCountUse() const {return fCountUse;};
+    void  increaseCountUse()  {fCountUse++;};
+    void  decreaseCountUse()  {fCountUse--;};
     
-    static
-    const G4IsotopeTable* GetIsotopeTable() {return &theIsotopeTable;};
-    static size_t GetNumberOfIsotopes()     {return theIsotopeTable.length();};
+    static  
+    G4Isotope* GetIsotope(G4String name);
+    
+    static const
+    G4IsotopeTable* GetIsotopeTable();
+    
+    static 
+    size_t GetNumberOfIsotopes();
+    
+    size_t GetIndex() const;    
     
     friend
     G4std::ostream& operator<<(G4std::ostream&, G4Isotope*);
@@ -110,26 +119,28 @@ class G4Isotope
     G4int    fZ;                 // atomic number
     G4int    fN;                 // number of nucleons
     G4double fA;                 // mass of a mole
+    
+    G4int    fCountUse;          // nb of elements which use this isotope
 
     static 
     G4IsotopeTable theIsotopeTable;
-    size_t   fIndexInTable;      // index in the Isotope Table
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
+size_t G4Isotope::GetIndex() const
 {  
-  // search the isotope by its name 
-  for (size_t J=0 ; J<theIsotopeTable.length() ; J++)
-   {
-    if(theIsotopeTable[J]->GetName() == isotopeName)
-      return theIsotopeTable[J];
-   }
-   
-  // the isotope does not exist in the table
-  return NULL;          
+  // return the index of this isotope in theIsotopeTable
+  //
+  size_t J=0, Jmax=theIsotopeTable.size();
+  while ((J<Jmax)&&(theIsotopeTable[J] != this)) J++;  
+
+  if (J==Jmax) G4Exception("G4Isotope::GetIndex() Isotope not in IsotopeTable");
+  
+  return J;        
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

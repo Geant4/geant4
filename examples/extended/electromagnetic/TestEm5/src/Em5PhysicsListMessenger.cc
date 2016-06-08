@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.cc,v 1.2.4.1 2001/06/28 19:07:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5PhysicsListMessenger.cc,v 1.5 2001/11/05 17:58:02 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5PhysicsListMessenger.hh"
 
 #include "Em5PhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
 :Em5List(List)
@@ -44,35 +44,35 @@ Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
   cutGCmd->SetParameterName("range",false);
   cutGCmd->SetRange("range>0.");
   cutGCmd->SetUnitCategory("Length");
-  cutGCmd->AvailableForStates(Idle);
+  cutGCmd->AvailableForStates(PreInit,Idle);
 
   cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("range",false);
   cutECmd->SetRange("range>0.");
   cutECmd->SetUnitCategory("Length");  
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(PreInit,Idle);
 
   cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
   cutPCmd->SetParameterName("range",false);
   cutPCmd->SetRange("range>0.");
   cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(Idle);
+  cutPCmd->AvailableForStates(PreInit,Idle);
 
   eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
   eCmd->SetParameterName("energy",false);
   eCmd->SetRange("energy>0.");
   eCmd->SetUnitCategory("Energy");   
-  eCmd->AvailableForStates(Idle);
+  eCmd->AvailableForStates(PreInit,Idle);
 
   rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
   rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
   rCmd->SetParameterName("energy",false);
   rCmd->SetRange("energy>0.");
   rCmd->SetUnitCategory("Energy");     
-  rCmd->AvailableForStates(Idle);
+  rCmd->AvailableForStates(PreInit,Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");
@@ -81,7 +81,7 @@ Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
   setMaxStepCmd->SetUnitCategory("Length");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5PhysicsListMessenger::~Em5PhysicsListMessenger()
 {
@@ -93,9 +93,10 @@ Em5PhysicsListMessenger::~Em5PhysicsListMessenger()
   delete setMaxStepCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 {
   if(command == cutGCmd)
     { Em5List->SetGammaCut(cutGCmd->GetNewDoubleValue(newValue));}
@@ -111,5 +112,5 @@ void Em5PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue
     { Em5List->SetMaxStep(setMaxStepCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.cc,v 1.2.2.1 2001/06/28 19:13:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4CoulombBarrier.cc,v 1.5 2001/10/08 17:15:48 larazb Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -71,8 +71,7 @@ G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes,
   if (GetA() == 1 && GetZ() == 0) {
     Barrier = 0.0;   // Neutron Coulomb Barrier is 0
   } else {
-    G4double CompoundRadius = 2.173*fermi*(1.0+0.006103*G4double(GetZ())*G4double(ZRes))/
-      (1.0+0.009443*G4double(GetZ())*G4double(ZRes));
+    G4double CompoundRadius = CalcCompoundRadius(G4double(ZRes));
     Barrier = elm_coupling/CompoundRadius * G4double(GetZ())*G4double(ZRes)/
       (pow(G4double(GetA()),1./3.) + pow(G4double(ARes),1./3.));
 

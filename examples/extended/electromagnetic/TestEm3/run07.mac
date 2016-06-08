@@ -1,4 +1,4 @@
-# $Id: run07.mac,v 1.2 2000/01/21 09:11:05 maire Exp $
+# $Id: run07.mac,v 1.4 2001/11/05 15:28:39 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -7,19 +7,21 @@
 #
 /control/verbose 2
 #
+/run/particle/setCut 1.5 mm
+/run/initialize
+#
 /calor/setNbOfLayers 2
 /calor/setNbOfAbsor 2
 /calor/setAbsor 0 liquidArgon 4 mm
 /calor/setAbsor 1 Lead 4 mm
 /calor/setSizeYZ 16 mm
 /calor/update
+#
+/process/inactivate msc
+#
 /gun/setDefault
 #
-/run/particle/setCut 0.15 mm
-/run/initialize
-#
 /run/verbose 2
-/event/drawTracks none
 /event/printModulo 100
 #
 /gun/particle proton

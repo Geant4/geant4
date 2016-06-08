@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonPlus.hh,v 1.4.2.2 2001/06/28 20:19:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4KaonPlus.hh,v 1.7 2001/10/16 08:16:09 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
 // Each class inheriting from G4VMeson
@@ -55,8 +54,6 @@ class G4KaonPlus : public G4VMeson
 {
  private:
    static G4KaonPlus theKaonPlus;
-   static G4double  theKaonPlusLengthCut;
-   static G4double* theKaonPlusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4KaonPlus(
@@ -74,29 +71,8 @@ class G4KaonPlus : public G4VMeson
 public:
    virtual ~G4KaonPlus(){}
    static G4KaonPlus* KaonPlusDefinition();
-   static G4KaonPlus* KaonPlus() {return &theKaonPlus;}
-   static G4double GetCuts() {return theKaonPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theKaonPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
+   static G4KaonPlus* KaonPlus();
 };
-
-inline void G4KaonPlus::SetCuts(G4double aCut)
-{
-  G4ParticleWithCuts::SetCuts(aCut);
-  theKaonPlusLengthCut = theCutInMaxInteractionLength;  
-  theKaonPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
-
-inline void G4KaonPlus::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theKaonPlusLengthCut = theCutInMaxInteractionLength;  
-  theKaonPlusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 
 #endif

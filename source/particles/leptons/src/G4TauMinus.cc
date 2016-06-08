@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.cc,v 1.4.4.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TauMinus.cc,v 1.7 2001/10/16 08:16:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -122,9 +122,10 @@ G4TauMinus G4TauMinus::theTauMinus(
 );
 
 G4TauMinus* G4TauMinus::TauMinusDefinition() {return &theTauMinus;}
-// initialization for static cut values
-G4double   G4TauMinus::theTauMinusLengthCut = -1.0;
-G4double*  G4TauMinus::theTauMinusKineticEnergyCuts = NULL;
 
+G4TauMinus*  G4TauMinus::TauMinus()
+{ 
+  return &theTauMinus; 
+}
 
 

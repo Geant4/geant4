@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleHeum.cc,v 1.4.4.1 2001/06/28 19:08:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SimpleHeum.cc,v 1.5 2001/07/11 09:59:13 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //  Simple Heum:
 //        x_1 = x_0 + h *

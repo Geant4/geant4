@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EdgeCurveCreator.cc,v 1.4.4.1 2001/06/28 19:09:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EdgeCurveCreator.cc,v 1.5 2001/07/11 10:00:10 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4EdgeCurveCreator

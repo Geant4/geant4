@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -50,7 +50,7 @@ void G4QGSMSplitableHadron::InitParameters()
   // changing rapidity distribution for projectile like
   beta = 2.5;// Note that this number is still assumed in the algorithm
                 // needs to be generalized.
-  theMinPz = 0.8*G4PionMinus::PionMinus()->GetPDGMass(); 
+  theMinPz = 0.5*G4PionMinus::PionMinus()->GetPDGMass(); 
 //  theMinPz = 0.1*G4PionMinus::PionMinus()->GetPDGMass(); 
 //  theMinPz = G4PionMinus::PionMinus()->GetPDGMass(); 
   // as low as possible, otherwise, we have unphysical boundary conditions in the sampling.
@@ -87,6 +87,13 @@ G4QGSMSplitableHadron::G4QGSMSplitableHadron(const G4Nucleon & aNucleon)
   InitParameters();
 }
 
+G4QGSMSplitableHadron::G4QGSMSplitableHadron(const G4Nucleon & aNucleon, G4bool aDirection)
+      :  G4VSplitableHadron(aNucleon)
+{
+  InitParameters();
+  Direction = aDirection;
+}
+
 G4QGSMSplitableHadron::~G4QGSMSplitableHadron(){}
 
 const G4QGSMSplitableHadron & G4QGSMSplitableHadron::operator=(const G4QGSMSplitableHadron &right)
@@ -100,7 +107,9 @@ const G4QGSMSplitableHadron & G4QGSMSplitableHadron::operator=(const G4QGSMSplit
     
 void G4QGSMSplitableHadron::SplitUp()
 {  
-  if (!Color.isEmpty()) return;
+  if (IsSplit()) return;
+  Splitting();
+  if (Color.size()!=0) return;
   if (GetSoftCollisionCount() == 0)
   {
     DiffractiveSplitUp();
@@ -126,7 +135,8 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   G4double pt2 = HadronMom.perp2();
   G4double transverseMass2 = HadronMom.plus()*HadronMom.minus();
   G4double maxAvailMomentum2 = sqr(sqrt(transverseMass2) - sqrt(pt2));
-  G4ThreeVector pt = GaussianPt(widthOfPtSquare, maxAvailMomentum2);
+  G4ThreeVector pt(0.,0.,0.);
+  if(maxAvailMomentum2/widthOfPtSquare>0.01) pt = GaussianPt(widthOfPtSquare, maxAvailMomentum2);
 
   G4LorentzVector LeftMom(pt, 0.);
   G4LorentzVector RightMom;
@@ -147,8 +157,8 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   RightMom.setE (0.5*(RightPlus + RightMinus));
   Left->Set4Momentum(LeftMom);
   Right->Set4Momentum(RightMom);
-  Color.insert(Left);
-  AntiColor.insert(Right);
+  Color.push_back(Left);
+  AntiColor.push_back(Right);
 }
 
 
@@ -160,20 +170,61 @@ void G4QGSMSplitableHadron::SoftSplitUp()
    G4double SumPx = 0.;
    G4ThreeVector Pos    = GetPosition();
    G4int nSeaPair = GetSoftCollisionCount()-1; 
+   
+   // here the condition,to ensure viability of splitting, also in cases
+   // where difractive excitation occured together with soft scattering.
+   //   G4double LightConeMomentum = (Direction)? Get4Momentum().plus() : Get4Momentum().minus();
+   //   G4double Xmin = theMinPz/LightConeMomentum;
+   G4double Xmin = theMinPz/( Get4Momentum().e() - GetDefinition()->GetPDGMass() );
+   while(Xmin>=1-(2*nSeaPair+1)*Xmin) Xmin*=0.95;
+
    G4int aSeaPair;
    for (aSeaPair = 0; aSeaPair < nSeaPair; aSeaPair++)
    {
-     G4int aPDGCode = 1 + (G4int)(G4UniformRand()/StrangeSuppress);
+     //  choose quark flavour, d:u:s = 1:1:(1/StrangeSuppress-2)
+
+     G4int aPDGCode = 1 + (G4int)(G4UniformRand()/StrangeSuppress); 
+
+     //  BuildSeaQuark() determines quark spin, isospin and colour 
+     //  via parton-constructor G4Parton(aPDGCode) 
 
      G4Parton * aParton = BuildSeaQuark(false, aPDGCode, nSeaPair);
+
+//		G4cerr << "G4QGSMSplitableHadron::SoftSplitUp()" << G4endl;
+
+//		G4cerr << "Parton 1: " 
+//		       << " PDGcode: "  << aPDGCode
+//		       << " - Name: "   << aParton->GetDefinition()->GetParticleName()
+//		       << " - Type: "   << aParton->GetDefinition()->GetParticleType() 
+//		       << " - Spin-3: " << aParton->GetSpinZ() 
+//		       << " - Colour: " << aParton->GetColour() << G4endl;
+
+     // save colour a spin-3 for anti-quark
+
+     G4int firstPartonColour = aParton->GetColour();
+     G4double firstPartonSpinZ = aParton->GetSpinZ();
+
      SumPx += aParton->Get4Momentum().px();
      SumPy += aParton->Get4Momentum().py();
-     Color.insert(aParton);
+     Color.push_back(aParton);
+
+     // create anti-quark
 
      aParton = BuildSeaQuark(true, aPDGCode, nSeaPair);
+     aParton->SetSpinZ(-firstPartonSpinZ);
+     aParton->SetColour(-firstPartonColour);
+
+//		G4cerr << "Parton 2: " 
+//		       << " PDGcode: "  << -aPDGCode
+//		       << " - Name: "   << aParton->GetDefinition()->GetParticleName()
+//		       << " - Type: "   << aParton->GetDefinition()->GetParticleType() 
+//		       << " - Spin-3: " << aParton->GetSpinZ() 
+//		       << " - Colour: " << aParton->GetColour() << G4endl;
+//		G4cerr << "------------" << G4endl;
+
      SumPx += aParton->Get4Momentum().px();
      SumPy += aParton->Get4Momentum().py();
-     AntiColor.insert(aParton);
+     AntiColor.push_back(aParton);
    }
    // Valence quark    
    G4Parton* pColorParton = NULL;   
@@ -203,12 +254,10 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      G4LorentzVector AntiColorMom(-SumPx, -SumPy, 0, 0);
      pAntiColorParton->Set4Momentum(AntiColorMom);
    }
-   Color.insert(pColorParton);
-   AntiColor.insert(pAntiColorParton);
+   Color.push_back(pColorParton);
+   AntiColor.push_back(pAntiColorParton);
 
    // Sample X
-   G4double LightConeMomentum = (Direction)? Get4Momentum().plus() : Get4Momentum().minus();
-   G4double Xmin = theMinPz/LightConeMomentum;
    G4int nAttempt = 0;
    G4double SumX = 0;
    G4double aBeta = beta;
@@ -229,29 +278,29 @@ void G4QGSMSplitableHadron::SoftSplitUp()
      ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
      HPWtest = ColorX;
      while (ColorX < Xmin || ColorX > 1.|| 1. -  ColorX <= Xmin); 
-     Color.last()->SetX(SumX = ColorX);// this is the valenz quark.
+     Color.back()->SetX(SumX = ColorX);// this is the valenz quark.
      for(G4int aPair = 0; aPair < nSeaPair; aPair++) 
      {
        NumberOfUnsampledSeaQuarks--;
        ColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
-       Color.at(aPair)->SetX(ColorX);
+       Color[aPair]->SetX(ColorX);
        SumX += ColorX; 
        NumberOfUnsampledSeaQuarks--;
        AntiColorX = SampleX(Xmin, NumberOfUnsampledSeaQuarks, 2*nSeaPair, aBeta);
-       AntiColor.at(aPair)->SetX(AntiColorX); // the 'sea' partons
+       AntiColor[aPair]->SetX(AntiColorX); // the 'sea' partons
        SumX += AntiColorX;
        if (1. - SumX <= Xmin)  break;
      }
    } 
    while (1. - SumX <= Xmin); 
-   AntiColor.last()->SetX(1. - SumX); // the di-quark takes the rest, then go to momentum
+   (*(AntiColor.end()-1))->SetX(1. - SumX); // the di-quark takes the rest, then go to momentum
    G4double lightCone = ((!Direction) ? Get4Momentum().minus() : Get4Momentum().plus());
    for(aSeaPair = 0; aSeaPair < nSeaPair+1; aSeaPair++) 
    {
-     G4Parton* aParton = Color.at(aSeaPair);
+     G4Parton* aParton = Color[aSeaPair];
      aParton->DefineMomentumInZ(lightCone, Direction);
 
-     aParton = AntiColor.at(aSeaPair); 
+     aParton = AntiColor[aSeaPair]; 
      aParton->DefineMomentumInZ(lightCone, Direction);
    }  
 //--DEBUG--   cout <<G4endl<<"XSAMPLE "<<HPWtest<<G4endl;
@@ -260,7 +309,7 @@ void G4QGSMSplitableHadron::SoftSplitUp()
 
 void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * aPart, G4Parton *& Parton1, G4Parton *& Parton2)
 {
-   // Note! convention aEnd = q or qqbar and bEnd = qbar or qq.
+   // Note! convention aEnd = q or (qq)bar and bEnd = qbar or qq.
   G4int aEnd;
   G4int bEnd;
   G4int HadronEncoding = aPart->GetPDGEncoding();
@@ -276,8 +325,48 @@ void G4QGSMSplitableHadron::GetValenceQuarkFlavors(const G4ParticleDefinition * 
   Parton1 = new G4Parton(aEnd);
   Parton1->SetPosition(GetPosition());
 
+//	G4cerr << "G4QGSMSplitableHadron::GetValenceQuarkFlavors()" << G4endl;
+//	G4cerr << "Parton 1: " 
+//	       << " PDGcode: "  << aEnd
+//	       << " - Name: "   << Parton1->GetDefinition()->GetParticleName()
+//	       << " - Type: "   << Parton1->GetDefinition()->GetParticleType() 
+//	       << " - Spin-3: " << Parton1->GetSpinZ() 
+//	       << " - Colour: " << Parton1->GetColour() << G4endl;
+
   Parton2 = new G4Parton(bEnd);
   Parton2->SetPosition(GetPosition());
+
+//	G4cerr << "Parton 2: " 
+//	       << " PDGcode: "  << bEnd
+//	       << " - Name: "   << Parton2->GetDefinition()->GetParticleName()
+//	       << " - Type: "   << Parton2->GetDefinition()->GetParticleType() 
+//	       << " - Spin-3: " << Parton2->GetSpinZ() 
+//	       << " - Colour: " << Parton2->GetColour() << G4endl;
+//	G4cerr << "... now checking for color and spin conservation - yielding: " << G4endl;
+
+  // colour of parton 1 choosen at random by G4Parton(aEnd)
+  // colour of parton 2 is the opposite:
+
+  Parton2->SetColour(-(Parton1->GetColour()));
+
+	// isospin-3 of both partons is handled by G4Parton(PDGCode)
+
+	// spin-3 of parton 1 and 2 choosen at random by G4Parton(aEnd)
+	// spin-3 of parton 2 may be constrained by spin of original particle:
+
+  if ( abs(Parton1->GetSpinZ() + Parton2->GetSpinZ()) > aPart->GetPDGSpin()) 
+  {
+		Parton2->SetSpinZ(-(Parton2->GetSpinZ()));    
+  } 
+
+//	G4cerr << "Parton 2: " 
+//	       << " PDGcode: "  << bEnd
+//	       << " - Name: "   << Parton2->GetDefinition()->GetParticleName()
+//	       << " - Type: "   << Parton2->GetDefinition()->GetParticleType() 
+//	       << " - Spin-3: " << Parton2->GetSpinZ() 
+//	       << " - Colour: " << Parton2->GetColour() << G4endl;
+//	G4cerr << "------------" << G4endl;
+
 }
  
     
@@ -319,7 +408,17 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
   do
   {
     x1 = -1.;
-    while(x1<anXmin||x1>=1-(totalSea+1)*anXmin) x1 = G4UniformRand();
+    G4int debcount=0;
+    while(x1<anXmin||x1>=1-(totalSea+1)*anXmin) 
+    {
+      debcount ++; 
+      if(debcount>10000) 
+      {
+        G4cout << "anXmin = "<<anXmin<<" nSea = "<<nSea<<" totalSea = "<< totalSea<<G4endl;
+        G4Exception("G4QGSMSplitableHadron - Fatal: Cannot sample parton densities under these constraints.");
+      }
+      x1 = G4UniformRand();
+    }
     y = pow(x1, alpha);
     y *= pow( pow(1-x1-totalSea*anXmin, alpha+1) - pow(anXmin, alpha+1), nSea);
     y *= pow(1-x1-totalSea*anXmin, aBeta+1) - pow(anXmin, aBeta+1);  

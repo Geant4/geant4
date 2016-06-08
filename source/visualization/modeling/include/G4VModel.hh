@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.hh,v 1.8.2.1 2001/06/28 19:16:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VModel.hh,v 1.13 2001/08/24 20:36:26 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -33,6 +33,8 @@
 // graphics-system-indepedent description of a Geant4 component.
 // The key fuctionality of a model is to know how to describe itself
 // to a scene handler.  A scene is a collection of models.
+// A special case is made for G4PhysicalVolumeModel - a non-null pointer
+// is to be returned by G4PhysicalVolumeModel::GetG4PhysicalVolumeModel().
 
 #ifndef G4VMODEL_HH
 #define G4VMODEL_HH
@@ -43,6 +45,8 @@
 
 class G4VGraphicsScene;
 class G4ModelingParameters;
+
+class G4PhysicalVolumeModel;  // Special case - see above.
 
 class G4VModel {
 
@@ -57,7 +61,7 @@ public: // With description
   virtual ~G4VModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&) = 0;
-  // The main task of a model is to describe itself to the scene.
+  // The main task of a model is to describe itself to the graphics scene.
 
   const G4ModelingParameters* GetModelingParameters () const;
 
@@ -82,9 +86,15 @@ public: // With description
   const G4Transform3D& GetTransformation () const;
   // Model transformation, i.e., position and orientation of model in world.
 
+  virtual const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const;
+  virtual       G4PhysicalVolumeModel* GetG4PhysicalVolumeModel ();
+  // Returns 0 unless implemented by derived class.
+
   void SetModelingParameters (const G4ModelingParameters*);
 
-  virtual G4bool Validate ();
+  void SetExtent (const G4VisExtent&);
+
+  virtual G4bool Validate (G4bool warn = true);
   // Validate, but allow internal changes (hence non-const function).
 
 protected:

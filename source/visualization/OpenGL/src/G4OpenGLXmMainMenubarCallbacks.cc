@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.8.2.1 2001/06/28 19:15:45 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.9 2001/07/11 10:08:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  16th April 1997

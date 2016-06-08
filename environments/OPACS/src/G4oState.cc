@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4oState.cc,v 1.6.4.1 2001/06/28 19:06:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //#define DEBUG
 

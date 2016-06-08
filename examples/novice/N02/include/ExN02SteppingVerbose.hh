@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02SteppingVerbose.hh,v 1.4.4.1 2001/06/28 19:07:29 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02SteppingVerbose.hh,v 1.6 2001/10/11 12:32:36 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.
 //   It shows how to extract informations during the tracking of a particle.
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02SteppingVerbose;
 
@@ -38,11 +38,11 @@ class ExN02SteppingVerbose;
 
 #include "G4SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExN02SteppingVerbose : public G4SteppingVerbose {
-
-public:
+class ExN02SteppingVerbose : public G4SteppingVerbose 
+{
+ public:
    
   ExN02SteppingVerbose();
  ~ExN02SteppingVerbose();
@@ -51,5 +51,7 @@ public:
   void TrackingStarted();
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

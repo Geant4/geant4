@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.9.2.1 2001/06/28 19:15:30 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSteppingVerbose.hh,v 1.13 2001/11/07 13:04:50 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //  
 //---------------------------------------------------------------
@@ -47,7 +47,8 @@
 class G4SteppingManager;
 
 #include "globals.hh"                 // Include from 'global'
-#include "g4rw/tvordvec.h"  
+#include "g4std/vector"
+
 class G4Navigator;
 class G4VPhysicalVolume;
 class G4VSensitiveDetector;
@@ -59,7 +60,7 @@ class G4Track;
 #include "G4StepStatus.hh"            // Include from 'track'
 class G4UserSteppingAction;
 class G4StepPoint;
-class G4VTouchable;
+#include "G4TouchableHandle.hh"
 class G4VParticleChange;
 #include "G4ForceCondition.hh"  //enum 'track'
 #include "G4GPILSelection.hh"   //enum 'track'
@@ -177,10 +178,7 @@ protected:
 
   G4double   fPreviousStepSize;
 
-  const G4VTouchable* fTouchable1;
-  const G4VTouchable* fTouchable2;
-  G4bool fIsTouchable1Free;
-  G4bool fIsTouchable2Free;
+  G4TouchableHandle fTouchableHandle;
 
   G4SteppingControl StepControlFlag;
 

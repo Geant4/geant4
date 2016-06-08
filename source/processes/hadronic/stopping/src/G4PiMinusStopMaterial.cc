@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.4.8.2 2001/06/28 20:20:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PiMinusStopMaterial.cc,v 1.8 2001/10/05 16:09:44 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -42,9 +42,7 @@
 
 #include "G4PiMinusStopMaterial.hh"
 
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
-#include "g4rw/cstring.h"
+#include "g4std/vector"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -65,8 +63,6 @@
 G4PiMinusStopMaterial::G4PiMinusStopMaterial()
   
 {
-  //  _definitions = new G4RWTPtrOrderedVector<G4ParticleDefinition>();
-  //  _momenta = new G4RWTPtrOrderedVector<G4LorentzVector>();
   _definitions = 0;
   _momenta = 0;
   _distributionE = 0;
@@ -83,29 +79,29 @@ G4PiMinusStopMaterial::~G4PiMinusStopMaterial()
   if (_definitions != 0) delete _definitions;
   _definitions = 0;
 
-  _momenta->clearAndDestroy();
+  for(unsigned int i=0; i<_momenta->size(); i++) delete(*_momenta)[i];
   if (_momenta != 0) delete _momenta;
 
   delete _distributionE;
   delete _distributionAngle;
 }
 
-G4RWTPtrOrderedVector<G4ParticleDefinition>* G4PiMinusStopMaterial::DefinitionVector()
+G4std::vector<G4ParticleDefinition*>* G4PiMinusStopMaterial::DefinitionVector()
 {
 
-  _definitions->append(G4Neutron::Neutron());
+  _definitions->push_back(G4Neutron::Neutron());
 
   G4double ranflat = G4UniformRand();
   if (ranflat < theR)
-    { _definitions->append(G4Proton::Proton()); }
+    { _definitions->push_back(G4Proton::Proton()); }
   else
-    { _definitions->append(G4Neutron::Neutron()); }
+    { _definitions->push_back(G4Neutron::Neutron()); }
   
   return _definitions;
 
 }
 
-G4RWTPtrOrderedVector<G4LorentzVector>* G4PiMinusStopMaterial::P4Vector(const G4double binding,
+G4std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double binding,
 								      const G4double massNucleus)
 {
 
@@ -164,8 +160,8 @@ G4RWTPtrOrderedVector<G4LorentzVector>* G4PiMinusStopMaterial::P4Vector(const G4
 
     }  while ((eKin1 + eKin2 + eRecoil) > availableE);
   
-  _momenta->append(new G4LorentzVector(p1));
-  _momenta->append(new G4LorentzVector(p2));
+  _momenta->push_back(new G4LorentzVector(p1));
+  _momenta->push_back(new G4LorentzVector(p2));
 
   return _momenta;
 
@@ -192,7 +188,7 @@ G4double G4PiMinusStopMaterial::RecoilEnergy(const G4double mass)
 {
   G4ThreeVector p(0.,0.,0.);
   
-  for (G4int i = 0; i< _momenta->entries(); i++)
+  for (unsigned int i = 0; i< _momenta->size(); i++)
     {
       p = p + (*_momenta)[i]->vect();
     }

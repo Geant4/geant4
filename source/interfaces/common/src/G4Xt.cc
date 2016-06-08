@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Xt.cc,v 1.6.4.1 2001/06/28 19:10:25 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Xt.cc,v 1.8 2001/12/03 08:01:47 barrand Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G.Barrand
 
@@ -41,9 +41,9 @@
 #define NewString(str)  \
  ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : NULL)
 
-static void XWidgetIconify                 (Widget);
-static void XWidgetUniconify               (Widget);
-static void XDisplaySetWindowToNormalState (Display*,Window);
+//static void XWidgetIconify                 (Widget);
+//static void XWidgetUniconify               (Widget);
+//static void XDisplaySetWindowToNormalState (Display*,Window);
 
 G4Xt* G4Xt::instance    = NULL;
 
@@ -188,38 +188,22 @@ void G4Xt::FlushAndWaitExecution (
 /***************************************************************************/
 /******* From OPACS Xx/v3 package ******************************************/
 /***************************************************************************/
-/***************************************************************************/
-void XWidgetIconify (
- Widget This 
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
+/*
+void XWidgetIconify ( Widget This ) {
   if(This==NULL)          return;
   if(!XtIsRealized(This)) return;
   XIconifyWindow(XtDisplay(This),XtWindow(This),XScreenNumberOfScreen(XtScreen(This)));
 }
-/***************************************************************************/
-void XWidgetUniconify (
- Widget This 
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
+void XWidgetUniconify ( Widget This ) {
   if(This==NULL)          return;
   if(!XtIsRealized(This)) return;
   XDisplaySetWindowToNormalState (XtDisplay(This),XtWindow(This));
 }
-/***************************************************************************/
 void XDisplaySetWindowToNormalState (
  Display* This
 ,Window a_window
 )
-/***************************************************************************/
-/*
-  Used to deiconify a window.
-*/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+//  Used to deiconify a window.
 {
   XWMHints         wh;
   if(This==NULL)   return;
@@ -229,6 +213,7 @@ void XDisplaySetWindowToNormalState (
   XSetWMHints      (This,a_window,&wh);
   XMapWindow       (This,a_window);
 }
+*/
 
 #endif
 

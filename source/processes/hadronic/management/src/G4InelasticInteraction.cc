@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -179,6 +179,7 @@
    G4bool &targetHasChanged,
    G4bool quasiElastic )
   {
+    what = originalIncident->GetMomentum();
     theReactionDynamics.ProduceStrangeParticlePairs( vec, vecLen,
                                                      modifiedOriginal, originalTarget,
                                                      currentParticle, targetParticle,
@@ -252,7 +253,11 @@
                                             targetNucleus, incidentHasChanged,
                                             targetHasChanged, leadFlag,
                                             leadingStrangeParticle );
-    if( finishedGenXPt )return;
+    if( finishedGenXPt )
+    {
+      Rotate(vec, vecLen);
+      return;
+    }
     G4bool finishedTwoClu = false;
     if( modifiedOriginal.GetTotalMomentum()/MeV < 1.0 )
     {
@@ -272,7 +277,11 @@
                                                        targetHasChanged, leadFlag,
                                                        leadingStrangeParticle );
     }
-    if( finishedTwoClu )return;
+    if( finishedTwoClu )
+    {
+      Rotate(vec, vecLen);
+      return;
+    }
     //
     // PNBlackTrackEnergy is the kinetic energy available for
     //   proton/neutron black track particles [was enp(1) in fortran code]
@@ -299,6 +308,20 @@
                                  targetNucleus, targetHasChanged );
   }
  
+ void G4InelasticInteraction::
+ Rotate(G4FastVector<G4ReactionProduct,128> &vec, G4int &vecLen)
+ {
+   G4double rotation = 2.*pi*G4UniformRand();
+   cache = rotation;
+   G4int i;
+   for( i=0; i<vecLen; ++i )
+   {
+     G4ThreeVector momentum = vec[i]->GetMomentum();
+     momentum = momentum.rotate(rotation, what);
+     vec[i]->SetMomentum(momentum);
+   }
+ }      
+
  void
   G4InelasticInteraction::SetUpChange(
    G4FastVector<G4ReactionProduct,128> &vec,
@@ -371,7 +394,9 @@
     {
       G4DynamicParticle *p1 = new G4DynamicParticle;
       p1->SetDefinition( targetParticle.GetDefinition() );
-      p1->SetMomentum( targetParticle.GetMomentum() );
+      G4ThreeVector momentum = targetParticle.GetMomentum();
+      momentum = momentum.rotate(cache, what);
+      p1->SetMomentum( momentum );
       theParticleChange.AddSecondary( p1 );
     }
     G4DynamicParticle *p;

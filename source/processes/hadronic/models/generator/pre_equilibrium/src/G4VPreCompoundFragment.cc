@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.8.2.1 2001/06/28 19:13:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPreCompoundFragment.cc,v 1.11.2.1 2001/12/04 15:32:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by V. Lara
  
@@ -48,8 +48,9 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(const G4VPreCompoundFragment & ri
 
 G4VPreCompoundFragment::G4VPreCompoundFragment(const G4double anA,
 					       const G4double aZ, G4VCoulombBarrier* aCoulombBarrier):
-  theA(anA),theZ(aZ), theCoulombBarrierPtr(aCoulombBarrier),
+  theA(anA),theZ(aZ), 
   theRestNucleusA(0.0),theRestNucleusZ(0.0),theCoulombBarrier(0.0),
+  theCoulombBarrierPtr(aCoulombBarrier),theBindingEnergy(0.0),
   theMaximalKineticEnergy(-1.0),theExcitonLevelDensityRatio(0.0),theEmissionProbability(0.0),
   theCondensationProbability(0.0),theMomentum(0.0,0.0,0.0,0.0),theFragmentName("No Name")
 {}
@@ -57,8 +58,9 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(const G4double anA,
 G4VPreCompoundFragment::G4VPreCompoundFragment(const G4double anA,
 					       const G4double aZ, G4VCoulombBarrier* aCoulombBarrier,
 					       const G4String & aName):
-  theA(anA),theZ(aZ), theCoulombBarrierPtr(aCoulombBarrier),
+  theA(anA),theZ(aZ), 
   theRestNucleusA(0.0),theRestNucleusZ(0.0),theCoulombBarrier(0.0),
+  theCoulombBarrierPtr(aCoulombBarrier), theBindingEnergy(0.0),
   theMaximalKineticEnergy(-1.0),theExcitonLevelDensityRatio(0.0),theEmissionProbability(0.0),
   theCondensationProbability(0.0),theMomentum(0.0,0.0,0.0,0.0),theFragmentName(aName)
 {}
@@ -109,7 +111,12 @@ G4std::ostream& operator << (G4std::ostream &out, const G4VPreCompoundFragment &
 
 G4std::ostream& operator << (G4std::ostream &out, const G4VPreCompoundFragment *theFragment)
 {
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags old_floatfield = out.flags();
+  out.setf(G4std::ios::floatfield);
+#else
   long old_floatfield = out.setf(0,G4std::ios::floatfield);
+#endif
 
   out 
     << "PreCompound Model Emitted Fragment: A = " << G4std::setprecision(3) << theFragment->theA 

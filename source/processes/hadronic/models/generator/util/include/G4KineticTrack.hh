@@ -14,15 +14,13 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4KineticTrack.hh,v 1.3.8.2 2001/06/28 20:20:01 gunter Exp $
-// GEANT4 tag $Name:  $
 //
 // $Id: G4KineticTrack.hh,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------
@@ -93,14 +91,14 @@ class G4KineticTrack : public G4VKineticNucleon
   // LB move to public (before was private) LB
       G4double* GetActualWidth() const;
 
+      G4double GetActualMass() const;
+      
   private:
 
 
       G4int GetnChannels() const;
       void SetnChannels(const G4int aChannel);
 
-      G4double GetActualMass() const;
-      
       void SetActualWidth(G4double* anActualWidth); 
       
       G4double EvaluateTotalActualWidth();
@@ -108,9 +106,9 @@ class G4KineticTrack : public G4VKineticNucleon
       G4double EvaluateCMMomentum (const G4double mass,
                                    const G4double* m_ij) const;                                 
       
-      G4double IntegrateCMMomentum() const;
+      G4double IntegrateCMMomentum(const G4double lowerLimit) const;
 
-      G4double IntegrateCMMomentum(const G4double polemass) const;
+      G4double IntegrateCMMomentum(const G4double lowerLimit ,const G4double polemass) const;
 
       G4double IntegrateCMMomentum2() const;
 
@@ -121,13 +119,15 @@ class G4KineticTrack : public G4VKineticNucleon
                      const G4double rmass, 
                      const G4double mass) const;
 
-      friend G4double IntegrandFunction1 (G4double xmass);
+private:
+      G4double IntegrandFunction1 (G4double xmass) const;
+      G4double IntegrandFunction2 (G4double xmass) const;
+      G4double IntegrandFunction3 (G4double xmass) const;
+      G4double IntegrandFunction4 (G4double xmass) const;
+public:
+  //   friend G4double IntegrandFunction3 (G4double xmass);
 
-      friend G4double IntegrandFunction2 (G4double xmass);
-
-      friend G4double IntegrandFunction3 (G4double xmass);
-
-      friend G4double IntegrandFunction4 (G4double xmass);
+  //   friend G4double IntegrandFunction4 (G4double xmass);
       
   // LB new variable created LB
       G4int chosench;
@@ -227,7 +227,7 @@ inline G4double G4KineticTrack::GetActualMass() const
  G4ThreeVector theMomentum = the4Momentum.vect();
  G4double      theMomentum2 = theMomentum.mag2();
  G4double      theTotalEnergy = the4Momentum.e();
- G4double      theMass = sqrt(theTotalEnergy * theTotalEnergy - theMomentum2);
+ G4double      theMass = sqrt(abs(theTotalEnergy * theTotalEnergy - theMomentum2));
  return        theMass;
 }
 

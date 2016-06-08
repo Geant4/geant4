@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -90,10 +90,13 @@
          pnBlackTrackEnergy=right.pnBlackTrackEnergy; 
          dtaBlackTrackEnergy=right.dtaBlackTrackEnergy; 
          theTemp = right.theTemp;
+	 excitationEnergy = right.excitationEnergy;
+	 momentum = right.momentum;
+	 fermiMomentum = right.fermiMomentum;
        }
        return *this;
      }
-    
+   
     inline G4bool operator==( const G4Nucleus &right ) const
     { return ( this == (G4Nucleus *) &right ); }
     

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.hh,v 1.4.2.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TauMinus.hh,v 1.7 2001/10/16 08:16:16 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,8 +55,6 @@ class G4TauMinus : public G4VLepton
 {
  private:
    static G4TauMinus theTauMinus;
-   static G4double  theTauMinusLengthCut;
-   static G4double* theTauMinusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4TauMinus(
@@ -76,32 +74,10 @@ class G4TauMinus : public G4VLepton
 
    static G4TauMinus*  TauMinusDefinition();
    static G4TauMinus*  TauMinus();
-   static G4double  GetCuts() {return theTauMinusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theTauMinusKineticEnergyCuts;};
 
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline void G4TauMinus::SetCuts(G4double aCut)
-{
-   CalcEnergyCuts(aCut);
-   theTauMinusLengthCut = theCutInMaxInteractionLength;  
-   theTauMinusKineticEnergyCuts = theKineticEnergyCuts;   
-}
 
-inline void G4TauMinus::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-   theTauMinusLengthCut = theCutInMaxInteractionLength;  
-   theTauMinusKineticEnergyCuts = theKineticEnergyCuts;   
-}
-
-
-inline  G4TauMinus*  G4TauMinus::TauMinus()
-{ return &theTauMinus; }
 #endif
 
 

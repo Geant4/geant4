@@ -21,16 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.6.2.1 2001/06/28 19:15:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DAWNFILEViewer.hh,v 1.8 2001/07/27 22:32:57 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE viewer - opens window, hard copy, etc.
-
-//=================//
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-//=================//
-
 
 #ifndef G4DAWNFILE_VIEWER_HH
 #define G4DAWNFILE_VIEWER_HH
@@ -72,4 +67,3 @@ private:
 };
 
 #endif
-#endif //G4VIS_BUILD_DAWNFILE_DRIVER

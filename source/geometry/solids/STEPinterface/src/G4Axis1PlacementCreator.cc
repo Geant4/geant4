@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Axis1PlacementCreator.cc,v 1.2.4.1 2001/06/28 19:09:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Axis1PlacementCreator.cc,v 1.3 2001/07/11 10:00:08 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4Axis1PlacementCreator

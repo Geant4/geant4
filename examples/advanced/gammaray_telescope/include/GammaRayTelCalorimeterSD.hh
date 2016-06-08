@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.hh,v 1.1.2.2 2001/06/28 20:18:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelCalorimeterSD.hh,v 1.4 2001/11/29 11:19:17 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -50,7 +50,7 @@ class GammaRayTelCalorimeterSD : public G4VSensitiveDetector
 {
 public:
   
-  GammaRayTelCalorimeterSD(G4String, GammaRayTelDetectorConstruction* );
+  GammaRayTelCalorimeterSD(G4String);
   ~GammaRayTelCalorimeterSD();
   
   void Initialize(G4HCofThisEvent*);
@@ -64,10 +64,14 @@ private:
   
   GammaRayTelCalorimeterHitsCollection*  CalorimeterCollection;      
   GammaRayTelDetectorConstruction* Detector;
-  G4int (*ChitXID)[12];
-  G4int (*ChitYID)[12];
+
+  G4int (*ChitXID);
+  G4int (*ChitYID);
+
   G4int NbOfCALLayers;
   G4int NbOfCALBars; 
+  G4int NbOfCALChannels; 
+
 };
 
 #endif

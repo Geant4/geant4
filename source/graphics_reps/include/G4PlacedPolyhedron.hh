@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedPolyhedron.hh,v 1.8.2.1 2001/06/28 19:10:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PlacedPolyhedron.hh,v 1.9 2001/07/11 10:01:02 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 
 // Class Description:

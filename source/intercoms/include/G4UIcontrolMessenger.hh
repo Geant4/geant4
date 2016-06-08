@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh,v 1.3.4.1 2001/06/28 19:10:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIcontrolMessenger.hh,v 1.9 2001/10/11 01:37:58 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4UIcontrolMessenger_h
@@ -34,6 +34,7 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithoutParameter;
+class G4UIcommand;
 
 // class description:
 //  This class is a concrete class of G4UImessenger which defines
@@ -41,10 +42,18 @@ class G4UIcmdWithoutParameter;
 // this messenger are
 //   /control/ 
 //   /control/execute
+//   /control/loop
+//   /control/foreach
+//   /control/suppressAbortion
 //   /control/verbose
 //   /control/saveHistory
 //   /control/stopSavingHistory
+//   /control/alias
+//   /control/unalias
+//   /control/listAlias
+//   /control/shell
 //   /control/manual
+//   /control/createHTML
 
 class G4UIcontrolMessenger : public G4UImessenger 
 {
@@ -57,10 +66,18 @@ class G4UIcontrolMessenger : public G4UImessenger
   private:
       G4UIdirectory * controlDirectory;
       G4UIcmdWithAString * ExecuteCommand;
+      G4UIcmdWithAnInteger * suppressAbortionCommand;
       G4UIcmdWithAnInteger * verboseCommand;
       G4UIcmdWithAString * historyCommand;
       G4UIcmdWithoutParameter * stopStoreHistoryCommand;
+      G4UIcommand * aliasCommand;
+      G4UIcmdWithAString * unaliasCommand;
+      G4UIcmdWithoutParameter * listAliasCommand;
+      G4UIcmdWithAString * shellCommand;
+      G4UIcommand * loopCommand;
+      G4UIcommand * foreachCommand;
       G4UIcmdWithAString * ManualCommand;
+      G4UIcmdWithAString * HTMLCommand;
 };
 
 #endif

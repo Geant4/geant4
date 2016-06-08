@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.hh,v 1.6.2.2 2001/06/28 20:18:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Neutron.hh,v 1.11 2001/10/28 05:08:21 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 //----------------------------------------------------------------
 
 // Each class inheriting from G4VBaryon
@@ -55,8 +54,6 @@ class G4Neutron : public G4VBaryon
 {
  private:
    static G4Neutron theNeutron;
-   static G4double  theNeutronLengthCut;
-   static G4double* theNeutronKineticEnergyCuts;
 
  private:
   G4Neutron(
@@ -75,13 +72,7 @@ class G4Neutron : public G4VBaryon
    virtual ~G4Neutron(){}
 
    static G4Neutron* NeutronDefinition();
-   static G4Neutron* Neutron(){return &theNeutron;}
-   static G4double GetCuts() {return theNeutronLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theNeutronKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
+   static G4Neutron* Neutron();
 
  public:  //With Description
    G4int    GetAtomicNumber() const;
@@ -91,6 +82,8 @@ class G4Neutron : public G4VBaryon
    void     SetExcitationEnergy(G4double ){}
    // These two methods are dummy because all particles derived from 
    // G4Neutron is "groud state" nuclei  
+
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 inline
@@ -103,15 +96,6 @@ inline
  G4int G4Neutron::GetAtomicMass() const 
 {
   return 1;
-}
-
-inline
- void G4Neutron::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theNeutronLengthCut = theCutInMaxInteractionLength;  
-  theNeutronKineticEnergyCuts = theKineticEnergyCuts;
 }
 
 #endif

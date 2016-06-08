@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.3.4.2 2001/06/28 20:19:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Alpha.cc,v 1.6 2001/10/16 08:16:07 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -85,6 +85,4 @@ G4Alpha G4Alpha::theAlpha(
 );
 
 G4Alpha* G4Alpha::AlphaDefinition(){return &theAlpha;}
-// initialization for static cut values
-G4double   G4Alpha::theAlphaLengthCut;
-G4double*  G4Alpha::theAlphaKineticEnergyCuts;
+G4Alpha* G4Alpha::Alpha(){return &theAlpha;}

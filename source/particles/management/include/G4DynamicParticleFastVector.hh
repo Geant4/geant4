@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticleFastVector.hh,v 1.2.4.2 2001/06/28 20:19:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DynamicParticleFastVector.hh,v 1.3 2001/07/11 10:01:55 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------

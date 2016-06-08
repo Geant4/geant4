@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000/02/14 13:44:01 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2001/11/29 16:46:51 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for STEP library.  Gabriele Cosmo, 15/11/96.
 # -------------------------------------------------------------
@@ -20,6 +20,17 @@ CPPFLAGS  += \
              -I$(G4BASE)/global/HEPRandom/include \
              -I$(G4BASE)/global/HEPGeometry/include
 
+# To avoid incompatibilities with ANSI standard treatment of strings, the
+# NIST STEP reader on gcc-2.95.X and later must be compiled in non-ANSI mode.
+#
+ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
+  ansi_options = -Wall -ansi -pedantic
+  NCXX = $(filter-out $(ansi_options),$(CXXFLAGS))
+  NCPP = $(CPPFLAGS)
+  CXXFLAGS := $(NCXX)
+  CPPFLAGS := $(NCPP) -w
+endif
+
 include $(G4INSTALL)/config/common.gmk
 
 # Fix for ISO AP203 geometry standard files to be always compiled without optimization.
@@ -29,14 +40,18 @@ CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
 CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
 
 $(G4TMP)/$(G4SYSTEM)/$(name)/SdaiCONFIG_CONTROL_DESIGN.o: src/SdaiCONFIG_CONTROL_DESIGN.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/SdaiCONFIG_CONTROL_DESIGN.cc
+	@$(ECHO) Compiling SdaiCONFIG_CONTROL_DESIGN.cc ...
+	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/SdaiCONFIG_CONTROL_DESIGN.cc
 $(G4TMP)/$(G4SYSTEM)/$(name)/SdaiCONFIG_CONTROL_DESIGN_init.o: src/SdaiCONFIG_CONTROL_DESIGN_init.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/SdaiCONFIG_CONTROL_DESIGN_init.cc
+	@$(ECHO) Compiling SdaiCONFIG_CONTROL_DESIGN_init.cc ...
+	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/SdaiCONFIG_CONTROL_DESIGN_init.cc
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   CXXFLAGS_WITH_ZM = $(filter-out -Zm%,$(CXXFLAGS)) -Zm500
 
 $(G4TMPDIR)/SdaiCONFIG_CONTROL_DESIGN.o: src/SdaiCONFIG_CONTROL_DESIGN.cc
-	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
+	@$(ECHO) Compiling SdaiCONFIG_CONTROL_DESIGN.cc ...
+	@$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
 	  src/SdaiCONFIG_CONTROL_DESIGN.cc
 endif
+

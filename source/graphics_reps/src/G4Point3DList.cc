@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Point3DList.cc,v 1.4.2.1 2001/06/28 19:10:11 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Point3DList.cc,v 1.5 2001/07/11 10:01:08 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  July 1995

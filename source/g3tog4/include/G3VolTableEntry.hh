@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.hh,v 1.4.4.1 2001/06/28 19:08:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3VolTableEntry.hh,v 1.7 2001/11/08 16:07:58 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------
 // Class description:
@@ -69,7 +69,7 @@
 #include "globals.hh"
 #include "G3Pos.hh"
 #include "G3Division.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4LogicalVolume;
 class G4Material;
@@ -80,8 +80,8 @@ class G3VolTableEntry
   public:  // with description
 
     G3VolTableEntry(G4String& vname, G4String& shape, G4double* rpar, 
-                     G4int npar, G4int nmed, G4VSolid* solid, 
-		     G4bool hasNegPars);
+                    G4int npar, G4int nmed, G4VSolid* solid, 
+		    G4bool hasNegPars);
     virtual ~G3VolTableEntry();
 
     // operators
@@ -92,6 +92,7 @@ class G3VolTableEntry
     void AddDaughter(G3VolTableEntry* aDaughter);
     void AddMother(G3VolTableEntry* aDaughter);
     void AddClone(G3VolTableEntry* aDaughter);
+    void AddOverlap(G3VolTableEntry* aOverlap);
     void ReplaceDaughter(G3VolTableEntry* vteOld, G3VolTableEntry* vteNew);
     void ReplaceMother(G3VolTableEntry* vteOld, G3VolTableEntry* vteNew);
     G3VolTableEntry* FindDaughter(const G4String& vname);
@@ -107,6 +108,7 @@ class G3VolTableEntry
     void SetNRpar(G4int npar, G4double* Rpar);
     void SetDivision(G3Division* division);
     void SetHasNegPars(G4bool hasNegPars);
+    void SetHasMANY(G4bool hasMANY);
     void ClearG3PosCopy(G4int copy);
     void ClearDivision();
  
@@ -120,20 +122,22 @@ class G3VolTableEntry
     G3Pos* GetG3PosCopy(G4int copy=0);
     G3Division* GetDivision();
     G4bool HasNegPars();
+    G4bool HasMANY();
     G4VSolid* GetSolid();
     G4LogicalVolume* GetLV();
     G4int GetNoDaughters();
     G4int GetNoMothers();
     G4int GetNoClones();
+    G4int GetNoOverlaps();
     G3VolTableEntry* GetDaughter(G4int i);
     G3VolTableEntry* GetMother(G4int i);
     G3VolTableEntry* GetMother();  
       // return the first mother - to be removed
     G3VolTableEntry* GetClone(G4int i);
     G3VolTableEntry* GetMasterClone();
+    G4std::vector<G3VolTableEntry*>* GetOverlaps();
 
   private:
-
     G4String fVname;
     G4String fShape;
     G4double* fRpar;
@@ -142,10 +146,12 @@ class G3VolTableEntry
     G4VSolid* fSolid;
     G4LogicalVolume* fLV;
     G4bool fHasNegPars;
-    G4RWTPtrOrderedVector<G3VolTableEntry> fDaughters;
-    G4RWTPtrOrderedVector<G3VolTableEntry> fMothers;
-    G4RWTPtrOrderedVector<G3VolTableEntry> fClones;
-    G4RWTPtrOrderedVector<G3Pos> fG3Pos;
+    G4bool fHasMANY;
+    G4std::vector<G3VolTableEntry*> fDaughters;
+    G4std::vector<G3VolTableEntry*> fMothers;
+    G4std::vector<G3VolTableEntry*> fClones;
+    G4std::vector<G3VolTableEntry*> fOverlaps;
+    G4std::vector<G3Pos*> fG3Pos;
     G3Division*  fDivision;
 };
 

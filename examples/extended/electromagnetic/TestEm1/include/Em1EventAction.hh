@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventAction.hh,v 1.2.4.1 2001/06/28 19:06:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em1EventAction.hh,v 1.5 2001/11/29 11:28:07 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1EventAction_h
 #define Em1EventAction_h 1
@@ -35,15 +35,14 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class Em1RunAction;
 class Em1EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1EventAction : public G4UserEventAction
 {
   public:
-    Em1EventAction(Em1RunAction*);
+    Em1EventAction();
    ~Em1EventAction();
 
   public:
@@ -57,12 +56,13 @@ class Em1EventAction : public G4UserEventAction
             
     
   private:
-    Em1RunAction*             Em1Run;
     G4double                  TotalEnergyDeposit;   
     G4String                  drawFlag;
     G4int                     printModulo;                    
     Em1EventActionMessenger*  eventMessenger;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

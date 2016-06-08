@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: GammaRayTelDummySD.hh,v 1.1.4.2 2001/06/28 20:18:38 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelDummySD.hh,v 1.4 2001/11/28 10:07:01 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -42,12 +42,14 @@
 #define GammaRayTelDummySD_h 1
 
 #include "G4VSensitiveDetector.hh"
+#include "globals.hh"
+
 class G4Step;
 
 class GammaRayTelDummySD : public G4VSensitiveDetector
 {
 public:
-  GammaRayTelDummySD();
+  GammaRayTelDummySD(G4String name):G4VSensitiveDetector(name){};
   ~GammaRayTelDummySD() {};
   
   void Initialize(G4HCofThisEvent*HCE) {};
@@ -57,7 +59,5 @@ public:
   void DrawAll() {};
   void PrintAll() {};
 };
-GammaRayTelDummySD::GammaRayTelDummySD()
-  : G4VSensitiveDetector("dummySD")
-{}
+
 #endif

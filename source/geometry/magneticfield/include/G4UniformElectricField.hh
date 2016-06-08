@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.hh,v 1.4.4.1 2001/06/28 19:08:17 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UniformElectricField.hh,v 1.6 2001/12/04 17:35:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4UniformElectricField
@@ -56,14 +56,13 @@ class G4UniformElectricField : public G4ElectroMagneticField
 	                   G4double vTheta,
 		           G4double vPhi     ) ;
 		       
-    ~G4UniformElectricField() ;
+    virtual ~G4UniformElectricField() ;
 
     G4UniformElectricField(const G4UniformElectricField &p);
     G4UniformElectricField& operator = (const G4UniformElectricField &p);
       // Copy constructor and assignment operator
 
-    void GetFieldValue(const G4double position[] ,
-	                     G4double B[]      ) const ;
+    virtual void GetFieldValue(const G4double pos[4], G4double *field) const;
 
   private:
   

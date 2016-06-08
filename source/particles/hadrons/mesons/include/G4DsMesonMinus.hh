@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonMinus.hh,v 1.3.4.2 2001/06/28 20:19:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DsMesonMinus.hh,v 1.5 2001/10/15 10:06:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,8 +53,6 @@ class G4DsMesonMinus : public G4VMeson
 {
  private:
    static G4DsMesonMinus theDsMesonMinus;
-   static G4double  theDsMesonMinusLengthCut;
-   static G4double* theDsMesonMinusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4DsMesonMinus(
@@ -74,17 +72,6 @@ class G4DsMesonMinus : public G4VMeson
 
    static G4DsMesonMinus* DsMesonMinusDefinition();
    static G4DsMesonMinus* DsMesonMinus();
-   static G4double GetCuts() {return theDsMesonMinusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theDsMesonMinusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4DsMesonMinus::SetCuts(G4double aCut)
-{
-  G4ParticleWithCuts::SetCuts(aCut);
-  theDsMesonMinusLengthCut = theCutInMaxInteractionLength;  
-  theDsMesonMinusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 #endif

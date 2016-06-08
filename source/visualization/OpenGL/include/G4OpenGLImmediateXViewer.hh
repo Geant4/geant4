@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.hh,v 1.5.2.1 2001/06/28 19:15:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLImmediateXViewer.hh,v 1.7 2001/07/14 21:47:42 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -49,6 +49,7 @@ public:
   G4OpenGLImmediateXViewer (G4OpenGLImmediateSceneHandler& scene,
 			  const G4String& name = "");
   virtual ~G4OpenGLImmediateXViewer ();
+  void Initialise ();
   void DrawView ();
 };
 

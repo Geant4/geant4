@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.4.4.1 2001/06/28 19:12:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PAIxSection.hh,v 1.5 2001/07/11 10:03:28 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // G4PAIxSection.hh -- header file

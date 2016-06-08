@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineSurfaceWithKnots.cc,v 1.2.4.1 2001/06/28 19:08:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BSplineSurfaceWithKnots.cc,v 1.3 2001/07/11 09:59:43 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

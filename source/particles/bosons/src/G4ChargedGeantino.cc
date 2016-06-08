@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.cc,v 1.4.2.1 2001/06/28 19:10:36 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ChargedGeantino.cc,v 1.10 2001/10/28 05:03:49 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -85,31 +85,19 @@ G4ChargedGeantino G4ChargedGeantino::theChargedGeantino(
 );
 
 G4ChargedGeantino* G4ChargedGeantino::ChargedGeantinoDefinition(){return &theChargedGeantino;}
-// initialization for static cut values
-G4double   G4ChargedGeantino::theChargedGeantinoLengthCut = -1.0;
-G4double*  G4ChargedGeantino::theChargedGeantinoKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
 
-void G4ChargedGeantino::SetCuts(G4double aCut)
+void G4ChargedGeantino::CalcEnergyCuts( const G4Material* )
 {
-  theCutInMaxInteractionLength = aCut;
+  // Set Energy Cut values to zero  for all materials
+  SetEnergyCutValues( 0.0*keV);
+}
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
 
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = 0.0*keV;
-  }
-  theChargedGeantinoLengthCut = theCutInMaxInteractionLength;  
-  theChargedGeantinoKineticEnergyCuts = theKineticEnergyCuts;
-  // Rebuild the physics tables for every process for this particle type
+G4ChargedGeantino* G4ChargedGeantino::ChargedGeantino()
+{ 
+ return &theChargedGeantino; 
 }

@@ -57,6 +57,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ElementVector.hh"
+#include "G4Material.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -101,7 +102,7 @@ void G4hNuclearStoppingModel::InitializeMe()
   }
 
   // Default is nuclear stopping fluctuations On
-  nStopingPowerTable->SetNuclearStoppingFluctuationsOn();  
+  nStopingPowerTable->SetNuclearStoppingFluctuationsOff();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -165,8 +166,8 @@ G4double G4hNuclearStoppingModel::StoppingPower(
   G4double nloss = 0.0;
 
   for (G4int iel=0; iel<NumberOfElements; iel++) {
-    const G4Element* element = (*theElementVector)(iel) ;
-    G4double z2 = element->GetZ() ;
+    const G4Element* element = (*theElementVector)[iel] ;
+    G4double z2 = element->GetZ();
     G4double m2 = element->GetA()*mole/g ;
     nloss += (nStopingPowerTable->
               NuclearStoppingPower(kineticEnergy, z1, z2, m1, m2))

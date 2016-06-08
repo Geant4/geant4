@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProjectedSurface.hh,v 1.5.4.1 2001/06/28 19:08:46 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ProjectedSurface.hh,v 1.6 2001/07/11 09:59:36 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4ProjectedSurface

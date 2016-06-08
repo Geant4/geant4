@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.4.2.2 2001/06/28 20:19:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SynchrotronRadiation.cc,v 1.6 2001/10/24 16:27:45 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -83,7 +83,6 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
 {
   G4int i ;
   aParticleChange.Initialize(trackData);
-  G4Material* aMaterial=trackData.GetMaterial() ;
 
   const G4DynamicParticle* aDynamicParticle=trackData.GetDynamicParticle();
 
@@ -141,19 +140,6 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
       G4ParticleMomentum 
       particleDirection = aDynamicParticle->GetMomentumDirection();
 
-      // Gamma production cut in this material
-      G4double 
-      gammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
-
-      if (energyOfSR <= gammaEnergyCut)  // only energy loss, no SR photon
-      {
-        aParticleChange.SetMomentumChange( particleDirection );
-        aParticleChange.SetEnergyChange( kineticEnergy - energyOfSR );
-        aParticleChange.SetLocalEnergyDeposit (0.); 
-        aParticleChange.SetNumberOfSecondaries(0);
-        return G4VDiscreteProcess::PostStepDoIt(trackData,stepData);
-      }
-      // SR photon has energy more than the current material cut
       // M-C of its direction
       
       G4double Teta = G4UniformRand()/gamma ;    // Very roughly

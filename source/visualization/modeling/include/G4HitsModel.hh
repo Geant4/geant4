@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.hh,v 1.4.4.1 2001/06/28 19:16:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HitsModel.hh,v 1.7 2001/08/24 20:36:13 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  26th August 1998.
@@ -49,16 +49,13 @@ public: // With description
   virtual ~G4HitsModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the scene.
+  // The main task of a model is to describe itself to the graphics scene.
 
   virtual G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
 
   virtual G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
-
-  virtual G4bool Validate ();
-  // Validate, but allow internal changes (hence non-const function).
 
 };
 

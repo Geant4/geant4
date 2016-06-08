@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh,v 1.3.8.2 2001/06/28 20:19:58 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSplitableHadron.hh,v 1.8 2001/11/29 14:22:49 stesting Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VSplitableHadron_h
@@ -45,7 +45,7 @@ class G4Nucleon;
 class G4Parton;
 class G4VKineticNucleon;
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4VSplitableHadron 
 {
@@ -69,6 +69,7 @@ class G4VSplitableHadron
       G4ParticleDefinition * GetDefinition() const;
       
       void IncrementCollisionCount(G4int aCount);
+      void SetCollisionCount(G4int aCount);
 
       void SetPosition(const G4ThreeVector &aPosition);
       const G4ThreeVector & GetPosition() const;
@@ -76,10 +77,12 @@ class G4VSplitableHadron
       virtual void SplitUp() = 0;
       virtual G4Parton * GetNextParton() = 0 ;
       virtual G4Parton * GetNextAntiParton() = 0 ;
+      G4bool IsSplit() { return isSplit;}
 
 
   protected:
       G4int GetSoftCollisionCount();
+      void Splitting() {isSplit = true;}
       
   private:
 
@@ -95,11 +98,18 @@ class G4VSplitableHadron
       G4ThreeVector thePosition;
       G4int theCollisionCount;
 
+      G4bool isSplit;
+
 };
 
 inline G4int G4VSplitableHadron::GetSoftCollisionCount()
 {
 return theCollisionCount;
+}
+
+inline void G4VSplitableHadron::SetCollisionCount(G4int aCount)
+{
+ theCollisionCount = aCount;
 }
 
 inline void G4VSplitableHadron::Set4Momentum(const G4LorentzVector &a4Momentum)

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -23,7 +23,7 @@
 #ifndef G4HadronicInteractionRegistry_h
 #define G4HadronicInteractionRegistry_h 1
 
-#include "g4rw/tpvector.h"
+#include "g4std/vector"
 #include "globals.hh"
 class G4HadronicInteraction;
 
@@ -55,7 +55,7 @@ class G4HadronicInteractionRegistry
   void AddModel(G4HadronicInteraction * aModel);
   
   G4int nModels;
-  G4RWTPtrVector<G4HadronicInteraction> allModels;
+  G4std::vector <G4HadronicInteraction *> allModels;
   static G4HadronicInteractionRegistry theRegistry;
 
 };

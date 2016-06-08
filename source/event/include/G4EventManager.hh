@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.5.4.1 2001/06/28 19:07:53 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EventManager.hh,v 1.9 2001/07/19 00:14:15 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 
@@ -76,7 +76,7 @@ class G4EventManager
       // This method must be exclusively invoked by G4RunManager.
 
   private:
-      void StackTracks(G4TrackVector *trackVector);
+      void StackTracks(G4TrackVector *trackVector, G4bool IDhasAlreadySet=false);
   
       G4Event* currentEvent;
 
@@ -84,7 +84,7 @@ class G4EventManager
       G4TrackingManager *trackManager;
       G4TrajectoryContainer *trajectoryContainer;
       G4int trackIDCounter;
-      int verboseLevel;
+      G4int verboseLevel;
       G4SDManager* sdManager;
       G4PrimaryTransformer* transformer;
       G4bool tracking;
@@ -132,6 +132,8 @@ class G4EventManager
       // Set and get methods for user action classes. User action classes
       // which should belong to the other managers will be sent to the 
       // corresponding managers.
+      void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
+      { trackContainer->SetNumberOfAdditionalWaitingStacks(iAdd); }
 
   public: // with description
       inline G4int GetVerboseLevel()

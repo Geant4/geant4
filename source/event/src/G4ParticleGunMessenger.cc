@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.4.4.1 2001/06/28 19:07:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticleGunMessenger.cc,v 1.7 2001/10/11 13:34:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4ParticleGunMessenger.hh"
@@ -39,10 +39,9 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4ios.hh"
+#include "G4Tokenizer.hh"
 
 #include "g4std/iomanip"               
-#include "g4rw/ctoken.h"               
-#include "g4rw/rstream.h"               
 #include "g4std/strstream"
 
 G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
@@ -164,7 +163,7 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
     } else {
       fShootIon = false;
       G4ParticleDefinition* pd = particleTable->FindParticle(newValues);
-      if(pd != NULL)
+      if(pd != 0)
       { fParticleGun->SetParticleDefinition( pd ); }
     }
   }

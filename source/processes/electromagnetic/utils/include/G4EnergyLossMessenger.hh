@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.3.4.1 2001/06/28 19:12:47 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EnergyLossMessenger.hh,v 1.4 2001/07/11 10:03:40 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // Class Description:

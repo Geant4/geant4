@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyline.cc,v 1.5.2.1 2001/06/28 19:10:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Polyline.cc,v 1.7 2001/08/14 18:24:58 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  July 1995
@@ -48,6 +48,11 @@ G4VVisPrim & G4Polyline::operator = (const G4VVisPrim &right) {
 G4Polyline & G4Polyline::operator = (const G4Polyline &right) {
   if (&right == this) return *this;
   G4VVisPrim::operator = (right);
+  return *this;
+}
+
+G4Polyline& G4Polyline::transform (const G4Transform3D& transformation) {
+  for (iterator i = begin(); i != end(); ++i) i->transform(transformation);
   return *this;
 }
 

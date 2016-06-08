@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutrinoE.cc,v 1.4.2.1 2001/06/28 19:11:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutrinoE.cc,v 1.10 2001/10/28 05:05:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -79,36 +79,19 @@ G4NeutrinoE G4NeutrinoE::theNeutrinoE(
 );
 
 G4NeutrinoE* G4NeutrinoE::NeutrinoEDefinition() {return &theNeutrinoE;}
-// initialization for static cut values
-G4double   G4NeutrinoE::theNeutrinoELengthCut = -1.0;
-G4double*  G4NeutrinoE::theNeutrinoEKineticEnergyCuts = NULL;
-
+G4NeutrinoE* G4NeutrinoE::NeutrinoE() {return &theNeutrinoE;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
 
-void G4NeutrinoE::SetCuts(G4double aCut)
+void G4NeutrinoE::CalcEnergyCuts( const G4Material* )
 {
-  theCutInMaxInteractionLength = aCut;
-
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
-
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = 0.0*keV;
-  }
-  theNeutrinoELengthCut = theCutInMaxInteractionLength;  
-  theNeutrinoEKineticEnergyCuts = theKineticEnergyCuts;
-
-  // Rebuild the physics tables for every process for this particle type
   
+  
+  // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(0.0*keV); 
+
 }
 
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.cc,v 1.4.2.1 2001/06/28 19:07:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5EventAction.cc,v 1.7 2001/11/28 16:08:18 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5EventAction.hh"
 
@@ -35,9 +35,6 @@
 
 #include "Em5CalorHit.hh"
 #include "Em5EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
-
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -49,25 +46,24 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5EventAction::Em5EventAction(Em5RunAction* Em5RA)
-:calorimeterCollID(-1),eventMessenger(NULL),
- verboselevel(0),runaction(Em5RA),drawFlag("all"),printModulo(10000)
+:calorimeterCollID(-1),eventMessenger(NULL),runaction(Em5RA),
+ verboselevel(0),drawFlag("none"),printModulo(10000)
 {
   eventMessenger = new Em5EventActionMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5EventAction::~Em5EventAction()
 {
   delete eventMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::BeginOfEventAction(const G4Event* evt)
 {
@@ -76,13 +72,6 @@ void Em5EventAction::BeginOfEventAction(const G4Event* evt)
  //printing survey
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  
- //save rndm status
- if (runaction->GetRndmFreq() == 2)
-   { 
-    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
-    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
-   }
     
   if (calorimeterCollID==-1)
     {
@@ -101,7 +90,7 @@ void Em5EventAction::BeginOfEventAction(const G4Event* evt)
   Reflected  =0.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::EndOfEventAction(const G4Event* evt)
 {
@@ -155,7 +144,8 @@ void Em5EventAction::EndOfEventAction(const G4Event* evt)
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
    for(G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
+      { G4Trajectory* trj = (G4Trajectory *)
+                                      ((*(evt->GetTrajectoryContainer()))[i]);
         if (drawFlag == "all") trj->DrawTrajectory(50);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
                                trj->DrawTrajectory(50); 
@@ -163,7 +153,7 @@ void Em5EventAction::EndOfEventAction(const G4Event* evt)
   }  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int Em5EventAction::GetEventno()
 {
@@ -171,69 +161,69 @@ G4int Em5EventAction::GetEventno()
   return evno ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::setEventVerbose(G4int level)
 {
   verboselevel = level ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::CountStepsCharged()
 {
   nstepCharged += 1. ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::CountStepsNeutral()
 {
   nstepNeutral += 1. ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::AddCharged() 
 {
   Nch += 1.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::AddNeutral() 
 {
   Nne += 1.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::AddE() 
 {
   NE += 1.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::AddP() 
 {
   NP += 1.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::SetTr()
 {
   Transmitted = 1.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5EventAction::SetRef()
 {
   Reflected   = 1.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 

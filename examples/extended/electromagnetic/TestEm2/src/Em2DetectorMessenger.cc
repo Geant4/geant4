@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.cc,v 1.2.4.1 2001/06/28 19:06:52 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2DetectorMessenger.cc,v 1.5 2001/10/31 17:34:13 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2DetectorMessenger.hh"
 
@@ -38,7 +38,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
 :Em2Detector(Det)
@@ -49,7 +49,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   MaterCmd = new G4UIcmdWithAString("/calor/setMat",this);
   MaterCmd->SetGuidance("Select Material.");
   MaterCmd->SetParameterName("material",false);
-  MaterCmd->AvailableForStates(PreInit,Idle);
+  MaterCmd->AvailableForStates(Idle);
   
   LBinCmd = new G4UIcmdWith3Vector("/calor/setLbin",this);
   LBinCmd->SetGuidance("set longitudinal bining");
@@ -70,7 +70,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   FieldCmd->SetParameterName("Bz",false);
   FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(PreInit,Idle);
+  FieldCmd->AvailableForStates(Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update geometry.");
@@ -79,7 +79,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   UpdateCmd->AvailableForStates(Idle);          
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2DetectorMessenger::~Em2DetectorMessenger()
 {
@@ -91,7 +91,7 @@ Em2DetectorMessenger::~Em2DetectorMessenger()
   delete Em2detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
@@ -111,4 +111,4 @@ void Em2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { Em2Detector->UpdateGeometry();}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

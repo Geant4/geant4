@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc,v 1.2.4.1 2001/06/28 19:15:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Run.cc,v 1.4 2001/07/13 15:57:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4Run.hh"
@@ -30,7 +30,7 @@
 G4Allocator<G4Run> aRunAllocator;
 
 G4Run::G4Run()
-:runID(0),numberOfEvent(0),HCtable(NULL),DCtable(NULL)
+:runID(0),numberOfEvent(0),HCtable(0),DCtable(0)
 {;}
 
 G4Run::~G4Run()

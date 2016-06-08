@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewerList.hh,v 1.5.2.1 2001/06/28 19:16:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ViewerList.hh,v 1.6 2001/07/11 10:09:15 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  May 1996

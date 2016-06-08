@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.7.2.1 2001/06/28 19:11:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DecayProducts.cc,v 1.9 2001/07/11 10:01:59 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -65,7 +65,16 @@ G4DecayProducts::G4DecayProducts(const G4DecayProducts &right)
   //copy daughters (Deep Copy)
   for (G4int index=0; index < right.numberOfProducts; index++)
   {
-    PushProducts( new G4DynamicParticle(*right.theProductVector[index]) );
+    G4DynamicParticle* daughter = right.theProductVector[index];
+    const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
+    G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
+
+    if (pPreAssigned) {
+      G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
+      pDaughter->SetPreAssignedDecayProducts(pPA);
+    }
+
+    PushProducts( pDaughter );
   }
 }
 

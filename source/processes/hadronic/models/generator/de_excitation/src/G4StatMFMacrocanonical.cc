@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.7.2.1 2001/06/28 19:13:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StatMFMacroCanonical.cc,v 1.10 2001/10/06 07:33:24 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -85,7 +85,7 @@ void G4StatMFMacroCanonical::Initialize(const G4Fragment & theFragment)
 {
   
     // Excitation Energy
-    G4double U = theFragment.GetExcitationEnergy();
+//    G4double U = theFragment.GetExcitationEnergy();
   
     G4double A = theFragment.GetA();
     G4double Z = theFragment.GetZ();
@@ -159,7 +159,6 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseAandZ(const G4Fragment &theFragm
     G4std::vector<G4double> FragmentsA;
   
     G4int i = 0;  
-    G4int s = 0;
     for (i = 0; i < A; i++) {
 //		if (ANumbers(i) == 0) continue;
 	for (G4int j = 0; j < ANumbers[i]; j++) FragmentsA.push_back(i+1);

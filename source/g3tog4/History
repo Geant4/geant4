@@ -1,7 +1,31 @@
-$Id: History,v 1.44 2001/05/30 08:13:34 gcosmo Exp $
+$Id: History,v 1.48 2001/11/21 14:25:29 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-02-03 21-Nov-2001 G.Cosmo
+- Added G3G4_NO_REFLECTION flag to exclude G4ReflectionFactory if needed.
+- Changed G3Division::CreatePVReplica() to return a G4PhysicalVolumesPair
+  (I.Hrivnacova).
+
+g3tog4-V03-02-02 08-Nov-2001 G.Cosmo
+- Implemented reflection of CSG solids through G4ReflectionFactory class
+  and G4ReflectedSolid (I.Hrivnacova).
+- Added limited support for MANY volumes through adoption of boolean
+  solids(I.Hrivnacova). New files: G3toG4MANY[.hh.cc], G4gsbool.cc.
+
+g3tog4-V03-02-01 11-Oct-2001 G.Cosmo
+- clparse.cc: removed inclusion of RW wrapper, moved now to G4Tokenizer.hh.
+  This tag co-works with "global-V03-02-03", where STLInterface has been removed.
+
+g3tog4-V03-02-00 16-Jul-2001 G.Cosmo
+- Migration to STL vector, removed references to Rogue-Wave Tools.h++
+  wrappers. Modified files:
+  G3EleTable[.hh.cc], G3MatTable[.hh.cc], G3MedTable[.hh.cc],
+  G3RotTable[.hh.cc], G3VolTableEntry[.hh.cc], G3SensVolVector.hh,
+  G3toG4BuildTree.cc, G4gsatt.cc, clparse.cc.
+- Replaced usage of "NULL" with "0".
+- Replaced usage of "int" with "G4int".
 
 g3tog4-V03-01-01 30-May-2001 G.Cosmo
 - Cleared pedantic warnings detected on Linux-g++ with ISO/ANSI setup.

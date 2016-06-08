@@ -354,7 +354,6 @@
     G4int    innerCounter, outerCounter;
     G4bool   eliminateThisParticle, resetEnergies, constantCrossSection;
     
-    G4double phi = G4UniformRand()*twopi;
     G4double forwardKinetic = 0.0, backwardKinetic = 0.0;
     //
     // process the secondary particles in reverse order
@@ -368,6 +367,7 @@
 
     for( i=(vecLen-1); i>=0; --i )
     {
+      G4double phi = G4UniformRand()*twopi;
       if( vec[i]->GetNewlyAdded() )           // added from intranuclear cascade
       {
         if( vec[i]->GetSide() == -2 )         //  is a nucleon
@@ -456,6 +456,7 @@
         }
         innerCounter = 0;
         // bug: reset the x,y components of the momentum, please. @@@@@@@
+        vec[i]->SetMomentum( pt*cos(phi)*GeV, pt*sin(phi)*GeV );
         //
         //   start of inner iteration loop
         //
@@ -585,7 +586,7 @@
           }
         }
       }    // closes outer loop
-      
+              
       if( eliminateThisParticle )  // not enough energy, eliminate this particle
       {
         if( vec[i]->GetSide() > 0 )
@@ -621,6 +622,7 @@
     //   set pt and phi values, they are changed somewhat in the iteration loop
     //   set mass parameter for lambda fragmentation model
     //
+    G4double phi = G4UniformRand()*twopi;
     G4double ran = -log(1.0-G4UniformRand());
     if( currentParticle.GetDefinition() == aPiMinus ||
         currentParticle.GetDefinition() == aPiZero ||
@@ -844,8 +846,8 @@
       }    // closes outer loop
       if( eliminateThisParticle )  // not enough energy, eliminate target
       {
-        G4cerr << "eliminating target particle" << G4endl;
-        exit( EXIT_FAILURE );
+        G4cerr << "Warning: eliminating target particle" << G4endl;
+//        exit( EXIT_FAILURE );
       }
     }
     //
@@ -866,7 +868,7 @@
       pp = sqrt( abs( totalEnergy*totalEnergy - vecMass*vecMass ) )*GeV;
       pp1 = pseudoParticle[6].GetMomentum().mag()/MeV;
       if( pp1 < 1.0e-6*GeV )
-      {
+      { 
         rthnve = pi*G4UniformRand();
         phinve = twopi*G4UniformRand();
         G4double srth = sin(rthnve);
@@ -1059,7 +1061,7 @@
     pseudoParticle[3].SetTotalEnergy(
      sqrt( pOriginal*pOriginal + mOriginal*mOriginal )*GeV );
     
-    G4double ekin0 = pseudoParticle[3].GetKineticEnergy()/GeV;
+//    G4double ekin0 = pseudoParticle[3].GetKineticEnergy()/GeV;
     
     pseudoParticle[4].SetMomentum( 0.0, 0.0, 0.0 );
     pseudoParticle[4].SetMass( protonMass*numberofFinalStateNucleons*MeV );
@@ -1335,7 +1337,6 @@
     G4int i;
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
@@ -1909,7 +1910,7 @@
     pseudoParticle[5].SetMass( protonMass*numberofFinalStateNucleons*MeV );
     pseudoParticle[5].SetTotalEnergy( protonMass*numberofFinalStateNucleons*MeV );
     
-    G4double ekin0 = pseudoParticle[4].GetKineticEnergy()/GeV;
+//    G4double ekin0 = pseudoParticle[4].GetKineticEnergy()/GeV;
     G4double theoreticalKinetic =
       pseudoParticle[4].GetTotalEnergy()/GeV + pseudoParticle[5].GetTotalEnergy()/GeV;
     
@@ -2094,9 +2095,6 @@
     // The b values are parametrizations from experimental data.
     // Not available values are taken from those of similar reactions.
     //
-    G4int i;
-    G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
@@ -2105,9 +2103,7 @@
     G4ParticleDefinition *aKaonZeroS = G4KaonZeroShort::KaonZeroShort();
     G4ParticleDefinition *aKaonZeroL = G4KaonZeroLong::KaonZeroLong();
     
-      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
-    const G4double kaonMinusMass = aKaonMinus->GetPDGMass()/GeV;
-    
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);    
     static const G4double expxu =  82.;           // upper bound for arg. of exp
     static const G4double expxl = -expxu;         // lower bound for arg. of exp
     
@@ -2117,16 +2113,16 @@
     const G4double pOriginal = modifiedOriginal.GetMomentum().mag()/GeV;
     G4double currentMass = currentParticle.GetMass()/GeV;
     G4double targetMass = targetParticle.GetDefinition()->GetPDGMass()/GeV;
-    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
-                                        targetMass*targetMass +
-                                        2.0*targetMass*etOriginal );  // GeV
+//    G4double centerofmassEnergy = sqrt( mOriginal*mOriginal +
+//                                        targetMass*targetMass +
+//                                        2.0*targetMass*etOriginal );  // GeV
     targetMass = targetParticle.GetMass()/GeV;
     const G4double atomicWeight = targetNucleus.GetN();
-    const G4double atomicNumber = targetNucleus.GetZ();
+//    const G4double atomicNumber = targetNucleus.GetZ();
     
     G4double etCurrent = currentParticle.GetTotalEnergy()/GeV;
     G4double pCurrent = currentParticle.GetTotalMomentum()/GeV;
-    G4double ekCurrent = currentParticle.GetKineticEnergy()/GeV;
+//    G4double ekCurrent = currentParticle.GetKineticEnergy()/GeV;
     G4double cmEnergy = sqrt( currentMass*currentMass +
                               targetMass*targetMass +
                               2.0*targetMass*etCurrent );  // in GeV
@@ -2562,7 +2558,7 @@
      G4double ran;
      
      if( x > 9.9 )    // use normal distribution with sigma^2 = <x>
-       iran = G4std::max( 0.0, x+normal()*sqrt(x) );
+       iran = static_cast<G4int>(G4std::max( 0.0, x+normal()*sqrt(x) ) );
      else {
       G4int mm = G4int(5.0*x);
       if( mm <= 0 )   // for very small x try iran=1,2,3
@@ -2689,93 +2685,64 @@
     //    inclusive distributions, but it is necessary for momentum conservation
     //
     const G4double atomicWeight = targetNucleus.GetN();
-    const G4double atomicNumber = targetNucleus.GetZ();
     const G4double logWeight = log(atomicWeight);
     
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
-    G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
     G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
     
     G4int i;
-    G4ReactionProduct pseudoParticle[4];
-    for( i=0; i<4; ++i )pseudoParticle[i].SetZero();
-    pseudoParticle[0] = ( pseudoParticle[0] + currentParticle ) + targetParticle;
-    for( i=0; i<vecLen; ++i )pseudoParticle[0] = pseudoParticle[0] + (*vec[i]);
+    G4ThreeVector pseudoParticle[4];
+    for( i=0; i<4; ++i )pseudoParticle[i].set(0,0,0);
+    pseudoParticle[0] = currentParticle.GetMomentum()
+                        + targetParticle.GetMomentum();
+    for( i=0; i<vecLen; ++i )
+      pseudoParticle[0] = pseudoParticle[0] + (vec[i]->GetMomentum());
     //
     //  Some smearing in transverse direction from Fermi motion
     //
     G4float pp, pp1;
-    G4double alekw, pix, piy, piz, p, rthnve, phinve;
-    G4double ry, rz, rx, a1, ran1, ran2, xxh, exh, pxTemp, pyTemp, pzTemp;
+    G4double alekw, p, rthnve, phinve;
+    G4double r1, r2, a1, ran1, ran2, xxh, exh, pxTemp, pyTemp, pzTemp;
     
-    ry = G4UniformRand();
-    rz = G4UniformRand();
-    rx = twopi*rz;
-    a1 = sqrt(-2.0*log(ry));
-    ran1 = a1*sin(rx)*0.020*numberofFinalStateNucleons*GeV;
-    ran2 = a1*cos(rx)*0.020*numberofFinalStateNucleons*GeV;
-    pseudoParticle[0].SetMomentum( pseudoParticle[0].GetMomentum().x()+ran1,
-                                   pseudoParticle[0].GetMomentum().y()+ran2 );
-    pseudoParticle[2].SetMomentum( temp );
-    pseudoParticle[3].SetMomentum( pseudoParticle[0].GetMomentum() );
-    
-    pix = pseudoParticle[2].GetMomentum().y()*pseudoParticle[3].GetMomentum().z() -
-      pseudoParticle[2].GetMomentum().z()*pseudoParticle[3].GetMomentum().y();
-    piy = pseudoParticle[2].GetMomentum().z()*pseudoParticle[3].GetMomentum().x() -
-      pseudoParticle[2].GetMomentum().x()*pseudoParticle[3].GetMomentum().z();
-    piz = pseudoParticle[2].GetMomentum().x()*pseudoParticle[3].GetMomentum().y() -
-      pseudoParticle[2].GetMomentum().y()*pseudoParticle[3].GetMomentum().x();
-    pseudoParticle[1].SetMomentum( pix, piy, piz );
-    
-    pix = pseudoParticle[3].GetMomentum().y()*pseudoParticle[1].GetMomentum().z() -
-      pseudoParticle[3].GetMomentum().z()*pseudoParticle[1].GetMomentum().y();
-    piy = pseudoParticle[3].GetMomentum().z()*pseudoParticle[1].GetMomentum().x() -
-      pseudoParticle[3].GetMomentum().x()*pseudoParticle[1].GetMomentum().z();
-    piz = pseudoParticle[3].GetMomentum().x()*pseudoParticle[1].GetMomentum().y() -
-      pseudoParticle[3].GetMomentum().y()*pseudoParticle[1].GetMomentum().x();
-    pseudoParticle[2].SetMomentum( pix, piy, piz );
-    
-    p = pseudoParticle[1].GetMomentum().mag();
-    if( p == 0.0 )
-      pseudoParticle[1].SetMomentum( 0.0, 0.0, 0.0 );
-    else
-      pseudoParticle[1].SetMomentum( pseudoParticle[1].GetMomentum() * (1./p) );
-    
-    p = pseudoParticle[2].GetMomentum().mag();
-    if( p == 0.0 )
-      pseudoParticle[2].SetMomentum( 0.0, 0.0, 0.0 );
-    else
-      pseudoParticle[2].SetMomentum( pseudoParticle[2].GetMomentum() * (1./p) );
-    
-    p = pseudoParticle[3].GetMomentum().mag();
-    if( p == 0.0 )
-      pseudoParticle[3].SetMomentum( 0.0, 0.0, 0.0 );
-    else
-      pseudoParticle[3].SetMomentum( pseudoParticle[3].GetMomentum() * (1./p) );
+    r1 = twopi*G4UniformRand();
+    r2 = G4UniformRand();
+    a1 = sqrt(-2.0*log(r2));
+    ran1 = a1*sin(r1)*0.020*numberofFinalStateNucleons*GeV;
+    ran2 = a1*cos(r1)*0.020*numberofFinalStateNucleons*GeV;
+    G4ThreeVector fermi(ran1, ran2, 0);
 
-    pseudoParticle[0].SetZero();
+    pseudoParticle[0] = pseudoParticle[0]+fermi; // all particles + fermi
+    pseudoParticle[2] = temp; // original in cms system
+    pseudoParticle[3] = pseudoParticle[0];
     
-    pxTemp = (pseudoParticle[1].GetMomentum()).dot(currentParticle.GetMomentum());
-    pyTemp = (pseudoParticle[2].GetMomentum()).dot(currentParticle.GetMomentum());
-    pzTemp = (pseudoParticle[3].GetMomentum()).dot(currentParticle.GetMomentum());
+    pseudoParticle[1] = pseudoParticle[2].cross(pseudoParticle[3]);
+    pseudoParticle[2] = pseudoParticle[3].cross(pseudoParticle[1]);    
+    for(G4int ii=1; ii<=3; ii++)
+    {
+      p = pseudoParticle[ii].mag();
+      if( p == 0.0 )
+        pseudoParticle[ii]= G4ThreeVector( 0.0, 0.0, 0.0 );
+      else
+        pseudoParticle[ii]= pseudoParticle[ii] * (1./p);
+    }
+    
+    pxTemp = pseudoParticle[1].dot(currentParticle.GetMomentum());
+    pyTemp = pseudoParticle[2].dot(currentParticle.GetMomentum());
+    pzTemp = pseudoParticle[3].dot(currentParticle.GetMomentum());
     currentParticle.SetMomentum( pxTemp, pyTemp, pzTemp );
-    pseudoParticle[0] = pseudoParticle[0] + currentParticle;
     
-    pxTemp = (pseudoParticle[1].GetMomentum()).dot(targetParticle.GetMomentum());
-    pyTemp = (pseudoParticle[2].GetMomentum()).dot(targetParticle.GetMomentum());
-    pzTemp = (pseudoParticle[3].GetMomentum()).dot(targetParticle.GetMomentum());
+    pxTemp = pseudoParticle[1].dot(targetParticle.GetMomentum());
+    pyTemp = pseudoParticle[2].dot(targetParticle.GetMomentum());
+    pzTemp = pseudoParticle[3].dot(targetParticle.GetMomentum());
     targetParticle.SetMomentum( pxTemp, pyTemp, pzTemp );
-    pseudoParticle[0] = pseudoParticle[0] + targetParticle;
     
     for( i=0; i<vecLen; ++i )
     {
-      pxTemp = (pseudoParticle[1].GetMomentum()).dot(vec[i]->GetMomentum());
-      pyTemp = (pseudoParticle[2].GetMomentum()).dot(vec[i]->GetMomentum());
-      pzTemp = (pseudoParticle[3].GetMomentum()).dot(vec[i]->GetMomentum());
+      pxTemp = pseudoParticle[1].dot(vec[i]->GetMomentum());
+      pyTemp = pseudoParticle[2].dot(vec[i]->GetMomentum());
+      pzTemp = pseudoParticle[3].dot(vec[i]->GetMomentum());
       vec[i]->SetMomentum( pxTemp, pyTemp, pzTemp );
-      pseudoParticle[0] = pseudoParticle[0] + (*vec[i]);
     }
     //
     //  Rotate in direction of primary particle, subtract binding energies
@@ -3526,7 +3493,7 @@
 
  void
   G4ReactionDynamics::NuclearReaction(
-   G4FastVector<G4ReactionProduct,3> &vec,
+   G4FastVector<G4ReactionProduct,4> &vec,
    G4int &vecLen,
    const G4DynamicParticle *originalIncident,
    const G4Nucleus &targetNucleus,
@@ -3687,8 +3654,7 @@
     tempV.SetElement( tempLen++, v[1] );
     if( nt == 3 )tempV.SetElement( tempLen++, v[2] );
     G4bool constantCrossSection = true;
-    G4double wgt =
-      GenerateNBodyEvent( pseudo2.GetMass()/MeV, constantCrossSection, tempV, tempLen );
+    GenerateNBodyEvent( pseudo2.GetMass()/MeV, constantCrossSection, tempV, tempLen );
     v[0]->Lorentz( *v[0], pseudo2 );
     v[1]->Lorentz( *v[1], pseudo2 );
     if( nt == 3 )v[2]->Lorentz( *v[2], pseudo2 );

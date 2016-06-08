@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersistencyMessenger.hh,v 1.4.8.1 2001/06/28 19:11:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PersistencyMessenger.hh,v 1.5 2001/07/11 10:02:26 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //	GEANT 4 class header file 

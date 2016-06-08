@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.21.2.1 2001/06/28 19:12:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VEnergyLoss.cc,v 1.28 2001/11/08 15:56:52 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // --------------------------------------------------------------
@@ -33,6 +33,9 @@
 //  bugfix in fluct.
 //  (some variables are doubles instead of ints now),L.Urban 23/03/01
 //  18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
+//  17-09-01 migration of Materials to pure STL (mma)
+//  26-10-01 static inline functions moved from .hh file (mma) 
+//  08.11.01 some static methods,data members are not static L.Urban
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,12 +44,6 @@
 #include "G4EnergyLossMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double     G4VEnergyLoss::ParticleMass ;                
-G4double     G4VEnergyLoss::taulow       ;                
-G4double     G4VEnergyLoss::tauhigh      ;                
-G4double     G4VEnergyLoss::ltaulow      ;                
-G4double     G4VEnergyLoss::ltauhigh     ;                
 
 G4bool       G4VEnergyLoss::rndmStepFlag   = false;
 G4bool       G4VEnergyLoss::EnlossFlucFlag = true;
@@ -104,14 +101,39 @@ G4VEnergyLoss::G4VEnergyLoss(G4VEnergyLoss& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEnergyLoss::SetRndmStep(G4bool value) {rndmStepFlag = value;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetEnlossFluc(G4bool value) {EnlossFlucFlag = value;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetSubSec(G4bool value) {subSecFlag = value;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetMinDeltaCutInRange(G4double value)
+{MinDeltaCutInRange = value; setMinDeltaCutInRange = true;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLoss::SetStepFunction(G4double c1, G4double c2)
+{
+ dRoverRange = c1; finalRange = c2;
+ c1lim=dRoverRange;
+ c2lim=2.*(1-dRoverRange)*finalRange;
+ c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4PhysicsTable* G4VEnergyLoss::BuildRangeTable(
         G4PhysicsTable* theDEDXTable,G4PhysicsTable* theRangeTable,            
         G4double LowestKineticEnergy,G4double HighestKineticEnergy,G4int TotBin)
 // Build range table from the energy loss table
 {
-   const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-   G4int numOfMaterials = theMaterialTable->length();
+   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
    if(theRangeTable)
    { theRangeTable->clearAndDestroy();
@@ -143,10 +165,8 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   G4int nbin=100,i;
   G4bool isOut;
 
-  // ??????????????????????????????????
-  static const G4double small = 1.e-6 ;
-
-  static G4double masslimit = 0.52*MeV ;
+  const G4double small = 1.e-6 ;
+  const G4double masslimit = 0.52*MeV ;
 
   G4double tlim=2.*MeV,t1=0.1*MeV,t2=0.025*MeV ;
   G4double tlime=0.2*keV,factor=2.*electron_mass_c2 ;
@@ -348,9 +368,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTable,
                                      G4double HighestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theLabTimeTable)
   { theLabTimeTable->clearAndDestroy();
@@ -382,9 +400,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXTable
                                      G4double HighestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theProperTimeTable)
   { theProperTimeTable->clearAndDestroy();
@@ -608,9 +624,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRangeTa
 {
   G4double SmallestRange,BiggestRange ;
   G4bool isOut ;
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
     if(theInverseRangeTable)
     { theInverseRangeTable->clearAndDestroy();
@@ -704,9 +718,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffATable)
   { theRangeCoeffATable->clearAndDestroy();
@@ -767,9 +779,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
-  const G4MaterialTable* theMaterialTable=
-                               G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffBTable)
   { theRangeCoeffBTable->clearAndDestroy();
@@ -829,9 +839,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffCTable)
   { theRangeCoeffCTable->clearAndDestroy();
@@ -892,12 +900,12 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
 {
-   static const G4double minLoss = 1.*eV ;
-   static const G4double probLim = 0.01 ;
-   static const G4double sumaLim = -log(probLim) ;
-   static const G4double alim=10.;
-   static const G4double kappa = 10. ;
-   static const G4double factor = twopi_mc2_rcl2 ;
+   const G4double minLoss = 1.*eV ;
+   const G4double probLim = 0.01 ;
+   const G4double sumaLim = -log(probLim) ;
+   const G4double alim=10.;
+   const G4double kappa = 10. ;
+   const G4double factor = twopi_mc2_rcl2 ;
 
 
   // check if the material has changed ( cache mechanism)
@@ -932,7 +940,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double Tkin   = aParticle->GetKineticEnergy();
   ParticleMass = aParticle->GetMass() ;
 
-  threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
+  threshold =((G4Electron::Electron())->GetEnergyCuts())[imat];
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
@@ -1104,5 +1112,31 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   return loss ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
    
+G4bool G4VEnergyLoss::EqualCutVectors( G4double* vec1, G4double* vec2 )
+{
+  if ( (vec1==0 ) || (vec2==0) ) return false;
+  
+  G4bool flag = true;
+   
+  for (size_t j=0; flag && j<G4Material::GetNumberOfMaterials(); j++){
+    flag = (vec1[j] == vec2[j]);
+  }
+  
+  return flag;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double* G4VEnergyLoss::CopyCutVectors( G4double* dest, G4double* source )
+{
+  if ( dest != 0) delete [] dest;
+  dest = new G4double [G4Material::GetNumberOfMaterials()];
+  for (size_t j=0; j<G4Material::GetNumberOfMaterials(); j++){
+    dest[j] = source[j];
+  }
+  return dest;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

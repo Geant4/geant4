@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01CalorimeterSD.hh,v 1.1.1.1.4.1 2001/06/28 19:06:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: AnaEx01CalorimeterSD.hh,v 1.2 2001/07/11 09:57:09 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 

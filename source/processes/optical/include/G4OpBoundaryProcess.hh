@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.5.4.1 2001/06/28 19:15:10 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpBoundaryProcess.hh,v 1.7 2001/08/31 16:44:24 gum Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpBoundaryProcess(const G4String& processName = "Boundary");
+        G4OpBoundaryProcess(const G4String& processName = "OpBoundary");
 
 	~G4OpBoundaryProcess();
 

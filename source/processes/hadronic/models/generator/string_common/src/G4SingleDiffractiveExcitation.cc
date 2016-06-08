@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.5.2.2 2001/06/28 20:19:59 gunter Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.8 2001/10/05 16:17:15 hpw Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -160,7 +160,7 @@ G4bool G4SingleDiffractiveExcitation::
 		     || (Pprojectile+Qmomentum).e() < 0. );
 
 
-	   G4double Ecms=Pprojectile.e() + Ptarget.e();
+//	   G4double Ecms=Pprojectile.e() + Ptarget.e();
 	   
 	   Pprojectile += Qmomentum;
 

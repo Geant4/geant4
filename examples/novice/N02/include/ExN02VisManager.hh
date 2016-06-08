@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02VisManager.hh,v 1.3.4.1 2001/06/28 19:07:30 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02VisManager.hh,v 1.5 2001/10/11 12:32:36 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Example Visualization Manager implementing virtual function
 //   RegisterGraphicsSystems.  Exploits C-pre-processor variables
@@ -42,7 +42,7 @@
 //   G4VisManager* myVisManager = new MyVisManager;
 //   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02VisManager_h
 #define ExN02VisManager_h 1
@@ -51,7 +51,7 @@
 
 #include "G4VisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02VisManager: public G4VisManager {
 
@@ -64,6 +64,8 @@ private:
   void RegisterGraphicsSystems ();
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

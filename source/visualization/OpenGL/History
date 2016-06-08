@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001/04/02 14:05:54 johna Exp $
+$Id: History,v 1.15 2001/08/24 20:28:15 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,65 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+24th August 2001  John Allison  (vis-V03-02-13)
+- Limited the printing of warnings in
+  G4OpenGLSceneHandler::AddPrimitive (const G4Text& text).
+
+14th August 2001  John Allison  (vis-V03-02-11)
+- Improved KernelVisitDecision.
+- Fixed a few small bugs in multiple "stored" viewers, but see next item.
+- There's an outstanding bug in OpenGL Stored.  If there is more than
+  one viewer controlled by a scene handler, after a ClearStore on the
+  scene handler, e.g., with /vis/scene/notifyHandlers, the first
+  viewer to get refreshed should trigger the display list rebuild, but
+  the second need not.  However, when the second viewer's turn comes,
+  the display lists are there, and are called, e.g.,
+  G4OpenGLStoredXViewer::DrawView calls
+  G4OpenGLStoredViewer::DrawDisplayLists that calls glCallList, but
+  nothing appears on the screen.  To overcome this there is some
+  temporary code in G4VViewer::NeedKernelVisit which marks *all*
+  viewers to force a rebuild.  To see the symptoms, comment out that
+  temporary code and issue these commands:
+    /vis/verbose c
+    /control/verbose 2
+    /vis/scene/create
+    /vis/scene/add/volume
+    /vis/sceneHandler/create OGLSX
+    /vis/viewer/create ! ! 1
+    /run/beamOn
+    /vis/viewer/create ! ! 1
+    /vis/viewer/select viewer-0
+    /vis/viewer/viewpointThetaPhi 20 20
+    /vis/viewer/select viewer-1
+    /vis/viewer/viewpointThetaPhi 40 40
+    /vis/viewer/set/style surface
+    /vis/viewer/refresh
+    /vis/viewer/select viewer-0
+    /vis/viewer/refresh
+    /vis/viewer/select viewer-1
+    /vis/viewer/set/style wireframe
+    /vis/scene/notifyHandlers
+  You may have to do this too:
+    /vis/viewer/select viewer-0
+    /vis/scene/notifyHandlers
+  One of the viewers is empty.  Curious!!
+
+9th August 2001  John Allison  (vis-V03-02-10-00)
+- Implemented G4OpenGLStoredSceneHandler::ClearTransientStore()
+- Removed G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker&) (it only
+  invoked G4VSceneHandler::AddPrimitive (const G4Polymarker&) which is
+  picked up by inheritance anyway.
+- Removed lots of unnecessary header files from G4OpenGLStoredSceneHandler.cc.
+- Corrected order of calling base class functions in
+  G4OpenGLStoredSceneHandler::Begin/EndModeling.
+
+24th July 2001  John Allison  (vis-V03-02-06)
+- G4OpenGLSceneHandler::AddPrimitive (const G4Text&) handles transformation.
+
+14th July 2001  John Allison (opengl-V03-02-00)
+- Fixed crash in optimised mode: added Initialise() to viewers so
+  that windows are opened after viewers are fully constructed.
 
 2nd April 2001  John Allison (opengl-V03-00-01 wrt vis-V03-00-09)
 - Tidied G4OpenGLXmViewer callback code.  Removed superfluous header files.

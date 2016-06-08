@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.hh,v 1.5.4.1 2001/06/28 19:16:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VRML2SceneHandler.hh,v 1.8 2001/09/18 07:53:08 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4VRML2SceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -76,8 +76,10 @@ public:
 	void AddPrimitive(const G4Square&);
 	void AddPrimitive (const G4Polymarker& polymarker)
 		{ G4VSceneHandler::AddPrimitive (polymarker); }
+        void AddPrimitive (const G4Scale& scale) 
+                { G4VSceneHandler::AddPrimitive (scale); }
 
-	void ClearStore();
+	void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	void BeginModeling();
 	void EndModeling();

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.2.4.1 2001/06/28 19:15:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.4 2001/07/14 21:47:49 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -47,6 +47,9 @@ G4OpenGLImmediateViewer (scene),
 G4VViewer (scene, scene.IncrementViewCount ()) {
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
+}
+
+void G4OpenGLImmediateWin32Viewer::Initialise () {
 
 // ensure a suitable window was found
 
@@ -66,7 +69,6 @@ G4VViewer (scene, scene.IncrementViewCount ()) {
 
   glDepthFunc (GL_LEQUAL);
   glDepthMask (GL_TRUE);
-  
 }
 
 void G4OpenGLImmediateWin32Viewer::DrawView () {

@@ -27,8 +27,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExcitedMesonConstructor.hh,v 1.6.2.2 2001/06/28 20:19:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ExcitedMesonConstructor.hh,v 1.7 2001/07/11 10:02:05 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------

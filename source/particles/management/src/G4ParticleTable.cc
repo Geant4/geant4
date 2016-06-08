@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.17.4.1 2001/06/28 19:11:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticleTable.cc,v 1.18 2001/07/11 10:02:03 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // class G4ParticleTable
 //

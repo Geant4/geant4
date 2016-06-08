@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4Gamma.hh,v 1.4.2.2 2001/06/28 20:18:55 gunter Exp $
-// GEANT4 tag $Name:  $
+//// $Id: G4Gamma.hh,v 1.11 2001/12/13 12:04:11 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -56,8 +55,6 @@ class G4Gamma : public G4VBoson
 {
  private:
    static G4Gamma theGamma;
-   static G4double  theGammaLengthCut;
-   static G4double* theGammaKineticEnergyCuts;
    
    //-------- the followings are used privately in G4Gamma ----
  private:
@@ -76,27 +73,19 @@ class G4Gamma : public G4VBoson
 
  //--------------for SetCuts----------------------------------------------
  protected:    
-    G4double ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const
-    {
-      return ComputeCrossSection(AtomicNumber,KineticEnergy);
-    };
+  G4double ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const;
 
-    void BuildRangeVector(
-                                  const G4Material* aMaterial,
-				  const G4LossTable* aLossTable,
-				  G4double       maxEnergy,     
-				  G4double       aMass,
-                                  G4RangeVector* rangeVector)
-    {
-        BuildAbsorptionLengthVector(aMaterial,
-				    (const G4CrossSectionTable*)aLossTable,
-                                    maxEnergy, aMass, rangeVector);
-    }
+  void BuildRangeVector(
+			const G4Material* aMaterial,
+			const G4LossTable* aLossTable,
+			G4double       maxEnergy,     
+			G4double       aMass,
+			G4RangeVector* rangeVector);
 
-    G4double ConvertCutToKineticEnergy(
-                                 G4RangeVector* absorptionLengthVector
+  G4double ConvertCutToKineticEnergy(
+				     G4RangeVector* absorptionLengthVector,
+				     size_t materialIndex
                                 ) const;
-
 
  private: // hide conxtructor as private
    G4Gamma(
@@ -116,37 +105,28 @@ class G4Gamma : public G4VBoson
 
    static G4Gamma* GammaDefinition();
    static G4Gamma* Gamma();
-   static G4double  GetCuts() {return theGammaLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theGammaKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline void G4Gamma::SetCuts(G4double aCut)
+inline 
+ G4double G4Gamma::ComputeLoss(G4double AtomicNumber,G4double KineticEnergy) const
 {
-  CalcEnergyCuts(aCut);
-  theGammaLengthCut = theCutInMaxInteractionLength;  
-  theGammaKineticEnergyCuts = theKineticEnergyCuts;
+  return ComputeCrossSection(AtomicNumber,KineticEnergy);
 }
 
-inline void G4Gamma::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
+inline 
+ void G4Gamma::BuildRangeVector(
+				const G4Material* aMaterial,
+				const G4LossTable* aLossTable,
+				G4double       maxEnergy,     
+				G4double       aMass,
+				G4RangeVector* rangeVector)
 {
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theGammaLengthCut = theCutInMaxInteractionLength;  
-  theGammaKineticEnergyCuts = theKineticEnergyCuts;
+  BuildAbsorptionLengthVector(aMaterial,
+			      (const G4CrossSectionTable*)aLossTable,
+			      maxEnergy, aMass, rangeVector);
 }
 
-
-inline G4Gamma* G4Gamma::Gamma()
-{ return &theGamma; }
 
 #endif
-
-
-
-
 
 

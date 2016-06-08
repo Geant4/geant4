@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.cc,v 1.7.2.1 2001/06/28 19:08:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BSplineCurve.cc,v 1.9 2001/07/17 07:17:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -47,8 +47,7 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
   degree= degree0;
    
   G4int nbpoints =  controlPointsList0->size();
-  controlPointsList = new G4Point3DVector();
-  controlPointsList->reserve(nbpoints);
+  controlPointsList = new G4Point3DVector(nbpoints,G4Point3D(0,0,0));
 
   G4int a;  
   for(a = 0; a < nbpoints; a++)
@@ -57,16 +56,14 @@ void G4BSplineCurve::Init(G4int degree0, G4Point3DVector* controlPointsList0,
   }
  
   G4int nbknots = knots0->size();
-  knots = new G4doubleVector();
-  knots->reserve(nbknots);
+  knots = new G4doubleVector(nbknots,0.);
   for(a = 0; a < nbknots; a++)
   {
     (*knots)[a] = (*knots0)[a];
   }
 
   G4int nbweights = weightsData0->size();
-  weightsData  = new G4doubleVector();
-  weightsData->reserve(nbweights);
+  weightsData  = new G4doubleVector(nbweights,0.);
   for(a = 0; a < nbweights; a++)
   {
     (*weightsData)[a] = (*weightsData0)[a];

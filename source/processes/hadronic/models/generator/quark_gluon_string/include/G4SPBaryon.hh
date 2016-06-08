@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -77,7 +77,7 @@ class G4SPBaryon
     
     ~G4SPBaryon()
     {
-      for(G4int i=0;i<thePartonInfo.size(); i++) delete thePartonInfo[i];
+      for(unsigned int i=0;i<thePartonInfo.size(); i++) delete thePartonInfo[i];
     }
     
     G4bool operator == ( const G4SPBaryon & aBaryon) const

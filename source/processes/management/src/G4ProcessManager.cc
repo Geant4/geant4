@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.17.2.2 2001/06/28 20:20:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ProcessManager.cc,v 1.20 2001/09/01 02:22:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -106,7 +106,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
 #endif
 
    theParticleType    = right.theParticleType;
-   numberOfProcesses  = right.numberOfProcesses;
+   numberOfProcesses  = 0;
  
    // create the process List and ProcessAttr Vector
    theProcessList = new G4ProcessVector();
@@ -473,6 +473,9 @@ G4int G4ProcessManager::AddProcess(
   numberOfProcesses += 1;
 
   CreateGPILvectors();
+
+  // inform process manager pointer to the process 
+  aProcess->SetProcessManager(this);
 
   return idx;
 }

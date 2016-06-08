@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.14.4.1 2001/06/28 19:10:23 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIterminal.cc,v 1.17 2001/11/26 19:15:08 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "g4std/strstream"
@@ -40,7 +40,6 @@ G4UIterminal::G4UIterminal(G4VUIshell* aShell)
   UI= G4UImanager::GetUIpointer();
   UI-> SetSession(this);
   UI-> SetCoutDestination(this);
-  G4StateManager* statM= G4StateManager::GetStateManager();
 
   iExit= FALSE;
   iCont= FALSE;
@@ -74,7 +73,6 @@ G4UIsession* G4UIterminal::SessionStart()
 /////////////////////////////////////////
 {
   iExit= TRUE;
-  G4StateManager* statM= G4StateManager::GetStateManager();
 
   G4String newCommand= GetCommand();
   while(iExit){
@@ -118,7 +116,7 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
   case fCommandSucceeded:
     break;
   case fCommandNotFound:
-    G4cerr << "command <" << aCommand << "> not found" << G4endl;
+    G4cerr << "command <" << UI->SolveAlias(aCommand) << "> not found" << G4endl;
     if( aCommand.index("@@") != G4String::npos) {
       G4cout << "@@G4UIterminal" << G4endl;
     }
@@ -142,6 +140,7 @@ void G4UIterminal::ExecuteCommand(G4String aCommand)
   case fParameterUnreadable:
     G4cerr << "Parameter is wrong type and/or is not omittable (index " << paramIndex << ")" << G4endl;
     break;
+  case fAliasNotFound:
   default:
     G4cerr << "command refused (" << commandStatus << ")" << G4endl;
   }

@@ -21,148 +21,213 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.hh,v 1.1.4.2 2001/06/28 20:19:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MultipleScattering.hh,v 1.5 2001/09/19 13:16:06 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+// 
+//------------- G4MultipleScattering physics process --------------------------
+//               by Laszlo Urban, March 2001   
 //
-// $Id:
-// --------------------------------------------------------------
-//    GEANT 4 class header file
-//  
-//    History: based on object model of
-//    2nd December 1995, G.Cosmo
-//    --------- G4MultipleScattering physics process --------
-//               by Laszlo Urban, October 1997
-// **************************************************************
-//      UNIVERSAL: for arbitrary single charged particle
-//  09/12/98:      charge can be != +- 1 !!!!   L.Urban
-//  30/09/99:    nuclear size effect correction L.Urban 
-// --------------------------------------------------------------
-// 22/10/98: cleanup , L.Urban
+// 07-08-01 new methods Store/Retrieve PhysicsTable 
+// 23-08-01 new angle and z distribution,energy dependence reduced,
+//          Store,Retrieve methods commented out temporarily, L.Urban
+// 11-09-01 G4MultipleScatteringx put as default: G4MultipleScattering
+//          Store,Retrieve methods reactived (mma)
+// 13-09-01 Unused TrueToGeomTransformation method deleted,
+//          class description (L.Urban)
+// 19-09-01 come back to previous process name msc 
+//            
+//------------------------------------------------------------------------------
+
+// class description
+//
+//  The class simulates the multiple scattering for any kind
+//  of charged particle.
+//
+// class description - end
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4MultipleScattering_h
 #define G4MultipleScattering_h 1
-
-#include "G4ios.hh"
-#include "globals.hh"
-#include "Randomize.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4MuonPlus.hh"
-#include "G4PionPlus.hh"
-#include "G4Proton.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4GPILSelection.hh"
 #include "G4VContinuousDiscreteProcess.hh"
-#include "G4Step.hh"
-#include "G4Track.hh"
-#include "G4Material.hh"
+#include "G4EnergyLossTables.hh"
+#include "G4GPILSelection.hh"
+#include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForMSC.hh"
 #include "G4UnitsTable.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
 {
- public:
+ public:    // with description
 
-   G4MultipleScattering(const G4String& processName="msc") ;
+   G4MultipleScattering(const G4String& processName="msc");
 
-   ~G4MultipleScattering() ;
+  ~G4MultipleScattering();
           
-   G4bool IsApplicable ( const G4ParticleDefinition& ) ;
+   G4bool IsApplicable ( const G4ParticleDefinition& );
+     // returns true for charged particles, false otherwise
 
-   void SetPhysicsTableBining(G4double lowE,G4double highE,G4int nBins);
-
-   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) ;
+   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
+     // This function overloads the corresponding virtual function
+     // of the base class G4VContinuousDiscreteProcess.
+     // It is invoked by the G4ParticleWithCuts()::SetCut() method.
+     // It prepares the table of the transport mean free paths 
+     // for every material.
 
    void PrintInfoDefinition();
+     // Print few lines of informations about the process: validity range,
+     // origine ..etc..
+     // Invoked by BuildPhysicsTable().
 
+   
+   G4bool StorePhysicsTable(G4ParticleDefinition* ,
+ 			    const G4String& directory, G4bool);
+     // store TransportMeanFreePath tables into an external file
+     // specified by 'directory' (must exist before invokation)
+
+   G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
+ 		               const G4String& directory, G4bool);
+     // retrieve TransportMeanFreePath tables from an external file
+     // specified by 'directory' 
+       
+
+   G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+                                                  G4double  previousStepSize,
+                                                  G4double  currentMinimumStep,
+                                                  G4double& currentSafety,
+                                                  G4GPILSelection* selection);
+     // The function overloads the corresponding function of the base
+     // class.It limits the step near to boundaries only 
+     // and invokes the method GetContinuousStepLimit at every step. 
+						  
    G4double GetContinuousStepLimit(const G4Track& aTrack,
                                    G4double previousStepSize,
                                    G4double currentMinimumStep,
-                                   G4double& currentSafety) ; 
+                                   G4double& currentSafety); 
+     // It performs the true step length --> geometrical step length
+     // transformation. It is invoked by the
+     // AlongStepGetPhysicalInteractionLength method.  
 
    G4double GetMeanFreePath(const G4Track& aTrack,
                             G4double previousStepSize,
-                            G4ForceCondition* condition) ;
+                            G4ForceCondition* condition);
+     // It sets the force condition to true only
+     // in order to have the PostStepDoIt called at every step.
+     // This function overloads a virtual function of the base class.
+     // It is invoked by the ProcessManager of the Particle.
 
-   G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
-
-   G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep) ;
-
-   G4double GetLambda(G4double KineticEnergy,G4Material* material);
-
-   void SetScatteringParameter(G4double value)
-           { scatteringparameter = value ; } ;
-   void SetTuning(G4double value) { tuning = value ; };
-   void SetCpar  (G4double value) { cpar   = value ; };
-   void SetTlimitmsc  (G4double value) { Tlimit = value ; };
-   void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
+			    
+   G4double GetTransportMeanFreePath(
+                          G4double KineticEnergy,G4Material* material);
+     // Just a utility method to get the values of the transport
+     //  mean free path . (It is not used inside the class.)
    
-   void SetNuclCorrPar(G4double val) { NuclCorrPar = val; } ;
-   void SetFactPar(G4double val) { FactPar = val ; } ;
+   G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
+     // The geometrical step length --> true path length transformation
+     // is performed here (the inverse of the transformation done
+     // by GetContinuousStepLimit).  
 
- protected:
+   G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep);
+     // It computes the final state of the particle: samples the 
+     // scattering angle and computes the lateral displacement.
+     // The final state is returned as a ParticleChange object.
+     // This function overloads a virtual function of the base class.
+     // It is invoked by the ProcessManager of the Particle.
 
-   G4double ComputeTransportCrossSection(
+     // Set functions for the different model parameters:
+   void Setpalfa(G4double value)                {palfa = value;};
+   void Setpbeta(G4double value)                {pbeta = value;};
+   void Setpgamma(G4double value)               {pgamma = value;};
+   void Setpq0(G4double value)                  {pq0 = value;};
+   void Setpq1(G4double value)                  {pq1 = value;};
+   void Setpc0(G4double value)                  {pc0 =  value;};
+     // angle distribution parameters
+
+   void Setpcz(G4double value)                  {pcz = value;};
+     // geom. step length distribution
+
+   void Setdtrl(G4double value)                 {dtrl = value;};
+     // to reduce the energy/step dependence
+
+   void SetBoundary(G4bool value)               {boundary = value;};
+   void SetFactlim(G4double val)                {factlim=val;};
+     // parameters needed near to boundary
+
+   void SetTuning(G4double value)               {tuning = value;};
+   void SetCparm (G4double value)               {cparm  = value;};
+     // tuning of the transport mean free path
+
+   void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
+     // lateral displacement to be/not to be computed
+   
+   void SetNuclCorrPar(G4double val)            {NuclCorrPar = val;};
+   void SetFactPar(G4double val)                {FactPar = val;};
+     // corrs to transport cross section for high energy 
+
+ protected:    // with description
+
+   virtual G4double ComputeTransportCrossSection(
                              const G4ParticleDefinition& aParticleType,
                                    G4double KineticEnergy,
                                    G4double AtomicNumber,
-                                   G4double AtomicWeight) ;
-
-   G4double TrueToGeomTransformation(const G4DynamicParticle* aParticle,
-                                     G4Material* aMaterial,
-                                     G4double truePathLength) ;
+                                   G4double AtomicWeight);
+     // It computes the transport cross section.
+     // The transport mean free path is 1/(transport cross section). 
 
  private:
 
  //  hide assignment operator as  private
-   G4MultipleScattering & operator = (const G4MultipleScattering &right) ;
-   G4MultipleScattering ( const G4MultipleScattering &) ;
+   G4MultipleScattering & operator = (const G4MultipleScattering &right);
+   G4MultipleScattering ( const G4MultipleScattering &);
 
+ private:        // data members
 
- // data members ...................................................
- private:
+   G4PhysicsTable* theTransportMeanFreePathTable;
 
-   G4PhysicsTable* theTransportMeanFreePathTable ;
+   G4double fTransportMeanFreePath;
 
-   G4double fTransportMeanFreePath ;
-   G4double range,alpha1 ;
-   G4int stepFlag ;
+   G4double biglambda,taubig,tausmall,taulim;
 
-   G4double biglambda ;
-
-   G4double LowestKineticEnergy ;
-   G4double HighestKineticEnergy ;
-   G4int TotBin ;
-
-   const G4Electron* theElectron ;
-   const G4Positron* thePositron ;
+   G4double LowestKineticEnergy;
+   G4double HighestKineticEnergy;
+   G4int    TotBin;
 
    G4Material* lastMaterial;
-   G4double lastKineticEnergy;
-   G4int materialIndex ;
+   G4double    lastKineticEnergy;
+   G4int       materialIndex;
   
-   G4double tLast ;
-   G4double zLast ;
-
-   G4double Tlimit ;
+   G4double tLast;
+   G4double zLast;
 
    // model parameters
-   G4double scatteringparameter;
-   G4double tuning;
-   G4double cpar;
+   G4bool   boundary;                         // spec. handling near boundaries
+   G4double factlim;
+   G4GPILSelection  valueGPILSelectionMSC;
+
+   G4double pcz,zmean;                        // z(geom.step length)
+                                              //  distribution 
+
+   G4double palfa,pbeta,pgamma,pq0,pq1,pc0;   // parameters of angle
+                                              // disrtibution
+
+   G4double range,T1,lambda1,cth1,z1,t1,dtrl; // used to reduce the energy
+                                              // (or step length) dependence
+
+   G4double tuning;                            //  param. for lambda tuning
+   G4double cparm;                             //          "
 
    // with/without lateral displacement
-   G4bool fLatDisplFlag ;
+   G4bool fLatDisplFlag;
 
    // nuclear size effect correction
-   G4double NuclCorrPar ;
-   G4double FactPar ;
+   G4double NuclCorrPar;
+   G4double FactPar;
 
-   //New ParticleChange
-   G4ParticleChangeForMSC fParticleChange ;
-   
+   G4ParticleChangeForMSC fParticleChange; 
 };
 
 #include "G4MultipleScattering.icc"

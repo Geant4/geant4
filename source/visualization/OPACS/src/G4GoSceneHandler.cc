@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GoSceneHandler.cc,v 1.11.2.1 2001/06/28 19:15:36 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GoSceneHandler.cc,v 1.13 2001/11/12 18:22:09 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -152,7 +152,7 @@ void G4GoSceneHandler::AddPrimitive (
 {
   SetColour (GetColour(circle));
   G4Point3D center = circle.GetPosition();
-  G4double  radius = circle.GetWorldSize();
+  // G4double  radius = circle.GetWorldSize();  ####### Unused. #######
 #ifdef DEBUG
   G4cout << "G4GoSceneHandler::AddPrimitive(G4Circle&) : center : " 
     << " x : " << center.x() 

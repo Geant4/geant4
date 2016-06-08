@@ -33,7 +33,7 @@ include $(G4INSTALL)/config/globlib.gmk
 
 # --------------------------------------------------------------
 
-.PHONY : all global clean clean_libs cleandb
+.PHONY : all global clean clean_libs cleandb test
 
 # if G4ODBMS flag is not defined, override the target "all" then exit 
 ifndef G4ODBMS
@@ -53,4 +53,7 @@ newdb:
 	@rm -f $(G4SCHEMA_BOOT_DIR)/*.G4SCHEMA.DB
 	@$(HEP_ODBMS_DIR)/etc/getdb $(HEP_ODBMS_DIR)/schema/HEP_BASE \
 	  $(G4SCHEMA_BOOT) $(G4SCHEMA_FDID)
+
+test:
+	@echo "G4DDLX_FLAGS = $(G4DDLX_FLAGS)"
 

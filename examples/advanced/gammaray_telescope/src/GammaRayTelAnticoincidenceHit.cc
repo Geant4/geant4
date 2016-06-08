@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceHit.cc,v 1.1.2.2 2001/06/28 20:18:41 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelAnticoincidenceHit.cc,v 1.2 2001/07/11 09:56:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

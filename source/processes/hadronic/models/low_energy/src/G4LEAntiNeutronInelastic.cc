@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiNeutronInelastic.cc,v 1.3.2.1 2001/06/28 19:14:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4LEAntiNeutronInelastic.cc,v 1.6 2001/10/05 16:11:31 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
  // Hadronic Process: AntiNeutron Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997
@@ -273,8 +273,6 @@
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
     G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
-    G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
-    G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
     
     // energetically possible to produce pion(s)  -->  inelastic scattering
     //                                   otherwise quasi-elastic scattering

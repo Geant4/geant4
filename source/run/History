@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2001/06/22 07:57:39 asaim Exp $
+$Id: History,v 1.50 2001/12/07 08:45:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,79 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 07, 2001 G.Cosmo (run-V03-02-11)
+- G4RunManager.cc: fixed new date for the December public release.
+
+Nov 27, 2001 M.Asai (run-V03-02-10)
+- Change implementation in rndmSaveThisRun() and rndmSaveThisEvent().
+     
+Nov 23, 2001 M.Maire
+- Add rndmSaveThisRun() and rndmSaveThisEvent() methods to G4RunManager.
+- Add /random/ commands to G4RunMessenger
+
+Nov 20, 2001 M.Asai (run-V03-02-09)
+- Add GetVersionString() method to G4RunManager.
+
+Oct 24, 2004 M.Asai (run-V03-02-08)
+
+Oct 20, 2001 H.Kurasige
+- Modified Set/GetCuts() related methods in G4VUserPhysicsList
+  for "cut-per-materials" implementation.
+
+Oct 24, 2001 G.Cosmo (run-V03-02-07)
+- Removed references to G4GeomTestMessenger now moved to geometry/volumes
+  module. Files G4RunManager[.hh.cc], GNUmakefile.
+
+Oct 23, 2001 G.Cosmo (run-V03-02-06)
+- Merged changes in "run-V03-02-04a" and "run-V03-02-05" for removal of
+  STLinterface module.
+ 
+Oct 11, 2001 G.Cosmo (run-V03-02-05)
+- Replaced inclusion of ctoken.h with G4Tokenizer.hh in
+  G4UserPhysicsListMessenger.cc.
+- Co-works with tag "globals-V03-02-03" where the STLInterface
+  module has been removed.
+
+Oct 11, 2001 G.Cosmo (run-V03-02-04a)
+- Modified G4RunManager:
+  o added pointer to G4GeomTestMessenger for including new default
+    set of commands /geomtest/* in kernel, providing ability to check
+    for volumes overlaps in the user's detector geometry.
+  o modified call to G4GeometryManager::CloseGeometry() by adding
+    argument to verbose-mode.
+- The tag co-works with "geometry-V03-02-01" and "config-V03-02-06b"
+
+Oct 10, 2001 M.Asai (run-V03-02-04)
+- Add an option to store random number engine status for BOTH
+  of each run and each event.
+
+Oct 10, 2001 H.Kurashige
+- Modify G4VUserPhysicsList::SetCutsForOthers to fix problems of
+   no invocation of RetreivePhysicsTable() for muons  
+   
+Sep 19, 2001 H.Kurashige (run-V03-02-03)
+- Modify G4VUserPhysicsList for STL migration of materials (Hisaya) 
+
+Aug 02, 2001, G.Cosmo (run-V03-02-02)
+- Add Set/GetApplyCuts methods in G4VUserPhysicsList (Hisaya)
+- Add /run/particle/applyCuts command in G4UserPhysicsListMessenger (Hisaya)
+- Updated revision number of G4RunManager.cc for reference tag.
+
+Jul 18, 2001, M.Asai (run-V03-02-01)
+- Add a new feature for the user to increase the number of waiting stacks
+- Co-working with event-V03-02-02
+
+Jul 15, 2001 
+- Fixed bugs in G4VUserPhysicsList     (Hisaya)
+--- Modify Store/RetreivePhysicsTable for new G4VProcess
+--- Fixed bugs in StoreMaterialInfor and StoreCutValues in binary mode 
+ 
+Jul 13, 2001, G.Cosmo (run-V03-02-00)
+- Cleanup of pedantic warnings in Linux-g++ ANSI setup.
+- Corrected "NULL" to "0".
+- Synchronised with HEAD revision after inclusion of disclaimer
+  liability.
 
 Jun 22, 2001, M.Asai (run-V03-01-00)
 - Tagging for the release

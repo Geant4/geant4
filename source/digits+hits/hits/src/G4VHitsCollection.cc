@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.cc,v 1.2.2.1 2001/06/28 19:07:52 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VHitsCollection.cc,v 1.4 2001/07/13 15:00:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // G4VHitsCollection
@@ -44,7 +44,7 @@ G4VHitsCollection::G4VHitsCollection(G4String detName,G4String colNam)
 G4VHitsCollection::~G4VHitsCollection()
 { ; }
 
-int G4VHitsCollection::operator==(const G4VHitsCollection &right) const
+G4int G4VHitsCollection::operator==(const G4VHitsCollection &right) const
 { 
   return ((collectionName==right.collectionName)
         &&(SDname==right.SDname));

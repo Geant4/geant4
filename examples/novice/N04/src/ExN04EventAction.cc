@@ -72,9 +72,9 @@ void ExN04EventAction::EndOfEventAction(const G4Event* evt)
   if(trackerCollID<0||calorimeterCollID<0||muonCollID<0) return;
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
-  ExN04TrackerHitsCollection* THC = NULL;
-  ExN04CalorimeterHitsCollection* CHC = NULL;
-  ExN04MuonHitsCollection* MHC = NULL;
+  ExN04TrackerHitsCollection* THC = 0;
+  ExN04CalorimeterHitsCollection* CHC = 0;
+  ExN04MuonHitsCollection* MHC = 0;
   if(HCE)
   {
     THC = (ExN04TrackerHitsCollection*)(HCE->GetHC(trackerCollID));

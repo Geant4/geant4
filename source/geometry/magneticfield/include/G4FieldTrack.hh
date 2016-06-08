@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.hh,v 1.6.2.1 2001/06/28 19:08:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FieldTrack.hh,v 1.8 2001/10/25 17:02:16 japost Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // class G4FieldTrack
@@ -113,7 +113,7 @@ class  G4FieldTrack
        // Needed and should be used only for RK integration driver
      enum { ncompSVEC = 12 };
      inline void DumpToArray(G4double valArr[ncompSVEC]) const; 
-     inline void LoadFromArray(G4double valArr[ncompSVEC]); 
+     inline void LoadFromArray(const G4double valArr[ncompSVEC]); 
      
      friend  G4std::ostream&
              operator<<( G4std::ostream& os, G4FieldTrack& SixVec);

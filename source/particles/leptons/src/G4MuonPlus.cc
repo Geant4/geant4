@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonPlus.cc,v 1.4.4.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MuonPlus.cc,v 1.7 2001/10/16 08:16:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -97,12 +97,11 @@ G4MuonPlus G4MuonPlus::theMuonPlus(
 );
 
 G4MuonPlus*  G4MuonPlus::MuonPlusDefinition() {return &theMuonPlus;}
-// initialization for static cut values
-G4double   G4MuonPlus::theMuonPlusLengthCut = -1.0;
-G4double*  G4MuonPlus::theMuonPlusKineticEnergyCuts = NULL;
 
-
-
+G4MuonPlus* G4MuonPlus::MuonPlus()
+{ 
+  return &theMuonPlus; 
+}
 
 
 

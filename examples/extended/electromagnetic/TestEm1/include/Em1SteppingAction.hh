@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1SteppingAction.hh,v 1.2.4.1 2001/06/28 19:06:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em1SteppingAction.hh,v 1.4 2001/10/26 12:51:24 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1SteppingAction_h
 #define Em1SteppingAction_h 1
@@ -37,7 +37,7 @@
 class Em1RunAction;
 class Em1EventAction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1SteppingAction : public G4UserSteppingAction
 {
@@ -51,5 +51,7 @@ class Em1SteppingAction : public G4UserSteppingAction
     Em1RunAction*   runAction;
     Em1EventAction* eventAction;    
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

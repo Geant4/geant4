@@ -20,11 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// Persistent class for description of subtraction of two CSG solids: A - B
 //
+// $Id: G4PSubtractionSolid.ddl,v 1.5 2001/07/11 10:02:22 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent class for description of subtraction of two CSG solids: A - B
+
 // History: 
 // 10.11.99 Y.Morita, Initial creation
-//
 
 #ifndef G4PSUBTRACTIONSOLID_DDL
 #define G4PSUBTRACTIONSOLID_DDL
@@ -37,20 +41,22 @@ class G4VSolid;
 class G4PSubtractionSolid
  : public G4PBooleanSolid
 {
-public:
+public: // With description
         G4PSubtractionSolid( const G4String& pName,
                              HepRef(G4PVSolid) persSolidA,
                              HepRef(G4PVSolid) persSolidB );
         virtual ~G4PSubtractionSolid() ;
+        // Constructor and Destructor
 
         G4VSolid* MakeTransientObject() const;
-
         G4VSolid* MakeTransientBooleanSolid(
                                G4VSolid* aSolidA,
                                G4VSolid* aSolidB ) const;
+        // Creates a transient G4SubtractionSolid object.
 
         virtual G4GeometryType GetEntityType() const 
         { return G4String("G4SubtractionSolid"); }
+        // Returns the G4GeometryType of this solid.
 
 protected:
 

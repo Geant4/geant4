@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.hh,v 1.6.4.1 2001/06/28 19:10:22 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIterminal.hh,v 1.7 2001/07/11 10:01:20 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4UIterminal_h

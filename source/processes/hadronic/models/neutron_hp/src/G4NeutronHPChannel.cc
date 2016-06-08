@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -134,9 +134,8 @@
   
   void G4NeutronHPChannel::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
   {
-    G4int s = 0, n=0, i=0, m=0;
+    G4int s = 0, n=0, m=0;
     G4NeutronHPVector * theMerge = new G4NeutronHPVector;
-    G4bool flag;
     G4NeutronHPVector * anActive = theStore;
     G4NeutronHPVector * aPassive = theNew;
     G4NeutronHPVector * tmp;

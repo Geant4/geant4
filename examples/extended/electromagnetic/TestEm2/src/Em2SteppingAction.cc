@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2SteppingAction.cc,v 1.2.4.1 2001/06/28 19:06:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2SteppingAction.cc,v 1.6 2001/12/11 17:44:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2SteppingAction.hh"
 #include "Em2DetectorConstruction.hh"
@@ -35,46 +35,52 @@
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2SteppingAction::Em2SteppingAction(Em2DetectorConstruction* det,
                                      Em2RunAction* run)
 :Em2Det(det),Em2Run(run)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2SteppingAction::~Em2SteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
  G4Track* aTrack = aStep->GetTrack();
+ const G4VTouchable*  preStepTouchable= aStep->GetPreStepPoint()->GetTouchable();
+ const G4VTouchable* postStepTouchable= aStep->GetPostStepPoint()->GetTouchable();
 
  // energy deposit
  //
  G4int SlideNb(0), RingNb(0);
- if (Em2Det->GetnRtot()>1)
-    RingNb  = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(1);
- if (Em2Det->GetnLtot()>1)
-    SlideNb = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber();
-             
+ if (preStepTouchable->GetHistoryDepth()>0)
+ {
+   if (Em2Det->GetnRtot()>1)
+     RingNb  = preStepTouchable->GetReplicaNumber(1);
+   if (Em2Det->GetnLtot()>1)
+     SlideNb = preStepTouchable->GetReplicaNumber();
+ }
+         
  G4double dEStep = aStep->GetTotalEnergyDeposit();
- if (dEStep > 0.) Em2Run->fillPerStep(dEStep,SlideNb,RingNb);
+ if (dEStep > 0.)
+   Em2Run->fillPerStep(dEStep,SlideNb,RingNb);
 
  // particle flux
  //  
  if ((Em2Det->GetnLtot()>1)&&
-     (aStep->GetPostStepPoint()->GetTouchable()->GetVolume()))
+     (postStepTouchable->GetVolume()))
    {
-     G4int next = aStep->GetPostStepPoint()->GetTouchable()->GetReplicaNumber();
+     G4int next = postStepTouchable->GetReplicaNumber();
      if (next != SlideNb)
         Em2Run->particleFlux(aTrack->GetDefinition(), (SlideNb+next)/2);
    }  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

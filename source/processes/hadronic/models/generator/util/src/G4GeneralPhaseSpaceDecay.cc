@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4GeneralPhaseSpaceDecay.cc,v 1.2.8.2 2001/06/28 20:20:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GeneralPhaseSpaceDecay.cc,v 1.5 2001/10/05 16:17:55 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // $Id: G4GeneralSpaceDecay.cc,v 1.0 1998/05/21
 // ----------------------------------------------------------------
@@ -79,13 +79,13 @@ G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName
 			                           const G4String& theDaughterName1,
 			                           const G4String& theDaughterName2,
 			                           const G4String& theDaughterName3) :
-			                           parentmass(theParentMass),
                                    G4VDecayChannel("Phase Space",
 					           theParentName,theBR,
 					           theNumberOfDaughters,
 					           theDaughterName1,
 					           theDaughterName2,
-					           theDaughterName3)
+					           theDaughterName3),
+			           parentmass(theParentMass)
 {
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
 }
@@ -134,7 +134,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::OneBodyDecayIt()
 {
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay::OneBodyDecayIt()"<<G4endl;
 
-  G4double daughtermass = daughters[0]->GetPDGMass();
+//  G4double daughtermass = daughters[0]->GetPDGMass();
 
   //create parent G4DynamicParticle at rest
   G4ParticleMomentum dummy;
@@ -166,7 +166,7 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::TwoBodyDecayIt()
   G4double daughtermomentum;
   daughtermass[0] = daughters[0]->GetPDGMass();
   daughtermass[1] = daughters[1]->GetPDGMass();
-  G4double sumofdaughtermass =  daughtermass[0] + daughtermass[1];
+//  G4double sumofdaughtermass =  daughtermass[0] + daughtermass[1];
 
   //create parent G4DynamicParticle at rest
   G4ParticleMomentum dummy;

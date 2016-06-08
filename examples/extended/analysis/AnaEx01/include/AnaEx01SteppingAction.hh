@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01SteppingAction.hh,v 1.3.4.1 2001/06/28 19:06:45 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: AnaEx01SteppingAction.hh,v 1.4 2001/07/11 09:57:09 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 

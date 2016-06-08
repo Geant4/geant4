@@ -21,27 +21,31 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.14.2.1 2001/06/28 19:12:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PAIonisation.cc,v 1.22 2001/11/09 13:59:46 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // **************************************************************
 //
-// 12.07.00, V.Grichine - modifications in BuildPAIonisationTable 
-// 11.07.00, V.Grichine - GetRandomEnergyTransfer, and PostStepDoIt
+// 08.11.01 particleMass becomes a local variable (mma)
+// 17.09.01 migration of Materials to pure STL (mma)
+// 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 17.05.01 V. Grichine, low energy extension down to 10*keV of proton
+// 12.07.00 V.Grichine - modifications in BuildPAIonisationTable 
+// 11.07.00 V.Grichine - GetRandomEnergyTransfer, and PostStepDoIt
 //                        modifications
-// 03.07.00, V.Grichine - modifications in AlongStepDoIt
-// 08-04-98: remove 'traking cut' of the ionizing particle, MMa
-// 30-11-97: V. Grichine
+// 03.07.00 V.Grichine - modifications in AlongStepDoIt
+// 08-04-98 remove 'traking cut' of the ionizing particle, MMa
+// 30-11-97 V. Grichine
 //
 // **************************************************************
 
 #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
 
-const G4double G4PAIonisation:: LowestKineticEnergy = 100.0*MeV  ;
-const G4double G4PAIonisation::HighestKineticEnergy = 10.*TeV  ;
-G4int G4PAIonisation::TotBin = 100  ;  // 50
+const G4double G4PAIonisation:: LowestKineticEnergy = 10.0*keV ; // 100.0*MeV  ;
+const G4double G4PAIonisation::HighestKineticEnergy =  10.*TeV ; // 1000.0*MeV ;  
+G4int G4PAIonisation::TotBin = 200  ;  // 50
 
       // create physics vector and fill it
       
@@ -63,11 +67,11 @@ G4PAIonisation::G4PAIonisation( const G4String& materialName,
    : G4VPAIenergyLoss(processName),
      theElectron ( G4Electron::Electron() )
 {
-  G4int numberOfMat, iMat ;
+  G4int  iMat ;
   theMeanFreePathTable  = NULL; 
-  lastCutInRange = 0. ;
+  lastCutInRange = 0 ;
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfMat = theMaterialTable->length() ;
+  G4int numberOfMat = G4Material::GetNumberOfMaterials() ;
   for(iMat=0;iMat<numberOfMat;iMat++)
   {
     if(materialName == (*theMaterialTable)[iMat]->GetName() )
@@ -115,7 +119,13 @@ G4PAIonisation::~G4PAIonisation()
 /////////////////////////////////////////////////////////////////////////
 //
 //
+G4double G4PAIonisation::GetMaxKineticEnergy() {return HighestKineticEnergy;}
+G4double G4PAIonisation::GetMinKineticEnergy() {return LowestKineticEnergy;}
+G4int    G4PAIonisation::GetBinNumber()        {return TotBin;}
 
+/////////////////////////////////////////////////////////////////////////
+//
+//
 
 void G4PAIonisation::ComputeSandiaPhotoAbsCof()
 {
@@ -178,7 +188,7 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
 {
     G4double Charge = aParticleType.GetPDGCharge();
-    G4double Chargesquare = Charge*Charge ;     
+    //G4double Chargesquare = Charge*Charge ;     
     CutInRange = aParticleType.GetLengthCuts(); 
 
     //  BuildLossTable(aParticleType) ;
@@ -193,9 +203,9 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
        RecorderOfpbarProcess[CounterOfpbarProcess] = (*this).theLossTable ;
        CounterOfpbarProcess++;
     }
-    if(CutInRange != lastCutInRange)
+    if( !EqualCutVectors(CutInRange, lastCutInRange))
     {
-       lastCutInRange = CutInRange ;
+       lastCutInRange =  CopyCutVectors(lastCutInRange,CutInRange) ;
        BuildLambdaTable(aParticleType) ;
     }
     //  G4VPAIenergyLoss::BuildDEDXTable(aParticleType) ;
@@ -211,7 +221,7 @@ void
 G4PAIonisation::BuildPAIonisationTable()
 {
    G4double LowEdgeEnergy , ionloss ;
-   G4double massRatio, tau, Tmax, gamma, bg2 ;
+   G4double massRatio, tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
 
    if ( theLossTable)
    {
@@ -230,12 +240,18 @@ G4PAIonisation::BuildPAIonisationTable()
    //create physics vector then fill it ....
 
    G4PhysicsLogVector* aVector = new G4PhysicsLogVector( LowestKineticEnergy, 
-							   HighestKineticEnergy,
-							   TotBin               ) ;
+							 HighestKineticEnergy,
+							 TotBin               ) ;
 
-   // From gas detector experience
+   
 
-   DeltaCutInKineticEnergyNow = 100*keV ;
+   DeltaCutInKineticEnergyNow = 100*keV ; // From gas detector experience
+
+   Tmin = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+
+   //   G4cout<<"Tmin = "<<Tmin/eV<<" eV"<<G4endl<<G4endl ;
+
+   deltaLow = 0.5*eV ;                    // shift from Tmin for stability
 
    for (G4int i = 0 ; i < TotBin ; i++)  //The loop for the kinetic energy 
    {
@@ -243,10 +259,8 @@ G4PAIonisation::BuildPAIonisationTable()
       
       tau = LowEdgeEnergy/proton_mass_c2 ;
 
-      if(tau < 0.01)  // was 0.11, 0.05
-      {
-	       tau = 0.01 ;
-      }
+      //    if(tau < 0.01)  tau = 0.01 ;
+ 
       gamma = tau +1. ;
 
       //   G4cout<<"gamma = "<<gamma<<endl ;
@@ -256,12 +270,18 @@ G4PAIonisation::BuildPAIonisationTable()
 
       Tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*massRatio+massRatio*massRatio) ;
 
+      Tkin = DeltaCutInKineticEnergyNow ;
+
       if ( DeltaCutInKineticEnergyNow > Tmax)         // was <
       {
-         DeltaCutInKineticEnergyNow = Tmax ;
+         Tkin = Tmax ;
+      }
+      if ( Tkin < Tmin + deltaLow )  // low energy safety       
+      {
+         Tkin = Tmin + deltaLow ;
       }
       G4PAIxSection protonPAI( fMatIndex,
-                               DeltaCutInKineticEnergyNow,
+                               Tkin,
                                bg2,
                                fSandiaPhotoAbsCof,
                                fSandiaIntervalNumber  ) ;
@@ -306,11 +326,11 @@ void
 G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
     G4double LowEdgeEnergy , Value ,sigma ;
-    G4bool isOutRange ;
+    //G4bool isOutRange ;
     const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
     const G4double BigValue = DBL_MAX ;
 
-    G4int numOfMaterials = theMaterialTable->length();    //create table
+    G4int numOfMaterials = G4Material::GetNumberOfMaterials();    //create table
 
     if (theMeanFreePathTable) 
     {
@@ -321,7 +341,7 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 
     // get electron and particle cuts in kinetic energy
 
-    DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
+    DeltaCutInKineticEnergy = theElectron->GetEnergyCuts() ;
     ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
 
     for (G4int J=0 ; J < numOfMaterials; J++)  // loop for materials 
@@ -356,7 +376,7 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
               sigma +=  theAtomicNumDensityVector[iel]*
                         ComputeMicroscopicCrossSection(aParticleType,
                         LowEdgeEnergy,
-                       (*theElementVector)(iel)->GetZ() ) ;
+                       (*theElementVector)[iel]->GetZ() ) ;
           }
           // mean free path = 1./macroscopic cross section
 
@@ -386,16 +406,16 @@ ComputeMicroscopicCrossSection( const G4ParticleDefinition& aParticleType,
 	     TotalCrossSection, tempvar ;
     const G4double SmallCrossSection = DBL_MIN;
 
-    ParticleMass=aParticleType.GetPDGMass() ; // get particle data 
-    TotalEnergy=KineticEnergy + ParticleMass;
+    G4double particleMass=aParticleType.GetPDGMass() ; // get particle data 
+    TotalEnergy=KineticEnergy + particleMass;
 
-    betasquare = KineticEnergy*(TotalEnergy+ParticleMass)   //  kinematics
+    betasquare = KineticEnergy*(TotalEnergy+particleMass)   //  kinematics
                  /(TotalEnergy*TotalEnergy);
 
-    tempvar = ParticleMass+electron_mass_c2;
+    tempvar = particleMass+electron_mass_c2;
 
     MaxKineticEnergyTransfer = 2.*electron_mass_c2*KineticEnergy
-                     *(TotalEnergy+ParticleMass)
+                     *(TotalEnergy+particleMass)
                      /(tempvar*tempvar+2.*electron_mass_c2*KineticEnergy);
 
     //  total cross section
@@ -444,13 +464,18 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
     massRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
     scaledTkin = kinE*massRatio ;
     energyTransfer = GetRandomEnergyTransfer(scaledTkin) ;
+    if( energyTransfer < 0.0 )
+    {
+      //  G4cout<<"PAI::energyTransfer = "<<energyTransfer/keV<<" keV"<<G4endl ;
+      energyTransfer = 0.0 ;
+    }
     finalTkin = kinE - energyTransfer ;
 
     //  kill the particle if the kinetic energy <= 0  
 
-    if (finalTkin <= 0. )
+    if (finalTkin < 0.0 )
     {
-      finalTkin = 0.;
+      finalTkin = 0.0;
       if (aParticle->GetDefinition()->GetParticleName() == "proton")
       {
                aParticleChange.SetStatusChange( fStopAndKill ) ;
@@ -478,16 +503,17 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
   
   const G4DynamicParticle* aParticle;
   G4Material* aMaterial;
-  G4bool isOut;
-  G4double E,ScaledE,finalT,Step,Tbin,rangebin ;
-  const G4double smallLoss=DBL_MIN;
+  //G4bool isOut;
+  //G4double E,ScaledE,finalT,Step,Tbin,rangebin, delta ;
+  G4double E,ScaledE,finalT,Step,delta;
+  //const G4double smallLoss=DBL_MIN;
   const G4double BigRange = DBL_MAX ;
-  G4int index ;
-  G4double cc,discr ; 
+  //G4int index ;
+  //G4double cc,discr ; 
 
   aParticleChange.Initialize(trackData) ;
   aMaterial = trackData.GetMaterial() ;
-  index = aMaterial->GetIndex() ;
+  size_t index = aMaterial->GetIndex() ;
 
   // get the actual (true) Step length from stepData 
   // there is no loss for Step=0. !
@@ -505,14 +531,12 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 
   E = aParticle->GetKineticEnergy() ;
 
-  G4double mass = aParticle->GetDefinition()->GetPDGMass() ;
-  G4double gamma = 1.0 + E/mass ;
-
-  if( gamma < 1.2 ) return &aParticleChange ; 
-
   G4double Charge = aParticle->GetDefinition()->GetPDGCharge() ;
+
   G4double Chargesquare = Charge*Charge ;
-  G4double MassRatio = proton_mass_c2/mass ;
+
+  G4double MassRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
+
   ScaledE = E*MassRatio ;
 
   ParticleCutInKineticEnergyNow =
@@ -528,12 +552,17 @@ G4VParticleChange* G4PAIonisation::AlongStepDoIt( const G4Track& trackData,
 	  //  fMeanLoss = ScaledE-0.5*(discr-RangeCoeffB)/RangeCoeffA ;
 
           //  now the loss with fluctuation
+   delta  = GetLossWithFluct(Step,aParticle,aMaterial) ;
+   if ( delta < 0.0 )
+   {
+     //     G4cout<<"PAI::delta = "<<delta/keV<<" keV"<<G4endl ;
+     delta = 0.0 ;
+   }
+   finalT = E - delta ;
 
-          finalT = E-GetLossWithFluct(Step,aParticle,aMaterial) ;
+   if (finalT < 0.0) finalT = 0. ;
 
-          if (finalT<0.) finalT = 0. ;
-
-          fMeanLoss *= Chargesquare ;
+   fMeanLoss *= Chargesquare ;
     
   }
   //  kill the particle if the kinetic energy <= 0  
@@ -564,14 +593,16 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
                                    G4Material* aMaterial               )
 {  
   G4int iTkin, iTransfer  ;
-  G4long iCollision, numOfCollisions ;
-  G4int       index = aMaterial->GetIndex() ;
-  G4bool isOutRange ;
+  G4long numOfCollisions;
+  //  G4long iCollision, numOfCollisions ;
+  //G4int       index = aMaterial->GetIndex() ;
+  //G4bool isOutRange ;
 
   // G4cout<<"G4VPAIenergyLoss::GetLossWithFluct"<<G4endl ;
 
   G4double loss = 0.0, charge2 ;
-  G4double transfer, position, E1, E2, W1, W2, W, firstMu, secondMu ;
+  //G4double transfer, position, E1, E2, W1, W2, W, firstMu, secondMu ;
+  G4double position, E1, E2, W1, W2, W;
   G4double      Tkin = aParticle->GetKineticEnergy() ;
   G4double MassRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
   G4double charge = aParticle->GetDefinition()->GetPDGCharge() ;

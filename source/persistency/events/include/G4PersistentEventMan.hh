@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersistentEventMan.hh,v 1.11.4.1 2001/06/28 19:11:26 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PersistentEventMan.hh,v 1.13 2001/07/11 10:02:15 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // Class Description:
@@ -78,9 +78,10 @@ class G4PersistentEventMan
       G4int         f_currentEventID;
       HepRef(G4PEvent) f_currentPEvent;
 
-  public:
+  public: // With description
       inline G4int CurrentEventID()
       { return f_currentEventID; }
+        // Returns the current event id
 
   private:
       G4bool Store( HepDbApplication* dbApp,

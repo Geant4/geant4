@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.3.2.2 2001/06/28 20:19:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NucleiPropertiesTheoreticalTable.hh,v 1.5 2001/10/15 09:58:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -105,62 +105,6 @@ private:
 
 };
   
-inline G4double G4NucleiPropertiesTheoreticalTable::GetMassExcess(G4int Z, G4int A) 
-{
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) {
-		return AtomicMassExcess[i]*MeV;
-    } else {
-        return 0.0;
-    }
-}
-
-inline G4double G4NucleiPropertiesTheoreticalTable::GetBindingEnergy(G4int Z, G4int A)
-{
-    G4int i=GetIndex(Z, A);
-    if (i >= 0){
-	    const G4double Mh = 7.289034*MeV;  // hydrogen atom mass excess
-		 const G4double Mn = 8.071431*MeV;  // neutron mass excess
-		 return G4double(Z)*Mh + G4double(A-Z)*Mn - AtomicMassExcess[i]*MeV;
-    } else { 
-	    return 0.0;
-    }
-}
-
-
-
-inline G4double  G4NucleiPropertiesTheoreticalTable::GetAtomicMass(G4int Z, G4int A)
-{
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) {
-      return AtomicMassExcess[i]*MeV + A*amu_c2;
-    } else {
-      return 0.0;
-    }
-}
-  
-
-
-inline G4double  G4NucleiPropertiesTheoreticalTable::GetNuclearMass(G4int Z, G4int A)
-{
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) {
-      return GetAtomicMass(Z,A) - G4double(Z)*electron_mass_c2 + ElectronicBindingEnergy(Z);
-    } else {
-      return 0.0;
-    }
-}
-
-inline G4double G4NucleiPropertiesTheoreticalTable::ElectronicBindingEnergy(G4int Z) {
-	const G4double ael = 1.433e-5*MeV; // electronic-binding constant
-	return ael*pow(G4double(Z),2.39);
-}
-
-inline G4bool G4NucleiPropertiesTheoreticalTable::IsInTable(G4int Z, G4int A)
-{
-    return (Z <= A && A >= 16 && A <= 339 && Z <= 136 && Z >= 8 && GetIndex(Z, A) >= 0);
-}
-
 
 #endif
 

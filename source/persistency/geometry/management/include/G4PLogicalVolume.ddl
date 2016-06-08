@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PLogicalVolume.ddl,v 1.9.4.1 2001/06/28 19:11:27 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// 
-// class G4PLogicalVolume
-// P-verson of the class G4LogicalVolume
-//                                              Takashi.Sasaki@kek.jp
+// $Id: G4PLogicalVolume.ddl,v 1.11 2001/07/11 10:02:18 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of the class G4LogicalVolume.
+
 #ifndef G4PLOGICALVOLUME_DDL
 #define G4PLOGICALVOLUME_DDL 1
 
@@ -51,25 +50,29 @@ typedef d_Varray< d_Ref<G4PVPhysicalVolume> > G4PVPhysVolRefVArray;
 
 class G4PLogicalVolume: public HepPersObj
 {
-public:
+  public: // With description
     G4PLogicalVolume( const G4LogicalVolume* aLogicalVolume,
                       HepRef(G4PVSolid) persSolid);
     ~G4PLogicalVolume();
+      // Constructor and Destructor
 
     G4LogicalVolume* MakeTransientObject(G4VSolid* aSolid,
                                          G4Material* aMaterial);
+      // Creates a transient G4LogicalVolume object.
 
     HepRef(G4PVSolid) GetSolid();
     void SetSolid( HepRef(G4PVSolid) pSolid );
+      // Get or set the pointer of persistent solid object.
 
-public:
+  public: // With description
     G4int GetNoDaughters() const;
     HepRef(G4PVPhysicalVolume) GetDaughter(const G4int i) const;
     void AddDaughter(HepRef(G4PVPhysicalVolume) p);
     G4bool IsDaughter(const HepRef(G4PVPhysicalVolume) p) const;
     void RemoveDaughter(const HepRef(G4PVPhysicalVolume) p);
+      // Methods to handle association of persistent physical volume.
 
-private:
+  private:
     G4PVPhysVolRefVArray fDaughters;    
 //    G4MagneticField* fMagneticField;
 //    G4Material* fMaterial;
@@ -85,11 +88,13 @@ private:
 
     G4Pint NoOfDaughters;
 
-  public:
+  public: // With description
       inline void SetMaterialName(G4String aName)
       { fMaterialName = aName; }
       inline G4String GetMaterialName()
       { return (G4String) fMaterialName; }
+        // Set and Get methods for the associated material name.
+
 };
 
 #endif

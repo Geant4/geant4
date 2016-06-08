@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlusPlus.cc,v 1.4.4.2 2001/06/28 20:19:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiSigmacPlusPlus.cc,v 1.6 2001/10/15 10:10:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -99,9 +99,6 @@ G4AntiSigmacPlusPlus G4AntiSigmacPlusPlus::theAntiSigmacPlusPlus(
 
 G4AntiSigmacPlusPlus* G4AntiSigmacPlusPlus::AntiSigmacPlusPlusDefinition(){return &theAntiSigmacPlusPlus;}
 G4AntiSigmacPlusPlus* G4AntiSigmacPlusPlus::AntiSigmacPlusPlus(){return &theAntiSigmacPlusPlus;}
-// initialization for static cut values
-G4double   G4AntiSigmacPlusPlus::theAntiSigmacPlusPlusLengthCut = -1.0;
-G4double*  G4AntiSigmacPlusPlus::theAntiSigmacPlusPlusKineticEnergyCuts = NULL;
 
 
 

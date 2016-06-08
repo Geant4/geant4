@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VInteractorManager.cc,v 1.8.4.1 2001/06/28 19:10:25 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VInteractorManager.cc,v 1.11 2001/12/03 08:07:45 barrand Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G.Barrand
 
@@ -59,7 +59,7 @@ G4VInteractorManager::~G4VInteractorManager (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(argv!=NULL) {
-    for(int argi=0;argi<argc;argi++) {
+    for(G4int argi=0;argi<argc;argi++) {
       if(argv[argi]!=NULL) free(argv[argi]);
     }
     free (argv);
@@ -76,7 +76,7 @@ G4VInteractorManager::~G4VInteractorManager (
 }
 /***************************************************************************/
 void G4VInteractorManager::SetArguments (
- int    a_argc
+ G4int  a_argc
 ,char** a_argv
 )
 /***************************************************************************/
@@ -84,7 +84,7 @@ void G4VInteractorManager::SetArguments (
 {
   // Free previous values.
   if(argv!=NULL) {
-    for(int argi=0;argi<argc;argi++) {
+    for(G4int argi=0;argi<argc;argi++) {
       if(argv[argi]!=NULL) free(argv[argi]);
     }
     free(argv);
@@ -96,7 +96,7 @@ void G4VInteractorManager::SetArguments (
     argv = (char**)malloc(a_argc * sizeof(char*));
     if(argv!=NULL) {
       argc = a_argc;
-      for(int argi=0;argi<a_argc;argi++) {
+      for(G4int argi=0;argi<a_argc;argi++) {
 	argv[argi] = (char*)NewString (a_argv[argi]);
       }
     }
@@ -104,7 +104,7 @@ void G4VInteractorManager::SetArguments (
 }
 /***************************************************************************/
 char** G4VInteractorManager::GetArguments (
- int* a_argc
+ G4int* a_argc
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -163,7 +163,13 @@ void G4VInteractorManager::RemoveDispatcher (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4std::remove(dispatchers.begin(),dispatchers.end(),a_dispatcher);
+  G4std::vector<G4DispatchFunction>::iterator it;
+  for (it = dispatchers.begin(); it != dispatchers.end(); it++) {
+    if (*it == a_dispatcher) {
+      dispatchers.erase(it);
+      break;
+    }
+  }
 }
 /***************************************************************************/
 void G4VInteractorManager::DispatchEvent (
@@ -172,10 +178,9 @@ void G4VInteractorManager::DispatchEvent (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int dispatchern = dispatchers.size();
+  G4int dispatchern = dispatchers.size();
   G4DispatchFunction func;
-  G4bool status;
-  for(int count=0;count<dispatchern;count++) {
+  for(G4int count=0;count<dispatchern;count++) {
     func = dispatchers[count];
     if(func!=NULL) {
       if(func(a_event)==true) return;
@@ -199,8 +204,8 @@ void G4VInteractorManager::SecondaryLoopPreActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int preActionn = preActions.size();
-  for(int count=0;count<preActionn;count++) {
+  G4int preActionn = preActions.size();
+  for(G4int count=0;count<preActionn;count++) {
     if(preActions[count]!=NULL) preActions[count]();
   }
 }
@@ -221,8 +226,8 @@ void G4VInteractorManager::SecondaryLoopPostActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int postActionn = postActions.size();
-  for(int count=0;count<postActionn;count++) {
+  G4int postActionn = postActions.size();
+  for(G4int count=0;count<postActionn;count++) {
     if(postActions[count]!=NULL) postActions[count]();
   }
 }
@@ -243,7 +248,7 @@ void G4VInteractorManager::SecondaryLoop (
     alreadyInSecondaryLoop   = TRUE;
     exitSecondaryLoop        = 0;
     SecondaryLoopPreActions  ();
-    //for(int count=0;count<shelln;count++) XWidgetUniconify(shells[count]);
+    //for(G4int count=0;count<shelln;count++) XWidgetUniconify(shells[count]);
     void*                    event;
     while(1) {
       event = GetEvent();
@@ -251,12 +256,13 @@ void G4VInteractorManager::SecondaryLoop (
       DispatchEvent  (event);
       if(exitSecondaryLoop!=0) break;
     }
+    G4cout << "Secondary X event loop exited." << G4endl;
     SecondaryLoopPostActions ();
     }
 }
 /***************************************************************************/
 void G4VInteractorManager::RequireExitSecondaryLoop (
- int a_code
+ G4int a_code
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -265,11 +271,11 @@ void G4VInteractorManager::RequireExitSecondaryLoop (
   if(a_code==0)            a_code = 1;
   exitSecondaryLoop        = a_code;
   alreadyInSecondaryLoop   = FALSE;
-  // for(int count=0;count<shelln;count++) XWidgetIconify(shells[count]);
+  // for(G4int count=0;count<shelln;count++) XWidgetIconify(shells[count]);
   // if(shelln!=0)            XSync(XtDisplay(topWidget),False);
 }
 /***************************************************************************/
-int G4VInteractorManager::GetExitSecondaryLoopCode (
+G4int G4VInteractorManager::GetExitSecondaryLoopCode (
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -294,7 +300,13 @@ void G4VInteractorManager::RemoveShell (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {  
-  G4std::remove(shells.begin(),shells.end(),a_shell);
+  G4std::vector<G4Interactor>::iterator it;
+  for (it = shells.begin(); it != shells.end(); it++) {
+    if (*it == a_shell) {
+      shells.erase(it);
+      break;
+    }
+  }
 }
 /***************************************************************************/
 void G4VInteractorManager::SetParentInteractor (

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.hh,v 1.6.2.1 2001/06/28 19:16:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisCommandsCompound.hh,v 1.7 2001/07/11 10:09:15 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysisMessenger.cc,v 1.1.4.2 2001/06/28 20:18:40 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelAnalysisMessenger.cc,v 1.5 2001/12/04 11:40:28 flongo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -31,23 +31,24 @@
 //
 //      ------------ GammaRayTelAnalysisMessenger ------
 //           by R.Giannitrapani, F.Longo & G.Santin (03 dic 2000)
-//
+// 20.11.01 G.Santin: modified according to the new GammaRayTelAnalysis.cc
 // ************************************************************
 #ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisMessenger.hh"
 
-#include "GammaRayTelAnalysisManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
+#include "GammaRayTelAnalysisMessenger.hh"
+#include "GammaRayTelAnalysis.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysisManager* analysisManager)
-  :GammaRayTelAnalysis(analysisManager)
+GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* analysis)
+  :gammaRayTelAnalysis(analysis)
 
 { 
-  GammaRayTelAnalysisDir = new G4UIdirectory("/analysis/");
-  GammaRayTelAnalysisDir->SetGuidance("GammaRayTel analysis control.");
+  gammaRayTelAnalysisDir = new G4UIdirectory("/analysis/");
+  gammaRayTelAnalysisDir->SetGuidance("GammaRayTel analysis control.");
   
   /* 
      Commands for the 1D histograms (energy deposition in the last 
@@ -139,21 +140,21 @@ void GammaRayTelAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String new
   // 1D Histograms
 
   if( command == Histo1DDrawCmd )
-    { GammaRayTelAnalysis->SetHisto1DDraw(newValue);}
+    { gammaRayTelAnalysis->SetHisto1DDraw(newValue);}
 
   if( command == Histo1DSaveCmd )
-    { GammaRayTelAnalysis->SetHisto1DSave(newValue);}
+    { gammaRayTelAnalysis->SetHisto1DSave(newValue);}
 
   // 2D Histograms
 
   if( command == Histo2DDrawCmd )
-    { GammaRayTelAnalysis->SetHisto2DDraw(newValue);}
+    { gammaRayTelAnalysis->SetHisto2DDraw(newValue);}
 
   if( command == Histo2DSaveCmd )
-    { GammaRayTelAnalysis->SetHisto2DSave(newValue);}
+    { gammaRayTelAnalysis->SetHisto2DSave(newValue);}
 
   if( command == Histo2DModeCmd )
-    { GammaRayTelAnalysis->SetHisto2DMode(newValue);}
+    { gammaRayTelAnalysis->SetHisto2DMode(newValue);}
    
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.4.4.1 2001/06/28 19:15:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.6 2001/08/09 20:16:56 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -51,6 +51,7 @@ public:
   void EndPrimitives ();
   void BeginModeling ();
   void EndModeling ();
+  void ClearTransientStore ();
   static G4int GetSceneCount ();
 
 private:

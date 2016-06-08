@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.8.2.1 2001/06/28 19:09:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Trd.cc,v 1.9 2001/07/11 09:59:59 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // Implementation for G4Trd class

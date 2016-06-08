@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRmodel.hh,v 1.1.4.1 2001/06/28 19:10:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VXrayTRmodel.hh,v 1.3 2001/07/11 10:01:30 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,6 +43,8 @@
 
 #include "globals.hh"
 #include "templates.hh"
+#include "g4std/complex"
+
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4Gamma.hh"
@@ -66,7 +68,7 @@ public:
 
   // Pure virtuals must be implemented in inherited particular TR radiators
  
-  void DoIt(const G4FastTrack&, G4FastStep&)  ;
+  virtual  void DoIt(const G4FastTrack&, G4FastStep&) = 0  ;
 
   virtual  G4double GetStackFactor( G4double energy, G4double gamma,
                                                      G4double varAngle ) = 0  ;
@@ -75,9 +77,6 @@ public:
                                    G4double gamma,
 				   G4double varAngle ) const ;
 
-  void BuildTable() ;
-  void BuildEnergyTable() ;
-  void BuildAngleTable() ;
 
   // for photon energy distribution tables
 
@@ -95,17 +94,19 @@ public:
 
   // Auxiliary functions for plate/gas material parameters
 
-  G4double GetPlateFormationZone(G4double,G4double,G4double) ;
-  void     ComputePlatePhotoAbsCof() ;
-  G4double GetPlateLinearPhotoAbs(G4double) ;
-  void     GetPlateZmuProduct() ;
-  G4double GetPlateZmuProduct(G4double,G4double,G4double) ;
+  G4double  GetPlateFormationZone(G4double,G4double,G4double) ;
+  G4complex GetPlateComplexFZ(G4double,G4double,G4double) ;
+  void      ComputePlatePhotoAbsCof() ;
+  G4double  GetPlateLinearPhotoAbs(G4double) ;
+  void      GetPlateZmuProduct() ;
+  G4double  GetPlateZmuProduct(G4double,G4double,G4double) ;
 
-  G4double GetGasFormationZone(G4double,G4double,G4double) ;
-  void     ComputeGasPhotoAbsCof() ;
-  G4double GetGasLinearPhotoAbs(G4double) ;
-  void     GetGasZmuProduct() ;
-  G4double GetGasZmuProduct(G4double,G4double,G4double) ;
+  G4double  GetGasFormationZone(G4double,G4double,G4double) ;
+  G4complex GetGasComplexFZ(G4double,G4double,G4double) ;
+  void      ComputeGasPhotoAbsCof() ;
+  G4double  GetGasLinearPhotoAbs(G4double) ;
+  void      GetGasZmuProduct() ;
+  G4double  GetGasZmuProduct(G4double,G4double,G4double) ;
 
   G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin ) ;
   G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  ) ;

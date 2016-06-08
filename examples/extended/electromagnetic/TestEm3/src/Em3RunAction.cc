@@ -21,19 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.11.2.1 2001/06/28 19:06:59 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em3RunAction.cc,v 1.15 2001/11/28 17:54:46 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3RunAction.hh"
 #include "Em3RunActionMessenger.hh"
 
 #include "G4Run.hh"
 #include "G4Material.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -46,13 +47,13 @@
  #include "CLHEP/Hist/HBookFile.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 :Detector(det)
 {
   runMessenger = new Em3RunActionMessenger(this);   
-  saveRndm = 1;
+
 #ifndef G4NOHIST
   // init hbook
   hbookManager = new HBookFile("TestEm3.paw", 68);
@@ -60,7 +61,7 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 #endif    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3RunAction::~Em3RunAction()
 {
@@ -75,17 +76,16 @@ Em3RunAction::~Em3RunAction()
 #endif  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }
+  //
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
        
   //initialize cumulative quantities
   //
@@ -95,11 +95,8 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
   //drawing
   // 
   if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    }
-    
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
+     
   //histograms
   //
   bookHisto();
@@ -109,7 +106,7 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
   ////PrintDedxTables();     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3RunAction::bookHisto()
 {
@@ -130,9 +127,9 @@ void Em3RunAction::bookHisto()
 #endif   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3RunAction::SetHisto(G4int idh, G4int nbins, G4double vmin, G4double vmax)
+void Em3RunAction::SetHisto(G4int idh,G4int nbins,G4double vmin,G4double vmax)
 {
 #ifndef G4NOHIST
   // (re)book histograms
@@ -145,7 +142,7 @@ void Em3RunAction::SetHisto(G4int idh, G4int nbins, G4double vmin, G4double vmax
 #endif   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 void Em3RunAction::EndOfRunAction(const G4Run* aRun)
@@ -164,7 +161,8 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   G4int  oldprec = G4cout.precision(2);
     
   G4cout << "\n-------------------------------------------------------------\n"
-         << G4std::setw(51) << "total energy dep" << G4std::setw(30) << "total tracklen \n \n";
+         << G4std::setw(51) << "total energy dep" 
+	 << G4std::setw(30) << "total tracklen \n \n";
 	   
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
@@ -178,7 +176,8 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
      //    
      G4cout
      << " Absorber" << k 
-     << " (" << G4std::setw(12) << Detector->GetAbsorMaterial(k)->GetName() << ") :" 
+     << " (" << G4std::setw(12) << Detector->GetAbsorMaterial(k)->GetName() 
+     << ") :" 
      << G4std::setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
      << G4std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
      << G4std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
@@ -191,14 +190,11 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
     
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
-    }                         
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -206,19 +202,19 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
 #include "G4Electron.hh"
 #include "G4EnergyLossTables.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3RunAction::PrintDedxTables()
 {
   //Print dE/dx tables with binning identical to the Geant3 JMATE bank.
-  //The printout is readable as Geant3 ffread data cards (by the Geant3 program g4mat).
+  //The printout is readable as Geant3 ffread data cards (by the program g4mat).
   //  
   const G4double tkmin=10*keV, tkmax=10*TeV;
   const G4int nbin=90;  
   G4double tk[nbin];
     
   const G4int ncolumn = 5;  
-													      							            
+            
   //compute the kinetic energies
   //  
   const G4double dp = log10(tkmax/tkmin)/nbin;
@@ -249,19 +245,21 @@ void Em3RunAction::PrintDedxTables()
      {
       G4Material* mat = Detector->GetAbsorMaterial(iab);
       G4cout << "\nLIST";
-      G4cout << "\nC \nC  dE/dx (MeV/cm) for " << part->GetParticleName() << " in "
-             << mat ->GetName() << "\nC";
+      G4cout << "\nC \nC  dE/dx (MeV/cm) for " << part->GetParticleName() 
+             << " in " << mat ->GetName() << "\nC";
       G4cout << "\nKINE   (" << part->GetParticleName() << ")"; 	     
       G4cout << "\nMATE   (" << mat ->GetName() << ")";
       G4cout.precision(2);
       G4cout << "\nERAN  " << tkmin/GeV << " (ekmin)\t"
                            << tkmax/GeV << " (ekmax)\t"
 			   << nbin      << " (nekbin)";
-      G4double cutgam = (G4Gamma::Gamma()->GetCutsInEnergy())[mat->GetIndex()];
+      G4double cutgam = (G4Gamma::Gamma()->GetEnergyCuts())[mat->GetIndex()];
       if (cutgam < tkmin) cutgam = tkmin; if (cutgam > tkmax) cutgam = tkmax;
-      G4double cutele = (G4Electron::Electron()->GetCutsInEnergy())[mat->GetIndex()];
-      if (cutele < tkmin) cutele = tkmin; if (cutele > tkmax) cutele = tkmax;      			   			   
-      G4cout << "\nCUTS  " << cutgam/GeV << " (cutgam)\t" << cutele/GeV << " (cutele)";
+      G4double cutele = (G4Electron::Electron()
+                          ->GetEnergyCuts())[mat->GetIndex()];
+      if (cutele < tkmin) cutele = tkmin; if (cutele > tkmax) cutele = tkmax;
+      G4cout << "\nCUTS  " << cutgam/GeV << " (cutgam)\t" 
+                           << cutele/GeV << " (cutele)";
       			   
       G4cout.precision(6);            
       G4cout << "\nG4VAL \n ";
@@ -278,4 +276,4 @@ void Em3RunAction::PrintDedxTables()
   G4cout.setf(oldform,G4std::ios::floatfield);     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

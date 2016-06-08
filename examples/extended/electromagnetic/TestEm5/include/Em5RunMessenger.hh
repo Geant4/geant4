@@ -22,13 +22,13 @@
 //
 
 //
-// $Id: Em5RunMessenger.hh,v 1.2.4.1 2001/06/28 19:07:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5RunMessenger.hh,v 1.5 2001/11/28 16:08:18 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5RunMessenger_h
 #define Em5RunMessenger_h 1
@@ -37,7 +37,7 @@
 #include "G4UImessenger.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5RunAction;
 class G4UIdirectory;
@@ -46,7 +46,7 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithADouble;
 class G4UIcmdWithAString;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5RunMessenger: public G4UImessenger
 {
@@ -104,12 +104,9 @@ class Em5RunMessenger: public G4UImessenger
    G4UIcmdWithAnInteger*      setnbinzvertexCmd; 
    G4UIcmdWithADoubleAndUnit* setzlowCmd; 
    G4UIcmdWithADoubleAndUnit* setzhighCmd;
-   
-   G4UIdirectory*             RndmDir;
-   G4UIcmdWithAnInteger*      RndmSaveCmd;    
-   G4UIcmdWithAString*        RndmReadCmd;    
- 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

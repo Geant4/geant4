@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.11.2.1 2001/06/28 19:15:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLViewer.cc,v 1.12 2001/07/11 10:08:56 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  27th March 1996

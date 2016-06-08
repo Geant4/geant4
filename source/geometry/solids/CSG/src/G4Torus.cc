@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.24.2.1 2001/06/28 19:09:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Torus.cc,v 1.25 2001/07/11 09:59:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4Torus

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -92,7 +92,7 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     G4double random = G4UniformRand();
     G4double sum = 0;
     const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-    G4int i;
+    unsigned int i;
     for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
     {
       sum += aMaterial->GetAtomicNumDensityVector()[i];
@@ -102,8 +102,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     {
       running += aMaterial->GetAtomicNumDensityVector()[i];
       if( running/sum > random ) {
-        aEff = (*theElementVector)(i)->GetA()*mole/g;
-        zEff = (*theElementVector)(i)->GetZ();
+        aEff = (*theElementVector)[i]->GetA()*mole/g;
+        zEff = (*theElementVector)[i]->GetZ();
         break;
       }
     }
@@ -185,13 +185,10 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
  G4double
   G4Nucleus::GetThermalPz( const G4double mass, const G4double temp ) const
   {
-    G4double result = 0.0;
-    for( int i=0; i<12 ; ++i )
-      result += G4UniformRand() - 0.5;
+    G4double result = G4RandGauss::shoot();
     result *= sqrt(k_Boltzmann*temp*mass); // Das ist impuls (Pz),
                                            // nichtrelativistische rechnung
                                            // Maxwell verteilung angenommen
-    if ( G4UniformRand()<0.5 ) result =-result;
     return result;
   }
  

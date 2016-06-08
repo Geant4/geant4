@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.5.4.1 2001/06/28 19:15:26 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VParticleChange.icc,v 1.8 2001/11/13 05:13:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //----------------------------------------------------------------
 // Virtual methods for updating G4Step 
@@ -30,9 +30,6 @@
 
 inline G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
 {
-  // Apply math fomula if Event Biasing is active
-  if (fUseEB) theEBMechanism->ApplyMath( this, *pStep);
-
   // Update the G4Step specific attributes
   pStep->SetStepLength( theTrueStepLength );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
@@ -43,18 +40,27 @@ inline G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
 inline
  G4Step* G4VParticleChange::UpdateStepForAtRest(G4Step* Step)
 { 
+  if (!fSetParentWeightByProcess){
+    Step->GetPostStepPoint()->SetWeight( theParentWeight );
+  }
   return UpdateStepInfo(Step);
 }
 
 inline
  G4Step* G4VParticleChange::UpdateStepForAlongStep(G4Step* Step)
 {
+  if (!fSetParentWeightByProcess){
+    Step->GetPostStepPoint()->SetWeight( theParentWeight );
+  }
   return UpdateStepInfo(Step);
 }
 
 inline
  G4Step* G4VParticleChange::UpdateStepForPostStep(G4Step* Step)
 {
+  if (!fSetParentWeightByProcess){
+    Step->GetPostStepPoint()->SetWeight( theParentWeight );
+  }
   return UpdateStepInfo(Step);
 }
 
@@ -219,9 +225,11 @@ inline void G4VParticleChange::InitializeSecondaries(const G4Track&)
 
 inline void G4VParticleChange::AddSecondary(G4Track *aTrack)
 {
-  // pass the weight of parent track 
-  aTrack->SetWeight(theParentWeight);
-  
+  if (!fSetSecondaryWeightByProcess){
+    // pass the weight of parent track 
+    aTrack->SetWeight(theParentWeight);
+  }
+
   // add a secondary after size check
   if (theSizeOftheListOfSecondaries > theNumberOfSecondaries) {
     theListOfSecondaries->SetElement(theNumberOfSecondaries, aTrack);
@@ -272,36 +280,6 @@ inline void G4VParticleChange::Initialize(const G4Track& track)
 }
 
 inline 
- void G4VParticleChange::RegisterEBMechanism(G4VEvtBiasMechanism* pEB)
-{
-  theEBMechanism = pEB;
-}
-
-inline 
- void G4VParticleChange::SwOnEB()
-{
-  if (theEBMechanism!=0) fUseEB = true;
-}
-
-inline 
- void G4VParticleChange::SwOffEB()
-{
-  fUseEB = false;
-}
-
-inline 
- G4bool G4VParticleChange::IsEBActive() const
-{
-  return fUseEB;
-}
-
-inline 
- G4VEvtBiasMechanism* G4VParticleChange::GetEBMechanism() 
-{
-  return theEBMechanism;
-}
-
-inline 
  void G4VParticleChange::ClearDebugFlag()
 {
   debugFlag = false;
@@ -318,3 +296,35 @@ inline
 {
   return debugFlag;
 }
+
+inline
+ void     G4VParticleChange::SetSecondaryWeightByProcess(G4bool flag)
+{
+  fSetSecondaryWeightByProcess = flag;
+}
+
+inline
+ G4bool   G4VParticleChange::IsSecondaryWeightSetByProcess() const
+{
+  return fSetSecondaryWeightByProcess;
+}
+
+inline
+ void     G4VParticleChange::SetParentWeight(G4double w)
+{
+  theParentWeight = w;
+}
+
+inline
+ void     G4VParticleChange::SetParentWeightByProcess(G4bool flag)
+{
+  fSetParentWeightByProcess = flag;
+}
+
+inline 
+ G4bool   G4VParticleChange::IsParentWeightSetByProcess() const
+{
+  return fSetParentWeightByProcess;
+}
+
+

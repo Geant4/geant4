@@ -1,0 +1,53 @@
+$Id: History,v 1.9 2001/11/19 15:08:37 johna Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/HepRep sub-category
+---------------------------------------------------------------------------
+
+19th November 2001  John Allison  (vis-V03-02-19)
+- Added G4HEPREPFILEDEBUG to control debug code.
+- Changed <fstream.h> to "g4std/fstream".
+- Changed cout to G4cout, endl to G4endl.
+- Changed G4HepRep.xml to G4HepRepFile.xml in hepRepXMLWriter->open("..."");
+
+8th November 2001  Joseph Perl
+- HepRep Type names now come from Physical Volume names.
+- Added many HepRep Attributes for other volume properties.
+
+6th November 2001  John Allison  (HepRep-pure-C++-1st-version)
+- Removed HepRep files G4HepRep.hh, G4HepRepSceneHandler.hh,
+  G4HepRepViewer.hh, G4HepRep.cc, G4HepRepSceneHandler.cc and
+  G4HepRepViewer.cc (recoverable with tag HepRep-Java-version).
+- Added HepRepFile from version of 27th September 2001  Joseph Perl.
+  First pure C++ version (eliminates need for Java jni or freehep).
+  Named as HepRepFile rather than HepRep.
+- GNUmakefile: removed CPPFLAGS += -DHEPREP and CPPFLAGS += -DDEBUG.
+- README: completely re-written for HepRepFile.
+
+6th November 2001  John Allison  (HepRep-Java-version)
+- Tagged before major revision.
+
+4th September 2001  Joseph Perl
+- minor improvements to README.
+
+26th August 2001  Joseph Perl
+- handle PolyHedron.getNoFacets()==0 and improve README.
+
+24th August 2001  Joseph Perl  (vis-V03-02-13-00)
+- First version of HepRep Graphics Driver

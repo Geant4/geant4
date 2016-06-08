@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroLInelastic.cc,v 1.4.2.1 2001/06/28 19:14:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4LEKaonZeroLInelastic.cc,v 1.7 2001/10/05 16:11:32 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
  // Hadronic Process: Low Energy KaonZeroLong Inelastic Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997
@@ -212,7 +212,6 @@
     
     const G4double expxu = 82.;           // upper bound for arg. of exp
     const G4double expxl = -expxu;        // lower bound for arg. of exp
-    G4ParticleDefinition *aKaonPlus = G4KaonPlus::KaonPlus();
     G4ParticleDefinition *aKaonMinus = G4KaonMinus::KaonMinus();
     G4ParticleDefinition *aKaonZS = G4KaonZeroShort::KaonZeroShort();
     G4ParticleDefinition *aKaonZL = G4KaonZeroLong::KaonZeroLong();

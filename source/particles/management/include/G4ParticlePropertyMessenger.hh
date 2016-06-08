@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyMessenger.hh,v 1.4.4.1 2001/06/28 19:11:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticlePropertyMessenger.hh,v 1.5 2001/07/11 10:01:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------

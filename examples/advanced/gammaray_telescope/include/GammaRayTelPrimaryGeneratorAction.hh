@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.3.4.2 2001/06/28 20:18:39 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelPrimaryGeneratorAction.hh,v 1.6 2001/11/29 11:19:17 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -55,7 +55,8 @@ class GammaRayTelPrimaryGeneratorMessenger;
 class GammaRayTelPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  GammaRayTelPrimaryGeneratorAction(GammaRayTelDetectorConstruction*);    
+
+  GammaRayTelPrimaryGeneratorAction();    
   ~GammaRayTelPrimaryGeneratorAction();
   
 public:

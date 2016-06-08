@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventActionMessenger.cc,v 1.4.4.1 2001/06/28 19:07:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN03EventActionMessenger.cc,v 1.6 2001/10/10 14:58:12 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03EventActionMessenger.hh"
 
@@ -36,7 +36,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
 :eventAction(EvAct)
@@ -56,7 +56,7 @@ ExN03EventActionMessenger::ExN03EventActionMessenger(ExN03EventAction* EvAct)
   PrintCmd->AvailableForStates(Idle);     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03EventActionMessenger::~ExN03EventActionMessenger()
 {
@@ -64,15 +64,16 @@ ExN03EventActionMessenger::~ExN03EventActionMessenger()
   delete PrintCmd;   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void ExN03EventActionMessenger::SetNewValue(
+                                        G4UIcommand* command,G4String newValue)
 { 
   if(command == DrawCmd)
     {eventAction->SetDrawFlag(newValue);}
        
   if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}              
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

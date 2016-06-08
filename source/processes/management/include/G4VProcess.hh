@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.8.2.2 2001/06/28 20:20:11 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VProcess.hh,v 1.11 2001/09/01 02:22:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -212,21 +212,28 @@ class G4VProcess
       // function. Not another BuildPhysicsTable, please.
 
 
-      virtual G4bool StorePhysicsTable(const G4String& directory, 
+      virtual G4bool StorePhysicsTable(G4ParticleDefinition* ,
+				       const G4String& directory, 
 				       G4bool          ascii = false)
                                       {return true;}
       // Store PhysicsTable in a file. 
       // (return false in case of failure at I/O ) 
  
-      virtual G4bool RetrievePhysicsTable(const G4String& directory, 
-				          G4bool          ascii = false)
+      virtual G4bool RetrievePhysicsTable( G4ParticleDefinition* ,
+					   const G4String& directory, 
+				           G4bool          ascii = false)
                                       {return false;}
       // Retrieve Physics from a file. 
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
       // File name should be defined by each process 
       // and the file should be placed under the directory specifed by the argument. 
- 
+      const G4String& GetPhysicsTableFileName(G4ParticleDefinition* ,
+					      const G4String& directory,
+					      const G4String& tableName,
+					      G4bool ascii =false);
+      // this method is utility for Store/RetreivePhysicsTable
+
   ////////////////////////////
       const G4String& GetProcessName() const;
       //  Returns the name of the process.
@@ -244,7 +251,16 @@ class G4VProcess
       virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
  
-
+  public:
+      virtual void SetProcessManager(const G4ProcessManager*); 
+      // A process manager set its own pointer when the process is registered
+      // the process Manager
+      virtual  const G4ProcessManager* GetProcessManager(); 
+      // Get the process manager which the process belongs to
+  
+  protected:
+      const G4ProcessManager* aProcessManager; 
+ 
   protected:
       G4VParticleChange* pParticleChange;
       //  The pointer to G4VParticleChange object 
@@ -282,6 +298,8 @@ class G4VProcess
  private: 
       G4String theProcessName;
       //  The name of the process
+
+      G4String thePhysicsTableFileName;
 
       G4ProcessType theProcessType;
       //  The type of the process
@@ -390,6 +408,18 @@ inline G4double G4VProcess::PostStepGPIL( const G4Track& track,
   G4double value
    =PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
   return thePILfactor*value;
+}
+      
+inline 
+ void G4VProcess::SetProcessManager(const G4ProcessManager* procMan)
+{
+   aProcessManager = procMan; 
+}
+
+inline
+ const G4ProcessManager* G4VProcess::GetProcessManager()
+{
+  return  aProcessManager; 
 }
 #endif
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.hh,v 1.2.4.1 2001/06/28 19:07:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN03DetectorMessenger.hh,v 1.4 2001/10/10 14:58:11 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03DetectorMessenger_h
 #define ExN03DetectorMessenger_h 1
@@ -42,7 +42,7 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03DetectorMessenger: public G4UImessenger
 {
@@ -65,6 +65,8 @@ class ExN03DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

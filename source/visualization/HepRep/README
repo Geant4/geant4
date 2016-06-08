@@ -1,0 +1,20 @@
+This G4 Graphics Driver creates a HepRep File suitable for viewing
+by the WIRED Event Display client.  It requires no external packages.
+
+The HepRep graphics format is further described at
+http://heprep.freehep.org
+The version of HepRep produced by this driver is HepRep Version 1.
+
+Each call to /vis/viewer/update
+rewrites the file G4HepRep.xml.
+
+View the file using the WIRED Event Display, available from:
+http://www.slac.stanford.edu/BFROOT/www/Computing/Graphics/Wired/
+
+WIRED can read xml files in zipped format as well as unzipped,
+so you can save space by applying gzip to the xml file.
+This will reduce the file to about five percent of its original size.
+
+Joseph Perl
+9 November 2001
+

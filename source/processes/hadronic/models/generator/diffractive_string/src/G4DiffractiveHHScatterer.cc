@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -50,16 +50,16 @@ Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack)
 
   string = theExcitation->String(& aHadron, true);  // Projectile
   fragments=theStringFragmentation->FragmentString(*string);
-  for (G4int aFragment=0; aFragment < fragments->entries(); aFragment++)
+  for (unsigned int aFragment=0; aFragment < fragments->size(); aFragment++)
   {
-  	result->append(fragments->at(aFragment));
+  	result->push_back(fragments->operator[](aFragment));
   }
   
   string = theExcitation->String(& bHadron, false); // Target
   fragments=theStringFragmentation->FragmentString(*string);
-  for (G4int bFragment=0; bFragment < fragments->entries(); bFragment++)
+  for (unsigned int bFragment=0; bFragment < fragments->size(); bFragment++)
   {
-  	result->append(fragments->at(bFragment));
+  	result->push_back(fragments->operator[](bFragment));
   }
   
   

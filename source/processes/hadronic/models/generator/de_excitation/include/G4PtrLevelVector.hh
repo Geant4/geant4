@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -41,11 +41,11 @@
 #ifndef G4PTRLEVELVECTOR_HH
 #define G4PTRLEVELVECTOR_HH
 
-class G4NuclearLevel;
-#include "g4rw/tpsrtvec.h"
+#include "G4NuclearLevel.hh"
+#include "g4std/vector"
 
-typedef G4RWTPtrSortedVector<G4NuclearLevel> G4PtrLevelVector;
-
+typedef G4std::vector<G4NuclearLevel *> G4PtrLevelVector;
+struct DeleteLevel { void operator () (G4NuclearLevel * aL) {delete aL;} };
 
 #endif
 

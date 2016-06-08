@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicPlus.cc,v 1.5.4.2 2001/06/28 20:19:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiXicPlus.cc,v 1.7 2001/10/15 10:10:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -86,6 +86,3 @@ G4AntiXicPlus G4AntiXicPlus::theAntiXicPlus(
 
 G4AntiXicPlus* G4AntiXicPlus::AntiXicPlusDefinition(){return &theAntiXicPlus;}
 G4AntiXicPlus* G4AntiXicPlus::AntiXicPlus(){return &theAntiXicPlus;}
-// initialization for static cut values
-G4double   G4AntiXicPlus::theAntiXicPlusLengthCut = -1.0;
-G4double*  G4AntiXicPlus::theAntiXicPlusKineticEnergyCuts = NULL;

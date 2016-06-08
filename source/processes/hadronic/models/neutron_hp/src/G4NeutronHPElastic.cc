@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -40,7 +40,7 @@
     theElastic = new G4NeutronHPChannel[numEle];
     for (G4int i=0; i<numEle; i++)
     {
-      theElastic[i].Init((*(G4Element::GetElementTable()))(i), dirName);
+      theElastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       while(!theElastic[i].Register(theFS));
     }
     delete theFS;
@@ -63,7 +63,6 @@
     if(n!=1)
     {
       G4int i;
-      G4int it = n-1;
       xSec = new G4double[n];
       G4double sum=0;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();

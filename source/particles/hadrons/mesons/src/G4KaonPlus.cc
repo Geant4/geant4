@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonPlus.cc,v 1.4.4.2 2001/06/28 20:19:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4KaonPlus.cc,v 1.7 2001/10/16 08:16:12 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -109,9 +109,8 @@ G4KaonPlus G4KaonPlus::theKaonPlus(
 );
 
 G4KaonPlus*  G4KaonPlus::KaonPlusDefinition(){return &theKaonPlus;}
-// initialization for static cut values
-G4double   G4KaonPlus::theKaonPlusLengthCut = -1.0;
-G4double*  G4KaonPlus::theKaonPlusKineticEnergyCuts = NULL;
+
+G4KaonPlus*  G4KaonPlus::KaonPlus(){return &theKaonPlus;}
 
 
 

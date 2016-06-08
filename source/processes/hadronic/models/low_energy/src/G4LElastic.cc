@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LElastic.cc,v 1.3.8.1 2001/06/28 19:14:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4LElastic.cc,v 1.6 2001/10/05 16:11:32 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Physics model class G4LElastic
 //
@@ -47,7 +47,6 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    theParticleChange.Initialize(aTrack);
 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4double Z = targetNucleus.GetZ();
    G4double atno2 = targetNucleus.GetN();
 
 // Elastic scattering off Hydrogen
@@ -152,7 +151,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    }
    G4double eps = 0.001;
    G4int ind1 = 10;
-   G4double t, val;
+   G4double t;
    G4int ier1;
    ier1 = Rtmi(&t, t1, t2, eps, ind1,
                aa, bb, cc, dd, rr);

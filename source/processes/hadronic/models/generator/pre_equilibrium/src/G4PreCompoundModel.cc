@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.11.2.1 2001/06/28 19:13:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PreCompoundModel.cc,v 1.16 2001/10/04 20:00:30 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by V. Lara
 
@@ -96,14 +96,14 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   
   // fill particle change
   theResult.SetStatusChange(fStopAndKill);
-  theResult.SetNumberOfSecondaries(result->length());
-  for(G4int i=0; i<result->length(); i++)
+  theResult.SetNumberOfSecondaries(result->size());
+  for(unsigned int i=0; i<result->size(); i++)
     {
       G4DynamicParticle * aNew = 
-	new G4DynamicParticle(result->at(i)->GetDefinition(),
-			      result->at(i)->GetTotalEnergy(),
-			      result->at(i)->GetMomentum());
-      delete result->at(i);
+	new G4DynamicParticle(result->operator[](i)->GetDefinition(),
+			      result->operator[](i)->GetTotalEnergy(),
+			      result->operator[](i)->GetMomentum());
+      delete result->operator[](i);
       theResult.AddSecondary(aNew);
     }
   delete result;
@@ -123,6 +123,16 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
   
   // Copy of the initial state 
   G4Fragment aFragment(theInitialState);
+  
+  if (aFragment.GetA() < 5) {
+    G4ReactionProduct * theRP = new G4ReactionProduct(G4ParticleTable::GetParticleTable()->
+						      GetIon(aFragment.GetZ(),aFragment.GetA(),
+							     aFragment.GetExcitationEnergy()));
+    theRP->SetMomentum(aFragment.GetMomentum().vect());
+    theRP->SetTotalEnergy(aFragment.GetMomentum().e());	  
+    Result->push_back(theRP);
+    return Result;
+  }
   
   G4PreCompoundEmission aEmission(theInitialState);
 	
@@ -178,7 +188,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	  ThereIsTransition = false;
 
 	  // Perform the emission and Add emitted fragment to Result
-	  Result->insert(aEmission.PerformEmission(aFragment));
+	  Result->push_back(aEmission.PerformEmission(aFragment));
 	}
       } else {
 	// Perform Equilibrium Emission
@@ -201,8 +211,11 @@ void G4PreCompoundModel::PerformEquilibriumEmission(const G4Fragment & aFragment
   G4ReactionProductVector * theEquilibriumResult;
   theEquilibriumResult = GetExcitationHandler()->BreakItUp(aFragment);
   
-  while (theEquilibriumResult->entries() > 0) Result->insert(theEquilibriumResult->removeFirst());
-  
+  while (theEquilibriumResult->size() > 0) 
+  {
+    Result->push_back(*theEquilibriumResult->begin());
+    theEquilibriumResult->erase(theEquilibriumResult->begin());
+  }
   delete theEquilibriumResult;
   return;
 }

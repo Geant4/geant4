@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh,v 1.5.4.1 2001/06/28 19:10:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Colour.hh,v 1.6 2001/07/11 10:01:01 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison 20th October 1996

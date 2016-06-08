@@ -21,15 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4EventAction.cc,v 1.1.4.1 2001/06/28 19:07:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3toG4EventAction.cc,v 1.3 2001/10/23 13:32:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "g4rw/tvordvec.h"
 #include "G4ios.hh"
 #include "G3toG4EventAction.hh"
 #include "G3toG4EventActionMessenger.hh"

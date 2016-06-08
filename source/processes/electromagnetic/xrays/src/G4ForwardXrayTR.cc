@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.4.4.1 2001/06/28 19:12:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ForwardXrayTR.cc,v 1.7 2001/10/24 16:40:54 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4ForwardXrayTR class -- implementation file
 
@@ -34,6 +34,7 @@
 // History:
 // 1st version 11.09.97 V. Grichine (Vladimir.Grichine@cern.ch )
 // 2nd version 17.12.97 V. Grichine
+// 17-09-01, migration of Materials to pure STL (mma) 
 
 
 #include <math.h>
@@ -44,7 +45,6 @@
 
 #include "G4ForwardXrayTR.hh"
 #include "G4Material.hh"
-#include "G4MaterialTable.hh"
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
@@ -100,10 +100,10 @@ G4ForwardXrayTR::G4ForwardXrayTR()
 {
   G4int iMat, jMat, iTkin, iTR, iPlace ;
   static 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  G4int numOfMat = theMaterialTable->length() ;
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numOfMat = G4Material::GetNumberOfMaterials();
   fGammaCutInKineticEnergy = new G4double[numOfMat] ;
-  fGammaCutInKineticEnergy = fPtrGamma->GetCutsInEnergy() ;
+  fGammaCutInKineticEnergy = fPtrGamma->GetEnergyCuts() ;
   fMatIndex1 = -1 ;
   fMatIndex2 = -1 ;
   fAngleDistrTable  = new G4PhysicsTable(numOfMat*(numOfMat - 1)*fTotBin) ;
@@ -221,11 +221,11 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
 {
   //  fMatIndex1 = pMat1->GetIndex() ;
   //  fMatIndex2 = pMat2->GetIndex() ;
-  G4int iMat, jMat ;
+  G4int iMat;
   static 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
-  G4int numOfMat = theMaterialTable->length() ;
+  G4int numOfMat = G4Material::GetNumberOfMaterials();
 
   for(iMat=0;iMat<numOfMat;iMat++)    // check first material name
   {
@@ -288,10 +288,10 @@ void G4ForwardXrayTR::BuildXrayTRtables()
   static 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
-  G4int numOfMat = theMaterialTable->length() ;
+  G4int numOfMat = G4Material::GetNumberOfMaterials() ;
 
   fGammaCutInKineticEnergy = new G4double[numOfMat] ;
-  fGammaCutInKineticEnergy = fPtrGamma->GetCutsInEnergy() ;
+  fGammaCutInKineticEnergy = fPtrGamma->GetEnergyCuts() ;
 
   fAngleDistrTable  = new G4PhysicsTable(2*fTotBin) ;
   fEnergyDistrTable = new G4PhysicsTable(2*fTotBin) ;
@@ -570,7 +570,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   G4double W, W1, W2, E1, E2 ;
   static 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  numOfMat = theMaterialTable->length() ;
+  numOfMat = G4Material::GetNumberOfMaterials() ;
 
   G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
   G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
@@ -599,14 +599,14 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
            && ( iMat != fMatIndex1 && iMat != fMatIndex2 )
            && ( jMat != fMatIndex1 && jMat != fMatIndex2 )  )
 
-      || (*theMaterialTable)(iMat)->GetState() ==
-         (*theMaterialTable)(jMat)->GetState()
+      || (*theMaterialTable)[iMat]->GetState() ==
+         (*theMaterialTable)[jMat]->GetState()
   
-      ||(    (*theMaterialTable)(iMat)->GetState() == kStateSolid
-          && (*theMaterialTable)(jMat)->GetState() == kStateLiquid )
+      ||(    (*theMaterialTable)[iMat]->GetState() == kStateSolid
+          && (*theMaterialTable)[jMat]->GetState() == kStateLiquid )
  
-      ||(    (*theMaterialTable)(iMat)->GetState() == kStateLiquid
-          && (*theMaterialTable)(jMat)->GetState() == kStateSolid  )   )
+      ||(    (*theMaterialTable)[iMat]->GetState() == kStateLiquid
+          && (*theMaterialTable)[jMat]->GetState() == kStateSolid  )   )
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep) ;
   }
@@ -796,11 +796,11 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
   G4int  iPlace, numOfMat, numOfTR, iTR, iTransfer ;
   G4double energyTR = 0.0 ; // return this value for no TR photons
   G4double energyPos  ;
-  G4double  W1, W2, E1, E2 ;
+  G4double  W1, W2;
 
   static 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  numOfMat = theMaterialTable->length() ;
+  numOfMat = G4Material::GetNumberOfMaterials() ;
 
 
   // The case of equal or approximate (in terms of plasma energy) materials
@@ -809,14 +809,14 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 
   if (     iMat == jMat
 
-      || (*theMaterialTable)(iMat)->GetState() ==
-         (*theMaterialTable)(jMat)->GetState()
+      || (*theMaterialTable)[iMat]->GetState() ==
+         (*theMaterialTable)[jMat]->GetState()
   
-      ||(    (*theMaterialTable)(iMat)->GetState() == kStateSolid
-          && (*theMaterialTable)(jMat)->GetState() == kStateLiquid )
+      ||(    (*theMaterialTable)[iMat]->GetState() == kStateSolid
+          && (*theMaterialTable)[jMat]->GetState() == kStateLiquid )
  
-      ||(    (*theMaterialTable)(iMat)->GetState() == kStateLiquid
-          && (*theMaterialTable)(jMat)->GetState() == kStateSolid  )   )
+      ||(    (*theMaterialTable)[iMat]->GetState() == kStateLiquid
+          && (*theMaterialTable)[jMat]->GetState() == kStateSolid  )   )
   {
     return energyTR ;
   }

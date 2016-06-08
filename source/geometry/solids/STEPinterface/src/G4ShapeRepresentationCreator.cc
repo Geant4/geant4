@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShapeRepresentationCreator.cc,v 1.4.2.1 2001/06/28 19:09:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ShapeRepresentationCreator.cc,v 1.5 2001/07/11 10:00:12 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------

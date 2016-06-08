@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.cc,v 1.3.4.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Electron.cc,v 1.7 2001/10/16 08:16:17 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -83,9 +83,6 @@ G4Electron G4Electron::theElectron(
 );
 
 G4Electron* G4Electron::ElectronDefinition(){return &theElectron;}
-// initialization for static cut values
-G4double   G4Electron::theElectronLengthCut = -1.0;
-G4double*  G4Electron::theElectronKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // ************************* ComputeLoss ********************************
@@ -171,7 +168,7 @@ void G4Electron::BuildRangeVector(const G4Material* aMaterial,
   for (i=0; i<NumEl; i++)
   {
     G4bool isOut;
-    G4int IndEl = (*elementVector)(i)->GetIndex();
+    G4int IndEl = (*elementVector)[i]->GetIndex();
     loss += atomicNumDensityVector[i]*
            (*aLossTable)[IndEl]->GetValue(tlim,isOut);
   }
@@ -205,6 +202,11 @@ void G4Electron::BuildRangeVector(const G4Material* aMaterial,
   }
 } 
 
+G4Electron* G4Electron::Electron()
+{  
+  return &theElectron; 
+}
+ 
 
 
 

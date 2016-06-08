@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.hh,v 1.4.2.1 2001/06/28 19:06:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em3RunActionMessenger.hh,v 1.7 2001/11/28 17:54:46 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3RunActionMessenger_h
 #define Em3RunActionMessenger_h 1
@@ -36,13 +36,9 @@
 #include "G4UImessenger.hh"
 
 class Em3RunAction;
-class G4UIdirectory;
 class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3RunActionMessenger: public G4UImessenger
 {
@@ -53,13 +49,11 @@ class Em3RunActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    Em3RunAction*          Em3Run;   
-    G4UIdirectory*         RndmDir;
-    G4UIcmdWithAnInteger*  RndmSaveCmd;       
-    G4UIcmdWithAString*    RndmReadCmd;
-    
-    G4UIcommand*           HistoCmd;        
+    Em3RunAction* Em3Run;
+    G4UIcommand*  HistoCmd;        
  
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm4.cc,v 1.5.4.1 2001/06/28 19:07:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: TestEm4.cc,v 1.7 2001/10/25 14:04:22 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
@@ -90,7 +90,7 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif         
-     UI->ApplyCommand("/control/execute init.mac");    
+     UI->ApplyCommand("/control/execute vis.mac");    
      session->SessionStart();
      delete session;
     }

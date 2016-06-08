@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdet.cc,v 1.3.8.1 2001/06/28 19:08:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4gsdet.cc,v 1.4 2001/07/11 09:59:00 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 #include "globals.hh"
 #include "G3toG4.hh"

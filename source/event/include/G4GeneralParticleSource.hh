@@ -31,8 +31,8 @@
 // Customer:      ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSource.hh,v 1.3 2001/06/29 08:05:59 gcosmo Exp $
-// GEANT4 tag $Name: event-V03-01-01 $
+// $Id: G4GeneralParticleSource.hh,v 1.7 2001/10/19 16:48:28 flei Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Class Description:
@@ -336,7 +336,7 @@
 //
 // void SetVerbosity(G4int)
 //    Sets the verbosity level.
-
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -396,6 +396,9 @@ public:
   inline G4double GetRadius()
   { return Radius; }
   void SetRadius0(G4double);
+  void SetBeamSigmaInR(G4double);
+  void SetBeamSigmaInX(G4double);
+  void SetBeamSigmaInY(G4double);
   void SetParAlpha(G4double);
   void SetParTheta(G4double);
   void SetParPhi(G4double);
@@ -403,6 +406,7 @@ public:
   void GenerateRotationMatrices();
   // the following routines generate the source position
   void GeneratePointSource();
+  void GeneratePointsInBeam();
   void GeneratePointsInPlane();
   void GeneratePointsOnSurface();
   void GeneratePointsInVolume();
@@ -416,14 +420,23 @@ public:
   void SetMinPhi(G4double);
   void SetMaxTheta(G4double);
   void SetMaxPhi(G4double);
+  void SetBeamSigmaInAngR(G4double);
+  void SetBeamSigmaInAngX(G4double);
+  void SetBeamSigmaInAngY(G4double);
   void UserDefAngTheta(G4ThreeVector);
   void UserDefAngPhi(G4ThreeVector);
+  inline void SetParticleMomentumDirection
+  (G4ParticleMomentum aMomentumDirection)
+  { particle_momentum_direction =  aMomentumDirection.unit(); }
   // These methods generate the momentum vectors for the particles.
   void GenerateIsotropicFlux();
   void GenerateCosineLawFlux();
+  void GenerateBeamFlux();
+  void GeneratePlanarFlux();
   void GenerateUserDefFlux();
   G4double GenerateUserDefTheta();
   G4double GenerateUserDefPhi();
+  void SetUseUserAngAxis(G4bool);
   void SetUserWRTSurface(G4bool);
 
   // Energy Distribution methods
@@ -443,6 +456,7 @@ public:
   void SetMonoEnergy(G4double);
   void SetAlpha(G4double);
   void SetTemp(G4double);
+  void SetBeamSigmaInE(G4double);
   void SetEzero(G4double);
   void SetGradient(G4double);
   void SetInterCept(G4double);
@@ -467,6 +481,7 @@ public:
   void GenerateLinearEnergies();
   void GeneratePowEnergies();
   void GenerateExpEnergies();
+  void GenerateGaussEnergies();
   void GenerateBremEnergies();
   void GenerateBbodyEnergies();
   void GenerateCdgEnergies();
@@ -489,6 +504,9 @@ public:
   G4double GenRandTheta();
   G4double GenRandPhi();
   G4double GenRandEnergy();
+
+  // method to re-set the histograms
+  void ReSetHist(G4String);
 
   // Set the verbosity level.
   void SetVerbosity(G4int);
@@ -545,6 +563,7 @@ private:
   G4double halfx, halfy, halfz; //half lengths
   G4double Radius; //Radius for circles or spheres
   G4double Radius0; // The inner radius of an annulus
+  G4double SR,SX,SY; // Standard deviation in raduial, x, y for beam type source
   G4ThreeVector CentreCoords; // Coords of centre of input shape
   G4ThreeVector Rotx, Roty, Rotz; // Unit vectors defining rotation matrix
   G4double ParAlpha, ParTheta, ParPhi; //Angle for Right Parallellepipeds
@@ -556,6 +575,7 @@ private:
   G4String AngDistType; // String to hold Ang dist type iso, cos, user
   G4ThreeVector AngRef1, AngRef2, AngRef3; // Reference axes for ang dist
   G4double MinTheta, MaxTheta, MinPhi, MaxPhi; // min/max theta/phi
+  G4double DR,DX,DY ; // Standard deviation for beam divergence 
   G4double Theta, Phi; // Store these for use with DEBUG
   G4bool IPDFThetaExist, IPDFPhiExist; // tell whether IPDF histos exist
   G4PhysicsOrderedFreeVector UDefThetaH; // Theta histo data
@@ -565,10 +585,12 @@ private:
   G4String UserDistType; //String to hold user distributions
   G4bool UserWRTSurface; // G4bool to tell whether user wants distribution wrt
                        // surface normals or co-ordinate system
+  G4bool UserAngRef; // Set to true when user defines aaa new coordinates
 
   // Energy Distribution variables
   G4String EnergyDisType; // energy dis type Variable  - Mono,Lin,Exp,etc
   G4double MonoEnergy; //Mono-energteic energy
+  G4double SE ; // Standard deviation for Gaussion distrbution in energy
   G4double Emin, Emax; // emin and emax
   G4double alpha, Ezero, Temp; // alpha (pow), E0 (exp) and Temp (bbody,brem)
   G4double grad, cept; // gradient and intercept for linear spectra
@@ -626,6 +648,8 @@ private:
   G4int verbosityLevel;
 
 private:
+  
+  G4PhysicsOrderedFreeVector ZeroPhysVector ; // for re-set only 
 
   G4DataInterpolation *SplineInt; // holds Spline stuff
 
@@ -636,4 +660,9 @@ private:
   
 };
 
+
 #endif
+
+
+
+

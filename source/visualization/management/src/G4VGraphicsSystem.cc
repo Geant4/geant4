@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.cc,v 1.7.2.1 2001/06/28 19:16:13 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VGraphicsSystem.cc,v 1.9 2001/08/05 02:29:09 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  27th March 1996
@@ -69,7 +69,7 @@ G4std::ostream& operator << (G4std::ostream& os, const G4VGraphicsSystem& gs) {
     os << "\n  Description: " << gs.GetDescription ();
   }
   os << "\n  Functionality: " << G4int(gs.GetFunctionality());
-  if (pVMan -> GetVerboseLevel () > 1) {
+  if (pVMan -> GetVerbosity() >= G4VisManager::parameters) {
     size_t nScenes = scenes.size ();
     if (nScenes) {
       G4int nScenesOfThisSystem = 0;

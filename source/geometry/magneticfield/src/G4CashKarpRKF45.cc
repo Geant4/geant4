@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc,v 1.8.2.1 2001/06/28 19:08:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4CashKarpRKF45.cc,v 1.10 2001/11/21 17:56:18 japost Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 //  order method (giving fifth-order accuracy) for the solution
@@ -51,6 +51,7 @@ G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs, G4int numberOfVariab
   ak4 = new G4double[fNumberOfVariables] ; 
   ak5 = new G4double[fNumberOfVariables] ; 
   ak6 = new G4double[fNumberOfVariables] ; 
+  ak7 = 0;
   yTemp = new G4double[fNumberOfVariables] ; 
   yIn = new G4double[fNumberOfVariables] ;
 
@@ -77,7 +78,7 @@ G4CashKarpRKF45::~G4CashKarpRKF45()
   delete[] ak4;
   delete[] ak5;
   delete[] ak6;
-  delete[] ak7;
+  // delete[] ak7;
   delete[] yTemp;
   delete[] yIn;
 

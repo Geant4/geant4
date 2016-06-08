@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.8.4.2 2001/06/28 20:19:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NucleiPropertiesTable.hh,v 1.10 2001/10/15 09:58:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997
@@ -142,52 +142,6 @@ private:
 
 
 };
-  
-inline G4double G4NucleiPropertiesTable::GetMassExcess(G4int Z, G4int A) 
-{
-    G4int i=GetIndex(Z, A);
-    if (i >= 0) {
-		return MassExcess[i]*keV;
-    } else {
-        return 0.0;
-    }
-}
-
-inline G4double G4NucleiPropertiesTable::GetBindingEnergy(G4int Z, G4int A)
-{
-    G4int i=GetIndex(Z, A);
-    if (i >= 0){
-		 return (G4double(A-Z)*MassExcess[0] + G4double(Z)*MassExcess[1] - MassExcess[i])*keV;
-    } else { 
-	    return 0.0;
-    }
-}
-
-inline G4double  G4NucleiPropertiesTable::GetBetaDecayEnergy(G4int Z, G4int A)
-{
-    G4int i=GetIndex(Z, A);
-    if (i >= 0){
-	 	return BetaEnergy[i]*keV;
-    } else { 
-		return 0.0;
-  	}
-}
-
-inline G4double  G4NucleiPropertiesTable::GetAtomicMass(G4int Z, G4int A)
-{
-	G4int i=GetIndex(Z, A);	
-   if (i >= 0){
-	 	return MassExcess[i]*keV + G4double(A)*amu_c2;
-    } else { 
-		return 0.0;
-  	}	
-}
-  
-
-inline G4bool G4NucleiPropertiesTable::IsInTable(G4int Z, G4int A)
-{
-    return (Z <= A && A >= 1 && A <= 273 && Z >= 0 && Z <= 110 && GetIndex(Z, A) >= 0);
-}
 
 
 #endif

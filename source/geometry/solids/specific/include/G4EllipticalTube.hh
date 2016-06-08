@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.8.4.1 2001/06/28 19:09:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EllipticalTube.hh,v 1.9 2001/07/11 10:00:14 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file

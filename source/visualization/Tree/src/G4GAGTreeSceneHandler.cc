@@ -131,7 +131,7 @@ void G4GAGTreeSceneHandler::EndModeling ()
   G4VTreeSceneHandler::EndModeling ();  
 }
 
-void G4GAGTreeSceneHandler::Dump (const G4VSolid& solid) 
+void G4GAGTreeSceneHandler::RequestPrimitives (const G4VSolid& solid) 
 {
 //////////////////////////////
   G4String        cur_abs_pv_name ;
@@ -144,11 +144,10 @@ void G4GAGTreeSceneHandler::Dump (const G4VSolid& solid)
   const G4int detail = verbosity % 10;
 
   if (verbosity < 10 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
-    // Ignore if an already treated replica.  (Assumes that the model
-    // which has invoked this function is a G4PhysicalVolumeModel - we
-    // check this by testing fpCurrentPV.)
-    if (fpCurrentPV) {
-      ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+    // Ignore if an already treated replica.
+    G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
+    if (pPVM) {
+      pPVM->CurtailDescent();
       return;
     }
   }

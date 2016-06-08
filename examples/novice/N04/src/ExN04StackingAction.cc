@@ -34,7 +34,7 @@
 #include "G4ios.hh"
 
 ExN04StackingAction::ExN04StackingAction()
-:stage(0),trkHits(NULL),muonHits(NULL)
+ : trkHits(0), muonHits(0), stage(0)
 { 
   angRoI = 30.0*deg; 
   reqMuon = 2;
@@ -119,7 +119,7 @@ G4VHitsCollection* ExN04StackingAction::GetCollection(G4String colName)
     G4HCofThisEvent* HCE = currentEvent->GetHCofThisEvent();
     return HCE->GetHC(colID);
   }
-  return NULL;
+  return 0;
 }
 
 void ExN04StackingAction::NewStage()
@@ -196,8 +196,8 @@ void ExN04StackingAction::NewStage()
 void ExN04StackingAction::PrepareNewEvent()
 { 
   stage = 0; 
-  trkHits = NULL;
-  muonHits = NULL;
+  trkHits = 0;
+  muonHits = 0;
 }
 
 

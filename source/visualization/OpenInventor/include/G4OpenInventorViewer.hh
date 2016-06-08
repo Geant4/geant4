@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorViewer.hh,v 1.7.2.1 2001/06/28 19:15:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenInventorViewer.hh,v 1.10 2001/11/14 14:56:11 barrand Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -39,7 +39,7 @@
 
 class SoXtComponent;
 class SoSelection;
-class SoWindow;
+class G4SoWindow;
 class G4OpenInventorSceneHandler;
 class G4VInteractorManager;
 
@@ -59,10 +59,12 @@ private:
   void FinishView          ();
   void SetView             ();
   void KernelVisitDecision ();
+  G4bool CompareForKernelVisit(G4ViewParameters&);
 
-  G4OpenInventorSceneHandler&	fSceneHandler; 	// Graphics Scene for this view.
+  G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
+  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   Widget fShell;
-  SoWindow* fWindow;
+  G4SoWindow* fWindow;
   SoXtComponent* fViewer;	  // The Inventor Viewer
   SoSelection* fSelection;
   G4VInteractorManager* fInteractorManager;
@@ -71,5 +73,3 @@ private:
 #endif
 
 #endif
-
-

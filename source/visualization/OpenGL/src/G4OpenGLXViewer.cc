@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.10.2.1 2001/06/28 19:15:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXViewer.cc,v 1.13 2001/11/29 12:14:01 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -540,8 +540,8 @@ G4float* G4OpenGLXViewer::spewPrimitiveEPS (FILE* file, GLfloat* loc) {
   GLfloat dx, dy, dr, dg, db, absR, absG, absB, colormax;
   G4int steps;
   Feedback3Dcolor *vertex;
-  GLfloat xstep, ystep, rstep, gstep, bstep;
-  GLfloat xnext, ynext, rnext, gnext, bnext, distance;
+  GLfloat xstep(0.), ystep(0.), rstep(0.), gstep(0.), bstep(0.);
+  GLfloat xnext(0.), ynext(0.), rnext(0.), gnext(0.), bnext(0.), distance(0.);
 
   token=G4int (*loc);
   loc++;
@@ -863,13 +863,13 @@ GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi, G4bool& d
 			 XDefaultScreen (dpy),
 			 snglBuf_RGBA);
 
-  if (pvi != NULL) {
+  if (pvi) {
     db=false;
   } else {
     pvi = glXChooseVisual (dpy,
 			   XDefaultScreen (dpy),
 			   dblBuf_RGBA);
-    if (NULL) {
+    if (!pvi) {
       db=true;
     }
   }

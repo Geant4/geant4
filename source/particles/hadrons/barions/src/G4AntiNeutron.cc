@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.5.2.1 2001/06/28 19:10:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiNeutron.cc,v 1.11 2001/10/28 05:08:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -77,33 +77,18 @@ G4AntiNeutron G4AntiNeutron::theAntiNeutron(
 		 true,            -1.0,          NULL
 );
 G4AntiNeutron* G4AntiNeutron::AntiNeutronDefinition(){return &theAntiNeutron;}
-// initialization for static cut values
-G4double   G4AntiNeutron::theAntiNeutronLengthCut = -1.0;
-G4double*  G4AntiNeutron::theAntiNeutronKineticEnergyCuts = NULL;
+G4AntiNeutron* G4AntiNeutron::AntiNeutron(){return &theAntiNeutron;}
 
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
-void G4AntiNeutron::SetCuts(G4double aCut)
+void G4AntiNeutron::CalcEnergyCuts( const G4Material* )
 {
-  theCutInMaxInteractionLength = aCut;
-
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
-
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = LowestEnergy;
-  }
-  theAntiNeutronLengthCut = theCutInMaxInteractionLength;  
-  theAntiNeutronKineticEnergyCuts = theKineticEnergyCuts;
-  // Rebuild the physics tables for every process for this particle type
   
+
+  // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(LowestEnergy);
+ 
 }

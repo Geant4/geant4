@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -229,7 +229,7 @@ G4ReactionProduct * G4NeutronHPLabAngularEnergy::Sample(G4double anEnergy, G4dou
      }
      {
        // calculate theta
-       G4double x, x1, x2, y1, y2, y;
+       G4double x, x1, x2, y1, y2;
        x =  random;
        x1 = theThVec.GetY(ith-1)-theThVec.GetY(0); // integrals
        x2 = theThVec.GetY(ith)-theThVec.GetY(0);

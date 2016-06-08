@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingMessenger.cc,v 1.2.4.1 2001/06/28 19:07:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em8SteppingMessenger.cc,v 1.3 2001/07/11 09:57:56 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

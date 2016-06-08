@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonZeroLong.hh,v 1.3.4.2 2001/06/28 20:19:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4KaonZeroLong.hh,v 1.8 2001/10/28 05:01:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
 // Each class inheriting from G4VMeson
@@ -55,8 +54,6 @@ class G4KaonZeroLong : public G4VMeson
 {
  private:
    static G4KaonZeroLong theKaonZeroLong;
-   static G4double  theKaonZeroLongLengthCut;
-   static G4double* theKaonZeroLongKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4KaonZeroLong(
@@ -75,11 +72,9 @@ class G4KaonZeroLong : public G4VMeson
    virtual ~G4KaonZeroLong() {}
 
    static G4KaonZeroLong* KaonZeroLongDefinition();
-   static G4KaonZeroLong* KaonZeroLong(){return &theKaonZeroLong;}
-   static G4double GetCuts() {return theKaonZeroLongLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theKaonZeroLongKineticEnergyCuts;};
+   static G4KaonZeroLong* KaonZeroLong();
 
-   virtual void        SetCuts(G4double aCut);
+   virtual void        CalcEnergyCuts( const G4Material* );
 };
 
 #endif

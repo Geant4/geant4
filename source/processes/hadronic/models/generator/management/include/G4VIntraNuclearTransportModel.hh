@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VIntraNuclearTransportModel.hh,v 1.6.6.2 2001/06/28 20:19:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VIntraNuclearTransportModel.hh,v 1.8 2001/08/01 17:08:13 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // $Id: G4IntraNuclearTransportMode.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------

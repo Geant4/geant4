@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.5.4.1 2001/06/28 19:08:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RKG3_Stepper.cc,v 1.6 2001/07/11 09:59:13 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "G4RKG3_Stepper.hh"
 #include "G4ThreeVector.hh"

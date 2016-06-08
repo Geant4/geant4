@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsCollection.hh,v 1.7.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4THitsCollection.hh,v 1.9 2001/07/13 15:00:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4THitsCollection_h
@@ -50,7 +50,7 @@ class G4HitsCollection : public G4VHitsCollection
       G4HitsCollection();
       G4HitsCollection(G4String detName,G4String colNam);
       virtual ~G4HitsCollection();
-      int operator==(const G4HitsCollection &right) const;
+      G4int operator==(const G4HitsCollection &right) const;
 
   protected:
       void* theCollection;
@@ -67,7 +67,7 @@ template <class T> class G4THitsCollection : public G4HitsCollection
       // constructor.
   public:
       virtual ~G4THitsCollection();
-      int operator==(const G4THitsCollection<T> &right) const;
+      G4int operator==(const G4THitsCollection<T> &right) const;
       
       inline void *operator new(size_t);
       inline void operator delete(void* anHC);
@@ -84,7 +84,7 @@ template <class T> class G4THitsCollection : public G4HitsCollection
       inline G4std::vector<T*>* GetVector() const
       { return (G4std::vector<T*>*)theCollection; }
       //  Returns a collection vector.
-      inline int insert(T* aHit)
+      inline G4int insert(T* aHit)
       {
         G4std::vector<T*>*theHitsCollection 
           = (G4std::vector<T*>*)theCollection;
@@ -93,7 +93,7 @@ template <class T> class G4THitsCollection : public G4HitsCollection
       }
       //  Insert a hit object. Total number of hit objects stored in this
       // collection is returned.
-      inline int entries() const
+      inline G4int entries() const
       {
         G4std::vector<T*>*theHitsCollection
           = (G4std::vector<T*>*)theCollection;
@@ -135,21 +135,21 @@ template <class T> G4THitsCollection<T>::~G4THitsCollection()
   G4std::vector<T*> * theHitsCollection 
     = (G4std::vector<T*>*)theCollection;
   //theHitsCollection->clearAndDestroy();
-  for(int i=0;i<theHitsCollection->size();i++)
+  for(size_t i=0;i<theHitsCollection->size();i++)
   { delete (*theHitsCollection)[i]; }
   theHitsCollection->clear();
   delete theHitsCollection;
 }
 
-template <class T> int G4THitsCollection<T>::operator==(const G4THitsCollection<T> &right) const
+template <class T> G4int G4THitsCollection<T>::operator==(const G4THitsCollection<T> &right) const
 { return (collectionName==right.collectionName); }
 
 template <class T> void G4THitsCollection<T>::DrawAllHits() 
 {
   G4std::vector<T*> * theHitsCollection 
     = (G4std::vector<T*>*)theCollection;
-  int n = theHitsCollection->size();
-  for(int i=0;i<n;i++)
+  size_t n = theHitsCollection->size();
+  for(size_t i=0;i<n;i++)
   { (*theHitsCollection)[i]->Draw(); }
 }
 
@@ -157,8 +157,8 @@ template <class T> void G4THitsCollection<T>::PrintAllHits()
 {
   G4std::vector<T*> * theHitsCollection 
     = (G4std::vector<T*>*)theCollection;
-  int n = theHitsCollection->size();
-  for(int i=0;i<n;i++)
+  size_t n = theHitsCollection->size();
+  for(size_t i=0;i<n;i++)
   { (*theHitsCollection)[i]->Print(); }
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionPlus.cc,v 1.5.4.2 2001/06/28 20:19:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PionPlus.cc,v 1.8 2001/10/16 08:16:14 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -98,10 +98,8 @@ G4PionPlus G4PionPlus::thePionPlus(
 );
 
 G4PionPlus*  G4PionPlus::PionPlusDefinition(){return &thePionPlus;}
-// initialization for static cut values
-G4double   G4PionPlus::thePionPlusLengthCut = -1.0;
-G4double*  G4PionPlus::thePionPlusKineticEnergyCuts = NULL;
 
+G4PionPlus*  G4PionPlus::PionPlus(){return &thePionPlus;}
 
 
 

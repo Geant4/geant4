@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LESigmaMinusInelastic.hh,v 1.3.6.1 2001/06/28 19:14:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4LESigmaMinusInelastic.hh,v 1.5 2001/08/01 17:10:53 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
  // Hadronic Process: Low Energy SigmaMinus Inelastic Process
  // original by J.L. Chuma, TRIUMF, 03-Feb-1997

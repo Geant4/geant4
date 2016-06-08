@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001/02/03 18:39:56 johna Exp $
+$Id: History,v 1.16 2001/08/24 20:36:11 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,41 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+24th August 2001  John Allison  (vis-V03-02-13)
+- Intoduced argument for printing in G4VModel::Validate(G4bool warn).
+- Changed default return value in G4VModel::Validate(G4bool) to true.
+- Invoke CalculateExtent after successful geometry change in
+  G4PhysicalVolumeModel::Validate, and other bug fixes..
+
+14th August 2001  John Allison  (vis-V03-02-11)
+- Added sceneHandler.Begin/EndPrimitives messages to models (long
+  standing bug!).
+
+9th August 2001  John Allison  (vis-V03-02-10-00)
+- Removed G4ModelingParameters::hierarchy.  It is no longer used.  The
+  textual or graphical representation of the geometry hierarchy is now
+  done in G4xxxTree classes in visua;ization/Tree.
+
+25th July 2001  John Allison  (modeling-V03-02-03)
+- Added G4VModel::GetG4PhysicalVolumeModel().
+- Added G4VModel* argument to G4BoundingSphereScene constructor.
+  Both the above are to facilitate access to a model, if it exists, and
+  to invoke methods of G4PhysicalVolumeModel if it is one.
+- Added code to curtail G4PhysicalVolumeModel search in G4BoundingSphereScene.
+
+24th July 2001  John Allison  (modeling-V03-02-02)
+- Added G4VModel::SetExtent(const G4VisExtent&).
+- Cosmetic improvements to G4BoundingSphereScene.
+- Augmented G4ScaleModel::fGlobalTag.
+
+21st July 2001  John Allison  (modeling-V03-02-01)
+- Added G4ScaleModel.
+- Fixed bug in G4BoundingSphereScene::::Accrue().
+- Also a few cosmetic changes.
+
+18th July 2001  John Allison  (modeling-V03-02-00)
+- Ensured rotation and translation of replica is restored.
 
 3rd February 2001  John Allison  (vis-V03-00-02)
 - Tidied for CodeWizard.

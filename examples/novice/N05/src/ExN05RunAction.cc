@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05RunAction.cc,v 1.5.4.1 2001/06/28 19:07:43 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05RunAction.cc,v 1.6 2001/07/11 09:58:36 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // Make this appear first!

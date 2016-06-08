@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.hh,v 1.5.2.1 2001/06/28 19:06:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em1RunAction.hh,v 1.8 2001/11/29 11:28:07 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1RunAction_h
 #define Em1RunAction_h 1
@@ -36,10 +36,9 @@
 #include "ProcessesCount.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-class Em1RunActionMessenger;
 
 #ifndef G4NOHIST
  class HepTupleManager;
@@ -61,11 +60,7 @@ class Em1RunAction : public G4UserRunAction
     void CountSteps0(G4int ns) { NbOfSteps0 += ns;}
     void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
     void CountProcesses(G4String);
-    
-  public:
-    void  SetRndmFreq(G4int val) {saveRndm = val;}
-    G4int GetRndmFreq()          {return saveRndm;}
-        
+
 #ifndef G4NOHIST   
     HepHistogram* GetHisto(G4int id) {return histo[id];}
 #endif
@@ -77,16 +72,15 @@ class Em1RunAction : public G4UserRunAction
   private:
     G4int NbOfTraks0, NbOfTraks1;
     G4int NbOfSteps0, NbOfSteps1;
-    ProcessesCount*   ProcCounter;
+    ProcessesCount*   ProcCounter;   
 
-    Em1RunActionMessenger* runMessenger;    
-    G4int saveRndm;
-    
 #ifndef G4NOHIST       
     HepTupleManager* hbookManager;
     HepHistogram* histo[3];
 #endif                     
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

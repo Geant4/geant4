@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EventAction.cc,v 1.5.2.1 2001/06/28 19:07:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05EventAction.cc,v 1.7 2001/11/05 08:24:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "ExN05EventAction.hh"
@@ -71,8 +71,8 @@ void ExN05EventAction::EndOfEventAction(const G4Event* evt )
    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
-  ExN05CalorimeterHitsCollection* CaloHC    = NULL;
-  ExN05CalorimeterHitsCollection* HadCaloHC = NULL;
+  ExN05CalorimeterHitsCollection* CaloHC    = 0;
+  ExN05CalorimeterHitsCollection* HadCaloHC = 0;
   if(HCE)
     {
       CaloHC    = (ExN05CalorimeterHitsCollection*)(HCE->GetHC(calorimeterCollID));

@@ -1,19 +1,29 @@
 **********************************************
- Geant4 version $Name: geant4-03-01-ref-01 $
-                                (06-Apr-2001)
+ Geant4 version $Name: geant4-04-00 $
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
 
-***** Table : Nb of materials = 13 *****
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+***** Table : Nb of materials = 12 *****
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
    --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
    --->  Element: liquidArgon      Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
-   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -64,11 +74,11 @@ ExN03PhysicsList::SetCuts:CutLength : 1 mm
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -77,56 +87,67 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-MuIoni:  knock-on electron cross sections .
-          Good description above the mean excitation energy.
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
-Cut in range                  1 mm            1 mm 
+Cut in range       
+          Aluminium           1 mm            1 mm 
+        liquidArgon           1 mm            1 mm 
+               Lead           1 mm            1 mm 
+              Water           1 mm            1 mm 
+       Scintillator           1 mm            1 mm 
+             quartz           1 mm            1 mm 
+                Air           1 mm            1 mm 
+            Aerogel           1 mm            1 mm 
+        CarbonicGas           1 mm            1 mm 
+         WaterSteam           1 mm            1 mm 
+           Galactic           1 mm            1 mm 
+               Beam           1 mm            1 mm 
 Cut in energy
           Aluminium        6.89 keV         597 keV
         liquidArgon        6.18 keV         343 keV
-             Copper        24.6 keV         1.4 MeV
                Lead         101 keV        1.38 MeV
               Water         2.9 keV         347 keV
        Scintillator        2.37 keV         356 keV
@@ -138,7 +159,6 @@ Cut in energy
            Galactic         990 eV          990 eV 
                Beam         990 eV          990 eV 
 ===================================================
-# e+ 300MeV 
 ### Run 0 start.
 
 ---> Begin of event: 0
@@ -148,35 +168,27 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
-        Gap: total energy:     8.2 MeV       total track length:     4.1 cm 
+   Absorber: total energy: 269.904 MeV       total track length: 19.1751 cm 
+        Gap: total energy: 14.6003 MeV       total track length: 7.40188 cm 
 
      9 hits are stored in ExN03CalorHitsCollection.
-#
-# list the existing physics processes
      Transportation,              hIoni,                msc,              eIoni
               eBrem,            annihil,               conv,              compt
                phot,             MuIoni,            MuBrems,         MuPairProd
               Decay
-#
-# switch off MultipleScattering
 ### Run 1 start.
 
 ---> Begin of event: 0
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1007375238, 624422740
+ Current couple of seeds = 1748430878, 543225391
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 2.7e+02 MeV       total track length:      15 cm 
-        Gap: total energy:      19 MeV       total track length:     9.9 cm 
+   Absorber: total energy:  279.35 MeV       total track length: 19.6094 cm 
+        Gap: total energy: 15.0617 MeV       total track length: 7.74823 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
-#
-# switch on MultipleScattering
-#
-# change detector parameter
 
 ------------------------------------------------------------
 ---> The calorimeter is 10 layers of: [ 10mm of Aluminium + 5mm of liquidArgon ] 
@@ -195,10 +207,12 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1472867459, 1074604418
+ Current couple of seeds = 1715683464, 1760201142
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy: 4.1e+02 MeV       total track length:      95 cm 
-        Gap: total energy:      81 MeV       total track length:     2.2 m  
+   Absorber: total energy: 333.094 MeV       total track length: 79.5857 cm 
+        Gap: total energy: 68.1459 MeV       total track length: 1.88635 m  
 
-     25 hits are stored in ExN03CalorHitsCollection.
+     23 hits are stored in ExN03CalorHitsCollection.
+Graphics systems deleted.
+Visualization Manager deleting...

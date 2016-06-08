@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PGeometryObjectMap.ddl,v 1.7.4.1 2001/06/28 19:11:27 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PGeometryObjectMap.ddl,v 1.9 2001/07/11 10:02:18 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // class description:
@@ -53,6 +53,8 @@
 
 #include "G4Pglobals.hh"
 
+#include "g4std/vector"
+
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -67,9 +69,13 @@ class G4PLogicalVolume;
 class G4PVSolid;
 #pragma ooclassref G4PVSolid "G4PVSolid_ref.hh"
 
-class G4VPhysVolRefArray;
-class G4LogVolRefArray;
-class G4VSolidRefArray;
+typedef G4std::vector<G4LogicalVolume*>       G4LogVolRefArray;
+typedef G4std::vector<G4VPhysicalVolume*>     G4VPhysVolRefArray;
+typedef G4std::vector<G4VSolid*>              G4VSolidRefArray;
+
+typedef G4std::vector<G4LogicalVolume*>::iterator   G4LogVolRefArrayItr;
+typedef G4std::vector<G4VPhysicalVolume*>::iterator G4VPhysVolRefArrayItr;
+typedef G4std::vector<G4VSolid*>::iterator          G4VSolidRefArrayItr;
 
 typedef d_Varray< d_Ref<G4PVPhysicalVolume> > G4PVPhysVolRefVArray;
 typedef d_Varray< d_Ref<G4PLogicalVolume> >   G4PLogVolRefVArray;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.hh,v 1.5.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HCofThisEvent.hh,v 1.7 2001/07/13 15:00:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4HCofThisEvent_h
@@ -31,7 +31,6 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VHitsCollection.hh"
-//#include "g4rw/tpordvec.h"
 #include "g4std/vector"
 
 // class description:
@@ -70,7 +69,7 @@ class G4HCofThisEvent
       inline G4int GetNumberOfCollections()
       {
         G4int n = 0;
-        for(int i=0;i<HC->size();i++)
+        for(size_t i=0;i<HC->size();i++)
         {
           if((*HC)[i]) n++;
         }

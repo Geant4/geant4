@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc,v 1.4.2.1 2001/06/28 19:08:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FieldManager.cc,v 1.6 2001/11/28 18:44:43 japost Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "G4FieldManager.hh"
 
@@ -33,6 +33,8 @@ G4FieldManager::G4FieldManager()
 
    fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
    fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
+
+   fFieldChangesEnergy= false;
 }
 
 G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
@@ -43,6 +45,8 @@ G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
 
    fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
    fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
+
+   fFieldChangesEnergy= false;
 }
 
 

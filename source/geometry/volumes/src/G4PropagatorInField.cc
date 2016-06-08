@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.19.2.1 2001/06/28 19:09:44 gunter Exp $
-// GEANT4 tag $Name:  $
-//
+// $Id: G4PropagatorInField.cc,v 1.28 2001/12/08 01:17:04 japost Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
 // 
-// This routine implements an algorithm to track a particle in a       //
-//  non-uniform magnetic field. It utilises an ODE solver (with        //
-//  the Runge - Kutta method) to evolve the particle, and drives it    //
+//  This class implements an algorithm to track a particle in a
+//  non-uniform magnetic field. It utilises an ODE solver (with
+//  the Runge - Kutta method) to evolve the particle, and drives it
 //  until the particle has traveled a set distance or it enters a new 
 //  volume.
 // 
@@ -39,6 +38,8 @@
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
 
+// #define  G4DEBUG_FIELD  1
+
 #include "G4PropagatorInField.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"
@@ -48,7 +49,8 @@
 //const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
-const G4double  G4PropagatorInField::fEpsilonMinDefault = 1.0e-10 ;  
+const G4double  G4PropagatorInField::fEpsilonMinDefault = 5.0e-7;  
+const G4double  G4PropagatorInField::fEpsilonMaxDefault = 0.05;
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -84,53 +86,84 @@ G4double G4PropagatorInField::
   
   G4FieldTrack  CurrentState(pFieldTrack);
 
-#if 0
-  CurrentState.SetVelocity( pFieldTrack.GetMomentumDir() ); 
-    // For now, must utilize unit "velocity"    J.A. Nov 17, 98
-
-    //  Problem in setting the energy in this case .... (and in E field)
-#endif
-
- 
   G4FieldTrack  OriginalState= CurrentState;
 
   // If the Step length is "infinite", then an approximate-maximum Step lenght
   // (used to calculate the relative accuracy) must be guessed.
   //
   
-  if( CurrentProposedStepLength >= kInfinity )
+  if( CurrentProposedStepLength >= fLargestAcceptableStep )
   {
      G4ThreeVector StartPointA, VelocityUnit;
      StartPointA = pFieldTrack.GetPosition();
      VelocityUnit= pFieldTrack.GetMomentumDir();
 
-     CurrentProposedStepLength= 1.e3 *  ( 10.0 * cm + 
+     G4double trialProposedStep= 1.e2 *  ( 10.0 * cm + 
 		  fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) ) ;
+     CurrentProposedStepLength= G4std::min( trialProposedStep, fLargestAcceptableStep); 
   }
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength ;
 
   if( epsilon < fEpsilonMin ) epsilon = fEpsilonMin ;
+  if( epsilon > fEpsilonMax ) epsilon = fEpsilonMax ;
 
   this->SetEpsilonStep( epsilon );
 
-  if( fNoZeroStep > fThresholdNo_ZeroSteps ) {
+  //  Shorten the proposed step in case of earlier problems (zero steps)
+  // 
+  if( fNoZeroStep > fActionThreshold_NoZeroSteps ) {
      G4double stepTrial; //  = fMidPoint_CurveLen_of_LastAttempt;
-     stepTrial= 0.5 * fFull_CurveLen_of_LastAttempt; 
+
+     stepTrial= fFull_CurveLen_of_LastAttempt; 
      if( (stepTrial <= 0.0) && (fLast_ProposedStepLength>0.0) ) 
-        stepTrial=0.5 * fLast_ProposedStepLength; 
-     if( fNoZeroStep > 2*fThresholdNo_ZeroSteps ){
-        stepTrial *= 0.5;     // Ensure quicker convergence.
-	if(   (stepTrial == 0.0) 
-	   || ( fNoZeroStep > 5*fThresholdNo_ZeroSteps ) ) { 
- 	   G4cerr << " G4PropagatorInField::ComputeStep "
-		  << "  ERROR : attempting a zero step= " << stepTrial << G4endl
-		  << " and/or no progress after "  << fNoZeroStep 
-		  << " trial steps.  ABORTING." << G4endl;
-	   G4Exception("G4PropagatorInField::ComputeStep No progress - Looping with zero steps"); 
-	} 
+        stepTrial= fLast_ProposedStepLength; 
+
+     G4double decreaseFactor=0.9; // Unused default
+     // G4double thisTolerance= kCarTolerance;
+     if( (fNoZeroStep < fSevereActionThreshold_NoZeroSteps)
+	  && (stepTrial > 1000.0*kCarTolerance) ){
+        // Ensure quicker convergence.
+        decreaseFactor= 0.1;
+     } else {
+        // We are in significant difficulties, probably at a boundary
+        //   that is either geometrically sharp 
+        //     or between very different materials.
+        // 
+        // Careful decreases to cope with tolerance are required.
+        if(stepTrial > 1000.0*kCarTolerance)
+	   decreaseFactor= 0.25;     // Try slow decreases
+	else if(stepTrial > 100.0*kCarTolerance)
+	   decreaseFactor= 0.5;      // Try slower decreases
+	else if(stepTrial > 10.0*kCarTolerance)
+	   decreaseFactor= 0.75;     // Try even slower decreases
+	else
+	   decreaseFactor= 0.9;      // Try very slow decreases
      }
-     CurrentProposedStepLength = stepTrial;
+     stepTrial *= decreaseFactor;
+
+#ifdef G4DEBUG_FIELD
+     PrintStepLengthDiagnostic(CurrentProposedStepLength, decreaseFactor,
+			       stepTrial, pFieldTrack);
+#endif
+     if(   (stepTrial == 0.0) ) {
+           //  || ( fNoZeroStep > fAbandonThresholdNo_ZeroSteps )  ) {
+         G4cout << " G4PropagatorInField::ComputeStep "
+              << " Particle abandoned due to lack of progress in field."
+	      << G4endl
+              << " Properties : " << pFieldTrack << " "
+              << G4endl;
+         G4cerr << " G4PropagatorInField::ComputeStep "
+              << "  ERROR : attempting a zero step= " << stepTrial << G4endl
+              << " while attempting to progress after "  << fNoZeroStep
+              << " trial steps.  Will abandon step." << G4endl;
+         //  G4Exception("G4PropagatorInField::ComputeStep No progress - Looping with zero steps");
+         fParticleIsLooping= true;
+         return 0;  // = stepTrial;
+     }
+     
+     if( stepTrial < CurrentProposedStepLength)
+        CurrentProposedStepLength = stepTrial;
   }
   fLast_ProposedStepLength= CurrentProposedStepLength;
 
@@ -215,7 +248,7 @@ G4double G4PropagatorInField::
 	   StepTaken = 
 	   TruePathLength= IntersectPointVelct_G.GetCurveLength()
 	                         - OriginalState.GetCurveLength(); // which is Zero now.
-#ifdef G4VERBOSE
+#ifdef G4DEBUG_FIELD
 	   if( Verbose() > 0 )
 	      G4cout << " Found intersection after Step of length " << 
 	           StepTaken << G4endl;
@@ -232,21 +265,30 @@ G4double G4PropagatorInField::
 	StepTaken += s_length_taken; 
      }
      first_substep= false;
-     
-#ifdef G4VERBOSE
-    if( Verbose() > 0 )
-      printStatus( SubStepStartState,  // or OriginalState,
+
+#ifdef G4DEBUG_FIELD
+     // if( fNoZeroStep )
+     if( fNoZeroStep > fActionThreshold_NoZeroSteps )
+     {
+     // if( Verbose() > 0 )
+       //if(do_loop_count==0) 
+       //  G4cout << "G4PiF: End of Step " << do_loop_count;
+        printStatus( SubStepStartState,  // or OriginalState,
 		   CurrentState,
 		   CurrentProposedStepLength, 
 		   NewSafety,  
 		   do_loop_count, 
 		   pPhysVol);
+	// G4cout << " Step accepted taken =" << StepTaken << G4endl;
+     }
 #endif
 
      do_loop_count++;
   }
   while( (!intersects ) && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
                         && ( do_loop_count < GetMaxLoopCount() ) );
+
+
 				       
 #ifdef G4VERBOSE
   if( do_loop_count >= GetMaxLoopCount() ){
@@ -294,6 +336,14 @@ G4double G4PropagatorInField::
   }
 #endif
 
+#ifdef G4DEBUG_FIELD
+  if( fNoZeroStep ){
+     G4cout << " PiF: Step returning=" << StepTaken << G4endl;
+     G4cout << " ------------------------------------------------------- "
+	    << G4endl;
+  }
+#endif
+
   // In particular anomalous cases, we can get repeated zero steps
   //   In order to correct this efficiently, we identify these cases
   //   and only take corrective action when they occur.
@@ -302,6 +352,14 @@ G4double G4PropagatorInField::
     fNoZeroStep++;
   else
     fNoZeroStep= 0;
+
+  if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+     G4cout << " G4PropagatorInField::ComputeStep : Warning :" 
+            << " no progress after "  << fNoZeroStep << " trial steps. "   
+            << G4endl;
+     G4cout << "   Particle will be abandoned." ; 
+     fParticleIsLooping= true;
+  } 
 
   return TruePathLength;
 
@@ -512,7 +570,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	  GetChordFinder()->GetIntegrationDriver()
 	    ->AccurateAdvance(newEndpoint, curveDist, GetEpsilonStep() );
 	  CurrentB_PointVelocity= newEndpoint;
-#ifdef G4DEBUG
+#ifdef G4DEBUG_FIELD
           static int noInaccuracyWarnings = 0; 
           const  int maxNoWarnings = 10;
 	  if(   (noInaccuracyWarnings < maxNoWarnings ) 
@@ -528,6 +586,10 @@ G4PropagatorInField::LocateIntersectionPoint(
 #endif
        }
        if( curveDist < 0.0 ) {
+	     G4cerr << "G4PropagatorInField::LocateIntersectionPoint: "
+		    << "Error in advancing " << G4endl;
+          printStatus( CurrentA_PointVelocity,  CurrentB_PointVelocity,
+                 -1.0, NewSafety,  substep_no, 0); //  startVolume);
 	  G4Exception("G4PropagatorInField::LocateIntersectionPoint : the final curve point is not further along than the original.");
        }
 
@@ -584,13 +646,13 @@ void G4PropagatorInField::printStatus(
             << G4std::setw( 7) << " N_y " << " "
             << G4std::setw( 7) << " N_z " << " "
             << G4std::setw( 9) << "StepLen" << " "  
-            << G4std::setw( 9) << "PhsStep" << " "  
+            << G4std::setw(12) << "PhsStep" << " "  
             << G4std::setw(12) << "StartSafety" << " "  
             << G4std::setw(18) << "NextVolume" << " "
             << G4endl;
         // Recurse to print the start values 
         printStatus( StartFT,   StartFT,   // 
-                 -1.0, safety,  -1, 0);     //  startVolume);
+                 -1.0, safety,  -1, startVolume);
     }
 
     if( verboseLevel <= 3 )
@@ -608,9 +670,9 @@ void G4PropagatorInField::printStatus(
 	      << G4std::setw( 7) << CurrentUnitVelocity.z() << " ";
        G4cout << G4std::setw( 9) << step_len << " "; 
        if( requestStep != -1.0 ) 
-	  G4cout << G4std::setw( 9) << requestStep << " ";
+	  G4cout << G4std::setw( 12) << requestStep << " ";
        else
-  	  G4cout << G4std::setw( 9) << " InitialStep " << " "; 
+  	  G4cout << G4std::setw( 12) << "InitialStep" << " "; 
        G4cout << G4std::setw(12) << safety << " ";
 
        if( startVolume != 0) {
@@ -638,4 +700,23 @@ void G4PropagatorInField::printStatus(
        G4cout << "Chord length = " << (CurrentPosition-StartPosition).mag() << G4endl;
        G4cout << G4endl; 
     }
+}
+
+
+void 
+G4PropagatorInField::PrintStepLengthDiagnostic(G4double CurrentProposedStepLength,
+					       G4double decreaseFactor,
+					       G4double stepTrial,
+					       const G4FieldTrack& aFieldTrack)
+{
+     G4cout << " PiF: NoZeroStep= " << fNoZeroStep
+	    << " CurrentProposedStepLength= " << CurrentProposedStepLength
+            << " Full_curvelen_last=" << fFull_CurveLen_of_LastAttempt
+	    << " last proposed step-length= " << fLast_ProposedStepLength 
+	    << " decreate factor = " << decreaseFactor
+	    << " step trial = " << stepTrial
+	    << G4endl;
+     //     printStatus( pFieldTrack,  pFieldTrack, CurrentProposedStepLength, 
+     //	                 -1.0,  0,  pPhysVol);
+
 }

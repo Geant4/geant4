@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FoamXrayTRmodel.hh,v 1.1.4.1 2001/06/28 19:10:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FoamXrayTRmodel.hh,v 1.3 2001/07/11 10:01:29 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -46,9 +46,9 @@
 #include "G4VFastSimulationModel.hh"
 // #include "G4ForwardXrayTR.hh"
 
-#include "G4VXrayTRmodel.hh"
+#include "G4VXrayTRadModel.hh"
 
-class G4FoamXrayTRmodel : public G4VXrayTRmodel
+class G4FoamXrayTRmodel : public G4VXrayTRadModel
 {
 public:
 

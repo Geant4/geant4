@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -61,17 +61,17 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
     {
     const int    nAttemptScale = 500;
     const double ErrLimit = 1.E-5;
-    if (Output->isEmpty())
+    if (Output->empty())
        return TRUE;
     G4LorentzVector SumMom;
     G4double        SumMass = 0;     
     G4double        TotalCollisionMass = TotalCollisionMom.m(); 
     // Calculate sum hadron 4-momenta and summing hadron mass
-    G4int cHadron;
-    for(cHadron = 0; cHadron < Output->length(); cHadron++)
+    unsigned int cHadron;
+    for(cHadron = 0; cHadron < Output->size(); cHadron++)
         {
-        SumMom  += Output->at(cHadron)->Get4Momentum();
-        SumMass += Output->at(cHadron)->GetDefinition()->GetPDGMass();
+        SumMom  += Output->operator[](cHadron)->Get4Momentum();
+        SumMass += Output->operator[](cHadron)->GetDefinition()->GetPDGMass();
         }
     if (SumMass > TotalCollisionMass) return FALSE;
     SumMass = SumMom.m2();
@@ -88,13 +88,13 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
     for(G4int cAttempt = 0; cAttempt < nAttemptScale; cAttempt++)
         {
         G4double Sum = 0;
-        for(cHadron = 0; cHadron < Output->length(); cHadron++)
+        for(cHadron = 0; cHadron < Output->size(); cHadron++)
             {
-            G4LorentzVector HadronMom = Output->at(cHadron)->Get4Momentum();
+            G4LorentzVector HadronMom = Output->operator[](cHadron)->Get4Momentum();
             HadronMom.setVect(Scale*HadronMom.vect());
-            G4double E = sqrt(HadronMom.vect().mag2() + sqr(Output->at(cHadron)->GetDefinition()->GetPDGMass()));
+            G4double E = sqrt(HadronMom.vect().mag2() + sqr(Output->operator[](cHadron)->GetDefinition()->GetPDGMass()));
             HadronMom.setE(E);
-            Output->at(cHadron)->Set4Momentum(HadronMom);
+            Output->operator[](cHadron)->Set4Momentum(HadronMom);
             Sum += E;
             }   
         Scale = TotalCollisionMass/Sum;    

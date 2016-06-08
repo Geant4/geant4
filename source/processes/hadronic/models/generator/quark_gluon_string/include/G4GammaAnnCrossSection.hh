@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -34,6 +34,7 @@ class G4GammaAnnCrossSection : public G4VAnnihilationCrossSection
     G4GammaAnnCrossSection();
     G4bool InCharge(G4int aCode, G4int bCode);
     G4double GetXsec(G4double s);
+    virtual ~G4GammaAnnCrossSection(){}
     
   private:
   

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BsMesonZero.cc,v 1.5.2.1 2001/06/28 19:10:55 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BsMesonZero.cc,v 1.10 2001/10/28 05:01:33 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -83,9 +83,6 @@ G4BsMesonZero G4BsMesonZero::theBsMesonZero(
 
 G4BsMesonZero*  G4BsMesonZero::BsMesonZeroDefinition(){return &theBsMesonZero;}
 G4BsMesonZero*  G4BsMesonZero::BsMesonZero(){return &theBsMesonZero;}
-// initialization for static cut values
-G4double   G4BsMesonZero::theBsMesonZeroLengthCut = -1.0;
-G4double*  G4BsMesonZero::theBsMesonZeroKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // **************************** SetCuts *********************************
@@ -93,26 +90,13 @@ G4double*  G4BsMesonZero::theBsMesonZeroKineticEnergyCuts = NULL;
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4BsMesonZero::SetCuts(G4double aCut)
+void G4BsMesonZero::CalcEnergyCuts( const G4Material* )
 {
-  theCutInMaxInteractionLength = aCut;
-
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
-
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = LowestEnergy;
-  }
-  theBsMesonZeroLengthCut = theCutInMaxInteractionLength;  
-  theBsMesonZeroKineticEnergyCuts = theKineticEnergyCuts;
+  
+  
+  // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(LowestEnergy);
 }
-
 
 
 

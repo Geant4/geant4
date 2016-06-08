@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh,v 1.2.4.2 2001/06/28 20:20:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Transportation.hh,v 1.6 2001/11/28 18:27:50 japost Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -110,17 +110,6 @@ class G4Transportation : public G4VProcess
      G4bool               DoesGlobalFieldExist();
 
   private:
-     // Needed to add the Relocation in the PostStepDoIt
-     //                                         Copied from SteppingManager
-     G4VTouchable* GetFreeTouchable();
-        // Get Touchable which is free, i.e. not assigined to Track/StepPoint
-        // If no free touchable is availabe, the NULL will be returned
-        // Once you get a Touchable, it will be set to NotFree. 
-     void SetTheOtherTouchableFree(G4VTouchable* pTouch);
-        // Set the partner of the given Touchable to be free. For example,
-        // the argument has fTouchable1, then fTouchable2 will be set to 
-
-  private:
      // The Propagators used to transport the particle
      G4Navigator*         fLinearNavigator;
      G4PropagatorInField* fFieldPropagator;
@@ -135,10 +124,12 @@ class G4Transportation : public G4VProcess
      G4ThreeVector        fTransportEndSpin;
      G4bool               fMomentumChanged;
      G4bool               fEnergyChanged;
+     G4bool               fEndGlobalTimeComputed; 
+     G4double             fCandidateEndGlobalTime;
 
      G4bool               fParticleIsLooping;
 
-     G4VTouchable*        fCurrentTouchable;
+     G4TouchableHandle    fCurrentTouchableHandle;
      
      // Whether a magnetic field exists ...
      // G4bool         fFieldExists;
@@ -152,12 +143,6 @@ class G4Transportation : public G4VProcess
      //   The current answer is to ignore this data member and use 
      // the member function DoesGlobalFieldExist() in its place ...
      //    John Apostolakis, July 7, 1997
-
-     // Needed for the relocation - Copied from SteppingManager
-     G4VTouchable* fTouchable1;
-     G4VTouchable* fTouchable2;
-     G4bool fIsTouchable1Free;
-     G4bool fIsTouchable2Free;
 
      // Flag to determine whether a boundary was reached.
      G4bool fGeometryLimitedStep;

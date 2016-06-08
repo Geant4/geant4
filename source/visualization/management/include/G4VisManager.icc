@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc,v 1.5.4.1 2001/06/28 19:16:11 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisManager.icc,v 1.8 2001/08/05 02:29:05 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -43,11 +43,6 @@ inline G4Scene* G4VisManager::GetCurrentScene () const {
   return fpScene;
 }
 
-inline const G4ViewParameters&
-G4VisManager::GetCurrentViewParameters () const {
-  return fVP;
-}
-
 inline const G4SceneHandlerList&
 G4VisManager::GetAvailableSceneHandlers () const {
   return fAvailableSceneHandlers;
@@ -62,16 +57,17 @@ G4VisManager::GetCurrentGraphicsSystem () const {
   return fpGraphicsSystem;
 }
 
-inline G4int G4VisManager::GetVerboseLevel () const {
-  return fVerbose;
+inline G4VisManager::Verbosity G4VisManager::GetVerbosity () const {
+  return fVerbosity;
+}
+
+inline void G4VisManager::GetWindowSizeHint
+ (G4int& xHint, G4int& yHint) const {
+  xHint = fWindowSizeHintX; yHint = fWindowSizeHintY;
 }
 
 inline void G4VisManager::SetCurrentScene (G4Scene* pScene) {
   fpScene = pScene;
-}
-
-inline G4ViewParameters& G4VisManager::SetCurrentViewParameters () {
-  return fVP;
 }
 
 inline G4SceneList& G4VisManager::SetSceneList () {
@@ -82,6 +78,10 @@ inline G4SceneHandlerList& G4VisManager::SetAvailableSceneHandlers () {
   return fAvailableSceneHandlers;
 }
 
-inline void G4VisManager::SetVerboseLevel (G4int vLevel) {
-  fVerbose = vLevel;
+inline void G4VisManager::SetVerboseLevel (G4VisManager::Verbosity verbosity) {
+  fVerbosity = verbosity;
+}
+
+inline void G4VisManager::SetWindowSizeHint (G4int xHint, G4int yHint) {
+  fWindowSizeHintX = xHint; fWindowSizeHintY = yHint;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiZero.hh,v 1.4.4.2 2001/06/28 20:18:58 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4XiZero.hh,v 1.9 2001/10/28 05:08:21 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,8 +53,6 @@ class G4XiZero : public G4VBaryon
 {
  private:
    static G4XiZero theXiZero;
-   static G4double  theXiZeroLengthCut;
-   static G4double* theXiZeroKineticEnergyCuts;
 
  private:
    G4XiZero(
@@ -73,11 +71,9 @@ class G4XiZero : public G4VBaryon
    virtual ~G4XiZero(){}
 
    static G4XiZero* XiZeroDefinition();
-   static G4XiZero* XiZero() {return &theXiZero;}
-   static G4double GetCuts() {return theXiZeroLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theXiZeroKineticEnergyCuts;};
+   static G4XiZero* XiZero();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

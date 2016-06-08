@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -56,7 +56,7 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(
 			    G4int Z, G4int A,
 			    G4double excitation,
 			    G4int verbose):
-  _nucleusZ(Z), _nucleusA(A), _excitation(excitation), _levelManager(levelManager) 
+  _nucleusA(A), _nucleusZ(Z), _excitation(excitation), _levelManager(levelManager) 
 {
   const G4PtrLevelVector* levels = levelManager.GetLevels();
   G4double eTolerance = 0.;
@@ -65,7 +65,7 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(
     G4int lastButOne = levelManager.NumberOfLevels() - 2;
     if (lastButOne >= 0)
     {
-      eTolerance = levelManager.MaxLevelEnergy() - levels->at(lastButOne)->Energy();
+      eTolerance = levelManager.MaxLevelEnergy() - levels->operator[](lastButOne)->Energy();
       if (eTolerance < 0.) eTolerance = 0.;
     }
   }

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -75,14 +75,14 @@ G4Element* G4StopElementSelector::GetElement(const G4Material* aMaterial)
   const G4int numberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  if(1 == numberOfElements) return (*theElementVector)(0);
+  if(1 == numberOfElements) return (*theElementVector)[0];
     
   const G4double* theAtomicNumberDensity = aMaterial->GetAtomicNumDensityVector();
 
   G4double sum = 0.0;
   for ( i=0; i < numberOfElements; i++ ) {
 
-    Z = (*theElementVector)(i)->GetZ();
+    Z = (*theElementVector)[i]->GetZ();
 
       // Halogens
     if( (9.0 == Z) || (17.0 == Z) || (35.0 == Z) || (53.0 == Z) || (85.0 == Z) ) {
@@ -105,7 +105,7 @@ G4Element* G4StopElementSelector::GetElement(const G4Material* aMaterial)
   // Selection of element
   do {
     i++;
-    Z = (*theElementVector)(i)->GetZ();
+    Z = (*theElementVector)[i]->GetZ();
 
       // Galogens
     if( (9.0 == Z) || (17.0 == Z) || (35.0 == Z) || (53.0 == Z) || (85.0 == Z) ) {
@@ -121,7 +121,7 @@ G4Element* G4StopElementSelector::GetElement(const G4Material* aMaterial)
     }
   } while ( (sum < random) && (i < numberOfElements - 1) );
 
-  return (*theElementVector)(i);
+  return (*theElementVector)[i];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -198,7 +198,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
           (2.0 * (A - Z) /  Z  + abs(a2ze - 1.) ) * b0c / (A * 4.) );
 
   // == Mu capture data are taken if exist 
-  for (G4int j = 0; j < ListZE; j++) {
+  for (unsigned int j = 0; j < ListZE; j++) {
     if( ListZExp[j] == i + 1) {
       lambda = ListCaptureVel[j] / microsecond;
       break;

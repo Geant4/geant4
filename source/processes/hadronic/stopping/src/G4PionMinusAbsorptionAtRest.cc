@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PionMinusAbsorptionAtRest.cc,v 1.2.8.2 2001/06/28 20:20:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PionMinusAbsorptionAtRest.cc,v 1.6 2001/10/19 11:55:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -51,9 +51,9 @@
 G4PionMinusAbsorptionAtRest::G4PionMinusAbsorptionAtRest(const G4String& processName)
   : G4VRestProcess (processName),       // initialization
   massPionMinus(G4PionMinus::PionMinus()->GetPDGMass()/GeV),
-  pdefPionMinus(G4PionMinus::PionMinus()),
   pdefGamma(G4Gamma::Gamma()),
   pdefPionZero(G4PionZero::PionZero()),
+  pdefPionMinus(G4PionMinus::PionMinus()),
   pdefProton(G4Proton::Proton()),
   pdefNeutron(G4Neutron::Neutron()),
   pdefDeuteron(G4Deuteron::Deuteron()),
@@ -164,14 +164,14 @@ G4VParticleChange* G4PionMinusAbsorptionAtRest::AtRestDoIt(
                                               // probabilities are included.
     if (random<=runningSum)
     {
-      targetCharge = G4double((*theElementVector)(i2)->GetZ());
-      targetAtomicMass = (*theElementVector)(i2)->GetN();
+      targetCharge = G4double((*theElementVector)[i2]->GetZ());
+      targetAtomicMass = (*theElementVector)[i2]->GetN();
     }
   }
   if (random>runningSum)
   {
-    targetCharge = G4double((*theElementVector)(numberOfElements-1)->GetZ());
-    targetAtomicMass = (*theElementVector)(numberOfElements-1)->GetN();
+    targetCharge = G4double((*theElementVector)[numberOfElements-1]->GetZ());
+    targetAtomicMass = (*theElementVector)[numberOfElements-1]->GetN();
 
   }
 

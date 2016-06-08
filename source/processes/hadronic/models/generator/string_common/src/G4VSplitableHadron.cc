@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.cc,v 1.2.8.2 2001/06/28 20:20:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSplitableHadron.cc,v 1.6 2001/10/05 16:17:16 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // ------------------------------------------------------------
@@ -38,12 +38,12 @@
 #include "G4VKineticNucleon.hh"
 
 G4VSplitableHadron::G4VSplitableHadron()
-      :  theCollisionCount(0), theDefinition(NULL)
+      :  theDefinition(NULL), theCollisionCount(0), isSplit(false)
 {
 }
 
 G4VSplitableHadron::G4VSplitableHadron(const G4ReactionProduct & aPrimary)
-      :  theCollisionCount(0)
+      :  theCollisionCount(0), isSplit(false)
 {
 	theDefinition=aPrimary.GetDefinition();
 	the4Momentum.setVect(aPrimary.GetMomentum());
@@ -53,6 +53,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4ReactionProduct & aPrimary)
 G4VSplitableHadron::G4VSplitableHadron(const G4Nucleon & aNucleon)
 {
 	theCollisionCount=0;
+  isSplit = false;
 	theDefinition=aNucleon.GetParticleType();
 	the4Momentum=aNucleon.GetMomentum();
 	thePosition=aNucleon.GetPosition();
@@ -61,6 +62,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4Nucleon & aNucleon)
 G4VSplitableHadron::G4VSplitableHadron(const G4VKineticNucleon * aNucleon)
 {
 	theCollisionCount=0;
+  isSplit = false;
 	theDefinition=aNucleon->GetDefinition();
 	the4Momentum=aNucleon->Get4Momentum();
 	thePosition=aNucleon->GetPosition();
@@ -69,6 +71,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4VKineticNucleon * aNucleon)
 G4VSplitableHadron::G4VSplitableHadron(const G4VSplitableHadron &right)
 {
 	theCollisionCount=0;
+  isSplit = false;
 	theDefinition= right.GetDefinition();
 	the4Momentum= right.Get4Momentum();
 	thePosition=  right.GetPosition();

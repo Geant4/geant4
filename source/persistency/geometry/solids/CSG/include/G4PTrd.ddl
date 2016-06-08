@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PTrd.ddl,v 1.3.4.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4PTrd
-//
+// $Id: G4PTrd.ddl,v 1.5 2001/07/11 10:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PTrd solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Trd.hh
 
@@ -38,19 +39,21 @@
 class G4Trd;
 class G4VSolid;
 
-class G4PTrd : public G4PCSGSolid {
-
-public:
-
+class G4PTrd
+ : public G4PCSGSolid
+{
+public: // With description
     G4PTrd(const G4Trd* theTrd);
-
     virtual ~G4PTrd();
+    // Constructor and Destructor
 
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient boolean solid object.
 
-    // Naming method (pseudo-RTTI : run-time type identification
     virtual G4GeometryType  GetEntityType() const {return G4String("G4Trd");}
+    // Returns the G4GeometryType of this solid.
 
+public:
     void CheckAndSetAllParameters (G4double pdx1, G4double pdx2,
                              G4double pdy1, G4double pdy2,
                              G4double pdz);

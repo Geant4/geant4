@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RepresentationRelationshipCreator.cc,v 1.6.2.1 2001/06/28 19:09:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RepresentationRelationshipCreator.cc,v 1.7 2001/07/11 10:00:11 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------

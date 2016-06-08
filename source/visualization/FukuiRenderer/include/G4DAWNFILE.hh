@@ -21,15 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILE.hh,v 1.6.2.1 2001/06/28 19:15:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DAWNFILE.hh,v 1.8 2001/07/27 22:32:55 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Satoshi TANAKA
 // DAWNFILE driver factory.
-
-//=================//
-#if defined (G4VIS_BUILD_DAWNFILE_DRIVER) || defined (G4VIS_USE_DAWNFILE)
-//=================//
 
 #ifndef G4DAWNFILE_HH
 #define G4DAWNFILE_HH
@@ -56,4 +52,3 @@ private:
 };
 
 #endif
-#endif 

@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4BREPSolidCone.cc,v 1.5.2.1 2001/06/28 19:08:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BREPSolidCone.cc,v 1.7 2001/07/11 09:59:41 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -52,7 +51,7 @@ G4BREPSolidCone::G4BREPSolidCone(const G4String& name,
   G4Vector3D   tmporigin(origin);  
   G4Point3D    tmppoint;
 
-  tmppoint= origin + (length*tmpaxis);
+  tmppoint= G4Point3D(origin) + (length*tmpaxis);
   G4Point3D origin2(tmppoint.x(), tmppoint.y(), tmppoint.z());
 
   tmppoint=  origin2 + (large_radius*tmpaxis);

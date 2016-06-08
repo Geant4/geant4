@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.cc,v 1.4.4.2 2001/06/28 20:19:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TauPlus.cc,v 1.7 2001/10/16 08:16:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -123,12 +123,9 @@ G4TauPlus G4TauPlus::theTauPlus(
 );
 
 G4TauPlus* G4TauPlus::TauPlusDefinition(){return &theTauPlus;}
-// initialization for static cut values
-G4double   G4TauPlus::theTauPlusLengthCut = -1.0;
-G4double*  G4TauPlus::theTauPlusKineticEnergyCuts = NULL;
 
-
-
-
-
+G4TauPlus*  G4TauPlus::TauPlus()
+{  
+  return &theTauPlus; 
+}
 

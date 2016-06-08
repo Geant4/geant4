@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IrregularXrayTRmodel.cc,v 1.1.4.1 2001/06/28 19:10:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4IrregularXrayTRmodel.cc,v 1.4 2001/09/18 09:02:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 
@@ -38,7 +38,7 @@
 
 G4IrregularXrayTRmodel::G4IrregularXrayTRmodel(G4Envelope *anEnvelope, 
                                                   G4double a, G4double b) :
-  G4VXrayTRmodel(anEnvelope,a,b)
+  G4VXrayTRadModel(anEnvelope,a,b)
 {
   G4cout<<"Irregular X-ray TR model is called"<<G4endl ;
 
@@ -224,7 +224,7 @@ G4IrregularXrayTRmodel::GetStackFactor( G4double energy,
 
   factor      = plateFactor*gasFactor ;
 
-  result      = ( 1 - pow(factor,fPlateNumber) )/( 1 - factor ) ;
+  result      = ( 1 - pow(factor,G4double(fPlateNumber)) )/( 1 - factor ) ;
 
   result     *= 1 + plateFactor ;
 

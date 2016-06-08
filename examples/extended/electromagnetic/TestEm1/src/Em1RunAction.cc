@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: Em1RunAction.cc,v 1.10.2.1 2001/06/28 19:06:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em1RunAction.cc,v 1.13 2001/11/29 11:28:07 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 08.03.01 Hisaya: adapted for STL   
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em1RunAction.hh"
-#include "Em1RunActionMessenger.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -46,26 +46,24 @@
  #include "CLHEP/Hist/HBookFile.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1RunAction::Em1RunAction()
-  : ProcCounter(0), saveRndm (1),
-    runMessenger(new Em1RunActionMessenger(this))
+  : ProcCounter(0)
 {
 #ifndef G4NOHIST
-  hbookManager = NULL;
+  hbookManager = 0;
 #endif 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1RunAction::~Em1RunAction()
 {
  cleanHisto();
- delete runMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::bookHisto()
 {
@@ -73,13 +71,16 @@ void Em1RunAction::bookHisto()
   hbookManager = new HBookFile("testem1.paw", 68);
 
   // booking histograms
-  histo[0] = hbookManager->histogram("track length (mm) of a charged particle",100,0.,50*cm);
-  histo[1] = hbookManager->histogram("Nb of steps per track (charged particle)",100,0.,100.);
-  histo[2] = hbookManager->histogram("step length (mm) charged particle",100,0.,10*mm);
+  histo[0] = hbookManager->histogram
+                       ("track length (mm) of a charged particle",100,0.,50*cm);
+  histo[1] = hbookManager->histogram
+                       ("Nb of steps per track (charged particle)",100,0.,100.);
+  histo[2] = hbookManager->histogram
+                       ("step length (mm) charged particle",100,0.,10*mm);
 #endif   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::cleanHisto()
 {
@@ -91,18 +92,16 @@ void Em1RunAction::cleanHisto()
 #endif   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }  
-  
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
+
   NbOfTraks0 = 0; NbOfTraks1 = 0; NbOfSteps0 = 0; NbOfSteps1 = 0;
   ProcCounter = new ProcessesCount;
      
@@ -111,13 +110,10 @@ void Em1RunAction::BeginOfRunAction(const G4Run* aRun)
   if (aRun->GetRunID() == 0) bookHisto();
     
   if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    }
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::CountProcesses(G4String procName)
 {
@@ -130,7 +126,7 @@ void Em1RunAction::CountProcesses(G4String procName)
    (*ProcCounter)[i]->Count();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em1RunAction::EndOfRunAction(const G4Run* aRun)
 {
@@ -143,21 +139,22 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
       G4int  oldprec = G4cout.precision(2);
       
       G4cout << "\n nb tracks/event"
-                      << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
-                      << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents
+             << "   neutral: " << G4std::setw(7) << NbOfTraks0/dNbOfEvents
+             << "   charged: " << G4std::setw(7) << NbOfTraks1/dNbOfEvents
              << "\n nb  steps/event"
-                      << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
-                      << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
+             << "   neutral: " << G4std::setw(7) << NbOfSteps0/dNbOfEvents
+             << "   charged: " << G4std::setw(7) << NbOfSteps1/dNbOfEvents
              << G4endl;
       
       //frequency of processes call       
       G4cout << "\n nb of process calls per event: \n   ";       
-      for (G4int i=0; i< ProcCounter->size();i++)
+      for (size_t i=0; i< ProcCounter->size();i++)
            G4cout << G4std::setw(9) << (*ProcCounter)[i]->GetName();
            
       G4cout << "\n   ";       
-      for (G4int j=0; j< ProcCounter->size();j++)
-           G4cout << G4std::setw(9) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
+      for (size_t j=0; j< ProcCounter->size();j++)
+      G4cout << G4std::setw(9) << ((*ProcCounter)[j]->GetCounter())
+                                                               /dNbOfEvents;
       G4cout << G4endl;    
                          
       G4cout.setf(oldform,G4std::ios::floatfield);
@@ -176,11 +173,8 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
   if (G4VVisManager::GetConcreteInstance()) 
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
-    }
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

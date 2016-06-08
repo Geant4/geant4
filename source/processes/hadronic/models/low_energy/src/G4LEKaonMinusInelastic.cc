@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonMinusInelastic.cc,v 1.4.2.1 2001/06/28 19:14:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4LEKaonMinusInelastic.cc,v 1.7 2001/10/05 16:11:31 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
  // Hadronic Process: Low Energy KaonMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 12-Feb-1997
@@ -45,7 +45,6 @@
     // create the target particle
     
     G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
-    G4double targetMass = originalTarget->GetDefinition()->GetPDGMass();
     G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
     if( verboseLevel > 1 )

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPersistentSubDbMan.cc,v 1.3.2.1 2001/06/28 19:11:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPersistentSubDbMan.cc,v 1.4 2001/07/11 10:02:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // class G4VPersistentSubDbMan 
 //

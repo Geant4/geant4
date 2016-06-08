@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.cc,v 1.3.4.2 2001/06/28 20:19:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GenericIon.cc,v 1.6 2001/10/16 08:16:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -85,6 +85,4 @@ G4GenericIon G4GenericIon::theGenericIon(
 );
 
 G4GenericIon* G4GenericIon::GenericIonDefinition(){return &theGenericIon;}
-// initialization for static cut values
-G4double   G4GenericIon::theGenericIonLengthCut;
-G4double*  G4GenericIon::theGenericIonKineticEnergyCuts;
+G4GenericIon* G4GenericIon::GenericIon(){return &theGenericIon;}

@@ -20,17 +20,17 @@ fi
 
 export CC_COMP=""
 case $G4SYSTEM in
-SUN-CC5)
+SUN-CC)
     export PLATF=sol7
     export CC_COMP=CC-5.2/
     export OBJY_VERS=6.1.3
-    export HEP_ODBMS_VER=0.3.2.10
+    export HEP_ODBMS_VER=0.3.3.1
     ;;
 Linux-g++)
     export PLATF=@sys
     export CC_COMP=gcc-2.95.2/
-    export OBJY_VERS=6.0
-    export HEP_ODBMS_VER=0.3.2.3
+    export OBJY_VERS=6.1.3
+    export HEP_ODBMS_VER=0.3.3.1
     ;;
 default)
     echo "Objectivity and HepODBMS versions not specified for G4SYSTEM = $G4SYSTEM."

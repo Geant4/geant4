@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelVisManager.hh,v 1.2.4.2 2001/06/28 20:18:40 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelVisManager.hh,v 1.3 2001/07/11 09:56:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland

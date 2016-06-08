@@ -14,15 +14,12 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4AntiNeutronAnnihilationAtRest.cc,v 1.2.8.2 2001/06/28 20:20:07 gunter Exp $
-// GEANT4 tag $Name:  $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -171,15 +168,14 @@ G4VParticleChange* G4AntiNeutronAnnihilationAtRest::AtRestDoIt(
                                               // probabilities are included.
     if (random<=runningSum)
     {
-      targetCharge = G4double((*theElementVector)(i2)->GetZ());
-      targetAtomicMass = (*theElementVector)(i2)->GetN();
+      targetCharge = G4double( ((*theElementVector)[i2])->GetZ());
+      targetAtomicMass = (*theElementVector)[i2]->GetN();
     }
   }
   if (random>runningSum)
   {
-    targetCharge = G4double((*theElementVector)(numberOfElements-1)->GetZ());
-    targetAtomicMass = (*theElementVector)(numberOfElements-1)->GetN();
-
+    targetCharge = G4double( ((*theElementVector)[numberOfElements-1])->GetZ());
+    targetAtomicMass = (*theElementVector)[numberOfElements-1]->GetN();
   }
 
   if (verboseLevel>1) {

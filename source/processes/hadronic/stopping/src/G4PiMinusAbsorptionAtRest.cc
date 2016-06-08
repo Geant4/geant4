@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.4.8.2 2001/06/28 20:20:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.9 2001/10/19 11:55:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -104,20 +104,20 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double Z;
   G4double random = G4UniformRand();
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int i;
+  unsigned int i;
   G4double sum = 0;
   G4double totalsum=0;
   for(i=0; i<material->GetNumberOfElements(); ++i)
     {
-      if((*theElementVector)(i)->GetZ()!=1) totalsum+=material->GetFractionVector()[i];
+      if((*theElementVector)[i]->GetZ()!=1) totalsum+=material->GetFractionVector()[i];
     }
   for (i = 0; i<material->GetNumberOfElements(); ++i)
     {
-      if((*theElementVector)(i)->GetZ()!=1) sum += material->GetFractionVector()[i];
+      if((*theElementVector)[i]->GetZ()!=1) sum += material->GetFractionVector()[i];
       if ( sum/totalsum > random )  
 	{ 
-	  A = (*theElementVector)(i)->GetA()*mole/g;
-	  Z = (*theElementVector)(i)->GetZ();
+	  A = (*theElementVector)[i]->GetA()*mole/g;
+	  Z = (*theElementVector)[i]->GetZ();
           break;
 	}
     }
@@ -146,13 +146,13 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double pNucleus = (stopAbsorption.RecoilMomentum()).mag();
   G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
 
-  G4int nAbsorptionProducts = 0;
+  unsigned int nAbsorptionProducts = 0;
   if (absorptionProducts != 0)     
-    { nAbsorptionProducts  =  absorptionProducts->entries(); }
+    { nAbsorptionProducts  =  absorptionProducts->size(); }
 
-  G4int nFragmentationProducts = 0;
+  unsigned int nFragmentationProducts = 0;
   if (fragmentationProducts != 0) 
-    { nFragmentationProducts = fragmentationProducts->entries(); }
+    { nFragmentationProducts = fragmentationProducts->size(); }
   
   if (verboseLevel>0) 
     {
@@ -167,18 +167,18 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   aParticleChange.SetNumberOfSecondaries(G4int(nAbsorptionProducts + nFragmentationProducts)); 
      
   for (i = 0; i<nAbsorptionProducts; i++)
-    { aParticleChange.AddSecondary(absorptionProducts->at(i)); }
+    { aParticleChange.AddSecondary((*absorptionProducts)[i]); }
 
 //  for (i = 0; i<nFragmentationProducts; i++)
 //    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
   for(i=0; i<nFragmentationProducts; i++)
   {
     G4DynamicParticle * aNew = 
-       new G4DynamicParticle(fragmentationProducts->at(i)->GetDefinition(),
-                             fragmentationProducts->at(i)->GetMomentum());
-    G4double newTime = aParticleChange.GetGlobalTime(fragmentationProducts->at(i)->GetFormationTime());
+       new G4DynamicParticle((*fragmentationProducts)[i]->GetDefinition(),
+                             (*fragmentationProducts)[i]->GetMomentum());
+    G4double newTime = aParticleChange.GetGlobalTime((*fragmentationProducts)[i]->GetFormationTime());
     aParticleChange.AddSecondary(aNew, newTime);
-    delete fragmentationProducts->at(i);
+    delete (*fragmentationProducts)[i];
   }
 
   if (fragmentationProducts != 0)   delete fragmentationProducts;   

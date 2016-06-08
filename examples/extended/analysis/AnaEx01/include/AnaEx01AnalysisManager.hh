@@ -21,36 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.hh,v 1.3.4.1 2001/06/28 19:06:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: AnaEx01AnalysisManager.hh,v 1.5 2001/11/16 14:30:50 barrand Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
-
-// Example Analysis Manager implementing virtual function
-//   RegisterAnalysisSystems.  Exploits C-pre-processor variables
-//   G4ANALYSIS_USE_JAS, etc., which are set by the GNUmakefiles if
-//   environment variables of the same name are set.
-
-// So all you have to do is set environment variables and compile and
-//   instantiate this in your main().
 
 #ifndef AnaEx01AnalysisManager_h
 #define AnaEx01AnalysisManager_h 1
 
 #ifdef G4ANALYSIS_USE
 
-#include "G4AnalysisManager.hh"
-
 class G4Run;
 class G4Event;
 class G4Step;
 
+class IAnalysisFactory;
+class ITree;
 class IHistogram1D;
-//class ITuple;
+class ITuple;
 
-class AnaEx01AnalysisManager: public G4AnalysisManager {
+class AnaEx01AnalysisManager {
 public:
-  AnaEx01AnalysisManager(const G4String&);
+  AnaEx01AnalysisManager();
+  virtual ~AnaEx01AnalysisManager();
 public:
   virtual void BeginOfRun(const G4Run*); 
   virtual void EndOfRun(const G4Run*); 
@@ -58,12 +51,14 @@ public:
   virtual void EndOfEvent(const G4Event*); 
   virtual void Step(const G4Step*);
 private:
-  G4int fCalorimeterCollID;                
+  int fCalorimeterCollID;                
+  IAnalysisFactory* fAnalysisFactory;
+  ITree* fTree;
   IHistogram1D* fEAbs;
   IHistogram1D* fLAbs;
   IHistogram1D* fEGap;
   IHistogram1D* fLGap;
-  //ITuple* fTuple;
+  ITuple* fTuple;
 };
 
 #endif

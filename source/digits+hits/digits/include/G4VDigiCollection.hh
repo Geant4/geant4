@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigiCollection.hh,v 1.5.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VDigiCollection.hh,v 1.7 2001/07/13 15:00:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VDigiCollection_h
@@ -45,7 +45,7 @@ class G4VDigiCollection
       G4VDigiCollection();
       G4VDigiCollection(G4String DMnam,G4String colNam);
       virtual ~G4VDigiCollection();
-      int operator==(const G4VDigiCollection &right) const;
+      G4int operator==(const G4VDigiCollection &right) const;
 
       virtual void DrawAllDigi();
       virtual void PrintAllDigi();

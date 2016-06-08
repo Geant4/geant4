@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackingMessenger.hh,v 1.3.4.1 2001/06/28 19:07:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StackingMessenger.hh,v 1.4 2001/07/11 09:58:49 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4StackingMessenger_h

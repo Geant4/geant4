@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmFourArrowButtons.cc,v 1.3.4.1 2001/06/28 19:15:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmFourArrowButtons.cc,v 1.4 2001/07/11 10:08:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent
 

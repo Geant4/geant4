@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedString.cc,v 1.3.8.2 2001/06/28 20:20:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ExcitedString.cc,v 1.6 2001/10/04 20:00:33 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // ------------------------------------------------------------
@@ -36,14 +36,15 @@
 
 // G4ExcitedString
 #include "G4ExcitedString.hh"
+#include "g4std/algorithm"
 
 //G4ExcitedString::G4ExcitedString(const G4ExcitedString &right)
 //{}
 
 G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* AntiColor, G4int Direction)
     {
-    thePartons.insert(Color);
-    thePartons.insert(AntiColor);
+    thePartons.push_back(Color);
+    thePartons.push_back(AntiColor);
     thePosition = Color->GetPosition();
     theDirection = Direction;
     theTrack=0;
@@ -51,9 +52,9 @@ G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* AntiColor, G4int Dir
 
 G4ExcitedString::G4ExcitedString(G4Parton* Color, G4Parton* Gluon,  G4Parton* AntiColor, G4int Direction)
     {
-    thePartons.insert(Color);
-    thePartons.insert(Gluon);
-    thePartons.insert(AntiColor);
+    thePartons.push_back(Color);
+    thePartons.push_back(Gluon);
+    thePartons.push_back(AntiColor);
     thePosition = Color->GetPosition();
     theDirection = Direction;
     theTrack=0;
@@ -68,7 +69,7 @@ G4ExcitedString::G4ExcitedString(G4KineticTrack * track)
 
 G4ExcitedString::~G4ExcitedString()
 {
-	thePartons.clearAndDestroy();
+  G4std::for_each(thePartons.begin(), thePartons.end(), DeleteParton());
 }
 
 
@@ -89,7 +90,7 @@ G4ExcitedString::~G4ExcitedString()
 
 void G4ExcitedString::Boost(G4ThreeVector& Velocity)
     {
-    for(G4int cParton = 0; cParton < thePartons.entries() ; cParton++ )
+    for(unsigned int cParton = 0; cParton < thePartons.size() ; cParton++ )
         {
         G4LorentzVector Mom = thePartons[cParton]->Get4Momentum();
         Mom.boost(Velocity);
@@ -101,41 +102,45 @@ void G4ExcitedString::Boost(G4ThreeVector& Velocity)
 
 G4Parton* G4ExcitedString::GetColorParton(void) const
     {
-    G4int Encoding = thePartons.first()->GetPDGcode();
+    G4Parton * start = *(thePartons.begin());
+    G4Parton * end = *(thePartons.end()-1);
+    G4int Encoding = start->GetPDGcode();
     if (Encoding < -1000 || ((Encoding  < 1000) && (Encoding > 0)))
-        return thePartons.first(); 
-    return thePartons.last(); 
+        return start;
+    return end; 
     }
 
 //---------------------------------------------------------------------------------
 
 G4Parton* G4ExcitedString::GetGluon(void) const
     {
-    return thePartons.at(1); 
+    return thePartons[1]; 
     }
 
 //---------------------------------------------------------------------------------
 
 G4Parton* G4ExcitedString::GetGluon(G4int GluonPos) const
     {
-    return thePartons.at(1 + GluonPos); 
+    return thePartons[1 + GluonPos]; 
     }
 
 //---------------------------------------------------------------------------------
 
 G4Parton* G4ExcitedString::GetAntiColorParton(void) const
     {
-    G4int Encoding = thePartons.first()->GetPDGcode();
+    G4Parton * start = *(thePartons.begin());
+    G4Parton * end = *(thePartons.end()-1);
+    G4int Encoding = start->GetPDGcode();
     if (Encoding < -1000 || ((Encoding  < 1000) && (Encoding > 0)))
-        return thePartons.last(); 
-    return thePartons.first(); 
+        return end; 
+    return start; 
     }
 
 //---------------------------------------------------------------------------------
 
 G4bool G4ExcitedString::IsItKinkyString(void) const
     {
-    return (thePartons.entries() > 2);    
+    return (thePartons.size() > 2);    
     }
 
 //---------------------------------------------------------------------------------
@@ -149,14 +154,14 @@ G4int G4ExcitedString::GetDirection(void) const
 
 G4Parton* G4ExcitedString::GetLeftParton(void) const
     {
-    return thePartons.first(); 
+    return *thePartons.begin(); 
     }
 
 //---------------------------------------------------------------------------------
 
 G4Parton* G4ExcitedString::GetRightParton(void) const
     {
-    return thePartons.last(); 
+    return *(thePartons.end()-1); 
     }
 
 //*********************************************************************************

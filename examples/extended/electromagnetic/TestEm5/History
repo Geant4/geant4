@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2001/03/27 09:23:59 maire Exp $
+$Id: History,v 1.13 2001/11/28 16:08:18 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,25 +15,46 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-27-03-01  mma (testem5-V03-00-04)
-	  - set cppflag G4NOHIST = true in gnumakefile
+28-11-01  mma (testem5-V03-02-02) 
+- EventAction: DrawTrack "none"
+- small change in vis.mac
+- suppression of the rndm commands, now managed by G4RunManager: 
+  --> RunAction, RunActionMessenger, EventAction.
+     
+05-11-01  mma (testem5-V03-02-01)
+- mods in TestEm3.cc: the initialisation and vis initialisation are
+  not done by default. --> inserted /run/initialize in all macros.
+- To get visualisation: > /control/execute vis.mac
+
+        
+19-10-01 Steve O'Neale (examples-V03-02-00)
+- Update reference output
+
+16-10-01 mma (testem5-V03-02-00)
+- removal of G4RW header (EventAction.cc)
+- new vis commands (init.mac)
+- 80 columns everywhere
+    
+27-03-01 mma (testem5-V03-00-04)
+- set cppflag G4NOHIST = true in gnumakefile
 	  
-21-02-01  mma (testem5-V03-00-03)
-          - hbook histograms restored
+21-02-01 mma (testem5-V03-00-03)
+- hbook histograms restored
 	  
 20-02-01 mma (testem5-V03-00-02)
-         - verbose stepping adapted for STL
-	 - save rndm at begin of event 
+- verbose stepping adapted for STL
+- save rndm at begin of event 
 	     
-09-01-01 mma modified Em5PhysicsList and Em5StepCut in order to make the
-         command /step/setMaxStep working
+09-01-01 mma
+- modified Em5PhysicsList and Em5StepCut in order to make the
+  command /step/setMaxStep working
 	      
 07-12-00 mma (testem5-V02-00-03 & testem-noHist)
-         remove hbook histograms: GNUmakefile,runAction
+- remove hbook histograms: GNUmakefile,runAction
 				   
 06-12-00 mma (testem5-V02-00-02 & testem-withHist)
-         update of init.mac for new vis commands.
-	 G4UItcsh in the main()
+- update of init.mac for new vis commands.
+- G4UItcsh in the main()
 	  
 25th November 2000 Steve O'Neale (tagset210)
 - update test outputs for min.delta energy cut and cut table
@@ -43,8 +64,8 @@ June 17, 2000  John Allison  (testem5-V01-00-00)
 - Updated TestEm5.out for geant4-01-01-ref-06.
      
 17-01-00 cppflag G4NOHIST to protect hbook histograms.
-         new histo: normalizsed distribution of energy deposit.
-	 new materials (mainly gas)
+- new histo: normalizsed distribution of energy deposit.
+- new materials (mainly gas)
      
 12-10-99 moved to examples/extended/electromagnetic/TestEm5
 

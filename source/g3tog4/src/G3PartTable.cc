@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3PartTable.cc,v 1.9.4.1 2001/06/28 19:08:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3PartTable.cc,v 1.10 2001/07/11 09:58:59 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "g4std/strstream"

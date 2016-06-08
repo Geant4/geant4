@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh,v 1.6.4.1 2001/06/28 19:12:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ForwardXrayTR.hh,v 1.7 2001/07/11 10:03:42 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4ForwardXrayTR -- header file
 //

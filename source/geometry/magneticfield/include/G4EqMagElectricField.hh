@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqMagElectricField.hh,v 1.5.2.1 2001/06/28 19:08:13 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EqMagElectricField.hh,v 1.6 2001/07/11 09:59:07 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // class G4EqMagElectricField

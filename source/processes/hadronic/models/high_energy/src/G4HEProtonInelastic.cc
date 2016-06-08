@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HEProtonInelastic.cc,v 1.4.4.1 2001/06/28 19:13:59 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HEProtonInelastic.cc,v 1.7 2001/10/05 16:10:42 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 
@@ -47,7 +47,7 @@ ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
     G4HEVector * pv = new G4HEVector[MAXPART];
     theParticleChange.Initialize( aTrack );
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
-    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
+//    G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     const G4double A = targetNucleus.GetN();
     const G4double Z = targetNucleus.GetZ();
     G4HEVector incidentParticle(aParticle);
@@ -226,8 +226,8 @@ G4HEProtonInelastic::FirstIntInCasProton( G4bool &inElastic,
    G4double           pionMass    = PionPlus.getMass();
 
    G4int               targetCode = targetParticle.getCode();
-   G4double          incidentMass = incidentParticle.getMass();
-   G4double        incidentEnergy = incidentParticle.getEnergy();
+//   G4double          incidentMass = incidentParticle.getMass();
+//   G4double        incidentEnergy = incidentParticle.getEnergy();
    G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
    static G4bool first = true;

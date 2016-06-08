@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PPVPlacement.ddl,v 1.4.4.1 2001/06/28 19:11:27 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// 
-//          P-versieon of G4PVPlacement      Takashi.Sasaki@kek.jp
+// $Id: G4PPVPlacement.ddl,v 1.6 2001/07/11 10:02:18 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PVPlacement.
+
 #ifndef G4PPVPLACEMENT_DDL
 #define G4PPVPLACEMENT_DDL 1
 
@@ -40,18 +41,20 @@ class G4PLogicalVolume;
 
 class G4PPVPlacement : public G4PVPhysicalVolume
 {
-public:
+public: // With description
   G4PPVPlacement( G4VPhysicalVolume *PhysVol,
 		          HepRef(G4PLogicalVolume) persLogVol);
-
   ~G4PPVPlacement();
+    // Constructor and Destructor
 
   G4VPhysicalVolume* MakeTransientObject(
                              G4LogicalVolume* aLogical,
                              G4VPhysicalVolume* aMother );
+    // Make a transient G4PVPlacement object.
 
   virtual G4bool IsMany() const;
   virtual G4int GetCopyNo() const;
+    // Returns the multiplicity of the volume.
 
 protected:
   virtual void  SetCopyNo(G4int CopyNo);

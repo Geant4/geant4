@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdetv.cc,v 1.6.4.1 2001/06/28 19:08:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4gsdetv.cc,v 1.8 2001/07/16 15:38:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 #include "G4ios.hh"
 #include "G3toG4.hh"
@@ -53,7 +53,7 @@ void G4gsdetv(G4String chset, G4String chdet, G4int idtyp, G4int,
   /*
     // get lvol for detector chdet
     G4LogicalVolume *lvol = G3Vol.GetLV(chdet);
-    if (lvol == NULL) {
+    if (lvol == 0) {
     G4cout << "G4gsdetv: Logical volume " << chdet << " not available. Skip." << G4endl;
     return;
     }

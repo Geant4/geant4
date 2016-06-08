@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.3.2.1 2001/06/28 19:08:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UniformElectricField.cc,v 1.6 2001/12/04 17:35:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //
@@ -86,8 +86,8 @@ G4UniformElectricField& G4UniformElectricField::operator = (const G4UniformElect
 // ------------------------------------------------------------------------
 
 
-void G4UniformElectricField::GetFieldValue (const G4double [3],
-                                             G4double fieldBandE[6]  ) const 
+void G4UniformElectricField::GetFieldValue (const G4double[4],
+                                            G4double *fieldBandE ) const 
 {
    fieldBandE[0]= 0.0;
    fieldBandE[1]= 0.0;

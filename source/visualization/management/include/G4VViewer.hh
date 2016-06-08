@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.9.2.1 2001/06/28 19:16:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VViewer.hh,v 1.12 2001/08/14 18:35:19 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  27th March 1996
@@ -49,6 +49,16 @@ public: // With description
   G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();
 
+  virtual void Initialise ();
+  // Called immediately after construction for those operations that
+  // must await complete contruction of viewer and all its bases.  For
+  // example, if this class (G4VViewer) is inherited virtually, as in
+  // the OpenGL sub-category, it will not be fully constructed until
+  // *after* the the derived viewer (this is the rule about order of
+  // construction for virtual inheritance), so the derived viewer may
+  // not use information in G4VViewer in its contructor.  Hence such
+  // code must be in Initialise().
+
   //////////////////////////////////////////////////////////////
   // View manipulation functions.
 
@@ -60,7 +70,8 @@ public: // With description
   // Clear screen/viewing buffers.
 
   virtual void DrawView () = 0;
-  // Draw scene - see example of a minimal function at end of this file.
+  // Draw view of the scene currently attached to the scene handler -
+  // see example of a minimal function at end of this file.
 
   virtual void ShowView ();
   // Show view (for graphics systems which require to process

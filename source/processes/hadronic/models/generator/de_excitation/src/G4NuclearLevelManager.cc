@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -48,12 +48,13 @@
 #include <stdlib.h>
 #include "g4std/fstream"
 #include "g4std/strstream"
+#include "g4std/algorithm"
 
 G4NuclearLevelManager::G4NuclearLevelManager():
   _nucleusA(0), _nucleusZ(0), _levels(0), _levelEnergy(0), _gammaEnergy(0), _probability(0)
 { }
 
-G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A): _nucleusZ(Z), _nucleusA(A)
+G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A): _nucleusA(A), _nucleusZ(Z)
 { 
 
 
@@ -65,11 +66,14 @@ G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A): _nucleusZ(Z), _n
   MakeLevels();
 }
 
-
 G4NuclearLevelManager::~G4NuclearLevelManager()
 { 
   if ( _levels ) {
-    if (_levels->entries()>0) _levels->clearAndDestroy();
+    if (_levels->size()>0) 
+    {
+      G4std::for_each(_levels->begin(), _levels->end(), DeleteLevel());
+      _levels->clear();
+    }
     delete _levels;
    _levels = 0;
   }
@@ -115,7 +119,7 @@ G4bool G4NuclearLevelManager::IsValid(G4int Z, G4int A) const
 G4int G4NuclearLevelManager::NumberOfLevels() const
 {
   G4int n = 0;
-  if (_levels != 0) n = _levels->entries();
+  if (_levels != 0) n = _levels->size();
   return n;
 }
 
@@ -133,10 +137,10 @@ const G4NuclearLevel* G4NuclearLevelManager::NearestLevel(G4double energy, G4dou
   G4double diff = 9999. * GeV;
   if (_levels != 0)
     {
-      G4int i = 0;
-      for (i=0; i<_levels->entries(); i++)
+      unsigned int i = 0;
+      for (i=0; i<_levels->size(); i++)
 	{
-	  G4double e = _levels->at(i)->Energy();
+	  G4double e = _levels->operator[](i)->Energy();
 	  G4double eDiff = abs(e - energy);
 	  if (eDiff < diff && eDiff <= eDiffMax)
 	    { 
@@ -145,8 +149,8 @@ const G4NuclearLevel* G4NuclearLevelManager::NearestLevel(G4double energy, G4dou
 	    }
 	}
     }
-  if (_levels != 0 && iNear >= 0 && iNear < _levels->entries())
-    { return _levels->at(iNear); }
+  if (_levels != 0 && iNear >= 0 && iNear < static_cast<G4int>(_levels->size()) )
+    { return _levels->operator[](iNear); }
   else
     { return 0; }
 }
@@ -157,7 +161,7 @@ G4double G4NuclearLevelManager::MinLevelEnergy() const
   G4double eMin = 9999.*GeV;
   if (_levels != 0)
     {
-      if (_levels->entries() > 0) eMin = _levels->first()->Energy(); 
+      if (_levels->size() > 0) eMin = _levels->front()->Energy(); 
     }
   return eMin;
 }
@@ -168,7 +172,7 @@ G4double G4NuclearLevelManager::MaxLevelEnergy() const
   G4double eMax = 0.;
   if (_levels != 0)
     {
-      if (_levels->entries() > 0) eMax = _levels->last()->Energy(); 
+      if (_levels->size() > 0) eMax = _levels->back()->Energy(); 
     }
   return eMax;
 }
@@ -176,14 +180,14 @@ G4double G4NuclearLevelManager::MaxLevelEnergy() const
 
 const G4NuclearLevel* G4NuclearLevelManager::HighestLevel() const
 {
-  if (_levels!= 0 && _levels->entries() > 0) return _levels->first(); 
+  if (_levels!= 0 && _levels->size() > 0) return _levels->front(); 
   else return 0; 
 }
 
 
 const G4NuclearLevel* G4NuclearLevelManager::LowestLevel() const
 {
-  if (_levels != 0 && _levels->entries() > 0) return _levels->last();
+  if (_levels != 0 && _levels->size() > 0) return _levels->back();
   else return 0;
 }
 
@@ -242,7 +246,10 @@ void G4NuclearLevelManager::MakeLevels()
 
   if (_levels != 0)
     {
-      if (_levels->entries()>0) _levels->clearAndDestroy();
+      if (_levels->size()>0)
+      {
+        for(unsigned int i=0; i<_levels->size(); i++) delete _levels->operator[](i);
+      }
       delete _levels;
     }
 
@@ -296,7 +303,7 @@ void G4NuclearLevelManager::MakeLevels()
 						      thisLevelEnergies,
 						      thisLevelWeights,
 						      thisLevelPolarities);
-	  _levels->insert(newLevel);
+	  _levels->push_back(newLevel);
 	  // Reset data vectors
 	  thisLevelEnergies.clear();
 	  thisLevelWeights.clear();
@@ -318,9 +325,9 @@ void G4NuclearLevelManager::MakeLevels()
 						    thisLevelEnergies,
 						    thisLevelWeights,
 						    thisLevelPolarities);
-      _levels->insert(newLevel);
+      _levels->push_back(newLevel);
     }
-
+  G4std::sort(_levels->begin(), _levels->end());
   return;
 }
 
@@ -328,7 +335,7 @@ void G4NuclearLevelManager::MakeLevels()
 void G4NuclearLevelManager::PrintAll()
 {
   G4int nLevels = 0;
-  if (_levels != 0) nLevels = _levels->entries();
+  if (_levels != 0) nLevels = _levels->size();
 
   G4cout << " ==== G4NuclearLevelManager ==== (" << _nucleusZ << ", " << _nucleusA
 	 << ") has " << nLevels << " levels" << G4endl
@@ -338,7 +345,7 @@ void G4NuclearLevelManager::PrintAll()
 
   G4int i = 0;
   for (i=0; i<nLevels; i++)
-    { _levels->at(i)->PrintAll(); }
+    { _levels->operator[](i)->PrintAll(); }
 }
 
 
@@ -355,12 +362,13 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
   if (right._levels != 0)   
     {
       _levels = new G4PtrLevelVector;
-      G4int n = right._levels->entries();
+      G4int n = right._levels->size();
       G4int i;
       for (i=0; i<n; i++)
 	{
-	  _levels->insert(new G4NuclearLevel(*(right._levels->at(i))));
+	  _levels->push_back(new G4NuclearLevel(*(right._levels->operator[](i))));
 	}
+      G4std::sort(_levels->begin(), _levels->end());
     }
   else 
     {

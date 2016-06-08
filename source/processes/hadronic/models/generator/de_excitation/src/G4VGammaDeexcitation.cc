@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -53,7 +53,7 @@
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 
-G4VGammaDeexcitation::G4VGammaDeexcitation(): _verbose(0), _transition(0)
+G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0)
 { }
 
 
@@ -201,7 +201,7 @@ void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
   if(newExcitation < 0)
     newExcitation = 0;
 
-  G4ThreeVector p3Residual(p4Nucleus - pGamma);
+  G4ThreeVector p3Residual(G4ThreeVector(p4Nucleus) - pGamma);
   G4double newEnergy = sqrt(p3Residual * p3Residual +
 			    (Mass + newExcitation) * (Mass + newExcitation));
   G4LorentzVector p4Residual(p3Residual, newEnergy);

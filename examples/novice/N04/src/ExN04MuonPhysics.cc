@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04MuonPhysics.cc,v 1.2.2.1 2001/06/28 19:07:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN04MuonPhysics.cc,v 1.3 2001/07/11 09:58:29 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 

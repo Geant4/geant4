@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PPara.cc,v 1.2.8.1 2001/06/28 19:11:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PPara.cc,v 1.3 2001/07/11 10:02:24 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // class G4PPara
 //

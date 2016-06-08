@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.5.4.1 2001/06/28 19:16:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ModelingParameters.hh,v 1.7 2001/08/09 20:06:20 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -50,8 +50,7 @@ public: // With description
   enum RepStyle {
     wireframe,  // Use G4Wireframe.
     polyhedron, // Use G4Polyhedron.
-    nurbs,      // Use G4NURBS.
-    hierarchy   // Draw as geometry hierarchy (DTREE in GEANT3 language!).
+    nurbs       // Use G4NURBS.
   };
   // RepStyle is used to determine which graphics_reps classes to use,
   // if required.

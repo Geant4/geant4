@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4JPsi.hh,v 1.3.4.2 2001/06/28 20:19:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4JPsi.hh,v 1.7 2001/10/28 05:01:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,8 +54,6 @@ class G4JPsi : public G4VMeson
 {
  private:
    static G4JPsi theJPsi;
-   static G4double  theJPsiLengthCut;
-   static G4double* theJPsiKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4JPsi(
@@ -75,10 +73,8 @@ class G4JPsi : public G4VMeson
 
    static G4JPsi* JPsiDefinition();
    static G4JPsi* JPsi();
-   static G4double GetCuts() {return theJPsiLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theJPsiKineticEnergyCuts;};
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

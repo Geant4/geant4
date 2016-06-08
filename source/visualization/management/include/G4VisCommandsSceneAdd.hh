@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.7.2.1 2001/06/28 19:16:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.9 2001/07/22 01:05:00 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -78,6 +78,18 @@ private:
   G4VisCommandSceneAddLogicalVolume (const G4VisCommandSceneAddLogicalVolume&);
   G4VisCommandSceneAddLogicalVolume& operator =
   (const G4VisCommandSceneAddLogicalVolume&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddScale: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddScale ();
+  virtual ~G4VisCommandSceneAddScale ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddScale (const G4VisCommandSceneAddScale&);
+  G4VisCommandSceneAddScale& operator = (const G4VisCommandSceneAddScale&);
   G4UIcommand* fpCommand;
 };
 

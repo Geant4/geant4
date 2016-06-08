@@ -1,4 +1,4 @@
-# $Id: run16.mac,v 1.2 2001/04/13 14:22:27 maire Exp $
+# $Id: run16.mac,v 1.4 2001/11/05 15:28:40 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -9,6 +9,9 @@
 #
 /control/verbose 2
 #
+/run/particle/setCut 1 mum
+/run/initialize
+#
 /calor/setNbOfLayers 1
 /calor/setNbOfAbsor 3
 /calor/setAbsor 0 Aluminium 170 mum
@@ -16,17 +19,11 @@
 /calor/setAbsor 2 Aluminium 850 mum
 /calor/setSizeYZ 1050 mum
 /calor/update
+#
 /gun/setDefault
-#
-/vis/camera/zoom 1.4
-/vis/drawVolume
-#
-/run/particle/setCut 1 mum
-/run/initialize
 #
 /run/verbose 2
 /event/printModulo 1000
-/event/drawTracks  all
 #
 /gun/particle e-
 /gun/energy 1 MeV

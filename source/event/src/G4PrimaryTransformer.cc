@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.8.2.1 2001/06/28 19:07:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PrimaryTransformer.cc,v 1.13 2001/11/22 18:53:13 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -33,10 +33,16 @@
 #include "G4Track.hh"
 #include "G4ThreeVector.hh"
 #include "G4DecayProducts.hh"
+#include "G4TransportationManager.hh"
+#include "G4Navigator.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VSolid.hh"
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
 G4PrimaryTransformer::G4PrimaryTransformer()
-:verboseLevel(0)
+:verboseLevel(0),trackID(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
 }
@@ -44,15 +50,17 @@ G4PrimaryTransformer::G4PrimaryTransformer()
 G4PrimaryTransformer::~G4PrimaryTransformer()
 {;}
     
-G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent)
+G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent,G4int trackIDCounter)
 {
+  trackID = trackIDCounter;
+
   //TV.clearAndDestroy();
-  for( int ii=0; ii<TV.size();ii++)
+  for( size_t ii=0; ii<TV.size();ii++)
   { delete TV[ii]; }
   TV.clear();
   G4int n_vertex = anEvent->GetNumberOfPrimaryVertex();
-  if(n_vertex==0) return NULL; 
-  for( int i=0; i<n_vertex; i++ )
+  if(n_vertex==0) return 0; 
+  for( G4int i=0; i<n_vertex; i++ )
   { GenerateTracks( anEvent->GetPrimaryVertex(i) ); }
   return &TV;
 }
@@ -76,8 +84,20 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
   }
 #endif
 
+  //Check whether the vertex is inside the world volume
+  G4Navigator* navi = 
+    G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  G4VSolid* theWorldSolid = navi->GetWorldVolume()->GetLogicalVolume()->GetSolid();
+  if(theWorldSolid->Inside(G4ThreeVector(X0,Y0,Z0))==kOutside)
+  {
+    G4cerr << "Primary vertex "
+           << G4BestUnit(G4ThreeVector(X0,Y0,Z0),G4String("Length"))
+           << " is outside of the world volume." << G4endl;
+    G4Exception("G4PrimaryTransformer::Primary vertex outside of the world");
+  }
+
   G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
-  while( primaryParticle != NULL )
+  while( primaryParticle != 0 )
   {
     GenerateSingleTrack( primaryParticle, X0, Y0, Z0, T0, WV );
     primaryParticle = primaryParticle->GetNext();
@@ -134,6 +154,10 @@ void G4PrimaryTransformer::GenerateSingleTrack
     SetDecayProducts( primaryParticle, DP );
     // Create G4Track object
     G4Track* track = new G4Track(DP,t0,G4ThreeVector(x0,y0,z0));
+    // Set trackID and let primary particle know it
+    trackID++;
+    track->SetTrackID(trackID);
+    primaryParticle->SetTrackID(trackID);
     // Set parentID to 0 as a primary particle
     track->SetParentID(0);
     // Set weight ( vertex weight * particle weight )

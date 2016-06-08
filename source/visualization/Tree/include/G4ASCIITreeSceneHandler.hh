@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.8.2.1 2001/06/28 19:15:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.10 2001/08/24 20:41:26 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -47,7 +47,9 @@ public:
   virtual void BeginModeling();
   virtual void EndModeling();
 protected:
-  virtual void Dump(const G4VSolid&);
+  virtual void RequestPrimitives(const G4VSolid&);
+  // Overrides G4VScenehandler::RequestPrimitives and implements dump
+  // of leaves of the geometry heirachy.
   G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> > fLVSet;
   typedef
   G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> >::iterator

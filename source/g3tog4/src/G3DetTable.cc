@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTable.cc,v 1.9.4.1 2001/06/28 19:08:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3DetTable.cc,v 1.10 2001/07/11 09:58:58 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "globals.hh"
 #include "G3DetTable.hh"

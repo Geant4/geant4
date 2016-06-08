@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PTorus.ddl,v 1.3.4.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// 
-// class G4PTorus
-//
+// $Id: G4PTorus.ddl,v 1.5 2001/07/11 10:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PTorus solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Torus.hh
 
@@ -39,18 +39,24 @@
 class G4VSolid;
 class G4Torus;
 
-class G4PTorus : public G4PCSGSolid {
-public:
+class G4PTorus
+ : public G4PCSGSolid
+{
+public: // With description
     G4PTorus(const G4Torus* theTorus);
     virtual ~G4PTorus();
+    // Constructor and Destructor
     
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient boolean solid object.
 
+public:
     void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
 	       G4double pSPhi, G4double pDPhi);
 
-    // Naming method (pseudo-RTTI : run-time type identification
+public: // With description
     virtual G4GeometryType  GetEntityType() const {return G4String("G4Torus");}
+    // Returns the G4GeometryType of this solid.
 
 protected:
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.7.2.1 2001/06/28 19:15:38 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLSceneHandler.hh,v 1.10 2001/08/24 21:46:45 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -53,7 +53,14 @@ public:
   void AddPrimitive (const G4Square&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
-  void AddPrimitive (const G4Polymarker&);
+  // Explicitly invoke base class methods to avoid warnings about
+  // hiding of base class methods...
+  void AddPrimitive(const G4Polymarker& polymarker) {
+    G4VSceneHandler::AddPrimitive (polymarker);
+  }
+  void AddPrimitive (const G4Scale& scale) {
+    G4VSceneHandler::AddPrimitive (scale);
+  }
 
   void AddThis (const G4Box&);
   void AddThis (const G4Cons&);

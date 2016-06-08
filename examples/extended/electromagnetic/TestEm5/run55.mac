@@ -6,6 +6,10 @@
 /control/verbose 2
 /run/verbose 2
 #
+/calor/cutG 1 mm    
+/calor/cutE 1 mm
+/run/initialize
+#
 /calor/setAbsMat Iron   
 /calor/setAbsThick 2 m  
 /calor/setAbsYZ    2 m
@@ -23,10 +27,6 @@
 /plots/setnbinTt 50
 /plots/setTtlow   950. GeV
 /plots/setTthigh 1000. GeV  
-#
-/calor/cutG 1 mm    
-/calor/cutE 1 mm
-/run/initialize
 #
 /gun/particle mu+ 
 /gun/energy 1000 GeV

@@ -21,8 +21,8 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: gcbank.inc,v 1.2.8.1 2001/06/28 19:08:02 gunter Exp $
-*     GEANT4 tag $Name:  $
+*     $Id: gcbank.inc,v 1.3 2001/07/11 09:58:58 gunter Exp $
+*     GEANT4 tag $Name: geant4-04-00 $
 *    
       INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
       INTEGER KWBANK,KWWORK,IWS

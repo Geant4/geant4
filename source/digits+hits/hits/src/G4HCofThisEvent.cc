@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.cc,v 1.4.2.1 2001/06/28 19:07:52 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HCofThisEvent.cc,v 1.6 2001/07/13 15:00:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4HCofThisEvent.hh"
@@ -37,16 +37,16 @@ G4HCofThisEvent::G4HCofThisEvent()
 G4HCofThisEvent::G4HCofThisEvent(G4int cap)
 {
   HC = new G4std::vector<G4VHitsCollection*>;
-  for(int i=0;i<cap;i++)
+  for(G4int i=0;i<cap;i++)
   {
-    HC->push_back((G4VHitsCollection*)NULL);
+    HC->push_back((G4VHitsCollection*)0);
   }
 }
 
 G4HCofThisEvent::~G4HCofThisEvent()
 {
   //HC->clearAndDestroy();
-  for(G4int i=0;i<HC->size();i++)
+  for(size_t i=0;i<HC->size();i++)
   { delete (*HC)[i]; }
   HC->clear();
   delete HC;
@@ -54,7 +54,7 @@ G4HCofThisEvent::~G4HCofThisEvent()
 
 void G4HCofThisEvent::AddHitsCollection(G4int HCID,G4VHitsCollection * aHC)
 {
-  if(HCID>=0 && HCID<HC->size())
+  if(HCID>=0 && HCID<G4int(HC->size()))
   { (*HC)[HCID] = aHC; }
 }
 

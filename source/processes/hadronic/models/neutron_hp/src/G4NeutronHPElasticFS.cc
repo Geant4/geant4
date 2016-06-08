@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -115,7 +115,6 @@
   }
   G4ParticleChange * G4NeutronHPElasticFS::ApplyYourself(const G4Track & theTrack)
   {  
-    G4int i, ii, iii;
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<G4endl;
     theResult.Initialize(theTrack);   
     G4double eKinetic = theTrack.GetKineticEnergy();
@@ -125,7 +124,6 @@
     theNeutron.SetKineticEnergy( eKinetic );
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself++"<<eKinetic<<" "<<G4endl;
 //    G4cout << "CMSVALUES 0 "<<theNeutron.GetTotalMomentum()<<G4endl;
-    G4double pold = theNeutron.GetTotalMomentum();
     
     G4ReactionProduct theTarget; 
     G4Nucleus aNucleus;
@@ -214,8 +212,20 @@
     {
       theNeutron.Lorentz(theNeutron, theCMS);
       theTarget.Lorentz(theTarget, theCMS);
-      G4double en = theNeutron.GetTotalMomentum();
-      G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+      G4double en = theNeutron.GetTotalMomentum(); // already in CMS.
+      G4ThreeVector cmsMom=theNeutron.GetMomentum(); // for neutron direction in CMS
+      G4double cms_theta=cmsMom.theta();
+      G4double cms_phi=cmsMom.phi();
+      G4ThreeVector tempVector;
+      tempVector.setX(cos(theta)*sin(cms_theta)*cos(cms_phi)
+                      +sin(theta)*cos(phi)*cos(cms_theta)*cos(cms_phi)
+                      -sin(theta)*sin(phi)*sin(cms_phi)  );
+      tempVector.setY(cos(theta)*sin(cms_theta)*sin(cms_phi)
+                      +sin(theta)*cos(phi)*cos(cms_theta)*sin(cms_phi)
+                      +sin(theta)*sin(phi)*cos(cms_phi)  );
+      tempVector.setZ(cos(theta)*cos(cms_theta)
+                      -sin(theta)*cos(phi)*sin(cms_theta)  );
+      tempVector *= en;
       theNeutron.SetMomentum(tempVector);
       theTarget.SetMomentum(-tempVector);
       G4double tP = theTarget.GetTotalMomentum();
@@ -236,7 +246,6 @@
     G4DynamicParticle* theRecoil = new G4DynamicParticle;
     if(targetMass<4.5)
     {
-      G4bool He3flag = false;
       if(targetMass<1)
       {
         // proton

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.6.2.1 2001/06/28 19:15:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.9 2001/09/17 07:40:32 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:19:19 JST 1996
@@ -62,8 +62,13 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+
+	//----- explicitly invoke base class methods to avoid warnings about
+        //----- hiding of base class methods.
   void AddPrimitive (const G4Polymarker& polymarker) 
        { G4VSceneHandler::AddPrimitive (polymarker); }
+  void AddPrimitive (const G4Scale& scale) 
+       { G4VSceneHandler::AddPrimitive (scale); }
 
   virtual void BeginModeling () { G4VSceneHandler::BeginModeling ();} 
   virtual void EndModeling   () { G4VSceneHandler::EndModeling   ();}
@@ -87,7 +92,7 @@ public:
   }
   void AddThis ( const G4VSolid& solid  );
 
-  void ClearStore (){}
+  void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	//----- methods inherent to this class
   static G4int GetSceneCount   ();

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.7.2.1 2001/06/28 19:15:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.10 2001/08/03 06:02:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -46,6 +46,7 @@
 //    storePhysicsTable * store physics table into files
 //    retreivePhysicsTable * retreive physics table from files
 //    setStoredInAscii * Switch on/off ascii mode in store/retreive Physics Table
+//    applyCuts *  Set flag for ApplyCuts 
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
@@ -53,6 +54,7 @@
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add store/retreivePhysicsTable  08 Nov. 2000 by H.Kurashige
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
+//        add applyCuts command         2 Aug. 2001 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
@@ -98,6 +100,7 @@ public: // with description
     G4UIcmdWithAString *        storeCmd;
     G4UIcmdWithAString *        retrieveCmd;
     G4UIcmdWithAnInteger *      asciiCmd;
+    G4UIcommand          *      applyCutsCmd;
 };
 
 #endif

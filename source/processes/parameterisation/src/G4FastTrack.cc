@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.cc,v 1.4.4.1 2001/06/28 19:15:13 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FastTrack.cc,v 1.6 2001/10/26 14:43:37 mverderi Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //---------------------------------------------------------------
 //
@@ -47,8 +47,8 @@
 //
 G4FastTrack::G4FastTrack(G4Envelope *anEnvelope,
 			 G4bool IsUnique) :
-  fEnvelope(anEnvelope),fEnvelopeSolid(fEnvelope->GetSolid()),
-  fIsUnique(IsUnique), fAffineTransformationDefined(false)
+  fAffineTransformationDefined(false),   fEnvelope(anEnvelope),
+  fIsUnique(IsUnique),   fEnvelopeSolid(fEnvelope->GetSolid())
 {}
 
 // -----------

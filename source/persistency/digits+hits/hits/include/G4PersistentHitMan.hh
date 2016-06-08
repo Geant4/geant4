@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersistentHitMan.hh,v 1.6.4.1 2001/06/28 19:11:25 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PersistentHitMan.hh,v 1.7 2001/07/11 10:02:14 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // Class Description:

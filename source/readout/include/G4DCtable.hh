@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCtable.hh,v 1.5.2.1 2001/06/28 19:15:17 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DCtable.hh,v 1.6 2001/07/11 10:08:31 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4DCtable_H

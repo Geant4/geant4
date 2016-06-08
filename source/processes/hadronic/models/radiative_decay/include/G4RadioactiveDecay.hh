@@ -219,12 +219,11 @@ private:
 
   G4RIsotopeTable              *theIsotopeTable;
 
-  G4int                         verboseLevel;
-
   G4NucleusLimits               theNucleusLimits;
 
-  const G4double                LowestBinValue;
   const G4double                HighestBinValue;
+  const G4double                LowestBinValue;
+
   const G4int                   TotBin;
 
   G4bool                        AnalogueMC;
@@ -252,6 +251,9 @@ private:
 
   // Remainder of life time at rest
   G4double                      fRemainderLifeTime;
+
+  G4int                         verboseLevel;
+
 
   // ParticleChange for decay process
   G4ParticleChangeForRadDecay   fParticleChangeForRadDecay;

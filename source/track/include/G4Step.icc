@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.4.2.1 2001/06/28 19:15:24 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Step.icc,v 1.7 2001/10/22 04:19:40 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
@@ -179,7 +179,7 @@ inline
    fpPreStepPoint->SetMomentumDirection(fpTrack->GetMomentumDirection());
    fpPreStepPoint->SetKineticEnergy(fpTrack->GetKineticEnergy());
    fpPreStepPoint->SetVelocity(fpTrack->GetVelocity());
-   fpPreStepPoint->SetTouchable(fpTrack->GetTouchable());
+   fpPreStepPoint->SetTouchableHandle(fpTrack->GetTouchableHandle());
    fpPreStepPoint->SetMaterial( fpTrack->GetTouchable()->GetVolume()->GetLogicalVolume()->GetMaterial());
    fpPreStepPoint->SetPolarization(fpTrack->GetPolarization());
    fpPreStepPoint->SetSafety(0.);
@@ -214,9 +214,12 @@ inline
    fpTrack->SetStepLength(fStepLength);
    // NextTouchable is updated 
    // (G4Track::Touchable points touchable of Pre-StepPoint)
-   fpTrack->SetNextTouchable(fpPostStepPoint->GetTouchable());
+   fpTrack->SetNextTouchableHandle(fpPostStepPoint->GetTouchableHandle());
    fpTrack->SetWeight(fpPostStepPoint->GetWeight());
- }
+
+   // set velocity 
+   fpPostStepPoint->SetVelocity(fpTrack->GetVelocity());
+}
 
 
 

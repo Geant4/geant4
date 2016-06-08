@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonMinus.cc,v 1.4.4.2 2001/06/28 20:19:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BMesonMinus.cc,v 1.6 2001/10/15 10:08:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -85,9 +85,6 @@ G4BMesonMinus G4BMesonMinus::theBMesonMinus
 
 G4BMesonMinus*  G4BMesonMinus::BMesonMinusDefinition(){return &theBMesonMinus;}
 G4BMesonMinus*  G4BMesonMinus::BMesonMinus(){return &theBMesonMinus;}
-// initialization for static cut values
-G4double   G4BMesonMinus::theBMesonMinusLengthCut = -1.0;
-G4double*  G4BMesonMinus::theBMesonMinusKineticEnergyCuts = NULL;
 
 
 

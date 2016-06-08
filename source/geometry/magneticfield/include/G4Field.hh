@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh,v 1.4.4.1 2001/06/28 19:08:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Field.hh,v 1.6 2001/11/08 17:31:07 grichine Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // class G4Field
@@ -43,7 +43,7 @@ class G4Field
 {
   public:  // with description
 
-      virtual void  GetFieldValue( const  double Point[3],
+      virtual void  GetFieldValue( const  double Point[4],
 					  double *Bfield ) const = 0;
       G4Field(){;}
       virtual ~G4Field(){;}
@@ -55,3 +55,10 @@ class G4Field
 
 
 #endif /* G4FIELD_HH */
+
+
+
+
+
+
+

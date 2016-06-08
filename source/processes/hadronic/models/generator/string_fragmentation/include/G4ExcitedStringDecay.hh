@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh,v 1.6.8.1 2001/06/28 19:13:45 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ExcitedStringDecay.hh,v 1.9 2001/10/04 20:00:31 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1
@@ -77,17 +77,17 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
   G4LorentzVector KTsum;
   G4bool NeedEnergyCorrector=false;
   
-  for ( G4int astring=0; astring < theStrings->entries(); astring++)
+  for ( unsigned int astring=0; astring < theStrings->size(); astring++)
   {
-	KTsum+= theStrings->at(astring)->Get4Momentum();
+	KTsum+= theStrings->operator[](astring)->Get4Momentum();
         G4KineticTrackVector * generatedKineticTracks = NULL;
   
-	if ( theStrings->at(astring)->IsExcited() )
+	if ( theStrings->operator[](astring)->IsExcited() )
 	{
-  	     generatedKineticTracks=FragmentString(*theStrings->at(astring));
+  	     generatedKineticTracks=FragmentString(*theStrings->operator[](astring));
 	} else {
 	     generatedKineticTracks = new G4KineticTrackVector;
-	     generatedKineticTracks->insert(theStrings->at(astring)->GetKineticTrack());
+	     generatedKineticTracks->push_back(theStrings->operator[](astring)->GetKineticTrack());
 	}    
 
 	if (generatedKineticTracks == NULL) 
@@ -97,14 +97,14 @@ FragmentStrings(const G4ExcitedStringVector * theStrings)
 	}
 	
 	G4LorentzVector KTsum1;
-	for ( G4int aTrack=0; aTrack<generatedKineticTracks->entries();aTrack++)
+	for ( unsigned int aTrack=0; aTrack<generatedKineticTracks->size();aTrack++)
 	{
-		theResult->insert(generatedKineticTracks->at(aTrack));
+		theResult->push_back(generatedKineticTracks->operator[](aTrack));
 		KTsum1+= (*generatedKineticTracks)[aTrack]->Get4Momentum();
 	}
 	
 	
-	if  ( abs((KTsum1.e()-theStrings->at(astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
+	if  ( abs((KTsum1.e()-theStrings->operator[](astring)->Get4Momentum().e()) / KTsum1.e()) > perMillion ) 
 	{
 	   NeedEnergyCorrector=true;
  	}

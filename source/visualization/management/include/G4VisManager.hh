@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.18.2.1 2001/06/28 19:16:11 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisManager.hh,v 1.27 2001/09/10 11:00:36 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
@@ -30,7 +30,7 @@
 //
 // The GEANT4 Visualization Manager - John Allison 02/Jan/1996.
 //
-// G4VisManage is a "Singleton", i.e., only one instance of it or any
+// G4VisManager is a "Singleton", i.e., only one instance of it or any
 // derived class may exist.  A G4Exception is thrown if an attempt is
 // made to instantiate more than one.
 //
@@ -83,14 +83,12 @@
 #include "G4SceneHandlerList.hh"
 #include "G4Scene.hh"
 #include "G4SceneList.hh"
-#include "G4ViewParameters.hh"
 #include "G4Transform3D.hh"
 #include "G4UImessenger.hh"
 
 #include "g4std/iostream"
 #include "g4std/vector"
 
-class G4VisManMessenger;
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4VSolid;
@@ -100,6 +98,7 @@ class G4VViewer;
 class G4Polyline;
 class G4Text;
 class G4Circle;
+class G4Scale;
 class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
@@ -115,7 +114,6 @@ class G4VisManager: public G4VVisManager {
   // non-zero.
 
   // Odd friends that need access to various methods of the G4VisManager...
-  friend void G4OpenGLXmViewerSecondaryLoopPostAction ();  // Mmmm!
   friend class G4RTSteppingAction;
   friend class G4RayTrajectory;
 
@@ -131,26 +129,18 @@ class G4VisManager: public G4VVisManager {
 
   friend class G4VisStateDependent;
 
-  // Now classes associated with the old commands...
-  friend class G4VisManMessenger;
-  friend class G4VisCommandCameraReset;
-  friend class G4VisCommandClearScene;
-  friend class G4VisCommandClearView;
-  friend class G4VisCommandClearViewAndScene;
-  friend class G4VisCommandCopyAll;
-  friend class G4VisCommandCopyScene;
-  friend class G4VisCommandCopyView;
-  friend class G4VisCommandCreateViewNewScene;
-  friend class G4VisCommandCreateViewNewView;
-  friend class G4VisCommandDeleteScene;
-  friend class G4VisCommandDeleteView;
-  friend class G4VisCommandDrawCurrent;
-  friend class G4VisCommandLightsMoveWithCamera;
-  friend class G4VisCommandRefreshView;
-  friend class G4VisCommandSetCulling;
-  friend class G4VisCommandSetCullCoveredDaughters;
-  friend class G4VisCommandSetCullInvisible;
-  friend class G4VisCommandShowView;
+public: // With description
+
+  enum Verbosity {
+    quiet,         // Nothing is printed.
+    startup,       // Startup and endup messages are printed...
+    errors,        // ...and errors...
+    warnings,      // ...and warnings...
+    confirmations, // ...and confirming messages...
+    parameters,    // ...and parameters of scenes and views...
+    all            // ...and everything available.
+  };
+  // Simple graded message scheme.
 
 protected: // With description
 
@@ -182,52 +172,40 @@ public: // With description
   void Initialize ();  // Alias Initialise ().
   G4bool RegisterGraphicsSystem (G4VGraphicsSystem* pSystem);
 
-  //////////////////////////////////////////////////////////////////////
-  // Drawing routines!
-
-  void ClearView ();
-  // Clear visible window of current viewer (both buffers of a double
-  // buffered system).
-
-  void Draw ();
-  // Draw current scene in current view.
-
-  void Show ();
-  // Show current view (initiates post-procesing of graphical
-  // databases for graphics systems which require it.)
-
-  // ///////////////////////////////////////////////////////////////
-  // Now functions for drawing various visualization primitives,
-  // useful for representing hits, digis, etc.
-
-  void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
-  void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+  /////////////////////////////////////////////////////////////////
+  // Now functions that implement the pure virtual functions of
+  // G4VVisManager for drawing various visualization primitives, useful
+  // for representing hits, digis, etc.
 
   void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
-  void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
-  void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
-
-  void Draw (const G4Polyhedron&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4NURBS&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
-  // //////////////////////////////////////////////////////////////////
-  // Now functions for drawing a GEANT4 geometry object.  Note that
+  void Draw (const G4Polyhedron&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Polyline&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Polymarker&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Scale&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Square&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  void Draw (const G4Text&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  ////////////////////////////////////////////////////////////////////
+  // Now functions that implement the pure virtual functions of
+  // G4VVisManager for drawing a GEANT4 geometry object.  Note that
   // the 2nd argument overrides any visualization attributes that are
   // associated with the object itself.
-
-  void Draw (const G4VSolid&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
@@ -235,11 +213,17 @@ public: // With description
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
+  void Draw (const G4VSolid&, const G4VisAttributes&,
+    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+
+  ////////////////////////////////////////////////////////////////////////
+  // Now other pure virtual functions of G4VVisManager...
+
+  void GeometryHasChanged ();
+  // Used by run manager to notify change.
+
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
-
-  void CopyViewParameters ();
-  // Copy view parameters of current viewer into current view parameters.
 
   void CreateSceneHandler (G4String name = "");
   // Creates scene handler for the current system.
@@ -253,26 +237,18 @@ public: // With description
   void DeleteCurrentViewer ();
   // Leaves current scene and view undefined!
 
-  void GeometryHasChanged ();
-  // Used by run manager to notify change.
-
-  void RefreshCurrentView  ();
-  // Soft clear, then redraw.
-
 private:
+
+  void BeginOfRun ();
+
+  void BeginOfEvent ();
 
   void EndOfEvent ();
   // This is called on change of state (G4ApplicationState).  It is
   // used to draw hits and trajectories if included in the current
   // scene at the end of event, as required.
 
-public:
-
-  // These can go when OLD STYLE commands go...
-  void PrintCurrentSystem  () const;
-  void PrintCurrentSystems () const;
-  void PrintCurrentScene   () const;
-  void PrintCurrentView    () const;
+  void EndOfRun ();
 
 public: // With description
 
@@ -287,24 +263,27 @@ public: // With description
   G4Scene*                     GetCurrentScene             () const;
   G4VSceneHandler*             GetCurrentSceneHandler      () const;
   G4VViewer*                   GetCurrentViewer            () const;
-  const G4ViewParameters&      GetCurrentViewParameters    () const;
   const G4GraphicsSystemList&  GetAvailableGraphicsSystems ();
   // The above is non-const because it checks and updates the List by
   // calling RegisterGraphicsSystems() if no graphics systems are
   // already registered.
   const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
   const G4SceneList&           GetSceneList                () const;
-  G4int                        GetVerboseLevel             () const;
+  Verbosity                    GetVerbosity                () const;
+  void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
+  // Note: GetWindowSizeHint information is returned via the G4int& arguments.
   void              SetCurrentGraphicsSystemAndCreateViewer
                                                 (G4VGraphicsSystem* pSystem);
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
   void              SetCurrentScene             (G4Scene*);
   void              SetCurrentSceneHandler      (G4VSceneHandler* pScene);
   void              SetCurrentViewer            (G4VViewer* pView);
-  G4ViewParameters& SetCurrentViewParameters    ();  // Returns lvalue.
   G4SceneHandlerList& SetAvailableSceneHandlers ();  // Returns lvalue.
   G4SceneList&      SetSceneList                ();  // Returns lvalue.
-  void              SetVerboseLevel             (G4int vLevel);
+  void              SetVerboseLevel             (G4int);
+  void              SetVerboseLevel             (const G4String&);
+  void              SetVerboseLevel             (Verbosity);
+  void              SetWindowSizeHint           (G4int xHint, G4int yHint);
 
 
   /////////////////////////////////////////////////////////////////////
@@ -318,11 +297,18 @@ public: // With description
   // Returns zero if not found.  Can use long or short name, but find
   // is done on short name.
 
-  G4bool IsValidView ();
-  // True if view is valid.  Prints messages and sanitises varoius data.
+  static Verbosity GetVerbosityValue(const G4String&);
+  // Returns verbosity given a string.  (Uses first character only.)
 
-  static void PrintCommandDeprecation(const G4String&);
-  // Temporary deprecation printing.
+  static Verbosity GetVerbosityValue(G4int);
+  // Returns verbosity given an integer.  If integer is out of range,
+  // selects verbosity at extreme of range.
+
+  static G4String VerbosityString(Verbosity);
+  // Converts the verbosity into a string for suitable for printing.
+  
+  static G4String VerbosityGuidanceString;
+  // Guidance on the use of visualization verbosity.
 
 protected:
 
@@ -332,6 +318,12 @@ protected:
   void PrintInstalledGraphicsSystems   () const;
   void PrintAvailableGraphicsSystems   () const;
   void PrintInvalidPointers            () const;
+  G4bool IsValidView ();
+  // True if view is valid.  Prints messages and sanitises various data.
+  void ClearTransientStoreIfMarked();
+  // Clears transient store of current scene handler if it is marked
+  // for clearing.  Assumes view is valid.
+
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
@@ -341,12 +333,16 @@ protected:
   G4GraphicsSystemList  fAvailableGraphicsSystems;
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
-  G4ViewParameters      fVP;                // Current viewing parameters.
-  G4int                 fVerbose;           // Verbosity level 0-10.
-  G4VisManMessenger*    fpMessenger;        // Pointer to messenger.
+  Verbosity             fVerbosity;
+  const G4int           fVerbose;
+  // fVerbose is kept for backwards compatibility for some user
+  // examples.  (It is used in the derived user vis managers to print
+  // available graphics systems.)  It is initialised to 1 in the
+  // constructor and cannot be changed.
   G4std::vector<G4UImessenger*> fMessengerList;
   G4std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
+  G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer construction.
 
 };
 

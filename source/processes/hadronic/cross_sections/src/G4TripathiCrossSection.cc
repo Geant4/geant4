@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -34,12 +34,10 @@ GetCrossSection(const G4DynamicParticle* aPart,
   
   const G4double targetAtomicNumber = anEle->GetN();
   const G4double nTargetProtons = anEle->GetZ();
-  const G4double nTargetNeutrons = targetAtomicNumber-nTargetProtons;
   
   const G4double kineticEnergy = aPart->GetKineticEnergy()/MeV;
   const G4double nProjProtons = aPart->GetDefinition()->GetPDGCharge();
   const G4double projectileAtomicNumber = aPart->GetDefinition()->GetBaryonNumber();
-  const G4double nProjNeutrons = projectileAtomicNumber-nProjProtons;
 
   const G4double nuleonRadius=1.1E-15;
   const G4double myNuleonRadius=1.36E-15;

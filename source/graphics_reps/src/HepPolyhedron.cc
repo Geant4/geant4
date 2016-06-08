@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.8.2.1 2001/06/28 19:10:13 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: HepPolyhedron.cc,v 1.9 2001/07/11 10:01:10 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //

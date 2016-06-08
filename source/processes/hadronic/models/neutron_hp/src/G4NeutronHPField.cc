@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -40,7 +40,6 @@
   
   G4double G4NeutronHPField::GetY(G4double e, G4int j)
   {
-    G4int found = 0;
     G4int low   = 0;
     G4int high  = 0;
     G4int i;

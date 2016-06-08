@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.12.2.1 2001/06/28 19:15:31 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Trajectory.cc,v 1.14 2001/11/07 10:45:37 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // ---------------------------------------------------------------
@@ -52,15 +52,11 @@ G4Allocator<G4Trajectory> aTrajectoryAllocator;
 
 ///////////////////////////////////////////
 G4Trajectory::G4Trajectory()
+:  positionRecord(0), fTrackID(0), fParentID(0),
+   PDGEncoding( 0 ), PDGCharge(0.0), ParticleName("")
 ///////////////////////////////////////////
 {
-   G4ParticleDefinition * fpParticleDefinition = 0;
-   ParticleName = "";
-   PDGCharge = 0;
-   PDGEncoding = 0;
-   fTrackID = 0;
-   fParentID = 0;
-   positionRecord = 0;
+   // Unused: G4ParticleDefinition * fpParticleDefinition = 0;
 }
 
 ///////////////////////////////////////////

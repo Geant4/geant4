@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.4.4.1 2001/06/28 19:16:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VRML2SceneHandler.cc,v 1.6 2001/09/18 07:53:16 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -95,11 +95,11 @@ G4VRML2SceneHandler::~G4VRML2SceneHandler()
 
 
 
-#define  G4VRML2SCENE  G4VRML2SceneHandler
+#define  G4VRML2SCENEHANDLER   G4VRML2SceneHandler
 #define  IS_CONNECTED  fDest.isConnected() 
 #include "G4VRML2SceneHandlerFunc.icc"
 #undef   IS_CONNECTED
-#undef   G4VRML2SCENE 
+#undef   G4VRML2SCENEHANDLER
 
 
 void G4VRML2SceneHandler::connectPort(G4int max_trial)

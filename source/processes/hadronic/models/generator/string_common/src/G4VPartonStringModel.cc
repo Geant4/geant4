@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.7.8.2 2001/06/28 20:19:59 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPartonStringModel.cc,v 1.10 2001/10/04 20:00:31 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -99,14 +99,14 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   }
   
   G4KineticTrackVector * theResult = 0;
-  for ( G4int astring=0; astring < strings->entries(); astring++)
+  for ( unsigned int astring=0; astring < strings->size(); astring++)
   {
 //    rotate string to lab frame, models have it aligned to z
-  	strings->at(astring)->LorentzRotate(toLab);
+  	(*strings)[astring]->LorentzRotate(toLab);
   }
   
   theResult = stringFragmentationModel->FragmentStrings(strings);
-  strings->clearAndDestroy();
+  G4std::for_each(strings->begin(), strings->end(), DeleteString() );
   delete strings;
 
   return theResult;

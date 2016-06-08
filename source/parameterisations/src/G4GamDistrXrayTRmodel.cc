@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GamDistrXrayTRmodel.cc,v 1.1.4.1 2001/06/28 19:10:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GamDistrXrayTRmodel.cc,v 1.3 2001/07/11 10:01:31 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "g4std/complex"
@@ -39,7 +39,7 @@
 G4GamDistrXrayTRmodel::G4GamDistrXrayTRmodel(G4Envelope *anEnvelope, 
 					       G4double a, G4double alphaPlate,
                                                G4double b, G4double alphaGas) :
-  G4VXrayTRmodel(anEnvelope,a,b)
+  G4VXrayTRadModel(anEnvelope,a,b)
 {
   G4cout<<"Gammma distributed X-ray TR radiator model is called"<<G4endl ;
 

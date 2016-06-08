@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8EventAction.cc,v 1.3.4.1 2001/06/28 19:07:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em8EventAction.cc,v 1.5 2001/10/16 12:22:23 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
@@ -35,9 +35,6 @@
 
 #include "Em8CalorHit.hh"
 #include "Em8EventActionMessenger.hh"
-
-#include "g4rw/tvordvec.h"
-
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"

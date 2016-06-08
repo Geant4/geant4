@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.12.2.2 2001/06/28 20:20:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticleChange.cc,v 1.18 2001/11/21 14:05:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,19 +44,9 @@
 #include "G4TrackFastVector.hh"
 #include "G4DynamicParticle.hh"
 
-G4bool G4ParticleChange::fUseEBForAll = false;
 
-G4ParticleChange::G4ParticleChange():G4VParticleChange(false)
+G4ParticleChange::G4ParticleChange():G4VParticleChange()
 {
-}
-
-G4ParticleChange::G4ParticleChange(G4bool useEB):G4VParticleChange(useEB)
-{
-#ifdef G4VERBOSE
-  if (verboseLevel>2) {
-    G4cout << "G4ParticleChange::G4ParticleChange() " << G4endl;
-  }
-#endif
 }
 
 G4ParticleChange::~G4ParticleChange() 
@@ -139,7 +129,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
 
   //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchable(0);
+  aTrack->SetTouchableHandle((G4VTouchable*)0);
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -156,7 +146,7 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
 
   //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchable(0);
+  aTrack->SetTouchableHandle((G4VTouchable*)0);
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -172,8 +162,8 @@ void G4ParticleChange::AddSecondary(G4DynamicParticle* aParticle,
   // set IsGoodGorTrackingFlag
   if (IsGoodForTracking) aTrack->SetGoodForTrackingFlag();
  
-  //   Touchable is a temporary object, so you cannot keep the pointer
-  aTrack->SetTouchable(0);
+  //   Touchable handle is copied to keep the pointer
+    aTrack->SetTouchableHandle(theCurrentTrack->GetTouchableHandle());
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
@@ -193,6 +183,7 @@ void G4ParticleChange::Initialize(const G4Track& track)
 {
   // use base class's method at first
   G4VParticleChange::Initialize(track);
+  theCurrentTrack= &track;
 
   // set Energy/Momentum etc. equal to those of the parent particle
   const G4DynamicParticle*  pParticle = track.GetDynamicParticle();
@@ -276,7 +267,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->AddProperTime( theProperTimeChange 
 				 - pPreStepPoint->GetProperTime());
 
-  // update weight if use EB
+  // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
 #ifdef G4VERBOSE
@@ -295,10 +286,8 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
   // pointer to G4ParticleMometum. Also it is a normalized 
   // momentum vector.
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = theMassChange;
 
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
@@ -318,7 +307,7 @@ G4Step* G4ParticleChange::UpdateStepForPostStep(G4Step* pStep)
 				 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight if use EB
+  // update weight
   pPostStepPoint->SetWeight( theWeightChange );
 
 #ifdef G4VERBOSE
@@ -334,10 +323,8 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
 { 
   // A physics process always calculates the final state of the particle
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = theMassChange;
 
   // Set Mass/Charge
   pPostStepPoint->SetMass(theMassChange);
@@ -357,7 +344,7 @@ G4Step* G4ParticleChange::UpdateStepForAtRest(G4Step* pStep)
 				 - aTrack->GetGlobalTime());
   pPostStepPoint->SetProperTime( theProperTimeChange  );
 
-  // update weight if use EB
+  // update weight 
   pPostStepPoint->SetWeight( theWeightChange );
 
 #ifdef G4VERBOSE

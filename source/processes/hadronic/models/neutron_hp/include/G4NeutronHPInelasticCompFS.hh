@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.5.4.1 2001/06/28 19:14:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.7 2001/07/26 09:28:05 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
 #define G4NeutronHPInelasticCompFS_h 1

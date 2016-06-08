@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.hh,v 1.4.10.2 2001/06/28 20:20:14 gunter Exp $
+// $Id: G4ParticleChangeForMSC.hh,v 1.5 2001/07/11 10:08:36 gunter Exp $
 // GEANT4 tag $ $
 //
 // 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.hh,v 1.5.2.1 2001/06/28 19:07:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em4RunAction.hh,v 1.8 2001/11/28 15:07:22 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em4RunAction_h
 #define Em4RunAction_h 1
@@ -35,10 +35,9 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
-class Em4RunActionMessenger;
 
 #ifndef G4NOHIST
   class HepTupleManager;
@@ -55,9 +54,6 @@ class Em4RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    void  SetRndmFreq(G4int    val) {saveRndm = val;}
-    G4int GetRndmFreq()             {return saveRndm;}
-    
 #ifndef G4NOHIST    
     HepHistogram* GetHisto(G4int id) {return histo[id];}
 #endif
@@ -66,14 +62,14 @@ class Em4RunAction : public G4UserRunAction
     void bookHisto();
     
   private:  
-    Em4RunActionMessenger* runMessenger;
-    G4int saveRndm;
     
 #ifndef G4NOHIST         
     HepTupleManager* hbookManager;    
     HepHistogram* histo[1];
 #endif         
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

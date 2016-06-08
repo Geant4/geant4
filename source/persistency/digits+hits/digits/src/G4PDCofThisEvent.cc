@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDCofThisEvent.cc,v 1.3.8.1 2001/06/28 19:11:23 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PDCofThisEvent.cc,v 1.4 2001/07/11 10:02:13 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4PDCofThisEvent.hh"

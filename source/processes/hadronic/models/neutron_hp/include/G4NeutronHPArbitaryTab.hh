@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPArbitaryTab.hh,v 1.4.8.1 2001/06/28 19:14:11 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPArbitaryTab.hh,v 1.7 2001/10/04 20:00:35 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4NeutronHPArbitaryTab_h
 #define G4NeutronHPArbitaryTab_h 1
@@ -51,7 +51,7 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
   
   inline void Init(G4std::ifstream & theData)
   {
-    G4int i, total;
+    G4int i;
     theFractionalProb.Init(theData, eV);
     theData >> nDistFunc; // = number of incoming n energy points
     theDistFunc = new G4NeutronHPVector [nDistFunc];

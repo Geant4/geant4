@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RectangularTrimmedSurface.hh,v 1.6.4.1 2001/06/28 19:08:46 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RectangularTrimmedSurface.hh,v 1.7 2001/07/11 09:59:37 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BezierSurface

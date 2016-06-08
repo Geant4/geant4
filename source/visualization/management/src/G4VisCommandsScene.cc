@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.17.2.1 2001/06/28 19:16:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisCommandsScene.cc,v 1.30 2001/11/12 18:22:11 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -64,18 +64,6 @@ void G4VVisCommandScene::UpdateCandidateLists () {
   }
 }
 
-void G4VVisCommandScene::UpdateVisManagerScene
-(const G4String& sceneName) {
-  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.size ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
-    if (sceneList [iScene] -> GetName () == sceneName) break;
-  }
-  G4Scene* pScene = 0;  // Zero unless scene has been found...
-  if (iScene < nScenes) pScene = sceneList [iScene];
-  fpVisManager -> SetCurrentScene (pScene);
-}
-
 ////////////// /vis/scene/create ///////////////////////////////////////
 
 G4VisCommandSceneCreate::G4VisCommandSceneCreate (): fId (0) {
@@ -108,6 +96,9 @@ G4String G4VisCommandSceneCreate::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4String& newName = newValue;
   G4String nextName = NextName ();
 
@@ -122,18 +113,23 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
     if (sceneList [iScene] -> GetName () == newName) break;
   }
   if (iScene < nScenes) {
-    G4cout << "Scene \"" << newName << "\" already exists." << G4endl;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene \"" << newName << "\" already exists."
+	     << G4endl;
+    }
   }
   else {
 
     sceneList.push_back (new G4Scene (newName));
     // Adds empty scene data object to list.
 
-    UpdateVisManagerScene (newName);
-    G4cout << "New empty scene \"" << newName << "\" created." << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "New empty scene \"" << newName << "\" created." << G4endl;
+    }
 
     UpdateCandidateLists ();
   }
+  UpdateVisManagerScene (newName);
 }
 
 ////////////// /vis/scene/edit ///////////////////////////////////////
@@ -160,6 +156,9 @@ G4String G4VisCommandSceneEdit::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneEdit::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4String sceneName;
   G4std::istrstream is ((char*)newValue.data());
   is >> sceneName;
@@ -172,24 +171,93 @@ void G4VisCommandSceneEdit::SetNewValue (G4UIcommand* command,
     if (pScene -> GetName () == sceneName) break;
   }
   if (iScene >= nScenes) {
-    G4cout << "G4VisCommandSceneEdit::SetNewValue: Scene \""
-	   << sceneName << "\" not found."
-      "\n  /vis/scene/list to see scenes."
-	   << G4endl;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: G4VisCommandSceneEdit::SetNewValue: Scene \""
+	     << sceneName << "\" not found."
+	"\n  /vis/scene/list to see scenes."
+	     << G4endl;
+    }
     return;
   }
   else {
-    G4cout << "Scene \"" << sceneName << "\" contains:" << G4endl;
-    G4String uiCommand ("/vis/scene/list ");
-    uiCommand += sceneName;
-    uiCommand += " 1";
-    G4UImanager::GetUIpointer () -> ApplyCommand (uiCommand);
-    G4cout <<
-      "(YOU CAN DO NOTHING YET - /vis/scene/edit FACILITY IN PREPARATION."
-	   << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Scene \"" << sceneName << "\" contains:" << G4endl;
+      G4String uiCommand ("/vis/scene/list ");
+      uiCommand += sceneName;
+      uiCommand += " confirmations";
+      G4UImanager::GetUIpointer () -> ApplyCommand (uiCommand);
+      G4cout <<
+      "BUT...YOU CAN DO NOTHING YET - /vis/scene/edit FACILITY IN PREPARATION."
+	     << G4endl;
+    }
   }
 
   UpdateVisManagerScene (sceneName);
+}
+
+////////////// /vis/scene/endOfEventAction ////////////////////////////
+
+G4VisCommandSceneEndOfEventAction::G4VisCommandSceneEndOfEventAction () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/scene/endOfEventAction", this);
+  fpCommand -> SetGuidance
+    ("/vis/scene/endOfEventAction [accumulate|refresh]");
+  fpCommand -> SetGuidance
+    ("Requests viewer to refresh hits, tracks, etc., at end of event."
+     "\n  Or they are accumulated.  Detector remains or is redrawn.");
+  fpCommand -> SetParameterName ("action",
+				 omitable = true);
+  fpCommand -> SetCandidates ("accumulate refresh");
+  fpCommand -> SetDefaultValue ("refresh");
+}
+
+G4VisCommandSceneEndOfEventAction::~G4VisCommandSceneEndOfEventAction () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneEndOfEventAction::GetCurrentValue
+(G4UIcommand* command) {
+  return "";
+}
+
+void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand* command,
+						     G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String action;
+  G4std::istrstream is ((char*)newValue.data());
+  is >> action;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  if (action == "accumulate") {
+    pScene->SetRefreshAtEndOfEvent(false);
+  }
+  else if (action == "refresh") {
+    pScene->SetRefreshAtEndOfEvent(true);
+  }
+  else {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: unrecognised parameter \"" << action << "\"."
+             << G4endl;
+    }
+    return;
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "End of event action set to \"";
+    if (pScene->GetRefreshAtEndOfEvent()) G4cout << "refresh";
+    else G4cout << "accumulate";
+    G4cout << "\"" << G4endl;
+  }
 }
 
 ////////////// /vis/scene/list ///////////////////////////////////////
@@ -201,14 +269,14 @@ G4VisCommandSceneList::G4VisCommandSceneList () {
   fpCommand -> SetGuidance ("Lists scene(s).");
   fpCommand -> SetGuidance ("<scene-name> default is \"all\"");
   fpCommand -> SetGuidance
-    ("<verbosity> is 0/1/2 for short/medium/long listing.");
+    ("See /vis/verbose for definition of verbosity.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("scene-name", 's',
 				 omitable = true);
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue ("all");
   fpCommand -> SetParameter (parameter);
-  parameter = new G4UIparameter ("verbosity", 'i',
+  parameter = new G4UIparameter ("verbosity", 's',
 				 omitable = true);
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
@@ -226,10 +294,11 @@ G4String G4VisCommandSceneList::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
 					 G4String newValue) {
-  G4String name;
-  G4int verbosity;
+  G4String name, verbosityString;
   G4std::istrstream is ((char*)newValue.data());
-  is >> name >> verbosity;
+  is >> name >> verbosityString;
+  G4VisManager::Verbosity verbosity =
+    fpVisManager->GetVerbosityValue(verbosityString);
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   G4int iScene, nScenes = sceneList.size ();
@@ -242,7 +311,7 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
     }
     found = true;
     G4cout << "Scene name: \"" << iName << "\"";
-    if (verbosity == 1) {
+    if (verbosity >= G4VisManager::confirmations) {
       G4int i;
       G4cout << "\n  Run-duration models:";
       G4int nRunModels = pScene -> GetRunDurationModelList ().size ();
@@ -263,7 +332,7 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
 	G4cout << "\n    " << pModel -> GetGlobalDescription ();
       }
     }
-    if (verbosity >= 2) {
+    if (verbosity >= G4VisManager::parameters) {
       G4cout << "\n  " << *sceneList [iScene];
     }
     G4cout << G4endl;
@@ -280,17 +349,31 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
 ////////////// /vis/scene/notifyHandlers /////////////////////////
 
 G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
-  G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/notifyHandlers", this);
-  fpCommand -> SetGuidance ("/vis/scene/notifyHandlers [<scene-name>]");
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/notifyHandlers", this);
+  fpCommand -> SetGuidance
+    ("/vis/scene/notifyHandlers [<scene-name>] [r[efresh]|f[lush]]");
   fpCommand -> SetGuidance
     ("Notifies scene handlers of possible changes of scene.");
   fpCommand -> SetGuidance ("<scene-name> default is current scene name.");
   fpCommand -> SetGuidance
+    ("Clears and refreshes all viewers of current scene."
+     "\n  The default action \"refresh\" does not issue \"update\" (see"
+     "\n    /vis/viewer/update)."
+     "\nIf \"flush\" is specified, it issues an \"update\" as well as"
+     "\n  \"refresh\".  Useful for refreshing and initiating post-processing"
+     "\n  for graphics systems which need post-processing.");
+  fpCommand -> SetGuidance
     ("This command does not change current scene, scene handler or viewer.");
-  fpCommand -> SetParameterName ("scene-name",
-				 omitable = true,
-				 currentAsDefault = true);
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("scene-name", 's',
+				 omitable = true);
+  parameter -> SetCurrentAsDefault(true);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("refresh-flush", 's',
+				 omitable = true);
+  parameter -> SetDefaultValue("refresh");
+  fpCommand -> SetParameter (parameter);
   sceneNameCommands.push_back (fpCommand);
 }
 
@@ -305,7 +388,15 @@ G4String G4VisCommandSceneNotifyHandlers::GetCurrentValue
 
 void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 						   G4String newValue) {
-  G4String& sceneName = newValue;
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String sceneName, refresh_flush;
+  G4std::istrstream is ((char*)newValue.data());
+  is >> sceneName >> refresh_flush;
+  G4bool flush(false);
+  if (refresh_flush(0) == 'f') flush = true;
+
   const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
   G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> SetAvailableSceneHandlers ();
@@ -315,15 +406,14 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   G4int iScene;
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* scene = sceneList [iScene];
-    if (sceneName == scene -> GetName ()) {
-      scene -> AddWorldIfEmpty ();
-      break;
-    }
+    if (sceneName == scene -> GetName ()) break;
   }
   if (iScene >= nScenes ) {
-    G4cout << "Scene \"" << sceneName << "\" not found."
-      "\n  /vis/scene/list to see scenes."
-	   << G4endl;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
+	"\n  /vis/scene/list to see scenes."
+	     << G4endl;
+    }
     return;
   }
 
@@ -337,32 +427,46 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
     if (aScene) {
       const G4String& aSceneName = aScene -> GetName ();
       if (sceneName == aSceneName) {
+	// Clear store and force a rebuild of graphical database...
 	aSceneHandler -> ClearStore ();
-	aSceneHandler -> ClearTransientStore ();
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
-	  aViewer -> ClearView ();
-	  aViewer -> SetView ();
+	  aSceneHandler -> SetCurrentViewer (aViewer);  // Temporarily.
+	  aViewer -> SetView ();  // Temporarily switch contexts.
+	  //??aViewer -> ClearView ();
 	  aViewer -> DrawView ();
-	  // Triggers rebuild of graphical database by notifying the scene
-	  // handler.  The viewer is supposed to be smart enough to know
-	  // when not to do this.  E.g., the second viewer of a scene
-	  // handler does not do it.
-	  G4cout << "Viewer \"" << aViewer -> GetName ()
-		 << "\" of scene handler \"" << aSceneHandler -> GetName ()
-		 << "\"\n  prepared at request of scene \"" << sceneName
-		 << "\"." << G4endl;
+	  if (flush) aViewer -> ShowView ();
+	  if (verbosity >= G4VisManager::confirmations) {
+	    G4cout << "Viewer \"" << aViewer -> GetName ()
+		   << "\" of scene handler \"" << aSceneHandler -> GetName ()
+		   << "\"\n  ";
+	    if (flush) G4cout << "flushed";
+	    else G4cout << "refreshed";
+	    G4cout << " at request of scene \"" << sceneName
+		   << "\"." << G4endl;
+	  }
 	}
       }
     }
     else {
-      G4cout << "G4VisCommandSceneNotifyHandlers: scene handler \""
-	     << aSceneHandler->GetName()
-	     << "\" has a null scene."
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "WARNING: G4VisCommandSceneNotifyHandlers: scene handler \""
+	       << aSceneHandler->GetName()
+	       << "\" has a null scene."
 	       << G4endl;
+      }
     }
+  }
+  // Reclaim original context...
+  G4VSceneHandler* pCurrentSceneHandler =
+    fpVisManager -> GetCurrentSceneHandler();
+  G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
+  if (pCurrentSceneHandler) {
+    pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
+    if (pCurrentViewer && pCurrentSceneHandler->GetScene())
+      pCurrentViewer -> SetView ();
   }
 }
 
@@ -391,6 +495,9 @@ G4String G4VisCommandSceneRemove::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4String& removeName = newValue;
   const G4String& currentSceneName =
     fpVisManager -> GetCurrentScene () -> GetName ();
@@ -402,28 +509,39 @@ void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
   if (iScene != sceneList.end()) {
     delete *iScene;
     sceneList.erase (iScene);
-    G4cout << "Scene \"" << removeName << "\" removed." << G4endl;
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Scene \"" << removeName << "\" removed." << G4endl;
+    }
     UpdateCandidateLists ();
     if (sceneList.empty ()) {
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout << "WARNING: No scenes left.  Please create a new one."
+	       << G4endl;
+      }
       UpdateVisManagerScene ();
-      G4cout << "No scenes left.  Please create a new one." << G4endl;
     }
     else {
       if (currentSceneName == removeName) {
+	if (verbosity >= G4VisManager::warnings) {
+	  G4cout << "WARNING: Current scene is now \""
+		 << fpVisManager -> GetCurrentScene () -> GetName ()
+		 << "\"" << G4endl;
+	}
 	UpdateVisManagerScene (sceneList [0] -> GetName ());
-	G4cout << "Current scene is now \""
-	       << fpVisManager -> GetCurrentScene () -> GetName ()
-	       << "\"" << G4endl;
       }
       else {
-	G4cout << "Current scene unchanged." << G4endl;
+	if (verbosity >= G4VisManager::confirmations) {
+	  G4cout << "Current scene unchanged." << G4endl;
+	}
       }
     }
   }
   else {
-    G4cout << "Scene \"" << removeName
-	   << "\" not found - \"/vis/scene/list\" to see possibilities."
-	   << G4endl;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene \"" << removeName
+	     << "\" not found - \"/vis/scene/list\" to see possibilities."
+	     << G4endl;
+    }
   }
 }
 
@@ -452,19 +570,28 @@ G4String G4VisCommandSceneSelect::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneSelect::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4String& selectName = newValue;
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     if (sceneList [iScene] -> GetName () == selectName) break;
   }
-  G4cout << "Scene \"" << selectName;
-  if (iScene < nScenes) {
-    UpdateVisManagerScene (selectName);
-    G4cout << "\" selected." << G4endl;
+  if (iScene >= nScenes) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene \"" << selectName
+	     << "\" not found - \"/vis/scene/list\" to see possibilities."
+	     << G4endl;
+    }
+    return;
   }
-  else {
-    G4cout << "\" not found - \"/vis/scene/list\" to see possibilities."
-	   << G4endl;
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Scene \"" << selectName
+	   << "\" selected." << G4endl;
   }
+  UpdateVisManagerScene (selectName);
+
 }

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -23,8 +23,8 @@
 #ifndef G4PomeronCrossSection_h
 #define G4PomeronCrossSection_h 1
 //
-// $Id: G4PomeronCrossSection.hh,v 1.3.8.1 2001/06/28 19:13:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PomeronCrossSection.hh,v 1.6 2001/11/13 14:56:53 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -38,6 +38,7 @@
 #include "G4KaonZero.hh"
 #include "G4KaonZeroShort.hh"
 #include "G4KaonZeroLong.hh"
+#include "G4Gamma.hh"
 
 class G4PomeronCrossSection
 {
@@ -56,6 +57,8 @@ class G4PomeronCrossSection
   	G4PomeronCrossSection(const G4KaonZero * );
   	G4PomeronCrossSection(const G4KaonZeroLong * );
   	G4PomeronCrossSection(const G4KaonZeroShort * );
+
+  	G4PomeronCrossSection(const G4Gamma * );
 
 	~G4PomeronCrossSection();
 //  					s = (center of mass energy)**2	
@@ -104,6 +107,8 @@ class G4PomeronCrossSection
         void InitForNucleon();
         void InitForPion();
         void InitForKaon();
+        void InitForGamma();
+	
 	G4double Expand(G4double z);
 	inline G4double Z(const G4double Scms);
 	inline G4double SigP(const G4double Scms);

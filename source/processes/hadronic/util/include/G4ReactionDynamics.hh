@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ReactionDynamics.hh,v 1.2.8.1 2001/06/28 19:15:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ReactionDynamics.hh,v 1.6 2001/10/04 20:00:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
  // Hadronic Process: Reaction Dynamics
  // original by H.P. Wellisch
@@ -47,7 +47,7 @@
     
     G4ReactionDynamics() {}
     
-    ~G4ReactionDynamics() {}
+    virtual ~G4ReactionDynamics() {}
     
     virtual G4double FindInelasticity()
     { return 0.0; }
@@ -120,7 +120,7 @@
      G4bool &targetHasChanged );
     
     void NuclearReaction(                     // derived from NUCREC
-     G4FastVector<G4ReactionProduct,3> &vec,
+     G4FastVector<G4ReactionProduct,4> &vec,
      G4int &vecLen,
      const G4DynamicParticle *originalIncident,
      const G4Nucleus &aNucleus,

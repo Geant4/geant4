@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Parton.hh,v 1.9.8.2 2001/06/28 20:20:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Parton.hh,v 1.13 2001/08/01 17:09:21 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4Parton_h
@@ -41,16 +41,20 @@
 #include "G4LorentzVector.hh"
 #include "g4std/iostream"
 #include "G4ParticleTable.hh"
+#include "Randomize.hh"
 
 class G4Parton
 {
    public:
       G4Parton()
       {
-        PDGencoding=0; 
-	theColour = 1;
-	theIsoSpinZ = 0.5;
-	theSpinZ = 0.5;
+        // CAUTION: 
+        // this is a preliminary definition yielding u and d quarks only!
+        //
+        PDGencoding=(G4int)(2.*G4UniformRand()); 
+        theColour = (G4int)(3.*G4UniformRand())+1;
+        theIsoSpinZ = ((G4int)(G4UniformRand()))-0.5;
+        theSpinZ = ((G4int)(G4UniformRand()))-0.5;
       }
       
       G4Parton(G4int PDGencoding);
@@ -81,10 +85,10 @@ class G4Parton
       void SetColour(G4int aColour) {theColour = aColour;}
       G4int GetColour() {return theColour;}
       
-      void SetIsoSpinZ(G4int anIsoSpinZ) {theIsoSpinZ = anIsoSpinZ;}
+      void SetIsoSpinZ(G4double anIsoSpinZ) {theIsoSpinZ = anIsoSpinZ;}
       G4double GetIsoSpinZ() {return theIsoSpinZ;}
 
-      void SetSpinZ(G4int anIsoSpinZ) {theIsoSpinZ = anIsoSpinZ;}
+      void SetSpinZ(G4double aSpinZ) {theSpinZ = aSpinZ;}
       G4double GetSpinZ() {return theSpinZ;}
       
    private:

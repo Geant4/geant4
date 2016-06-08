@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.hh,v 1.6.4.1 2001/06/28 19:07:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN03PhysicsList.hh,v 1.8 2001/10/10 14:58:11 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03PhysicsList_h
 #define ExN03PhysicsList_h 1
@@ -35,7 +35,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03PhysicsList: public G4VUserPhysicsList
 {
@@ -77,6 +77,8 @@ class ExN03PhysicsList: public G4VUserPhysicsList
     G4double cutForProton;
     G4double currentDefaultCut;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -48,7 +48,10 @@
 #ifndef G4hICRU49p_h
 #define G4hICRU49p_h 1
 
+#include "globals.hh"
 #include "G4VhElectronicStoppingPower.hh"
+
+class G4Material;
 
 class G4hICRU49p : public G4VhElectronicStoppingPower
 {

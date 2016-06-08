@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.3.4.2 2001/06/28 20:19:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4He3.cc,v 1.6 2001/10/16 08:16:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -82,6 +82,4 @@ G4He3 G4He3::theHe3(
 );
 
 G4He3* G4He3::He3Definition(){return &theHe3;}
-// initialization for static cut values
-G4double   G4He3::theHe3LengthCut;
-G4double*  G4He3::theHe3KineticEnergyCuts;
+G4He3* G4He3::He3(){return &theHe3;}

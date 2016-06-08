@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTable.hh,v 1.9.4.1 2001/06/28 19:08:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3MatTable.hh,v 1.11 2001/07/16 15:38:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------
 // Class description:
@@ -41,11 +41,11 @@
 
 #include "globals.hh"
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4Material;
 
-typedef G4RWTPtrOrderedVector<G3MatTableEntry>  G3MaterialVector;
+typedef G4std::vector<G3MatTableEntry*>  G3MaterialVector;
 
 class G3MatTable
 {

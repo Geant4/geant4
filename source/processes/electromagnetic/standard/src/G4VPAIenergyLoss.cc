@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.cc,v 1.1.4.2 2001/06/28 20:19:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPAIenergyLoss.cc,v 1.5 2001/10/29 16:23:41 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -39,7 +39,8 @@
 // corrected by V. Grichine on 24/11/97
 // corrected by L. Urban    on 27/05/98   ( other corrections come soon!)
 // 10/02/00  modifications , new e.m. structure, L.Urban
-// 02/03/00 initialisation of theDEDXTable
+// 02/03/00  initialisation of theDEDXTable
+// 17-09-01, migration of Materials to pure STL (mma) 
 //
  
 
@@ -84,7 +85,7 @@ G4PhysicsTable* G4VPAIenergyLoss::thepbarRangeCoeffCTable = NULL ;
 
 G4PhysicsTable* G4VPAIenergyLoss::theDEDXTable = NULL ;
 
-G4double G4VPAIenergyLoss::CutInRange = 0;
+G4double* G4VPAIenergyLoss::CutInRange = 0;
 
 G4double G4VPAIenergyLoss::LowerBoundEloss= 1.00*keV ;
 G4double G4VPAIenergyLoss::UpperBoundEloss= 100.*TeV ;
@@ -119,7 +120,26 @@ G4VPAIenergyLoss::~G4VPAIenergyLoss()
      }
 
 }
- 
+
+/////////////////////////////////////////////////////////////////////////
+//
+
+G4double G4VPAIenergyLoss::GetMaxKineticEnergy() {return UpperBoundEloss;}
+G4double G4VPAIenergyLoss::GetMinKineticEnergy() {return LowerBoundEloss;}
+G4int    G4VPAIenergyLoss::GetBinNumber()        {return NbinEloss;} 
+
+void  G4VPAIenergyLoss::SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;}
+void  G4VPAIenergyLoss::PlusNbOfProcesses()        {NbOfProcesses++ ;}
+void  G4VPAIenergyLoss::MinusNbOfProcesses()       {NbOfProcesses-- ;}
+G4int G4VPAIenergyLoss::GetNbOfProcesses()         {return NbOfProcesses;}
+
+void G4VPAIenergyLoss::SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;}
+void G4VPAIenergyLoss::SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;}
+void G4VPAIenergyLoss::SetNbinEloss(G4int nb)		{NbinEloss=nb;}
+
+G4double G4VPAIenergyLoss::GetLowerBoundEloss() {return LowerBoundEloss;}
+G4double G4VPAIenergyLoss::GetUpperBoundEloss() {return UpperBoundEloss;}
+G4int    G4VPAIenergyLoss::GetNbinEloss()	{return NbinEloss;}
  
 /////////////////////////////////////////////////////////////////////////
 //
@@ -130,7 +150,7 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 
   G4bool MakeTable = false ;
      
-  G4double newCutInRange = aParticleType.GetLengthCuts();
+  G4double* newCutInRange = aParticleType.GetLengthCuts();
 
 // Create tables only if there is a new cut value !
 
@@ -146,10 +166,10 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
     theDEDXTable= theDEDXpbarTable;
   }
 
-  if ((CutInRange != newCutInRange) || (theDEDXTable==NULL)) 
+  if (!EqualCutVectors(CutInRange,newCutInRange) || (theDEDXTable==NULL)) 
   {
     MakeTable = true ;
-    CutInRange = newCutInRange ;
+    CutInRange = CopyCutVectors(CutInRange,newCutInRange) ;
   }
   
   if( MakeTable )
@@ -160,12 +180,9 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 //
 //  different processes.                                           
 
-    const G4MaterialTable* theMaterialTable=
-                                     G4Material::GetMaterialTable();
-
 //  create table for the total energy loss
 
-    G4int numOfMaterials = theMaterialTable->length();
+    G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   G4PhysicsTable** RecorderOfProcess;
   int CounterOfProcess;

@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4DatabaseTypes.hh,v 1.3.8.1 2001/06/28 19:11:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DatabaseTypes.hh,v 1.5 2001/07/11 10:02:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // file description:
 //
 //      This file defines types of database and transaction mode
 //      supported by G4TransactionManager.
-//
+
 // History:
 // 99.11.26 Y.Morita  Initial version
 

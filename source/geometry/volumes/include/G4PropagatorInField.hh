@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.15.2.1 2001/06/28 19:09:40 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PropagatorInField.hh,v 1.20 2001/12/08 00:07:23 japost Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4PropagatorInField 
@@ -138,12 +138,22 @@ class G4PropagatorInField
    inline G4double  GetMinimumEpsilonStep() const;
    inline void      SetMinimumEpsilonStep(G4double newEpsMin);
 
+   inline void      SetLargestAcceptableStep(G4double newBigDist);
+   inline G4double  GetLargestAcceptableStep();
+
  public:  // without description
 
    // void  SetGlobalFieldMgr( G4FieldManager *detectorFieldMgr );
         // The Field Manager of the Detector.
 
- private:
+   inline G4FieldManager*  GetCurrentFieldManager();
+
+ public:  // no description
+
+   inline void SetThresholdNoZeroStep(G4int noAct, G4int noHarsh, G4int noAbandon);
+   inline G4int GetThresholdNoZeroSteps(G4int i); 
+
+ protected:
 
    G4bool LocateIntersectionPoint( 
 	    const  G4FieldTrack&       CurveStartPointTangent,  //  A
@@ -155,7 +165,12 @@ class G4PropagatorInField
      // with the surface of the current volume (or of one of its daughters). 
      //  (Should use lateral displacement as measure of convergence). 
 
+   void PrintStepLengthDiagnostic(G4double CurrentProposedStepLength,
+				  G4double decreaseFactor,
+				  G4double stepTrial,
+				  const G4FieldTrack& aFieldTrack);
 
+  // ----------------------------------------------------------------------
   //  DATA Members
   // ----------------------------------------------------------------------
 
@@ -186,19 +201,24 @@ class G4PropagatorInField
    //  Values for the small possible relative accuracy of a step
    //       (corresponding to the greatest possible integration accuracy)
 
-     // Minimum for Relative accuracy of any Step 
+     // Limits for the Relative accuracy of any Step 
    G4double  fEpsilonMin; 
-   static const G4double  fEpsilonMinDefault;               // 1.0e-10 ;  
+   G4double  fEpsilonMax;
+   static const G4double  fEpsilonMinDefault;         // Can be 1.0e-5 to 1.0e-10 ...
+   static const G4double  fEpsilonMaxDefault;         // Can be 1.0e-1 to 1.0e-3 ...
 
    G4int  fmax_loop_count;
 
    //  Variables to keep track of "abnormal" case - which causes loop
    //
    G4int     fNoZeroStep;                //  Counter of zeroStep
-   G4int     fThresholdNo_ZeroSteps;     //  Threshold: above this - action
+   G4int     fActionThreshold_NoZeroSteps;       //  Threshold: above this - act
+   G4int     fSevereActionThreshold_NoZeroSteps; //  Threshold to act harshly
+   G4int     fAbandonThreshold_NoZeroSteps;      //  Threshold to abandon
                        // G4double  fMidPoint_CurveLen_of_LastAttempt= -1;
    G4double  fFull_CurveLen_of_LastAttempt; 
    G4double  fLast_ProposedStepLength; 
+   G4double  fLargestAcceptableStep;
 };
 
 //  Defines the constructor.

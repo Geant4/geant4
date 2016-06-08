@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.13.4.1 2001/06/28 19:08:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DisplacedSolid.cc,v 1.14 2001/07/11 09:59:52 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids

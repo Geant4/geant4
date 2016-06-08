@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlateIrrGasXrayTRmodel.cc,v 1.1.4.1 2001/06/28 19:10:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PlateIrrGasXrayTRmodel.cc,v 1.4 2001/09/18 09:02:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "g4std/complex"
@@ -38,7 +38,7 @@
 
 G4PlateIrrGasXrayTRmodel::G4PlateIrrGasXrayTRmodel(G4Envelope *anEnvelope, 
                                                   G4double a, G4double b) :
-  G4VXrayTRmodel(anEnvelope,a,b)
+  G4VXrayTRadModel(anEnvelope,a,b)
 {
   G4cout<<"PlateIrrGas X-ray TR radiator model is called"<<G4endl ;
 
@@ -69,7 +69,7 @@ G4double
 G4PlateIrrGasXrayTRmodel::GetStackFactor( G4double energy, 
                                          G4double gamma, G4double varAngle )
 {
-  G4double result, Qa, Qb, Q, Za, Zb, Ma, Mb ;
+  G4double result, Qa, Qb, Q, Za, Ma, Mb ;
   
   Za = GetPlateFormationZone(energy,gamma,varAngle) ;
   //  Zb = GetGasFormationZone(energy,gamma,varAngle) ;

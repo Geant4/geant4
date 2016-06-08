@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.8.2.1 2001/06/28 19:16:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Scene.hh,v 1.12 2001/08/24 20:47:39 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -82,24 +82,32 @@ public: // With description
   const G4Point3D& GetStandardTargetPoint () const;
   // Usually centre of extent.  See G4ViewParameters for definition.
 
+  G4bool GetRefreshAtEndOfEvent () const;
+  // If true, the visualization manager will request viewer to refresh
+  // "transient" objects, such as hits, at end of event.  Otherwise
+  // they will be accumulated.
+
   //////////////////////////////////////////////
   // Add, Set, Clear functions...
 
-  G4bool AddRunDurationModel (G4VModel*);
+  G4bool AddRunDurationModel (G4VModel*, G4bool warn = false);
   // Adds models of type which are expected to last for the duration
   // of the run, for example geometry volumes.
   // Returns false if model is already in the list.
+  // Prints warnings if warn is true.
 
-  G4bool AddWorldIfEmpty ();
+  G4bool AddWorldIfEmpty (G4bool warn = false);
   // In some situations, if the user asks for a drawing and has not
   // yet set any run duration models it makes sense to put the "world"
   // in there by default.
   // Returns false if model is already in the list.
+  // Prints warnings if warn is true.
 
-  G4bool AddEndOfEventModel (G4VModel*);
+  G4bool AddEndOfEventModel (G4VModel*, G4bool warn = false);
   // Adds models of type which are described at the end of event when
   // the scene is current.
   // Returns false if model is already in the list.
+  // Prints warnings if warn is true.
 
   G4std::vector<G4VModel*>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!
@@ -110,12 +118,21 @@ public: // With description
   void Clear ();
   // Clears and destroys models in all lists.
 
+  void SetRefreshAtEndOfEvent(G4bool);
+  // If set true, the visualization manager will request viewer to
+  // refresh "transient" objects, such as hits, at end of event.
+  // Otherwise they will be accumulated.
+
+  void CalculateExtent();
+  // (Re-)calculates the extent from the extents of its models.
+
 private:
   G4String fName;
   G4std::vector<G4VModel*> fRunDurationModelList;
   G4std::vector<G4VModel*> fEndOfEventModelList;
   G4VisExtent fExtent;
   G4Point3D   fStandardTargetPoint;
+  G4bool      fRefreshAtEndOfEvent;
 };
 
 #include "G4Scene.icc"

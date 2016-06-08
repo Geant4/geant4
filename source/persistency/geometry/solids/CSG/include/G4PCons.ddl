@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PCons.ddl,v 1.3.4.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4Cons
-//
+// $Id: G4PCons.ddl,v 1.5 2001/07/11 10:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4Cons solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Cons.hh
 
@@ -38,15 +39,19 @@
 class G4Cons;
 class G4VSolid;
 
-class G4PCons : public G4PCSGSolid {
-public:
+class G4PCons
+ : public G4PCSGSolid
+{
+public: // With description
     G4PCons(const G4Cons* theCons);
     virtual ~G4PCons() ;
+    // Constructor and Destructor
 
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient boolean solid object.
 
-    // Naming method (pseudo-RTTI : run-time type identification
     virtual G4GeometryType  GetEntityType() const {return G4String("G4Cons");}
+    // Returns the G4GeometryType of this solid.
 
 private:
 
@@ -57,3 +62,4 @@ private:
 };
 
 #endif
+

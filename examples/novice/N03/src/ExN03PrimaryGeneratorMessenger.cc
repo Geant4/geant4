@@ -21,22 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.3.4.1 2001/06/28 19:07:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.5 2001/10/10 14:58:12 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03PrimaryGeneratorMessenger.hh"
 
 #include "ExN03PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithAString.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(ExN03PrimaryGeneratorAction* ExN03Gun)
+ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(
+                                          ExN03PrimaryGeneratorAction* ExN03Gun)
 :ExN03Action(ExN03Gun)
 { 
   RndmCmd = new G4UIcmdWithAString("/gun/random",this);
@@ -48,20 +49,21 @@ ExN03PrimaryGeneratorMessenger::ExN03PrimaryGeneratorMessenger(ExN03PrimaryGener
   RndmCmd->AvailableForStates(PreInit,Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03PrimaryGeneratorMessenger::~ExN03PrimaryGeneratorMessenger()
 {
   delete RndmCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ExN03PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void ExN03PrimaryGeneratorMessenger::SetNewValue(
+                                        G4UIcommand* command, G4String newValue)
 { 
   if( command == RndmCmd )
    { ExN03Action->SetRndmFlag(newValue);}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

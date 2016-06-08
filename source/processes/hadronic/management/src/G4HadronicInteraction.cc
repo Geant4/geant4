@@ -14,15 +14,12 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4HadronicInteraction.cc,v 1.2.8.1 2001/06/28 19:12:57 gunter Exp $
-// GEANT4 tag $Name:  $
 //
  // Hadronic Interaction  base class
  // original by H.P. Wellisch
@@ -46,6 +43,7 @@
     {
       if( aMaterial == theMinMaterials[i] )return theMinEnergyList[i];
     }
+    if(IsBlocked()) return 0.*GeV;
     if( verboseLevel > 0 )
       G4cout << "*** Warning from HadronicInteraction::GetMinEnergy" << G4endl
            << "    material " << aMaterial->GetName()
@@ -116,6 +114,7 @@
     {
       if( aMaterial == theMaxMaterials[i] )return theMaxEnergyList[i];
     }
+    if(IsBlocked()) return 0.*GeV;
     if( verboseLevel > 0 )
       G4cout << "*** Warning from HadronicInteraction::GetMaxEnergy" << G4endl
            << "    material " << aMaterial->GetName()

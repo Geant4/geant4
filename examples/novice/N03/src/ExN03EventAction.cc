@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.cc,v 1.12.2.1 2001/06/28 19:07:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN03EventAction.cc,v 1.15 2001/11/05 08:24:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03EventAction.hh"
 
@@ -46,23 +46,23 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03EventAction::ExN03EventAction()
-:calorimeterCollID(-1),drawFlag("all"),eventMessenger(NULL),
- printModulo(1)
+:calorimeterCollID(-1),drawFlag("all"),printModulo(1),
+ eventMessenger(0)
 {
   eventMessenger = new ExN03EventActionMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03EventAction::~ExN03EventAction()
 {
   delete eventMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
 {
@@ -81,7 +81,7 @@ void ExN03EventAction::BeginOfEventAction(const G4Event* evt)
    } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03EventAction::EndOfEventAction(const G4Event* evt)
 {
@@ -91,7 +91,7 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
   // track length) in all absorbers and in all gaps
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
-  ExN03CalorHitsCollection* CHC = NULL;
+  ExN03CalorHitsCollection* CHC = 0;
   G4int n_hit = 0;
   G4double totEAbs=0, totLAbs=0, totEGap=0, totLGap=0;
     
@@ -115,34 +115,39 @@ void ExN03EventAction::EndOfEventAction(const G4Event* evt)
     G4cout << "---> End of event: " << evtNb << G4endl;	
 
     G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLAbs,"Length")
+       << "   Absorber: total energy: " << G4std::setw(7)
+                                        << G4BestUnit(totEAbs,"Energy")
+       << "       total track length: " << G4std::setw(7)
+                                        << G4BestUnit(totLAbs,"Length")
        << G4endl
-       << "        Gap: total energy: " << G4std::setw(7) << G4BestUnit(totEGap,"Energy")
-       << "       total track length: " << G4std::setw(7) << G4BestUnit(totLGap,"Length")
+       << "        Gap: total energy: " << G4std::setw(7)
+                                        << G4BestUnit(totEGap,"Energy")
+       << "       total track length: " << G4std::setw(7)
+                                        << G4BestUnit(totLGap,"Length")
        << G4endl;
 	  
     G4cout << "\n     " << n_hit
-	   << " hits are stored in ExN03CalorHitsCollection." << G4endl;  	     
+	   << " hits are stored in ExN03CalorHitsCollection." << G4endl;
   }
   
   // extract the trajectories and draw them
   
   if (G4VVisManager::GetConcreteInstance())
     {
-     G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
+     G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
      G4int n_trajectories = 0;
      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
 
      for (G4int i=0; i<n_trajectories; i++) 
-        { G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
+        { G4Trajectory* trj = (G4Trajectory*)
+	                                ((*(evt->GetTrajectoryContainer()))[i]);
           if (drawFlag == "all") trj->DrawTrajectory(50);
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
                                   trj->DrawTrajectory(50);
           else if ((drawFlag == "neutral")&&(trj->GetCharge() == 0.))
-                                  trj->DrawTrajectory(50);				   
+                                  trj->DrawTrajectory(50);
         }
-  }             
-}
+  }
+}  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.6.4.2 2001/06/28 20:20:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticleChangeForMSC.cc,v 1.8 2001/08/16 08:17:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -131,7 +131,6 @@ G4Step* G4ParticleChangeForMSC::UpdateStepForPostStep(G4Step* pStep)
   // pointer to G4ParticleMometum. Also it is a normalized 
   // momentum vector.
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
  

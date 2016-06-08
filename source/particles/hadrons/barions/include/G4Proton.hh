@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Proton.hh,v 1.6.2.2 2001/06/28 20:18:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Proton.hh,v 1.9 2001/10/16 08:15:50 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,8 +55,6 @@ class G4Proton : public G4VBaryon
 {
  private:
    static G4Proton theProton;
-   static G4double  theProtonLengthCut;
-   static G4double* theProtonKineticEnergyCuts;
 
  private:
    G4Proton(
@@ -76,12 +74,6 @@ class G4Proton : public G4VBaryon
 
    static G4Proton* ProtonDefinition();
    static G4Proton* Proton();
-   static G4double  GetCuts() {return theProtonLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theProtonKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
       
  public:  //With Description
    G4int    GetAtomicNumber() const;
@@ -94,23 +86,6 @@ class G4Proton : public G4VBaryon
 
 };
 
-inline void G4Proton::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theProtonLengthCut = theCutInMaxInteractionLength;  
-  theProtonKineticEnergyCuts = theKineticEnergyCuts;  
-}
-
-inline void G4Proton::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theProtonLengthCut = theCutInMaxInteractionLength;  
-  theProtonKineticEnergyCuts = theKineticEnergyCuts;  
-}
-
-inline G4Proton* G4Proton::Proton()
-{  return &theProton; }
 
 inline
  G4int G4Proton::GetAtomicNumber() const 

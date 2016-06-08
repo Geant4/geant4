@@ -1,4 +1,4 @@
-$Id: History,v 1.80 2001/06/18 12:58:43 pia Exp $
+$Id: History,v 1.127 2001/11/15 15:56:21 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,236 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.11.2001 - MGP, tag emlowen-V03-02-45
+             Bug fix in G4FluoData 
+             Physics improvement in Bremsstrahlung
+             Modified warning message in G4hLowEnergyIonisation
+             Goes with new database version G4EMLOW0.4
+
+09.11.2001 - MGP, tag emlowen-V03-02-44
+             Example for using analysis in test/LowEnTest, based on 
+             Ramon's XrayTel
+
+09.11.2001 - MGP, tag emlowen-V03-02-43
+             Fixed name in test/processTest/GNUmakefile causing
+             problems with library map
+
+08.11.2001 - MGP, tag emlowen-V03-02-42
+             Modifications to be compliant with the unsupported, 
+             deprecated "cuts per material" 
+             Added G4CutsPerMaterialWarning functor to warn users
+             WARNING: LowE processes are not supported if using different
+             cuts for different materials
+
+06.11.2001 - MGP, tag emlowen-V03-02-41
+             Identical to emlowen-V03-02-40
+             Redone because the tag aborted before completion
+
+06.11.2001 - MGP, tag emlowen-V03-02-40
+             Performance improvement in electron processes
+             Some clean up of code (include/forward class declarations,
+             coding style guidelines etc.)
+             First implementation of a generic unit test, with AIDA/Lizard
+             analysis in test/processTest
+
+01.11.2001 - MGP, tag emlowen-V03-02-39
+             PIXE introduced in G4hLowEnergyIonisation
+
+29.10.2001 - MGP, tag emlowen-V03-02-38
+             Bug fixes in new code
+             Generic unit test for e/photon processes in test/processTest
+             (analysis still to be added)
+
+28.10.2001 - MGP, tag emlowen-V03-02-37
+             Fixed compilation warnings on Linux and HP
+             Improved code style
+
+26.10.2001 - MGP, tag emlowen-V03-02-36
+             Bug and memory leak fixes in the new electron classes
+
+26.10.2001 - MGP, tag emlowen-V03-02-35
+             Swapped old/new electron processes
+
+25.10.2001 - MGP, tag emlowen-V03-02-34
+             Bug fixes in the new classes related to Bremsstrahlung and 
+             e/h Ionisation             
+
+25.10.2001 - MGP, tag emlowen-V03-02-33
+             G4LowEnergyPolarizedCompton moved to new design
+             Many bug fixes in G4eIonisationParameters and G4BremsstrahlungParameters
+             New classes for shell cross sections for proton-induced fluorescence 
+             Fluorescence introduced in temporary class G4hLowEnergyIonisation
+             Fluorescence introduced in the continuous part of electron
+             ionisation in G4eLowEnergyLoss and temporary G4LowEnergyIonisationVI
+
+18.10.2001 - MGP, tag emlowen-V03-02-32
+             Same as previous one, with on top fixes to G4BremsstrahlungParameters.cc
+	     and G4eIonisationParameters.cc by G. Cosmo for compatibility with 
+             geant4-03-02-ref-06 in view of STL migration
+
+18.10.2001 - MGP, tag emlowen-V03-02-31
+             Added member function in G4eLowEnergyLoss and G4VLowEnergyIonisationVI
+             for generation of atomic deexcitation products in the continuous part
+
+18.10.2001 - MGP, tag emlowen-V03-02-30
+             Electron processes: contributions to the implementation by V.I.
+                                 revision of code quality and consistency
+                                 with design by MGP
+
+18.10.2001 - MGP, tag emlowen-V03-02-29
+             Modification of G4hNuclearStoppingModel and 
+	     G4hParametrisedLossModel by G. Cosmo required for
+             compatibility with materials-V03-02-04
+
+12.10.2001 - MGP, tag emlowen-V03-02-28
+             Cosmetics in the source code (FALSE/TRUE moved to false/true)
+             and update of all tests to new materials migrated to STL
+
+11.10.2001 - MGP, tag emlowen-V03-02-27
+             Further revision of the new code in the previous tag
+             Restored G4LowEnergyIonisation and G4LowEnergyBremsstrahlung 
+             as in emlowen-V03-02-25; new versions as in emlowen-V03-02-26
+             renamed temporarily to allow for parallel development
+             Removed references to Rogue Wave and STL interface from
+             test/LowEnTest/ and test/fluoTest/
+
+10.10.2001 - MGP, tag emlowen-V03-02-26
+             Code for implementation of design iteration for electrons 
+             by V. Ivanchenko
+             Major revision of new code to improve code quality and consistency
+             with design by MGP
+             Since the new code does not respect the design and broke system 
+             test and user code, this tag is only for internal debugging 
+             purpose and should not be used by developers
+
+09.10.2001 - MGP, tag emlowen-V03-02-25
+             Identical to the previous one, but restored G4VDataSetAlgorithm
+             (corrupted in cvs update?)
+
+08.10.2001 - MGP, tag emlowen-V03-02-24
+             Modified G4CrossSectionHandler to inherit from base class
+             Minor design iteration in G4VEMDataSet and G4VDataSetAlgorithm
+             Encapsulated range test to generate secondaries into a 
+             strategy pattern; implemented in photon processes
+
+04.10.2001 - MGP, tag emlowen-V03-02-23
+             Fluorescence according to the new design introduced 
+             into e- ionisation (contribution to PostStepDoIt) 
+             by E. Guardincerri
+
+26.09.2001 - MGP, tag emlowen-V03-02-22
+             Workaround to support deficiencies of ObjectSpace in 
+             implementation of STL pair 
+
+25.09.2001 - MGP, tag emlowen-V03-02-21
+             Workaround to support deficiencies of ObjectSpace in 
+             implementation of STL pair (wrongly tagged)
+
+24.09.2001 - MGP, tag emlowen-V03-02-20
+             Minor modifications to make the lowenergy category co-work
+             with both materials-V03-02-03 and materials as 
+             in geant4-03-02-ref-03
+
+23.09.2001 - MGP, tag emlowen-V03-02-19
+             Same as previous one + migration to materials-V03-02-03 (STL)
+
+23.09.2001 - MGP, tag emlowen-V03-02-18
+             New class to generate shell vacancies in continuous part
+             of processes by E. Guardincerri
+             Renamed old photon processes (pre-design iteration) to
+             G4LowEnergyOld; to be kept for a limited period for convenience
+             of regression testing
+             Fixed various STL problems found with HP compiler
+             Added protection in G4LowEnergyPhotoElectric to avoid
+             generating photons causing negative energy balance
+
+21.09.2001 - MGP, tag emlowen-V03-02-17
+             G4LowEnergyPhotoElectric moved to the implementation
+             according to the new fluo+data design 
+             [Test version G4LowEnergyPhotoElectricMG removed]
+             Fixed warning for energy outside allowed range in G4EMDataSet
+             Update to test/GNUmakefile, G4ComptonTest.cc by A. Pfeiffer
+             Minor cosmetics
+
+19.09.2001 - MGP, tag emlowen-V03-02-16
+             Same as previous one, but test/GNUmakefile, G4ComptonTest.cc
+             and G4ComptonTest.py for histograms and ntuples with Lizard 
+             (by A. Pfeiffer)
+
+19.09.2001 - MGP, tag emlowen-V03-02-15
+             Same as previous one, but test/fluoTest with Particle gun
+
+19.09.2001 - MGP, tag emlowen-V03-02-14
+             Minor cosmetics w.r.t. the previous one (removed compilation 
+             warnings)
+             test/fluoTest with GPS
+
+16.09.2001 - MGP, tag emlowen-V03-02-13
+             Update to the fluorescence domain consistent with the
+             new design (development by E. Guardincerri)
+             Update to test/fluoTest (development by E. Guardincerri)
+
+13.09.2001 - MGP, tag emlowen-V03-02-12
+             Fix in G4CrossSectionHandler::Clear to remove an infinite loop
+             occurring in test14
+
+10.09.2001 - MGP, tag emlowen-V03-02-11
+             Identical to emlowen-V03-02-10
+             Restored a clean situation in the cvs head, removing all
+             the code inconsistent with the design present in 
+             emlowen-after-chep2001, resulting from a fault in the
+             software process by a developer.
+
+10.09.2001 - MGP, tag emlowen-after-chep2001
+             Junk found in the repository 
+             Tagged as an aid in the procedure of restoring a reasonable
+             situation in the cvs head for future developments
+
+29.08.2001 - MGP, tag emlowen-V03-02-10
+             Major revision of G4LowEnergyCompton, G4LowEnergyRayleigh and
+             G4LowEnergyGammaConversion: re-implementation according to
+             the design iteration in the data domain
+             Temporary re-implementation of G4LowEnergyPhotoElectricMG,
+             without fluorescence yet
+
+29.08.2001 - MGP, tag emlowen-V03-02-09
+             Bug fix in G4CrossSectionHandler
+
+29.08.2001 - MGP, tag emlowen-V03-02-08
+             Cleared compilation warnings in G4AtomicTransitionManager
+          
+28.08.2001 - G.Cosmo, tag emlowen-V03-02-07
+             Fixed mess with tag names
+
+27.08.2001 - STT, tag emlowen-V03-02-06
+ 
+20.08.2001 - MGP, tag emlowen-V03-02-05
+             Added files resulting from design iteration in the data domain   
+
+20.08.2001 - MGP, tag emlowen-V03-02-04
+	     Same as emlowen-V03-02-02 + bug fix by V.I. described below
+
+18.08.2001 - V.Ivanchenko fix energy conservation bugs for small
+             range cuts in G4LowEnergyIonisation.cc
+
+30.07.2001 - MGP, tag emlowen-V03-02-03
+             First step of design iteration in fluorescence (files
+             contributed by E. Guardincerri, G4AtomicShell and 
+             G4AtomicTransitionManager) + related unit test
+
+30.07.2001 - MGP, tag emlowen-V03-02-02
+             Fix to GammaConversion by F. Longo
+
+30.07.2001 - MGP, tag emlowen-V03-02-01
+             Added modifications by V.I. listed below (13.07.2001),
+             on top of previous tag
+
+30.07.2001 - MGP, tag emlowen-V03-02-00
+             Same as emlowen-V03-01-19, with liability disclaimer added
+
+13.07.2001 - V.Ivanchenko remove comments with Rogue Wave 
+             fix a problem of continuity of ion effective charge
 
 18.06.2001 - MGP, tag emlowen-V03-01-19
              Same as emlowen-V03-01-18, with corrections by S. Chauvie

@@ -21,22 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.8.4.2 2001/06/28 20:19:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MuBremsstrahlung.hh,v 1.12 2001/10/29 13:53:18 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      -------- G4MuBremsstrahlung physics process ---------
+//--------------- G4MuBremsstrahlung physics process ------------------
 //                by Laszlo Urban, September 1997
-// ************************************************************
+//------------------------------------------------------------------------------
 // 10/02/00  modifications , new e.m. structure, L.Urban
-//
+// 10-08-01: new methods Store/Retrieve PhysicsTable (mma)
+// 29-10-01 all static functions no more inlined (mma)   
+//------------------------------------------------------------------------------
 
 #ifndef G4MuBremsstrahlung_h
 #define G4MuBremsstrahlung_h 1
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ios.hh" 
 #include "globals.hh"
@@ -47,6 +46,8 @@
 #include "G4OrderedTable.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 class G4MuBremsstrahlung : public G4VMuEnergyLoss
  
@@ -64,15 +65,15 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
      void BuildLossTable(const G4ParticleDefinition& ParticleType);
 
      void BuildLambdaTable(const G4ParticleDefinition& ParticleType);
-
-     void PrintInfoDefinition() ;
+     
+     void PrintInfoDefinition();
 
      G4double GetMeanFreePath(const G4Track& track,
                               G4double previousStepSize,
-                              G4ForceCondition* condition ) ;
+                              G4ForceCondition* condition );
  
      G4VParticleChange *PostStepDoIt(const G4Track& track,
-                                     const G4Step& Step  ) ;                 
+                                     const G4Step& Step  );                 
 
      G4double GetDMicroscopicCrossSection(
                                       const G4ParticleDefinition* ParticleType,
@@ -80,6 +81,16 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
                                             G4double AtomicNumber,
                                             G4double AtomicMass,  
                                             G4double GammaEnergy);
+					    
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+  		              const G4String& directory, G4bool);
+      // store eLoss and MeanFreePath tables into an external file
+      // specified by 'directory' (must exist before invokation)
+      
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,   
+			         const G4String& directory, G4bool);
+      // retrieve eLoss and MeanFreePath tables from an external file
+      // specified by 'directory'					    
 
   protected:
 
@@ -120,36 +131,38 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
 
   private:
 
-     G4PhysicsTable* theMeanFreePathTable ;              
+     G4PhysicsTable* theMeanFreePathTable;              
 
      G4OrderedTable PartialSumSigma;   
 
-     static G4double LowerBoundLambda ; // bining for lambda table
-     static G4double UpperBoundLambda ;
-     static G4int    NbinLambda ;
-     G4double LowestKineticEnergy,HighestKineticEnergy ;
-     G4int    TotBin ;
+     static G4double LowerBoundLambda; // bining for lambda table
+     static G4double UpperBoundLambda; 
+     static G4int    NbinLambda;
+     G4double LowestKineticEnergy,HighestKineticEnergy;
+     G4int    TotBin;
 
      const G4double* GammaCutInKineticEnergy;
 
      G4double GammaCutInKineticEnergyNow;
 
-     // tables for sampling ..............
-     static G4int nzdat,ntdat,NBIN ;
-     static G4double zdat[5],adat[5],tdat[8] ;
-     static G4double ya[1001],proba[5][8][1001] ;
-     static G4double CutFixed ;
+     // tables for sampling 
+     static G4int nzdat,ntdat,NBIN;
+     static G4double zdat[5],adat[5],tdat[8];
+     static G4double ya[1001],proba[5][8][1001];
+     static G4double CutFixed;
 
   public:
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n) {NbinLambda = n;};
-    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
-    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
-    static G4int GetNbinLambda() {return NbinLambda;};
+    static void SetLowerBoundLambda(G4double val);
+    static void SetUpperBoundLambda(G4double val);
+    static void SetNbinLambda(G4int n);
+    static G4double GetLowerBoundLambda();
+    static G4double GetUpperBoundLambda();
+    static G4int GetNbinLambda();
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MuBremsstrahlung.icc"
   

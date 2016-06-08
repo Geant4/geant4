@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegCoderTables.hh,v 1.4.4.1 2001/06/28 19:15:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RTJpegCoderTables.hh,v 1.5 2001/07/11 10:09:01 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // class description:

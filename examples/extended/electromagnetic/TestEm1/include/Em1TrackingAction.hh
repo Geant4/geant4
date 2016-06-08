@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Em1TrackingAction.hh,v 1.2.4.1 2001/06/28 19:06:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em1TrackingAction.hh,v 1.4 2001/10/26 12:51:24 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #ifndef Em1TrackingAction_h
 #define Em1TrackingAction_h 1
 
@@ -33,7 +34,7 @@
 
 class Em1RunAction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1TrackingAction : public G4UserTrackingAction {
 
@@ -46,5 +47,7 @@ class Em1TrackingAction : public G4UserTrackingAction {
   private:
     Em1RunAction* runAction;  
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

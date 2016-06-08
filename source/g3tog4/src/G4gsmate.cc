@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmate.cc,v 1.7.2.1 2001/06/28 19:08:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4gsmate.cc,v 1.8 2001/07/11 09:59:01 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

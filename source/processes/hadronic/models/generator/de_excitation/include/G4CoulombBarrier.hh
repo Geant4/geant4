@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.hh,v 1.2.2.1 2001/06/28 19:13:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4CoulombBarrier.hh,v 1.5 2001/10/08 17:15:48 larazb Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -58,7 +58,9 @@ private:
 
   virtual G4double BarrierPenetrationFactor(const G4double aZ) const {return 1.0;}
 
-
+  virtual G4double CalcCompoundRadius(const G4double ZRes) const 
+  {
+    return 2.173*fermi*(1.0+0.006103*G4double(GetZ())*ZRes)/(1.0+0.009443*G4double(GetZ())*ZRes);
+  }
 };
-
 #endif

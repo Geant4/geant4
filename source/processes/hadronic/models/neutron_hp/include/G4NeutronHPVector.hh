@@ -14,15 +14,11 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-//
-// $Id: G4NeutronHPVector.hh,v 1.15.2.1 2001/06/28 19:14:21 gunter Exp $
-// GEANT4 tag $Name:  $
 //
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
@@ -249,14 +245,14 @@ class G4NeutronHPVector
     nEntries=0;   
     theManager.CleanUp();
     maxValue = -DBL_MAX;
+    theHash.Clear();
   }
 
   // merges the vectors active and passive into *this
   inline void Merge(G4NeutronHPVector * active, G4NeutronHPVector * passive)
   {
     CleanUp();
-    G4int s = 0, n=0, i=0, m=0;
-    G4bool flag;
+    G4int s = 0, n=0, m=0;
     G4NeutronHPVector * tmp;
     G4int a = s, p = n, t;
     while (a<active->GetVectorLength()&&p<passive->GetVectorLength())

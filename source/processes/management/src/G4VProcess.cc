@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.6.2.1 2001/06/28 19:15:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VProcess.cc,v 1.8 2001/07/11 10:08:21 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -173,6 +173,22 @@ void G4VProcess::DumpInfo() const
   G4cout << " : Type[" << GetProcessTypeName(theProcessType) << "]"<< G4endl;
 }
 
+
+const G4String&  G4VProcess::GetPhysicsTableFileName(G4ParticleDefinition* particle,
+						     const G4String& directory,
+						     const G4String& tableName,
+						     G4bool ascii)
+{
+  G4String thePhysicsTableFileExt;
+  if (ascii) thePhysicsTableFileExt = ".asc";
+  else       thePhysicsTableFileExt = ".dat";
+
+  thePhysicsTableFileName = directory + "/";
+  thePhysicsTableFileName += tableName + "." +  theProcessName + ".";
+  thePhysicsTableFileName += particle->GetParticleName() + thePhysicsTableFileExt;
+  
+  return thePhysicsTableFileName;
+}
 
 
 

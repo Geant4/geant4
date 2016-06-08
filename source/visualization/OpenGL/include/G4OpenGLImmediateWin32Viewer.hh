@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.4.2.1 2001/06/28 19:15:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.6 2001/07/14 21:47:41 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from
@@ -46,6 +46,7 @@ public G4OpenGLWin32Viewer, public G4OpenGLImmediateViewer{
   
 public:
   G4OpenGLImmediateWin32Viewer (G4OpenGLImmediateSceneHandler& scene);
+  void Initialise ();
   void DrawView ();
 };
 

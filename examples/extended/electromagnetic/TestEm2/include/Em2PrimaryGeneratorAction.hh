@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PrimaryGeneratorAction.hh,v 1.2.4.1 2001/06/28 19:06:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2PrimaryGeneratorAction.hh,v 1.4 2001/10/25 15:12:06 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2PrimaryGeneratorAction_h
 #define Em2PrimaryGeneratorAction_h 1
@@ -39,8 +39,7 @@
 class G4Event;
 class Em2DetectorConstruction;
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -56,6 +55,8 @@ class Em2PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun*              particleGun;
     Em2DetectorConstruction*    Em2Detector; 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

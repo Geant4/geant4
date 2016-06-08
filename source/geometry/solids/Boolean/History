@@ -1,5 +1,5 @@
 
-$Id: History,v 1.21 2001/05/30 14:06:05 gcosmo Exp $
+$Id: History,v 1.24 2001/11/08 15:46:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Nov 08  2001  Gabriele Cosmo       geom-solid-bool-V03-02-02
+  - Fix for verbosity in G4ReflectionFactory.cc. Reduced of one level.
+
+ Oct 18  2001  Gabriele Cosmo       geom-solid-bool-V03-02-01
+  - Introduced first implementation of classes G4ReflectedSolid and
+    G4ReflectionFactory for reflections of positioned volumes
+    (courtesy of V.Grichine and I.Hrivnacova).
+  - Fixed bug in G4ReflectedSolid::CreatePolyhedron().
+
+ Aug 13  2001  Vladimir Grichine    geom-solid-bool-V03-02-00
+  - Introduced G4BOOLDEBUG flag and replaced G4Exception statements with
+    simple warnings to G4cerr for rare occurences of anomalous conditions.
 
  May 30  2001  Vladimir Grichine    geom-solid-bool-V03-01-00
   - G4IntersectionSolid: fix in DistanceToIn(p,v) resolving bug observed

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventActionMessenger.hh,v 1.2.4.1 2001/06/28 19:06:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2EventActionMessenger.hh,v 1.4 2001/10/25 15:12:06 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2EventActionMessenger_h
 #define Em2EventActionMessenger_h 1
@@ -39,7 +39,7 @@ class Em2EventAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2EventActionMessenger: public G4UImessenger
 {
@@ -54,5 +54,7 @@ class Em2EventActionMessenger: public G4UImessenger
     G4UIcmdWithAString*   DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

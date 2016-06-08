@@ -21,25 +21,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.hh,v 1.8.2.2 2001/06/28 20:19:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4eBremsstrahlung.hh,v 1.13 2001/10/29 16:23:41 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4eBremsstrahlung physics process ------
-//                     by Michel Maire, 24 July 1996
-// ************************************************************
-// 1-10-96 : new type G4OrderedTable;  ComputePartialSumSigma()
-// 20/03/97: new energy loss+ionisation+brems scheme, L.Urban
-// 01-09-98, new method  PrintInfo() 
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
+//                     by Laszlo Urban, 24 July 1996
+// 
+// 01-10-96 new type G4OrderedTable;  ComputePartialSumSigma()
+// 20-03-97 new energy loss+ionisation+brems scheme, L.Urban
+// 01-09-98 new method  PrintInfo() 
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 07-08-00 new cross section/en.loss parametrisation, LPM flag , L.Urban
+// 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
+// 19-09-01 come back to previous process name "eBrem"
+// 29-10-01 all static functions no more inlined (mma)  
 // ------------------------------------------------------------
+
+// Class description
+//
+// This class manages the bremsstrahlung for e-/e+
+// it inherites from G4VContinuousDiscreteProcess via G4VeEnergyLoss.
+//
+// Class description - end
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef G4eBremsstrahlung_h
 #define G4eBremsstrahlung_h 1
@@ -56,7 +63,9 @@
 #include "G4OrderedTable.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
 class G4eBremsstrahlung : public G4VeEnergyLoss
  
 { 
@@ -83,9 +92,18 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
      G4VParticleChange *PostStepDoIt(const G4Track& track,         
                                      const G4Step&  step);                 
 
-     G4double GetLambda(
-                   G4double KineticEnergy,G4Material* material);
-
+     G4double GetLambda(G4double KineticEnergy,G4Material* material);
+     
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+  		              const G4String& directory, G4bool);
+      // store eLoss and MeanFreePath tables into an external file
+      // specified by 'directory' (must exist before invokation)
+      
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,   
+			         const G4String& directory, G4bool);
+      // retrieve eLoss and MeanFreePath tables from an external file
+      // specified by 'directory'
+            
   protected:
 
      G4double ComputeMeanFreePath( const G4ParticleDefinition* ParticleType,
@@ -96,7 +114,7 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
                                         G4double KineticEnergy,
                                   const G4Material* aMaterial);
 
-     virtual G4double ComputeMicroscopicCrossSection(
+     virtual G4double ComputeCrossSectionPerAtom(
                                   const G4ParticleDefinition* ParticleType,
                                         G4double KineticEnergy, 
                                         G4double AtomicNumber,
@@ -131,12 +149,12 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
      
   private:
 
-     G4PhysicsTable* theMeanFreePathTable ;              
+     G4PhysicsTable* theMeanFreePathTable;              
 
      G4OrderedTable PartialSumSigma;       // partial sum of total crosssection
 
-     static G4double LowerBoundLambda;     // low  energy limit of the crossection formula
-     static G4double UpperBoundLambda;     // high energy limit of the crossection formula 
+     static G4double LowerBoundLambda;     // low  energy limit of crossection table
+     static G4double UpperBoundLambda;     // high energy limit of crossection table
      static G4int    NbinLambda;           // number of bins in the tables 
      
      G4double MinThreshold;                // minimun value for the production threshold
@@ -144,21 +162,23 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
      G4double LowestKineticEnergy,HighestKineticEnergy; // bining of the Eloss table
      G4int    TotBin;                                   // (from G4VeEnergyLoss)
 
-     static G4double probsup ;
-     static G4bool LPMflag ;
+     static G4double probsup;
+     static G4bool LPMflag;
 
   public:
 
-    static void SetLowerBoundLambda(G4double val) {LowerBoundLambda = val;};
-    static void SetUpperBoundLambda(G4double val) {UpperBoundLambda = val;};
-    static void SetNbinLambda(G4int n) {NbinLambda = n;};
-    static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
-    static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
-    static G4int GetNbinLambda() {return NbinLambda;};
+    static void SetLowerBoundLambda(G4double val);
+    static void SetUpperBoundLambda(G4double val);
+    static void SetNbinLambda(G4int n);
+    static G4double GetLowerBoundLambda();
+    static G4double GetUpperBoundLambda();
+    static G4int GetNbinLambda();
 
-    static void SetLPMflag(G4bool val) { LPMflag = val ; } ;
-    static G4bool GetLPMflag() { return LPMflag ; } ;
+    static void   SetLPMflag(G4bool val);
+    static G4bool GetLPMflag();
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eBremsstrahlung.icc"
   

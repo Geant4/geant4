@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.14.2.1 2001/06/28 19:15:30 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SteppingManager.cc,v 1.23 2001/12/04 17:15:50 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
@@ -53,7 +53,7 @@
 //////////////////////////////////////
 G4SteppingManager::G4SteppingManager()
 //////////////////////////////////////
-  : verboseLevel(0), fUserSteppingAction(NULL)
+  : fUserSteppingAction(NULL), verboseLevel(0)
 {
 
 // Construct simple 'has-a' related objects
@@ -87,8 +87,7 @@ G4SteppingManager::G4SteppingManager()
    SetNavigator(G4TransportationManager::GetTransportationManager()
      ->GetNavigatorForTracking());
 
-   fTouchable1 = new G4TouchableHistory();
-   fTouchable2 = new G4TouchableHistory();
+//   fTouchableHandle = new G4TouchableHistory();
 }
 
 ///////////////////////////////////////
@@ -102,8 +101,6 @@ G4SteppingManager::~G4SteppingManager()
    delete fSelectedAtRestDoItVector;
    delete fSelectedAlongStepDoItVector;
    delete fSelectedPostStepDoItVector;
-   delete (G4VTouchable*)(fTouchable1);
-   delete (G4VTouchable*)(fTouchable2);
    if (fUserSteppingAction) delete fUserSteppingAction;
 #ifdef G4VERBOSE
    if(KillVerbose) delete fVerbose;
@@ -130,10 +127,7 @@ G4StepStatus G4SteppingManager::Stepping()
    fStep->ResetTotalEnergyDeposit();
 
 // Switch next touchable in track to current one
-   fTrack->SetTouchable(fTrack->GetNextTouchable());
-
-// Free the touchable which is not used
-   SetAnotherTouchableFree(fPostStepPoint->GetTouchable());
+   fTrack->SetTouchableHandle(fTrack->GetNextTouchableHandle());
 
 // Reset the secondary particles
    fN2ndariesAtRestDoIt = 0;
@@ -254,8 +248,6 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
    fTrack = valueTrack;
    Mass = fTrack->GetDynamicParticle()->GetMass();
 
-   fIsTouchable1Free = TRUE;
-   fIsTouchable2Free = TRUE;
 
 // If the primary track has 'Suspend' or 'PostponeToNextEvent' state,
 // set the track state to 'Alive'.
@@ -270,37 +262,52 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
      fTrack->SetTrackStatus( fStopButAlive );
    }
 
-// Initialize VTouchable using the point in the global coordinate
-// system. 
-   G4VTouchable* pTouchableFree = (G4VTouchable*)(GetFreeTouchable());
-   fNavigator->LocateGlobalPointAndUpdateTouchable(
-                     fTrack->GetPosition(),
-                     pTouchableFree,
-                     true );
-
 // Set Touchable to track and a private attribute of G4SteppingManager
-   fTrack->SetTouchable( pTouchableFree );
-   fTrack->SetNextTouchable( pTouchableFree );
+ 
 
+  if ( ! fTrack->GetTouchableHandle() ) {
+     G4ThreeVector direction= fTrack->GetMomentumDirection();
+     fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(), &direction, true, false);
+     fTouchableHandle = fNavigator->CreateTouchableHistory();
+
+     fTrack->SetTouchableHandle( fTouchableHandle );
+     fTrack->SetNextTouchableHandle( fTouchableHandle );
+  }else{
+     fTrack->SetNextTouchableHandle( fTrack->GetTouchableHandle() );
+     G4VPhysicalVolume* oldTopVolume= fTrack->GetTouchableHandle()->GetVolume();
+     G4VPhysicalVolume* newTopVolume=
+     fNavigator->LocateGlobalPointAndSetup( fTrack->GetPosition(), 
+         fTrack->GetMomentumDirection(),*((G4TouchableHistory*)fTrack->GetTouchableHandle()()) );
+     if(newTopVolume != oldTopVolume ){
+        fTouchableHandle = fNavigator->CreateTouchableHistory();
+        fTrack->SetTouchableHandle( fTouchableHandle );
+        fTrack->SetNextTouchableHandle( fTouchableHandle );
+     }
+  }
 // Set vertex information of G4Track at here
-//corrected on 10APR2001/TS
    if ( fTrack->GetCurrentStepNumber() == 0 ) {
      fTrack->SetVertexPosition( fTrack->GetPosition() );
      fTrack->SetVertexMomentumDirection( fTrack->GetMomentumDirection() );
      fTrack->SetVertexKineticEnergy( fTrack->GetKineticEnergy() );
+     fTrack->SetLogicalVolumeAtVertex( fTrack->GetVolume()->GetLogicalVolume() );
    }
 // Initial set up for attributes of 'G4SteppingManager'
-   fCurrentVolume = pTouchableFree->GetVolume();
+   fCurrentVolume = fTouchableHandle->GetVolume();
 
+// If track is already outside the world boundary, kill it
+   if( fCurrentVolume==0 ){
+       fTrack->SetTrackStatus( fStopAndKill );
+       G4cerr << "G4SteppingManager::SetInitialStep(): warning: "
+              << "initial track position is outside world! "
+              << fTrack->GetPosition() << G4endl;
+   }
+   else {
 // Initial set up for attribues of 'Step'
-   fStep->InitializeStep( fTrack );
+       fStep->InitializeStep( fTrack );
+   }
 #ifdef G4VERBOSE
                          // !!!!! Verbose
            if(verboseLevel>0) fVerbose->TrackingStarted();
 #endif
-// If track is already outside the world boundary, kill it
-   if( fTrack->GetVolume()==0 ){
-       fTrack->SetTrackStatus( fStopAndKill );
-   }
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.hh,v 1.8.2.1 2001/06/28 19:07:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TDigiCollection.hh,v 1.10 2001/07/13 15:00:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4TDigiCollection_h
@@ -31,7 +31,6 @@
 #include "G4VDigiCollection.hh"
 #include "G4Allocator.hh"
 #include "globals.hh"
-//#include "g4rw/tpordvec.h"
 #include "g4std/vector"
 
 // class description:
@@ -50,7 +49,7 @@ class G4DigiCollection : public G4VDigiCollection
       G4DigiCollection();
       G4DigiCollection(G4String detName,G4String colNam);
       virtual ~G4DigiCollection();
-      int operator==(const G4DigiCollection &right) const;
+      G4int operator==(const G4DigiCollection &right) const;
 
   protected:
       void* theCollection;
@@ -67,7 +66,7 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
       // Constructor.
   public:
       virtual ~G4TDigiCollection();
-      int operator==(const G4TDigiCollection &right) const;
+      G4int operator==(const G4TDigiCollection &right) const;
       
       inline void *operator new(size_t);
       inline void operator delete(void* aDC);
@@ -84,7 +83,7 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
       inline G4std::vector<T*>* GetVector() const
       { return (G4std::vector<T*>*)theCollection; }
       //  Returns a collection vector.
-      inline int insert(T* aHit)
+      inline G4int insert(T* aHit)
       {
         G4std::vector<T*>*theDigiCollection 
           = (G4std::vector<T*>*)theCollection;
@@ -93,7 +92,7 @@ template <class T> class G4TDigiCollection : public G4DigiCollection
       }
       //  Insert a digi object. Total number of digi objects stored in this
       // collection is returned.
-      inline int entries() const
+      inline G4int entries() const
       {
         G4std::vector<T*>*theDigiCollection 
           = (G4std::vector<T*>*)theCollection;
@@ -134,21 +133,21 @@ template <class T> G4TDigiCollection<T>::~G4TDigiCollection()
   G4std::vector<T*> * theDigiCollection 
     = (G4std::vector<T*>*)theCollection;
   //theDigiCollection->clearAndDestroy();
-  for(int i=0;i<theDigiCollection->size();i++)
+  for(size_t i=0;i<theDigiCollection->size();i++)
   { delete (*theDigiCollection)[i]; }
   theDigiCollection->clear();
   delete theDigiCollection;
 }
 
-template <class T> int G4TDigiCollection<T>::operator==(const G4TDigiCollection<T> &right) const
+template <class T> G4int G4TDigiCollection<T>::operator==(const G4TDigiCollection<T> &right) const
 { return (collectionName==right.collectionName); }
 
 template <class T> void G4TDigiCollection<T>::DrawAllDigi() 
 {
   G4std::vector<T*> * theDigiCollection 
     = (G4std::vector<T*>*)theCollection;
-  int n = theDigiCollection->size();
-  for(int i=0;i<n;i++)
+  size_t n = theDigiCollection->size();
+  for(size_t i=0;i<n;i++)
   { (*theDigiCollection)[i]->Draw(); }
 }
 
@@ -156,8 +155,8 @@ template <class T> void G4TDigiCollection<T>::PrintAllDigi()
 {
   G4std::vector<T*> * theDigiCollection 
     = (G4std::vector<T*>*)theCollection;
-  int n = theDigiCollection->size();
-  for(int i=0;i<n;i++)
+  size_t n = theDigiCollection->size();
+  for(size_t i=0;i<n;i++)
   { (*theDigiCollection)[i]->Print(); }
 }
 

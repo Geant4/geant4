@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambda.hh,v 1.4.4.2 2001/06/28 20:18:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiLambda.hh,v 1.9 2001/10/28 05:06:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,8 +53,6 @@ class G4AntiLambda : public G4VBaryon
 {
  private:
    static G4AntiLambda theAntiLambda;
-   static G4double  theAntiLambdaLengthCut;
-   static G4double* theAntiLambdaKineticEnergyCuts;
 
  private:
    G4AntiLambda(
@@ -73,11 +71,9 @@ class G4AntiLambda : public G4VBaryon
    virtual  ~G4AntiLambda(){}
 
    static G4AntiLambda* AntiLambdaDefinition();
-   static G4AntiLambda* AntiLambda(){return &theAntiLambda;}
-   static G4double GetCuts() {return theAntiLambdaLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiLambdaKineticEnergyCuts;};
+   static G4AntiLambda* AntiLambda();
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

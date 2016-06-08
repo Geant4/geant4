@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.6.2.1 2001/06/28 19:08:31 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SolidStore.cc,v 1.7 2001/07/11 09:59:21 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4SolidStore
 //

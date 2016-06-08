@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvManMessenger.hh,v 1.3.4.1 2001/06/28 19:07:52 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EvManMessenger.hh,v 1.4 2001/07/11 09:58:47 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4EvManMessenger_h

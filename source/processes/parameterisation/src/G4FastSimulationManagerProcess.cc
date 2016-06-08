@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.5.2.1 2001/06/28 19:15:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.7 2001/10/26 14:43:36 mverderi Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
@@ -156,8 +156,8 @@ G4FastSimulationManagerProcess::PostStepGetPhysicalInteractionLength(
   //---------------------------------------------
   // Normal Dispatcher (for tracking geometry) :
   //---------------------------------------------
-  if(fFastSimulationManager = 
-     track.GetVolume()->GetLogicalVolume()->GetFastSimulationManager())
+  if( (fFastSimulationManager =
+     track.GetVolume()->GetLogicalVolume()->GetFastSimulationManager()) )
     {
       // Yes, so should us trigger a fast simulation model now ?
       if(fFastSimulationTrigger = 
@@ -216,8 +216,8 @@ G4FastSimulationManagerProcess::PostStepGetPhysicalInteractionLength(
 
       if (!fOutOfGhostWorld)
 	{
-	  if(fFastSimulationManager = 
-	     fGhostTouchable->GetVolume()->GetLogicalVolume()->GetFastSimulationManager())
+	  if( (fFastSimulationManager = 
+	     fGhostTouchable->GetVolume()->GetLogicalVolume()->GetFastSimulationManager()) )
 	    {
 	      // Yes, so should us trigger a fast simulation model now ?
 	      if(fFastSimulationTrigger = 
@@ -295,11 +295,11 @@ G4VParticleChange* G4FastSimulationManagerProcess::PostStepDoIt(
 						  track.GetPosition(),	  
 						  track.GetMomentumDirection(),
 					          &fTrackingHistory);
-	  G4VPhysicalVolume* trackingVolume = fTrackingHistory.GetVolume();
+	  // G4VPhysicalVolume* trackingVolume = fTrackingHistory.GetVolume();
 
 	  G4double trackingSafety(0.0);
-	  G4double trackingLinearDistance = 
-	    fTrackingNavigator.ComputeStep(
+	  // G4double trackingLinearDistance = 
+	  fTrackingNavigator.ComputeStep(
 			   track.GetPosition(),
 			   track.GetMomentumDirection(),
 			   DBL_MAX,
@@ -489,8 +489,8 @@ G4FastSimulationManagerProcess::AtRestGetPhysicalInteractionLength(
 
       if (!fOutOfGhostWorld)
 	{
-	  if(fFastSimulationManager = 
-	     fGhostTouchable->GetVolume()->GetLogicalVolume()->GetFastSimulationManager())
+	  if( (fFastSimulationManager = 
+	     fGhostTouchable->GetVolume()->GetLogicalVolume()->GetFastSimulationManager()) )
 	    {
 	      // Should it trigger a fast simulation model now ?
 	      if(fFastSimulationTrigger = 

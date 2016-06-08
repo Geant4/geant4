@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4KineticTrackVector.hh,v 1.3.8.1 2001/06/28 19:13:47 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4KineticTrackVector.hh,v 1.6 2001/10/04 20:00:33 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // Modified at 8-Oct-1998 by Maxim Komogorov. Methods BoostBeam,Boost,Shift
 // were added.
@@ -32,9 +32,9 @@
 
 #include "globals.hh"
 #include "G4KineticTrack.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-class G4KineticTrackVector : public G4RWTPtrOrderedVector<G4KineticTrack>
+class G4KineticTrackVector : public G4std::vector<G4KineticTrack *>
     {
 public:
   G4KineticTrackVector();
@@ -44,6 +44,8 @@ public:
     void Boost(G4ThreeVector& Velocity);
     void Shift(G4ThreeVector& Pos);
     };
+
+struct DeleteKineticTrack{void operator()(G4KineticTrack * aT){delete aT;}};
 
 #endif
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCtable.cc,v 1.4.2.1 2001/06/28 19:07:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HCtable.cc,v 1.6 2001/07/13 15:00:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4HCtable.hh"
@@ -33,7 +33,7 @@ G4HCtable::~G4HCtable() {;}
 
 G4int G4HCtable::Registor(G4String SDname,G4String HCname)
 {
-  for(int i=0;i<HClist.size();i++)
+  for(size_t i=0;i<HClist.size();i++)
   { if(HClist[i]==HCname && SDlist[i]==SDname) return -1; }
   HClist.push_back(HCname);
   SDlist.push_back(SDname);
@@ -45,7 +45,7 @@ G4int G4HCtable::GetCollectionID(G4String HCname)
   G4int i = -1;
   if(HCname.index("/")==G4std::string::npos) // HCname only
   {
-    for(G4int j=0;j<HClist.size();j++)
+    for(size_t j=0;j<HClist.size();j++)
     {
       if(HClist[j]==HCname)
       { 
@@ -56,7 +56,7 @@ G4int G4HCtable::GetCollectionID(G4String HCname)
   }
   else
   {
-    for(G4int j=0;j<HClist.size();j++)
+    for(size_t j=0;j<HClist.size();j++)
     {
       G4String tgt = SDlist[j];
       tgt += "/";

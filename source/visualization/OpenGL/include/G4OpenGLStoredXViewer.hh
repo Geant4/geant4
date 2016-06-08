@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.hh,v 1.3.4.1 2001/06/28 19:15:38 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLStoredXViewer.hh,v 1.5 2001/07/14 21:47:46 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -46,6 +46,7 @@ public G4OpenGLXViewer, public G4OpenGLStoredViewer{
 public:
   G4OpenGLStoredXViewer (G4OpenGLStoredSceneHandler& scene, const G4String& name = "");
   virtual ~G4OpenGLStoredXViewer ();
+  void Initialise ();
   void DrawView ();
 };
 

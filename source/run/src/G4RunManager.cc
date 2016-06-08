@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.25.2.1 2001/06/28 19:15:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RunManager.cc,v 1.40 2001/12/06 16:54:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
@@ -56,21 +56,20 @@
 #include "g4std/strstream"
 
 
-G4RunManager* G4RunManager::fRunManager = NULL;
+G4RunManager* G4RunManager::fRunManager = 0;
 
 G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
 
 G4RunManager::G4RunManager()
-:userDetector(NULL),physicsList(NULL),
- userRunAction(NULL),userPrimaryGeneratorAction(NULL),userEventAction(NULL),
- userStackingAction(NULL),userTrackingAction(NULL),userSteppingAction(NULL),
- currentRun(NULL),currentEvent(NULL),n_perviousEventsToBeStored(0),
+:userDetector(0),physicsList(0),
+ userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
+ userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
- geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
- runAborted(false),
- geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0),
- storeRandomNumberStatus(0)
+ geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
+ geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
+ currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
+ storeRandomNumberStatus(false)
 {
   if(fRunManager)
   { G4Exception("G4RunManager constructed twice."); }
@@ -83,10 +82,10 @@ G4RunManager::G4RunManager()
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
+  versionString = " Geant4 version $Name: geant4-04-00 $\n                                (14-Dec-2001)";
   G4cout 
   << "**********************************************" << G4endl
-  << " Geant4 version $Name:  $" << G4endl
-  << "                                (29-Jun-2001)" << G4endl
+  << versionString << G4endl
   << "             Copyright : Geant4 Collaboration" << G4endl
   << "**********************************************" << G4endl;
 }
@@ -206,22 +205,25 @@ void G4RunManager::RunInitialization()
     if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
     G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
     geomManager->OpenGeometry();
-    geomManager->CloseGeometry(geometryToBeOptimized);
+    geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
     geometryNeedsToBeClosed = false;
   }
   G4StateManager* stateManager = G4StateManager::GetStateManager();
   stateManager->SetNewState(GeomClosed);
 
   //previousEvents->clearAndDestroy();
-  for(G4int itr=0;itr<previousEvents->size();itr++)
+  for(size_t itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
   previousEvents->clear();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-  { previousEvents->push_back((G4Event*)NULL); }
+  { previousEvents->push_back((G4Event*)0); }
 
   runAborted = false;
 
-  if(storeRandomNumberStatus==1 || storeRandomNumberStatus==-1) StoreRandomNumberStatus();
+  if(storeRandomNumberStatus) {
+    G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
+    HepRandom::saveEngineStatus(fileN);
+  }
   
   if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
@@ -234,7 +236,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   { timer->Start(); }
 
   G4String msg;
-  if(macroFile!=NULL)
+  if(macroFile!=0)
   { 
     if(n_select<0) n_select = n_event;
     msg = "/control/execute ";
@@ -257,7 +259,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
     stateManager->SetNewState(GeomClosed);
     StackPreviousEvent(currentEvent);
-    currentEvent = NULL;
+    currentEvent = 0;
     if(runAborted) break;
   }
 
@@ -284,8 +286,11 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 
   G4Event* anEvent = new G4Event(i_event);
 
-  if(storeRandomNumberStatus==2 || storeRandomNumberStatus==-2) StoreRandomNumberStatus(anEvent->GetEventID());
-
+  if(storeRandomNumberStatus) {
+    G4String fileN = randomNumberStatusDir + "currentEvent.rndm"; 
+    HepRandom::saveEngineStatus(fileN);
+  }  
+    
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
 }
@@ -302,7 +307,7 @@ void G4RunManager::RunTermination()
   G4StateManager* stateManager = G4StateManager::GetStateManager();
 
   //previousEvents->clearAndDestroy();
-  for(G4int itr=0;itr<previousEvents->size();itr++)
+  for(size_t itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
   previousEvents->clear();
 
@@ -311,7 +316,7 @@ void G4RunManager::RunTermination()
   G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
   if(fPersM) fPersM->Store(currentRun);
   delete currentRun;
-  currentRun = NULL;
+  currentRun = 0;
   runIDCounter++;
 
   stateManager->SetNewState(Idle);
@@ -417,27 +422,47 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   geometryNeedsToBeClosed = true;
 }
 
-void G4RunManager::StoreRandomNumberStatus(G4int eventID)
+void G4RunManager::rndmSaveThisRun()
 {
-  G4String fileN = randomNumberStatusDir+"RandEngine";
-  if(storeRandomNumberStatus>0 && currentRun != NULL)
-  {
-    char st[20];
-    G4std::ostrstream os(st,20);
-    os << currentRun->GetRunID() << '\0';
-    fileN += "R";
-    fileN += st;
+  G4int runNumber = runIDCounter;
+  if(currentRun == 0) runNumber--;        //state Idle; decrease runNumber
+  if(!storeRandomNumberStatus || runNumber < 0) {
+     G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
+          << " there is no currentRun or its RandomEngineStatus is not available." 
+	  << G4endl << "Command ignored." << G4endl;
+     return;
   }
-  if(storeRandomNumberStatus==2 && eventID>=0)
-  {
-    char st[20];
-    G4std::ostrstream os(st,20);
-    os << eventID << '\0';
-    fileN += "E";
-    fileN += st;
+  
+  G4String fileIn  = randomNumberStatusDir + "currentRun.rndm";
+ 
+  G4std::ostrstream os;
+  os << "run" << runNumber << ".rndm" << '\0';
+  G4String fileOut = randomNumberStatusDir + os.str();  
+
+  G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
+  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+  if(verboseLevel>0) G4cout << "currentRun.rndm is copied to file: " << fileOut << G4endl;    
+}
+
+void G4RunManager::rndmSaveThisEvent()
+{
+  if(!storeRandomNumberStatus || currentEvent == 0) {
+     G4cerr << "Warning from G4RunManager::rndmSaveThisEvent():"
+          << " there is no currentEvent or its RandomEngineStatus is not available."
+	  << G4endl << "Command ignored." << G4endl;
+     return;
   }
-  fileN += ".stat";
-  HepRandom::saveEngineStatus(fileN);
+  
+  G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
+
+  G4std::ostrstream os;
+  os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
+     << ".rndm" << '\0';
+  G4String fileOut = randomNumberStatusDir + os.str();       
+
+  G4String copCmd = "/control/shell cp "+fileIn+" "+fileOut;
+  G4UImanager::GetUIpointer()->ApplyCommand(copCmd);
+  if(verboseLevel>0) G4cout << "currentEvent.rndm is copied to file: " << fileOut << G4endl;  
 }
   
 void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
@@ -447,13 +472,9 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
   { fileNameWithDirectory = randomNumberStatusDir+fileN; }
   else
   { fileNameWithDirectory = fileN; }
+  
   HepRandom::restoreEngineStatus(fileNameWithDirectory);
+  if(verboseLevel>0) G4cout << "RandomNumberEngineStatus restored from file: "
+         << fileNameWithDirectory << G4endl;
+  HepRandom::showEngineStatus();	 
 }
-
-
-
-
-
-
-
-

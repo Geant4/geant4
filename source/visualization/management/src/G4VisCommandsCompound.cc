@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.12.2.1 2001/06/28 19:16:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisCommandsCompound.cc,v 1.20 2001/11/07 17:09:59 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -66,9 +66,14 @@ void G4VisCommandDrawTree::SetNewValue
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/open " + system);
   UImanager->ApplyCommand("/vis/drawVolume " + pvname);
+  UImanager->ApplyCommand("/vis/viewer/flush");
   UImanager->SetVerboseLevel(keepVerbose);
 }
 
@@ -115,10 +120,15 @@ G4VisCommandDrawView::~G4VisCommandDrawView() {
 void G4VisCommandDrawView::SetNewValue
 (G4UIcommand* command, G4String newValue) {
 
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
-    G4cout << "G4VisCommandsDrawView::SetNewValue: no current viewer."
-           << G4endl;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: G4VisCommandsDrawView::SetNewValue: no current viewer."
+	     << G4endl;
+    }
     return;
   }
 
@@ -137,7 +147,11 @@ void G4VisCommandDrawView::SetNewValue
   
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   G4ViewParameters vp = currentViewer->GetViewParameters();
   G4bool keepAutoRefresh = vp.IsAutoRefresh();
   vp.SetAutoRefresh(false);
@@ -177,14 +191,23 @@ G4VisCommandDrawVolume::~G4VisCommandDrawVolume() {
 
 void G4VisCommandDrawVolume::SetNewValue
 (G4UIcommand* command, G4String newValue) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/scene/add/volume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
-  UImanager->ApplyCommand("/vis/viewer/refresh");
   UImanager->SetVerboseLevel(keepVerbose);
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout <<
+      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
+	   << G4endl;
+  }
 }
 
 ////////////// /vis/open ///////////////////////////////////////
@@ -233,7 +256,11 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
   is >> systemName >> windowSizeHint;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/sceneHandler/create " + systemName);
   UImanager->ApplyCommand("/vis/viewer/create ! ! " + windowSizeHint);
   UImanager->SetVerboseLevel(keepVerbose);
@@ -259,13 +286,22 @@ G4VisCommandSpecify::~G4VisCommandSpecify() {
 
 void G4VisCommandSpecify::SetNewValue
 (G4UIcommand* command, G4String newValue) {
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/geometry/print " + newValue);
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/scene/add/logicalVolume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
-  UImanager->ApplyCommand("/vis/viewer/refresh");
   UImanager->SetVerboseLevel(keepVerbose);
+  if (verbosity >= G4VisManager::warnings) {
+    G4cout <<
+      "WARNING: For systems which are not \"auto-refresh\" you will need to"
+      "\n  issue \"/vis/viewer/refresh\" or \"/vis/viewer/flush\"."
+	   << G4endl;
+  }
 }

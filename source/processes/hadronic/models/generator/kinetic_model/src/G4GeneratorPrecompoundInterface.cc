@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -48,30 +48,30 @@
      result1=theSecondaries;
      result=new G4KineticTrackVector();
      
-     for (G4int aResult=0; aResult < result1->entries(); aResult++)
+     for (unsigned int aResult=0; aResult < result1->size(); aResult++)
      {
        G4ParticleDefinition * pdef;
-       pdef=result1->at(aResult)->GetDefinition();
+       pdef=result1->operator[](aResult)->GetDefinition();
        secondaries=NULL;
        if ( pdef->IsShortLived() )
        {
-	  secondaries = result1->at(aResult)->Decay();
+	  secondaries = result1->operator[](aResult)->Decay();
        }
        if ( secondaries == NULL )
        {
-	  result->insert(result1->at(aResult));
-	  result1->at(aResult)=NULL;	//protect for clearAndDestroy 
+	  result->push_back(result1->operator[](aResult));
+	  result1->operator[](aResult)=NULL;	//protect for clearAndDestroy 
        } 
        else
        {
-	 for (G4int aSecondary=0; aSecondary<secondaries->entries(); aSecondary++)
+	 for (unsigned int aSecondary=0; aSecondary<secondaries->size(); aSecondary++)
 	 {
-	     result1->append(secondaries->at(aSecondary));
+	     result1->push_back(secondaries->operator[](aSecondary));
 	 }
 	 delete secondaries;
        }
      }
-     result1->clearAndDestroy();
+     G4std::for_each(result1->begin(), result1->end(), DeleteKineticTrack());
      delete result1;
      
      
@@ -86,30 +86,30 @@
      G4double exEnergy = 0;
      G4ThreeVector exciton3Momentum(0,0,0);
      // loop over secondaries
-     for(G4int list=0; list < result->entries(); list++)
+     for(unsigned int list=0; list < result->size(); list++)
      {
-       G4KineticTrack *aTrack = result->at(list);
+       G4KineticTrack *aTrack = result->operator[](list);
        if(aTrack->GetDefinition() != G4Proton::Proton() && 
           aTrack->GetDefinition() != G4Neutron::Neutron())
        {
 	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
 	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
 	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
-         theTotalResult->insert(theNew);            
+         theTotalResult->push_back(theNew);            
        }
        else if(aTrack->Get4Momentum().t() - aTrack->Get4Momentum().mag()>80*MeV)
        {
 	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
 	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
 	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
-         theTotalResult->insert(theNew);            
+         theTotalResult->push_back(theNew);            
        }
        else if(aTrack->GetPosition().mag() > theNucleus->GetNuclearRadius())
        {
 	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
 	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
 	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
-         theTotalResult->insert(theNew);            
+         theTotalResult->push_back(theNew);            
        }
        else
        {
@@ -163,11 +163,11 @@
      // call pre-compound
        const G4Fragment aFragment(anInitialState);
        G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
-     
+//       G4ReactionProductVector * aPreResult = new G4ReactionProductVector;
        // fill pre-compound part into the result, and return
-       for(G4int ll=0; ll<aPreResult->entries(); ll++)
+       for(unsigned int ll=0; ll<aPreResult->size(); ll++)
        {
-         theTotalResult->insert(aPreResult->at(ll));
+         theTotalResult->push_back(aPreResult->operator[](ll));
        }
        delete aPreResult;
      }
@@ -177,7 +177,7 @@
      }
      // now return
      
-     result->clearAndDestroy();
+     G4std::for_each(result->begin(), result->end(), DeleteKineticTrack());
      delete result;
      return theTotalResult;
    }

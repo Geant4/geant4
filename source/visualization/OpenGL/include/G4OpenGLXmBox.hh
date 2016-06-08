@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmBox.hh,v 1.5.2.1 2001/06/28 19:15:39 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmBox.hh,v 1.6 2001/07/11 10:08:51 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //Box container class

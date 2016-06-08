@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeVector.hh,v 1.2.4.2 2001/06/28 20:18:55 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4IsotopeVector.hh,v 1.4 2001/10/17 07:59:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -36,6 +36,9 @@
 #ifndef G4ISOTOPEVECTOR_HH
 #define G4ISOTOPEVECTOR_HH
 
-#include "G4Element.hh"
+#include "g4std/vector"
+#include "G4Isotope.hh"
+
+typedef G4std::vector<G4Isotope*> G4IsotopeVector;
 
 #endif

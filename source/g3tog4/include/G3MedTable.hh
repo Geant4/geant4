@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.hh,v 1.8.4.1 2001/06/28 19:08:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3MedTable.hh,v 1.10 2001/07/16 15:38:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------
 // Class description:
@@ -43,13 +43,13 @@
 
 #include "globals.hh"
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4Material;
 class G4MagneticField;
 class G4UserLimits;
 
-typedef G4RWTPtrOrderedVector<G3MedTableEntry>  G3MediumVector;
+typedef G4std::vector<G3MedTableEntry*>  G3MediumVector;
 
 class G3MedTable
 {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.11.2.1 2001/06/28 19:10:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PhysicsVector.cc,v 1.14 2001/11/29 18:59:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -169,7 +169,7 @@ G4bool G4PhysicsVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
  
   G4double* value = new G4double[2*size];
   fIn.read((char*)(value),  2*size*(sizeof(G4double)) );
-  if (fIn.gcount() != 2*size*(sizeof(G4double)) ){
+  if (G4int(fIn.gcount()) != G4int(2*size*(sizeof(G4double))) ){
     delete [] value;
     return false;
   }

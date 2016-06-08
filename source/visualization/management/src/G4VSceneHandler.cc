@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.14.2.1 2001/06/28 19:16:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSceneHandler.cc,v 1.23 2001/09/10 10:52:01 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -42,6 +42,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Material.hh"
 #include "G4Polyline.hh"
+#include "G4Scale.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
@@ -70,6 +71,8 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fSceneHandlerId        (id),
   fViewCount             (0),
   fpViewer               (0),
+  fpScene                (0),
+  fMarkForClearingTransientStore (false),
   fReadyForTransients    (false),
   fpModel                (0),
   fpObjectTransformation (&G4Transform3D::Identity),
@@ -112,10 +115,14 @@ void G4VSceneHandler::PostAddThis () {
 }
 
 void G4VSceneHandler::ClearStore () {
-  fpViewer -> NeedKernelVisit ();
+  if (fpViewer) fpViewer -> NeedKernelVisit ();
+  // ?? Viewer is supposed to be smart enough to know when to visit
+  // kernel, but a problem in OpenGL Stored seems to require a forced
+  // kernel visit triggered by the above code.  John Allison Aug 2001
 }
 
-void G4VSceneHandler::ClearTransientStore () {}
+void G4VSceneHandler::ClearTransientStore () {
+}
 
 void G4VSceneHandler::AddThis (const G4Box& box) {
   RequestPrimitives (box);
@@ -183,7 +190,6 @@ void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
 }
 
 void G4VSceneHandler::BeginModeling () {
-  if (!GetModel ()) G4Exception ("G4VSceneHandler::BeginModeling: NO MODEL!!!");
 }
 
 void G4VSceneHandler::BeginPrimitives
@@ -193,6 +199,108 @@ void G4VSceneHandler::BeginPrimitives
 }
 
 void G4VSceneHandler::EndPrimitives () {}
+
+void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
+
+  const G4double margin(0.01);
+  // Fractional margin - ensures scale is comfortably inside viewing
+  // volume.
+  const G4double oneMinusMargin (1. - margin);
+
+  const G4VisExtent& sceneExtent = fpScene->GetExtent();
+
+  // Useful constants...
+  const G4double length(scale.GetLength());
+  const G4double halfLength(length / 2.);
+  const G4double tickLength(length / 20.);
+  const G4double piBy2(M_PI / 2.);
+
+  // Get size of scene...
+  const G4double xmin = sceneExtent.GetXmin();
+  const G4double xmax = sceneExtent.GetXmax();
+  const G4double ymin = sceneExtent.GetYmin();
+  const G4double ymax = sceneExtent.GetYmax();
+  const G4double zmin = sceneExtent.GetZmin();
+  const G4double zmax = sceneExtent.GetZmax();
+
+  // Create (empty) polylines having the same vis attributes...
+  G4Polyline scaleLine, tick11, tick12, tick21, tick22;
+  G4VisAttributes visAtts(*scale.GetVisAttributes());  // Long enough life.
+  scaleLine.SetVisAttributes(&visAtts);
+  tick11.SetVisAttributes(&visAtts);
+  tick12.SetVisAttributes(&visAtts);
+  tick21.SetVisAttributes(&visAtts);
+  tick22.SetVisAttributes(&visAtts);
+
+  // Add points to the polylines to represent an scale parallel to the
+  // x-axis centred on the origin...
+  G4Point3D r1(G4Point3D(-halfLength, 0., 0.));
+  G4Point3D r2(G4Point3D( halfLength, 0., 0.));
+  scaleLine.push_back(r1);
+  scaleLine.push_back(r2);
+  G4Point3D ticky(0., tickLength, 0.);
+  G4Point3D tickz(0., 0., tickLength);
+  tick11.push_back(r1 + ticky);
+  tick11.push_back(r1 - ticky);
+  tick12.push_back(r1 + tickz);
+  tick12.push_back(r1 - tickz);
+  tick21.push_back(r2 + ticky);
+  tick21.push_back(r2 - ticky);
+  tick22.push_back(r2 + tickz);
+  tick22.push_back(r2 - tickz);
+  G4Point3D textPosition(0., tickLength, 0.);
+
+  // Transform appropriately...
+
+  G4Transform3D rotation;
+  switch (scale.GetDirection()) {
+  case G4Scale::x:
+    break;
+  case G4Scale::y:
+    rotation = G4RotateZ3D(piBy2);
+    break;
+  case G4Scale::z:
+    rotation = G4RotateY3D(piBy2);
+    break;
+  }
+
+  G4double sxmid(scale.GetXmid());
+  G4double symid(scale.GetYmid());
+  G4double szmid(scale.GetZmid());
+  if (scale.GetAutoPlacing()) {
+    sxmid = xmin + oneMinusMargin * (xmax - xmin);
+    symid = ymin + margin * (ymax - ymin);
+    szmid = zmin + oneMinusMargin * (zmax - zmin);
+    switch (scale.GetDirection()) {
+    case G4Scale::x:
+      sxmid -= halfLength;
+      break;
+    case G4Scale::y:
+      symid += halfLength;
+      break;
+    case G4Scale::z:
+      szmid -= halfLength;
+      break;
+    }
+  }
+
+  G4Translate3D translation(sxmid, symid, szmid);
+
+  G4Transform3D transformation(translation * rotation);
+
+  // Draw...
+  // We would like to call BeginPrimitives(transformation) here but
+  // calling BeginPrimitives from within an AddPrimitive is not
+  // allowed!  So we have to do our own transformation...
+  AddPrimitive(scaleLine.transform(transformation));
+  AddPrimitive(tick11.transform(transformation));
+  AddPrimitive(tick12.transform(transformation));
+  AddPrimitive(tick21.transform(transformation));
+  AddPrimitive(tick22.transform(transformation));
+  G4Text text(scale.GetAnnotation(),textPosition.transform(transformation));
+  text.SetScreenSize(24.);
+  AddPrimitive(text);
+}
 
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   switch (polymarker.GetMarkerType()) {
@@ -252,6 +360,8 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
 }
 
 void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
+  if (!GetModel ())
+    G4Exception ("G4VSceneHandler::RequestPrimitives: NO MODEL!!!");
   G4Polyhedron* pPolyhedron;
   G4NURBS*      pNURBS;
   BeginPrimitives (*fpObjectTransformation);
@@ -266,8 +376,15 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       break;
     }
     else {
-      G4cerr << "NURBS not available for " << solid.GetName () << G4endl;
-      G4cerr << "Trying polyhedron." << G4endl;
+      G4VisManager::Verbosity verbosity =
+	G4VisManager::GetInstance()->GetVerbosity();
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: G4VSceneHandler::RequestPrimitives"
+	  "\n  NURBS not available for "
+	       << solid.GetName () << G4endl;
+	G4cout << "Trying polyhedron." << G4endl;
+      }
     }
     // Dropping through to polyhedron...
   case G4ModelingParameters::polyhedron:
@@ -283,17 +400,16 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       delete pPolyhedron;
     }
     else {
-      G4cerr << "Polyhedron not available for " << solid.GetName ()
-	   <<".\nThis means it cannot be visualized on most systems."
+      G4VisManager::Verbosity verbosity =
+	G4VisManager::GetInstance()->GetVerbosity();
+      if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VSceneHandler::RequestPrimitives"
+	"\n  Polyhedron not available for " << solid.GetName () <<
+	".\nThis means it cannot be visualized on most systems."
 	"\nContact the Visualization Coordinator." << G4endl;
+      }
     }
-    break;
-  case G4ModelingParameters::hierarchy:
-    G4cout << "Geometry hierarchy requested: tag " 
-	 << GetModel () -> GetCurrentTag ()
-	 << ", depth "
-	 << fCurrentDepth
-	 << G4endl;
     break;
   }
   EndPrimitives ();
@@ -312,13 +428,18 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
     fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.size ()) {
-    G4cout << "Traversing scene data..." << G4endl;
+    G4VisManager::Verbosity verbosity =
+      G4VisManager::GetInstance()->GetVerbosity();
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Traversing scene data..." << G4endl;
+    }
+    BeginModeling ();
     G4ModelingParameters* pMP = CreateModelingParameters ();
     for (size_t i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
       const G4ModelingParameters* tempMP =
 	pModel -> GetModelingParameters ();
-      // NOTE THAT tempMP COULD BE ZERO.
+      // NOTE THAT pModel->GetModelingParameters() COULD BE ZERO.
       // (Not sure the above is necessary; but in future we might
       // want to take notice of the modeling parameters with which
       // the model was created.  For the time being we are ignoring
@@ -330,16 +451,21 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
       // and convert using pMP = CreateModelingParameters () as above.)
       pModel -> SetModelingParameters (pMP);
       SetModel (pModel);  // Store for use by derived class.
-      BeginModeling ();
       pModel -> DescribeYourselfTo (*this);
-      EndModeling ();
       pModel -> SetModelingParameters (tempMP);
     }
     delete pMP;
     SetModel (0);  // Flags invalid model.
+    EndModeling ();
   }
   else {
-    G4cerr << "No run-duration models in scene data." << G4endl;
+    G4VisManager::Verbosity verbosity =
+      G4VisManager::GetInstance()->GetVerbosity();
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: G4VSceneHandler::ProcessScene:"
+	"\n  No run-duration models in scene data." << G4endl;
+    }
   }
 
   fReadyForTransients = true;
@@ -372,10 +498,6 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
 	vp.GetDrawingStyle () == G4ViewParameters::hsr ||
 	vp.GetDrawingStyle () == G4ViewParameters::hlhsr
 	);
-
-  /////////////// TESTING TESTING
-  //modelRepStyle = G4ModelingParameters::hierarchy;
-  ///////////////////////////////
 
   G4ModelingParameters* pModelingParams = new G4ModelingParameters
     (vp.GetDefaultVisAttributes (),
@@ -490,13 +612,18 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
 
 G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
 
-  os << "Scene " << s.fName << " has "
-     << s.fViewerList.size () << " viewers:";
+  os << "Scene handler " << s.fName << " has "
+     << s.fViewerList.size () << " viewer(s):";
   for (size_t i = 0; i < s.fViewerList.size (); i++) {
     os << "\n  " << *(s.fViewerList [i]);
   }
 
-  os << "\n  " << *s.fpScene;
+  if (s.fpScene) {
+    os << "\n  " << *s.fpScene;
+  }
+  else {
+    os << "\n  This scene handler currently has no scene.";
+  }
 
   return os;
 }

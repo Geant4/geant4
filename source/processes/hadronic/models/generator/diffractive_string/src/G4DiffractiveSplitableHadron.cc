@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.2.8.2 2001/06/28 20:19:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DiffractiveSplitableHadron.cc,v 1.7 2001/10/25 16:15:32 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // ------------------------------------------------------------
@@ -75,6 +75,8 @@ const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(con
 
 void G4DiffractiveSplitableHadron::SplitUp()
 {
+  if (IsSplit()) return;
+  Splitting();
 // Split once only...
 	if (Parton[0] != NULL) return;
 
@@ -111,7 +113,7 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, 
 {
 	const G4double udspin1= 1./6.;
 	const G4double uuspin1= 1./3.;
-	const G4double udspin0= 1./2.;
+//	const G4double udspin0= 1./2.; //@
 	
 	G4int absPDGcode=abs(PDGcode);
 	
@@ -160,7 +162,9 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, 
 	        } else
 	        {
 	            *aEnd=j100;
-	            *bEnd= Diquark( j1000, j10, 0);
+		       // Careful, there is no diquark q1=q2, (q1 q2)0, 
+		       //   possible for Omega-
+	            *bEnd= Diquark( j1000, j10, j1000 != j100 ? 0 : 1);
 	        }
 	     } else
 	     {
@@ -168,7 +172,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, 
 	        if ( random < udspin1 )
 	        {
 	            *aEnd=j1000;
-	            *bEnd= Diquark( j100, j10, 0);
+		    		// as above, but with charmed barions
+	            *bEnd= Diquark( j100, j10, j100 != j10 ? 0 : 10);
 	        } else if ( random < (udspin1 + uuspin1) )
 	        {
 	            *aEnd= j10;

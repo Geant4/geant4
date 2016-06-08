@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05VisManager.hh,v 1.1.4.1 2001/06/28 19:07:41 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05VisManager.hh,v 1.2 2001/07/11 09:58:33 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 

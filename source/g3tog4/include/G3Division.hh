@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.hh,v 1.4.4.1 2001/06/28 19:08:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3Division.hh,v 1.7 2001/11/21 14:25:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------
 // Class description:
@@ -63,7 +63,7 @@ class G3Division
     
     // methods
     void UpdateVTE();
-    G4VPhysicalVolume* CreatePVReplica();   
+    void CreatePVReplica();   
     
   private:
 

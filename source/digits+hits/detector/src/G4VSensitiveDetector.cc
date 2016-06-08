@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc,v 1.3.2.1 2001/06/28 19:07:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSensitiveDetector.cc,v 1.5 2001/07/13 15:00:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
 #include "G4SDManager.hh"
 
 G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
-:verboseLevel(0),active(true),ROgeometry(NULL)
+:verboseLevel(0),active(true),ROgeometry(0)
 {
   size_t sLast = name.last('/');
   if(sLast==G4std::string::npos)
@@ -61,12 +61,12 @@ const G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveD
     return *this;
 }
 
-int G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
+G4int G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
 {
    return false;
 }
 
-int G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
+G4int G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
 {
    return true;
 }

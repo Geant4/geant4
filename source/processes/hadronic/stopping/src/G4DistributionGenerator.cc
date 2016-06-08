@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4DistributionGenerator.cc,v 1.4.8.2 2001/06/28 20:20:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DistributionGenerator.cc,v 1.8 2001/10/05 16:09:44 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -45,38 +45,38 @@
 
 // Constructor
 
-G4DistributionGenerator::G4DistributionGenerator(G4RWTValOrderedVector<G4double>& x,
-						 G4RWTValOrderedVector<G4double>& values)
+G4DistributionGenerator::G4DistributionGenerator(G4std::vector<G4double>& x,
+						 G4std::vector<G4double>& values)
   
 {
   _x = x;
 
   // Check boundaries: must be size(x) = size(values) + 1
-  if (x.entries() != (values.entries() + 1))
+  if (x.size() != (values.size() + 1))
     { G4cout << " Inconsistent parameters in G4DistributionGenerator "
 	   << G4endl;
     }
-  assert (x.entries() == (values.entries() + 1));
+  assert (x.size() == (values.size() + 1));
 
   G4double tot = 0.;
-  int i;
-  for (i=0; i<values.entries(); i++) { tot += values[i]; }
+  unsigned int i;
+  for (i=0; i<values.size(); i++) { tot += values[i]; }
   assert (tot > 0.);
   
-  _cumProb.insert(0.);    
-  //  _cumProb.insert(values[0] / tot);
+  _cumProb.push_back(0.);    
+  //  _cumProb.push_back(values[0] / tot);
   G4double sum = 0.;
-  for (i=0; i<values.entries(); i++) 
+  for (i=0; i<values.size(); i++) 
     { 
       sum += values[i];
-      _cumProb.insert(sum / tot); }
+      _cumProb.push_back(sum / tot); }
 
   // Debugging
   /*
-  for (i=0; i<values.entries(); i++)
+  for (i=0; i<values.size(); i++)
     { G4cout << values[i] << "  " ; }
   G4cout << "  Integral = " << tot << G4endl;
-  for (i=0; i<_cumProb.entries(); i++)
+  for (i=0; i<_cumProb.size(); i++)
     { 
       G4cout << "Variable " << _x[i]  
 	   << " --- cumProb = " << _cumProb[i] << G4endl;
@@ -97,9 +97,9 @@ G4double G4DistributionGenerator::Generate(G4double ranflat)
 {
   G4double xRandom = _x[0];
 
-  G4int bin = _cumProb.entries() - 1;
-  int i;
-  for (i=1; i<_cumProb.entries(); i++)
+  G4int bin = _cumProb.size() - 1;
+  unsigned int i;
+  for (i=1; i<_cumProb.size(); i++)
     {
       if (ranflat >= _cumProb[i-1] && ranflat < _cumProb[i])
 	{
@@ -107,7 +107,7 @@ G4double G4DistributionGenerator::Generate(G4double ranflat)
 	}
     }
 
-  if (bin >= 0 && bin < (_cumProb.entries()-1) && bin < (_x.entries()-1)) 
+  if (bin >= 0 && bin < static_cast<G4int>(_cumProb.size()-1) && bin < static_cast<G4int>(_x.size()-1)) 
     {
       G4double coeff = (ranflat - _cumProb[bin]) *  (_x[bin+1] - _x[bin]) / 
                    (_cumProb[bin+1] - _cumProb[bin]);
@@ -121,12 +121,12 @@ G4double G4DistributionGenerator::Generate(G4double ranflat)
 
     }
   else
-    { 
+    { 	
       // Debugging
       /*
       G4cout << "Bin " << bin << " "
-	   << _cumProb.entries() << " " 
-	   << _x.entries()
+	   << _cumProb.size() << " " 
+	   << _x.size()
 	   << G4endl;
       */
       // End of debugging

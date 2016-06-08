@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4o.cc,v 1.7.4.1 2001/06/28 19:06:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 /*
 #define DEBUG

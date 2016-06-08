@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTable.hh,v 1.6.4.1 2001/06/28 19:08:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3DetTable.hh,v 1.7 2001/07/11 09:58:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G3DetTable class
 

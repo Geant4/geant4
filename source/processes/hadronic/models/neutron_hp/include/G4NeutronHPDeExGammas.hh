@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDeExGammas.hh,v 1.4.8.1 2001/06/28 19:14:13 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPDeExGammas.hh,v 1.7 2001/10/04 20:00:35 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1
@@ -65,12 +65,12 @@ class G4NeutronHPDeExGammas
 
     theResult = theLevels[aLevel]. GetDecayGammas();
     G4ReactionProduct * theCurrent;
-    G4int i;
-    for(i=0; i<theResult->length(); i++)
+    unsigned int i;
+    for(i=0; i<theResult->size(); i++)
     {
       theCurrent = new G4ReactionProduct;
-      *theCurrent = *(theResult->at(i));
-      delete theResult->at(i);
+      *theCurrent = *(theResult->operator[](i));
+      delete theResult->operator[](i);
       G4double costheta = 2.*G4UniformRand()-1;
       G4double theta = acos(costheta);
       G4double phi = twopi*G4UniformRand();
@@ -78,7 +78,7 @@ class G4NeutronHPDeExGammas
       G4double en = theCurrent->GetTotalMomentum();
       G4ThreeVector temp(en*sinth*cos(phi), en*sinth*sin(phi), en*costheta );
       theCurrent->SetMomentum( temp ) ;
-      result->insert(theCurrent);
+      result->push_back(theCurrent);
     }
     delete theResult;
     return result;

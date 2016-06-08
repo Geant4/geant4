@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.hh,v 1.1.4.1 2001/06/28 19:10:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VClusterModel.hh,v 1.4 2001/11/07 10:27:21 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -44,9 +44,9 @@
 #include "G4PAIonisation.hh"
 #include "G4VFastSimulationModel.hh"
 #include "G4Step.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
-#include <g4rw/tvordvec.h>
+#include "G4TouchableHandle.hh"
+#include "G4TouchableHistoryHandle.hh"
+#include "g4std/vector"
 
 
 class G4VClusterModel : public G4VFastSimulationModel
@@ -78,12 +78,13 @@ protected:
   G4StepPoint*    fFakePreStepPoint ; 
   G4StepPoint*    fFakePostStepPoint ; 
 
-  G4VTouchable*   fTouchable ;
+  G4TouchableHandle   fTouchable ;
+  
   G4Navigator*    fNavigator ;
   G4bool          fNavigatorSetup ;
 
-  G4RWTValOrderedVector<G4ThreeVector> fClusterPositionVector ; 
-  G4RWTValOrderedVector<G4double>      fClusterEnergyVector ; 
+  G4std::vector<G4ThreeVector> fClusterPositionVector ; 
+  G4std::vector<G4double>      fClusterEnergyVector ; 
 };
 
 #endif

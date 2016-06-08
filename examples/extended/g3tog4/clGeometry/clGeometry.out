@@ -1,16 +1,29 @@
 **********************************************
- Geant4 version $Name: geant4-03-01-ref-01 $
-                                (06-Apr-2001)
+ Geant4 version $Name: geant4-04-00 $
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 /run/verbose 1
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -53,19 +66,20 @@ G4VUserPhysicsList::Construct()
 Construct particles 
 Construct processes 
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
+G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-        Scattered gamma energy according Klein-Nishina.
+       Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-Set cuts for gamma
+G4VUserPhysicsList::SetCutValue       :Set cuts for e-
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -81,12 +95,12 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-Set cuts for e-
+G4VUserPhysicsList::SetCutValue       :Set cuts for e+
 
-annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-Set cuts for e+
+G4VUserPhysicsList::SetCutValue       :Set cuts for proton
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -97,8 +111,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-Set cuts for proton
-Set cuts for anti_proton
+G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :2[mm]
 Set cuts for anti_kaon0
 Set cuts for anti_neutron
@@ -119,10 +132,10 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
-MuIoni:  knock-on electron cross sections .
-          Good description above the mean excitation energy.
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
@@ -142,7 +155,23 @@ Set cuts for pi-
 Set cuts for pi0
 ============= The cut Energy ==============================
                             gamma              e-    
-Cut in range                  2 mm            2 mm 
+Cut in range       
+ HYDROGEN                       2 mm            2 mm 
+ DEUTERIUM                      2 mm            2 mm 
+ HELIUM                         2 mm            2 mm 
+ LITHIUM                        2 mm            2 mm 
+ BERILLIUM                      2 mm            2 mm 
+ CARBON                         2 mm            2 mm 
+ NITROGEN                       2 mm            2 mm 
+ NEON                           2 mm            2 mm 
+ ALUMINIUM                      2 mm            2 mm 
+ IRON                           2 mm            2 mm 
+ COPPER                         2 mm            2 mm 
+ TUNGSTEN                       2 mm            2 mm 
+ LEAD                           2 mm            2 mm 
+ URANIUM                        2 mm            2 mm 
+                AIR           2 mm            2 mm 
+ VACUUM                         2 mm            2 mm 
 Cut in energy
  HYDROGEN                     990 eV          162 keV
  DEUTERIUM                    990 eV          271 keV
@@ -161,10 +190,7 @@ Cut in energy
                 AIR         990 eV          990 eV 
  VACUUM                       990 eV          990 eV 
 ===================================================
-/control/execute /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/test601/test601.in
-#
-# Initialize GEANT4
-#
+/control/execute /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/test601/test601.in
 /gun/position   0. -1.5 0. mm
 /gun/direction  0.  1.   0.
 /gun/energy 1 GeV
@@ -179,15 +205,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.07s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 ### Run 1 start.
@@ -199,9 +224,8 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -219,9 +243,8 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -239,16 +262,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0     -1.5        0     1e+03        0        0         0        TBD1 initStep
-    1        0     -1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0     -1.5        0     1e+03        0        0         0        HALL initStep
+    1        0    4e+03        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-#
+  User=0s Real=0s Sys=0s
 /gun/position   0. 1.5 0. mm
 /gun/direction  1.  0.   0.
 /gun/energy 1 GeV
@@ -263,15 +284,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    1e-09      1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /gun/particle mu+
 /run/beamOn 1
 ### Run 5 start.
@@ -283,9 +303,8 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    1e-09      1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -303,9 +322,8 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    1e-09      1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
@@ -323,18 +341,14 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0      1.5        0     1e+03        0        0         0        TBD1 initStep
-    1    1e-09      1.5        0     1e+03        0    1e-09     1e-09        HALL Transportation
-    2    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
+    0        0      1.5        0     1e+03        0        0         0        HALL initStep
+    1    4e+03      1.5        0     1e+03        0    4e+03     4e+03  OutOfWorld Transportation
 >>> Event 0
     1 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-#
-# Termination
-#
-exit
-
+Graphics systems deleted.
+Visualization Manager deleting...
 G4 kernel has come to Quit state.

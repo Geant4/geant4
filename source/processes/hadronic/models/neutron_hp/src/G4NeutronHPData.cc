@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -36,7 +36,7 @@
 //     G4cout << "G4NeutronHPData::G4NeutronHPData(): numEle="<<numEle<<G4endl;
      for (G4int i=0; i<numEle; i++)
      {
-       theData[i].Init((*(G4Element::GetElementTable()))(i));
+       theData[i].Init((*(G4Element::GetElementTable()))[i]);
      }
   }
   
@@ -55,9 +55,7 @@
     G4double emax = theVector->GetX(len-1);
 //    G4cout <<"zahl der energie-punkte "<< len<<" "<<emin<<" "<<emax<<G4endl;
     
-   //  G4int dummy; G4cin >> dummy; 
-    G4bool flag;
-    
+   //  G4int dummy; G4cin >> dummy;     
     G4LPhysicsFreeVector * theResult = new G4LPhysicsFreeVector(len, emin, emax);
     for (G4int i=0; i<len; i++)
     {

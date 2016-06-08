@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPersistentSubMan.hh,v 1.3.2.1 2001/06/28 19:11:33 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4VPersistentSubMan 
-//
-// Abstract submanager class to be used by G4PersistencyManager
-//
+// $Id: G4VPersistentSubMan.hh,v 1.5 2001/07/11 10:02:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Abstract submanager class to be used by G4PersistencyManager
+
 // Member functions:
 // =================
 //  virtual void SetVerboseLevel(G4int verboseLevel)
@@ -61,10 +60,12 @@ class G4VPersistentSubMan
       // interface with G4PersistencyManager
       inline virtual void SetVerboseLevel(G4int verboseLevel)
       { f_verboseLevel = verboseLevel; }
+        // Set the verbose level
 
-  public:
+  public: // With description
       inline G4int GetVerboseLevel()
       { return f_verboseLevel; };
+        // Get the current verbose level
 
   protected:
       G4int f_verboseLevel;

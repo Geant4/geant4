@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserLimits.hh,v 1.6.4.1 2001/06/28 19:10:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UserLimits.hh,v 1.7 2001/07/11 10:00:52 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
 //
 // class G4UserLimits

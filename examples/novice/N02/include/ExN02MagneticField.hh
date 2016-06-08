@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02MagneticField.hh,v 1.3.4.1 2001/06/28 19:07:28 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02MagneticField.hh,v 1.5 2001/10/11 12:32:35 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //    A class for control of the Magnetic Field of the detector.
 //  The field is assumed to be uniform.
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN02MagneticField_H
 #define ExN02MagneticField_H
@@ -38,7 +38,7 @@
 
 class G4FieldManager;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 class ExN02MagneticField: public G4UniformMagField
@@ -60,5 +60,7 @@ class ExN02MagneticField: public G4UniformMagField
       // Find the global Field Manager
       G4FieldManager* GetGlobalFieldManager();   // static 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

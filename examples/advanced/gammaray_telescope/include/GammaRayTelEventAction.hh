@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.hh,v 1.4.2.2 2001/06/28 20:18:38 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelEventAction.hh,v 1.9 2001/12/04 11:40:28 flongo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -31,6 +31,8 @@
 //      ------------ GammaRayTelEventAction  ------
 //           by R.Giannitrapani, F. Longo & G.Santin (13 nov 2000)
 //
+//- inclusion of Digits by F.Longo & R.Giannitrapani (24 oct 2001)
+//  20.11.01 G.Santin: new analysis management, modified according to GammaRayTelAnalysis
 // ************************************************************
 
 
@@ -43,21 +45,13 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class GammaRayTelEventAction : public G4UserEventAction
 {
 public:
 
-#ifdef G4ANALYSIS_USE
-  GammaRayTelEventAction(GammaRayTelAnalysisManager* analysisMgr);
-#else
   GammaRayTelEventAction();
-#endif
   virtual ~GammaRayTelEventAction();
   
 public:
@@ -67,18 +61,17 @@ public:
   void SetDrawFlag   (G4String val)  {drawFlag = val;};
   
 private:
+
   G4int       trackerCollID;                
   G4int       calorimeterCollID;                
   G4int       anticoincidenceCollID;                
   G4String    drawFlag;
-#ifdef G4ANALYSIS_USE
-  GammaRayTelAnalysisManager* analysisManager;
-#endif
 };
 
 #endif
 
     
+
 
 
 

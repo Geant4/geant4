@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -40,9 +40,9 @@
 
     for (G4int i=0; i<numEle; i++)
     { 
-      if((*(G4Element::GetElementTable()))(i)->GetZ()>89)
+      if((*(G4Element::GetElementTable()))[i]->GetZ()>89)
       {
-        theFission[i].Init((*(G4Element::GetElementTable()))(i), dirName);
+        theFission[i].Init((*(G4Element::GetElementTable()))[i], dirName);
         theFission[i].Register(&theFS);
       }
     }
@@ -64,7 +64,7 @@
     {
       xSec = new G4double[n];
       G4double sum=0;
-      G4int i, it, index;
+      G4int i, index;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
       G4double rWeight;    
       G4NeutronHPThermalBoost aThermalE;

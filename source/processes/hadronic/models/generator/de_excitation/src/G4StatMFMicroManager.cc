@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.cc,v 1.2.2.1 2001/06/28 19:13:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StatMFMicroManager.cc,v 1.5 2001/10/05 16:13:44 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -186,7 +186,7 @@ G4StatMFChannel * G4StatMFMicroManager::ChooseChannel(const G4double A0, const G
     G4double RandNumber = _Normalization * _WW * G4UniformRand();
     G4double AccumWeight = 0.0;
 	
-    for (G4int i = 0; i < _Partition.size(); i++) {
+    for (unsigned int i = 0; i < _Partition.size(); i++) {
 	AccumWeight += _Partition[i]->GetProbability();
 	if (RandNumber < AccumWeight) 
 	    return _Partition[i]->ChooseZ(A0,Z0,MeanT);

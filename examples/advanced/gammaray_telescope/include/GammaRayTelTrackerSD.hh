@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.hh,v 1.1.2.2 2001/06/28 20:18:40 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelTrackerSD.hh,v 1.4 2001/11/29 11:19:17 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -50,7 +50,7 @@ class GammaRayTelTrackerSD : public G4VSensitiveDetector
 {
 public:
   
-  GammaRayTelTrackerSD(G4String, GammaRayTelDetectorConstruction* );
+  GammaRayTelTrackerSD(G4String);
   ~GammaRayTelTrackerSD();
   
   void Initialize(G4HCofThisEvent*);
@@ -64,10 +64,14 @@ private:
   
   GammaRayTelTrackerHitsCollection*  TrackerCollection;      
   GammaRayTelDetectorConstruction* Detector;
-  G4int (*ThitXID)[30];
-  G4int (*ThitYID)[30];
+
+  G4int (*ThitXID);
+  G4int (*ThitYID);
+  
   G4int NbOfTKRLayers;
   G4int NbOfTKRStrips;
+  G4int NbOfTKRChannels;
+
 
 };
 

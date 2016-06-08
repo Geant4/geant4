@@ -21,16 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.11.4.1 2001/06/28 19:08:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: clparse.cc,v 1.14 2001/10/11 12:36:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // modified by I.Hrivnacova
 // added G3SensVol
 
 #include "globals.hh"
 #include "g4std/fstream"
-#include "g4rw/rstream.h"
-#include "g4rw/ctoken.h"
+#include "G4Tokenizer.hh"
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
 #include "G3VolTable.hh"
@@ -92,7 +91,7 @@ void PG4gsdetd(G4String *tokens);
 void PG4gsdetu(G4String *tokens);
 void PG4ggclos();
 
-void G3CLRead(G4String & fname, char *select = NULL){
+void G3CLRead(G4String & fname, char *select = 0){
 //
 //  G3CLRead
 //  Read the call List file, parse the tokens, and pass the token
@@ -167,7 +166,7 @@ void G3CLEval(G4String tokens[], char *select)
     const char* routine = tokens[1];
 
     // If context is selected, return unless context matches.
-    if (select != NULL && select != "*") if ( strcmp(select,context) ) return;
+    if (select != 0 && select != "*") if ( strcmp(select,context) ) return;
 
     // Branch on Geant3 routine name
     ofile << "Do routine " << routine << " in context " << context << G4endl;

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PrimaryGeneratorAction.cc,v 1.3.4.1 2001/06/28 19:07:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN03PrimaryGeneratorAction.cc,v 1.5 2001/10/10 14:58:12 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExN03PrimaryGeneratorAction.hh"
 
@@ -40,10 +40,10 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03PrimaryGeneratorAction::ExN03PrimaryGeneratorAction(
-                                               ExN03DetectorConstruction* ExN03DC)
+                                             ExN03DetectorConstruction* ExN03DC)
 :ExN03Detector(ExN03DC),rndmFlag("off")
 {
   G4int n_particle = 1;
@@ -66,7 +66,7 @@ ExN03PrimaryGeneratorAction::ExN03PrimaryGeneratorAction(
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03PrimaryGeneratorAction::~ExN03PrimaryGeneratorAction()
 {
@@ -74,7 +74,7 @@ ExN03PrimaryGeneratorAction::~ExN03PrimaryGeneratorAction()
   delete gunMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -91,5 +91,5 @@ void ExN03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.hh,v 1.1.4.1 2001/06/28 19:06:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2PhysicsListMessenger.hh,v 1.3 2001/10/25 15:12:06 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2PhysicsListMessenger_h
 #define Em2PhysicsListMessenger_h 1
@@ -38,7 +38,7 @@
 class Em2PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2PhysicsListMessenger: public G4UImessenger
 {
@@ -57,6 +57,8 @@ class Em2PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* electCutCmd;
     G4UIcmdWithADoubleAndUnit* protoCutCmd;    
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

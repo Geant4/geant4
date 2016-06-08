@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.3.2.1 2001/06/28 19:08:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FieldTrack.cc,v 1.4 2001/07/11 09:59:11 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "G4FieldTrack.hh"
 

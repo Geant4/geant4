@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PTubs.ddl,v 1.3.4.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// 
-// class G4PTubs
-//
+// $Id: G4PTubs.ddl,v 1.5 2001/07/11 10:02:24 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PTubs solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Tubs.hh
 
@@ -39,15 +39,19 @@
 class G4VSolid;
 class G4Tubs;
 
-class G4PTubs : public G4PCSGSolid {
-public:
+class G4PTubs
+ : public G4PCSGSolid
+{
+public: // With description
     G4PTubs(const G4Tubs* theTubs);
     virtual ~G4PTubs();
+    // Constructor and Destructor
 
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient boolean solid object.
 
-    // Naming method (pseudo-RTTI : run-time type identification)
     virtual G4GeometryType  GetEntityType() const { return G4String("G4Tubs"); }
+    // Returns the G4GeometryType of this solid.
 
 protected:
 
@@ -56,3 +60,4 @@ protected:
 };
    	
 #endif
+

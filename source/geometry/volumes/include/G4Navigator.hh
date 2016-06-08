@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.6.4.1 2001/06/28 19:09:39 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Navigator.hh,v 1.15 2001/12/06 09:35:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-// 
+//
 // class G4Navigator
 //
 // Class description:
@@ -100,7 +100,8 @@
 
 #include "G4GRSVolume.hh"
 #include "G4GRSSolid.hh"
-#include "G4TouchableHistory.hh"
+#include "G4TouchableHandle.hh"
+#include "G4TouchableHistoryHandle.hh"
 
 #include "G4NavigationHistory.hh"
 #include "G4NormalNavigation.hh"
@@ -139,12 +140,14 @@ class G4Navigator
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
 
-  G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &p,
-  			                       const G4TouchableHistory &h);
+  inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &point,
+                                                      const G4ThreeVector &direction,
+                                                      const G4TouchableHistory &h);
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
-					       const G4ThreeVector* direction=0,
-					       const G4bool pRelativeSearch=true);
+                                               const G4ThreeVector* direction=0,
+                                               const G4bool pRelativeSearch=true,
+                                               const G4bool ignoreDirection=true);
     // Search the geometrical hierarchy for the volumes deepest in the hierarchy
     // containing the point in the global coordinate space. Two main cases are:
     //  i) If pRelativeSearch=false it makes use of no previous/state
@@ -154,10 +157,12 @@ class G4Navigator
     //     hierarchy at the location of the last located point, or the endpoint of
     //     the previous Step if SetGeometricallyLimitedStep() has been called
     //     immediately before.
-    // The direction is used (to check if a volume is entered) only if 
-    // the Navigator has determined that it is on an edge shared by two or more
-    // volumes.  (This is state information.)
-    // The geometry must be closed.
+    // The direction is used (to check if a volume is entered) if either
+    //   - the argument ignoreDirection is false, or
+    //   - the Navigator has determined that it is on an edge shared by two or more
+    //     volumes.  (This is state information.)
+    // 
+    // Important Note: In order to call this the geometry MUST be closed.
 
   void LocateGlobalPointWithinVolume( const  G4ThreeVector& position);
     // Notify the Navigator that a track has moved to the new Global point
@@ -168,10 +173,10 @@ class G4Navigator
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
 
-  inline void LocateGlobalPointAndUpdateTouchable(
+  void LocateGlobalPointAndUpdateTouchableHandle(
 			  const G4ThreeVector&       position,
 			  const G4ThreeVector&       direction,
-				G4VTouchable*        touchableToUpdate,
+				G4TouchableHandle&         oldTouchableToUpdate,
 			  const G4bool               RelativeSearch  =true);
     // First, search the geometrical hierarchy like the above method
     // LocateGlobalPointAndSetup(). Then use the volume found and its
@@ -179,7 +184,16 @@ class G4Navigator
 
   inline void LocateGlobalPointAndUpdateTouchable(
 			  const G4ThreeVector&       position,
-				G4VTouchable*        touchableToUpdate,
+			  const G4ThreeVector&       direction,
+				G4VTouchable*              touchableToUpdate,
+			  const G4bool               RelativeSearch  =true);
+    // First, search the geometrical hierarchy like the above method
+    // LocateGlobalPointAndSetup(). Then use the volume found and its
+    // navigation history to update the touchable.
+
+  inline void LocateGlobalPointAndUpdateTouchable(
+			  const G4ThreeVector&       position,
+				G4VTouchable*              touchableToUpdate,
 			  const G4bool               RelativeSearch  =true);
     // Old version (missing direction).
     // Not recommended replace with newer version above.
@@ -211,20 +225,23 @@ class G4Navigator
     // system of the volume that was found by LocalGlobalPointAndSetup.
     // The Local Coordinates of point in world coordinate system.
 
-  G4ThreeVector NetTranslation() const;
-  G4RotationMatrix NetRotation() const;
+  inline G4ThreeVector NetTranslation() const;
+  inline G4RotationMatrix NetRotation() const;
     // Compute+return the local->global translation/rotation of current volume.
 
   inline G4VPhysicalVolume* GetWorldVolume() const;
     // Return the current  world (`topmost') volume.
 
-  void SetWorldVolume(G4VPhysicalVolume* pWorld);
+  inline void SetWorldVolume(G4VPhysicalVolume* pWorld);
     // Set the world (`topmost') volume. This must be positioned at
     // origin (0,0,0) and unrotated.
 
-  G4GRSVolume* CreateGRSVolume() const;
-  G4GRSSolid* CreateGRSSolid() const; 
-  G4TouchableHistory* CreateTouchableHistory() const;
+  inline G4GRSVolume* CreateGRSVolume() const;
+  inline G4GRSSolid* CreateGRSSolid() const; 
+  inline G4TouchableHistory* CreateTouchableHistory() const;
+    // `Touchable' creation methods: caller has deletion responsibility.
+
+  G4TouchableHistoryHandle CreateTouchableHistoryHandle() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
   inline G4bool IsExitNormalValid();
@@ -251,7 +268,7 @@ class G4Navigator
     // This function takes full care about how to calculate this normal,
     // but if the surfaces are not convex it will return valid=false.
 
-  G4bool EnteredDaughterVolume();
+  inline G4bool EnteredDaughterVolume();
     // The purpose of this function is to inform the caller if the track is
     // entering a daughter volume while exiting from the current volume.
     // This method returns 
@@ -261,10 +278,8 @@ class G4Navigator
     // This function is not guaranteed to work if SetGeometricallyLimitedStep()
     // was not called when it should have been called.
 
-  // G4bool ExitedMotherVolume();
-
-  G4int GetVerboseLevel();
-  void  SetVerboseLevel(G4int level);
+  inline G4int GetVerboseLevel();
+  inline void  SetVerboseLevel(G4int level);
     // Get/Set Verbose(ness) level.
     // [if level>0 && G4VERBOSE, printout can occur]
 
@@ -273,12 +288,13 @@ class G4Navigator
     // The level of detail is according to the verbosity.
 
   inline const G4AffineTransform& GetGlobalToLocalTransform() const;
-  const G4AffineTransform  GetLocalToGlobalTransform() const;
+  inline const G4AffineTransform  GetLocalToGlobalTransform() const;
     // Obtain the transformations Global/Local (and inverse).
     // Clients of these methods must copy the data if they need to keep it.
 
  protected:  // with description
 
+  inline void ResetState();
   inline void ResetStackAndState();
     // Reset stack and minimum or navigator state machine necessary for reset
     // as needed by LocalGlobalPointAndSetup.

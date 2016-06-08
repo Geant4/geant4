@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParametrizedHadronicVertex.cc,v 1.3.4.1 2001/06/28 19:15:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParametrizedHadronicVertex.cc,v 1.5 2001/10/24 17:47:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // --------------------------------------------------------------
 #include "G4ParametrizedHadronicVertex.hh"
@@ -41,5 +41,5 @@ ApplyYourself(G4Nucleus & theTarget, const G4Track &thePhoton)
       if(theKineticEnergy<20*GeV) return theLowEPionPlus.ApplyYourself(thePhoton, theTarget);
       return theHighEPionPlus.ApplyYourself(thePhoton, theTarget);
     }
-    return NULL;
+    return 0;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.9.4.1 2001/06/28 19:15:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.12 2001/08/24 21:48:32 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -57,6 +57,12 @@ public:
   void AddPrimitive (const G4Polyhedron& p);
   void AddPrimitive (const G4NURBS& nurb);
   void AddPrimitive (const G4Polymarker&);
+  ////////////////////////////////////////////////////////////////
+  // Explicitly invoke base class methods to avoid warnings about
+  // hiding of base class methods.
+  void AddPrimitive (const G4Scale& scale) {
+    G4VSceneHandler::AddPrimitive (scale);
+  }
   
   //
   // Primitives for use of HEPVis
@@ -89,6 +95,11 @@ private:
   static 	G4int    fSceneIdCount;   // static counter for OpenInventor scenes.
   static 	G4int    fSceneCount;     // No. of extanct scene handlers.
   G4double  	GetMarkerSize    ( const G4VMarker&  mark ) ;
+  G4ViewParameters fLastVP; // Keeps memory of last view parameters,
+         // namely the ones which go with the graphical database
+         // (display lists).  A view may interrogate this to decide if
+         // it needs to visit the kernel, i.e., to remake the
+         // graphical database.
 
   //
   // Stop-gap solution of structure re-use.

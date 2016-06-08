@@ -94,8 +94,8 @@ G4VPhysicalVolume* ExN04CalorimeterROGeometry::Build()
 		 caloRing_dz, caloRing_sphi, caloRing_dphi);
   G4LogicalVolume * caloROcellLog
     = new G4LogicalVolume(caloROcellTub, dummyMat, "caloROcellLogical",0,0,0);
-  G4VPhysicalVolume * caloROcellPhys
-    = new G4PVReplica("caloROcellPhysical", caloROcellLog, caloROphiDivisionPhys,
+//  G4VPhysicalVolume * caloROcellPhys =
+      new G4PVReplica("caloROcellPhysical", caloROcellLog, caloROphiDivisionPhys,
 		      kZAxis, segmentsinZ,2.*caloRing_dz);
   
 

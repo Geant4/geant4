@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc,v 1.7.2.1 2001/06/28 19:08:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FieldTrack.icc,v 1.9 2001/10/25 17:02:16 japost Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "PhysicalConstants.h"
 
@@ -261,7 +261,7 @@ void G4FieldTrack::DumpToArray(G4double valArr[ncompSVEC] ) const
 //   note that momentum direction must-be/is normalised
 
 inline
-void G4FieldTrack::LoadFromArray(G4double valArr[ncompSVEC])
+void G4FieldTrack::LoadFromArray(const G4double valArr[ncompSVEC])
 {
   SixVector[0]=valArr[0];
   SixVector[1]=valArr[1];

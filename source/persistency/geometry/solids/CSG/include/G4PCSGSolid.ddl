@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PCSGSolid.ddl,v 1.3.4.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-//  
-// class G4CSGSolid
-//
+// $Id: G4PCSGSolid.ddl,v 1.5 2001/07/11 10:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4CSGSolid
+
 // History:
 // 19.06.98 A.Kimura Converted G4CSGSolid.hh
 
@@ -36,11 +36,13 @@
 #include "G4PersistentSchema.hh"
 #include "G4PVSolid.hh"
 
-class G4PCSGSolid : public G4PVSolid {
-public:
+class G4PCSGSolid
+ : public G4PVSolid
+{
+public: // With description
     G4PCSGSolid(const G4String& pName);
-
     virtual ~G4PCSGSolid();
+    // Constructor and Destructor
 };
 
 #endif

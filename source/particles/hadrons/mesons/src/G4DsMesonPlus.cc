@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonPlus.cc,v 1.4.4.2 2001/06/28 20:19:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DsMesonPlus.cc,v 1.6 2001/10/15 10:08:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -84,9 +84,6 @@ G4DsMesonPlus G4DsMesonPlus::theDsMesonPlus(
 
 G4DsMesonPlus*  G4DsMesonPlus::DsMesonPlusDefinition(){return &theDsMesonPlus;}
 G4DsMesonPlus*  G4DsMesonPlus::DsMesonPlus(){return &theDsMesonPlus;}
-// initialization for static cut values
-G4double   G4DsMesonPlus::theDsMesonPlusLengthCut = -1.0;
-G4double*  G4DsMesonPlus::theDsMesonPlusKineticEnergyCuts = NULL;
 
 
 

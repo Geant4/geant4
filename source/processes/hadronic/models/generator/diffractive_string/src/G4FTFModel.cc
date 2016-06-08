@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.4.8.2 2001/06/28 20:19:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FTFModel.cc,v 1.9 2001/10/20 10:45:24 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // ------------------------------------------------------------
@@ -97,6 +97,8 @@ G4ExcitedStringVector * G4FTFModel::GetStrings()
 	return theStrings;
 }
 
+struct DeleteVSplitableHadron { void operator()(G4VSplitableHadron * aH){delete aH;} };
+
 G4ExcitedStringVector * G4FTFModel::BuildStrings()
 {	
 
@@ -106,18 +108,19 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	G4ExcitedStringVector * strings;
 	strings = new G4ExcitedStringVector();
 	
-	G4RWTPtrOrderedVector<G4VSplitableHadron> primaries;
-	G4RWTPtrOrderedVector<G4VSplitableHadron> targets;
+	G4std::vector<G4VSplitableHadron *> primaries;
+	G4std::vector<G4VSplitableHadron *> targets;
 	
 	theParticipants.StartLoop();    // restart a loop 
 	while ( theParticipants.Next() ) 
 	{
 	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
                  //  do not allow for duplicates ...
-	    if ( ! primaries.contains(interaction.GetProjectile()) )
-	    	primaries.insert(interaction.GetProjectile());
-	    if ( ! targets.contains(interaction.GetTarget()) ) 
-	    	targets.insert(interaction.GetTarget());
+	    if ( primaries.end() == G4std::find(primaries.begin(), primaries.end(), interaction.GetProjectile()) )
+	    	primaries.push_back(interaction.GetProjectile());
+		
+	    if ( targets.end() == G4std::find(targets.begin(), targets.end(),interaction.GetTarget()) ) 
+	    	targets.push_back(interaction.GetTarget());
 	}
 	    
 	
@@ -125,20 +128,22 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 //					     targets.entries() << G4endl;
 
 
-	G4int ahadron;
-	for ( ahadron=0; ahadron < primaries.entries() ; ahadron++)
+	unsigned int ahadron;
+	for ( ahadron=0; ahadron < primaries.size() ; ahadron++)
 	{
 	    G4bool isProjectile=true;
-	    strings->insert(theExcitation->String(primaries[ahadron], isProjectile));
+	    strings->push_back(theExcitation->String(primaries[ahadron], isProjectile));
 	}
-	for ( ahadron=0; ahadron < targets.entries() ; ahadron++)
+	for ( ahadron=0; ahadron < targets.size() ; ahadron++)
 	{
 	    G4bool isProjectile=false;
-	    strings->insert(theExcitation->String(targets[ahadron], isProjectile));
+	    strings->push_back(theExcitation->String(targets[ahadron], isProjectile));
 	}
 
-	primaries.clearAndDestroy();
-	targets.clearAndDestroy();
+	G4std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
+	primaries.clear();
+	G4std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
+	targets.clear();
 	
 	return strings;
 }

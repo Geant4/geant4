@@ -21,23 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.11.2.1 2001/06/28 19:15:28 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Track.cc,v 1.15 2001/12/10 08:36:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
 //
 //  G4Track.cc
 //
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
-//
 //---------------------------------------------------------------
 //   Add copy constructor            Hisaya Feb. 07 01
 //   Fix GetVelocity                 Hisaya Feb. 17 01
-//
+//   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek//
 #include "G4Track.hh"
 
 G4Allocator<G4Track> aTrackAllocator;
@@ -47,53 +42,35 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
                  G4double aValueTime,
                  const G4ThreeVector& aValuePosition)
 ///////////////////////////////////////////////////////////
-{
-   fpDynamicParticle = apValueDynamicParticle;
-   fCurrentStepNumber = 0;
-   fGlobalTime = aValueTime;
-   fLocalTime = 0.;
-   fTrackLength = 0.;
-   fPosition = aValuePosition;
-   fpTouchable = 0;
-   fpNextTouchable = 0; 
-   fpStep=0;
-
-   fpLVAtVertex = 0;
-   fpCreatorProcess = 0;
-
-   fTrackStatus = fAlive;
-
-   fBelowThreshold = false;
-   fGoodForTracking = false;
-   fWeight = 1.0;
-
-   fpUserInformation = 0;
+  : fCurrentStepNumber(0),    fPosition(aValuePosition),
+    fGlobalTime(aValueTime),  fLocalTime(0.),
+    fTrackLength(0.),
+    fParentID(0),             fTrackID(0),
+    fpDynamicParticle(apValueDynamicParticle),
+    fTrackStatus(fAlive),
+    fBelowThreshold(false),   fGoodForTracking(false),
+    fWeight(1.0),
+    fpStep(0),
+    fpLVAtVertex(0),          fpCreatorProcess(0),
+    fpUserInformation(0)
+{    
 }
 
 //////////////////
 G4Track::G4Track()
 //////////////////
+  : fCurrentStepNumber(0),    
+    fGlobalTime(0),           fLocalTime(0.),
+    fTrackLength(0.),
+    fParentID(0),             fTrackID(0),
+    fpDynamicParticle(0),
+    fTrackStatus(fAlive),
+    fBelowThreshold(false),   fGoodForTracking(false),
+    fWeight(1.0),
+    fpStep(0),
+    fpLVAtVertex(0),          fpCreatorProcess(0),
+    fpUserInformation(0)
 {
-   fCurrentStepNumber = 0;
-   fGlobalTime = 0.;
-   fLocalTime = 0.;
-   fTrackLength = 0.;
-   fParentID = 0;
-   fTrackID = 0;
-   fpTouchable = 0;
-   fpNextTouchable = 0;
-   fpStep=0;
-
-   fpDynamicParticle = 0;
-   fpLVAtVertex = 0;
-   fpCreatorProcess = 0;
-
-   fTrackStatus = fAlive;
-   fBelowThreshold = false;
-   fGoodForTracking = false;
-   fWeight = 1.0;
-
-   fpUserInformation = 0;
 }
 //////////////////
 G4Track::G4Track(const G4Track& right)
@@ -115,32 +92,40 @@ G4Track & G4Track::operator=(const G4Track &right)
 //////////////////
 {
   if (this != &right) {
-   fCurrentStepNumber = right.fCurrentStepNumber;
+   fPosition = right.fPosition;
    fGlobalTime = right.fGlobalTime;
    fLocalTime = right.fLocalTime;
    fTrackLength = right.fTrackLength;
-   fParentID = right.fParentID;
+   fWeight = right.fWeight;
 
-   // Track ID is not copied and set to zero for new track
+   // Track ID (and Parent ID) is not copied and set to zero for new track
    fTrackID = 0;
+   fParentID =0;
 
-   // pointers to Touchables or Step are not copied
-   fpTouchable = 0;
-   fpNextTouchable = 0;
-   fpStep=0;
+   // CurrentStepNumber is set to be 0
+   fCurrentStepNumber = 0;
 
+   // dynamic particle information 
    fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
-
-   fVtxKineticEnergy = right.fVtxKineticEnergy;
-   fVtxPosition = right.fVtxPosition;
-   fpLVAtVertex = right.fpLVAtVertex;
-   fpCreatorProcess = right.fpCreatorProcess;
-
+ 
+   // track status and flags for tracking  
    fTrackStatus = right.fTrackStatus;
    fBelowThreshold = right.fBelowThreshold;
    fGoodForTracking = right.fGoodForTracking;
-   fWeight = right.fWeight;
+   
+   // Step information (Step Length, Step Number, pointer to the Step,) 
+   // are not copied
+   fpStep=0;
 
+   // vertex information
+   fVtxPosition = right.fVtxPosition;
+   fpLVAtVertex = right.fpLVAtVertex;
+   fVtxKineticEnergy = right.fVtxKineticEnergy;
+   fVtxMomentumDirection = right.fVtxMomentumDirection;
+
+   // CreatorProcess is not copied 
+   fpCreatorProcess = 0;
+    
    fpUserInformation = right.fpUserInformation;
   }
   return *this;

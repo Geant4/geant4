@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.hh,v 1.3.4.1 2001/06/28 19:15:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VUserDetectorConstruction.hh,v 1.4 2001/07/11 10:08:33 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VUserDetectorConstruction_h

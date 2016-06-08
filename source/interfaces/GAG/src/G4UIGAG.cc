@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.cc,v 1.9.4.1 2001/06/28 19:10:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIGAG.cc,v 1.13 2001/11/29 06:04:45 yhajime Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal
@@ -34,8 +34,9 @@
 #include "G4UIcommandStatus.hh"
 #include "g4std/strstream"
 
-G4UIGAG::G4UIGAG(): TVersion("T1.0a"), JVersion("J1.0a")
+G4UIGAG::G4UIGAG()//: TVersion("T1.0a"), JVersion("J1.0a")
 {
+ TVersion="T1.0a"; JVersion="J1.0a";
   //G4cout << "G4UIGAG: Apr15,98." << G4endl;
   prefix = "/";
   UI = G4UImanager::GetUIpointer();
@@ -98,21 +99,31 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
 {
   G4UIcommandTree * tree = UI->GetTree();
   if(aCommand.length()<2) return;
-  int commandStatus = UI->ApplyCommand(aCommand);
+  G4int returnVal = UI->ApplyCommand(aCommand);
+  G4int paramIndex = returnVal % 100;
+  G4int commandStatus  = returnVal - paramIndex;
+
   UpdateState();
   if ( uiMode == terminal_mode){
     switch(commandStatus) {
     case fCommandSucceeded:
       break;
     case fCommandNotFound:
-      G4cerr << "command not found" << G4endl;
+      //      G4cerr << "command not found" << G4endl;
+    G4cerr << "command <" << UI->SolveAlias(aCommand) << "> not found" << G4endl;
       break;
     case fIllegalApplicationState:
       G4cerr << "illegal application state -- command refused" << G4endl;
       break;
     case fParameterOutOfRange:
     case fParameterUnreadable:
+      G4cerr << "Parameter is wrong type and/or is not omittable (index " << paramIndex << ")" << G4endl;
+      break;
     case fParameterOutOfCandidates:
+      G4cerr << "Parameter is out of candidate list (index " << paramIndex << ")" << G4endl;
+      //      G4cerr << "Candidates : " << cmd->GetParameter(paramIndex)->GetParameterCandidates() << G4endl;
+      break;
+    case fAliasNotFound:
     default:
       G4cerr << "command refused (" << commandStatus << ")" << G4endl;
     }
@@ -133,7 +144,7 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
       }
       break;
     case fCommandNotFound:
-      G4cout << "@@ErrResult \"command not found.\"" << G4endl;
+      G4cout << "@@ErrResult \" <" << UI->SolveAlias(aCommand) << "> command not found.\"" << G4endl;
       break;
     case fIllegalApplicationState:
       G4cout << "@@ErrResult \"Illegal application state -- command refused\"" << G4endl;
@@ -142,11 +153,13 @@ void G4UIGAG::ExecuteCommand(G4String aCommand)
       G4cout << "@@ErrResult \"Parameter Out of Range.\"" << G4endl;
       break;
     case fParameterUnreadable:
-      G4cout << "@@ErrResult \"Parameter Unreadable.\"" << G4endl;
+      G4cout << "@@ErrResult \"Parameter is wrong type and/or is not omittable.\"" << G4endl;
       break;
     case fParameterOutOfCandidates:
+//      G4cout << "@@ErrResult \"Parameter Out of Candidates. Candidates : " << cmd->GetParameter(paramIndex)->GetParameterCandidates()<< "\"" << G4endl;
       G4cout << "@@ErrResult \"Parameter Out of Candidates.\"" << G4endl;
       break;
+    case fAliasNotFound:
     default:
       G4cout << "@@ErrResult \"command refused (" << commandStatus << ")\"" << G4endl;
     }
@@ -294,7 +307,7 @@ G4String G4UIGAG::GetFullPath( G4String aNewCommand )
   else if( newCommand(0,3) == "../" )
   {
     G4String tmpPrefix = prefix;
-    G4int i_direc = 0;
+    /*G4int*/ unsigned i_direc = 0;
     while( i_direc < newCommand.length() )
     {
       if( newCommand(i_direc,3) == "../" )
@@ -397,7 +410,7 @@ void G4UIGAG::ListDirectory( G4String newCommand )
 void G4UIGAG::TerminalHelp(G4String newCommand)
 {
   G4UIcommandTree * treeTop = UI->GetTree();
-  int i = newCommand.index(" ");
+  /*int*/unsigned i = newCommand.index(" ");
   if( i != G4std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
@@ -420,7 +433,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   G4UIcommandTree * floor[10];
   floor[0] = treeTop;
   int iFloor = 0;
-  int prefixIndex = 1;
+  /*int*/ unsigned prefixIndex = 1;
   while( prefixIndex < prefix.length()-1 )
   {
     int ii = prefix.index("/",prefixIndex);
@@ -432,6 +445,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
   floor[iFloor]->ListCurrentWithNum();
   // 1998 Oct 2 non-number input
   while(1){
+    int i;
     G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4std::flush;
     G4cin >> i;
     if(!G4cin.good()){
@@ -444,7 +458,7 @@ void G4UIGAG::TerminalHelp(G4String newCommand)
       floor[iFloor]->ListCurrentWithNum(); continue;}
     else if(i == 0) { break;}
     else if( i > 0 ) {
-      int n_tree = floor[iFloor]->GetTreeEntry();
+      int  n_tree = floor[iFloor]->GetTreeEntry();
       if( i > n_tree )
       {
         if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
@@ -503,7 +517,7 @@ G4String G4UIGAG::ModifyPrefix(G4String newCommand)
 G4UIcommandTree * G4UIGAG::FindDirPath(G4String newCommand)
 {
   G4UIcommandTree * comTree = UI->GetTree();
-  int idx = 1;
+  /*int*/ unsigned idx = 1;
   while( idx < newCommand.length()-1 )
   {
     int i = newCommand.index("/",idx);
@@ -569,7 +583,7 @@ void G4UIGAG::CodeGenJavaTree(G4UIcommandTree * tree, int level)
 void G4UIGAG::CodeGenJavaParams(G4UIcommandTree * tree, int level) //recursive
 {
   int treeEntry, commandEntry, i;
-  G4UIcommand * Comp;
+  //G4UIcommand * Comp;
   G4UIcommandTree * treeLink;
 
   treeEntry = tree->GetTreeEntry();
@@ -604,7 +618,7 @@ void G4UIGAG::SendAParamProperty(G4UIcommand * Comp)
     title = Comp->GetGuidanceLine(j);
     title2 = "";
     if (title != ""){
-      for(int i=0; i< title.length(); i++){
+      for(int i=0; i< (int)title.length(); i++){
 	c[0]=title(i);
 	c[1]= '\0';
 	if ( c[0] == '\n' || c[0] == '\r') {
@@ -675,7 +689,7 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
       j = 0;
       while(1){
 	title1 = Comp->GetGuidanceLine(j);
-	for(i=0; i< title1.length(); i++){
+	for(i=0; i< (int)title1.length(); i++){
 	  char c[2];
 	  c[0]=title1(i);
 	  c[1]= '\0';
@@ -700,7 +714,7 @@ void G4UIGAG::CodeGenTclTree(G4UIcommandTree * tree, int level)
     pathName =  t->GetPathName();   
     title1 = t->GetTitle();
     title2 = "";
-    for(int i=0; i<title1.length(); i++){
+    for(int i=0; i<(int)title1.length(); i++){
       char c[2];
       c[0]=title1(i);
       c[1]= '\0';
@@ -750,7 +764,7 @@ void G4UIGAG::SendATclParamProperty(G4UIcommand * Comp)
       G4String  guide1,guide2;
       guide1 = prp->GetParameterGuidance();
       guide2 = "";
-      for(int i=0; i<guide1.length(); i++){
+      for(int i=0; i<(int)guide1.length(); i++){
         char c[2];
         c[0]=guide1(i);
         c[1]= '\0';

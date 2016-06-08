@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.hh,v 1.5.4.1 2001/06/28 19:15:10 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpAbsorption.hh,v 1.7 2001/08/31 16:43:32 gum Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Definition
@@ -85,7 +85,7 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpAbsorption(const G4String& processName = "Absorption");
+        G4OpAbsorption(const G4String& processName = "OpAbsorption");
 
         // G4OpAbsorption(const G4OpAbsorption &right);
 

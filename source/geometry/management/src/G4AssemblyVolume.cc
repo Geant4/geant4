@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.5.2.1 2001/06/28 19:08:29 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AssemblyVolume.cc,v 1.6 2001/07/11 09:59:20 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Class G4AssemblyVolume - implementation

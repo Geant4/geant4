@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.6.2.1 2001/06/28 19:09:38 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4LogicalSkinSurface.hh,v 1.7 2001/07/11 10:00:28 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // class G4LogicalSkinSurface

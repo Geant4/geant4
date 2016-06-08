@@ -44,6 +44,8 @@
 //
 // CHANGE HISTORY
 // --------------
+// 27 Sepetember 2001, F. Lei
+//            verboselevel(0) used in constructor
 //
 // 01 November 2000, F.Lei
 //            added " ee = e0 +1. ;" as line 763
@@ -58,7 +60,7 @@
 // 14 April 2000, F Lei, DERA UK
 // 0.b.4 release. Changes are:
 //            1) Use PhotonEvaporation instead of DiscreteGammaDeexcitation
-//            2) VR: Significant efficiency inprovement
+//            2) VR: Significant efficiency improvement
 // 
 // 29 February 2000, P R Truscott, DERA UK
 // 0.b.3 release.
@@ -105,7 +107,7 @@ const G4double   G4RadioactiveDecay::levelTolerance =2.0*keV;
 G4RadioactiveDecay::G4RadioactiveDecay
   (const G4String& processName)
   :G4VRestDiscreteProcess(processName, fDecay), HighestBinValue(10.0),
-   LowestBinValue(1.0e-3), TotBin(200), verboseLevel(1)
+   LowestBinValue(1.0e-3), TotBin(200), verboseLevel(0)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) {
@@ -226,7 +228,7 @@ void G4RadioactiveDecay::SelectAVolume(const G4String aVolume)
   G4LogicalVolumeStore *theLogicalVolumes;
   G4LogicalVolume *volume;
   theLogicalVolumes=G4LogicalVolumeStore::GetInstance();
-  for (G4int i = 0; i < theLogicalVolumes->size(); i++){
+  for (size_t i = 0; i < theLogicalVolumes->size(); i++){
     volume=(*theLogicalVolumes)[i];
     if (volume->GetName() == aVolume) {
       ValidVolumes.push_back(aVolume);
@@ -252,7 +254,7 @@ void G4RadioactiveDecay::DeselectAVolume(const G4String aVolume)
   G4LogicalVolumeStore *theLogicalVolumes;
   G4LogicalVolume *volume;
   theLogicalVolumes=G4LogicalVolumeStore::GetInstance();
-  for (G4int i = 0; i < theLogicalVolumes->size(); i++){
+  for (size_t i = 0; i < theLogicalVolumes->size(); i++){
     volume=(*theLogicalVolumes)[i];
     if (volume->GetName() == aVolume) {
       G4std::vector<G4String>::iterator location;
@@ -288,7 +290,7 @@ void G4RadioactiveDecay::SelectAllVolumes()
   if (GetVerboseLevel()>0)
     G4cout << " RDM Applies to all Volumes"  << G4endl;
 #endif
-  for (G4int i = 0; i < theLogicalVolumes->size(); i++){
+  for (size_t i = 0; i < theLogicalVolumes->size(); i++){
     volume=(*theLogicalVolumes)[i];
     ValidVolumes.push_back(volume->GetName());    
 #ifdef G4VERBOSE
@@ -328,7 +330,7 @@ G4bool G4RadioactiveDecay::IsRateTableReady(const G4ParticleDefinition &
   // been calculated.
   //
   G4String aParticleName = aParticle.GetParticleName();
-  for (G4int i = 0; i < theDecayRateTableVector.size(); i++)
+  for (size_t i = 0; i < theDecayRateTableVector.size(); i++)
     {
       if (theDecayRateTableVector[i].GetIonName() == aParticleName)
         return true ;
@@ -348,7 +350,7 @@ void G4RadioactiveDecay::GetDecayRateTable(const G4ParticleDefinition &
 
   G4String aParticleName = aParticle.GetParticleName();
 
-  for (G4int i = 0; i < theDecayRateTableVector.size(); i++)
+  for (size_t i = 0; i < theDecayRateTableVector.size(); i++)
     {
       if (theDecayRateTableVector[i].GetIonName() == aParticleName)
 	{
@@ -869,6 +871,13 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 		  modeSumBR[6] += b;
 		}
 	      break;
+	    case ERROR:
+	    default:
+	      // 
+	      // 
+	      G4cout << " There is an  error in decay mode selection! exit RDM now" << G4endl;
+	      exit(0);
+	      
 	    }
 	  }
       }
@@ -960,7 +969,6 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
   G4bool stable = false;
   G4int i;
   G4int j;
-  G4int k;
   G4VDecayChannel       *theChannel             = NULL;
   G4NuclearDecayChannel *theNuclearDecayChannel = NULL;
   G4ITDecayChannel *theITChannel = NULL;
@@ -1138,6 +1146,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	    //
 	    // they are in two parts, first the les than n ones
 	    rates.clear();
+	    size_t k;
 	    for (k = 0; k < RP.size(); k++){
 	      theRate = TP[k]/(TP[k]-TaoPlus) * theBR * RP[k];
 	      rates.push_back(theRate);
@@ -1274,7 +1283,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 		 << " is not selected for the RDM"<< G4endl;
 	  G4cout << " There are " << ValidVolumes.size() << " volumes" << G4endl;
 	  G4cout << " The Valid volumes are " << G4endl;
-	  for (G4int i = 0; i< ValidVolumes.size(); i++)
+	  for (size_t i = 0; i< ValidVolumes.size(); i++)
 	    G4cout << ValidVolumes[i] << G4endl;
 	}
 #endif
@@ -1458,14 +1467,14 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	G4double taotime;
 	G4double decayRate;
 	
-	G4int i;
-	G4int j;
+	size_t i;
+	size_t j;
 	G4int numberOfSecondaries;
 	G4int totalNumberOfSecondaries = 0;
-	G4double currentTime;
+	G4double currentTime = 0.;
 	G4int ndecaych;
 	G4DynamicParticle* asecondaryparticle;
-	G4DecayProducts* products = NULL;
+	//	G4DecayProducts* products = NULL;
 	G4std::vector<G4DynamicParticle*> secondaryparticles;
 	G4std::vector<G4double> pw;
 	pw.clear();

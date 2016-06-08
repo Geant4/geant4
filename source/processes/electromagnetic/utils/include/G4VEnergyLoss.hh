@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.hh,v 1.9.4.2 2001/06/28 20:19:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VEnergyLoss.hh,v 1.13 2001/11/08 08:09:57 urban Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
-//
+// 26.10.01 static inline functions moved to .cc file (mma)
+// 08.11.01 some static methods,data members are not static L.Urban
+// ------------------------------------------------------------
 // 
 // Class Description 
 //
@@ -41,6 +42,7 @@
 //  All the EnergyLoss classes are inherited from G4VEnergyLoss
 //  class.
 //
+
 //  -----------------------------------------------------------
 //  created  on 28 January 2000  by L. Urban               
 //  -----------------------------------------------------------
@@ -96,6 +98,45 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
                               G4double	 MeanLoss,
                               G4double step);
 
+    // Build range table starting from the DEDXtable
+    G4PhysicsTable*
+    BuildRangeTable(G4PhysicsTable* theDEDXTable,
+                    G4PhysicsTable* theRangeTable,
+                    G4double Tmin,G4double Tmax,G4int nbin);
+
+    // Build time tables starting from the DEDXtable
+    G4PhysicsTable*
+    BuildLabTimeTable(G4PhysicsTable* theDEDXTable,
+                      G4PhysicsTable* theLabTimeTable,
+                      G4double Tmin,G4double Tmax,G4int nbin);
+
+    G4PhysicsTable*
+    BuildProperTimeTable(G4PhysicsTable* theDEDXTable,
+                      G4PhysicsTable* ProperTimeTable,
+                      G4double Tmin,G4double Tmax,G4int nbin);
+
+    // Build tables of coefficients needed for inverting the range table 
+    G4PhysicsTable*
+    BuildRangeCoeffATable(G4PhysicsTable* theRangeTable,
+                          G4PhysicsTable* theCoeffATable,
+                          G4double Tmin,G4double Tmax,G4int nbin);
+    G4PhysicsTable*
+    BuildRangeCoeffBTable(G4PhysicsTable* theRangeTable,
+                          G4PhysicsTable* theCoeffBTable,
+                          G4double Tmin,G4double Tmax,G4int nbin);
+    G4PhysicsTable*
+    BuildRangeCoeffCTable(G4PhysicsTable* theRangeTable,
+                          G4PhysicsTable* theCoeffCTable,
+                          G4double Tmin,G4double Tmax,G4int nbin);
+
+    // Invert range table
+    G4PhysicsTable*
+    BuildInverseRangeTable(G4PhysicsTable* theRangeTable,
+                           G4PhysicsTable* theRangeCoeffATable,
+                           G4PhysicsTable* theRangeCoeffBTable,
+                           G4PhysicsTable* theRangeCoeffCTable,
+                           G4PhysicsTable* theInverseRangeTable,
+                           G4double Tmin,G4double Tmax,G4int nbin);
 
    private:
 
@@ -103,7 +144,39 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
       G4VEnergyLoss();
       G4VEnergyLoss & operator=(const G4VEnergyLoss &right);
 
+      void BuildRangeVector(G4PhysicsTable* theDEDXTable,
+                     G4double Tmin,G4double Tmax,G4int nbin,
+                     G4int materialIndex,G4PhysicsLogVector* rangeVector);
+
+      G4double RangeIntLin(G4PhysicsVector* physicsVector,G4int nbin);
+
+      G4double RangeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
+
+      void BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
+                     G4double Tmin,G4double Tmax,G4int nbin,
+                     G4int materialIndex,G4PhysicsLogVector* rangeVector);
+
+      void BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
+                     G4double Tmin,G4double Tmax,G4int nbin,
+                     G4int materialIndex,G4PhysicsLogVector* rangeVector);
+
+      G4double LabTimeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
+
+      G4double ProperTimeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
+
+      void InvertRangeVector(G4PhysicsTable* theRangeTable,
+                             G4PhysicsTable* theRangeCoeffATable,
+                             G4PhysicsTable* theRangeCoeffBTable,
+                             G4PhysicsTable* theRangeCoeffCTable,
+                             G4double Tmin,G4double Tmax,G4int nbin,
+                       G4int materialIndex,G4PhysicsLogVector* rangeVector);
+
+
   protected:
+
+    G4double ParticleMass;
+
+  private:
 
     // data members to speed up the fluctuation calculation
     G4Material* lastMaterial;
@@ -113,36 +186,32 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
     const G4int nmaxCont1,nmaxCont2 ;
 
+    // for some integration routines
+    G4double taulow,tauhigh,ltaulow,ltauhigh;
+
   // static part of the class 
 
   public:  // With description
 
-    static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
+    static void SetRndmStep(G4bool value);
     // use / do not use randomisation in energy loss steplimit
     // ( default = no randomisation)
 
-    static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
+    static void SetEnlossFluc(G4bool value);
     // compute energy loss with/without fluctuation
     // ( default : with fluctuation)
 
-    static void SetSubSec       (G4bool  value) {subSecFlag = value ; }
+    static void SetSubSec(G4bool value);
     // switch on/off the generation of the subcutoff secondaries
     // ( default = subcutoff secondary generation )
 
-    static void SetMinDeltaCutInRange(G4double value)
-                                    {MinDeltaCutInRange = value;
-                                     setMinDeltaCutInRange = true ;}
+    static void SetMinDeltaCutInRange(G4double value);
     // sets minimal cut value for the subcutoff secondaries
     // (i.e. the kinetic energy of these secondaries can not be
     //	smaller than the energy corresponds to MinDeltaCutInRange).
 
 
-    static void SetStepFunction (G4double c1, G4double c2)
-                               {dRoverRange = c1; finalRange = c2;
-                                c1lim=dRoverRange ;
-                                c2lim=2.*(1-dRoverRange)*finalRange;
-                                c3lim=-(1.-dRoverRange)*finalRange*finalRange;
-                               }
+    static void SetStepFunction (G4double c1, G4double c2);
     // sets values for data members used to compute the step limit:
     //   dRoverRange : max. relative range change in one step,
     //   finalRange  : if range <= finalRange --> last step for the particle.
@@ -150,86 +219,11 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
   protected: // With description
 
-    // Build range table starting from the DEDXtable
-    static G4PhysicsTable*
-     BuildRangeTable(G4PhysicsTable* theDEDXTable,
-                     G4PhysicsTable* theRangeTable,
-                     G4double Tmin,G4double Tmax,G4int nbin);
-
-    // Build time tables starting from the DEDXtable
-    static G4PhysicsTable*
-     BuildLabTimeTable(G4PhysicsTable* theDEDXTable,
-                       G4PhysicsTable* theLabTimeTable,
-                       G4double Tmin,G4double Tmax,G4int nbin);
-
-    static G4PhysicsTable*
-     BuildProperTimeTable(G4PhysicsTable* theDEDXTable,
-                       G4PhysicsTable* ProperTimeTable,
-                       G4double Tmin,G4double Tmax,G4int nbin);
-
-    // Build tables of coefficients needed for inverting the range table 
-    static G4PhysicsTable*
-     BuildRangeCoeffATable(G4PhysicsTable* theRangeTable,
-                           G4PhysicsTable* theCoeffATable,
-                           G4double Tmin,G4double Tmax,G4int nbin);
-    static G4PhysicsTable*
-     BuildRangeCoeffBTable(G4PhysicsTable* theRangeTable,
-                           G4PhysicsTable* theCoeffBTable,
-                           G4double Tmin,G4double Tmax,G4int nbin);
-    static G4PhysicsTable*
-     BuildRangeCoeffCTable(G4PhysicsTable* theRangeTable,
-                           G4PhysicsTable* theCoeffCTable,
-                           G4double Tmin,G4double Tmax,G4int nbin);
-
-    // Invert range table
-    static G4PhysicsTable*
-     BuildInverseRangeTable(G4PhysicsTable* theRangeTable,
-                            G4PhysicsTable* theRangeCoeffATable,
-                            G4PhysicsTable* theRangeCoeffBTable,
-                            G4PhysicsTable* theRangeCoeffCTable,
-                            G4PhysicsTable* theInverseRangeTable,
-                            G4double Tmin,G4double Tmax,G4int nbin);
-
-  private:
-
-    static void BuildRangeVector(G4PhysicsTable* theDEDXTable,
-                        G4double Tmin,G4double Tmax,G4int nbin,
-                        G4int materialIndex,G4PhysicsLogVector* rangeVector);
-
-    static G4double RangeIntLin(G4PhysicsVector* physicsVector
-                                                        ,G4int nbin);
-
-    static G4double RangeIntLog(G4PhysicsVector* physicsVector
-                                                        ,G4int nbin);
-
-    static void BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
-                        G4double Tmin,G4double Tmax,G4int nbin,
-                        G4int materialIndex,G4PhysicsLogVector* rangeVector);
-
-    static void BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
-                        G4double Tmin,G4double Tmax,G4int nbin,
-                        G4int materialIndex,G4PhysicsLogVector* rangeVector);
-
-    static G4double LabTimeIntLog(G4PhysicsVector* physicsVector
-                                                        ,G4int nbin);
-
-    static G4double ProperTimeIntLog(G4PhysicsVector* physicsVector,
-                                                         G4int nbin);
-
-    static void InvertRangeVector(G4PhysicsTable* theRangeTable,
-                                  G4PhysicsTable* theRangeCoeffATable,
-                                  G4PhysicsTable* theRangeCoeffBTable,
-                                  G4PhysicsTable* theRangeCoeffCTable,
-                                  G4double Tmin,G4double Tmax,G4int nbin,
-                       G4int materialIndex,G4PhysicsLogVector* rangeVector);
-
+     static G4bool EqualCutVectors( G4double* vec1, G4double* vec2 );	 
+     static G4double* CopyCutVectors( G4double* dest, G4double* source );
 
   // data members
   protected:
-
-   // variables for the integration routines
-   static G4double ParticleMass,taulow,tauhigh,ltaulow,ltauhigh;
-
 
    static G4double dRoverRange;     // dRoverRange is the maximum allowed
                                      // deltarange/range in one Step
@@ -238,7 +232,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
    static G4bool   rndmStepFlag;    // control the randomization of the step
    static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
-   static G4bool       subSecFlag;  // control the generation of subcutoff secondaries
+   static G4bool       subSecFlag;  // control the generation of subcutoff delta
 
    static G4double MinDeltaCutInRange; // minimum cut for delta rays
    static G4double* MinDeltaEnergy ;

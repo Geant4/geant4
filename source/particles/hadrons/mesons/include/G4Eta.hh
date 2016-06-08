@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Eta.hh,v 1.3.4.2 2001/06/28 20:19:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Eta.hh,v 1.8 2001/10/28 05:01:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
 // Each class inheriting from G4VMeson
@@ -55,8 +54,6 @@ class G4Eta : public G4VMeson
 {
  private:
    static G4Eta    theEta;
-   static G4double  theEtaLengthCut;
-   static G4double* theEtaKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4Eta(
@@ -75,11 +72,9 @@ class G4Eta : public G4VMeson
    virtual ~G4Eta(){}
 
    static G4Eta*      EtaDefinition();
-   static G4Eta*      Eta(){return &theEta;}
-   static G4double GetCuts() {return theEtaLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theEtaKineticEnergyCuts;};
+   static G4Eta*      Eta();
 
-   virtual void        SetCuts(G4double aCut);
+   virtual void        CalcEnergyCuts( const G4Material* );
 };
 
 #endif

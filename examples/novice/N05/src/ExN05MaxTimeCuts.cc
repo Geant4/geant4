@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05MaxTimeCuts.cc,v 1.2.4.2 2001/06/28 20:18:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05MaxTimeCuts.cc,v 1.4 2001/11/05 08:24:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -70,7 +70,6 @@ G4double ExN05MaxTimeCuts::PostStepGetPhysicalInteractionLength(
    // get the pointer to UserLimits
    G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
   
    if (pUserLimits) {
      G4double temp = DBL_MAX;

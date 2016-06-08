@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.4.4.1 2001/06/28 19:09:44 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TouchableHistory.cc,v 1.5 2001/07/11 10:00:34 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4TouchableHistory Implementation

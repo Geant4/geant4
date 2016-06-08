@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.hh,v 1.5.2.1 2001/06/28 19:07:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSensitiveDetector.hh,v 1.7 2001/07/13 15:00:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VSensitiveDetector_h
@@ -33,7 +33,6 @@
 #include "G4HCofThisEvent.hh"
 #include "G4VReadOutGeometry.hh"
 #include "G4TouchableHistory.hh"
-//#include "g4rw/tvordvec.h"
 #include "G4CollectionNameVector.hh"
 
 // class description:
@@ -60,8 +59,8 @@ class G4VSensitiveDetector
 
       const G4VSensitiveDetector & operator=(const G4VSensitiveDetector &right);
 
-      int operator==(const G4VSensitiveDetector &right) const;
-      int operator!=(const G4VSensitiveDetector &right) const;
+      G4int operator==(const G4VSensitiveDetector &right) const;
+      G4int operator!=(const G4VSensitiveDetector &right) const;
 
   public: // with description
       virtual void Initialize(G4HCofThisEvent*HCE);
@@ -113,7 +112,7 @@ class G4VSensitiveDetector
       inline G4bool Hit(G4Step*aStep)
       {
         G4bool ack = true; 
-        G4TouchableHistory* ROhis = NULL;
+        G4TouchableHistory* ROhis = 0;
         if(!isActive()) 
         { ack = false; }
         else if(ROgeometry)

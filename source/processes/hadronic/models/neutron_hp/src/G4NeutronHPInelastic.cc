@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.8.2.1 2001/06/28 19:14:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPInelastic.cc,v 1.12 2001/10/19 11:54:51 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "G4NeutronHPInelastic.hh"
 
@@ -47,11 +47,10 @@
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();
     theInelastic = new G4NeutronHPChannelList[numEle];
-    G4bool toBeInitialised = true;
 
     for (G4int i=0; i<numEle; i++)
     { 
-      theInelastic[i].Init((*(G4Element::GetElementTable()))(i), dirName);
+      theInelastic[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       do
       {
 	theInelastic[i].Register(&theNFS, "F01"); // has

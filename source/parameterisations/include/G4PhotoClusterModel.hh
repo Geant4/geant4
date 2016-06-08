@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoClusterModel.hh,v 1.1.4.1 2001/06/28 19:10:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PhotoClusterModel.hh,v 1.3 2001/09/18 09:30:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -46,7 +46,6 @@
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
 #include "G4TouchableHistory.hh"
-#include <g4rw/tvordvec.h>
 
 
 class G4PhotoClusterModel : public G4VClusterModel

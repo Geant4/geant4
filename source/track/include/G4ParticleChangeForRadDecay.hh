@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForRadDecay.hh,v 1.2.4.2 2001/06/28 20:20:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticleChangeForRadDecay.hh,v 1.4 2001/10/24 05:41:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,7 +55,8 @@ class G4ParticleChangeForRadDecay: public G4ParticleChange
   protected:
     // hide copy constructor and assignment operaor as protected
     G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay &right){}
-    G4ParticleChangeForRadDecay & operator=(const G4ParticleChangeForRadDecay &right){}
+    G4ParticleChangeForRadDecay & operator=(const G4ParticleChangeForRadDecay &right){return *this;}
+
 
   public: // with description
   void AddSecondary(G4Track* aSecondary);

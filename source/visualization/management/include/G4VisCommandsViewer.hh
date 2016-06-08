@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh,v 1.13.2.1 2001/06/28 19:16:10 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisCommandsViewer.hh,v 1.15 2001/11/06 12:55:28 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -89,6 +89,18 @@ private:
   G4UIcmdWithADoubleAndUnit* fpCommandDollyTo;
   G4double fDollyIncrement;
   G4double fDollyTo;
+};
+
+class G4VisCommandViewerFlush: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerFlush ();
+  virtual ~G4VisCommandViewerFlush ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerFlush (const G4VisCommandViewerFlush&);
+  G4VisCommandViewerFlush& operator = (const G4VisCommandViewerFlush&);
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandViewerLights: public G4VVisCommandViewer {

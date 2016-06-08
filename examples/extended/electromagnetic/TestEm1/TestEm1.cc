@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm1.cc,v 1.4.4.1 2001/06/28 19:06:47 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: TestEm1.cc,v 1.7 2001/11/29 11:28:06 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #define Em1NoOptimize 1
 
@@ -51,7 +51,7 @@
  #endif
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 int main(int argc,char** argv) {
  
@@ -82,14 +82,11 @@ int main(int argc,char** argv) {
   Em1EventAction* EvtAct;
   
   runManager->SetUserAction(RunAct = new Em1RunAction); 
-  runManager->SetUserAction(EvtAct = new Em1EventAction(RunAct));
+  runManager->SetUserAction(EvtAct = new Em1EventAction);
   runManager->SetUserAction(new Em1TrackingAction(RunAct));
   runManager->SetUserAction(new Em1SteppingAction(RunAct,EvtAct));
 #endif
-  
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
+   
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -101,7 +98,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif     
-     UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
     }
@@ -124,4 +120,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsatt.cc,v 1.9.2.1 2001/06/28 19:08:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4gsatt.cc,v 1.11 2001/07/16 15:38:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
-#include "g4rw/cstring.h"
+#include "globals.hh"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 

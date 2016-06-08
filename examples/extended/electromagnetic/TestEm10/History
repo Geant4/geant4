@@ -1,0 +1,35 @@
+$Id: History,v 1.4 2001/11/27 17:01:17 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm10 History file
+                    ---------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27 Nov. 2001 Gabriele Cosmo (TestEm10-V03-02-01)
+- Corrected README.
+- Set G4NOHIST as default in GNUmakefile.
+- More models in run11.mac (V.Grichine).
+
+21 Nov. 2001 Marc Verderi (TestEm10-V03-02-00)
+- Define a new TestEm10.in (and .out) which tests
+  all XTR models, shooting 10 particles for each run.
+  Required some modification in the detector construction
+  and messenger.
+- Define a new TestEm10.large_N.in (and .out)
+  shooting 1000 particles/run.
+
+21 Nov. 2001 Marc Verderi
+- Taken for the HEAD and made compliant with
+  geant4-04-00-cand-01
+- clear many warnings
+

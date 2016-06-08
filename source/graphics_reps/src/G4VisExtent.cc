@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc,v 1.4.4.1 2001/06/28 19:10:13 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VisExtent.cc,v 1.6 2001/07/24 21:39:50 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // A.Walkden 28/11/95
@@ -40,24 +40,22 @@ G4VisExtent::G4VisExtent (G4double xmin, G4double xmax,
 {}
 
 G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius) {
-  // Use inscribed radius to define G3VisExtent so that
-  // GetExtentRadius gets radius back again.  The one is the "inverse"
-  // of the other, so to speak.
-  G4double inscribedRadius = radius / sqrt (3.);
-  fXmin = centre.x () - inscribedRadius;
-  fXmax = centre.x () + inscribedRadius;
-  fYmin = centre.y () - inscribedRadius;
-  fYmax = centre.y () + inscribedRadius;
-  fZmin = centre.z () - inscribedRadius;
-  fZmax = centre.z () + inscribedRadius;
+  // Use exscribed radius ... see comments in header file.
+  G4double halfSide (radius / sqrt (3.));
+  fXmin = centre.x () - halfSide;
+  fXmax = centre.x () + halfSide;
+  fYmin = centre.y () - halfSide;
+  fYmax = centre.y () + halfSide;
+  fZmin = centre.z () - halfSide;
+  fZmax = centre.z () + halfSide;
 }
 
 G4VisExtent::~G4VisExtent () {}
 
 G4Point3D G4VisExtent::GetExtentCentre () const {
   return G4Point3D (((fXmin + fXmax) / 2.),
-		       ((fYmin + fYmax) / 2.),
-		       ((fZmin + fZmax) / 2.));
+		    ((fYmin + fYmax) / 2.),
+		    ((fZmin + fZmax) / 2.));
 }
 
 G4double G4VisExtent::GetExtentRadius () const {

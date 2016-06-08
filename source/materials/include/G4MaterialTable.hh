@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialTable.hh,v 1.2.4.2 2001/06/28 20:18:55 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MaterialTable.hh,v 1.4 2001/10/17 14:02:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -36,6 +36,8 @@
 #ifndef G4MATERIALTABLE_HH
 #define G4MATERIALTABLE_HH
 
-#include "G4Material.hh"
+class G4Material;
+
+typedef G4std::vector<G4Material*> G4MaterialTable;
 
 #endif

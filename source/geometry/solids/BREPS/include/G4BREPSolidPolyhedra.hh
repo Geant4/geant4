@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.6.4.1 2001/06/28 19:08:39 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.7 2001/07/11 09:59:31 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPolyhedra

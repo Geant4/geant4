@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EMShowerModel.hh,v 1.4.2.1 2001/06/28 19:07:40 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05EMShowerModel.hh,v 1.6 2001/11/08 10:16:03 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //----------------------------------------------
@@ -37,8 +37,7 @@
 
 #include "G4VFastSimulationModel.hh"
 #include "G4Step.hh"
-#include "G4VTouchable.hh"
-#include "G4TouchableHistory.hh"
+#include "G4TouchableHandle.hh"
 #include "g4std/vector"
 
 class ExN05EMShowerModel : public G4VFastSimulationModel
@@ -68,13 +67,19 @@ private:
   void FillFakeStep(const ExN05EnergySpot &eSpot);
   void Explode(const G4FastTrack&);
   void BuildDetectorResponse();
-  G4Step      *fFakeStep;
-  G4StepPoint *fFakePreStepPoint, *fFakePostStepPoint;
-  G4VTouchable*fpTouchable;
-  G4Navigator *fpNavigator;
-  G4bool       fNaviSetup;
+  
+private:  
+  G4Step                         *fFakeStep;
+  G4StepPoint                    *fFakePreStepPoint, *fFakePostStepPoint;
+  G4TouchableHandle              fTouchableHandle;
+  G4Navigator                    *fpNavigator;
+  G4bool                         fNaviSetup;
 
   G4std::vector<ExN05EnergySpot> feSpotList;
 
 };
 #endif
+
+
+
+

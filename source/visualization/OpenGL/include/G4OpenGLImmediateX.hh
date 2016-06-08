@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateX.hh,v 1.5.4.1 2001/06/28 19:15:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLImmediateX.hh,v 1.6 2001/07/11 10:08:48 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  10th February 1997

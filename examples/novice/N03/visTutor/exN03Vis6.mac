@@ -41,7 +41,7 @@
 
 # Bird-eye view of events
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi   45 45 
+/vis/viewer/set/viewpointThetaPhi   45 45 
 
 # Attach the just created Go scene graph to the viewer.
 /vis/viewer/update

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc,v 1.6.4.1 2001/06/28 19:16:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TrajectoriesModel.cc,v 1.9 2001/08/14 18:43:33 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  26th August 1998.
@@ -30,6 +30,7 @@
 
 #include "G4TrajectoriesModel.hh"
 
+#include "G4VGraphicsScene.hh"
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 
@@ -40,13 +41,14 @@ G4TrajectoriesModel::G4TrajectoriesModel () {
   fGlobalDescription = fGlobalTag;
 }
 
-void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
+void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   G4RunManager* runManager = G4RunManager::GetRunManager ();
   const G4Event* event = runManager -> GetCurrentEvent ();
   if (event) {
     G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
     if (TC) {
       G4int nT = TC -> entries ();
+      sceneHandler.BeginPrimitives ();
       for (int iT = 0; iT < nT; iT++) {
 	// GB : default representation should be the most efficent one.
         // Representation with a circle at each step should be an option 
@@ -54,6 +56,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
 	// (*TC) [iT] -> DrawTrajectory (50);
 	(*TC) [iT] -> DrawTrajectory ();
       }
+      sceneHandler.EndPrimitives ();
     }
   }
 }

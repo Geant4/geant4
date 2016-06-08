@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.hh,v 1.3.4.2 2001/06/28 20:19:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EtaPrime.hh,v 1.8 2001/10/28 05:01:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -51,8 +51,6 @@ class G4EtaPrime : public G4VMeson
 {
  private:
    static G4EtaPrime  theEtaPrime;
-   static G4double    theEtaPrimeLengthCut;
-   static G4double*   theEtaPrimeKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4EtaPrime(
@@ -71,11 +69,9 @@ class G4EtaPrime : public G4VMeson
    virtual  ~G4EtaPrime(){}
 
    static G4EtaPrime*      EtaPrimeDefinition();
-   static G4EtaPrime*      EtaPrime(){return &theEtaPrime;}
-   static G4double GetCuts() {return theEtaPrimeLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theEtaPrimeKineticEnergyCuts;};
+   static G4EtaPrime*      EtaPrime();
 
-   virtual void        SetCuts(G4double aCut);
+   virtual void        CalcEnergyCuts( const G4Material* );
 };
 
 #endif

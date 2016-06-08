@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2001/05/25 13:38:51 johna Exp $
+$Id: History,v 1.37 2001/09/10 10:27:18 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th September 2001  John Allison  (greps-V03-02-04)
+- Added G4Scale::GuidanceString.
+
+20th August 2001  John Allison  (greps-V03-02-03)
+- Made typedef's public in G4Point3DList.hh and G4Polyline.hh.
+
+14th August 2001  John Allison  (greps-V03-02-02)
+- Coworks with vis-V03-02-11 and intercoms-V03-02-03.
+- Added G4Polyline::transform.
+- Fixed pedantic warnings in G4NURBS.
+
+24th July May 2001  John Allison  (greps-V03-02-01)
+- Improvements to comments and layout in G4VisExtent.
+- Cosmetic improvements to G4Scale, small change of interface.
+
+21st July May 2001  John Allison  (greps-V03-02-00)
+- Added G4Scale.
 
 25th May 2001  John Allison  (greps-V03-01-02)
 - Added GetSurfaceArea() and GetVolume() to HepPolyhedron (Evgeni).

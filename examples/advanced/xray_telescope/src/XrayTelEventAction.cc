@@ -38,6 +38,9 @@
 // CHANGE HISTORY
 // --------------
 //
+// 05.12.2001 R.Nartallo
+// - Implement "Update" function as in LowEnTest
+//
 // 06.11.2000 R.Nartallo
 // - First implementation of xray_telescope event action
 // - Based on Chandra and XMM models 
@@ -58,33 +61,29 @@
 #include "XrayTelEventAction.hh"
 #include "XrayTelEventActionMessenger.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayTelEventAction::XrayTelEventAction(G4bool* dEvent)
-  : drawFlag("all"),eventMessenger(NULL), drawEvent(dEvent)
+XrayTelEventAction::XrayTelEventAction()
+  : drawFlag("all"),eventMessenger(0),drawEvent(false)
 {
   eventMessenger = new XrayTelEventActionMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayTelEventAction::~XrayTelEventAction()
 {
   delete eventMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayTelEventAction::BeginOfEventAction(const G4Event* Ev)
 {
-  *drawEvent=false;
+  drawEvent = false;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayTelEventAction::EndOfEventAction(const G4Event* Ev)
 {
-  if (*drawEvent){
+  if (drawEvent){
     const G4Event* evt = fpEventManager->GetConstCurrentEvent();
 
     G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
@@ -106,7 +105,11 @@ void XrayTelEventAction::EndOfEventAction(const G4Event* Ev)
 }
 
 
-
+void XrayTelEventAction::Update()
+{
+  // Update the flag identifying the event to be visualised
+  drawEvent = true;
+}
 
 
 

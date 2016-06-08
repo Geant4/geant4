@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaMinus.hh,v 1.4.4.2 2001/06/28 20:18:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiSigmaMinus.hh,v 1.7 2001/10/16 08:15:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,8 +53,6 @@ class G4AntiSigmaMinus : public G4VBaryon
 {
  private:
    static G4AntiSigmaMinus theAntiSigmaMinus;
-   static G4double  theAntiSigmaMinusLengthCut;
-   static G4double* theAntiSigmaMinusKineticEnergyCuts;
 
  private:
    G4AntiSigmaMinus(
@@ -73,20 +71,9 @@ class G4AntiSigmaMinus : public G4VBaryon
    virtual ~G4AntiSigmaMinus(){}
 
    static G4AntiSigmaMinus* AntiSigmaMinusDefinition();
-   static G4AntiSigmaMinus* AntiSigmaMinus() {return &theAntiSigmaMinus;}
-   static G4double GetCuts() {return theAntiSigmaMinusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiSigmaMinusKineticEnergyCuts;};
+   static G4AntiSigmaMinus* AntiSigmaMinus();
 
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4AntiSigmaMinus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theAntiSigmaMinusLengthCut = theCutInMaxInteractionLength;  
-  theAntiSigmaMinusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 
 #endif

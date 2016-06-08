@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.hh,v 1.2.4.1 2001/06/28 19:10:22 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UItcsh.hh,v 1.5 2001/11/26 19:15:08 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4UItcsh_h
@@ -69,8 +69,8 @@ class G4UItcsh : public G4VUIshell {
 protected:
   virtual void MakePrompt(const char* msg=0);
 
-  G4int cursorPosition;    // cursor position 
   G4String commandLine;    // command line string;
+  G4int cursorPosition;    // cursor position 
   G4String commandLineBuf; // temp. command line;
   G4bool IsCursorLast() const; 
                            // Is cursor position at the last of command line ?
@@ -125,7 +125,7 @@ public:
 
 inline G4bool G4UItcsh::IsCursorLast() const
 {
-  if(cursorPosition == commandLine.length()+1) return TRUE;
+  if(cursorPosition == G4int(commandLine.length()+1)) return TRUE;
   else return FALSE;
 }
 

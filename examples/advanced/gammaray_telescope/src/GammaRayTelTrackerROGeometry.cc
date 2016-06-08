@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerROGeometry.cc,v 1.1.2.2 2001/06/28 20:18:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelTrackerROGeometry.cc,v 1.5 2001/11/29 11:19:18 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -34,7 +34,7 @@
 //           by F.Longo, R.Giannitrapani & G.Santin (13 nov 2000)
 //
 // ************************************************************
-
+#include "G4RunManager.hh"
 #include "GammaRayTelTrackerROGeometry.hh"
 #include "GammaRayTelDummySD.hh"
 #include "GammaRayTelDetectorConstruction.hh"
@@ -53,14 +53,12 @@ GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry()
   : G4VReadOutGeometry()
 {
 }
-GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry(G4String aString,GammaRayTelDetectorConstruction* GammaRayTelDC)
-  :GammaRayTelDetector(GammaRayTelDC), G4VReadOutGeometry(aString)
-{
-}
-
 GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry(G4String aString)
-  : G4VReadOutGeometry(aString)
+  :G4VReadOutGeometry(aString)
 {
+ G4RunManager* runManager = G4RunManager::GetRunManager();
+  GammaRayTelDetector =
+    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
 }
 
 GammaRayTelTrackerROGeometry::~GammaRayTelTrackerROGeometry()
@@ -326,8 +324,7 @@ G4VPhysicalVolume* GammaRayTelTrackerROGeometry::Build()
   // as a flag only to check for sensitivity.
   // (Could we make it by a simple cast of a non-NULL value ?)
   
-  
-  GammaRayTelDummySD * dummySensi = new GammaRayTelDummySD;
+  GammaRayTelDummySD * dummySensi = new GammaRayTelDummySD("Orpo");
   
   logicTKRStripX->SetSensitiveDetector(dummySensi);
   logicTKRStripY->SetSensitiveDetector(dummySensi);

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -44,6 +44,8 @@
 //            1) levelTolerance = 2.0 keV
 //            2) changes to verbose control
 //
+// 18,July 2001 F.Lei
+//  tidy up the print out at run level
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
@@ -182,10 +184,12 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
 
   if (!DecaySchemeFile )
   {
-    G4cout <<"G4RIsotopeTable::GetMeanLife() : "
-           <<"cannot find ion radioactive decay file: " 
-	   <<file <<G4endl;
-    G4cout <<"The nucleus is assumed to be stable " <<G4endl;
+    if (GetVerboseLevel()>0) {
+      G4cout <<"G4RIsotopeTable::GetMeanLife() : "
+	     <<"cannot find ion radioactive decay file: " 
+	     <<file <<G4endl;
+      G4cout <<"The nucleus is assumed to be stable " <<G4endl;
+    }
   }
   else
   {
@@ -232,11 +236,13 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
       }
     if (!found && !aE )
       {
-	G4cout <<"G4RIsotopeTable::GetMeanLife() : ";
-	G4cout <<"cannot find ion of required excitation E = " << aE << G4endl;
-	G4cout <<"state in radioactive data file " <<G4endl;
-	G4cout <<"The nucleus is assumed to be stable" <<G4endl;
-	lifetime = -1.0;
+	if (GetVerboseLevel()>0) {
+	  G4cout <<"G4RIsotopeTable::GetMeanLife() : ";
+	  G4cout <<"cannot find ion of required excitation E = " << aE << G4endl;
+	  G4cout <<"state in radioactive data file " <<G4endl;
+	  G4cout <<"The nucleus is assumed to be stable" <<G4endl;
+	  lifetime = -1.0;
+	}
       }
     DecaySchemeFile.close();
   }

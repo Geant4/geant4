@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvtBiasMechanism.cc,v 1.3.4.2 2001/06/28 20:20:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EvtBiasMechanism.cc,v 1.5 2001/08/16 08:17:58 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -42,8 +42,8 @@
 
 G4EvtBiasMechanism::G4EvtBiasMechanism(const G4String& name, G4int mulFactor):
    G4VEvtBiasMechanism(name),
-   MultiplicationForSecondaries(mulFactor),
-   particleToBeBiased(0)
+   particleToBeBiased(0),
+   MultiplicationForSecondaries(mulFactor)
 {
 }  
 

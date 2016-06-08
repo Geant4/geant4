@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedSigmaConstructor.cc,v 1.5.2.1 2001/06/28 19:11:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ExcitedSigmaConstructor.cc,v 1.6 2001/07/11 10:02:08 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------

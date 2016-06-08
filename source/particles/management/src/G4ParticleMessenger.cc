@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.cc,v 1.4.4.1 2001/06/28 19:11:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticleMessenger.cc,v 1.6 2001/10/24 18:42:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
@@ -64,7 +64,7 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
  
   //Directory   /particle/
   thisDirectory = new G4UIdirectory("/particle/");
-  thisDirectory->SetGuidance("Paricle control commands.");
+  thisDirectory->SetGuidance("Particle control commands.");
 
   //Commnad   /particle/select
   selectCmd = new G4UIcmdWithAString("/particle/select",this);

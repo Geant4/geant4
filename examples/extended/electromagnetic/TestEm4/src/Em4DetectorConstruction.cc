@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4DetectorConstruction.cc,v 1.2.4.1 2001/06/28 19:07:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em4DetectorConstruction.cc,v 1.4 2001/10/17 14:04:15 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em4DetectorConstruction.hh"
 
@@ -41,17 +41,17 @@
 
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4DetectorConstruction::Em4DetectorConstruction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4DetectorConstruction::~Em4DetectorConstruction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* Em4DetectorConstruction::Construct()
 {
@@ -70,7 +70,7 @@ G4VPhysicalVolume* Em4DetectorConstruction::Construct()
   G4Element* elF  = new G4Element(name="Fluorine",symbol="N" , z= 9., a);
  
   G4double density = 1.61*g/cm3;
-  G4Material* matC6F6 = new G4Material(name="FluorCarbonate",density,ncomponents=2);
+  G4Material* matC6F6 = new G4Material("FluorCarbonate",density,ncomponents=2);
   matC6F6->AddElement(elC, natoms=6);
   matC6F6->AddElement(elF, natoms=6);
   
@@ -113,3 +113,5 @@ G4VPhysicalVolume* Em4DetectorConstruction::Construct()
   
   return physiWorld;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

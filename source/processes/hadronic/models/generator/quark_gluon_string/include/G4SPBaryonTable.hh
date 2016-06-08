@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -23,20 +23,22 @@
 #ifndef G4SPBaryonTable_h
 #define G4SPBaryonTable_h
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4SPBaryon.hh"
 
 class G4SPBaryonTable
 {
   public:
-  ~G4SPBaryonTable() {theBaryons.clearAndDestroy();}
-  void insert(G4SPBaryon * aBaryon) { theBaryons.insert(aBaryon);}
-  G4double length() {return theBaryons.length();}
+  struct DeleteSPBaryon{void operator()(G4SPBaryon* aS){delete aS;} };
+  
+  ~G4SPBaryonTable() {G4std::for_each(theBaryons.begin(), theBaryons.end(), G4SPBaryonTable::DeleteSPBaryon());}
+  void insert(G4SPBaryon * aBaryon) { theBaryons.push_back(aBaryon);}
+  G4double length() {return theBaryons.size();}
   
   const G4SPBaryon * GetBaryon(G4ParticleDefinition * aDefinition);
 
   private:
-  G4RWTPtrOrderedVector<G4SPBaryon> theBaryons;
+  G4std::vector<G4SPBaryon *> theBaryons;
 
 };
 
@@ -44,7 +46,7 @@ inline const G4SPBaryon * G4SPBaryonTable::
 GetBaryon(G4ParticleDefinition * aDefinition)
 {
   G4SPBaryon * result = 0;
-  for(G4int i=0; i<theBaryons.length(); i++)
+  for(unsigned int i=0; i<theBaryons.size(); i++)
   {
     if(theBaryons[i]->GetDefinition()==aDefinition)
     {

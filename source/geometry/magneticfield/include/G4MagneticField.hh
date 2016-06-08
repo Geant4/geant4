@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.hh,v 1.6.2.1 2001/06/28 19:08:17 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MagneticField.hh,v 1.10 2001/12/04 17:47:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // class G4MagneticField
@@ -39,6 +39,7 @@
 #ifndef G4MAGNETIC_FIELD_DEF
 #define G4MAGNETIC_FIELD_DEF
 
+#include "G4Types.hh"
 #include "G4Field.hh"
 
 class G4MagneticField : public G4Field
@@ -53,8 +54,8 @@ class G4MagneticField : public G4Field
      G4MagneticField& operator = (const G4MagneticField &);
        // Copy constructor & assignment operator.
 
-     virtual void  GetFieldValue( const  double Point[3],
-					 double *Bfield ) const = 0;
+     virtual void  GetFieldValue( const G4double Point[4],
+					G4double *Bfield ) const = 0;
 };
 
 // Inline implementations

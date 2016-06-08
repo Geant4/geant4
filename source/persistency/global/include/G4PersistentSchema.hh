@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersistentSchema.hh,v 1.5.8.1 2001/06/28 19:11:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PersistentSchema.hh,v 1.7 2001/07/11 10:02:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-// Persistent-capable schema definitions required for ooddlx processor
-//
+
+// file description:
+//   Persistent-capable schema definitions required for ooddlx processor
+
 // History:
 // 19.11.99 Y.Morita - Created
 

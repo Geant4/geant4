@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopAl.cc,v 1.4.8.2 2001/06/28 20:20:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PiMinusStopAl.cc,v 1.7 2001/10/04 20:00:41 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -41,10 +41,6 @@
 #include "G4ios.hh"
 
 #include "G4PiMinusStopAl.hh"
-
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
-#include "g4rw/cstring.h"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -107,28 +103,28 @@ G4PiMinusStopAl::G4PiMinusStopAl()
   // R ratio
   theR = 1. / (1. + npRatio);
 
-  _definitions = new G4RWTPtrOrderedVector<G4ParticleDefinition>();
-  _momenta = new G4RWTPtrOrderedVector<G4LorentzVector>();
+  _definitions = new G4std::vector<G4ParticleDefinition*>();
+  _momenta = new G4std::vector<G4LorentzVector*>();
 
-  G4RWTValOrderedVector<double> eKinVector;
-  G4RWTValOrderedVector<double> eKinDataVector;
+  G4std::vector<double> eKinVector;
+  G4std::vector<double> eKinDataVector;
   int i;
   for (i=0; i<eKinEntries; i++)
     {
-      eKinVector.insert(eKin[i]);
-      eKinDataVector.insert(eKinData[i]);
+      eKinVector.push_back(eKin[i]);
+      eKinDataVector.push_back(eKinData[i]);
     }
-  eKinVector.insert(eKin[eKinEntries]);
+  eKinVector.push_back(eKin[eKinEntries]);
   _distributionE = new G4DistributionGenerator(eKinVector,eKinDataVector);
 
-  G4RWTValOrderedVector<double> angleVector;
-  G4RWTValOrderedVector<double> angleDataVector;
+  G4std::vector<double> angleVector;
+  G4std::vector<double> angleDataVector;
   for (i=0; i<angleEntries; i++)
     {
-      angleVector.insert(angle[i]);
-      angleDataVector.insert(angleData[i]);
+      angleVector.push_back(angle[i]);
+      angleDataVector.push_back(angleData[i]);
     }
-  angleVector.insert(angle[angleEntries]);
+  angleVector.push_back(angle[angleEntries]);
   _distributionAngle = new G4DistributionGenerator(angleVector,angleDataVector);
 }
 

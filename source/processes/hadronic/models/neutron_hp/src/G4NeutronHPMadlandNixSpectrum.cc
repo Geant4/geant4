@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -66,11 +66,10 @@
 
   G4double G4NeutronHPMadlandNixSpectrum::Sample(G4double anEnergy) 
   {
-    G4bool Done = false;
     G4double tm = theMaxTemp.GetY(anEnergy);
     G4double last=0, buff, current = 100*MeV;
     G4double precision = 0.001;
-    G4double newValue = 0., oldValue=0., diff=0.;
+    G4double newValue = 0., oldValue=0.;
     G4double random = G4UniformRand();
     
     do

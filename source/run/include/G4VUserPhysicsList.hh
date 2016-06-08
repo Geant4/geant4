@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.9.2.1 2001/06/28 19:15:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VUserPhysicsList.hh,v 1.14 2001/10/16 08:35:50 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -197,15 +197,15 @@ class G4VUserPhysicsList
    // other than particle types specified in arguments
    void SetCutValueForOtherThan(G4double cutValue,
 				G4ParticleDefinition* first,
-				G4ParticleDefinition* second  = NULL,
-				G4ParticleDefinition* third   = NULL,
-				G4ParticleDefinition* fourth  = NULL,
-				G4ParticleDefinition* fifth   = NULL,
-				G4ParticleDefinition* sixth   = NULL,
-				G4ParticleDefinition* seventh = NULL,
-				G4ParticleDefinition* eighth  = NULL,
-				G4ParticleDefinition* nineth  = NULL,
-				G4ParticleDefinition* tenth   = NULL  );
+				G4ParticleDefinition* second  = 0,
+				G4ParticleDefinition* third   = 0,
+				G4ParticleDefinition* fourth  = 0,
+				G4ParticleDefinition* fifth   = 0,
+				G4ParticleDefinition* sixth   = 0,
+				G4ParticleDefinition* seventh = 0,
+				G4ParticleDefinition* eighth  = 0,
+				G4ParticleDefinition* nineth  = 0,
+				G4ParticleDefinition* tenth   = 0  );
 
    //  "reCalcCutsForOthers" method re-calculates a cut value 
    //  to all particle types which have not be called SetCuts() methods yet.
@@ -216,8 +216,13 @@ class G4VUserPhysicsList
    // Cut values will be retrieved from files
    void SetParticleCuts( G4double cut, G4ParticleDefinition* );    
 
-  
-  ///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+  public:   
+   // Get/SetApplyCuts gets/sets the flag for ApplyCuts
+   void SetApplyCuts(G4bool value, const G4String& name); 
+   G4bool GetApplyCuts(const G4String& name) const; 
+
+///////////////////////////////////////////////////////////////////////////////
   protected:  
     // do BuildPhysicsTable for make the integral schema
     void BuildIntegralPhysicsTable(G4VProcess* ,G4ParticleDefinition*  );   
@@ -248,10 +253,7 @@ class G4VUserPhysicsList
     // check stored material is consistent with the current detector setup. 
     virtual G4bool  CheckMaterialInfo(const G4String& directory, 
 				      G4bool          ascii = false);
-    // check stored cut value is consistent with the current detector setup. 
-    virtual G4bool  CheckCutValues(const G4String& directory, 
-				   G4bool          ascii = false);
-  /////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////
   protected: 
     // adds new ProcessManager to all particles in the Particle Table
     //   this routine is used in Construct()
@@ -265,7 +267,7 @@ class G4VUserPhysicsList
   public: // with description
     // add process manager for particles created on-the-fly 
     void AddProcessManager(G4ParticleDefinition* newParticle,
-			   G4ProcessManager*    newManager = NULL );
+			   G4ProcessManager*    newManager = 0 );
  
  
   ////////////////////////////////////////////////////////////////////////
@@ -303,6 +305,12 @@ class G4VUserPhysicsList
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
+  ////////////////////////////////////////////////////////////////////
+  protected:
+   enum { NumberOfParticlesForStoreCuts = 9};
+   static const G4String particleForStoreCuts[NumberOfParticlesForStoreCuts];
+   G4bool isBuildPhysicsTable[NumberOfParticlesForStoreCuts];
+   G4int  isParticleForStoreCuts(const G4ParticleDefinition*) const;
 };
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.9.4.1 2001/06/28 19:10:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Exception.cc,v 1.12 2001/10/11 14:04:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 
 #include "G4ios.hh"
 #include <stdlib.h>
-#include "g4rw/cstring.h"
+#include "G4String.hh"
 #include "G4StateManager.hh"
 
 void G4Exception(const char* s)
@@ -45,9 +45,13 @@ void G4Exception(const char* s)
 	{
 	    G4cerr << s << G4endl;
 	}
-   G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
-   G4StateManager::GetStateManager()->SetNewState(Abort);
-   abort();
+   if(G4StateManager::GetStateManager()->SetNewState(Abort)) {
+     G4cerr << G4endl << "*** G4Exception: Aborting execution ***" << G4endl;
+     abort();
+   } else {
+     G4cerr << G4endl << "*** G4Exception: Abortion suppressed ***"
+            << G4endl << "*** No guarantee for further execution ***" << G4endl;
+   }
 }
 
 void G4Exception(G4std::string s)

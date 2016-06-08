@@ -21,15 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileViewer.cc,v 1.5.4.1 2001/06/28 19:16:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VRML2FileViewer.cc,v 1.8 2001/09/18 07:53:16 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4VRML2FileViewer.cc
 // Satoshi Tanaka & Yasuhide Sawada
-
-//=================//
-#ifdef G4VIS_BUILD_VRMLFILE_DRIVER
-//=================//
 
 
 //#define DEBUG_FR_VIEW
@@ -140,6 +136,4 @@ void G4VRML2FileViewer::SendViewParameters ()
 	fDest << "}" << G4endl;
 	fDest << G4endl;
 
-} 
-
-#endif
+}

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.5.4.1 2001/06/28 19:07:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05PhysicsList.cc,v 1.6 2001/07/11 09:58:35 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 

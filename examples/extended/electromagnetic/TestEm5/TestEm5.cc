@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.4.4.1 2001/06/28 19:07:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: TestEm5.cc,v 1.7 2001/11/05 17:57:58 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -45,7 +45,7 @@
 #include "Em5SteppingAction.hh"
 #include "Em5SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -57,7 +57,7 @@ int main(int argc,char** argv) {
     
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
-
+  
   // set mandatory initialization classes
   Em5DetectorConstruction* detector;
   detector = new Em5DetectorConstruction;
@@ -80,11 +80,8 @@ int main(int argc,char** argv) {
 
   Em5SteppingAction* steppingaction = new Em5SteppingAction(detector,
                                                eventaction, runaction);
-  runManager->SetUserAction(steppingaction);
-  
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
+  runManager->SetUserAction(steppingaction);    
+   
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
  
@@ -96,7 +93,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif                      
-     UI->ApplyCommand("/control/execute init.mac");    
      session->SessionStart();
      delete session;
     }
@@ -116,5 +112,5 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

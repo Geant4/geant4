@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.8.2.1 2001/06/28 19:08:28 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VSolid.hh,v 1.9 2001/07/11 09:59:19 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4VSolid

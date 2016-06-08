@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigi.cc,v 1.4.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VDigi.cc,v 1.6 2001/07/13 15:00:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // G4VDigi
@@ -35,7 +35,7 @@ G4VDigi::G4VDigi()
 G4VDigi::~G4VDigi()
 {;}
 
-int G4VDigi::operator==(const G4VDigi &right) const
+G4int G4VDigi::operator==(const G4VDigi &right) const
 { return false; }
 
 void G4VDigi::Draw() 

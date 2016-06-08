@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PersEx02TrackerHit.ddl,v 1.4.8.1 2001/06/28 19:07:24 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: PersEx02TrackerHit.ddl,v 1.5 2001/07/11 09:58:14 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef PersEx02TrackerHit_h

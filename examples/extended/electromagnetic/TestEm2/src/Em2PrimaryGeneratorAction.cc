@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PrimaryGeneratorAction.cc,v 1.2.4.1 2001/06/28 19:06:53 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2PrimaryGeneratorAction.cc,v 1.4 2001/10/25 15:12:07 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2PrimaryGeneratorAction.hh"
 
@@ -36,7 +36,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PrimaryGeneratorAction::Em2PrimaryGeneratorAction(
                                                Em2DetectorConstruction* det)
@@ -54,14 +54,14 @@ Em2PrimaryGeneratorAction::Em2PrimaryGeneratorAction(
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PrimaryGeneratorAction::~Em2PrimaryGeneratorAction()
 {
   delete particleGun;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -72,5 +72,5 @@ void Em2PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

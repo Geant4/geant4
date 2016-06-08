@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.5.2.1 2001/06/28 19:13:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FermiConfiguration.cc,v 1.8 2001/10/05 16:13:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -293,7 +293,7 @@ const G4FermiConfiguration & G4FermiConfiguration::operator=(const G4FermiConfig
 G4bool G4FermiConfiguration::operator==(const G4FermiConfiguration &right) const
 {
     if (Index.size() == right.Index.size()) {
-	for (G4int i = 0; i < Index.size(); i++) {
+	for (unsigned int i = 0; i < Index.size(); i++) {
 	    if (Index[i] != right.Index[i]) return false;
 	}
 	return true;
@@ -388,7 +388,7 @@ G4double G4FermiConfiguration::CoulombBarrier(void)
 
     G4double SumA = 0, SumZ = 0;
     G4double CoulombEnergy = 0.;
-    for (G4int i = 0; i < Index.size(); i++) {
+    for (unsigned int i = 0; i < Index.size(); i++) {
 	G4double z = theListOfFragments[Index[i]-1]->GetZ();
 	G4double a = theListOfFragments[Index[i]-1]->GetA();
 	CoulombEnergy += (z*z) / pow(a, 1./3.);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.10.2.1 2001/06/28 19:15:24 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Track.hh,v 1.13 2001/11/13 05:13:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
@@ -35,14 +35,10 @@
 //     1) current position/time of the particle,
 //     2) static particle information,
 //     3) the pointer to the physical volume where currently
-//        the particle exists,
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//        the particle exists
 //
 //---------------------------------------------------------------
+//   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek
 
 #ifndef G4Track_h
 #define G4Track_h 1
@@ -54,7 +50,7 @@
 #include "G4Allocator.hh"             // Include from 'particle+matter'
 #include "G4DynamicParticle.hh"       // Include from 'particle+matter'
 #include "G4TrackStatus.hh"           // Include from 'tracking'
-#include "G4VTouchable.hh"            // Include from 'geometry'
+#include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
 
 #include "G4Material.hh"
@@ -134,11 +130,13 @@ public: // With description
    G4Material* GetMaterial() const;
    G4Material* GetNextMaterial() const;
 
-   const G4VTouchable* GetTouchable() const;
-   void SetTouchable(const G4VTouchable* apValue);
+   const G4VTouchable*      GetTouchable() const;
+   const G4TouchableHandle& GetTouchableHandle() const;
+   void SetTouchableHandle( const G4TouchableHandle& apValue);
 
-   const G4VTouchable* GetNextTouchable() const;
-   void SetNextTouchable(const G4VTouchable* apValue);
+   const G4VTouchable*      GetNextTouchable() const;
+   const G4TouchableHandle& GetNextTouchableHandle() const;
+   void SetNextTouchableHandle( const G4TouchableHandle& apValue);
 
   // energy
    G4double GetKineticEnergy() const;
@@ -212,10 +210,7 @@ public: // With description
    void SetCreatorProcess(G4VProcess* aValue);
 
   // track weight
-     // These are methods for manipulating a weight for this track.
-     // The track weight is used by G4VEvtBiasMechanism 
-     // to execute inclusive simulation for hadronic/electomagnetic shower
-     // and neutron transportation etc. 
+  // These are methods for manipulating a weight for this track.
    G4double GetWeight() const;
    void     SetWeight(G4double aValue);
 
@@ -236,8 +231,9 @@ public: // With description
    G4int fParentID;
    G4int fTrackID;
 
-   const G4VTouchable* fpTouchable;
-   const G4VTouchable* fpNextTouchable;
+   G4TouchableHandle fpTouchable;
+   G4TouchableHandle fpNextTouchable;
+  // Touchable Handle
 
    G4DynamicParticle* fpDynamicParticle;
    G4TrackStatus fTrackStatus;

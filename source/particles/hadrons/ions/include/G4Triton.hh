@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.hh,v 1.4.2.2 2001/06/28 20:19:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Triton.hh,v 1.7 2001/10/16 08:16:06 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,8 +55,6 @@ class G4Triton : public G4VIon
 {
  private:
    static G4Triton theTriton;
-   static G4double  theTritonLengthCut;
-   static G4double* theTritonKineticEnergyCuts;
 
  public:
    G4Triton(
@@ -74,31 +72,9 @@ class G4Triton : public G4VIon
    virtual   ~G4Triton();
 
    static G4Triton*   TritonDefinition();
-   static G4Triton*   Triton() {return &theTriton;}
-   static G4double GetCuts() {return theTritonLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theTritonKineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
+   static G4Triton*   Triton();
+  
 };
-
-inline void G4Triton::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theTritonLengthCut = theCutInMaxInteractionLength;  
-  theTritonKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
-inline void G4Triton::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theTritonLengthCut = theCutInMaxInteractionLength;  
-  theTritonKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 
 #endif

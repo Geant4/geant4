@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.cc,v 1.4.4.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MuonMinus.cc,v 1.7 2001/10/16 08:16:17 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -97,5 +97,8 @@ G4MuonMinus G4MuonMinus::theMuonMinus(
 );
 
 G4MuonMinus* G4MuonMinus::MuonMinusDefinition() {return &theMuonMinus;}
-G4double   G4MuonMinus::theMuonMinusLengthCut = -1.0;
-G4double*  G4MuonMinus::theMuonMinusKineticEnergyCuts = NULL;
+
+G4MuonMinus*  G4MuonMinus::MuonMinus()
+{ 
+  return &theMuonMinus; 
+}

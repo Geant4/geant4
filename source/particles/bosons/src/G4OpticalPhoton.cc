@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.cc,v 1.4.2.1 2001/06/28 19:10:36 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpticalPhoton.cc,v 1.8 2001/10/16 08:15:43 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -83,9 +83,6 @@ G4OpticalPhoton G4OpticalPhoton::theOpticalPhoton(
       "opticalphoton",               0,             0,         0,
                  true,             0.0,          NULL
 );
-// initialization for static cut values
-G4double   G4OpticalPhoton::theOpticalPhotonLengthCut = -1.0;
-G4double*  G4OpticalPhoton::theOpticalPhotonKineticEnergyCuts = NULL;
 
 G4OpticalPhoton* G4OpticalPhoton::OpticalPhotonDefinition()
 					{return &theOpticalPhoton;}
@@ -97,22 +94,19 @@ G4OpticalPhoton* G4OpticalPhoton::OpticalPhotonDefinition()
 //  theKineticEnergyCuts for all materials are set to Zero.
 void G4OpticalPhoton::SetCuts(G4double aCut)
 {
-  theCutInMaxInteractionLength = aCut;
+  SetCutInMaxInteractionLength( aCut );
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
-
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = 0.0;
-  }
-  theOpticalPhotonLengthCut = theCutInMaxInteractionLength;  
-  theOpticalPhotonKineticEnergyCuts = theKineticEnergyCuts;
-  // Rebuild the physics tables for every process for this particle type
-  
+  // Set Energy Cut values to zero  for all materials
+  SetEnergyCutValues( 0.0*keV);
 }
+
+
+G4OpticalPhoton* G4OpticalPhoton::OpticalPhoton()
+{ 
+  return &theOpticalPhoton; 
+}
+
+
+
+
+

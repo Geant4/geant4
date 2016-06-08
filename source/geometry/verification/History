@@ -1,0 +1,38 @@
+$Id: History,v 1.6 2001/10/24 22:12:44 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Oct 24th, 2001          G.Cosmo  (geomver-V03-02-02)
+- Fixed compilation error and warnings on HP-aCC. Modified files:
+  G4GeomTestVolume.cc, G4GeomTestStreamLogger.cc.
+
+Oct 24th, 2001          G.Cosmo  (geomver-V03-02-01)
+- Moved messenger to geometry/volumes and renamed G4GeometryMessenger.
+- Removed dependencies from intercoms and geometry/volumes.
+
+Oct 22nd, 2001		G.Cosmo  (geomver-V03-02-00)
+- Added "/geomtest/tolerance" command to set custom error tolerance.
+  Added Set/GetTolerance() methods to G4GeomTestVolume class.
+- Introduced additional diagnostics in G4GeomTestStreamLogger to report
+  in case no intersections/overlaps are detected.
+
+Oct 16th, 2001		G.Cosmo
+- Added messenger for geometry overlaps testing.
+- General source code formatting.
+- Created.
+  Original implementation by D.C.Williams (UCSC, BaBar).

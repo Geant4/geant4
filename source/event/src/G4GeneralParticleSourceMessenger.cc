@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 ///////////////////////////////////////////////////////////////////////////////
-// 
+//
 // MODULE:           G4GeneralParticleSourceMessenger.cc
 //
 // Version:          1.
@@ -31,15 +31,15 @@
 // Customer:         ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSourceMessenger.cc,v 1.4 2001/06/29 08:06:04 gcosmo Exp $
-// GEANT4 tag $Name: event-V03-01-01 $
-///////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
 // --------------
 //
+// 9-May-2001 F. Lei
+//   added all the g4pariclegun commands
+//
 // 10-Nov-2000 F. Lei
-//    changed 
+//    changed
 //       #include <iostream.h>
 //    to
 //       #include "g4std/fstream"
@@ -66,13 +66,13 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
 
+//#include <iostream.h>
 #include "g4std/fstream"
 
-#include "g4std/iomanip"               
-#include "g4rw/ctoken.h"               
-#include "g4rw/rstream.h"               
+#include "g4std/iomanip"
 #include "g4std/strstream"
 
+#include "G4Tokenizer.hh"
 #include "G4GeneralParticleSourceMessenger.hh"
 #include "G4GeneralParticleSource.hh"
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,13 +86,106 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
 
   gpsDirectory = new G4UIdirectory("/gps/");
   gpsDirectory->SetGuidance("General Paricle Source control commands.");
+  gpsDirectory->SetGuidance(" The first 9 commands are the same as in G4ParticleGun ");
+
+  // below we reproduce commands awailable in G4Particle Gun
+
+  listCmd = new G4UIcmdWithoutParameter("/gps/List",this);
+  listCmd->SetGuidance("List available particles.");
+  listCmd->SetGuidance(" Invoke G4ParticleTable.");
+
+  particleCmd = new G4UIcmdWithAString("/gps/particle",this);
+  particleCmd->SetGuidance("Set particle to be generated.");
+  particleCmd->SetGuidance(" (geantino is default)");
+  particleCmd->SetGuidance(" (ion can be specified for shooting ions)");
+  particleCmd->SetParameterName("particleName",true);
+  particleCmd->SetDefaultValue("geantino");
+  G4String candidateList; 
+  G4int nPtcl = particleTable->entries();
+  for(G4int i=0;i<nPtcl;i++)
+  {
+    candidateList += particleTable->GetParticleName(i);
+    candidateList += " ";
+  }
+  candidateList += "ion ";
+  particleCmd->SetCandidates(candidateList);
+
+
+  directionCmd = new G4UIcmdWith3Vector("/gps/direction",this);
+  directionCmd->SetGuidance("Set momentum direction.");
+  directionCmd->SetGuidance("Direction needs not to be a unit vector.");
+  directionCmd->SetParameterName("Px","Py","Pz",true,true); 
+  directionCmd->SetRange("Px != 0 || Py != 0 || Pz != 0");
+  
+  energyCmd = new G4UIcmdWithADoubleAndUnit("/gps/energy",this);
+  energyCmd->SetGuidance("Set kinetic energy.");
+  energyCmd->SetParameterName("Energy",true,true);
+  energyCmd->SetDefaultUnit("GeV");
+  //energyCmd->SetUnitCategory("Energy");
+  //energyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
+
+  positionCmd = new G4UIcmdWith3VectorAndUnit("/gps/position",this);
+  positionCmd->SetGuidance("Set starting position of the particle.");
+  positionCmd->SetParameterName("X","Y","Z",true,true);
+  positionCmd->SetDefaultUnit("cm");
+  //positionCmd->SetUnitCategory("Length");
+  //positionCmd->SetUnitCandidates("microm mm cm m km");
+
+  // SR1.3
+  //  ionCmd = new UIcmdWithNucleusAndUnit("/gps/ion",this);
+  //ionCmd->SetGuidance("define the primary ion (a,z,e)");
+  //ionCmd->SetParameterName("A","Z","E",true);
+  //ionCmd->SetDefaultUnit("keV");
+  //ionCmd->SetUnitCandidates("keV MeV");
+
+  ionCmd = new G4UIcommand("/gps/ion",this);
+  ionCmd->SetGuidance("Set properties of ion to be generated.");
+  ionCmd->SetGuidance("[usage] /gun/ion Z A Q E");
+  ionCmd->SetGuidance("        Z:(int) AtomicNumber");
+  ionCmd->SetGuidance("        A:(int) AtomicMass");
+  ionCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");
+  ionCmd->SetGuidance("        E:(double) Excitation energy (in keV)");
+  
+  G4UIparameter* param;
+  param = new G4UIparameter("Z",'i',false);
+  param->SetDefaultValue("1");
+  ionCmd->SetParameter(param);
+  param = new G4UIparameter("A",'i',false);
+  param->SetDefaultValue("1");
+  ionCmd->SetParameter(param);
+  param = new G4UIparameter("Q",'i',true);
+  param->SetDefaultValue("0");
+  ionCmd->SetParameter(param);
+  param = new G4UIparameter("E",'d',true);
+  param->SetDefaultValue("0.0");
+  ionCmd->SetParameter(param);
+
+
+  timeCmd = new G4UIcmdWithADoubleAndUnit("/gps/time",this);
+  timeCmd->SetGuidance("Set initial time of the particle.");
+  timeCmd->SetParameterName("t0",true,true);
+  timeCmd->SetDefaultUnit("ns");
+  //timeCmd->SetUnitCategory("Time");
+  //timeCmd->SetUnitCandidates("ns ms s");
+  
+  polCmd = new G4UIcmdWith3Vector("/gps/polarization",this);
+  polCmd->SetGuidance("Set polarization.");
+  polCmd->SetParameterName("Px","Py","Pz",true,true); 
+  polCmd->SetRange("Px>=-1.&&Px<=1.&&Py>=-1.&&Py<=1.&&Pz>=-1.&&Pz<=1.");
+
+  numberCmd = new G4UIcmdWithAnInteger("/gps/number",this);
+  numberCmd->SetGuidance("Set number of particles to be generated.");
+  numberCmd->SetParameterName("N",true,true);
+  numberCmd->SetRange("N>0");
+
+  // now extended commands
 
   typeCmd = new G4UIcmdWithAString("/gps/type",this);
   typeCmd->SetGuidance("Sets source distribution type.");
-  typeCmd->SetGuidance("Either Point, Plane, Surface or Volume");
+  typeCmd->SetGuidance("Either Point, Beam, Plane, Surface or Volume");
   typeCmd->SetParameterName("DisType",true,true);
   typeCmd->SetDefaultValue("Point");
-  typeCmd->SetCandidates("Point Plane Surface Volume");
+  typeCmd->SetCandidates("Point Beam Plane Surface Volume");
 
   shapeCmd = new G4UIcmdWithAString("/gps/shape",this);
   shapeCmd->SetGuidance("Sets source shape type.");
@@ -148,6 +241,24 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   radius0Cmd->SetDefaultUnit("cm");
   radius0Cmd->SetUnitCandidates("micron mm cm m km");
 
+  possigmarCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaposr",this);
+  possigmarCmd->SetGuidance("Set standard deviation of beam position in radial");
+  possigmarCmd->SetParameterName("Sigmar",true,true);
+  possigmarCmd->SetDefaultUnit("cm");
+  possigmarCmd->SetUnitCandidates("micron mm cm m km");
+
+  possigmaxCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaposx",this);
+  possigmaxCmd->SetGuidance("Set standard deviation of beam position in x-dir");
+  possigmaxCmd->SetParameterName("Sigmax",true,true);
+  possigmaxCmd->SetDefaultUnit("cm");
+  possigmaxCmd->SetUnitCandidates("micron mm cm m km");
+
+  possigmayCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaposy",this);
+  possigmayCmd->SetGuidance("Set standard deviation of beam position in y-dir");
+  possigmayCmd->SetParameterName("Sigmay",true,true);
+  possigmayCmd->SetDefaultUnit("cm");
+  possigmayCmd->SetUnitCandidates("micron mm cm m km");
+
   paralpCmd = new G4UIcmdWithADoubleAndUnit("/gps/paralp",this);
   paralpCmd->SetGuidance("Angle from y-axis of y' in Para");
   paralpCmd->SetParameterName("paralp",true,true);
@@ -175,10 +286,10 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   // Angular distribution commands
   angtypeCmd = new G4UIcmdWithAString("/gps/angtype",this);
   angtypeCmd->SetGuidance("Sets angular source distribution type");
-  angtypeCmd->SetGuidance("Possible variables are: iso, cos or user");
+  angtypeCmd->SetGuidance("Possible variables are: iso, cos planar beam1d beam2d or user");
   angtypeCmd->SetParameterName("AngDis",true,true);
   angtypeCmd->SetDefaultValue("iso");
-  angtypeCmd->SetCandidates("iso cos user");
+  angtypeCmd->SetCandidates("iso cos planar beam1d beam2d user");
 
   angrot1Cmd = new G4UIcmdWith3Vector("/gps/angrot1",this);
   angrot1Cmd->SetGuidance("Sets the x' vector for angular distribution");
@@ -217,6 +328,30 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   maxphiCmd->SetDefaultUnit("rad");
   maxphiCmd->SetUnitCandidates("rad deg");
 
+  angsigmarCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaangr",this);
+  angsigmarCmd->SetGuidance("Set standard deviation of beam direction in radial.");
+  angsigmarCmd->SetParameterName("Sigmara",true,true);
+  angsigmarCmd->SetDefaultUnit("rad");
+  angsigmarCmd->SetUnitCandidates("rad deg");
+
+  angsigmaxCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaangx",this);
+  angsigmaxCmd->SetGuidance("Set standard deviation of beam direction in x-direc.");
+  angsigmaxCmd->SetParameterName("Sigmaxa",true,true);
+  angsigmaxCmd->SetDefaultUnit("rad");
+  angsigmaxCmd->SetUnitCandidates("rad deg");
+
+  angsigmayCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaangy",this);
+  angsigmayCmd->SetGuidance("Set standard deviation of beam direction in y-direc.");
+  angsigmayCmd->SetParameterName("Sigmaya",true,true);
+  angsigmayCmd->SetDefaultUnit("rad");
+  angsigmayCmd->SetUnitCandidates("rad deg");
+
+  useuserangaxisCmd = new G4UIcmdWithABool("/gps/useuserangaxis",this);
+  useuserangaxisCmd->SetGuidance("true for using user defined angular co-ordinates");
+  useuserangaxisCmd->SetGuidance("Default is false");
+  useuserangaxisCmd->SetParameterName("useuserangaxis",true);
+  useuserangaxisCmd->SetDefaultValue(false);
+
   surfnormCmd = new G4UIcmdWithABool("/gps/surfnorm",this);
   surfnormCmd->SetGuidance("Makes a user-defined distribution with respect to surface normals rather than x,y,z axes.");
   surfnormCmd->SetGuidance("Default is false");
@@ -228,7 +363,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   energytypeCmd->SetGuidance("Sets energy distribution type");
   energytypeCmd->SetParameterName("EnergyDis",true,true);
   energytypeCmd->SetDefaultValue("Mono");
-  energytypeCmd->SetCandidates("Mono Lin Pow Exp Brem Bbody Cdg User Arb Epn");
+  energytypeCmd->SetCandidates("Mono Lin Pow Exp Gauss Brem Bbody Cdg User Arb Epn");
 
   eminCmd = new G4UIcmdWithADoubleAndUnit("/gps/emin",this);
   eminCmd->SetGuidance("Sets Emin");
@@ -243,42 +378,48 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   emaxCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   monoenergyCmd = new G4UIcmdWithADoubleAndUnit("/gps/monoenergy",this);
-  monoenergyCmd->SetGuidance("Sets Monoenergy");
+  monoenergyCmd->SetGuidance("Sets Monoenergy (obsolete, use gps/energy instead!)");
   monoenergyCmd->SetParameterName("monoenergy",true,true);
   monoenergyCmd->SetDefaultUnit("keV");
   monoenergyCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
+  engsigmaCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmae",this);
+  engsigmaCmd->SetGuidance("Sets the standard deviation for Gaussian energy dist.");
+  engsigmaCmd->SetParameterName("Sigmae",true,true);
+  engsigmaCmd->SetDefaultUnit("keV");
+  engsigmaCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+
   alphaCmd = new G4UIcmdWithADouble("/gps/alpha",this);
-  alphaCmd->SetGuidance("Sets Alpha");
+  alphaCmd->SetGuidance("Sets Alpha (index) for power-law energy dist.");
   alphaCmd->SetParameterName("alpha",true,true);
   
   tempCmd = new G4UIcmdWithADouble("/gps/temp",this);
-  tempCmd->SetGuidance("Sets the temperature for Brem and BBody");
+  tempCmd->SetGuidance("Sets the temperature for Brem and BBody (in Kelvin)");
   tempCmd->SetParameterName("temp",true,true);
 
   ezeroCmd = new G4UIcmdWithADouble("/gps/ezero",this);
-  ezeroCmd->SetGuidance("Sets ezero exponential distributions");
+  ezeroCmd->SetGuidance("Sets ezero exponential distributions (in MeV)");
   ezeroCmd->SetParameterName("ezero",true,true);
 
   gradientCmd = new G4UIcmdWithADouble("/gps/gradient",this);
-  gradientCmd->SetGuidance("Sets the gradient for Lin distributions");
+  gradientCmd->SetGuidance("Sets the gradient for Lin distributions (in 1/MeV)");
   gradientCmd->SetParameterName("gradient",true,true);
 
   interceptCmd = new G4UIcmdWithADouble("/gps/intercept",this);
-  interceptCmd->SetGuidance("Sets the intercept for Lin distributions");
+  interceptCmd->SetGuidance("Sets the intercept for Lin distributions (in MeV)");
   interceptCmd->SetParameterName("intercept",true,true);
 
   calculateCmd = new G4UIcmdWithoutParameter("/gps/calculate",this);
   calculateCmd->SetGuidance("Calculates distributions for Cdg and BBody");
 
   energyspecCmd = new G4UIcmdWithABool("/gps/energyspec",this);
-  energyspecCmd->SetGuidance("Toggles between energy and momentum spectra");
+  energyspecCmd->SetGuidance("True for energy and false for momentum spectra");
   energyspecCmd->SetParameterName("energyspec",true);
   energyspecCmd->SetDefaultValue(true);
 
   diffspecCmd = new G4UIcmdWithABool("/gps/diffspec",this);
-  diffspecCmd->SetGuidance("Toggles between differential and integral spectra");
-  diffspecCmd->SetParameterName("diffspec",true,true);
+  diffspecCmd->SetGuidance("True for differential and flase for integral spectra");
+  diffspecCmd->SetParameterName("diffspec",true);
   diffspecCmd->SetDefaultValue(true);
 
   // Biasing + histograms in general
@@ -287,6 +428,13 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   histnameCmd->SetParameterName("HistType",true,true);
   histnameCmd->SetDefaultValue("biasx");
   histnameCmd->SetCandidates("biasx biasy biasz biast biasp biase theta phi energy arb epn");
+
+  // re-set the histograms
+  resethistCmd = new G4UIcmdWithAString("/gps/resethist",this);
+  resethistCmd->SetGuidance("Re-Set the histogram ");
+  resethistCmd->SetParameterName("HistType",true,true);
+  resethistCmd->SetDefaultValue("energy");
+  resethistCmd->SetCandidates("biasx biasy biasz biast biasp biase theta phi energy arb epn");
 
   histpointCmd = new G4UIcmdWith3Vector("/gps/histpoint",this);
   histpointCmd->SetGuidance("Allows user to define a histogram");
@@ -309,68 +457,6 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   verbosityCmd->SetParameterName("level",false);
   verbosityCmd->SetRange("level>=0 && level <=2");
 
-  particleCmd = new G4UIcmdWithAString("/gps/particle",this);
-  particleCmd->SetGuidance("Set particle to be generated.");
-  particleCmd->SetGuidance(" (geantino is default)");
-  particleCmd->SetGuidance(" (ion can be specified for shooting ions)");
-  particleCmd->SetParameterName("particleName",true);
-  particleCmd->SetDefaultValue("geantino");
-  G4String candidateList; 
-  G4int nPtcl = particleTable->entries();
-  for(G4int i=0;i<nPtcl;i++)
-  {
-    candidateList += particleTable->GetParticleName(i);
-    candidateList += " ";
-  }
-  candidateList += "ion ";
-  particleCmd->SetCandidates(candidateList);
-
-  // SR1.3
-  //  ionCmd = new UIcmdWithNucleusAndUnit("/gps/ion",this);
-  //ionCmd->SetGuidance("define the primary ion (a,z,e)");
-  //ionCmd->SetParameterName("A","Z","E",true);
-  //ionCmd->SetDefaultUnit("keV");
-  //ionCmd->SetUnitCandidates("keV MeV");
-
-  ionCmd = new G4UIcommand("/gps/ion",this);
-  ionCmd->SetGuidance("Set properties of ion to be generated.");
-  ionCmd->SetGuidance("[usage] /gun/ion Z A Q E");
-  ionCmd->SetGuidance("        Z:(int) AtomicNumber");
-  ionCmd->SetGuidance("        A:(int) AtomicMass");
-  ionCmd->SetGuidance("        Q:(int) Charge of Ion (in unit of e)");
-  ionCmd->SetGuidance("        E:(double) Excitation energy (in keV)");
-  
-  G4UIparameter* param;
-  param = new G4UIparameter("Z",'i',false);
-  param->SetDefaultValue("1");
-  ionCmd->SetParameter(param);
-  param = new G4UIparameter("A",'i',false);
-  param->SetDefaultValue("1");
-  ionCmd->SetParameter(param);
-  param = new G4UIparameter("Q",'i',true);
-  param->SetDefaultValue("0");
-  ionCmd->SetParameter(param);
-  param = new G4UIparameter("E",'d',true);
-  param->SetDefaultValue("0.0");
-  ionCmd->SetParameter(param);
-
-
-  timeCmd = new G4UIcmdWithADoubleAndUnit("/gps/time",this);
-  timeCmd->SetGuidance("Set initial time of the particle.");
-  timeCmd->SetParameterName("t0",true,true);
-  timeCmd->SetDefaultUnit("ns");
-  //timeCmd->SetUnitCategory("Time");
-  //timeCmd->SetUnitCandidates("ns ms s");
-  
-  polCmd = new G4UIcmdWith3Vector("/gps/polarization",this);
-  polCmd->SetGuidance("Set polarization.");
-  polCmd->SetParameterName("Px","Py","Pz",true,true); 
-  polCmd->SetRange("Px>=-1.&&Px<=1.&&Py>=-1.&&Py<=1.&&Pz>=-1.&&Pz<=1.");
-
-  numberCmd = new G4UIcmdWithAnInteger("/gps/number",this);
-  numberCmd->SetGuidance("Set number of particles to be generated.");
-  numberCmd->SetParameterName("N",true,true);
-  numberCmd->SetRange("N>0");
 }
 
 G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
@@ -385,6 +471,9 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete halfzCmd;
   delete radiusCmd;
   delete radius0Cmd;
+  delete possigmarCmd;
+  delete possigmaxCmd;
+  delete possigmayCmd;
   delete paralpCmd;
   delete partheCmd;
   delete parphiCmd;
@@ -397,12 +486,17 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete maxthetaCmd;
   delete minphiCmd;
   delete maxphiCmd;
+  delete angsigmarCmd;
+  delete angsigmaxCmd;
+  delete angsigmayCmd;
+  delete useuserangaxisCmd;
   delete surfnormCmd;
 
   delete energytypeCmd;
   delete eminCmd;
   delete emaxCmd;
   delete monoenergyCmd;
+  delete engsigmaCmd;
   delete alphaCmd;
   delete tempCmd;
   delete ezeroCmd;
@@ -413,6 +507,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete diffspecCmd;
 
   delete histnameCmd;
+  delete resethistCmd;
   delete histpointCmd;
   delete arbintCmd;
 
@@ -422,6 +517,11 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete timeCmd;
   delete polCmd;
   delete numberCmd;
+
+  delete positionCmd;
+  delete directionCmd;
+  delete energyCmd;
+  delete listCmd;
 
   delete gpsDirectory;
 }
@@ -467,6 +567,18 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
   else if(command == radius0Cmd)
     {
       fParticleGun->SetRadius0(radius0Cmd->GetNewDoubleValue(newValues));
+    }
+  else if(command == possigmarCmd)
+    {
+      fParticleGun->SetBeamSigmaInR(possigmarCmd->GetNewDoubleValue(newValues));
+    }
+  else if(command == possigmaxCmd)
+    {
+      fParticleGun->SetBeamSigmaInX(possigmaxCmd->GetNewDoubleValue(newValues));
+    }
+  else if(command == possigmayCmd)
+    {
+      fParticleGun->SetBeamSigmaInY(possigmayCmd->GetNewDoubleValue(newValues));
     }
   else if(command == paralpCmd)
     {
@@ -514,6 +626,22 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     {
       fParticleGun->SetMaxPhi(maxphiCmd->GetNewDoubleValue(newValues));
     }
+  else if(command == angsigmarCmd)
+    {
+      fParticleGun->SetBeamSigmaInAngR(angsigmarCmd->GetNewDoubleValue(newValues));
+    }
+  else if(command == angsigmaxCmd)
+    {
+      fParticleGun->SetBeamSigmaInAngX(angsigmaxCmd->GetNewDoubleValue(newValues));
+    }
+  else if(command == angsigmayCmd)
+    {
+      fParticleGun->SetBeamSigmaInAngY(angsigmayCmd->GetNewDoubleValue(newValues));
+    }
+  else if(command == useuserangaxisCmd)
+    {
+      fParticleGun->SetUseUserAngAxis(useuserangaxisCmd->GetNewBoolValue(newValues));
+    }
   else if(command == surfnormCmd)
     {
       fParticleGun->SetUserWRTSurface(surfnormCmd->GetNewBoolValue(newValues));
@@ -533,6 +661,10 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
   else if(command == monoenergyCmd)
     {
       fParticleGun->SetMonoEnergy(monoenergyCmd->GetNewDoubleValue(newValues));
+    }
+  else if(command == engsigmaCmd)
+    {
+      fParticleGun->SetBeamSigmaInE(engsigmaCmd->GetNewDoubleValue(newValues));
     }
   else if(command == alphaCmd)
     {
@@ -560,7 +692,6 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     }
   else if(command == energyspecCmd)
     {
-      G4cout << "here in energyspecCmd" << G4endl;
       fParticleGun->InputEnergySpectra(energyspecCmd->GetNewBoolValue(newValues));
     }
   else if(command == diffspecCmd)
@@ -595,6 +726,10 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
 	fParticleGun->ArbEnergyHisto(histpointCmd->GetNew3VectorValue(newValues));
       if(histtype == "epn")
 	fParticleGun->EpnEnergyHisto(histpointCmd->GetNew3VectorValue(newValues));
+    }
+  else if(command == resethistCmd)
+    {
+      fParticleGun->ReSetHist(newValues);
     }
   else if(command == arbintCmd)
     {
@@ -659,6 +794,23 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
 	G4cout << G4endl; 
       }
     }
+  else if( command==listCmd )
+    { particleTable->DumpTable(); }
+  else if( command==directionCmd )
+    { 
+      fParticleGun->SetAngDistType("planar");
+      fParticleGun->SetParticleMomentumDirection(directionCmd->GetNew3VectorValue(newValues));
+    }
+  else if( command==energyCmd )
+    {    
+      fParticleGun->SetEnergyDisType("Mono");
+      fParticleGun->SetMonoEnergy(energyCmd->GetNewDoubleValue(newValues));
+    }
+  else if( command==positionCmd )
+    { 
+      fParticleGun->SetPosDisType("Point");    
+      fParticleGun->SetCentreCoords(positionCmd->GetNew3VectorValue(newValues));
+    }
   else
     {
       G4cout << "Error entering command" << G4endl;
@@ -686,3 +838,8 @@ G4String G4GeneralParticleSourceMessenger::GetCurrentValue(G4UIcommand * command
 
   return cv;
 }
+
+
+
+
+

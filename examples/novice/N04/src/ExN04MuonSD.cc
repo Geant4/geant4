@@ -51,7 +51,6 @@ void ExN04MuonSD::Initialize(G4HCofThisEvent*HCE)
 
 G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 {
-  G4Track* aTrack = aStep->GetTrack();
   G4double edep = aStep->GetTotalEnergyDeposit();
 
   if(edep==0.) return true;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIArrayString.cc,v 1.3.4.1 2001/06/28 19:10:23 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIArrayString.cc,v 1.5 2001/11/26 19:15:08 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "g4std/iomanip"
@@ -45,8 +45,8 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
   while(1) {
     G4int jc= astream.index(" ", indx);
     nElement++;
-    if(jc == G4String::npos) break;
-    for(G4int i=1; jc+i< astream.length(); i++ ) {  // skip continuing spaces
+    if(jc == G4int(G4String::npos)) break;
+    for(G4int i=1; jc+i< G4int(astream.length()); i++ ) {  // skip continuing spaces
       if(astream[(size_t)(jc+i)]==' ') jc++;
       else break;
     }
@@ -60,13 +60,13 @@ G4UIArrayString::G4UIArrayString(const G4String& stream)
   indx=0;
   for(G4int i=0; i<nElement; i++){
     G4int jc= astream.index(" ", indx);
-    if(jc != G4String::npos)
+    if(jc != G4int(G4String::npos))
       stringArray[i]= astream(indx, jc-indx);
     else {  // last token
       jc= astream.length()+1;
       stringArray[i]= astream(indx, jc-indx);
     }
-    for(G4int j=1; jc+j< astream.length(); j++ ) { // skip continuing spaces
+    for(G4int j=1; jc+j< G4int(astream.length()); j++ ) { // skip continuing spaces
       if(astream(jc+j)==' ') jc++;
       else break;
     }

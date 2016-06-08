@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.6.2.1 2001/06/28 19:13:11 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4CompetitiveFission.cc,v 1.9 2001/10/05 16:13:42 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -242,16 +242,16 @@ G4int G4CompetitiveFission::FissionAtomicNumber(const G4int A, const G4FissionPa
     const G4double A1 = theParam.GetA1();
     const G4double A2 = theParam.GetA2();
     const G4double As = theParam.GetAs();
-    const G4double Sigma1 = theParam.GetSigma1();
+//    const G4double Sigma1 = theParam.GetSigma1();
     const G4double Sigma2 = theParam.GetSigma2();
     const G4double SigmaS = theParam.GetSigmaS();
     const G4double w = theParam.GetW();
 
   
-    G4double FasymAsym = 2.0*exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
-	exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
+//    G4double FasymAsym = 2.0*exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
+//	exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
 
-    G4double FsymA1A2 = exp(-((As-(A1+A2))*(As-(A1+A2)))/(2.0*SigmaS*SigmaS));
+//    G4double FsymA1A2 = exp(-((As-(A1+A2))*(As-(A1+A2)))/(2.0*SigmaS*SigmaS));
 
 
     G4double C2A = A2 + 3.72*Sigma2;

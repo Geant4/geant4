@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4BREPSolidCylinder.cc,v 1.5.2.1 2001/06/28 19:08:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BREPSolidCylinder.cc,v 1.7 2001/07/11 09:59:41 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -72,7 +71,7 @@ G4BREPSolidCylinder::G4BREPSolidCylinder(const G4String& name,
 
   // Creation of the second circular surface
   G4Point3D  origin2   = G4Point3D( origin  + ( length*axis ) );  
-  G4Point3D  ArcStart2 = G4Point3D( origin2 + ( radius*direction ) );
+  G4Point3D  ArcStart2 = origin2 + G4Point3D( radius*direction );
   G4Vector3D axis2     = axis1;
 
   tmp = new G4CircularCurve;

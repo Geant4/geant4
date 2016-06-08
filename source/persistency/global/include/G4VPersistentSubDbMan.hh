@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPersistentSubDbMan.hh,v 1.3.8.1 2001/06/28 19:11:33 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4VPersistentSubDbMan 
-//
-// Abstract class to be used by G4PersistencyManager
-// and G4TransactionManager
+// $Id: G4VPersistentSubDbMan.hh,v 1.5 2001/07/11 10:02:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Abstract class to be used by G4PersistencyManager
+//   and G4TransactionManager
 //
 // Member functions:
 // =================
@@ -60,7 +59,7 @@
 //        f_currentContainer = f_container;
 //        pRun_iterator.scan(f_currentContainer);
 //      }
-//
+
 // History:
 // 99.11.25 Y.Morita  Initial creation
 
@@ -95,11 +94,13 @@ class G4VPersistentSubDbMan
       inline void SetContainer(HepContainerRef container)
       { f_container = container; }
 
-  public:
+  public: // With description
       inline HepDatabaseRef GetDB()
       { return f_DB; }
+        // Returns the reference pointer of the database
       inline HepContainerRef GetContainer()
       { return f_container; }
+        // Returns the reference pointer of the container
 
   protected:
       HepDatabaseRef  f_DB;

@@ -21,16 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.6.2.1 2001/06/28 19:15:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.10 2001/09/17 07:40:32 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Satoshi TANAKA
-
-
-//=================//
-#ifdef G4VIS_BUILD_DAWNFILE_DRIVER
-//=================//
-
 
 #ifndef G4DAWNFILE_SCENE_HANDLER_HH
 #define G4DAWNFILE_SCENE_HANDLER_HH
@@ -63,8 +57,13 @@ public:
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+
+	//----- explicitly invoke base class methods to avoid warnings about
+        //----- hiding of base class methods.
   void AddPrimitive (const G4Polymarker& polymarker) 
        { G4VSceneHandler::AddPrimitive (polymarker); }
+  void AddPrimitive (const G4Scale& scale) 
+       { G4VSceneHandler::AddPrimitive (scale); }
 
   virtual void BeginModeling () { G4VSceneHandler::BeginModeling ();} 
   virtual void EndModeling   () { G4VSceneHandler::EndModeling   ();}
@@ -88,7 +87,7 @@ public:
   }
   void AddThis ( const G4VSolid& solid  );
 
-  void ClearStore (){}
+  void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	//----- public methods inherent to this class
   static G4int GetSceneCount   ();
@@ -234,4 +233,3 @@ private:
 };
 
 #endif
-#endif //G4VIS_BUILD_DAWNFILE_DRIVER

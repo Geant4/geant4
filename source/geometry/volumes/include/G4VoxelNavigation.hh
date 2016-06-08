@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.8.2.1 2001/06/28 19:09:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VoxelNavigation.hh,v 1.9 2001/07/11 10:00:31 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4VoxelNavigation

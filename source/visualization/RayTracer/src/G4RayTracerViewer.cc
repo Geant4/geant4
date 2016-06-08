@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.7.2.1 2001/06/28 19:15:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RayTracerViewer.cc,v 1.9 2001/11/12 18:22:10 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 #include "G4RayTracerViewer.hh"
 
@@ -66,7 +66,9 @@ void G4RayTracerViewer::SetView() {
   theTracer->SetTargetPosition(targetPoint);
   theTracer->SetEyePosition(cameraPosition);
   theTracer->SetHeadAngle(fVP.GetViewpointDirection().phi());
-  theTracer->SetLightDirection(-fVP.GetActualLightpointDirection());
+  const G4Vector3D
+    actualLightpointDirection(-fVP.GetActualLightpointDirection());
+  theTracer->SetLightDirection(actualLightpointDirection);
 }
 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2001/05/30 14:32:18 vnivanch Exp $
+$Id: History,v 1.43 2001/11/12 11:20:50 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,74 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+12 nov 01: mma (stand-V03-02-14)
+- ParticleMass and Charge : local variables
+- merge 11a + 13
+- some cleanup in G4hEnergyLoss.hh and .cc 
+     
+29 oct 01: mma (stand-V03-02-13)
+- all static functions no more inlined
+     
+23 oct 01: mma (stand-V03-02-12)
+- cut per material: Ve(h)EnergyLoss, e(h)Ionisation, eBremsstrahlung,
+  PAIEnergyLoss, PAIonisation, SynchrotronRadiation     
+
+08 nov 01: G.Cosmo (stand-V03-02-11a)
+- Introduced changes to G4VeEnergyLoss.cc and G4VhEnergyLoss.cc for reference
+  counted touchables (R.Chytracek). Not included in "stand-V03-02-12" and
+  "stand-V03-02-13".
+
+23 oct 01: G.Cosmo (stand-V03-02-11)
+- Minor fix to G4PAIxSection.cc, added inclusion of G4Material.hh to cope
+  with latest updates included in materials-V03-02-04.
+
+11 oct 01: mma (stand-V03-02-10)
+- activate buildDEDXTable() in G4hIonisation::retrievePhysicsTable()
+
+11 oct 01: G.Cosmo (stand-V03-02-09)
+- G4VPAIenergyLoss.hh: removed redundant inclusion of RW wrapper header.
+ 
+01 oct 01: mma (stand-V03-02-08)
+- Phot,Comp,Conv,Annil: come back to BuildPhysicsTable(particleDefinition)
+  invoked from the process manager
+       
+28 sep 01: mma (stand-V03-02-07)
+- StorePhysicsTable(): ParticleName included in fileName.
+  Completion of Store/Retrieve functions 
+     
+21 sep 01: mma (stand-V03-02-06)
+- DoIt: fminimalEnergy = 1*eV in phot,comp,conv,anni     
+     
+19 sep 01: mma (stand-V03-02-05)
+- come back to the previous ProcessNames
+     
+17 sep 01: mma (stand-V03-02-04)
+- modifs in almost all classes for the migration of Materials to pure STL,
+  but backward compatible with g4rw   
+
+13 sep 01: L.Urban (stand-V03-02-03)
+-G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation
+    
+11 sep 01: L.Urban (stand-V03-02-02)
+- G4VhEnergyLoss+G4VeEnergyLoss: bugfix in subcutoff delta generation
+     
+29 aug 01: mma (stand-V03-02-01)
+- G4hIonisation::PostStepDoIt grecj term for spin 1/2 (not 1)
+     
+13 aug 01: mma
+- G4eIonisation: new function ComputeRestrictedMeandEdx()
+- G4hIonisation: new function ComputeRestrictedMeandEdx() + 'cleanup'
+    
+10 aug 01: mma
+- store/retrieve PhysicsTables implemented in photelec, compton, gamaconv,
+  annihil, eIonisa, eBrems, mulscat, hIonisa      
+     
+17 jul 01: mma (stand-V03-02-00)
+- suppression of the production threshold in phot,compt,conv,annih
+
+11 jul 01: mma
+- GammaConversion::PostStepDoIt : sample epsil->power (rndm,0.333333)
 
 29 may 01: V.Ivanchenko 
 - clean up againist Linux ANSI strict compilation mode.

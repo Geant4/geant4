@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000/12/06 16:53:12 flongo Exp $
+$Id: README,v 1.11 2001/12/07 12:57:30 pfeiffer Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,12 +19,14 @@ GammaRayTel is an example of application of Geant4 in a space
 envinronment. It simulates a typical telescope for gamma ray analysis;
 the detector setup is composed by a tracker made with silicon planes,
 subdivided in ladders and strips, a CsI calorimeter and an
-anticoincidence system. In this version, only the tracker is made
-sensitive; the hits on the tracker strips are registered and relevant 
+anticoincidence system. In this version, the three detectors are made
+sensitive but only the hits on the tracker strips are registered and relevant 
 information (energy deposition, position etc) are dumped to an external
-ASCII file for subsequent analysis. If Lizard is available on the user
-platform, than some histograms with relevant hits information are 
-displayed and saved as PostScript files.
+ASCII file for subsequent analysis. If the user has set up the 
+AIDA (version 2.2 or compatible) environment or Anaphe/Lizard is available, 
+then some histograms with relevant hits information are displayed 
+and saved as PostScript files, and histograms and ntuples with
+relevant information are stored on a HBOOK file.
 
 The main features of this example are
 
@@ -39,11 +41,12 @@ The main features of this example are
      subdivisions of the planes of the tracker (strips) without
      affecting in a relevant way the simulation performances
 
-  d) Histogramming for Linux and Solaris platform via the 
-     Lizard system (tested on Linux platform); this is a preliminary 
-     feature of GEANT4, so expect some changes and/or improvements in 
-     future releases 
-     
+  d) Histograming facilities are presently provided for the Linux 
+     environment either by using the AIDA interfaces, or through 
+     the Anaphe/Lizard system. The AIDA compliant version has not 
+     been tested by the developers and is here as a example of 
+     "forward compatibility" on how to use analysis.
+
   e) User interfaces via Xmotif or normal terminal provided
 
   
@@ -67,36 +70,43 @@ The main features of this example are
  - Setup for Xmotif user interface
   
   setenv G4UI_USE_XM  1    
+  (IMPORTANT: Do not set G4ANALYSIS_USE_NTUPLE	when using XM!)
+	
 
-
- - Set up for analysis using Lizard 
-
-  IMPORTANT: be sure that your G4 installation has been done properly; 
-  in particular be sure that the following environment variables are
-  set prior to build the library (this is working only on Linux and 
-  Solaris platform)
-
-  setenv G4ANALYSIS_BUILD 	1 # Build the analysis tools
-  setenv G4ANALYSIS_BUILD_LIZARD 1 # Build the Lizard interface 
-  setenv LIZARDROOT  /usr/local/freeLizard/3.2.0  #get correct path 
- 
-  For example at CERN the path is
-  setenv LIZARDROOT /afs/cern.ch/project/asddat/lhcxx/3.2.0/freeLizard/3.2.0
-
+ - Set up for analysis using AIDA
 
   To compile the GammaRayTel example with the analysis tools activated, 
   set the following variables 
 
   setenv G4ANALYSIS_USE               1 # Use the analysis tools
-  setenv G4ANALYSIS_USE_LIZARD        1 # Use the Lizard one
 
-  and be sure to have the right path to the Lizard library
+  To be sure to have the right compilation and link flags, the 
+  'aida-config' command, provided by an AIDA compliant implementation
+  must be up and running ; in particular 'aida-config --cflags' and
+  'aida-config --libs' must be active.
 
-  #add to the LD_LIBRARY_PATH (get correct path) 
-  setenv LD_LIBRARY_PATH /usr/local/freeLizard/3.2.0/Linux/lib
+ - Set up for analysis using Anaphe/Lizard 
 
-  For example at CERN the path is
-  setenv LD_LIBRARY_PATH /afs/cern.ch/project/asddat/lhcxx/3.2.0/freeLizard/3.2.0/Linux/lib
+  To compile the GammaRayTel example with the analysis tools activated, 
+  set the following variables 
+
+  setenv G4ANALYSIS_USE               1 # Use the analysis tools
+  setenv G4ANALYSIS_USE_NTUPLE        1 # To store Ntuples 
+
+  (IMPORTANT: Do not set G4UI_USE_XM when using Ntuples!)
+
+  and be sure to have the right path to the Lizard library, inserting this
+  on the .tcshrc:
+
+ (on a CERN machine with the gcc-2.95 compiler)
+  
+  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.5/bin
+  source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5/install/sharedstart.csh
+
+ (on a CERN machine with the egcs-2.91.66 compiler (G4SYSTEM Linux-egcs)
+
+  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.5-sec/bin
+  source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.5-sec/install/sharedstart.csh
 
 
 2. Sample run
@@ -120,6 +130,18 @@ The main features of this example are
  your local G4 installation (see geant4/source/visualization/README for
  more information).
 
+
+ ATTENTION:
+ If you use analysis with Lizard, you have to remove any hbook file in the 
+ example directory obtained in previous Geant4 sessions. This issues will be 
+ solved in future releases. Note also that the following error can be reported
+ during run with analysis activated
+
+ ***** ERROR in HLNEXT : Bad sequence for RZ : ID=       1 
+	
+ Ignore this message; histograms (and ntuples) are correctly saved in the hbook files.
+			
+	
 3. Detector description
 -----------------------
 
@@ -163,8 +185,9 @@ The main features of this example are
 7. Hit 
 ------
 
- In this version only the hits from the TKR are recorded. Each hit
- contains the following information
+ In this version the hits from the TKR the CAL and the ACD are generated. 
+ Only the hit from the TRK are saved. Each TKR hit contains the following 
+ information
 
   a) ID of the event (this is important for multiple events run)
   b) Energy deposition of the particle in the strip (keV)
@@ -176,7 +199,20 @@ The main features of this example are
  The hit information are saved on an ASCII file named Tracks_N.dat, where 
  N is the progressive ID number associated to the run. 
 
-8. Histogramming
+8. Analysis
+----------------
+
+ At present there are two options for analysis packages: either 
+ explicitely the Anaphe 3.6.5 (or compatible) version is selected, 
+ or any AIDA-2.2 compliant analysis system is chosen.  This dual
+ approach will be removed in the next release when only the AIDA
+ compliant version will be present. Presently, the OpenScientist 
+ package (version 8) provides an implementation of AIDA 2.2, 
+ other packages as Anaphe and JAS will follow soon. The AIDA 
+ compliant version has not been tested by the developers and is
+ here as a example of "forward compatibility" on how to use analysis.
+
+9. Histogramming
 ----------------
 
  Some hits information can be visualized runtime using Lizard (if it is 
@@ -207,7 +243,20 @@ The main features of this example are
  for next releases. 
 
 
-9. Classes Overview
+10. Digi
+--------
+
+ For the TKR also the digits corresponding to the Hits are generated. 
+ A digi is generated when the hit energy deposit is greater than a threshold 
+ (in this example setted at 120 keV). 
+ The TKR digi information are stored on the same file Tracks_N.dat and contain:
+
+  a) ID of the event (this is important for multiple events run)
+  b) Number of the strip 
+  c) Number of the plane
+  d) Type of the plane (1=X  0=Y)
+
+11. Classes Overview
 -------------------
 
  This is the overview of the classes defined in this example
@@ -233,7 +282,7 @@ The main features of this example are
 	Messenger for interactive geometry parameters 
 	modification via the User Interface
 	
-  GammaRayTelAnalysisManager
+  GammaRayTelAnalysis
 	Analysis manager class with Lizard tool (experimental)
 
   GammaRayTelAnalysisMessenger
@@ -246,14 +295,36 @@ The main features of this example are
   GammaRayTelEventAction
 	User event action class
 
-  GammaRayTelPayloadHit
+  GammaRayTelTrackerHit
 	Description of the hits on the tracker
 
-  GammaRayTelPayloadROGeometry
+  GammaRayTelDigi
+	Description of the digi on the tracker
+
+  GammaRayTelDigitizer
+	Description of the digitizer for the tracker
+
+  GammaRayTelTrackerROGeometry
 	Description of the readout geometry for strips subdivision
 
-  GammaRayTelPayloadSD
-	Description of the sensitive detector
+  GammaRayTelTrackerSD
+	Description of the TKR sensitive detector
+
+  GammaRayTelAnticoincidenceHit
+	Description of the hits on the anticoincidence
+
+  GammaRayTelAnticoincidenceSD
+	Description of the ACD sensitive detector
+
+  GammaRayTelCalorimeterHit
+	Description of the hits on the calorimeter
+
+  GammaRayTelCalorimeterSD
+	Description of the CAL sensitive detector
+
+
+
+
 
 
 

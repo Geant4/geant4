@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.7.2.1 2001/06/28 19:16:13 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Scene.cc,v 1.11 2001/08/24 20:47:41 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -36,30 +36,38 @@
 #include "G4TransportationManager.hh"
 
 G4Scene::G4Scene (const G4String& name):
-  fName (name)
-{} // Note all data members have default initial values.
+  fName (name),
+  fRefreshAtEndOfEvent(true)
+{} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}
 
-G4bool G4Scene::AddRunDurationModel (G4VModel* pModel) {
+G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
   G4int i, nModels = fRunDurationModelList.size ();
   for (i = 0; i < nModels; i++) {
     if (pModel -> GetGlobalDescription () ==
 	fRunDurationModelList [i] -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
-    G4cout << "G4Scene::AddRunDurationModel: model \""
-	   << pModel -> GetGlobalDescription ()
-	   << "\"\n  is already in the run-duration list of scene \""
-	   << fName
-	   << "\"."
-	   << G4endl;
+    if (warn) {
+      G4cout << "G4Scene::AddRunDurationModel: model \""
+	     << pModel -> GetGlobalDescription ()
+	     << "\"\n  is already in the run-duration list of scene \""
+	     << fName
+	     << "\"."
+	     << G4endl;
+    }
     return false;
   }
   fRunDurationModelList.push_back (pModel);
-  nModels = fRunDurationModelList.size ();  // ...has increased by 1...
+  CalculateExtent ();
+  return true;
+}
+
+void G4Scene::CalculateExtent () {
+  G4int nModels = fRunDurationModelList.size ();
   G4BoundingSphereScene boundingSphereScene;
-  for (i = 0; i < nModels; i++) {
+  for (G4int i = 0; i < nModels; i++) {
     const G4VisExtent& thisExtent =
       fRunDurationModelList[i] -> GetExtent ();
     G4Point3D thisCentre = thisExtent.GetExtentCentre ();
@@ -69,12 +77,12 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel) {
   }
   fExtent = boundingSphereScene.GetBoundingSphereExtent ();
   fStandardTargetPoint = fExtent.GetExtentCentre ();
-  return true;
 }
 
-G4bool G4Scene::AddWorldIfEmpty () {
-  G4bool successful = false;
+G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
+  G4bool successful = true;
   if (IsEmpty ()) {
+    successful = false;
     G4VPhysicalVolume* pWorld =
       G4TransportationManager::GetTransportationManager ()
       -> GetNavigatorForTracking () -> GetWorldVolume ();
@@ -82,40 +90,46 @@ G4bool G4Scene::AddWorldIfEmpty () {
       const G4VisAttributes* pVisAttribs =
 	pWorld -> GetLogicalVolume () -> GetVisAttributes ();
       if (!pVisAttribs || pVisAttribs -> IsVisible ()) {
-	G4cout << 
-	  "Your \"world\" has no vis attributes or is marked as visible."
-	  "\n  For a better view of the contents, mark the world as"
-	  " invisible, e.g.,"
-	  "\n  myWorldLogicalVol ->"
-	  " SetVisAttributes (G4VisAttributes::Invisible);"
-	       << G4endl;
+	if (warn) {
+	  G4cout << 
+	    "Your \"world\" has no vis attributes or is marked as visible."
+	    "\n  For a better view of the contents, mark the world as"
+	    " invisible, e.g.,"
+	    "\n  myWorldLogicalVol ->"
+	    " SetVisAttributes (G4VisAttributes::Invisible);"
+		 << G4endl;
+	}
       }
       successful = AddRunDurationModel (new G4PhysicalVolumeModel (pWorld));
       // Note: default depth and no modeling parameters.
       if (successful) {
-	G4cout <<
-	  "G4Scene::AddWorldIfEmpty: The scene was empty,"
-	  "\n   \"world\" has been added.";
-	G4cout << G4endl;
+	if (warn) {
+	  G4cout <<
+	    "G4Scene::AddWorldIfEmpty: The scene was empty,"
+	    "\n   \"world\" has been added.";
+	  G4cout << G4endl;
+	}
       }
     }
   }
   return successful;
 }
 
-G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel) {
+G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
   G4int i, nModels = fEndOfEventModelList.size ();
   for (i = 0; i < nModels; i++) {
     if (pModel -> GetGlobalDescription () ==
 	fEndOfEventModelList [i] -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
-    G4cout << "G4Scene::AddEndOfEventModel: model \""
-	   << pModel -> GetGlobalDescription ()
-	   << "\"\n  is already in the run-duration list of scene \""
-	   << fName
-	   << "\"."
-	   << G4endl;
+    if (warn) {
+      G4cout << "G4Scene::AddEndOfEventModel: model \""
+	     << pModel -> GetGlobalDescription ()
+	     << "\"\n  is already in the run-duration list of scene \""
+	     << fName
+	     << "\"."
+	     << G4endl;
+    }
     return false;
   }
   fEndOfEventModelList.push_back (pModel);
@@ -132,25 +146,30 @@ void G4Scene::Clear () {
   }
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
+G4std::ostream& operator << (G4std::ostream& os, const G4Scene& s) {
 
   size_t i;
 
   os << "Scene data:";
 
   os << "\n  Run-duration model list:";
-  for (i = 0; i < d.fRunDurationModelList.size (); i++) {
-    os << "\n  " << *(d.fRunDurationModelList[i]);
+  for (i = 0; i < s.fRunDurationModelList.size (); i++) {
+    os << "\n  " << *(s.fRunDurationModelList[i]);
   }
 
   os << "\n  End-of-event model list:";
-  for (i = 0; i < d.fEndOfEventModelList.size (); i++) {
-    os << "\n  " << *(d.fEndOfEventModelList[i]);
+  for (i = 0; i < s.fEndOfEventModelList.size (); i++) {
+    os << "\n  " << *(s.fEndOfEventModelList[i]);
   }
 
-  os << "\n  Extent or bounding box: " << d.fExtent;
+  os << "\n  Extent or bounding box: " << s.fExtent;
 
-  os << "\n  Standard target point:  " << d.fStandardTargetPoint;
+  os << "\n  Standard target point:  " << s.fStandardTargetPoint;
+
+  os << "\n  End of event action set to \"";
+  if (s.fRefreshAtEndOfEvent) os << "refresh";
+  else os << "accumulate";
+  os << "\"";
 
   return os;
 }
@@ -158,9 +177,10 @@ G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
 G4bool G4Scene::operator != (const G4Scene& s) const {
   if (
       (fRunDurationModelList.size () !=
-       s.fRunDurationModelList.size ())              ||
+       s.fRunDurationModelList.size ())                 ||
       (fExtent               != s.fExtent)              ||
-      !(fStandardTargetPoint == s.fStandardTargetPoint)
+      !(fStandardTargetPoint == s.fStandardTargetPoint) ||
+      fRefreshAtEndOfEvent != s.fRefreshAtEndOfEvent
       ) return true;
 
   for (size_t i = 0; i < fRunDurationModelList.size (); i++) {

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorConstruction.hh,v 1.2.4.1 2001/06/28 19:06:47 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em1DetectorConstruction.hh,v 1.4 2001/10/26 12:51:23 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1DetectorConstruction_h
 #define Em1DetectorConstruction_h 1
@@ -40,7 +40,7 @@ class G4Material;
 class G4UniformMagField;
 class Em1DetectorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -86,7 +86,7 @@ class Em1DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructVolumes();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 #endif

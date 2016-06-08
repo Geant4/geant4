@@ -14,19 +14,16 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4ParticleVector.hh,v 1.3.8.1 2001/06/28 19:15:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ParticleVector.hh,v 1.7 2001/10/05 16:10:06 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-// ------------------------------------------------------------
-// HPW decoupling theo models from RW (Mon Mar 16 1998)
-// ------------------------------------------------------------
 
 #ifndef G4ParticleVector_h
 #define G4ParticleVector_h 1
@@ -34,13 +31,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4DynamicParticle.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-// #ifdef STL
-// for future use STL vector as container 
-// typedef Vector<G4DynamicParticle> G4ParticleVector;
-// #elseifdef RWT
-
-typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
+typedef G4std::vector<G4DynamicParticle *> G4ParticleVector;
+struct DeleteDynamicParticle {void operator()(G4DynamicParticle*aP) {delete aP;}};
 
 #endif

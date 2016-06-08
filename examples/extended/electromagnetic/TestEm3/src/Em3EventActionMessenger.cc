@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3EventActionMessenger.cc,v 1.2.4.1 2001/06/28 19:06:59 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em3EventActionMessenger.cc,v 1.5 2001/11/28 17:54:46 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3EventActionMessenger.hh"
 
@@ -36,7 +36,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3EventActionMessenger::Em3EventActionMessenger(Em3EventAction* EvAct)
 :eventAction(EvAct)
@@ -45,7 +45,7 @@ Em3EventActionMessenger::Em3EventActionMessenger(Em3EventAction* EvAct)
   DrawCmd->SetGuidance("Draw the tracks in the event");
   DrawCmd->SetGuidance("  Choice : none, charged(default), all");
   DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("charged");
+  DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
   DrawCmd->AvailableForStates(Idle);
   
@@ -56,7 +56,7 @@ Em3EventActionMessenger::Em3EventActionMessenger(Em3EventAction* EvAct)
   PrintCmd->AvailableForStates(Idle);    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3EventActionMessenger::~Em3EventActionMessenger()
 {
@@ -64,9 +64,10 @@ Em3EventActionMessenger::~Em3EventActionMessenger()
   delete PrintCmd;  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Em3EventActionMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 { 
   if(command == DrawCmd)
     {eventAction->SetDrawFlag(newValue);}
@@ -75,4 +76,4 @@ void Em3EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}       
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

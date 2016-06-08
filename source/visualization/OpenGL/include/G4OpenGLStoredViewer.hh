@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.hh,v 1.6.2.1 2001/06/28 19:15:38 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLStoredViewer.hh,v 1.8 2001/08/14 18:03:15 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -52,8 +52,10 @@ public:
   
 protected:
   void KernelVisitDecision ();
+  G4bool CompareForKernelVisit(G4ViewParameters&);
   void DrawDisplayLists ();
-  G4OpenGLStoredSceneHandler&            fSceneHandler; // Graphics Scene for this view.
+  G4OpenGLStoredSceneHandler& fG4OpenGLStoredSceneHandler;
+  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
 };
 
 #endif

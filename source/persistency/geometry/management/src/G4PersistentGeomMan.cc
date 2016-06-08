@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersistentGeomMan.cc,v 1.15.2.1 2001/06/28 19:11:29 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PersistentGeomMan.cc,v 1.16 2001/07/11 10:02:20 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // class G4PersistentGeomMan 
 //

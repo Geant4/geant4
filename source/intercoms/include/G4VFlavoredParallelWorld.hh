@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFlavoredParallelWorld.hh,v 1.2.4.1 2001/06/28 19:10:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VFlavoredParallelWorld.hh,v 1.3 2001/07/11 10:01:15 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Abstract interface for GEANT4 Flavored Parallel World.

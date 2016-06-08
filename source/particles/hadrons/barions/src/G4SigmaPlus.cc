@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.cc,v 1.5.4.2 2001/06/28 20:19:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SigmaPlus.cc,v 1.8 2001/10/16 08:16:00 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -99,6 +99,5 @@ G4SigmaPlus G4SigmaPlus::theSigmaPlus(
 );
 
 G4SigmaPlus* G4SigmaPlus::SigmaPlusDefinition(){return &theSigmaPlus;}
-// initialization for static cut values
-G4double   G4SigmaPlus::theSigmaPlusLengthCut = -1.0;
-G4double*  G4SigmaPlus::theSigmaPlusKineticEnergyCuts = NULL;
+
+G4SigmaPlus* G4SigmaPlus::SigmaPlus(){return &theSigmaPlus;}

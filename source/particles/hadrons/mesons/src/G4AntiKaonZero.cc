@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiKaonZero.cc,v 1.4.2.1 2001/06/28 19:10:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiKaonZero.cc,v 1.10 2001/10/28 05:01:32 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -99,33 +99,19 @@ G4AntiKaonZero G4AntiKaonZero::theAntiKaonZero(
 );
 
 G4AntiKaonZero* G4AntiKaonZero::AntiKaonZeroDefinition(){return &theAntiKaonZero;}
-// initialization for static cut values
-G4double   G4AntiKaonZero::theAntiKaonZeroLengthCut = -1.0;
-G4double*  G4AntiKaonZero::theAntiKaonZeroKineticEnergyCuts = NULL;
-
+G4AntiKaonZero* G4AntiKaonZero::AntiKaonZero(){return &theAntiKaonZero;}
 // **********************************************************************
 // **************************** SetCuts *********************************
 // **********************************************************************
 //  In this version Input Cut Value is meaning less
 //  theKineticEnergyCuts for all materials are set to LowestEnergy
 
-void G4AntiKaonZero::SetCuts(G4double aCut)
+void G4AntiKaonZero::CalcEnergyCuts( const G4Material* )
 {
-  theCutInMaxInteractionLength = aCut;
+  
 
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  // Create the vector of cuts in energy
-  // corresponding to the stopping range cut
-  if(theKineticEnergyCuts) delete [] theKineticEnergyCuts;
-  theKineticEnergyCuts = new G4double [materialTable->length()];
+  // Set Energy Cut values to lowest  for all materials
+  SetEnergyCutValues(LowestEnergy);
 
-  // Build range vector for every material, convert cut into energy-cut,
-  // fill theKineticEnergyCuts and delete the range vector
-  for (size_t J=0; J<materialTable->length(); J++)
-  {
-    theKineticEnergyCuts[J] = LowestEnergy;
-  }
-  theAntiKaonZeroLengthCut = theCutInMaxInteractionLength;  
-  theAntiKaonZeroKineticEnergyCuts = theKineticEnergyCuts;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.hh,v 1.5.2.2 2001/06/28 20:18:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiNeutron.hh,v 1.10 2001/10/28 05:06:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
 // Each class inheriting from G4VBaryon
@@ -55,8 +54,6 @@ class G4AntiNeutron : public G4VBaryon
 {
  private:
    static G4AntiNeutron theAntiNeutron;
-   static G4double  theAntiNeutronLengthCut;
-   static G4double* theAntiNeutronKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4AntiNeutron(
@@ -75,21 +72,9 @@ class G4AntiNeutron : public G4VBaryon
    virtual ~G4AntiNeutron(){}
 
    static G4AntiNeutron* AntiNeutronDefinition();
-   static G4AntiNeutron* AntiNeutron(){return &theAntiNeutron;}
-   static G4double GetCuts() {return theAntiNeutronLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiNeutronKineticEnergyCuts;};
+   static G4AntiNeutron* AntiNeutron();
 
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
-inline
- void G4AntiNeutron::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theAntiNeutronLengthCut = theCutInMaxInteractionLength;  
-  theAntiNeutronKineticEnergyCuts = theKineticEnergyCuts;
-}
 #endif

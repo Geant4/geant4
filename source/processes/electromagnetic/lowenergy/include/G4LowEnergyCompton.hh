@@ -19,85 +19,86 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+
+// $Id: G4LowEnergyCompton.hh,v 1.19 2001/12/13 12:04:13 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
+// Author: A. Forti
+//         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
-// $Id: G4LowEnergyCompton.hh,v 1.11.2.2 2001/06/28 20:19:23 gunter Exp $
-// GEANT4 tag $Name:  $
+// History:
+// -----------
+// 02 Mar 1999   A. Forti   1st implementation
+//  1 Aug 2001   MGP        Major revision according to a design iteration
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file --- Copyright CERN 1995
-//      CERN Geneva Switzerland
-//
-//      ------------ G4LowEnergyCompton physics process ------
-//                   by A.Forti 1999/03/02
-//
+// -------------------------------------------------------------------
+
 // Class description:
-// Low Energy electromagnetic process, Compton
+// Low Energy Electromagnetic Physics, Compton Scattering
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-// ************************************************************
+// -------------------------------------------------------------------
 
-#ifndef G4LowEnergyCompton_h
-#define G4LowEnergyCompton_h 
+#ifndef G4LOWENERGYCOMPTON_HH
+#define G4LOWENERGYCOMPTON_HH 1
 
-// Base Class Headers
+#include "globals.hh"
 #include "G4VDiscreteProcess.hh"
 
-// Contained Variables Headers
-#include "G4LowEnergyUtilities.hh"
-#include "G4Gamma.hh"
+class G4Track;
+class G4Step;
+class G4ParticleDefinition;
+class G4VParticleChange;
+class G4VEMDataSet;
+class G4VCrossSectionHandler;
+class G4VRangeTest;
 
-class G4LowEnergyCompton : public G4VDiscreteProcess{
+class G4LowEnergyCompton : public G4VDiscreteProcess {
 
-private: 
-
-  // hide assignment operator as private 
-  G4LowEnergyCompton& operator=(const G4LowEnergyCompton &right);
-  G4LowEnergyCompton(const G4LowEnergyCompton& );
- 
 public:
   
   G4LowEnergyCompton(const G4String& processName ="LowEnCompton");
   
   ~G4LowEnergyCompton();
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition& definition);
   
-  void BuildPhysicsTable(const G4ParticleDefinition& GammaType);
+  void BuildPhysicsTable(const G4ParticleDefinition& photon);
  
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
+ 
+  // For testing purpose only
+  G4double DumpMeanFreePath(const G4Track& aTrack, 
+			    G4double previousStepSize, 
+			    G4ForceCondition* condition) 
+  { return GetMeanFreePath(aTrack, previousStepSize, condition); }
+
+protected:
+
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
 
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
-  
-protected:
+private: 
 
-  void BuildScatteringFunctionTable();
-  void BuildCrossSectionTable();
-  void BuildMeanFreePathTable();
-  void BuildZVec();
+  // Hide copy constructor and assignment operator as private 
+  G4LowEnergyCompton& operator=(const G4LowEnergyCompton& right);
+  G4LowEnergyCompton(const G4LowEnergyCompton& );
 
-private:
+  G4double lowEnergyLimit;  // low energy limit  applied to the process
+  G4double highEnergyLimit; // high energy limit applied to the process
 
-  G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
-  
-  G4SecondLevel* theCrossSectionTable;
-  G4SecondLevel* theScatteringFunctionTable;
-  G4PhysicsTable* theMeanFreePathTable;
-  G4DataVector* ZNumVec;
+  G4VEMDataSet* meanFreePathTable;
+  G4VEMDataSet* scatterFunctionData;
 
-  G4double lowestEnergyLimit; // low  energy limit of the crosssection data 
-  G4double highestEnergyLimit; // high energy limit of the crosssection data
-  G4int numbBinTable; // number of bins in the data  tables
+  G4VCrossSectionHandler* crossSectionHandler;
 
-  G4LowEnergyUtilities util;
+  G4VRangeTest* rangeTest;
 
-  G4double meanFreePath; // actual Mean Free Path (current medium)
+  const G4double intrinsicLowEnergyLimit; // intrinsic validity range
+  const G4double intrinsicHighEnergyLimit;
+
 };
-
-#include "G4LowEnergyCompton.icc"
 
 #endif
 

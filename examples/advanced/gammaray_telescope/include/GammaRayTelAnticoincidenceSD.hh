@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceSD.hh,v 1.1.2.2 2001/06/28 20:18:37 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelAnticoincidenceSD.hh,v 1.3 2001/11/29 11:19:17 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -50,7 +50,7 @@ class GammaRayTelAnticoincidenceSD : public G4VSensitiveDetector
 {
 public:
   
-  GammaRayTelAnticoincidenceSD(G4String, GammaRayTelDetectorConstruction* );
+  GammaRayTelAnticoincidenceSD(G4String);
   ~GammaRayTelAnticoincidenceSD();
   
   void Initialize(G4HCofThisEvent*);

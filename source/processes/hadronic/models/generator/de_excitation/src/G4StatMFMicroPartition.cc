@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.9.2.1 2001/06/28 19:13:21 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StatMFMicroPartition.cc,v 1.12 2001/10/05 16:13:44 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -96,7 +96,7 @@ G4double G4StatMFMicroPartition::GetCoulombEnergy(void)
 	(G4StatMFParameters::Getr0()*pow(theA,1./3.));
 									
 									
-    for (G4int i = 0; i < _thePartition.size(); i++) 
+    for (unsigned int i = 0; i < _thePartition.size(); i++) 
 	CoulombEnergy += _theCoulombFreeEnergy[i] - elm_coupling*(3./5.)*
 	    (theZ/theA)*(theZ/theA)*pow(_thePartition[i],5./3.)/
 	    G4StatMFParameters::Getr0();
@@ -114,7 +114,7 @@ G4double G4StatMFMicroPartition::GetPartitionEnergy(const G4double T)
 	
 	
     // We use the aprox that Z_f ~ Z/A * A_f
-    for (G4int i = 0; i < _thePartition.size(); i++) {
+    for (unsigned int i = 0; i < _thePartition.size(); i++) {
 	if (_thePartition[i] == 0 || _thePartition[i] == 1) {
 		
 	    PartitionEnergy += _theCoulombFreeEnergy[i];
@@ -227,10 +227,10 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
 
     // Factorial of fragment multiplicity
     G4double Fact = 1.0;
-    G4int i;
+    unsigned int i;
     for (i = 0; i < _thePartition.size() - 1; i++) {
 	G4double f = 1.0;
-	for (G4int ii = i+1; i< _thePartition.size(); i++) 
+	for (unsigned int ii = i+1; i< _thePartition.size(); i++) 
 	    if (_thePartition[i] == _thePartition[ii]) f++;
 	Fact *= f;
     }
@@ -302,7 +302,7 @@ G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(const G4double A0, const G4dou
     do {
 	G4double CC = G4StatMFParameters::GetGamma0()*8.0;
 	G4int SumZ = 0;
-	for (G4int i = 0; i < _thePartition.size(); i++) {
+	for (unsigned int i = 0; i < _thePartition.size(); i++) {
 	    G4double ZMean;
 	    G4double Af = _thePartition[i];
 	    if (Af > 1.5 && Af < 4.5) ZMean = 0.5*Af;
@@ -320,7 +320,7 @@ G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(const G4double A0, const G4dou
     FragmentsZ[0] += ZBalance;
 	
     G4StatMFChannel * theChannel = new G4StatMFChannel;
-    for (G4int i = 0; i < _thePartition.size(); i++) 
+    for (unsigned int i = 0; i < _thePartition.size(); i++) 
 	theChannel->CreateFragment(_thePartition[i],FragmentsZ[i]);
 	
 	

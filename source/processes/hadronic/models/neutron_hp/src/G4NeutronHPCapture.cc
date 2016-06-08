@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -49,7 +49,7 @@
     for (G4int i=0; i<numEle; i++)
     {
 //      G4cout << "initializing theCapture "<<i<<" "<< numEle<<G4endl;
-      theCapture[i].Init((*(G4Element::GetElementTable()))(i), dirName);
+      theCapture[i].Init((*(G4Element::GetElementTable()))[i], dirName);
       theCapture[i].Register(theFS);
     }
     delete theFS;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItokenNum.hh,v 1.2.4.1 2001/06/28 19:10:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UItokenNum.hh,v 1.4 2001/10/16 08:14:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4UItokenNum.hh
 
@@ -51,11 +51,11 @@ enum  tokenNum {
 
 typedef struct yystype {
     tokenNum      type;
-    double   D;
-    int      I;
+    G4double D;
+    G4int    I;
     char     C;
     G4String S;
-    int operator==(const yystype &right) const
+    G4int operator==(const yystype &right) const
     { return (this == &right); }
 } yystype;
  

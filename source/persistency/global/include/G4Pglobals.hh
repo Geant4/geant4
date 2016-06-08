@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pglobals.hh,v 1.2.2.1 2001/06/28 19:11:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Pglobals.hh,v 1.5 2001/07/11 10:02:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-//
-// Wrapper header file to protect globals.hh from ooddlx
-//
+
+// file description:
+//  Wrapper header file to protect globals.hh from ooddlx
+
 // History:
 // 26.10.00 Y.Morita - Created
 
@@ -92,12 +93,6 @@ typedef char*  G4String;
 typedef int    G4int;
 typedef double G4double;
 typedef bool   G4bool;
-template<class T>
-class G4RWTPtrVector {};
-template<class T>
-class G4RWTValOrderedVector {};
-template<class T>
-class G4RWTPtrOrderedVector {};
 
 #endif
 

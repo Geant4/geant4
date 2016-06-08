@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.14.2.1 2001/06/28 19:10:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UnitsTable.cc,v 1.15 2001/07/11 10:00:59 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //

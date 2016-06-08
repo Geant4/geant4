@@ -28,8 +28,8 @@
 // * MODULE:            XrayTelSteppingAction.hh                        *
 // * -------                                                            *
 // *                                                                    *
-// * Version:           0.4                                             *
-// * Date:              06/11/00                                        *
+// * Version:           0.5                                             *
+// * Date:              16/10/01                                        *
 // * Author:            R Nartallo                                      *
 // * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
 // *                                                                    *
@@ -37,6 +37,12 @@
 //
 // CHANGE HISTORY
 // --------------
+//
+// 07.11.2001 M.G. Pia
+// - Modified the analysis management
+//
+// 16.10.2001 R.Nartallo
+// - Clean up code to avoid 'pedantic' and 'ANSI' compiler warnings 
 //
 // 06.11.2000 R.Nartallo
 // - First implementation of X-ray Telescope advanced example.
@@ -48,32 +54,22 @@
 #ifndef XrayTelSteppingAction_h
 #define XrayTelSteppingAction_h 1
 
-class XrayTelAnalysisManager;
-
 #include "G4UserSteppingAction.hh"
-#include "G4ThreeVector.hh"
-#include "g4std/vector"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class G4Step;
 
 class XrayTelSteppingAction : public G4UserSteppingAction
 {
 public:
-  XrayTelSteppingAction(  
-			G4std::vector<G4double*> *enEnergy, 
-			G4std::vector<G4ThreeVector*> *enDirect,
-			G4bool* dEvent,
-			XrayTelAnalysisManager* = 0);
+
+  XrayTelSteppingAction();
+
   virtual ~XrayTelSteppingAction();
 
-  virtual void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction(const G4Step* step);
   
 private:
-  G4bool* drawEvent;
-  G4std::vector<G4double*>* enteringEnergy;
-  G4std::vector<G4ThreeVector*>* enteringDirection;
 
-  XrayTelAnalysisManager* fAnalysisManager;
 };
 
 #endif

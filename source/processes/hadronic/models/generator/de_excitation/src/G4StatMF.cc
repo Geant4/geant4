@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.6.2.1 2001/06/28 19:13:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StatMF.cc,v 1.9 2001/10/05 16:13:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -102,7 +102,6 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
 
     G4int Iterations = 0;
     G4double Temperature = 0.0;
-    G4double EnergyCoulomb = 0.0;
   
     G4bool FirstTime = true;
     G4StatMFChannel * theChannel = 0;

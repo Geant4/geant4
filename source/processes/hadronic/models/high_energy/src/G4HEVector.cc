@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.7.2.1 2001/06/28 19:13:59 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HEVector.cc,v 1.10 2001/10/04 20:00:34 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaMinus.cc,v 1.5.4.2 2001/06/28 20:19:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiSigmaMinus.cc,v 1.8 2001/10/16 08:15:56 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -76,7 +76,7 @@ G4AntiSigmaMinus::G4AntiSigmaMinus(
 
   SetDecayTable(table);
 
-}
+};
 
 // ......................................................................
 // ...                 static member definitions                      ...
@@ -102,6 +102,7 @@ G4AntiSigmaMinus* G4AntiSigmaMinus::AntiSigmaMinusDefinition()
   return &theAntiSigmaMinus;
 }
 
-// initialization for static cut values
-G4double   G4AntiSigmaMinus::theAntiSigmaMinusLengthCut = -1.0;
-G4double*  G4AntiSigmaMinus::theAntiSigmaMinusKineticEnergyCuts = NULL;
+G4AntiSigmaMinus* G4AntiSigmaMinus::AntiSigmaMinus()
+{
+  return &theAntiSigmaMinus;
+}

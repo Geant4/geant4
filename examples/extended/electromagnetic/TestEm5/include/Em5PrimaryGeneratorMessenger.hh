@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PrimaryGeneratorMessenger.hh,v 1.2.4.1 2001/06/28 19:07:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5PrimaryGeneratorMessenger.hh,v 1.4 2001/10/16 11:56:28 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5PrimaryGeneratorMessenger_h
 #define Em5PrimaryGeneratorMessenger_h 1
@@ -38,7 +38,7 @@
 class Em5PrimaryGeneratorAction;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5PrimaryGeneratorMessenger: public G4UImessenger
 {
@@ -52,6 +52,8 @@ class Em5PrimaryGeneratorMessenger: public G4UImessenger
     Em5PrimaryGeneratorAction* Em5Action; 
     G4UIcmdWithoutParameter*   DefaultCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -84,5 +84,22 @@ gmake clean
       "PARA" -axis 1; axis 2,3 for a special case
   Unsupported shapes:    
       "SPHE", "ELTU", "HYPE", "GTRA", "CTUB"
+            
+ the implementation (November 2001)
+----------------------------------------
+- Support for G3 MANY feature:
+
+  MANY positions are resolved in G3toG4MANY function,
+  which has to be processed before G3toG4BuildTree
+  (it is not called by default).
+  In order to resolve MANY user code has to provide
+  additional info using G4gsbool(G4String volName, G4String manyVolName)
+  function) for all overlapping volumes. Daughters of
+  overlapping volumes are then resolved automatically
+  and should not be specified via Gsbool.
+  
+  Limitation: a volume with a MANY position can have only this
+  one position; if more than one position is needed a new volume
+  has to be defined (gsvolu) for each position.
 
 See History file for modification history.

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveHHScatterer.hh,v 1.2.8.2 2001/06/28 20:19:55 gunter Exp $
+// $Id: G4DiffractiveHHScatterer.hh,v 1.4 2001/08/01 17:05:44 hpw Exp $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1

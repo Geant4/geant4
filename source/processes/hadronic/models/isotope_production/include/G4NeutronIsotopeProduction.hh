@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -43,7 +43,7 @@ class G4NeutronIsotopeProduction : public G4VIsotopeProduction
   public:
   
   G4NeutronIsotopeProduction();
-  ~G4NeutronIsotopeProduction();
+  virtual ~G4NeutronIsotopeProduction();
 
   G4IsoResult * GetIsotope(const G4Track & aTrack, const G4Nucleus & aNucleus);
 

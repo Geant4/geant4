@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03EventAction.hh,v 1.4.4.1 2001/06/28 19:07:32 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN03EventAction.hh,v 1.6 2001/10/10 14:58:11 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef ExN03EventAction_h
 #define ExN03EventAction_h 1
@@ -37,7 +37,7 @@
 
 class ExN03EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN03EventAction : public G4UserEventAction
 {
@@ -58,6 +58,8 @@ class ExN03EventAction : public G4UserEventAction
     G4int                       printModulo;                         
     ExN03EventActionMessenger*  eventMessenger;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

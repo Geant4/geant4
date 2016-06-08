@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHit.hh,v 1.4.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VHit.hh,v 1.6 2001/07/13 15:00:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VHit_h
 #define G4VHit_h 1
+
+#include "globals.hh"
 
 // class description:
 //
@@ -43,7 +45,7 @@ class G4VHit
       G4VHit();
       virtual ~G4VHit();
 
-      int operator==(const G4VHit &right) const;
+      G4int operator==(const G4VHit &right) const;
 
       virtual void Draw();
       virtual void Print();

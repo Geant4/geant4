@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.10.2.1 2001/06/28 19:08:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3Division.cc,v 1.14 2001/11/21 14:25:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
@@ -35,7 +35,9 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-
+#ifndef G3G4_NO_REFLECTION
+#include "G4ReflectionFactory.hh"
+#endif
 
 G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
                                G4double Rpar[], G4int npar);
@@ -118,7 +120,7 @@ void G3Division::UpdateVTE()
   }  
 }
 
-G4VPhysicalVolume* G3Division::CreatePVReplica()
+void G3Division::CreatePVReplica()
 {
   G4String name = fVTE->GetName();
   G4LogicalVolume* lv =  fVTE->GetLV();
@@ -137,16 +139,20 @@ G4VPhysicalVolume* G3Division::CreatePVReplica()
        if (position.y()!=0.) 
          position.setX(position.y()*((G4Para*)lv->GetSolid())->GetTanAlpha());
 
+       #ifndef G3G4_NO_REFLECTION
+       G4ReflectionFactory::Instance()
+         ->Place(G4Translate3D(position), name, lv, mlv, 0, i);
+
+       #else  
        new G4PVPlacement(0, position, lv, name, mlv, 0, i);
+
+       #endif
     }
     
-    // no G4PVReplica was created - return 0
-    return 0;   
+    // G4PVReplica cannot be created
+    return;   
   }     
   
-  G4PVReplica* pvol 
-    = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
-
   #ifdef G3G4DEBUG
     G4cout << "Create G4PVReplica name " << name << " logical volume name " 
 	   << lv->GetName() << " mother logical volme name "
@@ -155,7 +161,14 @@ G4VPhysicalVolume* G3Division::CreatePVReplica()
 	   << fOffset << G4endl;
   #endif
 
-  return pvol;
+  #ifndef G3G4_NO_REFLECTION
+  G4ReflectionFactory::Instance()
+    ->Replicate(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
+
+  #else    
+  new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
+
+  #endif
 }
 
 // private methods
@@ -306,7 +319,7 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "PGON" ) {
         G4int i;
-        G4int nz = int(Rpar[3]);
+        G4int nz = G4int(Rpar[3]);
 
         G4double pPhi1 = Rpar[0]*deg;
         G4double dPhi  = Rpar[1]*deg;
@@ -322,9 +335,9 @@ void G3Division::SetRangeAndAxis()
 
         for(i=0; i<nz; i++) 
         {
-            int i4=3*i+4;
-            int i5=i4+1;
-            int i6=i4+2;
+            G4int i4=3*i+4;
+            G4int i5=i4+1;
+            G4int i6=i4+2;
             
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;
@@ -355,7 +368,7 @@ void G3Division::SetRangeAndAxis()
         G4int i;
         G4double pPhi1 = Rpar[0]*deg;
         G4double dPhi  = Rpar[1]*deg;    
-        G4int nz = int(Rpar[2]);
+        G4int nz = G4int(Rpar[2]);
     
         G4double *DzArray = new G4double[nz];
         G4double *Rmax    = new G4double[nz];
@@ -368,9 +381,9 @@ void G3Division::SetRangeAndAxis()
         rangelo[2] =  kInfinity ;
         
         for(i=0; i<nz; i++){
-            int i4=3*i+3;
-            int i5=i4+1;
-            int i6=i4+2;
+            G4int i4=3*i+3;
+            G4int i5=i4+1;
+            G4int i6=i4+2;
             
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.5.2.2 2001/06/28 20:19:46 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SynchrotronRadiation.hh,v 1.6 2001/07/11 10:03:28 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicsConstructor.hh,v 1.1.4.1 2001/06/28 19:15:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPhysicsConstructor.hh,v 1.3 2001/11/06 06:08:04 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -82,8 +82,8 @@ class G4VPhysicsConstructor
    // verbose level is set equal to physics list when registered 
 
  protected:
-   G4String namePhysics;
    G4int verboseLevel;
+   G4String namePhysics;
  
  protected:
   // the particle table has the complete List of existing particle types

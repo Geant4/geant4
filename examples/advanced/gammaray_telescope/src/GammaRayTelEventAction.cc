@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.5.2.2 2001/06/28 20:18:41 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelEventAction.cc,v 1.13 2001/12/04 13:23:52 flongo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -31,6 +31,10 @@
 //      ------------ GammaRayTelEventAction  ------
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
 //
+// - inclusion of Digits by F.Longo & R.Giannitrapani (24 oct 2001)
+// 
+// - Modification of analysis management by G.Santin (18 Nov 2001)
+// 
 // ************************************************************
 
 #include "GammaRayTelEventAction.hh"
@@ -38,10 +42,8 @@
 #include "GammaRayTelAnticoincidenceHit.hh"
 #include "GammaRayTelCalorimeterHit.hh"
 
-#include "g4rw/tvordvec.h"
-
 #ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
+#include "GammaRayTelAnalysis.hh"
 #endif
 
 #include "G4Event.hh"
@@ -57,25 +59,25 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
+#include "GammaRayTelDigi.hh"
+#include "GammaRayTelDigitizer.hh"
+#include "G4DigiManager.hh"
+
 // This file is a global variable in which we store energy deposition per hit
 // and other relevant information
+
 extern G4std::ofstream outFile;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4ANALYSIS_USE
-GammaRayTelEventAction::GammaRayTelEventAction(GammaRayTelAnalysisManager* aMgr)
-  :drawFlag("all"),trackerCollID(-1),  calorimeterCollID(-1),                
-  anticoincidenceCollID(-1), analysisManager(aMgr)
-{
-}
-#else
 GammaRayTelEventAction::GammaRayTelEventAction()
-  :drawFlag("all"), trackerCollID(-1),calorimeterCollID(-1),                
-  anticoincidenceCollID(-1)
-{
+  :trackerCollID(-1),calorimeterCollID(-1),                
+  anticoincidenceCollID(-1), drawFlag("all")
+{ 
+  G4DigiManager * fDM = G4DigiManager::GetDMpointer();
+  GammaRayTelDigitizer * myDM = new GammaRayTelDigitizer( "TrackerDigitizer" );
+  fDM->AddNewModule(myDM);
 }
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -90,22 +92,19 @@ void GammaRayTelEventAction::BeginOfEventAction(const G4Event* evt)
 
   G4int evtNb = evt->GetEventID();
   G4cout << "Event: " << evtNb << G4endl;
-
   G4SDManager * SDman = G4SDManager::GetSDMpointer();  
-  if (trackerCollID==-1)
-    {
-      trackerCollID = SDman->GetCollectionID("TrackerCollection");
-    }
-  if(anticoincidenceCollID==-1)
-    {
-      anticoincidenceCollID =
-	SDman->GetCollectionID("AnticoincidenceCollection");
-    }
-  if(calorimeterCollID==-1)
-    {
-      calorimeterCollID =
-	SDman->GetCollectionID("CalorimeterCollection");
-    }
+
+  if (trackerCollID==-1) {
+    trackerCollID = SDman->GetCollectionID("TrackerCollection");
+  }
+  if(anticoincidenceCollID==-1) {
+    anticoincidenceCollID =
+      SDman->GetCollectionID("AnticoincidenceCollection");
+  }
+  if(calorimeterCollID==-1) {
+    calorimeterCollID =
+      SDman->GetCollectionID("CalorimeterCollection");
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,6 +124,8 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
   GammaRayTelAnticoincidenceHitsCollection* AHC = 0;
 
 
+  G4DigiManager * fDM = G4DigiManager::GetDMpointer();
+
   if (HCE)
     {
       THC = (GammaRayTelTrackerHitsCollection*)(HCE->GetHC(trackerCollID));
@@ -142,8 +143,8 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
       G4int NStrip, NPlane, IsX;
       
       // This is a cycle on all the tracker hits of this event
-
-      for (int i=0;i<n_hit;i++)
+      
+      for (int i=0;i<n_hit;i++) 
 	{
 	  // Here we put the hit data in a an ASCII file for 
 	  // later analysis 
@@ -158,44 +159,83 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	    (*THC)[i]->GetPos().x()/mm <<" "<<
 	    (*THC)[i]->GetPos().y()/mm <<" "<<
 	    (*THC)[i]->GetPos().z()/mm <<" "<<
-	    G4endl;
+	    G4endl;	  
 	  
 #ifdef G4ANALYSIS_USE
-	  // Here we fill the histograms of the Analysis manager
-	  if(IsX)
-	    {
-	      if (analysisManager->GetHisto2DMode()=="position")
-		analysisManager->InsertPositionXZ((*CHC)[i]->GetPos().x()/mm,(*CHC)[i]->GetPos().z()/mm);
-	      else
-		analysisManager->InsertPositionXZ(NStrip, NPlane);  	      
-	      if (NPlane == 0) analysisManager->InsertEnergy(ESil/keV);
-	      analysisManager->InsertHits(NPlane);
-	    }
-	  else
-	    if (analysisManager->GetHisto2DMode()=="position")
-	      analysisManager->InsertPositionYZ((*CHC)[i]->GetPos().y()/mm,(*CHC)[i]->GetPos().z()/mm);  
-	    else 
-	      analysisManager->InsertPositionYZ(NStrip, NPlane);  	      
-#endif
-	}
 
+	  // Here we fill the histograms of the Analysis manager
+	  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
+
+	  if(IsX) 
+	    {
+	      if (analysis->GetHisto2DMode()=="position")
+		analysis->InsertPositionXZ((*THC)[i]->GetPos().x()/mm,(*THC)[i]->GetPos().z()/mm);
+	      else
+		analysis->InsertPositionXZ(NStrip, NPlane);  	      
+	      if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
+	      analysis->InsertHits(NPlane);
+	    } 
+	  else 
+	    {
+	      if (analysis->GetHisto2DMode()=="position")
+		analysis->InsertPositionYZ((*THC)[i]->GetPos().y()/mm,(*THC)[i]->GetPos().z()/mm);  
+	      else 
+		analysis->InsertPositionYZ(NStrip, NPlane);  	      
+	      if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
+	      analysis->InsertHits(NPlane);
+	    }
+	  
+#ifdef G4ANALYSIS_USE_NTUPLE
+	  
+	  analysis->setNtuple( ESil/keV, NPlane, (*THC)[i]->GetPos().x()/mm,
+			       (*THC)[i]->GetPos().y()/mm,
+			       (*THC)[i]->GetPos().z()/mm);
+#endif
+	  
+#endif
+	  
+	}
       // Here we call the analysis manager function for visualization
 #ifdef G4ANALYSIS_USE
-      analysisManager->EndOfEvent(n_hit);
+      GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
+      analysis->EndOfEvent(n_hit);
 #endif
     }
   
+  GammaRayTelDigitizer * myDM = 
+    (GammaRayTelDigitizer*)fDM->FindDigitizerModule( "TrackerDigitizer" );
+  myDM->Digitize();
   
+  G4int myDigiCollID = fDM->GetDigiCollectionID("DigitsCollection");
+
+  // G4cout << "digi collecion" << myDigiCollID << G4endl;
   
-  if(G4VVisManager::GetConcreteInstance())
-    {
-      for(G4int i=0; i<n_trajectories; i++) 
-	{ G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-	if (drawFlag == "all") trj->DrawTrajectory(50);
-	else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-	  trj->DrawTrajectory(50); 
-	}
+  GammaRayTelDigitsCollection * DC = (GammaRayTelDigitsCollection*)fDM->GetDigiCollection( myDigiCollID );
+  
+  if(DC) {
+    //    G4cout << "Total Digits " << DC->entries() << G4endl;
+    G4int n_digi =  DC->entries();
+    G4int NStrip, NPlane, IsX;
+    for (G4int i=0;i<n_digi;i++) {
+      // Here we put the digi data in a an ASCII file for 
+      // later analysis
+      NStrip = (*DC)[i]->GetStripNumber();
+      NPlane = (*DC)[i]->GetPlaneNumber();
+      IsX = (*DC)[i]->GetPlaneType();
+      
+      outFile << G4std::setw(7) << event_id << " " << NStrip << 
+	" " << NPlane << " " << IsX << " " << G4endl;	
     }
+  }
+  
+  if(G4VVisManager::GetConcreteInstance()) {
+    for(G4int i=0; i<n_trajectories; i++) { 
+      G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
+      if (drawFlag == "all") trj->DrawTrajectory(50);
+      else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+	trj->DrawTrajectory(50); 
+    }
+  }
 }
 
 

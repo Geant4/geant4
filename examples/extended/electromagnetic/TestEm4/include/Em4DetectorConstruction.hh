@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4DetectorConstruction.hh,v 1.2.4.1 2001/06/28 19:07:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em4DetectorConstruction.hh,v 1.4 2001/10/17 14:04:13 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em4DetectorConstruction_h
 #define Em4DetectorConstruction_h 1
@@ -35,8 +35,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em4DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -47,6 +46,8 @@ class Em4DetectorConstruction : public G4VUserDetectorConstruction
      
     G4VPhysicalVolume* Construct();
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PersEx01PhysicsList.cc,v 1.3.4.1 2001/06/28 19:07:22 gunter Exp $
+// $Id: PersEx01PhysicsList.cc,v 1.4 2001/07/11 09:58:13 gunter Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //

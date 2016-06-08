@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCofThisEvent.cc,v 1.4.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DCofThisEvent.cc,v 1.6 2001/07/13 15:00:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4DCofThisEvent.hh"
@@ -37,16 +37,16 @@ G4DCofThisEvent::G4DCofThisEvent()
 G4DCofThisEvent::G4DCofThisEvent(G4int cap)
 {
   DC = new G4std::vector<G4VDigiCollection*>;
-  for(int i=0;i<cap;i++)
+  for(G4int i=0;i<cap;i++)
   {
-    DC->push_back((G4VDigiCollection*)NULL);
+    DC->push_back((G4VDigiCollection*)0);
   }
 }
 
 G4DCofThisEvent::~G4DCofThisEvent()
 {
   //DC->clearAndDestroy();
-  for(G4int i=0;i<DC->size();i++)
+  for(size_t i=0;i<DC->size();i++)
   { delete (*DC)[i]; }
   DC->clear();
   delete DC;
@@ -54,7 +54,7 @@ G4DCofThisEvent::~G4DCofThisEvent()
 
 void G4DCofThisEvent::AddDigiCollection(G4int DCID,G4VDigiCollection * aDC)
 {
-  if(DCID>=0 && DCID<DC->size())
+  if(DCID>=0 && DCID<G4int(DC->size()))
   { (*DC)[DCID] = aDC; }
 }
 

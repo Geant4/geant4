@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PhysicsListMessenger.hh,v 1.2.4.1 2001/06/28 19:06:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em1PhysicsListMessenger.hh,v 1.4 2001/10/26 12:51:23 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em1PhysicsListMessenger_h
 #define Em1PhysicsListMessenger_h 1
@@ -38,7 +38,7 @@
 class Em1PhysicsList;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em1PhysicsListMessenger: public G4UImessenger
 {
@@ -56,5 +56,7 @@ class Em1PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

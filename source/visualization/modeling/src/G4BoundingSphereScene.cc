@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.cc,v 1.4.4.1 2001/06/28 19:16:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BoundingSphereScene.cc,v 1.8 2001/07/25 21:10:22 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  7th June 1997
@@ -31,9 +31,11 @@
 #include "G4BoundingSphereScene.hh"
 
 #include "G4VSolid.hh"
+#include "G4PhysicalVolumeModel.hh"
 #include "G4Vector3D.hh"
 
-G4BoundingSphereScene::G4BoundingSphereScene ():
+G4BoundingSphereScene::G4BoundingSphereScene (G4VModel* pModel):
+  fpModel (pModel),
   fRadius (-1.),
   fpObjectTransformation (0)
 {}
@@ -51,17 +53,18 @@ G4VisExtent G4BoundingSphereScene::GetBoundingSphereExtent () {
 }
 
 void G4BoundingSphereScene::Accrue (const G4VSolid& solid) {
-  const G4VisExtent& thisExtent = solid.GetExtent ();
-  G4Point3D thisCentre = thisExtent.GetExtentCentre ();
+
+  const G4VisExtent& newExtent = solid.GetExtent ();
+  G4Point3D newCentre = newExtent.GetExtentCentre ();
   if (fpObjectTransformation) {
-    thisCentre.transform (*fpObjectTransformation);
+    newCentre.transform (*fpObjectTransformation);
   }
-  const G4double thisRadius = thisExtent.GetExtentRadius ();
-  AccrueBoundingSphere (thisCentre, thisRadius);
-  /***********************************************
-    G4cout << "G4BoundingSphereScene::Accrue: centre: " << fCentre
-           << ", radius: " << fRadius << G4endl;
-  ***********************************************/
+  const G4double newRadius = newExtent.GetExtentRadius ();
+  AccrueBoundingSphere (newCentre, newRadius);
+
+  // Curtail descent - can assume daughters are contained within mother...
+  G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
+  if (pPVM) pPVM->CurtailDescent();
 }
 
 void G4BoundingSphereScene::ResetBoundingSphere () {
@@ -71,28 +74,43 @@ void G4BoundingSphereScene::ResetBoundingSphere () {
 }
 
 void G4BoundingSphereScene::AccrueBoundingSphere
-(const G4Point3D& thisCentre,
- G4double thisRadius) {
+(const G4Point3D& newCentre,
+ G4double newRadius) {
 
   if (fRadius < 0 ) {  // First time.
-    fCentre = thisCentre;
-    fRadius = thisRadius;
+    fCentre = newCentre;
+    fRadius = newRadius;
   }
   else {
-    G4Vector3D join = thisCentre - fCentre;
+    G4Vector3D join = newCentre - fCentre;
     if (join == G4Vector3D (0., 0., 0.)) {             // Centres coincide.
-      if (fRadius < thisRadius) fRadius = thisRadius;
+      if (fRadius < newRadius) fRadius = newRadius;
     }
-    else if (join.mag () + thisRadius <= fRadius) {  // Inside accrued sphere.
+    else if (join.mag () + newRadius <= fRadius) {  // Inside accrued sphere.
       // Do nothing.
     }
     else {
       G4Vector3D unitJoin = join.unit ();
-      G4Point3D extremity1 = fCentre - fRadius * unitJoin;
-      G4Point3D extremity2 = thisCentre + thisRadius * unitJoin;
+      G4Point3D oldExtremity1 = fCentre - fRadius * unitJoin;
+      G4Point3D newExtremity1 = newCentre - newRadius * unitJoin;
+      G4Point3D oldExtremity2 = fCentre + fRadius * unitJoin;
+      G4Point3D newExtremity2 = newCentre + newRadius * unitJoin;
+      G4Point3D extremity1;
+      if (oldExtremity1 * unitJoin < newExtremity1 * unitJoin) {
+	extremity1 = oldExtremity1;
+      }
+      else {
+	extremity1 = newExtremity1;
+      }
+      G4Point3D extremity2;
+      if (oldExtremity2 * unitJoin > newExtremity2 * unitJoin) {
+	extremity2 = oldExtremity2;
+      }
+      else {
+	extremity2 = newExtremity2;
+      }
       fCentre = 0.5 * (extremity2 + extremity1);
       fRadius = 0.5 * (extremity2 - extremity1).mag ();
     }
   }
 }
-

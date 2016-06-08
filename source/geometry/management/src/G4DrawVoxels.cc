@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DrawVoxels.cc,v 1.13.2.1 2001/06/28 19:08:29 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DrawVoxels.cc,v 1.14 2001/07/11 09:59:20 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4DrawVoxels

@@ -22,6 +22,7 @@
 #/payload/setNbOfTKRLayers 15
 #/payload/update
 
+
 #
 # Create empty scene ("world" is default)
 /vis/scene/create
@@ -31,7 +32,7 @@
 /vis/scene/add/volume
 
 #
-# Create a scene handler for a specific graphics system
+# Create a scene handler for a VRML file
 /vis/sceneHandler/create DAWNFILE
 
 # Create a viewer
@@ -39,6 +40,17 @@
 
 # Positioning of the camera
 /vis/camera/viewpoint 30 30 
+
+
+# Create a viewer
+/vis/viewer/create
+
+# Positioning of the camera
+/vis/camera/viewpoint 90 0 
+
+# Draw scene
+/vis/scene/notifyHandlers
+
 
 # for drawing the tracks
 # if too many tracks cause core dump => storeTrajectory 0
@@ -48,9 +60,9 @@
 # Flush visualization
 /vis/viewer/update
 
-#
-# Draw scene
-/vis/scene/notifyHandlers
+
+
+
 
 
 

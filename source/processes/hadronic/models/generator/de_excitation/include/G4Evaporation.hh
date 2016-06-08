@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.5.2.1 2001/06/28 19:13:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Evaporation.hh,v 1.8 2001/10/05 16:13:41 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -46,8 +46,8 @@ class G4Evaporation : public G4VEvaporation
 public:
   G4Evaporation();
   G4Evaporation(G4std::vector<G4VEvaporationChannel*> * aChannelsVector) :
-    theChannels(aChannelsVector),
-    myOwnChannelsVector(false)
+    myOwnChannelsVector(false),
+    theChannels(aChannelsVector)
   {};
 	 
   ~G4Evaporation();

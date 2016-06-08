@@ -38,7 +38,7 @@
     public:
 
       G4LeptonHadronInteractionModel();
-      ~G4LeptonHadronInteractionModel();
+      virtual ~G4LeptonHadronInteractionModel();
 
       virtual void makePhysicsVector() = 0;
       virtual G4VParticleChange* applyInteractionModel

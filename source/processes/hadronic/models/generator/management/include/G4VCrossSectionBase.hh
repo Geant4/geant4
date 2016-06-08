@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -35,7 +35,7 @@ class G4VCrossSectionBase
 public:
    //Constructors
    G4VCrossSectionBase();
-  ~G4VCrossSectionBase();
+  virtual ~G4VCrossSectionBase();
 
 public:   
    virtual G4double GetTotCrossSection(G4int ProjectileEncoding, G4int TargetEncoding, G4double Energy)=0;

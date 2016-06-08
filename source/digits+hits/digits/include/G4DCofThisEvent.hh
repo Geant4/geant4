@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCofThisEvent.hh,v 1.5.2.1 2001/06/28 19:07:50 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DCofThisEvent.hh,v 1.7 2001/07/13 15:00:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4DCofThisEvent_h
@@ -70,7 +70,7 @@ class G4DCofThisEvent
       inline G4int GetNumberOfCollections() const
       {
         G4int n = 0;
-        for(int i=0;i<DC->size();i++)
+        for(size_t i=0;i<DC->size();i++)
         {
           if((*DC)[i]) n++;
         }

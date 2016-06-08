@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05EnergySpot.hh,v 1.4.2.1 2001/06/28 19:07:40 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05EnergySpot.hh,v 1.6 2001/11/05 08:24:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef ExN05EnergySpot_h
 #define ExN05EnergySpot_h
@@ -49,7 +49,7 @@ public:
   }
 
   // Draw:
-  void Draw(G4Colour* color = NULL);
+  void Draw(G4Colour* color = 0);
   // Print:
   void Print();
 

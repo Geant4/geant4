@@ -20,8 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// Persistent class describing solid placements for boolean operations
 //
+// $Id: G4PDisplacedSolid.ddl,v 1.5 2001/07/11 10:02:21 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+// Persistent class describing solid placements for boolean operations
+
 // History:
 // 10.11.99 Y.Morita, Initial creation
 
@@ -37,19 +42,22 @@ class G4VSolid;
 class G4PDisplacedSolid
  : public G4PVSolid
 {
-public:
+public: // With description
         G4PDisplacedSolid ( HepRef(G4PVSolid) persCostituentSolid,
                             HepRef(G4PAffineTransform) pDirectTransform );
         virtual ~G4PDisplacedSolid();
+        // Constructor and destructor.
 
         G4VSolid* MakeTransientObject() const;
-
         G4VSolid* MakeTransientDisplacedSolid(G4VSolid* aSolid) const;
+        // Creates a transient G4VSolid object.
 
         virtual G4GeometryType  GetEntityType() const
         { return G4String("G4DisplacedSolid"); }
+        // Returns the G4GeometryType of the solid.
 
         HepRef(G4PVSolid) GetConstituentMovedSolid();
+        // Returns the pointer of persistent GetConstituentMovedSolid object.
 
 protected:
         d_Ref<G4PVSolid> fPtrSolid;

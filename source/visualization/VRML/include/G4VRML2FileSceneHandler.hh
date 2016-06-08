@@ -21,13 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.5.4.1 2001/06/28 19:16:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.9 2001/09/18 07:53:08 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4VRML2FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
-
-#ifdef  G4VIS_BUILD_VRMLFILE_DRIVER
 
 #ifndef G4VRML2FILE_SCENE_HANDLER_HH
 #define G4VRML2FILE_SCENE_HANDLER_HH
@@ -76,8 +74,10 @@ public:
 	void AddPrimitive(const G4Square&);
 	void AddPrimitive (const G4Polymarker& polymarker)
 		{ G4VSceneHandler::AddPrimitive (polymarker); }
+        void AddPrimitive (const G4Scale& scale) 
+                { G4VSceneHandler::AddPrimitive (scale); }
 
-	void ClearStore();
+	void ClearTransientStore();  // Used for triggering detector re-drawing.
 
 	void BeginModeling();
 	void EndModeling();
@@ -135,4 +135,3 @@ public:
 };
 
 #endif //G4VRML2File_SCENE_HH
-#endif //G4VIS_BUILD_VRMLFILE_DRIVER

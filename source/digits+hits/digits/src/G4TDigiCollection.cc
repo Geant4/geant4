@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.cc,v 1.2.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TDigiCollection.cc,v 1.4 2001/07/13 15:00:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4TDigiCollection.hh"
@@ -39,6 +39,6 @@ G4DigiCollection::G4DigiCollection(G4String detName,G4String colNam)
 G4DigiCollection::~G4DigiCollection()
 {;}
 
-int G4DigiCollection::operator==(const G4DigiCollection &right) const
+G4int G4DigiCollection::operator==(const G4DigiCollection &right) const
 { return (collectionName==right.collectionName); }
 

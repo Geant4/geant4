@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Randomize.hh,v 1.4.4.1 2001/06/28 19:09:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Randomize.hh,v 1.5 2001/07/11 10:00:43 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef randomize_h
 #define randomize_h 1

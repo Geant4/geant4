@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.cc,v 1.6.2.1 2001/06/28 19:13:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4EvaporationChannel.cc,v 1.9 2001/10/05 16:13:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -39,8 +39,8 @@ G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ,
     Z(theZ),
     theEvaporationProbabilityPtr(aEmissionStrategy),
     theCoulombBarrierPtr(aCoulombBarrier),
-    MaximalKineticEnergy(-1000.0),
-    EmissionProbability(0.0)
+    EmissionProbability(0.0),
+    MaximalKineticEnergy(-1000.0)
 { 
     theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
     MyOwnLevelDensity = true;
@@ -49,13 +49,13 @@ G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ,
 G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String & aName,
 					   G4VEmissionProbability * aEmissionStrategy,
 					   G4VCoulombBarrier * aCoulombBarrier):
+    G4VEvaporationChannel(aName),
     A(theA),
     Z(theZ),
     theEvaporationProbabilityPtr(aEmissionStrategy),
     theCoulombBarrierPtr(aCoulombBarrier),
-    MaximalKineticEnergy(-1000.0),
     EmissionProbability(0.0),
-    G4VEvaporationChannel(aName)
+    MaximalKineticEnergy(-1000.0)
 { 
     theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
     MyOwnLevelDensity = true;
@@ -64,13 +64,13 @@ G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ, c
 G4EvaporationChannel::G4EvaporationChannel(const G4int theA, const G4int theZ, const G4String * aName,
 					   G4VEmissionProbability * aEmissionStrategy,
 					   G4VCoulombBarrier * aCoulombBarrier):
+    G4VEvaporationChannel(aName),
     A(theA),
     Z(theZ),
     theEvaporationProbabilityPtr(aEmissionStrategy),
     theCoulombBarrierPtr(aCoulombBarrier),
-    MaximalKineticEnergy(-1000.0),
     EmissionProbability(0.0),
-    G4VEvaporationChannel(aName)
+    MaximalKineticEnergy(-1000.0)
 { 
     theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
     MyOwnLevelDensity = true;

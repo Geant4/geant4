@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.8.2.1 2001/06/28 19:15:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.11 2001/08/24 20:41:31 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  5th April 2001
@@ -70,18 +70,17 @@ void G4ASCIITreeSceneHandler::EndModeling () {
   G4VTreeSceneHandler::EndModeling ();  // To re-use "culling off" code.
 }
 
-void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
+void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
 
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();
   const G4int detail = verbosity % 10;
 
   if (verbosity < 10 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
-    // Ignore if an already treated replica.  (Assumes that the model
-    // which has invoked this function is a G4PhysicalVolumeModel - we
-    // check this by testing fpCurrentPV.)
-    if (fpCurrentPV) {
-      ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+    // Ignore if an already treated replica.
+    G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
+    if (pPVM) {
+      pPVM->CurtailDescent();
       return;
     }
   }

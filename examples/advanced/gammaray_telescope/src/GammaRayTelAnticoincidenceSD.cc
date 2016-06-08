@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceSD.cc,v 1.1.2.2 2001/06/28 20:18:41 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelAnticoincidenceSD.cc,v 1.4 2001/11/29 11:19:18 griccard Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -32,7 +32,7 @@
 //           by  R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
 //
 // ************************************************************
-
+#include "G4RunManager.hh"
 #include "GammaRayTelAnticoincidenceSD.hh"
 #include "GammaRayTelAnticoincidenceHit.hh"
 #include "GammaRayTelDetectorConstruction.hh"
@@ -46,10 +46,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnticoincidenceSD::GammaRayTelAnticoincidenceSD(G4String name,
-                                   GammaRayTelDetectorConstruction* det)
-:G4VSensitiveDetector(name),Detector(det)
+GammaRayTelAnticoincidenceSD::GammaRayTelAnticoincidenceSD(G4String name)
+:G4VSensitiveDetector(name)
 {
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  Detector =
+    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
+  
   NbOfACDLateralTiles  =  Detector->GetNbOfACDLateralTiles();
   NbOfACDTopTiles  =  Detector->GetNbOfACDTopTiles(); 
 
@@ -105,7 +108,7 @@ G4bool GammaRayTelAnticoincidenceSD::ProcessHits(G4Step* aStep,G4TouchableHistor
   G4int ACDTileNumber=acd_tile->GetCopyNo();
   G4String ACDTileName = acd_tile->GetName();
   
-  G4cout << ACDTileName << " " << edep/keV << G4endl;
+  //  G4cout << ACDTileName << " " << edep/keV << G4endl;
 
   if (ACDTileName == "ACT" )
     // The hit is on an top ACD tile (ACDType 0)

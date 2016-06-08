@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.3.4.1 2001/06/28 19:15:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.6 2001/08/14 18:03:16 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -100,18 +100,29 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives () {
 }
 
 void G4OpenGLImmediateSceneHandler::BeginModeling () {
-
+  G4VSceneHandler::BeginModeling();
   if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = true;
   }
-  G4VSceneHandler::BeginModeling();
 }
 
 void G4OpenGLImmediateSceneHandler::EndModeling () {
-  G4VSceneHandler::EndModeling ();
   if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = true;
     //    glDisable (GL_POLYGON_OFFSET_FILL);
+  }
+  G4VSceneHandler::EndModeling ();
+}
+
+void G4OpenGLImmediateSceneHandler::ClearTransientStore () {
+
+  G4VSceneHandler::ClearTransientStore ();
+
+  // For immediate mode, clear screen and re-draw detector.
+  if (fpViewer) {
+    fpViewer -> SetView ();
+    fpViewer -> ClearView ();
+    fpViewer -> DrawView ();
   }
 }
 
@@ -124,4 +135,3 @@ G4int G4OpenGLImmediateSceneHandler::fSceneIdCount = 0;
 G4int G4OpenGLImmediateSceneHandler::fSceneCount = 0;
 
 #endif
-

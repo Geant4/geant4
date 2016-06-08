@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_EqRhs.hh,v 1.5.4.1 2001/06/28 19:08:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Mag_EqRhs.hh,v 1.6 2001/07/11 09:59:09 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // class G4Mag_EqRhs

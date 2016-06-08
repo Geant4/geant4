@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedPolyhedron.cc,v 1.2.4.1 2001/06/28 19:10:11 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PlacedPolyhedron.cc,v 1.3 2001/07/11 10:01:08 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 #include "G4PlacedPolyhedron.hh"
 

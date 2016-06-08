@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPhysicalVolume.ddl,v 1.5.4.1 2001/06/28 19:11:28 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// 
-// class G4PVPhysicalVolume
+// $Id: G4PVPhysicalVolume.ddl,v 1.7 2001/07/11 10:02:19 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4VPhysicalVolume.
 
 #ifndef G4PVPHYSICALVOLUME_DDL
 #define G4PVPHYSICALVOLUME_DDL 1
@@ -52,38 +52,43 @@ class G4PLogicalVolume;
 
 class G4PVPhysicalVolume: public HepPersObj
 {
-public:
+public: // With description
     G4PVPhysicalVolume();
-
     G4PVPhysicalVolume( const G4VPhysicalVolume *PhysVol,
                         const HepRef(G4PLogicalVolume) persLogVol);
-
-// Destructor
     ~G4PVPhysicalVolume();
-//
+    // Constructor and Destructor
+
     void SetMother(const HepRef(G4PVPhysicalVolume) persMother);
+    // Set the persistent mother volume.
 
     G4VPhysicalVolume* MakeTransientObject(
                              G4LogicalVolume* aLogical,
                              G4VPhysicalVolume* aMother );
+    // Creates a transient G4VPhysicalVolume object.
 
-// Access functions
     G4PString GetName();
     void SetName(const G4PString aName);
+    // Get and set the name of the volume.
+
     G4RotationMatrix* GetRotation();
-    G4ThreeVector&  GetTranslation();
     void SetRotation(const G4RotationMatrix* aRot);
+    // Get and set the rotation matrix. 
+
+    G4ThreeVector&  GetTranslation();
     void SetTranslation(G4ThreeVector atrans);
+    // Get and set the translation vector.
 
     HepRef(G4PLogicalVolume) GetLogicalVolume();
+    // Returns the pointer to the persistent logical volume.
 
-// Define equality by equal addresses only.
     G4bool operator == (const G4PVPhysicalVolume& p) const;
+    // Define equality by equal addresses only.
 
-// Functions required of subclasses
     virtual G4bool IsMany() const = 0;
     virtual G4int GetCopyNo() const = 0;
     virtual void  SetCopyNo(G4int CopyNo) = 0;
+    // Functions required of subclasses
 
 protected:
     d_Varray<d_Double> frot;

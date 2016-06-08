@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.hh,v 1.3.4.1 2001/06/28 19:08:24 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GeometryManager.hh,v 1.5 2001/10/22 16:08:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // class G4GeometryManager
 //
@@ -38,18 +38,20 @@
 //   static G4GeometryManager* fgInstance
 //     - Ptr to the unique instance of class
 
-// History:
-// 26.07.95 P.Kent Initial version, incuding optimisation Build
+// Author:
+// 26.07.95 P.Kent Initial version, including optimisation Build
 
 #ifndef G4GEOMETRYMANAGER_HH
 #define G4GEOMETRYMANAGER_HH
 
+#include "g4std/vector"
 #include "globals.hh"
 
 // Needed for building optimisations
 #include "geomdefs.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
+#include "G4SmartVoxelStat.hh"
 #include "G4SmartVoxelHeader.hh"
 #ifdef  G4GEOMETRY_VOXELDEBUG
 #include "G4ios.hh"
@@ -59,7 +61,7 @@ class G4GeometryManager
 {
   public: // with description
   
-    G4bool CloseGeometry(G4bool pOptimise=true);
+    G4bool CloseGeometry(G4bool pOptimise=true, G4bool verbose=false);
       // Close (`lock') the geometry: perform sanity and `completion' checks
       // and optionally [default=yes] build optimisation information.
     
@@ -76,9 +78,10 @@ class G4GeometryManager
 
   private:
 
-    void BuildOptimisations(const G4bool allOpt);
+    void BuildOptimisations(G4bool allOpt, G4bool verbose=false);
     void DeleteOptimisations();
-
+    static void ReportVoxelStats( G4std::vector<G4SmartVoxelStat> & stats,
+                                  G4double totalCpuTime );
     static G4GeometryManager* fgInstance;
     G4bool fIsClosed;
 };

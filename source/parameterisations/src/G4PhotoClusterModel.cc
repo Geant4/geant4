@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoClusterModel.cc,v 1.1.4.1 2001/06/28 19:10:34 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PhotoClusterModel.cc,v 1.3 2001/09/18 09:30:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4Timer.hh"
@@ -137,8 +137,8 @@ void G4PhotoClusterModel::DoIt( const G4FastTrack& fastTrack ,
     //                  stepSum*direction ;  
   
     clusterPosition = globalStartPosition  + step*globalDirection ;   
-    fClusterPositionVector.insert(clusterPosition) ;      
-    fClusterEnergyVector.insert(energy) ;
+    fClusterPositionVector.push_back(clusterPosition) ;      
+    fClusterEnergyVector.push_back(energy) ;
 
     fastStep.KillPrimaryTrack();
     fastStep.SetPrimaryTrackPathLength(step);

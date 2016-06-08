@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandStatus.hh,v 1.2.4.1 2001/06/28 19:10:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIcommandStatus.hh,v 1.4 2001/10/04 23:15:27 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4UIcommandStatus_h
@@ -35,7 +35,8 @@ enum G4UIcommandStatus
   fIllegalApplicationState  = 200,
   fParameterOutOfRange      = 300,
   fParameterUnreadable      = 400,
-  fParameterOutOfCandidates = 500
+  fParameterOutOfCandidates = 500,
+  fAliasNotFound            = 600
 };
 
 #endif

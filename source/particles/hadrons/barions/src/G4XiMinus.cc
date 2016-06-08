@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiMinus.cc,v 1.5.4.2 2001/06/28 20:19:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4XiMinus.cc,v 1.8 2001/10/16 08:16:01 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -97,6 +97,5 @@ G4XiMinus G4XiMinus::theXiMinus(
 );
 
 G4XiMinus* G4XiMinus::XiMinusDefinition(){return &theXiMinus;}
-// initialization for static cut values
-G4double   G4XiMinus::theXiMinusLengthCut = -1.0;
-G4double*  G4XiMinus::theXiMinusKineticEnergyCuts = NULL;
+
+G4XiMinus* G4XiMinus::XiMinus(){return &theXiMinus;}

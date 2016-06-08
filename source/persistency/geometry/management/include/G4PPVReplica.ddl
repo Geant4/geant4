@@ -21,14 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PPVReplica.ddl,v 1.5.4.1 2001/06/28 19:11:27 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// 
-// class G4PPVReplica
-//
+// $Id: G4PPVReplica.ddl,v 1.7 2001/07/11 10:02:19 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
 //  Persistent-capable class of G4PVReplica
-//
+
 // History:
 // 05.11.99  Y.Morita  First non-stub version
 
@@ -47,18 +45,20 @@
 class G4PPVReplica
  : public G4PVPhysicalVolume
 {
-public:
+public: // With description
   G4PPVReplica( G4VPhysicalVolume *PhysVol,
                 HepRef(G4PLogicalVolume) persLogVol);
-
   ~G4PPVReplica();
+    // Constructor and Destructor
 
   G4VPhysicalVolume* MakeTransientObject(
                              G4LogicalVolume* aLogical,
                              G4VPhysicalVolume* aMother );
+    // Creates a transient G4PVReplica object.
 
   virtual G4bool IsMany() const;
   virtual G4int GetCopyNo() const;
+    // Returns the multiplicity of the volume.
 
 protected:
   virtual void  SetCopyNo(G4int CopyNo);

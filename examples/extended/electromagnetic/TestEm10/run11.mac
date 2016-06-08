@@ -1,0 +1,71 @@
+#
+# Macro file 'run11.mac' for the initialization phase of "TestEm10.cc"       
+#
+/control/verbose 2
+#
+#control/saveHistory
+#
+/run/verbose 2
+#
+#/run/initialize
+#
+# Parameters of MWPC detector: material and its thickness
+# Xe55He15CH4, Xe10CH4, Xe20CH4, Xe5CH4, Xe20CO2, Kr20CO2
+# Kr7CH4, Ar7CH4, XeArCH4
+#
+/XTRdetector/setAbsMat Xe20CO2 
+/XTRdetector/setAbsThick 3.0 mm
+/XTRdetector/setWorldZ 4000.0 mm
+#
+# Parameters of Radiator (default mm)
+# TRT_CH2, Radiator, CarbonFiber, Li, Be, Mylar, Kapton ?, CH2
+# Air, CO2, He, Ne, Kr, Ar, Xe, 
+#
+/XTRdetector/setRadMat CH2
+/XTRdetector/setWorldMat Air
+/XTRdetector/setRadThick 0.02 mm
+/XTRdetector/setGasGapThick 0.2 mm
+/XTRdetector/setFoilNum 200
+# 
+# Selection of XTR parametrisation model: 1-10
+# TRmodel/XTRdEdx: Foam 1/2, GamDistr 3/4, Irr 5/6, Plate 7/8, Reg 9/10 
+#
+/XTRdetector/setModel 10
+#
+# Update geometry after changing its parametrs
+#
+#/XTRdetector/update
+# window: Myalr 51 micron
+#  PLOT: energy deposit distribution in absorber (g4.11)
+#
+/plots/sethistName g4.p11
+/plots/setnbinEn 40
+/plots/setEnlow 0.0 MeV
+/plots/setEnhigh 0.02  MeV  
+#
+#
+/run/initialize
+/run/particle/dumpCutValues
+#
+# Particle and its energy
+#
+/gun/particle e-
+#
+/gun/energy 40000.0 MeV
+#
+#/tracking/verbose 2
+#
+/event/printModulo 100
+/run/beamOn 1000
+#
+#
+
+
+
+
+
+
+
+
+
+

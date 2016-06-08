@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.4.6.1 2001/06/28 19:12:55 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HadronicInteraction.hh,v 1.8 2001/11/26 16:28:18 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
  // Hadronic Interaction  abstract base class
  // This class is the base class for the model classes.
@@ -58,8 +58,8 @@
  public:
     
     G4HadronicInteraction() :
-      verboseLevel(0), theMinEnergy(0.0*GeV), theMaxEnergy(25.0*GeV),
-      theBlockedCounter(0), theMinCounter(0), theMaxCounter(0),
+      verboseLevel(0), theMinEnergy(0.0*GeV), theMaxEnergy(25.0*GeV), isBlocked(false),
+      theMinCounter(0), theMaxCounter(0), theBlockedCounter(0), 
       theMinCounterElements(0), theMaxCounterElements(0),
       theBlockedCounterElements(0)
     { 
@@ -139,8 +139,21 @@ public: // With description
 public: // Without description
 
     void DeActivateFor( G4Material *aMaterial );
+    
+    void ActivateFor( G4Material *aMaterial ) 
+    { 
+      Block(); 
+      SetMaxEnergy(GetMaxEnergy(), aMaterial);
+      SetMinEnergy(GetMinEnergy(), aMaterial);
+    }
 
     void DeActivateFor( G4Element *anElement ); 
+    void ActivateFor( G4Element *anElement )
+    { 
+      Block(); 
+      SetMaxEnergy(GetMaxEnergy(), anElement);
+      SetMinEnergy(GetMinEnergy(), anElement);
+    }
 
     G4bool IsBlocked( const G4Material *aMaterial ) const;
 
@@ -167,6 +180,10 @@ public: // Without description
     
     G4double theMinEnergy;
     G4double theMaxEnergy;
+    
+    G4bool IsBlocked() const { return isBlocked;}
+    void Block() { isBlocked = true; }
+    G4bool isBlocked;
     
  private:
     

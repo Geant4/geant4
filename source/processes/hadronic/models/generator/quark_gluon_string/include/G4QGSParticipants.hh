@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -45,25 +45,36 @@ class G4QGSParticipants : public G4VParticipants
     int operator==(const G4QGSParticipants &right) const;
     int operator!=(const G4QGSParticipants &right) const;
 
+    virtual void DoLorentzBoost(Hep3Vector aBoost) 
+    {
+      if(theNucleus) theNucleus->DoLorentzBoost(aBoost);
+      theBoost = aBoost;
+    }
+
     G4PartonPair* GetNextPartonPair();
     void BuildInteractions(const G4ReactionProduct  &thePrimary);
     void StartPartonPairLoop();
-    
-  private:
+
+      private:
     void SplitHadrons(); 
     void PerformSoftCollisions();
     void PerformDiffractiveCollisions();
       
   private:
-    G4RWTPtrOrderedVector<G4InteractionContent> theInteractions;
-    G4RWTPtrOrderedVector<G4VSplitableHadron>   theTargets; 
-    G4RWTPtrOrderedVector<G4PartonPair>   thePartonPairs;
+    struct DeleteInteractionContent {void operator()(G4InteractionContent*aC){delete aC;}};
+    G4std::vector<G4InteractionContent*> theInteractions;
+    struct DeleteSplitableHadron{void operator()(G4VSplitableHadron*aS){delete aS;}};
+    G4std::vector<G4VSplitableHadron*>   theTargets; 
+    struct DeletePartonPair{void operator()(G4PartonPair*aP){delete aP;}};
+    G4std::vector<G4PartonPair*>   thePartonPairs;
   
     G4SingleDiffractiveExcitation theSingleDiffExcitation;
     G4DiffractiveExcitation theDiffExcitaton;
     G4int ModelMode;
     G4bool IsSingleDiffractive();
  
+    G4ThreeVector theBoost;
+
   private:
     // model parameters HPW
     const G4int nCutMax; 
@@ -76,7 +87,7 @@ class G4QGSParticipants : public G4VParticipants
 
 inline G4bool G4QGSParticipants::IsSingleDiffractive()
 {
-  G4bool result;
+  G4bool result=false;
   if(G4UniformRand()<1.) result = true;
   return result;
 }
@@ -87,17 +98,19 @@ inline void G4QGSParticipants::StartPartonPairLoop()
 
 inline G4PartonPair* G4QGSParticipants::GetNextPartonPair()
 {
-if (thePartonPairs.isEmpty()) return 0;
-return thePartonPairs.removeLast();
+  if (thePartonPairs.empty()) return 0;
+  G4PartonPair * result = thePartonPairs.back();
+  thePartonPairs.pop_back();
+  return result;
 }
 
 
 inline void G4QGSParticipants::SplitHadrons()
 {
-  G4int i;
-  for(i = 0; i < theInteractions.length(); i++) 
+  unsigned int i;
+  for(i = 0; i < theInteractions.size(); i++) 
   {
-    theInteractions.at(i)->SplitHadrons();
+    theInteractions[i]->SplitHadrons();
   }
 }
 

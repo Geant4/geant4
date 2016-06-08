@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NullModel.hh,v 1.4.4.1 2001/06/28 19:16:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NullModel.hh,v 1.6 2001/08/24 20:36:15 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  4th April 1998.
@@ -44,9 +44,6 @@ public:
 
   void DescribeYourselfTo (G4VGraphicsScene&);
   // An exception is thrown if this is called!!!!!!!!!!!!!!!!!!!!
-
-  G4bool Validate ();
-  // Validate, but allow internal changes (hence non-const function).
 
   /////////////////////////////////////////////////
   // Access to other information: use GetModelingParameters()

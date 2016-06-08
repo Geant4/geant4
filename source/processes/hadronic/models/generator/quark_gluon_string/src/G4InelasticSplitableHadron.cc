@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -134,7 +134,7 @@ void G4InelasticSplitableHadron::GetValenceQuarkFlavors(G4int PDGcode, G4int& aE
 	 {
 	 G4int Swap = aEnd;
 	 aEnd = bEnd;
-	 bEnd = aEnd;
+	 bEnd = Swap;
 	 }
       return;
       } 
@@ -158,7 +158,7 @@ void G4InelasticSplitableHadron::GetValenceQuarkFlavors(G4int PDGcode, G4int& aE
       {
       G4int Swap = aEnd;
       aEnd = bEnd;
-      bEnd = aEnd;
+      bEnd = Swap;
       }
    }   
 	

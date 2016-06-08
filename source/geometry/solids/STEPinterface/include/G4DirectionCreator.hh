@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DirectionCreator.hh,v 1.3.4.1 2001/06/28 19:09:09 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4DirectionCreator.hh,v 1.4 2001/07/11 10:00:04 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4DirectionCreator

@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2001/06/28 15:07:28 gcosmo Exp $
+$Id: History,v 1.35 2001/11/22 19:24:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,79 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 21 2001, M.Asai (event-V03-02-09)
+- G4PrimaryTransformer.cc: now considering case where a primary is placed on the
+  boundary of the world volume. Added units.
+
+Nov 20 2001, M.Asai (event-V03-02-08)
+- Add check whether the primary vertex is inside of thw world volume.
+- Move set method of position and time from G4ParticleGun to G4VPrimaryGenerator
+  so that G4HEPEvtInterface can accept the primary vertex position
+
+Nov 10 2001, M.Asai (event-V03-02-07)
+- Tagged.
+
+Oct 19 2001, F. Lei
+- Code changes to remove compilation warnings un gcc-2.95.2
+- Added Beam option for generating accerlator beams
+
+Oct 11 2001, G.Cosmo (event-V03-02-06)
+- Replaced inclusions of ctoken.h with G4Tokenizer.hh in
+  G4GeneralParticleSourceMessenger.cc and G4ParticleGunMessenger.cc.
+  Removed comment on RW wrappers.
+- Co-works with tag "globals-V03-02-03" where the STLInterface
+  module has been removed.
+
+Aug 27 2001, M.Asai (event-V03-02-05)
+- Convert NULL to 0 in G4EventManager.cc
+
+Aug 17 2001, M.Asai (event-V03-02-04)
+- G4EventManager.cc is debugged according to bug report 289.
+
+July 19 2001, M.Asai (event-V03-02-03)
+- Tagged 
+
+July 19 2001, F.Lei 
+- Most commands under G4ParticleGun class are now available under GPS
+
+    e.g..
+    /gun/position => /gps/position
+    /gun/direction => /gps/direction
+    /gun/energy  => /gps/energy
+   ...
+
+- Implemented co-ordinates rotation for angular distribution. User defined
+co-ordinates was an option available to user in the messenger but not
+implemented internally in the older version gps.
+Source angular distribution coupled with positional distribution can lead to
+rather strange combinations. To avoid this I used a simple scheme in this
+implementation:
+
+- For cos-law angular distribution the default maxtheta is set to pi/2.
+    instead of pi. The user can of course re-set this to any number between
+        0 - pi.
+
+- Added user defined histogram re-set method. After re-set user can
+      redefine all the histograms. To use
+        /gps/resethist  'histname'
+-  Bug fixed in generating theta, and in calculating the weight.
+
+- Added further guidance in the messenger for the definition of pre-defined
+    energy distributions
+
+Jul 18 2001, M.Asai (event-V03-02-02)
+- Added a new feature for the user to increase the number of waiting stacks.
+
+Jul 17 2001, M.Asai (event-V03-02-01)
+- G4PrimaryParticle now stores the proper trackID.
+
+Jul 13 2001, G.Cosmo (event-V03-02-00)
+- Cleanup of pedantic warnings in Linux-g++ ANSI setup.
+- Corrected "int" to "G4int".
+- Corrected "NULL" to "0".
+- Synchronised with HEAD revision after inclusion of disclaimer
+  liability.
 
 Jun 28 2001, G.Cosmo (event-V03-01-01)
 - Added CVS headers to G4GeneralParticleSource[.hh.cc] and

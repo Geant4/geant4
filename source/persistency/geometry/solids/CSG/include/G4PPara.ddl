@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PPara.ddl,v 1.5.2.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4PPara
-//
+// $Id: G4PPara.ddl,v 1.7 2001/07/11 10:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PPara solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Para.hh
-
 
 #ifndef G4PPara_DDL
 #define G4PPara_DDL
@@ -41,27 +41,27 @@ class G4VSolid;
 
 #include "G4ThreeVector.hh"
 
-class G4PPara : public G4PCSGSolid {
-public:
-
+class G4PPara
+ : public G4PCSGSolid
+{
+public: // With description
     G4PPara(const G4Para* thePara);
     virtual ~G4PPara() ;
-    
-				// Access functions
+    // Constructor and Destructor
+
     G4VSolid* MakeTransientObject() const ;
+    // Creates a transient boolean solid object.
 
-				// Get  functions
-
+public:
     G4ThreeVector GetSymAxis() const {
-	G4double cosTheta
+      G4double cosTheta
 	    = 1.0/sqrt(1+fTthetaCphi*fTthetaCphi+fTthetaSphi*fTthetaSphi) ;
-     
-	return G4ThreeVector(fTthetaCphi*cosTheta,fTthetaSphi*cosTheta,cosTheta) ;
+      return G4ThreeVector(fTthetaCphi*cosTheta,fTthetaSphi*cosTheta,cosTheta) ;
    }
 
-    // Naming method (pseudo-RTTI : run-time type identification
-
+public: // With description
     virtual G4GeometryType  GetEntityType() const {return G4String("G4Para");}
+    // Returns the G4GeometryType of this solid.
 
 private:
     G4double fDx,fDy,fDz;
@@ -69,3 +69,4 @@ private:
 };
    	
 #endif
+

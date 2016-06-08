@@ -21,24 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.8.2.1 2001/06/28 19:10:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UImanager.hh,v 1.16 2001/10/16 08:14:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4UImanager_h
 #define G4UImanager_h 1
 
 #include "globals.hh"
-#include "g4rw/ctoken.h"
-//#include "g4rw/tvordvec.h"
+
 #include "g4std/vector"
 #include "g4std/fstream"
 #include "G4VStateDependent.hh"
+#include "G4UIcommandStatus.hh"
 class G4UIcommandTree;
 class G4UIcommand;
 class G4UIsession;
 class G4UIcontrolMessenger;
 class G4UnitsMessenger;
+class G4UIaliasList;
 
 // class description:
 //
@@ -61,8 +62,8 @@ class G4UImanager : public G4VStateDependent
   private:
       G4UImanager(const G4UImanager &right);
       const G4UImanager & operator=(const G4UImanager &right);
-      int operator==(const G4UImanager &right) const;
-      int operator!=(const G4UImanager &right) const;
+      G4int operator==(const G4UImanager &right) const;
+      G4int operator!=(const G4UImanager &right) const;
 
   public: // with description
       G4String GetCurrentValues(const char * aCommand);
@@ -75,8 +76,18 @@ class G4UImanager : public G4VStateDependent
       void RemoveCommand(G4UIcommand * aCommand);
       //  This command remove the registered command. After invokation of this
       // command, that particular command cannot be applied.
+      void ExecuteMacroFile(const char * fileName);
       void ExecuteMacroFile(G4String fileName);
       //  A macro file defined by the argument will be read by G4UIbatch object.
+      void Loop(const char * macroFile,const char * variableName,
+                   G4double initialValue,G4double finalValue,G4double stepSize=1.0);
+      void Loop(G4String macroFile,G4String variableName,
+                   G4double initialValue,G4double finalValue,G4double stepSize=1.0);
+      // Execute a macro file more than once with a loop counter.
+      void Foreach(const char * macroFile,const char * variableName,const char * candidates);
+      void Foreach(G4String macroFile,G4String variableName,G4String candidates);
+      // Execute a macro file more than once with an aliased variable which takes
+      // a value in the candidate list.
       G4int ApplyCommand(const char * aCommand);
       G4int ApplyCommand(G4String aCommand);
       //  These two methods are identical. A command (and parameter(s)) given
@@ -95,6 +106,26 @@ class G4UImanager : public G4VStateDependent
       void ListCommands(G4String direc);
       //  All commands registored under the given directory will be listed to
       // G4cout.
+      void SetAlias(const char * aliasLine);
+      void SetAlias(G4String aliasLine);
+      //  Define an alias. The first word of "aliasLine" string is the
+      // alias name and the remaining word(s) is(are) string value
+      // to be aliased.
+      void RemoveAlias(const char * aliasName);
+      void RemoveAlias(G4String aliasName);
+      //  Remove the defined alias.
+      void ListAlias();
+      //  Print all aliases.
+      G4String SolveAlias(G4String aCmd);
+      //  Convert a command string which contains alias(es).
+      void CreateHTML(const char* dir = "/");
+      //  Generate HTML files for defined UI commands
+
+
+  public: 
+      void LoopS(G4String valueList);
+      void ForeachS(G4String valueList);
+      //  These methods are used by G4UIcontrolMessenger to use Loop() and Foreach() methods.
       virtual G4bool Notify(G4ApplicationState requestedState);
       //  This method is exclusively invoked by G4StateManager and the user
       // must not use this method.
@@ -123,6 +154,7 @@ class G4UImanager : public G4VStateDependent
       G4std::ofstream historyFile;
       G4bool saveHistory;
       G4std::vector<G4String> histVec;
+      G4UIaliasList* aliasList;
       
       G4bool pauseAtBeginOfEvent;
       G4bool pauseAtEndOfEvent;
@@ -130,11 +162,11 @@ class G4UImanager : public G4VStateDependent
 
   public: // with description
       G4String GetCurrentStringValue(const char * aCommand, 
-	    int parameterNumber=1, G4bool reGet=true);
+	    G4int parameterNumber=1, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand, 
-	    int parameterNumber=1, G4bool reGet=true);
+	    G4int parameterNumber=1, G4bool reGet=true);
       G4double GetCurrentDoubleValue(const char * aCommand,
-	    int parameterNumber=1, G4bool reGet=true);
+	    G4int parameterNumber=1, G4bool reGet=true);
       G4String GetCurrentStringValue(const char * aCommand, 
 	    const char * aParameterName, G4bool reGet=true);
       G4int GetCurrentIntValue(const char * aCommand, 
@@ -165,12 +197,12 @@ class G4UImanager : public G4VStateDependent
 
   public:
       inline G4UIcommandTree * GetTree() const
-      { return treeTop; };
+      { return treeTop; }
       inline G4UIsession * GetSession() const
-      { return session; };
+      { return session; }
   public: // with description
       inline void SetSession(G4UIsession *const value)
-      { session = value; };
+      { session = value; }
       //  This method defines the active (G)UI session.
      void SetCoutDestination(G4UIsession *const value);
      //  This method defines the destination of G4cout/G4cerr stream.
@@ -180,11 +212,11 @@ class G4UImanager : public G4VStateDependent
 
   public:
       inline void SetVerboseLevel(G4int val)
-      { verboseLevel = val; };
+      { verboseLevel = val; }
       inline G4int GetVerboseLevel() const
-      { return verboseLevel; };
+      { return verboseLevel; }
       inline G4int GetNumberOfHistory() const
-      { return histVec.size(); };
+      { return histVec.size(); }
       inline G4String GetPreviousCommand(G4int i) const
       { 
         G4String st;

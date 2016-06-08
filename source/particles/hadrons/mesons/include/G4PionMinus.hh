@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinus.hh,v 1.4.2.2 2001/06/28 20:19:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PionMinus.hh,v 1.7 2001/10/16 08:16:10 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,6 @@
 // ****************************************************************
 //  Added particle definitions, H.Kurashige, 19 April 1996
 //  Revised, G.Cosmo, 6 June 1996
-//  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
 // Each class inheriting from G4VMeson
@@ -55,8 +54,6 @@ class G4PionMinus : public G4VMeson
 {
  private:
    static G4PionMinus thePionMinus;
-   static G4double  thePionMinusLengthCut;
-   static G4double* thePionMinusKineticEnergyCuts;
 
  private: // constructors are hide as private  
    G4PionMinus(
@@ -74,28 +71,8 @@ class G4PionMinus : public G4VMeson
  public:
   virtual      ~G4PionMinus(){}
    static      G4PionMinus* PionMinusDefinition();
-   static      G4PionMinus* PionMinus(){return &thePionMinus;}
-   static G4double GetCuts() {return thePionMinusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return thePionMinusKineticEnergyCuts;};
+   static      G4PionMinus* PionMinus();
 
-   virtual void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
-
-inline void G4PionMinus::SetCuts(G4double aCut)
-{
-  G4ParticleWithCuts::SetCuts(aCut);
-  thePionMinusLengthCut = theCutInMaxInteractionLength;  
-  thePionMinusKineticEnergyCuts = theKineticEnergyCuts;
-}
-
-inline void G4PionMinus::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  thePionMinusLengthCut = theCutInMaxInteractionLength;  
-  thePionMinusKineticEnergyCuts = theKineticEnergyCuts;
-}
 
 #endif

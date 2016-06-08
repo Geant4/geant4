@@ -28,7 +28,7 @@
 
 
 #ifndef BrachyWaterBoxROGeometry_h
-#define BrachyWaterBoxROGeometry_h 1
+#define BrachyWaterBoxROGeometry_h 
 
 #include "G4VReadOutGeometry.hh"
 
@@ -38,7 +38,7 @@ class BrachyWaterBoxROGeometry : public G4VReadOutGeometry
 	BrachyWaterBoxROGeometry(G4String aString,G4double DetDimX,G4double DetDimZ,G4int NumVoxelX,G4int NumVoxelZ);
   	~BrachyWaterBoxROGeometry();
 
-  public:
+   private:
 	const G4double m_DetDimX;
 	const G4double m_DetDimZ;
 	const G4int m_NumVoxelX;

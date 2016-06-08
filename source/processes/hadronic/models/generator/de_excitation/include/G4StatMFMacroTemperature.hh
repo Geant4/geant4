@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.hh,v 1.5.2.1 2001/06/28 19:13:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4StatMFMacroTemperature.hh,v 1.8 2001/10/05 16:13:41 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -48,8 +48,8 @@ public:
 	theA(anA),
 	theZ(aZ),
 	_ExEnergy(ExEnergy),
-	_Kappa(kappa),
 	_FreeInternalE0(FreeE0),
+	_Kappa(kappa),
 	_MeanMultiplicity(0.0),
 	_MeanTemperature(0.0),
 	_ChemPotentialMu(0.0),

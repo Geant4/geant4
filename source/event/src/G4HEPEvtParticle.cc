@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc,v 1.2.4.1 2001/06/28 19:07:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HEPEvtParticle.cc,v 1.4 2001/07/13 15:01:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 
@@ -45,9 +45,9 @@ const G4HEPEvtParticle &
 G4HEPEvtParticle::operator=(const G4HEPEvtParticle &right)
 { return *this; }
 
-int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
+G4int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
 { return false; }
-int G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
+G4int G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
 { return true; }
 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2001/05/18 16:41:37 gcosmo Exp $
+$Id: History,v 1.64 2001/11/19 09:36:24 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,69 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Nov 19, 2001    H.Kurashige (particles-V03-02-10)
+- remove extra semi-colon and comments from G4Gamma.hh
+
+- Oct 30, 2001    H.Kurashige (particles-V03-02-09)
+- TAG FOR CUT FOR MATERIAL -
+-------- partman-V03-02-09
+-------- bosons-V03-02-09
+-------- leptons-V03-02-09
+-------- hadrons-V03-02-09
+- Modify CalcEnergyCuts method
+
+- Oct 25, 2001    H.Kurashige (particles-V03-02-08)
+- TAG FOR CUT FOR MATERIAL -
+- STL migartion in test directory 
+- Corrected typo in guidance text in G4ParticleMessenger.cc (Gabriele)
+ 
+- Oct 25, 2001    H.Kurashige (particles-V03-02-07)
+- TAG FOR CUT FOR MATERIAL -
+------- bosons-V03-02-07
+------- leptons-V03-02-07
+------- hadrons-V03-02-07
+- Remove SetCut and add CalcEnergyCuts
+
+- Oct 20, 2001    H.Kurashige (particles-V03-02-06)
+- TAG FOR CUT FOR MATERIAL -
+------- partman-V03-02-06
+- Fixed bugs in G4ParticleWithCuts::UseProton 
+-  Fixed bugs in G4ParticleWithCuts::RestoreCuts
+------- bosons-V03-02-06
+- Fixed bugs in G4Gamma::BuildAbsorptionLengthVector   by Hisaya
+
+- Oct 15, 2001   H.Kurashige (particles-V03-02-04)
+- TAG FOR CUT FOR MATERIAL -
+------- partman-V03-02-04
+------- hadrons-V03-02-03
+------- bosons-V03-02-03
+------- leptons-V03-02-03
+------- shortlived-V03-02-02 
+- Remove "static" Set/GetCuts methods
+- Introduce "Different cut in range for different material"  
+- Remove static inline methods
+
+  
+- Sep 20, 2001  H.Kurashige (particles-V03-02-03)
+------- partman-V03-02-03
+- Modify to use G4Material::GetNumberOfMaterials 
+ 
+- Sep 19, 2001  H.Kurashige (particles-V03-02-02)
+------- partman-V03-02-02
+------- hadrons-V03-00-02
+------- bosons-V03-00-02
+------- leptons-V03-00-02
+- Modify for STL migration for materials 
+
+- Sep 18, 2001  H.Kurashige (particles-V03-02-01)
+------- partman-V03-02-01
+- Added G4NeutronBetaDecayChannel
+- Allow MassDifference in case of nucleon decay ()
+------- hadrons-V03-00-01
+- Added G4NeutronBetaDecayChannel to G4Neutron
+
+- July 31, H.Kurashige (particles-V03-02-00)
+- Fixed bugs in copy constructor of G4DecayProduct (partman-V03-02-00)
 
 - May 18, 01 G.Cosmo (particles-V03-01-00)
 - Cleared pedantic warnings from Linux-g++ ISO/ANSI setup.

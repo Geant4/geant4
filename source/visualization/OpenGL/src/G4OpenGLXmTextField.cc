@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmTextField.cc,v 1.5.2.1 2001/06/28 19:15:46 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmTextField.cc,v 1.6 2001/07/11 10:08:58 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //Text field class. Inherits from G4OpenGLXmVWidgetComponent
 

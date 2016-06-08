@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.5.2.1 2001/06/28 19:15:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.8 2001/12/01 20:52:06 stanaka Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:34:24 JST 1996
@@ -79,8 +79,8 @@ const char  FR_ENV_MULTI_WINDOW[]            = "G4DAWN_MULTI_WINDOW" ;
 	//----- G4FukuiRendererSceneHandler, constructor
 G4FukuiRendererSceneHandler::G4FukuiRendererSceneHandler (G4FukuiRenderer& system,
 					    const G4String& name):
-fSystem   (system)                  ,
 G4VSceneHandler  (system, fSceneIdCount++, name) ,
+fSystem   (system)                  ,
 fPrimDest (system.GetPrimDest() )   ,
 FRflag_in_modeling     (false)      ,
 flag_saving_g4_prim    (false)      ,
@@ -192,9 +192,9 @@ void G4FukuiRendererSceneHandler::FRBeginModeling( void )
 // Common to DAWN and DAWNFILE drivers //
 /////////////////////////////////////////
 
-#define  G4FRSCENE  G4FukuiRendererSceneHandler
+#define  G4FRSCENEHANDLER  G4FukuiRendererSceneHandler
 #include "G4FRSceneFunc.icc"
-#undef   G4FRSCENE 
+#undef   G4FRSCENEHANDLER
 
 //////////////////////
 // static variables //

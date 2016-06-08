@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.3.4.2 2001/06/28 20:18:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTel.cc,v 1.8 2001/12/04 11:40:27 flongo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,11 +33,14 @@
 //      ------------ GammaRayTel example main program ------
 //           by F.Longo, R.Giannitrapani & G.Santin (29 nov 2000)
 //           See README file for details on this example            
+//  20.11.01 G.Santin: new analysis management, and some modification in the 
+//                     construction of some Action's
 // ************************************************************
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
@@ -54,8 +57,10 @@
 #include "GammaRayTelEventAction.hh"
 
 #ifdef G4ANALYSIS_USE
-#include "GammaRayTelAnalysisManager.hh"
+#include "GammaRayTelAnalysis.hh"
 #endif
+
+//using namespace Lizard;
 
 
 /* This global file is used to store relevant data for
@@ -75,24 +80,17 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(new GammaRayTelPhysicsList);
 
   // Set mandatory user action classes
-  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);
 
 
 #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
-  GammaRayTelAnalysisManager* analysisMgr = new GammaRayTelAnalysisManager(detector);
+  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
 #endif
 
   // Set optional user action classes
-#ifdef G4ANALYSIS_USE
-  GammaRayTelEventAction* eventAction = 
-    new GammaRayTelEventAction(analysisMgr);
-  GammaRayTelRunAction* runAction =
-    new GammaRayTelRunAction(analysisMgr);
-#else 
   GammaRayTelEventAction* eventAction = new GammaRayTelEventAction();
   GammaRayTelRunAction* runAction = new GammaRayTelRunAction();
-#endif
   runManager->SetUserAction(eventAction);
   runManager->SetUserAction(runAction);
 
@@ -103,9 +101,14 @@ int main(int argc, char** argv)
   // Create a XMotif user interface
   session = new G4UIXm(argc,argv);
 #else
+#ifdef G4UI_USE_TCSH
+  session = new G4UIterminal(new G4UItcsh);      
+#else
   // Create the standard user interface
-  session = new G4UIterminal;
+  session = new G4UIterminal();
 #endif
+#endif
+
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new GammaRayTelVisManager;
@@ -143,11 +146,13 @@ int main(int argc, char** argv)
   delete visManager;
 #endif
 #ifdef G4ANALYSIS_USE
-  delete analysisMgr;
+  delete analysis;
 #endif
   delete runManager;
   return 0;
 }
+
+
 
 
 

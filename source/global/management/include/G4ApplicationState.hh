@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ApplicationState.hh,v 1.1.4.1 2001/06/28 19:10:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ApplicationState.hh,v 1.2 2001/07/11 10:00:49 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4APPLICATIONSTATE_H

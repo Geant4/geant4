@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GaussLegendreQ.cc,v 1.2.8.1 2001/06/28 19:09:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GaussLegendreQ.cc,v 1.3 2001/07/11 10:00:41 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #include "G4GaussLegendreQ.hh"
 

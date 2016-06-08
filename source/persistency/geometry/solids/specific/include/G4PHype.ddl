@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PHype.ddl,v 1.1.4.1 2001/06/28 19:11:32 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4PHype
-//
+// $Id: G4PHype.ddl,v 1.3 2001/07/11 10:02:24 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4Hype specific solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Hype.hh
 
@@ -38,15 +39,19 @@
 class G4VSolid;
 class G4Hype;
 
-class G4PHype : public G4PCSGSolid {
-public:
-
+class G4PHype
+ : public G4PCSGSolid
+{
+public: // With description
     G4PHype(const G4Hype* theHype);
     virtual ~G4PHype();
+    // Constructor and Destructor
 
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient G4Hype object.
 
     virtual G4GeometryType  GetEntityType() const {return G4String("G4Hype");}
+    // Returns the G4GeometryType of this solid.
 
 protected:
     // values of hype radius at a given Z
@@ -75,38 +80,4 @@ protected:
 };
    	
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

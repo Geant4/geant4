@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.hh,v 1.4.2.1 2001/06/28 19:07:52 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VHitsCollection.hh,v 1.6 2001/07/13 15:00:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VHitsCollection_h
@@ -45,7 +45,7 @@ class G4VHitsCollection
       G4VHitsCollection();
       G4VHitsCollection(G4String detName,G4String colNam);
       virtual ~G4VHitsCollection();
-      int operator==(const G4VHitsCollection &right) const;
+      G4int operator==(const G4VHitsCollection &right) const;
 
       virtual void DrawAllHits();
       virtual void PrintAllHits();

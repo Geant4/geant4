@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Fragment.cc,v 1.9.2.1 2001/06/28 19:13:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Fragment.cc,v 1.12 2001/11/29 15:41:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -139,7 +139,12 @@ G4bool G4Fragment::operator!=(const G4Fragment &right) const
 
 G4std::ostream& operator << (G4std::ostream &out, const G4Fragment *theFragment)
 {
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags old_floatfield = out.flags();
+  out.setf(G4std::ios::floatfield);
+#else
   long old_floatfield = out.setf(0,G4std::ios::floatfield);
+#endif
 
   out 
     << "Fragment: A = " << G4std::setprecision(3) << theFragment->theA 

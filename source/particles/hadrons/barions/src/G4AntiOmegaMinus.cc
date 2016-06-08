@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegaMinus.cc,v 1.5.4.2 2001/06/28 20:19:00 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiOmegaMinus.cc,v 1.8 2001/10/16 08:15:55 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -101,6 +101,5 @@ G4AntiOmegaMinus G4AntiOmegaMinus::theAntiOmegaMinus(
 );
 
 G4AntiOmegaMinus* G4AntiOmegaMinus::AntiOmegaMinusDefinition(){return &theAntiOmegaMinus;}
-// initialization for static cut values
-G4double   G4AntiOmegaMinus::theAntiOmegaMinusLengthCut = -1.0;
-G4double*  G4AntiOmegaMinus::theAntiOmegaMinusKineticEnergyCuts = NULL;
+
+G4AntiOmegaMinus* G4AntiOmegaMinus::AntiOmegaMinus(){return &theAntiOmegaMinus;}

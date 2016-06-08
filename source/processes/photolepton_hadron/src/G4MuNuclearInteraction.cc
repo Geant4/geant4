@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.8.2.2 2001/06/28 20:20:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4MuNuclearInteraction.cc,v 1.11 2001/10/24 17:46:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -48,20 +48,20 @@ G4double G4MuNuclearInteraction::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,
                                                              1.e9,1.e10};
 G4int G4MuNuclearInteraction::NBIN = 1000 ;  
 G4double G4MuNuclearInteraction::ya[1001]={0.};
-G4double G4MuNuclearInteraction::proba[5][8][1001]={0.};
+G4double G4MuNuclearInteraction::proba[5][8][1001]={{{0.}}};
  
 G4MuNuclearInteraction::G4MuNuclearInteraction(const G4String& processName)
   : G4VDiscreteProcess(processName),  
-    theCrossSectionTable(NULL),
-    theMeanFreePathTable(NULL),
+    theMeanFreePathTable(0),
+    theCrossSectionTable(0),
     LowestKineticEnergy (1.*GeV),
     HighestKineticEnergy (1000000.*TeV),
     TotBin(100),
+    CutFixed ( 0.200*GeV),
+    GramPerMole(g/mole),
     theMuonMinus ( G4MuonMinus::MuonMinus() ),
     theMuonPlus ( G4MuonPlus::MuonPlus() ),
-    thePionZero (G4PionZero::PionZero() ),
-    GramPerMole(g/mole),
-    CutFixed ( 0.200*GeV)
+    thePionZero (G4PionZero::PionZero() )
 {  }
  
 G4MuNuclearInteraction::~G4MuNuclearInteraction()
@@ -98,18 +98,18 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
   }
 
   // make tables for the sampling at initialization
-  if (theMeanFreePathTable == NULL) MakeSamplingTables(&aParticleType);
+  if (theMeanFreePathTable == 0) MakeSamplingTables(&aParticleType);
 
   theCrossSectionTable = new G4PhysicsTable (G4Element::GetNumberOfElements()); 
   const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
   G4double AtomicNumber,AtomicWeight ;
 
-  for (G4int J=0; J < G4Element::GetNumberOfElements(); J++ )
+  for (size_t J=0; J < G4Element::GetNumberOfElements(); J++ )
   {
     ptrVector = new G4PhysicsLogVector(LowestKineticEnergy,
                                          HighestKineticEnergy,TotBin) ;
-    AtomicNumber = (*theElementTable )(J)->GetZ() ;
-    AtomicWeight = (*theElementTable )(J)->GetA() ;
+    AtomicNumber = (*theElementTable )[J]->GetZ() ;
+    AtomicWeight = (*theElementTable )[J]->GetA() ;
 
     for ( G4int i = 0 ; i < TotBin ; i++)
     {
@@ -135,7 +135,7 @@ void G4MuNuclearInteraction::BuildPhysicsTable(
   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
 
 
-  for (G4int K=0 ; K < G4Material::GetNumberOfMaterials(); K++ )  
+  for (size_t K=0 ; K < G4Material::GetNumberOfMaterials(); K++ )  
   { 
     ptrVector = new G4PhysicsLogVector(LowestKineticEnergy,
                                          HighestKineticEnergy,
@@ -182,8 +182,8 @@ void G4MuNuclearInteraction::ComputePartialSumSigma(
       {             
         SIGMA += theAtomNumDensityVector[Ielem] * 
                ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                        (*theElementVector)(Ielem)->GetZ(),
-                                        (*theElementVector)(Ielem)->GetA()) ;
+                                        (*theElementVector)[Ielem]->GetZ(),
+                                        (*theElementVector)[Ielem]->GetA()) ;
         PartialSumSigma[Imate]->push_back(SIGMA);
       }
 }
@@ -215,7 +215,7 @@ G4double G4MuNuclearInteraction::ComputeMicroscopicCrossSection(
 
   aaa = log(epmin) ;
   bbb = log(epmax) ;
-  kkk = int((bbb-aaa)/ak1)+ak2 ;
+  kkk = G4int((bbb-aaa)/ak1 +ak2) ;
   hhh = (bbb-aaa)/kkk ;
 
   for (G4int l=0 ; l<kkk; l++)
@@ -309,7 +309,6 @@ void G4MuNuclearInteraction::MakeSamplingTables(
 
       G4double c,y,ymin,ymax,dy,yy,dx,x,ep ;
 
-      G4int NbofIntervals ;
       // calculate the differential cross section
       // numerical integration in    
       //  log ...............
@@ -389,14 +388,14 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
 
    // sample  energy of the secondary ( pi0)
    //  sampling using tables 
-   G4double ep,xc,x,yc,y ;
-   G4int iZ,iT,iy ;
+   G4double ep,x,y ;
+   G4int iy ;
 
    // select sampling table ;
    G4double lnZ = log(anElement->GetZ()) ;
    G4double delmin = 1.e10 ;
    G4double del ;
-   G4int izz,itt,NBINminus1 ;
+   G4int izz=0,itt=0,NBINminus1 ;
    NBINminus1 = NBIN-1 ;
    for (G4int iz=0; iz<nzdat; iz++)
    {
@@ -487,7 +486,7 @@ G4VParticleChange* G4MuNuclearInteraction::PostStepDoIt(
    G4double Ef=NewKinEnergy+Mass ;
    G4double initMomentum=sqrt(KineticEnergy*(TotalEnergy+Mass)) ;
 
-   G4double Q2=2.*(TotalEnergy*Ef-initMomentum*finalMomentum*cos(theta)-Mass*Mass) ;
+   // G4double Q2=2.*(TotalEnergy*Ef-initMomentum*finalMomentum*cos(theta)-Mass*Mass) ;
 
    aParticleChange.SetMomentumChange( finalDirection );
    aParticleChange.SetEnergyChange( NewKinEnergy );
@@ -531,10 +530,10 @@ G4Element* G4MuNuclearInteraction::SelectRandomAtom(G4Material* aMaterial) const
 
   G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)[i]);
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;
-  return NULL;
+  return 0;
 }
 void G4MuNuclearInteraction::PrintInfoDefinition()
 {

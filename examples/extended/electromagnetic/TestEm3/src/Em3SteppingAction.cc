@@ -21,28 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: Em3SteppingAction.cc,v 1.3.2.1 2001/06/28 19:06:59 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em3SteppingAction.cc,v 1.5 2001/10/22 10:58:59 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3SteppingAction.hh"
 #include "G4Step.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3SteppingAction::Em3SteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3SteppingAction::~Em3SteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
@@ -52,7 +52,7 @@ void Em3SteppingAction::UserSteppingAction(const G4Step* aStep)
 ////         << " response after Birk: "  << response/keV << " keV" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double Em3SteppingAction::BirkAttenuation(const G4Step* aStep)
 {
@@ -76,5 +76,5 @@ G4double Em3SteppingAction::BirkAttenuation(const G4Step* aStep)
  return response;   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

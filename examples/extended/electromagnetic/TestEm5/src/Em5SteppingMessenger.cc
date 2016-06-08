@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingMessenger.cc,v 1.2.4.1 2001/06/28 19:07:08 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5SteppingMessenger.cc,v 1.4 2001/10/16 11:56:29 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em5SteppingMessenger.hh"
 
@@ -34,7 +34,7 @@
 #include "G4UIdirectory.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5SteppingMessenger::Em5SteppingMessenger(Em5SteppingAction* SA)
 :steppingAction (SA)
@@ -43,18 +43,18 @@ Em5SteppingMessenger::Em5SteppingMessenger(Em5SteppingAction* SA)
   steppingDir->SetGuidance("stepping control");
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em5SteppingMessenger::~Em5SteppingMessenger()
 {
   delete steppingDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em5SteppingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
-{}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
    

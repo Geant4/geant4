@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSteppingAction.cc,v 1.5.4.1 2001/06/28 19:15:53 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RTSteppingAction.cc,v 1.6 2001/07/11 10:09:04 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //

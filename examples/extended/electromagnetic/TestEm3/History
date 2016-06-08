@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2001/05/31 15:49:34 maire Exp $
+$Id: History,v 1.16 2001/11/28 17:54:45 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+28-11-01  mma (testem3-V03-02-03) 
+- EventAction: DrawTrack "none"
+- small change in vis.mac
+- suppression of the rndm commands, now managed by G4RunManager: 
+  --> RunAction, RunActionMessenger, EventAction.
+  
+39-10-01  mma (testem3-V03-02-02)
+-invert initialize and update in all macros (and TestEm3.in)
+     
+25-10-01  mma (testem3-V03-02-01)
+- GetEnergyCuts() in PrintdEdx()
+     
+22-10-01  mma (testem3-V03-02-00)
+- mods in TestEm3.cc: the initialisation and vis initialisation are
+  not done by default. --> inserted /run/initialize in all macros.
+- To get visualisation: > /control/execute vis.mac
+- 80 columns everywhere.   
+     
+19-10-01  Steve O'Neale (examples-V03-02-00)
+- Update reference output
+
 31-05-01  mma (testem3-V03-01-01)
 - VisManager
      

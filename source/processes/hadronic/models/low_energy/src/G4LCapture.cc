@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.4.8.1 2001/06/28 19:14:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4LCapture.cc,v 1.7 2001/10/05 16:11:31 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -62,7 +62,7 @@ G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    theParticleChange.Initialize(aTrack);
 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-   const G4Material* aMaterial = aTrack.GetMaterial();
+//   const G4Material* aMaterial = aTrack.GetMaterial();
 
    theParticleChange.SetStatusChange(fStopAndKill);
    G4double N = targetNucleus.GetN();
@@ -75,7 +75,6 @@ G4LCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double E = aParticle->GetTotalEnergy()/GeV;
    G4double E0 = aParticle->GetDefinition()->GetPDGMass()/GeV;
    G4double Q = aParticle->GetDefinition()->GetPDGCharge();
-   G4double pv6 = aParticle->GetDefinition()->GetPDGCharge();
    if (verboseLevel > 1) {
       G4cout << "G4LCapture:ApplyYourself: incident particle:" << G4endl;
       G4cout << "P      " << P << " GeV/c" << G4endl;

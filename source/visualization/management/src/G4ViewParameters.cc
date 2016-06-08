@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.12.2.1 2001/06/28 19:16:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ViewParameters.cc,v 1.14 2001/08/05 02:29:12 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -137,7 +137,9 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
     fCutawayPlanes.push_back (cutawayPlane);
   }
   else {
-    G4cerr << "A maximum of 3 cutaway planes supported." << G4endl;
+    G4cout <<
+      "ERROR: G4ViewParameters::AddCutawayPlane:"
+      "\n  A maximum of 3 cutaway planes supported." << G4endl;
   }
 }
 

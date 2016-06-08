@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticDataSet.cc,v 1.2.8.1 2001/06/28 19:12:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HadronElasticDataSet.cc,v 1.4 2001/08/01 17:03:16 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // G4 Physics class: HadronElasticDataSet for cross sections

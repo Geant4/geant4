@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegacZero.hh,v 1.4.4.2 2001/06/28 20:18:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AntiOmegacZero.hh,v 1.8 2001/10/28 05:06:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,8 +54,6 @@ class G4AntiOmegacZero : public G4VBaryon
 {
  private:
    static G4AntiOmegacZero theAntiOmegacZero;
-   static G4double  theAntiOmegacZeroLengthCut;
-   static G4double* theAntiOmegacZeroKineticEnergyCuts;
 
  private:
    G4AntiOmegacZero(
@@ -75,10 +73,8 @@ class G4AntiOmegacZero : public G4VBaryon
 
    static G4AntiOmegacZero* AntiOmegacZeroDefinition();
    static G4AntiOmegacZero* AntiOmegacZero();
-   static G4double GetCuts() {return theAntiOmegacZeroLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAntiOmegacZeroKineticEnergyCuts;};
 
-   virtual void SetCuts(G4double aCut); 
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 

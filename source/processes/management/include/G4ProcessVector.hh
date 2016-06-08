@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.hh,v 1.6.4.1 2001/06/28 19:15:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ProcessVector.hh,v 1.8 2001/09/19 10:54:47 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -61,6 +61,7 @@ class G4ProcessVector
     // Returns the number of items
     G4int entries() const;
     G4int length() const;
+    G4int size() const;
     
     // Returns the position of the element
     G4int index(G4VProcess* aProcess) const;

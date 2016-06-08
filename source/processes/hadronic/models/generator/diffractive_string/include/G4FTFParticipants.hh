@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.3.8.2 2001/06/28 20:19:55 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FTFParticipants.hh,v 1.7 2001/10/05 16:13:58 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4FTFParticipants_h
@@ -37,7 +37,7 @@
 // ------------------------------------------------------------
 
 #include "G4VParticipants.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4Nucleon.hh"
 #include "G4V3DNucleus.hh"
 #include "G4Fancy3DNucleus.hh"
@@ -64,7 +64,7 @@ class G4FTFParticipants : public G4VParticipants
       
   private:
 
-      G4RWTPtrOrderedVector<G4InteractionContent> theInteractions;
+      G4std::vector<G4InteractionContent *> theInteractions;
   
       G4int currentInteraction;
 
@@ -80,7 +80,7 @@ void G4FTFParticipants::StartLoop()
 inline
 G4bool G4FTFParticipants::Next()
 {
-	return ++currentInteraction < theInteractions.entries();
+	return ++currentInteraction < static_cast<G4int>(theInteractions.size());
 }
 
 

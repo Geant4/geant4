@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.7.2.1 2001/06/28 19:10:30 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4IonisParamMat.cc,v 1.9 2001/09/13 08:57:46 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -106,8 +106,8 @@ void G4IonisParamMat::ComputeDensityEffect()
       const G4double X0valS[] = {1.0   , 1.5   };
       const G4double X1valS[] = {2.0   , 3.0   };
                                 
-      if(fMeanExcitationEnergy < E100eV) icase = 0 ;
-         else                             icase = 1 ;
+      if(fMeanExcitationEnergy < E100eV) icase = 0;
+         else                            icase = 1;
 
       if(fCdensity < ClimiS[icase]) fX0density = 0.2;
          else                       fX0density = 0.326*fCdensity-X0valS[icase];
@@ -153,14 +153,14 @@ void G4IonisParamMat::ComputeDensityEffect()
       
       G4double DensitySTP = Density*STP_Pressure*Temp/(Pressure*STP_Temperature);
 
-      G4double ParCorr = log(Density/DensitySTP) ;
+      G4double ParCorr = log(Density/DensitySTP);
   
       fCdensity  -= ParCorr;
-      fX0density -= ParCorr/twoln10 ;
-      fX1density -= ParCorr/twoln10 ;
+      fX0density -= ParCorr/twoln10;
+      fX1density -= ParCorr/twoln10;
   }
 
-  G4double Xa = fCdensity/twoln10 ;
+  G4double Xa = fCdensity/twoln10;
   fAdensity = twoln10*(Xa-fX0density)
               /pow((fX1density-fX0density),fMdensity);
 }

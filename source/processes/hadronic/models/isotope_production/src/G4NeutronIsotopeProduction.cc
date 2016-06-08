@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -30,10 +30,10 @@ G4NeutronIsotopeProduction()
   for(G4int i=0; i< numberOfElements; i++)
   {
     theData[i] = new G4ElementIsoCrossSections<G4NeutronIsoIsoCrossSections>;
-    if((*(G4Element::GetElementTable()))(i)->GetZ()>12 &&
-       (*(G4Element::GetElementTable()))(i)->GetZ()<84) // @@@@@@ workaround to ne fixed in G4NeutronHPNames.
+    if((*(G4Element::GetElementTable()))[i]->GetZ()>12 &&
+       (*(G4Element::GetElementTable()))[i]->GetZ()<84) // @@@@@@ workaround to ne fixed in G4NeutronHPNames.
     {
-      theData[i]->Init((*(G4Element::GetElementTable()))(i));
+      theData[i]->Init((*(G4Element::GetElementTable()))[i]);
     }
   }
 }
@@ -59,9 +59,12 @@ GetIsotope(const G4Track& aTrack,
 
   // get the isotope
   G4Material * theMaterial = aTrack.GetMaterial();
-  if(theMaterial->GetZ()<13) return NULL; //@@@@@@ workaround to ne fixed in G4NeutronHPNames.
-  if(theMaterial->GetZ()>83) return NULL; //@@@@@@ workaround to ne fixed in G4NeutronHPNames.
   G4int nEleInMat = theMaterial->GetNumberOfElements();
+  for(G4int check = 0; check<nEleInMat; check++)
+  {
+    if(theMaterial->GetElement(check)->GetZ()<13) return NULL; //@@@@@@ workaround to ne fixed in G4NeutronHPNames.
+    if(theMaterial->GetElement(check)->GetZ()>83) return NULL; //@@@@@@ workaround to ne fixed in G4NeutronHPNames.
+  }
   G4int index;
   G4double * xSec = new G4double[nEleInMat];
   G4double sum = 0;

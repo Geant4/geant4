@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.11.2.1 2001/06/28 19:08:31 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SmartVoxelHeader.cc,v 1.13 2001/11/23 16:22:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -841,7 +841,9 @@ G4int    noNodes = ((noNodesSmart-noNodesExactI)>=0.5) ?
                      noNodesExactI + 1 : noNodesExactI ; 
 //
 //
-
+    if( noNodes == 0 ){
+       noNodes = 1;
+    }
 #ifdef G4GEOMETRY_VOXELDEBUG
     G4cout << "     Min width = " << minWidth
 	 << " => # Nodes = " << noNodes << G4endl;

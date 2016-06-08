@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Lambda.hh,v 1.4.4.2 2001/06/28 20:18:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Lambda.hh,v 1.9 2001/10/28 05:08:21 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -53,8 +53,6 @@ class G4Lambda : public G4VBaryon
 {
  private:
    static G4Lambda theLambda;
-   static G4double  theLambdaLengthCut;
-   static G4double* theLambdaKineticEnergyCuts;
 
  private:
    G4Lambda(
@@ -73,11 +71,10 @@ class G4Lambda : public G4VBaryon
    virtual ~G4Lambda(){}
 
    static G4Lambda* LambdaDefinition();
-   static G4Lambda* Lambda(){return &theLambda;}
-   static G4double GetCuts() {return theLambdaLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theLambdaKineticEnergyCuts;};
 
-   virtual void SetCuts(G4double aCut); 
+   static G4Lambda* Lambda();
+
+   virtual void CalcEnergyCuts( const G4Material* ); 
 };
 
 #endif

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SceneList.hh,v 1.7.2.1 2001/06/28 19:16:06 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SceneList.hh,v 1.8 2001/07/11 10:09:14 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  9th August 1998

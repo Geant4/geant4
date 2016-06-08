@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -79,6 +79,9 @@ public:
       delete theUpper;
       theUpper = 0;
     }
+    theIndex.clear();
+    theData.clear();
+    prepared = false;
   }
   
   G4bool Prepared() const {return prepared;}
@@ -107,7 +110,7 @@ public:
     {
       lower = theUpper->GetMinIndex(e);
     }
-    G4int i;
+    unsigned int i;
     for(i=lower; i<theData.size(); i++)
     {
       if(theData[i].GetX()>e)

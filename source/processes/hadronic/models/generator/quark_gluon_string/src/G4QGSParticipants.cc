@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -30,9 +30,10 @@
 // HPW Feb 1999
 // Promoting model parameters from local variables class properties
 
-G4QGSParticipants::G4QGSParticipants() : nCutMax(7),ThersholdParameter(0.45*GeV),
-                                         QGSMThershold(3*GeV),theNucleonRadius(1.5*fermi),
-                                         theDiffExcitaton(0.7*GeV, 250*MeV, 250*MeV)
+G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(0.7*GeV, 250*MeV, 250*MeV),
+                                         nCutMax(7),ThersholdParameter(0.45*GeV),
+                                         QGSMThershold(3*GeV),theNucleonRadius(1.5*fermi)
+                                         
 {
 }
 
@@ -70,10 +71,12 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
   }
  
   // first find the collisions HPW
-  theInteractions.clearAndDestroy();
+  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  theInteractions.clear();
   G4int totalCuts = 0;
   G4double impactUsed = 0;
-  while(theInteractions.entries() == 0)
+  G4double eK = thePrimary.GetKineticEnergy()/GeV;
+  while(theInteractions.size() == 0)
   {
     // choose random impact parameter HPW
     G4Pair<G4double, G4double> theImpactParameter;
@@ -84,9 +87,12 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
     // loop over nuclei to find collissions HPW
     theNucleus->StartLoop();
     G4int nucleonCount = 0; // debug
-    while( pNucleon = theNucleus->GetNextNucleon() )
+    while( (pNucleon = theNucleus->GetNextNucleon()) )
     {
-      if(totalCuts>nCutMax) break;
+      if(totalCuts>1.5*thePrimary.GetKineticEnergy()/GeV) 
+      {
+	break;
+      }
        nucleonCount++; // debug
       // Needs to be moved to Probability class @@@
       G4double s = (aPrimaryMomentum + pNucleon->Get4Momentum()).mag2();
@@ -100,7 +106,7 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
       {
 //--DEBUG--        cout << "DEBUG p="<< Probability<<" r="<<rndNumber<<" d="<<sqrt(Distance2)<<G4endl;
         G4QGSMSplitableHadron* aTarget = new G4QGSMSplitableHadron(*pNucleon);
-        theTargets.insert(aTarget);
+        theTargets.push_back(aTarget);
  	pNucleon->Hit(aTarget);
         if ((theProbability.GetDiffractiveProbability(s, Distance2)/Probability > G4UniformRand() 
              &&(ModelMode==SOFT)) || (ModelMode==DIFFRACTIVE ))
@@ -116,7 +122,8 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 	  }
           G4InteractionContent * aInteraction = new G4InteractionContent(aProjectile);
           aInteraction->SetTarget(aTarget); 
-          theInteractions.insert(aInteraction);
+          theInteractions.push_back(aInteraction);
+	  aInteraction->SetNumberOfDiffractiveCollisions(1);
           totalCuts += 1;
 	}
 	else
@@ -143,7 +150,7 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
           G4InteractionContent * aInteraction = new G4InteractionContent(aProjectile);
           aInteraction->SetTarget(aTarget);
           aInteraction->SetNumberOfSoftCollisions(nCut+1);
-          theInteractions.insert(aInteraction);
+          theInteractions.push_back(aInteraction);
           totalCuts += nCut+1;
           impactUsed=Distance2;
        }
@@ -163,18 +170,20 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
   PerformDiffractiveCollisions();
   
   // clean-up, if necessary
-  theInteractions.clearAndDestroy();
-  theTargets.clearAndDestroy();
+  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  theInteractions.clear();
+  G4std::for_each(theTargets.begin(), theTargets.end(), DeleteSplitableHadron());
+  theTargets.clear();
   delete aProjectile;
 }
 
 void G4QGSParticipants::PerformDiffractiveCollisions()
 {
   // remove the "G4PartonPair::PROJECTILE", etc., which are not necessary. @@@
-  G4int i;
-  for(i = 0; i < theInteractions.length(); i++) 
+  unsigned int i;
+  for(i = 0; i < theInteractions.size(); i++) 
   {
-    G4InteractionContent* anIniteraction = theInteractions.at(i);
+    G4InteractionContent* anIniteraction = theInteractions[i];
     G4VSplitableHadron* aProjectile = anIniteraction->GetProjectile();
     G4Parton* aParton = aProjectile->GetNextParton();
     G4PartonPair * aPartonPair;
@@ -184,7 +193,7 @@ void G4QGSParticipants::PerformDiffractiveCollisions()
       aPartonPair = new G4PartonPair(aParton, aProjectile->GetNextAntiParton(), 
                                      G4PartonPair::DIFFRACTIVE, 
                                      G4PartonPair::PROJECTILE);
-      thePartonPairs.insert(aPartonPair);
+      thePartonPairs.push_back(aPartonPair);
     }
     // then target HPW
     G4VSplitableHadron* aTarget = anIniteraction->GetTarget();
@@ -194,17 +203,17 @@ void G4QGSParticipants::PerformDiffractiveCollisions()
       aPartonPair = new G4PartonPair(aParton, aTarget->GetNextAntiParton(), 
                                      G4PartonPair::DIFFRACTIVE, 
                                      G4PartonPair::TARGET);
-      thePartonPairs.insert(aPartonPair);
+      thePartonPairs.push_back(aPartonPair);
     }
   }
 }
 
 void G4QGSParticipants::PerformSoftCollisions()
 {
-  G4int i;
-  for(i = 0; i < theInteractions.length(); i++)   
+  G4std::vector<G4InteractionContent*>::iterator i;
+  for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
   {
-    G4InteractionContent* anIniteraction = theInteractions.at(i);
+    G4InteractionContent* anIniteraction = *i;
     G4PartonPair * aPair = NULL;
     if (anIniteraction->GetNumberOfSoftCollisions())
     { 
@@ -214,12 +223,14 @@ void G4QGSParticipants::PerformSoftCollisions()
       {
         aPair = new G4PartonPair(pTarget->GetNextParton(), pProjectile->GetNextAntiParton(), 
                                  G4PartonPair::SOFT, G4PartonPair::TARGET);
-        thePartonPairs.insert(aPair);
+        thePartonPairs.push_back(aPair);
         aPair = new G4PartonPair(pProjectile->GetNextParton(), pTarget->GetNextAntiParton(), 
                                  G4PartonPair::SOFT, G4PartonPair::PROJECTILE);
-        thePartonPairs.insert(aPair);
+        thePartonPairs.push_back(aPair);
       }  
-      delete theInteractions.removeAt(i--);
+      delete *i;
+      i=theInteractions.erase(i);
+      i--;
     }
   }
 }

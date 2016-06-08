@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.5.4.1 2001/06/28 19:07:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em8DetectorConstruction.cc,v 1.7 2001/10/24 21:30:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
@@ -661,8 +661,8 @@ void Em8DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; J<theMaterialTable->size() ; J++)
+   { pttoMaterial = (*theMaterialTable)[J];     
      if(pttoMaterial->GetName() == materialChoice)
         {AbsorberMaterial = pttoMaterial;
          logicAbsorber->SetMaterial(pttoMaterial); 
@@ -682,8 +682,8 @@ void Em8DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
+  for (size_t J=0 ; J<theMaterialTable->size() ; J++)
+   { pttoMaterial = (*theMaterialTable)[J];     
      if(pttoMaterial->GetName() == materialChoice)
         {WorldMaterial = pttoMaterial;
          logicWorld->SetMaterial(pttoMaterial); 

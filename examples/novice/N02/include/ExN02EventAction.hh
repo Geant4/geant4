@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02EventAction.hh,v 1.4.4.1 2001/06/28 19:07:28 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN02EventAction.hh,v 1.6 2001/10/11 12:32:35 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef ExN02EventAction_h
 #define ExN02EventAction_h 1
@@ -34,7 +34,7 @@
 
 class G4Event;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ExN02EventAction : public G4UserEventAction
 {
@@ -46,6 +46,8 @@ class ExN02EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void EndOfEventAction(const G4Event*);
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

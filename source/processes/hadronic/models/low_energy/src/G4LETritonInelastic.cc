@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -24,7 +24,9 @@
  // Hadronic Process: Triton Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
  // Last modified: 27-Mar-1997
-
+ // J.L. Chuma, 08-May-2001: Update original incident passed back in vec[0]
+ //                          from NuclearReaction
+ //
 #include "G4LETritonInelastic.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
@@ -64,20 +66,20 @@
     massVec[7] = massVec[3];
     massVec[8] = targetNucleus.AtomicMass( N+1.0, Z-1.0 )-(Z-1.0)*G4Electron::Electron()->GetPDGMass();
     
-    G4FastVector<G4ReactionProduct,3> vec;  // vec will contain the secondary particles
+    G4FastVector<G4ReactionProduct,4> vec;  // vec will contain the secondary particles
     G4int vecLen = 0;
     vec.Initialize( 0 );
     
     theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
                                          targetNucleus, theAtomicMass, massVec );
-    
-    G4double p = originalIncident->GetTotalMomentum();
-    theParticleChange.SetMomentumChange( originalIncident->GetMomentum() * (1.0/p) );
-    theParticleChange.SetEnergyChange( originalIncident->GetKineticEnergy() );
-    
-    theParticleChange.SetNumberOfSecondaries( vecLen );
+    //
+    G4double p = vec[0]->GetMomentum().mag();
+    theParticleChange.SetMomentumChange( vec[0]->GetMomentum()*(1./p) );
+    theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
+    //
+    theParticleChange.SetNumberOfSecondaries( vecLen-1 );
     G4DynamicParticle *pd;
-    for( G4int i=0; i<vecLen; ++i )
+    for( G4int i=1; i<vecLen; ++i )
     {
       pd = new G4DynamicParticle();
       pd->SetDefinition( vec[i]->GetDefinition() );

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopAl.hh,v 1.3.8.2 2001/06/28 20:20:05 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PiMinusStopAl.hh,v 1.7 2001/10/05 16:09:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -40,10 +40,6 @@
 
 #ifndef G4PIMINUSSTOPAL_HH
 #define G4PIMINUSSTOPAL_HH 
-
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
-#include "g4rw/cstring.h"
 
 #include "G4PiMinusStopMaterial.hh"
 #include "globals.hh"
@@ -67,12 +63,6 @@ public:
 
   // Destructor
   virtual ~G4PiMinusStopAl();
-
-  // Definitions of absorption products
-  //  virtual G4RWTValOrderedVector<G4String>* DefinitionVector();
-
-  // 4-vectors of absorption products
-  //  virtual G4RWTPtrOrderedVector<G4LorentzVector>* P4Vector();
 
   // Number of final nucleons, out of generated absorption products
   virtual G4double FinalNucleons();

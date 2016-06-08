@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.hh,v 1.2.4.1 2001/06/28 19:06:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2DetectorMessenger.hh,v 1.4 2001/10/25 15:12:06 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2DetectorMessenger_h
 #define Em2DetectorMessenger_h 1
@@ -42,7 +42,7 @@ class G4UIcmdWith3Vector;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2DetectorMessenger: public G4UImessenger
 {
@@ -62,6 +62,8 @@ class Em2DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* FieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

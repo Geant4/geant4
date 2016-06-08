@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.cc,v 1.4.4.1 2001/06/28 19:15:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLImmediateXViewer.cc,v 1.6 2001/07/14 21:47:50 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -60,6 +60,11 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
     fViewId = -1;  // This flags an error.
     return;
   }
+}
+
+G4OpenGLImmediateXViewer::~G4OpenGLImmediateXViewer () {}
+
+void G4OpenGLImmediateXViewer::Initialise () {
 
   CreateGLXContext (vi_immediate);
 
@@ -71,6 +76,17 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   ClearView ();
   FinishView ();
 
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //The following code was in the constructor and found not to work for
+  //the reasons below.  It was moved to DrawView(), but has now been moved
+  //to Initialise().
+  //The following code is useless in its current position, as the 
+  //G4OpenGLXmViewer constructor gets called *after* it, and hence sets
+  //doublebuffer to true or false there, after our little test to correct
+  //it in the case of a double buffer being got for an immediate view.
+  //Hence, code moved to DrawView.
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
   if (doublebuffer) {
@@ -80,19 +96,9 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 
   glDepthFunc (GL_LEQUAL);
   glDepthMask (GL_TRUE);
-  
 }
 
-G4OpenGLImmediateXViewer::~G4OpenGLImmediateXViewer () {}
-
 void G4OpenGLImmediateXViewer::DrawView () {
-
-  // If a double buffer context has been forced upon us, ignore the
-  // back buffer for this OpenGLImmediate view.
-  if (doublebuffer) {
-    doublebuffer = false;
-    glDrawBuffer (GL_FRONT);
-  }
 
   if (white_background == true) {
     glClearColor (1., 1., 1., 1.);

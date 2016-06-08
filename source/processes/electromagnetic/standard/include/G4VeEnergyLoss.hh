@@ -21,18 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.hh,v 1.5.4.1 2001/06/28 19:12:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VeEnergyLoss.hh,v 1.10 2001/11/08 08:45:43 urban Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
-// ---------------------------------------------------------------
-// 18/11/98 It is a modified version of G4VeEnergyLoss: continuous energy loss
+// -----------------------------------------------------------------------------
+// 18-11-98 It is a modified version of G4VeEnergyLoss: continuous energy loss
 //          with generation of subcutoff delta rays, L. Urban
-// 02/02/99 new data members ,  L.Urban 
-// 10/02/00 modifications , new e.m. structure, L.Urban
+// 02-02-99 new data members ,  L.Urban 
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 29-10-01 all static functions no more inlined (mma)
+// 08-11-01 Charge,lastCharge not data members, L.Urban
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef G4VeEnergyLoss_h
 #define G4VeEnergyLoss_h 1
@@ -53,14 +55,13 @@
 #include "G4PhysicsLinearVector.hh"
 #include "G4EnergyLossTables.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 // Class description:
 //
 // This class is the implementation of the unified Energy Loss process
 // with generation of subcutoff secondaries , see description of 
-// *****************************************
-//  the AlongStepDoIt method.
+// the AlongStepDoIt method.
 // It calculates the continuous energy loss for e+/e-.
 // The following processes give contributions to the continuous
 // energy loss (by default) :
@@ -74,7 +75,7 @@
 //
 // Class description - end
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 class G4VeEnergyLoss : public G4VEnergyLoss
  
@@ -140,10 +141,7 @@ class G4VeEnergyLoss : public G4VEnergyLoss
 
     G4PhysicsTable* theLossTable;
      
-    G4double MinKineticEnergy ;           //
-
-    G4double Charge,lastCharge ;
-
+    G4double MinKineticEnergy ;           
 
   private:
 
@@ -157,7 +155,7 @@ class G4VeEnergyLoss : public G4VEnergyLoss
 
     G4double linLossLimit ;               //
 
-    G4double c1N,c2N ;                   // coeffs to compute nb of deltas
+    G4double cN ;                         // coeffs to compute nb of deltas
     G4int Ndeltamax ;                    // upper limit for nb of subcutoff
                                          // delta rays in one step
     
@@ -166,26 +164,26 @@ class G4VeEnergyLoss : public G4VEnergyLoss
  //
   public:  // With description
 
-    static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    static void  SetNbOfProcesses(G4int nb);
     // Sets number of processes giving contribution to the energy loss
 
-    static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    static void  PlusNbOfProcesses();
     // Increases number of processes giving contribution to the energy loss
 
-    static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};
+    static void  MinusNbOfProcesses();
     // Decreases number of processes giving contribution to the energy loss
 
-    static G4int GetNbOfProcesses()         {return NbOfProcesses;};
+    static G4int GetNbOfProcesses();
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 2)
 
-    static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
-    static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
-    static void SetNbinEloss(G4int nb)           {NbinEloss=nb;};
+    static void SetLowerBoundEloss(G4double val);
+    static void SetUpperBoundEloss(G4double val);
+    static void SetNbinEloss(G4int nb);
 
-    static G4double GetLowerBoundEloss() {return LowerBoundEloss;};
-    static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
-    static G4int    GetNbinEloss()       {return NbinEloss;};
+    static G4double GetLowerBoundEloss();
+    static G4double GetUpperBoundEloss();
+    static G4int    GetNbinEloss();
 
  
  protected:
@@ -239,6 +237,8 @@ class G4VeEnergyLoss : public G4VEnergyLoss
   public: // With description
      
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #include "G4VeEnergyLoss.icc"
 

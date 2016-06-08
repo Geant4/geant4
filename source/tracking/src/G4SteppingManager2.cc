@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.1.2.1 2001/06/28 19:15:30 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SteppingManager2.cc,v 1.4 2001/11/07 13:14:45 radoone Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //---------------------------------------------------------------
 //
-// G4SteppingManager.icc
+// G4SteppingManager2.cc
 //
 // Description:
 //   This class represents the manager who steers to move the give
@@ -223,7 +223,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    fN2ndariesAtRestDoIt = 0;
    shortestLifeTime = DBL_MAX;
 
-   int NofInactiveProc=0;
+   unsigned int NofInactiveProc=0;
    for( size_t ri=0 ; ri < MAXofAtRestLoops ; ri++ ){
      fCurrentProcess = (*fAtRestGetPhysIntVector)[ri];
      if (fCurrentProcess== NULL) {

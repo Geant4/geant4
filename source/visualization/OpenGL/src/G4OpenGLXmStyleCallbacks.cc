@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.4.2.1 2001/06/28 19:15:46 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmStyleCallbacks.cc,v 1.6 2001/11/12 18:22:09 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -65,6 +65,7 @@ void G4OpenGLXmViewer::drawing_style_callback (Widget w,
     break;
 
   default:
+    style = G4ViewParameters::wireframe;
     G4Exception("Unrecognised case in drawing_style_callback.");
   }
 
@@ -97,6 +98,7 @@ void G4OpenGLXmViewer::rep_style_callback (Widget w,
     break;
 
   default:
+    style = G4ViewParameters::polyhedron;
     G4Exception("Unrecognised case in rep_style_callback.");
   }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmacPlusPlus.hh,v 1.4.4.2 2001/06/28 20:18:58 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SigmacPlusPlus.hh,v 1.6 2001/10/15 10:09:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,8 +54,6 @@ class G4SigmacPlusPlus : public G4VBaryon
 {
  private:
    static G4SigmacPlusPlus theSigmacPlusPlus;
-   static G4double  theSigmacPlusPlusLengthCut;
-   static G4double* theSigmacPlusPlusKineticEnergyCuts;
 
  private:
    G4SigmacPlusPlus(
@@ -75,19 +73,7 @@ class G4SigmacPlusPlus : public G4VBaryon
 
    static G4SigmacPlusPlus* SigmacPlusPlusDefinition();
    static G4SigmacPlusPlus* SigmacPlusPlus();
-   static G4double GetCuts() {return theSigmacPlusPlusLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theSigmacPlusPlusKineticEnergyCuts;};
-
-   virtual void SetCuts(G4double aCut); 
 };
-
-inline void G4SigmacPlusPlus::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theSigmacPlusPlusLengthCut = theCutInMaxInteractionLength;  
-  theSigmacPlusPlusKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 
 #endif

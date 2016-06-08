@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HitsModel.cc,v 1.4.4.1 2001/06/28 19:16:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HitsModel.cc,v 1.7 2001/08/14 18:43:30 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  26th August 1998.
@@ -30,6 +30,7 @@
 
 #include "G4HitsModel.hh"
 
+#include "G4VGraphicsScene.hh"
 #include "G4ModelingParameters.hh"
 #include "G4RunManager.hh"
 #include "G4Event.hh"
@@ -42,7 +43,7 @@ G4HitsModel::G4HitsModel () {
   fGlobalDescription = fGlobalTag;
 }
 
-void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
+void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   if (fpMP && fpMP -> IsViewHits ()) {
     G4RunManager* runManager = G4RunManager::GetRunManager ();
     const G4Event* event = runManager -> GetCurrentEvent ();
@@ -50,9 +51,11 @@ void G4HitsModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
       G4HCofThisEvent* HCE = event -> GetHCofThisEvent ();
       if (HCE) {
 	G4int nHC = HCE -> GetCapacity ();
+	sceneHandler.BeginPrimitives ();
 	for (int iHC = 0; iHC < nHC; iHC++) {
 	  HCE -> GetHC (iHC) -> DrawAllHits ();
 	}
+	sceneHandler.EndPrimitives ();
       }
     }
   }

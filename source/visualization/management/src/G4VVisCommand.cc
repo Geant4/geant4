@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.8.2.1 2001/06/28 19:16:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VVisCommand.cc,v 1.10 2001/09/10 10:49:51 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
 
 #include "G4VVisCommand.hh"
 
+#include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include "g4std/strstream"
 
@@ -133,4 +134,42 @@ void G4VVisCommand::GetNewDoublePairValue(const G4String& paramString,
   yval = y*ValueOf(unt);
 
   return;
+}
+
+void G4VVisCommand::UpdateVisManagerScene
+(const G4String& sceneName) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+
+  G4int iScene, nScenes = sceneList.size ();
+  for (iScene = 0; iScene < nScenes; iScene++) {
+    if (sceneList [iScene] -> GetName () == sceneName) break;
+  }
+
+  G4Scene* pScene = 0;  // Zero unless scene has been found...
+  if (iScene < nScenes) {
+    pScene = sceneList [iScene];
+  }
+
+  if (!pScene) {
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
+	     << G4endl;
+    }
+    return;
+  }
+
+  fpVisManager -> SetCurrentScene (pScene);
+
+  // Scene has changed.  Trigger a rebuild of graphical database...
+  G4VViewer* pViewer = fpVisManager -> GetCurrentViewer();
+  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler();
+  if (sceneHandler && sceneHandler -> GetScene ()) {
+    if (pViewer && pViewer -> GetViewParameters().IsAutoRefresh()) {
+      G4UImanager::GetUIpointer () ->
+	ApplyCommand ("/vis/scene/notifyHandlers");
+    }
+  }
 }

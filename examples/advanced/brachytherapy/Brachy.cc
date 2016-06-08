@@ -19,10 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
-//
-// $Id: Brachy.cc,v 1.4.4.1 2001/06/28 19:06:34 gunter Exp $
-// GEANT4 tag $Name:  $
+
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -37,18 +34,20 @@
 //
 // Simplified gamma generation is used.
 // Source axis is oriented along Z axis. 
-// Voxel data on the X-Z plane is output to ASCII file
+// Voxel data on the X-Z plan
+//e is output to ASCII file
 // "Brachy.out".
-//
-// For information related to this code contact the developers.
-//
-// --------------------------------------------------------------  
+ 
+// 
+// $Id: Brachy.cc,v 1.8 2001/12/13 13:44:53 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 #include "BrachyEventAction.hh"
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "BrachyWaterBoxSD.hh"
+
 
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
@@ -58,7 +57,7 @@
 int main()
 {
  // Number of generated photons
- G4int NumberOfEvents = 10;
+ G4int NumberOfEvents = 1000;
 
  // Define number of voxels in X-Z plane
  G4int NumVoxelX = 101;
@@ -103,8 +102,15 @@ int main()
 	// Format = x coord [mm] <tab> z coord [mm] <tab> edep [MeV] <eol>
 	ofs.open("Brachy.out");
 		{
-		G4double VoxelWidth_X = pDetectorConstruction->m_BoxDimX/NumVoxelX;
-		G4double VoxelWidth_Z = pDetectorConstruction->m_BoxDimZ/NumVoxelZ;
+
+		  ofs<<" x(mm)"<<'\t'<<"z(mm)"<<'\t'<<"released energy(Mev)"
+		     <<G4endl;
+                                
+		
+
+		G4double VoxelWidth_X = pDetectorConstruction->GetBoxDim_X()/NumVoxelX;
+		G4double VoxelWidth_Z = pDetectorConstruction->GetBoxDim_Z()/NumVoxelZ;
+
 		G4double x,z;
 
 		for(G4int k=0;k<NumVoxelZ;k++)
@@ -118,8 +124,12 @@ int main()
 				
 				// Do not consider near voxels
 				if(fabs(x) > 3*mm || fabs(z) > 6*mm)	
-					ofs << x << '\t' << z << '\t' << pVoxel[j] << G4endl;
-				}
+				{	ofs << x << '\t' << z << '\t' << pVoxel[j] << G4endl;
+				//check released energy	
+				// if(pVoxel[j]!=0)
+				//  G4cout<<x<<'\t'<<z<< '\t'<<pVoxel[j]<<G4endl;
+				}      
+		}
 			}
 		ofs.close();
 		}
@@ -132,3 +142,13 @@ int main()
 
  return 0;
 }
+
+
+
+
+
+
+
+
+
+

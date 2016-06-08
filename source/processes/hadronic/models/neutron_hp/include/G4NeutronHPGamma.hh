@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPGamma.hh,v 1.5.4.1 2001/06/28 19:14:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPGamma.hh,v 1.8 2001/10/04 20:00:35 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4NeutronHPGamma_h
 #define G4NeutronHPGamma_h 1
@@ -67,7 +67,7 @@ class G4NeutronHPGamma
     G4DynamicParticle * theNew = new G4DynamicParticle;
     theNew->SetDefinition(G4Gamma::Gamma());
     theNew->SetKineticEnergy(gammaEnergy);
-    theResult->insert(theNew);
+    theResult->push_back(theNew);
     return theResult;
   }
   

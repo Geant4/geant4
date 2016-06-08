@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2001/05/18 17:08:19 gcosmo Exp $
+$Id: History,v 1.38 2001/11/24 18:37:10 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,78 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 23, 2001, M.Asai (intercoms-V03-02-15)
+- Fix a problem with a command which has doubled slash.
+
+Oct 23, 2001, G.Cosmo (intercoms-V03-02-14)
+- Restored inclusion of G4Tokenizer.hh for removal of STLinterface module.
+  Files: G4UImanager.cc, G4UIcommand.cc and G4UIparameter.cc.
+
+Oct 12, 2001, M.Asai (intercoms-V03-02-13)
+- Rename method in G4UIcommandTree to avoid confliction.
+- Temporarly replaced inclusion of G4Tokenizer.hh with old RW wrapper. (G.Cosmo)
+- Replaced int/double with G4int/G4double wherever needed. (G.Cosmo)
+
+Oct 11, 2001, G.Cosmo (intercoms-V03-02-12)
+- Replaced inclusions of ctoken.h with G4Tokenizer.hh in
+  G4UImanager[.hh.cc], G4UIcommand.cc and G4UIparameter.cc.
+  Removed comment on RW wrappers.
+- Co-works with tag "globals-V03-02-03" where the STLInterface
+  module has been removed.
+
+Oct 10, 2001, M.Asai (intercoms-V03-02-11)
+- Change aliasing characters from "[" and "]" to "{" and "}".
+  This is required to fix the crash in hadronics test code.
+- Introducing /control/createHTML
+
+Oct 5, 2001, M.Asai (intercoms-V03-02-10)
+- Introducing Loop() and Foreach() methods.
+- Introducing three new UI commands
+    /control/shell
+    /control/foreach
+    /control/loop
+
+Oct 4, 2001, M.Asai (intercoms-V03-02-09)
+- Correction for string parameter starting with a space.
+- Recurrent variables 
+
+Oct 1, 2001, M.Asai (intercoms-V03-02-08)
+- Introducing a functionality of "shell variables".
+    New class : G4UIaliasList
+    Modified classes : G4UImanager G4UIcontrolMessenger
+
+Sep 28, 2001, M.Asai (intercoms-V03-02-07)
+- For Batch mode, comment lines are displayed only at verbose level = 2.
+
+Aug 29, 2001, M.Asai (intercoms-V03-02-06)
+- Corrections in G4UIbatch to ignore the blank line.
+
+Aug 27, 2001, M.Asai (intercoms-V03-02-05)
+- G4UIbatch now displays (G4cerr) the error message.
+  Correction according to the bug report #294.
+
+Aug 17, 2001, J.Allison (intercoms-V03-02-04)
+- Coworks with vis-V03-02-12 and greps-V03-02-02.
+- Added G4VisManager::Draw(const G4Scale&,...
+
+Aug 14, 2001, J.Allison (intercoms-V03-02-03)
+- Coworks with vis-V03-02-11 and greps-V03-02-02.
+- Moved default value of argument G4Transform3D::Identity from
+  G4VSceneHandler::BeginPrimitives to
+  G4VGraphicsScene::BeginPrimitives.
+
+July 21, 2001, J.Allison (intercoms-V03-02-02)
+- Added G4VGraphicsScene::AddPrimitive(const G4Scale&).
+
+July 18, 2001, M.Asai (intercoms-V03-02-01)
+- Added a feature of suppressing program abortion due to G4Exception
+  affected files : G4UIcontrolMessenger.hh G4UIcontrolMessenger.cc
+- This co-works with global-V03-02-01
+
+July 17, 2001, J.Allison (intercoms-V03-02-00)
+- Fixed parsing of quoted (") tokens in current value for null or defaulted
+  parameters in loop over previous parameters in G4UIcommand::DoIt().
 
 May 18, 2001, G.Cosmo (intercoms-V03-01-00)
 - Cleared pedantic warnings detected in Linux-g++ with ISO/ANSI setup.

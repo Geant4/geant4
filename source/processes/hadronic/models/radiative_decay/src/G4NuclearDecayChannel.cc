@@ -273,7 +273,9 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   for( G4int index=0; index < numberOfDaughters; index++)
     {theParentMass += daughters[index]->GetPDGMass();}
   theParentMass += Qtransition  ;
-
+  // bug fix for beta+ decay (flei 25/09/01)
+  if (decayMode == 2) theParentMass -= 2*0.511 * MeV;
+  
   if (GetVerboseLevel()>1) {
     G4cout << "G4NuclearDecayChannel::DecayIt ";
     G4cout << "the decay mass = " << theParentMass << G4endl;
@@ -333,7 +335,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
   //
     dynamicDaughter = products->PopProducts();
     G4LorentzVector daughterMomentum = dynamicDaughter->Get4Momentum();
-      G4ThreeVector daughterMomentum1 = dynamicDaughter->Get4Momentum();
+    G4ThreeVector const daughterMomentum1 = G4ThreeVector(daughterMomentum);
   //
   //
   // Now define a G4Fragment with the correct A, Z and excitation, and declare and
@@ -454,7 +456,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     //
     //create daughter G4DynamicParticle
     G4double costheta, sintheta, phi, sinphi, cosphi;
-    G4double costhetan, sinthetan, phin, sinphin, cosphin;
+    //    G4double costhetan, sinthetan, phin, sinphin, cosphin;
     costheta = 2.*G4UniformRand()-1.0;
     sintheta = sqrt((1.0-costheta)*(1.0+costheta));
     phi  = 2.0*M_PI*G4UniformRand()*rad;
@@ -480,7 +482,7 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
   } else {
     //calculate daughter momentum
     //  Generate two
-    G4double rd1, rd2, rd;
+    G4double rd1, rd2;
     G4double daughtermomentum[3];
     G4double daughterenergy[3];
     G4double momentummax=0.0, momentumsum = 0.0;

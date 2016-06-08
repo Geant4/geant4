@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WoViewer.cc,v 1.6.4.1 2001/06/28 19:15:36 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4WoViewer.cc,v 1.7 2001/07/11 10:08:48 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Guy Barrand 04 November 1996

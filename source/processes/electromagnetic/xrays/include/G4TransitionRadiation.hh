@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.hh,v 1.5.4.1 2001/06/28 19:12:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TransitionRadiation.hh,v 1.6 2001/07/11 10:03:42 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4TransitionRadiation  -- header file
 //

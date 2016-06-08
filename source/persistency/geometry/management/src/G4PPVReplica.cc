@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PPVReplica.cc,v 1.2.4.1 2001/06/28 19:11:28 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PPVReplica.cc,v 1.3 2001/07/11 10:02:20 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 //

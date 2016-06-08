@@ -21,8 +21,8 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: jshape.F,v 1.2.8.1 2001/06/28 19:08:09 gunter Exp $
-*     GEANT4 tag $Name:  $
+*     $Id: jshape.F,v 1.3 2001/07/11 09:59:03 gunter Exp $
+*     GEANT4 tag $Name: geant4-04-00 $
 *    
 *     
 *--   Author : Jouko Vuoskoski, CERN, Jouko.Vuoskoski@cern.ch

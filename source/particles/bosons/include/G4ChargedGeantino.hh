@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargedGeantino.hh,v 1.3.4.2 2001/06/28 20:18:55 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ChargedGeantino.hh,v 1.8 2001/10/28 05:03:48 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -55,8 +55,6 @@ class G4ChargedGeantino : public G4VBoson
 {
  private:
    static G4ChargedGeantino theChargedGeantino;
-   static G4double  theChargedGeantinoLengthCut;
-   static G4double* theChargedGeantinoKineticEnergyCuts;
 
  private:
    G4ChargedGeantino(
@@ -76,13 +74,8 @@ class G4ChargedGeantino : public G4VBoson
  
    static G4ChargedGeantino* ChargedGeantinoDefinition();
    static G4ChargedGeantino* ChargedGeantino();
-   static G4double  GetCuts() {return theChargedGeantinoLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theChargedGeantinoKineticEnergyCuts;};
 
-   virtual void   SetCuts(G4double aCut);
+   virtual void CalcEnergyCuts( const G4Material* );
 };
-
-inline G4ChargedGeantino* G4ChargedGeantino::ChargedGeantino()
-{  return &theChargedGeantino; }
 
 #endif

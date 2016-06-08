@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmVWidgetComponent.cc,v 1.3.4.1 2001/06/28 19:15:47 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmVWidgetComponent.cc,v 1.4 2001/07/11 10:08:58 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //Base class for all Motif component widgets
 

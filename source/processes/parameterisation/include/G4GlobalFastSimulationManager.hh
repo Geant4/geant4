@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.7.4.1 2001/06/28 19:15:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.8 2001/07/11 10:08:24 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //  
 //---------------------------------------------------------------

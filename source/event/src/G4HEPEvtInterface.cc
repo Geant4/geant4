@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtInterface.cc,v 1.4.2.1 2001/06/28 19:07:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4HEPEvtInterface.cc,v 1.7 2001/11/20 23:21:41 asaim Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -45,13 +45,25 @@ G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
   else {
     G4Exception("G4HEPEvtInterface:: cannot open file.");
   }
+  G4ThreeVector zero;
+  particle_position = zero;
+  particle_time = 0.0;
+
 }
 
 G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
 {
   const char* fn = evfile.data();
   inputFile.open((char*)fn);
-  fileName = evfile;
+  if (inputFile) {
+    fileName = evfile;
+  }
+  else {
+    G4Exception("G4HEPEvtInterface:: cannot open file.");
+  }
+  G4ThreeVector zero;
+  particle_position = zero;
+  particle_time = 0.0;
 }
 
 G4HEPEvtInterface::~G4HEPEvtInterface()
@@ -59,7 +71,7 @@ G4HEPEvtInterface::~G4HEPEvtInterface()
 
 void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 {
-  int NHEP;  // number of entries
+  G4int NHEP;  // number of entries
   inputFile >> NHEP;
   if( inputFile.eof() ) 
   {
@@ -67,7 +79,7 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
     return;
   }
 
-  for( int IHEP=0; IHEP<NHEP; IHEP++ )
+  for( G4int IHEP=0; IHEP<NHEP; IHEP++ )
   {
     G4int ISTHEP;   // status code
     G4int IDHEP;    // PDG code
@@ -99,14 +111,14 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 
   // make connection between daughter particles decayed from 
   // the same mother
-  for( int i=0; i<HPlist.size(); i++ )
+  for( size_t i=0; i<HPlist.size(); i++ )
   {
     if( HPlist[i]->GetJDAHEP1() > 0 ) //  it has daughters
     {
-      int jda1 = HPlist[i]->GetJDAHEP1()-1; // FORTRAN index starts from 1
-      int jda2 = HPlist[i]->GetJDAHEP2()-1; // but C++ starts from 0.
+      G4int jda1 = HPlist[i]->GetJDAHEP1()-1; // FORTRAN index starts from 1
+      G4int jda2 = HPlist[i]->GetJDAHEP2()-1; // but C++ starts from 0.
       G4PrimaryParticle* mother = HPlist[i]->GetTheParticle();
-      for( int j=jda1; j<=jda2; j++ )
+      for( G4int j=jda1; j<=jda2; j++ )
       {
         G4PrimaryParticle* daughter = HPlist[j]->GetTheParticle();
         if(HPlist[j]->GetISTHEP()>0)
@@ -119,14 +131,10 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
   }
 
   // create G4PrimaryVertex object
-  G4double x0 = 0.;  // vertex point X
-  G4double y0 = 0.;  // vertex point Y
-  G4double z0 = 0.;  // vertex point Z
-  G4double t0 = 0.;  // vertex time
-  G4PrimaryVertex* vertex = new G4PrimaryVertex(x0,y0,z0,t0);
+  G4PrimaryVertex* vertex = new G4PrimaryVertex(particle_position,particle_time);
 
   // put initial particles to the vertex
-  for( int ii=0; ii<HPlist.size(); ii++ )
+  for( size_t ii=0; ii<HPlist.size(); ii++ )
   {
     if( HPlist[ii]->GetISTHEP() > 0 ) // ISTHEP of daughters had been 
                                        // set to negative
@@ -138,7 +146,7 @@ void G4HEPEvtInterface::GeneratePrimaryVertex(G4Event* evt)
 
   // clear G4HEPEvtParticles
   //HPlist.clearAndDestroy();
-  for(G4int iii=0;iii<HPlist.size();iii++)
+  for(size_t iii=0;iii<HPlist.size();iii++)
   { delete HPlist[iii]; }
   HPlist.clear();
 

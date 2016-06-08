@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVHit.ddl,v 1.7.4.1 2001/06/28 19:11:24 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PVHit.ddl,v 1.9 2001/12/07 03:48:59 morita Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // Class Description:
@@ -34,6 +34,7 @@
 #ifndef G4PVHit_h
 #define G4PVHit_h 1
 
+#include "G4Pglobals.hh"
 #include "G4PersistentSchema.hh"
 
 #include "G4VHit.hh"

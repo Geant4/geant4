@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSphere.ddl,v 1.5.2.1 2001/06/28 19:11:31 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4PSphere
-//
+// $Id: G4PSphere.ddl,v 1.7 2001/07/11 10:02:23 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PSphere solid.
+
 // History:
 // 19.06.98 A.Kimura Converted G4Sphere.hh
 
@@ -40,17 +41,20 @@ class G4Sphere;
 
 #include "G4ThreeVector.hh"
 
-class G4PSphere : public G4PCSGSolid {
-public:
+class G4PSphere
+ : public G4PCSGSolid
+{
+public: // With description
     G4PSphere(const G4Sphere* theSphere);
-		   
     virtual ~G4PSphere() ;
+    // Constructor and Destructor
 
     G4VSolid* MakeTransientObject() const;
+    // Creates a transient boolean solid object.
 
-    // Naming method (pseudo-RTTI : run-time type identification
     virtual G4GeometryType  GetEntityType() const {return G4String("G4Sphere");}
-       
+    // Returns the G4GeometryType of this solid.
+
 private:
 
     G4double fRmin,fRmax,

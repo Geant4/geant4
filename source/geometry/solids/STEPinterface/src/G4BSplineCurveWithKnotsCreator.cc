@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.6.2.1 2001/06/28 19:09:15 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.7 2001/07/11 10:00:08 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineCurveWithKnotsCreator

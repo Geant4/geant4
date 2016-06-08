@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SpecialCuts.hh,v 1.3.4.2 2001/06/28 20:18:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN05SpecialCuts.hh,v 1.5 2001/11/05 08:24:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -69,7 +69,7 @@ class ExN05SpecialCuts : public G4VProcess
      virtual G4VParticleChange* AtRestDoIt(
 			     const G4Track& ,
 			     const G4Step&
-			    ){return NULL;};
+			    ){return 0;};
 
      //  no operation in  AlongStepGPIL
      virtual G4double AlongStepGetPhysicalInteractionLength(
@@ -84,7 +84,7 @@ class ExN05SpecialCuts : public G4VProcess
      virtual G4VParticleChange* AlongStepDoIt(
 			     const G4Track& ,
 			     const G4Step& 
-			    ) {return NULL;};
+			    ) {return 0;};
 
   private:
   

@@ -19,17 +19,17 @@ if( ! $?LHCXXTOP ) then
 endif
 
 switch ($G4SYSTEM)
-  case SUN-CC5:
+  case SUN-CC:
     setenv PLATF         sol7
     setenv CC_COMP       CC-5.2
     setenv OBJY_VERS     6.1.3
-    setenv HEP_ODBMS_VER 0.3.2.10
+    setenv HEP_ODBMS_VER 0.3.3.1
     breaksw
   case Linux-g++:
     setenv PLATF         @sys
     setenv CC_COMP       gcc-2.95.2
-    setenv OBJY_VERS     6.0
-    setenv HEP_ODBMS_VER 0.3.2.3
+    setenv OBJY_VERS     6.1.3
+    setenv HEP_ODBMS_VER 0.3.3.1
     breaksw
   default:
     echo "Objectivity and HepODBMS versions not specified for G4SYSTEM = $G4SYSTEM."

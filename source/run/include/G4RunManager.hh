@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.15.2.1 2001/06/28 19:15:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RunManager.hh,v 1.22 2001/11/23 16:20:30 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
@@ -80,8 +80,8 @@ class G4Timer;
 class G4RunMessenger;
 class G4DCtable;
 class G4Run;
-#include "G4Event.hh"
 
+#include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
 #include "g4std/vector"
@@ -104,7 +104,7 @@ class G4RunManager
     // bottom of the main().
 
   public: // with description
-    virtual void BeamOn(G4int n_event,const char* macroFile=NULL,G4int n_select=-1);
+    virtual void BeamOn(G4int n_event,const char* macroFile=0,G4int n_select=-1);
     //  This method starts an event loof of "n_event" events. The condition of Geant4
     // is examined before starting the event loop. This method must be invoked at
     // Idle state. The state will be changed to GeomClosed during the event loop and
@@ -146,7 +146,7 @@ class G4RunManager
 
     virtual G4bool ConfirmBeamOnCondition();
     virtual void RunInitialization();
-    virtual void DoEventLoop(G4int n_event,const char* macroFile=NULL,G4int n_select=-1);
+    virtual void DoEventLoop(G4int n_event,const char* macroFile=0,G4int n_select=-1);
     virtual void RunTermination();
     //  These four protected methods are invoked from BeamOn() method. These four methods
     // are invoked in this order.
@@ -210,11 +210,13 @@ class G4RunManager
     G4std::vector<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
 
-    G4int storeRandomNumberStatus;
+    G4bool storeRandomNumberStatus;
     G4String randomNumberStatusDir;
+    G4String versionString;
 
   public:
-    virtual void StoreRandomNumberStatus(G4int eventID=-1);
+    virtual void rndmSaveThisRun();
+    virtual void rndmSaveThisEvent();
     virtual void RestoreRandomNumberStatus(G4String fileN);
 
   public: // with description
@@ -264,11 +266,21 @@ class G4RunManager
     inline const G4UserSteppingAction* GetUserSteppingAction() const
     { return userSteppingAction; }
     //  These methods returns respective user initialization and action classes.
+     
+    inline void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
+    { eventManager->SetNumberOfAdditionalWaitingStacks(iAdd); }
+      //  Set the number of additional (optional) waiting stacks.
+      // This method must be invoked at PreInit, Init or Idle states.
+      // Once the user set the number of additional waiting stacks,
+      // he/she can use the corresponding ENUM in G4ClassificationOfNewTrack.
+
+    inline G4String GetVersionString() const
+    { return versionString; }
 
   public:
-    inline void SetRandomNumberStore(G4int i)
-    { storeRandomNumberStatus = i; }
-    inline G4int GetRandomNumberStore() const
+    inline void SetRandomNumberStore(G4bool flag)
+    { storeRandomNumberStatus = flag; }
+    inline G4bool GetRandomNumberStore() const
     { return storeRandomNumberStatus; }
     inline void SetRandomNumberStoreDir(G4String dir)
     { 
@@ -325,7 +337,7 @@ class G4RunManager
     {
       if(i>=1 && i<=n_perviousEventsToBeStored)
       { return (*previousEvents)[i-1]; }
-      return NULL;
+      return 0;
     }
     //  Returns the pointer to the "i" previous event. This method is availavle for
     // EventProc state. In case the event loop has not yet to reach to the requested

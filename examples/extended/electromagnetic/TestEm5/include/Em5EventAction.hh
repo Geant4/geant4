@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventAction.hh,v 1.2.4.1 2001/06/28 19:07:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em5EventAction.hh,v 1.4 2001/10/16 11:56:27 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5EventAction_h
 #define Em5EventAction_h 1
@@ -38,7 +38,7 @@
 class Em5RunAction;
 class Em5EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em5EventAction : public G4UserEventAction
 {
@@ -77,6 +77,8 @@ class Em5EventAction : public G4UserEventAction
     G4String drawFlag;
     G4int    printModulo;             
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PPrimaryParticle.ddl,v 1.2.4.1 2001/06/28 19:11:26 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PPrimaryParticle.ddl,v 1.3 2001/07/11 10:02:15 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4PPrimaryParticle_h

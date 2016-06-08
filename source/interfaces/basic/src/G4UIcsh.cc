@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcsh.cc,v 1.4.4.1 2001/06/28 19:10:23 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UIcsh.cc,v 1.5 2001/07/11 10:01:21 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4UIcsh.hh"

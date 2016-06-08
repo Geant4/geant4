@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -28,6 +28,7 @@
 #include "G4MesonSplitter.hh"
 #include "G4BaryonSplitter.hh"
 #include "Randomize.hh"
+#include "g4std/deque"
 
 // based on prototype by Maxim Komogorov
 // Splitting into methods, and centralizing of model parameters HPW Feb 1999
@@ -42,6 +43,7 @@ class G4QGSMSplitableHadron : public G4VSplitableHadron
       G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary);
       G4QGSMSplitableHadron(const G4ReactionProduct & aPrimary, G4bool Direction);
       G4QGSMSplitableHadron(const G4Nucleon & aNucleon); 
+      G4QGSMSplitableHadron(const G4Nucleon & aNucleon, G4bool Direction); 
 
       virtual ~G4QGSMSplitableHadron();
      
@@ -65,8 +67,8 @@ class G4QGSMSplitableHadron : public G4VSplitableHadron
   // aggregated data
     G4bool Direction; // FALSE is target. - candidate for more detailed design. @@@@ HPW
 
-    G4PartonVector Color;
-    G4PartonVector AntiColor;   
+    G4std::deque<G4Parton *> Color;
+    G4std::deque<G4Parton *> AntiColor;   
   private:
     // associated classes
     G4MesonSplitter theMesonSplitter;
@@ -84,12 +86,18 @@ class G4QGSMSplitableHadron : public G4VSplitableHadron
 
 inline G4Parton* G4QGSMSplitableHadron::GetNextParton()
    {
-   return Color.isEmpty()?0:Color.removeLast();
+   if(Color.size()==0) return 0;
+   G4Parton * result = Color.back();
+   Color.pop_back();
+   return result;
    }
 
 inline G4Parton* G4QGSMSplitableHadron::GetNextAntiParton()
    {
-   return AntiColor.isEmpty()?0:AntiColor.removeFirst();
+   if(AntiColor.size() == 0) return 0;
+   G4Parton * result = AntiColor.front();
+   AntiColor.pop_front();
+   return result;
    }
 
 #endif

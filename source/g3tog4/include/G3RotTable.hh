@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3RotTable.hh,v 1.11.4.1 2001/06/28 19:08:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G3RotTable.hh,v 1.13 2001/07/16 15:38:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------
 // Class description:
@@ -41,11 +41,11 @@
 
 #include "globals.hh"
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4Material;
 
-typedef G4RWTPtrOrderedVector<G3RotTableEntry>  G3RotMatrixVector;
+typedef G4std::vector<G3RotTableEntry*>  G3RotMatrixVector;
 
 class G3RotTable
 {

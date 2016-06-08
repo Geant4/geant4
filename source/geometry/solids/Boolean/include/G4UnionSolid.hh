@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.hh,v 1.5.4.1 2001/06/28 19:08:57 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UnionSolid.hh,v 1.6 2001/07/11 09:59:51 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // class G4UnionSolid

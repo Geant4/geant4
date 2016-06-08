@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.3.18.1 2001/06/28 19:13:27 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TheoFSGenerator.cc,v 1.6 2001/10/04 20:00:28 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // G4TheoFSGenerator
 #include "G4DynamicParticle.hh"
@@ -82,17 +82,17 @@ G4VParticleChange * G4TheoFSGenerator::ApplyYourself(const G4Track & thePrimary,
                theTransport->Propagate(theInitialResult, theHighEnergyGenerator->GetWoundedNucleus());
   
   // Fill particle change
-  int i;
-  theParticleChange->SetNumberOfSecondaries(theTransportResult->entries());
-  for(i=0; i<theTransportResult->entries(); i++)
+  unsigned int i;
+  theParticleChange->SetNumberOfSecondaries(theTransportResult->size());
+  for(i=0; i<theTransportResult->size(); i++)
   {
     G4DynamicParticle * aNew = 
-       new G4DynamicParticle(theTransportResult->at(i)->GetDefinition(),
-                             theTransportResult->at(i)->GetTotalEnergy(),
-                             theTransportResult->at(i)->GetMomentum());
-    G4double newTime = theParticleChange->GetGlobalTime(theTransportResult->at(i)->GetFormationTime());
+       new G4DynamicParticle(theTransportResult->operator[](i)->GetDefinition(),
+                             theTransportResult->operator[](i)->GetTotalEnergy(),
+                             theTransportResult->operator[](i)->GetMomentum());
+    G4double newTime = theParticleChange->GetGlobalTime(theTransportResult->operator[](i)->GetFormationTime());
     theParticleChange->AddSecondary(aNew, newTime);
-    delete theTransportResult->at(i);
+    delete theTransportResult->operator[](i);
   }
   
   // some garbage collection

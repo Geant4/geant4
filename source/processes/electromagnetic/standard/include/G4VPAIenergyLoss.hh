@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.hh,v 1.2.4.2 2001/06/28 20:19:47 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VPAIenergyLoss.hh,v 1.7 2001/11/08 08:13:24 urban Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -47,6 +47,7 @@
 // corrected by V. Grichine on 24/11/97 
 // corrected by L. Urban    on 27/05/98  (other corrections come soon!)
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 08/11/01  BuildDEDXTable is not static any more, L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4VPAIenergyLoss_h
@@ -55,7 +56,6 @@
 #include "G4ios.hh"
 #include "g4std/fstream"
 #include "g4std/iomanip"
-#include "g4rw/tpordvec.h"
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -119,7 +119,7 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
 
   // Build energy loss table (total continuous energy loss)
   
-    static void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
+    void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
 
   //----------------------------------------------
   //  public functions .........................
@@ -141,34 +141,34 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
                             G4Material *aMaterial);
 
   // static 
-    G4PhysicsTable* GetPAItransferBank(){ return fPAItransferBank ; } ;
+    G4PhysicsTable* GetPAItransferBank(){ return fPAItransferBank ; };
 
-    static G4double GetMaxKineticEnergy() { return UpperBoundEloss ; } ;
-    static G4double GetMinKineticEnergy() { return  LowerBoundEloss ; } ;
-    static G4int    GetBinNumber()        { return               NbinEloss ; } ; 
+    static G4double GetMaxKineticEnergy();
+    static G4double GetMinKineticEnergy();
+    static G4int    GetBinNumber(); 
 
   public:  // With description
 
-    static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    static void  SetNbOfProcesses(G4int nb);
     // Sets number of processes giving contribution to the energy loss
 
-    static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    static void  PlusNbOfProcesses();
     // Increases number of processes giving contribution to the energy loss
 
-    static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};
+    static void  MinusNbOfProcesses();
     // Decreases number of processes giving contribution to the energy loss
 
-    static G4int GetNbOfProcesses()         {return NbOfProcesses;};
+    static G4int GetNbOfProcesses();
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 1)
 
-    static void SetLowerBoundEloss(G4double val) {LowerBoundEloss=val;};
-    static void SetUpperBoundEloss(G4double val) {UpperBoundEloss=val;};
-    static void SetNbinEloss(G4int nb)		 {NbinEloss=nb;};
+    static void SetLowerBoundEloss(G4double val);
+    static void SetUpperBoundEloss(G4double val);
+    static void SetNbinEloss(G4int nb);
 
-    static G4double GetLowerBoundEloss() {return LowerBoundEloss;};
-    static G4double GetUpperBoundEloss() {return UpperBoundEloss;};
-    static G4int    GetNbinEloss()	 {return NbinEloss;};
+    static G4double GetLowerBoundEloss();
+    static G4double GetUpperBoundEloss();
+    static G4int    GetNbinEloss();
 
 
   protected:
@@ -255,7 +255,7 @@ class G4VPAIenergyLoss : public G4VEnergyLoss
 
 
     // cut in range
-    static G4double CutInRange;
+    static G4double* CutInRange;
 
     //  cuts in kinetic energy ........ 
     G4double* ParticleCutInKineticEnergy ;

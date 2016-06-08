@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.cc,v 1.1.2.1 2001/06/28 19:16:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4TextModel.cc,v 1.4 2001/08/14 18:43:32 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  3rd April 2001
@@ -40,6 +40,8 @@ G4TextModel::G4TextModel (const G4Text& text): fText(text) {
   fGlobalDescription = fGlobalTag;
 }
 
-void G4TextModel::DescribeYourselfTo (G4VGraphicsScene& scene) {
-  scene.AddPrimitive (fText);
+void G4TextModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
+  sceneHandler.BeginPrimitives ();
+  sceneHandler.AddPrimitive (fText);
+  sceneHandler.EndPrimitives ();
 }

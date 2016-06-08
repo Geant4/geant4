@@ -89,3 +89,15 @@ void BrachyEventAction::EndOfEventAction(const G4Event* evt)
 		}
 	}	
 }
+
+
+
+
+
+
+
+
+
+
+
+

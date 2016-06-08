@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Parton.cc,v 1.7.8.2 2001/06/28 20:20:03 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Parton.cc,v 1.12 2001/11/15 14:10:48 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -38,15 +38,66 @@ G4Parton::G4Parton(G4int PDGcode)
 {
 	PDGencoding=PDGcode;
 	theX = 0;
-	theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);;
+	theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);
 	if (theDefinition == NULL)
 	{
 	  G4cout << "Encoding = "<<PDGencoding<<G4endl;
 	  G4Exception("G4Parton::GetDefinition(): Encoding not in particle table");
 	}
-	theColour = 1;
-	theIsoSpinZ = 0.5;
-	theSpinZ = 0.5;
+	//
+	// colour by random in (1,2,3)=(R,G,B) for quarks and 
+	//                  in (-1,-2,-3)=(Rbar,Gbar,Bbar) for anti-quarks:
+  //
+	if (theDefinition->GetParticleType() == "quarks") {
+		theColour = ((G4int)(3.*G4UniformRand())+1)*(abs(PDGencoding)/PDGencoding) ;
+	}
+	//
+	// colour by random in (-1,-2,-3)=(Rbar,Gbar,Bbar)=(GB,RB,RG) for di-quarks and
+	//                  in (1,2,3)=(R,G,B)=(GB,RB,RG) for anti-di-quarks:
+  //
+	else if (theDefinition->GetParticleType() == "diquarks") {
+		theColour = -((G4int)(3.*G4UniformRand())+1)*(abs(PDGencoding)/PDGencoding);
+	}
+	//
+	// colour by random in (-11,-12,...,-33)=(RRbar,RGbar,RBbar,...,BBbar) for gluons:
+  //
+	else if (theDefinition->GetParticleType() == "gluons") {
+		theColour = -(((G4int)(3.*G4UniformRand())+1)*10 + ((G4int)(3.*G4UniformRand())+1));
+	}
+	else {
+	  G4cout << "Encoding = "<<PDGencoding<<G4endl;
+	  G4Exception("G4Parton::GetDefinition(): Particle is not a parton");
+	}
+	//  
+	// isospin-z from PDG-encoded isospin-z for 
+	// quarks, anti-quarks, di-quarks, and anti-di-quarks:
+  //
+	if ((theDefinition->GetParticleType() == "quarks") || (theDefinition->GetParticleType() == "diquarks")){
+		theIsoSpinZ = theDefinition->GetPDGIsospin3();
+	}
+	//
+  // isospin-z choosen at random from PDG-encoded isospin for gluons (should be zero):
+	//
+	else {
+		G4int thisPDGiIsospin=theDefinition->GetPDGiIsospin();
+		if (thisPDGiIsospin == 0) {
+			theIsoSpinZ = 0;
+		}
+		else {
+			theIsoSpinZ = ((G4int)((thisPDGiIsospin+1)*G4UniformRand()))-thisPDGiIsospin*0.5;
+		}
+	}
+	//
+	// spin-z choosen at random from PDG-encoded spin:
+	//
+	G4int thisPDGiSpin=theDefinition->GetPDGiSpin();
+	if (thisPDGiSpin == 0) {
+		theSpinZ = 0;
+	}
+	else {
+		G4int rand=((G4int)((thisPDGiSpin+1)*G4UniformRand()));
+		theSpinZ = rand-thisPDGiSpin*0.5;;
+	}
 }
 
 G4Parton::G4Parton(const G4Parton &right)
@@ -76,7 +127,10 @@ const G4Parton & G4Parton::operator=(const G4Parton &right)
 }
 
 G4Parton::~G4Parton()
-{}
+{
+//  cout << "G4Parton::~G4Parton(): this = "<<this <<endl;
+//  cout << "break here"<<this <<endl;
+}
 
 void G4Parton::DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection)
 {

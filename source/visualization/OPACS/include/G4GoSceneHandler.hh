@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GoSceneHandler.hh,v 1.6.4.1 2001/06/28 19:15:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4GoSceneHandler.hh,v 1.8 2001/08/24 21:49:59 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -54,6 +54,12 @@ public:
   void AddPrimitive    (const G4Polymarker&);
   void AddPrimitive    (const G4Polyhedron&);
   void AddPrimitive    (const G4NURBS&);
+  ////////////////////////////////////////////////////////////////
+  // Explicitly invoke base class methods to avoid warnings about
+  // hiding of base class methods.
+  void AddPrimitive (const G4Scale& scale) {
+    G4VSceneHandler::AddPrimitive (scale);
+  }
 
   void AddThis         (const G4Box&);
   void AddThis         (const G4Cons&);

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.4.4.1 2001/06/28 19:12:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ComptonScattering.hh,v 1.8 2001/10/01 15:00:28 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-//      ------------ G4ComptonScattering physics process ------
+//------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
 //
 // 10-06-96, updated by M.Maire 
@@ -33,8 +33,13 @@
 // 17-02-97, New Physics scheme
 // 25-02-97, GetMeanFreePath() now is public function
 // 12-03-97, new physics scheme again
-// 13-08-98, new methods SetBining()  PrintInfo() 
-// ------------------------------------------------------------
+// 13-08-98, new methods SetBining()  PrintInfo()
+// 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 19-09-01, come back to previous ProcessName "compt"
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)     
+// -----------------------------------------------------------------------------
 
 // class description
 //
@@ -76,18 +81,26 @@ class G4ComptonScattering : public G4VDiscreteProcess
        // Allows to define the binning of the PhysicsTables, 
        // before to build them.
      
-     void BuildPhysicsTable(const G4ParticleDefinition& GammaType);
+     void BuildPhysicsTable(const G4ParticleDefinition&);
        // It builds the total CrossSectionPerAtom table, for Gamma,
        // and for every element contained in the elementTable.
        // It builds the MeanFreePath table, for Gamma,
-       // and for every material contained in the materialTable.       
-       // This function overloads a virtual function of the base class.
-       // It is invoked by the G4ParticleWithCuts::SetCut() method. 
-     
+       // and for every material contained in the materialTable.
+
+     G4bool StorePhysicsTable(G4ParticleDefinition* ,
+			      const G4String& directory, G4bool);
+       // store CrossSection and MeanFreePath tables into an external file
+       // specified by 'directory' (must exist before invokation)
+
+     G4bool RetrievePhysicsTable(G4ParticleDefinition* ,
+				 const G4String& directory, G4bool);
+       // retrieve CrossSection and MeanFreePath tables from an external file
+       // specified by 'directory' 
+       				         			           
      void PrintInfoDefinition();
        // Print few lines of informations about the process: validity range,
        // origine ..etc..
-       // Invoked by BuildPhysicsTable(). 
+       // Invoked by BuildThePhysicsTable(). 
      
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
@@ -128,10 +141,16 @@ class G4ComptonScattering : public G4VDiscreteProcess
      G4PhysicsTable* theCrossSectionTable;    // table for crosssection
      G4PhysicsTable* theMeanFreePathTable;    // table for mean free path
        
-     G4double LowestEnergyLimit ;      // low  energy limit of the crossection formula
-     G4double HighestEnergyLimit ;     // high energy limit of the crossection formula
-     G4int NumbBinTable ;              // number of bins in the crossection table
+     G4double LowestEnergyLimit;      // low  energy limit of the tables
+     G4double HighestEnergyLimit;     // high energy limit of the tables
+     G4int NumbBinTable;              // number of bins in the tables
+     
+  protected:   
+     
+     G4double fminimalEnergy;         // minimalEnergy of produced particles
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.icc"
   

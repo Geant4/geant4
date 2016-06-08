@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -30,13 +30,12 @@
   {
     if(i<0) 
     {
-      G4int dummy; 
       G4Exception("G4NeutronHPList::Check(G4int) called with negative index");
     }
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPList");
     if(i==nPoints)
     {
-      nPoints += 50;
+      nPoints = static_cast<G4int>(1.5*nPoints);
       G4double * buff = new G4double[nPoints];
       for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
       delete [] theData;

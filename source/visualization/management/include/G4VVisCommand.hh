@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.10.2.1 2001/06/28 19:16:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VVisCommand.hh,v 1.13 2001/09/10 10:49:07 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -30,11 +30,11 @@
 #ifndef G4VVISCOMMAND_HH
 #define G4VVISCOMMAND_HH
 
+#include "G4VisManager.hh"
 #include "G4UImessenger.hh"
 #include "G4ThreeVector.hh"
 #include "g4std/vector"
 
-class G4VisManager;
 class G4UIcommand;
 class G4UIcmdWithAString;
 
@@ -56,6 +56,8 @@ public:
   static void          GetNewDoublePairValue(const G4String& paramString,
 					     G4double& xval,
 					     G4double& yval);
+  void UpdateVisManagerScene (const G4String& sceneName = "");
+
 protected:
   static G4VisManager* fpVisManager;
   static  G4std::vector<G4UIcommand*> sceneNameCommands;

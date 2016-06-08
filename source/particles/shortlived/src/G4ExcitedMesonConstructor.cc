@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.9.2.2 2001/06/28 20:19:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.10 2001/07/11 10:02:08 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------

@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.8.8.2 2001/06/28 20:20:02 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Fancy3DNucleus.cc,v 1.14 2001/10/20 10:48:43 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -38,7 +38,7 @@
 #include "G4NucleiPropertiesTable.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4rw/tvvector.h"
+#include "g4std/algorithm"
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
@@ -79,11 +79,11 @@ G4Fancy3DNucleus::~G4Fancy3DNucleus()
 
 void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
 {
-  G4int i;
 //  G4cout << "G4Fancy3DNucleus::Init(theA, theZ) called"<<G4endl;
   currentNucleon=-1;
   if(theNucleons!=NULL) delete [] theNucleons;
 
+  G4std::for_each(theRWNucleons.begin(), theRWNucleons.end(), DeleteNucleon());
   theRWNucleons.clear();
 
   myZ = G4int(theZ);
@@ -134,13 +134,13 @@ G4Nucleon * G4Fancy3DNucleus::GetNextNucleon()
 }
 
 
-const G4RWTPtrOrderedVector<G4Nucleon> & G4Fancy3DNucleus::GetNucleons()
+const G4std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
 {
-	if ( theRWNucleons.isEmpty() )
+	if ( theRWNucleons.size()==0 )
 	{
 	    for (G4int i=0; i< myA; i++)
 	    {
-	        theRWNucleons.append(theNucleons+i);
+	        theRWNucleons.push_back(theNucleons+i);
 	    }
 	}
 	return theRWNucleons;
@@ -316,7 +316,7 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 //     G4ThreeVector sum;
 //     for (G4int index=0; index<myA;sum+=momentum[index++])
 //     ;
-//     cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
+//     G4cout << "final sum / mag() " << sum << " / " << sum.mag() << G4endl;
     
     
     G4double energy;
@@ -324,7 +324,7 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     {
        energy=theNucleons[i].GetParticleType()->GetPDGMass() 
 	      + BindingEnergy()/myA;
-       G4LorentzVector tempV(momentum[i],energy);
+       G4LorentzVector tempV(momentum[i],sqrt(energy*energy+momentum[i].mag2()));
        theNucleons[i].SetMomentum(tempV);
     }
 
@@ -343,7 +343,7 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     	}
     	int operator < (const G4Fancy3DNucleusHelper &right) const
     	{
-    		return this->Size<right.Size;
+    		return size()<right.size();
     	}
     	const G4ThreeVector& vector() const
     	{
@@ -357,16 +357,19 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     	{
     		return anInt;
     	}
-    private:
-    	G4Fancy3DNucleusHelper operator =(const G4Fancy3DNucleusHelper &right) const 
+    	G4Fancy3DNucleusHelper operator =(const G4Fancy3DNucleusHelper &right)  
     	{
-    		G4cout <<" G4Fancy3DNucleus::G4Fancy3DNucleusHelper op = called------------------" << G4endl;
-		return G4Fancy3DNucleusHelper();
+	  Vector = right.Vector;
+	  Size = right.Size;
+	  anInt = right.anInt;
+	  return *this;
     	}
+	
+    private:
     	G4Fancy3DNucleusHelper(): Vector(0), Size(0), anInt(0) {G4cout << "def ctor for MixMasch" << G4endl;}
-	const G4ThreeVector Vector;
-	const G4double Size;
-	const G4int anInt;
+	G4ThreeVector Vector;
+	G4double Size;
+	G4int anInt;
   };
 
 G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
@@ -386,31 +389,33 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 	
 // find all possible changes in momentum, changing only the component parallel to sum
 	G4ThreeVector testDir=sum.unit();
-	G4RWTPtrSortedVector<G4Fancy3DNucleusHelper> testSums(myA-1);		// Sorted on delta.mag()
+	G4std::vector<G4Fancy3DNucleusHelper> testSums;		// Sorted on delta.mag()
+
 	for ( G4int aNucleon=0; aNucleon < myA-1; aNucleon++){
 		G4ThreeVector delta=2*((momentum[aNucleon]*testDir)* testDir);
-		testSums.insert(new G4Fancy3DNucleusHelper(delta,delta.mag(),aNucleon));		
+		testSums.push_back(G4Fancy3DNucleusHelper(delta,delta.mag(),aNucleon));		
 	}
+	G4std::sort(testSums.begin(), testSums.end());
 	
 //    reduce Momentum Sum until the next would be allowed.
-	G4int index=testSums.entries();
-	while ( (sum-testSums[--index]->vector()).mag()>PFermi && index>0) 
+	G4int index=testSums.size();
+	while ( (sum-testSums[--index].vector()).mag()>PFermi && index>0) 
 	{
 		// Only take one which improve, ie. don't change sign and overshoot...
-		if ( sum.mag() > (sum-testSums[index]->vector()).mag() ) {
-// 		   momentum[testSums[index]->index()]-=testSums[index]->vector();
-// 		   sum-=testSums[index]->vector();
+		if ( sum.mag() > (sum-testSums[index].vector()).mag() ) {
+		   momentum[testSums[index].index()]-=testSums[index].vector();
+		   sum-=testSums[index].vector();
 		}
 	}
 
-	if ( (sum-testSums[index]->vector()).mag() <= PFermi ) 
+	if ( (sum-testSums[index].vector()).mag() <= PFermi ) 
 	{
 		G4int best=-1;
 		G4double pBest=2*PFermi; // anything larger than PFermi
 		for ( G4int aNucleon=0; aNucleon<=index; aNucleon++)
 		{
 			// find the momentum closest to choosen momentum for last Nucleon.
-			G4double pTry=(testSums[aNucleon]->vector()-sum).mag();
+			G4double pTry=(testSums[aNucleon].vector()-sum).mag();
 			if ( pTry < PFermi 
 			 &&  abs(momentum[myA-1].mag() - pTry ) < pBest )
 		        {
@@ -419,14 +424,14 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 			}
 		}
 		if ( best < 0 )  G4Exception( " Logic error in Fancy3DNucleus");
-// 		momentum[testSums[best]->index()]-=testSums[best]->vector();
-// 		momentum[myA-1]=testSums[best]->vector()-sum;
+		momentum[testSums[best].index()]-=testSums[best].vector();
+		momentum[myA-1]=testSums[best].vector()-sum;
 
-		testSums.clearAndDestroy();
+		testSums.clear();
 		return true;
 		
 	} 
-	testSums.clearAndDestroy();
+	testSums.clear();
 
 	// try to compensate momentum using another Nucleon....
 	

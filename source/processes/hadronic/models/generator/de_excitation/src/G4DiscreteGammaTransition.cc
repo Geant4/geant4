@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -45,7 +45,7 @@
 
 
 G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level): 
-  _level(level), _excitation(0.), _gammaEnergy(0.), _gammaCreationTime(0.)
+  _gammaEnergy(0.), _level(level), _excitation(0.), _gammaCreationTime(0.)
 { }
 
 

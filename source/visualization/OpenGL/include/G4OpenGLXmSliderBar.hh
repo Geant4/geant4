@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmSliderBar.hh,v 1.5.2.1 2001/06/28 19:15:41 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLXmSliderBar.hh,v 1.6 2001/07/11 10:08:52 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent

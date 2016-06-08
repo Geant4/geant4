@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.12.2.1 2001/06/28 19:16:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PhysicalVolumeModel.hh,v 1.16 2001/08/24 20:36:17 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -66,7 +66,7 @@ public: // With description
   virtual ~G4PhysicalVolumeModel ();
 
   void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the scene
+  // The main task of a model is to describe itself to the graphics scene
   // handler (a object which inherits G4VSceneHandler, which inherits
   // G4VGraphicsScene).  It can also provide special information
   // through pointers to working space in the scene handler.  These
@@ -85,7 +85,14 @@ public: // With description
   G4String GetCurrentTag () const;
   // A tag which depends on the current state of the model.
 
-  G4bool Validate ();
+  const G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () const {
+    return this;
+  }
+  G4PhysicalVolumeModel* GetG4PhysicalVolumeModel () {
+    return this;
+  }
+
+  G4bool Validate (G4bool warn);
   // Validate, but allow internal changes (hence non-const function).
 
   void DefinePointersToWorkingSpace (G4int*              pCurrentDepth,
@@ -121,6 +128,8 @@ protected:
 
   G4bool IsDaughterCulled (const G4LogicalVolume* pMotherLV);
 
+  void CalculateExtent ();
+
   /////////////////////////////////////////////////////////
   // Data members...
 
@@ -129,6 +138,7 @@ protected:
   G4int              fTopPVCopyNo;   // ...of the physical volume.
   G4int              fRequestedDepth;
                      // Requested depth of geom. hierarchy search.
+  G4bool             fUseFullExtent; // ...if requested.
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.

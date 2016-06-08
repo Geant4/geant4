@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvx.cc,v 1.3.8.1 2001/06/28 19:08:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4gsdvx.cc,v 1.4 2001/07/11 09:59:01 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // by I.Hrivnacova, V.Berejnoi, 27 Sep 99
 

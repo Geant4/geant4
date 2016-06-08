@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Positron.cc,v 1.3.4.2 2001/06/28 20:19:07 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Positron.cc,v 1.6 2001/10/16 08:16:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -83,9 +83,6 @@ G4Positron G4Positron::thePositron(
 );
 
 G4Positron* G4Positron::PositronDefinition() {return &thePositron;}
-// initialization for static cut values
-G4double   G4Positron::thePositronLengthCut = -1.0;
-G4double*  G4Positron::thePositronKineticEnergyCuts = NULL;
 
 // **********************************************************************
 // ************************* ComputeLoss ********************************
@@ -162,4 +159,9 @@ void G4Positron::BuildRangeVector(const G4Material* aMaterial,
 			      maxEnergy,
 			      aMass,
                               rangeVector);
+}
+
+G4Positron*  G4Positron::Positron()
+{
+  return &thePositron; 
 }

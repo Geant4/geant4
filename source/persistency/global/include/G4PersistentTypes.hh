@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PersistentTypes.hh,v 1.2.4.1 2001/06/28 19:11:33 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PersistentTypes.hh,v 1.4 2001/07/11 10:02:25 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-//
-// Persistent-capable typedefs for Geant4/Persistency category
-//
+
+// file description:
+//   Persistent-capable typedefs for Geant4/Persistency category
+
 // History:
 // 15.06.98 Y.Morita - Created
 

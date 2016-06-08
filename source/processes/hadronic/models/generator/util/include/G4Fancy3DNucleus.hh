@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.hh,v 1.6.8.2 2001/06/28 20:20:01 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Fancy3DNucleus.hh,v 1.9 2001/10/04 20:00:32 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1
@@ -41,7 +41,7 @@
 #include "G4Nucleon.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4Fancy3DNucleus : public G4V3DNucleus
 {
@@ -68,7 +68,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void Init(G4double theA, G4double theZ);
       G4bool StartLoop();
       G4Nucleon * GetNextNucleon();
-      const G4RWTPtrOrderedVector<G4Nucleon> & GetNucleons();
+      const G4std::vector<G4Nucleon *> & GetNucleons();
       G4int GetMassNumber();
       G4double GetMass();
       G4int GetCharge();
@@ -87,7 +87,8 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   G4int myA;
   G4int myZ;
   G4Nucleon * theNucleons;
-  G4RWTPtrOrderedVector<G4Nucleon> theRWNucleons;  // should not have two...
+  G4std::vector<G4Nucleon *> theRWNucleons;  // should not have two...
+  struct DeleteNucleon{ void operator()(G4Nucleon *aN){delete aN;} };
   G4int currentNucleon;
   G4VNuclearDensity * theDensity;
   G4FermiMomentum theFermi;  

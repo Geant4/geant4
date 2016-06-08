@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElementTable.hh,v 1.2.4.2 2001/06/28 20:18:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4ElementTable.hh,v 1.4 2001/10/17 14:02:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -36,6 +36,8 @@
 #ifndef G4ELEMENTTABLE_HH
 #define G4ELEMENTTABLE_HH
 
-#include "G4Element.hh"
+class G4Element;
+
+typedef G4std::vector<G4Element*> G4ElementTable;
 
 #endif

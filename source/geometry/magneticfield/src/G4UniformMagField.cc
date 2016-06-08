@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc,v 1.3.4.1 2001/06/28 19:08:22 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UniformMagField.cc,v 1.5 2001/11/08 17:32:21 grichine Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //
@@ -89,7 +89,7 @@ G4UniformMagField& G4UniformMagField::operator = (const G4UniformMagField &p)
 // ------------------------------------------------------------------------
 
 
-void G4UniformMagField::GetFieldValue (const G4double [3],
+void G4UniformMagField::GetFieldValue (const G4double [4],
                                              G4double *B  ) const 
 {
    B[0]= fFieldComponents[0] ;

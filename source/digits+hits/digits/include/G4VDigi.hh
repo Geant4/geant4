@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDigi.hh,v 1.5.2.1 2001/06/28 19:07:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VDigi.hh,v 1.7 2001/07/13 15:00:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4VDigi_h
 #define G4VDigi_h 1
+
+#include "globals.hh"
 
 // class description:
 //
@@ -43,7 +45,7 @@ class G4VDigi
       G4VDigi();
       virtual ~G4VDigi();
 
-      int operator==(const G4VDigi &right) const;
+      G4int operator==(const G4VDigi &right) const;
 
       virtual void Draw();
       virtual void Print();

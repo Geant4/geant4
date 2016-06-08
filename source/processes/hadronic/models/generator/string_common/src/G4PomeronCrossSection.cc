@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PomeronCrossSection.cc,v 1.3.8.1 2001/06/28 19:13:43 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PomeronCrossSection.cc,v 1.7 2001/11/13 14:58:16 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4PomeronCrossSection.hh"
@@ -90,6 +90,10 @@ G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZeroLong * particle)
 G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZeroShort * particle)
 {
 	InitForKaon();
+}
+G4PomeronCrossSection::G4PomeronCrossSection(const G4Gamma * particle)
+{
+	InitForGamma();
 }
 
 G4double G4PomeronCrossSection::GetTotalCrossSection(const G4double s)
@@ -208,6 +212,19 @@ void G4PomeronCrossSection::InitForKaon()
 	pomeron_Gamma=		1.92/GeV/GeV;
 	pomeron_C=		1.8;
 	pomeron_Rsquare=	1.96/GeV/GeV;
+	pomeron_Alpha=		1.0808;
+	pomeron_Alphaprime=	0.25/GeV/GeV;
+        pomeron_Gamma_Hard =    0.0002/GeV/GeV;
+        pomeron_Alpha_Hard =    1.47;
+}
+
+void G4PomeronCrossSection::InitForGamma()
+{
+	pomeron_S=		1.7*GeV*GeV;
+//	pomeron_Gamma=		1.42/GeV/GeV;
+	pomeron_Gamma=		2.07/GeV/GeV;
+	pomeron_C=		1.7;
+	pomeron_Rsquare=	2.16/GeV/GeV;
 	pomeron_Alpha=		1.0808;
 	pomeron_Alphaprime=	0.25/GeV/GeV;
         pomeron_Gamma_Hard =    0.0002/GeV/GeV;

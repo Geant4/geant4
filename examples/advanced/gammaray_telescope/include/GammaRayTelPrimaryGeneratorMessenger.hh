@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorMessenger.hh,v 1.2.4.2 2001/06/28 20:18:39 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelPrimaryGeneratorMessenger.hh,v 1.3 2001/07/11 09:56:57 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // ------------------------------------------------------------

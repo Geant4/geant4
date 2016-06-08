@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PersEx02TrackerSD.cc,v 1.5.2.1 2001/06/28 19:07:26 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: PersEx02TrackerSD.cc,v 1.6 2001/07/11 09:58:16 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include <assert.h>

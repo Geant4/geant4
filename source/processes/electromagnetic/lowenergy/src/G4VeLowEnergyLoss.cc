@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.12.2.2 2001/06/28 20:19:31 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VeLowEnergyLoss.cc,v 1.17 2001/11/23 11:45:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,6 +37,7 @@
 // 22/11/00 minor fix in fluctuations V.Ivanchenko
 // 10/05/01  V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 22/05/01  V.Ivanchenko Update range calculation
+// 23/11/01  V.Ivanchenko Move static member-functions from header to source
 //
 // --------------------------------------------------------------
 
@@ -95,16 +96,33 @@ G4VeLowEnergyLoss::G4VeLowEnergyLoss(G4VeLowEnergyLoss& right)
 {
 }
 
-//    
+void G4VeLowEnergyLoss::SetRndmStep(G4bool value) 
+{
+   rndmStepFlag   = value;
+}
+
+void G4VeLowEnergyLoss::SetEnlossFluc(G4bool value) 
+{
+   EnlossFlucFlag = value;
+}
+
+void G4VeLowEnergyLoss::SetStepFunction (G4double c1, G4double c2)
+{
+   dRoverRange = c1; 
+   finalRange = c2;
+   c1lim=dRoverRange;
+   c2lim=2.*(1-dRoverRange)*finalRange;
+   c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+}
 
 G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
         G4PhysicsTable* theDEDXTable,G4PhysicsTable* theRangeTable,            
-        G4double lowestKineticEnergy,G4double highestKineticEnergy,G4int TotBin)
+        G4double lowestKineticEnergy,G4double highestKineticEnergy,
+        G4int TotBin)
 // Build range table from the energy loss table
 {
-   const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-   G4int numOfMaterials = theMaterialTable->length();
+   
+   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
    if(theRangeTable)
    { theRangeTable->clearAndDestroy();
@@ -236,9 +254,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildLabTimeTable(G4PhysicsTable* theDEDXTabl
                                      G4double highestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theLabTimeTable)
   { theLabTimeTable->clearAndDestroy();
@@ -270,9 +287,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXT
                                      G4double highestKineticEnergy,G4int TotBin)
                             
 {
-  const G4MaterialTable* theMaterialTable=
-                                 G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
  
   if(theProperTimeTable)
   { theProperTimeTable->clearAndDestroy();
@@ -312,7 +328,6 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
            LowEdgeEnergy,tau,Value ;
 
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   // low energy part first...
   losslim = physicsVector->GetValue(tlim,isOut);
@@ -498,9 +513,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
 {
   G4double SmallestRange,BiggestRange ;
   G4bool isOut ;
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
     if(theInverseRangeTable)
     { theInverseRangeTable->clearAndDestroy();
@@ -594,9 +608,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffATable)
   { theRangeCoeffATable->clearAndDestroy();
@@ -657,9 +670,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
-  const G4MaterialTable* theMaterialTable=
-                               G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffBTable)
   { theRangeCoeffBTable->clearAndDestroy();
@@ -719,9 +731,8 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
-  const G4MaterialTable* theMaterialTable=
-                                G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if(theRangeCoeffCTable)
   { theRangeCoeffCTable->clearAndDestroy();
@@ -806,7 +817,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       ipotLogFluct = aMaterial->GetIonisation()->GetLogMeanExcEnergy();
     }
   G4double threshold,w1,w2,C,
-           beta2,suma,e0,loss,lossc ,w;
+           beta2,suma,e0,loss,lossc,w;
   G4double a1,a2,a3;
   G4int p1,p2,p3;
   G4int nb;
@@ -823,7 +834,7 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   //  G4cout << "MGP -- Fluc Tkin " << Tkin/keV << " keV "  << " MeanLoss = " << MeanLoss/keV << G4endl;
 
-  threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
+  threshold = G4Electron::Electron()->GetEnergyThreshold(aMaterial);
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);

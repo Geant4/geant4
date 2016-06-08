@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyCreator.cc,v 1.8.2.1 2001/06/28 19:09:14 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4AssemblyCreator.cc,v 1.10 2001/09/21 16:12:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4AssemblyCreator
@@ -160,7 +160,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
 
 	  for(G4int b=0; b<entr; b++)
 	  {
-	    ps = (*tmpV)[b];
+	    ps = (G4PlacedSolid*)((*tmpV)[b]);
 	    psv->push_back(ps);
 	  }
 	}
@@ -214,7 +214,7 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& sEntity)
 
 	  for(G4int b=0; b<entr; b++)
 	  {
-	    ps =  (*tmpV)[b];
+	    ps = (G4PlacedSolid*)((*tmpV)[b]);
 	    psv->push_back(ps);
 	  }
 	}

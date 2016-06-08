@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.5.4.1 2001/06/28 19:10:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4VGraphicsScene.hh,v 1.8 2001/08/14 18:19:14 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // John Allison  19th July 1996
 //
 // Class Description:
@@ -48,6 +48,7 @@ class G4PhysicalVolumeModel;
 class G4Polycone;
 class G4Polyhedra;
 class G4Polyline;
+class G4Scale;
 class G4Text;
 class G4Circle;
 class G4Square;
@@ -91,7 +92,8 @@ public: // With description
   ///////////////////////////////////////////////////////////////////
   // Functions for adding graphics primitives to the scene handler.
 
-  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) = 0;
+  virtual void BeginPrimitives
+  (const G4Transform3D& objectTransformation = G4Transform3D::Identity) = 0;
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
@@ -107,6 +109,7 @@ public: // With description
   // }
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;
+  virtual void AddPrimitive (const G4Scale&)      = 0;
   virtual void AddPrimitive (const G4Text&)       = 0;
   virtual void AddPrimitive (const G4Circle&)     = 0;
   virtual void AddPrimitive (const G4Square&)     = 0;

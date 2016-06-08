@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopMaterial.hh,v 1.4.8.2 2001/06/28 20:20:06 gunter Exp $
+// $Id: G4PiMinusStopMaterial.hh,v 1.7 2001/10/04 20:00:40 hpw Exp $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -42,9 +42,6 @@
 #ifndef G4PIMINUSSTOPMATERIAL_HH
 #define G4PIMINUSSTOPMATERIAL_HH
 
-#include "g4rw/tvordvec.h"
-#include "g4rw/tpordvec.h"
-#include "g4rw/cstring.h"
 #include "globals.hh"
 #include "G4LorentzVector.hh"
 //#include "G4String.hh"
@@ -72,19 +69,19 @@ public:
   virtual ~G4PiMinusStopMaterial();
 
   // Definitions of absorption products
-  virtual G4RWTPtrOrderedVector<G4ParticleDefinition>* DefinitionVector();
+  virtual G4std::vector<G4ParticleDefinition*>* DefinitionVector();
 
   // 4-vectors of absorption products
-  virtual G4RWTPtrOrderedVector<G4LorentzVector>* P4Vector(const G4double binding, 
-							 const G4double mass);
+  virtual G4std::vector<G4LorentzVector*>* P4Vector(const G4double binding, 
+						   const G4double mass);
 
   // Number of final nucleons, out of generated absorption products
   virtual G4double FinalNucleons()=0;
 
 protected:
    
-  G4RWTPtrOrderedVector<G4ParticleDefinition>* _definitions;
-  G4RWTPtrOrderedVector<G4LorentzVector>* _momenta; 
+  G4std::vector<G4ParticleDefinition* >* _definitions;
+  G4std::vector<G4LorentzVector* >* _momenta; 
   G4DistributionGenerator* _distributionE;
   G4DistributionGenerator* _distributionAngle;
   G4double theR; 

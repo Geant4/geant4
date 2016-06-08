@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDigit.ddl,v 1.3.4.1 2001/06/28 19:11:23 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PVDigit.ddl,v 1.5 2001/12/07 03:49:10 morita Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // Class Description:
@@ -34,6 +34,7 @@
 #ifndef G4PVDigit_h
 #define G4PVDigit_h 1
 
+#include "G4Pglobals.hh"
 #include "G4PersistentSchema.hh"
 
 #include "G4VDigi.hh"

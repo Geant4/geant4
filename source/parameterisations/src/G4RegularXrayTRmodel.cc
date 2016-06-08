@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXrayTRmodel.cc,v 1.1.4.1 2001/06/28 19:10:35 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RegularXrayTRmodel.cc,v 1.3 2001/07/11 10:01:31 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "g4std/complex"
@@ -38,7 +38,7 @@
 
 G4RegularXrayTRmodel::G4RegularXrayTRmodel(G4Envelope *anEnvelope, 
                                                   G4double a, G4double b) :
-  G4VXrayTRmodel(anEnvelope,a,b)
+  G4VXrayTRadModel(anEnvelope,a,b)
 {
   G4cout<<"Regular X-ray TR radiator model is called"<<G4endl ;
 

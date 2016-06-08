@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.cc,v 1.4.4.1 2001/06/28 19:07:12 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em8PhysicsList.cc,v 1.5 2001/07/11 09:57:56 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // 
 
 #include "G4Timer.hh"

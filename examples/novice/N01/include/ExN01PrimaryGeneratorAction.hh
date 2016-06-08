@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN01PrimaryGeneratorAction.hh,v 1.2.4.1 2001/06/28 19:07:26 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: ExN01PrimaryGeneratorAction.hh,v 1.3 2001/07/11 09:58:16 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef ExN01PrimaryGeneratorAction_h

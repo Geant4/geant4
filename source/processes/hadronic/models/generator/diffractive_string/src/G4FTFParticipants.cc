@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.3.8.2 2001/06/28 20:19:56 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4FTFParticipants.cc,v 1.6 2001/10/04 20:00:28 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -74,7 +74,8 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
     
     StartLoop();  // reset Loop over Interactions
 
-    theInteractions.clearAndDestroy();
+    for(unsigned int i=0; i<theInteractions.size(); i++) delete theInteractions[i];
+    theInteractions.clear();
 
 // --- cms energy
 
@@ -101,7 +102,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 
     G4bool nucleusNeedsShift = true;
     
-    while ( theInteractions.entries() == 0 )
+    while ( theInteractions.size() == 0 )
     {
 	G4Pair<G4double, G4double> theImpactParameter;
 	theImpactParameter = theNucleus->ChooseImpactXandY(xyradius);
@@ -112,7 +113,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 
 	theNucleus->StartLoop();
 	G4Nucleon * nucleon;
-	while ( nucleon=theNucleus->GetNextNucleon() )
+	while ( (nucleon=theNucleus->GetNextNucleon()) )
 	{
     	   G4double impact2= sqr(impactX - nucleon->GetPosition().x()) +
     		    sqr(impactY - nucleon->GetPosition().y());
@@ -134,7 +135,7 @@ void G4FTFParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
 	   	}
 	   	G4InteractionContent * aInteraction = new G4InteractionContent(primarySplitable);
 		aInteraction->SetTarget(targetSplitable);
-		theInteractions.insert(aInteraction);
+		theInteractions.push_back(aInteraction);
 	   }
 	}    
 

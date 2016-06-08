@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.hh,v 1.5.2.1 2001/06/28 19:07:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SDStructure.hh,v 1.7 2001/07/13 15:00:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4SDStructure_h
@@ -32,8 +32,6 @@
 #include "globals.hh"
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
-// G4RWTPtrOrderedVector
-//#include "g4rw/tpordvec.h"
 #include "g4std/vector"
 
 class G4HCofThisEvent;
@@ -50,7 +48,7 @@ class G4SDStructure
       G4SDStructure(G4String aPath);
       ~G4SDStructure();
 
-      int operator==(const G4SDStructure &right) const;
+      G4int operator==(const G4SDStructure &right) const;
 
       void AddNewDetector(G4VSensitiveDetector*aSD, G4String treeStructure);
       void Activate(G4String aName, G4bool sensitiveFlag);
@@ -75,9 +73,9 @@ class G4SDStructure
       inline void SetVerboseLevel(G4int vl) 
       {
         verboseLevel = vl;
-        for(int i=0; i<structure.size(); i++)
+        for(size_t i=0; i<structure.size(); i++)
         { structure[i]->SetVerboseLevel(vl); }
-        for(int j=0; j<detector.size(); j++)
+        for(size_t j=0; j<detector.size(); j++)
         { detector[j]->SetVerboseLevel(vl); }
       };
 

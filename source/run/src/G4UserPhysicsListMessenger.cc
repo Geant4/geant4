@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.6.2.1 2001/06/28 19:15:20 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.10 2001/10/11 13:44:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -44,6 +44,8 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
+#include "G4Tokenizer.hh"           
+
 
 G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):thePhysicsList(pParticleList)
 {
@@ -124,6 +126,19 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   asciiCmd->AvailableForStates(PreInit,Idle);
   asciiCmd->SetRange("ascii ==0 || ascii ==1");
 
+  //Commnad    /run/particle/applyCuts command
+  applyCutsCmd = new G4UIcommand("/run/particle/applyCuts",this);
+  applyCutsCmd->SetGuidance("Set ApplyCuts flag ");
+  applyCutsCmd->SetGuidance("  applyCuts [value] [particle]");
+  applyCutsCmd->SetGuidance("  value     : true(default) or false ");
+  applyCutsCmd->SetGuidance("  particle  : all(default) or particle name ");
+  G4UIparameter* param = new G4UIparameter("Flag",'s',true);
+  param->SetDefaultValue("true");
+  applyCutsCmd->SetParameter(param);
+  param = new G4UIparameter("Particle",'s',true);
+  param->SetDefaultValue("all");
+  applyCutsCmd->SetParameter(param);
+  applyCutsCmd->AvailableForStates(PreInit,Init,Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -137,7 +152,8 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete storeCmd;  
   delete retrieveCmd;
   delete theDirectory;
-  delete asciiCmd;  
+  delete asciiCmd;
+  delete applyCutsCmd;
 }
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -161,13 +177,13 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == NULL) return;
-    if (particle->GetProcessManager() != NULL) return;
+    if (particle == 0) return;
+    if (particle->GetProcessManager() != 0) return;
     thePhysicsList->AddProcessManager(particle);
 
   }  else if( command == buildPTCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == NULL) return;
+    if (particle == 0) return;
     thePhysicsList->BuildPhysicsTable(particle);
     
   } else if ( command == storeCmd ){
@@ -187,6 +203,18 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
       thePhysicsList->SetStoredInAscii();
     }
 
+  } else if( command == applyCutsCmd ) {
+    G4Tokenizer next( newValue );
+
+    // check 1st argument
+    G4String temp = G4String(next());
+    G4bool flag = (temp =="true" || temp=="TRUE");
+
+    // check 2nd argument
+    G4String name = G4String(next());
+
+    thePhysicsList->SetApplyCuts(flag, name);
+ 
   }
 
 } 
@@ -240,6 +268,12 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
       cv = "0";
     }
 
+  } else if( command == applyCutsCmd ) {
+   if (thePhysicsList->GetApplyCuts("proton")){
+     cv =  "true";
+   } else {
+     cv =  "false";
+   } 
   }
    
   return cv;

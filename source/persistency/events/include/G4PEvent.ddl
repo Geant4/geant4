@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PEvent.ddl,v 1.11.2.1 2001/06/28 19:11:25 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4PEvent.ddl,v 1.12 2001/07/11 10:02:15 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 // Class Description:

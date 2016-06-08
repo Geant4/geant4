@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleIntegration.cc,v 1.2.8.1 2001/06/28 19:09:54 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SimpleIntegration.cc,v 1.3 2001/07/11 10:00:42 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // Implementation file for simple integration methods
 //

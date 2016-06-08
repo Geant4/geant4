@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.hh,v 1.8.2.1 2001/06/28 19:16:18 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BoundingSphereScene.hh,v 1.11 2001/07/25 21:08:14 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // John Allison  7th June 1997
@@ -44,10 +44,12 @@
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 
+class G4VModel;
+
 class G4BoundingSphereScene: public G4VGraphicsScene {
 
 public:
-  G4BoundingSphereScene ();
+  G4BoundingSphereScene (G4VModel* pModel = 0);
   virtual ~G4BoundingSphereScene ();
   void AddThis (const G4Box& s) {Accrue (s);}
   void AddThis (const G4Cons& s) {Accrue (s);}
@@ -80,6 +82,7 @@ public:
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
   virtual void EndPrimitives () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
+  virtual void AddPrimitive (const G4Scale&)      {}
   virtual void AddPrimitive (const G4Text&)       {}
   virtual void AddPrimitive (const G4Circle&)     {}
   virtual void AddPrimitive (const G4Square&)     {}
@@ -89,6 +92,7 @@ public:
 
 private:
   void Accrue (const G4VSolid& solid);
+  G4VModel* fpModel;  // Instantiating code may optionally set this.
   G4Point3D fCentre;
   G4double fRadius;
   const G4Transform3D* fpObjectTransformation;

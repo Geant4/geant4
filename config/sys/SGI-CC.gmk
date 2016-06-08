@@ -27,7 +27,7 @@ ifeq ($(G4SYSTEM),SGI-CC)
     OGLLIBS   := -L/usr/lib -lGLU -lGL
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
-  CPPFLAGS += -I$(G4STLINC)/wrappers/$(G4SYSTEM)
+  CPPFLAGS += -I$(G4BASE)/global/management/include/g4std/wrappers/$(G4SYSTEM)
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_IRIX_6_5 -DOS_NEW_CHECK -DOS_STL_ASSERT
     CPPFLAGS += -DOS_NO_WSTRING -DOS_NO_ALLOCATORS

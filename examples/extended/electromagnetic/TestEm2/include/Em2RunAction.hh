@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.hh,v 1.7.2.1 2001/06/28 19:06:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: Em2RunAction.hh,v 1.10 2001/11/28 18:57:24 maire Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 08.03.01 Hisaya: Adapted MyVector for STL   
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2RunAction_h
 #define Em2RunAction_h 1
@@ -46,11 +46,10 @@
 
 typedef  G4std::vector<G4double> MyVector;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2DetectorConstruction;
 class Em2PrimaryGeneratorAction;
-class Em2RunActionMessenger;
 
 class G4Run;
 
@@ -74,10 +73,7 @@ class Em2RunAction : public G4UserRunAction
     inline void fillPerTrack(G4double,G4double);
     inline void fillPerStep (G4double,G4int,G4int);
     inline void particleFlux(G4ParticleDefinition*,G4int);
-    
-    void  SetRndmFreq(G4int    val) {saveRndm = val;}
-    G4int GetRndmFreq()             {return saveRndm;}    
-    
+ 
   private:
   
     void bookHisto();
@@ -113,9 +109,6 @@ class Em2RunAction : public G4UserRunAction
     G4double NeutrTrLength;
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
-    
-    Em2RunActionMessenger* runMessenger;        
-    G4int saveRndm;
                   
 #ifndef G4NOHIST        
     HepTupleManager* hbookManager;
@@ -127,7 +120,7 @@ class Em2RunAction : public G4UserRunAction
     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 void Em2RunAction::initializePerEvent()
@@ -143,7 +136,7 @@ void Em2RunAction::initializePerEvent()
     ChargTrLength = NeutrTrLength = 0.;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 void Em2RunAction::fillPerTrack(G4double charge, G4double trkLength)
@@ -152,7 +145,7 @@ void Em2RunAction::fillPerTrack(G4double charge, G4double trkLength)
   else              NeutrTrLength += trkLength;   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 void Em2RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
@@ -160,7 +153,7 @@ void Em2RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
   dEdL[Lbin] += dEstep; dEdR[Rbin] += dEstep;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 void Em2RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)
@@ -170,6 +163,6 @@ void Em2RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)
   else if (particle == G4Positron::Positron()) positronFlux[Lplan]++;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.4.4.1 2001/06/28 19:15:43 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.7 2001/08/14 18:03:20 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -59,6 +59,11 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
       " G4OpenGLXViewer couldn't get a visual." << G4endl;
     return;
   }
+}
+
+G4OpenGLStoredXViewer::~G4OpenGLStoredXViewer () {}
+
+void G4OpenGLStoredXViewer::Initialise () {
 
   CreateGLXContext (vi_stored);
 
@@ -72,12 +77,13 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
 
   glDepthFunc (GL_LEQUAL);
   glDepthMask (GL_TRUE);
-
 }
 
-G4OpenGLStoredXViewer::~G4OpenGLStoredXViewer () {}
-
 void G4OpenGLStoredXViewer::DrawView () {
+
+  //Make sure current viewer is attached and clean...
+  glXMakeCurrent (dpy, win, cx);
+  glViewport (0, 0, WinSize_x, WinSize_y);
 
   if (white_background == true) {
     glClearColor (1., 1., 1., 1.);
@@ -85,9 +91,6 @@ void G4OpenGLStoredXViewer::DrawView () {
     glClearColor (0., 0., 0., 1.);
   }
 
-  //Make sure current viewer is attached and clean...
-  glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
   ClearView ();
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();

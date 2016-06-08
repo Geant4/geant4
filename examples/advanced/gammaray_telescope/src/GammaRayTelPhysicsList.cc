@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPhysicsList.cc,v 1.2.4.2 2001/06/28 20:18:42 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: GammaRayTelPhysicsList.cc,v 1.3 2001/07/11 09:56:58 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

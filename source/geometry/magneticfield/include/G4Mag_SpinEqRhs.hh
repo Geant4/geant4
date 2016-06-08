@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.5.2.1 2001/06/28 19:08:16 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4Mag_SpinEqRhs.hh,v 1.7 2001/07/17 02:13:43 gum Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // class G4Mag_SpinEqRhs
@@ -35,7 +35,7 @@
 
 // History:
 // - Created: J.Apostolakis, P.Gumplinger - February 8th, 1999.
-// - Modified: P.Gumplinger - April 11th, 2001.
+// - Modified: D. Cote-Ahern, P.Gumplinger - April 11th, 2001.
 
 #ifndef G4MAG_SPIN_EQRHS
 #define G4MAG_SPIN_EQRHS

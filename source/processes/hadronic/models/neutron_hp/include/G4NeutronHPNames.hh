@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNames.hh,v 1.6.8.1 2001/06/28 19:14:19 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4NeutronHPNames.hh,v 1.9 2001/07/26 09:28:16 hpw Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 #ifndef G4NeutronHPNames_h
 #define G4NeutronHPNames_h 1
@@ -46,10 +46,24 @@ class G4NeutronHPNames
   G4String GetName(G4int i) { return theString[i]; }
   void SetMaxOffSet(G4int anOffset) { theMaxOffSet = anOffset; }
   
-  private:
+  public:
   
   static const G4String theString[99];
   G4int theMaxOffSet;
-
+  G4String itoa(int current)
+  {
+    const char theDigits[11] = "0123456789";
+    G4String result;
+    int digit;
+    do
+    {
+      digit = current-10*(current/10);
+      result=theDigits[digit]+result;
+      current/=10;
+    }
+    while(current!=0);
+    return result;
+  }
 };
+
 #endif

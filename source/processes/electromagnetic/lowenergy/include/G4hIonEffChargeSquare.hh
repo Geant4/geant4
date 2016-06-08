@@ -48,7 +48,12 @@
 #ifndef G4hIonEffChargeSquare_h
 #define G4hIonEffChargeSquare_h 1
 
+#include "globals.hh"
 #include "G4VLowEnergyModel.hh"
+
+class G4Material;
+class G4ParticleDefinition;
+class G4DynamicParticle;
 
 class G4hIonEffChargeSquare : public G4VLowEnergyModel
 {

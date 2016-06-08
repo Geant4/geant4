@@ -54,7 +54,7 @@ G4VViewer* G4GAGTree::CreateViewer (G4VSceneHandler& scene,
     new G4GAGTreeViewer ((G4GAGTreeSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
-      G4cerr << "G4GAGTree::CreateViewer: error flagged by negative"
+      G4cout << "G4GAGTree::CreateViewer: ERROR flagged by negative"
         " view id in G4GAGTreeViewer creation."
         "\n Destroying view and returning null pointer."
            << G4endl;
@@ -63,7 +63,7 @@ G4VViewer* G4GAGTree::CreateViewer (G4VSceneHandler& scene,
     }
   }
   else {
-    G4cerr << "G4GAGTree::CreateViewer: null pointer on"
+    G4cout << "G4GAGTree::CreateViewer: ERROR: null pointer on"
       " new G4GAGTreeViewer." << G4endl;
   }
   return pView;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.16.2.1 2001/06/28 19:10:04 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: globals.hh,v 1.19 2001/10/12 12:18:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 // Global Constants and typedefs
@@ -73,6 +73,13 @@
   #define max _MAX
 #endif
 
+#ifndef FALSE
+  #define FALSE 0
+#endif
+#ifndef TRUE
+  #define TRUE 1
+#endif
+
 // min, max, abs and sqr are in TemplateFunctions.h.
 // Includes also CLHEP.h with typedef for numeric types and
 // implicit inclusions of <stdlib.h>, <limits.h>, <math.h>.
@@ -82,7 +89,7 @@
 #include "G4Types.hh"
 
 // Get definition of G4String
-#include "g4rw/cstring.h"
+#include "G4String.hh"
 
 // Includes some additional definitions
 #include "templates.hh"

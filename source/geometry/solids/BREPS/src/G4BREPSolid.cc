@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.18.2.1 2001/06/28 19:08:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4BREPSolid.cc,v 1.20 2001/07/20 11:52:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -784,8 +784,7 @@ G4ThreeVector G4BREPSolid::SurfaceNormal(const G4ThreeVector& Pt) const
   // at a point on the surface
   // Note : the sense of the normal depends on the sense of the surface 
 
-  G4Vector3D   n(0,0,0);
-  G4int        iplane;
+  G4int           iplane;
     
   G4Vector3D norm;
   G4Ray r( Pt, G4Vector3D(1, 0, 0) );
@@ -801,7 +800,7 @@ G4ThreeVector G4BREPSolid::SurfaceNormal(const G4ThreeVector& Pt) const
   // calcul of the normal at this point
   norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
 
-  n = G4ThreeVector ( norm.x(), norm.y(), norm.z() );
+  G4ThreeVector n( norm.x(), norm.y(), norm.z() );
   n = n.unit();
 
   return n;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollectionNameVector.hh,v 1.1.2.1 2001/06/28 19:07:48 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4CollectionNameVector.hh,v 1.2 2001/07/11 09:58:42 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #ifndef G4CollectionNameVector_H 

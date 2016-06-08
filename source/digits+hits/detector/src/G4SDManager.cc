@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.cc,v 1.2.2.1 2001/06/28 19:07:49 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4SDManager.cc,v 1.4 2001/07/13 15:00:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 
 #include "G4SDManager.hh"
@@ -67,7 +67,7 @@ void G4SDManager::AddNewDetector(G4VSensitiveDetector*aSD)
   if( pathName(0) != '/' ) pathName.prepend("/");
   if( pathName(pathName.length()-1) != '/' ) pathName += "/";
   treeTop->AddNewDetector(aSD,pathName);
-  for(int i=0;i<numberOfCollections;i++)
+  for(G4int i=0;i<numberOfCollections;i++)
   {
     G4String SDname = aSD->GetName();
     G4String DCname = aSD->GetCollectionName(i);

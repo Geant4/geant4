@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PPVParameterised.ddl,v 1.4.4.1 2001/06/28 19:11:27 gunter Exp $
-// GEANT4 tag $Name:  $
-//
-// class G4PPVParameterised
-//
-//  Persistent-capable class of G4PVParameterised
-//
+// $Id: G4PPVParameterised.ddl,v 1.6 2001/07/11 10:02:18 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00 $
+
+// Class Description:
+//   Persistent version of G4PVParameterised.
+
 // History:
 // 05.11.99  Y.Morita  First non-stub version
 
@@ -40,17 +39,18 @@
 class G4PPVParameterised
  : public G4PPVReplica
 {
-public:
-  G4PPVParameterised(G4VPhysicalVolume *PhysVol,
+  public: // With description
+    G4PPVParameterised(G4VPhysicalVolume *PhysVol,
                        HepRef(G4PLogicalVolume) persLogVol);
+    ~G4PPVParameterised();
+      // Constructor and Destructor
 
-  ~G4PPVParameterised();
-
-  G4VPhysicalVolume* MakeTransientObject(
+    G4VPhysicalVolume* MakeTransientObject(
                              G4LogicalVolume* aLogical,
                              G4VPhysicalVolume* aMother );
+      // Creates a transient physical volume object.
 
-private:
+  private:
 //    d_Ref<G4VPVParameterisation> fparam; 
 };
 

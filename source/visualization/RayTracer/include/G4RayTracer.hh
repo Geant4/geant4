@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.hh,v 1.5.4.1 2001/06/28 19:15:51 gunter Exp $
-// GEANT4 tag $Name:  $
+// $Id: G4RayTracer.hh,v 1.8 2001/07/27 22:33:03 johna Exp $
+// GEANT4 tag $Name: geant4-04-00 $
 //
 //
 
@@ -53,8 +53,6 @@
 // implementation must contain 
 //           RegisterGraphicsSystem (new G4RayTracer);
 //
-
-#if defined (G4VIS_BUILD_RAYTRACER_DRIVER) || defined (G4VIS_USE_RAYTRACER)
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -159,11 +157,11 @@ class G4RayTracer : public G4VGraphicsSystem
     inline G4int GetNColumn() const { return nColumn; }
     inline void SetNRow(G4int val) { nRow = val; }
     inline G4int GetNRow() const { return nRow; }
-    inline void SetEyePosition(G4ThreeVector val) { eyePosition = val; }
+    inline void SetEyePosition(const G4ThreeVector& val) { eyePosition = val; }
     inline G4ThreeVector GetEyePosition() const { return eyePosition; }
-    inline void SetTargetPosition(G4ThreeVector val) { targetPosition = val; }
+    inline void SetTargetPosition(const G4ThreeVector& val) { targetPosition = val; }
     inline G4ThreeVector GetTargetPosition() const { return targetPosition; }
-    inline void SetLightDirection(G4ThreeVector val) { lightDirection = val.unit(); }
+    inline void SetLightDirection(const G4ThreeVector& val) { lightDirection = val.unit(); }
     inline G4ThreeVector GetLightDirection() const { return lightDirection; }
     inline void SetHeadAngle(G4double val) { headAngle = val; }
     inline G4double GetHeadAngle() const { return headAngle; }
@@ -176,6 +174,3 @@ class G4RayTracer : public G4VGraphicsSystem
 };
 
 #endif
-#endif
-
-

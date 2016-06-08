@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -31,7 +31,7 @@
     G4NeutronHPVector * result = new G4NeutronHPVector;
     G4int j=0;
     G4double x;
-    G4double yl, yr, y;
+    G4double y;
     G4int running = 0;
     for(G4int i=0; i<left.GetVectorLength(); i++)
     {
@@ -69,8 +69,8 @@
 
   G4NeutronHPVector::G4NeutronHPVector()
   {
-    theData = new G4NeutronHPDataPoint[100]; 
-    nPoints=100;
+    theData = new G4NeutronHPDataPoint[20]; 
+    nPoints=20;
     nEntries=0;
     Verbose=0;
     theIntegral=NULL;
@@ -84,8 +84,8 @@
   
   G4NeutronHPVector::G4NeutronHPVector(G4int n)
   {
-    theData = new G4NeutronHPDataPoint[G4std::max(n, 100)]; 
-    nPoints=G4std::max(n, 100);
+    nPoints=G4std::max(n, 20);
+    theData = new G4NeutronHPDataPoint[nPoints]; 
     nEntries=0;
     Verbose=0;
     theIntegral=NULL;
@@ -196,7 +196,7 @@
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPVector");
     if(i==nPoints)
     {
-      nPoints = static_cast<G4int>(1.5*nPoints);
+      nPoints = static_cast<G4int>(1.2*nPoints);
       G4NeutronHPDataPoint * buff = new G4NeutronHPDataPoint[nPoints];
       for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
       delete [] theData;
@@ -213,8 +213,7 @@
     // continue in unknown areas by substraction of the last difference.
     
     CleanUp();
-    G4int s = 0, n=0, i=0, m=0;
-    G4bool flag;
+    G4int s = 0, n=0, m=0;
     G4NeutronHPVector * tmp;
     G4int a = s, p = n, t;
     while ( a<active->GetVectorLength() )
@@ -331,6 +330,12 @@
   G4double G4NeutronHPVector::Sample() // Samples X according to distribution Y
   {
     G4double result;
+    G4int j;
+    for(j=0; j<GetVectorLength(); j++)
+    {
+      if(GetY(j)<0) SetY(j, 0);
+    }
+    
     if(theBuffered.size() !=0 && G4UniformRand()<0.5) 
     {
       result = theBuffered[0];
@@ -346,7 +351,6 @@
       if(theIntegral==NULL) IntegrateAndNormalise();
       do
       {
-        G4int i;
         G4double value, test, baseline;
         baseline = theData[GetVectorLength()-1].GetX()-theData[0].GetX();
         G4double rand;
