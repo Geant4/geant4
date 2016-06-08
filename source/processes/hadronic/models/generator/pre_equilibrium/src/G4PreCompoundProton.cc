@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundProton.cc,v 1.8 2001/08/01 17:08:32 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundProton.cc,v 1.9 2001/11/22 17:38:10 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // by V. Lara
 
@@ -58,41 +58,5 @@ G4double G4PreCompoundProton::ProbabilityDistributionFunction(const G4double & e
 	
     return Probability;
 }
-
-
-
-
-G4double G4PreCompoundProton::GetKineticEnergy(const G4Fragment & aFragment)
-{
-    G4double DJ = - GetCoulombBarrier();
-
-    G4double T = aFragment.GetNumberOfParticles() + aFragment.GetNumberOfHoles() - GetA() - 1.0;
-    G4double R2 = GetMaximalKineticEnergy();
-    G4double R1 = R2 + GetCoulombBarrier();
-	
-    G4double E = 0.0; 
-
-    if (T <= -0.1) {
-	E = R1;
-    } else if (T <= 0.1) {
-	do {
-	    E = sqrt(G4UniformRand())*R2;
-	} while (E < GetCoulombBarrier());
-    } else {
-	G4double E1 = (R1 - DJ*T)/(T + 1.0);
-	G4double T3 = 0.0;
-	do {
-	    E = GetCoulombBarrier() + G4UniformRand()*R2;
-	    G4double T1 = (E + DJ)/(E1 + DJ);
-	    G4double T2 = (R1 - E)/(R1 - E1);
-	    T3 = T1*pow(T2,T);
-	} while (G4UniformRand() > T3);
-    }
-    return E;
-}
-
-
-
-
 
 

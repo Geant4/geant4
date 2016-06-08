@@ -22,7 +22,7 @@
 //
 //
 // $Id: exampleN05.cc,v 1.10 2002/01/09 17:24:16 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 // --------------------------------------------------------------

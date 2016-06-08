@@ -21,30 +21,8 @@
 // ********************************************************************
 //
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
-// $Id: G4PreCompoundEmission.cc,v 1.7 2001/09/27 16:51:56 larazb Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundEmission.cc,v 1.9 2002/01/15 12:52:58 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -80,82 +58,91 @@ G4PreCompoundEmission::G4PreCompoundEmission(const G4Fragment& aFragment)
 
 G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {
-  // Choose a Fragment for emission
-  G4VPreCompoundFragment * theFragment = theFragmentsVector.ChooseFragment();
+#ifdef debug
+    G4Fragment InitialState(aFragment);
+#endif
+    // Choose a Fragment for emission
+    G4VPreCompoundFragment * theFragment = theFragmentsVector.ChooseFragment();
 
-  // Kinetic Energy of emitted fragment
-  G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
+    // Kinetic Energy of emitted fragment
+    G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
+    
+    // Calculate the fragment momentum (three vector)
+    G4ThreeVector momentum = AngularDistribution(theFragment,aFragment,KineticEnergyOfEmittedFragment);
+    
+    // Mass of emittef fragment
+    G4double EmittedMass = theFragment->GetNuclearMass();
+    
+    // Now we can calculate the four momentum 
+    // both options are valid and give the same result but 2nd one is faster
+    // G4LorentzVector EmittedMomentum(momentum,sqrt(momentum.mag2()+EmittedMass*EmittedMass));
+    G4LorentzVector EmittedMomentum(momentum,EmittedMass+KineticEnergyOfEmittedFragment);
+    
+    // Perform Lorentz boost
+    EmittedMomentum.boost(aFragment.GetMomentum().boostVector());  
 
-  // Calculate the fragment momentum (three vector)
-  G4ThreeVector momentum = AngularDistribution(theFragment,aFragment,KineticEnergyOfEmittedFragment);
+    // Set emitted fragment momentum
+    theFragment->SetMomentum(EmittedMomentum);	
+
+
+    // NOW THE RESIDUAL NUCLEUS
+    // ------------------------
+    
+    // Now the residual nucleus. 
+    // The energy conservation says that 
+    G4double ResidualEcm = 
+//    aFragment.GetGroundStateMass() + aFragment.GetExcitationEnergy() // initial energy in cm
+	aFragment.GetMomentum().m()
+	- (EmittedMass+KineticEnergyOfEmittedFragment); 
+
+    // Then the four momentum for residual is 
+    G4LorentzVector RestMomentum(-momentum,ResidualEcm);
+    // This could save a Lorentz boost
+    // G4LorentzVector RestMomentum2(aFragment.GetMomentum()-EmittedMomentum);
+
+    // Just for test
+    // Excitation energy
+    //  G4double anU = ResidualEcm - theFragment->GetRestNuclearMass();
+    // This is equivalent
+    //  G4double anU = theFragment->GetMaximalKineticEnergy() - KineticEnergyOfEmittedFragment + 
+    //    theFragment->GetCoulombBarrier();
+    
+    // check that Excitation energy is >= 0
+    G4double anU = RestMomentum.m()-theFragment->GetRestNuclearMass();
+    if (anU < 0.0) G4Exception("G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
+    
+    
+    
+    // Update nucleus parameters:
+    // --------------------------
+    // Number of excitons
+    aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
+				   G4int(theFragment->GetA()));
+    // Number of charges
+    aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
+				 G4int(theFragment->GetZ()));
+    
+    // Atomic number
+    aFragment.SetA(theFragment->GetRestA());
+    
+    // Charge
+    aFragment.SetZ(theFragment->GetRestZ());
+    
+    
+    // Perform Lorentz boosts
+    RestMomentum.boost(aFragment.GetMomentum().boostVector());
+
+    // Update nucleus momentum
+    aFragment.SetMomentum(RestMomentum);
 	
-  // Mass of emittef fragment
-  G4double EmittedMass = theFragment->GetNuclearMass();
-
-	
-  // Now we can calculate the four momentum 
-  // both options are valid and give the same result but 2nd one is faster
-  //  G4LorentzVector EmittedMomentum(momentum,sqrt(momentum.mag2()+EmittedMass*EmittedMass));
-  G4LorentzVector EmittedMomentum(momentum,EmittedMass+KineticEnergyOfEmittedFragment);
-	
-  // Perform Lorentz boost
-  EmittedMomentum.boost(aFragment.GetMomentum().boostVector());  
-
-  // Set emitted fragment momentum
-  theFragment->SetMomentum(EmittedMomentum);	
-
-
-  // NOW THE RESIDUAL NUCLEUS
-  // ------------------------
-
-  // Now the residual nucleus. 
-  // The energy conservation says that 
-  G4double ResidualEcm = 
-    aFragment.GetGroundStateMass() + aFragment.GetExcitationEnergy() // initial energy in cm
-    - (EmittedMass+KineticEnergyOfEmittedFragment); 
-
-  // Then the four momentum for residual is 
-  G4LorentzVector RestMomentum(-momentum,ResidualEcm);
-  G4LorentzVector RestMomentum2(aFragment.GetMomentum()-EmittedMomentum);
-
-
-  // Just for test
-  // Excitation energy
-  //  G4double anU = ResidualEcm - theFragment->GetRestNuclearMass();
-  // This is equivalent
-  //  G4double anU = theFragment->GetMaximalKineticEnergy() - KineticEnergyOfEmittedFragment + 
-  //    theFragment->GetCoulombBarrier();
-	
-  // check that Excitation energy is >= 0
-  G4double anU = RestMomentum.m()-theFragment->GetRestNuclearMass();
-  if (anU < 0.0) G4Exception("G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
-
-  
-  
-  // Update nucleus parameters:
-  // --------------------------
-  // Number of excitons
-  aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
-				G4int(theFragment->GetA()));
-  // Number of charges
-  aFragment.SetNumberOfCharged(aFragment.GetNumberOfCharged()-
-			       G4int(theFragment->GetZ()));
-
-  // Atomic number
-  aFragment.SetA(theFragment->GetRestA());
-	  
-  // Charge
-  aFragment.SetZ(theFragment->GetRestZ());
-
-
-  // Perform Lorentz boosts
-  RestMomentum.boost(aFragment.GetMomentum().boostVector());
-
-  // Update nucleus momentum
-  aFragment.SetMomentum(RestMomentum);
-	
-  // Create a G4ReactionProduct 
-  G4ReactionProduct * MyRP = theFragment->GetReactionProduct();
+    // Create a G4ReactionProduct 
+    G4ReactionProduct * MyRP = theFragment->GetReactionProduct();
+#ifdef pctest
+    MyRP->SetCreatorModel("G4PreCompoundModel");
+#endif
+#ifdef debug
+  CheckConservation(InitialState,aFragment,MyRP);
+#endif
   return MyRP;
 }
 
@@ -286,3 +273,53 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
 //    return ans; 
 	
 //  }
+
+
+#ifdef debug
+void G4PreCompoundEmission::CheckConservation(const G4Fragment & theInitialState,
+					      const G4Fragment & theResidual,
+					      G4ReactionProduct * theEmitted) const
+{
+    G4double ProductsEnergy = theEmitted->GetTotalEnergy() + theResidual.GetMomentum().e();
+    G4ThreeVector ProductsMomentum(theEmitted->GetMomentum()+theResidual.GetMomentum().vect());
+    G4int ProductsA = theEmitted->GetDefinition()->GetBaryonNumber() + theResidual.GetA();
+    G4int ProductsZ = theEmitted->GetDefinition()->GetPDGCharge() + theResidual.GetZ();
+
+    if (ProductsA != theInitialState.GetA()) {
+	G4cout << "!!!!!!!!!! Baryonic Number Conservation Violation !!!!!!!!!!" << G4endl;
+	G4cout << "G4PreCompoundEmission.cc: Barionic Number Conservation"
+	       << G4endl; 
+	G4cout << "Initial A = " << theInitialState.GetA() 
+	       << "   Fragments A = " << ProductsA << "   Diference --> " 
+	       << theInitialState.GetA() - ProductsA << G4endl;
+    }
+    if (ProductsZ != theInitialState.GetZ()) {
+	G4cout << "!!!!!!!!!! Charge Conservation Violation !!!!!!!!!!" << G4endl;
+	G4cout << "G4PreCompoundEmission.cc: Charge Conservation test"
+	       << G4endl; 
+	G4cout << "Initial Z = " << theInitialState.GetZ() 
+	       << "   Fragments Z = " << ProductsZ << "   Diference --> " 
+	       << theInitialState.GetZ() - ProductsZ << G4endl;
+    }
+    if (abs(ProductsEnergy-theInitialState.GetMomentum().e()) > 10.0*eV) {
+	G4cout << "!!!!!!!!!! Energy Conservation Violation !!!!!!!!!!" << G4endl;
+	G4cout << "G4PreCompoundEmission.cc: Energy Conservation test" 
+	       << G4endl; 
+	G4cout << "Initial E = " << theInitialState.GetMomentum().e()/MeV << " MeV"
+	       << "   Fragments E = " << ProductsEnergy/MeV  << " MeV   Diference --> " 
+	       << (theInitialState.GetMomentum().e() - ProductsEnergy)/MeV << " MeV" << G4endl;
+    } 
+    if (abs(ProductsMomentum.x()-theInitialState.GetMomentum().x()) > 10.0*eV || 
+	abs(ProductsMomentum.y()-theInitialState.GetMomentum().y()) > 10.0*eV ||
+	abs(ProductsMomentum.z()-theInitialState.GetMomentum().z()) > 10.0*eV) {
+	G4cout << "!!!!!!!!!! Momentum Conservation Violation !!!!!!!!!!" << G4endl;
+	G4cout << "G4PreCompoundEmission.cc: Momentum Conservation test" 
+	       << G4endl; 
+	G4cout << "Initial P = " << theInitialState.GetMomentum().vect() << " MeV"
+	       << "   Fragments P = " << ProductsMomentum  << " MeV   Diference --> " 
+	       << theInitialState.GetMomentum().vect() - ProductsMomentum << " MeV" << G4endl;
+    }
+    return;
+}
+
+#endif

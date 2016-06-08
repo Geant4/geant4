@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05PionShowerModel.hh,v 1.7 2002/01/09 17:24:18 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 //----------------------------------------------

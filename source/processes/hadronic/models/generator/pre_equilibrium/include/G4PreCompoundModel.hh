@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.hh,v 1.11 2001/08/01 17:08:28 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundModel.hh,v 1.14 2002/01/22 13:47:28 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // by V. Lara
 
@@ -52,46 +52,66 @@
 
 //#define debug
 //#define verbose
-
+//#define pctest
 
 class G4PreCompoundModel : public G4VPreCompoundModel
 {
 public:
-  
-  G4PreCompoundModel(G4ExcitationHandler * const value) : 
-    G4VPreCompoundModel(value) {};
+    
+    G4PreCompoundModel(G4ExcitationHandler * const value) : 
+	G4VPreCompoundModel(value) {};
 
-  ~G4PreCompoundModel() {};
+    ~G4PreCompoundModel() {};
 
 private:
-  G4PreCompoundModel() {};
-  
-  G4PreCompoundModel(const G4PreCompoundModel &right) {};
-  
-  const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
-  G4bool operator==(const G4PreCompoundModel &right) const;
-  G4bool operator!=(const G4PreCompoundModel &right) const;
+    G4PreCompoundModel() {};
+
+    G4PreCompoundModel(const G4PreCompoundModel &right) {};
+
+    const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
+    G4bool operator==(const G4PreCompoundModel &right) const;
+    G4bool operator!=(const G4PreCompoundModel &right) const;
 
 public:
-  G4VParticleChange * ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus);
-  
-  G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
+    G4VParticleChange * ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus);
+
+    G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
+
+#ifdef pctest
+    static G4Fragment GetInitialFragmentForTest()
+	{ return G4PreCompoundModel::theInitialFragmentForTest; }
+    static G4std::vector<G4String*> * GetCreatorModels()
+	{ return &G4PreCompoundModel::theCreatorModels; }
+#endif
 
 private:  
 
-  void PerformEquilibriumEmission(const G4Fragment & aFragment, 
-				  G4ReactionProductVector * theResult) const;
+    void PerformEquilibriumEmission(const G4Fragment & aFragment, 
+				    G4ReactionProductVector * theResult) const;
 
 #ifdef debug				  
-  void CheckConservation(const G4Fragment & theInitialState,
-					   const G4Fragment & aFragment,
-					     G4ReactionProductVector * Result) const;
+    void CheckConservation(const G4Fragment & theInitialState,
+			   const G4Fragment & aFragment,
+			   G4ReactionProductVector * Result) const;
 #endif
 
-  G4ParticleChange theResult;
+    G4ParticleChange theResult;
+
+#ifdef pctest
+    static G4Fragment theInitialFragmentForTest;
+    static G4std::vector<G4String*> theCreatorModels;
+#endif
+
 };
-
-
 #endif
+
+
+
+
+
+
+
+
+
 
 

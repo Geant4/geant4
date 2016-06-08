@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.hh,v 1.8 2001/08/01 17:08:30 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VPreCompoundIon.hh,v 1.9 2001/11/22 17:37:02 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // by V. Lara
 
@@ -75,9 +75,6 @@ public:
 
 public:
   G4double ProbabilityDistributionFunction(const G4double & eKin, const G4Fragment & aFragment);
-
-  // Gives the kinetic energy for fragments in pre-equilibrium decay
-  G4double GetKineticEnergy(const G4Fragment & aFragment);
 
 protected:
 

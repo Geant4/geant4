@@ -1,0 +1,157 @@
+
+                 Geant4 4.0 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                      28th February 2002
+
+List of fixes included in this public patch to release 4.0, to be added on
+top of patch-01:
+
+  o Config:
+    ------
+    - liblist.c: added flags __CYGWIN__ and __CYGWIN32__ for triggering proper
+      parsing algorithm on Windows systems, also on most recent versions of
+      Cygwin.
+    - WIN32-VC.gmk: use g77 instead of f77 as default fortran compiler.
+    - sys/HP-aCC.gmk: removed include path to
+      global/management/include/std/wrappers, which was unused and not
+      necessary.
+
+  o Decay processes:
+    ---------------
+    - Removed a physics table from G4Decay.
+
+  o Electromagnetic processes:
+    -------------------------
+    - Fixed bug in G4Ve(h)EnergyLoss, G4VMuEnergyLoss:
+      o Adopt MinDeltaCut in-range instead of in-energy !
+    - G4VEnergyLoss:
+      o Set subSecFlag to false. NO default subcutoff generation.
+      o Set finalRange to 1mm as default (the actual value is computed in
+        G4VeEnergyLoss, G4VhEnergyLoss and G4VMuEnergyLoss).
+
+  o Event:
+    -----
+  - Optimised implementation of SetNewValue() in G4ParticleGunMessenger and 
+    G4GeneralParticleSourceMessenger to allow porting on WIN32-VC for optimised
+    compilation. 
+
+  o Geometry:
+    --------
+  - Management:
+    o G4GeometryManager.cc: fixed handling of ios manipulators and precision
+      to reset to their original state in G4GeometryManager::ReportVoxelStats().
+      Fixes problem report #343.
+  - Volumes:
+    o G4GeometryMessenger.cc: fixed local variable name not to clash with
+      class data member. 
+  - solids/Boolean:
+    o G4ReflectionFactory.cc: fixed bug causing repetition of daughter volumes.
+    o G4ReflectedSolid[.hh.cc]: 
+      - Defined new methods Set/GetTransform3D() and Set/GetDirectTransform3D() 
+        for defining/accessing the reflected transformation.
+    o Moved utility methods for G4AffineTransform to protected.
+  - solids/BREPS:
+    o Bug fixes to G4BREPSolidPolyhedra: 
+      - Added enhancement allowing to define RMIN and RMAX to be zero with the 
+        exception of forbidden two consecutive zero RMAX values. 
+      - Refactoring in constructor gained two new private methods for creation
+        of trapezoidal and triangular side planes of G4BREPSolidPolyhedra. 
+      - Rewritten code for delta phi >= 2*PI case with full classification of
+        possible cases. 
+      - Fixed sense of end planes. 
+      - Fixed delta phi < 2*PI case where some old code remained after bug
+        fix #266. 
+      - Added new private method for creation of planar surfaces gained 
+        after code refactoring in constructor. 
+      - Fixed bug for problem report #354 by adding the code handling the
+        cases where user supplies for the same z-section different RMIN or
+        RMAX values.
+      - Added more preconditions checks 
+      - Added code forbidding "teeth" in polyhedra.
+    o G4ConvexHull.hh: moved initialisation of 'next' to constructor's body. 
+  - solids/CSG:
+    o G4Sphere.cc: bug-fix in Inside() function. Fixes problem report #216. 
+    o G4Para.cc: fixed bug in G4Para::Inside() in calculation of xt,
+      according to problem report #357.
+  - solids/STEPinterface:
+    o G4RepresentationRelationshipCreator.cc: fixed unsafe usage of
+      '<' operator. 
+
+  o Hadronic processes:
+    ------------------
+    o Fixes in pre-equilibrium and de-excitation generator models.
+    o Fixed bug in doppler broadening in neutron-transport model:
+      - Fixed sign error in calculation of effective luminosity.
+    o Stopping: trivial bug-fix in pi-absorption at rest. 
+    o Util:
+      - Trivial bug-fix, affecting K-absorption at rest.
+      - G4Nucleus: moved definition of constructors/destructor from header to
+        source implementation file. Unresolved symbols were detected at link
+        time on SUN-CC for static constants used to initialise members in
+        inline constructors. 
+    o CHIPS model: fixed accuracy problem.
+    o Optimised implementation in G4Fancy3DNucleus.cc to allow porting on
+      WIN32-VC for optimised compilation. 
+
+  o Interfaces:
+    ----------
+    - Fixed for odd behavior of G4UIcsh in Windows systems.
+
+  o Materials:
+    ---------
+    - Optimised implementation of GetIndex() for fIndexTable in G4Material,
+      G4Element and G4Isotope.
+
+  o Particles:
+    ---------
+    - Fixed bug in the decay table for G4KaonMinus.
+
+  o Track & Tracking:
+    ----------------
+    - track:
+      o Added G4Track::CopyTrackInfo().
+      o Optimised G4ParticleChange::AddSecondary() to properly use touchable
+        handles.
+      o Fixed a bug of changing parent weight in
+        G4ParticleChange::UpdateStepForAlongStep().
+      o Optimised implementation in G4Track::GetVelocity().
+    - tracking:
+      o G4SteppingManager2.cc:
+        - fix for extra steps when the ApplyCuts flag is set 
+        - G4SteppingManager.hh: changed scope for 'SizeOfSelectedDoItVector'
+          to allow porting on WIN-VC compiler.
+      o Fix in G4SteppingManager::SetInitialStep() for applyCuts. 
+
+  o Visualization:
+    -------------
+    - HepRep: added check for missing hierarchy layers in HepRepXMLWriter. 
+    - Bug fix in modeling: removed Begin/EndPrimitives from G4HitsModel and
+      G4TrajectoriesModel. This was causing nested calls to Begin/EndPrimitives
+      (and thus to glNewList/EndList in OpenGL stored mode), since the
+      trajectories and hits Draw methods themselves have Begin/EndPrimitives.
+
+  o Examples:
+    --------
+    - extended/electromagnetic/testem1,3,4,5:
+      o Improvements in PrimaryGenerator and macros
+    - novice/N03:
+      o New macros for tutorials/exercises.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of "patch-01" for release 4.0.
+  o  Technical notes distributed for release 4.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 4.0 are available through
+our "Source Code" Web page:
+- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+
+Please refer to <A
+href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.
+

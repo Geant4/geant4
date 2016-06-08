@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.9 2001/10/05 16:13:42 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CompetitiveFission.cc,v 1.11 2002/01/15 12:27:30 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -84,7 +84,7 @@ void G4CompetitiveFission::Initialize(const G4Fragment & fragment)
     G4int anA = G4int(fragment.GetA());
     G4int aZ = G4int(fragment.GetZ());
     G4double ExEnergy = fragment.GetExcitationEnergy() - 
-	G4PairingCorrection::GetFissionPairingCorrection(anA,aZ);
+	   G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(anA,aZ);
   
 
     // Saddle point excitation energy ---> A = 65
@@ -115,7 +115,7 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     G4int Z = G4int(theNucleus.GetZ());
     //   Excitation energy (in MeV)
     G4double U = theNucleus.GetExcitationEnergy() - 
-	G4PairingCorrection::GetFissionPairingCorrection(A,Z);
+	G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
     // Check that U > 0
     if (U <= 0.0) {
 	G4FragmentVector * theResult = new  G4FragmentVector;
@@ -205,20 +205,24 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
     momentum2 += (theNucleusMomentum.boostVector() * (M2+U2));
 
 
-  // Create 4-momentum for first fragment
-  // Warning!! Energy conservation is broken
+    // Create 4-momentum for first fragment
+    // Warning!! Energy conservation is broken
     G4LorentzVector FourMomentum1( momentum1 , sqrt(momentum1.mag2() + (M1+U1)*(M1+U1)));
 
     // Create 4-momentum for second fragment
     // Warning!! Energy conservation is broken
     G4LorentzVector FourMomentum2( momentum2 , sqrt(momentum2.mag2() + (M2+U2)*(M2+U2)));
 
-  // Create Fragments
+    // Create Fragments
     G4Fragment * Fragment1 = new G4Fragment( A1, Z1, FourMomentum1);
     if (!Fragment1) G4Exception("G4CompetitiveFission::BreakItUp: Can't create Fragment1! ");
     G4Fragment * Fragment2 = new G4Fragment( A2, Z2, FourMomentum2);
     if (!Fragment2) G4Exception("G4CompetitiveFission::BreakItUp: Can't create Fragment2! ");
 
+#ifdef pctest
+    Fragment1->SetCreatorModel(G4String("G4CompetitiveFission"));
+    Fragment2->SetCreatorModel(G4String("G4CompetitiveFission"));
+#endif
   // Create Fragment Vector
     G4FragmentVector * theResult = new G4FragmentVector;
 

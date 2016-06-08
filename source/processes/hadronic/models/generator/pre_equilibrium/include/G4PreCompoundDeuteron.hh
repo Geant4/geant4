@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundDeuteron.hh,v 1.8 2001/08/01 17:08:28 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundDeuteron.hh,v 1.9 2002/01/15 12:43:25 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // by V. Lara 
 
@@ -56,16 +56,20 @@ public:
   G4bool operator==(const G4PreCompoundDeuteron &right) const
   { return G4VPreCompoundIon::operator==(right);}
   
-  G4bool operator!=(const G4PreCompoundDeuteron &right) const
-  { return G4VPreCompoundIon::operator!=(right);}
+    G4bool operator!=(const G4PreCompoundDeuteron &right) const
+	{ return G4VPreCompoundIon::operator!=(right);}
 
-  G4ReactionProduct * GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = new G4ReactionProduct(G4Deuteron::DeuteronDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
-    return theReactionProduct;
-  }
+    G4ReactionProduct * GetReactionProduct() const
+	{
+	    G4ReactionProduct * theReactionProduct = new 
+		G4ReactionProduct(G4Deuteron::DeuteronDefinition());
+	    theReactionProduct->SetMomentum(GetMomentum().vect());
+	    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+#ifdef pctest
+	    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+#endif
+	    return theReactionProduct;
+	}
 
 
 public:

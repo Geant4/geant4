@@ -1,5 +1,5 @@
-$Id: History,v 1.177 2001/12/14 08:37:39 gcosmo Exp $
-$Name: geant4-04-00 $
+$Id: History,v 1.180 2002/02/07 10:18:32 gcosmo Exp $
+$Name: geant4-04-00-patch-02 $
 
 -------------------------------------------------------------------
 
@@ -17,6 +17,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07th February 2002 Gabriele Cosmo (config-V04-00-01)
+- liblist.c: added flags __CYGWIN__ and __CYGWIN32__ for triggering proper
+  parsing algorithm on Windows systems, also on most recent versions of Cygwin.
+- WIN32-VC.gmk: use g77 instead of f77 as default fortran compiler.
+
+25th January 2002 Gabriele Cosmo (config-V04-00-00)
+- sys/HP-aCC.gmk: removed include path to global/management/include/std/wrappers,
+  which was unused and not neccessary.
 
 10th December 2001 Gabriele Cosmo (config-V03-02-15)
 - architecture.gmk:

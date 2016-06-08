@@ -18,12 +18,13 @@
       CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 *
       CALL GRNDM(RNDM,2)
-      THETA = PI*RNDM(1)
-      PHI   = TWOPI*RNDM(2)                                
+      cosTheta = 2*RNDM(1) - 1.
+      sinTheta = sqrt(1. - cosTheta**2)
+      Phi   = TWOPI*RNDM(2)                                
 *                                                         
-      PLAB(1)  = PKINE(1)*SIN(THETA)*COS(PHI)
-      PLAB(2)  = PKINE(1)*SIN(THETA)*SIN(PHI)
-      PLAB(3)  = PKINE(1)*COS(THETA)                                       
+      PLAB(1)  = PKINE(1)*sinTheta*COS(Phi)
+      PLAB(2)  = PKINE(1)*sinTheta*SIN(Phi)
+      PLAB(3)  = PKINE(1)*cosTheta                                       
 *                                                          
       CALL GSKINE(PLAB,IKINE,NVERT,0,0,NT)                           
 *                                                                   

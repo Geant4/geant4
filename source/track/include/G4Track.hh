@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.13 2001/11/13 05:13:37 kurasige Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Track.hh,v 1.15 2001/12/14 09:59:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 //
 //---------------------------------------------------------------
@@ -67,15 +67,19 @@ public: // With description
 
 // Constructor
    G4Track();
-   G4Track(const G4Track&);
    G4Track(G4DynamicParticle* apValueDynamicParticle,
            G4double aValueTime,
            const G4ThreeVector& aValuePosition);
       // aValueTime is a global time
-
+   G4Track(const G4Track&);
+   // Copy Constructor copys members other than tracking information
+ 
+private:
+  // Hide assignment operator as private
    G4Track& operator=(const  G4Track&);
+
 //--------
-public: 
+public: // With description
 
 // Destrcutor
    ~G4Track();
@@ -86,12 +90,12 @@ public:
    inline void operator delete(void *aTrack);
       // Override "delete" for "G4Allocator".
 
-   int operator==( const G4Track& s);
-      // Define "==" operator because "G4TrackVector" uses 
-      //"RWPtrOrderdVector" which requires this.
-
+   G4bool operator==( const G4Track& );
+  
 //--------
 public: // With description
+// Copy information of the track (w/o tracking information)
+   void CopyTrackInfo(const G4Track&);
 
 // Get/Set functions
   // track ID
@@ -252,9 +256,7 @@ public: // With description
       // this will be set equal to 'StepLength' in G4Step.
 
    G4double fWeight;
-     // This is a weight for this track used by G4VEvtBiasMechanism 
-     // to execute inclusive simulation for hadronic/electomagnetic shower
-     // and neutron transportation etc. 
+     // This is a weight for this track 
 
    const G4Step* fpStep;
 

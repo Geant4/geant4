@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MagHelicalStepper.cc,v 1.11 2002/01/17 08:12:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 #include "G4MagHelicalStepper.hh"
 #include "G4ThreeVector.hh"

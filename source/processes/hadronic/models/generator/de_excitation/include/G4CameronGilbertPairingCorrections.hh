@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CameronGilbertPairingCorrections.hh,v 1.5 2001/08/01 17:04:09 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4CameronGilbertPairingCorrections.hh,v 1.7 2002/01/15 12:01:51 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,44 +33,74 @@
 
 #include "globals.hh"
 
+
+//#define verbose 1
+
 class G4CameronGilbertPairingCorrections
 {
 private:
-    // Dummy constructor
-    G4CameronGilbertPairingCorrections(G4double dummy);
+  // Dummy constructor
+  G4CameronGilbertPairingCorrections();
 	
-    static G4CameronGilbertPairingCorrections theInstance;
+  static G4CameronGilbertPairingCorrections* theInstance;
 
 
 public:
-	
-    ~G4CameronGilbertPairingCorrections() {};
+  static G4CameronGilbertPairingCorrections* GetInstance();
 
-    G4double GetPairingZ(const G4int Z) {
-	if (Z <= ZTableSize && Z > 1) return PairingZTable[Z-1]*MeV;
-	else {
-	    G4cerr << "G4CameronGilbertPairingCorrections: out of table for Z = " << Z << G4endl;
-	    return 0.0;
-	}
+  ~G4CameronGilbertPairingCorrections() {};
+
+  G4double GetPairingCorrection(const G4int A, const G4int Z) const
+  {
+    return GetPairingZ(Z) + GetPairingN(A-Z);
+  }
+
+  G4double GetPairingZ(const G4int Z) const 
+  {
+    if (IsInTableThisZ(Z)) return PairingZTable[Z-ZTableMin]*MeV;
+    else {
+#ifdef verbose
+      G4cerr << "G4CameronGilbertPairingCorrections: out of table for Z = " << Z << G4endl;
+#endif
+      return 0.0;
     }
+  }
+
+  G4bool IsInTableThisZ(const G4int Z) const 
+  {
+    if ( Z >= ZTableMin && Z <= ZTableMax ) return true;
+    else return false;
+  }
+
 	
-    G4double GetPairingN(const G4int N) {
-	if (N <= NTableSize && N > 0) return PairingNTable[N-1]*MeV;
-	else {
-	    G4cerr << "G4CameronGilbertPairingCorrections: out of table for N = " << N << G4endl;
-	    return 0.0;
-	}
+  G4double GetPairingN(const G4int N) const 
+  {
+   if (IsInTableThisN(N)) return PairingNTable[N-NTableMin]*MeV;
+    else {
+#ifdef verbose
+      G4cerr << "G4CameronGilbertPairingCorrections: out of table for N = " << N << G4endl;
+#endif
+      return 0.0;
     }
-	
-	
-    enum  { ZTableSize = 98, NTableSize = 150 };
+  }
+
+  G4bool IsInTableThisN(const G4int N) const 
+  {
+    if ( N >= NTableMin && N <= NTableMax ) return true;
+    else return false;
+  }
+
+
+  enum  { ZTableSize = 88, NTableSize = 140, ZTableMin = 11, ZTableMax = 98,
+	  NTableMin = 11, NTableMax = 150 };
+
 private:
 
 
 
-    static G4double PairingZTable[ZTableSize];
+  static const G4double PairingZTable[ZTableSize];
 
-    static G4double PairingNTable[NTableSize];
+  static const G4double PairingNTable[NTableSize];
 	
 };
 #endif

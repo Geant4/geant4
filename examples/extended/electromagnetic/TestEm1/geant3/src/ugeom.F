@@ -31,7 +31,7 @@
       CALL GSMATE( 7,'Tungsten' ,183.85, 74., 19.30  , 0.35, 18.5, 0,0)                    
       CALL GSMATE( 8,'Lead'     ,207.19, 82., 11.35  , 0.56, 18.5, 0,0)                    
       CALL GSMATE( 9,'Uranium'  ,238.03, 92., 18.95  , 0.32, 12. , 0,0)                    
-*                                               
+      CALL GSMATE(10,'Germanium', 72.61, 32., 5.323  , 2.30, 16.6, 0,0)                                          
 *                                                                               
 * *** Defines USER tracking media parameters
       IFIELD = 0                                                             

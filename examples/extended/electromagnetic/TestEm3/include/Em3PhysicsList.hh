@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsList.hh,v 1.5 2001/10/22 10:58:49 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em3PhysicsList.hh,v 1.6 2002/02/14 14:20:46 maire Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 
@@ -51,7 +51,8 @@ class Em3PhysicsList: public G4VUserPhysicsList
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
-    void ConstructBarions();    
+    void ConstructBarions();
+    void ConstructIons();   
     
   public: 
     void SetCuts();

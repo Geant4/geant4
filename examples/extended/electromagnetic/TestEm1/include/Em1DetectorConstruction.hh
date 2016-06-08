@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em1DetectorConstruction.hh,v 1.4 2001/10/26 12:51:23 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: Em1DetectorConstruction.hh,v 1.5 2001/12/07 11:49:09 maire Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 
@@ -64,7 +64,7 @@ class Em1DetectorConstruction : public G4VUserDetectorConstruction
      const
      G4VPhysicalVolume* GetWorld()      {return pBox;};           
                     
-     G4double           GeSize()        {return BoxSize;};      
+     G4double           GetSize()       {return BoxSize;};      
      G4Material*        GetMaterial()   {return aMaterial;};
      
      void               PrintParameters();

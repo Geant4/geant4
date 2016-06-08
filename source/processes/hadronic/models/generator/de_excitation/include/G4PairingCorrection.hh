@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PairingCorrection.hh,v 1.3 2001/08/01 17:04:36 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PairingCorrection.hh,v 1.5 2002/01/15 12:12:24 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -31,31 +31,46 @@
 #define G4PairingCorrection_h 1
 
 #include "globals.hh"
+#include "G4CookPairingCorrections.hh"
+#include "G4CameronGilbertPairingCorrections.hh"
+//#include "G4CameronTruranHilfPairingCorrections.hh"
+
 
 class G4PairingCorrection
 {
 private:
-
+  
   // Dummy constructor
-  G4PairingCorrection(G4double dummy);
-
-  static G4PairingCorrection theInstance;
+  G4PairingCorrection();
+  
+  static G4PairingCorrection* theInstance;
    
 public:
 	
+  static G4PairingCorrection* GetInstance();
+  
   ~G4PairingCorrection() {};
 
-  static G4double GetPairingCorrection(const G4int anA, const G4int aZ) 
+  G4double GetPairingCorrection(const G4int A, const G4int Z) const
   {
-    const G4double PairingConstant = 12.0*MeV;
-    const G4int N = anA - aZ;
-    G4double Pair = (1.0 - G4double(aZ) + 2.0*(aZ/2)) + (1.0 - G4double(N) + 2.0*(N/2));
-    G4double PCorrection = Pair*PairingConstant/sqrt(G4double(anA));
-    return PCorrection;
+    G4double PCorrection = 0.0;
+    const G4int N = A - Z;
+    if (theCookPairingCorrections->IsInTableThisN(N) &&
+	theCookPairingCorrections->IsInTableThisZ(Z)) 
+      PCorrection = theCookPairingCorrections->GetParingCorrection(A,Z);
+    else if (theCameronGilbertPairingCorrections->IsInTableThisN(N) &&
+	     theCameronGilbertPairingCorrections->IsInTableThisZ(Z))
+      PCorrection = theCameronGilbertPairingCorrections->GetPairingCorrection(A,Z);
+    else {
+      const G4double PairingConstant = 12.0*MeV;
+      G4double Pair = (1.0 - G4double(Z) + 2.0*(Z/2)) + (1.0 - G4double(N) + 2.0*(N/2));
+      PCorrection = Pair*PairingConstant/sqrt(G4double(A));
+    }
+    return G4std::max(PCorrection,0.0);
   }
 
 
-  static G4double GetFissionPairingCorrection(const G4int A, const G4int Z)
+  G4double GetFissionPairingCorrection(const G4int A, const G4int Z) const 
   {
     const G4double PairingConstant = 14.0*MeV;
     const G4int N = A - Z;
@@ -64,6 +79,12 @@ public:
     return PCorrection;
   }
 
-	
+private:
+
+  
+  G4CookPairingCorrections* theCookPairingCorrections;
+//  G4CameronTruranHilfPairingCorrections* theCameronTruranHilfPairingCorrections;
+  G4CameronGilbertPairingCorrections* theCameronGilbertPairingCorrections;
+
 };
 #endif

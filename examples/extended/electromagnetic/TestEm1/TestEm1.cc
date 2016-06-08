@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm1.cc,v 1.7 2001/11/29 11:28:06 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: TestEm1.cc,v 1.8 2001/12/07 11:49:08 maire Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -68,7 +68,7 @@ int main(int argc,char** argv) {
   Em1DetectorConstruction* det;
   runManager->SetUserInitialization(det = new Em1DetectorConstruction);
   runManager->SetUserInitialization(new Em1PhysicsList(det));
-  runManager->SetUserAction(new Em1PrimaryGeneratorAction);
+  runManager->SetUserAction(new Em1PrimaryGeneratorAction(det));
   
 #ifdef Em1NoOptimize  
   #ifdef G4VIS_USE

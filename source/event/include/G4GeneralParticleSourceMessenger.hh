@@ -31,8 +31,8 @@
 // Customer:     ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSourceMessenger.hh,v 1.7 2001/10/19 16:48:28 flei Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4GeneralParticleSourceMessenger.hh,v 1.8 2002/02/26 16:34:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Class Description:
@@ -106,6 +106,9 @@ public:
   //    parameters associated with that command (held in newValues), and uses
   //    these values with the appropriate member function of G4GeneralParticleSource.
   G4String GetCurrentValue(G4UIcommand *command);
+
+private:
+  void IonCommand(G4String newValues);
 
 private:
   G4GeneralParticleSource *fParticleGun;
@@ -193,7 +196,4 @@ private: //commands
 };
 
 #endif
-
-
-
 

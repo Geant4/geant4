@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.cc,v 1.11.2.1 2001/12/04 15:32:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VPreCompoundFragment.cc,v 1.14 2001/11/29 15:43:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // by V. Lara
  
@@ -163,9 +163,9 @@ void G4VPreCompoundFragment::Init(const G4Fragment & aFragment)
   // (needed to separate a fragment from the nucleus)
   
   theBindingEnergy = G4NucleiProperties::GetMassExcess(theA,theZ) +
-    G4NucleiProperties::GetMassExcess(theRestNucleusA,theRestNucleusZ) -
-    G4NucleiProperties::GetMassExcess(aFragment.GetA(),aFragment.GetZ());
-      
+      G4NucleiProperties::GetMassExcess(theRestNucleusA,theRestNucleusZ) -
+      G4NucleiProperties::GetMassExcess(aFragment.GetA(),aFragment.GetZ());
+  
   // Compute Maximal Kinetic Energy which can be carried by fragments after separation
   //  theMaximalKineticEnergy = aFragment.GetExcitationEnergy() -
   //    (theBindingEnergy + theCoulombBarrier);
@@ -181,15 +181,16 @@ void G4VPreCompoundFragment::Init(const G4Fragment & aFragment)
 
 G4double G4VPreCompoundFragment::CalcEmissionProbability(const G4Fragment & aFragment)
 {
-  if (GetMaximalKineticEnergy() <= 0.0) return 0.0;
+    if (GetMaximalKineticEnergy() <= 0.0) return 0.0;
 
   // Coulomb barrier is the lower limit 
   // of integration over kinetic energy
-  G4double LowerLimit = theCoulombBarrier;
+    G4double LowerLimit = theCoulombBarrier;
   
   // Excitation energy of nucleus after fragment emission is the upper limit
   // of integration over kinetic energy
-  G4double UpperLimit = aFragment.GetExcitationEnergy() - theBindingEnergy;
+//  G4double UpperLimit = aFragment.GetExcitationEnergy() - theBindingEnergy;
+    G4double UpperLimit = this->GetMaximalKineticEnergy() + this->GetCoulombBarrier();
   
   theEmissionProbability = IntegrateEmissionProbability(LowerLimit,UpperLimit,aFragment);
   
@@ -200,35 +201,79 @@ G4double G4VPreCompoundFragment::
 IntegrateEmissionProbability(const G4double & Low, const G4double & Up,
 			     const G4Fragment & aFragment)
 {
-  static const G4double w[8] = {0.1012285363,
-				0.2223810345,
-				0.3137066459,
-				0.3626837834,
-				0.3626837834,
-				0.3137066459,
-				0.2223810345,
-				0.1012285363
-  };
+    static const G4int N = 10;
+    // 8-Points Gauss-Legendre abcisas and weights
+//      static const G4double w[8] = {0.1012285363,
+//                                    0.2223810345,
+//                                    0.3137066459,
+//                                    0.3626837834,
+//                                    0.3626837834,
+//                                    0.3137066459,
+//                                    0.2223810345,
+//                                    0.1012285363
+//      };
+    
+//      static const G4double x[8] = { 0.9602898565,
+//                                        0.7966664774,
+//                                        0.5255324099,
+//                                        0.1834346425,
+//                                        -0.1834346425,
+//                                        -0.5255324099,
+//                                        -0.7966664774,
+//                                        -0.9602898565
+//      };
 
-  static const G4double FIKS[8] = { 0.9602898565,
-				    0.7966664774,
-				    0.5255324099,
-				    0.1834346425,
-				   -0.1834346425,
-				   -0.5255324099,
-				   -0.7966664774,
-				   -0.9602898565
-  };
-
-  G4double Total = 0.0;
-  for (G4int i = 0; i < 8; i++) {
-    G4double KineticE = ((Up-Low)*FIKS[i]+(Up+Low))/2.0;
-    Total += w[i]*ProbabilityDistributionFunction(KineticE, aFragment)*(Up-Low)/2.0;
-  }
-  return Total;
+    // 10-Points Gauss-Legendre abcisas and weights
+    static const G4double w[N] = {
+        0.0666713443086881,
+        0.149451349150581,
+        0.219086362515982,
+        0.269266719309996,
+        0.295524224714753,
+        0.295524224714753,
+        0.269266719309996,
+        0.219086362515982,
+        0.149451349150581,
+        0.0666713443086881
+    };
+    static const G4double x[N] = {
+        -0.973906528517172,
+        -0.865063366688985,
+        -0.679409568299024,
+        -0.433395394129247,
+        -0.148874338981631,
+        0.148874338981631,
+        0.433395394129247,
+        0.679409568299024,
+        0.865063366688985,
+        0.973906528517172
+    };
+    
+    G4double Total = 0.0;
+    for (G4int i = 0; i < N; i++) {
+        G4double KineticE = ((Up-Low)*x[i]+(Up+Low))/2.0;
+        Total += w[i]*ProbabilityDistributionFunction(KineticE, aFragment);
+    }
+    return Total*(Up-Low)/2.0;
 }
 
 
 
+
+G4double G4VPreCompoundFragment::GetKineticEnergy(const G4Fragment & aFragment) 
+{
+  G4double V = this->GetCoulombBarrier();
+  G4double Tmax =  this->GetMaximalKineticEnergy();
+  
+  G4double T = 0.0;
+  G4double NormalizedProbability = 1.0;
+  do {
+    T = V + G4UniformRand()*Tmax;
+        NormalizedProbability = this->ProbabilityDistributionFunction(T,aFragment)/
+	  this->GetEmissionProbability();
+  } while (G4UniformRand() > NormalizedProbability);
+  
+  return T;
+}
 
 

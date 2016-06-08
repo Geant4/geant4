@@ -21,13 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.16 2001/10/04 20:00:30 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundModel.cc,v 1.19 2002/01/15 13:08:45 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // by V. Lara
 
 #include "G4PreCompoundModel.hh"
 
+#ifdef pctest
+G4Fragment G4PreCompoundModel::theInitialFragmentForTest;
+G4std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
+#endif
 
 const G4PreCompoundModel & G4PreCompoundModel::operator=(const G4PreCompoundModel &right)
 {
@@ -65,15 +69,17 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   aZ += G4int(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
   anInitialState.SetZ(aZ);
   
+  // Assume the projectile is a nucleon
   
   // Number of Excited Particles
-  anInitialState.SetNumberOfParticles(thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
+  anInitialState.SetNumberOfParticles(1+thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
   
   // Number of Charged Excited Particles
-  anInitialState.SetNumberOfCharged(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
+  anInitialState.SetNumberOfCharged(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge() + 
+				    G4int(0.5+G4UniformRand()));
   
   // Number of Holes 
-  anInitialState.SetNumberOfHoles(0);
+  anInitialState.SetNumberOfHoles(1);
   
   // pre-compound nucleus energy.
   G4double anEnergy = 0;
@@ -88,12 +94,20 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   G4LorentzVector momentum(p, anEnergy);
   anInitialState.SetMomentum(momentum);
   
-  
+#ifdef pctest
+  G4PreCompoundModel::theInitialFragmentForTest = anInitialState;
+#endif
   
   // call excitation handler
   const G4Fragment aFragment(anInitialState);
   G4ReactionProductVector * result = DeExcite(aFragment);
-  
+
+#ifdef pctest
+  while (!theCreatorModels.empty()) {
+    delete *(theCreatorModels.end()-1);
+    theCreatorModels.pop_back();
+  }
+#endif
   // fill particle change
   theResult.SetStatusChange(fStopAndKill);
   theResult.SetNumberOfSecondaries(result->size());
@@ -103,6 +117,9 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
 	new G4DynamicParticle(result->operator[](i)->GetDefinition(),
 			      result->operator[](i)->GetTotalEnergy(),
 			      result->operator[](i)->GetMomentum());
+#ifdef pctest
+      theCreatorModels.push_back(new G4String(result->operator[](i)->GetCreatorModel()));
+#endif
       delete result->operator[](i);
       theResult.AddSecondary(aNew);
     }
@@ -149,7 +166,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
     // Loop for transitions, it is performed while there are preequilibrium transitions.
     G4bool ThereIsTransition = false;
     do {
-      if (aFragment.GetNumberOfExcitons() < EquilibriumExcitonNumber) {
+      if (aFragment.GetNumberOfExcitons() < EquilibriumExcitonNumber && 
+	  aFragment.GetA() > 4) {
 //  	if (aFragment.GetNumberOfParticles() < 1) {
 //  	  aFragment.SetNumberOfHoles(aFragment.GetNumberOfHoles()+1);
 //  	  aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()+1);       

@@ -37,7 +37,6 @@
 #include "G4ExcitationHandler.hh"
 #include "g4std/list"
 
-
 G4ExcitationHandler::G4ExcitationHandler():
   maxZForFermiBreakUp(8),maxAForFermiBreakUp(16),minEForMultiFrag(1000.0*MeV), // make Multifrag. unavailable 
   MyOwnEvaporationClass(true), MyOwnMultiFragmentationClass(true),MyOwnFermiBreakUpClass(true),
@@ -271,63 +270,66 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
 
   G4FragmentVector::iterator i;
   for (i = theFragmentVector->begin(); i != theFragmentVector->end(); i++) {
-    //    std::cout << (*i) <<'\n';
-    theFragmentA = G4int((*i)->GetA());
-    theFragmentZ = G4int((*i)->GetZ());
-    theFragmentMomentum = (*i)->GetMomentum();
-    theKindOfFragment = 0;
-    if (theFragmentA == 0 && theFragmentZ == 0) {       // photon
-      theKindOfFragment = theGamma;      
-    } else if (theFragmentA == 1 && theFragmentZ == 0) { // neutron
-      theKindOfFragment = theNeutron;
-    } else if (theFragmentA == 1 && theFragmentZ == 1) { // proton
-      theKindOfFragment = theProton;
-    } else if (theFragmentA == 2 && theFragmentZ == 1) { // deuteron
-      theKindOfFragment = theDeuteron;
-    } else if (theFragmentA == 3 && theFragmentZ == 1) { // triton
-      theKindOfFragment = theTriton;
-    } else if (theFragmentA == 3 && theFragmentZ == 2) { // helium3
-      theKindOfFragment = theHelium3;
-    } else if (theFragmentA == 4 && theFragmentZ == 2) { // alpha
-      theKindOfFragment = theAlpha;
-    } else {
-      theKindOfFragment = theTableOfParticles->FindIon(theFragmentZ,theFragmentA,0,theFragmentZ);
-    }
-    if (theKindOfFragment != 0) 
+      //    std::cout << (*i) <<'\n';
+      theFragmentA = G4int((*i)->GetA());
+      theFragmentZ = G4int((*i)->GetZ());
+      theFragmentMomentum = (*i)->GetMomentum();
+      theKindOfFragment = 0;
+      if (theFragmentA == 0 && theFragmentZ == 0) {       // photon
+	  theKindOfFragment = theGamma;      
+      } else if (theFragmentA == 1 && theFragmentZ == 0) { // neutron
+	  theKindOfFragment = theNeutron;
+      } else if (theFragmentA == 1 && theFragmentZ == 1) { // proton
+	  theKindOfFragment = theProton;
+      } else if (theFragmentA == 2 && theFragmentZ == 1) { // deuteron
+	  theKindOfFragment = theDeuteron;
+      } else if (theFragmentA == 3 && theFragmentZ == 1) { // triton
+	  theKindOfFragment = theTriton;
+      } else if (theFragmentA == 3 && theFragmentZ == 2) { // helium3
+	  theKindOfFragment = theHelium3;
+      } else if (theFragmentA == 4 && theFragmentZ == 2) { // alpha
+	  theKindOfFragment = theAlpha;
+      } else {
+	  theKindOfFragment = theTableOfParticles->FindIon(theFragmentZ,theFragmentA,0,theFragmentZ);
+      }
+      if (theKindOfFragment != 0) 
       {
-	G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
-	theNew->SetMomentum(theFragmentMomentum.vect());
-	theNew->SetTotalEnergy(theFragmentMomentum.e());
-	theNew->SetFormationTime((*i)->GetCreationTime());
-	theReactionProductVector->push_back(theNew);
+	  G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
+	  theNew->SetMomentum(theFragmentMomentum.vect());
+	  theNew->SetTotalEnergy(theFragmentMomentum.e());
+	  theNew->SetFormationTime((*i)->GetCreationTime());
+#ifdef pctest
+	  theNew->SetCreatorModel((*i)->GetCreatorModel());
+#endif
+	  theReactionProductVector->push_back(theNew);
       }
   }
   if (theFragmentVector != 0)
-    { 
+  { 
       while (!theFragmentVector->empty()) {
-	delete *(theFragmentVector->end()-1);
-	theFragmentVector->pop_back();
+	  delete *(theFragmentVector->end()-1);
+	  theFragmentVector->pop_back();
       }
       delete theFragmentVector;
-    }
+  }
   G4ReactionProductVector::iterator debugit;
   for(debugit=theReactionProductVector->begin(); 
       debugit!=theReactionProductVector->end(); debugit++)
-    {
+  {
       if((*debugit)->GetTotalEnergy()<1.*eV)
-	{
+      {
 	  if(getenv("G4DebugPhotonevaporationData"))
-	    {
+	  {
 	      G4cerr << "G4ExcitationHandler: Warning: Photonevaporation data not exact."<<G4endl;
 	      G4cerr << "G4ExcitationHandler: Warning: Found gamma with energy = "
 		     << (*debugit)->GetTotalEnergy()/MeV << "MeV"
 		     << G4endl;
-	    }
+	  }
 	  delete (*debugit);
 	  theReactionProductVector->erase(debugit);
 	  if(debugit!=theReactionProductVector->begin()) debugit--;
-	}
-    }
+      }
+  }
   return theReactionProductVector;
 }
 

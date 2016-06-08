@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN03PrimaryGeneratorMessenger.cc,v 1.6 2002/01/09 17:24:13 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 

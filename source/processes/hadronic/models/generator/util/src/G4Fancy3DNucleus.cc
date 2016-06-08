@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.14 2001/10/20 10:48:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4Fancy3DNucleus.cc,v 1.16 2002/02/26 14:20:02 gunter Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -296,6 +296,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 void G4Fancy3DNucleus::ChooseFermiMomenta()
 {
     G4int i;
+    G4double density;
     G4ThreeVector * momentum=new G4ThreeVector[myA];
     
     G4double * fermiM=new G4double[myA];
@@ -304,8 +305,9 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     {	
 	for (i=0; i < myA; i++ )    // momenta for all, including last, in case we swa
 	{
-	   fermiM[i]=theFermi.GetFermiMomentum(theDensity->GetDensity(theNucleons[i].GetPosition()));
-	   momentum[i]= theFermi.GetMomentum(theDensity->GetDensity(theNucleons[i].GetPosition()));
+	   density = theDensity->GetDensity(theNucleons[i].GetPosition());
+	   fermiM[i] = theFermi.GetFermiMomentum(density);
+	   momentum[i]= theFermi.GetMomentum(density);
 	}
 	
 	if (ReduceSum(momentum,fermiM) ) 
@@ -375,7 +377,8 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
 G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 {
 	G4ThreeVector sum;
-	G4double PFermi=theFermi.GetFermiMomentum(theDensity->GetDensity(theNucleons[myA-1].GetPosition()));
+	G4double density = theDensity->GetDensity(theNucleons[myA-1].GetPosition());
+	G4double PFermi=theFermi.GetFermiMomentum(density);
 	
 	for (G4int i=0; i < myA-1 ; i++ )
 	     { sum+=momentum[i]; }
@@ -436,17 +439,18 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 	// try to compensate momentum using another Nucleon....
 	
 	G4int swapit=-1;
-	while (swapit< myA-1
-	   && theFermi.GetFermiMomentum(theDensity->GetDensity(theNucleons[++swapit].GetPosition())) < PFermi )
-	   ; 
-	
+	while (swapit<myA-1) 
+	{ 
+	  density = theDensity->GetDensity(theNucleons[++swapit].GetPosition()); 
+	  if ( theFermi.GetFermiMomentum(density) > PFermi ) break;
+	}
 	if (swapit == myA-1 ) return false;
 	
 	// Now we have a nucleon with a bigger Fermi Momentum.
 	// Exchange with last nucleon.. and iterate.
 // 	G4cout << " Nucleon to swap with : " << swapit << G4endl;
 // 	G4cout << " Fermi momentum test, and better.. " << PFermi << " / "
-// 	    << theFermi.GetFermiMomentum(theDensity->GetDensity(theNucleons[swapit].GetPosition())) << G4endl;
+// 	       << theFermi.GetFermiMomentum(density) << G4endl;
 //	cout << theNucleons[swapit]<< G4endl << theNucleons[myA-1] << G4endl;
 //	cout << momentum[swapit] << G4endl << momentum[myA-1] << G4endl;
 	G4Nucleon swap= theNucleons[swapit];

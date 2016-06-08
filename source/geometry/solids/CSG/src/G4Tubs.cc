@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Tubs.cc,v 1.32 2002/01/10 15:42:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 // class G4Tubs

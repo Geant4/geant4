@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Allocator.hh,v 1.8 2002/01/17 10:49:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 // ------------------------------------------------------------

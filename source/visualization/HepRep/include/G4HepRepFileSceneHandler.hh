@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.4 2001/11/21 16:48:58 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.7 2002/02/02 04:00:14 perl Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
-// John Allison  5th April 2001
-// A base class for a scene handler to dump geometry hierarchy.
+// Joseph Perl  27th January 2002
+// A base class for a scene handler to export geometry and trajectories
+// to the HepRep xml file format.
 
 #ifndef G4HepRepFileSCENEHANDLER_HH
 #define G4HepRepFileSCENEHANDLER_HH
@@ -105,8 +106,8 @@ public:
   // void BeginPrimitives(const G4Transform3D& objectTransformation);
   // void EndPrimitives();
 
-  // void BeginModeling();
-  // void EndModeling();
+  void BeginModeling();
+  void EndModeling();
 
   ////////////////////////////////////////////////////////////////
   // Required...
@@ -121,9 +122,14 @@ protected:
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
+  const G4ModelingParameters* fpOriginalMP;  // Keeps pointer to original.
+  G4ModelingParameters* fpNonCullingMP;      // For temporary non-culling.
 
 private:
   HepRepXMLWriter *hepRepXMLWriter;
+  void AddHepRepInstance(const char* primName,
+			 const G4Visible visible);
+  int fileCounter;
 
 #ifdef G4HEPREPFILEDEBUG
   void PrintThings();

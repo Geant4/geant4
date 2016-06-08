@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.hh,v 1.2 2001/11/19 15:06:52 johna Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4HepRepFileViewer.hh,v 1.5 2002/02/02 04:00:16 perl Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // 
 // John Allison  5th April 2001
@@ -36,6 +36,7 @@
 #include "G4VViewer.hh"
 
 #include "HepRepXMLWriter.hh"
+#include "G4HepRepFileSceneHandler.hh"
 
 class G4HepRepFileViewer: public G4VViewer {
 public:

@@ -116,9 +116,9 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
       boosted.Lorentz(theNeutron, aThermalNuc);
       G4double theEkin = boosted.GetKineticEnergy();
       aXsection = (*((*theCrossSections)(index))).GetValue(theEkin, outOfRange);
-      // velocity correction.
+      // velocity correction, or luminosity factor...
       G4ThreeVector targetVelocity = 1./aThermalNuc.GetMass()*aThermalNuc.GetMomentum();
-      aXsection *= (targetVelocity+neutronVelocity).mag()/neutronVMag;
+      aXsection *= (targetVelocity-neutronVelocity).mag()/neutronVMag;
       result += aXsection;
     }
     size += size;

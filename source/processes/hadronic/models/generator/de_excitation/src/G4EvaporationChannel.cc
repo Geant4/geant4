@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.cc,v 1.9 2001/10/05 16:13:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4EvaporationChannel.cc,v 1.11 2002/01/15 12:29:00 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -119,7 +119,8 @@ void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
     ZResidual = aZ - Z;
 
     // Effective excitation energy
-    G4double ExEnergy = fragment.GetExcitationEnergy() - G4PairingCorrection::GetPairingCorrection(anA,aZ);
+    G4double ExEnergy = fragment.GetExcitationEnergy() - 
+      G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
 
     // We only take into account channels which are physically allowed
     if (AResidual <= 0 || ZResidual <= 0 || AResidual < ZResidual ||
@@ -170,7 +171,9 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
     EvaporatedMomentum.boost(theNucleus.GetMomentum().boostVector());
 
     G4Fragment * EvaporatedFragment = new G4Fragment(A,Z,EvaporatedMomentum);
-
+#ifdef pctest
+    EvaporatedFragment->SetCreatorModel(G4String("G4Evaporation"));
+#endif
     // ** And now the residual nucleus ** 
     G4double theExEnergy = theNucleus.GetExcitationEnergy();
     G4double theMass = G4ParticleTable::GetParticleTable()->GetIonTable()->

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.9 2001/08/01 17:08:32 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4PreCompoundTransitions.cc,v 1.10 2001/11/08 09:50:22 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // by V. Lara
 
@@ -90,7 +90,7 @@ G4PreCompoundTransitions(const G4Fragment & aFragment)
   if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
 
   // g = 0.595aA; GE = g*E where E is Excitation Energy
-  G4double a = theLDP.LevelDensityParameter(A,Z,U-G4PairingCorrection::GetPairingCorrection(A,Z));
+  G4double a = theLDP.LevelDensityParameter(A,Z,U-G4PairingCorrection::GetInstance()->GetPairingCorrection(A,Z));
   //  G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
   G4double GE = 0.595*a*A*U;
 

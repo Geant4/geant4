@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FPlane.cc,v 1.14 2002/01/28 16:29:42 radoone Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolidPCone.hh,v 1.9 2002/01/22 22:43:01 radoone Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidPCone

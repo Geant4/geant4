@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02SteppingVerbose.cc,v 1.9 2002/01/09 17:24:10 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

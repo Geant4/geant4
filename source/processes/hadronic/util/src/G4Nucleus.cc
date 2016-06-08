@@ -38,6 +38,37 @@
 #include "G4Nucleus.hh"
 #include "Randomize.hh"
  
+G4Nucleus::G4Nucleus()
+{
+  pnBlackTrackEnergy = dtaBlackTrackEnergy = 0.0;
+  excitationEnergy = 0.0;
+  momentum = G4ThreeVector(0.,0.,0.);
+  fermiMomentum = 1.52*hbarc/fermi;
+  theTemp = 293.16*kelvin;
+}
+
+G4Nucleus::G4Nucleus( const G4double A, const G4double Z )
+{
+  SetParameters( A, Z );
+  pnBlackTrackEnergy = dtaBlackTrackEnergy = 0.0;
+  excitationEnergy = 0.0;
+  momentum = G4ThreeVector(0.,0.,0.);
+  fermiMomentum = 1.52*hbarc/fermi;
+  theTemp = 293.16*kelvin;
+}
+
+G4Nucleus::G4Nucleus( const G4Material *aMaterial )
+{
+  ChooseParameters( aMaterial );
+  pnBlackTrackEnergy = dtaBlackTrackEnergy = 0.0;
+  excitationEnergy = 0.0;
+  momentum = G4ThreeVector(0.,0.,0.);
+  fermiMomentum = 1.52*hbarc/fermi;
+  theTemp = aMaterial->GetTemperature();
+}
+
+G4Nucleus::~G4Nucleus() {}
+
 G4ReactionProduct G4Nucleus::
 GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) const
 {
@@ -295,7 +326,7 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     ranmax = (ranmax>ranflat3? ranmax : ranflat3);
     
     // - random decay angle
-    G4double theta=RandFlat::shoot((HepDouble)0.,(HepDouble)pi);  // isotropic decay angle theta
+    G4double theta=pi*G4UniformRand();  // isotropic decay angle theta
     G4double phi  =RandFlat::shoot((HepDouble)0.,(HepDouble)2*pi);  // isotropic decay angle phi
     
     // - setup ThreeVector

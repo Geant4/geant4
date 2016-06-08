@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN05SteppingAction.hh,v 1.5 2002/01/09 17:24:19 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 
 #ifndef ExN05SteppingAction_h

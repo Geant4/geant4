@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02ChamberParameterisation.hh,v 1.6 2002/01/09 17:24:08 ranjard Exp $
-// GEANT4 tag $Name: geant4-04-00-patch-01 $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 //
 //  A parameterisation that describes a series of boxes along Z

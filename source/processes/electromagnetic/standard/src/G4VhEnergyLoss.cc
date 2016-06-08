@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.29 2001/11/12 11:20:51 maire Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4VhEnergyLoss.cc,v 1.30 2002/02/06 05:50:27 urban Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 
 // -----------------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 29-10-01 all static functions no more inlined (mma) 
 // 08-11-01 BuildDEDXTable not static,Charge local variable, L.Urban
 // 09-11-01 cosmetics; 80 columns everywhere (mma)
+// 06-02-02 bug fixed in MinDeltaCutInRange computation, L.Urban
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -391,7 +392,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
     {
      // create array for the min. delta cuts in kinetic energy
      if(!setMinDeltaCutInRange)
-     	MinDeltaCutInRange = (G4Electron::Electron()->GetEnergyCuts())[mat]/10.;
+       	MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[mat]/10.;
      MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                     G4Electron::Electron(),MinDeltaCutInRange,
                                     (*theMaterialTable)[mat]);

@@ -144,6 +144,10 @@ G4FragmentVector* G4PhotonEvaporation::BreakUp(const G4Fragment& nucleus)
   if (_verbose > 0)
     G4cout << "*-*-*-* Photon evaporation: " << products->size() << G4endl;
 
+#ifdef debug
+  CheckConservation(nucleus,products);
+#endif
+
   return products;
 }
 

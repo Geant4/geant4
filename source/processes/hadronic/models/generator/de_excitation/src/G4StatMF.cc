@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.9 2001/10/05 16:13:43 hpw Exp $
-// GEANT4 tag $Name: geant4-04-00 $
+// $Id: G4StatMF.cc,v 1.10 2002/01/15 12:34:32 vlara Exp $
+// GEANT4 tag $Name: geant4-04-00-patch-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -197,6 +197,9 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
 	G4LorentzVector FourMom = (*i)->GetMomentum();
 	FourMom.boost(theFragment.GetMomentum().boostVector());
 	(*i)->SetMomentum(FourMom);
+#ifdef pctest
+	(*i)->SetCreatorModel(G4String("G4StatMF"));
+#endif
     }
 
     // garbage collection
