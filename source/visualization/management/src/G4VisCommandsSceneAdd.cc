@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.11 2000/05/19 09:17:56 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.14 2001/02/23 15:43:27 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -38,7 +38,6 @@
 G4VisCommandSceneAddGhosts::G4VisCommandSceneAddGhosts () {
   G4bool omitable;
   fpCommand = new G4UIcmdWithAString ("/vis/scene/add/ghosts", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("/vis/scene/add/ghosts [<particle-name>]");
   fpCommand -> SetGuidance
@@ -63,7 +62,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   const G4String& currentSceneName = pCurrentScene -> GetName ();
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  if (sceneList.isEmpty ()) {
+  if (sceneList.empty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << G4endl;
     return;
@@ -122,7 +121,6 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
 
 G4VisCommandSceneAddHits::G4VisCommandSceneAddHits () {
   fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/hits", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("Adds hits to current scene.");
   fpCommand -> SetGuidance
@@ -141,7 +139,7 @@ G4String G4VisCommandSceneAddHits::GetCurrentValue (G4UIcommand* command) {
 void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand* command,
 						G4String newValue) {
   G4SceneList& list = fpVisManager -> SetSceneList ();
-  if (list.isEmpty ()) {
+  if (list.empty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << G4endl;
     return;
@@ -161,7 +159,6 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/logicalVolume", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("/vis/scene/add/logicalVolume <logical-volume-name>"
      " [<depth-of-descending>]");
@@ -191,7 +188,7 @@ G4String G4VisCommandSceneAddLogicalVolume::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
 						     G4String newValue) {
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  if (sceneList.isEmpty ()) {
+  if (sceneList.empty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << G4endl;
     return;
@@ -237,7 +234,6 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddTrajectories::G4VisCommandSceneAddTrajectories () {
   fpCommand = new G4UIcmdWithoutParameter
     ("/vis/scene/add/trajectories", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("Adds trajectories to current scene.");
   fpCommand -> SetGuidance
@@ -256,7 +252,7 @@ G4String G4VisCommandSceneAddTrajectories::GetCurrentValue (G4UIcommand* command
 void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
   G4SceneList& list = fpVisManager -> SetSceneList ();
-  if (list.isEmpty ()) {
+  if (list.empty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << G4endl;
     return;
@@ -276,10 +272,10 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
 G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/volume", this);
-  fpCommand -> AvailableForStates (Idle, GeomClosed);
   fpCommand -> SetGuidance
     ("/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth-of-descending>]");
   fpCommand -> SetGuidance ("Adds a physical volume to the current scene.");
+  fpCommand -> SetGuidance ("Note: adds first occurence only.");
   fpCommand -> SetGuidance
     ("1st parameter: volume name (default \"world\").");
   //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
@@ -312,7 +308,7 @@ G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand* command) {
 void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  if (sceneList.isEmpty ()) {
+  if (sceneList.empty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << G4endl;
     return;
@@ -357,14 +353,13 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     // OK, what have we got...?
     foundVolume = searchScene.GetFoundVolume ();
     foundDepth = searchScene.GetFoundDepth ();
-    //const G4Transform3D&
-    //  transformation = searchScene.GetFoundTransformation ();
-    // Note: a physical volume carries its own transformation and
-    // does not need an additional model transformation.
+    const G4Transform3D&
+      transformation = searchScene.GetFoundTransformation ();
 
     if (foundVolume) {
       model = new G4PhysicalVolumeModel (foundVolume,
-					 requestedDepthOfDescent);
+					 requestedDepthOfDescent,
+					 transformation);
     }
     else {
       G4cout << "Volume \"" << name << "\", copy no. " << copyNo

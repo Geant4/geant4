@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ExcitedStringDecay.hh,v 1.6 2000/11/10 08:30:07 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1

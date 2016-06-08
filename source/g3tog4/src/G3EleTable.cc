@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3EleTable.cc,v 1.9 2000/03/02 17:54:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "G4strstreambuf.hh"

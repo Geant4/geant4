@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PolyconeSide.cc,v 1.3 2000/11/20 18:18:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------------

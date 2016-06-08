@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Fancy3DNucleus.cc,v 1.8 2000/08/11 08:22:15 hweber Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

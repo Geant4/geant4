@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4eLowEnergyLoss.cc,v 1.7 2000/09/20 16:49:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 

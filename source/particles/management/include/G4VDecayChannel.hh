@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VDecayChannel.hh,v 1.7 2000/03/23 16:43:41 hweber Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // ------------------------------------------------------------

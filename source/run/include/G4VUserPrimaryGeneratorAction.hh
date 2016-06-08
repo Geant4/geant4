@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VUserPrimaryGeneratorAction.hh,v 1.3 1999/12/15 14:53:52 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4VUserPrimaryGeneratorAction_h

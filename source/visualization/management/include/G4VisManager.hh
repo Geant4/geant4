@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.13 2000/05/02 09:57:15 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisManager.hh,v 1.17 2001/02/23 15:43:20 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 
@@ -71,8 +71,8 @@
 #include "G4Transform3D.hh"
 #include "G4UImessenger.hh"
 
-#include "g4rw/tpordvec.h"
 #include "g4std/iostream"
+#include "g4std/vector"
 
 class G4VisManMessenger;
 class G4VPhysicalVolume;
@@ -147,6 +147,11 @@ public: // With description
   virtual ~G4VisManager ();
 
 private:
+
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps CodeWizard happy.
+  G4VisManager (const G4VisManager&);
+  G4VisManager& operator = (const G4VisManager&);
 
   static G4VisManager* GetInstance ();
   // Returns pointer to itself.  Throws a G4Exception if called before
@@ -258,6 +263,10 @@ public: // With description
   /////////////////////////////////////////////////////////////////////
   // Access functions.
 
+  void Enable();
+  void Disable();
+  // Global enable/disable functions.
+
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
   G4Scene*                     GetCurrentScene             () const;
   G4VSceneHandler*             GetCurrentSceneHandler      () const;
@@ -296,6 +305,9 @@ public: // With description
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises varoius data.
 
+  static void PrintCommandDeprecation(const G4String&);
+  // Temporary deprecation printing.
+
 protected:
 
   virtual void RegisterGraphicsSystems () = 0;
@@ -316,7 +328,7 @@ protected:
   G4ViewParameters      fVP;                // Current viewing parameters.
   G4int                 fVerbose;           // Verbosity level 0-10.
   G4VisManMessenger*    fpMessenger;        // Pointer to messenger.
-  G4RWTPtrOrderedVector <G4UImessenger> fMessengerList;
+  G4std::vector<G4UImessenger*> fMessengerList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
 
 };

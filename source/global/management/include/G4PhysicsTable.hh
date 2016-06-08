@@ -5,28 +5,104 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsTable.hh,v 1.3 1999/11/16 17:40:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicsTable.hh,v 1.10 2001/04/03 07:26:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
+// Class description:
 //
-//      Modified 01 March 1996, K. Amako
+// G4PhysicsTable is an utility class for storage of pointers
+// to G4PhysicsVector containers. It derives all functionalities
+// of STL vector containers with the addition of few methods for
+// compatibility with previous implementation based on Rogue-Wave
+// pointer collections.
+// The constructor given the 'capacity' of the table, pre-allocates
+// memory for the specified value by invoking the STL's reserve()
+// function, in order to avoid reallocation during insertions.
 // ------------------------------------------------------------
+//
+// History:
+// -------
+// - First implementation, based on object model of
+//   2nd December 1995. G.Cosmo
+// - 1st March 1996, modified. K.Amako
+// - 24th February 2001, migration to STL vectors. H.Kurashige
+// - 9th March 2001, added Store/RetrievePhysicsTable. H.Kurashige
+//-------------------------------------
 
 #ifndef G4PhysicsTable_h
 #define G4PhysicsTable_h 1
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "globals.hh"
-#include "G4PhysicsVector.hh"
+#include "G4ios.hh"
 
-typedef G4RWTPtrOrderedVector<G4PhysicsVector> G4PhysicsTable;
+class G4PhysicsVector;
+
+class G4PhysicsTable : public G4std::vector<G4PhysicsVector*> 
+{
+
+  typedef G4std::vector<G4PhysicsVector*> G4PhysCollection;
+
+ public: // with description
+
+  G4PhysicsTable();
+    // Default constructor.
+
+  G4PhysicsTable(size_t capacity);
+    // Constructor with capacity. Reserves memory for the
+    // specified capacity.
+
+  virtual ~G4PhysicsTable();
+    // Destructor.
+    // Does not invoke deletion of contained pointed collections.
+
+  G4PhysicsVector*& operator()(size_t);
+  G4PhysicsVector* const& operator()(size_t) const;
+    // Access operators.
+
+  void clearAndDestroy();
+    // Removes all items and deletes them at the same time.
+
+  void   insert (G4PhysicsVector*);
+    // Pushes new element to collection.
+
+  void   insertAt (size_t, G4PhysicsVector*); 
+    // Inserts element at the specified position in the collection.
+
+  size_t entries() const;
+  size_t length() const;
+    // Return collection's size.
+
+  G4bool isEmpty() const;
+    // Flags if collection is empty or not.
+
+  G4bool StorePhysicsTable(const G4String& filename, G4bool ascii=false);
+    // Stores PhysicsTable in a file (returns false in case of failure).
+  
+  G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii=false);
+    // Retrieves Physics from a file (returns false in case of failure).
+
+  friend G4std::ostream& operator<<(G4std::ostream& out, G4PhysicsTable& table);
+
+ protected:
+
+  G4PhysicsVector* CreatePhysicsVector(G4int type);  
+
+ private:
+
+  G4PhysicsTable(const G4PhysicsTable&);
+  G4PhysicsTable& operator=(const G4PhysicsTable&);
+    // Private copy constructor and assignment operator.
+
+};
+
+typedef G4PhysicsTable::iterator G4PhysicsTableIterator;
+
+#include "G4PhysicsVector.hh"
+#include "G4PhysicsTable.icc"
 
 #endif
-
-

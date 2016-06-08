@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VNuclearDensity.hh,v 1.3 2000/05/23 13:41:56 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4VNuclearDensity_h
 #define G4VNuclearDensity_h 1

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4AnalysisManager.hh,v 1.8 2000/11/16 13:44:45 barrand Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Guy Barrand 20th Mai 2000

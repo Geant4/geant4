@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisToOldVisCommands.hh,v 1.4 1999/12/15 14:54:23 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisToOldVisCommands.hh,v 1.5 2001/02/23 15:43:20 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Implements some /vis/ commands as /vis~/ temporarily.
@@ -17,8 +17,6 @@
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
-
-#include "g4rw/tpordvec.h"
 
 class G4VisToOldVisCommands: public G4UImessenger {
 public:

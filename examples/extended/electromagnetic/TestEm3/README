@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000/01/21 09:11:04 maire Exp $
+$Id: README,v 1.4 2001/03/30 12:39:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -111,16 +111,19 @@ $Id: README,v 1.2 2000/01/21 09:11:04 maire Exp $
  		....
  		Idle> exit
  	
- 7- NTUPLE
+ 7- Histograms
  
-	Testem3 produce an Ntuple which is saved as testem3.histo
- 
-	Content of this Ntuple:
+ Testem3 produces histograms which are saved as testem3.paw : 
+  histo 1 : energy deposit in absorber 0 (edep/Ebeam)
+  histo 2 : energy deposit in absorber 1 (edep/Ebeam)
+  ...etc...........
   
-	EAbs0 = energy deposit in absorber[0] per event
-	LAbs0 = charged track length in absorber[0] per event
-        ........
-	EAbsN = energy deposit in absorber[N] per event
-	LAbsN = charged track length in absorber[N] per event
-	  
- 	
+ One can control the binning of the histo with the command:
+  /run/setHisto   idAbsor  nbin  vmin  vmax 
+  ...etc...........
+
+ Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Currently, histograms in this example are implemented through the obsolete
+ CLHEP/Hist package, which is no longer supported. The implementation will
+ be replaced by direct call to the "analysis" module in a near future.
+

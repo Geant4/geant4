@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4VNeutronHPEnergyAngular.hh,v 1.4 1999/12/15 14:53:14 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4VNeutronHPEnergyAngular_h
 #define G4VNeutronHPEnergyAngular_h 1

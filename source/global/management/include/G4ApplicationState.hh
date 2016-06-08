@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ApplicationState.hh,v 1.1 2000/07/22 10:45:34 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4APPLICATIONSTATE_H

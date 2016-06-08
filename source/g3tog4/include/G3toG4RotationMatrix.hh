@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4RotationMatrix.hh,v 1.4 2000/11/24 09:50:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 // ----------------------
 // Class description:
 //

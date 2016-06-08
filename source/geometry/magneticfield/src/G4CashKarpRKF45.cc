@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 1.6 2000/11/20 17:29:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4CashKarpRKF45.cc,v 1.8 2001/03/23 18:50:33 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 //  order method (giving fifth-order accuracy) for the solution
@@ -19,12 +19,13 @@
 //
 
 #include "G4CashKarpRKF45.hh"
+#include "G4LineSection.hh"
 
 /////////////////////////////////////////////////////////////////////
 //
 // Constructor
 
-G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
+G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs, G4int numberOfVariables, G4bool primary)
   : G4MagIntegratorStepper(EqRhs, numberOfVariables)
 {
   fNumberOfVariables = numberOfVariables ;
@@ -36,6 +37,17 @@ G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
   ak6 = new G4double[fNumberOfVariables] ; 
   yTemp = new G4double[fNumberOfVariables] ; 
   yIn = new G4double[fNumberOfVariables] ;
+
+  fLastInitialVector = new G4double[fNumberOfVariables] ;
+  fLastFinalVector = new G4double[fNumberOfVariables] ;
+  fLastDyDx = new G4double[fNumberOfVariables];
+
+  fMidVector = new G4double[fNumberOfVariables];
+  fMidError =  new G4double[fNumberOfVariables];
+  fAuxStepper = 0;   
+  if( primary ) 
+      fAuxStepper = new G4CashKarpRKF45(EqRhs, numberOfVariables, !primary);
+
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -52,6 +64,14 @@ G4CashKarpRKF45::~G4CashKarpRKF45()
   delete[] ak7;
   delete[] yTemp;
   delete[] yIn;
+
+  delete[] fLastInitialVector;
+  delete[] fLastFinalVector;
+  delete[] fLastDyDx;
+  delete[] fMidVector;
+  delete[] fMidError; 
+
+  delete fAuxStepper;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -145,12 +165,21 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
 
     yErr[i] = Step*(dc1*dydx[i] + dc3*ak3[i] + dc4*ak4[i] +
               dc5*ak5[i] + dc6*ak6[i]) ;
+
+    // Store Input and Final values, for possible use in calculating chord
+    fLastInitialVector[i] = yIn[i] ;
+    fLastFinalVector[i]   = yOut[i];
+    fLastDyDx[i]          = dydx[i];
  }
  // NormaliseTangentVector( yOut ); // Not wanted
 
+ fLastStepLength =Step;
+
  return ;
 
-}   // end of Stepper .......................................................
+} 
+
+///////////////////////////////////////////////////////////////////////////////
 
 void
 G4CashKarpRKF45::StepWithEst(const G4double yInput[],
@@ -283,5 +312,42 @@ G4CashKarpRKF45::StepWithEst(const G4double yInput[],
 
  return ;
 
-}   // end of StepWithEst ....................................................
+}
+
+/////////////////////////////////////////////////////////////////
+
+G4double  G4CashKarpRKF45::DistChord() const
+{
+  G4double distLine, distChord; 
+  G4ThreeVector initialPoint, finalPoint, midPoint;
+
+  // Store last initial and final points (they will be overwritten in self-Stepper call!)
+  initialPoint = G4ThreeVector( fLastInitialVector[0], 
+                                fLastInitialVector[1], fLastInitialVector[2]); 
+  finalPoint   = G4ThreeVector( fLastFinalVector[0],  
+                                fLastFinalVector[1],  fLastFinalVector[2]); 
+
+  // Do half a step using StepNoErr
+
+  fAuxStepper->Stepper( fLastInitialVector, fLastDyDx, 0.5 * fLastStepLength, 
+           fMidVector,   fMidError );
+
+  midPoint = G4ThreeVector( fMidVector[0], fMidVector[1], fMidVector[2]);       
+
+  // Use stored values of Initial and Endpoint + new Midpoint to evaluate
+  //  distance of Chord
+
+
+  if (initialPoint != finalPoint) 
+  {
+     distLine  = G4LineSection::Distline( midPoint, initialPoint, finalPoint );
+     distChord = distLine;
+  }
+  else
+  {
+     distChord = (midPoint-initialPoint).mag();
+  }
+  return distChord;
+}
+
 

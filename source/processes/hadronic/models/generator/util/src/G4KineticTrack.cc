@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4KineticTrack.cc,v 1.10 2000/12/07 14:38:21 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // $Id: G4KineticTrack.cc,v 1.0 1998/05/20
 // -----------------------------------------------------------------------------

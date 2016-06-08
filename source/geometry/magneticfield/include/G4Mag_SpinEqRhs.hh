@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Mag_SpinEqRhs.hh,v 1.4 2000/11/01 15:15:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4Mag_SpinEqRhs

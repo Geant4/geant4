@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.2 1999/11/16 17:40:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicsLinearVector.hh,v 1.6 2001/03/09 12:08:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -25,8 +25,9 @@
 //    02 Dec. 1995, G.Cosmo : Structure created based on object model
 //    03 Mar. 1996, K.Amako : Implemented the 1st version
 //    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
-//                            user introduced.
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
+//                            user introduced
+//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
@@ -34,26 +35,30 @@
 #define G4PhysicsLinearVector_h 1
 
 #include "globals.hh"
-#include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
-
 
 class G4PhysicsLinearVector : public G4PhysicsVector  
 {
   public:
 
-    // Constructors
     G4PhysicsLinearVector();
     G4PhysicsLinearVector(size_t theNbin);
-    G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
+      // Constructors
 
-    // Destructor
+  public: // with description
+
+    G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
+      // Constructor
+
     ~G4PhysicsLinearVector();
+      // Destructor
+
+    G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
 
   protected:
 
     size_t FindBinLocation(G4double theEnergy) const;
-         // Find bin# in which theEnergy belongs - pure virtual function
+      // Find bin# in which theEnergy belongs - pure virtual function
 
   private:
 
@@ -62,7 +67,8 @@ class G4PhysicsLinearVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
+inline 
+ size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
 {
   // For G4PhysicsLinearVector, FindBinLocation is implemented using
   // a simple arithmetic calculation.
@@ -78,17 +84,3 @@ inline size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

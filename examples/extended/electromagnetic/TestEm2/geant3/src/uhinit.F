@@ -56,6 +56,16 @@
       CALL HBPROF(11,'cumul radial energy dep. (in percent of E inc)'          
      *, NRTOT, RMIN,RMAX, 0., 100.,' ')
       CALL HBOOK1(12,'resolution: cumul R energy dep. (% of E inc)'          
-     *, NRTOT, RMIN,RMAX, 0.0)                                                                                                                                     
+     *, NRTOT, RMIN,RMAX, 0.0)
+     
+*
+* *** Origin of the deposited energy
+      tminlog = -6.
+      tmaxlog =  0.
+      CALL HBOOK1(21,'edep (normalized 100 percent) versus log(ekin/e0)'          
+     *, 100, tminlog, tmaxlog, 0.0)
+      CALL HBOOK1(22,'cumul edep (100 percent) versus log(ekin/e0)'          
+     *, 100, tminlog, tmaxlog, 0.0)
+                                                                                                                                                     
 *                                                                                                                                     
       END                                                                       

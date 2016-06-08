@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4PrimaryGeneratorAction.cc,v 1.2 2000/08/01 09:44:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "globals.hh"

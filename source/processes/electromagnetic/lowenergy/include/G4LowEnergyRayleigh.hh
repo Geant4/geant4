@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.7 2000/11/03 10:29:51 pia Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4LowEnergyRayleigh.hh,v 1.8 2001/02/05 17:45:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -72,7 +72,7 @@ private:
   G4SecondLevel* theCrossSectionTable; 
   G4SecondLevel* theFormFactorTable;
   G4PhysicsTable* theMeanFreePathTable;  
-  G4Data* ZNumVec;
+  G4DataVector* ZNumVec;
 
   G4LowEnergyUtilities util;
 

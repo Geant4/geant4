@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4StepStatus.hh,v 1.2 1999/11/07 16:32:02 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------

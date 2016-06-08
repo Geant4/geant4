@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Pglobals.hh,v 1.1 2000/11/02 12:40:31 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Pglobals.hh,v 1.2 2001/03/08 15:38:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // Wrapper header file to protect globals.hh from ooddlx
@@ -68,7 +68,7 @@ class   G4VSolid {};
 
 #ifndef G4UNITSTEST_HH
 #define G4UNITSTEST_HH
-#include "G4UnitsTest.hh"
+#include "G4SIunits.hh"
 #endif
 
 typedef int    EAxis;

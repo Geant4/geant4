@@ -5,17 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.hh,v 1.5 2000/06/01 03:17:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VSteppingVerbose.hh,v 1.9 2001/02/08 07:39:52 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //  
 //---------------------------------------------------------------
 //
 // G4VSteppingVerbose.hh
 //
-// Description:
+// class description:
 //   This class manages the vervose outputs in G4SteppingManager. 
-//   
+//   The instance should be singleton. Users can inherit this 
+//   class to make their own verbosing class.
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -30,10 +31,11 @@
 class G4SteppingManager;
 
 #include "globals.hh"                 // Include from 'global'
+#include "g4rw/tvordvec.h"  
 class G4Navigator;
 class G4VPhysicalVolume;
 class G4VSensitiveDetector;
-class G4VProcess;
+#include "G4VProcess.hh"
 class G4ProcessVector;
 class G4SteppingManager;              // Include from 'tracking'
 class G4Track;
@@ -52,11 +54,11 @@ class G4VSteppingVerbose{
 // Constructor/Destructor
 protected:    // to force 'singleton'
   G4VSteppingVerbose();  
-public:   
+public:  
   virtual ~G4VSteppingVerbose();
   //
-public:   
-// 
+public:   // with description
+// static methods to set/get the object's pointer 
   static void SetInstance(G4VSteppingVerbose* Instance)
     {
       fInstance = Instance;
@@ -65,7 +67,7 @@ public:
     {
       return fInstance;
     }
-//
+// these method are invoked in the SteppingManager 
   virtual void NewStep() = 0;
   void CopyState();
   void SetManager(G4SteppingManager* const);
@@ -147,15 +149,15 @@ protected:
 
   G4int verboseLevel;
 
-  typedef G4RWTValOrderedVector<G4int> 
+  typedef G4std::vector<G4int> 
              G4SelectedAtRestDoItVector;
-  typedef G4RWTValOrderedVector<G4int> 
+  typedef G4std::vector<G4int> 
              G4SelectedAlongStepDoItVector;
-  typedef G4RWTValOrderedVector<G4int>
+  typedef G4std::vector<G4int>
              G4SelectedPostStepDoItVector;
-  G4SelectedAtRestDoItVector *fSelectedAtRestDoItVector;
-  G4SelectedAlongStepDoItVector *fSelectedAlongStepDoItVector;
-  G4SelectedPostStepDoItVector *fSelectedPostStepDoItVector;
+  G4SelectedAtRestDoItVector* fSelectedAtRestDoItVector;
+  G4SelectedAlongStepDoItVector* fSelectedAlongStepDoItVector;
+  G4SelectedPostStepDoItVector* fSelectedPostStepDoItVector;
 
   G4double   fPreviousStepSize;
 

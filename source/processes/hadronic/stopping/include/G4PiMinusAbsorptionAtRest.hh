@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PiMinusAbsorptionAtRest.hh,v 1.3 2000/12/14 08:53:15 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

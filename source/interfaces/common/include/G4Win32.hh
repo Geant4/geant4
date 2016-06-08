@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Win32.hh,v 1.5 1999/12/15 14:50:47 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //  To unify Windows message treatment between 
 // G4/interfaces Windows sessions and G4/visualizations Windows drivers.

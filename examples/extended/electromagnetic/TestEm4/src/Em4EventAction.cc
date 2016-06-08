@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4EventAction.cc,v 1.4 2000/12/07 13:02:11 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: Em4EventAction.cc,v 1.6 2001/02/21 10:14:39 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 
@@ -26,6 +26,10 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
+
+#ifndef G4NOHIST
+  #include "CLHEP/Hist/HBookFile.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -47,9 +51,19 @@ Em4EventAction::~Em4EventAction()
 void Em4EventAction::BeginOfEventAction( const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
+
+ //printing survey
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-    
+  
+ //save rndm status
+ if (Em4Run->GetRndmFreq() == 2)
+   { 
+    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
+    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
+   }
+  
+ //additional initializations   
  TotalEnergyDeposit = 0.;
 }
 
@@ -60,6 +74,10 @@ void Em4EventAction::EndOfEventAction( const G4Event* evt)
   if (drawFlag != "none") 
     G4cout << " Energy deposit: " 
            << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
+	   
+#ifndef G4NOHIST
+  Em4Run->GetHisto(0)->accumulate(TotalEnergyDeposit/MeV);
+#endif
 	   
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
 
@@ -75,18 +93,6 @@ void Em4EventAction::EndOfEventAction( const G4Event* evt)
                                trj->DrawTrajectory(50); 
       }
   }
-  
-  //save rndm status
-  if (Em4Run->GetRndmFreq() == 2)
-    { 
-     HepRandom::saveEngineStatus("endOfEvent.rndm");   
-     G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
-       { 
-        G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        HepRandom::showEngineStatus();
-       }
-    }     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

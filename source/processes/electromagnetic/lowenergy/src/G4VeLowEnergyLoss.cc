@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VeLowEnergyLoss.cc,v 1.6 2000/11/22 16:06:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------

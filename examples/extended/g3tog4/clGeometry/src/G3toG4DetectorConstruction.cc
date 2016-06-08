@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4DetectorConstruction.cc,v 1.1 2000/07/24 11:23:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //--------------------------------------------------------------------------
 // G3toG4DetectorConstruction. Most the work is Done in

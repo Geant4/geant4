@@ -5,19 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3Division.cc,v 1.7 2000/11/24 09:50:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G3Division.cc,v 1.9 2001/03/14 13:27:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
 #include "G3Division.hh"
 #include "G3VolTableEntry.hh"
 #include "G3toG4MakeSolid.hh"
+#include "G4Para.hh"
 #include "G3Pos.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
+
 
 G3VolTableEntry* G4CreateVTE(G4String vname, G4String shape, G4int nmed,
                                G4double Rpar[], G4int npar);
@@ -89,7 +91,7 @@ void G3Division::UpdateVTE()
     
     if (envVTE) {
       // reset mother <-> daughter
-       fMVTE->ReplaceDaughter(fVTE, envVTE);
+      fMVTE->ReplaceDaughter(fVTE, envVTE);
       fVTE->ReplaceMother(fMVTE, envVTE);
       envVTE->AddDaughter(fVTE);
       envVTE->AddMother(fMVTE);
@@ -105,6 +107,26 @@ G4VPhysicalVolume* G3Division::CreatePVReplica()
   G4String name = fVTE->GetName();
   G4LogicalVolume* lv =  fVTE->GetLV();
   G4LogicalVolume* mlv = fMVTE->GetLV();
+  
+  G4String shape = fMVTE->GetShape();
+  if (shape == "PARA") {
+    // The para volume cannot be replicated using G4PVReplica.
+    // (Replicating a volume along a cartesian axis means "slicing" it
+    // with slices -perpendicular- to that axis.)
+    
+    // position the replicated elements    
+    for (G4int i=0; i<fNofDivisions; i++) {
+       G4ThreeVector position = G4ThreeVector(); 
+       position[fIAxis-1] = fLowRange + fWidth/2. + i*fWidth;
+       if (position.y()!=0.) 
+         position.setX(position.y()*((G4Para*)lv->GetSolid())->GetTanAlpha());
+
+       new G4PVPlacement(0, position, lv, name, mlv, 0, i);
+    }
+    
+    // no G4PVReplica was created - return 0
+    return 0;   
+  }     
   
   G4PVReplica* pvol 
     = new G4PVReplica(name, lv, mlv, fAxis, fNofDivisions, fWidth, fOffset);
@@ -650,7 +672,23 @@ void G3Division::CreateSolid(G4String shape, G4double par[], G4int npar)
          Rpar[0] = fWidth/2./cm; 
       }
     }
-    else if (shape == "SPHE" || shape == "PARA") {
+    else if (shape == "PARA") {
+      if      ( fIAxis == 1 ) {
+         Rpar[0] = fWidth/2./cm;
+      }	 
+      else if ( Rpar[4] == 0. && Rpar[5] == 0. ) {
+         // only special case for axis 2,3 is supported
+        if ( fIAxis == 2 ) {
+          Rpar[1] = fWidth/2./cm;
+	}  
+  	else if ( fIAxis == 3) {
+          Rpar[2] = fWidth/2./cm;
+	}
+      }	  
+      else    
+         Exception("CreateSolid", shape);
+    }	 
+    else if (shape == "SPHE") {
       Exception("CreateSolid", shape);
     }
     else if ( shape == "PGON" ) {

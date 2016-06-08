@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenInventorX.cc,v 1.4 1999/12/15 14:54:12 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

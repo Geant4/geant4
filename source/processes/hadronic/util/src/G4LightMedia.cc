@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LightMedia.cc,v 1.2 1999/12/15 14:53:40 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // Hadronic Process: Light Media Charge and/or Strangeness Exchange
  // J.L. Chuma, TRIUMF, 21-Feb-1997

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Allocator.hh,v 1.5 2000/11/20 20:16:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Allocator.hh,v 1.6 2001/01/09 07:50:57 stesting Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -103,7 +103,7 @@ G4Allocator<Type>::~G4Allocator()
   {
     aNextPage = aPage->fNext;
     free(aPage->fUnits);
-    free(aPage);
+    delete aPage;
     aPage = aNextPage;
   }
   fPages = NULL;

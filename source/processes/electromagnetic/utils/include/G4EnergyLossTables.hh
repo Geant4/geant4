@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4EnergyLossTables.hh,v 1.10 2000/11/04 16:47:28 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // $Id:
 //

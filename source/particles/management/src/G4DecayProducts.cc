@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DecayProducts.cc,v 1.6 2000/10/20 11:35:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------

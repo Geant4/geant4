@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSensitiveDetector.hh,v 1.2.2.1.2.1 1999/12/07 20:47:43 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VSensitiveDetector.hh,v 1.5 2001/02/08 06:07:11 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4VSensitiveDetector_h
@@ -17,7 +17,8 @@
 #include "G4HCofThisEvent.hh"
 #include "G4VReadOutGeometry.hh"
 #include "G4TouchableHistory.hh"
-#include "g4rw/tvordvec.h"
+//#include "g4rw/tvordvec.h"
+#include "G4CollectionNameVector.hh"
 
 // class description:
 //
@@ -77,7 +78,7 @@ class G4VSensitiveDetector
       //  This is a utility method which returns the hits collection ID of the
       // "i"-th collection. "i" is the order (starting with zero) of the collection
       // whose name is stored to the collectionName protected vector.
-      G4RWTValOrderedVector<G4String> collectionName;
+      G4CollectionNameVector collectionName;
       //  This protected name vector must be filled at the constructor of the user's
       // concrete class for registering the name(s) of hits collection(s) being
       // created by this particular sensitive detector.
@@ -115,7 +116,7 @@ class G4VSensitiveDetector
 
   public:
       inline G4int GetNumberOfCollections()
-      { return collectionName.entries(); }
+      { return collectionName.size(); }
       inline G4String GetCollectionName(G4int id)
       { return collectionName[id]; }
       inline void SetVerboseLevel(G4int vl)

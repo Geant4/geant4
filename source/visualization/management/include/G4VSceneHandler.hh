@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.11 2000/05/02 09:49:27 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VSceneHandler.hh,v 1.13 2001/02/23 15:43:17 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  19th July 1996.
@@ -49,9 +49,6 @@ public: // With description
 		   const G4String& name = "");
 
   virtual ~G4VSceneHandler ();
-
-  // For G4RWTPtrOrderedVector...
-  G4bool operator == (const G4VSceneHandler& scene) const;
 
   //////////////////////////////////////////////////////////////
   // Functions for adding raw GEANT4 objects, if the graphics system
@@ -255,6 +252,9 @@ protected:
   G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
 
 private:
+
+  G4VSceneHandler (const G4VSceneHandler&);
+  G4VSceneHandler& operator = (const G4VSceneHandler&);
 
   //////////////////////////////////////////////////////////////
   // Friend function accessed only by views of this scene.

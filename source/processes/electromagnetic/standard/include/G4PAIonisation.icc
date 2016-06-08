@@ -86,7 +86,7 @@ GetMeanFreePath( const G4Track&          trackData,
 // G4cout<<"G4PAIonisation::GetMeanFreePath is called"<<G4endl ;
 
   G4int iTkin, iPlace ;
-  G4double charge, charge2, massRatio, kinE, scaledE, meanFreePath ;
+  G4double charge, charge2, mass, massRatio, kinE, gamma, scaledE, meanFreePath ;
   G4double E1, E2, W, W1, W2, primaryIon ; 
 
  *condition = NotForced ;
@@ -98,9 +98,14 @@ GetMeanFreePath( const G4Track&          trackData,
   {
     const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
     kinE = aParticle->GetKineticEnergy() ;
+    mass = aParticle->GetDefinition()->GetPDGMass() ;
+    gamma = 1.0 + kinE/mass ;
+
+    if(gamma < 1.2) return meanFreePath = DBL_MAX ;
+
     charge = aParticle->GetDefinition()->GetPDGCharge() ;
     charge2 = charge*charge ;
-    massRatio = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
+    massRatio = proton_mass_c2/mass ;
     scaledE = kinE*massRatio ;
 
     for(iTkin=0;iTkin<G4PAIonisation::GetBinNumber();iTkin++)
@@ -235,7 +240,8 @@ GetdEdx( G4double scaledTkin, G4double charge2 )
 inline G4bool G4PAIonisation::IsApplicable(
                             const G4ParticleDefinition& particle)
 {
-   return(particle.GetPDGCharge() != 0.);
+   return( particle.GetPDGCharge() != 0. && 
+           particle.GetPDGMass()    > 0.     );
 }
 
 //////////////////////////////////////////////////////////////////////////

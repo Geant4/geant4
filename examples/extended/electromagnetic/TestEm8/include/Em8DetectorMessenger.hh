@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Em8DetectorMessenger.hh,v 1.2 2000/06/27 13:29:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 

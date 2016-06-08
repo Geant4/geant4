@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Mag_UsualEqRhs.hh,v 1.3 2000/04/27 09:14:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4Mag_UsualEqRhs

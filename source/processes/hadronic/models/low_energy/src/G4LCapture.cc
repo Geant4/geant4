@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LCapture.cc,v 1.4 2000/08/03 08:49:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // G4 Model: Low-energy Neutron Capture

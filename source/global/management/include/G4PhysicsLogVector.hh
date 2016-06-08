@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLogVector.hh,v 1.2 1999/11/16 17:40:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicsLogVector.hh,v 1.6 2001/03/09 12:08:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -26,7 +26,8 @@
 //    03 Mar. 1996, K.Amako : Implemented the 1st version
 //    27 Apr. 1996, K.Amako : Cache mechanism added
 //    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
+//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
@@ -34,28 +35,33 @@
 #define G4PhysicsLogVector_h 1
 
 #include "globals.hh"
-#include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
-
 
 class G4PhysicsLogVector : public G4PhysicsVector  
 {
   public:
 
-    // Constructors
     G4PhysicsLogVector();
     G4PhysicsLogVector(size_t theNbin);
-    G4PhysicsLogVector(G4double theEmin, G4double theEmax, size_t theNbin);
-         // Because of logarithmic scale, note that 'theEmin' has to be 
-         // greater than zero. No protection exists against this error.
+      // Constructors
 
-    // Destructor
+
+  public:  // with description
+
+    G4PhysicsLogVector(G4double theEmin, G4double theEmax, size_t theNbin);
+       // Because of logarithmic scale, note that 'theEmin' has to be 
+       // greater than zero. No protection exists against this error.
+
     ~G4PhysicsLogVector();
+      // Destructor
+
+    G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
+      // To retrieve persistent data from file stream.
 
   protected:
 
     size_t FindBinLocation(G4double theEnergy) const;
-         // Find bin# in which theEnergy belongs - pure virtual function
+      // Find bin# in which theEnergy belongs - pure virtual function
 
   private:
 
@@ -65,7 +71,8 @@ class G4PhysicsLogVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
+inline 
+ size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
 {
   // For G4PhysicsLogVector, FindBinLocation is implemented using
   // a simple arithmetic calculation.

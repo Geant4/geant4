@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.cc,v 1.7 2000/10/20 11:35:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4DynamicParticle.cc,v 1.9 2001/03/05 08:32:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,6 +35,8 @@
 //         modify DumpInfo()
 //      revised by Hisaya Kurashige, 5  June 1998
 //         remove    theKillProcess
+//      revised by Hisaya Kurashige, 5  Mar 2001
+//         fixed  SetDefinition()
 //--------------------------------------------------------------
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -54,6 +56,7 @@ G4DynamicParticle::G4DynamicParticle():
 		   theKineticEnergy(0.0),
  		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
+                   thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1)
 {  
    theDynamicalMass = 0.0; 
@@ -72,6 +75,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 		   theKineticEnergy(aKineticEnergy),
  		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
+                   thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1)
 {  
   // set dynamic charge/mass
@@ -86,6 +90,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 		   theParticleDefinition(aParticleDefinition),
        		   theProperTime(0.0),
                    thePreAssignedDecayProducts(0),
+                   thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1)
 {
   // set dynamic charge/mass
@@ -113,6 +118,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
 				     const G4LorentzVector   &aParticleMomentum):
 		   theParticleDefinition(aParticleDefinition),
  		   theProperTime(0.0),
+                   thePreAssignedDecayTime(-1.0),
                    thePreAssignedDecayProducts(0),
 		   verboseLevel(1)
 {
@@ -151,6 +157,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                    theParticleDefinition(aParticleDefinition),
                    thePreAssignedDecayProducts(0),
                    theProperTime(0.0),
+                   thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1)
 {
    // set dynamic charge/mass
@@ -200,8 +207,9 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right)
   // proper time is set to zero
   theProperTime = 0.0;
 
-  // thePreAssignedDecayProducts must not be copied.
+  // thePreAssignedDecayProducts/Time must not be copied.
   thePreAssignedDecayProducts = 0;
+  thePreAssignedDecayTime = -1.0;
 
 }
 
@@ -243,8 +251,36 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
     
     // thePreAssignedDecayProducts must not be copied.
     thePreAssignedDecayProducts = 0;
+    thePreAssignedDecayTime = -1.0;
+
   }
   return *this;
+}
+
+////////////////////
+void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition)
+{
+  // remove preassigned decay
+  if (thePreAssignedDecayProducts != 0) {
+    G4cout << " G4DynamicParticle::SetDefinition()::";
+    G4cout << "!!! Pre-assigned decay products is attached !!!! " << G4endl; 
+    DumpInfo(0); 
+    G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() << " !!! " << G4endl; 
+    G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl; 
+    delete thePreAssignedDecayProducts;
+  }
+  thePreAssignedDecayProducts = 0;
+
+  theParticleDefinition = aParticleDefinition;
+  // set Dynamic mass/chrge
+  theDynamicalMass = theParticleDefinition->GetPDGMass();
+  theDynamicalCharge = theParticleDefinition->GetPDGCharge();
+
+  // Set electron orbits
+  if (theElectronOccupancy != 0) delete theElectronOccupancy;
+  theElectronOccupancy =0;
+  AllocateElectronOccupancy();
+
 }
 
 ////////////////////
@@ -346,11 +382,6 @@ void G4DynamicParticle::DumpInfo(G4int mode) const
          << "   Kinetic Energy = " << GetKineticEnergy() /GeV << "[GeV]" << G4endl
          << "   ProperTime     = " << GetProperTime() /ns <<  "[ns]" << G4endl;
     if (mode>0) {
-      if( theElectronOccupancy != 0) {
-	theElectronOccupancy->DumpInfo();
-      }
-    }
-    if (mode>1) {
       if( theElectronOccupancy != 0) {
 	theElectronOccupancy->DumpInfo();
       }

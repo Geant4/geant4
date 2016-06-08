@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3toG4RotationMatrix.cc,v 1.2 1999/12/05 17:50:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 
 #include "G3toG4RotationMatrix.hh"
 

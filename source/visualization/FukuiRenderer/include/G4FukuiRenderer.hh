@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FukuiRenderer.hh,v 1.5 1999/12/15 14:54:01 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Satoshi TANAKA

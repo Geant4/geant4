@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: defs.h,v 1.8 2000/06/26 16:25:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //---------------------------------------------------------------

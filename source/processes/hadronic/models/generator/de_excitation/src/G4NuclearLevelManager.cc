@@ -243,22 +243,22 @@ void G4NuclearLevelManager::MakeLevels()
 
   while (Read(inFile))
     {
-      eLevel.insert(_levelEnergy);
-      eGamma.insert(_gammaEnergy);
-      wGamma.insert(_probability);
-      pGamma.insert(_polarity);
-      hLevel.insert(_halfLife);
-      aLevel.insert(_angularMomentum);
+      eLevel.push_back(_levelEnergy);
+      eGamma.push_back(_gammaEnergy);
+      wGamma.push_back(_probability);
+      pGamma.push_back(_polarity);
+      hLevel.push_back(_halfLife);
+      aLevel.push_back(_angularMomentum);
     }
 
   // ---- MGP ---- Don't forget to close the file 
   inFile.close();
 
-  G4int nData = eLevel.entries();
+  G4int nData = eLevel.size();
 
   //  G4cout << " ==== MakeLevels ===== " << nData << " data read " << G4endl;
 
-  G4double thisLevelEnergy = eLevel.at(0);
+  G4double thisLevelEnergy = eLevel[0];
   G4double thisLevelHalfLife = 0.;
   G4double thisLevelAngMom = 0.;
   G4DataVector thisLevelEnergies;
@@ -269,7 +269,7 @@ void G4NuclearLevelManager::MakeLevels()
   G4int i;
   for (i=0; i<nData; i++)
     {
-      e = eLevel.at(i);
+      e = eLevel[i];
       if (e != thisLevelEnergy)
       {
 	//	  G4cout << "Making a new level... " << e << " " 
@@ -288,13 +288,13 @@ void G4NuclearLevelManager::MakeLevels()
 	  thisLevelWeights.clear();
 	  thisLevelPolarities.clear();
 	  thisLevelEnergy = e;
-	}
+      }
       // Append current data
-      thisLevelEnergies.insert(eGamma.at(i));
-      thisLevelWeights.insert(wGamma.at(i));
-      thisLevelPolarities.insert(pGamma.at(i));
-      thisLevelHalfLife = hLevel.at(i);
-      thisLevelAngMom = aLevel.at(i);
+      thisLevelEnergies.push_back(eGamma[i]);
+      thisLevelWeights.push_back(wGamma[i]);
+      thisLevelPolarities.push_back(pGamma[i]);
+      thisLevelHalfLife = hLevel[i];
+      thisLevelAngMom = aLevel[i];
     }
   // Make last level
   if (e > 0.)

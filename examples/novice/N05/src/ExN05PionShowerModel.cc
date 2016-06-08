@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN05PionShowerModel.cc,v 1.3 2000/08/03 09:09:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #include "ExN05PionShowerModel.hh"
 #include "ExN05EnergySpot.hh"

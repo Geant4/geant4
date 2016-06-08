@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDigiCollection.hh,v 1.4.4.1 1999/12/07 20:47:46 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VDigiCollection.hh,v 1.5 1999/12/15 14:49:36 gunter Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4VDigiCollection_h

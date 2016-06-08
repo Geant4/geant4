@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4hIonisation.cc,v 1.12 2000/08/10 22:13:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 

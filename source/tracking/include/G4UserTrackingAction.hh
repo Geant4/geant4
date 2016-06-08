@@ -5,17 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserTrackingAction.hh,v 1.5 1999/12/15 14:53:57 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4UserTrackingAction.hh,v 1.7 2001/01/12 05:55:28 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
 //
 // G4UserTrackingAction.hh
 //
-// Description:
-//   This class represents actions taken place by the user at each
-//   end of stepping. 
+// class description:
+//   This class represents actions taken place by the user at 
+//   the start/end point of processing one track. 
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -38,7 +38,7 @@ class G4UserTrackingAction
 {
 
 //--------
-   public:
+public: // with description
 //--------
 
 // Constructor & Destructor

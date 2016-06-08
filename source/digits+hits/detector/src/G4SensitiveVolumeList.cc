@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SensitiveVolumeList.cc,v 1.1.10.1 1999/12/07 20:47:45 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SensitiveVolumeList.cc,v 1.3 2001/02/08 06:07:13 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -63,18 +63,18 @@
  //Other Operations 
    G4bool G4SensitiveVolumeList::CheckPV(const G4VPhysicalVolume * pvp) const
    {
-     if (thePhysicalVolumeList.entries()==0) return false;
-     for(int i=0;i<thePhysicalVolumeList.entries();i++)
-     { if(thePhysicalVolumeList(i)==pvp) return true; }
+     if (thePhysicalVolumeList.size()==0) return false;
+     for(int i=0;i<thePhysicalVolumeList.size();i++)
+     { if(thePhysicalVolumeList[i]==pvp) return true; }
      return false;  
    }
 
 
    G4bool G4SensitiveVolumeList::CheckLV(const G4LogicalVolume * lvp) const
    {
-    if (theLogicalVolumeList.entries()==0) return false;
-      for(int i=0;i<theLogicalVolumeList.entries();i++)
-      { if(theLogicalVolumeList(i)==lvp) return true; }
+    if (theLogicalVolumeList.size()==0) return false;
+      for(int i=0;i<theLogicalVolumeList.size();i++)
+      { if(theLogicalVolumeList[i]==lvp) return true; }
     return false;  
    }
 

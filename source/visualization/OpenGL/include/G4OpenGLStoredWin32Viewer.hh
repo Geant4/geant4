@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLStoredWin32Viewer.hh,v 1.2 1999/12/15 14:54:04 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from

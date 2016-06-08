@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PHCofThisEvent.cc,v 1.6 1999/12/02 16:10:22 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "G4PHCofThisEvent.hh"

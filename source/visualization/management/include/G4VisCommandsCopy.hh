@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCopy.hh,v 1.4 1999/12/15 14:54:21 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisCommandsCopy.hh,v 1.5 2001/02/05 02:33:51 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // /vis~/copy/ commands
@@ -98,6 +98,7 @@ public:
       "  WARNING: this overwrites the current view parameters.";
   }
   void SetValue () {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/all\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
       pVMan -> CopyViewParameters ();

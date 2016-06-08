@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LineSection.hh,v 1.4 2000/04/27 09:14:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4LineSection

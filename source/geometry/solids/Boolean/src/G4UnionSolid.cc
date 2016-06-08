@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.11 2000/11/20 17:56:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4UnionSolid.cc,v 1.16 2001/03/19 10:30:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -16,6 +16,8 @@
 // 28.11.98 V.Grichine, J. Apostolakis, while loops in DistToIn/Out 
 // 27.07.99 V.Grichine, modifications in Distance ToOut(p,v,...)
 //                      while -> do-while
+// 16.03.01 V.Grichine, modifications in CalculateExtent() 
+//                      based on D.Williams proposal
 
 #include "G4UnionSolid.hh"
 // #include "G4PlacedSolid.hh"
@@ -92,16 +94,23 @@ G4UnionSolid::CalculateExtent(const EAxis pAxis,
 				     const G4AffineTransform& pTransform,
 				     G4double& pMin, G4double& pMax) const 
 {
-  G4bool   touchesA, touchesB;
-  G4double minA, minB, maxA, maxB; 
+  G4bool   touchesA, touchesB, out ;
+  G4double minA =  kInfinity, minB =  kInfinity, 
+           maxA = -kInfinity, maxB = -kInfinity; 
 
-  touchesA= fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, pTransform, minA, maxA);
-  touchesB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, pTransform, minB, maxB);
+  touchesA = fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
+                                          pTransform, minA, maxA);
+  touchesB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, 
+                                         pTransform, minB, maxB);
+  if( touchesA || touchesB )
+  {
+    pMin = G4std::min( minA, minB ); 
+    pMax = G4std::max( maxA, maxB );
+    out  = true ; 
+  }
+  else out = false ;
 
-  pMin = G4std::min( minA, minB ); 
-  pMax = G4std::max( maxA, maxB ); 
-
-  return touchesA || touchesB ;  // It exists in this slice if either one does.
+  return out ;  // It exists in this slice if either one does.
 }
  
 /////////////////////////////////////////////////////
@@ -145,7 +154,7 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
 
     if( Inside(p) == kOutside )
     {
-       G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p),  point p is outside") ;
+       G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p),  point p is outside") ;
     }
 
     if(fPtrSolidA->Inside(p) == kSurface && fPtrSolidB->Inside(p) != kInside) 
@@ -159,7 +168,7 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
     }
     else 
     {
-      G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p),  point p is inside") ;
+      G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p),  point p is inside") ;
     }
 
     return normal;
@@ -175,7 +184,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
 {
   if( Inside(p) == kInside )
   {
-    G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v),  point p is inside") ;
+    G4Exception("Invalid call in G4UnionSolid::DistanceToIn(p,v),  point p is inside") ;
   }
   return G4std::min(fPtrSolidA->DistanceToIn(p,v),
                     fPtrSolidB->DistanceToIn(p,v) ) ;
@@ -224,7 +233,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
      G4cout << "v.x() = "   << v.x() << G4endl;
      G4cout << "v.y() = "   << v.y() << G4endl;
      G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-    G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v),  point p is outside") ;
+    G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p,v),  point p is outside") ;
   }
   else
   {
@@ -249,7 +258,6 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
       //     while( Inside(p+dist*v) == kInside ) ;
            while( fPtrSolidA->Inside(p+dist*v) != kOutside && 
                   disTmp > 0.5*kCarTolerance ) ;
-      *n = *nTmp ; 
     }
     else // if( positionB != kOutside )
     {
@@ -269,12 +277,13 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
       //  while( Inside(p+dist*v) == kInside ) ;
         while( fPtrSolidB->Inside(p+dist*v) != kOutside && 
               disTmp > 0.5*kCarTolerance ) ;
-      *n = *nTmp ;   
     }
   }
-  if( calcNorm ) 
+  if( calcNorm )
+  { 
      *validNorm = false ;
-
+     *n         = *nTmp ;   
+  }
   return dist ;
 }
 
@@ -288,7 +297,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
   G4double distout = kInfinity;
   if( Inside(p) == kOutside )
   {
-    G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p),  point p is outside") ;
+    G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p),  point p is outside") ;
   }
   else
   {

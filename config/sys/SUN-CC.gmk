@@ -3,6 +3,7 @@
 #
 ifeq ($(G4SYSTEM),SUN-CC)
   CXX       := CC
+# -Qoption ld -m
   ifdef G4OPTIMISE
     CXXFLAGS  := -O
   else

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.6 2000/05/02 10:09:04 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.7 2001/01/25 12:09:57 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -75,15 +75,17 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	rot_cb_list[0].closure = pView; 
 	rot_cb_list[1].callback = NULL;
 	
-	pView->fprotation_button1 = new G4OpenGLXmRadioButton ("Object",
-							       rot_cb_list,
-							       True,
-							       0);
+	pView->fprotation_button1 = new G4OpenGLXmRadioButton
+	  ("Object",
+	   rot_cb_list,
+	   pView->GetViewParameters().GetLightsMoveWithCamera(),
+	   0);
 	
-	pView->fprotation_button2 = new G4OpenGLXmRadioButton ("Camera",
-							       rot_cb_list,
-							       False,
-							       1);
+	pView->fprotation_button2 = new G4OpenGLXmRadioButton
+	  ("Camera",
+	   rot_cb_list,
+	   !(pView->GetViewParameters().GetLightsMoveWithCamera()),
+	   1);
 	
 	pView->fprotation_button_box->AddChild (pView->fprotation_button1);
 	pView->fprotation_button_box->AddChild (pView->fprotation_button2);

@@ -5,17 +5,22 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.9 2000/06/02 09:13:31 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4TrackingManager.hh,v 1.11 2001/01/12 05:55:28 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
 //
 // G4TrackingManager.hh
 //
-// Description:
-//   This class represents the manager who steers the tracking
-//   of a particle given from the event manager.
+// class description:
+//  This is an interface class among the event,  the track
+//  and the tracking category. It handles necessary 
+//  message passings between the upper hierarchical object, which 
+//  is the event manager (G4EventManager), and lower hierarchical 
+//  objects in the tracking category. It receives one track in an 
+//  event from the event manager and takes care to finish tracking it. 
+//  Geant4 kernel use only.
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -48,7 +53,7 @@ class G4TrackingManager
 {
 
 //--------
-   public:
+public: // without description
 //--------
 
 // Constructor/Destructor

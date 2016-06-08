@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PDCofThisEvent.ddl,v 1.4 2000/12/15 08:04:13 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PDCofThisEvent.ddl,v 1.5 2001/03/14 17:15:46 morita Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // Class Description:
@@ -60,7 +60,7 @@ class G4PDCofThisEvent
         G4int n = 0;
         for(int i=0;i<DC.size();i++)
         {
-          if(! DC[i] ) n++;
+          if( DC[i] != NULL ) n++;
         }
         return n;
       }

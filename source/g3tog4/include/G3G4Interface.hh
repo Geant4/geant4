@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3G4Interface.hh,v 1.7 1999/12/09 01:27:42 lockman Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //   Interfaces for G3 equivalent routines
 //

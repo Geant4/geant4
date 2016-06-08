@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.cc,v 1.5 2000/10/19 15:19:37 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PrimaryTransformer.cc,v 1.8 2001/02/09 00:11:31 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -30,7 +30,10 @@ G4PrimaryTransformer::~G4PrimaryTransformer()
     
 G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent)
 {
-  TV.clearAndDestroy();
+  //TV.clearAndDestroy();
+  for( int ii=0; ii<TV.size();ii++)
+  { delete TV[ii]; }
+  TV.clear();
   G4int n_vertex = anEvent->GetNumberOfPrimaryVertex();
   if(n_vertex==0) return NULL; 
   for( int i=0; i<n_vertex; i++ )
@@ -105,6 +108,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
     DP->SetPolarization(primaryParticle->GetPolX(),
                         primaryParticle->GetPolY(),
                         primaryParticle->GetPolZ());
+    if(primaryParticle->GetProperTime()>0.0)
+    { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
     // Set Charge
     if (abs(primaryParticle->GetCharge()-DP->GetCharge())>eplus) {
       DP->SetCharge(primaryParticle->GetCharge());
@@ -118,7 +123,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     // Set weight ( vertex weight * particle weight )
     track->SetWeight(wv*(primaryParticle->GetWeight()));
     // Store it to G4TrackVector
-    TV.insert( track );
+    TV.push_back( track );
   }
 }
 

@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000/01/20 17:27:55 maire Exp $
+$Id: README,v 1.4 2001/03/30 12:39:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -59,9 +59,13 @@ $Id: README,v 1.2 2000/01/20 17:27:55 maire Exp $
  		Idle> exit
  		
  	- visualize the histogram
- 		paw> h/file 1 testem4.histo
+ 		paw> h/file 1 testem4.paw
  		paw> option stat
  		paw> option logy
  		paw> h/pl 1 	
- 	  
- 	
+
+ Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Currently, histograms in this example are implemented through the obsolete
+ CLHEP/Hist package, which is no longer supported. The implementation will
+ be replaced by direct call to the "analysis" module in a near future.
+

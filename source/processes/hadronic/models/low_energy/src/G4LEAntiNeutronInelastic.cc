@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LEAntiNeutronInelastic.cc,v 1.2 1999/12/15 14:53:07 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // Hadronic Process: AntiNeutron Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

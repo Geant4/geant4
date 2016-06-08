@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.hh,v 1.5 1999/12/15 14:54:31 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VModel.hh,v 1.7 2001/02/23 15:43:33 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -39,13 +39,6 @@ public: // With description
    const G4ModelingParameters* = 0);
    
   virtual ~G4VModel ();
-
-public: // Without description
-
-  G4bool operator == (const G4VModel&) const;
-  // For G4RWTPtrOrderedVector...
-
-public: // With description
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&) = 0;
   // The main task of a model is to describe itself to the scene.
@@ -86,6 +79,12 @@ protected:
   G4VisExtent                 fExtent;
   G4Transform3D               fTransform;           
 
+private:
+
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps CodeWizard happy.
+  G4VModel (const G4VModel&);
+  G4VModel& operator = (const G4VModel&);
 };
 
 #include "G4VModel.icc"

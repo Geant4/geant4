@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VRML1FileViewer.cc,v 1.4 1999/12/15 14:54:16 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G4VRMLView.cc
 // Satoshi Tanaka & Yasuhide Sawada

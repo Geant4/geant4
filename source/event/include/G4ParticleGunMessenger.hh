@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ParticleGunMessenger.hh,v 1.5 2000/10/19 13:29:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 

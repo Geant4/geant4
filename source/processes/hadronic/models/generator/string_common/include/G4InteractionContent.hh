@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4InteractionContent.hh,v 1.3 2000/09/18 07:40:44 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4InteractionContent_h

@@ -10,7 +10,8 @@
       DIMENSION Aair(2),Zair(2),Wair(2)
       DIMENSION ACO2(2),ZCO2(2),WCO2(2)
       DIMENSION AH2O(2),ZH2O(2),WH2O(2)
-      DIMENSION AG10(4),ZG10(4),WG10(4)                                        
+      DIMENSION AG10(4),ZG10(4),WG10(4)
+      DIMENSION Asci(2),Zsci(2),Wsci(2)                                              
 *
       CHARACTER*4  volnam
       CHARACTER*20 matnam
@@ -34,7 +35,12 @@
       DATA AG10/ 1.01, 12.00, 16.00, 28.00/
       DATA ZG10/ 1.  ,  6.  ,  8.  , 14.  /
       DATA WG10/ 3.  ,  3.  ,  2.  ,  1.  /      
-      
+*                                                                               
+* *** Scintillator compound parameters
+      DATA Asci/12.01,  1.01/
+      DATA Zsci/ 6.  ,  1.  /
+      DATA Wsci/ 9.  , 10.  /                                                                               
+
 *
 * *** Defines USER perticular materials
       CALL GSMIXT( 1,'Air'      , Aair ,Zair, 1.29E-3, 2   , Wair)
@@ -46,10 +52,11 @@
       CALL GSMATE( 7,'Iron     ', 55.85, 26., 7.87   , 1.76, 17.1, 0,0)
       CALL GSMATE( 8,'Lead     ',207.19, 82., 11.35  , 0.56, 18.5, 0,0)
       CALL GSMATE( 9,'Uranium  ',238.03, 92., 18.95  , 0.32, 12. , 0,0)
-      CALL GSMATE(10,'Silicium ', 28.09, 14.,  2.33  , 9.36, 45.5, 0,0)
+      CALL GSMATE(10,'Silicon  ', 28.09, 14.,  2.33  , 9.36, 45.5, 0,0)
       CALL GSMATE(11,'Tungsten ',183.85, 74., 19.30  , 0.35,  9.6, 0,0)
       CALL GSMIXT(12,'NemaG10'  , AG10 ,ZG10, 1.7    ,-4   , WG10)
-      CALL GSMATE(13,'Copper   ', 63.55, 29., 8.96   , 1.43, 15.0, 0,0)      
+      CALL GSMATE(13,'Copper   ', 63.55, 29., 8.96   , 1.43, 15.0, 0,0)
+      CALL GSMIXT(14,'Scintilla', Asci ,Zsci, 1.032  ,-2   , Wsci)      
 *                                               
 *                                                                               
 * *** Defines USER tracking media parameters
@@ -65,6 +72,18 @@
       do k=1,NbAbsor
         CALL GSTMED( k,'absorber',materAbs(k), 0 ,IFIELD,FIELDM,TMAXFD,
      *                 STEMAX,DEEMAX,EPSIL,STMIN, 0 , 0 )
+      enddo
+* 
+* *** set specific bcute/dcute (if any)     
+      do k=1,4*NbAbsor,4
+         itm = prodcut(k) + 0.01
+	if(itm.ge.1) then
+	   call GSTPAR(itm,'BCUTE' ,prodcut(k+1))
+           call GSTPAR(itm,'BCUTM' ,prodcut(k+1))	   
+	   call GSTPAR(itm,'DCUTE' ,prodcut(k+2))
+           call GSTPAR(itm,'DCUTM' ,prodcut(k+2))
+	   call GSTPAR(itm,'PPCUTM',prodcut(k+3))
+	endif   
       enddo
 *
       nudef = NbAbsor+1

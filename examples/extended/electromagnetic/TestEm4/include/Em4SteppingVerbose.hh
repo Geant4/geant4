@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4SteppingVerbose.hh,v 1.4 2000/12/06 17:22:25 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: Em4SteppingVerbose.hh,v 1.5 2001/02/19 14:01:59 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.
@@ -14,8 +14,6 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-class Em4SteppingVerbose;
 
 #ifndef Em4SteppingVerbose_h
 #define Em4SteppingVerbose_h 1

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.hh,v 1.5 1999/12/15 14:50:33 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Polymarker.hh,v 1.6 2001/02/03 18:29:43 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  November 1996
@@ -29,6 +29,7 @@ public: // With description
   friend G4std::ostream& operator << (G4std::ostream& os, const G4Polymarker& marker);
   enum MarkerType {line, dots, circles, squares};
   G4Polymarker ();
+  virtual ~G4Polymarker ();
   virtual G4Visible&    operator = (const G4Visible& right);
   virtual G4VVisPrim&   operator = (const G4VVisPrim& right);
   virtual G4VMarker&    operator = (const G4VMarker& right);

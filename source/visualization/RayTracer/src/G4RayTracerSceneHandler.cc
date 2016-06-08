@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RayTracerSceneHandler.cc,v 1.1 2000/02/23 16:03:53 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 
 #include "G4RayTracerSceneHandler.hh"
 

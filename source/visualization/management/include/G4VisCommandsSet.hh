@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSet.hh,v 1.4 1999/12/15 14:54:22 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisCommandsSet.hh,v 1.6 2001/02/05 02:34:01 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // /vis~/set/ commands
@@ -47,14 +47,13 @@ public:
       IsCulling ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/culling\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCulling (value);
     G4VViewer* pView = pVMan -> GetCurrentViewer ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
@@ -76,6 +75,7 @@ public:
       IsCullingCovered ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/culling\".");
     G4cout << "\nNote: this is only effective in surface drawing style,"
       "\nand then only if the volumes are visible and opaque, and then"
       "\nonly if no sections or cutways are in operation."
@@ -86,8 +86,6 @@ public:
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
@@ -109,14 +107,13 @@ public:
       IsCullingInvisible ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/culling\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetCullingInvisible (value);
     G4VViewer* pView = pVMan -> GetCurrentViewer ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }

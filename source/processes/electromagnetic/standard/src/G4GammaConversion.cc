@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GammaConversion.cc,v 1.4 2000/08/03 08:36:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------

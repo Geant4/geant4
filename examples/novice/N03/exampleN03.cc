@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: exampleN03.cc,v 1.13 2000/11/21 10:59:41 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------

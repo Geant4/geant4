@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GammaConversion.hh,v 1.4 1999/12/17 18:26:11 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //      ------------ G4GammaConversion physics process ------
 //                   by Michel Maire, 24 May 1996

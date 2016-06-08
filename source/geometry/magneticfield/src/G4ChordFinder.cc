@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.16 2000/11/20 17:29:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4ChordFinder.cc,v 1.18 2001/03/23 18:50:33 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 
@@ -34,16 +34,16 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 {
   //  Construct the Chord Finder
   //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
-  // G4Mag_EqRhs *
-  fEquation = new G4Mag_UsualEqRhs(theMagField); // Should move q, p to 
-  fLastStepEstimate_Unconstrained = DBL_MAX;
-                                                     //G4FieldTrack ??
+  G4Mag_EqRhs *pEquation = new G4Mag_UsualEqRhs(theMagField);
+  fEquation = pEquation;                            
+  fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
+                                                      //    G4FieldTrack ??
   // --->>  Charge    Q = 0 
   // --->>  Momentum  P = 1       NOMINAL VALUES !!!!!!!!!!!!!!!!!!
 
   if( pItsStepper == 0 )
   { 
-     pItsStepper = fDriversStepper = new G4ClassicalRK4(fEquation);
+     pItsStepper = fDriversStepper = new G4ClassicalRK4(pEquation);
      fAllocatedStepper= true;
   }
   else
@@ -290,8 +290,8 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
 
   G4FieldTrack    Current_PointVelocity= CurveA_PointVelocity; 
 
-  G4ThreeVector  CurveA_Point= CurveA_PointVelocity.Position();
-  G4ThreeVector  CurveB_Point= CurveB_PointVelocity.Position();
+  G4ThreeVector  CurveA_Point= CurveA_PointVelocity.GetPosition();
+  G4ThreeVector  CurveB_Point= CurveB_PointVelocity.GetPosition();
 
   G4ThreeVector  ChordAB_Vector= CurveB_Point   - CurveA_Point;
   G4ThreeVector  ChordAE_Vector= CurrentE_Point - CurveA_Point;
@@ -301,7 +301,7 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
   G4double  AE_fraction; 
   
   curve_length= 
-       CurveB_PointVelocity.CurveS() - CurveA_PointVelocity.CurveS();  
+       CurveB_PointVelocity.GetCurveLength() - CurveA_PointVelocity.GetCurveLength();  
 
   // const 
   G4double  integrationInaccuracyLimit= G4std::max( perMillion, 0.5*eps_step ); 

@@ -5,15 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingVerbose.hh,v 1.7 1999/12/15 14:53:57 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SteppingVerbose.hh,v 1.8 2000/11/11 06:34:09 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //  
 //---------------------------------------------------------------
 //
 // G4SteppingVerbose.hh
 //
-// Description:
+// class dscription:
 //   This class manages the vervose outputs in G4SteppingManager. 
 //   
 //
@@ -32,11 +32,11 @@ class G4SteppingVerbose;
 #include "G4VSteppingVerbose.hh"
 
 class G4SteppingVerbose : public G4VSteppingVerbose {
-public:   
+public:   // with description
 // Constructor/Destructor
   G4SteppingVerbose();
  ~G4SteppingVerbose();
-//
+// methods to be invoked in the SteppingManager
   void NewStep();
   void AtRestDoItInvoked();
   void AlongStepDoItAllDone();

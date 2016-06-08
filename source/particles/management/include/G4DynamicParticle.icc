@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.icc,v 1.5 2000/10/20 11:34:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4DynamicParticle.icc,v 1.7 2001/03/05 08:32:16 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -179,11 +179,6 @@ inline void G4DynamicParticle::SetMomentumDirection(G4double px, G4double py, G4
   theMomentumDirection.setZ(pz);
 }
 
-inline void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition)
-{
-  theParticleDefinition = aParticleDefinition;
-  theDynamicalMass = theParticleDefinition->GetPDGMass();
-}
 
 inline void G4DynamicParticle::SetPolarization(G4double polX, G4double polY, G4double polZ)
 {
@@ -210,6 +205,16 @@ inline const G4DecayProducts* G4DynamicParticle::GetPreAssignedDecayProducts() c
 inline void G4DynamicParticle::SetPreAssignedDecayProducts(G4DecayProducts* aDecayProducts)
 {
  thePreAssignedDecayProducts = aDecayProducts;
+}
+
+inline G4double G4DynamicParticle::GetPreAssignedDecayProperTime() const
+{
+  return thePreAssignedDecayTime;
+}
+ 
+inline void G4DynamicParticle::SetPreAssignedDecayProperTime(G4double aTime)
+{
+  thePreAssignedDecayTime = aTime;
 }
 
 inline 

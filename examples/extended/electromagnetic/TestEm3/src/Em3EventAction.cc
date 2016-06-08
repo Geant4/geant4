@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3EventAction.cc,v 1.5 2000/12/07 12:38:25 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: Em3EventAction.cc,v 1.8 2001/03/26 16:01:58 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 
@@ -16,6 +16,7 @@
 #include "Em3EventAction.hh"
 
 #include "Em3RunAction.hh"
+#include "Em3PrimaryGeneratorAction.hh"
 #include "Em3DetectorConstruction.hh"
 #include "Em3CalorHit.hh"
 #include "Em3EventActionMessenger.hh"
@@ -35,10 +36,15 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Em3EventAction::Em3EventAction(Em3RunAction* run, Em3DetectorConstruction* det)
-:Em3Run(run),Detector(det),calorimeterCollID(-1),drawFlag("all"),
+Em3EventAction::Em3EventAction(Em3RunAction* run,Em3PrimaryGeneratorAction* kin,
+                               Em3DetectorConstruction* det)
+:Em3Run(run),Em3Kin(kin),Detector(det),calorimeterCollID(-1),drawFlag("all"),
  eventMessenger(NULL),printModulo(10000)
 {
   eventMessenger = new Em3EventActionMessenger(this);
@@ -56,9 +62,19 @@ Em3EventAction::~Em3EventAction()
 void Em3EventAction::BeginOfEventAction(const G4Event* evt)
 {   
  G4int evtNb = evt->GetEventID();
+ 
+ //survey printing
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
     
+ //save rndm status
+ if (Em3Run->GetRndmFreq() == 2)
+   { 
+    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
+    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
+   }         
+
+ // initialize Hits collection    
  if (calorimeterCollID==-1)
   {
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -74,10 +90,9 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
   Em3CalorHitsCollection* CHC = NULL;
   G4int NbHits=0;
   G4int NbOfAbsor=Detector->GetNbOfAbsor();
+  G4double Ebeam = Em3Kin->GetParticleGun()->GetParticleEnergy();
   G4double totEAbs, totLAbs;
-  char str1[6], str2[6];
-  strcpy(str1,"EAbs");strcpy(str2,"LAbs");
-     
+       
   if (HCE) CHC = (Em3CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
   if (CHC)
@@ -90,7 +105,13 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
 	     totEAbs += (*CHC)[j]->GetEdepAbs(k); 
              totLAbs += (*CHC)[j]->GetTrakAbs(k);     
             }
-         Em3Run->fillPerEvent(k,totEAbs,totLAbs);	 
+         Em3Run->fillPerEvent(k,totEAbs,totLAbs);
+	 
+#ifndef G4NOHIST        
+         //fill histo
+         //	 
+	 Em3Run->GetHisto(k)->accumulate(totEAbs/Ebeam);
+#endif  	 	 
        }
     }
     
@@ -106,19 +127,7 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
           else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
                                   trj->DrawTrajectory(50); 
         }
-  } 
-  
-  //save rndm status
-  if (Em3Run->GetRndmFreq() == 2)
-    { 
-     HepRandom::saveEngineStatus("endOfEvent.rndm");   
-     G4int evtNb = evt->GetEventID();
-     if (evtNb%printModulo == 0)
-       { 
-        G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        HepRandom::showEngineStatus();
-       }
-    }     
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: AnaEx01DetectorConstruction.cc,v 1.1.1.1 2000/09/14 11:37:21 barrand Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 

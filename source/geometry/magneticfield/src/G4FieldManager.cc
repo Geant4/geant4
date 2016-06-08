@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FieldManager.cc,v 1.3 2000/11/09 18:06:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #include "G4FieldManager.hh"
 

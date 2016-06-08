@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LizardSystem.cc,v 1.8 2000/11/17 08:16:45 barrand Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Guy Barrand 14 September 2000

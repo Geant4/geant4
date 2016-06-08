@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpticalSurface.hh,v 1.4 1999/11/05 21:12:05 gum Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

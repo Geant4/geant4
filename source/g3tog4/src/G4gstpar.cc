@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gstpar.cc,v 1.5 1999/12/15 14:49:44 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #include "G3toG4.hh"
 #include "G3VolTable.hh"

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BlockingList.hh,v 1.4 2000/04/25 16:15:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // class G4BlockingList
 //

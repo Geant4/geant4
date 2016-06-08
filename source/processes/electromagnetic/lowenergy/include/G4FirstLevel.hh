@@ -29,10 +29,10 @@
 #ifndef G4FIRSTLEVEL_HH
 #define G4FIRSTLEVEL_HH
 
-#include "G4Data.hh"
+#include "G4DataVector.hh"
 #include "g4rw/tpordvec.h"
 
-class G4FirstLevel : public G4RWTPtrOrderedVector< G4Data >{
+class G4FirstLevel : public G4RWTPtrOrderedVector< G4DataVector >{
 
 
 public:

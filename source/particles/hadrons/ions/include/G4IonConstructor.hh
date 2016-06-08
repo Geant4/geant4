@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IonConstructor.hh,v 1.2 1999/12/15 14:51:01 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------

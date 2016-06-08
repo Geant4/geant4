@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyline.hh,v 1.5 1999/12/15 14:50:33 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Polyline.hh,v 1.6 2001/02/03 18:29:42 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  July 1995
@@ -31,11 +31,10 @@ public: // With description
 
   G4Polyline ();
   G4Polyline (const G4VVisPrim& prim);
+  virtual ~G4Polyline ();
   virtual G4Visible&  operator = (const G4Visible& right);
   virtual G4VVisPrim& operator = (const G4VVisPrim& right);
   virtual G4Polyline& operator = (const G4Polyline& right);
 };
-
-inline G4Polyline::G4Polyline () {}
 
 #endif

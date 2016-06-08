@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HEInelastic.cc,v 1.5 2000/07/09 09:48:35 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.3 2000/11/20 17:26:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicsFreeVector.hh,v 1.7 2001/03/09 12:08:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -28,8 +28,9 @@
 //    02 Dec. 1995, G.Cosmo : Structure created based on object model
 //    06 Jun. 1996, K.Amako : Implemented the 1st version
 //    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
-//                            user introduced.
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added.
+//                            user introduced
+//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
@@ -37,29 +38,27 @@
 #define G4PhysicsFreeVector_h 1
 
 #include "globals.hh"
-#include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
-
+#include "G4DataVector.hh"
 
 class G4PhysicsFreeVector : public G4PhysicsVector  
 {
-  public:
+  public: // with description
 
-    // Constructors
     G4PhysicsFreeVector();
     G4PhysicsFreeVector(size_t theNbin);
     G4PhysicsFreeVector(const G4DataVector& binVector, 
                         const G4DataVector& dataVector);
+         // Constructors:
          // 'binVector' has the low edge value of each scale bin. 
          // 'dataVector' has the cross-section/energy-loss/etc at 
          // the energy/momenturm of the corresponding a bin of 
          // 'binVector'. 'binVector' and 'dataVector' need to have 
          // the same vector length.
   
-    // Destructor
     ~G4PhysicsFreeVector();
+         // Destructor
 
-    // Special PutValue function for PhysicsFreeVector
     void PutValue( size_t binNumber, G4double binValue, 
                                      G4double dataValue );   
          // To use this method to fill a PhysicsFreeVector, you have
@@ -75,7 +74,8 @@ class G4PhysicsFreeVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
+inline 
+size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
 {
   // For G4PhysicsFreeVector, FindBinLocation is implemented using
   // the binary search algorithm.
@@ -92,11 +92,11 @@ inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
 
   while (lowerBound <= upperBound) {
     size_t midBin = (lowerBound + upperBound)/2;
-    if( theEnergy < binVector(midBin) )
+    if( theEnergy < binVector[midBin] )
        upperBound = midBin-1;
     else
        lowerBound = midBin+1;
-  } 
+  }
 
   return upperBound;
 }

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPAIenergyLoss.cc,v 1.1 2000/04/25 14:33:10 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 

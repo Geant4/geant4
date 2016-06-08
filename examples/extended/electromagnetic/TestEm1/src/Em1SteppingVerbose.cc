@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1SteppingVerbose.cc,v 1.4 2000/12/06 13:21:50 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: Em1SteppingVerbose.cc,v 1.6 2001/02/19 14:05:15 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -46,7 +46,7 @@ void Em1SteppingVerbose::StepInfo()
 	     << G4std::setw( 9) << "dEStep"     << " "  
 	     << G4std::setw(10) << "StepLeng"     
 	     << G4std::setw(10) << "TrakLeng" 
-	     << G4std::setw(10) << "NextVolu" 
+	     << G4std::setw(10) << "Volume"    << "  "
 	     << G4std::setw(10) << "Process"   << G4endl;	          
     }
 
@@ -61,16 +61,17 @@ void Em1SteppingVerbose::StepInfo()
 
     // if( fStepStatus != fWorldBoundary){ 
     if( fTrack->GetNextVolume() != 0 ) { 
-      G4cout << G4std::setw(10) << fTrack->GetNextVolume()->GetName();
+      G4cout << G4std::setw(10) << fTrack->GetVolume()->GetName();
     } else {
       G4cout << G4std::setw(10) << "OutOfWorld";
     }
 
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
-      G4cout << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
-	->GetProcessName();
+      G4cout << "  " 
+             << G4std::setw(10) << fStep->GetPostStepPoint()->GetProcessDefinedStep()
+	                                ->GetProcessName();
     } else {
-      G4cout << "User Limit";
+      G4cout << "   UserLimit";
     }
 
     G4cout << G4endl;
@@ -86,12 +87,12 @@ void Em1SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
+	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+                        lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
@@ -115,8 +116,8 @@ void Em1SteppingVerbose::StepInfo()
     
   }
   G4cout.precision(prec);
-  
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void Em1SteppingVerbose::TrackingStarted()
@@ -134,7 +135,7 @@ G4int prec = G4cout.precision(3);
 	   << G4std::setw( 9) << "dEStep"     << " "  
 	   << G4std::setw(10) << "StepLeng"  
 	   << G4std::setw(10) << "TrakLeng"
-	   << G4std::setw(10) << "NextVolu"
+	   << G4std::setw(10) << "Volume"     << "  "
 	   << G4std::setw(10) << "Process"    << G4endl;	     
 
     G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
@@ -147,13 +148,13 @@ G4int prec = G4cout.precision(3);
 	   << G4std::setw( 6) << G4BestUnit(fTrack->GetTrackLength(),"Length");
 
     if(fTrack->GetNextVolume()){
-      G4cout << G4std::setw(10) << fTrack->GetNextVolume()->GetName() << " ";
+      G4cout << G4std::setw(10) << fTrack->GetVolume()->GetName();
     } else {
-      G4cout << G4std::setw(10) << "OutOfWorld" << " ";
+      G4cout << G4std::setw(10) << "OutOfWorld";
     }
-    G4cout << G4std::setw(10) << "initStep" << G4endl;
+    G4cout  << "    initStep" << G4endl;
   }
   G4cout.precision(prec);
-  
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

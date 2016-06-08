@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ParticleTableIterator.hh,v 1.4 2000/10/20 11:34:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------

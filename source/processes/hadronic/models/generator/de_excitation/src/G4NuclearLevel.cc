@@ -40,13 +40,13 @@ G4NuclearLevel::G4NuclearLevel(const G4double energy, const G4double halfLife,
   _halfLife = halfLife;
   _angularMomentum = angularMomentum;
   G4int i;
-  for (i=0; i<eGamma.entries(); i++)
+  for (i=0; i<eGamma.size(); i++)
     {
-      _energies.insert(eGamma.at(i));
-      _weights.insert(wGamma.at(i));
-      _polarities.insert(polarities.at(i));
+      _energies.push_back(eGamma[i]);
+      _weights.push_back(wGamma[i]);
+      _polarities.push_back(polarities[i]);
     }
-  _nGammas = _energies.entries();
+  _nGammas = _energies.size();
   MakeProbabilities();
   MakeCumProb();
 }
@@ -131,15 +131,15 @@ void G4NuclearLevel::PrintAll() const
 	 << ", " << _nGammas << " photons" << G4endl;
   G4int i;
   G4cout << "     Gammas: ";
-  for (i=0; i<_nGammas; i++) { G4cout << _energies.at(i) << " "; }
+  for (i=0; i<_nGammas; i++) { G4cout << _energies[i] << " "; }
   G4cout << G4endl << "     Weights: ";
-  for (i=0; i<_nGammas; i++) { G4cout << _weights.at(i) << " "; }
+  for (i=0; i<_nGammas; i++) { G4cout << _weights[i] << " "; }
   G4cout << G4endl << "     Relative transition probabilities ";
-  for (i=0; i<_nGammas; i++) { G4cout << _prob.at(i) << " "; }
+  for (i=0; i<_nGammas; i++) { G4cout << _prob[i] << " "; }
   G4cout << G4endl << "     Cumulative probabilities: ";
-  for (i=0; i<_nGammas; i++) { G4cout << _cumProb.at(i) << " "; }
+  for (i=0; i<_nGammas; i++) { G4cout << _cumProb[i] << " "; }
   G4cout << G4endl << "     Polarities: ";
-  for (i=0; i<_nGammas; i++) { G4cout << _polarities.at(i) << " "; }
+  for (i=0; i<_nGammas; i++) { G4cout << _polarities[i] << " "; }
   G4cout << G4endl;      
 
   return;
@@ -152,13 +152,13 @@ void G4NuclearLevel::MakeProbabilities()
   G4int i = 0;
   for (i=0; i<_nGammas; i++)
     {
-      sum += _weights.at(i);
+      sum += _weights[i];
     }
 
   for (i=0; i<_nGammas; i++)
     {
-      if (sum > 0.) { _prob.insert(_weights.at(i) / sum); }
-      else { _prob.insert(1./_nGammas); }
+      if (sum > 0.) { _prob.push_back(_weights[i] / sum); }
+      else { _prob.push_back(1./_nGammas); }
     }
   return;
 }
@@ -168,14 +168,14 @@ void G4NuclearLevel::MakeCumProb()
 {
   if (_nGammas > 0)
     {
-      G4double sum = _prob.at(0);
-      _cumProb.insert(sum);
+      G4double sum = _prob[0];
+      _cumProb.push_back(sum);
       
       G4int i = 0;
       for (i=1; i<_nGammas; i++)
 	{
-	  sum += _prob.at(i);
-          _cumProb.insert(sum);
+	  sum += _prob[i];
+          _cumProb.push_back(sum);
 	}
     }
   return;

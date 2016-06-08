@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FRClient.hh,v 1.4 1999/12/27 07:49:11 stanaka Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G4FRClient.hh
 // Yasuhide Sawada and Satoshi Tanaka

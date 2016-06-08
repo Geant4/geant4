@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4AntiXiZeroInelasticProcess.hh,v 1.3 2000/12/14 08:47:20 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // Hadronic Process: AntiXiZero Inelastic Process
  // J.L. Chuma, TRIUMF, 18-Feb-1997

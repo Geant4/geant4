@@ -52,7 +52,7 @@ void G4DiscreteGammaTransition::SelectGamma()
     G4int iGamma = 0;
     for(iGamma=0;iGamma < nGammas;iGamma++)
     {
-      if(random <= _level.GammaCumulativeProbabilities().at(iGamma))
+      if(random <= (_level.GammaCumulativeProbabilities())[iGamma])
 	break;
     }
 
@@ -62,7 +62,7 @@ void G4DiscreteGammaTransition::SelectGamma()
 
     G4double eCorrection = _level.Energy() - _excitation;
 
-    _gammaEnergy = _level.GammaEnergies().at(iGamma) - eCorrection;
+    _gammaEnergy = (_level.GammaEnergies())[iGamma] - eCorrection;
 
 //  Warning: the following check is needed to avoid loops:
 //  Due essentially to missing nuclear levels in data files, it is

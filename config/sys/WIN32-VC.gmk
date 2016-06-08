@@ -12,7 +12,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
       CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
     endif
   endif
-  CXXFLAGS += -MD -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
+  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
   CXXFLAGS += -D_WIN32 -DOS
   CPPFLAGS += -DWIN32
   #

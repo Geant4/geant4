@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCreateView.cc,v 1.5 1999/12/15 14:54:27 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisManMessCreateView.cc,v 1.7 2001/02/23 15:43:29 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -42,19 +42,19 @@ void G4VisManMessenger::AddCommandCreateView () {
   const G4GraphicsSystemList& gslist =
     fpVMan -> GetAvailableGraphicsSystems ();
   G4String candidates;
-  for (int igslist = 0; igslist < gslist.entries (); igslist++) {
-    G4String nickname = gslist (igslist) -> GetNickname ();
+  for (int igslist = 0; igslist < gslist.size (); igslist++) {
+    G4String nickname = gslist [igslist] -> GetNickname ();
     if (nickname . length () > 0) {
       candidates += nickname;
     }
     else {
-      candidates += gslist (igslist) -> GetName ();
+      candidates += gslist [igslist] -> GetName ();
     }
     candidates += " ";
   }
   param   -> SetParameterCandidates(candidates);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
 }
 
@@ -63,11 +63,13 @@ void G4VisManMessenger::DoCommandCreateView (const G4String& commandPath,
 
   ///////////////////  /vis~/create_view/new_graphics_system  /////
   if (commandPath == "/vis~/create_view/new_graphics_system") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/scenehandler/create\" or \"/vis/open\".");
     G4String selector;
     const char* aString = newValues;
     G4std::istrstream is ((char*) aString) ; is >> selector;
     const G4GraphicsSystemList& gsl = fpVMan -> GetAvailableGraphicsSystems ();
-    int nSystems = gsl.entries ();
+    int nSystems = gsl.size ();
     if (nSystems > 0) {
       int iGS;  // Selector index.
       for (iGS = 0; iGS < nSystems; iGS++) {

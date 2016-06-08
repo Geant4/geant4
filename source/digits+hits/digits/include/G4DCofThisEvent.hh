@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DCofThisEvent.hh,v 1.2.2.1.2.1 1999/12/07 20:47:46 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4DCofThisEvent.hh,v 1.5 2001/02/08 06:07:13 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4DCofThisEvent_h
@@ -15,7 +15,8 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VDigiCollection.hh"
-#include "g4rw/tpordvec.h"
+//#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 // class description:
 //
@@ -40,7 +41,7 @@ class G4DCofThisEvent
       void AddDigiCollection(G4int DCID,G4VDigiCollection * aDC);
 
   private:
-      G4RWTPtrOrderedVector<G4VDigiCollection> * DC;
+      G4std::vector<G4VDigiCollection*> * DC;
 
   public: // with description
       inline G4VDigiCollection* GetDC(G4int i) const
@@ -53,7 +54,7 @@ class G4DCofThisEvent
       inline G4int GetNumberOfCollections() const
       {
         G4int n = 0;
-        for(int i=0;i<DC->entries();i++)
+        for(int i=0;i<DC->size();i++)
         {
           if((*DC)[i]) n++;
         }
@@ -64,7 +65,7 @@ class G4DCofThisEvent
   public:
       inline G4int GetCapacity() const
       {
-        return DC->entries();
+        return DC->size();
       }
 };
 

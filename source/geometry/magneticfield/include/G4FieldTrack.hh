@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.hh,v 1.4 2000/11/01 15:15:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4FieldTrack.hh,v 1.6 2001/03/27 15:35:14 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4FieldTrack
@@ -35,10 +35,12 @@ class  G4FieldTrack
    public:  // with description
 
      G4FieldTrack( const G4ThreeVector& pPosition, 
-		   const G4ThreeVector& pVelocity,   // Or UnitVelocity
+		   const G4ThreeVector& pMomentumDirection,
 		         G4double       curve_length,
-		         G4double       Energy,
-		         G4double       LabratTimeOfFlight=0.0,
+		         G4double       kineticEnergy,
+     		   const G4double       restMass_c2,
+		         G4double       velocity,
+		         G4double       LaboratoryTimeOfFlight=0.0,
 		         G4double       ProperTimeOfFlight=0.0, 
 		   const G4ThreeVector* pSpin=0);
 
@@ -50,27 +52,29 @@ class  G4FieldTrack
      inline G4FieldTrack& operator = ( const G4FieldTrack & rStVec );
        // Assignment operator
 
-     inline G4ThreeVector  GetVelocity() const;   
+     inline G4ThreeVector  GetMomentum() const;   
      inline G4ThreeVector  GetPosition() const; 
      inline const G4ThreeVector& GetMomentumDir() const;
      inline G4double       GetCurveLength() const;
        // Distance along curve of point.
-     inline G4double       GetMomentumModulus() const;
+     // inline G4double       GetMomentumModulus() const;  // Obsolete
      inline G4ThreeVector  GetSpin()   const;
      inline G4double       GetLabTimeOfFlight() const;
      inline G4double       GetProperTimeOfFlight() const;
        // Accessors.
 
      inline void SetPosition(G4ThreeVector nPos); 
-     inline void SetVelocity(G4ThreeVector nMomDir);
+     inline void SetMomentum(G4ThreeVector nMomDir);
        // Does change mom-dir too.
+
      inline void SetMomentumDir(G4ThreeVector nMomDir);
-       // Does NOT change velocity.
+       // Does NOT change Momentum or Velocity Vector.
+
      inline void SetCurveLength(G4double nCurve_s);
        // Distance along curve.
-     inline void SetEnergy(G4double nEnergy);
+     inline void SetKineticEnergy(G4double nEnergy);
        // Does not modify momentum.
-     inline void SetMomentumModulus(G4double nMomentumMod);
+     // inline void SetMomentumModulus(G4double nMomentumMod);  // Obsolete
        // Does not modify energy.
      inline void SetSpin(G4ThreeVector nSpin);
      inline void SetLabTimeOfFlight(G4double nTOF); 
@@ -80,26 +84,18 @@ class  G4FieldTrack
    public: // without description
 
      inline G4FieldTrack& SetCurvePnt(const G4ThreeVector& pPosition, 
-				      const G4ThreeVector& pVelocity,
+				      const G4ThreeVector& pMomentum,
 				            G4double       s_curve );
        // Old multi-set method
 
-     inline G4ThreeVector Position() const;
-       // Renamed to GetPosition
+     G4double       GetKineticEnergy() const;  // Check it --> FIXME
 
-     inline G4double CurveS() const;
-       // Distance along curve of point
-     inline void SetCurveS(G4double new_curve_s);
-       // Old methods to be deleted. 
-
-     // G4double       GetEnergy() const;       //  Wrong Energy  --> FIXME
-
-     // G4double*      PosVelVec();       // [6]  Needed for RK integrator
+     // G4double*      PosVelVec();       // [6]  Needed(?) for RK integrator
        // This old method completely broke encapsulation ?  
   
      // static const G4int ncompSVEC=15;
        // Needed and should be used only for RK integration driver
-     enum { ncompSVEC = 16 };
+     enum { ncompSVEC = 12 };
      inline void DumpToArray(G4double valArr[ncompSVEC]) const; 
      inline void LoadFromArray(G4double valArr[ncompSVEC]); 
      
@@ -110,10 +106,11 @@ class  G4FieldTrack
 
      G4double  SixVector[6];
      G4double  fDistanceAlongCurve;  // distance along curve of point
-     G4double  fEnergy;
+     G4double  fKineticEnergy;
+     G4double  fRestMass_c2;
      G4double  fLabTimeOfFlight;
      G4double  fProperTimeOfFlight;
-     G4double  fMomentumModulus;
+     // G4double  fMomentumModulus;  // Unused
      G4ThreeVector fSpin;
      G4ThreeVector fMomentumDir;
 }; 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RegularXrayTRmodel.hh,v 1.1 2000/11/14 16:06:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SurfaceOfLinearExtrusion.cc,v 1.2 2000/08/28 08:57:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

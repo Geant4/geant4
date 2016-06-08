@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPhysVolRefArray.hh,v 1.1 2000/11/17 05:10:02 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // class description:

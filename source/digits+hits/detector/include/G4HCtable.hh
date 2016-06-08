@@ -5,15 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HCtable.hh,v 1.2.2.1.2.1 1999/12/07 20:47:41 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4HCtable.hh,v 1.5 2001/02/08 06:07:10 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4HCtable_H
 #define G4HCtable_H 1
 
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
+//#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 
 // class description:
 //
@@ -38,12 +39,12 @@ class G4HCtable
     G4int GetCollectionID(G4String HCname);
 
   private:
-    G4RWTValOrderedVector<G4String> SDlist;
-    G4RWTValOrderedVector<G4String> HClist;
+    G4std::vector<G4String> SDlist;
+    G4std::vector<G4String> HClist;
 
   public:
     inline G4int entries() const
-    { return HClist.entries(); }
+    { return HClist.size(); }
 
 };
 

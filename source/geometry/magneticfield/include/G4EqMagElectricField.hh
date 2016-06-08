@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EqMagElectricField.hh,v 1.4 2000/11/01 15:15:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4EqMagElectricField.hh,v 1.5 2001/02/20 08:49:29 grichine Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4EqMagElectricField
@@ -46,7 +46,8 @@ class G4EqMagElectricField : public G4Mag_EqRhs
 
   private:
 
-     G4double        fElectroMagCof;
+    G4double        fElectroMagCof ;
+    G4double        fMassCof;
 };
 
 #endif

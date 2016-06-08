@@ -1,0 +1,73 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4PhysicsTable.icc,v 1.3 2001/04/03 07:26:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
+//
+// 
+// ------------------------------------------------------------
+//      GEANT 4 class inline implementation
+//
+//	History: first implementation, based on object model of
+//	2nd December 1995, G.Cosmo
+//
+// ------------------------------------------------------------
+
+inline
+ void G4PhysicsTable::clearAndDestroy() 
+{
+  G4PhysicsVector* a;
+  while (size()>0) {
+    a = back();
+    pop_back();
+    if ( a )  delete a;    
+  } 
+}
+
+inline
+ G4PhysicsVector*& G4PhysicsTable::operator()(size_t i) 
+{
+  return (*this)[i]; 
+}
+
+inline
+ G4PhysicsVector* const& G4PhysicsTable::operator()(size_t i) const
+{ 
+  return (*this)[i]; 
+}
+
+inline
+ void   G4PhysicsTable::insert(G4PhysicsVector* pvec)
+{
+  push_back(pvec);
+}
+
+inline
+ void  G4PhysicsTable::insertAt (size_t idx, G4PhysicsVector* pvec)
+{
+  G4PhysicsTableIterator itr=begin();
+  for (size_t i=0; i<idx; ++i) itr++;
+  G4PhysCollection::insert(itr, pvec);
+}
+
+inline
+ size_t G4PhysicsTable::entries() const 
+{
+  return size();
+}
+
+inline
+ size_t G4PhysicsTable::length() const 
+{
+  return size();
+}
+
+inline
+ G4bool G4PhysicsTable::isEmpty() const
+{
+  return empty();
+}

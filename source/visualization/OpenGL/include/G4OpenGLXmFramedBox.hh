@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmFramedBox.hh,v 1.3 1999/12/15 14:54:05 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLXmFramedBox.hh,v 1.5 2001/03/07 14:56:16 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //Framed box container class
@@ -30,14 +30,16 @@ class G4OpenGLXmFramedBox : public G4OpenGLXmBox
 {
 
 public:
-  G4OpenGLXmFramedBox (char* = NULL, 
+  G4OpenGLXmFramedBox (const char* = NULL, 
 		       G4bool = False);   //constructor
-  ~G4OpenGLXmFramedBox ();               //destructor
+  virtual ~G4OpenGLXmFramedBox ();               //destructor
 
   void AddChild (G4OpenGLXmVWidgetComponent*);
   void AddYourselfTo (G4OpenGLXmVWidgetShell*);
 
 private:
+  G4OpenGLXmFramedBox (const G4OpenGLXmFramedBox&);
+  G4OpenGLXmFramedBox& operator = (const G4OpenGLXmFramedBox&);
   Widget frame;
 };
 

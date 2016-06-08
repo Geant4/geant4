@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VisCommandsCamera.cc,v 1.7 2000/05/13 10:52:14 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 

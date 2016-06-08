@@ -5,6 +5,7 @@
 *
 #include "calor.inc"
 #include "celoss.inc"
+#include "histo.inc"
 #include "geant321/gckine.inc"
 *
       CHARACTER*20 filnam
@@ -23,6 +24,10 @@
       CALL FFKEY('CALOR',NbAbsor,4,'MIXED')
       CALL FFKEY('MATE' ,materAbs(1),MaxAbs,'INTEGER')
       CALL FFKEY('THICK',thickAbs(1),MaxAbs,'REAL')
+* *** production cuts (bcute, dcute and ppcutm) for each absorber       
+      CALL FFKEY('CUTPR',prodcut(1) ,4*MaxAbs,'REAL')
+* *** histograms
+      CALL FFKEY('HISTO',idhist,4,'MIXED')            
 *
 * *** read data cards
       CALL GFFGO 

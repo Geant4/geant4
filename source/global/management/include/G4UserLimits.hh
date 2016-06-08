@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4UserLimits.hh,v 1.6 2000/02/17 16:13:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 // 
 //
 // class G4UserLimits

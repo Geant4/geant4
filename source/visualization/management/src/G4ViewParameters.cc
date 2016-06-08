@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.7 2000/07/03 10:36:33 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4ViewParameters.cc,v 1.11 2001/02/23 15:47:24 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  19th July 1996
@@ -51,7 +51,8 @@ G4ViewParameters::G4ViewParameters ():
   fGlobalMarkerScale (1.),
   fMarkerNotHidden (true),
   fWindowSizeHintX (600),
-  fWindowSizeHintY (600)
+  fWindowSizeHintY (600),
+  fAutoRefresh (false)
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels radius, 10 pixels diameter.
@@ -116,8 +117,8 @@ G4double G4ViewParameters::GetFrontHalfHeight (G4double nearDistance,
 
 void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
   fCutaway = true;
-  if (fCutawayPlanes.entries () < 3 ) {
-    fCutawayPlanes.insert (cutawayPlane);
+  if (fCutawayPlanes.size () < 3 ) {
+    fCutawayPlanes.push_back (cutawayPlane);
   }
   else {
     G4cerr << "A maximum of 3 cutaway planes supported." << G4endl;
@@ -180,7 +181,13 @@ void G4ViewParameters::SetLightpointDirection
   SetViewAndLights (fViewpointDirection);
 }
 
-void G4ViewParameters::Pan (G4double right, G4double up) {
+void G4ViewParameters::SetPan (G4double right, G4double up) {
+  G4Vector3D unitRight = (fUpVector.cross (fViewpointDirection)).unit();
+  G4Vector3D unitUp    = (fViewpointDirection.cross (unitRight)).unit();
+  fCurrentTargetPoint  = right * unitRight + up * unitUp;
+}
+
+void G4ViewParameters::IncrementPan (G4double right, G4double up) {
   G4Vector3D unitRight = (fUpVector.cross (fViewpointDirection)).unit();
   G4Vector3D unitUp    = (fViewpointDirection.cross (unitRight)).unit();
   fCurrentTargetPoint += right * unitRight + up * unitUp;
@@ -220,7 +227,8 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fDefaultMarker        != v.fDefaultMarker)        ||
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
-      (fWindowSizeHintY      != v.fWindowSizeHintY))
+      (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
+      (fAutoRefresh          != v.fAutoRefresh))
     G4cout << "Difference in 1st batch." << G4endl;
 
   if (fSection) {
@@ -229,12 +237,12 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
   }
 
   if (fCutaway) {
-    if (fCutawayPlanes.entries () != v.fCutawayPlanes.entries ()) {
+    if (fCutawayPlanes.size () != v.fCutawayPlanes.size ()) {
       G4cout << "Difference in no of cutaway planes." << G4endl;
     }
     else {
-      for (int i = 0; i < fCutawayPlanes.entries (); i++) {
-	if (!(fCutawayPlanes (i) == v.fCutawayPlanes (i)))
+      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i]))
 	  G4cout << "Difference in cutaway plane no. " << i << G4endl;
       }
     }
@@ -246,11 +254,9 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
   }
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
-  os << "View parameters and options:";
-
-  os << "\n  Drawing style: ";
-  switch (v.fDrawingStyle) {
+G4std::ostream& operator << (G4std::ostream& os,
+			     const G4ViewParameters::DrawingStyle& style) {
+  switch (style) {
   case G4ViewParameters::wireframe:
     os << "wireframe"; break;
   case G4ViewParameters::hlr:
@@ -261,6 +267,13 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
     os << "hlhsr - hidden line, hidden surface removed"; break;
   default: os << "unrecognised"; break;
   }
+  return os;
+}
+
+G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
+  os << "View parameters and options:";
+
+  os << "\n  Drawing style: " << v.fDrawingStyle;
 
   os << "\n  Representation style: ";
   switch (v.fRepStyle) {
@@ -297,7 +310,7 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Cutaway flag: ";
   if (v.fCutaway) {
     os << "true, cutaway planes: ";
-    for (int i = 0; i < v.fCutawayPlanes.entries (); i++) {
+    for (int i = 0; i < v.fCutawayPlanes.size (); i++) {
       os << ' ' << v.fCutawayPlanes[i];
     }
   }
@@ -378,6 +391,10 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Window size hint: "
      << v.fWindowSizeHintX << 'x'<< v.fWindowSizeHintX;
 
+  os << "\n  Auto refresh: ";
+  if (v.fAutoRefresh) os << "true";
+  else os << "false";
+
   return os;
 }
 
@@ -415,7 +432,8 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fGlobalMarkerScale    != v.fGlobalMarkerScale)    ||
       (fMarkerNotHidden      != v.fMarkerNotHidden)      ||
       (fWindowSizeHintX      != v.fWindowSizeHintX)      ||
-      (fWindowSizeHintY      != v.fWindowSizeHintY))
+      (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
+      (fAutoRefresh          != v.fAutoRefresh))
     return true;
 
   if (fDensityCulling &&
@@ -425,11 +443,11 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (!(fSectionPlane == v.fSectionPlane))) return true;
 
   if (fCutaway) {
-    if (fCutawayPlanes.entries () != v.fCutawayPlanes.entries ())
+    if (fCutawayPlanes.size () != v.fCutawayPlanes.size ())
       return true;
     else {
-      for (int i = 0; i < fCutawayPlanes.entries (); i++) {
-	if (!(fCutawayPlanes (i) == v.fCutawayPlanes (i))) return true;
+      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i])) return true;
       }
     }
   }

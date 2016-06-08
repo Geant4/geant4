@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.7 2000/04/12 13:09:07 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.9 2001/02/23 15:43:11 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -63,7 +63,8 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
   G4VSceneHandler::BeginPrimitives (objectTransformation);
 
   if (fMemoryForDisplayLists) {
-    if (!(fDisplayListId = glGenLists (1))) {  // Could pre-allocate?
+    fDisplayListId = glGenLists (1);
+    if (!fDisplayListId) {  // Could pre-allocate?
       G4cout << "********************* WARNING! ********************\n"
 	   <<"Unable to allocate any more display lists in OpenGL.\n "
 	   << "      Continuing drawing in IMMEDIATE MODE.\n"
@@ -73,8 +74,8 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
   }
   if (fMemoryForDisplayLists) {
     if (fReadyForTransients) {
-      fTODLList.append (fDisplayListId);
-      fTODLTransformList.append (objectTransformation);
+      fTODLList.push_back (fDisplayListId);
+      fTODLTransformList.push_back (objectTransformation);
       glDrawBuffer (GL_FRONT);
       glPushMatrix();
       G4OpenGLTransform3D oglt (objectTransformation);
@@ -82,8 +83,8 @@ void G4OpenGLStoredSceneHandler::BeginPrimitives
       glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
     }
     else {
-      fPODLList.append (fDisplayListId);
-      fPODLTransformList.append (objectTransformation);
+      fPODLList.push_back (fDisplayListId);
+      fPODLTransformList.push_back (objectTransformation);
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {
@@ -113,16 +114,16 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   int i;
 
   // Delete OpenGL display lists.
-  for (i = 0; i < fPODLList.entries (); i++) {
-    if (fPODLList (i)) {
-      glDeleteLists (fPODLList (i), 1);
+  for (i = 0; i < fPODLList.size (); i++) {
+    if (fPODLList [i]) {
+      glDeleteLists (fPODLList [i], 1);
     } else {
       G4cerr << "Warning : NULL display List in fPODLList." << G4endl;
     }
   }
-  for (i = 0; i < fTODLList.entries (); i++) {
-    if (fTODLList (i)) {
-      glDeleteLists (fTODLList (i), 1);
+  for (i = 0; i < fTODLList.size (); i++) {
+    if (fTODLList [i]) {
+      glDeleteLists (fTODLList [i], 1);
     } else {
       G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
     }
@@ -157,11 +158,11 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 //  }
 
   glNewList (fTopPODL, GL_COMPILE); {
-    for (int i = 0; i < fPODLList.entries (); i++) {
+    for (int i = 0; i < fPODLList.size (); i++) {
       glPushMatrix();
-      G4OpenGLTransform3D oglt (fPODLTransformList (i));
+      G4OpenGLTransform3D oglt (fPODLTransformList [i]);
       glMultMatrixd (oglt.GetGLMatrix ());
-      glCallList (fPODLList(i));
+      glCallList (fPODLList[i]);
       glPopMatrix();
     }
   }
@@ -187,8 +188,8 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     if (!(fpCurrentPV -> IsReplicated ()) &&
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
-      fPODLList.append (fDisplayListId);
-      fPODLTransformList.append (*fpObjectTransformation);
+      fPODLList.push_back (fDisplayListId);
+      fPODLTransformList.push_back (*fpObjectTransformation);
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);

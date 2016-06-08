@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4IonTable.cc,v 1.26 2000/09/14 10:00:22 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------

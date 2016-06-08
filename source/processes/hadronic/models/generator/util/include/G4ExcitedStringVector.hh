@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ExcitedStringVector.hh,v 1.3 1999/12/15 14:52:50 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4ExcitedStringVector_h
 #define G4ExcitedStringPartonVector_h 1

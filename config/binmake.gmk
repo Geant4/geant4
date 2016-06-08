@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.54 2000/12/05 17:19:49 morita Exp $
+# $Id: binmake.gmk,v 1.56.2.1 2001/03/22 13:54:24 gunter Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -37,7 +37,9 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/optical/include \
               -I$(G4BASE)/processes/transportation/include \
               -I$(G4BASE)/processes/parameterisation/include \
+              -I$(G4BASE)/processes/photolepton_hadron/include \
               -I$(G4BASE)/processes/electromagnetic/standard/include \
+              -I$(G4BASE)/processes/electromagnetic/integral/include \
               -I$(G4BASE)/processes/electromagnetic/muons/include \
               -I$(G4BASE)/processes/electromagnetic/utils/include \
               -I$(G4BASE)/processes/electromagnetic/xrays/include \
@@ -115,12 +117,6 @@ endif
 CPPFLAGS += $(INCFLAGS)
 LDFLAGS += -L$(G4LIBDIR)
 
-ifdef SHAREDLIBS
-  ifdef G4RUNPATHOPTION
-    LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
-  endif
-endif
-
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)
 G4BINDIR := $(G4BIN)/$(G4SYSTEM)
 
@@ -129,6 +125,8 @@ ifdef G4EXLIB
   LDFLAGS += -L$(G4LIBDIR)
   ifdef SHAREDLIBS
     ifdef G4RUNPATHOPTION
+#        for the example dependant directory, keep the path to the shared lib 
+#          in the executable.
       LDFLAGS += $(G4RUNPATHOPTION)$(G4LIBDIR)
     endif
   endif

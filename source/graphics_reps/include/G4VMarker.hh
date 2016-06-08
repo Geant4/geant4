@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VMarker.hh,v 1.6 1999/12/15 14:50:34 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.

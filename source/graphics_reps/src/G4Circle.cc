@@ -5,14 +5,22 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Circle.cc,v 1.2 1999/12/15 14:50:35 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Circle.cc,v 1.3 2001/02/03 18:29:52 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 
 #include "G4Circle.hh"
 
 #include "G4VisAttributes.hh"
+
+G4Circle::G4Circle () {}
+
+G4Circle::G4Circle (const G4Point3D& pos):
+G4VMarker (pos) {}
+
+G4Circle::G4Circle (const G4VMarker& marker):
+G4VMarker (marker) {}
 
 G4Circle::~G4Circle () {}
 

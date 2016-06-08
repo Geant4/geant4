@@ -5,17 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.cc,v 1.4 2000/11/01 15:15:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4MagIntegratorStepper.cc,v 1.5 2001/03/23 18:50:33 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #include "G4MagIntegratorStepper.hh"
 
 // Constructor for stepper abstract base class. 
 // 
 
-G4MagIntegratorStepper::G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs,
+G4MagIntegratorStepper::G4MagIntegratorStepper(G4EquationOfMotion* Equation,
 					       G4int       num_var)
-  : fEquation_Rhs(EqRhs),
+  : fEquation_Rhs(Equation),
     fNumberOfVariables(num_var)
 {
 }

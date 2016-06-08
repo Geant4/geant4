@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3RotTable.cc,v 1.12 2000/07/24 11:32:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

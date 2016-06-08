@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SensitiveVolumeList.hh,v 1.2.2.1.2.1 1999/12/07 20:47:42 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SensitiveVolumeList.hh,v 1.5 2001/02/08 06:07:11 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1996
@@ -22,8 +22,9 @@
 #ifndef G4SensitiveVolumeList_h
 #define G4SensitiveVolumeList_h 1
 
-#include "g4rw/tpordvec.h"
-#include "g4rw/tvordvec.h"
+//#include "g4rw/tpordvec.h"
+//#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
@@ -60,11 +61,11 @@ class G4SensitiveVolumeList
       G4bool CheckLV(const G4LogicalVolume *lvp) const;
 
     //Get and Set Operations for Has Relationships
-      const G4RWTPtrOrderedVector<G4VPhysicalVolume>& GetThePhysicalVolumeList() const;
-      void SetThePhysicalVolumeList(const G4RWTPtrOrderedVector<G4VPhysicalVolume> value);
+      const G4std::vector<G4VPhysicalVolume*>& GetThePhysicalVolumeList() const;
+      void SetThePhysicalVolumeList(const G4std::vector<G4VPhysicalVolume*> value);
 
-      const G4RWTPtrOrderedVector<G4LogicalVolume>& GetTheLogicalVolumeList() const;
-      void SetTheLogicalVolumeList(const G4RWTPtrOrderedVector<G4LogicalVolume> value);
+      const G4std::vector<G4LogicalVolume*>& GetTheLogicalVolumeList() const;
+      void SetTheLogicalVolumeList(const G4std::vector<G4LogicalVolume*> value);
 
 
 
@@ -72,8 +73,8 @@ class G4SensitiveVolumeList
 
     //Data Members for Has Relationships
 
-      G4RWTPtrOrderedVector<G4VPhysicalVolume> thePhysicalVolumeList;
-      G4RWTPtrOrderedVector<G4LogicalVolume> theLogicalVolumeList;
+      G4std::vector<G4VPhysicalVolume*> thePhysicalVolumeList;
+      G4std::vector<G4LogicalVolume*> theLogicalVolumeList;
 
 };
 

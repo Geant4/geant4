@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LogicalVolume.cc,v 1.5 2000/11/20 17:31:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // class G4LogicalVolume Implementation

@@ -5,19 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.3 1999/11/16 17:40:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.7 2001/03/09 12:08:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Definition
 ////////////////////////////////////////////////////////////////////////
 //
 // File:	G4PhysicsOrderedFreeVector.hh
-// Version:	1.0
 // Created:     1996-08-13
 // Author:      Juliet Armstrong
 // Updated:     1997-03-25 by Peter Gumplinger
 //		> cosmetics (only)
+//              2000-11-11 by H.Kurashige
+//              > use STL vector for dataVector and binVector
 // mail:        gum@triumf.ca
 //
 // Class description:
@@ -39,7 +40,6 @@
 // Includes
 /////////////
 
-#include "g4rw/tpordvec.h"
 #include "G4PhysicsVector.hh"
 
 /////////////////////
@@ -48,7 +48,8 @@
 
 class G4PhysicsOrderedFreeVector : public G4PhysicsVector 
 {
-public:
+
+  public: // with description
 	
         ////////////////////////////////
         // Constructors and Destructor
@@ -81,7 +82,7 @@ public:
 
 	void DumpValues();
 
-private:
+  private:
 
 	size_t FindBinLocation(G4double theEnergy) const;
 
@@ -93,3 +94,9 @@ private:
 #include "G4PhysicsOrderedFreeVector.icc"
 
 #endif /* G4PhysicsOrderedFreeVector_h */
+
+
+
+
+
+

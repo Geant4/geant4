@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VClusterModel.hh,v 1.1 2000/11/14 16:07:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////

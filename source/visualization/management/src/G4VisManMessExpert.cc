@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessExpert.cc,v 1.4 1999/12/15 14:54:27 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisManMessExpert.cc,v 1.6 2001/02/23 15:43:30 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -49,7 +49,7 @@ void G4VisManMessenger::AddCommandExpert () {
     (
      "...menu of expert commands."
      );
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_circle  ////
   //expert \hline
@@ -69,7 +69,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("size", 'd', true);
   param   -> SetDefaultValue (10.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_line  ////
   //expert \hline
@@ -95,7 +95,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("z1", 'd', true);
   param   -> SetDefaultValue (0.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////  /vis~/expert/draw_marks_and_show  ////
   //expert \hline
@@ -115,7 +115,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("size", 'd', true);
   param   -> SetDefaultValue (10.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   /***************************************
   ////////////////////////////////////  /vis~/expert/draw_physical_volume  ////
@@ -128,7 +128,7 @@ void G4VisManMessenger::AddCommandExpert () {
     (
      "A test of G4VisManager::Draw (const G4VPhysicalVolume&,..."
      );
-  fCommandList.append (command);
+  fCommandList.push_back (command);
   **************************************/
 
   ////////////////////////////////////////  /vis~/expert/draw_polymarkers  ////
@@ -144,7 +144,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   -> SetGuidance ("0/1/2/3 = line/dots/circles/squares");
   param   -> SetDefaultValue (0);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_spiral  ////
   //expert \hline
@@ -155,7 +155,7 @@ void G4VisManMessenger::AddCommandExpert () {
     (
      "Draws a G4Polyline in the form of a spiral."
      );
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_spirals  ////
   //expert \hline
@@ -169,7 +169,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("no. of spirals", 'i', true);
   param   -> SetDefaultValue (1);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_square  ////
   //expert \hline
@@ -189,7 +189,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("size", 'd', true);
   param   -> SetDefaultValue (10.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
 }
 
@@ -198,6 +198,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
   ///////////////////////////////////////  /vis~/expert/draw_circle  ////
   if (commandPath == "/vis~/expert/draw_circle") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4double x, y, z, worldSize;
       const char* aString = newValues;
@@ -213,6 +215,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
   ///////////////////////////////////////  /vis~/expert/draw_line  ////
   if (commandPath == "/vis~/expert/draw_line") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4double x0, y0, z0;
       G4double x1, y1, z1;
@@ -232,6 +236,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
   ////////////////////////////////////  /vis~/expert/draw_marks_and_show  ////
   if (commandPath == "/vis~/expert/draw_marks_and_show") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
 
     const G4int     num_each_marks = 100 ;
     const G4double  mark_step      = 1000.0 ;
@@ -281,6 +287,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
   /****************************************
   //////////////////////////////////  /vis~/expert/draw_physical_volume  ////
   if (commandPath == "/vis~/expert/draw_physical_volume") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
 
       // Given a physical volume...
@@ -328,6 +336,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
   ///////////////////////////////////////  /vis~/expert/draw_polymarkers  ////
   if (commandPath == "/vis~/expert/draw_polymarkers") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       int nPolyMarkers, type;
       const char* aString = newValues;
@@ -371,6 +381,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
   ///////////////////////////////////////  /vis~/expert/draw_spiral  ////
   if (commandPath == "/vis~/expert/draw_spiral") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4Polyline line;
       G4double t = 0., dt = M_PI / 50.;
@@ -385,6 +397,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
   ///////////////////////////////////////  /vis~/expert/draw_spirals  ////
   if (commandPath == "/vis~/expert/draw_spirals") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       int nSpirals;
       const char* aString = newValues;
@@ -416,6 +430,8 @@ void G4VisManMessenger::DoCommandExpert (const G4String& commandPath,
 
   ///////////////////////////////////////  /vis~/expert/draw_square  ////
   if (commandPath == "/vis~/expert/draw_square") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4double x, y, z, worldSize;
       const char* aString = newValues;

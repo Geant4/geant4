@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPInelasticBaseFS.hh,v 1.4 2000/11/09 16:13:38 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4NeutronHPInelasticBaseFS_h
 #define G4NeutronHPInelasticBaseFS_h 1

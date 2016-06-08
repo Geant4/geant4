@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4oDrawer.hh,v 1.3 1999/12/15 14:48:43 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4EllipticalTube.cc,v 1.9 2000/11/20 18:18:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------------

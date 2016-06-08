@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.10 2000/11/20 18:05:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Box.cc,v 1.13 2001/02/01 08:22:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //
@@ -17,8 +17,10 @@
 //  07.05.00 - V.Grichine: d= DistanceToIn(p,v), if d<e/2, d=0
 //  09.06.00 - V.Grichine: safety in DistanceToIn(p) against Inside(p)=kOutside
 //             and information before exception in DistanceToOut(p,v,...)
-
-
+//  15.11.00 - D.Williams, V.Grichine: bug fixed in CalculateExtent - change
+//                                     algorithm for rotated vertices
+// 
+//
 
 #include "G4Box.hh"
 
@@ -37,10 +39,11 @@
 //
 // Constructor - check & set half widths
 
-G4Box::G4Box(const G4String& pName, G4double pX,
-	  G4double pY, G4double pZ) : G4CSGSolid(pName)
+G4Box::G4Box(const G4String& pName,
+             G4double pX, G4double pY, G4double pZ)
+  : G4CSGSolid(pName)
 {
-  if ( pX > 0 && pY > 0 && pZ > 0 )
+  if ( pX > 2*kCarTolerance && pY > 2*kCarTolerance&& pZ > 2*kCarTolerance)
   {
     fDx = pX ;
     fDy = pY ; 
@@ -48,7 +51,7 @@ G4Box::G4Box(const G4String& pName, G4double pX,
   }
   else
   {
-    G4Exception("Error in G4Box::Box - negative parameters");
+    G4Exception("G4Box::G4Box(...) - invalid dimensions");
   }	
 
 }
@@ -61,6 +64,34 @@ G4Box::~G4Box()
 {
   ;
 }
+
+//////////////////////////////////////////////////////////////////////////////
+
+void G4Box::SetXHalfLength(G4double dx)
+{
+  if(dx > 2*kCarTolerance)
+    fDx = dx;
+  else
+    G4Exception("G4Box::SetXHalfLength(...) - invalid dimensions");
+} 
+
+void G4Box::SetYHalfLength(G4double dy) 
+{
+  if(dy > 2*kCarTolerance)
+    fDy = dy;
+  else
+    G4Exception("G4Box::SetYHalfLength(...) - invalid dimensions");
+} 
+
+void G4Box::SetZHalfLength(G4double dz) 
+{
+  if(dz > 2*kCarTolerance)
+    fDz = dz;
+  else
+    G4Exception("G4Box::SetZHalfLength(...) - invalid dimensions");
+} 
+    
+
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -189,39 +220,70 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
     ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
     ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax) ;
     ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
-	    
-    if ( pMin != kInfinity || pMax != -kInfinity )
-    {
-      existsAfterClip = true ;
-		    
+
+    if (pVoxelLimit.IsLimited(pAxis) == false) 
+    {	
+      if ( pMin != kInfinity || pMax != -kInfinity ) 
+      {
+          existsAfterClip = true ;
+
 // Add 2*tolerance to avoid precision troubles
 
-      pMin -= kCarTolerance ;
-      pMax += kCarTolerance ;		    
-    }
+          pMin           -= kCarTolerance;
+	  pMax           += kCarTolerance;
+      }
+    }	    
     else
     {
+      G4ThreeVector clipCentre(
+		( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+		( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+		( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+
+      if ( pMin != kInfinity || pMax != -kInfinity )
+      {
+        existsAfterClip = true ;
+	
+
+        // Check to see if endpoints are in the solid
+
+	clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
+
+	if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+        {
+      	  pMin = pVoxelLimit.GetMinExtent(pAxis);
+        }
+	else
+        {
+      	  pMin -= kCarTolerance;
+        }
+	clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
+
+	if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+        {
+	  pMax = pVoxelLimit.GetMaxExtent(pAxis);
+        }
+	else
+        {
+          pMax += kCarTolerance;
+        }
+      }
 // Check for case where completely enveloping clipping volume
 // If point inside then we are confident that the solid completely
 // envelopes the clipping volume. Hence set min/max extents according
 // to clipping volume extents along the specified axis.
-
-      G4ThreeVector clipCentre(
-	     ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-	     ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-	     ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
 		    
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
+      else if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
       {
-        existsAfterClip = true ;
-        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+         existsAfterClip = true ;
+         pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
+         pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
       }
-    }
+    } 
     delete vertices;
     return existsAfterClip;
-  }
-}
+  } 
+} 
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -646,8 +708,8 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
- // G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
-     G4cout<<"G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
+  G4Exception("Invalid call in G4Box::DistanceToOut(p),  point p is outside") ;
+     //    G4cout<<"G4Box::DistanceToOut(p),point p is outside ?!" << G4endl ;
   }
   safx1 = fDx - p.x() ;
   safx2 = fDx + p.x() ;

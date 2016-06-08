@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RTMessenger.cc,v 1.4 2000/06/07 02:52:45 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //

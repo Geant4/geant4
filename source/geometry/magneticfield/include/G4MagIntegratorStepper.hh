@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.5 2000/11/01 15:15:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4MagIntegratorStepper.hh,v 1.6 2001/03/23 18:50:33 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4MagIntegratorStepper
@@ -23,13 +23,13 @@
 #define G4MAGIntegratorSTEPPER
 
 #include "globals.hh"
-#include "G4Mag_EqRhs.hh"
+#include "G4EquationOfMotion.hh"
 
 class G4MagIntegratorStepper
 {
   public:  // with description
 
-     G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs, G4int num_variables);
+     G4MagIntegratorStepper(G4EquationOfMotion *Equation, G4int num_variables);
      virtual ~G4MagIntegratorStepper();
        // Constructor and destructor. No actions.
 

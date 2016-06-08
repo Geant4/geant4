@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.23 2000/11/28 15:05:52 grichine Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Tubs.cc,v 1.28 2001/02/21 15:47:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // class G4Tubs
@@ -28,6 +28,9 @@
 // 08.08.00 V.Grichine, more stable roots of 2-equation in Distance ToOut(p,v,...)
 // 31.10.00 V.Grichine, assign sr, sphi in Distance ToOut(p,v,...)
 // 28.11.00 V.Grichine, bug fixed in Inside(p)
+// 07.12.00 V.Grichine, phi-section algorithm was changed in Inside(p)
+// 20.02.01 V.Grichine, bug fixed in Inside(p) and CalculateExtent was 
+//                      simplified base on G4Box::CalculateExtent
 
 #include "G4Tubs.hh"
 
@@ -44,6 +47,7 @@
 #include "G4NURBStube.hh"
 #include "G4NURBScylinder.hh"
 #include "G4NURBStubesector.hh"
+#include "G4Box.hh"
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -139,6 +143,9 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
 			              G4double&          pMin, 
                                       G4double&          pMax    ) const
 {
+  G4Box box("box",fRMax,fRMax,fDz) ;
+  return box.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax) ;
+/*
   if ( !pTransform.IsRotated() && fDPhi == 2.0*M_PI && fRMin == 0 )
   {
 // Special case handling for unrotated solid tubes
@@ -324,7 +331,9 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     delete vertices;
     return existsAfterClip;
   }
+*/
 }
+
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -354,25 +363,32 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 
         pPhi = atan2(p.y(),p.x()) ;
 
-	if ( pPhi < 0 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
+	if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
 
 	if ( fSPhi >= 0 )
 	{
+	  if ( abs(pPhi) < kAngTolerance*0.5 &&
+               abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5 )
+          { 
+            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+          }
 	  if ( pPhi >= fSPhi + kAngTolerance*0.5 &&
-               pPhi <= fSPhi + fDPhi-kAngTolerance*0.5 ) in = kInside ;
+               pPhi <= fSPhi + fDPhi - kAngTolerance*0.5 ) in = kInside ;
 
 	  else if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
 		    pPhi <= fSPhi + fDPhi + kAngTolerance*0.5 ) in = kSurface ;
+	    
+
 	}
-	else
+	else  // fSPhi < 0
 	{
-	  // if (pPhi < fSPhi + 2*M_PI) pPhi += 2*M_PI ;
+	  if ( pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5 &&
+	         pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5)  ;
 
-	  if ( pPhi >= fSPhi + 2*M_PI + kAngTolerance*0.5 &&
-	       pPhi <= fSPhi + fDPhi + 2*M_PI - kAngTolerance*0.5) in = kInside ;
+	  else if ( pPhi <= fSPhi + 2*M_PI + kAngTolerance*0.5 &&
+	            pPhi >= fSPhi + fDPhi  - kAngTolerance*0.5) in = kSurface ;
 
-	  else if (pPhi >= fSPhi+2*M_PI-kAngTolerance*0.5 &&
-		   pPhi <= fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) in = kSurface ;
+          else in = kInside ;
 	}			    			    
       }
     }
@@ -393,25 +409,30 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 	{
 	  pPhi = atan2(p.y(),p.x()) ;
 
-	  if ( pPhi < 0 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
+	  if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
 
 	  if ( fSPhi >= 0 )
 	  {
-	    if (pPhi >= fSPhi-kAngTolerance*0.5 &&
-		  pPhi <= fSPhi+fDPhi+kAngTolerance*0.5) in = kSurface ;	
+	    if ( abs(pPhi) < kAngTolerance*0.5 &&
+               abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5 )
+            { 
+              pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+            }
+	    if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
+		 pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) in = kSurface ;	
 	  }
-	  else
+	  else  // fSPhi < 0
 	  {
-	    //  if (pPhi < fSPhi + 2*M_PI ) pPhi += 2*M_PI ;
+	    if ( pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5 &&
+	         pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5)  ;
 
-	    if (pPhi >= fSPhi+2*M_PI-kAngTolerance*0.5 &&
-		pPhi <= fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) in=kSurface;
+	    else  in = kSurface ;
 	  }
 	}
       }
     }
   }
-  else if (fabs(p.z()) <= fDz+kCarTolerance*0.5) // Check within tolerant r limits
+  else if (fabs(p.z()) <= fDz + kCarTolerance*0.5) // Check within tolerant r limits
   {
     r2      = p.x()*p.x() + p.y()*p.y() ;
     tolRMin = fRMin - kRadTolerance*0.5 ;
@@ -429,25 +450,31 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
       {
 	pPhi = atan2(p.y(),p.x()) ;
 
-	if ( pPhi < 0 ) pPhi += 2*M_PI ;		// 0<=pPhi<2pi
+	if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
 
 	if ( fSPhi >= 0 )
 	{
-	  if (pPhi >= fSPhi-kAngTolerance*0.5 &&
-	      pPhi <= fSPhi+fDPhi+kAngTolerance*0.5) in=kSurface; 	
+	    if ( abs(pPhi) < kAngTolerance*0.5 &&
+               abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5 )
+            { 
+              pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+            }
+	  if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
+	       pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) in = kSurface; 	
 	}
-	else
+	else  // fSPhi < 0
 	{
-	  if ( pPhi < fSPhi + 2*M_PI ) pPhi += 2*M_PI ;
-
-	  if ( pPhi >= fSPhi+2*M_PI-kAngTolerance*0.5 &&
-	       pPhi <= fSPhi+fDPhi+2*M_PI+kAngTolerance*0.5) in = kSurface ;
+	  if ( pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5 &&
+	       pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5)  ;
+	  else  in = kSurface ;
 	}	    
       }
     }
   }
   return in ;
 }
+
+
 
 ///////////////////////////////////////////////////////////////////////////
 //

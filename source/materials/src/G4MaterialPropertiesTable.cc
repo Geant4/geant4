@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4MaterialPropertiesTable.cc,v 1.9 2000/03/03 10:21:02 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////

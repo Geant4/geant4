@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Ellipse.cc,v 1.6 2000/11/10 17:41:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

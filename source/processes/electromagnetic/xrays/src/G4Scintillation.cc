@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Scintillation.cc,v 1.5 2000/09/19 03:13:04 gum Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation

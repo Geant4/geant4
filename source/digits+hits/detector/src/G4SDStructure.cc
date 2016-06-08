@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SDStructure.cc,v 1.1.8.1.2.1.2.1 1999/12/08 17:33:17 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SDStructure.cc,v 1.4 2001/02/08 06:07:12 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // G4SDStructure
@@ -50,7 +50,7 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
     { // Subdirectory not found. Create a new directory.
       subD.prepend(pathName);
       tgtSDS = new G4SDStructure(subD);
-      structure.insert( tgtSDS );
+      structure.push_back( tgtSDS );
     }
     tgtSDS->AddNewDetector(aSD,treeStructure);
   }
@@ -64,25 +64,25 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
     }
     else
     {
-      detector.insert( aSD );
+      detector.push_back( aSD );
     }
   }
 }
 
 G4SDStructure* G4SDStructure::FindSubDirectory(G4String subD)
 {
-  for( int i=0; i<structure.entries(); i++ )
+  for( int i=0; i<structure.size(); i++ )
   {
-    if( subD == structure(i)->dirName ) return structure(i);
+    if( subD == structure[i]->dirName ) return structure[i];
   } 
   return NULL;
 }
 
 G4VSensitiveDetector* G4SDStructure::GetSD(G4String aSDName)
 {
-  for( int i=0; i<detector.entries(); i++ )
+  for( int i=0; i<detector.size(); i++ )
   {
-    G4VSensitiveDetector* tgtSD = detector(i);
+    G4VSensitiveDetector* tgtSD = detector[i];
     if( aSDName == tgtSD->GetName() ) return tgtSD;
   }
   return NULL;
@@ -115,13 +115,13 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
   }
   else if( aPath.isNull() )
   {  // Command is ordered for all detectors in this directory.
-    for( int i=0; i<detector.entries(); i++)
+    for( int i=0; i<detector.size(); i++)
     { 
-      detector(i)->Activate(sensitiveFlag);
+      detector[i]->Activate(sensitiveFlag);
     }
-    for( int j=0;j<structure.entries(); j++)
+    for( int j=0;j<structure.size(); j++)
     {
-      structure(j)->Activate(G4String("/"),sensitiveFlag);
+      structure[j]->Activate(G4String("/"),sensitiveFlag);
     }
   }
   else
@@ -171,14 +171,14 @@ void G4SDStructure::Initialize(G4HCofThisEvent*HCE)
 {
   int i;
   // Broadcast to subdirectories.
-  for( i=0; i<structure.entries(); i++ )
+  for( i=0; i<structure.size(); i++ )
   {
-    structure(i)->Initialize(HCE);
+    structure[i]->Initialize(HCE);
   }
   // Initialize all detectors in this directory.
-  for( i=0; i<detector.entries(); i++ )
+  for( i=0; i<detector.size(); i++ )
   {
-    if(detector(i)->isActive()) detector(i)->Initialize(HCE);
+    if(detector[i]->isActive()) detector[i]->Initialize(HCE);
   }
 }
 
@@ -186,23 +186,23 @@ void G4SDStructure::Terminate(G4HCofThisEvent*HCE)
 {
   int i;
   // Broadcast to subdirectories.
-  for( i=0; i<structure.entries(); i++ )
+  for( i=0; i<structure.size(); i++ )
   {
-    structure(i)->Terminate(HCE);
+    structure[i]->Terminate(HCE);
   }
   // Initialize all detectors in this directory.
-  for( i=0; i<detector.entries(); i++ )
+  for( i=0; i<detector.size(); i++ )
   {
-    if(detector(i)->isActive()) detector(i)->EndOfEvent(HCE);
+    if(detector[i]->isActive()) detector[i]->EndOfEvent(HCE);
   }
 }
 
 void G4SDStructure::ListTree()
 {
   G4cout << pathName << G4endl;
-  for(int i=0; i<detector.entries(); i++)
+  for(int i=0; i<detector.size(); i++)
   {
-    G4VSensitiveDetector* sd = detector(i);
+    G4VSensitiveDetector* sd = detector[i];
     G4cout << pathName << sd->GetName();
     if( sd->isActive() )
     { G4cout << "   *** Active "; }
@@ -210,8 +210,8 @@ void G4SDStructure::ListTree()
     { G4cout << "   XXX Inactive "; }
     G4cout << G4endl;
   }
-  for(int j=0; j<structure.entries(); j++)
-  { structure(j)->ListTree(); }
+  for(int j=0; j<structure.size(); j++)
+  { structure[j]->ListTree(); }
 }
         
 

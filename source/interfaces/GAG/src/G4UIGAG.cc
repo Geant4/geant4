@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4UIGAG.cc,v 1.9 1999/12/17 12:09:50 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G4UIGAG.cc
 // 18.Feb.98 M.Nagamatu and T.Kodama created G4UIGAG from G4UIterminal

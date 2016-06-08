@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4StackManager.hh,v 1.5 2000/01/26 06:42:14 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 

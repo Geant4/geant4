@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmFourArrowButtons.hh,v 1.3 1999/12/15 14:54:05 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLXmFourArrowButtons.hh,v 1.4 2001/02/03 18:39:09 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //Four arrow buttons class. Inherits from G4OpenGLXmVWidgetComponent
@@ -24,7 +24,7 @@ class G4OpenGLXmFourArrowButtons : public G4OpenGLXmVWidgetComponent
 public:
   G4OpenGLXmFourArrowButtons (XtCallbackRec** = NULL); // array of 4 callbacks
                                                        //constructor
-  ~G4OpenGLXmFourArrowButtons ();                      //destructor
+  virtual ~G4OpenGLXmFourArrowButtons ();              //destructor
 
   void SetName (char*);
  
@@ -40,6 +40,10 @@ private:
   Widget arrow_form;
   Widget arrow;
   Widget* parent;
+
+private:
+  G4OpenGLXmFourArrowButtons (const G4OpenGLXmFourArrowButtons&);
+  G4OpenGLXmFourArrowButtons& operator = (const G4OpenGLXmFourArrowButtons&);
 };
 
 #endif

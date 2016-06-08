@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: GammaRayTelAnalysisManager.cc,v 1.1 2000/12/06 16:53:13 flongo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland

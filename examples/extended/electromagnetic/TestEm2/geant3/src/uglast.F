@@ -10,9 +10,9 @@
 #include "celoss.inc"                                                               
 *                                                                               
       DIMENSION XSEL1(NBIN),XSEL1C(NBIN),XSER1(NBIN),XSER1C(NBIN),          
-     +          XSEL2(NBIN),XSEL2C(NBIN),XSER2(NBIN),XSER2C(NBIN)          
-
-*                                          
+     +          XSEL2(NBIN),XSEL2C(NBIN),XSER2(NBIN),XSER2C(NBIN)
+     
+      DIMENSION EDIST(100),EDISTC(100)                                                    
 *                                                                                
       CALL GLAST
 *
@@ -21,7 +21,11 @@
 *                                                                               
 * *** Normalize and print energy distribution                                   
       XEVENT=IEVENT                                                             
-      CNORM  = 100./(XEVENT*PKINE(3))                                           
+      CNORM  = 100./(XEVENT*PKINE(3))      
+*
+* *** mean total energy deposit by charged and by neutral
+      EDEPCH = CNORM*EDEPCH
+      EDEPNE = CNORM*EDEPNE                                                 
 *
 * *** longitudinal profile                                                                               
       DO 2 I = 1,NLTOT                                                          
@@ -67,9 +71,24 @@
          PRINT 754,B0,B1,XSER1(I),XSER2(I),B1,XSER1C(I),XSER2C(I)                                         
    16 CONTINUE
 *
+* *** normalize histo of energy ditribution of contributing particles
+*     and compute cumulative distribution
+      SUM = HSUM (21)
+      CALL HUNPAK(21,EDIST,'HIST',1)
+         EDIST( 1) = EDIST(1)*100/SUM
+	 EDISTC(1) = EDIST(1)
+      DO 17 I=2,100
+         EDIST (I) = EDIST (I)*100/SUM
+	 EDISTC(I) = EDISTC(I-1) + EDIST(I)
+   17 CONTINUE
+      CALL HPAK (21,EDIST)
+      CALL HPAK (22,EDISTC)	 
+*
 * *** print summary
       PRINT 770
       PRINT 771,XSEL1C(NLTOT),XSEL2C(NLTOT)
+      PRINT 774,EDEPCH
+      PRINT 775,EDEPNE
       PRINT 772,XTRCH1,XTRCH2
       PRINT 773,XTRNE1,XTRNE2   
 *                                                                               
@@ -88,7 +107,9 @@
   770 FORMAT(///,30X,'SUMMARY',/)
   771 FORMAT(    25X,'energy deposit : ',F7.2,' % E0 +- ',F7.2,' % E0')
   772 FORMAT(    25X,'charged traklen: ',F7.2,' radl +- ',F7.2,' radl')
-  773 FORMAT(    25X,'neutral traklen: ',F7.2,' radl +- ',F7.2,' radl')                                                                           
+  773 FORMAT(    25X,'neutral traklen: ',F7.2,' radl +- ',F7.2,' radl')
+  774 FORMAT(    25X,'edep by charged: ',F7.2,' % E0')
+  775 FORMAT(    25X,'edep by neutral: ',F7.2,' % E0')                                                                            
 *
       END
 

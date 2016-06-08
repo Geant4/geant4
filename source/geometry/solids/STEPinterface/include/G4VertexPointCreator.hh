@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VertexPointCreator.hh,v 1.3 2000/11/09 16:35:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4VertexPointCreator

@@ -15,13 +15,18 @@
  
  run01.dat      (runNN.dat is the equivalent of the G4 runNN.mac)
  
+ It is possible to set the production cuts BCUTE, DCUTE and PPCUTM
+ medium by medium, via the data cards:
+ CUTPR  imed1  bcute/m   dcute/m  ppcutm
+ CUTPR  imed2  bcute/m   dcute/m  ppcutm
+ ...etc............
  
- testem3 produce an Ntuple which is saved as testem3.paw if ISWIT(2)=1
- 
- Content of this Ntuple:
+ testem3 produces histograms which are saved as testem3.paw : 
+  histo 1 : energy deposit in absorber 1 (edep/Ebeam)
+  histo 2 : energy deposit in absorber 2 (edep/Ebeam)
+  ...etc...........
   
-   EAbs0 = energy deposit in absorber(0) per event
-   LAbs0 = charged track length in absorber(0) per event
-   ..........
-   EAbsN = energy deposit in absorber(N) per event
-   LAbsN = charged track length in absorber(N) per event 
+ One can control the binning of the histo with the data cards:
+  *HISTO  id1  nbin  vmin  vmax 
+  *HISTO  id2  nbin  vmin  vmax
+  ...etc...........

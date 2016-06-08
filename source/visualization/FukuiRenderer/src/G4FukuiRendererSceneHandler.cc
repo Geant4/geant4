@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4FukuiRendererSceneHandler.cc,v 1.4 2000/04/12 13:08:22 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Satoshi TANAKA, Fri Jun 28 11:34:24 JST 1996

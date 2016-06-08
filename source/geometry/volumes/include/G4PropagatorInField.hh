@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.10 2000/11/01 16:51:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PropagatorInField.hh,v 1.10.4.1 2001/02/20 18:23:31 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // class G4PropagatorInField 
@@ -57,15 +57,15 @@ class G4PropagatorInField
   ~G4PropagatorInField(){};
 
    G4double ComputeStep(G4FieldTrack  &pFieldTrack,
-			G4double pCurrentProposedStepLength,
-			G4double       &pNewSafety, 
+ 			G4double pCurrentProposedStepLength,
+ 			G4double       &pNewSafety, 
 			G4VPhysicalVolume *pPhysVol=0 );
 
-   G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
-		        const G4ThreeVector &pCurveTangent,    // Unit vector
-		              G4double pCurrentProposedStepLength,
-			      G4double       &pNewSafety, 
-                       	      G4VPhysicalVolume *pPhysVol=0 );
+  //  G4double ComputeStep(const G4ThreeVector &pGlobalPoint,
+  // 		        const G4ThreeVector &pCurveTangent,    // Unit vector
+  //		              G4double pCurrentProposedStepLength,
+  // 			      G4double       &pNewSafety, 
+  //                          G4VPhysicalVolume *pPhysVol=0 );
      // Compute the next geometric Step
 
    inline G4ThreeVector  EndPosition() const;       

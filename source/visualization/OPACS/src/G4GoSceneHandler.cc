@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GoSceneHandler.cc,v 1.9 2000/06/07 22:36:02 barrand Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4GoSceneHandler.cc,v 1.10 2001/01/25 15:28:09 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Guy Barrand 04 November 1996
@@ -161,6 +161,9 @@ void G4GoSceneHandler::AddPrimitive (
 #ifdef DEBUG
   G4cout << "G4GoSceneHandler::AddPrimitive(G4Polyhedron&) " << G4endl;
 #endif
+
+  if (polyhedron.GetNoFacets() == 0) return;
+
   SetColour     (GetColour(polyhedron));
 
   OModeling     modeling = OModelingWireFrame;

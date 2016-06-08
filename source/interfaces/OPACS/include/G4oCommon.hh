@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4oCommon.hh,v 1.3 1999/12/15 14:50:44 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 /*
    Included by G4o.h.

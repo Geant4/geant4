@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTrajectory.hh,v 1.5 2000/03/09 17:38:33 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4RayTrajectory.hh,v 1.7 2001/02/23 15:43:13 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 
@@ -30,7 +30,7 @@ class G4Step;
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
 #include <stdlib.h>
-#include <g4rw/tpordvec.h>
+#include "g4std/vector"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4RayTrajectoryPoint.hh"
@@ -51,7 +51,7 @@ class G4RayTrajectory : public G4VTrajectory
    virtual void AppendStep(const G4Step*);
    virtual void ShowTrajectory() const;
    virtual void DrawTrajectory(G4int i_mode=0) const {;}
-   virtual int GetPointEntries() const {return positionRecord->entries();}
+   virtual int GetPointEntries() const {return positionRecord->size();}
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
    { return (*positionRecord)[i]; }
    G4RayTrajectoryPoint* GetPointC(G4int i) const 
@@ -60,7 +60,7 @@ class G4RayTrajectory : public G4VTrajectory
 
    private:
 
-   G4RWTPtrOrderedVector<G4RayTrajectoryPoint>* positionRecord;
+   G4std::vector<G4RayTrajectoryPoint*>* positionRecord;
 };
 
 

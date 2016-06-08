@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewer.cc,v 1.3 1999/12/15 14:54:12 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenInventorViewer.cc,v 1.4 2001/02/23 15:43:13 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -87,8 +87,8 @@ void G4OpenInventorViewer::KernelVisitDecision () {
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
 
       (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (lastVP.GetCutawayPlanes ().entries () !=
-                              fVP.GetCutawayPlanes ().entries ()) ||
+      (lastVP.GetCutawayPlanes ().size () !=
+                                 fVP.GetCutawayPlanes ().size ()) ||
 
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())

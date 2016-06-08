@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ShapeDefinitionRepresentationCreator.cc,v 1.5 2000/11/09 16:35:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ----------------------------------------------------------------------

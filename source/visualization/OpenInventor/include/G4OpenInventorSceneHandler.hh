@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenInventorSceneHandler.hh,v 1.9 2000/08/19 18:34:42 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // J Kallenbach  27th Aug 1996

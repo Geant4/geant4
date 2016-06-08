@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPInelastic.cc,v 1.7 2000/11/09 16:14:22 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #include "G4NeutronHPInelastic.hh"
 

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.7 2000/05/02 09:58:11 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisManMessSet.cc,v 1.11 2001/02/23 15:43:31 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -43,7 +43,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("density", 'd', true);
   param   -> SetDefaultValue  (0.01);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/drawing_style  ////
   //set \hline
@@ -57,7 +57,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Style selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/marker_choices  ////
   //set \hline
@@ -71,7 +71,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Style selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/rep_style  ////
   //set \hline
@@ -87,7 +87,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Style selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/scene  ////
   //set \hline
@@ -103,7 +103,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/section_plane   ////
   //set \hline
@@ -149,7 +149,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   -> SetDefaultValue  (0);
   param   -> SetGuidance      ("Component of plane normal.");
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/sides  ////
   //set \hline
@@ -163,7 +163,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("No. of sides", 'i', true);
   param   -> SetDefaultValue  (24);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/verbose  //////
   //set \hline
@@ -178,7 +178,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   -> SetDefaultValue (-1);
   param   -> SetGuidance ("0: quiet, >0: verbose");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/view  /////////
   //set  \hline
@@ -192,7 +192,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("View selector", 'i', true);
   param   -> SetDefaultValue (-1);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 }
 
 void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
@@ -200,6 +200,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/cull_by_density  ////
   if (commandPath == "/vis~/set/cull_by_density") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/culling\".");
     G4String choice;
     G4double density;  // Units in this section are g / cm3 - WARNING!!!
     const char* t = newValues;
@@ -240,8 +242,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -249,6 +249,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/drawing_style  ////
   if (commandPath == "/vis~/set/drawing_style") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/set/style\".");
     G4int iStyle;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> iStyle;
@@ -344,8 +345,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -353,6 +352,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ////////////////////////////////////////  /vis~/set/marker_choices  ////
   if (commandPath == "/vis~/set/marker_choices") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/hiddenMarker\".");
     G4int iChoice;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> iChoice;
@@ -390,8 +391,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -400,6 +399,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/section_plane  ////
   if (commandPath == "/vis~/set/section_plane") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/section_plane\".");
     G4String choice, unit;
     G4double x, y, z, nx, ny, nz;
     const char* t = newValues;
@@ -445,8 +446,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -454,16 +453,27 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/sides  ////
   if (commandPath == "/vis~/set/sides") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/lineSegmentsPerCircle\".");
     G4int nSides;
     const char* t = newValues;
     G4std::istrstream is ((char*)t); is >> nSides;
     G4cout << "Number of sides per circle in polygon approximation is "
 	 << nSides << G4endl;
     fpVMan -> SetCurrentViewParameters ().SetNoOfSides (nSides);
+    const G4ViewParameters& getVP = fpVMan -> GetCurrentViewParameters ();
+    G4VViewer* pView = fpVMan -> GetCurrentViewer ();
+    if (pView) {
+      // Copy current view parameters into current view.
+      pView -> SetViewParameters (getVP);
+    }
+    G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 
   ///////////////////////////////////////////  /vis~/set/rep_style  ////
   if (commandPath == "/vis~/set/rep_style") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     G4int iStyle;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> iStyle;
@@ -492,8 +502,6 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -501,6 +509,8 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////  /vis~/set/scene  ////
   if (commandPath == "/vis~/set/scene") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     static G4int iState = 0;
     static G4int nOptions = 2;
     G4int iSelector;
@@ -616,6 +626,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/verbose  //////
   if (commandPath == "/vis~/set/verbose") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/verbose\".");
     G4int vLevel;
     const char* t = newValues;
     G4std::istrstream is ((char*)t); is >> vLevel;
@@ -630,17 +641,18 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 
   ///////////////////////////////////////////  /vis~/set/view  /////////
   if (commandPath == "/vis~/set/view") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/select\".");
     // Make List of available views.
-    G4RWTPtrOrderedVector<G4VViewer> vList;
+    G4ViewerList vList;  // Keep temporary list of viewers.
     const G4SceneHandlerList& gml = fpVMan -> GetAvailableSceneHandlers ();
     G4int nViewTotal = 0;
-    G4int iGM, nScenes = gml.entries ();
+    G4int iGM, nScenes = gml.size ();
     for (iGM = 0; iGM < nScenes; iGM++) {
       const G4ViewerList& views = gml [iGM] -> GetViewerList ();
-      int nViews = views.entries ();
+      int nViews = views.size ();
       for (int iView = 0; iView < nViews; iView++) {
 	G4VViewer* pView = views [iView];
-	vList.append (pView);
+	vList.push_back (pView);
 	nViewTotal++;
       }
     }

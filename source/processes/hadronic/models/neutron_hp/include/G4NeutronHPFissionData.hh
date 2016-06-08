@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPFissionData.hh,v 1.3 2000/12/14 09:20:35 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4NeutronHPFissionData_h
 #define G4NeutronHPFissionData_h 1

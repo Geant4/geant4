@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLnVector.hh,v 1.3 2000/03/23 09:20:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicsLnVector.hh,v 1.7 2001/03/09 12:08:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //--------------------------------------------------------------------
@@ -23,6 +23,7 @@
 //
 //  History:
 //    27 Apr. 1999, M.G. Pia: Created, copying from G4PhysicsLogVector 
+//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //
 //--------------------------------------------------------------------
 
@@ -30,28 +31,32 @@
 #define G4PhysicsLnVector_h 1
 
 #include "globals.hh"
-#include "G4DataVector.hh"
 #include "G4PhysicsVector.hh"
-
 
 class G4PhysicsLnVector : public G4PhysicsVector  
 {
   public:
 
-    // Constructors
     G4PhysicsLnVector();
     G4PhysicsLnVector(size_t theNbin);
-    G4PhysicsLnVector(G4double theEmin, G4double theEmax, size_t theNbin);
-         // Because of logarithmic scale, note that 'theEmin' has to be 
-         // greater than zero. No protection exists against this error.
+      // Constructors
 
-    // Destructor
+  public: // with description
+
+    G4PhysicsLnVector(G4double theEmin, G4double theEmax, size_t theNbin);
+      // Because of logarithmic scale, note that 'theEmin' has to be 
+      // greater than zero. No protection exists against this error.
+
     ~G4PhysicsLnVector();
+      // Destructor.
+
+    G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
+      // To retrieve persistent data from file stream.
 
   protected:
 
     size_t FindBinLocation(G4double theEnergy) const;
-         // Find bin# in which theEnergy belongs - pure virtual function
+      // Find bin# in which theEnergy belongs - pure virtual function.
 
   private:
 
@@ -61,8 +66,10 @@ class G4PhysicsLnVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsLnVector::FindBinLocation(G4double theEnergy) const {
-
+inline 
+ size_t G4PhysicsLnVector::FindBinLocation(G4double theEnergy) const 
+{
+ 
   // For G4PhysicsLnVector, FindBinLocation is implemented using
   // a simple arithmetic calculation.
   //

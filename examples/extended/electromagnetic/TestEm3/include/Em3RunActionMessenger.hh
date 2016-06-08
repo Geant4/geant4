@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunActionMessenger.hh,v 1.3 2000/01/21 09:11:06 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: Em3RunActionMessenger.hh,v 1.4 2001/03/26 16:01:58 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 
@@ -21,6 +21,7 @@
 
 class Em3RunAction;
 class G4UIdirectory;
+class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
@@ -40,6 +41,8 @@ class Em3RunActionMessenger: public G4UImessenger
     G4UIdirectory*         RndmDir;
     G4UIcmdWithAnInteger*  RndmSaveCmd;       
     G4UIcmdWithAString*    RndmReadCmd;
+    
+    G4UIcommand*           HistoCmd;        
  
 };
 

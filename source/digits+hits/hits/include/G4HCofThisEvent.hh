@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HCofThisEvent.hh,v 1.2.2.1.2.1 1999/12/07 20:47:47 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4HCofThisEvent.hh,v 1.5 2001/02/08 06:07:14 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4HCofThisEvent_h
@@ -15,7 +15,8 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VHitsCollection.hh"
-#include "g4rw/tpordvec.h"
+//#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 // class description:
 //
@@ -40,7 +41,7 @@ class G4HCofThisEvent
       void AddHitsCollection(G4int HCID,G4VHitsCollection * aHC);
 
   private:
-      G4RWTPtrOrderedVector<G4VHitsCollection> * HC;
+      G4std::vector<G4VHitsCollection*> * HC;
 
   public: // with description
       inline G4VHitsCollection* GetHC(G4int i)
@@ -53,7 +54,7 @@ class G4HCofThisEvent
       inline G4int GetNumberOfCollections()
       {
         G4int n = 0;
-        for(int i=0;i<HC->entries();i++)
+        for(int i=0;i<HC->size();i++)
         {
           if((*HC)[i]) n++;
         }
@@ -64,7 +65,7 @@ class G4HCofThisEvent
   public:
       inline G4int GetCapacity()
       {
-        return HC->entries();
+        return HC->size();
       }
 };
 

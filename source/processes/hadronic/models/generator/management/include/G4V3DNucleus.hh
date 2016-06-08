@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4V3DNucleus.hh,v 1.4 2000/08/19 16:24:03 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4V3DNucleus_h
 #define G4V3DNucleus_h 1

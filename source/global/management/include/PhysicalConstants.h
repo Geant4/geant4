@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PhysicalConstants.h,v 1.4 1999/11/19 09:19:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: PhysicalConstants.h,v 1.5 2001/03/02 11:28:29 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 // 
 // ----------------------------------------------------------------------
 //
@@ -50,7 +50,7 @@
 #define HEP_PHYSICAL_CONSTANTS_H
 
 #include "SystemOfUnits.h"
-///#include "G4UnitsTest.hh"
+////#include "G4SIunits.hh"
 
 //
 //

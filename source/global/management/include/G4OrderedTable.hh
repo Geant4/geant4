@@ -5,43 +5,80 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OrderedTable.hh,v 1.4 1999/11/16 17:40:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OrderedTable.hh,v 1.7 2001/03/06 15:56:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------
+//      GEANT 4 class header file 
+// ------------------------------------------------------------
+// Sep. 1996  : M.Maire 
+// Jan. 2001  : H.Kurashige
+//              - G4ValVector is replaced with G4DataVector 
+//              - Migrated to G4std::vector<G4DataVector*>.
 //
-//	This class is setting up an ordered collection of 
-//      ordered vectors of <G4double>
-//	30 September 1996, M.Maire
+// Class Description:
 //
+//	Utility class, defining an ordered collection of vectors
+//      of <G4double>.
+
 // ------------------------------------------------------------
 
 #ifndef G4OrderedTable_h
 #define G4OrderedTable_h 1
 
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
+#include "G4DataVector.hh"
 
-class G4ValVector : public G4RWTValOrderedVector<G4double>
+class G4OrderedTable : public G4std::vector<G4DataVector*> 
 {
 
-  public:
+ public: // with description
 
-      G4ValVector(size_t capac=G4RWDEFAULT_CAPACITY)
-        : G4RWTValOrderedVector<G4double>(capac) {;}
+  G4OrderedTable();
+    // Deafult constructor.
 
-      virtual ~G4ValVector() {;}
+  G4OrderedTable(size_t capacity);
+    // Constructor given a 'capacity' defining the initial
+    // number of elements (NULL pointers are filled up)
 
+  virtual ~G4OrderedTable(){;}
+    // Empty Destructor
 
-      G4bool operator==(const G4ValVector &right) const
-      {
-        return (this == (G4ValVector *) &right);
-      }
+  inline void clearAndDestroy();
+    // Removes all elements and deletes all non-NULL pointers
 
 };
 
-typedef G4RWTPtrOrderedVector<G4ValVector> G4OrderedTable;
+inline
+G4OrderedTable::G4OrderedTable()
+  : G4std::vector<G4DataVector*>()
+{
+}
+
+inline
+G4OrderedTable::G4OrderedTable(size_t capacity)
+  : G4std::vector<G4DataVector*>(capacity, (G4DataVector*)(0) )
+{
+}
+
+inline 
+void G4OrderedTable::clearAndDestroy() 
+{
+  G4DataVector* a;
+  while (size()>0) {
+    a = back();
+    pop_back();
+    for (iterator i=begin(); i!=end(); i++){
+      if (*i==a) {
+	erase(i);
+	i--;
+      }
+    } 
+    if ( a )  delete a;    
+  } 
+}
+
 
 #endif

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VCrossSectionDataSet.hh,v 1.4 2000/12/14 11:25:57 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // GEANT4 physics abstract class: G4VCrossSectionData -- header file

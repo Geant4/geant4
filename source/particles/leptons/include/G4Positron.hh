@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Positron.hh,v 1.3 1999/12/15 14:51:08 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Positron.hh,v 1.4 2001/03/12 05:47:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -89,6 +89,8 @@ class G4Positron : public G4VLepton
    static G4double* GetCutsInEnergy() {return thePositronKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
+   virtual void RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy );
 };
 
 inline void G4Positron::SetCuts(G4double aCut)
@@ -97,8 +99,18 @@ inline void G4Positron::SetCuts(G4double aCut)
   thePositronLengthCut = theCutInMaxInteractionLength;  
   thePositronKineticEnergyCuts = theKineticEnergyCuts;
 }
+
+inline void G4Positron::RestoreCuts(G4double cutInLength,
+			    const G4double* cutInEnergy )
+{
+  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
+  thePositronLengthCut = theCutInMaxInteractionLength;  
+  thePositronKineticEnergyCuts = theKineticEnergyCuts;
+}
+
 inline G4Positron*  G4Positron::Positron()
 {  return &thePositron; }
+
 #endif
 
 

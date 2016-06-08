@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GRSSolid.cc,v 1.3 2000/11/01 16:51:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // class G4GRSSolid Implementation

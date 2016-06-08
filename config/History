@@ -1,5 +1,5 @@
-$Id: History,v 1.129 2000/12/13 09:19:56 gcosmo Exp $
-$Name: geant4-03-00 $
+$Id: History,v 1.132.2.1 2001/03/22 14:00:01 gunter Exp $
+$Name: geant4-03-01 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 March 2001 Gunter Folger (config-V03-00-03)
+- binmake.gmk, only store in executable PATH to libs from example/test; 
+  other libs should be taken/found from LD_LIBRARY_PATH
+- sys/{Linux-g++,SUN-CC}.gmk: enable storing of PATH to libs in executable 
+
+06th March 2001 Gabriele Cosmo (config-V03-00-02)
+- binmake.gmk: added include path for processes/electromagnetic/integral
+  the new subcategory introduced with tag em-V03-00-04.
+
+13th February 2001 Gabriele Cosmo (config-V03-00-01)
+- binmake.gmk: added include path for processes/photolepton_hadron
+  which was missing!
+
+08th January 2001 Gabriele Cosmo (config-V03-00-00)
+- sys/WIN32-VC.gmk: introduced -GR compiler option to allow usage of
+  dynamic casting and type-info at run-time.
 
 13th December 2000 Gunter Folger (config-V02-00-14)
 - common.gmk: fix to rule for building dependencies, parsing is skip

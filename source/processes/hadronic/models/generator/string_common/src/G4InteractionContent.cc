@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4InteractionContent.cc,v 1.3 2000/09/18 07:40:45 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

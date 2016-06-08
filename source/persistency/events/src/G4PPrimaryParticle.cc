@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PPrimaryParticle.cc,v 1.1 1999/12/05 22:32:26 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "G4PPrimaryParticle.hh"

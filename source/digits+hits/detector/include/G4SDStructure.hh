@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SDStructure.hh,v 1.2.2.1.2.1 1999/12/07 20:47:41 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SDStructure.hh,v 1.5 2001/02/08 06:07:11 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4SDStructure_h
@@ -17,7 +17,8 @@
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
 // G4RWTPtrOrderedVector
-#include "g4rw/tpordvec.h"
+//#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4HCofThisEvent;
 
@@ -48,8 +49,8 @@ class G4SDStructure
       G4String ExtractDirName(G4String aPath);
 
   private:
-      G4RWTPtrOrderedVector<G4SDStructure> structure;
-      G4RWTPtrOrderedVector<G4VSensitiveDetector> detector;
+      G4std::vector<G4SDStructure*> structure;
+      G4std::vector<G4VSensitiveDetector*> detector;
       G4String pathName;
       G4String dirName;
       G4int verboseLevel;
@@ -58,10 +59,10 @@ class G4SDStructure
       inline void SetVerboseLevel(G4int vl) 
       {
         verboseLevel = vl;
-        for(int i=0; i<structure.entries(); i++)
-        { structure(i)->SetVerboseLevel(vl); }
-        for(int j=0; j<detector.entries(); j++)
-        { detector(j)->SetVerboseLevel(vl); }
+        for(int i=0; i<structure.size(); i++)
+        { structure[i]->SetVerboseLevel(vl); }
+        for(int j=0; j<detector.size(); j++)
+        { detector[j]->SetVerboseLevel(vl); }
       };
 
 };

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.8 2000/05/22 08:09:15 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLViewer.cc,v 1.10 2001/02/04 20:24:38 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -49,6 +49,10 @@ transparency_enabled (False),
 antialiasing_enabled (False),
 haloing_enabled (False)
 {
+  // Make changes to view parameters for OpenGL...
+  fVP.SetAutoRefresh(true);
+  fDefaultVP.SetAutoRefresh(true);
+
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
   //  glDisable (GL_BLEND);
@@ -98,7 +102,7 @@ void G4OpenGLViewer::SetView () {
   
   // Get radius of scene, etc.
   // Note that this procedure properly takes into account zoom, dolly and pan.
-  const G4Point3D& targetPoint
+  const G4Point3D targetPoint
     = fSceneHandler.GetScene()->GetStandardTargetPoint()
     + fVP.GetCurrentTargetPoint ();
   G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();

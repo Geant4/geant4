@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpAbsorption.cc,v 1.3 2000/09/19 03:19:17 gum Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation

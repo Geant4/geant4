@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3NegVolPars.cc,v 1.7 2000/11/24 09:50:12 gcosmo Exp $ 
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // modified by I. Hrivnacova, 13.10.99 
 

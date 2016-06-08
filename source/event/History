@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000/11/20 15:39:53 gcosmo Exp $
+$Id: History,v 1.21 2001/02/08 06:13:53 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 8 2001, M.Asai (event-V03-00-03)
+- Migration to STL vector classes
+  affected files :
+./event/include/G4HEPEvtInterface.hh
+./event/include/G4PrimaryParticle.hh
+./event/include/G4TrajectoryContainer.hh
+./event/src/G4EventManager.cc
+./event/src/G4GeneralParticleSource.cc
+./event/src/G4HEPEvtInterface.cc
+./event/src/G4PrimaryParticle.cc
+./event/src/G4PrimaryTransformer.cc
+
+Feb 7 2001, M.Asai (event-V03-00-02)
+- Add proper time to G4PrimaryParticle
+
+Feb 7 2001, M.Asai (event-V03-00-01)
+- Fix syntax errors in G4GeneralSourceParticle.cc
+
+Feb 5 2001, M.Asai (event-V03-00-00)
+
+Jan 26 2001, F. Lei
+- bug fixing in G4GeneralSourceParticle.cc
+ replace: 
+          posphi = acos(tx/sin(posthe));
+ 
+ with:
+          if (posthe != 0. && posthe != pi) 
+             posphi = acos(tx/sin(posthe)); 
+          else 
+             posphi = 0.0;
+	  endif
 
 Nov 20 2000, G.Cosmo (event-V02-00-04)
 - Removed data-logs from test directory.

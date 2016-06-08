@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4KaonZeroSInelasticProcess.hh,v 1.3 2000/12/14 08:47:20 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // G4 Process: KaonZeroS InelasticProcess Process
  // J.L. Chuma, TRIUMF, 11-Feb-1997

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.hh,v 1.6 2000/10/19 15:19:36 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PrimaryParticle.hh,v 1.8 2001/02/08 06:07:16 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 
@@ -88,6 +88,7 @@ class G4PrimaryParticle
       G4double polY;
       G4double polZ;
       G4double Weight0;
+      G4double properTime;
 
   public: // with description
       // followings are get methods available.
@@ -124,6 +125,8 @@ class G4PrimaryParticle
       inline G4double GetPolZ() const { return polZ; }
       inline G4double GetWeight() const { return Weight0; }
       inline void SetWeight(G4double w) { Weight0 = w; }
+      inline void SetProperTime(G4double t) { properTime = t; }
+      inline G4double GetProperTime() const { return properTime; }
 
   public: // with description
       // Followings are available Set methods.

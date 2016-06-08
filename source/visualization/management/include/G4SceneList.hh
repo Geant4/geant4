@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SceneList.hh,v 1.5 1999/12/15 14:54:18 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SceneList.hh,v 1.7 2001/03/07 14:37:42 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  9th August 1998
@@ -15,8 +15,14 @@
 #define G4SCENELIST_HH
 
 #include "G4Scene.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-class G4SceneList: public G4RWTPtrOrderedVector <G4Scene> {};
+class G4SceneList: public G4std::vector <G4Scene*> {
+public:
+  void remove(G4Scene*);
+};
+
+typedef G4std::vector<G4Scene*>::iterator G4SceneListIterator;
+typedef G4std::vector<G4Scene*>::const_iterator G4SceneListConstIterator;
 
 #endif

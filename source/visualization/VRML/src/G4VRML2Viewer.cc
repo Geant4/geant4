@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VRML2Viewer.cc,v 1.6 2000/05/13 10:55:15 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G4VRML2Viewer.cc
 // Satoshi Tanaka & Yasuhide Sawada

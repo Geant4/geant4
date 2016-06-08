@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Em2DetectorConstruction.cc,v 1.4 2000/05/09 13:56:33 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronicInteraction.cc,v 1.2 1999/12/15 14:52:08 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // Hadronic Interaction  base class
  // original by H.P. Wellisch

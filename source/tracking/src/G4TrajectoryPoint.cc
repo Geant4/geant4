@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrajectoryPoint.cc,v 1.4 1999/12/15 14:53:59 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4TrajectoryPoint.cc,v 1.5 2001/02/08 07:39:53 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // ---------------------------------------------------------------

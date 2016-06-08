@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronInelasticDataSet.hh,v 1.3 2000/12/14 08:33:04 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // GEANT4 physics class: G4HadronInelasticDataSet -- header file

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.hh,v 1.2 2000/05/15 11:49:02 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisCommandsCompound.hh,v 1.5 2001/02/05 02:33:50 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -15,33 +15,47 @@
 
 #include "G4VVisCommand.hh"
 
-class G4VisCommandDrawVolume: public G4VVisCommand {
+class G4VisCommandDrawView: public G4VVisCommand {
 public:
-  // Uses compiler defaults for copy constructor and assignment.
-  G4VisCommandDrawVolume ();
-  ~G4VisCommandDrawVolume ();
+  G4VisCommandDrawView ();
+  virtual ~G4VisCommandDrawView ();
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
+  G4VisCommandDrawView (const G4VisCommandDrawView&);
+  G4VisCommandDrawView& operator = (const G4VisCommandDrawView&);
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandDrawVolume: public G4VVisCommand {
+public:
+  G4VisCommandDrawVolume ();
+  virtual ~G4VisCommandDrawVolume ();
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandDrawVolume (const G4VisCommandDrawVolume&);
+  G4VisCommandDrawVolume& operator = (const G4VisCommandDrawVolume&);
   G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandOpen: public G4VVisCommand {
 public:
-  // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandOpen ();
-  ~G4VisCommandOpen ();
+  virtual ~G4VisCommandOpen ();
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-  G4UIcmdWithAString* fpCommand;
+  G4VisCommandOpen (const G4VisCommandOpen&);
+  G4VisCommandOpen& operator = (const G4VisCommandOpen&);
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandSpecify: public G4VVisCommand {
 public:
-  // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandSpecify ();
-  ~G4VisCommandSpecify ();
+  virtual ~G4VisCommandSpecify ();
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
+  G4VisCommandSpecify (const G4VisCommandSpecify&);
+  G4VisCommandSpecify& operator = (const G4VisCommandSpecify&);
   G4UIcmdWithAString* fpCommand;
 };
 

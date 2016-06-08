@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ComptonScattering.cc,v 1.4 2000/11/17 15:03:17 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //------------ G4ComptonScattering physics process --------

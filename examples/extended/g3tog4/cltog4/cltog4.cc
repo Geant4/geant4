@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: cltog4.cc,v 1.1 2000/07/24 11:23:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 #include "G4ios.hh"

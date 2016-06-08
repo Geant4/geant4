@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ExcitedLambdaConstructor.hh,v 1.4 2000/02/27 07:48:50 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PLogicalVolume.ddl,v 1.9 2000/11/02 12:42:11 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // class G4PLogicalVolume

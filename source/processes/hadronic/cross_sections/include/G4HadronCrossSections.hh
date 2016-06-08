@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronCrossSections.hh,v 1.4 2000/12/14 08:33:03 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // GEANT4 Hadron physics class -- header file

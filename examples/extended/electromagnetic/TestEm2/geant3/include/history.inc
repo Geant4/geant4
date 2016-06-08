@@ -22,6 +22,7 @@
 * History                  
 * -------                                            
 *
+*  27-08-01 : added histo 21 and 22 : edep distribution
 *  08-02-99 : adapted for Geant4 comparison: electromagnetic/test/TestEm2
 *  17-02-98 : adapted to Unix + interactive + graphic
 *  21-01-90 : Simplified version (i.e. near gexam1)

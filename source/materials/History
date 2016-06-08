@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000/11/09 09:38:45 grichine Exp $
+$Id: History,v 1.18 2001/04/03 14:37:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,44 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+03.04.01 M.Maire - materials-V03-00-07
+         removed warning to cerr in GetIsotope(name), GetElement(name),
+	 and GetMaterial(name).
+         fnulcof added as data member in G4SandiaTable.
+     
+22.03.01 M.Maire - materials-V03-00-06
+         revision of destructor, copy constructor, assignement operator in
+	 G4IonisParamElm, G4IonisParamMat, G4Isotope, G4Element, G4Material
+	      
+22.02.01 M.Maire - materials-V03-00-05
+         G4SandiaTable : protection added in GetSandiaCofForMaterial(energy)
+	            
+Feb     16, 01 M.Maire - materials-V03-00-04
+               G4SandiaTable : major bug in GetSandiaCofPerAtom (units!).
+	       redesign of ComputeMatSandiaMatrix.
+	       Include materials-V03-00-02 
+	       
+Feb     05, 01 G.Cosmo - materials-V03-00-03
+               STL migration for G4OrderedTable and G4DataVector.
+               Modified files: G4SandiaTable.cc.
+               NOTE: this tag does not include changes in materials-V03-00-02.
 
-November 09, 00 V.Grichine - materials-V02-00-01
+Jan     28, 01 M.Maire - materials-V03-00-02
+               new method G4Material::GetNuclearInterLength()
+	  
+Jan     16, 01 V.Ivanchenko - materials-V03-00-01
+               IonisParamElm.cc : excitation potential is tabulated
+               according ICRU Report #37.
+	       
+Jan     16, 01 L.Urban  - materials-V03-00-00
+               bug fixed in IonisParamMat.cc : E100eV instead of E100keV
+               This bug affected the values of the density correction
+               parameters in the energy loss (dE/dx) computation,
+               its effect was quite big (~ 3-5 % error in dE/dx
+               in the energy range 1 MeV - 50 MeV !!!)
+	       
+Nov     09, 00 V.Grichine - materials-V02-00-01
                included test/ directory which was not tagged.
 
 August  04, 00 V.Grichine - materials-V02-00-00

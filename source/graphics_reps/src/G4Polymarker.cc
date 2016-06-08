@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polymarker.cc,v 1.5 1999/12/15 14:50:36 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Polymarker.cc,v 1.6 2001/02/03 18:29:56 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  November 1996
@@ -16,6 +16,8 @@
 G4Polymarker::G4Polymarker ():
 fMarkerType (line)
 {}
+
+G4Polymarker::~G4Polymarker () {}
 
 G4Visible & G4Polymarker::operator = (const G4Visible &right) {
   return G4Visible::operator = (right);

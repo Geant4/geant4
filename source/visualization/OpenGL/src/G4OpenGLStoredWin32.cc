@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLStoredWin32.cc,v 1.5 2000/08/19 18:34:33 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // OpenGLStoredWin32 graphics system factory.

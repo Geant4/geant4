@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Trd.hh,v 1.6 2000/11/02 17:06:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------------

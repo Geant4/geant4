@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DrawVoxels.hh,v 1.9 2000/06/06 13:18:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // class G4DrawVoxels

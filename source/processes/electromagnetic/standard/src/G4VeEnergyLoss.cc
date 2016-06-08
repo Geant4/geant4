@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.8 2000/10/30 07:01:09 urban Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VeEnergyLoss.cc,v 1.11 2001/03/27 15:10:52 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //  
 
 // --------------------------------------------------------------
@@ -16,6 +16,8 @@
 // 02/02/99  important correction in AlongStepDoIt , L.Urban
 // 28/04/99  bug fixed (unit independece now),L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 23/01/01  bug fixed in AlongStepDoIt , L.Urban
+// 27/03/01 : commented out the printing of subcutoff energies
 // --------------------------------------------------------------
 
  
@@ -98,6 +100,14 @@ void G4VeEnergyLoss::BuildDEDXTable(
   G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
   RTable   =exp(LOGRTable);
+
+  //set physically consistent value for finalRange 
+  //  and parameters for en.loss step limit
+  if(finalRange > G4Electron::Electron()->GetCuts())
+    finalRange = G4Electron::Electron()->GetCuts() ;
+  c1lim = dRoverRange ;
+  c2lim = 2.*(1.-dRoverRange)*finalRange ;
+  c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
   // Build energy loss table as a sum of the energy loss due to the
   // different processes.                                           
@@ -278,16 +288,16 @@ void G4VeEnergyLoss::BuildDEDXTable(
      if(!setMinDeltaCutInRange )
      MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10. ;
 
-     if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
-     {
-       G4cout << G4endl;
-       G4cout.precision(5) ;
-       G4cout << " eIoni   Minimum Delta cut in range=" << MinDeltaCutInRange/mm
-              << "  mm." << G4endl;
-       G4cout <<  G4endl;
-       G4cout << "           material       min.delta energy(keV) " << G4endl;
-       G4cout << G4endl;
-     }
+//     if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
+//     {
+//       G4cout << G4endl;
+//       G4cout.precision(5) ;
+//       G4cout << " eIoni   Minimum Delta cut in range=" << MinDeltaCutInRange/mm
+//              << "  mm." << G4endl;
+//       G4cout <<  G4endl;
+//       G4cout << "           material       min.delta energy(keV) " << G4endl;
+//       G4cout << G4endl;
+//     }
 
        if(MinDeltaEnergy) delete MinDeltaEnergy ;
        MinDeltaEnergy = new G4double [numOfMaterials] ; 
@@ -307,15 +317,15 @@ void G4VeEnergyLoss::BuildDEDXTable(
 	 if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
 	     MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
 
-	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
-         {
-	   G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
-	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
-           if(LowerLimitForced[mat])
-              G4cout << "  lower limit forced." << G4endl;
-           else
-              G4cout << G4endl ; 
-         }
+//	 if((subSecFlag) && (&aParticleType==G4Electron::Electron()))
+//         {
+//	   G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+//	 	  << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+//           if(LowerLimitForced[mat])
+//              G4cout << "  lower limit forced." << G4endl;
+//           else
+//              G4cout << G4endl ; 
+//         }
 
        }
   }
@@ -370,7 +380,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if(finalT < MinKineticEnergy) finalT = 0. ;
 
   MeanLoss = E - finalT ;
- 
+
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //  start of subcutoff generation
 
@@ -466,7 +476,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
            N = Ndeltamax ;
         G4double Px,Py,Pz ;
         G4ThreeVector ParticleDirection ;
-        ParticleDirection=stepData.GetPostStepPoint()->
+        ParticleDirection=stepData.GetPreStepPoint()->
                                    GetMomentumDirection() ;
         Px =ParticleDirection.x() ;
         Py =ParticleDirection.y() ;
@@ -524,8 +534,6 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
                zd=z1+frperstep*dz*urandom ;
                G4ThreeVector DeltaPosition(xd,yd,zd) ;
                DeltaTime=time0+frperstep*dTime*urandom ;
-               ParticleDirection=stepData.GetPostStepPoint()->
-                                     GetMomentumDirection() ;    
                     
                G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
                DeltaDirection.rotateUz(ParticleDirection);

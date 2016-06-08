@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: AnaEx01AnalysisManager.cc,v 1.9 2000/12/06 13:08:03 barrand Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Guy Barrand 14th Septembre 2000.

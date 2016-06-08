@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TransactionManager.hh,v 1.7 2000/12/05 14:40:03 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // class description:

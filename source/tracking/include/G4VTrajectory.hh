@@ -5,15 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VTrajectory.hh,v 1.4 2000/01/26 04:20:31 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VTrajectory.hh,v 1.5 2000/11/11 06:34:11 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
 //
 // G4VTrajectory.hh
 //
-// Description:
+// class description:
 //   This is the abstract base class of a trajectory.
 //
 // Contact:
@@ -33,7 +33,7 @@ class G4Step;
 
 class G4VTrajectory
 {
-   public:
+public: // without description
 
    G4VTrajectory() {;}
    virtual ~G4VTrajectory() {;}

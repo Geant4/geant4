@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.3 1999/12/15 14:54:05 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.4 2001/02/23 15:43:09 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -20,7 +20,6 @@
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
 
 //Win32 includes?
 

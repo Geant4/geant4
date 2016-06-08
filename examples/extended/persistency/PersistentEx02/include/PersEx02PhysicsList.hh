@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: PersEx02PhysicsList.hh,v 1.3 1999/11/29 18:23:32 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef PersEx02PhysicsList_h

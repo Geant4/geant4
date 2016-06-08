@@ -5,10 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.hh,v 1.4 1999/12/16 18:11:09 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Isotope.hh,v 1.6 2001/03/30 14:43:16 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 // 
-// ------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 // class description
 //
@@ -25,8 +25,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 17-01-97, aesthetic rearrangement, M.Maire
-// 04-08-98, new method GetIsotope(isotopeName), M.Maire
+// 30.03.01: suppression of the warnig message in GetIsotope
+// 04.08.98: new method GetIsotope(isotopeName) (mma)
+// 17.01.97: aesthetic rearrangement (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -53,7 +54,7 @@ class G4Isotope
                     G4int     n,		//number of nucleons
                     G4double  a);		//mass of mole
                     
-   ~G4Isotope();
+   virtual ~G4Isotope();
 
     // Retrieval methods
     G4String GetName()  const {return fName;};    
@@ -79,14 +80,14 @@ class G4Isotope
      
  public:  // without description
  
-    G4int operator==(const G4Isotope &right) const;
-    G4int operator!=(const G4Isotope &right) const;
-         
+    G4int operator==(const G4Isotope&) const;
+    G4int operator!=(const G4Isotope&) const;
+    
  private:
-
-    G4Isotope(G4Isotope &right);
-    G4Isotope & operator=(const G4Isotope &right);
-
+     
+    G4Isotope(G4Isotope&);
+    G4Isotope& operator=(const G4Isotope&);
+     
  private:
 
     G4String fName;              // name of the Isotope
@@ -111,8 +112,7 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
       return theIsotopeTable[J];
    }
    
-  G4cerr << "  Warning from GetIsotope(name). The isotope: " << isotopeName
-         << "  does not exist in the IsotopeTable.  Return NULL pointer \n";
+  // the isotope does not exist in the table
   return NULL;          
 }
 

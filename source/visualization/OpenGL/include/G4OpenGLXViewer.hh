@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.8 2000/05/22 08:06:50 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLXViewer.hh,v 1.10 2001/02/23 15:43:10 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -21,7 +21,6 @@
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
 
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
@@ -102,6 +101,9 @@ protected:
                                     iconName;
   char                              charViewName [100];
 
+private:
+  G4OpenGLXViewer (const G4OpenGLXViewer&);
+  G4OpenGLXViewer& operator = (const G4OpenGLXViewer&);
 };
 
 static const char* gouraudtriangleEPS[] =

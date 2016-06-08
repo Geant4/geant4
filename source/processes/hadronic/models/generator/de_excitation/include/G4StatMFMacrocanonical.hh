@@ -2,6 +2,8 @@
 #define G4StatMFMacroCanonical_h 1
 
 #include "g4rw/tpordvec.h"
+#include "g4rw/tvvector.h"
+#include "g4rw/tvordvec.h"  
 
 #include "G4Fragment.hh"
 #include "G4StatMFFragment.hh"

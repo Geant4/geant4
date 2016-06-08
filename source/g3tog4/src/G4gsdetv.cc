@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4gsdetv.cc,v 1.6 1999/12/15 14:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 
 #include "G4ios.hh"
 #include "G3toG4.hh"

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VeLowEnergyLoss.hh,v 1.3 2000/11/03 10:29:51 pia Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 3.4.2000 Veronique Lefebure:
 //          Move utils/include/G4VEnergyLoss.hh to 

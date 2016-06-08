@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Parton.cc,v 1.7 2000/08/02 08:15:47 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

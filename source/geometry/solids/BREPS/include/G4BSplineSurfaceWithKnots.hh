@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BSplineSurfaceWithKnots.hh,v 1.2 2000/08/28 08:57:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineSurfaceWithKnots

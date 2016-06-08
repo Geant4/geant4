@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.hh,v 1.6 1999/12/16 17:19:15 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VVisCommand.hh,v 1.10 2001/03/28 14:11:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -15,6 +15,7 @@
 #define G4VVISCOMMAND_HH
 
 #include "G4UImessenger.hh"
+#include "G4ThreeVector.hh"
 #include "g4std/vector"
 
 class G4VisManager;
@@ -27,6 +28,18 @@ public:
   G4VVisCommand ();
   virtual ~G4VVisCommand ();
   static void SetVisManager (G4VisManager*);
+  static G4double ValueOf(G4String unitName);
+  static G4String ConvertToString(G4bool blValue);
+  static G4String ConvertToString(G4double x, G4double y,
+				  const char * unitName);
+  static G4String ConvertToString(const G4ThreeVector& vec);
+  static G4bool        GetNewBoolValue(const G4String& paramString);
+  static G4int         GetNewIntValue(const G4String& paramString);
+  static G4double      GetNewDoubleValue(const G4String& paramString);
+  static G4ThreeVector GetNew3VectorValue(const G4String& paramString);
+  static void          GetNewDoublePairValue(const G4String& paramString,
+					     G4double& xval,
+					     G4double& yval);
 protected:
   static G4VisManager* fpVisManager;
   static  G4std::vector<G4UIcommand*> sceneNameCommands;

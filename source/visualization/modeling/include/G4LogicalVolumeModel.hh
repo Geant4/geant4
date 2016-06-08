@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LogicalVolumeModel.hh,v 1.4 2000/04/12 13:02:36 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  26th July 1999.

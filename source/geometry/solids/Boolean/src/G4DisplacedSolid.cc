@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DisplacedSolid.cc,v 1.13 2000/11/22 15:19:20 grichine Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids

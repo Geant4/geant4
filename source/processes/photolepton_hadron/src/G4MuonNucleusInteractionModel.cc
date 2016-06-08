@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4MuonNucleusInteractionModel.cc,v 1.3 2000/08/03 09:06:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // --------------------------------------------------------------
 // G4MuonNucleusInteractionModel.cc

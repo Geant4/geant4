@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PersistentRunMan.cc,v 1.8 1999/11/28 21:54:22 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // class G4PersistentRunMan 
 //

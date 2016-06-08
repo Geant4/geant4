@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VGraphicsScene.hh,v 1.5 2000/05/19 06:29:48 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 // John Allison  19th July 1996
 //
 // Class Description:

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.4 1999/12/15 14:54:26 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisManMessCamera.cc,v 1.8 2001/02/23 15:43:29 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -40,7 +40,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetDefaultValue (0.);
   param   -> SetGuidance ("world coordinates");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/camera/orbit  ////
   //camera \hline
@@ -62,7 +62,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetGuidance ("degrees");
   param   -> SetDefaultValue (1.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////  /vis~/camera/pan  ////
   //camera \hline
@@ -83,7 +83,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetDefaultValue (0.);
   param   -> SetGuidance ("world coordinates");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   /////////////////////////////////////  /vis~/camera/projection_style  ////
   //camera \hline
@@ -100,7 +100,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   =  new G4UIparameter ("Perspective view half angle.", 'd', true);
   param   -> SetDefaultValue  (0.);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/camera/spin  ////
   //camera \hline
@@ -122,7 +122,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetGuidance ("degrees");
   param   -> SetDefaultValue (1.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/camera/viewpoint  ////
   //camera \hline
@@ -145,7 +145,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetGuidance ("degrees");
   param   -> SetDefaultValue (0.0);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////  /vis~/camera/window_size_hint  ////
   //camera \hline
@@ -161,7 +161,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   =  new G4UIparameter ("Window size hint in pixels", 'i', true);
   param   -> SetDefaultValue  (600);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////  /vis~/camera/zoom  ////
   //camera \hline
@@ -178,7 +178,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetDefaultValue (1.);
   param   -> SetGuidance ("magnifies by this");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
 }
 
@@ -187,6 +187,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ///////////////////////////////  /vis~/camera/dolly ////
   if (commandPath == "/vis~/camera/dolly") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/dolly\".");
     if (ViewValid ()) {
       G4double in;
       const char* aString = newValues;
@@ -207,8 +208,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -216,6 +215,8 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////  /vis~/camera/orbit  ////
   if (commandPath  == "/vis~/camera/orbit") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4int nFrames;
       G4double dbeta;
@@ -234,12 +235,13 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ///////////////////////////////  /vis~/camera/pan  ////
   if (commandPath == "/vis~/camera/pan") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/pan\".");
     if (ViewValid ()) {
       G4double right, up;
       const char* aString = newValues;
       G4std::istrstream is((char*) aString);is >> right >> up;
       G4cout << "Pan " << right << " right, " << up << " up." << G4endl;
-      fpVMan -> SetCurrentViewParameters ().Pan (right, up);
+      fpVMan -> SetCurrentViewParameters ().IncrementPan (right, up);
       if (fpVMan -> GetVerboseLevel () > 0) {
 	G4cout << "Current target point changed to "
 	     << fpVMan -> GetCurrentViewParameters ().GetCurrentTargetPoint ()
@@ -255,8 +257,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -264,6 +264,8 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   /////////////////////////////////////  /vis~/camera/projection_style  ////
   if (commandPath == "/vis~/camera/projection_style") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/projection\".");
     G4int iStyle;
     G4double fieldHalfAngleDegrees;
     const char* aString = newValues;
@@ -320,8 +322,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }
@@ -329,6 +329,8 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////  /vis~/camera/spin  ////
   if (commandPath  == "/vis~/camera/spin") {
+    G4VisManager::PrintCommandDeprecation
+      ("This command will no longer be maintained.");
     if (ViewValid ()) {
       G4int nFrames;
       G4double dbeta;
@@ -347,6 +349,9 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////////////  /vis~/camera/viewpoint  ////
   if (commandPath == "/vis~/camera/viewpoint") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/viewpointThetaPhi\" or"
+       " \"/vis/viewer/viewpointVector\".");
     G4double theta, phi ;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> theta >> phi;
@@ -377,14 +382,15 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }
 
   ///////////////////////////////////////  /vis~/camera/window_size_hint  ////
   if (commandPath == "/vis~/camera/window_size_hint") {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/create ! ! <pixels>\" or"
+       " \"/vis/open <system> <pixels>\".");
     G4int size;
     const char* aString = newValues;
     G4std::istrstream is((char*) aString) ; is >> size;
@@ -399,6 +405,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 
   ////////////////////////////////  /vis~/camera/zoom  ////
   if (commandPath  == "/vis~/camera/zoom") {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/zoom\".");
     if (ViewValid ()) {
       G4double zoomBy;
       const char* aString = newValues;
@@ -418,8 +425,6 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
-	// Recalculate projection matrices, etc.
-	pView -> SetView ();
       }
       G4cout << "Issue Draw or refresh to see effect." << G4endl;
     }

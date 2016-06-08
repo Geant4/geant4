@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.5 2000/11/20 18:17:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineCurveWithKnotsCreator

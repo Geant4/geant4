@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.13 2000/10/30 07:01:09 urban Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VhEnergyLoss.cc,v 1.16 2001/03/27 15:10:52 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // -----------------------------------------------------------
@@ -23,6 +23,8 @@
 //            energy losses of ions
 // 17/08/00 : V.Ivanchenko change EnergyLossFluctuation 
 // 18/08/00 : V.Ivanchenko bug fixed in GetConstrained 
+// 23/01/01 : bug fixed in AlongStepDoIt , L.Urban
+// 27/03/01 : commented out the printing of subcutoff energies
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,6 +118,14 @@ void G4VhEnergyLoss::BuildDEDXTable(
   G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
   RTable   =exp(LOGRTable);
+
+  //set physically consistent value for finalRange
+  //  and parameters for en.loss step limit
+  if(finalRange > G4Electron::Electron()->GetCuts())
+    finalRange = G4Electron::Electron()->GetCuts() ;
+  c1lim = dRoverRange ;
+  c2lim = 2.*(1.-dRoverRange)*finalRange ;
+  c3lim = -(1.-dRoverRange)*finalRange*finalRange;
 
   // create table if there is no table or there is a new cut value
   G4bool MakeTable = false ;
@@ -315,16 +325,16 @@ void G4VhEnergyLoss::BuildDEDXTable(
    if(!setMinDeltaCutInRange)
      MinDeltaCutInRange = G4Electron::Electron()->GetCuts()/10.;
 
-  if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
-  {
-    G4cout << G4endl;
-    G4cout.precision(5) ;
-    G4cout << " hIoni    Minimum Delta cut in range=" << MinDeltaCutInRange/mm
-           << "  mm." << G4endl;
-    G4cout << G4endl;
-    G4cout << "           material        min.delta energy(keV) " << G4endl;
-    G4cout << G4endl;
-  }
+//  if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
+//  {
+//    G4cout << G4endl;
+//    G4cout.precision(5) ;
+//    G4cout << " hIoni    Minimum Delta cut in range=" << MinDeltaCutInRange/mm
+//           << "  mm." << G4endl;
+//    G4cout << G4endl;
+//    G4cout << "           material        min.delta energy(keV) " << G4endl;
+//    G4cout << G4endl;
+//  }
 
     if(MinDeltaEnergy) delete MinDeltaEnergy ;
     MinDeltaEnergy = new G4double [numOfMaterials] ;
@@ -343,15 +353,15 @@ void G4VhEnergyLoss::BuildDEDXTable(
       if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
         MinDeltaEnergy[mat]=G4Electron::Electron()->GetCutsInEnergy()[mat] ;
 
-     if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
-     {
-       G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
-	      << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
-	   if(LowerLimitForced[mat])
-	 	G4cout << "  lower limit forced." << G4endl;
-	   else
-	 	G4cout << G4endl ;
-     }
+//     if((subSecFlag) && (aParticleType.GetParticleName()=="proton"))
+//     {
+//       G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+//	      << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+//	   if(LowerLimitForced[mat])
+//	 	G4cout << "  lower limit forced." << G4endl;
+//	   else
+//	 	G4cout << G4endl ;
+//     }
     }
 }
       
@@ -570,12 +580,12 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
 
         G4double Px,Py,Pz ;
         G4ThreeVector ParticleDirection ;
-        ParticleDirection=stepData.GetPostStepPoint()->
+        ParticleDirection=aParticle->
                                    GetMomentumDirection() ;
         Px =ParticleDirection.x() ;
         Py =ParticleDirection.y() ;
         Pz =ParticleDirection.z() ;
-     
+
         G4int subdelta = 0;
 
         if(N > 0)

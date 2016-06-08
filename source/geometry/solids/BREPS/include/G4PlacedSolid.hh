@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PlacedSolid.hh,v 1.6 2000/11/09 19:12:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4PlacedSolid

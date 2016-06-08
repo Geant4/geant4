@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Randomize.hh,v 1.4 2000/08/02 15:21:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef randomize_h
 #define randomize_h 1

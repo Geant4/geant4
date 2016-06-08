@@ -5,16 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.12 2000/06/01 03:17:39 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SteppingManager.hh,v 1.16 2001/02/09 01:35:05 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 // 
 //---------------------------------------------------------------
 //
 // G4SteppingManager.hh
 //
-// Description:
-//   This class represents the manager who steers to move the give
-//   particle from the TrackingManger by one Step.
+// class description:
+//  This is the class which plays an essential role in tracking 
+//  the particle. It takes cares all message passing between
+//  objects in the different categories (for example, 
+//  geometry(including transportation), interactions in 
+//  matter, etc). It's public method 'stepping' steers to step 
+//  the particle.
+//  Geant4 kernel use only
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -24,7 +29,6 @@
 //---------------------------------------------------------------
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
 
-#include "g4rw/tvordvec.h"            // Include from 'RogueWave'
 
 class G4SteppingManager;
 
@@ -33,6 +37,7 @@ class G4SteppingManager;
 
 #include "G4ios.hh"                 // Include from 'system'
 #include "g4std/iomanip"                  // Include from 'system'
+#include "g4std/vector"                  // Include from 'system'
 #include "globals.hh"                 // Include from 'global'
 #include "Randomize.hh"               // Include from 'global'
 #include "G4Navigator.hh"             // Include from 'geometry'
@@ -56,22 +61,21 @@ class G4VSensitiveDetector;
 #include "G4TouchableHistory.hh"      // Include from 'geometry'
 
 //  must be changed in elegant way
-static const G4int SIZEofSelectedDoIt=100;
+static const size_t SizeOfSelectedDoItVector=100;
 // RogueWave Tools.h++
-   typedef G4RWTValOrderedVector<G4int> 
+   typedef G4std::vector<G4int> 
              G4SelectedAtRestDoItVector;
-   typedef G4RWTValOrderedVector<G4int> 
+   typedef G4std::vector<G4int> 
              G4SelectedAlongStepDoItVector;
-   typedef G4RWTValOrderedVector<G4int>
+   typedef G4std::vector<G4int>
              G4SelectedPostStepDoItVector;
-
 
 ///////////////////////
 class G4SteppingManager 
 ///////////////////////
 {
 //--------
-   public:
+public: //without description
 //--------
 
 // Constructor/Destructor
@@ -252,9 +256,9 @@ class G4SteppingManager
 
    G4int verboseLevel;
 
-   G4SelectedAtRestDoItVector *fSelectedAtRestDoItVector;
-   G4SelectedAlongStepDoItVector *fSelectedAlongStepDoItVector;
-   G4SelectedPostStepDoItVector *fSelectedPostStepDoItVector;
+   G4SelectedAtRestDoItVector* fSelectedAtRestDoItVector;
+   G4SelectedAlongStepDoItVector* fSelectedAlongStepDoItVector;
+   G4SelectedPostStepDoItVector* fSelectedPostStepDoItVector;
 
    G4double   fPreviousStepSize;
 
@@ -524,7 +528,7 @@ class G4SteppingManager
     }
   }
 
-#include "G4SteppingManager.icc"
+//#include "G4SteppingManager.icc"
 
 #endif
 

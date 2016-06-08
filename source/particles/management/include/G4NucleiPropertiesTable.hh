@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4NucleiPropertiesTable.hh,v 1.8 1999/12/15 14:51:11 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1997

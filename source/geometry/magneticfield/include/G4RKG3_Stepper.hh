@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RKG3_Stepper.hh,v 1.5 2000/11/01 15:15:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4RKG3_Stepper.hh,v 1.6 2001/03/23 18:50:33 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4RKG3_Stepper
@@ -23,6 +23,7 @@
 
 #include "G4MagIntegratorStepper.hh"
 #include "G4ThreeVector.hh"
+#include "G4Mag_EqRhs.hh"
 
 class G4RKG3_Stepper : public G4MagIntegratorStepper
 {

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessenger.hh,v 1.4 1999/12/15 14:54:22 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisManMessenger.hh,v 1.6 2001/02/23 15:43:19 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // GEANT4 Visualization Manager Messenger - John Allison 22nd July 1996.
@@ -16,8 +16,7 @@
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
-
-#include "g4rw/tpordvec.h"
+#include "g4std//vector"
 
 class G4VisManager;
 class G4UIcommand;
@@ -25,10 +24,12 @@ class G4UIcommand;
 class G4VisManMessenger: public G4UImessenger {
 public:
   G4VisManMessenger (G4VisManager* pVMan);
-  ~G4VisManMessenger ();
+  virtual ~G4VisManMessenger ();
   void SetNewValue (G4UIcommand* command, G4String newValues);
   G4String GetCurrentValue (G4UIcommand* command);
 private:
+  G4VisManMessenger (const G4VisManMessenger&);
+  G4VisManMessenger& operator = (const G4VisManMessenger&);
   void AddCommandCamera      ();
   //  void AddCommandClear       ();
   //  void AddCommandCopy        ();
@@ -56,7 +57,7 @@ private:
   G4bool ViewValid ();
   void RotateViewpointAboutUpVectorBy (G4double dbeta);
   G4VisManager* fpVMan;
-  G4RWTPtrOrderedVector <G4UIcommand> fCommandList;
+  G4std::vector<G4UIcommand*> fCommandList;
 };
 
 #endif

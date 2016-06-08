@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GamDistrXrayTRmodel.cc,v 1.1 2000/11/14 16:07:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "g4std/complex"

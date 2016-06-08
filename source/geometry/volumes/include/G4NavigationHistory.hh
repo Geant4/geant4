@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4NavigationHistory.hh,v 1.7 2000/11/20 18:59:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // class G4NavigationHistory
 //

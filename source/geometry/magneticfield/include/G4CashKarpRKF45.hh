@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.hh,v 1.4 2000/11/01 15:15:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4CashKarpRKF45.hh,v 1.6 2001/03/23 18:50:33 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4CashKarpRKF45
@@ -33,7 +33,7 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   public:  // with description
 
-    G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4CashKarpRKF45(G4EquationOfMotion *EqRhs, G4int numberOfVariables = 6, G4bool primary= true) ;
    ~G4CashKarpRKF45() ;
 
     void Stepper( const G4double y[],
@@ -53,8 +53,8 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   public:  // without description
 
-   G4double  DistChord() const = 0 ; // This is not IMPLEMENTED yet. 
-                                     //  It must be done before it can work.
+   G4double  DistChord() const; 
+                                 
    G4int IntegratorOrder() const { return 4; }
 
   private:
@@ -67,6 +67,12 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
    G4int fNumberOfVariables ;
    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *yTemp, *yIn;  // scratch space
+
+  // for DistChord calculations
+
+  G4double fLastStepLength;
+  G4double *fLastInitialVector, *fLastFinalVector, *fLastDyDx, *fMidVector, *fMidError;
+  G4CashKarpRKF45* fAuxStepper; 
 };
 
 #endif /* G4CashKARP_RKF45 */

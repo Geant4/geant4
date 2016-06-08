@@ -6,7 +6,7 @@
 // statement, and all its terms.
 //
 // $Id: Brachy.cc,v 1.4 2000/12/10 08:56:15 chauvie Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsShow.hh,v 1.3 1999/12/15 14:54:22 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisCommandsShow.hh,v 1.4 2001/02/05 02:34:03 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // /vis~/show/ commands
@@ -45,6 +45,7 @@ public:
       "graphics systems which use such techniques).";
   }
   void SetValue () {
+    G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/update\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     if (pVMan -> IsValidView ()) {
       if (pVMan -> GetVerboseLevel () > 1) {

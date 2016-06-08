@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ShortLivedConstructor.cc,v 1.7 2000/03/02 00:52:18 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DatabaseTypes.hh,v 1.3 1999/11/28 21:54:19 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // file description:

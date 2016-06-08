@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.12 2000/10/18 13:57:45 allison Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.14 2001/03/15 12:20:53 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -30,21 +30,21 @@
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
- G4int                       soughtDepth,
+ G4int                       requestedDepth,
  const G4Transform3D& modelTransformation,
  const G4ModelingParameters* pMP,
  G4bool useFullExtent):
-  G4VModel       (modelTransformation, pMP),
-  fpTopPV        (pVPV),
-  fTopPVName     (pVPV -> GetName ()),
-  fTopPVCopyNo   (pVPV -> GetCopyNo ()),
-  fSoughtDepth   (soughtDepth),
-  fCurrentDepth  (0),
-  fpCurrentPV    (0),
-  fpCurrentLV    (0),
-  fpCurrentDepth (0),
-  fppCurrentPV   (0),
-  fppCurrentLV   (0)
+  G4VModel        (modelTransformation, pMP),
+  fpTopPV         (pVPV),
+  fTopPVName      (pVPV -> GetName ()),
+  fTopPVCopyNo    (pVPV -> GetCopyNo ()),
+  fRequestedDepth (requestedDepth),
+  fCurrentDepth   (0),
+  fpCurrentPV     (0),
+  fpCurrentLV     (0),
+  fpCurrentDepth  (0),
+  fppCurrentPV    (0),
+  fppCurrentLV    (0)
 {
   const int len = 8; char a [len];
   G4std::ostrstream o (a, len); o.seekp (G4std::ios::beg);
@@ -94,7 +94,7 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
     G4Transform3D startingTransformation = fTransform;
 
     VisitGeometryAndGetVisReps (fpTopPV,
-				fSoughtDepth,
+				fRequestedDepth,
 				startingTransformation,
 				sceneHandler);
 
@@ -142,14 +142,14 @@ void G4PhysicalVolumeModel::DefinePointersToWorkingSpace
 
 void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 (G4VPhysicalVolume* pVPV,
- G4int soughtDepth,
+ G4int requestedDepth,
  const G4Transform3D& theAT,
  G4VGraphicsScene& sceneHandler) {
 
-  // Visits geometry structure to a given depth (soughtDepth), starting
+  // Visits geometry structure to a given depth (requestedDepth), starting
   //   at given physical volume with given starting transformation and
   //   describes volumes to the scene handler.
-  // soughtDepth < 0 (default) implies full visit.
+  // requestedDepth < 0 (default) implies full visit.
   // theAT is the Accumulated Transformation.
 
   // Find corresponding logical volume and (later) solid, storing in
@@ -163,7 +163,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
     // Non-replicated physical volume.
     pSol = pLV -> GetSolid ();
     pMaterial = pLV -> GetMaterial ();
-    DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
+    DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			theAT, sceneHandler);
   }
   else {
@@ -182,7 +182,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	pP -> ComputeTransformation (n, pVPV);
 	pSol -> ComputeDimensions (pP, n, pVPV);
 	// pVPV -> SetCopyNo (n);  // Uncertain of effect of this.
-	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
+	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
     }
@@ -231,7 +231,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	       << G4endl;
 	  break;
 	case kPhi:
-	  rotation.rotateZ (-(offset+n*width));
+	  rotation.rotateZ (-(offset+(n+0.5)*width));
 	  // Minus Sign because for the physical volume we need the
 	  // coordinate system rotation.
 	  pRotation = &rotation;
@@ -243,7 +243,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	// dangerous.
 	pSol = pLV -> GetSolid ();
 	pMaterial = pLV -> GetMaterial ();
-	DescribeAndDescend (pVPV, soughtDepth, pLV, pSol, pMaterial,
+	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
     }
@@ -254,7 +254,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 
 void G4PhysicalVolumeModel::DescribeAndDescend
 (G4VPhysicalVolume* pVPV,
- G4int soughtDepth,
+ G4int requestedDepth,
  G4LogicalVolume* pLV,
  G4VSolid* pSol,
  const G4Material* pMaterial,
@@ -272,7 +272,16 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   const HepRotation* pObjectRotation = pVPV -> GetObjectRotation ();
   const Hep3Vector&  translation     = pVPV -> GetTranslation ();
   G4Transform3D theLT (G4Transform3D (*pObjectRotation, translation));
-  G4Transform3D theNewAT (theAT * theLT);
+
+  // Compute the accumulated transformation...
+  // Note that top volume's transformation relative to the world
+  // coordinate system is specified in theAT == startingTransformation
+  // = fTransform (see DescribeYourselfTo), so first time through the
+  // volume's own transformation, which is only relative to its
+  // mother, i.e., not relative to the world coordinate system, should
+  // not be accumulated.
+  G4Transform3D theNewAT (theAT);
+  if (fCurrentDepth != 0) theNewAT = theAT * theLT;
 
   /********************************************************
   G4cout << "G4PhysicalVolumeModel::DescribeAndDescend: "
@@ -316,7 +325,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   G4bool cullDaughter = thisToBeDrawn && IsDaughterCulled (pLV);
   if (!cullDaughter) {
     // OK, now let's check for daughters...
-    if (soughtDepth != 0) {
+    if (requestedDepth != 0) {
       int nDaughters = pLV -> GetNoDaughters ();
       if (nDaughters) {
 	for (int iDaughter = 0; iDaughter < nDaughters; iDaughter++) {
@@ -324,7 +333,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
 	  // Descend the geometry structure recursively...
 	  fCurrentDepth++;
 	  VisitGeometryAndGetVisReps
-	    (pVPV, soughtDepth - 1, theNewAT, sceneHandler);
+	    (pVPV, requestedDepth - 1, theNewAT, sceneHandler);
 	  fCurrentDepth--;
 	}
       }

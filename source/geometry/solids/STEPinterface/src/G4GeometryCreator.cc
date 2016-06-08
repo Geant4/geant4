@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GeometryCreator.cc,v 1.5 2000/11/10 17:44:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ----------------------------------------------------------------------

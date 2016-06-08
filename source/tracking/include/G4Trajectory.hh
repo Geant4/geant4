@@ -5,15 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.9 2000/01/26 04:20:31 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Trajectory.hh,v 1.12 2001/02/09 01:35:05 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
 //
 // G4Trajectory.hh
 //
-// Description:
+// class description:
 //   This class represents the trajectory of a particle tracked.
 //   It includes information of 
 //     1) List of trajectory points which compose the trajectory,
@@ -38,7 +38,7 @@ class G4Trajectory;
 #include "G4Allocator.hh"
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include "g4rw/tpordvec.h"            // G4RWTValOrderedVector
+#include "g4std/vector"            // G4RWTValOrderedVector
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
@@ -47,13 +47,14 @@ class G4Trajectory;
 
 class G4Polyline;                   // Forward declaration.
 
+typedef G4std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 ///////////////////
 class G4Trajectory : public G4VTrajectory
 ///////////////////
 {
 
 //--------
-   public:
+public: // with description
 //--------
 
 // Constructor/Destrcutor
@@ -86,7 +87,7 @@ class G4Trajectory : public G4VTrajectory
    virtual void ShowTrajectory() const;
    virtual void DrawTrajectory(G4int i_mode=0) const;
    virtual void AppendStep(const G4Step* aStep);
-   virtual int GetPointEntries() const { return positionRecord->entries(); }
+   virtual int GetPointEntries() const { return positionRecord->size(); }
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
    { return (*positionRecord)[i]; }
    virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
@@ -97,7 +98,7 @@ class G4Trajectory : public G4VTrajectory
    private:
 //---------
 
-  G4RWTPtrOrderedVector<G4VTrajectoryPoint>* positionRecord;
+  TrajectoryPointContainer* positionRecord;
   G4int fTrackID;
   G4int fParentID;
   G4String ParticleName;

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLImmediateWin32.hh,v 1.4 1999/12/15 14:54:03 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // OpenGLImmediateWin32 graphics system factory.

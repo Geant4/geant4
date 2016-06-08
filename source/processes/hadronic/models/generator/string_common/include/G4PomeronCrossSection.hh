@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4PomeronCrossSection.hh,v 1.3 1999/12/15 14:52:45 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #include "G4Proton.hh"
 #include "G4Neutron.hh"

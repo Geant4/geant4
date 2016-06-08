@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN02SteppingAction.hh,v 1.4 2000/12/04 16:24:06 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

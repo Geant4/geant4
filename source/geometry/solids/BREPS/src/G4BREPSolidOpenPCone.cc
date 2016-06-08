@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BREPSolidOpenPCone.cc,v 1.5 2000/11/08 14:22:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

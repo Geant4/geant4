@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4MuBremsstrahlung.hh,v 1.8 2000/05/23 09:55:37 urban Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file 

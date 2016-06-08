@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronInelasticProcess.hh,v 1.4 2000/09/20 16:52:36 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // Hadronic Inelastic Process class
  // The specific particle inelastic processes derive from this class

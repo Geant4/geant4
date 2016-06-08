@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VEnergyLoss.hh,v 1.9 2000/10/30 06:49:46 urban Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------

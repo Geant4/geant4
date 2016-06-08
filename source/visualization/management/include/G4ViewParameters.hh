@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.8 2000/05/13 10:51:31 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4ViewParameters.hh,v 1.12 2001/03/07 14:30:12 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  19th July 1996
@@ -56,20 +56,18 @@
 #ifndef G4VIEWPARAMETERS_HH
 #define G4VIEWPARAMETERS_HH
 
-#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
 
-typedef G4RWTValOrderedVector<G4Plane3D> G4Planes;
+typedef G4std::vector<G4Plane3D> G4Planes;
 
 class G4ViewParameters {
 
 public: // With description
-
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v);
 
   enum DrawingStyle {
     wireframe,  // Draw edges    - no hidden line removal.
@@ -82,6 +80,12 @@ public: // With description
     polyhedron, // Use G4Polyhedron.
     nurbs       // Use G4NURBS.
   };
+
+  friend G4std::ostream& operator << (G4std::ostream&,
+				      const DrawingStyle&);
+
+  friend G4std::ostream& operator << (G4std::ostream&,
+				      const G4ViewParameters&);
 
   G4ViewParameters ();
   ~G4ViewParameters ();
@@ -125,6 +129,7 @@ public: // With description
         G4bool           IsMarkerNotHidden       () const;
         G4int            GetWindowSizeHintX      () const;
         G4int            GetWindowSizeHintY      () const;
+        G4bool           IsAutoRefresh           () const;
 
   // Here Follow functions to evaluate the above algorithms as a
   // function of the radius of the Bounding Sphere of the object being
@@ -166,6 +171,8 @@ public: // With description
   void IncrementDolly          (G4double dollyIncrement);
   void SetLightpointDirection  (const G4Vector3D& lightpointDirection);
   void SetLightsMoveWithCamera (G4bool moves);
+  void SetPan                  (G4double right, G4double up);
+  void IncrementPan            (G4double right, G4double up);
   void SetViewGeom             ();
   void UnsetViewGeom           ();
   void SetViewHits             ();
@@ -179,11 +186,7 @@ public: // With description
   void SetMarkerHidden         ();
   void SetMarkerNotHidden      ();
   void SetWindowSizeHint       (G4int xHint, G4int yHint);
-
-  void Pan                     (G4double right, G4double up);
-  // Note: the result of above "pan"operation is always an Increment
-  // relative to the current target point and also depends on the
-  // veiwpoint and up directions.
+  void SetAutoRefresh          (G4bool);
 
   void PrintDifferences (const G4ViewParameters& v) const;
 
@@ -228,6 +231,7 @@ private:
   // removed.
   G4int        fWindowSizeHintX; // Size hints for pixel-based window systems.
   G4int        fWindowSizeHintY;
+  G4bool       fAutoRefresh;     // ...after change of view parameters.
 };
 
 #include "G4ViewParameters.icc"

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Cerenkov.cc,v 1.9 2000/11/13 01:09:48 gum Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation

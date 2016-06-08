@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.12 2000/05/23 09:58:48 urban Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4MuBremsstrahlung.cc,v 1.14 2001/02/05 17:50:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //    
 // --------------------------------------------------------------
@@ -35,7 +35,7 @@ G4double G4MuBremsstrahlung::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
 G4int G4MuBremsstrahlung::NBIN = 1000;    // 100 ;
 G4double G4MuBremsstrahlung::ya[1001]={0.};
 G4double G4MuBremsstrahlung::proba[5][8][1001]={0.};
-G4double G4MuBremsstrahlung::CutFixed=1.*keV ;
+G4double G4MuBremsstrahlung::CutFixed=0.98*keV ;
 
 
 G4double G4MuBremsstrahlung::LowerBoundLambda = 1.*keV ;
@@ -210,6 +210,7 @@ void G4MuBremsstrahlung::BuildLambdaTable(
       delete theMeanFreePathTable;
   }
   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  PartialSumSigma.clearAndDestroy();
   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
 
   G4PhysicsLogVector* ptrVector;
@@ -249,7 +250,7 @@ void G4MuBremsstrahlung::ComputePartialSumSigma(
                                     aMaterial->GetAtomicNumDensityVector();
    G4double GammaEnergyCut = (G4Gamma::Gamma()->GetCutsInEnergy())[Imate];
 
-   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
+   PartialSumSigma[Imate] = new G4DataVector();
 
    G4double SIGMA = 0. ;
 
@@ -260,7 +261,7 @@ void G4MuBremsstrahlung::ComputePartialSumSigma(
                                             (*theElementVector)(Ielem)->GetZ(), 
                                             (*theElementVector)(Ielem)->GetA(), 
                                                  GammaEnergyCut );
-        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
+        PartialSumSigma[Imate]->push_back(SIGMA);
    }
 }
 
@@ -448,7 +449,6 @@ void G4MuBremsstrahlung::MakeSamplingTables(
          for(G4int ib=0; ib<=nbin; ib++)
          {
            proba[iz][it][ib] /= CrossSection ;
-
          }
        }
      }
@@ -461,6 +461,9 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
                                                   const G4Step& stepData)
 {
 
+  static G4double ysmall = -100. ;
+  static G4double ytablelow = -5. ;
+ 
   aParticleChange.Initialize(trackData);
   G4Material* aMaterial=trackData.GetMaterial() ;
 
@@ -487,7 +490,9 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
   G4double dy = 5./G4float(NBIN) ;
 
   G4double ymin=log(log(GammaEnergyCut/CutFixed)/log(KineticEnergy/CutFixed)) ;
-  G4int iymin = G4int((ymin+5.)/dy+0.5) ;  
+
+  if(ymin < ysmall)        
+    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
   //  sampling using tables 
   G4double v,xc,x,yc,y ;
@@ -518,23 +523,30 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
       itt=it ;
     }
   }
+  G4int iymin = G4int((ymin+5.)/dy+0.5) ;  
 
-  G4double r = G4UniformRand() ;
+  if(ymin < ytablelow)
+  {
+    y = ymin + G4UniformRand()*(ytablelow-ymin) ;
+  }
+  else
+  {
+    G4double r = G4UniformRand() ;
 
-  iy = iymin-1 ;
-  delmin = proba[izz][itt][NBINminus1]-proba[izz][itt][iymin] ;
-  do {
-       iy += 1 ;
-     } while ((r > (proba[izz][itt][iy]-proba[izz][itt][iymin])/delmin)
-               &&(iy < NBINminus1)) ;
+    iy = iymin-1 ;
+    delmin = proba[izz][itt][NBINminus1]-proba[izz][itt][iymin] ;
+    do {
+         iy += 1 ;
+       } while ((r > (proba[izz][itt][iy]-proba[izz][itt][iymin])/delmin)
+                 &&(iy < NBINminus1)) ;
 
-  //sampling is Done uniformly in y in the bin
-    y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy] ) ;
+    //sampling is Done uniformly in y in the bin
+     y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy] ) ;
+  }
 
   x = exp(y) ;
 
   v = CutFixed*exp(x*log(KineticEnergy/CutFixed)) ;            
-
   if( v <= 0.)
      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
@@ -584,9 +596,9 @@ G4Element* G4MuBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
+  G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material " << aMaterial->GetName()
        << " has no elements, NULL pointer returned." << G4endl;
   return NULL;

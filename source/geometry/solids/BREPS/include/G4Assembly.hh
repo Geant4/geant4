@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Assembly.hh,v 1.5 2000/11/08 14:21:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Assembly.hh,v 1.6 2001/02/05 18:45:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Assembly
@@ -28,7 +28,6 @@
 #define G4ASSEMBLY_HH
 
 #include "G4PlacedSolid.hh"
-#include "G4OrderedTable.hh"   
 #include "G4BREPSolid.hh"
 
 typedef G4RWTPtrOrderedVector<G4PlacedSolid> G4PlacedVector;  

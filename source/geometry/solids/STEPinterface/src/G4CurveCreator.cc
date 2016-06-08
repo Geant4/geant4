@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4CurveCreator.cc,v 1.2 2000/01/21 13:46:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4CurveCreator

@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000/01/21 10:56:13 maire Exp $
+$Id: README,v 1.4 2001/03/30 12:40:42 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -87,7 +87,7 @@ $Id: README,v 1.2 2000/01/21 10:56:13 maire Exp $
  	
  7- HISTOGRAMS
  
-     TestEm2 produces several histo which are saved as testem2.histo
+     TestEm2 produces several histo which are saved as testem2.paw
      
      Content of these histo:
   
@@ -106,4 +106,9 @@ $Id: README,v 1.2 2000/01/21 10:56:13 maire Exp $
      10 : radial energy profile    
      11 : cumulated radial energy profile
      12 : rms of cumulated radial energy profile
-   
+
+ Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Currently, histograms in this example are implemented through the obsolete
+ CLHEP/Hist package, which is no longer supported. The implementation will
+ be replaced by direct call to the "analysis" module in a near future.
+

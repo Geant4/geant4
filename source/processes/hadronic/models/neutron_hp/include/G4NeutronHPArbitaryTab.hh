@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPArbitaryTab.hh,v 1.4 1999/12/15 14:53:11 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4NeutronHPArbitaryTab_h
 #define G4NeutronHPArbitaryTab_h 1

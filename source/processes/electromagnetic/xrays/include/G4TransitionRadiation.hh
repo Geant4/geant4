@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4TransitionRadiation.hh,v 1.5 2000/04/03 13:45:28 grichine Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G4TransitionRadiation  -- header file
 //

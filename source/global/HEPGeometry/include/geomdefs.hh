@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: geomdefs.hh,v 1.3 2000/11/01 15:23:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ----------------------------------------------------------------------

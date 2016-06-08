@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.12 2000/11/20 19:05:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PropagatorInField.cc,v 1.12.4.1 2001/02/20 18:23:32 japost Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // 
@@ -33,6 +33,7 @@
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
 // -------------------------------------------------------------------------
+#if OLD_SIGNATURE_IS_INVALID
 G4double 
 G4PropagatorInField::
   ComputeStep(const  G4ThreeVector &   StartPointA,
@@ -47,6 +48,7 @@ G4PropagatorInField::
 		   Velocity, 
 		   0.0,          // length of path
 		   0.0,          // energy
+	      // PROBLEM ---> zero energy will create zero momentum !!
                    0.0,          // lab tof
 		   0.0,          // proper tof
 		   0 );
@@ -56,6 +58,7 @@ G4PropagatorInField::
 			    CurrentProposedStepLength, 
 			    currentSafety );
 }
+#endif
 
 // -------------------------------------------------------------------------
 G4double 
@@ -158,7 +161,7 @@ G4PropagatorInField::
      //    On Exit:
      //         CurrentState is updated with the final position and velocity. 
 
-     G4ThreeVector  EndPointB= CurrentState.Position(); 
+     G4ThreeVector  EndPointB= CurrentState.GetPosition(); 
 
      // Calculate the direction and length of the chord AB
      
@@ -204,8 +207,8 @@ G4PropagatorInField::
 	   //  G is our EndPoint ...
 	   End_PointAndTangent= IntersectPointVelct_G;
 	   StepTaken = 
-	   TruePathLength= IntersectPointVelct_G.CurveS()
-	                         - OriginalState.CurveS(); // which is Zero now.
+	   TruePathLength= IntersectPointVelct_G.GetCurveLength()
+	                         - OriginalState.GetCurveLength(); // which is Zero now.
 #ifdef G4VERBOSE
 	   if( Verbose() > 0 )
 	      G4cout << " Found intersection after Step of length " << 
@@ -272,16 +275,16 @@ G4PropagatorInField::
 
 #ifdef G4VERBOSE
   // Check that "s" is correct 
-  if( fabs(OriginalState.CurveS() + TruePathLength 
-            - End_PointAndTangent.CurveS()) > 3.e-4 * TruePathLength )
+  if( fabs(OriginalState.GetCurveLength() + TruePathLength 
+            - End_PointAndTangent.GetCurveLength()) > 3.e-4 * TruePathLength )
   {
       G4cerr << " Error in G4PropagatorInField: Curve lenght mis-match, is advancement wrong ? ";
       G4cerr << " The curve length of the endpoint should be " 
-	   << OriginalState.CurveS() + TruePathLength 
-           << " and is " <<  End_PointAndTangent.CurveS() 
+	   << OriginalState.GetCurveLength() + TruePathLength 
+           << " and is " <<  End_PointAndTangent.GetCurveLength() 
            << " a difference of " 
-	   << OriginalState.CurveS() + TruePathLength 
-              - End_PointAndTangent.CurveS() << G4endl;
+	   << OriginalState.GetCurveLength() + TruePathLength 
+              - End_PointAndTangent.GetCurveLength() << G4endl;
   }
 #endif
 
@@ -352,8 +355,8 @@ G4PropagatorInField::LocateIntersectionPoint(
 
   do{					      // REPEAT
 
-    G4ThreeVector  Point_A=  CurrentA_PointVelocity.Position();  
-    G4ThreeVector  Point_B=  CurrentB_PointVelocity.Position();  
+    G4ThreeVector  Point_A=  CurrentA_PointVelocity.GetPosition();  
+    G4ThreeVector  Point_B=  CurrentB_PointVelocity.GetPosition();  
 
     // F = a point on true AB path close to point E  (the closest if possible)
     //
@@ -365,7 +368,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 
     //  The above function is the most difficult part ...
     //        
-    G4ThreeVector CurrentF_Point= ApproxIntersecPointV.Position();
+    G4ThreeVector CurrentF_Point= ApproxIntersecPointV.GetPosition();
       // fMidPoint_CurveLen_of_LastAttempt = 
       //                         ApproxIntersecPointV.  GetCurveLength() -
       //                         CurrentA_PointVelocity.GetCurveLength(); 
@@ -386,7 +389,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 	// IntersectPointVelocity.SetCurvePnt( 
 	//		  CurrentE_Point, 
 	//		  ApproxIntersecPointV.GetVelocity(), 
-	//		  ApproxIntersecPointV.CurveS() );
+	//		  ApproxIntersecPointV.GetCurveLength() );
 	IntersectPointVelocity = ApproxIntersecPointV;
         IntersectPointVelocity.SetPosition( CurrentE_Point );
 
@@ -493,10 +496,10 @@ G4PropagatorInField::LocateIntersectionPoint(
        // Ensure that the new endpoints are not further apart in space than on the curve
        //  due to different errors in the integration
        G4double linDistSq, curveDist; 
-       linDistSq= (  CurrentB_PointVelocity.Position() 
-		   - CurrentA_PointVelocity.Position() ).mag2(); 
-       curveDist=  CurrentB_PointVelocity.CurveS() -
-                   CurrentA_PointVelocity.CurveS();
+       linDistSq= (  CurrentB_PointVelocity.GetPosition() 
+		   - CurrentA_PointVelocity.GetPosition() ).mag2(); 
+       curveDist=  CurrentB_PointVelocity.GetCurveLength() -
+                   CurrentA_PointVelocity.GetCurveLength();
        if( curveDist*(curveDist+2*perMillion ) < linDistSq ){
 	  //  Re-integrate to obtain a new B
 	  G4FieldTrack   newEndpoint= CurrentA_PointVelocity;

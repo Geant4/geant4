@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.hh,v 1.4 2000/12/07 12:38:24 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: Em3RunAction.hh,v 1.6 2001/03/26 16:01:58 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 
@@ -26,6 +26,11 @@
 class G4Run;
 class Em3RunActionMessenger;
 
+#ifndef G4NOHIST
+ class HepTupleManager;
+ class HepHistogram;
+#endif
+
 class Em3RunAction : public G4UserRunAction
 {
   public:
@@ -40,7 +45,13 @@ class Em3RunAction : public G4UserRunAction
     
     void  SetRndmFreq(G4int   val)  {saveRndm = val;}
     G4int GetRndmFreq()             {return saveRndm;}
-                
+    
+#ifndef G4NOHIST
+    HepHistogram* GetHisto(G4int id) {return histo[id];}    
+#endif
+
+    void SetHisto (G4int id, G4int nbins, G4double vmin, G4double vmax);
+            
   private:
     void bookHisto();
     
@@ -52,6 +63,11 @@ class Em3RunAction : public G4UserRunAction
     Em3DetectorConstruction* Detector;    
     Em3RunActionMessenger*   runMessenger;        
     G4int saveRndm;
+    
+#ifndef G4NOHIST    
+    HepTupleManager* hbookManager;    
+    HepHistogram* histo[MaxAbsor];
+#endif               
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

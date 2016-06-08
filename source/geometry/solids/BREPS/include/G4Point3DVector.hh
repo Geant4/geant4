@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Point3DVector.hh,v 1.4 2000/08/28 08:57:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4Point3DVector

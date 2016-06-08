@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RKG3_Stepper.cc,v 1.5 2000/11/20 17:29:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #include "G4RKG3_Stepper.hh"
 #include "G4ThreeVector.hh"

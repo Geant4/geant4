@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3EleTable.hh,v 1.5 2000/11/24 09:50:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------
 // Class description:

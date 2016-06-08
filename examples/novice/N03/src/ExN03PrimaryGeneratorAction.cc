@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN03PrimaryGeneratorAction.cc,v 1.3 2000/11/21 10:59:45 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 

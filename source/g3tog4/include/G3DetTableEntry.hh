@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G3DetTableEntry.hh,v 1.3 1999/12/09 01:27:42 lockman Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G3DetTableEntry class
 

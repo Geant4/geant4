@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.3 2000/11/01 15:30:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SynchrotronRadiation.hh,v 1.4 2001/02/05 17:53:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -43,7 +43,6 @@
 #include "G4Positron.hh"
 
 
-#include "G4OrderedTable.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
  

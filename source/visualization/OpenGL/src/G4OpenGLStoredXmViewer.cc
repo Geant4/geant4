@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.3 2000/05/22 08:16:42 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.4 2001/02/03 18:39:33 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -58,6 +58,8 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glShadeModel (GL_FLAT);
 }
+
+G4OpenGLStoredXmViewer::~G4OpenGLStoredXmViewer () {}
 
 void G4OpenGLStoredXmViewer::DrawView () {
 

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ConvexHull.hh,v 1.4 2000/11/08 14:22:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ConvexHull

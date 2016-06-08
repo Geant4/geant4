@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSections.cc,v 1.2 1999/12/15 14:52:06 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4HadronCrossSections.cc,v 1.3 2001/02/26 17:09:14 hpw Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -1235,6 +1235,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
       sigin = 49.*term*term;
    // Convert cross section from mb to default units
       siginelastic = sigin*millibarn;
+      if(aParticle->GetKineticEnergy() < 6*MeV) siginelastic = 0;
       sigelastic = 0.;
       return;
    }

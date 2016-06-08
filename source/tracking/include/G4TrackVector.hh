@@ -5,15 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackVector.hh,v 1.5 1999/12/15 14:53:57 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4TrackVector.hh,v 1.7 2001/02/08 07:39:51 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
 //
 //  G4TrackVector.hh
 //
-//  Description:
+//  class description:
 //    This class keeps a List of G4Track objects. It is implemented 
 //    as a RougeWave pointer ordered vector.
 //
@@ -27,11 +27,11 @@
 #ifndef G4TrackVector_h
 #define G4TrackVector_h 1
 
-#include "g4rw/tpordvec.h"           // Include from 'RogueWave'
+#include "g4std/vector"
 #include "G4Track.hh"              // Include form 'tracking'
 
 ///////////////////////////////////////////////////
-typedef G4RWTPtrOrderedVector<G4Track> G4TrackVector;
+typedef G4std::vector<G4Track*> G4TrackVector;
 ///////////////////////////////////////////////////
 
 #endif

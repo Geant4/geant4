@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RunMessenger.hh,v 1.6 2000/11/13 01:24:20 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //	GEANT 4 class header file 

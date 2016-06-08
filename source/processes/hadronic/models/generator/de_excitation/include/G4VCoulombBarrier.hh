@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VCoulombBarrier.hh,v 1.1 2000/06/09 11:36:54 larazb Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)

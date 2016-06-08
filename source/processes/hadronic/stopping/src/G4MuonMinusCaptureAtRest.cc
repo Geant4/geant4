@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4MuonMinusCaptureAtRest.cc,v 1.5 2000/07/12 09:19:53 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

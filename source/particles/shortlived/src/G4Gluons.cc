@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Gluons.cc,v 1.3 2000/02/27 07:48:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ----------------------------------------------------------------------

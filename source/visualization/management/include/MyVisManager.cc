@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: MyVisManager.cc,v 1.5 2000/01/29 00:43:10 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison 24th January 1998.

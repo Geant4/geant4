@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.cc,v 1.4 2000/06/02 05:36:53 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Track.cc,v 1.11 2001/02/17 10:51:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
@@ -19,7 +19,9 @@
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
 //
 //---------------------------------------------------------------
-
+//   Add copy constructor            Hisaya Feb. 07 01
+//   Fix GetVelocity                 Hisaya Feb. 17 01
+//
 #include "G4Track.hh"
 
 G4Allocator<G4Track> aTrackAllocator;
@@ -38,6 +40,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
    fPosition = aValuePosition;
    fpTouchable = 0;
    fpNextTouchable = 0; 
+   fpStep=0;
 
    fpLVAtVertex = 0;
    fpCreatorProcess = 0;
@@ -63,6 +66,7 @@ G4Track::G4Track()
    fTrackID = 0;
    fpTouchable = 0;
    fpNextTouchable = 0;
+   fpStep=0;
 
    fpDynamicParticle = 0;
    fpLVAtVertex = 0;
@@ -75,6 +79,12 @@ G4Track::G4Track()
 
    fpUserInformation = 0;
 }
+//////////////////
+G4Track::G4Track(const G4Track& right)
+//////////////////
+{
+  *this = right;
+}
 
 ///////////////////
 G4Track::~G4Track()
@@ -82,6 +92,42 @@ G4Track::~G4Track()
 {
    delete fpDynamicParticle;
    delete fpUserInformation;
+}
+
+//////////////////
+G4Track & G4Track::operator=(const G4Track &right)
+//////////////////
+{
+  if (this != &right) {
+   fCurrentStepNumber = right.fCurrentStepNumber;
+   fGlobalTime = right.fGlobalTime;
+   fLocalTime = right.fLocalTime;
+   fTrackLength = right.fTrackLength;
+   fParentID = right.fParentID;
+
+   // Track ID is not copied and set to zero for new track
+   fTrackID = 0;
+
+   // pointers to Touchables or Step are not copied
+   fpTouchable = 0;
+   fpNextTouchable = 0;
+   fpStep=0;
+
+   fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
+
+   fVtxKineticEnergy = right.fVtxKineticEnergy;
+   fVtxPosition = right.fVtxPosition;
+   fpLVAtVertex = right.fpLVAtVertex;
+   fpCreatorProcess = right.fpCreatorProcess;
+
+   fTrackStatus = right.fTrackStatus;
+   fBelowThreshold = right.fBelowThreshold;
+   fGoodForTracking = right.fGoodForTracking;
+   fWeight = right.fWeight;
+
+   fpUserInformation = right.fpUserInformation;
+  }
+  return *this;
 }
 
 ///////////////////
@@ -95,10 +141,9 @@ G4double G4Track::GetVelocity() const
   // mass less particle  
   if( mass == 0. ){
     velocity = c_light ; 
-    G4String name = fpDynamicParticle->GetDefinition()->GetParticleName();
 
     // special case for photons
-    if(( name=="gamma")||(name=="opticalphoton")){
+    if(fpDynamicParticle->GetDefinition()->GetParticleName()=="opticalphoton"){
       G4Material*
 	mat=fpTouchable->GetVolume()->GetLogicalVolume()->GetMaterial();
  
@@ -107,7 +152,7 @@ G4double G4Track::GetVelocity() const
           // light velocity = c/reflection-index 
 	  velocity /= 
 	    mat->GetMaterialPropertiesTable()->GetProperty("RINDEX")->
-	    GetMinProperty() ; 
+	    GetProperty(fpDynamicParticle->GetTotalMomentum()) ; 
 	}
       }  
     }

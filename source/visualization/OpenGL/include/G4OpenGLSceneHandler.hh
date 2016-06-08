@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.5 1999/12/16 17:25:05 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.7 2001/01/18 11:59:00 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -53,13 +53,29 @@ public:
 
 protected:
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
-		 G4int id,
-		 const G4String& name = "");
+			G4int id,
+			const G4String& name = "");
   virtual ~G4OpenGLSceneHandler ();
   G4bool initialize_hlr;
 
 private:
+  void AddCircleSquare (const G4VMarker&, G4int nSides);
+  /**************************************************
+  Not needed - but see note on future development in .cc.
+  void DrawScreenPolygon (G4double size,
+		          const G4Point3D& centre,
+		          G4int nSides);
+  // Draws in screen coordinates.
+  *********************************/
+
+  void DrawXYPolygon (G4double size,
+		      const G4Point3D& centre,
+		      G4int nSides);
+  // Draws in world coordinates a polygon in the screen plane knowing
+  // viewpoint direction and up vector.
+
   GLdouble clear_colour[4];
+  static const GLubyte fStippleMaskHashed [128];
 };
 
 #include "G4OpenGLSceneHandler.icc"

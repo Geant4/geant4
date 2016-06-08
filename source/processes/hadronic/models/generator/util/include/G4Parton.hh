@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Parton.hh,v 1.9 2000/08/02 08:15:31 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4Parton_h

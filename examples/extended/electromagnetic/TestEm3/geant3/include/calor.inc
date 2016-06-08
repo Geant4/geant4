@@ -15,4 +15,12 @@
 *  calorX  = total  X-size of the calor (cm)
 *  worldX  = total  X-size of the world (cm)
 *  worldYZ = total YZ-size of the world (cm)
-*                                                                               
+*
+
+      COMMON/PRODCUT/prodcut(4*MaxAbs)
+*
+*  prodcut(k)   = tracking medium number k          (data card CUTPR)
+*  prodcut(k+1) = bcute/m for this medium           (data card CUTPR)
+*  prodcut(k+2) = dcute/m for this medium           (data card CUTPR)
+*  prodcut(k+3) = ppcutm  for this medium           (data card CUTPR)
+*

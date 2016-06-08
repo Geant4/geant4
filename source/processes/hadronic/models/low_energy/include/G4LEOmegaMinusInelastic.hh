@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LEOmegaMinusInelastic.hh,v 1.3 2000/12/14 09:12:43 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // Hadronic Process: Low Energy OmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996

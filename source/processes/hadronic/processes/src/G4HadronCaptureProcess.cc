@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronCaptureProcess.cc,v 1.2 1999/12/15 14:53:35 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // G4 Process: Low-energy Neutron Capture

@@ -5,18 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.11 2000/11/20 17:26:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
-//
+// $Id: G4UnitsTable.cc,v 1.14 2001/04/02 14:29:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 // 
-// ------------------------------------------------------------
-//	GEANT 4 class implementation file 
-//
-//      ------------ class G4UnitsTable ------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
 // 17-05-98: first version, M.Maire
-// 05-08-98: angstrom,microbarn,picobarn,petaelectronvolt
-// 13-10-98: Units and symbols printed in fixed length  
+// 05-08-98: angstrom,microbarn,picobarn,petaelectronvolt, M.Maire
+// 13-10-98: units and symbols printed in fixed length, M.Maire
+// 01-03-01: parsec, M.Maire
+// 06-03-01: migration to STL vectors, G.Cosmo
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -32,18 +30,18 @@ G4UnitsTable      G4UnitDefinition::theUnitsTable;
  
 G4UnitDefinition::G4UnitDefinition(G4String name, G4String symbol,
                                    G4String category, G4double value)
-:Name(name),SymbolName(symbol),Value(value)				   
+  : Name(name),SymbolName(symbol),Value(value)				   
 {
     //
     //does the Category objet already exist ?
-    size_t nbCat = theUnitsTable.entries();
+    size_t nbCat = theUnitsTable.size();
     size_t i = 0;
     while ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
-    if (i == nbCat) theUnitsTable.insert( new G4UnitsCategory(category));
+    if (i == nbCat) theUnitsTable.push_back( new G4UnitsCategory(category));
     CategoryIndex = i;
     //
     //insert this Unit in the Unitstable
-    (theUnitsTable[CategoryIndex]->GetUnitsList()).insert(this);
+    (theUnitsTable[CategoryIndex]->GetUnitsList()).push_back(this);
     
     //update string max length for name and symbol
     theUnitsTable[i]->UpdateNameMxLen((G4int)name.length());
@@ -95,11 +93,11 @@ G4int G4UnitDefinition::operator!=(const G4UnitDefinition &right) const
  
 G4double G4UnitDefinition::GetValueOf(G4String string)
 {
-  if(theUnitsTable.entries()==0) BuildUnitsTable();
+  if(theUnitsTable.size()==0) BuildUnitsTable();
   G4String name,symbol;
-  for (size_t i=0;i<theUnitsTable.entries();i++)
+  for (size_t i=0;i<theUnitsTable.size();i++)
      { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
-       for (size_t j=0;j<units.entries();j++)
+       for (size_t j=0;j<units.size();j++)
           { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
             if(string==name||string==symbol) 
                return units[j]->GetValue();
@@ -115,11 +113,11 @@ G4double G4UnitDefinition::GetValueOf(G4String string)
   
 G4String G4UnitDefinition::GetCategory(G4String string)
 {
-  if(theUnitsTable.entries()==0) BuildUnitsTable();
+  if(theUnitsTable.size()==0) BuildUnitsTable();
   G4String name,symbol;
-  for (size_t i=0;i<theUnitsTable.entries();i++)
+  for (size_t i=0;i<theUnitsTable.size();i++)
      { G4UnitsContainer& units = theUnitsTable[i]->GetUnitsList();
-       for (size_t j=0;j<units.entries();j++)
+       for (size_t j=0;j<units.size();j++)
           { name=units[j]->GetName(); symbol=units[j]->GetSymbol();
             if(string==name||string==symbol) 
                return theUnitsTable[i]->GetName();
@@ -147,6 +145,7 @@ void G4UnitDefinition::PrintDefinition()
 void G4UnitDefinition::BuildUnitsTable()
 {
  //Length
+ new G4UnitDefinition(    "parsec","pc"      ,"Length",parsec); 
  new G4UnitDefinition( "kilometer","km"      ,"Length",kilometer);
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
@@ -263,7 +262,7 @@ void G4UnitDefinition::BuildUnitsTable()
 void G4UnitDefinition::PrintUnitsTable()
 {
   G4cout << "\n          ----- The Table of Units ----- \n";
-  for(size_t i=0;i<theUnitsTable.entries();i++)
+  for(size_t i=0;i<theUnitsTable.size();i++)
       theUnitsTable[i]->PrintCategory();
 }
 
@@ -320,7 +319,7 @@ G4int G4UnitsCategory::operator!=(const G4UnitsCategory &right) const
 void G4UnitsCategory::PrintCategory()
 {
   G4cout << "\n  category: " << Name << G4endl;
-  for(size_t i=0;i<UnitsList.entries();i++)
+  for(size_t i=0;i<UnitsList.size();i++)
       UnitsList[i]->PrintDefinition();
 }
 
@@ -330,14 +329,14 @@ G4BestUnit::G4BestUnit(G4double value,G4String category)
 {
  // find the category
     G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
-    size_t nbCat = theUnitsTable.entries();
+    size_t nbCat = theUnitsTable.size();
     size_t i = 0;
     while
      ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
     if (i == nbCat) 
        { G4cout << " G4BestUnit: the category " << category 
-              << " does not exist; --> G4Exception" << G4endl;
-         G4Exception(" ");
+                << " does not exist !!" << G4endl;
+         G4Exception("Missing unit category !");
        }  
   //
     IndexOfCategory = i;
@@ -351,7 +350,7 @@ G4BestUnit::G4BestUnit(const G4ThreeVector& value,G4String category)
 {
  // find the category
     G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
-    size_t nbCat = theUnitsTable.entries();
+    size_t nbCat = theUnitsTable.size();
     size_t i = 0;
     while
      ((i<nbCat)&&(theUnitsTable[i]->GetName()!=category)) i++;
@@ -389,7 +388,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   G4double value = G4std::max(G4std::max(fabs(a.Value[0]),fabs(a.Value[1])),
                               fabs(a.Value[2]));
 
-  for (size_t k=0; k<List.entries(); k++)
+  for (size_t k=0; k<List.size(); k++)
      {
        G4double unit = List[k]->GetValue();
             if (value==DBL_MAX) {if(unit>umax) {umax=unit; ksup=k;}}
@@ -405,10 +404,17 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   
   for (G4int j=0; j<a.nbOfVals; j++) 
      {flux << a.Value[j]/(List[index]->GetValue()) << " ";}
-  G4long oldform = G4cout.setf(G4std::ios::left,G4std::ios::adjustfield);
+
+  #ifdef G4USE_STD_NAMESPACE
+    std::ios::fmtflags oldform = G4cout.flags();
+  #else
+    G4long oldform = G4cout.flags();
+  #endif
+
+  G4cout.setf(G4std::ios::left,G4std::ios::adjustfield);
   flux << G4std::setw(len) << List[index]->GetSymbol();       
-  G4cout.setf(oldform,G4std::ios::adjustfield);     
-  
+  G4cout.flags(oldform);
+
   return flux;
 }       
 

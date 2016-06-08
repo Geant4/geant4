@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4RayShooter.cc,v 1.1 2000/01/29 00:44:53 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "G4RayShooter.hh"

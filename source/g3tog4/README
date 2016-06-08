@@ -70,18 +70,19 @@ gmake clean
 - GSPART has to be updated.
 - Usage of magnetic field class has to be turned on.
 
- the implementation (July 2000)
+ the implementation (February 2001)
 ----------------------------------------
 - Supported shapes: all G3 shapes except for
   "HYPE", "GTRA", "CTUB"
 - G3 MANY feature is not supported.
 - GSDV* routines for dividing volumes implemented, using
   G4PVReplicas, for shapes:
-      "BOX", "TUBE", "TUBS" - all axes;
+      "BOX", "TUBE", "TUBS", "PARA" - all axes;
       "CONE", "CONS" - axes 2, 3;
       "TRD1", "TRD2", "TRAP" - axis 3; 
       "PGON", "PCON" - axis 2;
+      "PARA" -axis 1; axis 2,3 for a special case
   Unsupported shapes:    
-      "SPHE", "PARA", "ELTU", "HYPE", "GTRA", "CTUB"
+      "SPHE", "ELTU", "HYPE", "GTRA", "CTUB"
 
 See History file for modification history.

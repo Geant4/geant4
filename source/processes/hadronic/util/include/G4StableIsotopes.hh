@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4StableIsotopes.hh,v 1.4 2000/12/14 08:56:46 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4StableIsotopes_h
 #define G4StableIsotopes_h 1

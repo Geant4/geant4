@@ -5,17 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Polyline.cc,v 1.4 1999/12/15 14:50:36 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Polyline.cc,v 1.5 2001/02/03 18:29:55 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  July 1995
 
 #include "G4Polyline.hh"
 
+G4Polyline::G4Polyline () {}
+
 G4Polyline::G4Polyline (const G4VVisPrim& prim):
   G4VVisPrim (prim)
 {}
+
+G4Polyline::~G4Polyline () {}
 
 G4Visible & G4Polyline::operator = (const G4Visible &right) {
   return G4Visible::operator = (right);

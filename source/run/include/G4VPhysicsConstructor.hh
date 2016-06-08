@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VPhysicsConstructor.hh,v 1.1 2000/11/14 23:53:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------

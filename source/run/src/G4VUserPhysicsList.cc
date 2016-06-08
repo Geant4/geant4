@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VUserPhysicsList.cc,v 1.12 2000/11/16 14:46:48 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ------------------------------------------------------------

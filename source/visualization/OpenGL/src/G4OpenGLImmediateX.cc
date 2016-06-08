@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4OpenGLImmediateX.cc,v 1.6 2000/08/19 18:34:28 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  27th March 1996

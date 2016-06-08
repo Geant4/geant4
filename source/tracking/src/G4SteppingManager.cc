@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.10 2000/06/02 09:53:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4SteppingManager.cc,v 1.12 2001/02/08 07:48:39 tsasaki Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
@@ -58,12 +58,16 @@ G4SteppingManager::G4SteppingManager()
 	  KillVerbose = false;
    }
 #endif
-   fSelectedAtRestDoItVector 
-      = new G4SelectedAtRestDoItVector(SIZEofSelectedDoIt);
-   fSelectedAlongStepDoItVector 
-      = new G4SelectedAlongStepDoItVector(SIZEofSelectedDoIt);
-   fSelectedPostStepDoItVector 
-      = new G4SelectedPostStepDoItVector(SIZEofSelectedDoIt);
+   SetNavigator(G4TransportationManager::GetTransportationManager()
+		   ->GetNavigatorForTracking());
+
+   fSelectedAtRestDoItVector
+      = new G4SelectedAtRestDoItVector(SizeOfSelectedDoItVector);
+   fSelectedAlongStepDoItVector
+      = new G4SelectedAlongStepDoItVector(SizeOfSelectedDoItVector);
+   fSelectedPostStepDoItVector
+      = new G4SelectedPostStepDoItVector(SizeOfSelectedDoItVector);
+
    SetNavigator(G4TransportationManager::GetTransportationManager()
      ->GetNavigatorForTracking());
 

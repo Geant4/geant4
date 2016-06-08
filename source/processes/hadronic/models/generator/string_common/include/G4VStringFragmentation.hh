@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VStringFragmentation.hh,v 1.3 2000/08/02 08:13:05 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4VStringFragmentation_h
 #define G4VStringFragmentation_h 1

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DataInterpolation.hh,v 1.3 2000/11/20 17:26:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // Class description:
 //

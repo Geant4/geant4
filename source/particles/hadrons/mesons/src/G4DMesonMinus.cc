@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4DMesonMinus.cc,v 1.4 2000/02/27 05:57:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ----------------------------------------------------------------------

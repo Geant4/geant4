@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PrimaryVertex.cc,v 1.3 2000/10/19 15:19:37 asaim Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #include "G4PrimaryVertex.hh"

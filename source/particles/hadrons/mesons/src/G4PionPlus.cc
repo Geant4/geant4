@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PionPlus.cc,v 1.5 2000/06/28 06:54:01 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // ----------------------------------------------------------------------

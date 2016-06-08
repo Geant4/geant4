@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN03VisManager.cc,v 1.4 2000/06/29 07:16:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison 24th January 1998.

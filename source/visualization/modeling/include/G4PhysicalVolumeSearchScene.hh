@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PhysicalVolumeSearchScene.hh,v 1.7 2000/05/22 07:36:57 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  10th August 1998.

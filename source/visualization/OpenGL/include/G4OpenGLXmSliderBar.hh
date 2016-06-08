@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmSliderBar.hh,v 1.3 1999/12/15 14:54:06 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLXmSliderBar.hh,v 1.5 2001/03/07 14:56:17 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //Slider bar class. Inherits from G4OpenGLXmVWidgetComponent
@@ -22,7 +22,7 @@ class G4OpenGLXmSliderBar : public G4OpenGLXmVWidgetComponent
 {
 
 public:
-  G4OpenGLXmSliderBar (char* = NULL,           // name of slider bar
+  G4OpenGLXmSliderBar (const char* = NULL,     // name of slider bar
 		       XtCallbackRec* = NULL,  // callbacks for slider bar
 		       G4bool = False,         // show current value if True
 		       short = 0,              // decimal places for show value
@@ -32,9 +32,9 @@ public:
 		       unsigned char = XmHORIZONTAL,
 		       unsigned char = XmMAX_ON_RIGHT); 
                                                //constructor
-  ~G4OpenGLXmSliderBar ();                     //destructor
+  virtual ~G4OpenGLXmSliderBar ();             //destructor
 
-  void SetName (char*);
+  void SetName (const char*);
   void SetShow (G4bool);
   void SetDecimalPlaces (short);
   void SetInitialValue (G4double);
@@ -44,7 +44,7 @@ public:
   void SetDirection (unsigned char);
 
  
-  char* GetName ();
+  const char* GetName ();
   G4bool GetShow ();
   short GetDecimalPlaces ();
   G4double GetInitialValue ();
@@ -59,7 +59,9 @@ public:
   Widget* GetPointerToWidget ();
 
 private:
-  char* name;
+  G4OpenGLXmSliderBar (const G4OpenGLXmSliderBar&);
+  G4OpenGLXmSliderBar& operator = (const G4OpenGLXmSliderBar&);
+  const char* name;
   XtCallbackRec* callback;
   Widget sliderbar;
   Widget* parent;

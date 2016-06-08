@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PlacedSolid.cc,v 1.3 2000/08/28 08:57:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

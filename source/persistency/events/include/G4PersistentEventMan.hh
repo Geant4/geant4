@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PersistentEventMan.hh,v 1.11 2000/12/15 07:54:49 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // Class Description:

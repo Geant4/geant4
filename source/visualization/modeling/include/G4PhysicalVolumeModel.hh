@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.9 2000/04/12 13:02:03 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.11 2001/02/03 18:39:58 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -14,8 +14,8 @@
 // Class Description:
 //
 // Model for physical volumes.  It describes a physical volume and its
-// daughters to any desired depth.  Note: the "sought depth" is
-// specified in the modeling parameters.
+// daughters to any desired depth.  Note: the "requested depth" is
+// specified in the modeling parameters; enum {UNLIMITED = -1}.
 //
 // For access to base class information, e.g., modeling parameters,
 // use GetModelingParameters() inherited from G4VModel.  See Class
@@ -42,7 +42,7 @@ public: // With description
 
   G4PhysicalVolumeModel
   (G4VPhysicalVolume*,
-   G4int soughtDepth = UNLIMITED,
+   G4int requestedDepth = UNLIMITED,
    const G4Transform3D& modelTransformation = G4Transform3D::Identity,
    const G4ModelingParameters* = 0,
    G4bool useFullExtent = false);
@@ -81,12 +81,12 @@ public: // With description
 protected:
 
   void VisitGeometryAndGetVisReps (G4VPhysicalVolume*,
-				   G4int soughtDepth,
+				   G4int requestedDepth,
 				   const G4Transform3D&,
 				   G4VGraphicsScene&);
 
   void DescribeAndDescend (G4VPhysicalVolume*,
-			   G4int soughtDepth,
+			   G4int requestedDepth,
 			   G4LogicalVolume*,
 			   G4VSolid*,
 			   const G4Material*,
@@ -109,7 +109,8 @@ protected:
   G4VPhysicalVolume* fpTopPV;        // The physical volume.
   G4String           fTopPVName;     // ...of the physical volume.
   G4int              fTopPVCopyNo;   // ...of the physical volume.
-  G4int              fSoughtDepth;   // Sought depth of geom. hierarchy search.
+  G4int              fRequestedDepth;
+                     // Requested depth of geom. hierarchy search.
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
@@ -121,6 +122,12 @@ protected:
   G4VPhysicalVolume** fppCurrentPV;    // Current physical volume.
   G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
 
+private:
+
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps CodeWizard happy.
+  G4PhysicalVolumeModel (const G4PhysicalVolumeModel&);
+  G4PhysicalVolumeModel& operator = (const G4PhysicalVolumeModel&);
 };
 
 #endif

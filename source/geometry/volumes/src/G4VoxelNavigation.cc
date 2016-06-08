@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4VoxelNavigation.cc,v 1.6 2000/11/20 19:06:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4VoxelNavigation Implementation

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: Em8PhysicsList.cc,v 1.4 2000/06/27 13:29:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 // 
 
 #include "G4Timer.hh"

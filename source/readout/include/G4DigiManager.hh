@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DigiManager.hh,v 1.2.2.1.2.1 1999/12/07 20:52:56 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4DigiManager.hh,v 1.5 2001/02/08 06:07:21 asaim Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 #ifndef G4DigiManager_h
@@ -21,7 +21,8 @@ class G4DMmessenger;
 #include "G4DCtable.hh"
 class G4RunManager;
 class G4SDManager;
-#include "g4rw/tpordvec.h"
+//#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 // class description:
 //
@@ -85,7 +86,7 @@ class G4DigiManager
   private: 
       static G4DigiManager * fDManager;
       G4int verboseLevel;
-      G4RWTPtrOrderedVector<G4VDigitizerModule> DMtable;
+      G4std::vector<G4VDigitizerModule*> DMtable;
       G4DCtable* DCtable;
       G4DMmessenger* theMessenger;
       G4RunManager* runManager;
@@ -97,7 +98,7 @@ class G4DigiManager
       inline G4int GetCollectionCapacity() const
       { return DCtable->entries(); }
       inline G4int GetModuleCapacity() const
-      { return DMtable.entries(); }
+      { return DMtable.size(); }
       inline G4DCtable* GetDCtable() const
       { return DCtable; }
       inline void RestoreDCtable(G4DCtable* dc)

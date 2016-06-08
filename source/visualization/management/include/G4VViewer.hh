@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.hh,v 1.7 2000/05/02 09:51:22 johna Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VViewer.hh,v 1.9 2001/02/23 15:43:18 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // John Allison  27th March 1996
@@ -32,9 +32,6 @@ public: // With description
 
   G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();
-
-  // For G4RWTPtrOrderedVector...
-  G4bool operator == (const G4VViewer& view) const;
 
   //////////////////////////////////////////////////////////////
   // View manipulation functions.
@@ -68,8 +65,10 @@ public: // With description
   void                    SetName           (const G4String&);
   G4int                   GetViewId         () const;
   G4VSceneHandler*        GetSceneHandler   () const;
-  const G4ViewParameters& GetViewParameters () const;
-  void SetViewParameters  (const G4ViewParameters& vp);
+  const G4ViewParameters& GetViewParameters        () const;
+  const G4ViewParameters& GetDefaultViewParameters () const;
+  void SetViewParameters         (const G4ViewParameters& vp);
+  void SetDefaultViewParameters  (const G4ViewParameters& vp);
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -95,7 +94,8 @@ protected:
   G4int            fViewId;    // Id of this instance.
   G4String         fName;
   G4String         fShortName; // Up to first ' ' character, if any.
-  G4ViewParameters fVP;        // Viewing parameters.
+  G4ViewParameters fVP;        // View parameters.
+  G4ViewParameters fDefaultVP; // Default view parameters.
 
   //////////////////////////////////////////////////////////////
   // Other parameters.

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4BooleanSolid.cc,v 1.4 2000/11/20 17:56:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids

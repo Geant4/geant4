@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Globals.hh,v 1.3 2000/08/28 08:57:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // Author: A.Breakstone
 // Adaptation: J.Sulkimo, P.Urban.

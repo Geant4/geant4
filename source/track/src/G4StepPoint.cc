@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.cc,v 1.3 2000/02/16 16:10:06 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4StepPoint.cc,v 1.5 2001/02/17 11:27:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //---------------------------------------------------------------
@@ -52,7 +52,8 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fpProcessDefinedStep(right.fpProcessDefinedStep),
   fMass(right.fMass),
   fCharge(right.fCharge),
-  fWeight(right.fWeight)
+  fWeight(right.fWeight),
+  fVelocity(right.fVelocity)
 {}
 
 
@@ -76,10 +77,7 @@ G4StepPoint & G4StepPoint::operator=(const G4StepPoint &right)
     fMass = right.fMass;
     fCharge = right.fCharge;
     fWeight = right.fWeight;
+    fVelocity = right.fVelocity;
   }
   return *this;
 }
-
-
-
-

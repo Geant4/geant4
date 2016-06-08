@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Nucleus.hh,v 1.3 2000/12/14 08:56:46 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // original by H.P. Wellisch
  // modified by J.L. Chuma, TRIUMF, 19-Nov-1996

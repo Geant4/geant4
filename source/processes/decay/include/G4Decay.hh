@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.hh,v 1.4 2000/10/20 11:28:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4Decay.hh,v 1.6 2001/02/22 13:29:26 kurasige Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // ------------------------------------------------------------
@@ -24,7 +24,9 @@
 //   remove BuildPhysicsTable()   27 Nov. 1997   H.Kurashige
 //   modified for new ParticleChange 12 Mar. 1998  H.Kurashige
 //   added aPhysicsTable          2  Aug. 1998 H.Kurashige
-
+//   PreAssignedDecayTime         18 Jan. 2001 H.Kurashige
+//   Add External Decayer         23 Feb. 2001  H.Kurashige
+//
 #ifndef G4Decay_h
 #define G4Decay_h 1
 
@@ -32,6 +34,7 @@
 #include "globals.hh"
 #include "G4VRestDiscreteProcess.hh"
 #include "G4ParticleChangeForDecay.hh"
+class G4VExtDecayer;
 
 class G4Decay : public G4VRestDiscreteProcess 
 {
@@ -93,6 +96,13 @@ class G4Decay : public G4VRestDiscreteProcess
                              G4ForceCondition* condition
                             );
 
+    virtual G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
+
+
   protected: // With Description
     // GetMeanFreePath returns ctau*beta*gamma for decay in flight 
     // GetMeanLifeTime returns ctau for decay at rest
@@ -105,6 +115,11 @@ class G4Decay : public G4VRestDiscreteProcess
                               G4ForceCondition* condition
                             );
 
+  public: //With Description
+     void SetExtDecayer(G4VExtDecayer*);
+     const G4VExtDecayer* GetExtDecayer() const;
+     // Set/Get External Decayer
+    
   public:
      void  SetVerboseLevel(G4int value);
      G4int GetVerboseLevel() const;
@@ -134,17 +149,51 @@ class G4Decay : public G4VRestDiscreteProcess
  
     // ParticleChange for decay process
     G4ParticleChangeForDecay fParticleChangeForDecay;
+    
+    // External Decayer
+    G4VExtDecayer*    pExtDecayer;
 };
 
+inline G4double G4Decay::PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            )
+{
+  // pre-assigned Decay time
+  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
+
+  if (pTime < 0.) {
+    // normal case 
+    return G4VRestDiscreteProcess::PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
+  }
+
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  
+  // reminder proper time
+  fRemainderLifeTime = pTime - track.GetProperTime();
+  if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+  
+  // use pre-assigned Decay time to determine PIL
+  G4double tau = track.GetDefinition()->GetPDGLifeTime();
+  return (fRemainderLifeTime/tau)*GetMeanFreePath(track, previousStepSize, condition);
+
+}
 inline
   G4double G4Decay::AtRestGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4ForceCondition* condition
                             )
 {
-  fRemainderLifeTime = 
-    G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength(
-                             track, condition );
+  G4double pTime = track.GetDynamicParticle()->GetPreAssignedDecayProperTime();
+  if (pTime >= 0.) {
+    fRemainderLifeTime = pTime - track.GetProperTime();
+    if (fRemainderLifeTime <= 0.0) fRemainderLifeTime = DBL_MIN;
+  } else {
+    fRemainderLifeTime = 
+      G4VRestDiscreteProcess::AtRestGetPhysicalInteractionLength(track, condition );
+  }
   return fRemainderLifeTime;
 }
 
@@ -172,6 +221,17 @@ inline
   return DecayIt(aTrack, aStep);
 }
 
+inline
+ void G4Decay::SetExtDecayer(G4VExtDecayer* val)
+{
+  pExtDecayer = val;
+}
+
+inline
+ const G4VExtDecayer* G4Decay::GetExtDecayer() const
+{
+  return pExtDecayer;
+}
 
 #endif
 

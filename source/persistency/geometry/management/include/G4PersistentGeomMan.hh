@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4PersistentGeomMan.hh,v 1.10 2000/12/15 07:56:35 morita Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 
 // Class Description:

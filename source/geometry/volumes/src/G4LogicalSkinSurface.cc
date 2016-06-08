@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4LogicalSkinSurface.cc,v 1.5 2000/11/20 19:05:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // G4LogicalSkinSurface Implementation

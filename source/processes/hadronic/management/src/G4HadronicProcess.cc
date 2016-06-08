@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4HadronicProcess.cc,v 1.8 1999/12/15 14:52:08 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // HPW to implement the choosing of an element for scattering.
 #include "g4std/fstream"

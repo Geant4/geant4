@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ExplicitEuler.cc,v 1.3 2000/11/01 15:15:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //  Explicit Euler: x_1 = x_0 + h * dx_0

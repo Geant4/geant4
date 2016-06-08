@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Xt.cc,v 1.6 2000/11/28 08:13:54 barrand Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G.Barrand
 

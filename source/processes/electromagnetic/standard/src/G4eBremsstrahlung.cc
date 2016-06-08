@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.13 2000/09/21 09:34:29 urban Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4eBremsstrahlung.cc,v 1.15 2001/02/05 17:53:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -265,37 +265,10 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
         }
 
        theLossTable->insert(aVector);
+
     }
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eBremsstrahlung::ComputeXYPolynomial(G4double x,  G4double y,
-                                             G4int xSize, G4int ySize,
-                                             const G4double coeff[])
-{
-  // Computes the polynomial (1 y y^2 ...) * matrix * (1 x x^2 ...) .
-  // xSize and ySize are the dimensions of the matrix,
-  // coeff containts the elements, stored row-wise.    
-  
-  G4double* a= new G4double[xSize];
-  G4int i, j;
-
-  for (i=0; i<xSize; i++) a[i]= 0.0;  
-
-  G4int index= 0; G4double yy= 1.0;
-  for (j=0; j<ySize; j++)
-    { for (i=0; i<xSize; i++) a[i]+= coeff[index++]*yy;     
-      yy*= y;
-    }
-  
-  G4double r= a[0]; G4double xx= x;
-  for (i=1; i<xSize; i++) { r+= a[i]*xx; xx*= x;}  
-  
-  delete[] a;
-  return r;
-}                                             
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -354,6 +327,9 @@ G4double G4eBremsstrahlung::ComputeBremLoss(G4double Z,G4double natom,
      0.00017519
 
     } ;
+ static G4double aaa=0.414 ;
+ static G4double bbb=0.345 ;
+ static G4double ccc=0.460 ;
 
   G4int iz = 0 ;
   G4double delz = 1.e6 ;
@@ -389,6 +365,9 @@ G4double G4eBremsstrahlung::ComputeBremLoss(G4double Z,G4double natom,
 
   if(T <= Cut)
     loss *= exp(alosslow*log(T/Cut)) ;
+
+ //  correction ................................
+ loss *= (aaa+bbb*T/Tlim)/(1.+ccc*T/Tlim) ;
 
   loss *= fl ;
 
@@ -438,7 +417,9 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
                              }
    theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
    
+   PartialSumSigma.clearAndDestroy();
    PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
+ 
    G4PhysicsLogVector* ptrVector;
    for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
        { 
@@ -694,7 +675,8 @@ void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* Parti
    const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
    G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
 
-   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
+
+   PartialSumSigma[Imate] = new G4DataVector();
 
    G4double SIGMA = 0. ;
 
@@ -704,7 +686,7 @@ void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* Parti
                  ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
                                                  (*theElementVector)(Ielem)->GetZ(), 
                                                  GammaEnergyCut );
-        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
+        PartialSumSigma[Imate]->push_back(SIGMA);
    }
 }
 
@@ -956,9 +938,9 @@ G4Element* G4eBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
   const G4int NumberOfElements = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
 
-  G4double rval = G4UniformRand()*((*PartialSumSigma(Index))(NumberOfElements-1));
+  G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma(Index))(i)) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;

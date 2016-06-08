@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4AffineTransform.hh,v 1.3 2000/04/20 16:49:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 // class G4AffineTransform

@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ClosedShellCreator.hh,v 1.3 2000/11/09 16:35:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // ----------------------------------------------------------------------
 // Class G4ClosedShellCreator

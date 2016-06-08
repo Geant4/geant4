@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.cc,v 1.5 2000/12/07 12:38:25 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: Em3RunAction.cc,v 1.8 2001/03/26 16:01:58 maire Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 
@@ -26,14 +26,22 @@
 #include "Randomize.hh"
 #include "g4std/iomanip"
 
+#ifndef G4NOHIST
+ #include "CLHEP/Hist/HBookFile.h"
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 :Detector(det)
 {
-  bookHisto(); 
   runMessenger = new Em3RunActionMessenger(this);   
-  saveRndm = 1;  
+  saveRndm = 1;
+#ifndef G4NOHIST
+  // init hbook
+  hbookManager = new HBookFile("TestEm3.paw", 68);
+  for (G4int k=0; k<MaxAbsor; k++) histo[k] = NULL;
+#endif    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -41,12 +49,15 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 Em3RunAction::~Em3RunAction()
 {
   delete runMessenger;
+  
+#ifndef G4NOHIST
+ // Write histogram file 
+  hbookManager->write();  
+ // Delete HBOOK stuff
+  delete [] histo;
+  delete hbookManager;
+#endif  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Em3RunAction::bookHisto()
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -71,10 +82,51 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
-    } 
+    }
+    
+  //histograms
+  //
+  bookHisto();     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em3RunAction::bookHisto()
+{
+#ifndef G4NOHIST
+  // book histograms
+  char str[25];
+  strcpy(str,"Edep/Ebeam in absorber ");
+  G4int nbins=100; G4double vmin=0., vmax=1.;
+  G4int NbOfAbsor = Detector->GetNbOfAbsor();
+  for (G4int k=0; k<NbOfAbsor; k++)
+     {
+      str[23] = (char)((int)('0') + k);
+      if (histo[k]==NULL)
+        { histo[k] = hbookManager->histogram(str,nbins,vmin,vmax);
+          G4cout << "bookHisto: " << k << " " << histo[k] << G4endl;
+	}  
+     }   
+#endif   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em3RunAction::SetHisto(G4int idh, G4int nbins, G4double vmin, G4double vmax)
+{
+#ifndef G4NOHIST
+  // (re)book histograms
+  char str[25];
+  strcpy(str,"Edep/Ebeam in absorber ");
+  str[23] = (char)((int)('0') + idh);  
+///  if (histo[idh] != NULL) delete histo[idh];
+  histo[idh] = hbookManager->histogram(str,nbins,vmin,vmax);
+  G4cout << "SetHisto: " << idh << " " << histo[idh] << G4endl;  
+#endif   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 void Em3RunAction::EndOfRunAction(const G4Run* aRun)
 {
@@ -118,9 +170,9 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << G4endl;  
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
-  
+    
   // save Rndm status
-  if (saveRndm == 1)
+  if (saveRndm > 0)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
     }                         

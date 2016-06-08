@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: ExN02ChamberParameterisation.hh,v 1.3 2000/12/04 16:24:04 maire Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 //
 //  A parameterisation that describes a series of boxes along Z

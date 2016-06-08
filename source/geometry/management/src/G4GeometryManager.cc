@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4GeometryManager.cc,v 1.2 1999/12/15 14:49:52 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // class G4GeometryManager
 //

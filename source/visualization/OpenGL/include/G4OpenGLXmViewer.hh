@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.hh,v 1.3 1999/12/15 14:54:06 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLXmViewer.hh,v 1.5 2001/02/23 15:43:10 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -21,7 +21,6 @@
 #include "G4OpenGLXViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
 
 #include <Xm/Xm.h>
 #include <Xm/MainW.h>
@@ -57,7 +56,7 @@ class G4OpenGLXmViewer: public G4OpenGLXViewer {
   
 public:
   G4OpenGLXmViewer (G4OpenGLSceneHandler& scene);
-  ~G4OpenGLXmViewer ();
+  virtual ~G4OpenGLXmViewer ();
   
 protected:
   virtual void ShowView ();
@@ -362,6 +361,10 @@ public:
   static G4int  get_int_userData (Widget w);
 
 friend class G4OpenGLXmVWidgetObject;
+
+private:
+  G4OpenGLXmViewer (const G4OpenGLXmViewer&);
+  G4OpenGLXmViewer& operator = (const G4OpenGLXmViewer&);
   
 };
 

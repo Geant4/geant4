@@ -7,7 +7,7 @@
 //
 // $Id: G4Hype.hh,v 1.4 2000/11/02 16:54:48 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------------

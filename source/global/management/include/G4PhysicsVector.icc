@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.icc,v 1.1 1999/11/16 17:40:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4PhysicsVector.icc,v 1.6 2001/03/09 12:08:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 //---------------------------------------------------------------
@@ -24,27 +24,32 @@
 //---------------------------------------------------------------
 
 
-inline G4double G4PhysicsVector::operator[](const size_t binNumber) const
+inline
+ G4double G4PhysicsVector::operator[](const size_t binNumber) const
 {
   return dataVector[binNumber];
 }
 
 
-inline G4double G4PhysicsVector::operator()(const size_t binNumber) const
+inline
+ G4double G4PhysicsVector::operator()(const size_t binNumber) const
 {
-  return dataVector(binNumber);
+  return dataVector[binNumber];
 }
 
 
-inline const G4RWTPtrOrderedVector<G4PhysicsVector>*
-G4PhysicsVector::GetNextTable() const
+inline 
+ size_t G4PhysicsVector::GetVectorLength() const
 {
-  return ptrNextTable;
+  return numberOfBin;
 }
 
 
-inline G4double G4PhysicsVector::LinearInterpolation(G4double theEnergy, 
-                                                     size_t theLocBin) {
+
+inline
+ G4double G4PhysicsVector::LinearInterpolation(G4double theEnergy, 
+                                               size_t theLocBin)
+{
 
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
@@ -52,16 +57,18 @@ inline G4double G4PhysicsVector::LinearInterpolation(G4double theEnergy,
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  G4double intplFactor = (theEnergy-binVector(theLocBin)) 
-     / (binVector(theLocBin+1)-binVector(theLocBin)); // Interpolation factor
+  G4double intplFactor = (theEnergy-binVector[theLocBin]) 
+     / (binVector[theLocBin+1]-binVector[theLocBin]); // Interpolation factor
 
-  return dataVector(theLocBin) +
-         ( dataVector(theLocBin+1)-dataVector(theLocBin) ) * intplFactor;
+  return dataVector[theLocBin] +
+         ( dataVector[theLocBin+1]-dataVector[theLocBin] ) * intplFactor;
 }
 
 
-inline G4double G4PhysicsVector::GetValue(G4double theEnergy, 
-                                          G4bool& isOutRange) {
+inline
+ G4double G4PhysicsVector::GetValue(G4double theEnergy, 
+                                    G4bool& isOutRange) 
+{
 
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last bin location. Also the
@@ -74,28 +81,28 @@ inline G4double G4PhysicsVector::GetValue(G4double theEnergy,
 
   if( theEnergy == lastEnergy ) {
      return lastValue;        
-  } 
-  else if( (theEnergy < lastEnergy) && 
-           (theEnergy >= binVector(lastBin)) ) {
+
+  } else if( (theEnergy < lastEnergy) && 
+           (theEnergy >= binVector[lastBin]) ) {
      locBin = lastBin;
 
      lastEnergy = theEnergy;
      lastValue = LinearInterpolation(theEnergy, locBin);
      return lastValue;
-  } 
-  else if( theEnergy < edgeMin ){
+
+  } else if( theEnergy < edgeMin ){
      lastBin = 0;
      lastEnergy = theEnergy;
-     lastValue = dataVector(0);
+     lastValue = dataVector[0];
      return lastValue;
-  } 
-  else if( theEnergy >= edgeMax ){
+
+  } else if( theEnergy >= edgeMax ){
      lastBin = numberOfBin-1;
      lastEnergy = theEnergy;
-     lastValue = dataVector( numberOfBin-1 );
+     lastValue = dataVector[ numberOfBin-1 ];
      return lastValue;
-  } 
-  else {
+
+  }  else {
      locBin = FindBinLocation(theEnergy); 
 
      lastBin = locBin;
@@ -103,4 +110,45 @@ inline G4double G4PhysicsVector::GetValue(G4double theEnergy,
      lastValue = LinearInterpolation(theEnergy, locBin);
      return lastValue;
   }
+
+}
+
+inline 
+ void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
+{
+  dataVector[binNumber] = theValue;
+
+  // Fill the bin which is hidden to user with theValue. This is to 
+  // handle correctly when Energy=theEmax in getValue.
+  if(binNumber==numberOfBin-1) {
+    dataVector[binNumber+1] = theValue;
+  }                                 
+}
+
+inline 
+ G4bool G4PhysicsVector::IsFilledVectorExist() const
+{
+  G4bool status=false;
+
+  if(numberOfBin > 0) status=true;
+  return status;
+}
+
+
+inline 
+ void G4PhysicsVector::PutComment(const G4String& theComment)
+{
+  comment = theComment;
+}
+
+inline 
+ const G4String& G4PhysicsVector::GetComment() const
+{
+  return comment;
+}
+
+inline 
+ G4PhysicsVectorType G4PhysicsVector::GetType() const
+{
+  return type;
 }

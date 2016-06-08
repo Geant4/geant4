@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.hh,v 1.5 1999/12/15 14:54:05 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4OpenGLViewer.hh,v 1.6 2001/02/23 15:43:09 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -19,7 +19,6 @@
 
 #include "G4VViewer.hh"
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
 
 class G4OpenGLSceneHandler;
 

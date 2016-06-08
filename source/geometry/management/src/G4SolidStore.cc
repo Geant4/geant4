@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4SolidStore.cc,v 1.5 2000/09/11 11:09:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // G4SolidStore
 //

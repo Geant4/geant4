@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4Polycone.hh,v 1.5 2000/11/02 16:54:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // --------------------------------------------------------------------

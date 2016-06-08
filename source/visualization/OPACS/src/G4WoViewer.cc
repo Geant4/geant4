@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4WoViewer.cc,v 1.6 2000/05/28 13:35:14 barrand Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // Guy Barrand 04 November 1996

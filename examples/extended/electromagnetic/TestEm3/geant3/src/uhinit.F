@@ -4,14 +4,17 @@
 *     To book the user's histograms
 *
 #include "calor.inc"
+#include "histo.inc"
 *
-      CHARACTER*5 chtags(20)
+      character*25 title
 *
-      DATA chtags /'EAbs0','LAbs0','EAbs1','LAbs1','EAbs2','LAbs2',
-     +             'EAbs3','LAbs3','EAbs4','LAbs4','EAbs5','LAbs5',
-     +             'EAbs6','LAbs6','EAbs7','LAbs7','EAbs8','LAbs8',
-     +	           'EAbs9','LAbs9'/		   
-*      
-      CALL HBOOKN(1,'sum per event',2*NbAbsor,' ',4000,chtags)
+* *** complete the booking of histograms
+      do k=1,NbAbsor
+        if (iexist(k).eq.0) then
+	   title = 'Edep/Ebeam in absorber '//char(ichar('0')+(k-1))
+	   call hbook1(k,title,100, 0.,1.,0.)
+	   iexist(k) = 1
+	endif
+      enddo	   	   
 *                                                                               
       END                                                                       

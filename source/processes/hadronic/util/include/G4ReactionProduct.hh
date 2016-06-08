@@ -6,7 +6,7 @@
 // and all its terms.
 //
 // $Id: G4ReactionProduct.hh,v 1.2 1999/12/15 14:53:40 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
  // J.L. Chuma, TRIUMF, 31-Oct-1996
  // last modified: 19-Dec-1996

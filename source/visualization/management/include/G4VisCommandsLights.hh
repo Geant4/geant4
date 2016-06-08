@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsLights.hh,v 1.4 1999/12/15 14:54:21 gunter Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// $Id: G4VisCommandsLights.hh,v 1.6 2001/02/05 02:33:58 johna Exp $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 // 
 // /vis~/lights/ commands
@@ -47,14 +47,14 @@ public:
       GetLightsMoveWithCamera ();
   }
   void SetValue (G4bool value) {
+    G4VisManager::PrintCommandDeprecation
+      ("Use \"/vis/viewer/set/lightsMove\".");
     G4VisManager* pVMan = G4VisManager::GetInstance ();
     pVMan -> SetCurrentViewParameters ().SetLightsMoveWithCamera (value);
     G4VViewer* pView = pVMan -> GetCurrentViewer ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (pVMan -> GetCurrentViewParameters ());
-      // Recalculate projection matrices, etc.
-      pView -> SetView ();
     }
     G4cout << "Issue Draw or refresh to see effect." << G4endl;
   }

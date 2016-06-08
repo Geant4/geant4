@@ -8,7 +8,7 @@
 // and all its terms.
 //
 // $Id: G4NeutronHPFissionBaseFS.hh,v 1.4 2000/11/09 16:13:38 hpw Exp $
-// GEANT4 tag $Name: geant4-03-00 $
+// GEANT4 tag $Name: geant4-03-01 $
 //
 #ifndef G4NeutronHPFissionBaseFS_h
 #define G4NeutronHPFissionBaseFS_h 1

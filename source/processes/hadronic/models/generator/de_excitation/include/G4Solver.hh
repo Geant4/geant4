@@ -72,6 +72,6 @@ private:
 
 };
 
-#include "G4Solver.templates.cc"
+#include "G4Solver.icc"
 
 #endif
